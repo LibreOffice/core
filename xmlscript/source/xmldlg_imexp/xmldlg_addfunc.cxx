@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_addfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:36 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,11 @@ Reference< io::XInputStream > InputStreamProvider::createInputStream()
 
 //==================================================================================================
 Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
-    Reference< container::XNameContainer > const & xDialogModel )
+    Reference< container::XNameContainer > const & xDialogModel,
+    Reference< XComponentContext > const & xContext )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiServiceFactory > xSMgr( ::comphelper::getProcessServiceFactory() );
+    Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
     if (! xSMgr.is())
     {
         throw RuntimeException(
@@ -111,8 +112,8 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
             Reference< XInterface >() );
     }
 
-    Reference< xml::sax::XExtendedDocumentHandler > xHandler( xSMgr->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
+    Reference< xml::sax::XExtendedDocumentHandler > xHandler( xSMgr->createInstanceWithContext(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ), xContext ), UNO_QUERY );
     OSL_ASSERT( xHandler.is() );
     if (! xHandler.is())
     {
@@ -133,10 +134,11 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
 //==================================================================================================
 void SAL_CALL importDialogModel(
     Reference< io::XInputStream > xInput,
-    Reference< container::XNameContainer > const & xDialogModel )
+    Reference< container::XNameContainer > const & xDialogModel,
+    Reference< XComponentContext > const & xContext )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiServiceFactory > xSMgr( ::comphelper::getProcessServiceFactory() );
+    Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager() );
     if (! xSMgr.is())
     {
         throw RuntimeException(
@@ -144,8 +146,8 @@ void SAL_CALL importDialogModel(
             Reference< XInterface >() );
     }
 
-    Reference< xml::sax::XParser > xParser( xSMgr->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
+    Reference< xml::sax::XParser > xParser( xSMgr->createInstanceWithContext(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ), xContext ), UNO_QUERY );
     OSL_ASSERT( xParser.is() );
     if (! xParser.is())
     {
@@ -155,7 +157,7 @@ void SAL_CALL importDialogModel(
     }
 
     // error handler, entity resolver omitted for this helper function
-    xParser->setDocumentHandler( importDialogModel( xDialogModel ) );
+    xParser->setDocumentHandler( importDialogModel( xDialogModel, xContext ) );
 
     xml::sax::InputSource source;
     source.aInputStream = xInput;

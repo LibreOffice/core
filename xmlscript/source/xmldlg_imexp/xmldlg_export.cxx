@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 
 
 namespace xmlscript
@@ -448,6 +450,38 @@ Reference< xml::sax::XAttributeList > Style::createElement()
 
 //##################################################################################################
 
+//__________________________________________________________________________________________________
+void ElementDescriptor::addNumberFormatAttr(
+    Reference< beans::XPropertySet > const & xFormatProperties,
+    OUString const & rAttrName )
+{
+    Reference< beans::XPropertyState > xState( xFormatProperties, UNO_QUERY );
+    OUString sFormat;
+    lang::Locale locale;
+    OSL_VERIFY( xFormatProperties->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatString") ) ) >>= sFormat );
+    OSL_VERIFY( xFormatProperties->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Locale") ) ) >>= locale );
+
+    addAttribute(
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":format-code") ),
+        sFormat );
+
+    // format-locale
+    OUStringBuffer buf( 48 );
+    buf.append( locale.Language );
+    if (locale.Country.getLength())
+    {
+        buf.append( (sal_Unicode)';' );
+        buf.append( locale.Country );
+        if (locale.Variant.getLength())
+        {
+            buf.append( (sal_Unicode)';' );
+            buf.append( locale.Variant );
+        }
+    }
+    addAttribute(
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":format-locale") ),
+        buf.makeStringAndClear() );
+}
 //__________________________________________________________________________________________________
 Any ElementDescriptor::readProp( OUString const & rPropName )
 {
@@ -1145,6 +1179,14 @@ void SAL_CALL exportDialogModel(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":patternfield") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readPatternFieldModel( &all_styles );
+            }
+            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":formattedfield") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readFormattedFieldModel( &all_styles );
             }
             else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,10 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -156,6 +159,8 @@ struct DialogImport
 {
     friend class ImportContext;
 
+    Reference< XComponentContext > _xContext;
+
     vector< OUString > _styleNames;
     vector< Reference< xml::XImportContext > > _styles;
 
@@ -163,6 +168,7 @@ struct DialogImport
     Reference< lang::XMultiServiceFactory > _xDialogModelFactory;
 
 public:
+
     void addStyle(
         OUString const & rStyleId,
         Reference< xml::XImportContext > const & xStyle )
@@ -171,11 +177,17 @@ public:
         OUString const & rStyleId ) const
         SAL_THROW( () );
 
-    inline DialogImport( Reference< container::XNameContainer > const & xDialogModel )
+    inline Reference< XComponentContext > getComponentContext() SAL_THROW( () )
+        { return _xContext; }
+
+    inline DialogImport(
+        Reference< XComponentContext > const & xContext,
+        Reference< container::XNameContainer > const & xDialogModel )
         SAL_THROW( () )
-        : _xDialogModel( xDialogModel )
+        : _xContext( xContext )
+        , _xDialogModel( xDialogModel )
         , _xDialogModelFactory( xDialogModel, UNO_QUERY )
-        { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() ); }
+        { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() && _xContext.is() ); }
     virtual ~DialogImport()
         SAL_THROW( () );
 
@@ -784,6 +796,26 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 
     inline PatternFieldElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class FormattedFieldElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline FormattedFieldElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 #include "exp_share.hxx"
+
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
 
 namespace xmlscript
 {
@@ -172,8 +175,8 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
+    readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
 
@@ -409,8 +412,8 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":hscroll") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("VScroll") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":vscroll") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
+    readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
@@ -680,6 +683,75 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":edit-mask") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":literal-mask") ) );
+    readEvents();
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
+    // collect styles
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+        aStyle._set |= 0x4;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":strict-format") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":text") ) );
+    readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin") ) );
+
+    Any a( readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault") ) ) );
+    switch (a.getValueTypeClass())
+    {
+    case TypeClass_DOUBLE:
+        addAttribute(
+            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-default") ),
+            OUString::valueOf( *(double const *)a.getValue() ) );
+        break;
+    case TypeClass_STRING:
+        addAttribute(
+            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-default") ),
+            *(OUString const *)a.getValue() );
+        break;
+    }
+    readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveMin") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+    readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveMax") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
+    readDoubleAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveValue") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+
+    // format spec
+    sal_Int32 nKey;
+    Reference< util::XNumberFormatsSupplier > xSupplier;
+    OSL_VERIFY( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ) ) >>= nKey );
+    OSL_VERIFY( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ) ) >>= xSupplier );
+    addNumberFormatAttr(
+        xSupplier->getNumberFormats()->getByKey( nKey ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+
     readEvents();
 }
 //__________________________________________________________________________________________________

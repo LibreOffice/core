@@ -93,6 +93,11 @@
              <fixedline style-id="bla3" id="fixedline1" left="20" top="660" width="150" height="20" value="FixedLineLabel" align="horizontal"/>
              <progressmeter style-id="no_border" id="progress1" left="200" top="660" width="80" height="20" align="horizontal" value="50" value-min="0" value-max="80"/>
              <scrollbar style-id="dialog" id="scrollbar1" left="300" top="660" width="80" height="20" align="horizontal" curpos="50" maxpos="200" increment="1" pageincrement="10"/>
+
+        <formattedfield style-id="dialog" id="ffield0" left="20" top="110" width="80" height="20" align="center" text="first ffield"
+                        dlg:format-code="[$$-409]#.##0,00;[ROT]-[$$-409]#.##0,00" dlg:format-locale="de" dlg:value-max="750" dlg:value-min="0" dlg:value="2" spin="true"/>
+        <formattedfield style-id="dialog" id="ffield1" left="250" top="110" width="80" height="20" align="center" text="second ffield"
+                        dlg:format-code="[$$-409]#.##0,00;[ROT]-[$$-409]#.##0,00" dlg:format-locale="de;DE;WIN" dlg:value-max="750" dlg:value-min="0" dlg:value="4" spin="true"/>
     </dlg:bulletinboard>
 
 </window>

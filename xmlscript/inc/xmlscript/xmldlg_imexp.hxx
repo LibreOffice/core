@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HXX_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 
 #ifndef _XMLSCRIPT_XMLNS_H_
 #include <xmlscript/xmlns.h>
@@ -87,7 +90,8 @@ void SAL_CALL exportDialogModel(
 //==================================================================================================
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importDialogModel(
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 // additional functions for convenience
@@ -95,12 +99,14 @@ SAL_CALL importDialogModel(
 //==================================================================================================
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >
 SAL_CALL exportDialogModel(
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 //==================================================================================================
 void SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInput,
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:47 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <stdio.h>
 #include <rtl/memory.h>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
 
@@ -99,7 +101,40 @@ using namespace ::com::sun::star::uno;
 
 
 
-Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
+static void reg(
+    Reference< registry::XImplementationRegistration > const & xReg,
+    char const * lib,
+    bool upd = false )
+{
+    OUStringBuffer buf( 32 );
+#ifndef SAL_W32
+    buf.appendAsciiL( RTL_CONSTASCII_STRINGPARAM("lib") );
+#endif
+    buf.appendAscii( lib );
+
+    if (upd)
+    {
+        buf.append( (sal_Int32)SUPD );
+#ifdef SAL_W32
+        buf.appendAscii( "mi" );
+#endif
+#ifdef SOLARIS
+        buf.appendAscii( "ss" );
+#else
+        buf.appendAscii( "li" );
+#endif
+    }
+#ifndef SAL_W32
+    buf.appendAscii( ".so" );
+#endif
+
+    xReg->registerImplementation(
+        OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+        buf.makeStringAndClear(), Reference< registry::XSimpleRegistry >() );
+}
+
+
+Reference< XComponentContext > createInitialComponentContext()
 {
     Reference< XComponentContext > xContext;
 
@@ -154,50 +189,10 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
                 xContext->getServiceManager()->createInstanceWithContext(
                     OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ), xContext ), UNO_QUERY );
 
-#ifdef SAL_W32
-            OUString aDllName = OUString::createFromAscii( "sax.dll" );
-#else
-            OUString aDllName = OUString::createFromAscii( "libsax.so" );
-#endif
-            xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                aDllName, Reference< registry::XSimpleRegistry > () );
-#ifdef SAL_W32
-            aDllName = OUString::createFromAscii( "tk" );
-            aDllName += OUString::valueOf( (sal_Int32)SUPD );
-            aDllName += OUString::createFromAscii( "mi.dll" );
-#else
-            aDllName = OUString::createFromAscii( "libtk" );
-            aDllName += OUString::valueOf( (sal_Int32)SUPD );
-            aDllName += OUString::createFromAscii( ".so" );
-#endif
-            xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                aDllName, Reference< registry::XSimpleRegistry > () );
-#ifdef SAL_W32
-            aDllName = OUString::createFromAscii( "svt" );
-            aDllName += OUString::valueOf( (sal_Int32)SUPD );
-            aDllName += OUString::createFromAscii( "mi.dll" );
-#else
-            aDllName = OUString::createFromAscii( "libsvt" );
-            aDllName += OUString::valueOf( (sal_Int32)SUPD );
-            aDllName += OUString::createFromAscii( ".so" );
-#endif
-            xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                aDllName, Reference< registry::XSimpleRegistry > () );
-#ifdef SAL_W32
-            aDllName = OUString::createFromAscii( "i18n" );
-            aDllName += OUString::valueOf( (sal_Int32)SUPD );
-            aDllName += OUString::createFromAscii( "mi.dll" );
-#else
-            aDllName = OUString::createFromAscii( "libi18n" );
-            aDllName += OUString::valueOf( (sal_Int32)SUPD );
-            aDllName += OUString::createFromAscii( ".so" );
-#endif
-            xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                aDllName, Reference< registry::XSimpleRegistry > () );
+            reg( xReg, "sax" );
+            reg( xReg, "tk", true );
+            reg( xReg, "svt", true );
+            reg( xReg, "i18n", true );
         }
     }
 
@@ -207,14 +202,15 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
         OSL_ENSURE( 0, aStr.getStr() );
     }
 
-    return Reference< lang::XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
+    return xContext;
 }
 
 
 // -----------------------------------------------------------------------
 
 Reference< container::XNameContainer > importFile(
-    char const * fname )
+    char const * fname,
+    Reference< XComponentContext > const & xContext )
 {
     // create the input stream
     FILE *f = ::fopen( fname, "rb" );
@@ -228,10 +224,9 @@ Reference< container::XNameContainer > importFile(
         ::fread( bytes.getArray(), nLength, 1, f );
         ::fclose( f );
 
-        Reference< lang::XMultiServiceFactory > xSMgr( ::comphelper::getProcessServiceFactory() );
-        Reference< container::XNameContainer > xModel( xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
-        ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel );
+        Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), xContext ), UNO_QUERY );
+        ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel, xContext );
 
         return xModel;
     }
@@ -244,9 +239,10 @@ Reference< container::XNameContainer > importFile(
 
 void exportToFile(
     char const * fname,
-    Reference< container::XNameContainer > const & xModel )
+    Reference< container::XNameContainer > const & xModel,
+    Reference< XComponentContext > const & xContext )
 {
-    Reference< io::XInputStreamProvider > xProvider( ::xmlscript::exportDialogModel( xModel ) );
+    Reference< io::XInputStreamProvider > xProvider( ::xmlscript::exportDialogModel( xModel, xContext ) );
     Reference< io::XInputStream > xStream( xProvider->createInputStream() );
 
     Sequence< sal_Int8 > bytes;
@@ -290,7 +286,8 @@ void MyApp::Main()
         return;
     }
 
-    Reference< lang::XMultiServiceFactory >  xMSF = createApplicationServiceManager();
+    Reference< XComponentContext > xContext( createInitialComponentContext() );
+    Reference< lang::XMultiServiceFactory >  xMSF( xContext->getServiceManager(), UNO_QUERY );
 
     try
     {
@@ -301,7 +298,7 @@ void MyApp::Main()
 
         // import dialogs
         OString aParam1( OUStringToOString( OUString( GetCommandLineParam( 0 ) ), RTL_TEXTENCODING_ASCII_US ) );
-        Reference< container::XNameContainer > xModel( importFile( aParam1.getStr() ) );
+        Reference< container::XNameContainer > xModel( importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
 
         Reference< awt::XControl > xDlg( xMSF->createInstance(
@@ -315,7 +312,7 @@ void MyApp::Main()
         {
             // write modified dialogs
             OString aParam2( OUStringToOString( OUString( GetCommandLineParam( 1 ) ), RTL_TEXTENCODING_ASCII_US ) );
-            exportToFile( aParam2.getStr(), xModel );
+            exportToFile( aParam2.getStr(), xModel, xContext );
         }
     }
     catch (xml::sax::SAXException & rExc)
@@ -335,21 +332,10 @@ void MyApp::Main()
         OSL_ENSURE( 0, aStr.getStr() );
     }
 
-    // dispose component context
-    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
-    if (xProps.is())
+    Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
+    if (xComp.is())
     {
-        try
-        {
-            Reference< lang::XComponent > xComp;
-            if (xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xComp)
-            {
-                xComp->dispose();
-            }
-        }
-        catch (beans::UnknownPropertyException &)
-        {
-        }
+        xComp->dispose();
     }
 }
 

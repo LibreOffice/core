@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "imp_share.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 
 
 using namespace ::rtl;
@@ -296,6 +297,172 @@ void PatternFieldElement::endElement()
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("literal-mask") ),
                               _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// formattedfield
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > FormattedFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    // event
+    if (isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void FormattedFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
+                               _xAttributes );
+    ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                             _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveMin") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-min") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveMax") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveValue") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("text") ),
+                              _xAttributes );
+    ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
+                             _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
+                               _xAttributes );
+
+    OUString sDefault( _xAttributes->getValueByUidName(
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("value-default") ) ) );
+    if (sDefault.getLength())
+    {
+        double d = sDefault.toDouble();
+        if (d != 0.0 ||
+            sDefault.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("0") ) ||
+            sDefault.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("0.0") ))
+        {
+            ctx.getControlModel()->setPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault") ),
+                makeAny( d ) );
+        }
+        else // treat as string
+        {
+            ctx.getControlModel()->setPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault") ),
+                makeAny( sDefault ) );
+        }
+    }
+
+    // format spec
+    try
+    {
+        OUString sFormat( _xAttributes->getValueByUidName(
+            XMLNS_DIALOGS_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
+        if (! sFormat.getLength())
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("missing format-code attribute!") ),
+                Reference< XInterface >(), Any() );
+        }
+        OUString sLocale( _xAttributes->getValueByUidName(
+            XMLNS_DIALOGS_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
+        if (! sLocale.getLength())
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("missing format-locale attribute!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        // split locale
+        lang::Locale locale;
+        sal_Int32 semi0 = sLocale.indexOf( ';' );
+        if (semi0 < 0) // no semi at all, just try language
+        {
+            locale.Language = sLocale;
+        }
+        else
+        {
+            sal_Int32 semi1 = sLocale.indexOf( ';', semi0 +1 );
+            if (semi1 > semi0) // language;country;variant
+            {
+                locale.Language = sLocale.copy( 0, semi0 );
+                locale.Country = sLocale.copy( semi0 +1, semi1 - semi0 -1 );
+                locale.Variant = sLocale.copy( semi1 +1 );
+            }
+            else // try language;country
+            {
+                locale.Language = sLocale.copy( 0, semi0 );
+                locale.Country = sLocale.copy( semi0 +1 );
+            }
+        }
+
+        Reference< XComponentContext > xContext( _pImport->getComponentContext() );
+//          Reference< util::XNumberFormatter > xFormatter( xContext->getServiceManager()->createInstanceWithContext(
+//              OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter") ), xContext ), UNO_QUERY );
+//          OSL_ASSERT( xFormatter.is() );
+//          Reference< util::XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier() );
+        Reference< util::XNumberFormatsSupplier > xSupplier( xContext->getServiceManager()->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier") ), xContext ), UNO_QUERY );
+
+        Reference< util::XNumberFormats > xFormats( xSupplier->getNumberFormats() );
+        sal_Int32 nKey = xFormats->addNew( sFormat, locale );
+
+        ctx.getControlModel()->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ),
+            makeAny( xSupplier ) );
+        ctx.getControlModel()->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ),
+            makeAny( nKey ) );
+    }
+    catch (util::MalformedNumberFormatException & exc)
+    {
+        OSL_ENSURE( 0, "### util::MalformedNumberFormatException occured!" );
+        // rethrow
+        throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
+    }
+
     ctx.importEvents( _events );
 }
 
@@ -1443,30 +1610,35 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     {
         return new FileControlElement( rLocalName, xAttributes, this, _pImport );
     }
-    // currency-field
+    // currencyfield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("currencyfield") ))
     {
         return new CurrencyFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // date-field
+    // datefield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("datefield") ))
     {
         return new DateFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // date-field
+    // datefield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("numericfield") ))
     {
         return new NumericFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // time-field
+    // timefield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("timefield") ))
     {
         return new TimeFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // pattern-field
+    // patternfield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("patternfield") ))
     {
         return new PatternFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // formattedfield
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("formattedfield") ))
+    {
+        return new FormattedFieldElement( rLocalName, xAttributes, this, _pImport );
     }
     // fixedline
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fixedline") ))

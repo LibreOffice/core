@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,7 +1301,8 @@ Reference< xml::XImportContext > DialogImport::getStyle(
 
 //==================================================================================================
 Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
-    Reference< container::XNameContainer > const & xDialogModel )
+    Reference< container::XNameContainer > const & xDialogModel,
+    Reference< XComponentContext > const & xContext )
     SAL_THROW( (Exception) )
 {
     NameSpaceUid arNamespaceUids[] = {
@@ -1316,7 +1317,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     return ::xmlscript::createDocumentHandler(
         arNamespaceUids, sizeof(arNamespaceUids) / sizeof(NameSpaceUid),
         -1 /* unknown namespace id */,
-        static_cast< xml::XImporter * >( new DialogImport( xDialogModel ) ) );
+        static_cast< xml::XImporter * >( new DialogImport( xContext, xDialogModel ) ) );
 }
 
 }

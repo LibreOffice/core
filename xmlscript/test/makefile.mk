@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-06 09:39:55 $
+#   last change: $Author: dbo $ $Date: 2001-09-19 08:46:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,13 +109,13 @@ APP1DEF=	$(MISC)$/imexp.def
 
 $(MISC)$/imexp.def: makefile.mk
     echo  NAME			imexp			>$@
-    echo  DESCRIPTION	'XML dialogs im-/ exporter'     >>$@
+    echo  DESCRIPTION	'XML dialog im-/ exporter'     	>>$@
     echo  EXETYPE		WINDOWS 			>>$@
-    echo  STUB			'winSTUB.EXE'           >>$@
+    echo  STUB		'winSTUB.EXE'           	>>$@
     echo  PROTMODE						>>$@
-    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	>>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE	>>$@
-    echo  HEAPSIZE		8192					>>$@
-    echo  STACKSIZE 	32768					>>$@
+    echo  CODE		PRELOAD MOVEABLE DISCARDABLE	>>$@
+    echo  DATA		PRELOAD MOVEABLE MULTIPLE	>>$@
+    echo  HEAPSIZE		8192				>>$@
+    echo  STACKSIZE 	32768				>>$@
 
 .ENDIF

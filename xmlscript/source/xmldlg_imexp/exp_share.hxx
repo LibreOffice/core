@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:39 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@ public:
     void readOrientationAttr( OUString const & rPropName, OUString const & rAttrName );
     //
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue ) SAL_THROW( () );
+    void addNumberFormatAttr(
+        Reference< beans::XPropertySet > const & xFormatProperties,
+        OUString const & rAttrName );
 
     //
     void readEvents() SAL_THROW( (Exception) );
@@ -169,6 +172,7 @@ public:
     void readListBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readNumericFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readPatternFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readFormattedFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readTimeFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readFixedLineModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readProgressBarModel( StyleBag * all_styles ) SAL_THROW( (Exception) );

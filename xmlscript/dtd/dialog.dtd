@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.17 2001-08-16 14:11:24 dbo Exp $
+        $Id: dialog.dtd,v 1.18 2001-09-19 08:46:32 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -73,9 +73,9 @@
                                ">
 
 <!ENTITY % event "(script:event|
-		   script:listener-event|
-		   dlg:event
-		  )">
+                   script:listener-event|
+                   dlg:event
+                  )">
 
 <!ENTITY % control "(dlg:bulletinboard|
                      dlg:button|
@@ -93,6 +93,7 @@
                      dlg:numericfield|
                      dlg:currencyfield|
                      dlg:patternfield|
+                     dlg:formattedfield|
                      dlg:fixedline|
                      dlg:progressmeter|
                      dlg:scrollbar
@@ -142,18 +143,18 @@
 
 <!ELEMENT script:event EMPTY>
 <!ATTLIST script:event script:location CDATA #IMPLIED
-		       script:language CDATA #REQUIRED
-		       script:macro-name CDATA #REQUIRED
+                       script:language CDATA #REQUIRED
+                       script:macro-name CDATA #REQUIRED
                        script:event-name CDATA #REQUIRED
-		       >
+                       >
 <!ELEMENT script:listener-event EMPTY>
 <!ATTLIST script:listener-event script:location CDATA #IMPLIED
-				script:language CDATA #REQUIRED
-				script:macro-name CDATA #REQUIRED
-				script:listener-type CDATA #REQUIRED
-				script:listener-method CDATA #REQUIRED
-				script:listener-param CDATA #IMPLIED
-				>
+                                script:language CDATA #REQUIRED
+                                script:macro-name CDATA #REQUIRED
+                                script:listener-type CDATA #REQUIRED
+                                script:listener-method CDATA #REQUIRED
+                                script:listener-param CDATA #IMPLIED
+                                >
 <!-- deprecated -->
 <!ELEMENT dlg:event EMPTY>
 <!ATTLIST dlg:event dlg:listener-type CDATA #REQUIRED
@@ -227,7 +228,7 @@
 
 <!ELEMENT dlg:text ((%event;)*)>
 <!ATTLIST dlg:text %default-attributes;
-                   dlg:align (left|center|right|none) #IMPLIED
+                   dlg:align (left|center|right) #IMPLIED
                    dlg:multiline %boolean; #IMPLIED
                    dlg:value CDATA #IMPLIED
                    >
@@ -235,7 +236,7 @@
 <!ELEMENT dlg:textfield ((%event;)*)>
 <!ATTLIST dlg:textfield %default-attributes;
                         dlg:tabstop %boolean; #IMPLIED
-                        dlg:align (left|center|right|none) #IMPLIED
+                        dlg:align (left|center|right) #IMPLIED
                         dlg:readonly %boolean; #IMPLIED
                         dlg:echochar CDATA #IMPLIED
                         dlg:hard-linebreaks %boolean; #IMPLIED
@@ -319,6 +320,23 @@
                            dlg:edit-mask CDATA #IMPLIED
                            dlg:literal-mask CDATA #IMPLIED
                            >
+
+<!ELEMENT dlg:formattedfield ((%event;)*)>
+<!ATTLIST dlg:formattedfield %default-attributes;
+			     dlg:tabstop %boolean; #IMPLIED
+			     dlg:readonly %boolean; #IMPLIED
+			     dlg:align (left|center|right) #IMPLIED
+			     dlg:format-code CDATA #REQUIRED
+			     dlg:format-locale CDATA #REQUIRED
+			     dlg:strict-format %boolean; #IMPLIED
+			     dlg:value-default CDATA #IMPLIED
+			     dlg:value-max %numeric; #IMPLIED
+			     dlg:value-min %numeric; #IMPLIED
+			     dlg:value %numeric; #IMPLIED
+			     dlg:maxlength %numeric; #IMPLIED
+			     dlg:spin %boolean; #IMPLIED
+			     dlg:text CDATA #IMPLIED
+			     >
 
 <!ELEMENT dlg:fixedline ((%event;)*)>
 <!ATTLIST dlg:fixedline %default-attributes;
