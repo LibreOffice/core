@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:00:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3642,12 +3642,12 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const REFERENCE< XSTORAGE >& xStora
             // if a Medium is present, the document is already initialized
             throw DOUBLEINITIALIZATIONEXCEPTION();
 
-        SfxMedium* pMedium = new SfxMedium( xStorage );
-
         // after i36090 is fixed the pool from object shell can be used
         // SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
         SfxAllItemSet aSet( SFX_APP()->GetPool() );
 
+        // the BaseURL is part of the ItemSet
+        SfxMedium* pMedium = new SfxMedium( xStorage, String() );
         TransformParameters( SID_OPENDOC, aMediaDescriptor, aSet );
         pMedium->GetItemSet()->Put( aSet );
 
@@ -3709,7 +3709,11 @@ void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorag
     else
     {
         m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion );
-        bSuccess = m_pData->m_pObjectShell->DoSaveAs( xStorage, &aSet );
+
+        // BaseURL is part of the ItemSet
+        SfxMedium aMedium( xStorage, String(), &aSet );
+        aMedium.CanDisposeStorage_Impl( FALSE );
+        bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, TRUE );
         m_pData->m_pObjectShell->DoSaveCompleted( NULL );
     }
 
