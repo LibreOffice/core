@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:08:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
 {
     SvXMLImportContext* pContext = 0L;
 
-    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENTS ) )
+    if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
