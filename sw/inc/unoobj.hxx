@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 20:26:31 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ enum CursorType
 #define FOREACHUNOPAM_END() \
         } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr ); \
     }
+
 
 /* -----------------26.06.98 16:18-------------------
  *
@@ -529,8 +530,13 @@ public:
 
     static void         SelectPam(SwPaM& rCrsr, sal_Bool bExpand);
     static void         SetString(SwUnoCrsr& rUnoCrsr, const rtl::OUString& rString);
-};
 
+    static              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                            createSortDescriptor(sal_Bool bFromTable);
+    static sal_Bool     convertSortProperties(
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor,
+                            SwSortOptions& rSortOpt);
+};
 /*-----------------20.03.98 07:47-------------------
 
 --------------------------------------------------*/

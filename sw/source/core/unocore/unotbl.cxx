@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2117,7 +2117,6 @@ SwXTextTable::SwXTextTable() :
     aChartLstnrCntnr( (XTextTable*)this),
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False),
-    pLastSortOptions(0),
     _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
     bIsDescriptor(sal_True),
     nRows(2),
@@ -2136,7 +2135,6 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
-    pLastSortOptions(0),
     _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
     bIsDescriptor(sal_False),
     nRows(0),
@@ -2150,7 +2148,6 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
   -----------------------------------------------------------------------*/
 SwXTextTable::~SwXTextTable()
 {
-    delete pLastSortOptions;
     delete pTableProps;
 }
 /*-- 11.12.98 12:42:44---------------------------------------------------
@@ -2799,33 +2796,20 @@ uno::Sequence< beans::PropertyValue > SwXTextTable::createSortDescriptor(void)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Sequence< beans::PropertyValue > aRet;
-    //XTextSortDescriptor noch nicht wieder definiert
-    DBG_WARNING("not implemented")
-    return aRet;
-    /*SwXTextSortDescriptor* pDesc = new SwXTextSortDescriptor(sal_True);
-    uno::Reference< XSortDescriptor >  xRet = pDesc;
-    if(!bEmpty && pLastSortOptions)
-        pDesc->SetSortOptions(*pLastSortOptions);
-    return xRet;*/
+    return SwXTextCursor::createSortDescriptor(sal_False);
 }
 /*-- 11.12.98 12:42:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& xDescriptor)
+void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-/*
+    SwSortOptions aSortOpt;
     SwFrmFmt* pFmt = GetFrmFmt();
-    SwXTextSortDescriptor* pDesc = (SwXTextSortDescriptor*)
-                        xDescriptor->getImplementation(::getCppuType((const SwXTextSortDescriptor*)0));
-
-    if(pFmt && pDesc && pDesc->GetSortOptions().aKeys.Count())
+    if(pFmt &&
+        SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
     {
-        delete pLastSortOptions;
-        pLastSortOptions = new SwSortOptions(pDesc->GetSortOptions());
         SwTable* pTable = SwTable::FindTable( pFmt );
         SwSelBoxes aBoxes;
         const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
@@ -2835,10 +2819,8 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& xDescriptor
             aBoxes.Insert( pBox );
         }
         UnoActionContext aContext( pFmt->GetDoc() );
-        pFmt->GetDoc()->SortTbl(aBoxes, pDesc->GetSortOptions());
+        pFmt->GetDoc()->SortTbl(aBoxes, aSortOpt);
     }
-
- * */
 }
 /*-- 11.12.98 12:42:49---------------------------------------------------
 
@@ -3462,7 +3444,6 @@ SwXCellRange::SwXCellRange() :
     aCursorDepend(this, 0),
     aChartLstnrCntnr((cppu::OWeakObject*)this),
     pTblCrsr(0),
-    pLastSortOptions(0),
     aPropSet(0),
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False),
@@ -3483,7 +3464,6 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_RANGE)),
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False),
-    pLastSortOptions(0),
     _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_RANGE))
 {
 
@@ -3493,7 +3473,6 @@ SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
   -----------------------------------------------------------------------*/
 SwXCellRange::~SwXCellRange()
 {
-    delete pLastSortOptions;
     delete pTblCrsr;
 }
 /*-- 11.12.98 14:27:34---------------------------------------------------
@@ -4026,37 +4005,25 @@ double SwXCellRange::getNotANumber(void) throw( uno::RuntimeException )
 uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    uno::Sequence< beans::PropertyValue > aRet;
-    return aRet;
-    /*SwXTextSortDescriptor* pDesc = new SwXTextSortDescriptor(sal_True);
-    uno::Reference< XSortDescriptor >  xRet = pDesc;
-    if(!bEmpty && pLastSortOptions)
-        pDesc->SetSortOptions(*pLastSortOptions);
-    return xRet;*/
+    return SwXTextCursor::createSortDescriptor(sal_False);
 }
 /*-- 11.12.98 14:27:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& xDescriptor)
+void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
-    /*
+    SwSortOptions aSortOpt;
     SwFrmFmt* pFmt = GetFrmFmt();
-    SwXTextSortDescriptor* pDesc = (SwXTextSortDescriptor*)
-//                      xDescriptor->getImplementation(::getCppuType((const SwXTextSortDescriptor*)0));
-
-    if(pFmt && pDesc && pDesc->GetSortOptions().aKeys.Count())
+    if(pFmt &&
+        SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
     {
-        delete pLastSortOptions;
-        pLastSortOptions = new SwSortOptions(pDesc->GetSortOptions());
         SwUnoTableCrsr* pTableCrsr = *pTblCrsr;
         pTableCrsr->MakeBoxSels();
         UnoActionContext aContext( pFmt->GetDoc() );
-        pFmt->GetDoc()->SortTbl(pTableCrsr->GetBoxes(), pDesc->GetSortOptions());
-    }*/
+        pFmt->GetDoc()->SortTbl(pTableCrsr->GetBoxes(), aSortOpt);
+    }
 }
 /* -----------------27.04.98 16:54-------------------
  *

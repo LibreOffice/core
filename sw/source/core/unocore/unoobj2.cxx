@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 12:27:01 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,24 +400,24 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
     else
         throw uno::RuntimeException();
 }
-/*-- 09.12.98 14:18:58---------------------------------------------------
+/* -----------------------------15.12.00 14:01--------------------------------
 
-  -----------------------------------------------------------------------*/
-uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(void) throw( uno::RuntimeException )
+ ---------------------------------------------------------------------------*/
+uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bool bFromTable)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Sequence< beans::PropertyValue > aRet(12);
     beans::PropertyValue* pArray = aRet.getArray();
 
     uno::Any aVal;
     sal_Bool bFalse = sal_False;
     sal_Bool bTrue = sal_True;
-    aVal.setValue( &bFalse, ::getCppuBooleanType());
+    aVal.setValue( &bFromTable, ::getCppuBooleanType());
     pArray[0] = beans::PropertyValue(C2U("IsSortInTable"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     String sSpace(String::CreateFromAscii(" "));
     sal_Unicode uSpace = sSpace.GetChar(0);
-    aVal.setValue( &uSpace, ::getCppuCharType());
+
+    aVal <<= uSpace;
     pArray[1] = beans::PropertyValue(C2U("Delimiter"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal.setValue( &bTrue, ::getCppuBooleanType());
@@ -451,22 +451,29 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(void) 
     pArray[11] = beans::PropertyValue(C2U("IsSortAscending2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     return aRet;
 }
-/*-- 09.12.98 14:19:00---------------------------------------------------
+
+/*-- 09.12.98 14:18:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
-        throw( uno::RuntimeException )
+uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    return SwXTextCursor::createSortDescriptor(sal_False);
+}
+/* -----------------------------15.12.00 14:06--------------------------------
 
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextCursor::convertSortProperties(
+    const uno::Sequence< beans::PropertyValue >& rDescriptor, SwSortOptions& rSortOpt)
+{
+    sal_Bool bRet = sal_True;
     const beans::PropertyValue* pProperties = rDescriptor.getConstArray();
-    SwSortOptions aSortOpt;
 
-    aSortOpt.bTable = sal_False;
-    aSortOpt.nDeli = ' ';
-    aSortOpt.eDirection = SRT_COLUMNS;
+    rSortOpt.bTable = sal_False;
+    rSortOpt.cDeli = ' ';
+    rSortOpt.eDirection = SRT_COLUMNS;
 
-    aSortOpt.aKeys;
+    rSortOpt.aKeys;
     SwSortKey* pKey1 = new SwSortKey;
     pKey1->nColumnId = USHRT_MAX;
     pKey1->eSortKeyType = SRT_NUMERIC;
@@ -491,33 +498,27 @@ void SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescripto
         if( COMPARE_EQUAL == rPropName.compareToAscii("IsSortInTable"))
         {
             if ( aValue.getValueType() == ::getBooleanCppuType() )
-            {
-                aValue >>= aSortOpt.bTable;
-            }
+                rSortOpt.bTable = *(sal_Bool*)aValue.getValue();
             else
-                throw uno::RuntimeException();
+                bRet = sal_False;
         }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("Delimiter"))
         {
-            if ( aValue.getValueType() == ::getCppuType((sal_Unicode*)0))
-            {
-                sal_Unicode uChar;
-                aValue >>= uChar;
-                aSortOpt.nDeli = uChar;
-            }
+            sal_Unicode uChar;
+            if( aValue >>= uChar )
+                rSortOpt.cDeli = uChar;
             else
-                throw uno::RuntimeException();
+                bRet = sal_False;
         }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("SortColumns"))
         {
             if ( aValue.getValueType() == ::getBooleanCppuType() )
             {
-                sal_Bool bTemp;
-                aValue >>= bTemp;
-                aSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
+                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
+                rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
             }
             else
-                throw uno::RuntimeException();
+                bRet = sal_False;
         }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("SortRowOrColumnNo", 17) &&
             rPropName.getLength() == 18 &&
@@ -529,11 +530,9 @@ void SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescripto
             if( aValue.getValueType() == ::getCppuType((const sal_Int16*)0) && nIndex < 3)
                 aValue >>= nCol;
             if( nCol >= 0 )
-            {
                 aKeys[nIndex]->nColumnId = nCol;
-            }
             else
-                throw uno::RuntimeException();
+                bRet = sal_False;
         }
         else if(0 == rPropName.search(C2U("IsSortNumeric")) &&
             rPropName.getLength() == 14 &&
@@ -543,39 +542,50 @@ void SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescripto
             nIndex = nIndex - '0';
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
             {
-                sal_Bool bTemp;
-                aValue >>= bTemp;
+                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
                 aKeys[nIndex]->eSortKeyType = bTemp ? SRT_NUMERIC : SRT_APLHANUM;
             }
             else
-                throw uno::RuntimeException();
+                bRet = sal_False;
         }
         else if(0 == rPropName.search(C2U("IsSortAscending")) && rPropName.getLength() == 16 &&
             lcl_IsNumeric(String(rPropName[(sal_uInt16)15])))
         {
-            sal_uInt16 nIndex = rPropName.getStr()[13];
+            sal_uInt16 nIndex = rPropName.getStr()[16];
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
             {
-                sal_Bool bTemp;
-                aValue >>= bTemp;
+                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
                 aKeys[nIndex]->eSortOrder = bTemp ? SRT_ASCENDING : SRT_DESCENDING;
             }
             else
-                throw uno::RuntimeException();
+                bRet = sal_False;
         }
     }
     if(pKey1->nColumnId != USHRT_MAX)
-        aSortOpt.aKeys.C40_INSERT(SwSortKey, pKey1, aSortOpt.aKeys.Count());
+        rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey1, rSortOpt.aKeys.Count());
     if(pKey2->nColumnId != USHRT_MAX)
-        aSortOpt.aKeys.C40_INSERT(SwSortKey, pKey2, aSortOpt.aKeys.Count());
+        rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey2, rSortOpt.aKeys.Count());
     if(pKey3->nColumnId != USHRT_MAX)
-        aSortOpt.aKeys.C40_INSERT(SwSortKey, pKey3, aSortOpt.aKeys.Count());
+        rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey3, rSortOpt.aKeys.Count());
 
+    return bRet && rSortOpt.aKeys.Count() > 0;
+}
+/*-- 09.12.98 14:19:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
+        throw( uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwSortOptions aSortOpt;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr && aSortOpt.aKeys.Count())
+
+    if(pUnoCrsr)
     {
         if(pUnoCrsr->HasMark())
         {
+            if(!SwXTextCursor::convertSortProperties(rDescriptor, aSortOpt))
+                    throw uno::RuntimeException();
             UnoActionContext aContext( pUnoCrsr->GetDoc() );
             pUnoCrsr->GetDoc()->SortText(*pUnoCrsr, aSortOpt);
         }
