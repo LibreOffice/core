@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-12-03 02:35:05 $
+ *  last change: $Author: khendricks $ $Date: 2001-12-04 00:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,13 +135,17 @@ SpellChecker::~SpellChecker()
 {
 
   for (int i = 0; i < numdict; i++) {
-         if (aSuppDicts[i]) delete aSuppDicts[i];
-         aSuppDicts[i] = NULL;
+         if (aDicts[i]) delete aDicts[i];
+         aDicts[i] = NULL;
   }
-  delete[] aSuppDicts;
-  aSuppDicts = NULL;
-  delete[] aSuppEncs;
-  aSuppEncs = NULL;
+  delete[] aDicts;
+  aDicts = NULL;
+  delete[] aDEncs;
+  aDEncs = NULL;
+  delete[] aDLocs;
+  aDLocs = NULL;
+  delete[] aDNames;
+  aDNames = NULL;
   numdict = 0;
   if (pPropHelper)
      pPropHelper->RemoveAsPropListener();
@@ -177,38 +181,54 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
     osl::FileBase::getSystemPathFromFileURL(diclst,dlst);
 
         /* invoke the dictionary manager to parse and return the dictionary list */
-    DictMgr* dMgr = new DictMgr(OU2A(dlst));
+        OString aTmp(OU2A(dlst));
+    DictMgr* dMgr = new DictMgr(aTmp.getStr());
         dictentry * pdict;
         numdict = 0;
         if (dMgr)
              numdict = dMgr->get_list(&pdict);
 
         if (numdict) {
-        aSuppDicts = new MySpell* [numdict];
-        aSuppEncs  = new rtl_TextEncoding [numdict];
+        aDicts = new MySpell* [numdict];
+        aDEncs  = new rtl_TextEncoding [numdict];
+            aDLocs = new Locale [numdict];
+            aDNames = new OUString [numdict];
         aSuppLocales.realloc(numdict);
-            aSuppNames.realloc(numdict);
             Locale * pLocale = aSuppLocales.getArray();
-            OUString * pNames = aSuppNames.getArray();
+            int numlocs = 0;
+            int newloc;
             for (int i = 0; i < numdict; i++) {
-        pLocale[i] = Locale( A2OU(pdict->lang), A2OU(pdict->region), OUString() );
-                aSuppDicts[i] = NULL;
-                pNames[i] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(pdict->filename);
+            Locale nLoc( A2OU(pdict->lang), A2OU(pdict->region), OUString() );
+                newloc = 1;
+            for (int j = 0; j < numlocs; j++) {
+                    if (nLoc == pLocale[j]) newloc = 0;
+                }
+                if (newloc) {
+                    pLocale[numlocs] = nLoc;
+                    numlocs++;
+                }
+                aDLocs[i] = nLoc;
+                aDicts[i] = NULL;
+                aDEncs[i] = 0;
+                aDNames[i] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(pdict->filename);
                 pdict++;
             }
+            aSuppLocales.realloc(numlocs);
 
         } else {
             /* no dictionary.lst so just use default en_US dictionary  */
             numdict = 1;
-            aSuppDicts = new MySpell*[1];
-                aSuppEncs  = new rtl_TextEncoding[1];
+            aDicts = new MySpell*[1];
+                aDEncs  = new rtl_TextEncoding[1];
+                aDLocs = new Locale[1];
+                aDNames = new OUString[1];
             aSuppLocales.realloc(1);
-                aSuppNames.realloc(1);
             Locale *pLocale = aSuppLocales.getArray();
-                OUString * pNames = aSuppNames.getArray();
-        pLocale[0] = Locale( A2OU("en"), A2OU("US"), OUString() );
-                aSuppDicts[0] = NULL;
-                pNames[0] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU("en_US");
+        Locale nLoc( A2OU("en"), A2OU("US"), OUString() );
+        pLocale[0] = nLoc;
+                aDLocs[0] = nLoc;
+                aDicts[0] = NULL;
+                aDNames[0] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU("en_US");
         }
 
         if (dMgr) {
@@ -251,8 +271,6 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
     // initialize a myspell object for each dictionary once
         // (note: mutex is held higher up in isValid)
 
-    const Locale *pLocale = aSuppLocales.getConstArray();
-        const OUString * pNames = aSuppNames.getConstArray();
 
     INT16 nRes = -1;
     String aTmp( rWord );
@@ -264,28 +282,31 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
             pMS = NULL;
                 aEnc = 0;
 
-            if (rLocale == pLocale[i])
+            if (rLocale == aDLocs[i])
             {
-                   if (!aSuppDicts[i])
+                   if (!aDicts[i])
                    {
-                      OUString dicpath = pNames[i] + A2OU(".dic");
-                      OUString affpath = pNames[i] + A2OU(".aff");
+                      OUString dicpath = aDNames[i] + A2OU(".dic");
+                      OUString affpath = aDNames[i] + A2OU(".aff");
                       OUString dict;
                       OUString aff;
                   osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
                    osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-                      aSuppDicts[i] = new MySpell(OU2A(aff),OU2A(dict));
-                      MySpell * pms = aSuppDicts[i];
-                      aSuppEncs[i] = 0;
+                      OString aTmpaff(OU2A(aff));
+                      OString aTmpdict(OU2A(dict));
+                      aDicts[i] = new MySpell(aTmpaff.getStr(),aTmpdict.getStr());
+                      MySpell * pms = aDicts[i];
+                      aDEncs[i] = 0;
                       if (pms)
-            aSuppEncs[i] = rtl_getTextEncodingFromUnixCharset(pms->get_dic_encoding());
+            aDEncs[i] = rtl_getTextEncodingFromUnixCharset(pms->get_dic_encoding());
                }
-               pMS = aSuppDicts[i];
-                   aEnc = aSuppEncs[i];
+               pMS = aDicts[i];
+                   aEnc = aDEncs[i];
         }
             if (pMS)
                 {
-                int rVal = pMS->spell((char*)OU2ENC(rWord,aEnc));
+            OString aWrd(OU2ENC(rWord,aEnc));
+                int rVal = pMS->spell((char*)aWrd.getStr());
                  if (rVal != 1)
                     {
                         nRes = SpellFailure::SPELLING_ERROR;
@@ -358,8 +379,6 @@ Reference< XSpellAlternatives >
         rtl_TextEncoding aEnc;
     int count;
 
-    const Locale * pLocale = aSuppLocales.getConstArray();
-
     String aTmp( rWord );
     if (aTmp.Len())
     {
@@ -370,17 +389,18 @@ Reference< XSpellAlternatives >
                 aEnc = 0;
                 count = 0;
 
-            if (rLocale == pLocale[i])
+            if (rLocale == aDLocs[i])
             {
-                    pMS = aSuppDicts[i];
-                    aEnc = aSuppEncs[i];
+                    pMS = aDicts[i];
+                    aEnc = aDEncs[i];
                 }
 
 
             if (pMS)
             {
                 char ** suglst = NULL;
-                    count = pMS->suggest(&suglst, (const char *)OU2ENC(rWord,aEnc));
+                    OString aWrd(OU2ENC(rWord,aEnc));
+                    count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
 
                     if (count) {
                    Sequence< OUString > aStr( count );

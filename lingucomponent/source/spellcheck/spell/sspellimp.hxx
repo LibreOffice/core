@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-12-03 02:35:05 $
+ *  last change: $Author: khendricks $ $Date: 2001-12-04 00:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,10 @@ class SpellChecker :
     >
 {
     Sequence< Locale >                 aSuppLocales;
-        MySpell **                         aSuppDicts;
-        rtl_TextEncoding *                 aSuppEncs;
-        Sequence<OUString>                 aSuppNames;
+        MySpell **                         aDicts;
+        rtl_TextEncoding *                 aDEncs;
+        Locale *                           aDLocs;
+        OUString *                         aDNames;
         sal_Int32                          numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
