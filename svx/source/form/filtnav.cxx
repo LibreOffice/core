@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-06 12:29:22 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 15:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,10 @@ void FmFilterModel::SetCurrentController(const Reference< ::com::sun::star::form
 
     FmFormItem* pItem = Find(m_aChilds, xCurrent);
     if (pItem)
-        SetCurrentItems((FmFilterItems*)pItem->GetChilds()[pItem->GetCurrentPosition()]);
+    {
+        if ( pItem->GetChilds().size() > pItem->GetCurrentPosition() )
+            SetCurrentItems( static_cast< FmFilterItems* >( pItem->GetChilds()[ pItem->GetCurrentPosition() ] ) );
+    }
 }
 
 //------------------------------------------------------------------------
