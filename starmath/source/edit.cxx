@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:19:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,8 +507,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
     else
     {
-        // Timer neu starten, um den Handler (auch bei längeren Eingaben)
-        // möglichst nur einmal am Ende aufzurufen.
+        // Timer neu starten, um den Handler (auch bei laengeren Eingaben)
+        // moeglichst nur einmal am Ende aufzurufen.
         aCursorMoveTimer.Start();
 
         DBG_ASSERT( pEditView, "EditView missing (NULL pointer)" );
@@ -707,7 +707,7 @@ void SmEditWindow::SetText(const XubString& rText)
         pEditEngine->SetText(rText);
         pEditEngine->ClearModifyFlag();
 
-        //! Hier die Timer neu zu starten verhindert, dass die Handler für andere
+        //! Hier die Timer neu zu starten verhindert, dass die Handler fuer andere
         //! (im Augenblick nicht mehr aktive) Math Tasks aufgerufen werden.
         aModifyTimer.Start();
         aCursorMoveTimer.Start();
