@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:18:21 $
+ *  last change: $Author: mt $ $Date: 2001-08-09 12:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,7 @@ sal_uInt32 EditEngine::GetTextHeight() const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( FALSE );
+    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( TRUE );
     return nHeight;
 }
 
@@ -1026,7 +1026,7 @@ sal_uInt32 EditEngine::CalcTextWidth()
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( FALSE ) : pImpEditEngine->GetTextHeight();
+    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( TRUE ) : pImpEditEngine->GetTextHeight();
      return nWidth;
 }
 
