@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-30 09:30:58 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 16:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
-#include <sot/dtrans.hxx>
 #include <sot/formats.hxx>
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
