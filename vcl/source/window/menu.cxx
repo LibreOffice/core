@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-18 12:58:58 $
+ *  last change: $Author: ssa $ $Date: 2002-11-19 16:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,7 @@ private:
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
     Timer           aHighlightChangedTimer;
+    Timer           aSubmenuCloseTimer;
     Timer           aScrollTimer;
     ULONG           nSaveFocusId;
 //    long            nStartY;
@@ -412,6 +413,7 @@ private:
 
                     DECL_LINK( PopupEnd, FloatingWindow* );
                     DECL_LINK( HighlightChanged, Timer* );
+                    DECL_LINK( SubmenuClose, Timer* );
                     DECL_LINK( AutoScroll, Timer* );
 
     void            StateChanged( StateChangedType nType );
@@ -2908,6 +2910,8 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
     aHighlightChangedTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, HighlightChanged ) );
     aHighlightChangedTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
+    aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
+    aSubmenuCloseTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, SubmenuClose ) );
     aScrollTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, AutoScroll ) );
 
     if ( Application::GetAccessHdlCount() )
@@ -3188,6 +3192,17 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
     return 0;
 }
 
+IMPL_LINK( MenuFloatingWindow, SubmenuClose, Timer*, pTimer )
+{
+    if( pMenu->pStartedFrom )
+    {
+        MenuFloatingWindow* pWin = (MenuFloatingWindow*) pMenu->pStartedFrom->GetWindow();
+        if( pWin )
+            pWin->KillActivePopup();
+    }
+    return 0;
+}
+
 void MenuFloatingWindow::EnableScrollMenu( BOOL b )
 {
     bScrollMenu = b;
@@ -3376,9 +3391,9 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
         {
             // #102461# do not remove highlight if a popup menu is open at this position
             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
-            // close popup if we leave somewhere else
+            // close popup with some delayed if we leave somewhere else
             if( pActivePopup && pData->pSubMenu != pActivePopup )
-                KillActivePopup();
+                pActivePopup->ImplGetFloatingWindow()->aSubmenuCloseTimer.Start();
 
             if( !pActivePopup || pData->pSubMenu != pActivePopup )
                 ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
@@ -3388,6 +3403,7 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
     }
     else if ( ImplIsMouseFollow() || ( rMEvt.GetButtons() == MOUSE_LEFT ) )
     {
+        aSubmenuCloseTimer.Stop();
         if( bIgnoreFirstMove )
             bIgnoreFirstMove = FALSE;
         else
@@ -3502,6 +3518,8 @@ void MenuFloatingWindow::ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer )
 //  MenuItemData* pNextData = pMenu->pItemList->GetDataFromPos( n );
 //  if ( pActivePopup && pNextData && ( pActivePopup != pNextData->pSubMenu ) )
 //      KillActivePopup();
+
+    aSubmenuCloseTimer.Stop();
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
