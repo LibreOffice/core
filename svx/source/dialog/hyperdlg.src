@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:47:49 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,7 +1459,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ greek ] = "Δοκιμαστικό κείμενο";
         Text[ dutch ] = "Testtekst";
         Text[ french ] = "Texte d'essai";
-        Text[ spanish ] = "URL";
+        Text[ spanish ] = "Texto de prueba";
         Text[ italian ] = "Testo di prova";
         Text[ danish ] = "Testtekst";
         Text[ swedish ] = "Testtext";
@@ -2443,7 +2443,7 @@ String RID_SVXSTR_HYPDLG_APPLYBUT
     Text[ portuguese_brazilian ] = "Apply";
     Text[ japanese ] = "“K—p";
     Text[ korean ] = "ΐϋΏλ";
-    Text[ chinese_simplified ] = "ΜΧΣΓ";
+    Text[ chinese_simplified ] = "²ΙΣΓ";
     Text[ chinese_traditional ] = "±Δ¥Ξ";
     Text[ arabic ] = "ΚΨΘνή";
     Text[ turkish ] = "Uygula";
@@ -2762,6 +2762,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
