@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:12:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #define HID_SD_NAVIGATOR_TBX        (HID_SD_START + 30)
 #define HID_SD_NAVIGATOR_LB         (HID_SD_START + 31)
 
-#define HID_SD_NAVIGATOR_TBI_LIVE   (HID_SD_START + 32)
 #define HID_SD_NAVIGATOR_TBI_PEN    (HID_SD_START + 33)
 #define HID_SD_NAVIGATOR_TBI_FIRST  (HID_SD_START + 34)
 #define HID_SD_NAVIGATOR_TBI_PREV   (HID_SD_START + 35)
@@ -235,3 +234,12 @@
 #define HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT    (HID_SD_START + 134)
 
 #define HID_SD_DRAW_MEDIA_TOOLBOX           (HID_SD_START + 135)
+
+#define HID_SD_TASK_PANE                    (HID_SD_START + 136)
+#define HID_SD_SLIDE_DESIGNS                (HID_SD_START + 137)
+#define HID_SD_CURRENT_MASTERS              (HID_SD_START + 138)
+#define HID_SD_RECENT_MASTERS               (HID_SD_START + 139)
+#define HID_SD_ALL_MASTERS                  (HID_SD_START + 140)
+#define HID_SD_SLIDE_LAYOUTS                (HID_SD_START + 141)
+#define HID_SD_CUSTOM_ANIMATIONS            (HID_SD_START + 142)
+#define HID_SD_SLIDE_TRANSITIONS            (HID_SD_START + 143)
