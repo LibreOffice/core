@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:52:12 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ namespace dbaccess
         rtl::OUString                               m_aOrder;
         rtl::OUString                               m_aActiveCommand;
         rtl::OUString                               m_aCursorName;
+        rtl::OUString                               m_aUpdateCatalogName; // is set by a query
+        rtl::OUString                               m_aUpdateSchemaName; // is set by a query
         rtl::OUString                               m_aUpdateTableName; // is set by a query
 
         sal_Int32                   m_nFetchDirection;
@@ -453,6 +455,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2000/12/06 09:52:12  oj
+    #80219# correted deleterow(s) and remeber position
+
     Revision 1.11  2000/12/01 14:16:46  oj
     #81017# use of xinteractionhandler
 
