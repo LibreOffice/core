@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:28:17 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:21:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ AUTODOCPARAMS= -lg c++ \
         -p registry $(INCOUT) -t registry \
         -p cppu $(INCOUT) -t cppu -t com -t typelib -t uno \
         -p cppuhelper $(INCOUT) -t cppuhelper \
+        -p salhelper $(INCOUT) -t salhelper \
         -p bridges $(INCOUT) -t bridges
 
 JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -classpath $(SOLARBINDIR)$/ridl.jar -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
