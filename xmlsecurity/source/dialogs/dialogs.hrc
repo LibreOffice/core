@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 09:00:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 #define TD_SP_INNERBORDER_RIGHT         3
 #define TD_SP_INNERBORDER_TOP           3
 #define TD_SP_INNERBORDER_BOTTOM        3
-#define TD_WIDTH                        (TP_WIDTH+TD_SP_INNERBORDER_LEFT+TD_SP_INNERBORDER_RIGHT)
+#define TD_WIDTH                        (TP_WIDTH+RSC_SP_DLG_INNERBORDER_LEFT+RSC_SP_DLG_INNERBORDER_RIGHT)
 #define TD_HEIGHT                       (TP_HEIGHT+TD_SP_INNERBORDER_TOP+2*TD_SP_INNERBORDER_BOTTOM+RSC_CD_PUSHBUTTON_HEIGHT+RIDDER_HEIGHT)
 
 #define SEP_FL_SPACE_Y                  6
@@ -209,12 +209,9 @@
 #define FI_ISSTO                        9
 #define FI_ISSBYLABEL                   10
 #define FI_ISSBY                        11
-#define FI_VALFROMLABEL                 12
-#define FI_VALFROM                      13
-#define FI_VALTOLABEL                   14
-#define FI_VALTO                        15
-#define IMG_KEY                         16
-#define FI_CORRPRIVKEY                  17
+#define FI_VALIDDATE                    12
+#define IMG_KEY                         13
+#define FI_CORRPRIVKEY                  14
 
 #define IMG1_WIDTH                      33
 #define IMG1_HEIGHT                     22
@@ -278,10 +275,9 @@
 #define CV_ROW_0A                       (CV_ROW_0+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
 #define CV_ROW_2A                       (CV_ROW_2+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
 
-
 // --------- tab dialog macro security ---------
 
-#define MS_COL_A                        (TD_WIDTH-TD_SP_INNERBORDER_RIGHT)
+#define MS_COL_A                        (TD_WIDTH-RSC_SP_DLG_INNERBORDER_LEFT)
 #define MS_COL_B                        (MS_COL_A-RSC_CD_PUSHBUTTON_WIDTH)
 #define MS_COL_C                        (MS_COL_B-RSC_SP_CTRL_X)
 #define MS_COL_D                        (MS_COL_C-RSC_CD_PUSHBUTTON_WIDTH)
@@ -298,16 +294,17 @@
 #define RB_MEDIUM                       4
 #define RB_LOW                          5
 
-#define SL_RB_DIST_Y                    (RSC_SP_FLGR_SPACE_Y+3*RSC_CD_RADIOBUTTON_HEIGHT)
-#define SL_COL_0                        TD_SP_INNERBORDER_LEFT
+#define RSC_BIG_RADIOBUTTON             40
+#define SL_RB_DIST_Y                    (RSC_SP_FLGR_SPACE_Y+RSC_BIG_RADIOBUTTON)
+#define SL_COL_0                        RSC_SP_TBPG_INNERBORDER_LEFT
 #define SL_COL_1                        (SL_COL_0+RSC_SP_FLGR_SPACE_X)
 #define SL_COL_3                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define SL_COL_2                        ((SL_COL_3-SL_COL_1)*90/100)
+#define SL_COL_2                        ((SL_COL_3-SL_COL_1)*100/105)
 #define SL_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
-#define SL_ROW_1                        (SL_ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define SL_ROW_1                        (SL_ROW_0+SL_RB_DIST_Y)
 #define SL_ROW_2                        (SL_ROW_1+SL_RB_DIST_Y)
 #define SL_ROW_3                        (SL_ROW_2+SL_RB_DIST_Y)
-#define SL_ROW_4                        (SL_ROW_3+SL_RB_DIST_Y)
+#define SL_ROW_4                        (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
 
 // --------- tab page trusted sources ---------
 
@@ -322,25 +319,27 @@
 #define FL_ADD_TRUSTFILELOC             9
 #define FL_REMOVE_TRUSTFILELOC          10
 
-#define TS_COL_0                        TD_SP_INNERBORDER_LEFT
+#define TS_COL_0                        RSC_SP_TBPG_INNERBORDER_LEFT
 #define TS_COL_1                        (TS_COL_0+RSC_SP_FLGR_SPACE_X)
-#define TS_COL_7                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define TS_COL_8                        (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define TS_COL_7                        (TS_COL_8-RSC_SP_FLGR_SPACE_X)
 #define TS_COL_6                        (TS_COL_7-RSC_CD_PUSHBUTTON_WIDTH)
 #define TS_COL_5                        (TS_COL_6-RSC_SP_CTRL_GROUP_X)
 #define TS_COL_4                        (TS_COL_5-RSC_CD_PUSHBUTTON_WIDTH)
 #define TS_COL_3                        (TS_COL_4-RSC_SP_CTRL_GROUP_X)
 #define TS_COL_2                        (TS_COL_3-RSC_CD_PUSHBUTTON_WIDTH)
+
+#define RSC_CD_TABLISTBOX_HEIGHT        6*RSC_BS_CHARHEIGHT
 #define TS_ROW_0                        RSC_SP_TBPG_INNERBORDER_TOP
-#define TS_ROW_10                       (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
-#define TS_ROW_5                        ((TS_ROW_10-TS_ROW_0)/2)
 #define TS_ROW_1                        (TS_ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_4                        (TS_ROW_5-RSC_SP_CTRL_Y)
-#define TS_ROW_3                        (TS_ROW_4-RSC_CD_PUSHBUTTON_HEIGHT)
-#define TS_ROW_2                        (TS_ROW_3-RSC_SP_CTRL_GROUP_Y)
-#define TS_ROW_6                        (TS_ROW_5+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_7                        (TS_ROW_6+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define TS_ROW_9                        (TS_ROW_10-RSC_CD_PUSHBUTTON_HEIGHT)
-#define TS_ROW_8                        (TS_ROW_9-RSC_SP_CTRL_GROUP_Y)
+#define TS_ROW_2                        (TS_ROW_1+RSC_CD_TABLISTBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define TS_ROW_3                        (TS_ROW_2+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define TS_ROW_4                        (TS_ROW_3+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define TS_ROW_5                        (TS_ROW_4+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+
+#define TS_ROW_8                        (TP_HEIGHT-RSC_SP_TBPG_INNERBORDER_BOTTOM)
+#define TS_ROW_7                        (TS_ROW_8-RSC_CD_PUSHBUTTON_HEIGHT)
+#define TS_ROW_6                        (TS_ROW_7-RSC_SP_FLGR_SPACE_Y)
 
 // --------- signed macro warning ---------
 
