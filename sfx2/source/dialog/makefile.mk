@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dv $ $Date: 2001-04-27 10:38:40 $
+#   last change: $Author: ka $ $Date: 2001-05-03 08:07:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,8 @@ SLOFILES =\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/partwnd.obj			\
-        $(SLO)$/versdlg.obj
+        $(SLO)$/versdlg.obj			\
+        $(SLO)$/printopt.obj		
 
 EXCEPTIONSFILES=\
         $(SLO)$/filedlghelper.obj	\
@@ -140,7 +141,8 @@ SRCFILES =\
         passwd.src			\
         register.src		\
         templdlg.src		\
-        versdlg.src
+        versdlg.src			\
+        printopt.src		
 
 # --- Targets -------------------------------------------------------
 
