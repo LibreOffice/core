@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:08:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,6 @@ Menu RID_FMEXPLORER_POPUPMENU
             HelpID = SID_FM_AUTOCONTROLFOCUS ;
             Text [ de ] = "Automatischer Kontrollelement-Fokus";
             Text [ en-US ] = "Automatic Control Focus";
-        };
-        MenuItem
-        {
-            Identifier = SID_FM_CONVERTTO_NAVIGATIONBAR;
-            HelpID = SID_FM_CONVERTTO_NAVIGATIONBAR;
-            Text [ de ] = "Navigationsleiste" ;
-            Text [ en-US ] = "Navigation Bar";
         };
     };
 };
@@ -328,6 +321,14 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Command = ".uno:ConvertToSpinButton" ;
             Text [ de ] = "Drehfeld" ;
             Text [ en-US ] = "Spin Button";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_NAVIGATIONBAR;
+            HelpID = SID_FM_CONVERTTO_NAVIGATIONBAR;
+            Command = ".uno:ConvertToNavigationBar" ;
+            Text [ de ]= "Navigationsleiste" ;
+            Text [ en-US ] = "Navigation Bar" ;
         };
     };
 };
