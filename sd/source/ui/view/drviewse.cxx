@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-12 07:54:26 $
+ *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,6 +705,30 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
             else if (pDrView)   pDrView->DoPaste();
 
             rReq.Ignore ();
+        }
+        break;
+
+        case SID_CLIPBOARD_FORMAT_ITEMS:
+        {
+            WaitObject              aWait( (Window*)GetActiveWindow() );
+            TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+            const SfxItemSet*       pReqArgs = rReq.GetArgs();
+            UINT32                  nFormat = 0;
+
+            if( pReqArgs )
+            {
+                SFX_REQUEST_ARG( rReq, pIsActive, SfxUInt32Item, SID_CLIPBOARD_FORMAT_ITEMS, FALSE );
+                nFormat = pIsActive->GetValue();
+            }
+
+
+            if( nFormat && aDataHelper.GetTransferable().is() )
+            {
+                sal_Int8 nAction = DND_ACTION_COPY;
+                pDrView->InsertData( aDataHelper,
+                                     pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
+                                     nAction, FALSE, nFormat );
+            }
         }
         break;
 

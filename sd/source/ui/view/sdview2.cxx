@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-18 13:31:22 $
+ *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
             {
                 sal_Int8 nDnDAction = DND_ACTION_COPY;
 
-                if( !InsertData( aDataHelper.GetTransferable(), aPos, nDnDAction, FALSE ) )
+                if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
                 {
                     SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
 
@@ -722,17 +722,17 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
 
         if( !bIsInsideOutlinerView )
         {
-            Point               aPos;
-            SdDrawViewShell*    pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
-            SdrPage*            pPage = NULL;
+            Point                   aPos;
+            SdDrawViewShell*        pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
+            SdrPage*                pPage = NULL;
+            TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
 
             if( pWin )
                 aPos = pWin->PixelToLogic( rEvt.maPosPixel );
 
             //!!!DND if( !( bReturn = FmFormView::Drop(rMEvt, pWin) ) ) )
-            if( !InsertData( rEvt.maDropEvent.Transferable, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
+            if( !InsertData( aDataHelper, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
             {
-                TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
                 String                  aTmpString1, aTmpString2;
                 INetBookmark            aINetBookmark( aTmpString1, aTmpString2 );
 

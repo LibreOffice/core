@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-24 10:15:59 $
+ *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONTEXT ) )
         rSet.Put( SfxStringItem( SID_CONTEXT, pDrView->GetStatusText() ) );
 
+    // clipboard (paste)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
@@ -525,6 +526,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             rSet.DisableItem( SID_PASTE );
             rSet.DisableItem( SID_PASTE2 );
+            rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
         }
         else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
         {
@@ -553,8 +555,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                     if( aTestFormat == aSupportedFormats[ n ] )
                     {
                         if( ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) ||
-                            ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) ||
-                            ( SOT_FORMATSTR_ID_EDITENGINE == aTestFormat ) )
+                            ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) )
                         {
                             aItem.AddClipbrdFormat( aTestFormat );
                         }
@@ -993,6 +994,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE2 );
+        rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
         rSet.DisableItem( SID_INSERT_GRAPHIC );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_INSERT_OBJECT );

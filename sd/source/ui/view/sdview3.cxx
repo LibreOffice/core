@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-03 13:55:29 $
+ *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 |*
 \************************************************************************/
 
-BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
+BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                          const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
                          ULONG nFormat, USHORT nPage, USHORT nLayer )
 {
@@ -188,7 +188,7 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
     nAction = rDnDAction;
     bIsDropAllowed = FALSE;
 
-    TransferableDataHelper  aDataHelper( rxTransferable );
+    TransferableDataHelper  aDataHelper( rDataHelper );
     SdrObject*              pPickObj = NULL;
     SdPage*                 pPage = NULL;
     SdWindow*               pWin = pViewSh->GetActiveWindow();
@@ -213,8 +213,8 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
         pPage = (SdPage*) pDoc->GetPage( nPage );
 
     // !!!Clipboard
-    SdTransferable* pOwnData = ( SD_MOD()->pTransferClip == (SdTransferable*) rxTransferable.get() ) ? SD_MOD()->pTransferClip :
-                               ( ( SD_MOD()->pTransferDrag == (SdTransferable*) rxTransferable.get() ) ? SD_MOD()->pTransferDrag : NULL );
+    SdTransferable* pOwnData = ( SD_MOD()->pTransferClip == (SdTransferable*) aDataHelper.GetTransferable().get() ) ? SD_MOD()->pTransferClip :
+                               ( ( SD_MOD()->pTransferDrag == (SdTransferable*) aDataHelper.GetTransferable().get() ) ? SD_MOD()->pTransferDrag : NULL );
 
     if( !pOwnData )
     {
