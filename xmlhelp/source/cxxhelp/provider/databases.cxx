@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-12 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,9 @@ using namespace com::sun::star::container;
 
 Databases::Databases( const rtl::OUString& instPath,
                       com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr )
-    : m_xSMgr( xSMgr )
+    : m_xSMgr( xSMgr ),
+      m_nErrorDocLength( 0 ),
+      m_pErrorDoc( 0 )
 {
     setInstallPath( instPath );
 }
@@ -109,6 +111,9 @@ Databases::Databases( const rtl::OUString& instPath,
 
 Databases::~Databases()
 {
+    // release errorDocument
+
+    delete[] m_pErrorDoc;
 
     // unload the databases
 
@@ -629,6 +634,53 @@ void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount
 }
 
 
+void Databases::errorDocument( const rtl::OUString& Language,
+                               char** buffer,
+                               int* byteCount )
+{
+    m_nErrorDocLength;
+
+    if( ! m_pErrorDoc )
+    {
+        rtl::OUString fileURL =
+            getInstallPathAsURL()
+            + lang( Language )
+            + rtl::OUString::createFromAscii( "/" )
+            + rtl::OUString::createFromAscii( "err.html" );
+
+        osl::DirectoryItem aDirItem;
+        osl::File aFile( fileURL );
+        osl::FileStatus aStatus( FileStatusMask_FileSize );
+
+        if( osl::FileBase::E_None == osl::DirectoryItem::get( fileURL,aDirItem ) &&
+            osl::FileBase::E_None == aFile.open( OpenFlag_Read )       &&
+            osl::FileBase::E_None == aDirItem.getFileStatus( aStatus ) )
+        {
+            m_nErrorDocLength = int( aStatus.getFileSize() );
+            m_pErrorDoc = new char[ 1 + m_nErrorDocLength ];
+            m_pErrorDoc[ m_nErrorDocLength ] = 0;
+            sal_uInt64 a = m_nErrorDocLength,b = m_nErrorDocLength;
+            aFile.read( m_pErrorDoc,a,b );
+            aFile.close();
+        }
+        else
+        {
+            // the error file does not exist
+            m_nErrorDocLength = strlen( m_pErrorDoc = "<html><body>"
+                                        "The requested document does not exist in the database !!"
+                                        "</body></html>" );
+        }
+
+    }
+
+    *byteCount = m_nErrorDocLength;
+    *buffer = new char[ 1 + *byteCount ];
+    (*buffer)[*byteCount] = 0;
+    rtl_copyMemory( *buffer,m_pErrorDoc,m_nErrorDocLength );
+}
+
+
+
 void Databases::setInstallPath( const rtl::OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -636,6 +688,6 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
     if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory ) )
         ;
 
-    if( m_aInstallDirectory.lastIndexOf( sal_Unicode( "/" ) ) != m_aInstallDirectory.getLength() - 1 )
+    if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
         m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
 }

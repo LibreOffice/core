@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-08 08:53:55 $
+ *  last change: $Author: abi $ $Date: 2001-06-12 14:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,8 @@ class InputStreamTransformer
 {
 public:
 
+    InputStreamTransformer( sal_uInt32 length,char* bff );
+
     InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
                             URLParameter* urlParam,
                             Databases*    pDatatabases );
@@ -591,12 +593,7 @@ bool URLParameter::query()
         else if( parameter.compareToAscii( "Scope" ) == 0 )
             m_aScope = value;
         else if( parameter.compareToAscii( "System" ) == 0 )
-        {
-//          if( ! value.getLength() )
-//                  m_aSystem = rtl::OUString::createFromAscii( "WIN" );
-//          else
             m_aSystem = value;
-        }
         else if( parameter.compareToAscii( "HelpPrefix" ) == 0 )
             m_aPrefix = value;
         else if( parameter.compareToAscii( "HitCount" ) == 0 )
@@ -684,6 +681,15 @@ rtl::OString URLParameter::getByName( const char* par )
         val = get_system();
 
     return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
+}
+
+
+InputStreamTransformer::InputStreamTransformer( sal_uInt32 length,char* bff )
+    : pos( 0 ),
+      len( length ),
+      buffer( new char[ length ] )
+{
+    rtl_copyMemory( buffer,bff,length );
 }
 
 
@@ -1019,10 +1025,7 @@ int schemehandlergetall( void *userData,
         *byteCount = size;
     }
     else
-    {
-        *buffer = 0;
-        *byteCount = 0;
-    }
+        uData->m_pDatabases->errorDocument( language,buffer,byteCount );
 
     return 0;
 }
