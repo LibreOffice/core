@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-21 09:15:35 $
+ *  last change: $Author: fs $ $Date: 2002-05-27 10:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,17 +424,20 @@ ImageList RID_DEFAULTIMAGELIST_LCH
 };
 
  // Vorlagen
+#define STYLE_IMAGE_LISTEF \
+    MaskColor = IMAGE_STDBTN_COLOR ; \
+    IdList = \
+    { \
+        1; 2; 3; 4; 5; \
+    }; \
+    IdCount = 5;
+
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
     StyleFamilyList =
     {
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "catpar.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Absatzvorlagen" ;
             Text [ ENGLISH ] = "Paragraph Styles" ;
             Text [ norwegian ] = "Avsnittsmaler" ;
@@ -800,11 +803,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "catabc.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Zeichenvorlagen" ;
             Text [ ENGLISH ] = "Character Styles" ;
             Text [ norwegian ] = "Tegnmaler" ;
@@ -998,11 +996,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "catfrm.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Rahmenvorlagen" ;
             Text [ ENGLISH ] = "Frame Styles" ;
             Text [ norwegian ] = "Rammemaler" ;
@@ -1196,11 +1189,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "catpag.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Seitenvorlagen" ;
             Text [ ENGLISH ] = "Page Styles" ;
             Text [ norwegian ] = "Sidetyper" ;
@@ -1394,11 +1382,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "catnum.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Nummerierungsvorlagen" ;
             Text [ ENGLISH ] = "Number Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
@@ -1589,6 +1572,17 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "ลักษณะแบบกำหนดเอง" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
+    };
+
+    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    {
+        ImageBitmap = Bitmap { File = "sf_out.bmp" ; };
+        STYLE_IMAGE_LISTEF
+    };
+    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
+    {
+        ImageBitmap = Bitmap { File = "sfh_out.bmp" ; };
+        STYLE_IMAGE_LISTEF
     };
 };
 
