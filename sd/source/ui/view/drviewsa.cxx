@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:26:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,7 +964,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrPageView* pPageView = pDrView->GetPageViewPvNum( 0 );
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                // || ( pDrView->GetMarkList().GetMarkCount() == 0 ) )
+                // || ( pDrView->GetMarkedObjectList().GetMarkCount() == 0 ) )
             {
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             }
@@ -1004,7 +1004,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
     else
     {
-        if ( pDrView->HasMarkedObj() )
+        if ( pDrView->AreObjectsMarked() )
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
@@ -1046,7 +1046,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SdrLayerID nLayer, nOldLayer;
             SdrLayer*  pLayer = NULL;
             SdrObject* pObj = NULL;
-            const SdrMarkList& rMarkList = pDrView->GetMarkList();
+            const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             FASTBOOL bOneLayer = TRUE;
 
