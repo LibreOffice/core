@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:07:23 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
+#endif
+#ifndef _SVX_TBXCOLOR_HXX
+#include <svx/tbxcolor.hxx>
 #endif
 #ifndef _SVX_CLIPBOARDCTL_HXX_
 #include <svx/clipboardctl.hxx>
