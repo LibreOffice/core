@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 10:21:28 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 09:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,10 @@ protected:
     virtual long                    Notify( NotifyEvent& rNEvt );
     virtual void                    Select();
     virtual void                    Modify();
+#ifndef TF_SVDATA
     virtual BOOL                    QueryDrop( DropEvent &rEvt );
     virtual BOOL                    Drop( const DropEvent &rEvt );
+#endif
     virtual long                    PreNotify( NotifyEvent& rNEvt );
 
 public:
