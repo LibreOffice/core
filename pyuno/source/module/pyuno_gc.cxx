@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_gc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,16 @@ void GCThread::run()
     {
         PyThreadAttach guard( (PyInterpreterState*)mPyInterpreter );
         {
+            Runtime runtime;
+
+            // remove the reference from the pythonobject2adapter map
+            PyRef2Adapter::iterator ii =
+                runtime.getImpl()->cargo->mappedObjects.find( mPyObject );
+            if( ii != runtime.getImpl()->cargo->mappedObjects.end() )
+            {
+                runtime.getImpl()->cargo->mappedObjects.erase( ii );
+            }
+
             Py_XDECREF( mPyObject );
         }
     }
