@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:49:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@
 		<xsl:if test="count(child::prop) or count(child::set) or count(child::group) or count(child::node-ref)">
 			<xsl:message terminate="yes">ERROR: extensible groups with children are currently NOT supported!</xsl:message>
 		</xsl:if>
+	</xsl:template>
+
+<!-- Localized info elements (desc/label) are not supported currently -->
+	<xsl:template match="info//*[@xml:lang]">
+		<xsl:message terminate="yes">ERROR: Info elements (desc/label) are currently not localized. Remove xml:lang attributes!</xsl:message>
 	</xsl:template>
 
 <!-- check if properties of type 'any' do not have a value -->
