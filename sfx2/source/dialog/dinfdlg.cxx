@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 13:55:19 $
+ *  last change: $Author: pb $ $Date: 2001-07-03 09:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,18 +746,17 @@ SfxDocumentUserPage::SfxDocumentUserPage( Window* pParent,
 IMPL_LINK( SfxDocumentUserPage, EditLabelHdl, PushButton *, pPushButton )
 {
     SfxDocInfoEditDlg* pDlg = new SfxDocInfoEditDlg( this );
-    pDlg->SetText1( aInfo1Ft.GetText().EraseAllChars( '~' ) );
-    pDlg->SetText2( aInfo2Ft.GetText().EraseAllChars( '~' ) );
-    pDlg->SetText3( aInfo3Ft.GetText().EraseAllChars( '~' ) );
-    pDlg->SetText4( aInfo4Ft.GetText().EraseAllChars( '~' ) );
+    pDlg->SetText1( GetLabelText_Impl( &aInfo1Ft ) );
+    pDlg->SetText2( GetLabelText_Impl( &aInfo2Ft ) );
+    pDlg->SetText3( GetLabelText_Impl( &aInfo3Ft ) );
+    pDlg->SetText4( GetLabelText_Impl( &aInfo4Ft ) );
 
     if ( RET_OK == pDlg->Execute() )
     {
-        aShortcuts.Erase();
-        aInfo1Ft.SetText( CreateShortcutTitle( pDlg->GetText1() ) );
-        aInfo2Ft.SetText( CreateShortcutTitle( pDlg->GetText2() ) );
-        aInfo3Ft.SetText( CreateShortcutTitle( pDlg->GetText3() ) );
-        aInfo4Ft.SetText( CreateShortcutTitle( pDlg->GetText4() ) );
+        SetLabelText_Impl( &aInfo1Ft, pDlg->GetText1() );
+        SetLabelText_Impl( &aInfo2Ft, pDlg->GetText2() );
+        SetLabelText_Impl( &aInfo3Ft, pDlg->GetText3() );
+        SetLabelText_Impl( &aInfo4Ft, pDlg->GetText4() );
         bLabelModified = TRUE;
     }
     delete pDlg;
@@ -766,45 +765,34 @@ IMPL_LINK( SfxDocumentUserPage, EditLabelHdl, PushButton *, pPushButton )
 
 //------------------------------------------------------------------------
 
-XubString SfxDocumentUserPage::CreateShortcutTitle( const XubString& rTitle )
+String SfxDocumentUserPage::GetLabelText_Impl( FixedText* pLabel )
 {
-    USHORT nPos;
+    DBG_ASSERT( pLabel, "SfxDocumentUserPage::SetLabelText_Impl(): invalid label" );
+    String aLabel = pLabel->GetText();
+    aLabel.Erase( 0, aLabel.Search( ' ' ) + 1 );
+    return aLabel;
+}
 
-    if ( !aShortcuts.Len() )
-    {
-        XubString aText = aEditLabelBtn.GetText().ToLowerAscii();
-        nPos = aText.Search( '~' );
-        if ( nPos != STRING_NOTFOUND && nPos != aText.Len() - 1 )
-            aShortcuts = aText.GetChar( nPos + 1 );
-    }
-    XubString aTitle = rTitle;
-    aTitle.ToLowerAscii();
-    const char* pcTitle = U2S(aTitle).getStr();
-    FASTBOOL bFound = FALSE;
-    nPos = 0;
+//------------------------------------------------------------------------
 
-    while ( *pcTitle && !bFound )
-    {
-        char cChar = *pcTitle;
-        if ( ByteString( cChar ).IsAlphaNumericAscii() &&
-             aShortcuts.Search( cChar ) == STRING_NOTFOUND )
-        {
-            bFound = TRUE;
-            aShortcuts += cChar;
-        }
-        else
-        {
-            pcTitle++;
-            nPos++;
-        }
-    }
-
-    if ( !bFound )
-        nPos = 0;
-
-    XubString aShortcutTitle = rTitle;
-    aShortcutTitle.Insert( '~', nPos );
-    return aShortcutTitle;
+void SfxDocumentUserPage::SetLabelText_Impl( FixedText* pLabel, const String& rNewLabel )
+{
+    String aLabel( '~' );
+    sal_Int32 nNumber = 0;
+    if ( &aInfo1Ft == pLabel )
+        nNumber = 1;
+    else if ( &aInfo2Ft == pLabel )
+        nNumber = 2;
+    else if ( &aInfo3Ft == pLabel )
+        nNumber = 3;
+    else if ( &aInfo4Ft == pLabel )
+        nNumber = 4;
+    DBG_ASSERT( nNumber > 0, "SfxDocumentUserPage::SetLabelText_Impl(): wrong label" );
+    aLabel += String::CreateFromInt32( nNumber );
+    aLabel += String( DEFINE_CONST_UNICODE(": ") );
+    aLabel += rNewLabel;
+    DBG_ASSERT( pLabel, "SfxDocumentUserPage::SetLabelText_Impl(): invalid label" );
+    pLabel->SetText( aLabel );
 }
 
 //------------------------------------------------------------------------
@@ -841,22 +829,22 @@ BOOL SfxDocumentUserPage::FillItemSet( SfxItemSet& rSet )
 
     if ( bLabelModified || aInfo1Ed.IsModified() )
     {
-        XubString aTitle = aInfo1Ft.GetText().EraseAllChars( '~' );
+        XubString aTitle = GetLabelText_Impl( &aInfo1Ft );
         rInfo.SetUserKey( SfxDocUserKey( aTitle, aInfo1Ed.GetText() ), 0 );
     }
     if ( bLabelModified || aInfo2Ed.IsModified() )
     {
-        XubString aTitle = aInfo2Ft.GetText().EraseAllChars( '~' );
+        XubString aTitle = GetLabelText_Impl( &aInfo2Ft );
         rInfo.SetUserKey( SfxDocUserKey( aTitle, aInfo2Ed.GetText() ), 1 );
     }
     if ( bLabelModified || aInfo3Ed.IsModified() )
     {
-        XubString aTitle = aInfo3Ft.GetText().EraseAllChars( '~' );
+        XubString aTitle = GetLabelText_Impl( &aInfo3Ft );
         rInfo.SetUserKey( SfxDocUserKey( aTitle, aInfo3Ed.GetText() ), 2 );
     }
     if ( bLabelModified || aInfo4Ed.IsModified() )
     {
-        XubString aTitle = aInfo4Ft.GetText().EraseAllChars( '~' );
+        XubString aTitle = GetLabelText_Impl( &aInfo4Ft );
         rInfo.SetUserKey( SfxDocUserKey( aTitle, aInfo4Ed.GetText() ), 3 );
     }
     rSet.Put( *pInfo );
@@ -871,14 +859,13 @@ void SfxDocumentUserPage::Reset(const SfxItemSet &rSet)
 {
     pInfoItem = &(SfxDocumentInfoItem&)rSet.Get( SID_DOCINFO );
     const SfxDocumentInfo& rInfo = pInfoItem->GetDocInfo();
-    aShortcuts.Erase();
-    aInfo1Ft.SetText( CreateShortcutTitle( rInfo.GetUserKey(0).GetTitle() ) );
+    SetLabelText_Impl( &aInfo1Ft, rInfo.GetUserKey(0).GetTitle() );
     aInfo1Ed.SetText( rInfo.GetUserKey(0).GetWord() );
-    aInfo2Ft.SetText( CreateShortcutTitle( rInfo.GetUserKey(1).GetTitle() ) );
+    SetLabelText_Impl( &aInfo2Ft, rInfo.GetUserKey(1).GetTitle() );
     aInfo2Ed.SetText( rInfo.GetUserKey(1).GetWord() );
-    aInfo3Ft.SetText( CreateShortcutTitle( rInfo.GetUserKey(2).GetTitle() ) );
+    SetLabelText_Impl( &aInfo3Ft, rInfo.GetUserKey(2).GetTitle() );
     aInfo3Ed.SetText( rInfo.GetUserKey(2).GetWord() );
-    aInfo4Ft.SetText( CreateShortcutTitle( rInfo.GetUserKey(3).GetTitle() ) );
+    SetLabelText_Impl( &aInfo4Ft, rInfo.GetUserKey(3).GetTitle() );
     aInfo4Ed.SetText( rInfo.GetUserKey(3).GetWord() );
     bLabelModified = FALSE;
 
