@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:33:50 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1676,6 +1676,8 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
         pPool->SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
         pPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
     }
+
+    UpdateDrawLanguages();      // set edit engine defaults in drawing layer pool
 }
 
 Rectangle ScDocument::GetMMRect( USHORT nStartCol, USHORT nStartRow,

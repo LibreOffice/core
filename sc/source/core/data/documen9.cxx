@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:31:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
+#include <svx/langitem.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
@@ -282,10 +283,22 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             }
 
         UpdateDrawPrinter();
+        UpdateDrawLanguages();
         if (bImportingXML)
             pDrawLayer->EnableAdjust(FALSE);
 
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
+    }
+}
+
+void ScDocument::UpdateDrawLanguages()
+{
+    if (pDrawLayer)
+    {
+        SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
+        rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+        rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, EE_CHAR_LANGUAGE_CJK ) );
+        rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, EE_CHAR_LANGUAGE_CTL ) );
     }
 }
 
