@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 15:18:43 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #define DLG_SQLEXCEPTIONCHAIN           1003
 #define DLG_DATASOURCE_SELECTION        1004
 #define DLG_PARAMETERS                  1005
+#define DLG_FILTERCRIT                  1006
+#define DLG_ORDERCRIT                   1007
 
 //========================================================================
 // tab pages
@@ -100,6 +102,7 @@
 
 #define RID_BRW_TAB_TOOLBOX             1000
 #define RID_BRW_QRY_TOOLBOX             1001
+#define RID_QRY_TOOLBOX_SQL             1002 // SQLAbfage
 
 //========================================================================
 // bitmaps
@@ -163,6 +166,22 @@
 #define STR_REMEMBERPASSWORD_SESSION        274
 #define STR_REMEMBERPASSWORD_PERSISTENT     275
 #define STR_ERR_EMPTY_DSN_NAME              276
+#define STR_QRY_FUNCTIONS                   277
+#define STR_QRY_SORTTEXT                    278
+#define STR_QUERY_UNDO_MOVETABWIN           279
+#define STR_QUERY_UNDO_SIZETABWIN           280
+#define STR_QUERY_UNDO_INSERTCONNECTION     281
+#define STR_QUERY_UNDO_REMOVECONNECTION     282
+#define STR_QUERY_UNDO_TABWINSHOW           283
+#define STR_QUERY_UNDO_TABWINDELETE         284
+#define STR_QUERY_UNDO_MODIFY_CELL          285
+#define STR_QUERY_UNDO_SIZE_COLUMN          286
+#define STR_QUERY_UNDO_TABFIELDDELETE       287
+#define STR_QUERY_UNDO_TABFIELDCREATE       288
+#define STR_QUERY_UNDO_MODIFYSQLEDIT        289
+#define RID_STR_TABLE_DOESNT_EXIST          290
+#define RID_STR_FIELD_DOESNT_EXIST          291
+#define RID_STR_TOMUCHTABLES                292
 
 //========================================================================
 // untyped resources
@@ -175,6 +194,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2000/11/02 15:18:43  fs
+ *  #79380# +STR_ERR_EMPTY_DSN_NAME
+ *
  *  Revision 1.9  2000/10/30 15:19:12  fs
  *  #79816# STR_INVALID_REGISTEREDDRIVER is obsolete
  *
