@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 08:29:06 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 14:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3055,14 +3055,16 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
 
             ::com::sun::star::util::URL aNewUrl = aURL;
             // and prepend our dispatch prefix
-            aNewUrl.Mark = m_sDispatchPrefix;
-            aNewUrl.Mark += ::rtl::OUString::createFromAscii("\\");
-            aNewUrl.Mark += sNewMark;
+            ::rtl::OUString aMark = m_sDispatchPrefix;
+            aMark += ::rtl::OUString::createFromAscii("\\");
+            aMark += sNewMark;
 
             // assemble the new url
             Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY);
             if (xTransformer.is())
             {
+                xTransformer->parseStrict(aNewUrl);
+                aNewUrl.Mark = aMark;
                 xTransformer->assemble(aNewUrl);
                 DBG_ASSERT(aNewUrl.Complete.getLength(), "FmXFormController::interceptedQueryDispatch : transformation of the ::com::sun::star::util::URL failed !");
             }
