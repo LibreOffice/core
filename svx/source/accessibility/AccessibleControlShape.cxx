@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
     {
         SetAccessibleDescription (CreateAccessibleDescription());
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     else
     {
         OSL_ENSURE( sal_False, "AccessibleControlShape::propertyChange: where did this come from?" );
@@ -544,7 +544,7 @@ void SAL_CALL AccessibleControlShape::modeChanged( const ModeChangeEvent& _rSour
         // the responsibility of our parent.
         OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, mnIndex, maShapeTreeInfo ) );
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     else
         OSL_ENSURE( sal_False, "AccessibleControlShape::modeChanged: where did this come from?" );
 #endif
@@ -731,7 +731,7 @@ void AccessibleControlShape::startStateMultiplexing()
 {
     OSL_PRECOND( !m_bMultiplexingStates, "AccessibleControlShape::startStateMultiplexing: already multiplexing!" );
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     // we should have a control, and it should be in alive mode
     OSL_PRECOND( isAliveMode( m_xUnoControl ),
         "AccessibleControlShape::startStateMultiplexing: should be done in alive mode only!" );
@@ -826,7 +826,7 @@ void AccessibleControlShape::initializeComposedState()
     pComposedStates->RemoveState( AccessibleStateType::ENABLED );       // this is controlled by the UNO-control
     pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );     // this is controlled by the UNO-control
     pComposedStates->RemoveState( AccessibleStateType::SELECTABLE );    // this does not hold for an alive UNO-control
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     // now, only states which are not in the responsibility of the UNO control should be part of this state set
     {
         Sequence< sal_Int16 > aInitStates = pComposedStates->getStates();
