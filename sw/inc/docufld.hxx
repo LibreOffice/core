@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _DATE_HXX //autogen
 #include <tools/date.hxx>
+#endif
+#ifndef _SFXMACITEM_HXX //autogen
+#include <svtools/macitem.hxx>
 #endif
 
 #include "fldbas.hxx"
@@ -493,6 +496,7 @@ class SwMacroField : public SwField
 {
     String  aMacro;
     String  aText;
+    BOOL      bIsScriptURL;
 
 public:
     // Direkte Eingabe alten Wert loeschen
@@ -502,6 +506,7 @@ public:
     inline const String& GetMacro() const { return aMacro; }
     String           GetLibName() const;
     String           GetMacroName() const;
+    SvxMacro         GetSvxMacro() const;
 
     virtual String   GetCntnt(BOOL bName = FALSE) const;
     virtual String   Expand() const;
@@ -520,6 +525,8 @@ public:
     static void CreateMacroString( String& rMacro,
                                    const String& rMacroName,
                                    const String& rLibraryName );
+
+    static BOOL isScriptURL( const String& str );
 };
 
 
