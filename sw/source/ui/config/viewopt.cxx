@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: os $ $Date: 2002-05-02 11:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,8 +487,7 @@ SwViewOption::SwViewOption() :
                     VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
                     VIEWOPT_1_PAGEBACK |
                     VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
-    nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA|
-                    VIEWOPT_CORE2_SECTION_BOUNDS;
+    nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS;
 
     if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
