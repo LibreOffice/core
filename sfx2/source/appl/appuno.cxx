@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:36:31 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 16:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
             static const String sHidden         = String::CreateFromAscii( "Hidden"         );
             static const String sPreview        = String::CreateFromAscii( "Preview"        );
+            static const String sSilent         = String::CreateFromAscii( "Silent"         );
 
             if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUsrAnyItem( SID_INPUTSTREAM, rProp.Value ) );
@@ -273,6 +274,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
             else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
+
+             else if ( aName == sSilent && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                rSet.Put( SfxBoolItem( SID_SILENT, *((sal_Bool*)rProp.Value.getValue()) ) );
 
             else if ( aName == sPreview && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_PREVIEW, *((sal_Bool*)rProp.Value.getValue()) ) );
@@ -370,6 +374,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
             nItems++;
+        if ( rSet.GetItemState( SID_SILENT ) == SFX_ITEM_SET )
+            nItems++;
     }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nItems );
@@ -403,6 +409,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
         static const String sHidden         = String::CreateFromAscii( "Hidden"         );
         static const String sPreview        = String::CreateFromAscii( "Preview"        );
+        static const String sSilent         = String::CreateFromAscii( "Silent"         );
 
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -438,6 +445,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_HIDDEN, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sHidden;
+            pValue[nItems++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+        }
+        if ( rSet.GetItemState( SID_SILENT, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sSilent;
             pValue[nItems++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_PREVIEW, sal_False, &pItem ) == SFX_ITEM_SET )

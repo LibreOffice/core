@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 10:59:58 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 16:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,10 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         SFX_REQUEST_ARG(rReq, pPreview, SfxBoolItem, SID_PREVIEW, FALSE);
         if ( pPreview )
             xDoc->GetMedium()->GetItemSet()->Put( *pPreview );
+
+        SFX_REQUEST_ARG(rReq, pSilent, SfxBoolItem, SID_SILENT, FALSE);
+        if ( pSilent )
+            xDoc->GetMedium()->GetItemSet()->Put( *pSilent );
 
         SFX_REQUEST_ARG(rReq, pFlags, SfxStringItem, SID_OPTIONS, FALSE);
         if ( pFlags )
