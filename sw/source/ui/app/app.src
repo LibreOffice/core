@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
+ *  last change: $Author: os $ $Date: 2001-06-28 07:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ String STR_PAGE_COUNT_MACRO
                                         \
         };                              \
     IdCount = {                         \
-        171;                            \
+        169;                            \
     };
 
 
