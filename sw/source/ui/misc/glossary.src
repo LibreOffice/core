@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:22:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ModalDialog DLG_GLOSSARY
         Text[ arabic ] = "ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_EXAMPLE
     {
@@ -140,6 +141,7 @@ ModalDialog DLG_GLOSSARY
         Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizlemeyi görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar pre~visualización";
     };
     CheckBox CB_INSERT_TIP
     {
@@ -159,7 +161,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese ] = "Mostrar ~resto do nome como sugestão durante a digitação" ;
         Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾ÊäÈëÎÄÌáÊ¾(~D)";
         Text[ russian ] = "Ïðè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
-        Text[ polish ] = "Wyœwietl pozosta³¹ czêœæ nazwy przy wprowadzaniu jako wskazówkê";
+        Text[ polish ] = "Wyœwietl w trakcie pisania pozosta³¹ czêœæ s³owa";
         Text[ japanese ] = "“ü—Í’†‚ÉÃ·½ÄÌÞÛ¯¸–¼‚ðƒqƒ“ƒg•\\Ž¦‚·‚é(~D)";
         Text[ chinese_traditional ] = "¦Û°Ê§¹¦¨Åã¥Ü(~D)";
         Text[ arabic ] = "ÚÑÖ ÈÞíÉ ÅÏÎÇá ÇáäÕ ÇáÊáÞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ Úáì Ôßá ÊáãíÍ";
@@ -167,6 +169,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "±âÀÔÇÏ´Â µ¿¾È  Á¶¾ðÀ¸·Î¼­ ³ª¸ÓÁö ÀÌ¸§ Ç¥½Ã(~D)";
         Text[ turkish ] = "Giriþ sýrasýnda adýn tamamýný öneri olarak görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Muestra el resto del nombre como sugerencia durante la entrada";
     };
     FixedText FT_NAME
     {
@@ -197,6 +200,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~ombre";
     };
     Edit ED_NAME
     {
@@ -236,6 +240,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "¹Ù·Î°¡±â(~S)";
         Text[ turkish ] = "Kýsaltma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Abrev.";
     };
     Edit ED_SHORTNAME
     {
@@ -276,6 +281,7 @@ ModalDialog DLG_GLOSSARY
             Text[ chinese_traditional ] = "°ßÅª";
             Text[ turkish ] = "readonly";
             Text[ arabic ] = "ááÞÑÇÁÉ ÝÞØ";
+            Text[ catalan ] = "solo lectura";
         };
     };
     GroupBox GB_GLOSSARY
@@ -305,6 +311,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®";
         Text[ turkish ] = "Otomatik metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "AutoTexto";
     };
     CheckBox CB_FILE_REL
     {
@@ -332,6 +339,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ÆÄÀÏ ½Ã½ºÅÛ(~F)";
         Text[ turkish ] = "Dosya sistemi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "En el ~sistema de archivos";
     };
     CheckBox CB_NET_REL
     {
@@ -358,6 +366,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ÀÎÅÍ³Ý(~R)";
         Text[ turkish ] = "Internet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "En I~nternet";
     };
     GroupBox GB_RELATIVE
     {
@@ -384,6 +393,7 @@ ModalDialog DLG_GLOSSARY
         Text[ arabic ] = "ÍÝÙ ÇáÇÑÊÈÇØÇÊ ÍÝÙÇð äÓÈíÇð";
         Text[ turkish ] = "Baðlantýlarý göreceli kaydet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Guardar vínculos relativamente";
     };
     OKButton PB_INSERT
     {
@@ -420,6 +430,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "»ðÀÔ(~I)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Insertar";
     };
     CancelButton PB_CLOSE
     {
@@ -450,6 +461,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cerrar";
     };
     HelpButton PB_HELP
     {
@@ -484,6 +496,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®(~X)";
         Text[ turkish ] = "Otomatik metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "AutoTe~xto";
     };
     PushButton PB_BIB
     {
@@ -513,6 +526,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "±¸¿ª(~A)...";
         Text[ turkish ] = "Bölümler...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Areas...";
     };
     PushButton PB_PATH
     {
@@ -540,6 +554,7 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "°æ·Î(~P)...";
         Text[ turkish ] = "Veri yolu...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ruta...";
     };
     String ST_READONLY_PATH
     {
@@ -563,6 +578,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_traditional ] = "'AutoText' ¥Ø¿ý¬O°ßÅªªº¡C­n¥´¶}¤@­Ó¸ô®|¹ï¸Ü¤è¡H";
         Text[ turkish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ arabic ] = "áÇ ÊÊæÝÑ ÍÞæÞ ßÊÇÈÉ áÏáÇÆá 'ÇáäÕ ÇáÊáÞÇÆí'. åá ÊÑíÏ ÝÊÍ ãÑÈÚ ÇáÍæÇÑ  ÇáÎÇÕ ÈÅÚÏÇÏÇÊ ÇáãÓÇÑ¿";
+        Text[ catalan ] = "No existen derechos de escritura para los directorios 'AutoTexto'. ¿Desea abrir el diálogo de rutas?";
     };
     Menu MNU_EDIT
     {
@@ -595,6 +611,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "»õ·Î(~N)";
                 Text[ turkish ] = "~Yeni";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Nuevo";
             };
             MenuItem
             {
@@ -621,6 +638,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "»õ·Î (ÅØ½ºÆ® ¸¸)";
                 Text[ turkish ] = "Yeni (yalnýzca metin)";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Nuevo (solo ~texto)";
             };
             MenuItem
             {
@@ -647,6 +665,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ arabic ] = "äÓÎ";
                 Text[ turkish ] = "Kopyala";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Copiar";
             };
             MenuItem
             {
@@ -675,6 +694,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "¹Ù²Ù±â";
                 Text[ turkish ] = "Deðiþtir";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Ree~mplazar";
             };
             MenuItem
             {
@@ -690,7 +710,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ spanish ] = "Reemplazar (sólo texto)" ;
                 Text [ french ] = "~Remplacer (texte seulement)" ;
                 Text [ dutch ] = "~Vervangen (alleen tekst)" ;
-                Text [ portuguese ] = "Substituir(só texto)" ;
+                Text [ portuguese ] = "~Substituir(só texto)" ;
                 Text[ chinese_simplified ] = "¸üÌæ(½öÎÄ×Ö)(~L)";
                 Text[ russian ] = "Çàìåíèòü (òîëüêî òåêñò)";
                 Text[ polish ] = "Zamieñ (tylko tekst)";
@@ -701,6 +721,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "¹Ù²Ù±â (ÅØ½ºÆ® ¸¸)(~L)";
                 Text[ turkish ] = "Deðiþtir (yalnýzca metin)";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Reemplazar (sólo texto)";
             };
             MenuItem
             {
@@ -727,6 +748,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â...";
                 Text[ turkish ] = "Yeniden adlandýr...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Cambiar nombre...";
             };
             MenuItem
             {
@@ -756,6 +778,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "»èÁ¦(~D)";
                 Text[ turkish ] = "Sil";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Eliminar";
             };
             MenuItem
             {
@@ -788,6 +811,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "ÆíÁý(~E)";
                 Text[ turkish ] = "Düzenle";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Editar";
             };
             MenuItem
             {
@@ -820,6 +844,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "¸ÅÅ©·Î(~M)...";
                 Text[ turkish ] = "Makro...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Macro...";
             };
             MenuItem
             {
@@ -849,6 +874,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ chinese_traditional ] = "¶×¤J(~I)...";
                 Text[ arabic ] = "ÇÓÊíÑÇÏ...";
                 Text[ turkish ] = "~Ýçe aktar...";
+                Text[ catalan ] = "~Importar...";
             };
         };
     };
@@ -862,6 +888,7 @@ ModalDialog DLG_GLOSSARY
     Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®";
     Text[ turkish ] = "Otomatik metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AutoTexto";
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
@@ -889,6 +916,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ korean ] = "¹Ù·Î°¡±â ÀÌ¸§ÀÌ ÀÌ¹Ì »ç¿ëÁßÀÔ´Ï´Ù. ´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ¿© ÁÖ½Ê½Ã¿À";
     MESSAGE[ turkish ] = "Bu kýsaltma mevcut durumda. Baþka bir ad seçin!";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Esta abreviatura ya está en uso. ¡Elija otro nombre por favor!";
 };
 QueryBox MSG_QUERY_DELETE
 {
@@ -918,6 +946,7 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE[ korean ] = "ÀÚµ¿ÅØ½ºÆ®¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Otomatik metin silinsin mi?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea eliminar el AutoTexto?";
 };
 String STR_QUERY_DELETE_GROUP1
 {
@@ -942,6 +971,7 @@ String STR_QUERY_DELETE_GROUP1
     Text[ korean ] = "¿µ¿ªÀ»";
     Text[ turkish ] = "Bölüm ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea usted eliminar  ";
 };
 String STR_QUERY_DELETE_GROUP2
 {
@@ -967,6 +997,7 @@ String STR_QUERY_DELETE_GROUP2
     Text[ greek ] = "íá äéáãñáöåß;";
     Text[ korean ] = "»èÁ¦ÇÏ½Ã°Ú½À´Ï±î£¿";
     Text[ turkish ] = "silinsin mi?";
+    Text[ catalan ] = "la categoría?";
 };
 String STR_GLOSSARY
 {
@@ -993,6 +1024,7 @@ String STR_GLOSSARY
     Text[ korean ] = "ÅØ½ºÆ® ºí·Ï : ";
     Text[ turkish ] = "Metin öðesi: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Módulo de texto :  ";
 };
 ModalDialog DLG_RENAME_GLOS
 {
@@ -1043,6 +1075,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ korean ] = "ÀÌ¸§(~M)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~ombre";
     };
     Edit ED_ON
     {
@@ -1079,6 +1112,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ korean ] = "¹Ù·Î°¡±â(~C)";
         Text[ turkish ] = "Kýsaltma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Abrev.";
     };
     Edit ED_OS
     {
@@ -1113,6 +1147,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ korean ] = "»õ·Î(~N)";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nuevo";
     };
     Edit ED_NN
     {
@@ -1148,6 +1183,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ korean ] = "¹Ù·Î°¡±â(~S)";
         Text[ turkish ] = "Kýsaltma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Abreviatura";
     };
     Edit ED_NS
     {
@@ -1181,6 +1217,7 @@ ModalDialog DLG_RENAME_GLOS
     Text[ korean ] = "ÅØ½ºÆ® ºí·Ï ÀÌ¸§ ¹Ù²Ù±â";
     Text[ turkish ] = "Metin öðesini yeniden adlandýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cambiar nombre al módulo de texto";
 };
 String STR_SAVE_GLOSSARY
 {
@@ -1205,6 +1242,7 @@ String STR_SAVE_GLOSSARY
     Text[ korean ] = "ÅØ½ºÆ® ºí·Ï ÀúÀå";
     Text[ turkish ] = "Metin öðesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar módulo de texto";
 };
 InfoBox MSG_NO_GLOSSARIES
 {
@@ -1228,4 +1266,5 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ chinese_traditional ] = "¦b³o­ÓÀÉ®×¤º¤£¦s¦b¦Û°Ê¹Ï¤å¶°±ø¥Ø¡C";
     MESSAGE[ arabic ] = "áÇ íÍÊæí åÐÇ ÇáãáÝ Úáì ßÊá äÕíÉ.";
     MESSAGE[ turkish ] = "Bu dosya metin bileþenleri içermiyor";
+    MESSAGE[ catalan ] = "Este archivo no contiene módulos de texto.";
 };
