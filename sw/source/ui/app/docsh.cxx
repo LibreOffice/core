@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-16 15:27:01 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 15:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,12 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SFX_MISCCFG_HXX
+#include <sfx2/misccfg.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -1245,7 +1251,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(FALSE);
                 rSet.Put( SfxUInt16Item( nWhich,
                         pFmtr ? pFmtr->GetYear2000()
-                              : SvNumberFormatter::GetYear2000Default() ));
+                              : SFX_APP()->GetMiscConfig()->GetYear2000() ));
             }
             break;
 
