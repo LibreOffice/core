@@ -92,7 +92,6 @@
             <menu:menu menu:id=".uno:MasterPageMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SlideMasterPage" menu:helpid="27348" menu:label="" />
-                    <menu:menuitem menu:id=".uno:TitleMasterPage" menu:helpid="27351" menu:label="" />
                     <menu:menuitem menu:id=".uno:NotesMasterPage" menu:helpid="27350" menu:label="" />
                     <menu:menuseparator/>
                        <menu:menuitem menu:id=".uno:MasterLayouts" menu:helpid="27408" menu:label="" />
