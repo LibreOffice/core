@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:01:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ ENGLISH ] = "Column ~format..." ;
             Text [ norwegian ] = "Kolonne format..." ;
             Text [ italian ] = "Formattazione ~colonna..." ;
-            Text [ portuguese_brazilian ] = "Formatar coluna..." ;
+            Text [ portuguese_brazilian ] = "~Formatar colunas..." ;
             Text [ portuguese ] = "~Formatar colunas..." ;
             Text [ finnish ] = "Sarake~muoto..." ;
             Text [ danish ] = "Kolonne~formatering..." ;
@@ -98,15 +98,18 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ english_us ] = "Column ~Format..." ;
             Text[ chinese_simplified ] = "列格式(~F)...";
             Text[ russian ] = "������ �������...";
-            Text[ polish ] = "Formatowanie kolumn...";
+            Text[ polish ] = "~Formatowanie kolumn...";
             Text[ japanese ] = "列の書式(~F)...";
             Text[ chinese_traditional ] = "欄格式(~F)...";
             Text[ arabic ] = "����� �������...";
             Text[ greek ] = "���~�������� ������...";
             Text[ korean ] = "열 서식(~F)...";
-            Text[ turkish ] = "S�tun format�...";
+            Text[ turkish ] = "S�tun ~Bi�emi";
             Text[ catalan ] = "~Format de la columna...";
             Text[ thai ] = "~รูปแบบคอลัมน์...";
+            Text[ czech ] = "Formát sloupce...";
+            Text[ hebrew ] = "Spalten~formatierung...";
+            Text[ hindi ] = "~स्तंभ रचना...";
         };
         MenuItem
         {
@@ -129,17 +132,20 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ italian ] = "Copia la ~descrizione della colonna";
             Text[ danish ] = "Kopier kolonneb~eskrivelse";
             Text[ swedish ] = "Kopiera kolumnb~eskrivning";
-            Text[ polish ] = "~Kopiuj opis kolumny";
-            Text[ portuguese_brazilian ] = "Copy column d~escription";
+            Text[ polish ] = "Kopiuj ~opis kolumny";
+            Text[ portuguese_brazilian ] = "Copiar ~descri��o da coluna";
             Text[ japanese ] = "列の見出しをコピー(~E)";
             Text[ korean ] = "열 설명 복사(~E)";
             Text[ chinese_simplified ] = "复制列标题(~E)";
             Text[ chinese_traditional ] = "複製列標題(~E)";
-            Text[ turkish ] = "Copy column d~escription";
+            Text[ turkish ] = "S�tun a��klmalar�n� kopyala";
             Text[ arabic ] = "��� ��� ������";
             Text[ catalan ] = "Copia la d~escripci� de la columna";
             Text[ finnish ] = "Kopioi sarakkeen ~kuvaus";
             Text[ thai ] = "คัดลอก~คำอธิบายคอลัมน์";
+            Text[ czech ] = "Zkopírovat popis sloupce";
+            Text[ hebrew ] = "Spaltenb~eschreibung kopieren";
+            Text[ hindi ] = "स्तं~भ विवरण का प्रतिलिपि";
         };
     };
 };
@@ -161,20 +167,23 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ french ] = "Formatage de table..." ;
             Text [ swedish ] = "Tabellformatering..." ;
             Text [ danish ] = "Tabelformatering..." ;
-            Text [ portuguese_brazilian ] = "Tabellenformatierung..." ;
+            Text [ portuguese_brazilian ] = "Formatar tabela..." ;
             Text [ portuguese ] = "Formatar tabela..." ;
             Text[ chinese_simplified ] = "表格格式...";
             Text[ russian ] = "�����...";
-            Text[ polish ] = "Formatowanie tabeli...";
+            Text[ polish ] = "Format tabeli...";
             Text[ japanese ] = "テーブルの書式...";
             Text[ chinese_traditional ] = "工作表格式...";
             Text[ arabic ] = "����� ������...";
             Text[ greek ] = "����������� ������...";
             Text[ korean ] = "테이블 서식...";
-            Text[ turkish ] = "Tablo format�...";
+            Text[ turkish ] = "Tablo Bi�emi...";
             Text[ catalan ] = "Format de la taula...";
             Text[ finnish ] = "Taulun muotoilu...";
             Text[ thai ] = "รูปแบบตาราง...";
+            Text[ czech ] = "Formát tabulky...";
+            Text[ hebrew ] = "Tabellenformatierung...";
+            Text[ hindi ] = "सारणी रचना...";
         };
         MenuItem
         {
@@ -184,7 +193,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ ENGLISH ] = "Row height..." ;
             Text [ norwegian ] = "Radh�yde..." ;
             Text [ italian ] = "Altezza riga..." ;
-            Text [ portuguese_brazilian ] = "Altura da fileira..." ;
+            Text [ portuguese_brazilian ] = "Altura da linha..." ;
             Text [ portuguese ] = "Altura da linha..." ;
             Text [ finnish ] = "Rivikorkeus..." ;
             Text [ danish ] = "R�kkeh�jde..." ;
@@ -201,9 +210,12 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ arabic ] = "������ ������...";
             Text[ greek ] = "���� �������...";
             Text[ korean ] = "행 높이...";
-            Text[ turkish ] = "Sat�r y�ksekli�i...";
+            Text[ turkish ] = "Sat�r y�ksekli�i";
             Text[ catalan ] = "Al�ada de la fila...";
             Text[ thai ] = "ความสูงของแถว...";
+            Text[ czech ] = "Výška sloupce...";
+            Text[ hebrew ] = "‮גובה שורה...‬";
+            Text[ hindi ] = "पंक्ति ऊँचाई...";
         };
     };
 };
@@ -222,17 +234,20 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ italian ] = "Annulla: Immissione dati";
     Text[ danish ] = "Fortryd: Dataindtastning";
     Text[ swedish ] = "�ngra: datainmatning";
-    Text[ polish ] = "Cofni�cie: wpisywania danych";
-    Text[ portuguese_brazilian ] = "Undo: input data";
+    Text[ polish ] = "Cofnij: wpisywanie danych";
+    Text[ portuguese_brazilian ] = "Desfazer: entrada de dados";
     Text[ japanese ] = "元に戻す: データの入力";
     Text[ korean ] = "실행 취소: 데이터 입력";
     Text[ chinese_simplified ] = "撤销命令：输入数据";
     Text[ chinese_traditional ] = "復原：輸入資料";
     Text[ arabic ] = "�����: ����� ������";
-    Text[ turkish ] = "Geri al: Veri giri�i";
+    Text[ turkish ] = "Gerial: Veri giri�i";
     Text[ catalan ] = "Desf�s: entrada de dades";
     Text[ finnish ] = "Kumoa: Tietojen sy�tt�";
     Text[ thai ] = "เลิกทำ: ป้อนข้อมูล";
+    Text[ czech ] = "Zpět: Vstup dat";
+    Text[ hebrew ] = "Rückgängig: Dateneingabe";
+    Text[ hindi ] = "अनावृत्ति: ड़ॉटा इनपुट";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
@@ -249,7 +264,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ danish ] = "Gem aktuel datapost";
     Text[ swedish ] = "Spara aktuell datapost";
     Text[ polish ] = "Zapisz bie��cy rekord";
-    Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern";
+    Text[ portuguese_brazilian ] = "Salvar registro atual";
     Text[ japanese ] = "現在のレコードを保存";
     Text[ chinese_simplified ] = "存盘当前的数据条目";
     Text[ chinese_traditional ] = "儲存目前的資料條目";
@@ -258,10 +273,13 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ chinese_simplified ] = "存盘当前的数据条目";
     Text[ greek ] = "���������� ��������� ��������";
     Text[ korean ] = "현재 레코드 저장";
-    Text[ turkish ] = "Y�r�rl�kteki verileri kaydet";
+    Text[ turkish ] = "G�ncek tutana�� kaydet";
     Text[ catalan ] = "Desa el registre actual";
     Text[ finnish ] = "Tallenna nykyinen tietue";
     Text[ thai ] = "บันทึกระเบียนปัจจุบัน";
+    Text[ czech ] = "Uložit aktuální záznam";
+    Text[ hebrew ] = "aktuellen Datensatz speichern";
+    Text[ hindi ] = "वर्तमान अभिलेख को संचित करो";
 };
 
 String STR_QRY_TITLE
@@ -270,7 +288,7 @@ String STR_QRY_TITLE
     Text [ ENGLISH ] = "Query #" ;
     Text [ english_us ] = "Query #" ;
     Text [ portuguese ] = "Consulta #" ;
-    Text [ portuguese_brazilian ] = "Abfrage #" ;
+    Text [ portuguese_brazilian ] = "Consulta #" ;
     Text [ swedish ] = "S�kning #" ;
     Text [ danish ] = "Foresp�rgsel #" ;
     Text [ italian ] = "Ricerca #" ;
@@ -287,11 +305,14 @@ String STR_QRY_TITLE
     Text[ korean ] = "쿼리 #";
     Text[ chinese_traditional ] = "查詢 #";
     Text[ arabic ] = "��������� #";
-    Text[ turkish ] = "Sorgu #";
+    Text[ turkish ] = "Sorgu#";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Consulta #";
     Text[ finnish ] = "Kysely #";
     Text[ thai ] = "แบบสอบถาม #";
+    Text[ czech ] = "Dotaz #";
+    Text[ hebrew ] = "Abfrage #";
+    Text[ hindi ] = "जानकारी #";
 };
 String STR_TBL_TITLE
 {
@@ -299,7 +320,7 @@ String STR_TBL_TITLE
     Text [ ENGLISH ] = "Table #" ;
     Text [ english_us ] = "Table #" ;
     Text [ portuguese ] = "Tabela #" ;
-    Text [ portuguese_brazilian ] = "Tabelle #" ;
+    Text [ portuguese_brazilian ] = "Tabela #" ;
     Text [ swedish ] = "Tabell #" ;
     Text [ danish ] = "Tabel #" ;
     Text [ italian ] = "Tabella #" ;
@@ -321,6 +342,9 @@ String STR_TBL_TITLE
     Text[ catalan ] = "Taula #";
     Text[ finnish ] = "Taulu #";
     Text[ thai ] = "ตาราง #";
+    Text[ czech ] = "Tabulka #";
+    Text[ hebrew ] = "Tabelle #";
+    Text[ hindi ] = "सारणी #";
 };
 String STR_VIEW_TITLE
 {
@@ -337,16 +361,19 @@ String STR_VIEW_TITLE
     Text[ danish ] = "Visning #";
     Text[ swedish ] = "Vy #";
     Text[ polish ] = "Widok #";
-    Text[ portuguese_brazilian ] = "View #";
+    Text[ portuguese_brazilian ] = "Vista #";
     Text[ japanese ] = "ビュー #";
     Text[ korean ] = "보기 #";
     Text[ chinese_simplified ] = "视图 #";
     Text[ chinese_traditional ] = "檢視 #";
-    Text[ turkish ] = "View #";
+    Text[ turkish ] = "G�r�n�m #";
     Text[ arabic ] = "View #";
     Text[ catalan ] = "Vista #";
     Text[ finnish ] = "N�yt� #";
     Text[ thai ] = "มุมมอง #";
+    Text[ czech ] = "Pohled #";
+    Text[ hebrew ] = "‮תצוגה #‬";
+    Text[ hindi ] = "दृश्य #";
 };
 
 String STR_OBJECT_ALREADY_EXISTS
@@ -365,14 +392,18 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ danish ] = "Navnet # findes allerede.";
     Text[ swedish ] = "Namnet # finns redan.";
     Text[ polish ] = "Nazwa # ju� istnieje.";
-    Text[ portuguese_brazilian ] = "The name # already exists.";
+    Text[ portuguese_brazilian ] = "O nome # j� existe.";
     Text[ japanese ] = "名前 # はすでにあります。";
     Text[ korean ] = "이름 \"#\"가(이) 이미 있습니다.";
     Text[ chinese_simplified ] = "名称 # 已经存在。";
     Text[ chinese_traditional ] = "名稱 # 已經存在。";
-    Text[ turkish ] = "The name # already exists.";
+    Text[ turkish ] = "Bu isim # halihaz�rda var.";
     Text[ arabic ] = "The name # already exists.";
     Text[ catalan ] = "El # nom ja existeix.";
+    Text[ czech ] = "Název # již existuje.";
+    Text[ hebrew ] = "Der Name \"#\" existiert bereits.";
+    Text[ thai ] = "The name \"#\" already exists.";
+    Text[ hindi ] = "# नाम पहिले से ही अस्तित्व में है ।";
 };
 
 
@@ -392,14 +423,18 @@ String STR_NO_COLUMNNAME_MATCHING
     Text[ danish ] = "Der kunne ikke findes noget passende kolonnenavn!";
     Text[ swedish ] = "Det gick inte att hitta n�gra kolumnnamn som st�mmer �verens.";
     Text[ polish ] = "Nie znaleziono odpowiednich nazw kolumn!";
-    Text[ portuguese_brazilian ] = "No matching column names found.";
+    Text[ portuguese_brazilian ] = "Nenhum nome de coluna correspondente foi encontrado";
     Text[ japanese ] = "一致する列の名前はありません。";
     Text[ korean ] = "일치하는 열 이름을 찾지 못했습니다.";
     Text[ chinese_simplified ] = "无法找到相符的列名称！";
     Text[ chinese_traditional ] = "沒有找到符合條件的欄名稱！";
-    Text[ turkish ] = "No matching column names found.";
+    Text[ turkish ] = "Birbirine uyan s�tun isimleri bulunamad�.";
     Text[ arabic ] = "No matching column names found.";
     Text[ catalan ] = "No matching column names found.";
+    Text[ czech ] = "Nebyl nalezen žádný odpovídající název sloupce.";
+    Text[ hebrew ] = "Es konnten keine übereinstimmenden Spaltennamen gefunden werden";
+    Text[ thai ] = "No matching column names were found.";
+    Text[ hindi ] = "स्तंभ नामों के समान नाम प्राप्त नहीं हुआ । ";
 };
 
 String STR_ERROR_OCCURED_WHILE_COPYING
@@ -417,15 +452,19 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ italian ] = "Si � verificato un errore. Volete proseguire il processo di copia?";
     Text[ danish ] = "Der er opst�et en fejl ! Vil du forts�tte kopieringen?";
     Text[ swedish ] = "Det har uppst�tt ett fel. Vill du forts�tta att kopiera?";
-    Text[ polish ] = "Wyst�pi� b��d! Kontynuowa� proces kopiowania?";
-    Text[ portuguese_brazilian ] = "A error occured. Would you like to continue the copying?";
+    Text[ polish ] = "Wyst�pi� b��d. Czy chcesz kontynuowa� kopiowanie?";
+    Text[ portuguese_brazilian ] = "Ocorreu um erro. Deseja continuar o processo de c�pia?";
     Text[ japanese ] = "エラーが発生しました。コピー処理を続行しますか。";
     Text[ korean ] = "오류가 발생했습니다. 복사를 계속 진행하시겠습니다?";
     Text[ chinese_simplified ] = "出现一个错误！还是要继续复制？";
     Text[ chinese_traditional ] = "已經發生一個錯誤。要繼續複製？";
-    Text[ turkish ] = "A error occured. Would you like to continue the copying?";
+    Text[ turkish ] = "Bir hata olu�tu.Kopyalamaya devam etmek istiyor musunuz?";
     Text[ arabic ] = "A error occured. Would you like to continue the copying?";
     Text[ catalan ] = "S'ha produ�t un error. Voleu continuar copiant?";
+    Text[ czech ] = "Došlo k chybě. Chcete pokračovat v kopírování?";
+    Text[ hebrew ] = "Es ist ein Fehler aufgetreten! Wollen Sie den Kopiervorgang fortsetzen?";
+    Text[ thai ] = "An error occurred. Do you want to continue copying?";
+    Text[ hindi ] = "गलती घटित हुआ । आप प्रतिलिपि बनाने का कार्य को जारी रखना चाहते है?";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_NAME
@@ -448,8 +487,14 @@ String STR_DATASOURCE_GRIDCONTROL_NAME
     Text[ korean ] = "데이터 원본의 테이블 보기";
     Text[ chinese_simplified ] = "数据源的表格视图";
     Text[ chinese_traditional ] = "資料源的表格檢視";
-    Text[ turkish ] = "Datasource tableview";
+    Text[ turkish ] = "Veri kayna�� tablo g�r�n�m�";
     Text[ arabic ] = "Datasource tableview";
+    Text[ czech ] = "Tabulkový pohled na zdroj dat";
+    Text[ hebrew ] = "Tabellenansicht der Datenquelle";
+    Text[ catalan ] = "Data source table view";
+    Text[ portuguese_brazilian ] = "Data source table view";
+    Text[ thai ] = "Data source table view";
+    Text[ hindi ] = "Data source table view";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_DESC
@@ -472,9 +517,25 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
     Text[ korean ] = "선택된 테이블 또는 쿼리를 표시합니다.";
     Text[ chinese_simplified ] = "显示已经选择的表格或查询。";
     Text[ chinese_traditional ] = "顯示已選擇的表格/查詢。";
-    Text[ turkish ] = "Shows the selected table/query.";
+    Text[ turkish ] = "Se�ili tabloyu eya sorgulamay� g�ster";
     Text[ arabic ] = "Shows the selected table/query.";
+    Text[ czech ] = "Zobrazit vybranou tabulku nebo dotaz.";
+    Text[ hebrew ] = "Zeigt die ausgewählte Tabelle oder Abfrage an.";
+    Text[ catalan ] = "Shows the selected table or query.";
+    Text[ portuguese_brazilian ] = "Shows the selected table or query.";
+    Text[ thai ] = "Shows the selected table or query.";
+    Text[ hindi ] = "Shows the selected table or query.";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
