@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2001-07-11 14:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,10 +827,10 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 static
 void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveInfo, Factory& aFactory)
 {
-    OSL_ENSURE(aRemoveInfo.change.element.oldValue.isValid(), "Cannot dispose removed/replaced element: No tree object available");
-    OSL_ENSURE(aRemoveInfo.change.element.isDataChange(), "ERROR: Dispose removed/replaced element: Element did not really change !");
     if (aRemoveInfo.change.element.oldValue.isValid())
     {
+        OSL_ENSURE(aRemoveInfo.change.element.isDataChange(), "ERROR: Disposing replaced element: Element did not really change !");
+
         configuration::ElementTree aElementTree( aRemoveInfo.change.element.oldValue.getBodyPtr() );
 
         SetElement* pSetElement = aFactory.findSetElement(aElementTree );
@@ -842,6 +842,12 @@ void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveIn
             pSetElement->haveNewParent(0);
             pSetElement->disposeTree(true);
         }
+    }
+    else
+    {
+        // This must apply to a node for which no element tree had been loaded in this view
+        // thus there should not be one now after the change (even if the change was replacing)
+        OSL_ENSURE(!aRemoveInfo.change.element.newValue.isValid(), "Cannot dispose replaced element: No tree object available");
     }
 }
 // ---------------------------------------------------------------------------------------------------
@@ -857,6 +863,7 @@ void disposeRemovedNodes(configuration::NodeChangesInformation const& aChanges, 
         {
         case NodeChangeData::eReplaceElement:
             // check if element is actually unchanged !
+            // (cannot dispose of the tree, if it is still in use)
             if (! it->change.element.isDataChange()) break;
 
             // else dispose the old one: fall thru
