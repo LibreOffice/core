@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-18 13:14:27 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 12:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #include "dispatch.hxx"
 #include <comphelper/extract.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
