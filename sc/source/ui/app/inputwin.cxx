@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-24 17:17:42 $
+ *  last change: $Author: sab $ $Date: 2002-11-19 15:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "appoptio.hxx"
 #include "rangenam.hxx"
 #include "compiler.hrc"
+#include "dbcolect.hxx"
 
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
@@ -283,6 +284,67 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
     }
 }
 
+sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
+{
+    sal_Bool bSubTotal(sal_False);
+    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    if ( pViewSh )
+    {
+        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        sal_Int32 nRangeCount (pRangeList->Count());
+        sal_Int32 nRangeIndex (0);
+        while (!bSubTotal && nRangeIndex < nRangeCount)
+        {
+            const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
+            if( pRange )
+            {
+                sal_uInt16 nTabEnd(pRange->aEnd.Tab());
+                sal_uInt16 nTab(pRange->aStart.Tab());
+                while (!bSubTotal && nTab <= nTabEnd)
+                {
+                    sal_uInt16 nRowEnd(pRange->aEnd.Row());
+                    sal_uInt16 nRow(pRange->aStart.Row());
+                    while (!bSubTotal && nRow <= nRowEnd)
+                    {
+                        if (pDoc->IsFiltered(nRow, nTab))
+                            bSubTotal = sal_True;
+                        else
+                            ++nRow;
+                    }
+                    ++nTab;
+                }
+            }
+            ++nRangeIndex;
+        }
+
+        ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+        sal_uInt16 nDBCount (pDBCollection->GetCount());
+        sal_uInt16 nDBIndex (0);
+        while (!bSubTotal && nDBIndex < nDBCount)
+        {
+            ScDBData* pDB = (*pDBCollection)[nDBIndex];
+            if (pDB && pDB->HasAutoFilter())
+            {
+                nRangeIndex = 0;
+                while (!bSubTotal && nRangeIndex < nRangeCount)
+                {
+                    const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
+                    if( pRange )
+                    {
+                        ScRange aDBArea;
+                        pDB->GetArea(aDBArea);
+                        if (aDBArea.Intersects(*pRange))
+                            bSubTotal = sal_True;
+                    }
+                    ++nRangeIndex;
+                }
+            }
+            ++nDBIndex;
+        }
+    }
+    return bSubTotal;
+}
+
 void __EXPORT ScInputWindow::Select()
 {
     ScModule* pScMod = SC_MOD();
@@ -327,24 +389,33 @@ void __EXPORT ScInputWindow::Select()
                     ScRangeList* pRangeList = new ScRangeList;
                     BOOL bDataFound = pViewSh->GetAutoSumArea( *pRangeList );
 
+                    sal_Bool bSubTotal(UseSubTotal(pRangeList));
+
                     if ((rMark.IsMarked() || rMark.IsMultiMarked()) && bDataFound)
                     {
-                        pViewSh->EnterAutoSum( *pRangeList );   // Block mit Summen fuellen
+                        pViewSh->EnterAutoSum( *pRangeList, bSubTotal );    // Block mit Summen fuellen
                     }
                     else                                    // nur in Eingabezeile einfuegen
                     {
                         String aFormula = '=';
                         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-                        ScFuncDesc* pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
+                        ScFuncDesc* pDesc = NULL;
+                        if (!bSubTotal)
+                            pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
+                        else
+                            pDesc = pFuncMgr->Get( SC_OPCODE_SUB_TOTAL );
                         if ( pDesc && pDesc->pFuncName )
                         {
                             aFormula += *pDesc->pFuncName;
-                            aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
+                            if (bSubTotal)
+                                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "(9;)" ));
+                            else
+                                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
                         }
 
-                        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
                         xub_StrLen nPos = aFormula.Len() - 1;
                         String aRef;
+                        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
                         pRangeList->Format( aRef, SCA_VALID, pDoc );
                         aFormula.Insert( aRef, nPos );
 
@@ -363,7 +434,10 @@ void __EXPORT ScInputWindow::Select()
                                 xub_StrLen nLen = aFormula.Len();
                                 if ( nOpen != STRING_NOTFOUND && nLen > nOpen )
                                 {
-                                    ESelection aSel(0,nOpen+1,0,nLen-1);
+                                    sal_uInt8 nAdd(1);
+                                    if (bSubTotal)
+                                        nAdd = 3;
+                                    ESelection aSel(0,nOpen+nAdd,0,nLen-1);
                                     EditView* pTableView = pHdl->GetTableView();
                                     if (pTableView)
                                         pTableView->SetSelection(aSel);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:58:13 $
+ *  last change: $Author: sab $ $Date: 2002-11-19 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ public:
     BYTE            GetSelectionScriptType();
 
     BOOL            GetAutoSumArea(ScRangeList& rRangeList);
-    void            EnterAutoSum(const ScRangeList& rRangeList);
+    void            EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal);
 
     void            EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String& rString,
                                 BOOL bRecord = TRUE );

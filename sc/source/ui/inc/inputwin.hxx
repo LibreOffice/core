@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-22 15:36:16 $
+ *  last change: $Author: sab $ $Date: 2002-11-19 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ struct ESelection;
 class ScInputHandler;
 class ScAccessibleEditLineTextData;
 struct EENotify;
+class ScRangeList;
 
 //========================================================================
 
@@ -235,6 +236,8 @@ public:
 protected:
     virtual void    SetText( const String& rString );
     virtual String  GetText() const;
+
+    sal_Bool        UseSubTotal( ScRangeList* pRangeList ) const;
 
 private:
     ScPosWnd        aWndPos;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
+ *  last change: $Author: sab $ $Date: 2002-11-19 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList)        // Block mit Summen fuellen
+void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal)        // Block mit Summen fuellen
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     String aRef;
@@ -427,11 +427,18 @@ void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList)        // Block mit
 
     String aFormula = '=';
     ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-    ScFuncDesc* pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
+    ScFuncDesc* pDesc = NULL;
+    if (!bSubTotal)
+        pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
+    else
+        pDesc = pFuncMgr->Get( SC_OPCODE_SUB_TOTAL );
     if ( pDesc && pDesc->pFuncName )
     {
         aFormula += *pDesc->pFuncName;
-        aFormula += '(';
+        if (bSubTotal)
+            aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "(9;" ));
+        else
+            aFormula += '(';
         aFormula += aRef;
         aFormula += ')';
     }
