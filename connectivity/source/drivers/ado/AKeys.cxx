@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:42:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeys::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdoKey(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -152,12 +152,12 @@ void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     OAdoKey* pKey = NULL;
     if(getImplementation(pKey,_xDescriptor) && pKey != NULL)
         return new OAdoKey(isCaseSensitive(),m_pConnection,pKey->getImpl());
-    return Reference< XNamed >();
+    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 
