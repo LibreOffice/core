@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 11:09:10 $
+ *  last change: $Author: mba $ $Date: 2002-09-04 08:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,6 +1490,9 @@ sal_Bool SfxFrame::HasComponent() const
 void SfxFrame::SetFrameInterface_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
 {
     pImp->xFrame = rFrame;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+    if ( !rFrame.is() && GetCurrentViewFrame() )
+        GetCurrentViewFrame()->GetBindings().SetRecorder_Impl( xRecorder );
 }
 
 void SfxFrame::SetItemSet_Impl( const SfxItemSet* pSet )
