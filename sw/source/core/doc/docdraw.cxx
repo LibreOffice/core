@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-22 10:44:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,9 @@ void SwDoc::InitDrawModel()
     //JP 28.01.99: der WinWord Import benoetigt ihn auch
     pDrawModel->SetLinkManager( &GetLinkManager() );
 
-    if( pPrt )
-        pDrawModel->SetRefDevice( pPrt );
+    OutputDevice* pRefDev = _GetRefDev();
+    if ( pRefDev )
+        pDrawModel->SetRefDevice( pRefDev );
     pDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
     if ( pLayout )
     {
@@ -607,13 +608,6 @@ SdrModel* SwDoc::_MakeDrawModel()
 void SwDoc::DrawNotifyUndoHdl()
 {
     pDrawModel->SetNotifyUndoActionHdl( Link() );
-}
-
-/*************************************************************************/
-
-void SwDoc::DrawSetRefDevice()
-{
-    pDrawModel->SetRefDevice( pPrt );
 }
 
 /*************************************************************************/
