@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:44:28 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
             aEvent.OldValue <<= GetAccessibleSpreadsheet();
 
             CommitChange(aEvent); // child is gone - event
