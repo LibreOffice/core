@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-09 09:24:51 $
+ *  last change: $Author: fme $ $Date: 2002-09-10 15:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,7 +1049,14 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                             rInf.GetOut().DrawText( aTmpPos, rInf.GetText(),
                                                     rInf.GetIdx() + j, i - j );
                         j = i + 1;
+#ifdef BIDI
+                        SwTwips nAdd = pKernArray[ i ] + nKernSum;
+                        if ( ( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL ) == nMode )
+                            nAdd *= -1;
+                        aTmpPos.X() = aPos.X() + nAdd;
+#else
                         aTmpPos.X() = aPos.X() + pKernArray[ i ] + nKernSum;
+#endif
                     }
                 }
                 if( j < i )
