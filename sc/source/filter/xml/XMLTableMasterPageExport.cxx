@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2003-02-14 09:15:57 $
+ *  last change: $Author: sab $ $Date: 2003-03-10 11:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,35 +132,32 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
             rtl::OUString sLeft (xLeft->getString());
             rtl::OUString sRight (xRight->getString());
 
-            if (sCenter.getLength() || sLeft.getLength() || sRight.getLength() || !bDisplay)
+            if( !bDisplay )
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                XML_DISPLAY, XML_FALSE );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                        aName, sal_True, sal_True );
+            if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
+                exportHeaderFooterContent( xCenter, sal_False, sal_False );
+            else
             {
-                if( !bDisplay )
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                    XML_DISPLAY, XML_FALSE );
-                SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                            aName, sal_True, sal_True );
-                if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
-                    exportHeaderFooterContent( xCenter, sal_False, sal_False );
-                else
+                if (sLeft.getLength())
                 {
-                    if (sLeft.getLength())
-                    {
-                        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                    XML_REGION_LEFT, sal_True, sal_True );
-                         exportHeaderFooterContent( xLeft, sal_False, sal_False );
-                    }
-                    if (sCenter.getLength())
-                    {
-                        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                    XML_REGION_CENTER, sal_True, sal_True );
-                         exportHeaderFooterContent( xCenter, sal_False, sal_False );
-                    }
-                    if (sRight.getLength())
-                    {
-                        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                    XML_REGION_RIGHT, sal_True, sal_True );
-                         exportHeaderFooterContent( xRight, sal_False, sal_False );
-                    }
+                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                                XML_REGION_LEFT, sal_True, sal_True );
+                     exportHeaderFooterContent( xLeft, sal_False, sal_False );
+                }
+                if (sCenter.getLength())
+                {
+                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                                XML_REGION_CENTER, sal_True, sal_True );
+                     exportHeaderFooterContent( xCenter, sal_False, sal_False );
+                }
+                if (sRight.getLength())
+                {
+                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                                XML_REGION_RIGHT, sal_True, sal_True );
+                     exportHeaderFooterContent( xRight, sal_False, sal_False );
                 }
             }
         }
