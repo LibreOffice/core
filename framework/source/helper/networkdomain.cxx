@@ -2,9 +2,9 @@
  *
  *  $RCSfile: networkdomain.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-20 10:12:11 $
+ *  last change: $Author: cd $ $Date: 2002-08-21 10:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,11 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 
 #elif defined( UNIX )
 
+#include <rtl/ustring.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <osl/thread.h>
+
 //_________________________________________________________________________________________________________________
 //  Unix
 //_________________________________________________________________________________________________________________
@@ -186,6 +191,7 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 //_________________________________________________________________________________________________________________
 
 #include <sys/systeminfo.h>
+#include <alloca.h>
 
 static rtl_uString *getDomainName()
 {
@@ -213,7 +219,7 @@ static rtl_uString *getDomainName()
 
     if ( -1 != nCopied  )
     {
-        rtl_string2uString(
+        rtl_string2UString(
             &ustrDomainName,
             pBuffer,
             nCopied - 1,
@@ -231,7 +237,6 @@ static rtl_uString *getDomainName()
 //_________________________________________________________________________________________________________________
 
 #include <unistd.h>
-#include <stdlib.h>
 
 static rtl_uString *getDomainName()
 {
@@ -254,7 +259,7 @@ static rtl_uString *getDomainName()
 
     if ( 0 == result )
     {
-        rtl_string2uString(
+        rtl_string2UString(
             &ustrDomainName,
             pBuffer,
             strlen( pBuffer ),
