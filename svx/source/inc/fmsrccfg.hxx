@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:34:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // ===================================================================================================
 
 #define MATCHING_ANYWHERE       0
@@ -95,7 +99,7 @@ namespace svxform
     // = struct FmSearchParams - Parameter einer Suche
     // ===================================================================================================
 
-    struct FmSearchParams
+    struct SVX_DLLPUBLIC FmSearchParams
     {
     protected:
         sal_Int32       nTransliterationFlags;
@@ -143,7 +147,7 @@ namespace svxform
     // = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
     // ===================================================================================================
 
-    class FmSearchConfigItem
+    class SVX_DLLPUBLIC FmSearchConfigItem
                 :protected  FmSearchParams
                 ,public     ::utl::OConfigurationValueContainer
                 // order matters!
@@ -184,8 +188,8 @@ namespace svxform
         void                    setParams( const FmSearchParams& _rParams );
 
     private:
-        void    implTranslateFromConfig( );
-        void    implTranslateToConfig( );
+        SVX_DLLPRIVATE void implTranslateFromConfig( );
+        SVX_DLLPRIVATE void implTranslateToConfig( );
     };
 
 //........................................................................
