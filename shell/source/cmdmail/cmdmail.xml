@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   smplmail    </module-name>
+    <module-name>   cmdmail </module-name>
     <component-description>
         <author> Oliver Braun </author>
         <name>com.sun.star.comp.system.SimpleCommandMail</name>
         <description>
-            A generic implementation of a SimpleSystemMail service.
+            A generic implementation of a SimpleCommandMail service.
         </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>  c++ </language>
         <status value="beta"/>
-        <supported-service> com.sun.star.system.SimpleSystemMail </supported-service>
+        <supported-service> com.sun.star.system.SimpleCommandMail </supported-service>
         <service-dependency>...</service-dependency>
         <type>  com.sun.star.system.XSimpleMailClient   </type>
         <type>  com.sun.star.system.XSimpleMailClientSupplier   </type>
