@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4053,7 +4053,19 @@ String SvNumberformat::GetMappedFormatstring(
                                         aStr += cx;     // don't escape simple forms
                                     break;
                                     default:
-                                        aStr += '\\';
+                                        // #i13399# Don't escape separators of
+                                        // target locale.
+                                        //! TODO: without binary filter all
+                                        // separators should become some
+                                        // SYMBOLTYPE_...SEP, which would also
+                                        // ease handling of
+                                        // PutandConvertEntry() and similar.
+                                        if ( !(((eType & NUMBERFORMAT_DATE) != 0)
+                                              && cx == rLoc.getDateSep().GetChar(0))
+                                          && !(((eType & NUMBERFORMAT_TIME) != 0)
+                                              && (cx == rLoc.getTimeSep().GetChar(0))
+                                               || cx == rLoc.getTime100SecSep().GetChar(0)))
+                                            aStr += '\\';
                                         aStr += cx;
                                 }
                             }
