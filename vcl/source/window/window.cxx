@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:32:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpFrameData->mbSysObjFocus      = FALSE;
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+        mpFrameData->maResizeTimer.SetTimeout( 50 );
+        mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpFrameData->mbInternalDragGestureRecognizer = FALSE;
         mpFrameData->mbTriggerHangulHanja = FALSE;
     }
@@ -2480,8 +2482,28 @@ void Window::ImplPostPaint()
 
 IMPL_LINK( Window, ImplHandlePaintHdl, void*, EMPTYARG )
 {
-    if ( mbReallyVisible )
+    // save paint events until resizing is done
+    if( mbFrame && mpFrameData->maResizeTimer.IsActive() )
+        mpFrameData->maPaintTimer.Start();
+    else if ( mbReallyVisible )
         ImplCallOverlapPaint();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( Window, ImplHandleResizeTimerHdl, void*, EMPTYARG )
+{
+    if( mbReallyVisible )
+    {
+        ImplCallResize();
+        if( mpFrameData->maPaintTimer.IsActive() )
+        {
+            mpFrameData->maPaintTimer.Stop();
+            mpFrameData->maPaintTimer.GetTimeoutHdl().Call( NULL );
+        }
+    }
+
     return 0;
 }
 
