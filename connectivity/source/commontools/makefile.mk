@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-25 13:09:29 $
+#   last change: $Author: hr $ $Date: 2001-05-29 10:07:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,15 +94,12 @@ EXCEPTIONSFILES=\
         $(SLO)$/emptymetadata.obj						\
         $(SLO)$/dbtools.obj								\
         $(SLO)$/dbexception.obj							\
+        $(SLO)$/CommonTools.obj							\
         $(SLO)$/DateConversion.obj						\
+        $(SLO)$/FDatabaseMetaDataResultSetMetaData.obj	\
         $(SLO)$/FDatabaseMetaDataResultSet.obj			\
         $(SLO)$/TDatabaseMetaDataBase.obj
 
-
-.IF "$(COM)"=="GCC"
-NOOPTFILES= \
-        $(SLO)$/dbexception.obj
-.ENDIF			# "$(COM)"=="GCC"
 
 # --- Targets ------------------------------------------------------
 
