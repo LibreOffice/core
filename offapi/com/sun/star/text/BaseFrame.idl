@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrame.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:32 $
+ *  last change: $Author: os $ $Date: 2002-08-16 12:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,21 @@ service BaseFrame
         is anchored, wraps around the object.
      */
     [property] boolean SurroundAnchorOnly;
+    //-------------------------------------------------------------------------
+    /** contains the transparency of the background color as percentage value.
+        The properties "BackTransparent" and "BackColorTransparency"
+        are overwriting each other.
+     */
+    [optional, property]byte BackColorTransparency;
+    //-------------------------------------------------------------------------
+    /** contains the color of the background. In contrast to the property "BackColor"
+     it doesn't contain a transparency value.
+     */
+    [optional, property]long BackColorRGB;
+    //-------------------------------------------------------------------------
+    /** contains the transparency of the background graphic as percentage value.
+     */
+    [optional, property]byte BackGraphicTransparency;
 };
 
 //=============================================================================
