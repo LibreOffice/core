@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:11:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Tamanho do texto base";
         Text[ japanese ] = "対象文字列の最大サイズ";
         Text[ korean ] = "대상 문자열 최대 크기";
-        Text[ chinese_simplified ] = "最大的主文字大小";
+        Text[ chinese_simplified ] = "主文字的大小";
         Text[ chinese_traditional ] = "最大的主文字大小";
         Text[ turkish ] = "Azami temel metin boyutu";
         Text[ arabic ] = "Base text size";
@@ -406,7 +406,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ portuguese_brazilian ] = "Tamanho do texto Ruby";
         Text[ japanese ] = "ルビ文字の最大サイズ";
         Text[ korean ] = "최대 덧말 문자 크기";
-        Text[ chinese_simplified ] = "最大的拼音文字大小";
+        Text[ chinese_simplified ] = "拼音文字的大小";
         Text[ chinese_traditional ] = "最大的注音符號大小";
         Text[ turkish ] = "Mak. Ruby metin boyutu";
         Text[ arabic ] = "Ruby text size";
@@ -612,7 +612,6 @@ TabPage TP_TEXTGRID_PAGE
         DropDown = TRUE;
     };
 };
-
 
 
 
