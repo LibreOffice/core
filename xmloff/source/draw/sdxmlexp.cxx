@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:55:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@
 #include <com/sun/star/style/XStyle.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER_HPP_
-#include <com/sun/star/form/XFormsSupplier.hpp>
+#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER2_HPP_
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
@@ -2668,16 +2668,12 @@ void SdXMLExport::exportFormsElement( Reference< XDrawPage > xDrawPage )
 {
     if( xDrawPage.is() )
     {
-        Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, UNO_QUERY );
-        if( xFormsSupplier.is() )
+        Reference< form::XFormsSupplier2 > xFormsSupplier( xDrawPage, UNO_QUERY );
+        if ( xFormsSupplier.is() && xFormsSupplier->hasForms() )
         {
-            Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
-            if( xForms.is() && xForms->hasElements() )
-            {
-                // write masterpage
-                ::xmloff::OOfficeFormsExport aForms(*this);
-                GetFormExport()->exportForms( xDrawPage );
-            }
+            // write masterpage
+            ::xmloff::OOfficeFormsExport aForms(*this);
+            GetFormExport()->exportForms( xDrawPage );
         }
 
         sal_Bool bRet = GetFormExport()->seekPage( xDrawPage );
