@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:48:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,6 +885,10 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
 
     if(pSdrPage)
     {
+        // End editing of text.  Otherwise the edited text object would
+        // still be visible on the new page.
+        GetDrawViewShell().GetView()->EndTextEdit();
+
         setMasterPageMode( pSdrPage->IsMasterPage() );
         GetDrawViewShell().SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
         GetDrawViewShell().WriteFrameViewData();
