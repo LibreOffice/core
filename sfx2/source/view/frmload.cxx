@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-18 10:22:31 $
+ *  last change: $Author: mba $ $Date: 2000-10-18 13:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #include <svtools/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -371,6 +373,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
     if ( pFilter )
     {
+        SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, sURL );
         const SfxFilter* pNew = NULL;
 
         SfxApplication* pApp = SFX_APP();
@@ -378,7 +381,11 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         TransformParameters( SID_OPENDOC, aArgumentlist, *pSet );
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
+#if SUPD<609
+        SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, sal_True, NULL, pSet );
+#else
         SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, NULL, pSet );
+#endif
         if ( aMedium.IsStorage() )
             aMedium.GetStorage();
         else
@@ -409,6 +416,9 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
         if ( pFilter )
             pFilter = rMatcher.ResolveRedirection( pFilter, aMedium );
+
+        if ( aMedium.GetErrorCode() != ERRCODE_NONE )
+            ErrorHandler::HandleError( aMedium.GetError() );
     }
 
     if ( !pFilter )
