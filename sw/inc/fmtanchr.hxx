@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtanchr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:52:56 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@ class SwFmtAnchor: public SfxPoolItem
     RndStdIds  nAnchorId;
     USHORT     nPageNum;        //Seitennummer bei Seitengeb. Rahmen.
 
+    // OD 2004-05-05 #i28701# - getting anchor positions ordered
+    sal_uInt32 mnOrder;
+    static sal_uInt32 mnOrderCounter;
+
 public:
     SwFmtAnchor( RndStdIds eRnd = FLY_PAGE, USHORT nPageNum = 0 );
     SwFmtAnchor( const SwFmtAnchor &rCpy );
@@ -114,11 +118,14 @@ public:
     RndStdIds GetAnchorId() const { return nAnchorId; }
     USHORT GetPageNum() const { return nPageNum; }
     const SwPosition *GetCntntAnchor() const { return pCntntAnchor; }
-
-    void SetPageNum( USHORT nNew ) { nPageNum = nNew; }
+    // OD 2004-05-05 #i28701#
+    sal_uInt32 GetOrder() const;
 
     void SetType( RndStdIds nRndId ) { nAnchorId = nRndId; }
+    void SetPageNum( USHORT nNew ) { nPageNum = nNew; }
     void SetAnchor( const SwPosition *pPos );
+    // OD 2004-05-05 #i28701#
+    void SetOrder( const sal_uInt32 _nNewOrder );
 };
 
 inline const SwFmtAnchor &SwAttrSet::GetAnchor(BOOL bInP) const
