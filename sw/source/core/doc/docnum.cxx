@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:41:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+
+#include <map>
+
+using std::map;
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
@@ -1498,6 +1502,42 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
     }
 
     return bRet;
+}
+
+
+void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
+{
+    map<SwNumRule *, SwNumRule *> aNumRuleMap;
+
+     ULONG nStt = rPaM.Start()->nNode.GetIndex();
+    ULONG nEnd = rPaM.End()->nNode.GetIndex();
+
+    for (ULONG n = nStt; n <= nEnd; n++)
+    {
+        SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
+
+        if (pCNd)
+        {
+            SwNumRule * pRule = pCNd->GetNumRule();
+
+            if (pRule && pRule->IsAutoRule())
+            {
+                SwNumRule * pReplaceNumRule = aNumRuleMap[pRule];
+
+                if (! pReplaceNumRule)
+                {
+                    pReplaceNumRule = new SwNumRule(*pRule);
+                    pReplaceNumRule->SetName(GetUniqueNumRuleName());
+
+                    aNumRuleMap[pRule] = pReplaceNumRule;
+                }
+
+                SwPaM aPam(*pCNd);
+
+                SetNumRule(aPam, *pReplaceNumRule);
+            }
+        }
+    }
 }
 
 BOOL SwDoc::NoNum( const SwPaM& rPam )
