@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 10:56:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
 #include "connectivity/sdbcx/VTable.hxx"
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -75,8 +74,20 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include "connectivity/sdbcx/VColumn.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_KEY_HXX_
+#include "connectivity/sdbcx/VKey.hxx"
+#endif
+
 
 // -------------------------------------------------------------------------
+using namespace connectivity::dbtools;
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -86,55 +97,163 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-IMPLEMENT_SERVICE_INFO(OTable,"com.sun.star.sdbcx.VTable","com.sun.star.sdbcx.Table");
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(isNew())
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VTableDescriptor");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Table");
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OTable::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    if(isNew())
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.TableDescriptor");
+    else
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Table");
 
+    return aSupported;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OTable::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    const ::rtl::OUString* pSupported = aSupported.getConstArray();
+    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
+        if (pSupported->equals(_rServiceName))
+            return sal_True;
 
-// --------------------------------------------------------------------------
-OTable::OTable( sal_Bool _bCase) : OTableDescriptor(_bCase)
-    ,m_pIndexes(NULL)
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+OTable::OTable(sal_Bool _bCase) :   OTableDescriptor_BASE(m_aMutex)
+                ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase,sal_True)
+                ,m_pKeys(NULL)
+                ,m_pColumns(NULL)
+                ,m_pIndexes(NULL)
 {
 }
 // -----------------------------------------------------------------------------
 OTable::OTable( sal_Bool _bCase,
                 const ::rtl::OUString& _Name,       const ::rtl::OUString& _Type,
                 const ::rtl::OUString& _Description,const ::rtl::OUString& _SchemaName,
-                const ::rtl::OUString& _CatalogName) :
-                OTableDescriptor(_bCase,
-                                  _Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
+                const ::rtl::OUString& _CatalogName) :  OTableDescriptor_BASE(m_aMutex)
+                ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase)
+                ,m_pKeys(NULL)
+                ,m_pColumns(NULL)
                 ,m_pIndexes(NULL)
+                ,m_CatalogName(_CatalogName)
+                ,m_SchemaName(_SchemaName)
+                ,m_Description(_Description)
+                ,m_Type(_Type)
 {
+    m_Name = _Name;
 }
 // -------------------------------------------------------------------------
 OTable::~OTable()
 {
+    delete m_pKeys;
+    delete m_pColumns;
     delete m_pIndexes;
 }
 // -------------------------------------------------------------------------
+void OTable::construct()
+{
+    ODescriptor::construct();
+
+    sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
+
+    registerProperty(PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_DESCRIPTION,      PROPERTY_ID_DESCRIPTION,nAttrib,&m_Description, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_TYPE,             PROPERTY_ID_TYPE,       nAttrib,&m_Type,        ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTableDescriptor_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTable::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTableDescriptor_BASE::release();
+}
+
+// -------------------------------------------------------------------------
 Any SAL_CALL OTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OTableDescriptor::queryInterface( rType);
-    if(aRet.hasValue())
-        return aRet;
-    return OTable_BASE::queryInterface( rType);
+    Any aRet = ODescriptor::queryInterface( rType);
+    if(!aRet.hasValue())
+    {
+        if(!isNew())
+            aRet = OTable_BASE::queryInterface( rType);
+        if(!aRet.hasValue())
+            aRet = OTableDescriptor_BASE::queryInterface( rType);
+    }
+    return aRet;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OTable::getTypes(  ) throw(RuntimeException)
 {
-    return ::comphelper::concatSequences(OTableDescriptor::getTypes(),OTable_BASE::getTypes());
+    if(isNew())
+        return ::comphelper::concatSequences(ODescriptor::getTypes(),OTableDescriptor_BASE::getTypes());
+    return ::comphelper::concatSequences(ODescriptor::getTypes(),OTableDescriptor_BASE::getTypes(),OTable_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTable::disposing(void)
 {
-    OTableDescriptor::disposing();
+    ODescriptor::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
+    if(m_pKeys)
+        m_pKeys->disposing();
+    if(m_pColumns)
+        m_pColumns->disposing();
     if(m_pIndexes)
         m_pIndexes->disposing();
+
+}
+// -----------------------------------------------------------------------------
+// XColumnsSupplier
+Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (rBHelper.bDisposed)
+        throw DisposedException();
+
+    if(!m_pColumns)
+        refreshColumns();
+
+    return const_cast<OTable*>(this)->m_pColumns;
+}
+
+// -------------------------------------------------------------------------
+// XKeysSupplier
+Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+
+    if(!m_pKeys)
+        refreshKeys();
+
+    return const_cast<OTable*>(this)->m_pKeys;
+}
+// -----------------------------------------------------------------------------
+cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 _nId) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+cppu::IPropertyArrayHelper & OTable::getInfoHelper()
+{
+    return *const_cast<OTable*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(RuntimeException)
@@ -185,16 +304,3 @@ void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPro
 
 }
 // -------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-cppu::IPropertyArrayHelper* OTable::createArrayHelper( ) const
-{
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new cppu::OPropertyArrayHelper(aProps);
-}
-// -------------------------------------------------------------------------
-cppu::IPropertyArrayHelper & OTable::getInfoHelper()
-{
-    return *static_cast<OTable_PROP*>(const_cast<OTable*>(this))->getArrayHelper();
-}
-

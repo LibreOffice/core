@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:45:46 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VDescriptor.hxx"
 #endif
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
@@ -205,6 +208,13 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
         if(m_aNameMap.find(xName->getName()) != m_aNameMap.end())
             throw ElementExistException(xName->getName(),*this);
 
+        Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+        if(xTunnel.is())
+        {
+            ODescriptor* pDescriptor = (ODescriptor*)xTunnel->getSomething(ODescriptor::getUnoTunnelImplementationId());
+            if(pDescriptor)
+                pDescriptor->setNew(sal_False);
+        }
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(xName->getName(),WeakReference< XNamed >(xName))));
     }
 }

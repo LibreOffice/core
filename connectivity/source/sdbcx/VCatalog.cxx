@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#include "connectivity/sdbcx/VCollection.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VDescriptor.hxx"
+#endif
 
 using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
@@ -138,7 +144,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (OCatalog_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return const_cast<OCatalog*>(this)->m_pViews;
 }
@@ -148,7 +154,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (OCatalog_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return const_cast<OCatalog*>(this)->m_pUsers;
 }
@@ -158,7 +164,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (OCatalog_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return const_cast<OCatalog*>(this)->m_pGroups;
 }
@@ -173,4 +179,37 @@ ODescriptor::~ODescriptor()
 {
 }
 // -------------------------------------------------------------------------
+// com::sun::star::lang::XUnoTunnel
+sal_Int64 SAL_CALL ODescriptor::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+
+    return 0;
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< sal_Int8 > ODescriptor::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+typedef ::comphelper::OPropertyContainer ODescriptorCon_BASE2;
+// -----------------------------------------------------------------------------
+Any SAL_CALL ODescriptor::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
+    if(!aRet.hasValue())
+        aRet = ODescriptorCon_BASE2::queryInterface(rType);
+    return aRet;
+}
+// -----------------------------------------------------------------------------
 

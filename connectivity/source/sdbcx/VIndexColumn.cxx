@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,39 @@ using namespace connectivity::dbtools;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-IMPLEMENT_SERVICE_INFO(OIndexColumn,"com.sun.star.sdbcx.VIndexColumn","com.sun.star.sdbcx.IndexColumn");
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(isNew())
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumnDescription");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndex");
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    if(isNew())
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexDescription");
+    else
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Index");
+
+    return aSupported;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OIndexColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    const ::rtl::OUString* pSupported = aSupported.getConstArray();
+    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
+        if (pSupported->equals(_rServiceName))
+            return sal_True;
+
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),  m_IsAscending(sal_True)
+{
+}
 // -------------------------------------------------------------------------
 OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
                             const ::rtl::OUString&  _Name,

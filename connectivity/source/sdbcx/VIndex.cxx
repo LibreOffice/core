@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 10:56:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#include "connectivity/sdbcx/VCollection.hxx"
+#endif
 // -------------------------------------------------------------------------
 using namespace connectivity::dbtools;
 using namespace connectivity;
@@ -82,14 +85,44 @@ using namespace connectivity::sdbcx;
 using namespace cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-//  using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-IMPLEMENT_SERVICE_INFO(OIndex,"com.sun.star.sdbcx.VIndex","com.sun.star.sdbcx.Index");
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(isNew())
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexDescriptor");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndex");
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    if(isNew())
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexDescriptor");
+    else
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Index");
+
+    return aSupported;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OIndex::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    const ::rtl::OUString* pSupported = aSupported.getConstArray();
+    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
+        if (pSupported->equals(_rServiceName))
+            return sal_True;
+
+    return sal_False;
+}
 // -------------------------------------------------------------------------
-OIndex::OIndex(sal_Bool _bCase) :   OIndexDescriptor( _bCase)
+OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
+                ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
+                ,   m_pColumns(NULL)
 {
 }
 // -------------------------------------------------------------------------
@@ -98,27 +131,74 @@ OIndex::OIndex( const ::rtl::OUString& _Name,
                 sal_Bool _isUnique,
                 sal_Bool _isPrimaryKeyIndex,
                 sal_Bool _isClustered,
-                sal_Bool _bCase) :  OIndexDescriptor(_Name,_Catalog,_isUnique,_isPrimaryKeyIndex,_isClustered,_bCase)
+                sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
+                        ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
+                        ,m_pColumns(NULL)
+                        ,m_Catalog(_Catalog)
+                        ,m_IsUnique(_isUnique)
+                        ,m_IsPrimaryKeyIndex(_isPrimaryKeyIndex)
+                        ,m_IsClustered(_isClustered)
 {
+    m_Name = _Name;
 }
 // -------------------------------------------------------------------------
 OIndex::~OIndex( )
 {
+    delete m_pColumns;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OIndex::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OIndexDescriptor::queryInterface( rType);
-    if(aRet.hasValue())
-        return aRet;
-    return cppu::queryInterface(rType,static_cast< ::com::sun::star::sdbcx::XDataDescriptorFactory* >(this));
+    Any aRet = ODescriptor::queryInterface( rType);
+    if(!aRet.hasValue())
+    {
+        if(!isNew())
+            aRet = OIndex_BASE::queryInterface(rType);
+        if(!aRet.hasValue())
+            aRet = ODescriptor_BASE::queryInterface( rType);
+    }
+    return aRet;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OIndex::getTypes(  ) throw(RuntimeException)
 {
-    Sequence< Type > aTypes(1);
-    aTypes[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::sdbcx::XDataDescriptorFactory >* >(NULL));
-    return ::comphelper::concatSequences(OIndexDescriptor::getTypes(),aTypes);
+    if(isNew())
+        return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes());
+    return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes(),OIndex_BASE::getTypes());
+}
+// -------------------------------------------------------------------------
+void OIndex::construct()
+{
+    ODescriptor::construct();
+
+    sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
+
+    registerProperty(PROPERTY_CATALOG,          PROPERTY_ID_CATALOG,            nAttrib,&m_Catalog,         ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_ISUNIQUE,         PROPERTY_ID_ISUNIQUE,           nAttrib,&m_IsUnique,            ::getBooleanCppuType());
+    registerProperty(PROPERTY_ISPRIMARYKEYINDEX,PROPERTY_ID_ISPRIMARYKEYINDEX,  nAttrib,&m_IsPrimaryKeyIndex,   ::getBooleanCppuType());
+    registerProperty(PROPERTY_ISCLUSTERED,      PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     ::getBooleanCppuType());
+}
+// -------------------------------------------------------------------------
+void OIndex::disposing(void)
+{
+    OPropertySetHelper::disposing();
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    if(m_pColumns)
+        m_pColumns->disposing();
+}
+// -------------------------------------------------------------------------
+Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (ODescriptor_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+
+    if(!m_pColumns)
+        refreshColumns();
+
+    return const_cast<OIndex*>(this)->m_pColumns;
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(RuntimeException)
@@ -130,4 +210,3 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
     return this;
 }
 // -----------------------------------------------------------------------------
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,40 @@ using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
-IMPLEMENT_SERVICE_INFO(OKeyColumn,"com.sun.star.sdbcx.VKeyColumn","com.sun.star.sdbcx.KeyColumn");
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if(isNew())
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyColumnDescription");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyColumn");
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    if(isNew())
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyColumnDescription");
+    else
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyColumn");
+
+    return aSupported;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeyColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    const ::rtl::OUString* pSupported = aSupported.getConstArray();
+    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
+        if (pSupported->equals(_rServiceName))
+            return sal_True;
+
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+OKeyColumn::OKeyColumn(sal_Bool _bCase) : OColumn(_bCase)
+{
+    construct();
+}
 // -------------------------------------------------------------------------
 OKeyColumn::OKeyColumn( const ::rtl::OUString&  _ReferencedColumn,
                         const ::rtl::OUString&  _Name,
