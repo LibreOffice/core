@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 20:58:10 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 21:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Returns the year fraction representing the number of whole days between start_date and end_date";
             Text[ italian ] = "Restituisce la differenza tra la data iniziale e la data finale come frazione dell'anno.";
             Text[ danish ] = "Returns the year fraction representing the number of whole days between start_date and end_date";
-            Text[ swedish ] = "Berдknar antalet dagar av ett еr mellan startdatum och slutdatum.";
+            Text[ swedish ] = "Berдknar antalet hela dagar av ett еr mellan startdatum och slutdatum.";
             Text[ polish ] = "Podaje, jak№ czкњж roku stanowi peіna liczba dni pomiкdzy dat№ pocz№tkow№ a koсcow№.";
             Text[ portuguese_brazilian ] = "Returns the year fraction representing the number of whole days between start_date and end_date";
             Text[ japanese ] = "й–‹е§‹ж—ҐгЃЁзµ‚дє†ж—ҐгЃ®й–“гЃ®ж—Ґж•°гЃЊпј‘е№ґй–“гЃ«еЇѕгЃ—гЃ¦еЌ г‚Ѓг‚‹е‰Іеђ€г‚’иї”гЃ—гЃѕгЃ™гЂ‚";
@@ -569,7 +569,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Количество месяцев до или после начальной даты.";
             Text[ greek ] = "months";
             Text[ dutch ] = "Maanden";
-            Text[ french ] = "Nombre de mois avant ou aprиs la date iniatiale.";
+            Text[ french ] = "Nombre de mois avant ou aprиs la date initiale.";
             Text[ spanish ] = "Cantidad de meses anterior o posterior a la fecha inicial.";
             Text[ finnish ] = "months";
             Text[ italian ] = "Numero di mesi precedenti o successivi alla data iniziale.";
@@ -609,7 +609,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅШ±Щ’lпїЅЙ‘О‰пїЅпїЅпїЅпїЅпїЅпїЅпїЅМ”NпїЅМ‰пїЅпїЅTпїЅЪ‚Й‚пїЅпїЅпїЅпїЅй‚©пїЅрђ”’lпїЅЕ•Ф‚пїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂж—ҐжњџењЁдёЂе№ґеЅ“дё­зљ„е‘ЁеєЏе€—ж•°гЂ‚";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅYпїЅ@пїЅпїЅfbпїЅ@пїЅ~пїЅн¤¤пїЅпїЅпїЅgпїЅЗ¦CпїЅЖЎC";
+            Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂж—ҐжњџењЁдёЂе№ґз•¶дё­зљ„йЂ±еєЏе€—ж•ёгЂ‚";
             Text[ turkish ] = "Returns the week number in year";
             Text[ arabic ] = "Returns the week number in year";
             Text[ catalan ] = "Returns the week number in year";
@@ -634,7 +634,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Datum";
             Text[ japanese ] = "пїЅШ±Щ’l";
             Text[ korean ] = "пїЅпїЅВҐ";
-            Text[ chinese_simplified ] = "Date";
+            Text[ chinese_simplified ] = "date";
             Text[ chinese_traditional ] = "date";
             Text[ turkish ] = "DATE";
             Text[ arabic ] = "ЗбКЗСнО";
@@ -661,7 +661,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "Excel пїЅЕ“пїЅпїЅвЋћпїЅФ‚МЊvпїЅZпїЅЙЋgпїЅpпїЅпїЅпїЅпїЅйє°пїЅ";
             Text[ korean ] = "пїЅпїЅВҐ";
             Text[ chinese_simplified ] = "ж—Ґжњџ";
-            Text[ chinese_traditional ] = "пїЅпїЅ";
+            Text[ chinese_traditional ] = "ж—Ґжњџ";
             Text[ turkish ] = "DATE";
             Text[ arabic ] = "ЗбКЗСнО";
             Text[ catalan ] = "Datum";
@@ -672,21 +672,21 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckgabetyp";
             Text[ english ] = "Rьckgabetyp";
             Text[ english_us ] = "Return type";
-            Text[ portuguese ] = "Rьckgabetyp";
+            Text[ portuguese ] = "Mйtodo";
             Text[ russian ] = "Тип_возвр";
             Text[ greek ] = "Rьckgabetyp";
             Text[ dutch ] = "Type resultaat";
             Text[ french ] = "Mйthode";
             Text[ spanish ] = "Tipo de devoluciуn";
             Text[ finnish ] = "Rьckgabetyp";
-            Text[ italian ] = "Tipo restituito";
+            Text[ italian ] = "Metodo";
             Text[ danish ] = "Rьckgabetyp";
             Text[ swedish ] = "Returtyp";
             Text[ polish ] = "Typ wyniku";
             Text[ portuguese_brazilian ] = "Rьckgabetyp";
             Text[ japanese ] = "пїЅTпїЅМЉоЏЂ";
             Text[ korean ] = "пїЅпїЅИЇ пїЅ";
-            Text[ chinese_simplified ] = "Return type";
+            Text[ chinese_simplified ] = "return_type";
             Text[ chinese_traditional ] = "return_type";
             Text[ turkish ] = "Rьckgabetyp";
             Text[ arabic ] = "Rьckgabetyp";
@@ -713,7 +713,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅPпїЅTпїЅФ‚пїЅпїЅпїЅпїЅjпїЅпїЅпїЅnпїЅЬ‚й‚©пїЅпїЅпїЅпїЅпїЅQпїЅМђпїЅпїЅlпїЅЕЋwпїЅ";
             Text[ korean ] = "пїЅпїЅ пїЅЦ°пїЅ пїЅо¶І пїЅпїЅпїЅЪ·пїЅ пїЅпїЅпїЅпїЅпїЅПґпїЅпїЅпїЅпїЅЛ·пїЅпїЅЦґпїЅ 1-3пїЅпїЅпїЅпїЅпїЅ пїЅ";
             Text[ chinese_simplified ] = "1и‡і3дё­зљ„дёЂдёЄж•°е­—з”ЁжќҐжЊ‡е®ље“ЄдёЂе¤©жЇдёЂе‘Ёзљ„ејЂе§‹гЂ‚";
-            Text[ chinese_traditional ] = "1пїЅпїЅ3пїЅд¤¤пїЅпїЅпїЅ@пїЅУјЖ¦rпїЅNпїЅпїЅYпїЅ@пїЅС¬пїЅпїЅ@пїЅgпїЅпїЅпїЅ}пїЅlпїЅC";
+            Text[ chinese_traditional ] = "1и‡і3е…¶дё­зљ„дёЂеЂ‹ж•ёе­—д»ЈиЎЁжџђдёЂе¤©з‚єдёЂйЂ±зљ„й–‹е§‹гЂ‚";
             Text[ turkish ] = "Eine Zahl von 1 bis 3, die angibt, mit welchem Tag eine Woche beginnt.";
             Text[ arabic ] = "Eine Zahl von 1 bis 3, die angibt, mit welchem Tag eine Woche beginnt.";
             Text[ catalan ] = "Eine Zahl von 1 bis 3, die angibt, mit welchem Tag eine Woche beginnt.";
@@ -875,12 +875,12 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Returns the number of whole workdays between to dates";
             Text[ italian ] = "Restituisce il numero dei giorni compresi tra due date.";
             Text[ danish ] = "Returns the number of whole workdays between to dates";
-            Text[ swedish ] = "Returnerar antalet dagar i ett tidsintervall";
+            Text[ swedish ] = "Returnerar antalet arbetsdagar i ett tidsintervall";
             Text[ polish ] = "Podaje liczbк dni roboczych miкdzy dwiema datami.";
             Text[ portuguese_brazilian ] = "Returns the number of whole workdays between to dates";
             Text[ japanese ] = "й–‹е§‹ж—ҐгЃ‹г‚‰зµ‚дє†ж—ҐгЃѕгЃ§гЃ®жњџй–“гЃ®ж—Ґж•°г‚’иї”гЃ—гЃѕгЃ™гЂ‚";
             Text[ korean ] = "л‘ђ к°њмќ л‚ м§њ м‚¬мќґм—ђ м†Ќн•лЉ” м „мІґ м—…л¬ґмќјмќ м€лҐј л°н™н•©л‹€л‹¤.";
-            Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂжЊ‡е®љдё¤дёЄе·ҐдЅњж—Ґж—Ґжњџд№‹й—ґзљ„е¤©ж•°гЂ‚";
+            Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂжЊ‡е®љж—Ґжњџе†…ж‰ЂеЊ…еђ«зљ„е·ҐдЅњж—Ґе¤©ж•°гЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћиµ·е§‹ж—Ґжњџи€‡зµђжќџж—Ґжњџд№‹й–“зљ„е·ҐдЅње¤©ж•ёз›®гЂ‚";
             Text[ turkish ] = "Returns the number of whole workdays between to dates";
             Text[ arabic ] = "Returns the number of whole workdays between to dates";
@@ -1072,7 +1072,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅlпїЅпїЅпїЅпїЅМ‚Ж‚пїЅ TRUE пїЅпїЅпїЅпїЅпїЅAпїЅпђ”пїЅМ‚Ж‚пїЅ FALSE пїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅЪ°пїЅпїЅпїЅ В¦пїЅпїЅМёпїЅ пїЅпїЅпїЅ пїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "е¦‚жћњж•°е­—жЇеЃ¶ж•°пјЊдѕїиї”е›ћйЂ»иѕ‘еЂј TRUEгЂ‚";
-            Text[ chinese_traditional ] = "пїЅpпїЅGпїЅСјЖ¬пїЅпїЅпїЅпїЅЖЎAпїЅЗ¦^пїЅЮїпїЅпїЅ TRUE пїЅAпїЅП¤пїЅпїЅЗ¦^ FALSE пїЅC";
+            Text[ chinese_traditional ] = "е¦‚жћњеЏѓж•ёз‚єеЃ¶ж•ёпјЊе‚іе›ћй‚ЏијЇеЂј TRUE пјЊеЏЌд№‹е‚іе›ћ FALSE гЂ‚";
             Text[ turkish ] = "Returns true if the number is even";
             Text[ arabic ] = "Returns true if the number is even";
             Text[ catalan ] = "Returns true if the number is even";
@@ -1097,7 +1097,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zahl";
             Text[ japanese ] = "пѕђпѕ”пѕ’l";
             Text[ korean ] = "пѕјпї¶";
-            Text[ chinese_simplified ] = "Number";
+            Text[ chinese_simplified ] = "number";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "Sayэ";
             Text[ arabic ] = "ЗбСЮг";
@@ -1124,7 +1124,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅ]пїЅпїЅпїЅпїЅпїЅйђ”пїЅl";
             Text[ korean ] = "пѕјпї¶";
             Text[ chinese_simplified ] = "ж•°е­—";
-            Text[ chinese_traditional ] = "пїЅСј";
+            Text[ chinese_traditional ] = "ж•ёе­—";
             Text[ turkish ] = "Sayэ";
             Text[ arabic ] = "ЗбСЮг";
             Text[ catalan ] = "Zahl";
@@ -1153,7 +1153,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅlпїЅпїЅпїЅпђ”пїЅМ‚Ж‚пїЅ TRUE пїЅпїЅпїЅпїЅпїЅAпїЅпїЅМ‚Ж‚пїЅ FALSE пїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅИ¦пїЅпїЅМёпїЅ пїЅпїЅпїЅ пїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "е¦‚жћњж•°е­—жЇеҐ‡ж•°пјЊе°±иї”е›ћйЂ»иѕ‘еЂј trueгЂ‚";
-            Text[ chinese_traditional ] = "пїЅpпїЅGпїЅпїЅпїЅ_пїЅЖЎAпїЅNпїЅЗ¦^пїЅЮїпїЅпїЅ TRUE пїЅC";
+            Text[ chinese_traditional ] = "е¦‚жћњз‚єеҐ‡ж•ёпјЊе°±е‚іе›ћй‚ЏијЇеЂј TRUE гЂ‚";
             Text[ turkish ] = "Returns true if the number is odd";
             Text[ arabic ] = "Returns true if the number is odd";
             Text[ catalan ] = "Returns true if the number is odd";
@@ -1178,7 +1178,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zahl";
             Text[ japanese ] = "пѕђпѕ”пѕ’l";
             Text[ korean ] = "пѕјпї¶";
-            Text[ chinese_simplified ] = "Number";
+            Text[ chinese_simplified ] = "number";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "Sayэ";
             Text[ arabic ] = "ЗбСЮг";
@@ -1205,7 +1205,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅ]пїЅпїЅпїЅпїЅпїЅйђ”пїЅl";
             Text[ korean ] = "пѕјпї¶";
             Text[ chinese_simplified ] = "ж•°е­—";
-            Text[ chinese_traditional ] = "пїЅnпїЅпїЅпїЅпїЅпїЅСјЖЎC";
+            Text[ chinese_traditional ] = "ж•ёе­—";
             Text[ turkish ] = "Sayэ";
             Text[ arabic ] = "Value";
             Text[ catalan ] = "Zahl";
@@ -2062,7 +2062,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅпїЅпїЅМђпїЅпїЅпїЅпїЅМЌЕ‘пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅЦґпїЅ пїЅпїЅпїЅпїЅпїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "и®Ўз®—дёЂдёЄжњЂе¤§зљ„е…¬зє¦ж•°гЂ‚";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅ@пїЅУіМ¤jпїЅпїЅпїЅпїЅпїЅпїЅпїЅC";
+            Text[ chinese_traditional ] = "е‚іе›ћдёЂеЂ‹жњЂе¤§зљ„е…¬зґ„ж•ёгЂ‚";
             Text[ turkish ] = "Returns the greatest common divisor";
             Text[ arabic ] = "Returns the greatest common divisor";
             Text[ catalan ] = "Returns the greatest common divisor";
@@ -2087,8 +2087,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zahl(en)";
             Text[ japanese ] = "пѕђпѕ”пѕ’l";
             Text[ korean ] = "пїЅпїЅпїЅ";
-            Text[ chinese_simplified ] = "Number(s)";
-            Text[ chinese_traditional ] = "number";
+            Text[ chinese_simplified ] = "number(s)";
+            Text[ chinese_traditional ] = "number(s)";
             Text[ turkish ] = "Zahl(en)";
             Text[ arabic ] = "Zahl(en)";
             Text[ catalan ] = "Zahl(en)";
@@ -2114,7 +2114,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅЕ‘пїЅпїЅпїЅпїЅпїЅнџ¬н±‚Я‚йђ”пїЅl";
             Text[ korean ] = "пїЅпїЅпїЅЗґпїЅ пїЅпїЅпїЅ";
             Text[ chinese_simplified ] = "ж•°е­—ж€–ж•°е­—е€—еЌ•гЂ‚";
-            Text[ chinese_traditional ] = "пїЅЖ¦rпїЅОјЖ¦rпїЅMпїЅпїЅC";
+            Text[ chinese_traditional ] = "ж•ёе­—ж€–ж•ёе­—жё…е–®гЂ‚";
             Text[ turkish ] = "Zahl oder Liste von Zahlen";
             Text[ arabic ] = "Zahl oder Liste von Zahlen";
             Text[ catalan ] = "Zahl oder Liste von Zahlen";
@@ -2143,7 +2143,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅпїЅпїЅМђпїЅпїЅпїЅпїЅМЌЕЏпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅЦјпїЅ пїЅпїЅпїЅпїЅпїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "и®Ўз®—дёЂдёЄжњЂе°Џзљ„е…¬еЂЌж•°гЂ‚";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅ@пїЅУіМ¤pпїЅпїЅпїЅпїЅпїЅпїЅпїЅЖЎC";
+            Text[ chinese_traditional ] = "е‚іе›ћдёЂеЂ‹жњЂе°Џзљ„е…¬еЂЌж•ёгЂ‚";
             Text[ turkish ] = "Returns the least common multiple";
             Text[ arabic ] = "Returns the least common multiple";
             Text[ catalan ] = "Returns the least common multiple";
@@ -2168,7 +2168,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zahl(en)";
             Text[ japanese ] = "пѕђпѕ”пѕ’l";
             Text[ korean ] = "пїЅпїЅпїЅ";
-            Text[ chinese_simplified ] = "Number(s)";
+            Text[ chinese_simplified ] = "number(s)";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "Zahl(en)";
             Text[ arabic ] = "Zahl(en)";
@@ -2181,7 +2181,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Zahl oder Liste von Zahlen";
             Text[ english_us ] = "Number or list of numbers";
             Text[ portuguese ] = "Nъmero ou sйrie de nъmeros.";
-            Text[ russian ] = "Число или набор чисел, для которых необходимо найти наибольший общий делитель.";
+            Text[ russian ] = "Число или набор чисел.";
             Text[ greek ] = "Zahl oder Liste von Zahlen";
             Text[ dutch ] = "Getal of lijst met getallen";
             Text[ french ] = "Nombre ou sйrie de nombres.";
@@ -2195,7 +2195,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅЕЏпїЅпїЅпїЅпїЅпїЅпїЅнџ¬н±‚Я‚йђ”пїЅl";
             Text[ korean ] = "пїЅпїЅпїЅЗґпїЅ пїЅпїЅпїЅ";
             Text[ chinese_simplified ] = "ж•°е­—ж€–ж•°е­—е€—еЌ•гЂ‚";
-            Text[ chinese_traditional ] = "пїЅЖ¦rпїЅОјЖ¦rпїЅMпїЅпїЅC";
+            Text[ chinese_traditional ] = "ж•ёе­—ж€–ж•ёе­—жё…е–®гЂ‚";
             Text[ turkish ] = "Zahl oder Liste von Zahlen";
             Text[ arabic ] = "Zahl oder Liste von Zahlen";
             Text[ catalan ] = "Zahl oder Liste von Zahlen";
@@ -4753,7 +4753,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Возвращает двойной факториал числа.";
             Text[ greek ] = "Returns the double factorial of a number";
             Text[ dutch ] = "Returns the double factorial of a number";
-            Text[ french ] = "Revoie la factorielle double d'un nombre.";
+            Text[ french ] = "Renvoie la factorielle double d'un nombre.";
             Text[ spanish ] = "Devuelve el doble factorial de un nъmero.";
             Text[ finnish ] = "Returns the double factorial of a number";
             Text[ italian ] = "Restituisce il fattoriale doppio di un numero.";
@@ -6670,7 +6670,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Converts a number from one measurement system to another";
             Text[ english_us ] = "Converts a number from one measurement system to another";
             Text[ portuguese ] = "Converte um nъmero de um sistema de medida para outro.";
-            Text[ russian ] = "Преобразовывает число из одной системы единиц в другую.";
+            Text[ russian ] = "Преобразует число из одной системы единиц в другую.";
             Text[ greek ] = "Converts a number from one measurement system to another";
             Text[ dutch ] = "Converteert een getal van de ene maateenheid naar een andere.";
             Text[ french ] = "Convertit un nombre d'un systиme de mesure а un autre.";
@@ -6684,7 +6684,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅlпїЅМ’PпїЅК‚пїЅпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅПіпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅГЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅЩёпїЅ пїЅпїЅпїЅ пїЅГЅпїЅпїЅпїЅ8пїЅпїЅ пїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "е°†дёЂдёЄж•°е­—д»ЋдёЂдёЄеє¦й‡Џе€¶иЅ¬жЌўе€°еЏ¦дёЂдёЄеє¦й‡Џе€¶гЂ‚";
-            Text[ chinese_traditional ] = "пїЅNпїЅ@пїЅУ«Ч¶qпїЅпїЅмЄєпїЅЖ¦rпїЅаґ«пїЅпїЅпїЅtпїЅ@пїЅУ«Ч¶qпїЅпїЅмЄєпїЅЖ¦rпїЅC";
+            Text[ chinese_traditional ] = "е°‡дёЂеЂ‹еє¦й‡Џе–®дЅЌзљ„ж•ёе­—иЅ‰жЏ›ж€ђеЏ¦дёЂеЂ‹еє¦й‡Џе–®дЅЌзљ„ж•ёе­—гЂ‚";
             Text[ turkish ] = "Converts a number from one measurement system to another";
             Text[ arabic ] = "Converts a number from one measurement system to another";
             Text[ catalan ] = "Converts a number from one measurement system to another";
@@ -6709,7 +6709,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zahl";
             Text[ japanese ] = "пѕђпѕ”пѕ’l";
             Text[ korean ] = "пѕјпї¶";
-            Text[ chinese_simplified ] = "Number";
+            Text[ chinese_simplified ] = "number";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "Sayэ";
             Text[ arabic ] = "ЗбСЮг";
@@ -6736,7 +6736,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅПЉпїЅпїЅпїЅпїЅпїЅl";
             Text[ korean ] = "пѕјпї¶";
             Text[ chinese_simplified ] = "ж•°е­—";
-            Text[ chinese_traditional ] = "пїЅnпїЅаґ«пїЅпїЅпїЅЖ¦rпїЅC";
+            Text[ chinese_traditional ] = "ж•ёе­—";
             Text[ turkish ] = "Saat";
             Text[ arabic ] = "ЗбСЮг";
             Text[ catalan ] = "Zahl";
@@ -6761,7 +6761,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Von-MaЯeinheit";
             Text[ japanese ] = "пїЅПЉпїЅпїЅOпїЅPпїЅ";
             Text[ korean ] = "пїЅпїЅИЇ пїЅпїЅпїЅпїЅ'";
-            Text[ chinese_simplified ] = "From unit";
+            Text[ chinese_simplified ] = "from_unit";
             Text[ chinese_traditional ] = "from_unit";
             Text[ turkish ] = "Von-MaЯeinheit";
             Text[ arabic ] = "Von-MaЯeinheit";
@@ -6788,7 +6788,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅlпїЅМ’PпїЅ";
             Text[ korean ] = "пїЅпїЅпїЅ пїЅпїЅ'";
             Text[ chinese_simplified ] = "ж•°е­—зљ„еє¦й‡ЏеЌ•дЅЌгЂ‚";
-            Text[ chinese_traditional ] = "пїЅпїЅУЄпїЅпїЅЧ¶qпїЅпїЅпїЅC";
+            Text[ chinese_traditional ] = "еЋџдѕ†зљ„еє¦й‡Џе–®дЅЌгЂ‚";
             Text[ turkish ] = "MaЯeinheit von Zahl.";
             Text[ arabic ] = "MaЯeinheit von Zahl.";
             Text[ catalan ] = "MaЯeinheit von Zahl.";
@@ -6813,7 +6813,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "In-MaЯeinheit";
             Text[ japanese ] = "пїЅПЉпїЅпїЅпїЅPпїЅ";
             Text[ korean ] = "пїЅпїЅИЇ пїЅпїЅ пїЅпїЅ'";
-            Text[ chinese_simplified ] = "To unit";
+            Text[ chinese_simplified ] = "to_unit";
             Text[ chinese_traditional ] = "to_unit";
             Text[ turkish ] = "In-MaЯeinheit";
             Text[ arabic ] = "In-MaЯeinheit";
@@ -6840,7 +6840,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅПЉпїЅпїЅпїЅМ’PпїЅ";
             Text[ korean ] = "пїЅпїЅпїЅпїЅ пїЅпїЅ'";
             Text[ chinese_simplified ] = "з»“жћњзљ„еє¦й‡ЏеЌ•дЅЌгЂ‚";
-            Text[ chinese_traditional ] = "пїЅnпїЅаґ«пїЅпїЅпїЅпїЅпїЅЧ¶qпїЅпїЅпїЅC";
+            Text[ chinese_traditional ] = "и¦ЃиЅ‰жЏ›ж€ђзљ„еє¦й‡Џе–®дЅЌгЂ‚";
             Text[ turkish ] = "MaЯeinheit des Ergebnisses.";
             Text[ arabic ] = "MaЯeinheit des Ergebnisses.";
             Text[ catalan ] = "MaЯeinheit des Ergebnisses.";
@@ -8983,7 +8983,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Возвращает ежегодную продолжительность действия ценных бумаг с периодическими выплатами по процентам.";
             Text[ greek ] = "Returns the annual duration of a security with periodic interest payments";
             Text[ dutch ] = "Returns the annual duration of a security with periodic interest payments";
-            Text[ french ] = "Revoie la durйe Macaulay d'un titre avec des paiements d'intйrкts pйriodiques.";
+            Text[ french ] = "Renvoie la durйe Macaulay d'un titre avec des paiements d'intйrкts pйriodiques.";
             Text[ spanish ] = "Devuelve la duraciуn anual Macaulay de un valor con pagos periуdicos de intereses.";
             Text[ finnish ] = "Returns the annual duration of a security with periodic interest payments";
             Text[ italian ] = "Restituisce la durata annuale (formula Macaulay) di un titolo che paga interessi periodici.";
@@ -9347,7 +9347,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅf пїЅпїЅпїЅпїЅпїЅпїЅ2; пїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "и®Ўз®—жЇЏе№ґзљ„е®ћй™…е€©жЃЇгЂ‚";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅYпїЅ@пїЅпїЅпїЅпїЅкЄєпїЅпїЅЪ¦~пїЅQпїЅvпїЅC";
+            Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂй …жЉ•иі‡зљ„еЇ¦йљ›е№ґе€©зЋ‡гЂ‚";
             Text[ turkish ] = "Returns the effectiv annual interest rate";
             Text[ arabic ] = "Returns the effectiv annual interest rate";
             Text[ catalan ] = "Returns the effectiv annual interest rate";
@@ -9372,7 +9372,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Nominalzins";
             Text[ japanese ] = "пїЅпїЅпїЅЪ—пїЅпїЅпїЅ";
             Text[ korean ] = "пїЅпїЅпїЅпїЅпїЅпїЅ";
-            Text[ chinese_simplified ] = "Nominal rate";
+            Text[ chinese_simplified ] = "nominal_rate";
             Text[ chinese_traditional ] = "nominal_rate";
             Text[ turkish ] = "Nominalzins";
             Text[ arabic ] = "Nominalzins";
@@ -9399,7 +9399,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅпїЅпїЅЪ”NпїЅпїЅпїЅпїЅ";
             Text[ korean ] = "пїЅпїЅпїЅпїЅпїЅпїЅ";
             Text[ chinese_simplified ] = "еђЌд№‰е€©жЃЇ";
-            Text[ chinese_traditional ] = "пѕ¦~пѕ¦Wпѕёqпѕ§QпѕІvпѕЎC";
+            Text[ chinese_traditional ] = "е№ґеђЌзѕ©е€©зЋ‡гЂ‚";
             Text[ turkish ] = "Nominalzins";
             Text[ arabic ] = "Nominalzins";
             Text[ catalan ] = "Nominalzins";
@@ -9424,7 +9424,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Perioden";
             Text[ japanese ] = "пїЅпїЅпїЅпїЅпїЅvпїЅZпїЅ";
             Text[ korean ] = "пїЅв°Ј";
-            Text[ chinese_simplified ] = "Npery";
+            Text[ chinese_simplified ] = "npery";
             Text[ chinese_traditional ] = "npery";
             Text[ turkish ] = "Perioden";
             Text[ arabic ] = "Perioden";
@@ -9451,7 +9451,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅPпїЅNпїЅпїЅпїЅпїЅпїЅпїЅМ•пїЅпїЅпїЅпїЅvпїЅZпїЅ";
             Text[ korean ] = "пїЅв°Ј";
             Text[ chinese_simplified ] = "е‘Ёжњџ";
-            Text[ chinese_traditional ] = "пїЅпїЅпїЅ~пїЅЖ§QпїЅпїЅпїЅпїЅпїЅЖЎC";
+            Text[ chinese_traditional ] = "з‚єе№ґи¤‡е€©зљ„ж¬Ўж•ёгЂ‚";
             Text[ turkish ] = "Perioden";
             Text[ arabic ] = "Perioden";
             Text[ catalan ] = "Perioden";
@@ -9480,7 +9480,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅwпїЅи‚іпїЅк‚ЅпїЅпїЅпїЅЙ‘Э•tпїЅпїЅЙ‘О‚пїЅпїЅДЋxпїЅпїЅпїЅпїЅпїЅйЊіпїЅпїЅМ—ЭЊvпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅ пїЅв°Ј пїЅпїЅпїЅМїпїЅ пїЅпїЅО±пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ; пїЅпїЅИЇпїЅХґПґ";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂиґ·ж¬ѕењЁдё¤дёЄе‘Ёжњџд№‹й—ґи¦ЃзґЇи®ЎеЃїиїзљ„жњ¬й‡‘ж•°йўќгЂ‚";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅ@пїЅпїЅпїЅUпїЅЪЄпїЅпїЅД¤@пїЅ{PпїЅМ«пїЅ@пїЅdпїЅпїЅпїЅпїЅпїЅпїЅvпїЅЩҐпїЅпїЅпїЅЦ­pпїЅИЎC";
+            Text[ chinese_traditional ] = "е‚іе›ћдёЂз­†иІёж¬ѕзљ„з¬¬дёЂжњџи€‡жњЂеѕЊдёЂжњџд№‹й–“зљ„е„џй‚„жњ¬й‡‘зљ„зґЇиЁ€еЂјгЂ‚";
             Text[ turkish ] = "Returns the cumulative principal paid a loan between two periods";
             Text[ arabic ] = "Returns the cumulative principal paid a loan between two periods";
             Text[ catalan ] = "Returns the cumulative principal paid a loan between two periods";
@@ -9505,7 +9505,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zins";
             Text[ japanese ] = "пѕ—пѕпѕ—пѕ¦";
             Text[ korean ] = "пїЅпїЅпїЅ";
-            Text[ chinese_simplified ] = "Rate";
+            Text[ chinese_simplified ] = "rate";
             Text[ chinese_traditional ] = "rate";
             Text[ turkish ] = "FAЭZ";
             Text[ arabic ] = "RATE";
@@ -9532,7 +9532,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅЭ•tпїЅпїЅпїЅпїЅпїЅпїЅпїЅД€пїЅпїЅМ—пїЅпїЅпїЅ";
             Text[ korean ] = "пїЅпїЅпїЅ";
             Text[ chinese_simplified ] = "е€©жЃЇ";
-            Text[ chinese_traditional ] = "пѕ§QпѕІv";
+            Text[ chinese_traditional ] = "е€©жЃЇ";
             Text[ turkish ] = "FAЭZ";
             Text[ arabic ] = "Interest";
             Text[ catalan ] = "Zins";
@@ -9549,7 +9549,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "Aantal perioden";
             Text[ french ] = "Npm";
             Text[ spanish ] = "NPER";
-            Text[ finnish ] = "Zzr";
+            Text[ finnish ] = "NPER";
             Text[ italian ] = "NUM.RATE";
             Text[ danish ] = "NPER";
             Text[ swedish ] = "Perioder";
@@ -9557,7 +9557,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zzr";
             Text[ japanese ] = "пїЅxпїЅпїЅпїЅ";
             Text[ korean ] = "NPER";
-            Text[ chinese_simplified ] = "Nper";
+            Text[ chinese_simplified ] = "nper";
             Text[ chinese_traditional ] = "nper";
             Text[ turkish ] = "NPER";
             Text[ arabic ] = "NPER";
@@ -9584,7 +9584,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "пїЅЭ•tпїЅпїЅпїЅSпїЅМ‚Е‚МЋxпїЅпїЅпїЅсђ”‚МЌпїЅпїЅv";
             Text[ korean ] = "пїЅпїЅ пїЅв°ЈпїЅпїЅ пїЅ";
             Text[ chinese_simplified ] = "ж”Їд»е‘Ёжњџж•°гЂ‚";
-            Text[ chinese_traditional ] = "пїЅUпїЅпїЅпїЅvпїЅЩґjпїЅпїЅпїЅпїЅЖЎC";
+            Text[ chinese_traditional ] = "иІёж¬ѕе„џй‚„жњџзљ„ж¬Ўж•ёгЂ‚";
             Text[ turkish ] = "Anzahl der Zahlungsperioden.";
             Text[ arabic ] = "Anzahl der Zahlungsperioden.";
             Text[ catalan ] = "Anzahl der Zahlungsperioden.";
@@ -9609,7 +9609,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Bw";
             Text[ japanese ] = "пїЅпїЅпїЅЭ‰пїЅпїЅl";
             Text[ korean ] = "????";
-            Text[ chinese_simplified ] = "Pv";
+            Text[ chinese_simplified ] = "pv";
             Text[ chinese_traditional ] = "pv";
             Text[ turkish ] = "PV";
             Text[ arabic ] = "PV";
@@ -9636,8 +9636,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Gegenstandswert";
             Text[ japanese ] = "пїЅпїЅпїЅЭ‚М‘Э•tпїЅz";
             Text[ korean ] = "пїЅпїЅпїЅЗ°пїЅ";
-            Text[ chinese_simplified ] = "ДіТ»пїЅпїЅпїЅпїЅпїЅЦЅпїЅпїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅ@пїЅпїЅпїЅUпїЅЪЄпїЅпїЅ{пїЅпїЅпїЅC";
+            Text[ chinese_simplified ] = "зЋ°й‡‘еЂј";
+            Text[ chinese_traditional ] = "иІёж¬ѕзљ„зЏѕй‡‘еЂјгЂ‚";
             Text[ turkish ] = "Gegenstandswert";
             Text[ arabic ] = "Gegenstandswert";
             Text[ catalan ] = "Gegenstandswert";
@@ -9688,8 +9688,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Startperiode";
             Text[ japanese ] = "пїЅvпїЅZпїЅМ‘ОЏЫ‚Ж‚И‚пїЅЕЏпїЅпїЅМЉ";
             Text[ korean ] = "пїЅпїЅпїЅпїЅ пїЅв°Ј";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅгё¶пїЅпїЅпїЅпїЅпїЅпїЅЪЎпїЅ";
-            Text[ chinese_traditional ] = "пїЅUпїЅпїЅпїЅvпїЅЩґjпїЅпїЅД¤@пїЅ";
+            Text[ chinese_simplified ] = "й¦–жњџ";
+            Text[ chinese_traditional ] = "з¬¬дёЂжњџ";
             Text[ turkish ] = "Startperiode";
             Text[ arabic ] = "Startperiode";
             Text[ catalan ] = "Startperiode";
@@ -9740,8 +9740,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Endperiode";
             Text[ japanese ] = "пїЅvпїЅZпїЅМ‘ОЏЫ‚Ж‚И‚пїЅЕЊпїЅМЉ";
             Text[ korean ] = "пїЅпїЅ~ пїЅв°Ј";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅгё¶пїЅпїЅпїЅД©пїЅЪЎпїЅ";
-            Text[ chinese_traditional ] = "пїЅUпїЅпїЅпїЅvпїЅЩґjпїЅпїЅМ«пїЅ@пїЅaC";
+            Text[ chinese_simplified ] = "жњ«жњџ";
+            Text[ chinese_traditional ] = "жњЂеѕЊдёЂжњџ";
             Text[ turkish ] = "Endperiode";
             Text[ arabic ] = "Endperiode";
             Text[ catalan ] = "Endperiode";
@@ -9765,8 +9765,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Rodzaj";
             Text[ portuguese_brazilian ] = "F";
             Text[ japanese ] = "пїЅxпїЅпїЅпїЅ";
-            Text[ korean ] = "F";
-            Text[ chinese_simplified ] = "type_payment";
+            Text[ korean ] = "н•нѓњ";
+            Text[ chinese_simplified ] = "type";
             Text[ chinese_traditional ] = "type_payment";
             Text[ turkish ] = "Tip";
             Text[ arabic ] = "ЗбджЪ";
@@ -9787,13 +9787,13 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Typ der Fдlligkeit";
             Text[ italian ] = "Tipo di scadenza";
             Text[ danish ] = "Typ der Fдlligkeit";
-            Text[ swedish ] = "Typ av tidpunkt";
+            Text[ swedish ] = "Typ av fцrfallodag";
             Text[ polish ] = "Okreњlenie typu pіatnoњci.";
             Text[ portuguese_brazilian ] = "Typ der Fдlligkeit";
             Text[ japanese ] = "пѕЋxпѕ•пѕҐпѕЋпѕћпѕЉпїє";
             Text[ korean ] = "пїЅпїЅпїЅпїЅпїЅпїЅ /пїЅ";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅпїЅК±пїЅпїЅпїЅпїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅvпїЅЩЄпїЅпїЅЙ¶пїЅпїЅпїЅпїЅпїЅ";
+            Text[ chinese_simplified ] = "е€°жњџз±»ећ‹";
+            Text[ chinese_traditional ] = "е„џй‚„зљ„ж™‚й–“йЎћећ‹";
             Text[ turkish ] = "Typ der Fдlligkeit";
             Text[ arabic ] = "Typ der Fдlligkeit";
             Text[ catalan ] = "Typ der Fдlligkeit";
@@ -9821,8 +9821,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Returns the cumulative interest paid between two periods";
             Text[ japanese ] = "пїЅwпїЅи‚іпїЅк‚ЅпїЅпїЅпїЅЙ‘Э•tпїЅпїЅЙ‘О‚пїЅпїЅДЋxпїЅпїЅпїЅпїЅпїЅй—пїЅпїЅпїЅМ—ЭЊvпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅ пїЅв°Ј пїЅпїЅпїЅМїпїЅ пїЅпїЅпїЅЗґпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅЪёпїЅ пїЅпїЅИЇпїЅХґПґ";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅпїЅТ»пїЅКґпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅД©пїЅЪµпїЅпїЅЫјЖіпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅ@пїЅпїЅпїЅUпїЅЪІД¤@пїЅ{PпїЅМ«пїЅ@пїЅdпїЅпїЅпїЅпїЅvпїЅЩЄпїЅпїЅQпїЅпїЅпїЅC";
+            Text[ chinese_simplified ] = "и®Ўз®—ењЁдё¤дёЄе‘Ёжњџд№‹й—ґзґЇи®Ўи¦Ѓж”Їд»зљ„е€©жЃЇйўќгЂ‚";
+            Text[ chinese_traditional ] = "е‚іе›ћдёЂз­†иІёж¬ѕз¬¬дёЂжњџи€‡жњЂеѕЊдёЂжњџд№‹й–“е„џй‚„зљ„е€©жЃЇгЂ‚";
             Text[ turkish ] = "Returns the cumulative interest paid between two periods";
             Text[ arabic ] = "Returns the cumulative interest paid between two periods";
             Text[ catalan ] = "Returns the cumulative interest paid between two periods";
@@ -9873,8 +9873,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Zins";
             Text[ japanese ] = "пїЅЭ•tпїЅпїЅпїЅпїЅпїЅпїЅпїЅД€пїЅпїЅМ—пїЅпїЅпїЅ";
             Text[ korean ] = "пїЅпїЅпїЅ";
-            Text[ chinese_simplified ] = "ТЄЦ§пїЅпїЅпїЅпїЅпїЅпїЅКЎпїЅ";
-            Text[ chinese_traditional ] = "пїЅnпїЅпїЅIпїЅпїЅпїЅQпїЅvпїЅC";
+            Text[ chinese_simplified ] = "е€©жЃЇ";
+            Text[ chinese_traditional ] = "е€©жЃЇ";
             Text[ turkish ] = "Faiz";
             Text[ arabic ] = "Interest";
             Text[ catalan ] = "Zins";
@@ -9891,7 +9891,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ dutch ] = "Aantal perioden";
             Text[ french ] = "Npm";
             Text[ spanish ] = "NPER";
-            Text[ finnish ] = "Zzr";
+            Text[ finnish ] = "NPER";
             Text[ italian ] = "NUM.RATE";
             Text[ danish ] = "NPER";
             Text[ swedish ] = "Perioder";
@@ -9925,8 +9925,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Anzahl Zahlungsperioden";
             Text[ japanese ] = "пїЅЭ•tпїЅпїЅпїЅSпїЅМ‚Е‚МЋxпїЅпїЅпїЅсђ”‚МЌпїЅпїЅv";
             Text[ korean ] = "пїЅпїЅ пїЅв°ЈпїЅпїЅ пїЅ";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅЪјпїЅпїЅпїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅUпїЅпїЅпїЅvпїЅЩґjпїЅпїЅпїЅпїЅЖЎC";
+            Text[ chinese_simplified ] = "ж”Їд»е‘Ёжњџж•°";
+            Text[ chinese_traditional ] = "иІёж¬ѕе„џй‚„жњџзљ„ж¬Ўж•ёгЂ‚";
             Text[ turkish ] = "Anzahl Zahlungsperioden";
             Text[ arabic ] = "Anzahl Zahlungsperioden";
             Text[ catalan ] = "Anzahl Zahlungsperioden";
@@ -9977,8 +9977,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Gegenstandswert";
             Text[ japanese ] = "пїЅпїЅпїЅЭ‚М‘Э•tпїЅz";
             Text[ korean ] = "пїЅпїЅпїЅЗ°пїЅ";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅпїЅпїЅЦЅ";
-            Text[ chinese_traditional ] = "пїЅUпїЅЪЄпїЅпїЅ{пїЅпїЅпїЅC";
+            Text[ chinese_simplified ] = "зЋ°й‡‘еЂј";
+            Text[ chinese_traditional ] = "иІёж¬ѕзљ„зЏѕй‡‘еЂјгЂ‚";
             Text[ turkish ] = "Gegenstandswert";
             Text[ arabic ] = "Gegenstandswert";
             Text[ catalan ] = "Gegenstandswert";
@@ -10029,8 +10029,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Startperiode";
             Text[ japanese ] = "пїЅvпїЅZпїЅМ‘ОЏЫ‚Ж‚И‚пїЅЕЏпїЅпїЅМЉ";
             Text[ korean ] = "пїЅпїЅпїЅпїЅ пїЅв°Ј";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅД¤@пїЅ";
+            Text[ chinese_simplified ] = "й¦–жњџ";
+            Text[ chinese_traditional ] = "з¬¬дёЂжњџ";
             Text[ turkish ] = "Startperiode";
             Text[ arabic ] = "Startperiode";
             Text[ catalan ] = "Startperiode";
@@ -10081,8 +10081,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Endperiode";
             Text[ japanese ] = "пїЅvпїЅZпїЅМ‘ОЏЫ‚Ж‚И‚пїЅЕЊпїЅМЉ";
             Text[ korean ] = "пїЅпїЅ~ пїЅв°Ј";
-            Text[ chinese_simplified ] = "Д©пїЅ";
-            Text[ chinese_traditional ] = "пїЅМ«пїЅ@пїЅ";
+            Text[ chinese_simplified ] = "жњ«жњџ";
+            Text[ chinese_traditional ] = "жњЂеѕЊдёЂжњџ";
             Text[ turkish ] = "Endperiode";
             Text[ arabic ] = "Endperiode";
             Text[ catalan ] = "Endperiode";
@@ -10106,9 +10106,9 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Rodzaj";
             Text[ portuguese_brazilian ] = "F";
             Text[ japanese ] = "пїЅxпїЅпїЅпїЅ";
-            Text[ korean ] = "F";
+            Text[ korean ] = "н•нѓњ";
             Text[ chinese_simplified ] = "type";
-            Text[ chinese_traditional ] = "type";
+            Text[ chinese_traditional ] = "type_payment";
             Text[ turkish ] = "Tip";
             Text[ arabic ] = "ЗбджЪ";
             Text[ catalan ] = "F";
@@ -10128,13 +10128,13 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Typ der Fдlligkeit";
             Text[ italian ] = "Tipo di scadenza";
             Text[ danish ] = "Typ der Fдlligkeit";
-            Text[ swedish ] = "Typ av tidpunkt";
+            Text[ swedish ] = "Typ av fцrfallodag";
             Text[ polish ] = "Okreњlenie typu pіatnoњci.";
             Text[ portuguese_brazilian ] = "Typ der Fдlligkeit";
             Text[ japanese ] = "пѕЋxпѕ•пѕҐпѕЋпѕћпѕЉпїє";
             Text[ korean ] = "пїЅпїЅпїЅпїЅпїЅпїЅ /пїЅ";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅпїЅК±пїЅпїЅпїЅпїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅvпїЅЩЄпїЅпїЅЙ¶пїЅпїЅпїЅпїЅпїЅпїЅC";
+            Text[ chinese_simplified ] = "е€°жњџз±»ећ‹";
+            Text[ chinese_traditional ] = "е„џй‚„зљ„ж™‚й–“йЎћећ‹";
             Text[ turkish ] = "Typ der Fдlligkeit";
             Text[ arabic ] = "Typ der Fдlligkeit";
             Text[ catalan ] = "Typ der Fдlligkeit";
@@ -11220,7 +11220,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Returns the Macauley modified duration for a security with an assumed par ";
             Text[ italian ] = "Restituisce la durata Macauley modificata di un titolo con un valore nominale di 100 lire.";
             Text[ danish ] = "Returns the Macauley modified duration for a security with an assumed par ";
-            Text[ swedish ] = "Returnerar den modifierade Macauley-lцptiden fцr ett vдrdepapper med ett nominellt vдrde pе 1000 kr.";
+            Text[ swedish ] = "Returnerar den modifierade Macauley-lцptiden fцr ett vдrdepapper med ett nominellt vдrde pе 100 kr.";
             Text[ polish ] = "Podaje wartoњж zmodyfikowanego okresu Macauley'a w przypadku papieru wartoњciowego o zaіoїonej wartoњci 100 jednostek.";
             Text[ portuguese_brazilian ] = "Returns the Macauley modified duration for a security with an assumed par ";
             Text[ japanese ] = "йЎЌйќўдѕЎж ј $100 гЃЁд»®е®љгЃ—гЃ¦иЁје€ёгЃ«еЇѕгЃ™г‚‹дї®ж­ЈпѕЏпЅєпЅ°пѕљпЅ°дї‚ж•°г‚’иї”гЃ—гЃѕгЃ™гЂ‚";
@@ -11578,8 +11578,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Returns the annual nominal interest rate";
             Text[ japanese ] = "пїЅпїЅпїЅЪ”NпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅЬ‚пїЅпїЅB";
             Text[ korean ] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ2; пїЅпїЅИЇпїЅХґПґ";
-            Text[ chinese_simplified ] = "пїЅпїЅпїЅпїЅДіТ»пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅКЎпїЅ";
-            Text[ chinese_traditional ] = "пїЅЗ¦^пїЅYпїЅ@пїЅUпїЅЪЄпїЅпїЅ~пїЅWпїЅqпїЅQпїЅvпїЅC";
+            Text[ chinese_simplified ] = "и®Ўз®—е№ґеђЌд№‰е€©зЋ‡гЂ‚";
+            Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂиІёж¬ѕзљ„е№ґеђЌзѕ©е€©зЋ‡гЂ‚";
             Text[ turkish ] = "Returns the annual nominal interest rate";
             Text[ arabic ] = "Returns the annual nominal interest rate";
             Text[ catalan ] = "Returns the annual nominal interest rate";
@@ -11630,8 +11630,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Effektiver Zins";
             Text[ japanese ] = "пїЅпїЅпїЅпїЅпїЅпїЅ";
             Text[ korean ] = "пїЅпїЅf пїЅпїЅпїЅ";
-            Text[ chinese_simplified ] = "КµпїЅпїЅпїЅпїЅпїЅпїЅКЎпїЅ";
-            Text[ chinese_traditional ] = "пїЅпїЅЪ¦~пїЅQпїЅvпїЅC";
+            Text[ chinese_simplified ] = "е®ћй™…е€©зЋ‡";
+            Text[ chinese_traditional ] = "еЇ¦йљ›е№ґе€©зЋ‡гЂ‚";
             Text[ turkish ] = "Effektiver Zins";
             Text[ arabic ] = "Effektiver Zins";
             Text[ catalan ] = "Effektiver Zins";
@@ -11682,8 +11682,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Perioden";
             Text[ japanese ] = "пїЅPпїЅNпїЅпїЅпїЅпїЅпїЅпїЅМ•пїЅпїЅпїЅпїЅvпїЅZпїЅ";
             Text[ korean ] = "пїЅв°Ј";
-            Text[ chinese_simplified ] = "пїЅкёґпїЅпїЅпїЅпїЅ";
-            Text[ chinese_traditional ] = "пїЅпїЅпїЅ~пїЅЖ§QпїЅ|ЖЎC";
+            Text[ chinese_simplified ] = "е‘Ёжњџ";
+            Text[ chinese_traditional ] = "з‚єе№ґи¤‡е€©зљ„ж¬Ўж•ёгЂ‚";
             Text[ turkish ] = "Perioden";
             Text[ arabic ] = "Perioden";
             Text[ catalan ] = "Perioden";
@@ -13616,17 +13616,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Возвращает цену за 100 рублей номинальной стоимости ценных бумаг с нерегулярным первым периодом.";
             Text[ greek ] = "Returns the price of $100 face value of a security with an odd first period";
             Text[ dutch ] = "Returns the price of $100 face value of a security with an odd first period";
-            Text[ french ] = "Renvoie le prix par valeur nominale de 100 F d'un titre dont la premiиre pйriode est irrйguliиre.";
+            Text[ french ] = "Renvoie le prix, pour une valeur nominale de 100 unitйs monйtaires, d'un titre dont la premiиre pйriode de coupon est irrйguliиre.";
             Text[ spanish ] = "Devuelve el precio de 100 (unidad monetaria) de valor nominal de un tнtulo con un primer perнodo irregular.";
             Text[ finnish ] = "Returns the price of $100 face value of a security with an odd first period";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 lire con il primo periodo d'interesse irregolare.";
             Text[ danish ] = "Returns the price of $100 face value of a security with an odd first period";
-            Text[ swedish ] = "Returnerar priset per 1000 kr nominellt vдrde fцr ett vдrdepapper med en udda fцrsta period.";
+            Text[ swedish ] = "Returnerar priset per 100 valutaenheter nominellt vдrde fцr ett vдrdepapper med en udda fцrsta period.";
             Text[ polish ] = "Podaje cenк za 100 jednostek wartoњci nominalnej papieru wartoњciowego z nietypowym pierwszym okresem.";
             Text[ portuguese_brazilian ] = "Returns the price of $100 face value of a security with an odd first period";
             Text[ japanese ] = "пј‘жњџз›®гЃ®ж—Ґж•°гЃЊеЌЉз«ЇгЃЄиЁје€ёгЃ«еЇѕгЃ—гЃ¦йЎЌйќў 100 е††еЅ“гЃџг‚ЉгЃ®дѕЎж јг‚’иї”гЃ—гЃѕгЃ™гЂ‚";
             Text[ korean ] = "мІмќЊ кё°к°„мќґ кё°м€мќё н•л‚мќ л‹ґліґл¬јм—ђ лЊЂн•њ $100 м•Ўл©ґк°Ђ л‹№ к°ЂкІ©мќ„ л°н™н•©л‹€л‹¤";
-            Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂйќўйўќдёє100е…ѓзљ„й¦–жњџд»жЃЇж—ҐдёЌе›єе®љзљ„жњ‰д»·иЇЃе€ёзљ„е®ћй™…д»·ж јгЂ‚";
+            Text[ chinese_simplified ] = "и®Ўз®—жЇЏдёЂйќўйўќдёє100е…ѓдё”й¦–жњџд»жЃЇж—ҐдёЌе›єе®љзљ„жњ‰д»·иЇЃе€ёзљ„е®ћй™…д»·ж јгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂйќўйЎЌз‚є100е…ѓгЂЃз¬¬дёЂжњџд»жЃЇдёЌе›єе®љзљ„жњ‰еѓ№и­‰е€ёзљ„еЇ¦йљ›еѓ№ж јгЂ‚";
             Text[ turkish ] = "Returns the price of $100 face value of a security with an odd first period";
             Text[ arabic ] = "Returns the price of $100 face value of a security with an odd first period";
@@ -14648,17 +14648,17 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Возвращает цену за 100 рублей нарицательной стоимости ценных бумаг с нерегулярным последним периодом.";
             Text[ greek ] = "Returns the price of $100 face value of a security with an odd last period";
             Text[ dutch ] = "Geeft als resultaat de koers per fl 100,--nominale waarde van een waardepapier met een afwijkende laatste rentetermijn.";
-            Text[ french ] = "Renvoie le prix par valeur nominale de 100 F d'un titre dont la derniиre pйriode est irrйguliиre.";
+            Text[ french ] = "Renvoie le prix, pour une valeur nominale de 100 unitйs monйtaires, d'un titre dont la derniиre pйriode de coupon est irrйguliиre.";
             Text[ spanish ] = "Devuelve la cotizaciуn por 100 (unidad monetaria) de valor nominal de un valor con ъltimo perнodo irregular.";
             Text[ finnish ] = "Returns the price of $100 face value of a security with an odd last period";
             Text[ italian ] = "Restituisce il prezzo di un titolo nominale dal valore di 100 lire avente l'ultimo periodo d'interesse irregolare.";
             Text[ danish ] = "Returns the price of $100 face value of a security with an odd last period";
-            Text[ swedish ] = "Returnerar priset per 1000 kronor nominellt vдrde fцr ett vдrdepapper med en udda sista period.";
+            Text[ swedish ] = "Returnerar priset per 100 valutaenheter nominellt vдrde fцr ett vдrdepapper med en udda sista period.";
             Text[ polish ] = "Podaje cenк za 100 jednostek wartoњci nominalnej papieru wartoњciowego z nietypowym ostatnim okresem.";
             Text[ portuguese_brazilian ] = "Returns the price of $100 face value of a security with an odd last period";
             Text[ japanese ] = "пј‘жњџз›®гЃ®ж—Ґж•°гЃЊеЌЉз«ЇгЃЄиЁје€ёгЃ«еЇѕгЃ—гЃ¦йЎЌйќў 100 е††еЅ“гЃџг‚ЉгЃ®дѕЎж јг‚’иї”гЃ—гЃѕгЃ™гЂ‚";
             Text[ korean ] = "л§€м§Ђл§‰ кё°к°„мќґ кё°м€мќё н•л‚мќ л‹ґліґл¬јм—ђ лЊЂн•ґ $100 м•Ўл©ґк°Ђ л‹№ к°ЂкІ©мќ„ л°н™н•©л‹€л‹¤";
-            Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂйќўйўќдёє100е…ѓзљ„жњ«жњџд»жЃЇдёЌе›єе®љзљ„жњ‰д»·иЇЃе€ёзљ„е®ћй™…д»·ж јгЂ‚";
+            Text[ chinese_simplified ] = "и®Ўз®—жЇЏдёЂйќўйўќдёє100е…ѓдё”жњ«жњџд»жЃЇж—ҐдёЌе›єе®љзљ„жњ‰д»·иЇЃе€ёзљ„е®ћй™…д»·ж јгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂйќўйЎЌз‚є100е…ѓгЂЃжњЂеѕЊдёЂжњџд»жЃЇдёЌе›єе®љзљ„жњ‰еѓ№и­‰е€ёзљ„еЇ¦йљ›еѓ№ж јгЂ‚";
             Text[ turkish ] = "Returns the price of $100 face value of a security with an odd last period";
             Text[ arabic ] = "Returns the price of $100 face value of a security with an odd last period";
@@ -17732,7 +17732,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Возвращает будущее значение основного капитала после начисления сложных процентов.";
             Text[ greek ] = "Returns the future value of an initial principal after applying a series of compound interest rates";
             Text[ dutch ] = "Geeft als resultaat de toekomstige waarde van een beginkapitaal na toevoeging van de samengestelde rente op basis van een reeks rentepercentages, die periodiek van elkaar verschillen.";
-            Text[ french ] = "Revoie la valeur future d'un investissement en appliquant une sйrie de taux d'intйrкt composites.";
+            Text[ french ] = "Renvoie la valeur future d'un investissement en appliquant une sйrie de taux d'intйrкt composites.";
             Text[ spanish ] = "Devuelve el valor del capital inicial tras la aplicaciуn de una serie de diversos tipos de intereses periуdicos.";
             Text[ finnish ] = "Returns the future value of an initial principal after applying a series of compound interest rates";
             Text[ italian ] = "Restituisce il valore del capitale iniziale soggetto a tassi d'interesse periodici variabili.";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
