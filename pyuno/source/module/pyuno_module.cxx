@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:01:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,8 +232,10 @@ static OUString getLibDir()
         {
             static OUString libDir;
 
+            // changed from reinterpret_cast<void> gcc 3.3 will not
+            // all you to cast to void in this way, converted to simple C cast.
             // workarounds the $(ORIGIN) until it is available
-            if( Module::getUrlFromAddress( reinterpret_cast<void*>(getLibDir) , libDir ) )
+            if( Module::getUrlFromAddress( (void*)(getLibDir) , libDir ) )
             {
                 libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
                 OUString name ( RTL_CONSTASCII_USTRINGPARAM( "PYUNOLIBDIR" ) );
