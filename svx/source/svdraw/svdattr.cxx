@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 08:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,8 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[ SDRATTR_GRAFTRANSPARENCE    - SDRATTR_START] = new SdrGrafTransparenceItem;
     ppPoolDefaults[ SDRATTR_GRAFINVERT          - SDRATTR_START] = new SdrGrafInvertItem;
     ppPoolDefaults[ SDRATTR_GRAFMODE            - SDRATTR_START] = new SdrGrafModeItem;
-    for( i = SDRATTR_GRAFRESERVE2; i <= SDRATTR_GRAFRESERVE6; i++ )
+    ppPoolDefaults[ SDRATTR_GRAFCROP            - SDRATTR_START] = new SdrGrafCropItem;
+    for( i = SDRATTR_GRAFRESERVE3; i <= SDRATTR_GRAFRESERVE6; i++ )
         ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
     ppPoolDefaults[ SDRATTRSET_GRAF - SDRATTR_START ] = new SdrGrafSetItem( pMaster );
 
@@ -725,7 +726,7 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_GRAFTRANSPARENCE   : nResId = SIP_SA_GRAFTRANSPARENCE;break;
         case SDRATTR_GRAFINVERT         : nResId = SIP_SA_GRAFINVERT;break;
         case SDRATTR_GRAFMODE           : nResId = SIP_SA_GRAFMODE;break;
-        case SDRATTR_GRAFRESERVE2       : nResId = SIP_SA_GRAFRESERVE2;break;
+        case SDRATTR_GRAFCROP           : nResId = SIP_SA_GRAFCROP;break;
         case SDRATTR_GRAFRESERVE3       : nResId = SIP_SA_GRAFRESERVE3;break;
         case SDRATTR_GRAFRESERVE4       : nResId = SIP_SA_GRAFRESERVE4;break;
         case SDRATTR_GRAFRESERVE5       : nResId = SIP_SA_GRAFRESERVE5;break;
@@ -1012,7 +1013,7 @@ BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
         case SDRATTR_GRAFTRANSPARENCE        : aStr="SDRATTR_GRAFTRANSPARENCE        "; break;
         case SDRATTR_GRAFINVERT              : aStr="SDRATTR_GRAFINVERT              "; break;
         case SDRATTR_GRAFMODE                : aStr="SDRATTR_GRAFMODE                "; break;
-        case SDRATTR_GRAFRESERVE2            : aStr="SDRATTR_GRAFRESERVE2            "; break;
+        case SDRATTR_GRAFCROP                : aStr="SDRATTR_GRAFCROP                "; break;
         case SDRATTR_GRAFRESERVE3            : aStr="SDRATTR_GRAFRESERVE3            "; break;
         case SDRATTR_GRAFRESERVE4            : aStr="SDRATTR_GRAFRESERVE4            "; break;
         case SDRATTR_GRAFRESERVE5            : aStr="SDRATTR_GRAFRESERVE5            "; break;
@@ -2852,3 +2853,24 @@ SfxItemPresentation __EXPORT SdrGrafModeItem::GetPresentation( SfxItemPresentati
     return ePres;
 }
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// SdrGrafCropItem
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+TYPEINIT1( SdrGrafCropItem, SvxGrfCrop );
+
+SfxPoolItem* SdrGrafCropItem::Clone( SfxItemPool* pPool ) const
+{
+    return new SdrGrafCropItem( *this );
+}
+
+SfxPoolItem* SdrGrafCropItem::Create( SvStream& rIn, USHORT nVer ) const
+{
+    return( ( 0 == nVer ) ? Clone( NULL ) : SvxGrfCrop::Create( rIn, nVer ) );
+}
+
+USHORT SdrGrafCropItem::GetVersion( USHORT nFileVersion ) const
+{
+    // GRFCROP_VERSION_MOVETOSVX is 1
+    return GRFCROP_VERSION_MOVETOSVX;
+}

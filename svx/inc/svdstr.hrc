@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 08:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,7 @@
 #define SIP_SA_GRAFTRANSPARENCE             (SIP_Begin + 249)
 #define SIP_SA_GRAFINVERT                   (SIP_Begin + 250)
 #define SIP_SA_GRAFMODE                     (SIP_Begin + 251)
-#define SIP_SA_GRAFRESERVE2                 (SIP_Begin + 252)
+#define SIP_SA_GRAFCROP                     (SIP_Begin + 252)
 #define SIP_SA_GRAFRESERVE3                 (SIP_Begin + 253)
 #define SIP_SA_GRAFRESERVE4                 (SIP_Begin + 254)
 #define SIP_SA_GRAFRESERVE5                 (SIP_Begin + 255)

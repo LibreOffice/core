@@ -215,6 +215,7 @@ hedabu: ..\inc\scene3d.hxx %_DEST%\inc%_EXT%\svx\scene3d.hxx
 hedabu: ..\inc\sdangitm.hxx %_DEST%\inc%_EXT%\svx\sdangitm.hxx
 hedabu: ..\inc\sderitm.hxx %_DEST%\inc%_EXT%\svx\sderitm.hxx
 hedabu: ..\inc\sdgcoitm.hxx %_DEST%\inc%_EXT%\svx\sdgcoitm.hxx
+hedabu: ..\inc\sdgcpitm.hxx %_DEST%\inc%_EXT%\svx\sdgcpitm.hxx
 hedabu: ..\inc\sdgrsitm.hxx %_DEST%\inc%_EXT%\svx\sdgrsitm.hxx
 hedabu: ..\inc\sdgluitm.hxx %_DEST%\inc%_EXT%\svx\sdgluitm.hxx
 hedabu: ..\inc\sdginitm.hxx %_DEST%\inc%_EXT%\svx\sdginitm.hxx

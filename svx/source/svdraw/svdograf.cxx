@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 08:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1765,6 +1765,7 @@ void SdrGrafObj::ForceDefaultAttr( SfxItemPool* pPool )
             rSet.Put( SdrGrafTransparenceItem( 0 ) );
             rSet.Put( SdrGrafInvertItem( FALSE ) );
             rSet.Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
+            rSet.Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
 
             pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, &aSetItem, FALSE );
         }
@@ -1838,8 +1839,9 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
 {
     if( pGrafAttr )
     {
-        const SfxItemSet&   rSet = pGrafAttr->GetItemSet();
-        const USHORT        nTrans = ( (SdrGrafTransparenceItem&) rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
+        const SfxItemSet&       rSet = pGrafAttr->GetItemSet();
+        const USHORT            nTrans = ( (SdrGrafTransparenceItem&) rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
+        const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) rSet.Get( SDRATTR_GRAFCROP );
 
         aGrafInfo.SetLuminance( ( (SdrGrafLuminanceItem&) rSet.Get( SDRATTR_GRAFLUMINANCE ) ).GetValue() );
         aGrafInfo.SetContrast( ( (SdrGrafContrastItem&) rSet.Get( SDRATTR_GRAFCONTRAST ) ).GetValue() );
@@ -1850,6 +1852,7 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
         aGrafInfo.SetTransparency( (BYTE) FRound( Min( nTrans, (USHORT) 100 )  * 2.55 ) );
         aGrafInfo.SetInvert( ( (SdrGrafInvertItem&) rSet.Get( SDRATTR_GRAFINVERT ) ).GetValue() );
         aGrafInfo.SetDrawMode( ( (SdrGrafModeItem&) rSet.Get( SDRATTR_GRAFMODE ) ).GetValue() );
+        aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
         SetXPolyDirty();
         SetRectsDirty();
@@ -1874,6 +1877,8 @@ void SdrGrafObj::ImpSetGrafInfoToAttr()
         rSet.Put( SdrGrafTransparenceItem( (USHORT) FRound( aGrafInfo.GetTransparency() / 2.55 ) ) );
         rSet.Put( SdrGrafInvertItem( aGrafInfo.IsInvert() ) );
         rSet.Put( SdrGrafModeItem( aGrafInfo.GetDrawMode() ) );
+        rSet.Put( SdrGrafCropItem( aGrafInfo.GetLeftCrop(), aGrafInfo.GetTopCrop(), aGrafInfo.GetRightCrop(), aGrafInfo.GetBottomCrop() ) );
+
         pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, &aSetItem );
     }
 }

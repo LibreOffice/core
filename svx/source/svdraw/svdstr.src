@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:11:30 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 08:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16482,7 +16482,13 @@ String SIP_SA_GRAFMODE
     Text[ arabic ] = "Ê÷⁄ «·’Ê—";
     Text[ turkish ] = "Grafik kipi";
 };
-String SIP_SA_GRAFRESERVE2 { Text = "" ; };
+String SIP_SA_GRAFCROP
+{
+    Text = "Zuschneiden" ;
+    Text[ english ] = "Crop";
+    Text[ english_us ] = "Crop";
+
+};
 String SIP_SA_GRAFRESERVE3 { Text = "" ; };
 String SIP_SA_GRAFRESERVE4 { Text = "" ; };
 String SIP_SA_GRAFRESERVE5 { Text = "" ; };
