@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:43:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-06 14:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 
 
 ScXMLExport::ScXMLExport() :
-    SvXMLExport( (MapUnit)GetFieldUnit(), sXML_spreadsheet ),
+    SvXMLExport( SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), sXML_spreadsheet ),
     pDoc(NULL),
     mbShowProgress( sal_False ),
     nLastColumns(SC_DEFAULT_TABLE_COUNT, 0),
