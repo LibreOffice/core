@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:44:55 $
+ *  last change: $Author: rt $ $Date: 2002-06-10 15:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3699,7 +3699,7 @@ String RID_TXT_FONT_ITALIC
     Text[ swedish ] = "Kursiv";
     Text[ polish ] = "Kursywa";
     Text[ portuguese_brazilian ] = "Italic";
-    Text[ japanese ] = "イタリック体";
+    Text[ japanese ] = "斜体";
     Text[ korean ] = "이탤릭";
     Text[ chinese_simplified ] = "斜体";
     Text[ chinese_traditional ] = "斜體字";
