@@ -53,4 +53,18 @@
         <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
         <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
     </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dba.OSingleSelectQueryComposer</name>
+        <description>Represents a service for composing a single select statement.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.SingleSelectQueryComposer</supported-service>
+        <supported-service>com.sun.star.sdb.SingleSelectQueryAnalyzer</supported-service>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.sdb.Connection</service-dependency>
+        <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
 </module-description>
