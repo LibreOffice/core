@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ module com { module sun { module star { module ucb {
     content provided by an implementation of the service
     <type>ContentProvider</type>.
 */
-service Content
+published service Content
 {
     //-------------------------------------------------------------------------
     /** provides access to the identitity and the type of the content and
