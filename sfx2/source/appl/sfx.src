@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:08:08 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ String STR_STANDARD
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyúlnie";
     Text[ portuguese_brazilian ] = "Padr?o";
     Text[ japanese ] = "ïWèÄ";
     Text[ korean ] = "«•¡ÿ";
@@ -549,4 +549,5 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ turkish ] = "T¸m dei˛iklikleri iptal et?";
     Message[ catalan ] = "øCancelar todos los cambios?";
 };
+
 
