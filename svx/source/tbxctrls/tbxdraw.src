@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 15:22:16 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,7 +623,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Center" ;
                 Text[ chinese_simplified ] = "¾ÓÖÐ";
                 Text[ russian ] = "Ïî öåíòðó";
-                Text[ polish ] = "Wy?rodkuj";
+                Text[ polish ] = "Wyœrodkuj";
                 Text[ japanese ] = "’†‰›‘µ‚¦";
                 Text[ chinese_traditional ] = "¸m¤¤";
                 Text[ greek ] = "ÊåíôñáñéóìÝíá";
@@ -710,7 +710,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ english_us ] = "Centered" ;
                 Text[ chinese_simplified ] = "ÖÐÐÄ";
                 Text[ russian ] = "Ïî ñåðåäèíå";
-                Text[ polish ] = "Po?rodku";
+                Text[ polish ] = "Poœrodku";
                 Text[ japanese ] = "’†‰›";
                 Text[ chinese_traditional ] = "¸m¤¤";
                 Text[ greek ] = "ÊÝíôñï";
