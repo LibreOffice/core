@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:52:58 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "frmsh.hxx"
 #include "doc.hxx"
 #include "viewsh.hxx"
@@ -1316,12 +1315,13 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
             // --> OD 2004-10-06 #i26945#
-            // If <pTmp> is a text frame inside a table, take the layout frame,
-            // at which the anchored object orients its vertical position.
-            else if ( pTmp->IsTxtFrm() && pTmp->IsInTab() &&
-                      _pAnchoredObj->GetVertPosOrientFrm() )
+            // --> OD 2004-11-29 #115759#
+            // If <pTmp> is a text frame inside a table, take the upper
+            // of the anchor frame, which contains the anchor position.
+            else if ( pTmp->IsTxtFrm() && pTmp->IsInTab() )
             {
-                pTmp = _pAnchoredObj->GetVertPosOrientFrm();
+                pTmp = const_cast<SwAnchoredObject*>(_pAnchoredObj)
+                                ->GetAnchorFrmContainingAnchPos()->GetUpper();
             }
             // <--
             // --> OD 2004-05-13 #i28701# - consider all objects in same context,
