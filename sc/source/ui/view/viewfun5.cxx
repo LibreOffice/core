@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:30:56 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 18:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,9 +1000,12 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             aDataHelper.GetSotStorageStream( nFormatId, xStm ) )
         {
             SvStorageRef xStore( new SvStorage( *xStm ) );
-            if( GetViewData()->GetDocShell()->GetClassName() == aObjDesc.maClassName )
+            if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_30 ) ||
+                 aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_40 ) ||
+                 aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_50 ) ||
+                 aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
             {
-                //  own format
+                //  own format (including old formats)
                 ScDocShellRef xDocShRef = new ScDocShell(SFX_CREATE_MODE_EMBEDDED);
                 if (xDocShRef->DoLoad(xStore))
                 {
@@ -1030,10 +1033,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 }
                 ((SfxInPlaceObject*)xDocShRef)->DoClose();
                 xDocShRef.Clear();
-
-                xDocShRef->DoClose();
-                xDocShRef.Clear();
-
             }
             else
             {
