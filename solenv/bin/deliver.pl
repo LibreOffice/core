@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-08 17:34:23 $
+#   last change: $Author: rt $ $Date: 2002-11-12 15:06:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.35 $ ';
+$id_str = ' $Revision: 1.36 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -614,7 +614,7 @@ sub copy_if_newer
             print "TOUCH: $from -> $to\n";
         }
         else {
-            print "COPY: $from -> $to\n";
+            print "COPY: $from -> $to\n" if ( $is_debug );
         }
     }
     if ( $opt_check ) {
@@ -922,12 +922,12 @@ sub zip_files
     }
     close(ZIP);
 
-    print "ZIP: updating $common_zip_file\n";
+    print "ZIP: updating $common_zip_file\n" if ( @common_zip_list );
     # zip content has to be relative to $dest
     chdir($common_dest);
     open(ZIP, "| $zipexe -q -o -u -@ $common_zip_file");
     foreach $file (@common_zip_list) {
-        print "ZIP: adding $file to $common_zip_file\n";# if $is_debug;
+        print "ZIP: adding $file to $common_zip_file\n" if $is_debug;
         print ZIP "$file\n";
     }
     close(ZIP);
