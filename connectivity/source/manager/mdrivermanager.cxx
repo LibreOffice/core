@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:39:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 //--------------------------------------------------------------------------
 OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& _rxFactory)
     :m_xServiceFactory(_rxFactory)
-    ,m_nLoginTimeout(NULL)
+    ,m_nLoginTimeout(0)
 {
     // bootstrap all objects supporting the .sdb.Driver service
     bootstrapDrivers();
