@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 14:32:49 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include "rtfkeywd.hxx"
 #include "parrtf.hxx"
 
-const int MAX_STRING_LEN = 1024;
 const int MAX_TOKEN_LEN = 128;
 
 #define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
@@ -356,8 +355,6 @@ sal_Unicode SvRTFParser::GetHexValue()
 void SvRTFParser::ScanText( const sal_Unicode cBreak )
 {
     String aStrBuffer;
-    sal_Unicode* pStr = aStrBuffer.AllocBuffer( MAX_STRING_LEN );
-    int nStrLen = 0;
     int bWeiter = TRUE;
     while( bWeiter && IsParserWorking() )
     {
@@ -380,11 +377,8 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             while (!bBreak)
                             {
                                 nSlash = (sal_Char)GetNextChar();
-                                while (nSlash == ' ' || nSlash == 0xD ||
-                                        nSlash == 0xA)
-                                {
+                                while (nSlash == 0xD || nSlash == 0xA)
                                     nSlash = (sal_Char)GetNextChar();
-                                }
 
                                 switch (nSlash)
                                 {
@@ -412,28 +406,23 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                         bNextCh = FALSE;
 
                         if (aByteString.Len())
-                        {
-                            String aUniString(aByteString, GetSrcEncoding());
-                            xub_StrLen nLen = aUniString.Len();
-                            for (int i = 0; i < nLen; ++i)
-                                *(pStr + nStrLen++) = aUniString.GetChar(i);
-                        }
+                            aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
                     }
                     break;
                 case '\\':
                 case '}':
                 case '{':
                 case '+':       // habe ich in einem RTF-File gefunden
-                    *(pStr + nStrLen++) = (sal_Char)nNextCh;
+                    aStrBuffer.Append(nNextCh);
                     break;
                 case '~':       // nonbreaking space
-                    *(pStr + nStrLen++) = 0xA0;
+                    aStrBuffer.Append(0xA0);
                     break;
                 case '-':       // optional hyphen
-                    *(pStr + nStrLen++) = 0xAD;
+                    aStrBuffer.Append(0xAD);
                     break;
                 case '_':       // nonbreaking hyphen
-                    *(pStr + nStrLen++) = 0x2011;
+                    aStrBuffer.Append(0x2011);
                     break;
 
                 case 'u':
@@ -451,7 +440,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             int nToken = _GetNextToken();
                             DBG_ASSERT( RTF_U == nToken, "doch kein UNI-Code Zeichen" );
                             // dont convert symbol chars
-                            *(pStr + nStrLen++) = (sal_Unicode)nTokenValue;
+                            aStrBuffer.Append(nTokenValue);
 
                             // overread the next n "RTF" characters. This
                             // can be also \{, \}, \'88
@@ -503,34 +492,18 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             break;
 
         default:
-            if( nNextCh == cBreak ||
-                aToken.Len() >= ( STRING_MAXLEN - MAX_STRING_LEN ))
+            if( nNextCh == cBreak || aToken.Len() >= STRING_MAXLEN)
                 bWeiter = FALSE;
             else
             {
                 do {
                     // alle anderen Zeichen kommen in den Text
-                    *(pStr + nStrLen++) = nNextCh;
+                    aStrBuffer.Append(nNextCh);
 
-                    if( MAX_STRING_LEN == nStrLen )
+                    if (sal_Unicode(EOF) == (nNextCh = GetNextChar()))
                     {
-                        aToken += aStrBuffer;
-                        aToken.GetBufferAccess();  // make unique string!
-                        nStrLen = 0;
-                        if( aToken.Len() >=
-                            ( STRING_MAXLEN - MAX_STRING_LEN ))
-                        {
-                            nNextCh = GetNextChar();
-                            return;
-                        }
-                    }
-                    if( sal_Unicode(EOF) == (nNextCh = GetNextChar() ))
-                    {
-                        if( nStrLen )
-                        {
-                            aStrBuffer.ReleaseBufferAccess( nStrLen );
+                        if (aStrBuffer.Len())
                             aToken += aStrBuffer;
-                        }
                         return;
                     }
                 } while( RTF_ISALPHA( nNextCh ) || RTF_ISDIGIT( nNextCh ) );
@@ -538,21 +511,12 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             }
         }
 
-        if( MAX_STRING_LEN == nStrLen )
-        {
-            aToken += aStrBuffer;
-            aToken.GetBufferAccess();  // make unique string!
-            nStrLen = 0;
-        }
-
         if( bWeiter && bNextCh )
             nNextCh = GetNextChar();
     }
-    if( nStrLen )
-    {
-        aStrBuffer.ReleaseBufferAccess( nStrLen );
+
+    if (aStrBuffer.Len())
         aToken += aStrBuffer;
-    }
 }
 
 
