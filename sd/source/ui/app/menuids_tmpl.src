@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2004-11-04 16:04:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
         Identifier = SID_DIAMODE ; \
         HelpID = SID_DIAMODE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Diaansicht" ; \
+        Text [ de ] = "Folienansicht" ; \
         Text [ en-US ] = "~Slides View" ; \
     };
 
@@ -223,7 +223,6 @@
             {\
                 MN_FORMAT_PAGE\
                 MN_PRESENTATION_LAYOUT\
-                MN_MODIFY_PAGE\
                 MN_RENAME_PAGE\
                 SEPARATOR\
                 MN_INSERT_PAGE\
@@ -232,6 +231,28 @@
         };\
         Text [ en-US ] = "Slid~e" ; \
         Text [ x-comment ] = " ";\
+    };
+
+#define MN_SLIDE_MENU \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 8 ; \
+        Command = ".uno:PageMenu" ; \
+        Text [ de ] = "~Folie" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_FORMAT_PAGE\
+                MN_PRESENTATION_LAYOUT\
+                MN_MODIFY_PAGE\
+                MN_RENAME_SLIDE\
+                SEPARATOR\
+                MN_INSERT_SLIDE\
+                MN_DELETE_SLIDE\
+            };\
+        };\
+        Text [ en-US ] = "Slid~e" ; \
     };
 
  // Layer
@@ -273,7 +294,7 @@
         Identifier = SID_DELETE_PAGE ; \
         HelpID = SID_DELETE_PAGE ; \
         Text [ de ] = "Seite ~löschen" ; \
-        Text [ en-US ] = "D~elete Slide..." ; \
+        Text [ en-US ] = "D~elete Slide" ; \
         Text [ x-comment ] = " ";\
     };
 
