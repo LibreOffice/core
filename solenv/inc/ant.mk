@@ -23,7 +23,7 @@ J2EE_HOME=$(SOLARROOT)$/j2sdkee1.3
 ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/ant
 
 .IF "$(ANT_OPTIONAL)" ==""
-ANT_OPTIONAL=$(ANT_HOME)$/jakarta-ant-1.4.1-optional.jar
+ANT_OPTIONAL=$(ANT_HOME)$/optional.jar
 .ENDIF
 
 .IF "$(ANT_CLASSPATH)"==""
