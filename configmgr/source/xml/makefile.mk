@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dg $ $Date: 2001-09-18 19:14:53 $
+#   last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,12 @@ SLOFILES=\
     $(SLO)$/binarydecide.obj \
     $(SLO)$/binarybasereader.obj \
     $(SLO)$/generatecache.obj \
+    $(SLO)$/elementparser.obj \
+    $(SLO)$/basicparser.obj \
+    $(SLO)$/layerparser.obj \
+    $(SLO)$/schemaparser.obj \
+    $(SLO)$/parsersvc.obj \
+    $(SLO)$/xmlstrings.obj \
 
 # --- Targets ---
 

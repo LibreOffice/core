@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-10 08:48:59 $
+ *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,185 @@ bool OValueConverter::convertListToAny(StringList const& aContentList, uno::Any&
 }
 
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+uno::Sequence<sal_Int8> ValueConverter::parseBinary(OUString const& aBinaryString_) const
+        CFG_UNO_THROW1 ( script::CannotConvertException)
+{
+    uno::Sequence<sal_Int8> aResultSeq;
+
+    parseHexBinary(aBinaryString_,aResultSeq);
+
+    return aResultSeq;
+}
+
+// -----------------------------------------------------------------------------
+static inline
+uno::Type getBinaryType()
+{
+    uno::Sequence<sal_Int8> const * const for_binary = 0;
+    return ::getCppuType(for_binary);
+}
+
+// -----------------------------------------------------------------------------
+bool ValueConverter::isList() const
+{
+    return  m_aType.getTypeClass() == uno::TypeClass_SEQUENCE &&
+            m_aType != getBinaryType();
+}
+
+// -----------------------------------------------------------------------------
+uno::Any ValueConverter::convertToAny(OUString const& aContent) const
+        CFG_UNO_THROW1( script::CannotConvertException)
+{
+    uno::Any aValue;
+
+    if (this->isNull())
+    {
+        OSL_ENSURE(aContent.trim().getLength() == 0, "ValueConverter: Non-empty Null Value - ignoring content");
+        OSL_ASSERT(!aValue.hasValue());
+    }
+
+    else if (this->isList())
+    {
+        StringList aContentList;
+        splitListData(aContent, aContentList);
+        convertListToAny(aContentList, aValue);
+    }
+
+    else
+    {
+        convertScalarToAny(aContent, aValue);
+    }
+
+    return aValue;
+}
+
+// -----------------------------------------------------------------------------
+bool ValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rValue) const
+        CFG_UNO_THROW1 ( script::CannotConvertException )
+{
+    OSL_PRECOND(!this->isNull(),"OValueConverter::convertScalarToAny - check for NULL before calling");
+    OSL_ENSURE(m_aType.getTypeClass() != uno::TypeClass_ANY,"'Any' values must be NULL");
+
+    // check for Binary
+    if (m_aType == getBinaryType())
+    {
+        Sequence<sal_Int8> aBinarySeq = parseBinary(aContent);
+        rValue <<= aBinarySeq;
+    }
+
+    else
+    {
+        rValue = toAny(m_xTypeConverter, aContent, m_aType.getTypeClass());
+    }
+
+    return !! rValue.hasValue();
+}
+
+// -----------------------------------------------------------------------------
+template <class T>
+bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rConverter)
+        CFG_UNO_THROW1 ( script::CannotConvertException )
+{
+    OSL_ASSERT(aElementTypeClass == ::getCppuType(static_cast<T const*>(0)).getTypeClass());
+
+    rSequence.realloc(aStringList.size());
+
+    sal_uInt32 nPos = 0;
+
+    for(StringList::const_iterator it = aStringList.begin();
+        it != aStringList.end();
+        ++it)
+    {
+        uno::Any aValueAny = toAny(rConverter.getTypeConverter(), *it, aElementTypeClass);
+
+        if (aValueAny >>= rSequence[nPos])
+            ++nPos;
+
+        else if (!aValueAny.hasValue())
+            OSL_ENSURE(false,"UNEXPECTED: Found NULL value in List - ignoring value !");
+
+        else
+            OSL_ENSURE(false,"ERROR: Cannot extract converted value into List - skipping value !");
+    }
+
+    bool bOK = (nPos == aStringList.size());
+
+    if (!bOK)
+    {
+        OSL_ASSERT(nPos < aStringList.size());
+        rSequence.realloc(nPos);
+    }
+    return bOK;
+}
+
+// -----------------------------------------------------------------------------
+// special overload for binary sequence
+
+// template<> // use an explicit specialization
+bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Sequence<sal_Int8> >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rParser )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
+{
+    OSL_ASSERT(aElementTypeClass == uno::TypeClass_SEQUENCE);
+
+    rSequence.realloc(aStringList.size());
+
+    sal_uInt32 nPos = 0;
+
+    for(StringList::const_iterator it = aStringList.begin();
+        it != aStringList.end();
+        ++it)
+    {
+        rSequence[nPos++] = rParser.parseBinary(*it);
+    }
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
+#define MAYBE_EXTRACT_SEQUENCE( type ) \
+    if (aElementType == ::getCppuType( (type const *)0))    \
+    {                                                       \
+        Sequence< type > aSequence;                         \
+        convertListToSequence(aContentList,aSequence,aElementTypeClass, *this); \
+        rValue <<= aSequence;                               \
+    }
+
+bool ValueConverter::convertListToAny(StringList const& aContentList, uno::Any& rValue) const
+        CFG_UNO_THROW1 ( script::CannotConvertException )
+{
+    OSL_PRECOND(!this->isNull(),"OValueConverter::convertListToAny - check for NULL before calling");
+    OSL_ENSURE(m_aType.getTypeClass() != uno::TypeClass_ANY,"'Any' not allowed for lists");
+
+    uno::Type       aElementType        = getSequenceElementType(m_aType);
+    uno::TypeClass  aElementTypeClass   = aElementType.getTypeClass();
+
+    OSL_ENSURE(aElementTypeClass != uno::TypeClass_ANY,"'Any' not allowed for list elements");
+
+    MAYBE_EXTRACT_SEQUENCE( OUString )
+    else
+    MAYBE_EXTRACT_SEQUENCE( sal_Bool )
+    else
+    MAYBE_EXTRACT_SEQUENCE( sal_Int16 )
+    else
+    MAYBE_EXTRACT_SEQUENCE( sal_Int32 )
+    else
+    MAYBE_EXTRACT_SEQUENCE( sal_Int64 )
+    else
+    MAYBE_EXTRACT_SEQUENCE( double )
+    else
+    MAYBE_EXTRACT_SEQUENCE( Sequence<sal_Int8> )
+    else
+    {
+        OSL_ENSURE(false, "Unknown element type in list");
+        throwConversionError("Invalid value-type found in list value");
+    }
+
+    return !! rValue.hasValue();
+}
+#undef MAYBE_EXTRACT_SEQUENCE
+
+// -----------------------------------------------------------------------------
 namespace
 {
     sal_Int32 const NO_MORE_TOKENS = -1;
@@ -525,6 +704,32 @@ void OValueConverter::splitListData(OUString const& aContent, StringList& rConte
     CFG_NOTHROW( )
 {
     OUString sSeparator = m_aValueDesc.sSeparator;
+
+    bool bSeparateByWhitespace = (sSeparator.trim().getLength() == 0);
+
+    OSL_ENSURE( bSeparateByWhitespace == (!sSeparator.getLength() || sSeparator.equals(DEFAULT_SEPARATOR)),
+                "Unexpected whitespace-only separator");
+
+    if (bSeparateByWhitespace)
+    {
+        OSL_ENSURE( sSeparator.getLength()==0 || sSeparator.equals(DEFAULT_SEPARATOR),
+                    "Unexpected whitespace-only separator");
+
+        tokenizeListData( OTokenizeByWhitespace(), aContent, rContentList );
+    }
+    else
+    {
+        OSL_ENSURE( sSeparator.trim()==sSeparator,
+                    "Unexpected whitespace in separator");
+
+        tokenizeListData( OTokenizeBySeparator(sSeparator), aContent, rContentList );
+    }
+}
+// -----------------------------------------------------------------------------
+void ValueConverter::splitListData(OUString const& aContent, StringList& rContentList) const
+    CFG_NOTHROW( )
+{
+    OUString sSeparator = m_sSeparator;
 
     bool bSeparateByWhitespace = (sSeparator.trim().getLength() == 0);
 
