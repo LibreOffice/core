@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dopngl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:47:42 $
+ *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,10 +672,10 @@ void Base3DOpenGL::SetActiveTexture(B3dTexture* pTex)
 |*
 \************************************************************************/
 
-B3dTexture* Base3DOpenGL::CreateTexture(TextureAttributes& rAtt, Bitmap& rBitmap)
+B3dTexture* Base3DOpenGL::CreateTexture(TextureAttributes& rAtt, BitmapEx& rBitmapEx)
 {
     // Hier Parent NICHT rufen! Sonst wird auch noch eine normale Textur erzeugt
-    B3dTextureOpenGL* pRetval = new B3dTextureOpenGL(rAtt, rBitmap, aOpenGL);
+    B3dTextureOpenGL* pRetval = new B3dTextureOpenGL(rAtt, rBitmapEx, aOpenGL);
     DBG_ASSERT(pRetval,"AW: Kein Speicher fuer OpenGL-Textur bekommen!");
     return pRetval;
 }
@@ -1412,7 +1412,8 @@ void Base3DOpenGL::DrawPolygonGeometry(B3dGeometry& rGeometry, BOOL bOutline)
             else
             {
                 // Transparenz Flaechen beachten
-                if(GetMaterial(Base3DMaterialDiffuse).GetTransparency())
+                if(GetMaterial(Base3DMaterialDiffuse).GetTransparency()
+                    || (GetActiveTexture() && !!(GetActiveTexture()->GetAlphaMask())))
                 {
                     aOpenGL.Enable( GL_BLEND );
                     aOpenGL.DepthMask( FALSE );

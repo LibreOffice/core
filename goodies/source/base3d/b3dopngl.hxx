@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dopngl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ public:
 
     // Texturen
 private:
-    virtual B3dTexture* CreateTexture(TextureAttributes& rAtt, Bitmap& rBitmap);
+    virtual B3dTexture* CreateTexture(TextureAttributes& rAtt, BitmapEx& rBitmapEx);
     virtual void DestroyTexture(B3dTexture*);
 public:
     virtual void SetActiveTexture(B3dTexture* pTex=NULL);

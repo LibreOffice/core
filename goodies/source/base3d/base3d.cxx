@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-14 10:32:39 $
+ *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@
 
 B3dGlobalData::B3dGlobalData()
 {
+    // init timer
+    maTimer.SetTimeout(10000); // ten seconds
+    maTimer.SetTimeoutHdl(LINK(this, B3dGlobalData, TimerHdl));
+    maTimer.Start();
 }
 
 /*************************************************************************
@@ -122,6 +126,110 @@ B3dGlobalData::B3dGlobalData()
 
 B3dGlobalData::~B3dGlobalData()
 {
+    // stop timer
+    maTimer.Stop();
+    DeleteAllTextures();
+}
+
+/*************************************************************************
+|*
+|* Methods B3dGlobalData
+|*
+\************************************************************************/
+
+IMPL_LINK(B3dGlobalData, TimerHdl, AutoTimer*, pTimer)
+{
+    if(maTextureStore.Count())
+    {
+        maMutex.acquire();
+        Time aTimeNow;
+        for(sal_uInt16 a(0); a < maTextureStore.Count();)
+        {
+            B3dTexture* pRetval = maTextureStore[a];
+            if(pRetval->GetTimeStamp() < aTimeNow)
+            {
+                maTextureStore.Remove(a);
+                delete pRetval;
+            }
+            else
+                a++;
+        }
+        maMutex.release();
+    }
+    return 0;
+}
+
+B3dTexture* B3dGlobalData::ObtainTexture(TextureAttributes& rAtt)
+{
+    maMutex.acquire();
+    for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
+    {
+        B3dTexture* pRetval = maTextureStore[a];
+        if(pRetval->GetAttributes() == rAtt)
+        {
+            pRetval->Touch();
+            maMutex.release();
+            return pRetval;
+        }
+    }
+    maMutex.release();
+    return NULL;
+}
+
+void B3dGlobalData::InsertTexture(B3dTexture* pNew)
+{
+    if(pNew)
+    {
+        maMutex.acquire();
+        for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
+        {
+            B3dTexture* pRetval = maTextureStore[a];
+            if(pRetval == pNew)
+            {
+                maMutex.release();
+                return;
+            }
+        }
+
+        pNew->Touch();
+        maTextureStore.Insert(pNew, maTextureStore.Count());
+        maMutex.release();
+    }
+}
+
+void B3dGlobalData::DeleteTexture(B3dTexture* pOld)
+{
+    if(pOld)
+    {
+        maMutex.acquire();
+        for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
+        {
+            B3dTexture* pRetval = maTextureStore[a];
+            if(pRetval == pOld)
+            {
+                maTextureStore.Remove(a);
+                delete pOld;
+                maMutex.release();
+                return;
+            }
+        }
+        maMutex.release();
+    }
+}
+
+void B3dGlobalData::DeleteAllTextures()
+{
+    if(maTextureStore.Count())
+    {
+        maMutex.acquire();
+        while(maTextureStore.Count())
+        {
+            B3dTexture* pRetval = maTextureStore[0];
+            maTextureStore.Remove(0);
+            delete pRetval;
+        }
+        maMutex.release();
+    }
 }
 
 /*************************************************************************
@@ -863,51 +971,13 @@ B3dGlobalData& Base3D::GetGlobalData()
 
 /*************************************************************************
 |*
-|* TextureStore aus GlobalData holen
-|*
-\************************************************************************/
-
-B3dTextureStore& Base3D::GetTextureStore()
-{
-    return GetGlobalData().GetTextureStore();
-}
-
-/*************************************************************************
-|*
 |* Textur mit den angegebenen Attributen als Grundlage anfordern.
 |*
 \************************************************************************/
 
 B3dTexture* Base3D::ObtainTexture(TextureAttributes& rAtt)
 {
-    B3dTexture* pRetval = NULL;
-
-    // Textur suchen und bei Treffer zurueckgeben
-    B3dTextureStore& rTextureStore = GetTextureStore();
-    for(UINT16 a=0;a<rTextureStore.Count();a++)
-    {
-        if(rTextureStore[a]->GetAttributes() == rAtt)
-        {
-            pRetval = rTextureStore[a];
-            pRetval->Touch();
-        }
-        else
-        {
-            rTextureStore[a]->DecrementUsageCount();
-
-            // Auf zu loeschende Texturen testen
-            if(!rTextureStore[a]->GetUsageCount())
-            {
-                B3dTexture *pTex = rTextureStore[a];
-                rTextureStore.Remove(a);
-                DestroyTexture(pTex);
-                a--;
-            }
-        }
-    }
-
-    // Textur zurueckgeben
-    return pRetval;
+    return GetGlobalData().ObtainTexture(rAtt);
 }
 
 /*************************************************************************
@@ -917,20 +987,14 @@ B3dTexture* Base3D::ObtainTexture(TextureAttributes& rAtt)
 |*
 \************************************************************************/
 
-B3dTexture* Base3D::ObtainTexture(TextureAttributes& rAtt, Bitmap& rBitmap)
+B3dTexture* Base3D::ObtainTexture(TextureAttributes& rAtt, BitmapEx& rBitmapEx)
 {
-    B3dTexture* pRetval = ObtainTexture(rAtt);
-
+    B3dTexture* pRetval = GetGlobalData().ObtainTexture(rAtt);
     if(!pRetval)
     {
-        // Existiert tatsaechlich nicht, generiere eine neue Textur
-        B3dTextureStore& rTextureStore = GetTextureStore();
-
-        pRetval = CreateTexture(rAtt, rBitmap);
-        rTextureStore.Insert((const B3dTexture*&)pRetval, rTextureStore.Count());
+        pRetval = CreateTexture(rAtt, rBitmapEx);
+        GetGlobalData().InsertTexture(pRetval);
     }
-
-    // Textur zurueckgeben
     return pRetval;
 }
 
@@ -942,26 +1006,13 @@ B3dTexture* Base3D::ObtainTexture(TextureAttributes& rAtt, Bitmap& rBitmap)
 
 void Base3D::DeleteTexture(TextureAttributes& rAtt)
 {
-    B3dTexture* pTexture = NULL;
-
-    // Textur suchen
-    B3dTextureStore& rTextureStore = GetTextureStore();
-    UINT16 a;
-    for(a=0;a<rTextureStore.Count();a++)
-    {
-        if(rTextureStore[a]->GetAttributes() == rAtt)
-        {
-            pTexture = rTextureStore[a];
-        }
-    }
-
+    B3dTexture* pTexture = GetGlobalData().ObtainTexture(rAtt);
     if(pTexture)
     {
         if(pTexture == pActiveTexture)
             pActiveTexture = NULL;
 
-        rTextureStore.Remove(a);
-        DestroyTexture(pTexture);
+        GetGlobalData().DeleteTexture(pTexture);
     }
 }
 
@@ -974,14 +1025,7 @@ void Base3D::DeleteTexture(TextureAttributes& rAtt)
 void Base3D::DeleteAllTextures()
 {
     pActiveTexture = NULL;
-
-    B3dTextureStore& rTextureStore = GetTextureStore();
-    while(rTextureStore.Count())
-    {
-        B3dTexture *pTex = rTextureStore[0];
-        rTextureStore.Remove(0);
-        DestroyTexture(pTex);
-    }
+    GetGlobalData().DeleteAllTextures();
 }
 
 /*************************************************************************
@@ -990,9 +1034,9 @@ void Base3D::DeleteAllTextures()
 |*
 \************************************************************************/
 
-B3dTexture* Base3D::CreateTexture(TextureAttributes& rAtt, Bitmap& rBitmap)
+B3dTexture* Base3D::CreateTexture(TextureAttributes& rAtt, BitmapEx& rBitmapEx)
 {
-    B3dTexture* pRetval = new B3dTexture(rAtt, rBitmap);
+    B3dTexture* pRetval = new B3dTexture(rAtt, rBitmapEx);
     DBG_ASSERT(pRetval,"AW: Kein Speicher fuer Textur bekommen!");
     return pRetval;
 }

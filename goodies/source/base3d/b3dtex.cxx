@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-14 13:28:42 $
+ *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,21 +81,48 @@
 |*
 \************************************************************************/
 
-TextureAttributes::TextureAttributes(BOOL bGhosted)
-:   mbGhosted(bGhosted)
+TextureAttributes::TextureAttributes(BOOL bGhosted, void* pFT)
+:   mpFloatTrans(pFT),
+    mbGhosted(bGhosted)
 {
 }
 
 BOOL TextureAttributes::operator==(const TextureAttributes& rAtt) const
 {
-    return (rAtt.mbGhosted == mbGhosted);
+    return ( GetTextureAttributeType() == rAtt.GetTextureAttributeType()
+        && rAtt.mbGhosted == mbGhosted
+        && rAtt.mpFloatTrans == mpFloatTrans);
+}
+
+// Fuer Colors
+
+TextureAttributesColor::TextureAttributesColor(BOOL bGhosted, void* pFT, Color aColor)
+:   TextureAttributes(bGhosted, pFT),
+    maColorAttribute(aColor)
+{
+}
+
+BOOL TextureAttributesColor::operator==(const TextureAttributes& rAtt) const
+{
+    if(TextureAttributes::operator==(rAtt))
+    {
+        const TextureAttributesColor& rAttCol = (const TextureAttributesColor&)rAtt;
+        if(rAttCol.maColorAttribute == maColorAttribute)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+UINT16 TextureAttributesColor::GetTextureAttributeType() const
+{
+    return TEXTURE_ATTRIBUTE_TYPE_COLOR;
 }
 
 // Fuer Bitmaps
 
-TextureAttributesBitmap::TextureAttributesBitmap(Bitmap aBmp, BOOL bGhosted)
-:   TextureAttributes(bGhosted),
-    aBitmapAttribute(aBmp)
+TextureAttributesBitmap::TextureAttributesBitmap(BOOL bGhosted, void* pFT, Bitmap aBmp)
+:   TextureAttributes(bGhosted, pFT),
+    maBitmapAttribute(aBmp)
 {
 }
 
@@ -103,13 +130,9 @@ BOOL TextureAttributesBitmap::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
-        if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
-        {
-            const TextureAttributesBitmap& rAttBmp = (const TextureAttributesBitmap&)rAtt;
-
-            if(rAttBmp.aBitmapAttribute == aBitmapAttribute)
-                return TRUE;
-        }
+        const TextureAttributesBitmap& rAttBmp = (const TextureAttributesBitmap&)rAtt;
+        if(rAttBmp.maBitmapAttribute == maBitmapAttribute)
+            return TRUE;
     }
     return FALSE;
 }
@@ -121,10 +144,10 @@ UINT16 TextureAttributesBitmap::GetTextureAttributeType() const
 
 // Fuer Gradientfills
 
-TextureAttributesGradient::TextureAttributesGradient(void* pF, void *pSC, BOOL bGhosted)
-:   TextureAttributes(bGhosted),
-    pFill(pF),
-    pStepCount(pSC)
+TextureAttributesGradient::TextureAttributesGradient(BOOL bGhosted, void* pFT, void* pF, void *pSC)
+:   TextureAttributes(bGhosted, pFT),
+    mpFill(pF),
+    mpStepCount(pSC)
 {
 }
 
@@ -132,14 +155,11 @@ BOOL TextureAttributesGradient::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
-        if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
-        {
-            const TextureAttributesGradient& rAttGra = (const TextureAttributesGradient&)rAtt;
+        const TextureAttributesGradient& rAttGra = (const TextureAttributesGradient&)rAtt;
 
-            if(rAttGra.pFill == pFill
-                && rAttGra.pStepCount == pStepCount)
-                return TRUE;
-        }
+        if(rAttGra.mpFill == mpFill
+            && rAttGra.mpStepCount == mpStepCount)
+            return TRUE;
     }
     return FALSE;
 }
@@ -151,9 +171,9 @@ UINT16 TextureAttributesGradient::GetTextureAttributeType() const
 
 // Fuer Hatchfills
 
-TextureAttributesHatch::TextureAttributesHatch(void* pF, BOOL bGhosted)
-:   TextureAttributes(bGhosted),
-    pFill(pF)
+TextureAttributesHatch::TextureAttributesHatch(BOOL bGhosted, void* pFT, void* pF)
+:   TextureAttributes(bGhosted, pFT),
+    mpFill(pF)
 {
 }
 
@@ -161,13 +181,10 @@ BOOL TextureAttributesHatch::operator==(const TextureAttributes& rAtt) const
 {
     if(TextureAttributes::operator==(rAtt))
     {
-        if(GetTextureAttributeType() == rAtt.GetTextureAttributeType())
-        {
-            const TextureAttributesHatch& rAttHat = (const TextureAttributesHatch&)rAtt;
+        const TextureAttributesHatch& rAttHat = (const TextureAttributesHatch&)rAtt;
 
-            if(rAttHat.pFill == pFill)
-                return TRUE;
-        }
+        if(rAttHat.mpFill == mpFill)
+            return TRUE;
     }
     return FALSE;
 }
@@ -185,15 +202,16 @@ UINT16 TextureAttributesHatch::GetTextureAttributeType() const
 
 B3dTexture::B3dTexture(
     TextureAttributes& rAtt,
-    Bitmap& rBmp,
+    BitmapEx& rBmpEx,
     Base3DTextureKind eKnd,
     Base3DTextureMode eMod,
     Base3DTextureFilter eFlt,
     Base3DTextureWrap eS,
     Base3DTextureWrap eT)
-:   aBitmap(rBmp),
+:   aBitmap(rBmpEx.GetBitmap()),
+    aAlphaMask(rBmpEx.GetAlpha()),
     pReadAccess(NULL),
-    nUsageCount(B3D_TEXTURE_LIFETIME),
+    pAlphaReadAccess(NULL),
     eKind(eKnd),
     eMode(eMod),
     eFilter(eFlt),
@@ -204,28 +222,39 @@ B3dTexture::B3dTexture(
 {
     // ReadAccess auf Textur anfordern
     pReadAccess = aBitmap.AcquireReadAccess();
+    pAlphaReadAccess = (!aAlphaMask) ? NULL : aAlphaMask.AcquireReadAccess();
     DBG_ASSERT(pReadAccess, "AW: Keinen Lesezugriff auf Textur-Bitmap bekommen");
 
     // Attribute kopieren
     switch(rAtt.GetTextureAttributeType())
     {
+        case TEXTURE_ATTRIBUTE_TYPE_COLOR :
+            pAttributes = new TextureAttributesColor(
+                rAtt.GetGhostedAttribute(),
+                rAtt.GetFloatTransAttribute(),
+                ((TextureAttributesColor&)rAtt).GetColorAttribute());
+            break;
+
         case TEXTURE_ATTRIBUTE_TYPE_BITMAP :
             pAttributes = new TextureAttributesBitmap(
-                ((TextureAttributesBitmap&)rAtt).GetBitmapAttribute(),
-                rAtt.GetGhostedAttribute());
+                rAtt.GetGhostedAttribute(),
+                rAtt.GetFloatTransAttribute(),
+                ((TextureAttributesBitmap&)rAtt).GetBitmapAttribute());
             break;
 
         case TEXTURE_ATTRIBUTE_TYPE_GRADIENT :
             pAttributes = new TextureAttributesGradient(
+                rAtt.GetGhostedAttribute(),
+                rAtt.GetFloatTransAttribute(),
                 ((TextureAttributesGradient&)rAtt).GetFillAttribute(),
-                ((TextureAttributesGradient&)rAtt).GetStepCountAttribute(),
-                rAtt.GetGhostedAttribute());
+                ((TextureAttributesGradient&)rAtt).GetStepCountAttribute());
             break;
 
         case TEXTURE_ATTRIBUTE_TYPE_HATCH :
             pAttributes = new TextureAttributesHatch(
-                ((TextureAttributesHatch&)rAtt).GetHatchFillAttribute(),
-                rAtt.GetGhostedAttribute());
+                rAtt.GetGhostedAttribute(),
+                rAtt.GetFloatTransAttribute(),
+                ((TextureAttributesHatch&)rAtt).GetHatchFillAttribute());
             break;
     }
 
@@ -246,6 +275,13 @@ B3dTexture::~B3dTexture()
     {
         aBitmap.ReleaseAccess(pReadAccess);
         pReadAccess = NULL;
+    }
+
+    // free ReadAccess to transparency bitmap
+    if(pAlphaReadAccess)
+    {
+        aAlphaMask.ReleaseAccess(pAlphaReadAccess);
+        pAlphaReadAccess = NULL;
     }
 
     // Attribute wegschmeissen
@@ -388,6 +424,13 @@ const BitmapColor B3dTexture::GetBitmapColor(long nX, long nY)
     return pReadAccess->GetColor(nY, nX);
 }
 
+const sal_uInt8 B3dTexture::GetBitmapTransparency(long nX, long nY)
+{
+    if(pAlphaReadAccess)
+        return pAlphaReadAccess->GetColor(nY, nX).GetIndex();
+    return 0;
+}
+
 /*************************************************************************
 |*
 |* Art der Pixeldaten lesen/bestimmen
@@ -495,6 +538,10 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
         if(bOnTexture)
             aBmCol = pReadAccess->GetColor(nY, nX);
     }
+
+    // transparence
+    if(bOnTexture && pAlphaReadAccess)
+        rCol.SetTransparency(pAlphaReadAccess->GetLuminance(nY, nX));
 
     // Falls die Position nicht innerhalb der Textur ist, auch das Filtern
     // unterdruecken um keine falschen BitmapAcesses zu bekommen
@@ -902,14 +949,14 @@ void B3dTexture::ModifyColor(Color& rCol, double fS, double fT)
 
 B3dTextureOpenGL::B3dTextureOpenGL(
     TextureAttributes& rAtt,
-    Bitmap& rBmp,
+    BitmapEx& rBmpEx,
     OpenGL& rOGL,
     Base3DTextureKind eKnd,
     Base3DTextureMode eMod,
     Base3DTextureFilter eFlt,
     Base3DTextureWrap eS,
     Base3DTextureWrap eT)
-:   B3dTexture(rAtt, rBmp, eKnd, eMod, eFlt, eS, eT),
+:   B3dTexture(rAtt, rBmpEx, eKnd, eMod, eFlt, eS, eT),
     nTextureName(0)
 {
     // TextureName anfordern
@@ -1046,17 +1093,39 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
         aSize.Height() = 8;
 
     // Skalierte Bitmap anlegen
+    BOOL bUsesAlpha(!!GetAlphaMask());
     Bitmap aBitmap(GetBitmap());
+    AlphaMask aTransAlphaMask;
+
+    if(bUsesAlpha)
+    {
+        aTransAlphaMask = GetAlphaMask();
+    }
+
     if(aSize != GetBitmapSize())
+    {
         aBitmap.Scale((double)aSize.Width() / (double)GetBitmapSize().Width(),
             (double)aSize.Height() / (double)GetBitmapSize().Height());
 
+        if(bUsesAlpha)
+        {
+            aTransAlphaMask.Scale((double)aSize.Width() / (double)GetBitmapSize().Width(),
+                (double)aSize.Height() / (double)GetBitmapSize().Height());
+        }
+    }
+
     // Falls es sich um eine nur einmal zu wiederholende Bitmap
     // handelt, lege nun eine mit einem definierten Rand an
-    if(GetTextureWrapS() == Base3DTextureSingle
-        || GetTextureWrapT() == Base3DTextureSingle)
+    if(GetTextureWrapS() == Base3DTextureSingle || GetTextureWrapT() == Base3DTextureSingle)
     {
         Bitmap aHelpBitmap(aBitmap);
+        AlphaMask aTransAlphaHelpMask;
+
+        if(bUsesAlpha)
+        {
+            aTransAlphaHelpMask = aTransAlphaMask;
+        }
+
         Size aNewSize(aSize);
         Point aNewPos(0, 0);
 
@@ -1079,17 +1148,38 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
         Rectangle aCopySrc(aPoint, aNewSize);
         Rectangle aCopyDest(aNewPos, aNewSize);
         aBitmap.CopyPixel(aCopyDest, aCopySrc, &aHelpBitmap);
+
+        if(bUsesAlpha)
+        {
+            aTransAlphaHelpMask.Scale((double)aNewSize.Width() / (double)aSize.Width(),
+                (double)aNewSize.Height() / (double)aSize.Height());
+            aTransAlphaMask.Erase(0);
+            aTransAlphaMask.CopyPixel(aCopyDest, aCopySrc, &aTransAlphaHelpMask);
+        }
     }
 
     // Lesezugriff auf neue Bitmap holen
     BitmapReadAccess* pReadAccess = aBitmap.AcquireReadAccess();
-    if(pReadAccess)
+    BitmapReadAccess* pAlphaReadAccess = (bUsesAlpha) ? aTransAlphaMask.AcquireReadAccess() : NULL;
+    BOOL bGotReadAccess((bUsesAlpha)
+        ? (pReadAccess != 0 && pAlphaReadAccess != 0) : pReadAccess != 0);
+
+    if(bGotReadAccess)
     {
         // Buffer holen
-        long nSize = aSize.Width() * aSize.Height();
+        sal_Int32 nSize(aSize.Width() * aSize.Height());
+        sal_Int32 nAllocSize(nSize);
+
         if(GetTextureKind() == Base3DTextureColor)
-            nSize *= 3;
-        GL_UINT8 pBuffer = (GL_UINT8)SvMemAlloc(nSize);
+        {
+            nAllocSize += (2 * nSize);
+        }
+        if(bUsesAlpha)
+        {
+            nAllocSize += nSize;
+        }
+
+        GL_UINT8 pBuffer = (GL_UINT8)SvMemAlloc(nAllocSize);
 
         if(pBuffer)
         {
@@ -1103,11 +1193,16 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            const BitmapColor& rCol = pReadAccess->GetPaletteColor(
-                                pReadAccess->GetPixel(a, b));
+                            BitmapColor rCol = pReadAccess->GetPaletteColor(pReadAccess->GetPixel(a, b));
                             *pRunner++ = rCol.GetRed();
                             *pRunner++ = rCol.GetGreen();
                             *pRunner++ = rCol.GetBlue();
+
+                            if(bUsesAlpha)
+                            {
+                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                *pRunner++ = (BYTE)255 - rTrn.GetIndex();
+                            }
                         }
                     }
                 }
@@ -1117,10 +1212,16 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            const BitmapColor& rCol = pReadAccess->GetPixel(a, b);
+                            BitmapColor rCol = pReadAccess->GetPixel(a, b);
                             *pRunner++ = rCol.GetRed();
                             *pRunner++ = rCol.GetGreen();
                             *pRunner++ = rCol.GetBlue();
+
+                            if(bUsesAlpha)
+                            {
+                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                *pRunner++ = (BYTE)255 - rTrn.GetIndex();
+                            }
                         }
                     }
                 }
@@ -1133,9 +1234,14 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            const BitmapColor& rCol = pReadAccess->GetPaletteColor(
-                                pReadAccess->GetPixel(a, b));
+                            BitmapColor rCol = pReadAccess->GetPaletteColor(pReadAccess->GetPixel(a, b));
                             *pRunner++ = (rCol.GetRed() + rCol.GetGreen() + rCol.GetBlue()) / 3;
+
+                            if(bUsesAlpha)
+                            {
+                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                *pRunner++ = (BYTE)255 - rTrn.GetIndex();
+                            }
                         }
                     }
                 }
@@ -1145,8 +1251,14 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
                     {
                         for(long b=0;b<aSize.Width();b++)
                         {
-                            const BitmapColor& rCol = pReadAccess->GetPixel(a, b);
+                            BitmapColor rCol = pReadAccess->GetPixel(a, b);
                             *pRunner++ = (rCol.GetRed() + rCol.GetGreen() + rCol.GetBlue()) / 3;
+
+                            if(bUsesAlpha)
+                            {
+                                BitmapColor rTrn = pAlphaReadAccess->GetPixel(a, b);
+                                *pRunner++ = (BYTE)255 - rTrn.GetIndex();
+                            }
                         }
                     }
                 }
@@ -1162,17 +1274,47 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             switch(GetTextureKind())
             {
                 case Base3DTextureLuminance:
-                    nInternalFormat = GL_LUMINANCE;
-                    nFormat = GL_LUMINANCE;
+                {
+                    if(bUsesAlpha)
+                    {
+                        nInternalFormat = GL_LUMINANCE_ALPHA;
+                        nFormat = GL_LUMINANCE_ALPHA;
+                    }
+                    else
+                    {
+                        nInternalFormat = GL_LUMINANCE;
+                        nFormat = GL_LUMINANCE;
+                    }
                     break;
+                }
                 case Base3DTextureIntensity:
-                    nInternalFormat = GL_INTENSITY;
-                    nFormat = GL_LUMINANCE;
+                {
+                    if(bUsesAlpha)
+                    {
+                        nInternalFormat = GL_LUMINANCE_ALPHA;
+                        nFormat = GL_LUMINANCE_ALPHA;
+                    }
+                    else
+                    {
+                        nInternalFormat = GL_INTENSITY;
+                        nFormat = GL_LUMINANCE;
+                    }
                     break;
+                }
                 case Base3DTextureColor:
-                    nInternalFormat = GL_RGB;
-                    nFormat = GL_RGB;
+                {
+                    if(bUsesAlpha)
+                    {
+                        nInternalFormat = GL_RGBA;
+                        nFormat = GL_RGBA;
+                    }
+                    else
+                    {
+                        nInternalFormat = GL_RGB;
+                        nFormat = GL_RGB;
+                    }
                     break;
+                }
             }
 
             rOpenGL.TexImage2D(GL_TEXTURE_2D, 0, nInternalFormat,
@@ -1185,6 +1327,8 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
 
         // Lesezugriff freigeben
         aBitmap.ReleaseAccess(pReadAccess);
+        if(bUsesAlpha)
+            aTransAlphaMask.ReleaseAccess(pAlphaReadAccess);
     }
 
     // Hinweis auf Veraenderung der Texturart auf jeden Fall elliminieren
