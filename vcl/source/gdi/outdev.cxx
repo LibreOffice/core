@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:20:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_OUTDEV_CXX
 #include <tools/ref.hxx>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -384,9 +383,9 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
 
 OutputDevice::OutputDevice() :
     maRegion( REGION_NULL ),
-    maSettings( Application::GetSettings() ),
     maFillColor( COL_WHITE ),
-    maTextLineColor( COL_TRANSPARENT )
+    maTextLineColor( COL_TRANSPARENT ),
+    maSettings( Application::GetSettings() )
 {
     DBG_CTOR( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -431,7 +430,6 @@ OutputDevice::OutputDevice() :
     mbDevOutput         = FALSE;
     mbOutputClipped     = FALSE;
     maTextColor         = maFont.GetColor();
-    maTextFillColorDummy= maFont.GetFillColor();
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
