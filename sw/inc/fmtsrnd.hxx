@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtsrnd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:00:07 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _FMTSRND_HXX
 #define _FMTSRND_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -87,7 +90,7 @@ enum SwSurround {
     SURROUND_END
 };
 
-class SwFmtSurround: public SfxEnumItem
+class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
     BOOL    bAnchorOnly :1;
     BOOL    bContour    :1;

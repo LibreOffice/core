@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmturl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:00:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,12 @@
 #ifndef _FMTURL_HXX
 #define _FMTURL_HXX
 
-
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -77,7 +80,7 @@ class IntlWrapper;
 
 // URL, ServerMap und ClientMap
 
-class SwFmtURL: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
     String    sTargetFrameName; // in diesen Frame soll die URL
     String    sURL;             //Einfache URL
@@ -90,8 +93,11 @@ class SwFmtURL: public SfxPoolItem
 
 public:
     SwFmtURL();
+
+    // @@@ copy construction allowed, but assigment is not? @@@
     SwFmtURL( const SwFmtURL& );
-    ~SwFmtURL();
+
+    virtual ~SwFmtURL();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
