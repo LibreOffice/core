@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 08:32:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 14:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,16 @@ String ODbAdminDialog::getConnectionURL() const
     SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     return pUrlItem->GetValue();
 }
+
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > ODbAdminDialog::getCurrentDataSource()
+{
+    ODatasourceMap::ODatasourceInfo aDatasourceInfo = m_aDatasources[m_sCurrentDatasource];
+    Reference< XPropertySet > xCurrentDatasource = aDatasourceInfo.getDatasource();
+    DBG_ASSERT(xCurrentDatasource.is(), "ODbAdminDialog::getCurrentDataSource: no data source!");
+    return xCurrentDatasource;
+}
+
 // -----------------------------------------------------------------------------
 Reference< XDriver > ODbAdminDialog::getDriver()
 {
@@ -477,9 +487,7 @@ void ODbAdminDialog::successfullyConnected()
         {
             ::rtl::OUString sPassword = pPassword->GetValue();
 
-            ODatasourceMap::ODatasourceInfo aDatasourceInfo = m_aDatasources[m_sCurrentDatasource];
-            Reference< XPropertySet > xCurrentDatasource = aDatasourceInfo.getDatasource();
-            DBG_ASSERT(xCurrentDatasource.is(), "ODbAdminDialog::successfullyConnected: no data source!");
+            Reference< XPropertySet > xCurrentDatasource = getCurrentDataSource();
             if (xCurrentDatasource.is())
             {
                 try
@@ -2018,6 +2026,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.69  2001/08/01 08:32:04  fs
+ *  #88530# if the address book type is initially selected, default the sub-type to something meaningfull
+ *
  *  Revision 1.68  2001/07/31 16:01:33  fs
  *  #88530# changes to operate the dialog in a mode where no type change is possible
  *

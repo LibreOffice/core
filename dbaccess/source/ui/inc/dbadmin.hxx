@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 15:58:55 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 14:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,17 +236,22 @@ public:
 
     /** creates a new connection. The caller is responsible to dispose it !!!!
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createConnection();
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >     createConnection();
+
     /** return the corresponding driver for the selected URL
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >         getDriver();
 
+    /** returns the data source the dialog is currently working with
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
+
+protected:
     // adds a new detail page and remove all the old ones
     void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
     // removes all detail pages
     void removeDetailPages();
 
-protected:
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();
 
@@ -360,6 +365,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/07/31 15:58:55  fs
+ *  #88530# +omSingleEditFixedType
+ *
  *  Revision 1.21  2001/07/30 11:31:03  fs
  *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
  *
