@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Juergen Schmidt </Author>
+
+<Name>  example.ExampleComponent2.Impl  </Name>
+
+<Description>
+    This component provides a simple demo component.
+</Description>
+
+<ModuleName>    excomp2 </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  example.ExampleComponent2   </SupportedService>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    vos         </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu        </RuntimeModuleDependency>
+<RuntimeModuleDependency>   vos         </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal         </RuntimeModuleDependency>
+
+<Type>  com.sun.star.lang.XTypeProvider                 </Type>
+<Type>  com.sun.star.lang.XServiceInfo                  </Type>
+<Type>  com.sun.star.lang.XSingleServiceFactory         </Type>
+<Type>  com.sun.star.lang.XMultiServiceFactory          </Type>
+<Type>  com.sun.star.registry.XRegistryKey              </Type>
+<Type>  com.sun.star.uno.XAggregation                   </Type>
+<Type>  com.sun.star.uno.XWeak                          </Type>
+<Type>  com.sun.star.uno.TypeClass                      </Type>
+<Type>  example.XTest                                   </Type>
+
+</COMPONENTDESCRIPTION>

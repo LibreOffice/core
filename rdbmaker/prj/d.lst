@@ -1,0 +1,5 @@
+..\%__SRC%\bin\rdbmaker.exe %_DEST%\bin%_EXT%\rdbmaker.exe
+..\%__SRC%\bin\rdbmaker.pdb %_DEST%\bin%_EXT%\rdbmaker.pdb
+
+..\%__SRC%\bin\rdbmaker %_DEST%\bin%_EXT%\rdbmaker
+

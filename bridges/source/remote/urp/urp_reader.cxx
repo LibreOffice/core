@@ -1,0 +1,578 @@
+/*************************************************************************
+ *
+ *  $RCSfile: urp_reader.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/**************************************************************************
+ *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/09/15 13:05:58  jbu
+ *  extensive performance optimizations
+ *
+ *  Revision 1.6  2000/09/14 15:24:00  willem.vandorp
+ *  OpenOffice header added.
+ *
+ *  Revision 1.5  2000/08/04 15:32:31  willem.vandorp
+ *  Header and footer replaced
+ *
+ *  Revision 1.4  2000/07/21 16:33:17  jbu
+ *  robustness improved
+ *
+ *  Revision 1.3  2000/07/14 13:14:42  jbu
+ *  dispose mechanism tided up
+ *
+ *  Revision 1.2  2000/07/12 10:11:59  jbu
+ *  added logging, attribute bug fixed
+ *
+ *  Revision 1.1  2000/07/10 11:36:35  jbu
+ *  new remote protocol : urp
+ *
+ *************************************************************************/
+#include <string.h>
+
+#include <osl/diagnose.h>
+
+#include <bridges/remote/connection.h>
+#include <bridges/remote/counter.hxx>
+#include <bridges/remote/context.h>
+#include <bridges/remote/helper.hxx>
+
+#include <uno/environment.h>
+
+#include "urp_reader.hxx"
+#include "urp_dispatch.hxx"
+#include "urp_job.hxx"
+#include "urp_bridgeimpl.hxx"
+#include "urp_log.hxx"
+
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+
+#ifdef DEBUG
+static MyCounter thisCounter( "DEBUG : ReaderThread" );
+#endif
+
+namespace bridges_urp
+{
+
+    inline sal_Bool getMemberTypeDescription(
+        typelib_InterfaceAttributeTypeDescription **ppAttributeType,
+        typelib_InterfaceMethodTypeDescription **ppMethodType,
+        sal_Bool *pbIsSetter,
+        sal_uInt16 nMethodId ,
+        const Type &typeInterface)
+    {
+        if( typeInterface.getTypeClass() != typelib_TypeClass_INTERFACE )
+        {
+            OSL_ENSURE( 0 , "type is not an interface" );
+            return sal_False;
+        }
+
+        typelib_InterfaceTypeDescription *pInterfaceType = 0;
+        TYPELIB_DANGER_GET(
+            (typelib_TypeDescription **)&pInterfaceType ,   typeInterface.getTypeLibType() );
+        if( ! pInterfaceType )
+        {
+            OString o = OUStringToOString( typeInterface.getTypeName() , RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( !"urp: unknown type " , o.getStr() );
+            return sal_False;
+        }
+
+        if( ! pInterfaceType->aBase.bComplete )
+        {
+            typelib_typedescription_complete( (typelib_TypeDescription **) &pInterfaceType );
+        }
+
+        if( nMethodId < 0 || nMethodId > pInterfaceType->nAllMembers *2 )
+        {
+            // ( m_nMethodId > m_pInterfaceType->nAllMembers *2) is an essential condition
+            // for the vtable index to be correct
+            OSL_ENSURE( 0 , "vtable index out of range" );
+            return sal_False;
+        }
+
+        // TODO : check the range of m_nMethodId
+        sal_Int32 nMemberIndex = pInterfaceType->pMapFunctionIndexToMemberIndex[ nMethodId ];
+
+        if( !( pInterfaceType->nAllMembers > nMemberIndex && nMemberIndex >= 0 ) )
+        {
+            OSL_ENSURE( 0 , "vtable index out of range" );
+            return sal_False;
+        }
+
+        typelib_InterfaceMemberTypeDescription *pMemberType = 0;
+        typelib_typedescriptionreference_getDescription(
+            (typelib_TypeDescription **) &pMemberType,pInterfaceType->ppAllMembers[nMemberIndex]);
+
+        if(! pMemberType )
+        {
+            OSL_ENSURE( 0 , "unknown method type description" );
+            return sal_False;
+        }
+
+        if( typelib_TypeClass_INTERFACE_ATTRIBUTE == pMemberType->aBase.eTypeClass )
+        {
+            *ppAttributeType = (typelib_InterfaceAttributeTypeDescription *) pMemberType;
+            *pbIsSetter = ! (
+                pInterfaceType->pMapMemberIndexToFunctionIndex[nMemberIndex] == nMethodId );
+        }
+        else
+        {
+            *ppMethodType = (typelib_InterfaceMethodTypeDescription *) pMemberType;
+        }
+
+        TYPELIB_DANGER_RELEASE( (typelib_TypeDescription * )pInterfaceType );
+        return sal_True;
+    }
+
+OReaderThread::OReaderThread( remote_Connection *pConnection,
+                              uno_Environment *pEnvRemote,
+                              OWriterThread * pWriterThread ) :
+    m_pConnection( pConnection ),
+    m_pEnvRemote( pEnvRemote ),
+    m_pWriterThread( pWriterThread ),
+    m_bDestroyMyself( sal_False ),
+    m_pBridgeImpl((struct urp_BridgeImpl*)
+                  ((remote_Context *)pEnvRemote->pContext)->m_pBridgeImpl ),
+    m_unmarshal( m_pBridgeImpl, m_pEnvRemote, ::bridges_remote::remote_createStub )
+{
+    m_pConnection->acquire( m_pConnection );
+#ifdef DEBUG
+    thisCounter.acquire();
+#endif
+}
+
+
+OReaderThread::~OReaderThread( )
+{
+#ifdef DEBUG
+    thisCounter.release();
+#endif
+}
+
+// may only be called in the callstack of this thread !!!!!
+// run() -> dispose() -> destroyYourself()
+void OReaderThread::destroyYourself()
+{
+    m_bDestroyMyself = sal_True;
+    m_pConnection->release( m_pConnection );
+    m_pConnection = 0;
+}
+
+void OReaderThread::onTerminated()
+{
+    if( m_bDestroyMyself )
+    {
+        delete this;
+    }
+}
+
+
+void OReaderThread::disposeEnvironment()
+{
+    struct remote_Context *pContext =
+        ( struct remote_Context * ) m_pEnvRemote->pContext;
+    if( ! pContext->m_pBridgeImpl->m_bDisposed )
+    {
+        // NOTE : This method may only be called by the run-method.
+        //        The remote-environment does not dispose, until the reader thread has gone.
+        //        So it is completly OK to hold the environment weakly, and only make a
+        //        hard reference during dispose call.
+        m_pEnvRemote->acquire( m_pEnvRemote );
+        m_pEnvRemote->dispose( m_pEnvRemote );
+        m_pEnvRemote->release( m_pEnvRemote );
+    }
+}
+
+void OReaderThread::run()
+{
+    sal_Bool bContinue = sal_True;
+    while( bContinue )
+    {
+        sal_Int32 nSize;
+        sal_uInt8 n8Size;
+        if( 1 != m_pConnection->read( m_pConnection , (sal_Int8*) &n8Size, 1) )
+        {
+            disposeEnvironment();
+            break;
+        }
+        if( 255 == n8Size )
+        {
+            sal_uInt8 buf[4];
+            m_pConnection->read( m_pConnection ,(sal_Int8*)buf, 4);
+
+            nSize = buf[0] << 24 | buf[1] << 16 | buf[2] << 8 | buf[3];
+        }
+        else
+        {
+            nSize = ( sal_Int32 ) n8Size;
+        }
+
+        if( nSize < 0 )
+        {
+            // buffer too big
+            // no exception can be thrown, because there is no thread id, which could be
+            // used. -> terminate !
+            OSL_ENSURE( 0 , "urp bridge: invalid message size, terminating connection." );
+            disposeEnvironment();
+            break;
+        }
+
+        if( 0 == nSize )
+        {
+            disposeEnvironment();
+            break;
+        }
+
+        // allocate the necessary memory
+        if( ! m_unmarshal.setSize( nSize ) )
+        {
+            OSL_ENSURE( 0 , "urp bridge: messages size too large, terminating connection" );
+            disposeEnvironment();
+            break;
+        }
+
+        sal_Int32 nRead = m_pConnection->read( m_pConnection , m_unmarshal.getBuffer() , nSize );
+
+        if( nSize != nRead )
+        {
+            // couldn't get the asked amount of bytes, quit
+            // should only occur, when the environment has already been disposed
+            OSL_ENSURE( m_pBridgeImpl->m_bDisposed , "urp bridge: couldn't read complete message, terminating connection." );
+
+            disposeEnvironment();
+            break;
+        }
+
+        ServerMultiJob *pMultiJob = 0;
+        remote_Interface *pLastRemoteI = 0;
+        while( ! m_unmarshal.finished()  )
+        {
+#ifdef BRIDGES_URP_PROT
+            sal_uInt32 nLogStart = m_unmarshal.getPos();
+            sal_Bool bIsOneWay = sal_False;
+            OUString sMemberName;
+#endif
+            sal_uInt8 nBitField;
+            sal_Bool bSuccess = m_unmarshal.unpackInt8( &nBitField );
+
+            sal_Bool bRequest = sal_True;
+            sal_uInt16 nMethodId = 0;
+            sal_Bool bType = sal_False, bOid = sal_False, bTid = sal_False;
+            sal_Bool bExceptionOccured = sal_False;
+
+            if( HDRFLAG_LONG & nBitField )
+            {
+                // this is a long header, interpret the byte as bitfield
+                // this is a bitfield
+                bTid  = ( HDRFLAG_NEWTID & nBitField );
+
+                if( HDRFLAG_REQUEST & nBitField )
+                {
+                    bType = ( HDRFLAG_NEWTYPE & nBitField );
+                    bOid  = ( HDRFLAG_NEWOID & nBitField );
+
+                    // request
+                    if( HDRFLAG_LONGMETHODID & nBitField )
+                    {
+                        // methodid as unsigned short
+                        bSuccess = bSuccess && m_unmarshal.unpackInt16( &nMethodId );
+                    }
+                    else
+                    {
+                        sal_uInt8 id;
+                        bSuccess = bSuccess && m_unmarshal.unpackInt8( &id );
+                        nMethodId = (sal_uInt16) id;
+                    }
+                }
+                else
+                {
+                    // reply
+                    bRequest = sal_False;
+                    bExceptionOccured = ( HDRFLAG_EXCEPTIONOCCURED & nBitField );
+                }
+            }
+            else
+            {
+                // method request + synchronous-asynchronous default
+                if( 0x40 & nBitField )
+                {
+                    sal_uInt8 lower;
+                    bSuccess = bSuccess && m_unmarshal.unpackInt8( &lower  );
+                    nMethodId = ( nBitField & 0x3f ) << 8 | lower;
+                }
+                else
+                {
+                    nMethodId = ( nBitField & 0x3f );
+                }
+            }
+
+            if( ! bSuccess )
+            {
+                OSL_ENSURE ( 0 , "urp-bridge : incomplete message, skipping block" );
+                break;
+            }
+
+            // get new type,oid,tid
+            if( bType )
+            {
+                if( ! m_unmarshal.unpackAndDestruct(
+                    &m_pBridgeImpl->m_lastInType , getCppuType( &m_pBridgeImpl->m_lastInType ) ) )
+                {
+                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
+                    disposeEnvironment();
+                    return;
+                }
+                if( m_pBridgeImpl->m_lastInType.getTypeClass() != typelib_TypeClass_INTERFACE )
+                {
+                    OSL_ENSURE( 0 , "urp-bridge : not an interface type" );
+                    disposeEnvironment();
+                    return;
+                }
+            }
+            if( bOid )
+            {
+                rtl_uString *pOid = 0;
+                if( m_unmarshal.unpackOid( &pOid ) )
+                {
+                    m_pBridgeImpl->m_lastInOid = pOid;
+                }
+                else
+                {
+                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
+                    disposeEnvironment();
+                    return;
+                }
+            }
+            if( bTid )
+            {
+                if( ! m_unmarshal.unpackTid( &(m_pBridgeImpl->m_lastInTid) ) )
+                {
+                    OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
+                    disposeEnvironment();
+                    return;
+                }
+            }
+
+            Job *pJob;
+            // do the job
+            if( bRequest )
+            {
+                // get the membertypedescription
+
+                typelib_InterfaceMethodTypeDescription *pMethodType = 0;
+                typelib_InterfaceAttributeTypeDescription *pAttributeType = 0;
+                sal_Bool bIsSetter = sal_False;
+
+                if( getMemberTypeDescription( &pAttributeType, &pMethodType, &bIsSetter,
+                                              nMethodId, m_pBridgeImpl->m_lastInType ) )
+                {
+                    if( ! pLastRemoteI || bOid || bType )
+                    {
+                        // a new interface must be retrieved
+
+                        // retrieve the interface NOW from the environment
+                        // (avoid race conditions : oneway followed by release )
+                        typelib_InterfaceTypeDescription *pInterfaceType = 0;
+
+                        TYPELIB_DANGER_GET(
+                            (typelib_TypeDescription ** ) &pInterfaceType ,
+                            m_pBridgeImpl->m_lastInType.getTypeLibType() );
+                        if( !pInterfaceType )
+                        {
+                            delete pMultiJob;
+                            disposeEnvironment();
+                            bContinue = sal_False;
+                            break;
+                        }
+                        m_pEnvRemote->pExtEnv->getRegisteredInterface(
+                            m_pEnvRemote->pExtEnv, ( void **  ) &pLastRemoteI,
+                            m_pBridgeImpl->m_lastInOid.pData, pInterfaceType );
+                        TYPELIB_DANGER_RELEASE( (typelib_TypeDescription * )pInterfaceType );
+
+                        // NOTE : Instance provider is called in the executing thread
+                        //        Otherwise, instance provider may block the bridge
+                    }
+
+                    if( pMultiJob && ! bTid && pMethodType && pMethodType->bOneWay && ! pMultiJob->isFull())
+                    {
+                        // add to the existing multijob, nothing to do here
+                    }
+                    else
+                    {
+                        // create a new multijob
+                        if( pMultiJob )
+                        {
+                            // start a previously existing multijob
+                            pMultiJob->initiate();
+                        }
+
+                        pMultiJob = new ServerMultiJob(
+                            m_pEnvRemote, m_pBridgeImpl->m_lastInTid.getHandle(),
+                            m_pBridgeImpl, &m_unmarshal );
+                    }
+
+                    pMultiJob->setType( m_pBridgeImpl->m_lastInType );
+                    if( pMethodType )
+                        pMultiJob->setMethodType( pMethodType , REMOTE_RELEASE_METHOD_INDEX == nMethodId);
+                    else if( pAttributeType )
+                        pMultiJob->setAttributeType( pAttributeType, bIsSetter  );
+
+                    if( pLastRemoteI )
+                        pMultiJob->setInterface( pLastRemoteI );
+                    else
+                        pMultiJob->setOid( m_pBridgeImpl->m_lastInOid );
+
+#ifdef BRIDGES_URP_PROT
+                    bIsOneWay = pMethodType && pMethodType->bOneWay;
+                    sMemberName = pMethodType ?
+                        pMethodType->aBase.pMemberName :
+                        pAttributeType->aBase.pMemberName;
+#endif
+                }
+                else
+                {
+                    delete pMultiJob;
+                    disposeEnvironment();
+                    bContinue = sal_False;
+                    break;
+                }
+                pJob = pMultiJob;
+            }
+            else
+            {
+                if( pMultiJob )
+                {
+                    pMultiJob->initiate();
+                    pMultiJob = 0;
+                }
+                if( pLastRemoteI )
+                {
+                    pLastRemoteI->release( pLastRemoteI );
+                    pLastRemoteI = 0;
+                }
+                ClientJob *pClientJob =
+                    m_pBridgeImpl->m_clientJobContainer.remove( m_pBridgeImpl->m_lastInTid );
+                OSL_ASSERT( pClientJob );
+                pClientJob->m_bExceptionOccured = bExceptionOccured;
+
+                pJob = pClientJob;
+                pJob->setThreadId( m_pBridgeImpl->m_lastInTid.getHandle() );
+                pJob->setUnmarshal( &m_unmarshal );
+#ifdef BRIDGES_URP_PROT
+                sMemberName = pClientJob->m_pMethodType ?
+                    pClientJob->m_pMethodType->aBase.pMemberName :
+                    pClientJob->m_pAttributeType->aBase.pMemberName;
+#endif
+            }
+
+#ifdef BRIDGES_URP_PROT
+            sal_uInt32 nLogHeader = m_unmarshal.getPos();
+#endif
+
+            if( ! pJob->extract(  ) )
+            {
+                // severe error during extracting, dispose
+                delete pJob;
+                disposeEnvironment();
+                bContinue = sal_False;
+                break;
+            }
+
+#ifdef BRIDGES_URP_PROT
+              {
+                  if( bRequest )
+                  {
+                      urp_logServingRequest(
+                          m_pBridgeImpl, m_unmarshal.getPos() - nLogStart,
+                          m_unmarshal.getPos() - nLogHeader,
+                          !bIsOneWay,
+                          sMemberName );
+                  }
+                  else
+                  {
+                      urp_logGettingReply(
+                          m_pBridgeImpl, m_unmarshal.getPos() - nLogStart,
+                          m_unmarshal.getPos() - nLogHeader, sMemberName );
+                  }
+              }
+#endif
+            if( ! pMultiJob )
+            {
+                pJob->initiate();
+            }
+        }  // end while( !m_unmarshal.finished() )
+
+        if( pLastRemoteI )
+            pLastRemoteI->release( pLastRemoteI );
+
+        if( pMultiJob )
+        {
+            pMultiJob->initiate();
+        }
+
+        m_unmarshal.restart();
+    }
+
+    if( m_pConnection )
+    {
+        m_pConnection->release( m_pConnection );
+        m_pConnection = 0;
+    }
+}
+}

@@ -1,0 +1,25 @@
+mkdir: %_DEST%\inc%_EXT%\stoc
+
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+
+..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
+
+..\source\componentdescription.dtd %_DEST%\xml%_EXT%\componentdescription.dtd
+
+..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\corefl.xml
+..\source\defaultregistry\defreg.xml %_DEST%\xml%_EXT%\defreg.xml
+..\source\implementationregistration\impreg.xml %_DEST%\xml%_EXT%\impreg.xml
+..\source\inspect\insp.xml %_DEST%\xml%_EXT%\insp.xml
+..\source\invocation\inv.xml %_DEST%\xml%_EXT%\inv.xml
+..\source\invocation_adapterfactory\invadp.xml %_DEST%\xml%_EXT%\invadp.xml
+..\source\io\io.xml %_DEST%\xml%_EXT%\io.xml
+..\source\javavm\jen.xml %_DEST%\xml%_EXT%\jen.xml
+..\source\loader\cpld.xml %_DEST%\xml%_EXT%\cpld.xml
+..\source\namingservice\namingservice.xml %_DEST%\xml%_EXT%\namingservice.xml
+..\source\proxy_factory\proxyfac.xml %_DEST%\xml%_EXT%\proxyfac.xml
+..\source\registry_tdprovider\rdbtdp.xml %_DEST%\xml%_EXT%\rdbtdp.xml
+..\source\servicemanager\smgr.xml %_DEST%\xml%_EXT%\smgr.xml
+..\source\simpleregistry\simreg.xml %_DEST%\xml%_EXT%\simreg.xml
+..\source\tdmanager\tdmgr.xml %_DEST%\xml%_EXT%\tdmgr.xml
+..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\tcv.xml

@@ -1,0 +1,57 @@
+mkdir: %_DEST%\inc%_EXT%\cppuhelper
+
+..\inc\cppuhelper\implbase.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase.hxx
+..\inc\cppuhelper\implbase1.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase1.hxx
+..\inc\cppuhelper\implbase2.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase2.hxx
+..\inc\cppuhelper\implbase3.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase3.hxx
+..\inc\cppuhelper\implbase4.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase4.hxx
+..\inc\cppuhelper\implbase5.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase5.hxx
+..\inc\cppuhelper\implbase6.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase6.hxx
+..\inc\cppuhelper\implbase7.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase7.hxx
+..\inc\cppuhelper\implbase8.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase8.hxx
+..\inc\cppuhelper\implbase9.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase9.hxx
+..\inc\cppuhelper\implbase10.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase10.hxx
+..\inc\cppuhelper\implbase11.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase11.hxx
+..\inc\cppuhelper\implbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase12.hxx
+					
+..\inc\cppuhelper\compbase.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase.hxx
+..\inc\cppuhelper\compbase1.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase1.hxx
+..\inc\cppuhelper\compbase2.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase2.hxx
+..\inc\cppuhelper\compbase3.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase3.hxx
+..\inc\cppuhelper\compbase4.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase4.hxx
+..\inc\cppuhelper\compbase5.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase5.hxx
+..\inc\cppuhelper\compbase6.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase6.hxx
+..\inc\cppuhelper\compbase7.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase7.hxx
+..\inc\cppuhelper\compbase8.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase8.hxx
+..\inc\cppuhelper\compbase9.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase9.hxx
+..\inc\cppuhelper\compbase10.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase10.hxx
+..\inc\cppuhelper\compbase11.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase11.hxx
+..\inc\cppuhelper\compbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase12.hxx
+
+..\inc\cppuhelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
+..\inc\cppuhelper\exc_hlp.hxx %_DEST%\inc%_EXT%\cppuhelper\exc_hlp.hxx
+..\inc\cppuhelper\typeprovider.hxx %_DEST%\inc%_EXT%\cppuhelper\typeprovider.hxx
+..\inc\cppuhelper\factory.hxx %_DEST%\inc%_EXT%\cppuhelper\factory.hxx
+..\inc\cppuhelper\interfacecontainer.hxx %_DEST%\inc%_EXT%\cppuhelper\interfacecontainer.hxx
+..\inc\cppuhelper\interfacecontainer.h %_DEST%\inc%_EXT%\cppuhelper\interfacecontainer.h
+..\inc\cppuhelper\component.hxx %_DEST%\inc%_EXT%\cppuhelper\component.hxx
+..\inc\cppuhelper\propshlp.hxx %_DEST%\inc%_EXT%\cppuhelper\propshlp.hxx
+..\inc\cppuhelper\proptypehlp.hxx %_DEST%\inc%_EXT%\cppuhelper\proptypehlp.hxx
+..\inc\cppuhelper\proptypehlp.h %_DEST%\inc%_EXT%\cppuhelper\proptypehlp.h
+..\inc\cppuhelper\stdidlclass.hxx %_DEST%\inc%_EXT%\cppuhelper\stdidlclass.hxx
+..\inc\cppuhelper\weak.hxx %_DEST%\inc%_EXT%\cppuhelper\weak.hxx
+..\inc\cppuhelper\weakagg.hxx %_DEST%\inc%_EXT%\cppuhelper\weakagg.hxx
+..\inc\cppuhelper\queryinterface.hxx %_DEST%\inc%_EXT%\cppuhelper\queryinterface.hxx
+..\inc\cppuhelper\weakref.hxx %_DEST%\inc%_EXT%\cppuhelper\weakref.hxx
+..\inc\cppuhelper\servicefactory.hxx %_DEST%\inc%_EXT%\cppuhelper\servicefactory.hxx
+..\inc\cppuhelper\smartservices.hxx %_DEST%\inc%_EXT%\cppuhelper\smartservices.hxx
+
+..\%__SRC%\bin\cppuhelper*.dll %_DEST%\bin%_EXT%\cppuhelper*.dll
+..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib%_EXT%\*
+
+..\%__SRC%\lib\libcppuhelper*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libcppuhelper*.dylib %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib%_EXT%\*
+..\%__SRC%\misc\cppuhelper*.pdb %_DEST%\misc%_EXT%\*
+..\version.mk %_DEST%\inc%_EXT%\cppuhelper\version.mk

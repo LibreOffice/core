@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: language_binding.idl,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 15:25:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _TEST_LANGUAGE_BINDING_IDL_
+#define _TEST_LANGUAGE_BINDING_IDL_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module test
+{
+
+enum TestEnum
+{
+    TEST,
+    ONE,
+    TWO,
+    CHECK,
+    LOLA,
+    PALOO,
+    ZA
+};
+
+/**
+ * simple c++ types
+ */
+struct TestSimple
+{
+    boolean                    Bool;
+    char                       Char;
+    byte                       Byte;
+    short                      Short;
+    unsigned short             UShort;
+    long                       Long;
+    unsigned long              ULong;
+    hyper                      Hyper;
+    unsigned hyper             UHyper;
+    float                      Float;
+    double                     Double;
+    test::TestEnum             Enum;
+};
+/**
+ * complex c++ types
+ */
+struct TestElement : test::TestSimple
+{
+    string                     String;
+    com::sun::star::uno::XInterface   Interface;
+    any                        Any;
+};
+struct TestDataElements : test::TestElement
+{
+    sequence<test::TestElement > Sequence;
+};
+
+typedef TestDataElements TestData;
+
+/**
+ * Monster test interface to test language binding calls.
+ *
+ * @author Daniel Boelzle
+ */
+[ uik(46833373-3462-11d3-87A400A0-24494732), ident("XLBTest", 1.0) ]
+interface XLBTestBase : com::sun::star::uno::XInterface
+{
+    /**
+     * in parameter test, tests by calls reference also (complex types)
+     */
+    [oneway] void setValues( [in] boolean bBool, [in] char cChar, [in] byte nByte,
+                             [in] short nShort, [in] unsigned short nUShort,
+                             [in] long nLong, [in] unsigned long nULong,
+                             [in] hyper nHyper, [in] unsigned hyper nUHyper,
+                             [in] float fFloat, [in] double fDouble,
+                             [in] test::TestEnum eEnum, [in] string aString,
+                             [in] com::sun::star::uno::XInterface xInterface, [in] any aAny,
+                             [in] sequence<test::TestElement > aSequence,
+                             [in] test::TestData aStruct );
+    /**
+     * inout parameter test
+     */
+    test::TestData setValues2( [inout] boolean bBool, [inout] char cChar, [inout] byte nByte,
+                               [inout] short nShort, [inout] unsigned short nUShort,
+                               [inout] long nLong, [inout] unsigned long nULong,
+                               [inout] hyper nHyper, [inout] unsigned hyper nUHyper,
+                               [inout] float fFloat, [inout] double fDouble,
+                               [inout] test::TestEnum eEnum, [inout] string aString,
+                               [inout] com::sun::star::uno::XInterface xInterface, [inout] any aAny,
+                               [inout] sequence<test::TestElement > aSequence,
+                               [inout] test::TestData aStruct );
+
+    /**
+     * out parameter test
+     */
+    test::TestData getValues( [out] boolean bBool, [out] char cChar, [out] byte nByte,
+                              [out] short nShort, [out] unsigned short nUShort,
+                              [out] long nLong, [out] unsigned long nULong,
+                              [out] hyper nHyper, [out] unsigned hyper nUHyper,
+                              [out] float fFloat, [out] double fDouble,
+                              [out] test::TestEnum eEnum, [out] string aString,
+                              [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
+                              [out] sequence<test::TestElement > aSequence,
+                              [out] test::TestData aStruct );
+
+    [attribute] boolean                  Bool;
+    [attribute] byte                     Byte;
+    [attribute] char                     Char;
+    [attribute] short                    Short;
+    [attribute] unsigned short           UShort;
+    [attribute] long                     Long;
+    [attribute] unsigned long            ULong;
+    [attribute] hyper                    Hyper;
+    [attribute] unsigned hyper           UHyper;
+    [attribute] float                    Float;
+    [attribute] double                   Double;
+    [attribute] test::TestEnum           Enum;
+    [attribute] string                   String;
+    [attribute] com::sun::star::uno::XInterface Interface;
+    [attribute] any                      Any;
+    [attribute] sequence<test::TestElement > Sequence;
+    [attribute] test::TestData           Struct;
+};
+
+
+/**
+ * Inherting from monster; adds raiseException().
+ *
+ * @author Daniel Boelzle
+ */
+[ uik(44C34C20-3478-11d3-87A400A0-24494732), ident("XLanguageBindingTest", 1.0) ]
+interface XLanguageBindingTest : test::XLBTestBase
+{
+    /**
+     * params are there only for dummy, to test if all temp out params will be released.
+     */
+    test::TestData raiseException( [out] boolean bBool, [out] char cChar, [out] byte nByte,
+                                   [out] short nShort, [out] unsigned short nUShort,
+                                   [out] long nLong, [out] unsigned long nULong,
+                                   [out] hyper nHyper, [out] unsigned hyper nUHyper,
+                                   [out] float fFloat, [out] double fDouble,
+                                   [out] test::TestEnum eEnum, [out] string aString,
+                                   [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
+                                   [out] sequence<test::TestElement > aSequence,
+                                   [out] test::TestData aStruct )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /**
+     * raises runtime exception
+     */
+    [attribute] long                     RuntimeException;
+};
+
+}; // test
+
+
+#endif

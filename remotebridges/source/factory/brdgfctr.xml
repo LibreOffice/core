@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Joerg Budischewski </Author>
+
+<Name>  com.sun.star.comp.remotebridges.BridgeFactory </Name>
+
+<Description>
+    This component allows
+    to establish a connection to another process.
+</Description>
+
+<ModuleName>    brdgfctr    </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.bridge.BridgeFactory   </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    vos         </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   vos2            </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+
+<Type>   com.sun.star.bridge.XBridgeFactory                     </Type>
+<Type>   com.sun.star.bridge.XInstanceProvider                  </Type>
+<Type>   com.sun.star.bridge.XBridge                                </Type>
+<Type>   com.sun.star.bridge.BridgeExistsException              </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory         </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory                </Type>
+<Type>   com.sun.star.lang.XInitialization                      </Type>
+<Type>   com.sun.star.lang.XComponent                               </Type>
+<Type>   com.sun.star.lang.XServiceInfo                         </Type>
+<Type>   com.sun.star.lang.XTypeProvider                </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException             </Type>
+<Type>   com.sun.star.lang.XInitialization                          </Type>
+<Type>   com.sun.star.registry.XRegistryKey                         </Type>
+<Type>   com.sun.star.uno.XWeak                                 </Type>
+<Type>   com.sun.star.uno.TypeClass                             </Type>
+<Type>   com.sun.star.uno.XAggregation                          </Type>
+
+</COMPONENTDESCRIPTION>
+

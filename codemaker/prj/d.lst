@@ -1,0 +1,8 @@
+..\%__SRC%\bin\cppumaker.exe %_DEST%\bin%_EXT%\cppumaker.exe
+..\%__SRC%\bin\cppumaker.pdb %_DEST%\bin%_EXT%\cppumaker.pdb
+..\%__SRC%\bin\javamaker.exe %_DEST%\bin%_EXT%\javamaker.exe
+..\%__SRC%\bin\javamaker.pdb %_DEST%\bin%_EXT%\javamaker.pdb
+
+..\%__SRC%\bin\cppumaker %_DEST%\bin%_EXT%\cppumaker
+..\%__SRC%\bin\javamaker %_DEST%\bin%_EXT%\javamaker
+

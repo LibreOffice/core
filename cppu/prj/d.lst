@@ -1,0 +1,42 @@
+mkdir: %_DEST%\inc%_EXT%\cppu
+mkdir: %_DEST%\inc%_EXT%\com
+mkdir: %_DEST%\inc%_EXT%\com\sun
+mkdir: %_DEST%\inc%_EXT%\com\sun\star
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
+mkdir: %_DEST%\inc%_EXT%\typelib
+mkdir: %_DEST%\inc%_EXT%\uno
+
+..\inc\cppu\macros.hxx %_DEST%\inc%_EXT%\cppu\macros.hxx
+
+..\inc\com\sun\star\uno\Reference.h %_DEST%\inc%_EXT%\com\sun\star\uno\Reference.h
+..\inc\com\sun\star\uno\Reference.hxx %_DEST%\inc%_EXT%\com\sun\star\uno\Reference.hxx
+..\inc\com\sun\star\uno\Type.h %_DEST%\inc%_EXT%\com\sun\star\uno\Type.h
+..\inc\com\sun\star\uno\Type.hxx %_DEST%\inc%_EXT%\com\sun\star\uno\Type.hxx
+..\inc\com\sun\star\uno\Any.h %_DEST%\inc%_EXT%\com\sun\star\uno\Any.h
+..\inc\com\sun\star\uno\Any.hxx %_DEST%\inc%_EXT%\com\sun\star\uno\Any.hxx
+..\inc\com\sun\star\uno\Sequence.h %_DEST%\inc%_EXT%\com\sun\star\uno\Sequence.h
+..\inc\com\sun\star\uno\Sequence.hxx %_DEST%\inc%_EXT%\com\sun\star\uno\Sequence.hxx
+..\inc\com\sun\star\uno\genfunc.h %_DEST%\inc%_EXT%\com\sun\star\uno\genfunc.h
+..\inc\com\sun\star\uno\genfunc.hxx %_DEST%\inc%_EXT%\com\sun\star\uno\genfunc.hxx
+
+..\inc\typelib\typeclass.h %_DEST%\inc%_EXT%\typelib\typeclass.h
+..\inc\typelib\typedescription.h %_DEST%\inc%_EXT%\typelib\typedescription.h
+..\inc\typelib\typedescription.hxx %_DEST%\inc%_EXT%\typelib\typedescription.hxx
+..\inc\typelib\uik.h %_DEST%\inc%_EXT%\typelib\uik.h
+
+..\inc\uno\dispatcher.h %_DEST%\inc%_EXT%\uno\dispatcher.h
+..\inc\uno\any2.h %_DEST%\inc%_EXT%\uno\any2.h
+..\inc\uno\sequence2.h %_DEST%\inc%_EXT%\uno\sequence2.h
+..\inc\uno\data.h %_DEST%\inc%_EXT%\uno\data.h
+..\inc\uno\lbnames.h %_DEST%\inc%_EXT%\uno\lbnames.h
+..\inc\uno\environment.h %_DEST%\inc%_EXT%\uno\environment.h
+..\inc\uno\environment.hxx %_DEST%\inc%_EXT%\uno\environment.hxx
+..\inc\uno\mapping.h %_DEST%\inc%_EXT%\uno\mapping.h
+..\inc\uno\mapping.hxx %_DEST%\inc%_EXT%\uno\mapping.hxx
+..\inc\uno\threadpool.h %_DEST%\inc%_EXT%\uno\threadpool.h
+
+..\%__SRC%\lib\icppu.lib %_DEST%\lib%_EXT%\icppu.lib
+..\%__SRC%\bin\cppu* %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\libcppu* %_DEST%\lib%_EXT%\*
+
+..\version.mk %_DEST%\inc%_EXT%\cppu\version.mk

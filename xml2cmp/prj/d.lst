@@ -1,0 +1,2 @@
+..\%__SRC%\bin\xml2cmp.exe %_DEST%\bin%_EXT%\xml2cmp.exe
+..\%__SRC%\bin\xml2cmp %_DEST%\bin%_EXT%\xml2cmp

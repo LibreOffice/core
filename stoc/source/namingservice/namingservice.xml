@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Juergen Schmidt </Author>
+
+<Name>  com.sun.star.comp.stoc.NamingService    </Name>
+
+<Description>
+    This component provides ...
+</Description>
+
+<ModuleName>    namingservice   </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.uno.NamingService  </SupportedService>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu1       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
+
+<Type>  com.sun.star.lang.XComponent                    </Type>
+<Type>  com.sun.star.lang.IllegalArgumentException      </Type>
+<Type>  com.sun.star.lang.XInitialization               </Type>
+<Type>  com.sun.star.lang.XTypeProvider                 </Type>
+<Type>  com.sun.star.lang.XServiceInfo                  </Type>
+<Type>  com.sun.star.lang.XSingleServiceFactory         </Type>
+<Type>  com.sun.star.lang.XMultiServiceFactory          </Type>
+<Type>  com.sun.star.registry.XRegistryKey              </Type>
+<Type>  com.sun.star.uno.XAggregation                   </Type>
+<Type>  com.sun.star.uno.XWeak                          </Type>
+<Type>  com.sun.star.uno.TypeClass                      </Type>
+<Type>  com.sun.star.uno.XNamingService                 </Type>
+
+</COMPONENTDESCRIPTION>
+
