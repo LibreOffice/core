@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versioner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-28 10:13:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 #include "versionhelper.hxx"
 
@@ -75,6 +76,13 @@ int _cdecl main( int argc, char* argv[] )
 #endif
 {
     static char* optionSet[] = {
+        "-time,      display time only",
+        "-date,      display date only",
+        "-upd,       display UPD only",
+        "-minor,     display minor only",
+        "-build,     display build only",
+        "-inpath,    display inpath only",
+        "-verbose,   be verbose",
         "-h:s,       display help or help on option",
         "-help:s,    see -h",
         NULL
@@ -100,6 +108,41 @@ int _cdecl main( int argc, char* argv[] )
     rtl::OUString suLibraryName = rtl::OStringToOUString(opt.getFirstParam(), RTL_TEXTENCODING_ASCII_US );
     VersionHelper aHelper(suLibraryName, opt);
 
-    std::cout << aHelper << std::endl;
+    if (! aHelper.isOk() )
+    {
+        fprintf(stderr, "error: No version info found.\n");
+        exit(1);
+    }
+
+    if (opt.hasOpt("-time"))
+    {
+        fprintf(stdout, "%s\n", aHelper.getTime().getStr());
+    }
+    else if (opt.hasOpt("-date"))
+    {
+        fprintf(stdout, "%s\n", aHelper.getDate().getStr());
+    }
+    else if (opt.hasOpt("-upd"))
+    {
+        fprintf(stdout, "%s\n", aHelper.getUpd().getStr());
+    }
+    else if (opt.hasOpt("-minor"))
+    {
+        fprintf(stdout, "%s\n", aHelper.getMinor().getStr());
+    }
+    else if (opt.hasOpt("-build"))
+    {
+        fprintf(stdout, "%s\n", aHelper.getBuild().getStr());
+    }
+    else if (opt.hasOpt("-inpath"))
+    {
+        fprintf(stdout, "%s\n", aHelper.getInpath().getStr());
+    }
+    else
+    {
+        // std::cout << aHelper << std::endl;
+        aHelper.printall(stdout);
+    }
+
     return 0;
 }
