@@ -21,6 +21,8 @@
 <Status StatusValue="experimental"/>
 
 <SupportedService>  com.sun.star.datatransfer.clipboard.SystemClipboard </SupportedService>
+<SupportedService>  com.sun.star.datatransfer.clipboard.dnd.X11DragSource </SupportedService>
+<SupportedService>  com.sun.star.datatransfer.clipboard.dnd.X11DropTarget </SupportedService>
 
 <ServiceDependency> ... </ServiceDependency>
 

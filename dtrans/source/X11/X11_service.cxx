@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 10:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
 Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragAndDrop");
+    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragSource");
     return aRet;
 }
 
@@ -161,7 +161,7 @@ static const OUString& getXdndImplementationName()
 
 static const OUString& getXdndServiceName()
 {
-    static OUString aImpl = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragAndDrop" );
+    static OUString aImpl = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragSource" );
     return aImpl;
 }
 
