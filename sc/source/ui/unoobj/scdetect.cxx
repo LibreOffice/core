@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:49:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,65 +740,50 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             }
                         }
 
-                        // ASCII cannot be recognized.
-                        // #i3341# But if the Text/CSV filter was set (either by the user or
-                        // file extension) it takes precedence over HTML and RTF and dBase
-                        // detection. Otherwise something like, for example, "lala <SUP> gugu"
-                        // would trigger HTML to be recognized.
-
-                        if ( !pFilter &&
-                                pPreselectedFilter && pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
+                        if ( pPreselectedFilter && !pFilter )
                         {
-                            pFilter = pPreselectedFilter;
-                        }
-                        else if ( !pFilter && pPreselectedFilter)
-                        {
-                            // get file header
-                            rStr.Seek( 0 );
-                            const int nTrySize = 80;
-                            ByteString aHeader;
-                            for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
+                            // further checks for filters only if they are preselected: ASCII, HTML, RTF, DBase
+                            // without the preselection other filters (Writer) take precedence
+                            // DBase can't be detected reliably, so it also needs preselection
+                            if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
                             {
-                                sal_Char c;
-                                rStr >> c;
-                                aHeader += c;
-                            }
-                            aHeader += '\0';
-
-                            // test for HTML
-
-                            if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
-                            {
-                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
-                                {
-                                    pFilter = pPreselectedFilter;
-                                }
-                                else
-                                {
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
-                                }
-                            }
-
-                            // test for RTF
-
-                            if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
-                            {
-                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
-                            }
-
-                            // #97832#; we don't have a flat xml filter
-                    /*      if ( aHeader.CompareTo( "<?xml", 5 ) == COMPARE_EQUAL )
-                            {
-                                //  if XML template is set, don't modify
-                                if (!lcl_IsAnyXMLFilter(pFilter))
-                                    pFilter = SFX_APP()->GetFilter( ScDocShell::Factory(),
-                                                                    String::CreateFromAscii(pFilterXML) );
-                                return ERRCODE_NONE;
-                            }*/
-
-                            // dBase cannot safely be recognized - only test if the filter was set
-                            if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                                // Text filter is accepted if preselected
                                 pFilter = pPreselectedFilter;
+                            }
+                            else
+                            {
+                                // get file header
+                                rStr.Seek( 0 );
+                                const int nTrySize = 80;
+                                ByteString aHeader;
+                                for ( int j = 0; j < nTrySize && !rStr.IsEof(); j++ )
+                                {
+                                    sal_Char c;
+                                    rStr >> c;
+                                    aHeader += c;
+                                }
+                                aHeader += '\0';
+
+                                if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
+                                {
+                                    // test for HTML
+                                    if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
+                                    {
+                                        pFilter = pPreselectedFilter;
+                                    }
+                                    else
+                                    {
+                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                    }
+                                }
+                                else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
+                                {
+                                    // test for RTF
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
+                                }
+                                else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                                    pFilter = pPreselectedFilter;
+                            }
                         }
                     }
                 }
