@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:25:11 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },// RES_PARATR_FORBIDDEN_RULES
     { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },          // RES_PARATR_VERTALIGN
     { SID_ATTR_PARA_SNAPTOGRID, SFX_ITEM_POOLABLE },    // RES_PARATR_SNAPTOGRID
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_CONNECT_BORDER
+    { SID_ATTR_BORDER_CONNECT, SFX_ITEM_POOLABLE },     // RES_PARATR_CONNECT_BORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY5
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY6
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY7
