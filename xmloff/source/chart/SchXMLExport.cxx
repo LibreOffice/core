@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:03:00 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,6 +1112,29 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     sal_Bool bWrite = sal_False;
     sal_Int32 nAttachedAxis;
 
+    // #32368# determine the number of lines in a combi-chart
+    // note: bIsBar
+    sal_Int32 nNumberOfLinesInBarChart = 0;
+    if( bExportContent )
+    {
+        if( 0 == xDiagram->getDiagramType().reverseCompareToAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.BarDiagram" )))
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
+                xDiaProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLines" )))
+                    >>= nNumberOfLinesInBarChart;
+            }
+            catch( uno::Exception & aEx )
+            {
+                String aStr( aEx.Message );
+                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+            }
+        }
+    }
+
     uno::Sequence< uno::Sequence< sal_Int32 > > aDataPointSeq;
     if( xPropSet.is())
     {
@@ -1223,6 +1246,15 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,
                         aSeriesASName );
                 maAutoStyleNameQueue.pop();
+            }
+
+            // chart-type for mixed types
+            if( nNumberOfLinesInBarChart > 0 &&
+                nSeries >= (mnSeriesCount - mnDomainAxes - nNumberOfLinesInBarChart))
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS,
+                                       mrExport.GetNamespaceMap().GetQNameByKey(
+                                           XML_NAMESPACE_CHART, GetXMLToken( XML_LINE )));
             }
 
             // open series element until end of for loop
