@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:54:16 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,8 @@ HACK( #define protected public )
 AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 : ModalDialog( pParent, id )
 , a1( this, ResId( 1 ) )
-, a3( this, ResId( 3 ) )
 , a4( this, ResId( 4 ) )
 , aVersionString( this, ResId( RID_VERSIONSTRING ) )
-//, aIcon( this, ResId( RID_ICON ) )
 , aOk  ( this, ResId( RID_OK ) )
 {
     aVersionString.SetText( ProductVersion::GetMajorVersion().Append( ProductVersion::GetMinorVersion() )
