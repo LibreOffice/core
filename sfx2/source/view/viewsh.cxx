@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-09 13:45:26 $
+ *  last change: $Author: mba $ $Date: 2001-03-19 09:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,10 @@ ErrCode SfxViewShell::DoVerb
 
     // und ab gehts (kein SetModified rufen, das mach das Obj schon selbst)
     SfxErrorContext aEc( ERRCTX_SO_DOVERB, GetWindow(), RID_SO_ERRCTX );
+    SvPersist* pPersist = GetObjectShell()->GetInPlaceObject();
+    if ( !pPersist )
+        pPersist = GetObjectShell();
+    pPersist->StartActivation( pIPClient->GetEmbedObj() );
     ErrCode nErr = pIPClient->GetEmbedObj()->DoVerb( nVerb );
     if( nErr )
         ErrorHandler::HandleError( nErr );
