@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:41:32 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ chinese_traditional ] = "ηΉªε–η‰©δ»¶ ζ–‡ε­—";
     Text[ arabic ] = "δΥ ίΗΖδ ΡΣζγν";
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
-    Text[ korean ] = "κ·Έλ¦¬κΈ° κ°μ²΄ ν…μ¤νΈ";
+    Text[ korean ] = "κ·Έλ¦¬κΈ° κ°μ²΄μ ν…μ¤νΈ";
     Text[ turkish ] = "Ηizim nesnesi metni";
     Text[ catalan ] = "Text de l'objecte de dibuix";
     Text[ finnish ] = "Piirrosobjektin teksti";
@@ -597,7 +597,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ japanese ] = "ε°ε·γƒ—γƒ¬γƒ“γƒ¥γƒΌ";
             Text[ chinese_traditional ] = "ε—ε°ι ιΆζªΆθ¦–";
             Text[ arabic ] = "ΗαΨΘΗΪΙ ΝΣΘ ΗαγΪΗνδΙ";
-            Text[ language_user1 ] = "ίν?ΣΚΪΡ?Γν?ΨΘΗΪ?\\ζΓνδ γΪΗνδΙ ΗαΥέΝΙ ήΘ?ΨΘΗΪΚε?ΏΏΏΏ";
+            Text[ language_user1 ] = "ίν; ίν?ΣΚΪΡ?Γν?ΨΘΗΪ?\\ζΓνδ γΪΗνδΙ ΗαΥέΝΙ ήΘ?ΨΘΗΪΚε?ΏΏΏΏ";
             Text[ greek ] = "Εκτύπωση προεπισκόπησης";
             Text[ korean ] = "νμ΄μ§€λ―Έλ¦¬λ³΄κΈ°γ€€μΈμ‡„";
             Text[ turkish ] = "Yazdύr";
@@ -653,7 +653,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ polish ] = "Close Preview";
             Text[ portuguese_brazilian ] = "Close Preview";
             Text[ japanese ] = "Close Preview";
-            Text[ korean ] = "Close Preview";
+            Text[ korean ] = "λ―Έλ¦¬ λ³΄κΈ° λ‹«κΈ°";
             Text[ chinese_simplified ] = "Close Preview";
             Text[ chinese_traditional ] = "Close Preview";
             Text[ turkish ] = "Close Preview";
