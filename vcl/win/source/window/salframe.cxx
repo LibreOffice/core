@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:26:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,9 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
     BOOL        bSubFrame = FALSE;
+
+    if( getenv( "SAL_SYNCHRONIZE" ) )   // no buffering of drawing commands
+        GdiSetBatchLimit( 1 );
 
     static int bLayeredAPI = -1;
     if( bLayeredAPI == -1 )
@@ -2737,6 +2740,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
     // TODO: once those options vanish: just set bCompBorder to TRUE
     // to have the system colors read
+    int menubarheight = GetSystemMetrics( SM_CYMENU );
     aStyleSettings.SetScrollBarSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
     aStyleSettings.SetSpinSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
