@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 16:24:06 $
+ *  last change: $Author: os $ $Date: 2001-03-14 15:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,7 +1150,7 @@ SvxCharStdPage::SvxCharStdPage( Window* pParent,
     }
 
     aColorBox.SetUpdateMode( FALSE );
-
+    aColorBox.InsertEntry(Color(COL_AUTO), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
@@ -1162,6 +1162,7 @@ SvxCharStdPage::SvxCharStdPage( Window* pParent,
     {
         aFillColorBox.SetUpdateMode( FALSE );
         aFillColorBox.CopyEntries( aColorBox );
+        aFillColorBox.RemoveEntry(0);
         aFillColorBox.InsertEntry( aStrTransparent, 0 );
         aFillColorBox.SetUpdateMode( TRUE );
         aLanguageBox.Hide();
@@ -3079,6 +3080,7 @@ void SvxCharNamePage::Initialize()
 
     m_aColorLB.SetUpdateMode( FALSE );
 
+    m_aColorLB.InsertEntry(Color(COL_AUTO), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->Get(i);
@@ -3617,7 +3619,7 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
             SvxFont& rFont = m_aPreviewWin.GetFont();
             const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
             Color aColor = rItem.GetValue();
-            rFont.SetColor( aColor );
+            rFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
             m_aPreviewWin.Invalidate();
             USHORT nSelPos = m_aColorLB.GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
@@ -3712,7 +3714,7 @@ IMPL_LINK( SvxCharNamePage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
         aSelectedColor = Color( COL_TRANSPARENT );
     else
         aSelectedColor = pBox->GetSelectEntryColor();
-    rFont.SetColor( aSelectedColor );
+    rFont.SetColor( aSelectedColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aSelectedColor );
     m_aPreviewWin.Invalidate();
     return 0;
 }

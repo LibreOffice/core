@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-15 07:02:33 $
+ *  last change: $Author: os $ $Date: 2001-03-14 15:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,6 +928,11 @@ SvxColorWindow::SvxColorWindow( USHORT nId, USHORT nSlotId,
         aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
         aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
     }
+    else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId)
+    {
+        aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
+        aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+    }
 
     if ( pColorTable )
     {
@@ -982,8 +987,13 @@ IMPL_LINK( SvxColorWindow, SelectHdl, void *, EMPTYARG )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    if ( ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) && !nItemId )
+    if ( !nItemId && ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) )
         GetBindings().GetDispatcher()->Execute( theSlotId );
+    else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId) )
+    {
+        SvxColorItem aColorItem( COL_AUTO, theSlotId );
+        GetBindings().GetDispatcher()->Execute( theSlotId, SFX_CALLMODE_RECORD, &aColorItem, 0L );
+    }
     else
     {
         SvxColorItem aColorItem( aColorSet.GetItemColor( nItemId ), theSlotId );
