@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mav $ $Date: 2003-12-15 11:44:43 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:54:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,12 +104,14 @@ SLOFILES += \
         $(SLO)$/graphconvert.obj\
         $(SLO)$/olecomponent.obj\
         $(SLO)$/olewrapclient.obj\
+        $(SLO)$/xdialogcreator.obj\
         $(SLO)$/advisesink.obj
 
 EXCEPTIONSFILES += \
         $(SLO)$/graphconvert.obj\
         $(SLO)$/olecomponent.obj\
         $(SLO)$/olewrapclient.obj\
+        $(SLO)$/xdialogcreator.obj\
         $(SLO)$/advisesink.obj
 
 .ENDIF
@@ -118,6 +120,7 @@ SHL1OBJS= $(SLOFILES)
 
 SHL1STDLIBS=\
     $(SALLIB)\
+    $(VOSLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(TOOLSLIB)\
