@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-17 11:19:46 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:20:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.db;
 
 import java.util.*;
@@ -69,10 +68,8 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XHierarchicalNameContainer;
@@ -84,29 +81,24 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.DataType;
-import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
-import com.sun.star.sdbcx.XDataDescriptorFactory;
 
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.util.MalformedNumberFormatException;
-import com.sun.star.util.NumberFormat;
 import com.sun.star.util.XCloseable;
-import com.sun.star.util.XNumberFormatTypes;
 import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XNumberFormats;
 
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdb.XBookmarksSupplier;
 import com.sun.star.sdb.XReportDocumentsSupplier;
+import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XDataSource;
@@ -122,7 +114,7 @@ import com.sun.star.sdbcx.XTablesSupplier;
 public class DBMetaData {
 
     public XNameAccess xTableNames;
-    public XNumberFormatsSupplier xNumberFormatsSupplier;
+
     public XNameAccess xQueryNames;
     private XInteractionHandler oInteractionHandler;
     private XNameAccess xNameAccess;
@@ -131,9 +123,8 @@ public class DBMetaData {
     private XBookmarksSupplier xBookmarksSuppl;
     public XDataSource xDataSource;
     private XCompletedConnection xCompleted;
-    private XAppend xTableAppend;
+    public XPropertySet xDataSourcePropertySet;
     private int[] nDataTypes = null;
-    public XNumberFormats NumberFormats;
     private XWindowPeer xWindowPeer;
     private boolean bConnectionOvergiven = true;
     public String[] DataSourceNames;
@@ -143,7 +134,8 @@ public class DBMetaData {
     public java.util.Vector CommandObjects = new Vector(1);
     public int[][] WidthList;
     public int[] NumericTypes;
-    public Locale CharLocale;
+    public int[] BinaryTypes;
+    public Locale aLocale;
     public int[] CommandTypes;
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
@@ -152,58 +144,59 @@ public class DBMetaData {
     public SQLQueryComposer oSQLQueryComposer;
     int iMaxColumnsInSelect;
     int iMaxColumnsInGroupBy;
-    public int iDateFormatKey;
-    public int iDateTimeFormatKey;
-    public int iNumberFormatKey;
-    public int iTextFormatKey;
-    public int iTimeFormatKey;
-    public int iLogicalFormatKey;
-    public long lDateCorrection;
+    int iMaxColumnsInTable;
+    int iMaxColumnNameLength = -1;
+    int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
     private boolean bFormatKeysareset = false;
     final int NOLIMIT = 9999999;
     final int RID_DB_COMMON = 1000;
+    final int INVALID = 9999999;
+    public TypeInspector oTypeInspector;
+    private PropertyValue[] aInfoPropertyValues = null;
+    private boolean bisSQL92CheckEnabled = false;
+    private NumberFormatter oNumberFormatter = null;
+    private long lDateCorrection = INVALID;
+    private boolean bdisposeConnection = false;
 
     public DBMetaData(XMultiServiceFactory xMSF) {
-        NumberFormats = null;
         getInterfaces(xMSF);
         InitializeWidthList();
     }
 
-    public DBMetaData(XMultiServiceFactory xMSF, Locale CharLocale, XNumberFormats NumberFormats) {
-        // Todo: getDatabaseContext
-        this.NumberFormats = NumberFormats;
-        this.CharLocale = CharLocale;
+    public DBMetaData(XMultiServiceFactory xMSF, Locale _aLocale, NumberFormatter _oNumberFormatter) {
+        oNumberFormatter = _oNumberFormatter;
+        aLocale = _aLocale;
         getInterfaces(xMSF);
         InitializeWidthList();
-        if (CharLocale != null) {
-            setStandardFormatKeys(false);
-        }
     }
 
-    private void setStandardFormatKeys(boolean bgetStandardBool) {
-        if (!bFormatKeysareset){
-            XNumberFormatTypes xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, NumberFormats);
-            if (!bgetStandardBool) {
-                String FormatString = "[=1]" + '"' + (char)9745 + '"' + ";[=0]" + '"' + (char)58480 + '"' + ";";
-                iLogicalFormatKey = NumberFormats.queryKey(FormatString, CharLocale, true);
-                try {
-                    if (iLogicalFormatKey == -1)
-                        iLogicalFormatKey = NumberFormats.addNew(FormatString, CharLocale);
-                } catch (Exception e) {         //MalformedNumberFormat
-                    e.printStackTrace();
-                    iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, CharLocale);
-                }
-            } else
-                iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, CharLocale);
-            iDateFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATE, CharLocale);
-            iDateTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATETIME, CharLocale);
-            iTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TIME, CharLocale);
-            iNumberFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.NUMBER, CharLocale);
-            iTextFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TEXT, CharLocale);
-            bFormatKeysareset = true;
+
+    public NumberFormatter getNumberFormatter(){
+        if (oNumberFormatter == null){
+            try {
+                XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) AnyConverter.toObject(XNumberFormatsSupplier.class, xDataSourcePropertySet.getPropertyValue("NumberFormatsSupplier"));
+                //TODO get the locale from the datasource
+                aLocale = Configuration.getOfficeLocale(xMSF);
+                oNumberFormatter = new NumberFormatter(xMSF, xNumberFormatsSupplier, aLocale);
+                lDateCorrection = oNumberFormatter.getNullDateCorrection();
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
         }
+        return oNumberFormatter;
     }
+
+
+    public long getNullDateCorrection(){
+        if (lDateCorrection == INVALID){
+            if (oNumberFormatter == null)
+                oNumberFormatter = getNumberFormatter();
+            lDateCorrection = oNumberFormatter.getNullDateCorrection();
+        }
+        return lDateCorrection;
+    }
+
 
     void getInterfaces(XMultiServiceFactory xMSF) {
         try {
@@ -217,6 +210,7 @@ public class DBMetaData {
             exception.printStackTrace(System.out);
         }
     }
+
 
     public void setCommandTypes() {
         int TableCount;
@@ -240,6 +234,11 @@ public class DBMetaData {
         }
     }
 
+
+    public boolean hasTableByName(String _stablename){
+        getTableNames();
+        return xTableNames.hasByName(_stablename);
+    }
 
     public void setTableByName(String _tableName) {
         CommandObject oTableObject = new CommandObject(_tableName, com.sun.star.sdb.CommandType.TABLE);
@@ -274,28 +273,30 @@ public class DBMetaData {
         this.CommandObjects.addElement(oQueryObject);
     }
 
+
     public class CommandObject {
-        public XNameAccess xColumns; // todo: wrap method around this property
+        public XNameAccess xColumns;
+        public XPropertySet xPropertySet;
         public String Name;
         public int CommandType;
 
         public CommandObject(String _CommandName, int _CommandType) {
-            try {
-                Object oCommand;
-                this.Name = _CommandName;
-                this.CommandType = _CommandType;
-                if (xTableNames == null)
-                    setCommandNames();
-                if (CommandType == com.sun.star.sdb.CommandType.TABLE)
-                    oCommand = xTableNames.getByName(Name);
-                else
-                    oCommand = xQueryNames.getByName(Name);
-                XColumnsSupplier xCommandCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oCommand);
-                xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xCommandCols.getColumns());
-            } catch (Exception exception) {
-                exception.printStackTrace(System.out);
-            }
-        }
+        try {
+            Object oCommand;
+            this.Name = _CommandName;
+            this.CommandType = _CommandType;
+            if (xTableNames == null)
+                setCommandNames();
+            if (CommandType == com.sun.star.sdb.CommandType.TABLE)
+                oCommand = xTableNames.getByName(Name);
+            else
+                oCommand = xQueryNames.getByName(Name);
+            XColumnsSupplier xCommandCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oCommand);
+            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oCommand);
+            xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xCommandCols.getColumns());
+        } catch (Exception exception) {
+            exception.printStackTrace(System.out);
+        }}
     }
 
     public void setCommandNames() {
@@ -349,6 +350,27 @@ public class DBMetaData {
         NumericTypes[7] = DataType.REAL; // ==   7;
         NumericTypes[8] = DataType.DOUBLE; // ==   8;
 
+        BinaryTypes = new int[12];
+        BinaryTypes[0] = DataType.BINARY;
+        BinaryTypes[1] = DataType.VARBINARY;
+        BinaryTypes[2] = DataType.LONGVARBINARY;
+        BinaryTypes[3] = DataType.BLOB;
+        BinaryTypes[4] = DataType.SQLNULL;
+        BinaryTypes[5] = DataType.OBJECT;
+        BinaryTypes[6] = DataType.DISTINCT;
+        BinaryTypes[7] = DataType.STRUCT;
+        BinaryTypes[8] = DataType.ARRAY;
+        BinaryTypes[9] = DataType.CLOB;
+        BinaryTypes[10] = DataType.REF;
+        BinaryTypes[11] = DataType.OTHER;
+
+    }
+
+
+    public boolean isBinaryDataType(int _itype){
+        if (NumericTypes == null)
+            InitializeWidthList();
+        return (JavaTools.FieldInIntTable(BinaryTypes, _itype) > -1);
     }
 
 
@@ -386,18 +408,21 @@ public class DBMetaData {
     }
 
 
+    public int getMaxColumnsInTable() throws SQLException {
+        iMaxColumnsInTable = xDBMetaData.getMaxColumnsInTable();
+        if (iMaxColumnsInTable == 0)
+            iMaxColumnsInTable = this.NOLIMIT;
+        return iMaxColumnsInTable;
+    }
+
+
     private void getDataSourceObjects() throws Exception{
     try {
         xBookmarksSuppl = (XBookmarksSupplier) UnoRuntime.queryInterface(XBookmarksSupplier.class, this.xDataSource);
         xDBMetaData = DBConnection.getMetaData();
         XChild xChild = (XChild) UnoRuntime.queryInterface(XChild.class, DBConnection);
         Object oDataSource = xChild.getParent();
-        xNumberFormatsSupplier = (XNumberFormatsSupplier) AnyConverter.toObject(XNumberFormatsSupplier.class,
-                                                                                Helper.getUnoPropertyValue(oDataSource, "NumberFormatsSupplier"));
-        NumberFormats = xNumberFormatsSupplier.getNumberFormats();
-        lDateCorrection = Desktop.getNullDateCorrection(xNumberFormatsSupplier);
-        CharLocale = Configuration.getOfficeLocale(xMSF);
-//      this.setStandardFormatKeys(false);
+        getDataSourceInterfaces();
         setMaxColumnsInGroupBy();
         setMaxColumnsInSelect();
     } catch (SQLException e) {
@@ -405,12 +430,37 @@ public class DBMetaData {
     }}
 
 
+    public boolean isSQL92CheckEnabled(){
+        try {
+            if (aInfoPropertyValues == null){
+                aInfoPropertyValues = (PropertyValue[]) AnyConverter.toArray(this.xDataSourcePropertySet.getPropertyValue("Info"));
+                if (Properties.hasPropertyValue(aInfoPropertyValues,"EnableSQL92Check")){
+                    bisSQL92CheckEnabled = AnyConverter.toBoolean(Properties.getPropertyValue(aInfoPropertyValues, "EnableSQL92Check"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bisSQL92CheckEnabled;
+    }
+
+
+    public String verifyName(String _sname, int _maxlen){
+        if (_sname.length() > _maxlen)
+            return _sname.substring(0, _maxlen);
+        if (this.isSQL92CheckEnabled()){
+            return Desktop.removeSpecialCharacters(xMSF, Configuration.getOfficeLocale(xMSF), _sname);
+        }
+        return _sname;
+    }
+
 
     private void setDataSourceByName(String _DataSourceName, boolean bgetInterfaces) {
         try {
             this.DataSourceName = _DataSourceName;
             Object oDataSource = xNameAccess.getByName(DataSourceName);
             xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
+            getDataSourceInterfaces();
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -419,8 +469,8 @@ public class DBMetaData {
 
     public void getDataSourceInterfaces() throws Exception{
         xCompleted = (XCompletedConnection) UnoRuntime.queryInterface(XCompletedConnection.class, xDataSource);
-        XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
-        bPasswordIsRequired = ((Boolean) xPSet.getPropertyValue("IsPasswordRequired")).booleanValue();
+        xDataSourcePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
+        bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
     }
 
 
@@ -433,6 +483,7 @@ public class DBMetaData {
                 Properties.getPropertyValue(curproperties, "ActiveConnection"));
             if (xConnection !=null)
             {
+                bdisposeConnection = true;
                 com.sun.star.container.XChild child = (com.sun.star.container.XChild)UnoRuntime.queryInterface(com.sun.star.container.XChild.class, xConnection);
 
                 xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, child.getParent());
@@ -474,13 +525,13 @@ public class DBMetaData {
     }
 
 
-    public boolean getConnection(String _DataSourceName) {
+    private boolean getConnection(String _DataSourceName) {
         setDataSourceByName(_DataSourceName, true);
         return getConnection(xDataSource);
     }
 
 
-    public boolean getConnection(com.sun.star.sdbc.XConnection _DBConnection){
+    private boolean getConnection(com.sun.star.sdbc.XConnection _DBConnection){
     try {
         this.DBConnection = _DBConnection;
         getDataSourceObjects();
@@ -492,7 +543,7 @@ public class DBMetaData {
     }}
 
 
-    public boolean getConnection(XDataSource xDataSource){
+    private boolean getConnection(XDataSource xDataSource){
     bConnectionOvergiven = false;
     Resource oResource = new Resource(xMSF, "Database", "dbw");
     try {
@@ -543,12 +594,24 @@ public class DBMetaData {
 
     public int getMaxColumnNameLength(){
     try {
-        return xDBMetaData.getMaxColumnNameLength();
+        if (iMaxColumnNameLength <= 0)
+            iMaxColumnNameLength = xDBMetaData.getMaxColumnNameLength();
+        return iMaxColumnNameLength;
     } catch (SQLException e) {
         e.printStackTrace(System.out);
-        return -1;
+        return 0;
     }}
 
+
+    public int getMaxTableNameLength(){
+    try {
+        if (iMaxTableNameLength <= 0)
+            iMaxTableNameLength = xDBMetaData.getMaxTableNameLength();
+        return iMaxTableNameLength;
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+        return 0;
+    }}
 
 
     public boolean supportsCoreSQLGrammar(){
@@ -607,14 +670,8 @@ public class DBMetaData {
         }
     }
 
-
-    public boolean isConnectionOvergiven() {
-        return bConnectionOvergiven;
-    }
-
-
-    public void disposeDBMetaData() {
-        if ((xComponent != null) && (!isConnectionOvergiven()))
+    public void dispose() {
+        if ((xComponent != null) && (this.bdisposeConnection))
             xComponent.dispose();
     }
 
@@ -713,91 +770,53 @@ public class DBMetaData {
     }
 
 
-    public int[] getsupportedDataTypes(){
-    try {
-        if (nDataTypes == null){
-            Vector oTypeVector = new Vector();
-            Integer[] aIntegerDataTypes = null;
-            XResultSet xResultSet = this.xDBMetaData.getTypeInfo();
-            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
-            while (xResultSet.next())
-                oTypeVector.addElement(new Integer(xRow.getShort(2)));
-            aIntegerDataTypes = new Integer[oTypeVector.size()];
-            oTypeVector.toArray(aIntegerDataTypes);
-            nDataTypes = new int[aIntegerDataTypes.length];
-            for (int i = 0; i < aIntegerDataTypes.length; i++)
-                nDataTypes[i] = aIntegerDataTypes[i].intValue();
-        }
-        return nDataTypes;
-    } catch (SQLException e){
-        e.printStackTrace(System.out);
-        return null;
-    }}
-
-
-    public boolean supportsDataType(int _curDataType){
-        return (JavaTools.FieldInIntTable(nDataTypes, _curDataType)> -1);
+    public void createTypeInspector() throws SQLException{
+        oTypeInspector = new TypeInspector(xDBMetaData.getTypeInfo());
     }
 
 
-    public int getLastConversionFallbackDataType(){
-        if (supportsDataType(DataType.VARCHAR))
-            return DataType.VARCHAR;
-        else
-            return DataType.LONGVARCHAR;
+    public TypeInspector getDBDataTypeInspector(){
+        return oTypeInspector;
     }
 
 
-    public int convertDataType(int _curDataType){
-        int retDataType = _curDataType;
-        if (!supportsDataType(_curDataType)){
-            switch(_curDataType)
-            {
-                case DataType.TINYINT:
-                    retDataType = convertDataType(DataType.SMALLINT);
-                    break;
-                case DataType.SMALLINT:
-                    retDataType = convertDataType(DataType.INTEGER);
-                    break;
-                case DataType.INTEGER:
-                    retDataType = convertDataType(DataType.FLOAT);
-                    break;
-                case DataType.FLOAT:
-                    retDataType = convertDataType(DataType.REAL);
-                    break;
-                case DataType.DATE:
-                case DataType.TIME:
-                    retDataType = convertDataType(DataType.TIMESTAMP);
-                    break;
-                case DataType.TIMESTAMP:
-                case DataType.REAL:
-                case DataType.BIGINT:
-                    retDataType = convertDataType(DataType.DOUBLE);
-                    break;
-                case DataType.DOUBLE:
-                    retDataType = convertDataType(DataType.NUMERIC);
-                    break;
-                case DataType.NUMERIC:
-                    retDataType = convertDataType(DataType.DECIMAL);
-                    break;
-                case DataType.DECIMAL:
-                    if (supportsDataType(DataType.DOUBLE))
-                        retDataType = convertDataType(DataType.DOUBLE);
-                    else if (supportsDataType(DataType.NUMERIC))
-                        retDataType = DataType.NUMERIC;
-                    else
-                        retDataType = getLastConversionFallbackDataType();
-                    break;
-                case DataType.VARCHAR:
-                    retDataType = getLastConversionFallbackDataType();
-                    break;
-                default:
-                    retDataType = getLastConversionFallbackDataType();
+    private String[] StringsFromResultSet(XResultSet _xResultSet, int _icol){
+        String[] sColValues = null;
+        try {
+            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, _xResultSet);
+            Vector aColVector = new Vector();
+            while (_xResultSet.next()){
+                aColVector.addElement(xRow.getString(_icol));
             }
+            sColValues = new String[aColVector.size()];
+            aColVector.toArray(sColValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return retDataType;
+        return sColValues;
     }
 
+
+    public String[] getCatalogNames(){
+        try {
+            XResultSet xResultSet = xDBMetaData.getCatalogs();
+            return StringsFromResultSet(xResultSet, 1);
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
+
+
+    public String[] getSchemaNames(){
+        try {
+            XResultSet xResultSet = xDBMetaData.getSchemas();
+            return StringsFromResultSet(xResultSet, 1);
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 
 
     public boolean storeDatabaseDocumentToTempPath(XComponent _xcomponent, String _storename){
@@ -838,17 +857,5 @@ public class DBMetaData {
      */
     public void setWindowPeer(XWindowPeer windowPeer) {
         xWindowPeer = windowPeer;
-    }
-    /**
-     * @return Returns the lDateCorrection.
-     */
-    public long getNullDateCorrection() {
-        return lDateCorrection;
-    }
-    /**
-     * @param dateCorrection The lDateCorrection to set.
-     */
-    public void setNullDateCorrection(long dateCorrection) {
-        lDateCorrection = dateCorrection;
     }
 }
