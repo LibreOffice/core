@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
+ *  last change: $Author: pl $ $Date: 2001-02-14 10:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1995,29 +1995,31 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
         fprintf( stderr, "drag left window 0x%x (rev. %d), entered window 0x%x (rev %d)\n", m_aDropWindow, m_nCurrentProtocolVersion, aNewCurrentWindow, nNewProtocolVersion );
 #endif
 
-        it = m_aDropTargets.find( m_aDropWindow );
-        if( it != m_aDropTargets.end() )
-            // shortcut for own drop targets
+        if( m_aDropWindow != None )
         {
-            DropTargetEvent dte;
-            dte.Source  = static_cast< OWeakObject* >( it->second.m_pTarget );
-            it->second.m_pTarget->dragExit( dte );
+            it = m_aDropTargets.find( m_aDropWindow );
+            if( it != m_aDropTargets.end() )
+                // shortcut for own drop targets
+            {
+                DropTargetEvent dte;
+                dte.Source  = static_cast< OWeakObject* >( it->second.m_pTarget );
+                it->second.m_pTarget->dragExit( dte );
+            }
+            else
+            {
+                // send old drop target a XdndLeave
+                XEvent aEvent;
+                aEvent.type = ClientMessage;
+                aEvent.xclient.display          = m_pDisplay;
+                aEvent.xclient.format           = 32;
+                aEvent.xclient.message_type     = m_nXdndLeave;
+                aEvent.xclient.window           = m_aDropWindow;
+                aEvent.xclient.data.l[0]        = m_aWindow;
+                aEvent.xclient.data.l[1]        = 0;
+                XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+            }
+            m_xDragSourceListener->dragExit( dsde );
         }
-        else
-        {
-            // send old drop target a XdndLeave
-            XEvent aEvent;
-            aEvent.type = ClientMessage;
-            aEvent.xclient.display          = m_pDisplay;
-            aEvent.xclient.format           = 32;
-            aEvent.xclient.message_type     = m_nXdndLeave;
-            aEvent.xclient.window           = m_aDropWindow;
-            aEvent.xclient.data.l[0]        = m_aWindow;
-            aEvent.xclient.data.l[1]        = 0;
-            XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
-        }
-
-        m_xDragSourceListener->dragExit( dsde );
 
         m_nCurrentProtocolVersion   = nNewProtocolVersion;
         m_aDropWindow               = aNewCurrentWindow;
