@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:56:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_DOCUNO_HXX
 #define SC_DOCUNO_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"           // ScRange, ScAddress
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _SFX_OBJUNO_HXX
@@ -209,7 +209,7 @@ public:
     BOOL                    IsEmbedded() const;
     double                  GetOutputFactor() const;
 
-    BOOL                    AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab );
+    BOOL                    AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
 
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
@@ -530,16 +530,16 @@ class ScTableColumnsObj : public cppu::WeakImplHelper5<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;
-    USHORT                  nStartCol;
-    USHORT                  nEndCol;
+    SCTAB                   nTab;
+    SCCOL                   nStartCol;
+    SCCOL                   nEndCol;
 
     ScTableColumnObj*       GetObjectByIndex_Impl(USHORT nIndex) const;
     ScTableColumnObj*       GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
-                            ScTableColumnsObj(ScDocShell* pDocSh, USHORT nT,
-                                                USHORT nSC, USHORT nEC);
+                            ScTableColumnsObj(ScDocShell* pDocSh, SCTAB nT,
+                                                SCCOL nSC, SCCOL nEC);
     virtual                 ~ScTableColumnsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -636,15 +636,15 @@ class ScTableRowsObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;
-    USHORT                  nStartRow;
-    USHORT                  nEndRow;
+    SCTAB                   nTab;
+    SCROW                   nStartRow;
+    SCROW                   nEndRow;
 
     ScTableRowObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
 
 public:
-                            ScTableRowsObj(ScDocShell* pDocSh, USHORT nT,
-                                                USHORT nSR, USHORT nER);
+                            ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT,
+                                                SCROW nSR, SCROW nER);
     virtual                 ~ScTableRowsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -795,13 +795,13 @@ class ScAnnotationsObj : public cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;           // Collection haengt am Sheet
+    SCTAB                   nTab;           // Collection haengt am Sheet
 
     BOOL                    GetAddressByIndex_Impl( ULONG nIndex, ScAddress& rPos ) const;
     ScAnnotationObj*        GetObjectByIndex_Impl(USHORT nIndex) const;
 
 public:
-                            ScAnnotationsObj(ScDocShell* pDocSh, USHORT nT);
+                            ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT);
     virtual                 ~ScAnnotationsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -848,14 +848,14 @@ class ScScenariosObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;
+    SCTAB                   nTab;
 
-    BOOL                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, USHORT& rIndex );
+    BOOL                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, SCTAB& rIndex );
     ScTableSheetObj*        GetObjectByIndex_Impl(USHORT nIndex);
     ScTableSheetObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
-                            ScScenariosObj(ScDocShell* pDocSh, USHORT nT);
+                            ScScenariosObj(ScDocShell* pDocSh, SCTAB nT);
     virtual                 ~ScScenariosObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
