@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:41:41 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
 Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
 {
+    using namespace ww;
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     if( !(rWW8Wrt.GetIniFlags() & WWFL_NO_OLE ) )
     {
@@ -327,12 +328,12 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
 
                     // write as embedded field - the other things will be done
                     // in the escher export
-                    String sServer(CREATE_CONST_ASC(" EINBETTEN "));
+                    String sServer(FieldString(eEMBED));
                     sServer += xOleStg->GetUserName();
                     sServer += ' ';
 
-                    rWW8Wrt.OutField( 0, 58, sServer, WRITEFIELD_START |
-                        WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
+                    rWW8Wrt.OutField(0, eEMBED, sServer, WRITEFIELD_START |
+                        WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
 
                     rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
                             nSize, pSpecOLE );
@@ -376,8 +377,8 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                         rWW8Wrt.OutGrf(rNode.GetOLENode());
                     }
 
-                    rWW8Wrt.OutField( 0, 58, aEmptyStr,
-                        WRITEFIELD_END | WRITEFIELD_CLOSE );
+                    rWW8Wrt.OutField(0, eEMBED, aEmptyStr,
+                        WRITEFIELD_END | WRITEFIELD_CLOSE);
 
                     if (bEndCR) //No newline in inline case
                         rWW8Wrt.WriteCR();
