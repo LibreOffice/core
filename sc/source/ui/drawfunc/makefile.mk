@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2000-12-07 10:03:13 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:20:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         objdraw.src\
         drformsh.src
 
