@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:57:42 $
+#   last change: $Author: hjs $ $Date: 2001-08-08 10:40:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -672,12 +672,16 @@ $(MISC)$/%.hid : %.src
     +mhids $< $(SRS) $(PRJNAME)
 .ENDIF
 
-#generate typelists from xml
-$(MISC)$/%.mk : %.xml 
+# make *.xml descriptions available in $(MISC)
+$(MISC)$/%.xml : %.xml
+    +$(COPY) $< $@
+
+##generate typelists from xml
+$(MISC)$/%.mk : $(MISC)$/%.xml 
     +xml2cmp -types $(MISC)$/$*.mk $*.xml
 
 #generate descriptions from xml
-$(MISC)$/%_description.cxx : %.xml 
+$(MISC)$/%_description.cxx : $(MISC)$/%.xml 
     +xml2cmp -func $(MISC)$/$*_description.cxx $<
 
 #generate private rdb
