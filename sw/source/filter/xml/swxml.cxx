@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-30 11:10:53 $
+ *  last change: $Author: dvo $ $Date: 2001-07-31 15:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
 #include <comphelper/genericpropertyset.hxx>
+#endif
+#ifndef _STATSTR_HRC
+#include <statstr.hrc>
 #endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -540,8 +543,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     sal_Int32 nProgressRange(1000000);
     if (xStatusIndicator.is())
     {
-        OUString sLoading(RTL_CONSTASCII_USTRINGPARAM("Loading ..."));
-        xStatusIndicator->start(sLoading, nProgressRange);
+        xStatusIndicator->start(SW_RESSTR(STR_STATSTR_SWGREAD), nProgressRange);
     }
     uno::Any aProgRange;
     aProgRange <<= nProgressRange;
