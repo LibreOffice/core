@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextArea.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,16 +72,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XTextArea
 /** gives access to the text in a control.
  */
 interface XTextArea: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XTextArea::getTextLines
-    /** @returns
-                    the text lines as a single string with line separators.
+    /** returns the text lines as a single string with line separators.
      */
     string getTextLines();
 

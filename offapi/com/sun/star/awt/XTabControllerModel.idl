@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTabControllerModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,66 +76,59 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XTabControllerModel
-/** el !
-
-
-
-
-
-    @deprecated
+/** specifies the basic operations for a tab controller model.
  */
 interface XTabControllerModel: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::getGroupControl
 
-    // DocMerge: empty anyway
+    /** returns whether the control models are grouped together.
+     */
     boolean getGroupControl();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::setGroupControl
 
-    // DocMerge: empty anyway
+    /** determines if the control models are grouped together.
+     */
     [oneway] void setGroupControl( [in] boolean GroupControl );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::setControlModels
 
-    // DocMerge: empty anyway
+    /** sets the control models.
+     */
     [oneway] void setControlModels( [in] sequence<com::sun::star::awt::XControlModel> Controls );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::getControlModels
 
-    // DocMerge: empty anyway
+    /** returns the control models.
+     */
     sequence<com::sun::star::awt::XControlModel> getControlModels();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::setGroup
 
-    // DocMerge: empty anyway
+    /** sets a control model group.
+     */
     [oneway] void setGroup( [in] sequence<com::sun::star::awt::XControlModel> Group,
              [in] string GroupName );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::getGroupCount
 
-    // DocMerge: empty anyway
+    /** returns the number of control model groups.
+     */
     long getGroupCount();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::getGroup
 
-    // DocMerge: empty anyway
+    /** returns a control model group.
+     */
     void getGroup( [in] long nGroup,
              [out] sequence<com::sun::star::awt::XControlModel> Group,
              [out] string Name );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XTabControllerModel::getGroupByName
 
-    // DocMerge: empty anyway
+    /** returns a control model group by name.
+     */
     void getGroupByName( [in] string Name,
              [out] sequence<com::sun::star::awt::XControlModel> Group );
 
