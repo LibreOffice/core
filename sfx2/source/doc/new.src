@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:07:56 $
+ *  last change: $Author: os $ $Date: 2001-06-18 11:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,10 +246,10 @@ ModalDialog DLG_NEW_FILE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pre~visualización";
     };
-    GroupBox GB_DOCINFO
+    FixedLine GB_DOCINFO
     {
         Pos = MAP_APPFONT ( 139 , 97 ) ;
-        Size = MAP_APPFONT ( 186 , 143 ) ;
+        Size = MAP_APPFONT ( 186 , 8 ) ;
         Text = "Beschreibung" ;
         Text [ English ] = "Description" ;
         Hide = TRUE ;
@@ -274,6 +274,167 @@ ModalDialog DLG_NEW_FILE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Descripción";
         Text[ finnish ] = "Kuvaus";
+    };
+    CheckBox CB_TEXT_STYLE
+    {
+        Pos = MAP_APPFONT ( 6 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Hide = TRUE;
+        Text = "Te~xt" ;
+        Text [ English ] = "Text" ;
+        Text [ english_us ] = "Te~xt" ;
+        Text [ italian ] = "Testo" ;
+        Text [ spanish ] = "Te~xto" ;
+        Text [ french ] = "~Texte" ;
+        Text [ dutch ] = "~Tekst" ;
+        Text [ swedish ] = "Text" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ portuguese ] = "~Texto" ;
+        Text [ portuguese_brazilian ] = "Text" ;
+        Text[ chinese_simplified ] = "ÎÄ×Ö(~X)";
+        Text[ russian ] = "Òåêñò";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "•¶‘(~X)";
+        Text[ chinese_traditional ] = "¤å¦r(~X)";
+        Text[ arabic ] = "äÕ";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®(~X)";
+        Text[ turkish ] = "~Metin";
+    };
+    CheckBox CB_FRAME_STYLE
+    {
+        Pos = MAP_APPFONT ( 60 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Hide = TRUE;
+        Text = "~Rahmen" ;
+        Text [ English ] = "Frame" ;
+        Text [ english_us ] = "~Frame" ;
+        Text [ italian ] = "Co~rnice" ;
+        Text [ spanish ] = "~Marco" ;
+        Text [ french ] = "~Cadres" ;
+        Text [ dutch ] = "~Kader" ;
+        Text [ swedish ] = "Ram" ;
+        Text [ danish ] = "Ramme" ;
+        Text [ portuguese_brazilian ] = "Rahmen" ;
+        Text [ portuguese ] = "Mol~dura" ;
+        Text[ chinese_simplified ] = "¿ò(~T)";
+        Text[ russian ] = "Ğàìêà";
+        Text[ polish ] = "Ramka";
+        Text[ japanese ] = "˜g(~T)";
+        Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
+        Text[ arabic ] = "ßÇÏÑ";
+        Text[ greek ] = "Ğåñßãñáììá";
+        Text[ korean ] = "ÇÁ·¹ÀÓ(~F)";
+        Text[ turkish ] = "Çerçeve";
+    };
+    CheckBox CB_PAGE_STYLE
+    {
+        Pos = MAP_APPFONT ( 114 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Hide = TRUE;
+        Text = "~Seiten" ;
+        Text [ English ] = "Page" ;
+        Text [ english_us ] = "~Pages" ;
+        Text [ italian ] = "Pagine" ;
+        Text [ spanish ] = "Págin~as" ;
+        Text [ french ] = "~Pages" ;
+        Text [ dutch ] = "~pagina's" ;
+        Text [ swedish ] = "Sidor" ;
+        Text [ danish ] = "Sider" ;
+        Text [ portuguese ] = "~Páginas" ;
+        Text [ portuguese_brazilian ] = "Seiten" ;
+        Text[ chinese_simplified ] = "Ò³(~P)";
+        Text[ russian ] = "Ñòğàíèöû";
+        Text[ polish ] = "Strony";
+        Text[ japanese ] = "Íß°¼Ş(~P)";
+        Text[ chinese_traditional ] = "­¶(~P)";
+        Text[ arabic ] = "ÕİÍÇÊ";
+        Text[ greek ] = "Óåëßäåò";
+        Text[ korean ] = "ÆäÀÌÁö(~P)";
+        Text[ turkish ] = "Sayfa";
+    };
+    CheckBox CB_NUM_STYLE
+    {
+        Pos = MAP_APPFONT ( 168 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Hide = TRUE;
+        Text = "N~ummerierung" ;
+        Text [ English ] = "Numbering" ;
+        Text [ portuguese ] = "~Numeração" ;
+        Text [ english_us ] = "N~umbering" ;
+        Text [ portuguese_brazilian ] = "Numerierung" ;
+        Text [ swedish ] = "Numrering" ;
+        Text [ danish ] = "Nummerering" ;
+        Text [ italian ] = "N~umerazione" ;
+        Text [ spanish ] = "Nu~meración" ;
+        Text [ french ] = "N~umérotation" ;
+        Text [ dutch ] = "~Nummering" ;
+        Text[ chinese_simplified ] = "±àºÅ(~U)";
+        Text[ russian ] = "Íóìåğàöèÿ";
+        Text[ polish ] = "Numeracja";
+        Text[ japanese ] = "”Ô†•t‚¯(~U)";
+        Text[ chinese_traditional ] = "½s¸¹(~U)";
+        Text[ arabic ] = "ÊÑŞíã";
+        Text[ greek ] = "Áñßèìçóç";
+        Text[ korean ] = "¹øÈ£ ¸Å±â±â(~U)";
+        Text[ turkish ] = "Numaralama";
+    };
+    CheckBox CB_MERGE_STYLE
+    {
+        Pos = MAP_APPFONT ( 222 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Hide = TRUE;
+        Text = "Üb~erschreiben" ;
+        Text [ English ] = "Overwrite" ;
+        Text [ dutch ] = "~Overschrijven" ;
+        Text [ english_us ] = "~Overwrite" ;
+        Text [ italian ] = "Sovrascrivi" ;
+        Text [ spanish ] = "So~brescribir" ;
+        Text [ french ] = "~Écraser" ;
+        Text [ swedish ] = "Skriv över" ;
+        Text [ danish ] = "Overskriv" ;
+        Text [ portuguese ] = "~Sobregravar" ;
+        Text [ portuguese_brazilian ] = "Überschreiben" ;
+        Text[ chinese_simplified ] = "¸²Ğ´(~O)";
+        Text[ russian ] = "Çàìåíèòü";
+        Text[ polish ] = "Skasowaæ przez zapisanie";
+        Text[ japanese ] = "ã‘‚«(~O)";
+        Text[ chinese_traditional ] = "ÂĞ¼g(~O)";
+        Text[ arabic ] = "ÇáßÊÇÈÉ İæŞ";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç";
+        Text[ korean ] = "µ¤¾î¾²±â(~O)";
+        Text[ turkish ] = "Üzerine yaz";
+    };
+    PushButton PB_LOAD_FILE
+    {
+        Pos = MAP_APPFONT ( 274 , 92 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Hide = TRUE;
+        Text = "Aus Datei..." ;
+        Text [ English ] = "From file..." ;
+    };
+    String STR_LOAD_TEMPLATE
+    {
+        Text = "Vorlagen laden" ;
+        Text [ English ] = "Load templates" ;
+        Text [ english_us ] = "Load Templates" ;
+        Text [ italian ] = "Carica modelli" ;
+        Text [ spanish ] = "Cargar estilos" ;
+        Text [ french ] = "Chargement de styles" ;
+        Text [ dutch ] = "Opmaakprofielen laden" ;
+        Text [ swedish ] = "Ladda mallar" ;
+        Text [ danish ] = "Indlæs typografier" ;
+        Text [ portuguese ] = "Carregar estilos" ;
+        Text [ portuguese_brazilian ] = "Vorlagen laden" ;
+        Text[ chinese_simplified ] = "×°ÔØÑùÊ½";
+        Text[ russian ] = "Çàãğóçèòü øàáëîíû";
+        Text[ polish ] = "Za³aduj style";
+        Text[ japanese ] = "ÃİÌßÚ°Ä‚Ì“Ç‚İ‚İ";
+        Text[ chinese_traditional ] = "¸Ë¸ü¼Ë¦¡";
+        Text[ arabic ] = "ÊÍãíá ÃäãÇØ";
+        Text[ greek ] = "ÅéóáãùãŞ ğñïôığùí";
+        Text[ korean ] = "À¯Çü °¡Á®¿À±â";
+        Text[ turkish ] = "Biçim yükle";
     };
     FixedText FT_TITLE
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: os $ $Date: 2001-06-18 11:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,3 +82,10 @@
 #define FT_TEMPLATE 53
 #define LB_TEMPLATE 52
 #define BT_MORE 32
+#define CB_TEXT_STYLE   33
+#define CB_FRAME_STYLE  34
+#define CB_PAGE_STYLE   35
+#define CB_NUM_STYLE    36
+#define CB_MERGE_STYLE  37
+#define PB_LOAD_FILE    38
+#define STR_LOAD_TEMPLATE 39

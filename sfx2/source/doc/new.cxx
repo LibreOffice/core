@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 15:10:14 $
+ *  last change: $Author: os $ $Date: 2001-06-18 11:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,14 @@ class SfxNewFileDialog_Impl
     Edit aKeywordsEd;
     FixedText aDescFt;
     MultiLineEdit aDescEd;
-    GroupBox aDocinfoGb;
+    FixedLine aDocinfoGb;
+
+    CheckBox aTextStyleCB;
+    CheckBox aFrameStyleCB;
+    CheckBox aPageStyleCB;
+    CheckBox aNumStyleCB;
+    CheckBox aMergeStyleCB;
+    PushButton aLoadFilePB;
 
     OKButton aOkBt;
     CancelButton aCancelBt;
@@ -253,6 +260,7 @@ class SfxNewFileDialog_Impl
     MoreButton* pMoreBt;
     Timer aPrevTimer;
     String aNone;
+    String sLoadTemplate;
 
     USHORT nFlags;
     SfxDocumentTemplates aTemplates;
@@ -269,6 +277,7 @@ class SfxNewFileDialog_Impl
     void TogglePreview(CheckBox *);
     DECL_LINK( Expand, MoreButton * );
     DECL_LINK( PreviewClick, CheckBox * );
+    DECL_LINK( LoadFile, PushButton* );
     USHORT  GetSelectedTemplatePos() const;
 
 public:
@@ -283,6 +292,9 @@ public:
     String GetTemplateRegion() const;
     String GetTemplateName() const;
     String GetTemplateFileName() const;
+
+    USHORT  GetTemplateFlags()const;
+    void    SetTemplateFlags(USHORT nSet);
 };
 
 
@@ -478,6 +490,14 @@ IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 
 //-------------------------------------------------------------------------
 
+IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, LoadFile, PushButton *, EMPTYARG )
+{
+    pAntiImpl->EndDialog(RET_TEMPLATE_LOAD);
+    return 0;
+}
+IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, LoadFile, PushButton *, EMPTYARG )
+//-------------------------------------------------------------------------
+
 USHORT  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
     USHORT nEntry=aTemplateLb.GetSelectEntryPos();
@@ -538,6 +558,29 @@ void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
     aSize.Width() += nSizeOffset;
     pWin->SetPosSizePixel(aPos, aSize);
 }
+//-------------------------------------------------------------------------
+USHORT  SfxNewFileDialog_Impl::GetTemplateFlags()const
+{
+    USHORT nRet = aTextStyleCB.IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
+    if(aFrameStyleCB.IsChecked())
+        nRet |= SFX_LOAD_FRAME_STYLES;
+    if(aPageStyleCB.IsChecked())
+        nRet |= SFX_LOAD_PAGE_STYLES;
+    if(aNumStyleCB.IsChecked())
+        nRet |= SFX_LOAD_NUM_STYLES;
+    if(aMergeStyleCB.IsChecked())
+        nRet |= SFX_MERGE_STYLES;
+    return nRet;
+}
+//-------------------------------------------------------------------------
+void    SfxNewFileDialog_Impl::SetTemplateFlags(USHORT nSet)
+{
+    aTextStyleCB.Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
+    aFrameStyleCB.Check( 0 != (nSet&SFX_LOAD_FRAME_STYLES));
+    aPageStyleCB.Check(  0 != (nSet&SFX_LOAD_PAGE_STYLES ));
+    aNumStyleCB.Check(   0 != (nSet&SFX_LOAD_NUM_STYLES  ));
+    aMergeStyleCB.Check( 0 != (nSet&SFX_MERGE_STYLES     ));
+}
 
 //-------------------------------------------------------------------------
 
@@ -558,11 +601,18 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         pMoreBt( new MoreButton( pAntiImplP, ResId( BT_MORE ) ) ),
         aPreviewBtn( pAntiImplP, ResId( BTN_PREVIEW ) ),
         aDocinfoGb( pAntiImplP, ResId( GB_DOCINFO ) ),
+        aTextStyleCB( pAntiImplP, ResId(  CB_TEXT_STYLE )),
+        aFrameStyleCB( pAntiImplP, ResId( CB_FRAME_STYLE )),
+        aPageStyleCB( pAntiImplP, ResId(  CB_PAGE_STYLE )),
+        aNumStyleCB( pAntiImplP, ResId(   CB_NUM_STYLE  )),
+        aMergeStyleCB( pAntiImplP, ResId( CB_MERGE_STYLE )),
+        aLoadFilePB( pAntiImplP, ResId(   PB_LOAD_FILE )),
         aTitleFt( pAntiImplP, ResId( FT_TITLE ) ),
         aKeywordsFt( pAntiImplP, ResId( FT_KEYWORDS ) ),
         aDescFt( pAntiImplP, ResId( FT_DESC ) ),
         aDescEd( pAntiImplP, ResId( ED_DESC ) ),
         aNone( ResId(STR_NONE) ),
+        sLoadTemplate( ResId(STR_LOAD_TEMPLATE)),
         nFlags(nFl),
         pDocInfo(0),
         pAntiImpl( pAntiImplP )
@@ -575,6 +625,23 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
 
     if (!nFlags)
         MORE_BTN(Hide());
+    else if(SFXWB_LOAD_TEMPLATE == nFlags)
+    {
+        aLoadFilePB.SetClickHdl(LINK(this, SfxNewFileDialog_Impl, LoadFile));
+        aLoadFilePB.Show();
+        aTextStyleCB.Show();
+        aFrameStyleCB.Show();
+        aPageStyleCB.Show();
+        aNumStyleCB.Show();
+        aMergeStyleCB.Show();
+        Size aSize(pAntiImplP->GetOutputSizePixel());
+        Size aTmp(pAntiImplP->LogicToPixel(Size(16, 16), MAP_APPFONT));
+        aSize.Height() += aTmp.Height();
+        pAntiImplP->SetOutputSizePixel(aSize);
+        pMoreBt->Hide();
+        aTextStyleCB.Check();
+        pAntiImplP->SetText(sLoadTemplate);
+    }
     else
     {
         MORE_BTN(SetClickHdl(LINK(this, SfxNewFileDialog_Impl, Expand)));
@@ -655,39 +722,38 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
     delete pDocInfo;
     delete pMoreBt;
 }
-
-
+//-------------------------------------------------------------------------
 SfxNewFileDialog::SfxNewFileDialog(Window *pParent, USHORT nFlags)
     : SfxModalDialog( pParent, SfxResId( DLG_NEW_FILE ) )
 {
     pImpl = new SfxNewFileDialog_Impl( this, nFlags );
 }
-
+//-------------------------------------------------------------------------
 SfxNewFileDialog::~SfxNewFileDialog()
 {
     delete pImpl;
 }
-
+//-------------------------------------------------------------------------
 BOOL SfxNewFileDialog::IsTemplate() const
 {
     return pImpl->IsTemplate();
 }
-
+//-------------------------------------------------------------------------
 String SfxNewFileDialog::GetTemplateRegion() const
 {
     return pImpl->GetTemplateRegion();
 }
-
+//-------------------------------------------------------------------------
 String SfxNewFileDialog::GetTemplateName() const
 {
     return pImpl->GetTemplateName();
 }
-
+//-------------------------------------------------------------------------
 String SfxNewFileDialog::GetTemplateFileName() const
 {
     return pImpl->GetTemplateFileName();
 }
-
+//-------------------------------------------------------------------------
 BOOL SfxNewFileDialog::FillDocumentInfo
 (
     const String &rFile,    // Datei incl. Pfad, deren DocInfo gelesen werden soll
@@ -702,5 +768,15 @@ BOOL SfxNewFileDialog::FillDocumentInfo
     bLoadOk=rInfo.Load(aStor);
     return bLoadOk;
 }
+//-------------------------------------------------------------------------
+USHORT SfxNewFileDialog::GetTemplateFlags()const
+{
+    return pImpl->GetTemplateFlags();
 
+}
+//-------------------------------------------------------------------------
+void    SfxNewFileDialog::SetTemplateFlags(USHORT nSet)
+{
+    pImpl->SetTemplateFlags(nSet);
+}
 
