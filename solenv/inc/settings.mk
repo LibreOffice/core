@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.135 $
+#   $Revision: 1.136 $
 #
-#   last change: $Author: mh $ $Date: 2003-06-17 10:40:25 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:48:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1270,10 +1270,10 @@ COMID=$(COM)
 # --- extend new environment ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
 
-# flags required for crashdump feature
-.IF "$(ENABLE_CRASHDUMP)"!=""
-CFLAGS+=$(CFLAGSCRASHDUMP)
-.ENDIF          # "$(ENABLE_CRASHDUMP)"!=""
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
+CFLAGS+=$(CFLAGSENABLESYMBOLS)
+.ENDIF          # "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
 
 .IF "$(profile)"!=""
 CDEFS+= $(CDEFSPROF)
