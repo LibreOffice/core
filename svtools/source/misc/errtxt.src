@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:11:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,7 +1502,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Operationen kan inte utfφras pε filer som\ninnehεller jokertecken" ;
         Text [ danish ] = "Det er ikke muligt at udfψre processen pε filer,\nsom indeholder jokertegn" ;
         Text [ portuguese ] = "A operaηγo nγo pode ser executada em\nficheiros que contenham caracteres universais." ;
-        Text [ portuguese_brazilian ] = "Esta operaηγo nγo pode ser executada em\narquivos que contenham caracteres curinga." ;
+        Text [ portuguese_brazilian ] = "Esta operaηγo nγo pode ser executada em\narquivos que contenham caracteres coringa" ;
         Text[ chinese_simplified ] = "ζ— ζ³•ε¨ε«ζ‰ι€ι…η¬¦η„\nζ–‡δ»¶δΈ­ζ‰§θ΅θΏ™δΈªζ“δ½";
         Text[ russian ] = "Νεβξημξζνξ βϋοξλνθςό ξοεπΰφθώ ρ τΰιλΰμθ, \nρξδεπζΰωθμθ ρθμβξλϋ ψΰαλξνΰ";
         Text[ polish ] = "Operacja nie moΏe byζ wykonana na plikach, ktσre \nw ktσrych wystκpujΉ symbole wieloznaczne";
@@ -2281,7 +2281,7 @@ Resource RID_ERRHDL
         TEXT[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γ‚’θª­γΏε–γ‚‹ι›γ®γ‚¨γƒ©γƒΌ ";
         TEXT[ chinese_traditional ] = "ε­ε–ζª”ζ΅ζ™‚η™Όη”ι―θª¤ ";
         TEXT[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ήΡΗΑΙ Ηαγαέ";
-        TEXT[ greek ] = "Σφάλμα κατά την ανάγνωση του αρχείου";
+        TEXT[ greek ] = "Σφάλμα κατά την ανάγνωση του αρχείου ";
         TEXT[ korean ] = "νμΌ μ½κΈ° μ¤λ¥";
         TEXT[ turkish ] = "Dosyayύ okurken bir hata oluώtu";
         TEXT[ language_user1 ] = " ";
@@ -2540,7 +2540,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "γΪαζγΗΚ ΗαΕδΚΡδΚ ΗαγΨαζΘΙ ΫνΡ γζΜζΟΙ έν ζΝΟΙ ΗαΚΞÒνδ ΗαγΔήΚΙ΅ ζαΗ νγίδ δήαεΗ΅ ΕΠ Γδ ζΦΪ ΗαΗΚΥΗα ΫνΡ δΤΨ";
         Text[ dutch ] = "De opgevraagde internetgegevens zijn niet beschikbaar in het cachegeheugen en kunnen niet worden overgedragen omdat de onlinemodus niet actief is";
         Text[ chinese_simplified ] = "ε› δΈΊζ‚¨η„θ®΅η®—ζΊε’θΏζ²΅ζ‰ε’ε›½ι™…δΊ’θ”η½‘θΏζ¥οΌθ€δΈ”θ®΅η®—ζΊηΌ“ε†²εΊδΉζ²΅ζ‰ζ‚¨θ―·ζ±‚η„ε›½ι™…δΊ’θ”η½‘η„θµ„ζ–™οΌε› ζ­¤ζ— ζ³•δΌ ι€’δ»»δ½•ζ•°ζ®γ€‚";
-        Text[ greek ] = "Τα ζητούμενα δεδομένα του Internet δεν βρίσκονται στην κρυφή μνήμη και δεν είναι δυνατόν να μεταδοθούν, επειδή εργάζεστε σε κατάσταση 'Χωρίς σύ ";
+        Text[ greek ] = "Τα δεδομένα Internet που ζητήθηκαν δεν είναι διαθέσιμα στην κρυφή μνήμη και δεν μπορούν να μεταδοθούν καθώς δεν έχει ενεργοποιηθεί η κατάσταση λειτουργίας με σύνδεση";
         Text[ korean ] = "μ”μ²­λ μΈν„°λ„· λ°μ΄ν„°κ°€ μΊμ‹μ— μ—†μΌλ©° μ¨λΌμΈ λª¨λ“κ°€ ν™μ„±ν™”λμ–΄ μμ§€ μ•μ•„ λ°μ΄ν„°λ¥Ό λ³΄λ‚Ό μ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "έstenen Internet verileri φnbellekte bulunmuyor ve ηevrimiηi kipi etkin olmadύπύ iηin aktarύlamύyor";
         Text[ catalan ] = "Les dades d'Internet que heu demanat no es troben a la memςria cau i no poden ser transmeses ja que el mode en lνnia estΰ desactivat.";
@@ -2963,7 +2963,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "ΚδΣνή Κίζνδ ΗαΪδΗζνδ (URLs) ΅ΗαζΗΜΘ ΝέΩεΗ γΝανΗπ΅ ΫνΡ ΥΗαΝ";
         Text[ dutch ] = "De configuratie van de URL's kan niet lokaal worden opgeslagen omdat de indeling ongeldig is.";
         Text[ chinese_simplified ] = "ζ¬ζΊε‚¨ε­ URL ε°ε€η„ι…η½®ζ–‡δ»¶ζ ΌεΌζ— ζ•";
-        Text[ greek ] = "Η μορφή των ρυθμίσεων του URL, το οποίο πρόκειται να αποθηκευτεί τοπικά, δεν είναι έγκυρη.";
+        Text[ greek ] = "Η μορφή της διαμόρφωσης του URL, το οποίο πρόκειται να αποθηκευτεί τοπικά, δεν είναι έγκυρη.";
         Text[ korean ] = "λ΅μ»¬λ΅ μ €μ¥ν•  URL μ„¤μ • ν•μ‹μ΄ μλª»λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'lerin konfigόrasyon formatύ geηerli deπil";
         Text[ catalan ] = "El format de la configuraciσ de les URLs que es volen desar localment no ιs vΰlid.";
@@ -3384,7 +3384,7 @@ Resource RID_ERRHDL
         Text[ portuguese ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ russian ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ polish ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ portuguese_brazilian ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ portuguese_brazilian ] = "Este documento contιm atributos que nγo podem ser salvos no formato selecionado.\nSalve o documento num formato de arquivo do %PRODUCTNAME 6.0";
         Text[ thai ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ hindi ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ slovak ] = "Tento dokument obsahuje vlastnosti ktorΓ© nemΓ΄ΕΎu byΕ¥ uloΕΎenΓ© vo vybranom formΓ΅te.\nProsΓ­m uloΕΎte dokument vo formΓ΅te %PRODUCTNAME 6.0.";
@@ -3586,6 +3586,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
