@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #ifdef REMOTE_APPSERVER
@@ -472,6 +475,9 @@ void Window::ImplInitData( WindowType nType )
     mbExtTextInput      = FALSE;        // TRUE: ExtTextInput-Mode is active
     mbInFocusHdl        = FALSE;        // TRUE: Innerhalb vom GetFocus-Handler
     mbCreatedWithToolkit = FALSE;
+
+    mpDummy3_WindowEventListeners = new VclEventListeners;
+    mpDummy4_WindowChildEventListeners = new VclEventListeners;
 
 #ifdef REMOTE_APPSERVER
     mpRmEvents          = NULL;
@@ -864,8 +870,7 @@ void Window::ImplCallResize()
 
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Resize( this );
+    ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE );
 }
 
 // -----------------------------------------------------------------------
@@ -875,8 +880,7 @@ void Window::ImplCallMove()
     mbCallMove = FALSE;
     Move();
 
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Move( this );
+    ImplCallEventListeners( VCLEVENT_WINDOW_MOVE );
 }
 
 // -----------------------------------------------------------------------
@@ -4214,6 +4218,9 @@ Window::~Window()
 
     if ( mpChildClipRegion )
         delete mpChildClipRegion;
+
+    delete mpDummy3_WindowEventListeners;
+    delete mpDummy4_WindowChildEventListeners;
 }
 
 // -----------------------------------------------------------------------
@@ -4289,8 +4296,7 @@ void Window::Paint( const Rectangle& rRect )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Paint( this, rRect );
+    ImplCallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
 }
 
 // -----------------------------------------------------------------------
@@ -4424,8 +4430,7 @@ void Window::Command( const CommandEvent& rCEvt )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Command( this, rCEvt );
+    ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE, (void*)&rCEvt );
 
     NotifyEvent aNEvt( EVENT_COMMAND, this, &rCEvt );
     if ( !Notify( aNEvt ) )
@@ -4483,8 +4488,8 @@ long Window::PreNotify( NotifyEvent& rNEvt )
                 bCompoundFocusChanged = TRUE;
             }
 
-            if ( mxWindowPeer.is() && ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) ) )
-                Application::GetUnoWrapper()->WindowEvent_GetFocus( this );
+            if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
+                ImplCallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
         }
         else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
         {
@@ -4495,48 +4500,48 @@ long Window::PreNotify( NotifyEvent& rNEvt )
                 bCompoundFocusChanged = TRUE;
             }
 
-            if ( mxWindowPeer.is() && ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) ) )
-                Application::GetUnoWrapper()->WindowEvent_LoseFocus( this );
+            if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
+                ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
         }
         else if( rNEvt.GetType() == EVENT_MOUSEMOVE )
         {
-            if ( mxWindowPeer.is() && ( mbCompoundControl || ( rNEvt.GetWindow() == this ) ) )
+            if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
             {
                 if ( rNEvt.GetWindow() == this )
-                    Application::GetUnoWrapper()->WindowEvent_MouseMove( this, *rNEvt.GetMouseEvent() );
+                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, (void*)rNEvt.GetMouseEvent() );
                 else
-                    Application::GetUnoWrapper()->WindowEvent_MouseMove( this, ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
             }
         }
         else if( rNEvt.GetType() == EVENT_MOUSEBUTTONUP )
         {
-            if ( mxWindowPeer.is() && ( mbCompoundControl || ( rNEvt.GetWindow() == this ) ) )
+            if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
             {
                 if ( rNEvt.GetWindow() == this )
-                    Application::GetUnoWrapper()->WindowEvent_MouseButtonUp( this, *rNEvt.GetMouseEvent() );
+                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, (void*)rNEvt.GetMouseEvent() );
                 else
-                    Application::GetUnoWrapper()->WindowEvent_MouseButtonUp( this, ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
             }
         }
         else if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
         {
-            if ( mxWindowPeer.is() && ( mbCompoundControl || ( rNEvt.GetWindow() == this ) ) )
+            if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
             {
                 if ( rNEvt.GetWindow() == this )
-                    Application::GetUnoWrapper()->WindowEvent_MouseButtonDown( this, *rNEvt.GetMouseEvent() );
+                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, (void*)rNEvt.GetMouseEvent() );
                 else
-                    Application::GetUnoWrapper()->WindowEvent_MouseButtonDown( this, ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
+                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
             }
         }
         else if( rNEvt.GetType() == EVENT_KEYINPUT )
         {
-            if ( mxWindowPeer.is() && ( mbCompoundControl || ( rNEvt.GetWindow() == this ) ) )
-                Application::GetUnoWrapper()->WindowEvent_KeyInput( this, *rNEvt.GetKeyEvent() );
+            if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+                ImplCallEventListeners( VCLEVENT_WINDOW_KEYINPUT, (void*)rNEvt.GetKeyEvent() );
         }
         else if( rNEvt.GetType() == EVENT_KEYUP )
         {
-            if ( mxWindowPeer.is() && ( mbCompoundControl || ( rNEvt.GetWindow() == this ) ) )
-                Application::GetUnoWrapper()->WindowEvent_KeyUp( this, *rNEvt.GetKeyEvent() );
+            if ( mbCompoundControl || ( rNEvt.GetWindow() == this ) )
+                ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
         }
     }
 
@@ -4586,6 +4591,53 @@ long Window::Notify( NotifyEvent& rNEvt )
     }
 
     return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ImplCallEventListeners( ULONG nEvent, void* pData )
+{
+    VclWindowEvent aEvent( this, nEvent, pData );
+
+    if ( !mpDummy3_WindowEventListeners->empty() )
+        mpDummy3_WindowEventListeners->Call( &aEvent );
+
+    Window* pWindow = this;
+    while ( pWindow )
+    {
+        if ( !mpDummy4_WindowChildEventListeners->empty() )
+            mpDummy4_WindowChildEventListeners->Call( &aEvent );
+
+        pWindow = pWindow->GetParent();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Window::AddEventListener( const Link& rEventListener )
+{
+    mpDummy3_WindowEventListeners->push_back( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::RemoveEventListener( const Link& rEventListener )
+{
+    mpDummy3_WindowEventListeners->remove( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::AddChildEventListener( const Link& rEventListener )
+{
+    mpDummy4_WindowChildEventListeners->push_back( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::RemoveChildEventListener( const Link& rEventListener )
+{
+    mpDummy4_WindowChildEventListeners->remove( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -5547,8 +5599,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     if ( mpFrameData->mpFirstBackWin )
         ImplInvalidateAllOverlapBackgrounds();
 
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Show( this, mbVisible );
+    ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE );
 }
 
 // -----------------------------------------------------------------------
@@ -6776,8 +6827,7 @@ void Window::ImplCallDeactivateListeners( Window *pNew )
     // Ich werde nicht deaktiviert, wenn das neu aktivierte Window ein Child von mir ist
     if ( !pNew || !ImplIsChild( pNew ) )
     {
-        if ( mxWindowPeer.is() )
-            Application::GetUnoWrapper()->WindowEvent_Activate( this, FALSE );
+        ImplCallEventListeners( VCLEVENT_WINDOW_DEACTIVATE );
         if ( ImplGetParent() )
             ImplGetParent()->ImplCallDeactivateListeners( pNew );
     }
@@ -6790,9 +6840,7 @@ void Window::ImplCallActivateListeners( Window *pOld )
     // Ich werde nicht aktiviert, wenn das alte aktive Fenster ein Child von mir ist
     if ( !pOld || !ImplIsChild( pOld ) )
     {
-        if ( mxWindowPeer.is() )
-            // Hier muss noch irgendwie pOld mitgeschickt werden!
-            Application::GetUnoWrapper()->WindowEvent_Activate( this, TRUE );
+        ImplCallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
         if ( ImplGetParent() )
             ImplGetParent()->ImplCallActivateListeners( pOld );
     }
@@ -7045,4 +7093,23 @@ Reference< XClipboard > Window::GetSelection()
     }
 
     return static_cast < XClipboard * > (0);
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
+{
+    if ( !mxAccessible.is() && bCreate )
+        mxAccessible = CreateAccessible();
+
+    return mxAccessible;
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::CreateAccessible()
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    return xAcc;
+}
+
+void Window::SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > x )
+{
+    mxAccessible = x;
 }
