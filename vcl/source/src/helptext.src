@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:12:32 $
+ *  last change: $Author: cd $ $Date: 2002-11-18 16:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,17 +428,58 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ thai ] = "แท่ง";
 };
 
+String SV_SHORTCUT_HELP
+{
+    Text = "Hilfe" ;
+    Text[ English ] = "Help" ;
+    TEXT[ english_us ] = "Help" ;
+};
 
+String SV_SHORTCUT_CONTEXTHELP
+{
+    Text = "Kontexthilfe" ;
+    Text[ English ] = "Context Help" ;
+    TEXT[ english_us ] = "Context Help";
+};
 
+String SV_SHORTCUT_ACTIVEHELP
+{
+    Text = "Aktive Hilfe" ;
+    Text[ English ] = "Extended Tips" ;
+    TEXT[ english_us ] = "Extended Tips";
+};
 
+String SV_SHORTCUT_DOCKUNDOCK
+{
+    Text = "Fenster an-/abdocken" ;
+    Text[ English ] = "Dock/Undock Windows" ;
+    TEXT[ english_us ] = "Dock/Undock Windows";
+};
 
+String SV_SHORTCUT_NEXTSUBWINDOW
+{
+    Text = "Zur n�chsten Symbolleiste/Fenster" ;
+    Text[ English ] = "To Next Toolbar/Window" ;
+    TEXT[ english_us ] = "To Next Toolbar/Window";
+};
 
+String SV_SHORTCUT_PREVSUBWINDOW
+{
+    Text = "Zur vorigen Symbolleiste/Fenster" ;
+    Text[ English ] = "To Previous Toolbar/Window" ;
+    TEXT[ english_us ] = "To Previous Toolbar/Window";
+};
 
+String SV_SHORTCUT_TODOCUMENT
+{
+    Text = "Zum Dokument" ;
+    Text[ English ] = "To Document" ;
+    TEXT[ english_us ] = "To Document";
+};
 
-
-
-
-
-
-
-
+String SV_SHORTCUT_MENUBAR
+{
+    Text = "Zur Men�leiste" ;
+    Text[ English ] = "To Menu Bar" ;
+    TEXT[ english_us ] = "To Menu Bar";
+};

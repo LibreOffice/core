@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-25 11:43:13 $
+ *  last change: $Author: cd $ $Date: 2002-11-18 16:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,6 @@ const KeyCode*  Application::GetReservedKeyCode( ULONG i )
 
 String Application::GetReservedKeyCodeDescription( ULONG i )
 {
-    return String();    // SSA->CD: please remove this line once the strings are available (#101009#)
     if( i >= GetReservedKeyCodeCount() )
         return String();
     else
