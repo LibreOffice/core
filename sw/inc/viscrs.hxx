@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2002-09-16 07:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ public:
 
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
-    virtual FASTBOOL MaxReplaceArived();
+    virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
     FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1 );
@@ -229,7 +229,7 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
     virtual operator SwShellCrsr* ();
     virtual operator SwTableCursor* ();
-    virtual FASTBOOL MaxReplaceArived();
+    virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
     // TRUE: an die Position kann der Cursor gesetzt werden
