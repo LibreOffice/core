@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 09:02:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
@@ -175,6 +178,9 @@
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
+#ifndef _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_
+#include "fontdialog.hxx"
+#endif
 
 // for the font handling
 #define ITEMID_FONT             SID_ATTR_CHAR_FONT
@@ -220,6 +226,15 @@
 #endif
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_WRLMITEM_HXX
+#include <svx/wrlmitem.hxx>
+#endif
+#ifndef _SV_SYSTEM_HXX
+#include <vcl/system.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -1122,32 +1137,79 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    static sal_uInt16 pPropFontRgs[] =
+    sal_Bool OPropertyBrowserController::implGetCheckFontProperty(const ::rtl::OUString& _rPropName, Any& _rValue)
     {
-        SID_ATTR_CHAR_FONT,SID_ATTR_CHAR_WEIGHT,
-        SID_ATTR_CHAR_STRIKEOUT, SID_ATTR_CHAR_FONTHEIGHT,
-        SID_ATTR_CHAR_COLOR,SID_ATTR_CHAR_COLOR,
+        _rValue = m_xPropValueAccess->getPropertyValue(_rPropName);
+        if (m_xPropStateAccess.is())
+            return PropertyState_DEFAULT_VALUE == m_xPropStateAccess->getPropertyState(_rPropName);
+
+        return sal_False;
+    }
+
+    //------------------------------------------------------------------------
+    ::rtl::OUString OPropertyBrowserController::implGetStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault)
+    {
+        Any aValue;
+        if (implGetCheckFontProperty(_rPropName, aValue))
+            return _rDefault;
+
+        return ::comphelper::getString(aValue);
+    }
+
+    //------------------------------------------------------------------------
+    sal_Int16 OPropertyBrowserController::implGetInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault)
+    {
+        Any aValue;
+        if (implGetCheckFontProperty(_rPropName, aValue))
+            return _nDefault;
+
+        return ::comphelper::getINT16(aValue);
+    }
+
+    //------------------------------------------------------------------------
+    float OPropertyBrowserController::implGetFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault)
+    {
+        Any aValue;
+        if (implGetCheckFontProperty(_rPropName, aValue))
+            return _nDefault;
+
+        return ::comphelper::getFloat(aValue);
+    }
+
+    //------------------------------------------------------------------------
+    static sal_uInt16 pPropFontRanges[] =
+    {
+        SID_ATTR_CHAR, SID_ATTR_CHAR_FONTLIST,
         0
     };
 
     //------------------------------------------------------------------------
     void OPropertyBrowserController::ChangeFontProperty( const ::rtl::OUString& rName )
     {
-        SfxItemSet aSet( SFX_APP()->GetPool(), pPropFontRgs);
+        SfxItemSet aCoreSet( SFX_APP()->GetPool(), pPropFontRanges);
 
         try
         {
-            ::rtl::OUString aFontName = ::comphelper::getString(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_NAME     ));
-            ::rtl::OUString aFontStyleName = ::comphelper::getString(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_STYLENAME));
-            sal_Int16   nFontFamily = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_FAMILY   ));
-            sal_Int16   nFontCharset = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_CHARSET  ));
-            float   nFontHeight = ::comphelper::getFloat(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_HEIGHT   ));
-            float   nFontWeight = ::comphelper::getFloat(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_WEIGHT   ));
-            sal_Int16   nFontSlant = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_SLANT    ));
-            sal_Int16   nFontUnderline = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_UNDERLINE));
-            sal_Int16   nFontStrikeout = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue( PROPERTY_FONT_STRIKEOUT));
-            Any aColor32 = m_xPropValueAccess->getPropertyValue( PROPERTY_TEXTCOLOR);
+            // some items, which may be in default state, have to be filled with non-void information
+            Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
+            ::com::sun::star::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
 
+            // get the current properties
+            ::rtl::OUString aFontName       = implGetStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
+            ::rtl::OUString aFontStyleName  = implGetStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
+            sal_Int16   nFontFamily         = implGetInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
+            sal_Int16   nFontCharset        = implGetInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
+            float   nFontHeight             = implGetFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
+            float   nFontWeight             = implGetFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
+            sal_Int16 nFontSlant            = implGetInt16FontProperty(PROPERTY_FONT_SLANT, aDefaultFont.Slant);
+            sal_Int16 nFontUnderline        = implGetInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
+            sal_Int16 nFontStrikeout        = implGetInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
+
+            Any aValue;
+            sal_Bool bWordLineMode          = implGetCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
+            sal_Int32 nColor32 = implGetCheckFontProperty(PROPERTY_TEXTCOLOR, aValue) ? (sal_Int32)0 : ::comphelper::getINT32(aValue);
+
+            // build SfxItems with the values
             SvxFontItem aFontItem((FontFamily)nFontFamily, aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, SID_ATTR_CHAR_FONT);
 
             nFontHeight = (float)OutputDevice::LogicToLogic(Size(0, (sal_Int32)nFontHeight), MAP_POINT, MAP_TWIP).Height();
@@ -1163,68 +1225,79 @@ namespace pcr
 
             SvxUnderlineItem    aUnderlineItem(eUnderline,SID_ATTR_CHAR_UNDERLINE);
             SvxCrossedOutItem   aCrossedOutItem(eStrikeout,SID_ATTR_CHAR_STRIKEOUT );
-
-            sal_Int32   nColor32 = 0;
-            if (aColor32.hasValue())
-                nColor32=::comphelper::getINT32(aColor32);
+            SvxWordLineModeItem aWordLineModeItem(bWordLineMode, SID_ATTR_CHAR_WORDLINEMODE);
 
             SvxColorItem aSvxColorItem(nColor32,SID_ATTR_CHAR_COLOR);
 
-            aSet.Put(aFontItem, SID_ATTR_CHAR_FONT);
-            aSet.Put(aSvxFontHeightItem,SID_ATTR_CHAR_FONTHEIGHT);
-            aSet.Put(aWeightItem, SID_ATTR_CHAR_WEIGHT );
-            aSet.Put(aPostureItem, SID_ATTR_CHAR_POSTURE);
-            aSet.Put(aUnderlineItem,SID_ATTR_CHAR_UNDERLINE );
-            aSet.Put(aCrossedOutItem,SID_ATTR_CHAR_STRIKEOUT );
-            aSet.Put(aSvxColorItem, SID_ATTR_CHAR_COLOR);
+            SvxLanguageItem aLanguageItem(Application::GetAppInternational().GetLanguage(), SID_ATTR_CHAR_LANGUAGE);
+
+            aCoreSet.Put(aFontItem, SID_ATTR_CHAR_FONT);
+            aCoreSet.Put(aSvxFontHeightItem,SID_ATTR_CHAR_FONTHEIGHT);
+            aCoreSet.Put(aWeightItem, SID_ATTR_CHAR_WEIGHT );
+            aCoreSet.Put(aPostureItem, SID_ATTR_CHAR_POSTURE);
+            aCoreSet.Put(aUnderlineItem,SID_ATTR_CHAR_UNDERLINE );
+            aCoreSet.Put(aCrossedOutItem,SID_ATTR_CHAR_STRIKEOUT );
+            aCoreSet.Put(aSvxColorItem, SID_ATTR_CHAR_COLOR);
+            aCoreSet.Put(aLanguageItem, SID_ATTR_CHAR_LANGUAGE);
+            aCoreSet.Put(aWordLineModeItem, SID_ATTR_CHAR_WORDLINEMODE);
 
             if (m_xPropStateAccess.is())
             {
                 if (m_xPropStateAccess->getPropertyState(PROPERTY_FONT_NAME)== PropertyState_AMBIGUOUS_VALUE)
-                    aSet.InvalidateItem(SID_ATTR_CHAR_FONT);
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_FONT);
                 if (m_xPropStateAccess->getPropertyState(PROPERTY_FONT_HEIGHT)==PropertyState_AMBIGUOUS_VALUE)
-                    aSet.InvalidateItem(SID_ATTR_CHAR_FONTHEIGHT);
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_FONTHEIGHT);
                 if ((m_xPropStateAccess->getPropertyState(PROPERTY_FONT_WEIGHT)==PropertyState_AMBIGUOUS_VALUE) || (::com::sun::star::awt::FontWeight::DONTKNOW == nFontWeight))
-                    aSet.InvalidateItem(SID_ATTR_CHAR_WEIGHT );
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_WEIGHT );
                 if ((m_xPropStateAccess->getPropertyState(PROPERTY_FONT_SLANT)==PropertyState_AMBIGUOUS_VALUE) || (::com::sun::star::awt::FontSlant_DONTKNOW == nFontSlant))
-                    aSet.InvalidateItem(SID_ATTR_CHAR_POSTURE);
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_POSTURE);
                 if ((m_xPropStateAccess->getPropertyState(PROPERTY_FONT_UNDERLINE)==PropertyState_AMBIGUOUS_VALUE) || (::com::sun::star::awt::FontUnderline::DONTKNOW == nFontUnderline))
-                    aSet.InvalidateItem(SID_ATTR_CHAR_UNDERLINE );
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_UNDERLINE );
                 if ((m_xPropStateAccess->getPropertyState(PROPERTY_FONT_STRIKEOUT)==PropertyState_AMBIGUOUS_VALUE) || (::com::sun::star::awt::FontStrikeout::DONTKNOW == nFontStrikeout))
-                    aSet.InvalidateItem(SID_ATTR_CHAR_STRIKEOUT );
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_STRIKEOUT );
                 if (m_xPropStateAccess->getPropertyState(PROPERTY_TEXTCOLOR)==PropertyState_AMBIGUOUS_VALUE)
-                    aSet.InvalidateItem(SID_ATTR_CHAR_COLOR );
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_COLOR );
+                if (m_xPropStateAccess->getPropertyState(PROPERTY_WORDLINEMODE)==PropertyState_AMBIGUOUS_VALUE)
+                    aCoreSet.InvalidateItem(SID_ATTR_CHAR_WORDLINEMODE);
             }
         }
-
         catch (Exception&)
         {
             DBG_ERROR("OPropertyBrowserController::ChangeFontProperty : caught an exception (1) !")
             return;
         }
 
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_FONT);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_FONTHEIGHT);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_LANGUAGE);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_POSTURE);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_WEIGHT);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_RUBY);
+
+        aCoreSet.DisableItem(SID_ATTR_CHAR_RELIEF);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_WORDLINEMODE);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_EMPHASISMARK);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CASEMAP);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_CONTOUR);
+        aCoreSet.DisableItem(SID_ATTR_CHAR_SHADOWED);
 
         FontList aFontList(Application::GetDefaultDevice());
         SvxFontListItem aFontListItem( &aFontList, SID_ATTR_CHAR_FONTLIST );
+        aCoreSet.Put(aFontListItem, SID_ATTR_CHAR_FONTLIST);
 
-        SfxSingleTabDialog* pDlg = new SfxSingleTabDialog( GetpApp()->GetAppWindow(),
-                                        aSet, RID_SVXDLG_FMFONT, sal_False );
-
-        SfxTabPage* pPage = SvxCharStdPage::Create( pDlg, aSet);
-        ((SvxCharStdPage*)pPage)->SetFontList( aFontListItem);
-        pDlg->SetTabPage( pPage );
+        ControlCharacterDialog aDlg(GetpApp()->GetAppWindow(), aCoreSet);
 
         try
         {
-            if ( pDlg->Execute() == RET_OK )
+            if ( RET_OK == aDlg.Execute() )
             {
-                const SfxItemSet* pOut = pDlg->GetOutputItemSet();
+                const SfxItemSet* pOut = aDlg.GetOutputItemSet();
 
                 if (pOut != NULL)
                 {
                     SfxItemState eState = pOut->GetItemState( SID_ATTR_CHAR_FONT );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxFontItem&          rFontItem=
                             (const SvxFontItem&)        pOut->Get(SID_ATTR_CHAR_FONT );
@@ -1239,7 +1312,7 @@ namespace pcr
 
                     eState = pOut->GetItemState( SID_ATTR_CHAR_FONTHEIGHT );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxFontHeightItem&    rSvxFontHeightItem=
                             (const SvxFontHeightItem&)  pOut->Get(SID_ATTR_CHAR_FONTHEIGHT);
@@ -1251,7 +1324,7 @@ namespace pcr
 
                     eState = pOut->GetItemState( SID_ATTR_CHAR_WEIGHT );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxWeightItem&        rWeightItem=
                             (const SvxWeightItem&)      pOut->Get(SID_ATTR_CHAR_WEIGHT );
@@ -1262,7 +1335,7 @@ namespace pcr
 
                     eState = pOut->GetItemState( SID_ATTR_CHAR_POSTURE );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxPostureItem&       rPostureItem=
                             (const SvxPostureItem&)     pOut->Get(SID_ATTR_CHAR_POSTURE);
@@ -1272,7 +1345,7 @@ namespace pcr
 
                     eState = pOut->GetItemState( SID_ATTR_CHAR_UNDERLINE );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxUnderlineItem&     rUnderlineItem=
                             (const SvxUnderlineItem&)   pOut->Get(SID_ATTR_CHAR_UNDERLINE );
@@ -1282,7 +1355,7 @@ namespace pcr
 
                     eState = pOut->GetItemState( SID_ATTR_CHAR_STRIKEOUT );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxCrossedOutItem&    rCrossedOutItem=
                             (const SvxCrossedOutItem&)  pOut->Get(SID_ATTR_CHAR_STRIKEOUT );
@@ -1291,9 +1364,19 @@ namespace pcr
                     }
 
 
+                    eState = pOut->GetItemState( SID_ATTR_CHAR_WORDLINEMODE );
+
+                    if ( eState == SFX_ITEM_SET )
+                    {
+                        const SvxWordLineModeItem&  rWordLineModeItem =
+                            (const SvxWordLineModeItem&)    pOut->Get(SID_ATTR_CHAR_WORDLINEMODE);
+                        m_xPropValueAccess->setPropertyValue( PROPERTY_WORDLINEMODE, ::cppu::bool2any(rWordLineModeItem.GetValue()));
+                    }
+
+
                     eState = pOut->GetItemState( SID_ATTR_CHAR_COLOR );
 
-                    if ( eState == SFX_ITEM_SET)
+                    if ( eState == SFX_ITEM_SET )
                     {
                         const SvxColorItem&     rColorItem=
                             (const SvxColorItem&)       pOut->Get(SID_ATTR_CHAR_COLOR );
@@ -1309,8 +1392,6 @@ namespace pcr
             DBG_ERROR("OPropertyBrowserController::ChangeFontProperty : caught an exception (2) !")
             return;
         }
-
-        delete pDlg;
     }
 
     //------------------------------------------------------------------------
@@ -2636,6 +2717,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/15 09:02:28  fs
+ *  cppuhelper/extract -> comphelper/extract
+ *
  *  Revision 1.11  2001/03/03 14:23:49  ab
  *  Integrated access to XScriptsEventSupplier for new UNO dialogs
  *
