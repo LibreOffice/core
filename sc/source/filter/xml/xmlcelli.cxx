@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
+ *  last change: $Author: sab $ $Date: 2000-10-24 14:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,10 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                         uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
                         if (xCellRange.is())
                         {
+                            if (aCellPos.Column > MAXCOL)
+                                aCellPos.Column = MAXCOL;
+                            if (aCellPos.Row > MAXROW)
+                                aCellPos.Row = MAXROW;
                             uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
                             if (xCell.is())
                             {
@@ -416,6 +420,10 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                                     uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
                                     if (xShapes.is())
                                     {
+                                        if (aCellPos.Column > MAXCOL)
+                                            aCellPos.Column = MAXCOL;
+                                        if (aCellPos.Row > MAXROW)
+                                            aCellPos.Row = MAXROW;
                                         Rectangle aRec = pDoc->GetMMRect(aCellPos.Column, aCellPos.Row, aCellPos.Column, aCellPos.Row, aCellPos.Sheet);
                                         awt::Point aPoint;
                                         aPoint.X = aRec.Left();
@@ -449,14 +457,21 @@ sal_Int16 ScXMLTableRowCellContext::GetCellType(const sal_Int32 nNumberFormat, s
         uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
         if (xNumberFormats.is())
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-            uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
-            aIsStandardFormat >>= bIsStandard;
-            uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TYPE)));
-            sal_Int16 nNumberFormat;
-            if ( aNumberFormat >>= nNumberFormat )
+            try
             {
-                return nNumberFormat;
+                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
+                aIsStandardFormat >>= bIsStandard;
+                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TYPE)));
+                sal_Int16 nNumberFormat;
+                if ( aNumberFormat >>= nNumberFormat )
+                {
+                    return nNumberFormat;
+                }
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
             }
         }
     }
