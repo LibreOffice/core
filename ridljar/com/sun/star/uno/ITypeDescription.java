@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ITypeDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:44:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@ package com.sun.star.uno;
 /**
  * The <code>ITypeDescription</code> allows to examine a type
  * in detail (e.g. it is used for marshaling/unmarshaling).
- * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2003-03-26 15:44:54 $
- * @author      Kay Ramme
+ *
+ * @deprecated This interface does not cover all the features supported by the
+ * corresponding (unpublished) implementation.  But no client code should need
+ * to access this functionality, anyway.
+ *
  * @since       UDK3.0
  */
 public interface ITypeDescription {
