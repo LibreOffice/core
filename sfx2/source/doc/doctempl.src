@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:18:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ StringArray TEMPLATE_SHORT_NAMES_ARY
 
 StringArray TEMPLATE_LONG_NAMES_ARY
 {
-    ItemList =
+    ItemList [ de ] =
     {
         < "Meine Vorlagen" ; > ;
         < "Geschäftliche Korrespondenz" ; > ;
@@ -95,20 +95,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Präsentationen" ; > ;
         < "Diverses" ; > ;
     };
-    ItemList[ ENGLISH ] =
-    {
-        < "My Templates" ; > ;
-        < "Business correspondence" ; > ;
-        < "Other business documents" ; > ;
-        < "Personal correspondence and documents" ; > ;
-        < "Forms and contracts" ; > ;
-        < "Finances" ; > ;
-        < "Education" ; > ;
-        < "Presentation backgrounds" ; > ;
-        < "Presentations" ; > ;
-        < "Miscellaneous" ; > ;
-    };
-    ItemList[ english_us ] =
+    ItemList [ en-US ] =
     {
         < "My Templates" ; > ;
         < "Business Correspondence" ; > ;
@@ -121,229 +108,8 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Presentations" ; > ;
         < "Miscellaneous" ; > ;
     };
-    ItemList[ portuguese ] =
-    {
-        < "Padrão" ; > ;
-        < "Correspondência comercial" ; > ;
-        < "Correspondência comercial diversa" ; > ;
-        < "Correspondência e documentos particulares" ; > ;
-        < "Formulários e contratos" ; > ;
-        < "Finanças" ; > ;
-        < "Educação/Formação" ; > ;
-        < "Planos de fundo para apresentações" ; > ;
-        < "Apresentações" ; > ;
-        < "Diversos" ; > ;
-    };
-    ItemList[ russian ] =
-    {
-        < "Îáû÷íûé" ; > ;
-        < "Äåëîâàÿ êîğğåñïîíäåíöèÿ" ; > ;
-        < "Ïğî÷èå äåëîâûå äîêóìåíòû" ; > ;
-        < "Ëè÷íàÿ êîğğåñïîíäåíöèÿ è äîêóìåíòû" ; > ;
-        < "Ôîğìû è êîíòàêòû" ; > ;
-        < "Ôèíàíñû" ; > ;
-        < "Îáğàçîâàíèå" ; > ;
-        < "Ôîíû ïğåçåíòàöèè" ; > ;
-        < "Ïğåçåíòàöèè" ; > ;
-        < "Ïğî÷åå" ; > ;
-    };
-    ItemList[ greek ] =
-    {
-        < "ĞñïåğéëïãŞ" ; > ;
-        < "ÅğáããåëìáôéêŞ áëëçëïãñáößá" ; > ;
-        < "ÄéÜöïñá åğáããåëìáôéêÜ İããñáöá" ; > ;
-        < "ĞñïóùğéêŞ áëëçëïãñáößá êáé ğñïóùğéêÜ İããñáöá" ; > ;
-        < "Öüñìåò êáé Óõìâüëáéá" ; > ;
-        < "ÏéêïíïìéêÜ" ; > ;
-        < "Ìüñöùóç" ; > ;
-        < "Öüíôá ğáñïõóéÜóåùí" ; > ;
-        < "ĞáñïõóéÜóåéò" ; > ;
-        < "ÄéÜöïñá" ; > ;
-    };
-    ItemList[ dutch ] =
-    {
-        < "Standaard" ; > ;
-        < "Zakelijke correspondentie" ; > ;
-        < "Andere zakelijke documenten" ; > ;
-        < "Privé-correspondentie en -documenten" ; > ;
-        < "Formulieren en contracten" ; > ;
-        < "Financieel" ; > ;
-        < "Opleiding" ; > ;
-        < "Presentatieachtergronden" ; > ;
-        < "Presentaties" ; > ;
-        < "Diverse" ; > ;
-    };
-    ItemList[ french ] =
-    {
-        < "Par défaut" ; > ;
-        < "Correspondance commerciale" ; > ;
-        < "Documents commerciaux divers" ; > ;
-        < "Correspondance et documents privés" ; > ;
-        < "Formulaires et contrats" ; > ;
-        < "Économie" ; > ;
-        < "Éducation" ; > ;
-        < "Arrière-plans de présentation" ; > ;
-        < "Présentations" ; > ;
-        < "Divers" ; > ;
-    };
-    ItemList[ spanish ] =
-    {
-        < "Predeterminado" ; > ;
-        < "Correspondencia comercial" ; > ;
-        < "Otros documentos comerciales" ; > ;
-        < "Correspondencia privada y documentos" ; > ;
-        < "Formularios y contratos" ; > ;
-        < "Finanzas" ; > ;
-        < "Educación" ; > ;
-        < "Fondos de presentación" ; > ;
-        < "Presentaciones" ; > ;
-        < "Diversos" ; > ;
-    };
-    ItemList[ italian ] =
-    {
-        < "Standard" ; > ;
-        < "Corrispondenza commerciale" ; > ;
-        < "Altri documenti commerciali" ; > ;
-        < "Corrispondenza privata e documenti" ; > ;
-        < "Formulari e contratti" ; > ;
-        < "Finanze" ; > ;
-        < "Formazione" ; > ;
-        < "Sfondi di presentazione" ; > ;
-        < "Presentazioni" ; > ;
-        < "Varie" ; > ;
-    };
-    ItemList[ danish ] =
-    {
-        < "Standard" ; > ;
-        < "Arbejdsrelateret korrespondance" ; > ;
-        < "Andre arbejdsrelaterede dokumenter" ; > ;
-        < "Privat korrespondance og dokumenter" ; > ;
-        < "Formularer og kontrakter" ; > ;
-        < "Finanser" ; > ;
-        < "Uddannelse" ; > ;
-        < "Præsentationsbaggrunde" ; > ;
-        < "Præsentationer" ; > ;
-        < "Diverse" ; > ;
-    };
-    ItemList[ swedish ] =
-    {
-        < "Standard" ; > ;
-        < "Affärskorrespondens" ; > ;
-        < "Andra affärsdokument" ; > ;
-        < "Privat korrespondens och privata dokument" ; > ;
-        < "Formulär och kontrakt" ; > ;
-        < "Ekonomi" ; > ;
-        < "Utbildning" ; > ;
-        < "Presentationsbakgrunder" ; > ;
-        < "Presentationer" ; > ;
-        < "Diverse" ; > ;
-    };
-    ItemList[ polish ] =
-    {
-        < "Domyœlnie" ; > ;
-        < "Korespondencja s³u¿bowa" ; > ;
-        < "Inne dokumenty s³u¿bowe" ; > ;
-        < "Korespondencja i dokumenty osobiste" ; > ;
-        < "Formularze i umowy" ; > ;
-        < "Finanse" ; > ;
-        < "Nauka" ; > ;
-        < "T³a prezentacji" ; > ;
-        < "Prezentacje" ; > ;
-        < "Inne" ; > ;
-    };
-    ItemList[ portuguese_brazilian ] =
-    {
-        < "Padrão" ; > ;
-        < "Correspondência Comercial" ; > ;
-        < "Outros documentos comerciais" ; > ;
-        < "Correspondência e documentos pessoais" ; > ;
-        < "Formulários e Contratos" ; > ;
-        < "Finanças" ; > ;
-        < "Educação" ; > ;
-        < "Planos de fundo para apresentações" ; > ;
-        < "Apresentações" ; > ;
-        < "Miscelânea" ; > ;
-    };
-    ItemList[ japanese ] =
-    {
-        < "æ¨™æº–" ; > ;
-        < "ç¤¾ç”¨æ›¸ç°¡" ; > ;
-        < "ãã®ä»–ã®ç¤¾ç”¨æ–‡æ›¸" ; > ;
-        < "å€‹äººæ›¸ç°¡ã¨æ–‡æ›¸" ; > ;
-        < "æ¥­å‹™ç”¨æ›¸é¡ã¨å¥‘ç´„æ›¸" ; > ;
-        < "è²¡æ”¿" ; > ;
-        < "æ•™é¤Š" ; > ;
-        < "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³èƒŒæ™¯" ; > ;
-        < "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³" ; > ;
-        < "ãã®ä»–" ; > ;
-    };
-    ItemList[ korean ] =
-    {
-        < "ê¸°ë³¸ê°’" ; > ;
-        < "ì—…ë¬´ì ì¸ í†µì‹ " ; > ;
-        < "ê¸°íƒ€ ì‚¬ë¬´ìš© ë¬¸ì„œ" ; > ;
-        < "ê°œì¸ì  í†µì‹  ë° ë¬¸ì„œ" ; > ;
-        < "ì›ê³ ì§€ ë° ì—°ì† ìš©ì§€" ; > ;
-        < "ì¬ì • ê´€ë¦¬" ; > ;
-        < "êµìœ¡" ; > ;
-        < "í”„ë ˆì  í…Œì´ì…˜ ë°°ê²½" ; > ;
-        < "í”„ë ˆì  í…Œì´ì…˜" ; > ;
-        < "ê¸°íƒ€" ; > ;
-    };
-    ItemList[ chinese_simplified ] =
-    {
-        < "æˆ‘çš„æ–‡æ¡£æ ·å¼" ; > ;
-        < "å•†åŠ¡ä¿¡å‡½" ; > ;
-        < "å…¶ä»–å•†åŠ¡æ–‡æ¡£" ; > ;
-        < "ç§äººä¿¡å‡½å’Œæ–‡æ¡£" ; > ;
-        < "è¡¨å•å’ŒåˆåŒ" ; > ;
-        < "è´¢åŠ¡" ; > ;
-        < "æ•™è‚²" ; > ;
-        < "æ¼”ç¤ºæ–‡ç¨¿èƒŒæ™¯" ; > ;
-        < "æ¼”ç¤ºæ–‡ç¨¿" ; > ;
-        < "å…¶å®ƒ" ; > ;
-    };
-    ItemList[ chinese_traditional ] =
-    {
-        < "æ¨™æº–" ; > ;
-        < "å•†å‹™ä¿¡å‡½" ; > ;
-        < "å…¶ä»–å•†å‹™æ–‡ä»¶" ; > ;
-        < "ç§äººä¿¡å‡½å’Œæ–‡ä»¶" ; > ;
-        < "è¡¨å–®å’ŒåˆåŒ" ; > ;
-        < "è²¡å‹™" ; > ;
-        < "æ•™è‚²" ; > ;
-        < "ç°¡å ±èƒŒæ™¯" ; > ;
-        < "ç°¡å ±" ; > ;
-        < "å…¶å®ƒ" ; > ;
-    };
-    ItemList[ arabic ] =
-    {
-        < "ÇİÊÑÇÖí" ; > ;
-        < "ãÑÇÓáÇÊ ÊÌÇÑíÉ" ; > ;
-        < "ãÓÊäÏÇÊ ÊÌÇÑíÉ ÃÎÑì" ; > ;
-        < "ãÑÇÓáÇÊ æãÓÊäÏÇÊ ÎÇÕÉ" ; > ;
-        < "ÇÓÊãÇÑÇÊ æÚŞæÏ" ; > ;
-        < "ãÇáíÉ" ; > ;
-        < "ÊÚáíã" ; > ;
-        < "ÎáİíÇÊ ÚÑæÖ ÊŞÏíãíÉ" ; > ;
-        < "ÚÑæÖ ÊŞÏíãíÉ" ; > ;
-        < "ãÊİÑŞÇÊ" ; > ;
-    };
-    ItemList[ turkish ] =
-    {
-        < "Öntanımlı" ; > ;
-        < "Mesleki Ugunluk" ; > ;
-        < "Diğer Mesleki belgeleri" ; > ;
-        < "Kişisel Uygunluk ve Belgeler" ; > ;
-        < "Formlar ve Anlaşmalar" ; > ;
-        < "Mali İşler" ; > ;
-        < "Eğitim" ; > ;
-        < "Sunu Artalanları" ; > ;
-        < "Sunular" ; > ;
-        < "Diğer" ; > ;
-    };
 
-ItemList [ language_user1 ] =
+ItemList [ x-comment ] =
     {
             < "; Standard" ; > ;
         < "; Geschäftliche Korrespondenz" ; > ;
@@ -356,157 +122,13 @@ ItemList [ language_user1 ] =
         < "; Präsentationen" ; > ;
         < "; Diverses" ; > ;
     };
-    ItemList [ catalan ] =
-    {
-            < "Per defecte" ; > ;
-        < "Correspondencia comercial" ; > ;
-        < "Altres documents de negocis" ; > ;
-        < "Correspondencia privada i documents" ; > ;
-        < "Formularis i contractes" ; > ;
-        < "Finances" ; > ;
-        < "Educació" ; > ;
-        < "Fons de presentació" ; > ;
-        < "Presentacions" ; > ;
-        < "Diversos" ; > ;
-    };
-    ItemList [ finnish ] =
-    {
-            < "Oletus" ; > ;
-        < "Liikekirjeenvaihto" ; > ;
-        < "Muut liikeasiakirjat" ; > ;
-        < "Yksityinen kirjeenvaihto ja asiakirjat" ; > ;
-        < "Lomakkeet ja sopimukset" ; > ;
-        < "Talous" ; > ;
-        < "Koulutus" ; > ;
-        < "Esitystaustat" ; > ;
-        < "Esitykset" ; > ;
-        < "Sekalaiset" ; > ;
-    };
-    ItemList [ thai ] =
-    {
-         < "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™" ; > ;
-        < "à¸à¸²à¸£à¹‚à¸•à¹‰à¸•à¸­à¸šà¸—à¸²à¸‡à¸˜à¸¸à¸£à¸à¸´à¸ˆ" ; > ;
-        < "à¹€à¸­à¸à¸ªà¸²à¸£à¸˜à¸¸à¸£à¸à¸´à¸ˆà¸­à¸·à¹ˆà¸™ à¹†" ; > ;
-        < "à¸à¸²à¸£à¹‚à¸•à¹‰à¸•à¸­à¸šà¹à¸¥à¸°à¹€à¸­à¸à¸ªà¸²à¸£à¸ªà¹ˆà¸§à¸™à¸•à¸±à¸§" ; > ;
-        < "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¹à¸¥à¸°à¸ªà¸±à¸à¸à¸²" ; > ;
-        < "à¸à¸²à¸£à¹€à¸‡à¸´à¸™" ; > ;
-        < "à¸à¸²à¸£à¸¨à¸¶à¸à¸©à¸²" ; > ;
-        < "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­" ; > ;
-        < "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­" ; > ;
-        < "à¹€à¸šà¹‡à¸”à¹€à¸•à¸¥à¹‡à¸”" ; > ;
-    };
-    ItemList [ czech ] =
-    {
-         < "VÃ½chozÃ­" ; > ;
-        < "ObchodnÃ­ korespondence" ; > ;
-        < "JinÃ© obchodnÃ­ dokumenty" ; > ;
-        < "OsobnÃ­ korespondence a dokumenty" ; > ;
-        < "FormulÃ¡Å™e a smlouvy" ; > ;
-        < "Finance" ; > ;
-        < "VzdÄ›lÃ¡nÃ­" ; > ;
-        < "PozadÃ­ prezentace" ; > ;
-        < "Prezentace" ; > ;
-        < "RÅ¯znÃ©" ; > ;
-    };
-    ItemList [ hebrew ] =
-    {
-         < "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬" ; > ;
-        < "â€®×”×ª×›×ª×‘×•×ª ×¢×™×¡×§×™×ªâ€¬" ; > ;
-        < "â€®××¡××›×™× ×¢×™×¡×§×™×™× ××—×¨×™×â€¬" ; > ;
-        < "â€®×”×ª×›×ª×‘×•×ª ××™×©×™×ª ×•××¡××›×™×â€¬" ; > ;
-        < "â€®×˜×¤×¡×™× ×•×—×•×–×™×â€¬" ; > ;
-        < "â€®×›×¡×¤×™×â€¬" ; > ;
-        < "â€®×—×™× ×•×šâ€¬" ; > ;
-        < "â€®×¨×§×¢×™× ×œ××¦×’×•×ªâ€¬" ; > ;
-        < "â€®××¦×’×•×ªâ€¬" ; > ;
-        < "â€®×©×•× ×•×ªâ€¬" ; > ;
-    };
-    ItemList [ hindi ] =
-    {
-         < "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿" ; > ;
-        < "à¤µà¥à¤¯à¤µà¤¹à¤¾à¤° à¤ªà¤¤à¥à¤°-à¤µà¥à¤¯à¤µà¤¹à¤¾à¤°" ; > ;
-        < "à¤…à¤¨à¥à¤¯ à¤µà¥à¤¯à¤µà¤¹à¤¾à¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚ " ; > ;
-        < "à¤µà¥ˆà¤¯à¤•à¥à¤¤à¤¿à¤• à¤ªà¤¤à¥à¤°-à¤µà¥à¤¯à¤µà¤¹à¤¾à¤° à¤”à¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚ " ; > ;
-        < "à¤«à¤¼à¥‰à¤°à¥à¤®à¥ à¤”à¤° à¤¸à¤‚à¤µà¤¿à¤¦à¤¾" ; > ;
-        < "à¤†à¤°à¥à¤¥à¤¿à¤• à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾" ; > ;
-        < "à¤¶à¤¿à¤•à¥à¤·à¤¾" ; > ;
-        < "à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—à¥‡à¤‚" ; > ;
-        < "à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿" ; > ;
-        < "à¤®à¤¿à¤²à¤¾ à¤œà¥à¤²à¤¾" ; > ;
-    };
-    ItemList [ slovak ] =
-    {
-         < "VÃ½chodzie" ; > ;
-        < "ObchodnÃ¡ koreÅ¡pondencia" ; > ;
-        < "InÃ© obchodnÃ© dokumenty" ; > ;
-        < "OsobnÃ¡ koreÅ¡pondencia a dokumenty" ; > ;
-        < "FormulÃ¡re a zmluvy" ; > ;
-        < "Financie" ; > ;
-        < "VzdelÃ¡vanie" ; > ;
-        < "Pozadia prezentÃ¡cie" ; > ;
-        < "PrezentÃ¡cia" ; > ;
-        < "RÃ´zne" ; > ;
-    };
-    ItemList [ hungarian ] =
-    {
-         < "AlapÃ©rtelmezett" ; > ;
-        < "Ãœzleti levelezÃ©s" ; > ;
-        < "EgyÃ©b Ã¼zleti dokumentumok" ; > ;
-        < "SzemÃ©lyes levelezÃ©s Ã©s dokumentumok" ; > ;
-        < "Å°rlapok Ã©s szerzÅ‘dÃ©sek" ; > ;
-        < "PÃ©nzÃ¼gyek" ; > ;
-        < "OktatÃ¡s" ; > ;
-        < "BemutatÃ³hÃ¡tterek" ; > ;
-        < "BemutatÃ³k" ; > ;
-        < "Egyebek" ; > ;
-    };
-    ItemList [ slovenian ] =
-    {
-         < "Privzeto" ; > ;
-        < "Poslovna korespondenca" ; > ;
-        < "Razni poslovni dokumenti" ; > ;
-        < "Zasebna korespondenca in dokumenti" ; > ;
-        < "Obrazci in pogodbe" ; > ;
-        < "Finance" ; > ;
-        < "Izobrazba" ; > ;
-        < "Ozadje predstavitve" ; > ;
-        < "Predstavitve" ; > ;
-        < "Razno" ; > ;
-    };
     };
 
 String RID_CNT_STR_WAITING
 {
-    Text = "Die Vorlagen werden jetzt für die erstmalige Benutzung einmal initialisiert." ;
-    Text [ ENGLISH ] = "Initializing the templates for the first usage." ;
-    Text [ english_us ] = "The templates are being initialized for first-time usage." ;
-    Text[ language_user1 ] = " ";
-    Text[ portuguese ] = "A inicializar modelos para a primeira utilização...";
-    Text[ russian ] = "Ïåğåä ïåğâûì èñïîëüçîâàíèåì âûïîëíÿåòñÿ èíèöèàëèçàöèÿ øàáëîíîâ.";
-    Text[ greek ] = "Ôá ğñüôõğá áñ÷éêïğïéïıíôáé ãéá íá ÷ñçóéìïğïéçèïıí ãéá ğñşôç öïñÜ.";
-    Text[ dutch ] = "De sjablonen worden nu geïnitialiseerd voor het eerste gebruik.";
-    Text[ french ] = "Initialisation des modèles pour une première utilisation ...";
-    Text[ spanish ] = "Las plantillas se inicializarán ahora para el primer uso.";
-    Text[ italian ] = "Inizializzazione dei modelli per il primo utilizzo del programma.";
-    Text[ danish ] = "Skabelonerne initialiseres nu til førstegangsbrug.";
-    Text[ swedish ] = "Mallarna initieras nu för den första användningen.";
-    Text[ polish ] = "Szablony s¹ teraz inicjowane do pierwszego u¿ycia";
-    Text[ portuguese_brazilian ] = "Os modelos estão sendo inicializados para a primeira utilização...";
-    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯ä»Šå›åˆã‚ã¦ä½¿ç”¨ã™ã‚‹ã«ã‚ãŸã£ã¦ã€ã¾ãšåˆæœŸåŒ–ã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ì§€ê¸ˆ ì„œì‹ íŒŒì¼ì´ ì²˜ìŒ ì‚¬ìš©ì„ ìœ„í•´ ì„¤ì¹˜ë˜ê³  ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "ç°åœ¨é¦–æ¬¡åˆå§‹åŒ–éœ€è¦ä½¿ç”¨çš„æ ·å¼æ–‡ä»¶ã€‚";
-    Text[ chinese_traditional ] = "ç¾åœ¨é¦–æ¬¡åˆå§‹åŒ–éœ€è¦ä½¿ç”¨çš„æ¨£å¼æª”æ¡ˆã€‚";
-    Text[ turkish ] = "İlk kullanım için şablonlar hazırlanıyor";
-    Text[ arabic ] = "ÌÇÑí ÇáÂä ÊåíÆÉ ãßæäÇÊ %PRODUCTNAME ááãÑÉ ÇáÃæáì ÈÚÏ ÇäÊåÇÁ ÚãáíÉ ÇáÊËÈíÊ.";
-    Text[ catalan ] = "Els components d'%PRODUCTNAME s'inicialitzaran després de la instal.lació.";
-    Text[ finnish ] = "Malleja alustetaan ensimmäistä käyttökertaa varten.";
-    Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¹à¸¡à¹ˆà¹à¸šà¸šà¸ªà¸³à¸«à¸£à¸±à¸šà¸à¸²à¸£à¹ƒà¸Šà¹‰à¸„à¸£à¸±à¹‰à¸‡à¹à¸£à¸";
-    Text[ czech ] = "Å ablony jsou inicializovÃ¡ny pro prvnÃ­ pouÅ¾itÃ­.";
-    Text[ hebrew ] = "â€®××ª×‘×¦×¢×ª ×ª×™×—×•×œ ×”×ª×‘× ×™×•×ª ×œ×©×™××•×©×Ÿ ×‘×¤×¢× ×”×¨××©×•× ×”â€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¬à¤¾à¤° à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤‡à¤¨à¤¿à¤¶à¥à¤¯à¤²à¥ˆà¤œà¤¼ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Å ablÃ³ny sÃº inicializovanÃ© pre prvÃ© pouÅ¾itie.";
-    Text[ hungarian ] = "Sablonok elÅ‘kÃ©szÃ­tÃ©se az elsÅ‘ hasznÃ¡latra.";
-    Text[ slovenian ] = "Predloge se inicializirajo za prvo uporabo.";
+    Text [ de ] = "Die Vorlagen werden jetzt für die erstmalige Benutzung einmal initialisiert." ;
+    Text [ en-US ] = "The templates are being initialized for first-time usage." ;
+    Text [ x-comment ] = " ";
 };
 
 
