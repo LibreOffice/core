@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:18:35 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 13:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 
 #define SC_NUMBERFORMAT "NumberFormat"
 #define SC_CONDITIONALFORMAT "ConditionalFormat"
+
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
 #define XML_LINE_TOP 2
@@ -145,6 +146,11 @@ ScXMLCellImportPropertyMapper::~ScXMLCellImportPropertyMapper()
 
 void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
+    static const sal_Int16 aPaddingCTF[4] = { CTF_SC_LEFTPADDING, CTF_SC_RIGHTPADDING,
+                                            CTF_SC_TOPPADDING, CTF_SC_BOTTOMPADDING };
+    static const sal_Int16 aBorderCTF[4] = { CTF_SC_LEFTBORDER, CTF_SC_RIGHTBORDER,
+                                            CTF_SC_TOPBORDER, CTF_SC_BOTTOMBORDER };
+
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty = NULL;
     XMLPropertyState* pPadding[4] = { NULL, NULL, NULL, NULL };
@@ -180,10 +186,10 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     for (sal_uInt16 i = 0; i < 4; i++)
     {
         if (pAllPaddingProperty && !pPadding[i])
-            pNewPadding[i] = new XMLPropertyState(pAllPaddingProperty->mnIndex + 1 + i, pAllPaddingProperty->maValue);
+            pNewPadding[i] = new XMLPropertyState(maPropMapper->FindEntryIndex(aPaddingCTF[i]), pAllPaddingProperty->maValue);
         if (pAllBorderProperty && !pBorders[i])
         {
-            pNewBorders[i] = new XMLPropertyState(pAllBorderProperty->mnIndex + 1 + i, pAllBorderProperty->maValue);
+            pNewBorders[i] = new XMLPropertyState(maPropMapper->FindEntryIndex(aBorderCTF[i]), pAllBorderProperty->maValue);
             pBorders[i] = pNewBorders[i];
         }
         if( !pBorderWidths[i] )
@@ -259,7 +265,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     }
     else if (pHeight)
     {
-        pOptimalHeight = new XMLPropertyState(0, ::cppu::bool2any( sal_False ));
+        pOptimalHeight = new XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( sal_False ));
         rProperties.push_back(*pOptimalHeight);
         delete pOptimalHeight;
     }

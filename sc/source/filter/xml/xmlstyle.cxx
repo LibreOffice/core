@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-26 09:08:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 13:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,6 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "ConditionalFormatXML", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP },
     { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 },
     { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 },
-//  { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MULTI_PROPERTY, CTF_SC_HORIJUSTIFY },
-//  { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MULTI_PROPERTY, CTF_SC_HORIJUSTIFY_SOURCE },
     { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "IsTextWrapped", XML_NAMESPACE_FO, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
     { "LeftBorder", XML_NAMESPACE_FO, sXML_border, XML_TYPE_BORDER, CTF_SC_ALLBORDER },
@@ -205,11 +203,9 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
 
 const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
 {
-    // This Position in the Map should not be changed
-    { "OptimalHeight", XML_NAMESPACE_STYLE, sXML_use_optimal_row_height, XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT}, // This Position in the Map should not be changed
-    // This Position in the Map should not be changed
     { "Height", XML_NAMESPACE_STYLE, sXML_row_height, XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT},
     { "IsManualPageBreak", XML_NAMESPACE_FO, sXML_break_before, XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE},
+    { "OptimalHeight", XML_NAMESPACE_STYLE, sXML_use_optimal_row_height, XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT},
     { 0L }
 };
 
