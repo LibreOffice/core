@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,17 @@ interface XEventListener;
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::lang::XComponent
-/** controls the lifetime of components.
+/** allows to exclicitly free resources and break cyclic references.
 
     <p>Actually the real lifetime of an UNO object is controlled by
     references kept on interfaces of this object. But there are two
     distinct meanings in keeping a reference to an interface:
-    1st to own the object and 2nd to know the object. Especially in case
-    of cyclic references, the objects would never get destroyed.  </p>
+    1st to own the object and 2nd to know the object.
 
     <p>You are only allowed to keep references of interfaces
     to UNO objects if you are by definition the owner of that object or
     your reference is very temporary or you have registered an
-    EventListener at that object and cleared the reference when
+    EventListener at that object and release the reference when
     "disposing" is called.</p>
  */
 interface XComponent: com::sun::star::uno::XInterface
@@ -93,56 +92,33 @@ interface XComponent: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::lang::XComponent::dispose
-    /** The owner of a component calls this method to get rid of it.
+    /** The owner of an object calls this method to explicitly free all
+        resources kept by this object and thus break cyclic references.
 
-        <p>Only the owner of this object calls the dispose method if
-        the object should be destroyed. All objects and components
-        must release the references to the objects. If the object is a
-        broadcaster, then all listeners are removed and the method
-        <member>XEventListener::disposing</member>
-        is called on all listeners.  </p>
+        <p>Only the owner of this object is allowed to call this method.
+        The object should release all resources and references in the
+        easiest possible manner ( for instance no serialization should
+        take place anymore ).
+        </p>
+        <p>
+        The object must notify all registered listeners using the method
+        <member>XEventListener::disposing</member>. All notfied objects
+        should release there references to this object without
+        calling <member>XComponent::removeEventListener</member>
+        (the disposed object will release the listeners eitherway).
+        </p>
 
-        <p>Due to the importance of the concept of the method
-        <member>XComponent::dispose</member>, we provide a figurative
-        example: </p>
+        <p>After this method has been called, the object should behave as passive
+        as possible, thus it should ignore all calls
+        in case it can comply with its specification (for instance addEventListener()).
+        Often the object can't fulfill its specification anymore,
+        in this case it must throw the <type>DisposedException</type>
+        (which is derived from <type>RuntimeException</type>) when it gets called.</p>
 
-        <blockquote>
-            Imagine there was a hole in the floor and some people
-            around it are holding a <em>box</em> (our component).
-            Everyone who holds the box for a longer time than just
-            temporarily (i.e., to put something in or get something
-            out) has to watch a light bulb which is attached to
-            the box (listening to the <member>XEventListener::disposing</member>
-            event).  Now, when the owner of the box switches the light on
-            (calling  <member>XComponent::dispose</member>),
-            everybody holding the box has to take his hands off
-            (clear the interface handles). If, and only if, everyone
-            does that, then the box falls (getting deleted).
-            But only the owner is allowed to switch the light on!
-        </blockquote>
-
-        <p>After this method is called the instance has to throw the
-        <type>DisposedException</type> for all calls not non-event-methods;
-        event-methods have to be ignored.  </p>
-
-
-        @example
-        <listing>
-        void dispose()
-        {
-        // make a copy
-        Listener [] aTmpListeners = MyListeners.clone();
-
-        // clear all listeners (against recursion)
-        MyListeners.clear();
-
-        // call all listeners
-        EventObject aEvt = new EventObject();
-        aEvt.xSource = this;
-        for( i = 0; i &amp;lt;aTmpListeners.length; i++ )
-        aTmpListeners[i].disposing( aEvt );
-        }
-        </listing>
+        <p>For some objects no real owner can be identified, thus it can be
+        disposed from multiple reference holders. In this case
+        the object should be able to cope with multiple dispose()-calls (which
+        are inevitable in a multithreaded environment).
      */
     void dispose();
 
@@ -178,6 +154,9 @@ interface XComponent: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.7  2001/03/16 15:10:37  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

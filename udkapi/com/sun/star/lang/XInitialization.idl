@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInitialization.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,18 +77,21 @@ module com {  module sun {  module star {  module lang {
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::lang::XInitialization
-/** This is the only interface for initializing an object directly after
-    its creation.
+/** initializes an object directly after its creation.
 
     <p>This interface works together with factories. If you want to
-    initialize the object after creation, you <strong>must</strong>
+    initialize the object after creation, you should
     support this interface and you may support other interfaces
     which offer type-safe initialization methods.  </p>
 
-    <p>The object must work without an initializing call. In this case
-    it must use a meaningful default.  </p>
+    <p>Instead of calling <member>XSingleComponentFactory::createInstanceWithContext</member>
+    and later initialize(), you should call
+    <member>XSingleComponentFactory::createInstanceWithArgumentsAndContext</member>
+    to pass the arguments to the instance. The reason is, that a component may want
+    return the same instance for the same set of parameters, and it can do so by implementing
+    the factory itself.
+    </p>
 
-    @see XProducer
  */
 interface XInitialization: com::sun::star::uno::XInterface
 {
@@ -97,7 +100,7 @@ interface XInitialization: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::lang::XInitialization::initialize
     /** initializes the object.
 
-        <p>It should be called directly after the object is created.  </p>
+        <p>It should be called directly after the object is created.
      */
     void initialize( [in] sequence<any> aArguments )
             raises( com::sun::star::uno::Exception );
@@ -111,6 +114,9 @@ interface XInitialization: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:37  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
