@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:13:18 $
+ *  last change: $Author: dvo $ $Date: 2002-06-24 16:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1432,7 +1432,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( aSaveFlyArr.Count() )
                 {
                     aIdx++;
-                    _RestFlyInRange( aSaveFlyArr, aIdx );
+                    _RestFlyInRange( aSaveFlyArr, aIdx, NULL );
                 }
             }
             else                                // Nodes moven
