@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.37 2001-06-25 05:59:47 sab Exp $
+	$Id: table.mod,v 1.38 2001-07-24 15:01:42 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -194,13 +194,13 @@
 	table:rejecting-change-id %positiveInteger; #IMPLIED
 >
 
-<!ENTITY % table-columns "( table:table-columns | ( table:table-column | table:table-column-group )+ )">
+<!ENTITY % table-columns "table:table-columns | ( table:table-column | table:table-column-group )+">
 <!ENTITY % table-header-columns "table:table-header-columns">
-<!ENTITY % table-rows "( table:table-rows | ( table:table-row | table:table-row-group )+ )">
+<!ENTITY % table-rows "table:table-rows | ( table:table-row | table:table-row-group )+">
 <!ENTITY % table-header-rows "table:table-header-rows">
-<!ENTITY % table-column-groups "( (%table-columns;,(%table-header-columns;,%table-columns;?)?) | (%table-header-columns;,%table-columns;?) )">
-<!ENTITY % table-row-groups "( (%table-rows;,(%table-header-rows;,%table-rows;?)?) | (%table-header-rows;,%table-rows;?) )">
-<!ELEMENT table:table (table:table-source?, table:scenario?, office:forms?, table:shapes?, %table-column-groups;, %table-row-groups;)>
+<!ENTITY % table-column-groups "((%table-columns;),(%table-header-columns;,(%table-columns;)?)?) | (%table-header-columns;,(%table-columns;)?)">
+<!ENTITY % table-row-groups "((%table-rows;),(%table-header-rows;,(%table-rows;)?)?) | (%table-header-rows;,(%table-rows;)?)">
+<!ELEMENT table:table (table:table-source?, table:scenario?, office:forms?, table:shapes?, (%table-column-groups;), (%table-row-groups;))>
 <!ATTLIST table:table
 	table:name %string; #IMPLIED
 	table:style-name %styleName; #IMPLIED
@@ -349,7 +349,7 @@
 	table:execute %boolean; #IMPLIED
 >
 
-<!ELEMENT table:sub-table (%table-column-groups; , %table-row-groups;)>
+<!ELEMENT table:sub-table ((%table-column-groups;) , (%table-row-groups;))>
 
 <!ELEMENT table:label-ranges (table:label-range)*>
 <!ELEMENT table:label-range EMPTY>

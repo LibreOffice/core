@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.10 2001-07-24 11:23:13 cl Exp $
+	$Id: form.mod,v 1.11 2001-07-24 15:01:42 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -53,10 +53,10 @@
 
 -->
 
-<!ENTITY % controls	"(	form:text|form:textarea|form:fixed-text|form:file|
-						form:password|form:formatted-text|form:button|form:image|
-						form:checkbox|form:radio|form:listbox|form:combobox|form:frame|
-						form:hidden|form:image-frame|form:grid|form:generic-control)">
+<!ENTITY % controls	"form:text|form:textarea|form:fixed-text|form:file|
+					 form:password|form:formatted-text|form:button|form:image|
+					 form:checkbox|form:radio|form:listbox|form:combobox|form:frame|
+					 form:hidden|form:image-frame|form:grid|form:generic-control">
 
 <!ENTITY % name "form:name CDATA #IMPLIED">
 <!ENTITY % service-name "form:service-name CDATA #IMPLIED">
@@ -65,7 +65,37 @@
 <!ENTITY % cycles "(records|current|page)">
 <!ENTITY % url "CDATA">
 
-<!ELEMENT form:control (%controls;+)>
+
+<!ENTITY % types "(submit|reset|push|url)">
+<!ENTITY % button-type "form:button-type %types; 'push'">
+<!ENTITY % current-selected "form:current-selected %boolean; 'false'">
+<!ENTITY % current-value "form:current-value CDATA #IMPLIED">
+<!ENTITY % value "form:value CDATA #IMPLIED">
+<!ENTITY % disabled "form:disabled %boolean; 'false'">
+<!ENTITY % dropdown "form:dropdown %boolean; 'false'">
+<!ENTITY % for "form:for CDATA #IMPLIED">
+<!ENTITY % image-data "form:image-data %url; #IMPLIED">
+<!ENTITY % label "form:label CDATA #IMPLIED">
+<!ENTITY % max-length "form:max-length CDATA #IMPLIED">
+<!ENTITY % printable "form:printable %boolean; 'true'">
+<!ENTITY % readonly "form:readonly %boolean; 'false'">
+<!ENTITY % size "form:size CDATA #IMPLIED">
+<!ENTITY % selected "form:selected %boolean; 'false'">
+<!ENTITY % size "form:size CDATA #IMPLIED">
+<!ENTITY % tab-index "form:tab-index CDATA #IMPLIED">
+<!ENTITY % target-frame "office:target-frame CDATA '_blank'">
+<!ENTITY % target-location "xlink:href %url; #IMPLIED">
+<!ENTITY % tab-stop "form:tab-stop %boolean; 'true'">
+<!ENTITY % title "form:title CDATA #IMPLIED">
+<!ENTITY % default-value "form:default-value CDATA #IMPLIED">
+<!ENTITY % bound-column "form:bound-column CDATA #IMPLIED">
+<!ENTITY % convert-empty "form:convert-empty-to-null  %boolean; 'false'">
+<!ENTITY % data-field "form:data-field CDATA #IMPLIED">
+<!ENTITY % list-source "form:list-source CDATA #IMPLIED">
+<!ENTITY % list-source-types "(table|query|sql|sql-pass-through|value-list|table-fields)">
+<!ENTITY % list-source-type "form:list-source-type %list-source-types; #IMPLIED">
+
+<!ELEMENT form:control (%controls;)+>
 <!ATTLIST form:control %name;
                        %service-name;
                        %control-id;>
@@ -288,44 +318,13 @@
                     %tab-index;
                     %tab-stop;
                     %title;>
-<!ENTITY % column-type "(form:text| form:textarea| form:formatted-text|form:checkbox| form:listbox| form:combobox)">
-<!ELEMENT form:column (%column-type;+)>
+<!ENTITY % column-type "form:text| form:textarea| form:formatted-text|form:checkbox| form:listbox| form:combobox">
+<!ELEMENT form:column (%column-type;)+>
 <!ATTLIST form:column %name;
                       %service-name;
                       %label;>
 
 <!ELEMENT form:generic-control (form:properties?, office:events?)>
-
-
-
-<!ENTITY % types "(submit|reset|push|url)">
-<!ENTITY % button-type "form:button-type %types; 'push'">
-<!ENTITY % current-selected "form:current-selected %boolean; 'false'">
-<!ENTITY % current-value "form:current-value CDATA #IMPLIED">
-<!ENTITY % value "form:value CDATA #IMPLIED">
-<!ENTITY % disabled "form:disabled %boolean; 'false'">
-<!ENTITY % dropdown "form:dropdown %boolean; 'false'">
-<!ENTITY % for "form:for CDATA #IMPLIED">
-<!ENTITY % image-data "form:image-data %url; #IMPLIED">
-<!ENTITY % label "form:label CDATA #IMPLIED">
-<!ENTITY % max-length "form:max-length CDATA #IMPLIED">
-<!ENTITY % printable "form:printable %boolean; 'true'">
-<!ENTITY % readonly "form:readonly %boolean; 'false'">
-<!ENTITY % size "form:size CDATA #IMPLIED">
-<!ENTITY % selected "form:selected %boolean; 'false'">
-<!ENTITY % size "form:size CDATA #IMPLIED">
-<!ENTITY % tab-index "form:tab-index CDATA #IMPLIED">
-<!ENTITY % target-frame "office:target-frame CDATA '_blank'">
-<!ENTITY % target-location "xlink:href %url; #IMPLIED">
-<!ENTITY % tab-stop "form:tab-stop %boolean; 'true'">
-<!ENTITY % title "form:title CDATA #IMPLIED">
-<!ENTITY % default-value "form:default-value CDATA #IMPLIED">
-<!ENTITY % bound-column "form:bound-column CDATA #IMPLIED">
-<!ENTITY % convert-empty "form:convert-empty-to-null  %boolean; 'false'">
-<!ENTITY % data-field "form:data-field CDATA #IMPLIED">
-<!ENTITY % list-source "form:list-source CDATA #IMPLIED">
-<!ENTITY % list-source-types "(table|query|sql|sql-pass-through|value-list|table-fields)">
-<!ENTITY % list-source-type "form:list-source-type %list-source-types; #IMPLIED">
 
 
 <!ELEMENT form:properties (form:property+)>

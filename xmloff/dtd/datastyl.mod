@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.7 2000-12-15 13:55:41 mib Exp $
+   $Id: datastyl.mod,v 1.8 2001-07-24 15:01:42 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -62,17 +62,17 @@
 <!ELEMENT number:scientific-number EMPTY>
 <!ELEMENT number:fraction EMPTY>
 
-<!ENTITY % currency-symbol-and-text "(number:currency-symbol,number:text?)">
-<!ENTITY % number-and-text "(number:number,number:text?)">
-<!ENTITY % currency-symbol-and-number "( (%number-and-text;,%currency-symbol-and-text;?) | (%currency-symbol-and-text;,%number-and-text;?) )">
-<!ENTITY % currency-style-content "( number:text?, %currency-symbol-and-number;? )">
+<!ENTITY % currency-symbol-and-text "number:currency-symbol,number:text?">
+<!ENTITY % number-and-text "number:number,number:text?">
+<!ENTITY % currency-symbol-and-number "((%number-and-text;),(%currency-symbol-and-text;)?) | ((%currency-symbol-and-text;),(%number-and-text;)?)">
+<!ENTITY % currency-style-content "number:text?, (%currency-symbol-and-number;)?">
 
-<!ELEMENT number:currency-style ( style:properties?, %currency-style-content;, style:map* )>
+<!ELEMENT number:currency-style ( style:properties?, (%currency-style-content;), style:map* )>
 <!ELEMENT number:currency-symbol (#PCDATA)>
 <!ATTLIST number:currency-symbol number:language CDATA #IMPLIED>
 <!ATTLIST number:currency-symbol number:country CDATA #IMPLIED>
 
-<!ENTITY % percentage-style-content "( (number:text,%number-and-text;?) | %number-and-text; )">
+<!ENTITY % percentage-style-content "( (number:text,(%number-and-text;)?) | (%number-and-text;) )">
 <!ELEMENT number:percentage-style ( style:properties?, %percentage-style-content;, style:map* )>
 
 <!ENTITY % any-date "( number:day | number:month | number:year | number:era | number:day-of-week | number:week-of-year | number:quarter| number:hours | number:am-pm | number:minutes | number:seconds )">
