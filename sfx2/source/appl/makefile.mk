@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:28:09 $
+#   last change: $Author: rt $ $Date: 2003-09-19 07:57:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,12 @@ BMP_IN=$(PRJ)$/win/res
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-Od
+.ENDIF
+
+.IF "$(GUI)"=="UNX"
+        CDEFS+=-DDLL_NAME=libsfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+.ELSE
+        CDEFS+=-DDLL_NAME=sfx$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 .ENDIF
 
 # --- Files --------------------------------------------------------
