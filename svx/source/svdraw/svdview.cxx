@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:13:24 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1439,7 +1439,7 @@ void SdrView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHi
         onAccessibilityOptionsChanged();
     }
 
-    SdrCreateView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType );
+     SdrCreateView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType );
 }
 
 SvtAccessibilityOptions& SdrView::getAccessibilityOptions()
