@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:58:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,6 +1027,26 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 if( bOk )
                     bOk = rItem.PutValue( aAny );
             }
+        }
+        break;
+
+        case RES_COLLAPSING_BORDERS:
+        {
+            SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
+            DBG_ASSERT( pBorders != NULL, "Wrong Which-ID" );
+
+            if( IsXMLToken( rValue, XML_COLLAPSING ) )
+            {
+                pBorders->SetValue( sal_True );
+                bOk = sal_True;
+            }
+            else if( IsXMLToken( rValue, XML_SEPARATING ) )
+            {
+                pBorders->SetValue( sal_False );
+                bOk = sal_True;
+            }
+            else
+                bOk = sal_False;
         }
         break;
 
