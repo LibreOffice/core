@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resary.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-28 13:17:58 $
+ *  last change: $Author: mhu $ $Date: 2002-05-22 14:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,23 +70,15 @@
 
 // =======================================================================
 
-typedef ImplResStringItem*   PIMPLRESSTRINGITEM;
-
-// =======================================================================
-
-ResStringArray::ResStringArray( const ResId& rResId ) :
-    Resource( rResId.SetRT( RSC_STRINGARRAY ) )
+ResStringArray::ResStringArray( const ResId& rResId )
+    : Resource ( rResId.SetRT( RSC_STRINGARRAY ) ),
+      mpAry    ( 0 ),
+      mnSize   ( ReadShortRes() )
 {
-    USHORT nNumber = ReadShortRes();
-
-    mnSize = nNumber;
-    if ( !nNumber )
-        mpAry = NULL;
-    else
+    if ( mnSize )
     {
-        mpAry = new PIMPLRESSTRINGITEM[nNumber];
-
-        for ( USHORT i = 0; i < nNumber; i++ )
+        mpAry = new ImplResStringItem*[mnSize];
+        for ( USHORT i = 0; i < mnSize; i++ )
         {
             // String laden
             mpAry[i] = new ImplResStringItem( ReadStringRes() );
@@ -101,25 +93,19 @@ ResStringArray::ResStringArray( const ResId& rResId ) :
 
 ResStringArray::~ResStringArray()
 {
-    USHORT nCount = Count();
-    if ( nCount )
-    {
-        for ( USHORT i = 0; i < nCount; i++ )
-            delete mpAry[i];
-        delete mpAry;
-    }
+    for ( USHORT i = 0; i < mnSize; i++ )
+        delete mpAry[i];
+    delete[] mpAry;
 }
 
 // -----------------------------------------------------------------------
 
 USHORT ResStringArray::FindIndex( long nValue ) const
 {
-    USHORT nCount = Count();
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < mnSize; i++ )
     {
         if ( mpAry[i]->mnValue == nValue )
             return i;
     }
-
     return RESARRAY_INDEX_NOTFOUND;
 }

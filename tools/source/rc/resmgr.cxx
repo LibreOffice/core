@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-16 12:05:21 $
+ *  last change: $Author: mhu $ $Date: 2002-05-22 14:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,8 +439,6 @@ InternalResMgr* InternalResMgr::GetInternalResMgr( const UniString& rFileName,
                                                    const UniString* pAppName,
                                                    const UniString* pResPath )
 {
-    ImplSVResourceData* pSVInData = GetResData();
-
     // Nur InternalResMgr's mit FileNamen stehen in der Liste
     if ( rFileName.Len() )
     {
@@ -547,7 +545,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, USHORT nId,
         RSHEADER_TYPE aHeader;
         pStm->Seek( pFind->nOffset );
         pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
-        void * pRes = new BYTE[ aHeader.GetGlobOff() ];
+        void * pRes = ::operator new( aHeader.GetGlobOff() );
         memcpy( pRes, &aHeader, sizeof( RSHEADER_TYPE ) );
         pStm->Read( (BYTE*)pRes + sizeof( RSHEADER_TYPE ),
                     aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
@@ -563,7 +561,7 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 {
     if ( !pResHandle )
         // REsource wurde extra allokiert
-        delete pResource;
+        ::operator delete (pResource);
 }
 
 // =======================================================================
@@ -573,7 +571,7 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 UniString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Funktion verlassen, falls Resourcefehler in dieser Funktion
-    static bInUse = FALSE;
+    static int bInUse = FALSE;
     UniString aTypStr( rTypeId.GetId() );
 
     if ( !bInUse )
@@ -926,7 +924,6 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                            this, nRT, nId, aStack, nTopRes -1 );
 #endif
             RscException_Impl();
-            ImplSVResourceData * pRD = GetResData();
             nTopRes--;
             return FALSE;
         }
@@ -1006,7 +1003,7 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     {
         // Der Zeiger steht am Anfang, deswegen zeigt der Klassen-Pointer
         // auf den Header und die restliche Groesse ist die Gesammte.
-        pHeader = (RSHEADER_TYPE*)new BYTE[ GetRemainSize() ];
+        pHeader = (RSHEADER_TYPE*)::operator new( GetRemainSize() );
         memcpy( pHeader, GetClass(), GetRemainSize() );
         Increment( pHeader->GetLocalOff() ); //ans Ende setzen
         if ( pHeader->GetLocalOff() != pHeader->GetGlobOff() )
@@ -1348,7 +1345,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
         LANGUAGE_KOREAN_JOHAB
     };
 
-    for( int i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); i++ )
+    for( size_t i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); i++ )
     {
         nType = aLanguages[i];
         aName = aBaseName;
@@ -1467,7 +1464,7 @@ UniString SimpleResMgr::ReadString( USHORT nId )
         // no such resource
         return sReturn;
 
-    USHORT nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
+    // USHORT nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
     ResMgr::GetString( sReturn, (const BYTE*)(pResHeader+1) );
 
     // not neccessary with te current implementation which holds the string table permanently, but to be sure ....
@@ -1509,5 +1506,5 @@ USHORT SimpleResMgr::ReadBlob( USHORT nId, void** pBuffer )
 void SimpleResMgr::FreeBlob( void* pBuffer )
 {
     void* pCompleteBuffer = (void*)(((BYTE*)pBuffer) - sizeof(RSHEADER_TYPE));
-    delete pCompleteBuffer;
+    ::operator delete (pCompleteBuffer);
 }
