@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:53:11 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_SPINFLD_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
