@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.79 $
+*  $Revision: 1.80 $
 *
-*  last change: $Author: rt $ $Date: 2004-11-26 12:58:56 $
+*  last change: $Author: rt $ $Date: 2004-11-26 14:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2260,7 +2260,6 @@ namespace xmloff { namespace token {
         TOKEN( "custom-shape" ,                     XML_CUSTOM_SHAPE ),
         TOKEN( "engine" ,                               XML_ENGINE ),
         TOKEN( "enhanced-geometry" ,                    XML_ENHANCED_GEOMETRY ),
-        TOKEN( "predefined-type" ,                      XML_PREDEFINED_TYPE ),
         TOKEN( "text-rotate-angle" ,                    XML_TEXT_ROTATE_ANGLE ),
         TOKEN( "mirror-vertical" ,                      XML_MIRROR_VERTICAL ),
         TOKEN( "mirror-horizontal" ,                    XML_MIRROR_HORIZONTAL ),
@@ -2293,7 +2292,7 @@ namespace xmloff { namespace token {
         TOKEN( "enhanced-path" ,                        XML_ENHANCED_PATH ),
         TOKEN( "path-stretchpoint-x" ,                  XML_PATH_STRETCHPOINT_X ),
         TOKEN( "path-stretchpoint-y" ,                  XML_PATH_STRETCHPOINT_Y ),
-        TOKEN( "text-frames" ,                          XML_TEXT_FRAMES ),
+        TOKEN( "text-areas" ,                           XML_TEXT_AREAS ),
         TOKEN( "glue-points" ,                          XML_GLUE_POINTS ),
         TOKEN( "glue-point-type" ,                      XML_GLUE_POINT_TYPE ),
         TOKEN( "glue-point-leaving-direction" ,     XML_GLUE_POINT_LEAVING_DIRECTIONS ),
@@ -2301,8 +2300,14 @@ namespace xmloff { namespace token {
         TOKEN( "text-path-mode" ,                       XML_TEXT_PATH_MODE ),
         TOKEN( "text-path-scale-x" ,                    XML_TEXT_PATH_SCALE_X ),
         TOKEN( "text-path-same-letter-heights" ,        XML_TEXT_PATH_SAME_LETTER_HEIGHTS ),
-        TOKEN( "adjustments" ,                          XML_ADJUSTMENTS ),
+        TOKEN( "modifiers" ,                            XML_MODIFIERS ),
         TOKEN( "equation" ,                         XML_EQUATION ),
+        TOKEN( "xstretch",                          XML_XSTRETCH ),
+        TOKEN( "ystretch",                          XML_YSTRETCH ),
+        TOKEN( "hasstroke",                         XML_HASSTROKE ),
+        TOKEN( "hasfill",                           XML_HASFILL ),
+        TOKEN( "logwidth",                          XML_LOGWIDTH ),
+        TOKEN( "logheight",                         XML_LOGHEIGHT ),
         TOKEN( "handle" ,                               XML_HANDLE ),
         TOKEN( "handle-mirror-vertical" ,               XML_HANDLE_MIRROR_VERTICAL ),
         TOKEN( "handle-mirror-horizontal" ,         XML_HANDLE_MIRROR_HORIZONTAL ),
@@ -2321,14 +2326,6 @@ namespace xmloff { namespace token {
         TOKEN( "cloud" ,                                XML_CLOUD ),
         TOKEN( "boundingcube" ,                     XML_BOUNDINGCUBE ),
         TOKEN( "wireframe" ,                            XML_WIREFRAME ),
-        TOKEN( "mid" ,                                  XML_MID ),
-        TOKEN( "if" ,                                   XML_IF ),
-        TOKEN( "mod" ,                                  XML_MOD ),
-        TOKEN( "atan2" ,                                XML_ATAN2 ),
-        TOKEN( "cosatan2" ,                         XML_COSATAN2 ),
-        TOKEN( "sinatan2" ,                         XML_SINATAN2 ),
-        TOKEN( "sqrt" ,                             XML_SQRT ),
-        TOKEN( "sumangle" ,                         XML_SUMANGLE ),
         TOKEN( "segments" ,                         XML_SEGMENTS ),
         TOKEN( "word-wrap" ,                            XML_WORD_WRAP ),
         TOKEN( "collapsing" ,                       XML_COLLAPSING ),
