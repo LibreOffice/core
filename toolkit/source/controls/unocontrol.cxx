@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-04 06:05:18 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 13:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,16 +330,16 @@ void UnoControl::dispose(  ) throw(RuntimeException)
         mxPeer = NULL;
     }
 
-    EventObject aEvt;
-    aEvt.Source = (XAggregation*)(::cppu::OWeakAggObject*)this;
+    EventObject aDisposeEvent;
+    aDisposeEvent.Source = static_cast< XAggregation* >( this );
 
-    maDisposeListeners.disposeAndClear(aEvt);
-    maWindowListeners.disposeAndClear(aEvt);
-    maFocusListeners.disposeAndClear(aEvt);
-    maKeyListeners.disposeAndClear(aEvt);
-    maMouseListeners.disposeAndClear(aEvt);
-    maMouseMotionListeners.disposeAndClear(aEvt);
-    maPaintListeners.disposeAndClear(aEvt);
+    maDisposeListeners.disposeAndClear( aDisposeEvent );
+    maWindowListeners.disposeAndClear( aDisposeEvent );
+    maFocusListeners.disposeAndClear( aDisposeEvent );
+    maKeyListeners.disposeAndClear( aDisposeEvent );
+    maMouseListeners.disposeAndClear( aDisposeEvent );
+    maMouseMotionListeners.disposeAndClear( aDisposeEvent );
+    maPaintListeners.disposeAndClear( aDisposeEvent );
 
     // Model wieder freigeben
     setModel( Reference< XControlModel > () );
@@ -466,11 +466,12 @@ void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
 
     if( mxModel == rEvt.Source )
     {
-        mxModel = NULL;
-
         // #62337# Ohne Model wollen wir nicht weiterleben
         Reference< XControl >  xThis = this;
         xThis->dispose();
+
+        DBG_ASSERT( !mxModel.is(), "UnoControl::disposing: invalid dispose behaviour!" );
+        mxModel.clear();
     }
 }
 
