@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-07 19:53:48 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -39103,7 +39103,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "num_times";
             Text[ russian ] = "Число повторений";
             Text[ polish ] = "Liczba";
-            Text[ japanese ] = "ЊJ‚и•Ф‚µ‰сђ”";
+            Text[ japanese ] = "‰сђ”";
             Text[ chinese_traditional ] = "num_times";
             Text[ arabic ] = "Num_times";
             Text[ dutch ] = "Aantal";
