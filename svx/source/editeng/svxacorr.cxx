@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-02 17:06:45 $
+ *  last change: $Author: jp $ $Date: 2001-11-07 13:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ BOOL SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
             sal_Unicode cSave = rTxt.GetChar( nSttPos );
             String sChar( cSave );
             rCC.toLower( sChar );
-            if( rDoc.Replace( nSttPos, sChar ))
+            if( sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar ))
             {
                 if( SaveWordWrdSttLst & nFlags )
                     rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
@@ -911,7 +911,8 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             // gueltiger Trenner -> Ersetze
             String sChar( *pWordStt );
             rCC.toUpper( sChar );
-            return rDoc.Replace( xub_StrLen( pWordStt - pStart ), sChar );
+            return  sChar != *pWordStt &&
+                    rDoc.Replace( xub_StrLen( pWordStt - pStart ), sChar );
         }
 
         aText = *pPrevPara;
@@ -1077,7 +1078,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     nSttPos = pWordStt - rTxt.GetBuffer();
     String sChar( cSave );
     rCC.toUpper( sChar );
-    BOOL bRet = rDoc.Replace( nSttPos, sChar );
+    BOOL bRet = sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar );
 
     // das Wort will vielleicht jemand haben
     if( bRet && SaveWordCplSttLst & nFlags )
