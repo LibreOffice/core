@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-17 15:40:38 $
+ *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             {
                 if( pArrow )
 #ifdef VERTICAL_LAYOUT
-                    pArrow->PaintIt( pOut, GetTxtFrm() );
+                    GetInfo().DrawRedArrow( *pArrow );
 #else
                     pArrow->PaintIt( pOut );
 #endif
@@ -535,7 +535,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                     {
                         SwArrowPortion aArrow( GetInfo() );
 #ifdef VERTICAL_LAYOUT
-                        aArrow.PaintIt( pOut, GetTxtFrm() );
+                        GetInfo().DrawRedArrow( aArrow );
 #else
                         aArrow.PaintIt( pOut );
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-15 16:38:23 $
+ *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,9 @@ public:
                    sal_Bool bRetouche = sal_True ) const;
     void DrawTab( const SwLinePortion &rPor ) const;
     void DrawLineBreak( const SwLinePortion &rPor ) const;
+#ifdef VERTICAL_LAYOUT
+    void DrawRedArrow( const SwLinePortion &rPor ) const;
+#endif
     void DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) const;
     void DrawBackground( const SwLinePortion &rPor ) const;
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;

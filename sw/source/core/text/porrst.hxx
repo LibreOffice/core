@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-17 15:41:23 $
+ *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,7 @@ public:
             SwArrowPortion( const SwTxtPaintInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual SwLinePortion *Compress();
-#ifdef VERTICAL_LAYOUT
-    void PaintIt( OutputDevice *pOut, SwTxtFrm* pFrm ) const;
-#else
+#ifndef VERTICAL_LAYOUT
     void PaintIt( OutputDevice *pOut ) const;
 #endif
     inline sal_Bool IsLeft() const { return bLeft; }
