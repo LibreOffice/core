@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 07:53:16 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,7 +1330,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De opdracht kon niet worden uitgevoerd bij gebrek aan vrij geheugen.";
         Text[ chinese_simplified ] = "ÒςΞªΔΪ΄ζ²»Χγ¶ψΞή·¨Φ΄ΠΠΥβΈφ²ΩΧχ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί η λειτουργία λόγω έλλειψης μνήμης";
-        Text[ korean ] = "ΈήΈπΈ® ΊΞΑ·ΐΈ·Ξ ΐΞΗΟΏ© ΐΫµΏΐΜ ½ΗΗΰµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈήΈπΈ® ΊΞΑ·ΐΈ·Ξ ΐΞΗΨ, ΐΫµΏΐΜ ½ΗΗΰµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έώlem, bellek yetersizliπi nedeniyle yόrόtόlemedi";
     };
     String ERRCODE_IO_CANTSEEK
