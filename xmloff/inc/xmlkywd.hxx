@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:36:29 $
+ *  last change: $Author: dvo $ $Date: 2000-11-22 16:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@ XML_CONSTASCII_ACTION( sXML_all, "all" );
 XML_CONSTASCII_ACTION( sXML_allow_empty_cell, "allow-empty-cell" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index, "alphabetical-index" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_entry_template, "alphabetical-index-entry-template" );
+XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark, "alphabetical-index-mark" );
+XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark_end, "alphabetical-index-mark-end" );
+XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark_start, "alphabetical-index-mark-start" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_source, "alphabetical-index-source" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_separators, "alphabetical-separators" );
 XML_CONSTASCII_ACTION( sXML_am_pm, "am-pm" );
@@ -230,6 +233,7 @@ XML_CONSTASCII_ACTION( sXML_bibiliographic_type, "bibiliographic-type" );
 XML_CONSTASCII_ACTION( sXML_bibliography, "bibliography" );
 XML_CONSTASCII_ACTION( sXML_bibliography_data_field, "bibliography-data-field" );
 XML_CONSTASCII_ACTION( sXML_bibliography_entry_template, "bibliography-entry-template" );
+XML_CONSTASCII_ACTION( sXML_bibliography_mark, "bibliography-mark" );
 XML_CONSTASCII_ACTION( sXML_bibliography_source, "bibliography-source" );
 XML_CONSTASCII_ACTION( sXML_bibliography_type, "bibliography-type" );
 XML_CONSTASCII_ACTION( sXML_bind_styles_to_content, "bind-styles-to-content");
@@ -345,8 +349,8 @@ XML_CONSTASCII_ACTION( sXML_content_validation_name, "validation-name");
 XML_CONSTASCII_ACTION( sXML_content_validations, "content-validations");
 XML_CONSTASCII_ACTION( sXML_continue, "continue" );
 XML_CONSTASCII_ACTION( sXML_continue_numbering, "continue-numbering" );
-XML_CONSTASCII_ACTION( sXML_contour_polygon, "contour-polygon" );
 XML_CONSTASCII_ACTION( sXML_contour_path, "contour-path" );
+XML_CONSTASCII_ACTION( sXML_contour_polygon, "contour-polygon" );
 XML_CONSTASCII_ACTION( sXML_contrast , "contrast" );
 XML_CONSTASCII_ACTION( sXML_control, "control" );
 XML_CONSTASCII_ACTION( sXML_conversion_mode, "conversion-mode" );
@@ -714,6 +718,7 @@ XML_CONSTASCII_ACTION( sXML_index_entry_span, "index-entry-span" );
 XML_CONSTASCII_ACTION( sXML_index_entry_tab_stop, "index-entry-tab-stop" );
 XML_CONSTASCII_ACTION( sXML_index_entry_template, "index-entry-template" );
 XML_CONSTASCII_ACTION( sXML_index_entry_text, "index-entry-text" );
+XML_CONSTASCII_ACTION( sXML_index_name, "index-name" );
 XML_CONSTASCII_ACTION( sXML_index_scope, "index-scope" );
 XML_CONSTASCII_ACTION( sXML_index_source_style, "index-source-style" );
 XML_CONSTASCII_ACTION( sXML_index_source_styles, "index-source-styles" );
@@ -742,6 +747,8 @@ XML_CONSTASCII_ACTION( sXML_justify, "justify" );
 XML_CONSTASCII_ACTION( sXML_justify_single_word, "justify-single-word" );
 XML_CONSTASCII_ACTION( sXML_keep_with_next, "keep-with-next" );
 XML_CONSTASCII_ACTION( sXML_kerning_normal, "normal" );
+XML_CONSTASCII_ACTION( sXML_key1, "key1" );
+XML_CONSTASCII_ACTION( sXML_key2, "key2" );
 XML_CONSTASCII_ACTION( sXML_keyword, "keyword" );
 XML_CONSTASCII_ACTION( sXML_keywords, "keywords" );
 XML_CONSTASCII_ACTION( sXML_label, "label" );
@@ -1291,8 +1298,8 @@ XML_CONSTASCII_ACTION( sXML_text_background_color, "text-background-color" );
 XML_CONSTASCII_ACTION( sXML_text_blinking, "text-blinking" );
 XML_CONSTASCII_ACTION( sXML_text_box, "text-box" );
 XML_CONSTASCII_ACTION( sXML_text_combine, "text-combine" );
-XML_CONSTASCII_ACTION( sXML_text_combine_start_char, "text-combine-start-char" );
 XML_CONSTASCII_ACTION( sXML_text_combine_end_char, "text-combine-end-char" );
+XML_CONSTASCII_ACTION( sXML_text_combine_start_char, "text-combine-start-char" );
 XML_CONSTASCII_ACTION( sXML_text_content, "text-content" );
 XML_CONSTASCII_ACTION( sXML_text_crossing_out, "text-crossing-out" );
 XML_CONSTASCII_ACTION( sXML_text_emphasize, "text-emphasize" );
@@ -1319,6 +1326,9 @@ XML_CONSTASCII_ACTION( sXML_time_value, "time-value");
 XML_CONSTASCII_ACTION( sXML_times, "times");
 XML_CONSTASCII_ACTION( sXML_title, "title" );
 XML_CONSTASCII_ACTION( sXML_to_another_table, "to-another-table" );
+XML_CONSTASCII_ACTION( sXML_toc_mark, "toc-mark" );
+XML_CONSTASCII_ACTION( sXML_toc_mark_end, "toc-mark-end" );
+XML_CONSTASCII_ACTION( sXML_toc_mark_start, "toc-mark-start" );
 XML_CONSTASCII_ACTION( sXML_top, "top" );
 XML_CONSTASCII_ACTION( sXML_top_percent, "top percent");
 XML_CONSTASCII_ACTION( sXML_top_values, "top values");
@@ -1384,6 +1394,9 @@ XML_CONSTASCII_ACTION( sXML_user_field_get, "user-field-get" );
 XML_CONSTASCII_ACTION( sXML_user_field_input, "user-field-input" );
 XML_CONSTASCII_ACTION( sXML_user_index, "user-index" );
 XML_CONSTASCII_ACTION( sXML_user_index_entry_template, "user-index-entry-template" );
+XML_CONSTASCII_ACTION( sXML_user_index_mark, "user-index-mark" );
+XML_CONSTASCII_ACTION( sXML_user_index_mark_end, "user-index-mark-end" );
+XML_CONSTASCII_ACTION( sXML_user_index_mark_start, "user-index-mark-start" );
 XML_CONSTASCII_ACTION( sXML_user_index_source, "user-index-source" );
 XML_CONSTASCII_ACTION( sXML_user_info_0, "user-info-0" );
 XML_CONSTASCII_ACTION( sXML_user_info_1, "user-info-1" );
@@ -1448,5 +1461,6 @@ XML_CONSTASCII_ACTION( sXML_y1, "y1" );
 XML_CONSTASCII_ACTION( sXML_y2, "y2" );
 XML_CONSTASCII_ACTION( sXML_year, "year" );
 XML_CONSTASCII_ACTION( sXML_zero_values, "zero-values" );
+
 
 #endif
