@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:35:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,9 @@
 #ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
+
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
 #endif
 
 #ifndef SC_DOCUMENT_HXX
@@ -910,8 +911,8 @@ void XclExpPivotCache::WriteDconref( XclExpStream& rStrm ) const
 
 void XclExpPivotCache::WriteCacheStream()
 {
-    SvStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
-    SvStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
+    SotStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    SotStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
     if( xSvStrm.Is() )
     {
         XclExpStream aStrm( *xSvStrm, GetRoot() );
