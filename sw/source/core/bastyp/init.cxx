@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:43:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,8 +883,10 @@ void _InitCore()
     aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, FALSE );
     // <-- collapsing
     // OD 2004-05-04 #i28701#
+    // --> OD 2004-10-18 #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
-            new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED );
+            new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+    // <--
 // FrmAttr-Dummies
     aAttrTab[ RES_FRMATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY3 );
     aAttrTab[ RES_FRMATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY4 );
