@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-17 09:32:58 $
+ *  last change: $Author: sab $ $Date: 2001-01-19 15:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,24 +65,42 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef __SGI_STL_LIST
+#include <stl/list>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 
 class ScDocument;
 class ScChangeAction;
 class ScChangeTrack;
 class ScXMLExport;
 class ScBaseCell;
+class ScChangeActionDel;
+class ScBigRange;
+class ScEditEngineTextObj;
+class ScChangeActionTable;
+
+typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 
 class ScChangeTrackingExportHelper
 {
     ScXMLExport&    rExport;
 
     ScChangeTrack*  pChangeTrack;
-    rtl::OUString   sTrackedChanges;
+    ScEditEngineTextObj* pEditTextObj;
+    ScChangeActionTable* pDependings;
     rtl::OUString   sChangeIDPrefix;
+    rtl::OUString   sAccepted;
+    rtl::OUString   sRejected;
+    rtl::OUString   sPending;
+    com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
 
     rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
+    rtl::OUString& GetAcceptanceState(const ScChangeAction* pAction);
 
-    void WriteBigRange(const ScChangeAction* pAction);
+    void WriteBigRange(const ScBigRange& rBigRange, const sal_Char *pName);
     void WriteChangeInfo(const ScChangeAction* pAction);
     void WriteDepending(const ScChangeAction* pDependAction);
     void WriteDependings(ScChangeAction* pAction);
@@ -96,17 +114,22 @@ class ScChangeTrackingExportHelper
     void WriteCell(const ScBaseCell* pCell);
 
     void WriteContentChange(ScChangeAction* pAction);
+    void AddInsertionAttributes(const ScChangeAction* pAction);
     void WriteInsertion(ScChangeAction* pAction);
+    void AddDeletionAttributes(const ScChangeActionDel* pAction, const ScChangeActionDel* pLastAction);
+    void WriteDeletionCells(ScChangeActionDel* pAction);
+    void WriteCutOffs(const ScChangeActionDel* pAction);
     void WriteDeletion(ScChangeAction* pAction);
     void WriteMovement(ScChangeAction* pAction);
 
+    void CollectCellAutoStyles(const ScBaseCell* pBaseCell);
+    void CollectActionAutoStyles(ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
-    void StartChangeActionList();
-    void EndChangeActionList();
 public:
     ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
 
+    void CollectAutoStyles();
     void CollectAndWriteChanges();
 };
 

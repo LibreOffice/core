@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 14:48:38 $
+ *  last change: $Author: sab $ $Date: 2001-01-19 15:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,6 +1560,7 @@ void ScXMLExport::_ExportAutoStyles()
                 if (nProgressValue < nOldProgressValue + nProgressObjects)
                     GetProgressBarHelper()->SetValue(++nProgressValue);
             }
+            pChangeTrackingExportHelper->CollectAutoStyles();
             GetPageExport()->collectAutoStyles(sal_True);
 
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
