@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:38:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     !pNd->FindTableNode() )
                 {
                     pEndNd = pNd;
+
                     break;
                 }
             }
@@ -505,9 +506,18 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                             pSectNd = pSttNd->FindSectionNode();
                         }
 
-                        pSectNd = GetNodes().InsertSection(
-                                            SwNodeIndex( *pSttNd ),
-                                            *pFmt, aSect, &aEndIdx, FALSE );
+                        // -> #i26762#
+                        // Ensure order of start and end of section is sane.
+                        SwNodeIndex aStartIdx(*pSttNd);
+
+                        if (aEndIdx >= aStartIdx)
+                            pSectNd = GetNodes().InsertSection
+                                (aStartIdx, *pFmt, aSect, &aEndIdx, FALSE );
+                        else
+                            pSectNd = GetNodes().InsertSection
+                                (aEndIdx, *pFmt, aSect, &aStartIdx, FALSE );
+                        // <- #i26762#
+
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );
                     }
                     break;
