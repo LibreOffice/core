@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-15 08:22:31 $
+#   last change: $Author: vg $ $Date: 2005-03-10 18:18:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,9 +100,9 @@ SHARE_LIBS =	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
-SHARE_LIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "xmlsec.lib" "xmlsec-nss.lib" "xsec_xmlsec.lib"
+SHARE_LIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "libxmlsec.lib" "libxmlsec-nss.lib" "xsec_xmlsec.lib"
 .ELSE
-SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lxmlsec-nss" "-lxsec_xmlsec"
+SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "-lxsec_xmlsec"
 .ENDIF
         
 SHARE_OBJS =	\
