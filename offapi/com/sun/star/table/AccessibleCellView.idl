@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellView.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:36:22 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ module com {  module sun {  module star {  module table {
       of a spreadsheet document. See
     <type scope="::com::sun::star::sheet">AccessibleCell</type> for cells in
     the edit view of a spreadsheet.
-    @since #107627#
+    @since OOo 1.1.2
 */
 published service AccessibleCellView
 {
