@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:03 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,16 +309,12 @@ protected:
     HWND    m_hwndFileOpenDlg;
     HWND    m_hwndFileOpenDlgChild;
 
-#if (_WIN32_WINNT >= 0x0500)
     _OPENFILENAMEW  m_ofn;
-#else
-    OPENFILENAMEW   m_ofn;
-#endif
 
-    // to reconnect to the instance
-    // !!! implies that only one instance
-    // at a time is supported
-    static CFileOpenDialog* s_fileOpenDlgInst;
+    // we connect the instance with the dialog window using
+    // SetProp, with this function we can reconnect from
+    // callback functions to this instance
+    static CFileOpenDialog* getCurrentInstance( HWND hwnd );
 
 private:
     // FileOpen or FileSaveDialog
@@ -332,6 +328,8 @@ private:
     CAutoUnicodeBuffer  m_fileTitleBuffer;
     CAutoUnicodeBuffer  m_helperBuffer;
 
+    DLGPROC             m_pfnBaseDlgProc;
+
     // callback function
     static unsigned int CALLBACK ofnHookProc(
         HWND hChildDlg, // handle to child dialog box
@@ -339,6 +337,13 @@ private:
         WPARAM wParam,  // message parameter
         LPARAM lParam   // message parameter
     );
+
+    // we have to subclass the dialog in order
+    // to clean up the window property we are
+    // using to connect the window with a class
+    // instance in WM_NCDESTROY
+    static unsigned int CALLBACK BaseDlgProc(
+        HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam );
 
 private:
 

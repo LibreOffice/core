@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:15 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,25 +88,24 @@ using rtl::OUString;
 // constants
 //------------------------------------------------------------------------
 
-// we choose such large buffers because the size of
-// an single line edit field can be up to 32k; if
-// a user has a multi selection FilePicker and selects
-// a lot of files in a large directory we may reach this
-// limit and don't want to get out of memory;
-// another much more elegant way would be to subclass the
-// FileOpen dialog and overload the BM_CLICK event of the
-// OK button so that we determine the size of the text
-// currently in the edit field and resize our buffer
-// appropriately - in the future we will do this
-const size_t MAX_FILENAME_BUFF_SIZE  = 32000;
-const size_t MAX_FILETITLE_BUFF_SIZE = 32000;
-const size_t MAX_FILTER_BUFF_SIZE    = 4096;
+namespace /* private */
+{
+    // we choose such large buffers because the size of
+    // an single line edit field can be up to 32k; if
+    // a user has a multi selection FilePicker and selects
+    // a lot of files in a large directory we may reach this
+    // limit and don't want to get out of memory;
+    // another much more elegant way would be to subclass the
+    // FileOpen dialog and overload the BM_CLICK event of the
+    // OK button so that we determine the size of the text
+    // currently in the edit field and resize our buffer
+    // appropriately - in the future we will do this
+    const size_t MAX_FILENAME_BUFF_SIZE  = 32000;
+    const size_t MAX_FILETITLE_BUFF_SIZE = 32000;
+    const size_t MAX_FILTER_BUFF_SIZE    = 4096;
 
-//------------------------------------------------------------------------
-// static member declaration
-//------------------------------------------------------------------------
-
-CFileOpenDialog* CFileOpenDialog::s_fileOpenDlgInst;
+    const char* CURRENT_INSTANCE = "CurrInst";
+};
 
 //------------------------------------------------------------------------
 //
@@ -144,7 +143,8 @@ CFileOpenDialog::CFileOpenDialog(
                    OFN_ENABLEHOOK |
                    OFN_HIDEREADONLY |
                    OFN_PATHMUSTEXIST |
-                   OFN_FILEMUSTEXIST;
+                   OFN_FILEMUSTEXIST |
+                   OFN_OVERWRITEPROMPT;
 
     // it is a little hack but how else could
     // we get a parent window (using a vcl window?)
@@ -173,10 +173,6 @@ CFileOpenDialog::CFileOpenDialog(
 
     // set a pointer to myself as ofn parameter
     m_ofn.lCustData = reinterpret_cast< long > ( this );
-
-    // initialize the static member to reconnect
-    // to the instance from callback methods
-    s_fileOpenDlgInst = this;
 }
 
 //------------------------------------------------------------------------
@@ -631,6 +627,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND hwndChild, LPOFNOTIFYW lpO
         break;
 
     case CDN_TYPECHANGE:
+        m_ofn.nFilterIndex = lpOfNotify->lpOFN->nFilterIndex;
         onTypeChanged( lpOfNotify->lpOFN->nFilterIndex );
         break;
     }
@@ -647,6 +644,8 @@ void SAL_CALL CFileOpenDialog::handleInitDialog( HWND hwndDlg, HWND hwndChild )
     m_hwndFileOpenDlg      = hwndDlg;
     m_hwndFileOpenDlgChild = hwndChild;
 
+    OSL_ASSERT( GetParent( hwndChild ) == hwndDlg );
+
     // calling virtual function which the
     // client can overload
     onInitDialog( hwndDlg, hwndChild );
@@ -659,25 +658,99 @@ void SAL_CALL CFileOpenDialog::handleInitDialog( HWND hwndDlg, HWND hwndChild )
 unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
     HWND hChildDlg, unsigned int uiMsg, WPARAM wParam, LPARAM lParam )
 {
-    CFileOpenDialog* pImpl = CFileOpenDialog::s_fileOpenDlgInst;
-    OSL_ASSERT( pImpl );
+    HWND hwndDlg = GetParent( hChildDlg );
+    CFileOpenDialog* pImpl = NULL;
 
     switch( uiMsg )
     {
     case WM_INITDIALOG:
-        pImpl->handleInitDialog(
-            GetParent( hChildDlg ),
-            hChildDlg );
+        {
+            _OPENFILENAMEW* lpofn = reinterpret_cast< _OPENFILENAMEW* >( lParam );
+            pImpl = reinterpret_cast< CFileOpenDialog* >( lpofn->lCustData );
+            OSL_ASSERT( pImpl );
+
+            // subclass the base dialog for WM_NCDESTROY processing
+            pImpl->m_pfnBaseDlgProc =
+                reinterpret_cast< DLGPROC >(
+                    SetWindowLong( hwndDlg,
+                    DWL_DLGPROC,
+                    reinterpret_cast< DWORD >( CFileOpenDialog::BaseDlgProc ) ) );
+
+            // connect the instance handle to the window
+            SetPropA( hwndDlg, CURRENT_INSTANCE, pImpl );
+
+            pImpl->handleInitDialog( hwndDlg, hChildDlg );
+        }
         return 0;
 
     case WM_NOTIFY:
-        return pImpl->onWMNotify(
-            hChildDlg, reinterpret_cast< LPOFNOTIFYW >( lParam ) );
+        {
+            pImpl = getCurrentInstance( hwndDlg );
+            return pImpl->onWMNotify(
+                hChildDlg, reinterpret_cast< LPOFNOTIFYW >( lParam ) );
+        }
 
     case WM_COMMAND:
-        return pImpl->onCtrlCommand(
-            hChildDlg, LOWORD( wParam ), HIWORD( lParam ) );
+        {
+            pImpl = getCurrentInstance( hwndDlg );
+            OSL_ASSERT( pImpl );
+
+            return pImpl->onCtrlCommand(
+                hChildDlg, LOWORD( wParam ), HIWORD( lParam ) );
+        }
     }
 
     return 0;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+unsigned int CALLBACK CFileOpenDialog::BaseDlgProc(
+    HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam )
+{
+    unsigned int lResult   = 0;
+    CFileOpenDialog* pImpl = NULL;
+
+    switch( wMessage )
+    {
+    case WM_NCDESTROY:
+
+        // RemoveProp returns the saved value on success
+        pImpl = reinterpret_cast< CFileOpenDialog* >(
+            RemovePropA( hWnd, CURRENT_INSTANCE ) );
+        OSL_ASSERT( pImpl );
+
+        // fall through in order to call the
+        // base dlg proc
+    default:
+        if ( !pImpl )
+        {
+            pImpl = getCurrentInstance( hWnd );
+            OSL_ASSERT( pImpl );
+        }
+
+        // !!! we use CallWindowProcA
+        lResult = CallWindowProcA(
+            reinterpret_cast< WNDPROC >( pImpl->m_pfnBaseDlgProc ),
+            hWnd, wMessage, wParam, lParam );
+
+    break;
+
+    } // switch
+
+    return lResult;
+
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+CFileOpenDialog* CFileOpenDialog::getCurrentInstance( HWND hwnd )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+    return reinterpret_cast< CFileOpenDialog* >(
+        GetPropA( hwnd, CURRENT_INSTANCE ) );
 }

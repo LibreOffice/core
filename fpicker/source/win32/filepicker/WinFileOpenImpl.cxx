@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-02 08:09:57 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,14 @@
 #include "..\misc\resourceprovider.hxx"
 #endif
 
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
+#endif
+
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -156,6 +164,17 @@ enum ECW_ACTION_T
     CHECK_PREVIEW = 0,
     INIT_CONTROL_VALUES,
     CACHE_CONTROL_VALUES
+};
+
+struct EnumParam
+{
+    ECW_ACTION_T        m_action;
+    CWinFileOpenImpl*   m_instance;
+
+    EnumParam( ECW_ACTION_T action, CWinFileOpenImpl* instance ):
+        m_action( action ),
+        m_instance( instance )
+    {}
 };
 
 //-------------------------------------------------------------------------
@@ -432,7 +451,7 @@ OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter(  ) throw(RuntimeException)
 //=================================================================================================================
 
 void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
-    throw(RuntimeException)
+    throw(IllegalArgumentException, RuntimeException)
 {
     if ( m_bInExecuteMode )
     {
@@ -482,7 +501,7 @@ void SAL_CALL CWinFileOpenImpl::setValue( sal_Int16 aControlId, sal_Int16 aContr
 //-----------------------------------------------------------------------------------------
 
 Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-    throw(RuntimeException)
+    throw(IllegalArgumentException, RuntimeException)
 {
     Any aAny;
 
@@ -540,7 +559,7 @@ Any SAL_CALL CWinFileOpenImpl::getValue( sal_Int16 aControlId, sal_Int16 aContro
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEnable )
-    throw(RuntimeException)
+    throw(IllegalArgumentException, RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( ControlID );
 
@@ -558,7 +577,7 @@ void SAL_CALL CWinFileOpenImpl::enableControl( sal_Int16 ControlID, sal_Bool bEn
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
-    throw (RuntimeException)
+    throw (IllegalArgumentException, RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
@@ -578,7 +597,7 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const ::rtl::OUS
 //-----------------------------------------------------------------------------------------
 
 OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
-        throw (RuntimeException)
+        throw (IllegalArgumentException, RuntimeException)
 {
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
@@ -735,15 +754,15 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::getFocused( )
 unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
     HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam )
 {
-    CWinFileOpenImpl* pImpl =
-        dynamic_cast< CWinFileOpenImpl* >( s_fileOpenDlgInst );
-    OSL_ASSERT( pImpl );
-
     unsigned int lResult = 0;
+
+    CWinFileOpenImpl* pImpl =
+        dynamic_cast< CWinFileOpenImpl* >(
+            getCurrentInstance( hWnd ) );
+    OSL_ASSERT( pImpl );
 
     switch( wMessage )
     {
-
     case WM_HELP:
     {
         FilePickerEvent evt;
@@ -752,7 +771,6 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
     break;
 
     default:
-
         // !!! we use CallWindowProcA
         lResult = CallWindowProcA(
             reinterpret_cast< WNDPROC >( pImpl->m_pfnOldDlgProc ),
@@ -781,22 +799,11 @@ void SAL_CALL CWinFileOpenImpl::InitControlState( HWND hWnd )
 
     for ( /* empty */; iter != iter_end; ++iter )
     {
-        try
-        {
-            if ( GetDlgCtrlID( hWnd ) == iter->m_controlId )
-                setValue(
-                    iter->m_controlId,
-                    iter->m_controlAction,
-                    iter->m_Value );
-        }
-        catch( ... )
-        {
-            // if setValue throws an exception
-            // we catch and ignore it because it may
-            // be that there are some invalid or old
-            // items in the cache
-            OSL_ASSERT( sal_False );
-        }
+        if ( GetDlgCtrlID( hWnd ) == iter->m_controlId )
+            setValue(
+                iter->m_controlId,
+                iter->m_controlAction,
+                iter->m_Value );
     }
 
     //-----------------------------------------
@@ -863,15 +870,14 @@ sal_Bool SAL_CALL CWinFileOpenImpl::HasPreview( HWND hWnd )
 
 BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc( HWND hWnd, LPARAM lParam )
 {
-    ECW_ACTION_T action = (ECW_ACTION_T)lParam;
-    CWinFileOpenImpl* pImpl =
-        dynamic_cast< CWinFileOpenImpl* >( s_fileOpenDlgInst );
+    EnumParam* enumParam    = (EnumParam*)lParam;
+    CWinFileOpenImpl* pImpl = enumParam->m_instance;
 
     OSL_ASSERT( pImpl );
 
     BOOL bRet = TRUE;
 
-    switch( action )
+    switch( enumParam->m_action )
     {
     case CHECK_PREVIEW:
         if ( pImpl->HasPreview( hWnd ) )
@@ -885,6 +891,10 @@ BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc( HWND hWnd, LPARAM lParam )
     case CACHE_CONTROL_VALUES:
         pImpl->CacheControlState( hWnd );
     break;
+
+    default:
+        // should not end here
+        OSL_ASSERT( sal_False );
     }
 
     return bRet;
@@ -898,10 +908,13 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
 {
     // fill the control value cache
     m_ControlCache.clear( );
+
+    EnumParam enumParam( CACHE_CONTROL_VALUES, this );
+
     EnumChildWindows(
         m_hwndFileOpenDlgChild,
         CWinFileOpenImpl::EnumChildWndProc,
-        (LPARAM) CACHE_CONTROL_VALUES );
+        (LPARAM)&enumParam );
 
     return 0;
 }
@@ -955,10 +968,12 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
 
     // we check if the checkbox is present and if so
     // create a preview window
+    EnumParam enumParam( CHECK_PREVIEW, this );
+
     EnumChildWindows(
         m_hwndFileOpenDlgChild,
         CWinFileOpenImpl::EnumChildWndProc,
-        (LPARAM) CHECK_PREVIEW );
+        (LPARAM)&enumParam );
 
     // create and display the preview control
 
@@ -1043,10 +1058,15 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     }
 
     // initialize controls from cache
+    enumParam.m_action   = INIT_CONTROL_VALUES;
+    enumParam.m_instance = this;
+
     EnumChildWindows(
         m_hwndFileOpenDlgChild,
         CWinFileOpenImpl::EnumChildWndProc,
-        (LPARAM) INIT_CONTROL_VALUES );
+        (LPARAM)&enumParam );
+
+    SetDefaultExtension( );
 }
 
 //-----------------------------------------------------------------
@@ -1066,6 +1086,8 @@ void SAL_CALL CWinFileOpenImpl::onFolderChanged()
 
 void SAL_CALL CWinFileOpenImpl::onTypeChanged( sal_uInt32 nFilterIndex )
 {
+    SetDefaultExtension( );
+
     FilePickerEvent evt;
     evt.ElementId = LISTBOX_FILTER;
     evt.Source = static_cast< XFilePicker* >( m_FilePicker );
@@ -1079,6 +1101,8 @@ void SAL_CALL CWinFileOpenImpl::onTypeChanged( sal_uInt32 nFilterIndex )
 sal_uInt32 SAL_CALL CWinFileOpenImpl::onCtrlCommand(
     HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode )
 {
+    SetDefaultExtension( );
+
     if ( ctrlId < ctlFirst )
     {
         FilePickerEvent evt;
@@ -1147,4 +1171,76 @@ HWND SAL_CALL CWinFileOpenImpl::GetHwndDlgItem( sal_Int16 ctrlId, sal_Bool bIncl
     }
 
     return hwndCtrl;
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CWinFileOpenImpl::SetDefaultExtension( )
+{
+    // !!! HACK !!!
+
+    OSVERSIONINFOA  OSVerInfo;
+
+    OSVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFOA );
+    GetVersionExA( &OSVerInfo );
+
+    // if windows 95/98
+    sal_Bool bIsWin9x = ( VER_PLATFORM_WIN32_WINDOWS == OSVerInfo.dwPlatformId );
+
+    HWND hwndChkSaveWithExt = GetDlgItem( m_hwndFileOpenDlgChild, 100 );
+
+    if ( hwndChkSaveWithExt )
+    {
+        Any aAny = CheckboxGetState( hwndChkSaveWithExt );
+        sal_Bool bChecked = *reinterpret_cast< const sal_Bool* >( aAny.getValue( ) );
+
+        if ( bChecked )
+        {
+            sal_uInt32 nIndex = getSelectedFilterIndex( );
+
+            OUString currentFilter;
+            if ( nIndex > 0 )
+            {
+                // filter index of the base class starts with 1
+                sal_Bool bRet = m_filterContainer->getFilter( nIndex - 1, currentFilter );
+
+                if ( currentFilter.getLength( ) )
+                {
+                    OUString FilterExt;
+                    m_filterContainer->getFilter( currentFilter, FilterExt );
+
+                    sal_Int32 posOfPoint = FilterExt.indexOf( L'.' );
+                    const sal_Unicode* pFirstExtStart = FilterExt.getStr( ) + posOfPoint + 1;
+
+                    sal_Int32 posOfSemiColon = FilterExt.indexOf( L';' ) - 1;
+                    if ( posOfSemiColon < 0 )
+                        posOfSemiColon = FilterExt.getLength( ) - 1;
+
+                    FilterExt = OUString( pFirstExtStart, posOfSemiColon - posOfPoint );
+
+                    if ( bIsWin9x )
+                    {
+                        rtl::OString tmp = rtl::OUStringToOString( FilterExt, osl_getThreadTextEncoding( ) );
+
+                        SendMessageA( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)( tmp.getStr( ) ) );
+                    }
+                    else
+                    {
+                        SendMessageW( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)( FilterExt.getStr( ) ) );
+                    }
+                }
+            }
+        }
+        else
+        {
+            if ( bIsWin9x )
+                SendMessageA( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)"" );
+            else
+                SendMessageW( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)L"");
+        }
+    }
+
+    // !!! HACK !!!
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-02 08:09:57 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,8 @@ private:
     // controls like OK button, etc. will not be considered
     // the function return 0 on failure
     HWND SAL_CALL GetHwndDlgItem( sal_Int16 ctrlId, sal_Bool bIncludeStdCtrls = sal_True );
+
+    void SAL_CALL SetDefaultExtension( );
 
     static unsigned int CALLBACK SubClassFunc( HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam );
 
