@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-18 13:29:50 $
+ *  last change: $Author: os $ $Date: 2002-10-21 07:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,20 +356,10 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             if(sPageStyle.Len())
             {
                 SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, GET_POOLID_PAGEDESC, sal_True );
-                const SwPageDesc* pDesc = ::GetPageDescByName_Impl(*pFmt->GetDoc(), sPageStyle);
-                if(pDesc)
-                {
-                    SwFmtPageDesc aDesc( pDesc );
-//                      SwFmtPageDesc aDesc();
-//                      uno::Any* pPgNo = pProps->GetProperty(UNO_NAME_PAGE_NUMBER_OFFSET );
-//                      if(pPgNo)
-//                      {
-//                          aDesc.SetNumOffset( TypeConversion::toINT16(*pPgNo) );
-//                      }
-                    pFmt->GetDoc()->SetAttr(aDesc, *pFmt);
-                    break;
-                }
+                pDesc = ::GetPageDescByName_Impl(*pFmt->GetDoc(), sPageStyle);
             }
+            SwFmtPageDesc aDesc( pDesc );
+            pFmt->GetDoc()->SetAttr(aDesc, *pFmt);
         }
         break;
         default:
