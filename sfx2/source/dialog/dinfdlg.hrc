@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-17 14:05:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,11 @@
 #define CB_FRAME            73
 #define PB_BROWSEURL        74
 #define STR_FORWARD_ERRMSSG 75
+
+#define FT_SIGNED           76
+#define FT_SIGNED_VAL       77
+#define STR_MULTSIGNED      78
+#define BTN_SIGNATURE       79
 
 #endif
 
