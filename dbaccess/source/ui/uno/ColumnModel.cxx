@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnModel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:20:42 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ OColumnControlModel::OColumnControlModel(const Reference<XMultiServiceFactory>& 
                     ,OPropertyContainer(m_aBHelper)
                     ,m_sDefaultControl(SERVICE_CONTROLDEFAULT)
                     ,m_nBorder(0)
+                    ,m_nWidth(50)
                     ,m_bEnable(sal_True)
                     ,m_xORB(_rxFactory)
 {
@@ -132,6 +133,7 @@ OColumnControlModel::OColumnControlModel(const OColumnControlModel* _pSource,con
                     ,m_bEnable(_pSource->m_bEnable)
                     ,m_aTabStop(_pSource->m_aTabStop)
                     ,m_xORB(_rxFactory)
+                    ,m_nWidth(50)
 {
     DBG_CTOR(OColumnControlModel,NULL);
     registerProperties();
@@ -150,17 +152,24 @@ OColumnControlModel::~OColumnControlModel()
 void OColumnControlModel::registerProperties()
 {
     registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
-            &m_xConnection, ::getCppuType( &m_xConnection ) );
+        &m_xConnection, ::getCppuType( &m_xConnection ) );
+    Any a;
+    a <<= m_xColumn;
+//  registerMayBeVoidProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND| PropertyAttribute::MAYBEVOID,
+//          &a, ::getCppuType( &m_xColumn ) );
     registerProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
             &m_xColumn, ::getCppuType( &m_xColumn ) );
+
     registerMayBeVoidProperty( PROPERTY_TABSTOP, PROPERTY_ID_TABSTOP, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-            &m_aTabStop, ::getCppuType( &m_aTabStop ) );
+            &m_aTabStop, ::getCppuType( static_cast<sal_Int16*>(NULL) ) );
     registerProperty( PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, PropertyAttribute::BOUND,
             &m_sDefaultControl, ::getCppuType( &m_sDefaultControl ) );
     registerProperty( PROPERTY_ENABLED, PROPERTY_ID_ENABLED, PropertyAttribute::BOUND,
             &m_bEnable, ::getCppuType( &m_bEnable ) );
     registerProperty( PROPERTY_BORDER, PROPERTY_ID_BORDER, PropertyAttribute::BOUND,
-            &m_nBorder, ::getCppuType( &m_nBorder ) );
+        &m_nBorder, ::getCppuType( &m_nBorder ) );
+    registerProperty( PROPERTY_EDIT_WIDTH, PROPERTY_ID_EDIT_WIDTH, PropertyAttribute::BOUND,
+        &m_nWidth, ::getCppuType( &m_nWidth ) );
 }
 // XCloneable
 //------------------------------------------------------------------------------
