@@ -72,24 +72,24 @@ $(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
 
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)OBJTARGET)"!=""
-$($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)OBJFILES)
+$($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    +echo. $(foreach,i,$(REAL_$(SECOND_BUILD)OBJFILES:f) $(ROBJ)$/$(i)) >> $@
+    +echo. $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) >> $@
 .ELSE
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
     @+-$(RM) $@ >& $(NULLDEV)
-    $(LIBMGR) $@ $(LIBFLAGS) +$(REAL_$(SECOND_BUILD)OBJFILES:+"\n+":^"&")
+    $(LIBMGR) $@ $(LIBFLAGS) +$(REAL_$(SECOND_BUILD)_OBJFILES:+"\n+":^"&")
 .ELSE			# "$(COM)"=="BLC"
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"

@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_slo.mk  $
 #*
 #*    Ersterstellung    MH 01.09.97
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:18 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-02-02 12:02:06 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_slo.mkv  $
 #*
@@ -140,7 +140,7 @@ $(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
 
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)SLOTARGET)"!=""
-$($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)SLOFILES)
+$($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
 .IF "$(MDB)" != ""
     @echo $(REAL_$(SECOND_BUILD)SLOTARGET)
     @echo $(&:+"\n")
@@ -152,12 +152,12 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)SLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WIN"
 .IF "$(COM)"=="BLC"
     @+-$(RM) $@ >& $(NULLDEV)
-    $(LIBMGR) $@ $(LIBFLAGS) +$(REAL_$(SECOND_BUILD)SLOFILES:+"\n+":^"&")
+    $(LIBMGR) $@ $(LIBFLAGS) +$(REAL_$(SECOND_BUILD)_SLOFILES:+"\n+":^"&")
 .ELSE			# "$(COM)"=="BLC"
 .ENDIF			# "$(COM)"=="BLC"
 .ENDIF			# "$(GUI)"=="WIN"
