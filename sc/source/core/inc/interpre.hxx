@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:11 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <rtl/math.hxx>
 #endif
 
-#ifndef SC_COMPILER_HXX
-#include "compiler.hxx"
+#ifndef SC_ERRORCODES_HXX
+#include "errorcodes.hxx"
 #endif
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
@@ -82,39 +82,19 @@
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
+#endif
 
 #if SC_SPEW_ENABLED
 #include "scspew.hxx"
 #endif
 
 class ScDocument;
-class ScMatrix;
 class SbxVariable;
 class ScBaseCell;
 class ScFormulaCell;
 class SvNumberFormatter;
-
-#define MAX_ANZ_MAT 150
-                                        // Maximale Anzahl fuer Zwischenergebnis
-                                        // Matrizen
-                                        // Maximum ca. 85 wird bei Invertierung
-                                        // von 128 x 128 benoetigt!
-
-
-#ifndef MSC
-    #include <setjmp.h>
-#else
-    extern "C"
-    {
-    #define _JBLEN  9  /* bp, di, si, sp, ret addr, ds */
-    typedef  int  jmp_buf[_JBLEN];
-    #define _JMP_BUF_DEFINED
-    #define setjmp  _setjmp
-    int  __cdecl _setjmp(jmp_buf);
-    void __cdecl longjmp(jmp_buf, int);
-    };
-#endif
-
 
 struct ScCompare
 {
@@ -195,7 +175,8 @@ private:
     String      aResult;
     ScDocument* pDok;                   // Pointer aufs Dokument
     double      nResult;
-    ScMatrix*   pResult;
+    ScMatrixRef pResult;
+    ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
     ScFormulaCell* pMyFormulaCell;      // die Zelle mit der Formel
     SvNumberFormatter* pFormatter;
     StackVar    eResult;
@@ -210,10 +191,6 @@ private:
     USHORT      sp;                     // der Stackpointer
     USHORT      maxsp;                  // der maximale StackPointer
     double**    ppGlobSortArray;        // Pointer auf Array zum Sortieren
-    ScMatrix**  ppTempMatArray;         // Array fuer temporaere Matrizen
-    USHORT      nMatCount;              // dazugehoeriger Zaehler
-    BOOL        bMatDel;                // und Kontrollvariable
-    USHORT      nRetMat;                // Index der Return-Matrix
     ULONG       nFuncFmtIndex;          // NumberFormatIndex einer Funktion
     ULONG       nCurFmtIndex;           // aktueller NumberFormatIndex
     ULONG       nRetFmtIndex;           // ggbf. NumberFormatIndex des Ausdrucks
@@ -275,13 +252,23 @@ const String& PopString();
 void PopSingleRef( ScAddress& );
 void PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab);
 void PopDoubleRef( ScRange&, BOOL bDontCheckForTableOp = FALSE );
+void DoubleRefToVars( const ScToken* p,
+        USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
+        USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+        BOOL bDontCheckForTableOp = FALSE );
 void PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
                           USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
                           BOOL bDontCheckForTableOp = FALSE );
 BOOL PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
-inline void MatrixDoubleRefToMatrix();      // wenn MatrixFormula: PopDoubleRefPushMatrix
-ScMatrix* PopMatrix();
+// If MatrixFormula: convert svDoubleRef to svMatrix, create JumpMatrix.
+// Else convert area reference parameters marked as ForceArray to array.
+// Returns TRUE if JumpMatrix created.
+bool ConvertMatrixParameters();
+inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPushMatrix
+// If MatrixFormula or ForceArray: ConvertMatrixParameters()
+inline bool MatrixParameterConversion();
+ScMatrixRef PopMatrix();
 //void PushByte(BYTE nVal);
 void PushDouble(double nVal);
 void PushInt( int nVal );
@@ -291,6 +278,7 @@ void PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab);
 void PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                  USHORT nCol2, USHORT nRow2, USHORT nTab2);
 void PushMatrix(ScMatrix* pMat);
+void PushError();
 StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 StackVar GetStackType( BYTE nParam );
@@ -304,7 +292,10 @@ BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDouble();
 BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
-ScMatrix* GetMatrix(USHORT& nMatInd);                   // in interpr2.cxx
+ScMatrixRef CreateMatrixFromDoubleRef(
+        USHORT nCol1, USHORT nRow1, USHORT nTab1,
+        USHORT nCol2, USHORT nRow2, USHORT nTab2 );
+ScMatrixRef GetMatrix();
 void ScTableOp();                                       // Mehrfachoperationen
 void ScErrCell();                                       // Sonderbehandlung
                                                         // Fehlerzelle
@@ -315,14 +306,21 @@ inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
 // Check for String overflow of rResult+rAdd and set error and erase rResult
 // if so. Return TRUE if ok, FALSE if overflow
-inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
+static inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
+// Set error according to rVal, and set rVal to 0.0 if there was an error.
+inline void TreatDoubleError( double& rVal );
 //---------------------------------Funktionen in interpr1.cxx---------
-//-----------------------------Textfunktionen
 void ScIfJump();
 void ScChoseJump();
-short CompareFunc( const ScCompare& rComp );
-short Compare();
-ScMatrix* CompareMat();
+
+// Be sure to only call this if pStack[sp-nStackLevel] really contains a
+// ScJumpMatrixToken, no further checks are applied!
+// Returns true if last jump was executed and result matrix pushed.
+bool JumpMatrix( short nStackLevel );
+
+double CompareFunc( const ScCompare& rComp );
+double Compare();
+ScMatrixRef CompareMat();
 void ScEqual();
 void ScNotEqual();
 void ScLess();
@@ -567,8 +565,7 @@ double ScGetGGT(double fx, double fy);
 void ScGGT();
 void ScKGV();
 //-------------------------- Matrixfunktionen ---------------------------------
-ScMatrix* GetNewMat(USHORT nC, USHORT nR, USHORT& nMatInd);
-void ResetNewMat(USHORT nIndex);
+ScMatrixRef GetNewMat(USHORT nC, USHORT nR);
 void ScMatValue();
 void MEMat(ScMatrix* mM, USHORT n);
 void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, USHORT n, USHORT m, USHORT l);
@@ -584,12 +581,12 @@ void ScMatMult();
 void ScMatTrans();
 void ScEMat();
 void ScMatRef();
-ScMatrix* MatAdd(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrix* MatSub(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrix* MatMul(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrix* MatDiv(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrix* MatPow(ScMatrix* pMat1, ScMatrix* pMat2);
-ScMatrix* MatConcat(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatAdd(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatSub(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatMul(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatDiv(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatPow(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatConcat(ScMatrix* pMat1, ScMatrix* pMat2);
 void ScSumProduct();
 void ScSumX2MY2();
 void ScSumX2DY2();
@@ -701,11 +698,11 @@ public:
 
     const     String& GetStringResult() { return aResult; }
     double    GetNumResult()            { return nResult; }
-    ScMatrix* GetMatrixResult()         { return pResult; }
+    /// caller must call ScMatrix.SetEternalRef() if stored as ScMatrix*
+    ScMatrixRef GetMatrixResult()       { return pResult; }
     StackVar  GetResultType()           { return eResult; }
     short     GetRetFormatType()    { return nRetFmtType; }
     ULONG     GetRetFormatIndex()   { return nRetFmtIndex; }
-    BOOL        HadMatrix() const   { return bMatDel; }
 };
 
 
@@ -713,6 +710,14 @@ inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
     if ( bMatrixFormula && GetStackType() == svDoubleRef )
         PopDoubleRefPushMatrix();
+}
+
+
+inline bool ScInterpreter::MatrixParameterConversion()
+{
+    if ( (bMatrixFormula || pCur->HasForceArray()) && !pJumpMatrix && sp > 0 )
+        return ConvertMatrixParameters();
+    return false;
 }
 
 
@@ -760,4 +765,17 @@ inline BOOL ScInterpreter::CheckStringResultLen( String& rResult, const String& 
     return TRUE;
 }
 
+
+inline void ScInterpreter::TreatDoubleError( double& rVal )
+{
+    if ( !::rtl::math::isFinite( rVal ) )
+    {
+        USHORT nErr = GetDoubleErrorValue( rVal );
+        if ( nErr )
+            SetError( nErr );
+        else
+            SetError( errNoValue );
+        rVal = 0.0;
+    }
+}
 #endif
