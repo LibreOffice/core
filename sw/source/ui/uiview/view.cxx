@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 16:53:33 $
+ *  last change: $Author: os $ $Date: 2002-04-18 10:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,6 +922,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     bNoInterrupt = sal_True;
 
     pHRuler->SetActive( sal_True );
+    pVRuler->SetActive( sal_True );
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if( pViewFrame->GetFrame()->GetParentFrame())
@@ -934,10 +935,14 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     StartListening( *pDocSh );
 
     // Vom HLineal den ZOOM-Faktor einstellen
-    pHRuler->SetZoom( Fraction( aUsrPref.GetZoom(), 100 ) );
+    Fraction aZoomFract( aUsrPref.GetZoom(), 100 );
+    pHRuler->SetZoom( aZoomFract );
+    pVRuler->SetZoom( aZoomFract );
     pHRuler->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));
     FieldUnit eMetric = pUsrPref->GetHScrollMetric();
     pHRuler->SetUnit( eMetric );
+    eMetric = pUsrPref->GetVScrollMetric();
+    pVRuler->SetUnit( eMetric );
 
     // DocShell setzen
     pDocSh->SetView( this );
