@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:05 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,7 @@ namespace dbaui
         virtual ::rtl::OUString getAutoIncrementValue() const;
 
     public:
-        OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar) :OFieldDescControl(pParent,pHelpBar) {};
-
+        OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
 
         String BoolStringPersistent(const String& rUIString) const { return OFieldDescControl::BoolStringPersistent(rUIString); }
         String BoolStringUI(const String& rPersistentString) const { return OFieldDescControl::BoolStringUI(rPersistentString); }

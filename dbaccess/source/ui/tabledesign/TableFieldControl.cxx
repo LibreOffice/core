@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:05 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -92,7 +95,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace dbaui;
-
+OTableFieldControl::OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar) :OFieldDescControl(pParent,pHelpBar)
+{
+}
 //------------------------------------------------------------------
 void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )
 {

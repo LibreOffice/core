@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:48:20 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,12 @@
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
 #endif
@@ -237,6 +243,10 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _NUMUNO_HXX
+#include <svtools/numuno.hxx>
+#endif
+
 // .........................................................................
 namespace dbaui
 {
@@ -1265,6 +1275,21 @@ URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHel
         aURL.Complete += sAnchor;
     }
     return aURL;
+}
+// -----------------------------------------------------------------------------
+void setEvalDateFormatForFormatter(Reference< XNumberFormatter >& _rxFormatter)
+{
+    Reference< XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
+
+    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
+    SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+    OSL_ENSURE(pSupplierImpl,"No Supplier!");
+
+    if ( pSupplierImpl )
+    {
+        SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
+        pFormatter->SetEvalDateFormat(NF_EVALDATEFORMAT_FORMAT);
+    }
 }
 // .........................................................................
 }

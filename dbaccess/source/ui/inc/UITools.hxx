@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:48:22 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ namespace com { namespace sun { namespace star {
     namespace util
     {
         struct URL;
+        class XNumberFormatter;
     }
 
 }}}
@@ -311,6 +312,11 @@ namespace dbaui
             The URL for the help agent to dispatch.
     */
     ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId);
+
+    /** set the evaluation flag at the number formatter
+        @param  _rxFormatter
+    */
+    void setEvalDateFormatForFormatter(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter);
 
 // .........................................................................
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 13:55:52 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,12 @@
 #include "UITools.hxx"
 #endif
 #include <memory>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
+#endif
 
 using namespace dbaui;
+using namespace dbtools;
 //  using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -194,6 +198,24 @@ using namespace ::com::sun::star::sdbc;
 
 #define HSCROLL_STEP        20
 
+
+namespace
+{
+    // -----------------------------------------------------------------------------
+    double checkDoubleForDateFormat(double _nValue,sal_Int32 _nFormatKey,const Reference<XNumberFormatter>& _xNumberFormatter)
+    {
+        double nValue = _nValue;
+        sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(_xNumberFormatter,_nFormatKey);
+        if(     (nNumberFormat & NumberFormat::DATE)    == NumberFormat::DATE
+            || (nNumberFormat & NumberFormat::DATETIME) == NumberFormat::DATETIME )
+        {
+            nValue = DBTypeConversion::toStandardDbDate(DBTypeConversion::getNULLDate(_xNumberFormatter->getNumberFormatsSupplier()),nValue);
+        }
+
+        return nValue;
+    }
+    // -----------------------------------------------------------------------------
+}
 
 //==================================================================
 // class OFieldDescControl
@@ -316,6 +338,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     m_pHorzScroll->SetPageSize(1);
 
     m_nOldVThumb = m_nOldHThumb = 0;
+
 }
 
 //------------------------------------------------------------------------------
@@ -391,6 +414,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
 //------------------------------------------------------------------------------
 void OFieldDescControl::Init()
 {
+    ::dbaui::setEvalDateFormatForFormatter(GetFormatter());
 }
 
 //------------------------------------------------------------------------------
@@ -1888,6 +1912,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
             try
             {
                 double nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
+                nValue = checkDoubleForDateFormat(nValue,nFormatKey,GetFormatter());
                 pFieldDescr->SetControlDefault(makeAny(nValue));
             }
             catch(const Exception&)
@@ -2083,17 +2108,26 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
 
             if ( !bTextFormat )
             {
-                Reference<XNumberFormatPreviewer> xPreViewer(GetFormatter(),UNO_QUERY);
+                Reference<XNumberFormatter> xNumberFormatter = GetFormatter();
+                Reference<XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
                 OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
 
-                Reference<XPropertySet> xFormSet = GetFormatter()->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
+                Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
                 OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
 
                 ::rtl::OUString sFormat;
                 xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
 
                 Locale aLocale;
-                ::comphelper::getNumberFormatProperty(GetFormatter(),nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
+                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
+
+                sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
+                if(     (nNumberFormat & NumberFormat::DATE)    == NumberFormat::DATE
+                    || (nNumberFormat & NumberFormat::DATETIME) == NumberFormat::DATETIME )
+                {
+                    nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
+                }
+
                 sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }
         }
@@ -2106,7 +2140,6 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
     return sDefault;
 }
 // -----------------------------------------------------------------------------
-
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:59 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,16 @@ using namespace ::com::sun::star::sdbc;
 //========================================================================
 // OWizTypeSelectControl
 //========================================================================
+OWizTypeSelectControl::OWizTypeSelectControl(Window* pParent, OTableDesignHelpBar* pHelpBar)
+            : OFieldDescControl(pParent,pHelpBar)
+{
+}
+// -----------------------------------------------------------------------------
+OWizTypeSelectControl::OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar)
+    : OFieldDescControl(pParent,rResId,pHelpBar)
+{
+}
+// -----------------------------------------------------------------------------
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
 }
@@ -236,6 +246,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     m_aTypeControl.Show();
+    m_aTypeControl.Init();
     m_etAuto.SetText(String::CreateFromAscii("10"));
     m_etAuto.SetDecimalDigits(0);
     m_pbAuto.SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));

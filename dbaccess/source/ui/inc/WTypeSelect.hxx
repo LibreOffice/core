@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:57 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 10:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,8 @@ namespace dbaui
         virtual ::rtl::OUString getAutoIncrementValue() const;
 
     public:
-        OWizTypeSelectControl(Window* pParent, OTableDesignHelpBar* pHelpBar=NULL)
-            : OFieldDescControl(pParent,pHelpBar) { };
-        OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL)
-            : OFieldDescControl(pParent,rResId,pHelpBar) { };
+        OWizTypeSelectControl(Window* pParent, OTableDesignHelpBar* pHelpBar=NULL);
+        OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
         virtual ~OWizTypeSelectControl();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData();
