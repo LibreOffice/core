@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lo $ $Date: 2004-01-28 16:31:35 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:15:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
@@ -102,4 +106,5 @@ SLOFILES =	\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
 
