@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 13:04:07 $
+ *  last change: $Author: pb $ $Date: 2000-11-27 09:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,103 +126,116 @@
 #define CB_WORD         94
 #define CB_FLASH        95
 
+// NamePage -----------------------------------------------------------------
+
+#define FL_WEST                 100
+#define FT_WEST_NAME            101
+#define LB_WEST_NAME            102
+#define FT_WEST_STYLE           103
+#define LB_WEST_STYLE           104
+#define FT_WEST_SIZE            105
+#define LB_WEST_SIZE            106
+#define FT_WEST_LANG            107
+#define LB_WEST_LANG            108
+
+#define FL_EAST                 110
+#define FT_EAST_NAME            111
+#define LB_EAST_NAME            112
+#define FT_EAST_STYLE           113
+#define LB_EAST_STYLE           114
+#define FT_EAST_SIZE            115
+#define LB_EAST_SIZE            116
+#define FT_EAST_LANG            117
+#define LB_EAST_LANG            118
+
+#define FL_ARABIAN              120
+#define FT_ARABIAN_NAME         121
+#define LB_ARABIAN_NAME         122
+#define FT_ARABIAN_STYLE        123
+#define LB_ARABIAN_STYLE        124
+#define FT_ARABIAN_SIZE         125
+#define LB_ARABIAN_SIZE         126
+#define FT_ARABIAN_LANG         127
+#define LB_ARABIAN_LANG         128
+
+#define FL_CHAR_PREVIEW         130
+#define WIN_CHAR_PREVIEW        131
+#define FT_CHAR_FONTTYPE        132
+
+#define FL_SEPARATE             140
+#define FL_COLOR2               141
+#define LB_COLOR2               142
+
+// EffectsPage --------------------------------------------------------------
+
+#define FT_UNDERLINE            200
+#define LB_UNDERLINE            201
+#define FT_UNDERLINE_COLOR      202
+#define LB_UNDERLINE_COLOR      203
+#define FT_STRIKEOUT            204
+#define LB_STRIKEOUT            205
+#define CB_INDIVIDUALWORDS      206
+#define FT_EMPHASIS             207
+#define LB_EMPHASIS             208
+#define FT_POSITION             209
+#define LB_POSITION             210
+
+#define FT_EFFECTS              220
+#define LB_EFFECTS              221
+#define LB_EFFECTS2             222
+#define CB_OUTLINE              223
+#define CB_SHADOW               224
+#define CB_BLINKING             225
+
+#define FL_EFFECTS_PREVIEW      230
+#define WIN_EFFECTS_PREVIEW     231
+#define FT_EFFECTS_FONTTYPE     232
+
+#define STR_EFFECTS_TRANSPARENT 240
+#define STR_EFFECTS_CAPITALS    241
+#define STR_EFFECTS_LOWERCASE   242
+#define STR_EFFECTS_TITLE       243
+#define STR_EFFECTS_SMALL       244
+#define STR_EFFECTS_OUTLINE     245
+#define STR_EFFECTS_SHADOW      246
+#define STR_EFFECTS_BLINKING    247
+
 // PositionPage -------------------------------------------------------------
 
-#define FL_POSITION     100
-#define RB_HIGHPOS      101
-#define RB_NORMALPOS    102
-#define RB_LOWPOS       103
-#define FT_HIGHLOW      104
-#define ED_HIGHLOW      105
-#define FT_FONTSIZE     106
-#define ED_FONTSIZE     107
-#define CB_FONTSIZE     108
+#define FL_POSITION             300
+#define RB_HIGHPOS              301
+#define RB_NORMALPOS            302
+#define RB_LOWPOS               303
+#define FT_HIGHLOW              304
+#define ED_HIGHLOW              305
+#define FT_FONTSIZE             306
+#define ED_FONTSIZE             307
+#define CB_FONTSIZE             308
 
-#define FL_KERNING2     110
-#define LB_KERNING2     111
-#define FT_KERNING2     112
-#define ED_KERNING2     113
-#define CB_PAIRKERNING  114
+#define FL_KERNING2             310
+#define LB_KERNING2             311
+#define FT_KERNING2             312
+#define ED_KERNING2             313
+#define CB_PAIRKERNING          314
 
-#define FL_POS_PREVIEW  120
-#define WIN_POS_PREVIEW 121
-#define FT_POS_FONTTYPE 122
+#define FL_POS_PREVIEW          320
+#define WIN_POS_PREVIEW         321
+#define FT_POS_FONTTYPE         322
 
-// AsianPage ----------------------------------------------------------------
+// TwoLinesPage -------------------------------------------------------------
 
-#define FL_SWITCHON         130
-#define CB_TWOLINES         131
+#define FL_SWITCHON             400
+#define CB_TWOLINES             401
 
-#define FL_ENCLOSE          140
-#define FT_BEGINCHAR        141
-#define ED_BEGINCHAR        142
-#define FT_ENDCHAR          143
-#define ED_ENDCHAR          144
+#define FL_ENCLOSE              410
+#define FT_BEGINCHAR            411
+#define ED_BEGINCHAR            412
+#define FT_ENDCHAR              413
+#define ED_ENDCHAR              414
 
-#define FL_ASIAN_PREVIEW    150
-#define WIN_ASIAN_PREVIEW   151
-#define FT_ASIAN_FONTTYPE   152
-
-// CharPage -----------------------------------------------------------------
-
-#define FL_WEST             170
-#define FT_WEST_NAME        171
-#define LB_WEST_NAME        172
-#define FT_WEST_STYLE       173
-#define LB_WEST_STYLE       174
-#define FT_WEST_SIZE        175
-#define LB_WEST_SIZE        176
-#define FT_WEST_LANG        177
-#define LB_WEST_LANG        178
-
-#define FL_EAST             180
-#define FT_EAST_NAME        181
-#define LB_EAST_NAME        182
-#define FT_EAST_STYLE       183
-#define LB_EAST_STYLE       184
-#define FT_EAST_SIZE        185
-#define LB_EAST_SIZE        186
-#define FT_EAST_LANG        187
-#define LB_EAST_LANG        188
-
-#define FL_ARABIAN          190
-#define FT_ARABIAN_NAME     191
-#define LB_ARABIAN_NAME     192
-#define FT_ARABIAN_STYLE    193
-#define LB_ARABIAN_STYLE    194
-#define FT_ARABIAN_SIZE     195
-#define LB_ARABIAN_SIZE     196
-#define FT_ARABIAN_LANG     197
-#define LB_ARABIAN_LANG     198
-
-#define FL_CHAR_PREVIEW     200
-#define WIN_CHAR_PREVIEW    201
-#define FT_CHAR_FONTTYPE    202
-
-#define FL_SEPARATE         210
-
-#define FL_COLOR2           211
-#define LB_COLOR2           212
-
-// EFFECTSPAGE --------------------------------------------------------------
-
-#define FT_UNDERLINE        221
-#define LB_UNDERLINE        222
-#define FT_UNDERLINE_COLOR  223
-#define LB_UNDERLINE_COLOR  224
-#define FT_STRIKEOUT        225
-#define LB_STRIKEOUT        226
-#define CB_INDIVIDUALWORDS  227
-#define FT_EMPHASIS         228
-#define LB_EMPHASIS         229
-#define FT_POSITION         230
-#define LB_POSITION         231
-#define FT_EFFECTS          232
-#define LB_EFFECTS          233
-
-#define FL_EFFECTS_PREVIEW  240
-#define WIN_EFFECTS_PREVIEW 241
-#define FT_EFFECTS_FONTTYPE 242
+#define FL_TWOLINES_PREVIEW     420
+#define WIN_TWOLINES_PREVIEW    421
+#define FT_TWOLINES_FONTTYPE    422
 
 #endif
 
