@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-27 15:40:11 $
+#   last change: $Author: rt $ $Date: 2004-09-17 14:04:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,7 @@ SLOFILES =  \
         $(SLO)$/olmenu.obj \
         $(SLO)$/sdrhhcwrap.obj \
         $(SLO)$/sdrspell.obj \
-        $(SLO)$/hhcwrp.obj \
-        $(SLO)$/splwrp.obj
+        $(SLO)$/hhcwrp.obj 
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
