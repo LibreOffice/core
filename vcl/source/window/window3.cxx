@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:12:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
+#endif
+#ifndef _SV_WAITOBJ_HXX
+#include <waitobj.hxx>
 #endif
 
 #ifndef _SV_SALGDI_HXX
@@ -260,3 +263,9 @@ BOOL Window::GetNativeControlRegion(  ControlType nType,
 
 
 // -----------------------------------------------------------------------
+
+WaitObject::~WaitObject()
+{
+    if ( mpWindow )
+        mpWindow->LeaveWait();
+}
