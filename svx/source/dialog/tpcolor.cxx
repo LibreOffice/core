@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,11 @@
 #include "xpool.hxx"
 #include "xtable.hxx"
 #include "drawitem.hxx"
-#include "tabarea.hxx"
+#include "cuitabarea.hxx"
 #include "tabarea.hrc"
-#include "dlgname.hxx"
+#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 #include "dlgname.hrc"
+#include "svxdlg.hxx" //CHINA001
 #include "dialmgr.hxx"
 
 #define DLGWIN GetParentDialog( this )
@@ -356,17 +357,23 @@ long SvxColorTabPage::CheckChanges_Impl()
         {
             ResMgr* pMgr = DIALOG_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxMessDialog aMessDlg( DLGWIN,
-                String( ResId( RID_SVXSTR_COLOR, pMgr ) ),
-                String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, pMgr ) ),
-                &aWarningBoxImage );
-
-            aMessDlg.SetButtonText( MESS_BTN_1,
+            //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
+            //CHINA001  String( ResId( RID_SVXSTR_COLOR, pMgr ) ),
+            //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, pMgr ) ),
+            //CHINA001  &aWarningBoxImage );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, ResId(RID_SVXDLG_MESSBOX),
+                                                        String( ResId( RID_SVXSTR_COLOR, pMgr ) ),
+                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, pMgr ) ),
+                                                        &aWarningBoxImage );
+            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
+            aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );
-            aMessDlg.SetButtonText( MESS_BTN_2,
+            aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
                                     String( ResId( RID_SVXSTR_ADD, pMgr ) ) );
 
-            short nRet = aMessDlg.Execute();
+            short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
 
             switch( nRet )
             {
@@ -390,6 +397,7 @@ long SvxColorTabPage::CheckChanges_Impl()
                 break;
                 // return( TRUE ); // Abbruch
             }
+            delete aMessDlg; //add by CHINA001
         }
     }
     if( *pDlgType == 0 ) // Flaechen-Dialog
@@ -542,7 +550,11 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
         aWarningBox.Execute();
 
-        SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         BOOL bLoop = TRUE;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -625,7 +637,11 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
-            SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+            //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             BOOL bLoop = TRUE;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
