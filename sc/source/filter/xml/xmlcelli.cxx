@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:37:49 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,6 +699,8 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
                 aAny = ::cppu::bool2any(aValidation.bIgnoreBlanks);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
+                aAny <<= aValidation.nShowList;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWLIST)), aAny);
                 aAny <<= aValidation.aAlertStyle;
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);
                 uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
