@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-13 17:26:29 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:33:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.4 $ ';
+my $id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -102,7 +102,7 @@ my $opt_master = '';    # option: master workspace
 my $opt_child  = '';    # option: child workspace
 
 # list of available query modes
-my @query_modes = qw(modules taskids state latest);
+my @query_modes = qw(modules taskids state latest current);
 my %query_modes_hash = ();
 foreach (@query_modes) {
     $query_modes_hash{$_}++;
@@ -162,7 +162,7 @@ sub query_taskids
 
     if ( is_valid_cws($cws) ) {
         my @taskids = $cws->taskids();
-        print_message("Task ID(s)");
+        print_message("Task ID(s):");
         foreach (@taskids) {
             print "$_\n";
         }
@@ -186,6 +186,22 @@ sub query_state
     return;
 }
 
+sub query_current
+{
+    my $cws = shift;
+
+    if ( is_valid_cws($cws) ) {
+        my $milestone = $cws->milestone();
+        if ( !$milestone ) {
+            print_error("Internal error: can't get current milestone.", 3);
+        } else {
+            print_message("Current milestone:");
+            print "$milestone\n";
+        }
+    }
+    return;
+}
+
 sub query_latest
 {
     my $cws = shift;
@@ -196,7 +212,8 @@ sub query_latest
 
     if ( $latest ) {
         print_message("Master workspace '$masterws':");
-        print_message("Latest milestone available for resync: '$masterws $latest'");
+        print_message("Latest milestone available for resync:");
+        print "$masterws $latest\n";
     }
     else {
         print_error("Can't determine latest milestone of '$masterws' available for resync.", 3);
@@ -264,13 +281,14 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <modules|taskIDs|state>\n";
+    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <modules|taskIDs|state|current>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest>\n";
     print STDERR "Query child workspace for miscellaneous information.\n";
     print STDERR "Modes:\n";
     print STDERR "\tmodules\t\tquery modules added to the CWS\n";
     print STDERR "\ttaskids\t\tquery taskids to be handled on the CWS\n";
     print STDERR "\tstate\t\tquery approval status of CWS\n";
+    print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
     print STDERR "\tlatest\t\tquery the latest milestone available for resync\n";
     print STDERR "Options:\n";
     print STDERR "\t-h\t\thelp\n";
