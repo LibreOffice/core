@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicupdatemerger.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-11-06 11:03:00 $
+ *  last change: $Author: ssmith $ $Date: 2002-11-08 14:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include "basicupdatemerger.hxx"
-#include "layerdecorator.hxx"
+#include "layerdefaultremover.hxx"
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
@@ -110,7 +110,7 @@ void SAL_CALL BasicUpdateMerger::readData( ResultHandler const & _xResultHandler
 
     try
     {
-        m_xResultHandler = new LayerDecorator(_xResultHandler);
+        m_xResultHandler = new LayerDefaultRemover(_xResultHandler);
         m_xSourceLayer->readData( this );
     }
     catch (uno::Exception & )
