@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:37:40 $
+ *  last change: $Author: abi $ $Date: 2001-09-06 08:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -205,7 +205,7 @@ namespace fileaccess
         void SAL_CALL startTask(
             sal_Int32 CommandId,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
-            throw( com::sun::star::ucb::CommandAbortedException );
+            throw( com::sun::star::ucb::CommandFailedException );
 
         sal_Int32 SAL_CALL getCommandId( void );
         void SAL_CALL abort( sal_Int32 CommandId );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:35:48 $
+ *  last change: $Author: abi $ $Date: 2001-09-06 08:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,10 @@ BaseContent::execute( const Command& aCommand,
            CommandAbortedException,
            RuntimeException )
 {
+    if( ! CommandId )
+        // A Command with commandid zero cannot be aborted
+        CommandId = createCommandIdentifier();
+
     m_pMyShell->startTask( CommandId,
                            Environment );
 

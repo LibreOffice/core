@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:37:40 $
+ *  last change: $Author: abi $ $Date: 2001-09-06 08:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,13 @@ void SAL_CALL
 TaskManager::startTask(
     sal_Int32 CommandId,
     const uno::Reference< XCommandEnvironment >& xCommandEnv )
-    throw( CommandAbortedException )
+    throw( CommandFailedException )
 {
     vos::OGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
-        throw CommandAbortedException();
+        throw CommandFailedException();
     }
     m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );
 }
@@ -134,12 +134,15 @@ TaskManager::endTask( shell * pShell,
 void SAL_CALL
 TaskManager::abort( sal_Int32 CommandId )
 {
-    vos::OGuard aGuard( m_aMutex );
-    TaskMap::iterator it = m_aTaskMap.find( CommandId );
-    if( it == m_aTaskMap.end() )
-        return;
-    else
-        it->second.abort();
+    if( CommandId )
+    {
+        vos::OGuard aGuard( m_aMutex );
+        TaskMap::iterator it = m_aTaskMap.find( CommandId );
+        if( it == m_aTaskMap.end() )
+            return;
+        else
+            it->second.abort();
+    }
 }
 
 
