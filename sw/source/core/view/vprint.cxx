@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:59:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1485,6 +1485,12 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                         }
                         SwPaintQueue::Repaint();
 
+                        // OD 03.03.2003 #103602# - printing contents of table,
+                        // which doesn't fit on the page on an extra page, doesn't
+                        // work as excepted for PDF export. Thus, do *not*
+                        // perform this code for PDF export.
+                        if ( !pPDFOut )
+                        {
                         //Wenn eine Tabelle heraushaengt, so wird der Rest der
                         //Tabelle auf zusaetzliche Seiten verteilt.
                         const SwFrm *pFrm = pStPage->FindLastBodyCntnt();
@@ -1558,6 +1564,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                                 }
                             }
                         }
+                        } // END OF If ( !pPDFOut ); OD 03.03.2003 #103602#
 
                         // Wenn PostIts nach Seite gedruckt werden sollen ...
                         if( (!rOptions.bPrintReverse) &&
