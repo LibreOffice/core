@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2002-06-14 09:07:31 $
+ *  last change: $Author: cp $ $Date: 2002-06-24 15:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,13 +244,13 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         aStyleSettings.SetActiveTextColor( aActive );
         aStyleSettings.SetDeactiveTextColor( aDeactive );
 
-        aStyleSettings.SetDialogTextColor( aActive );
-        aStyleSettings.SetMenuTextColor( aActive );
-        aStyleSettings.SetButtonTextColor( aActive );
-        aStyleSettings.SetRadioCheckTextColor( aActive );
-        aStyleSettings.SetGroupTextColor( aActive );
-        aStyleSettings.SetLabelTextColor( aActive );
-        aStyleSettings.SetInfoTextColor( aActive );
+        aStyleSettings.SetDialogTextColor( aDeactive );
+        aStyleSettings.SetMenuTextColor( aDeactive );
+        aStyleSettings.SetButtonTextColor( aDeactive );
+        aStyleSettings.SetRadioCheckTextColor( aDeactive );
+        aStyleSettings.SetGroupTextColor( aDeactive );
+        aStyleSettings.SetLabelTextColor( aDeactive );
+        aStyleSettings.SetInfoTextColor( aDeactive );
 
         aStyleSettings.Set3DColors( aColors[1] );
         aStyleSettings.SetFaceColor( aColors[1] );
