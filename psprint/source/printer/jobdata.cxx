@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-19 10:53:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
         aStream.Write( pContextBuffer, nBytes );
 
     // success
-    pData = rtl_allocateMemory( bytes = aStream.GetSize() );
+    pData = rtl_allocateMemory( bytes = aStream.Tell() );
     memcpy( pData, aStream.GetData(), bytes );
     return true;
 }
