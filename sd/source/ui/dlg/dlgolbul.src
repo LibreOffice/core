@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:11:42 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ language_user1 ] = "MS Word, KeyID23276";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
-                Text[ korean ] = "¹øÈ£ ¸Å±â±â À¯Çü";
+                Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
             };
             PageItem
@@ -217,7 +217,7 @@ TabDialog TAB_OUTLINEBULLET
     Text[ chinese_traditional ] = "½s¸¹/¶µ¥Ø²Å¸¹";
     Text[ arabic ] = "ÊÑŞíã/ÊÚÏÇÏ";
     Text[ greek ] = "Áñßèìçóç/Êïõêßäåò";
-    Text[ korean ] = "¹øÈ£ ¸Å±â±â/±Û¸Ó¸®Ç¥";
+    Text[ korean ] = "¹øÈ£¸Å±â±â/±Û¸Ó¸®±âÈ£";
     Text[ turkish ] = "Numaralama/madde işaretleri";
     Text[ language_user1 ] = " ";
 };
