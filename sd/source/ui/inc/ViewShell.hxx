@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:20:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,9 @@ public:
         PageKind ePageKind,
         BOOL bPrintMarkedOnly);
 
+    virtual void UIActivating( SfxInPlaceClient* );
+    virtual void UIDeactivated( SfxInPlaceClient* );
+
     /** Show controls of the UI or hide them, depending on the given flag.
         As a result the border is adapted.
     */
@@ -633,9 +636,6 @@ protected:
 
     virtual void Activate(BOOL IsMDIActivate);
     virtual void Deactivate(BOOL IsMDIActivate);
-
-    virtual void UIActivate( SvInPlaceObject* );
-    virtual void UIDeactivate( SvInPlaceObject* );
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );
