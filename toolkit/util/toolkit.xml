@@ -403,4 +403,34 @@
         <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFormattedFieldModel</supported-service>
     </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.awt.UnoControlProgressBarModel</name>
+        <description>UnoControlProgressBarModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControlProgressBarModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.awt.UnoControlScrollBarModel</name>
+        <description>UnoControlScrollBarModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControlScrollBarModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.awt.UnoControlFixedLineModel</name>
+        <description>UnoControlFixedLineModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControlFixedLineModel</supported-service>
+    </component-description>
 </module-description>
