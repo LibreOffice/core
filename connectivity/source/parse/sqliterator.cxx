@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:48:25 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,11 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
         {
             if(!m_xTables->hasByName(aTableName)) // name not in XNameAccess
             {
+
                 const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
                 Sequence< ::rtl::OUString > aSeq;
                 Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(Any(),sAll,aTableName,aSeq);
+                aTableName = ::rtl::OUString(); // now clear the name to avoid reassignment
                 if(xRes.is() && xRes->next())
                 {
                     ::rtl::OUString sCatalog, sSchema, sName;
@@ -235,14 +237,14 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                     if(sCatalog.getLength())
                     {
                         aTableName = sCatalog;
-                        aTableName += m_xDatabaseMetaData->getCatalogSeparator().getStr();
+                        aTableName += m_xDatabaseMetaData->getCatalogSeparator();
                     }
                     if(sSchema.getLength())
                     {
-                        aTableName += sSchema.getStr();
-                        aTableName += ::rtl::OUString::createFromAscii(".").getStr();
+                        aTableName += sSchema;
+                        aTableName += ::rtl::OUString::createFromAscii(".");
                     }
-                    aTableName += sName.getStr();
+                    aTableName += sName;
                 }
             }
             m_xTables->getByName(aTableName) >>= m_aTables[aTableRange];
