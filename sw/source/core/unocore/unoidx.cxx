@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:43:37 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 15:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2756,11 +2756,13 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_LINK_START   :
             {
-                rCurTokenSeq.realloc( 1 );
+                rCurTokenSeq.realloc( 2 );
                 PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenHyperlinkStart");
+                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Value <<= aProgCharStyle;
             }
             break;
             case TOKEN_LINK_END     :
