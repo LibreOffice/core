@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:46:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,11 +282,18 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
+
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
 #endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
+#endif
+#ifndef _UNOCRSRHELPER_HXX
+#include <unocrsrhelper.hxx>
 #endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
@@ -1104,10 +1111,9 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
             }
             if(nTxtLen)
             {
-                //OPT: GetSystemCharSet
-                if( !pDoc->Insert(*_pStartCrsr, rText) )
+                if( !SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, *_pStartCrsr, rText ) )
                 {
-                    ASSERT( sal_False, "Doc->Insert(Str) failed." )
+                    DBG_ASSERT( sal_False, "Doc->Insert(Str) failed." )
                 }
                 SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
                 _pStartCrsr->Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
@@ -1462,7 +1468,7 @@ sal_Bool SwXTextCursor::isStartOfWord(void) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        bRet = pUnoCrsr->IsStartWord();
+        bRet = pUnoCrsr->IsStartWordWT( i18n::WordType::DICTIONARY_WORD );
     }
     else
     {
@@ -1480,7 +1486,7 @@ sal_Bool SwXTextCursor::isEndOfWord(void) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        bRet = pUnoCrsr->IsEndWord();
+        bRet = pUnoCrsr->IsEndWordWT( i18n::WordType::DICTIONARY_WORD );
     }
     else
     {
@@ -1495,27 +1501,41 @@ sal_Bool SwXTextCursor::gotoNextWord(sal_Bool Expand) throw( uno::RuntimeExcepti
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     //Probleme gibt's noch mit einem Absatzanfang, an dem kein Wort beginnt.
-    sal_Bool bRet = sal_False;
+
     SwUnoCrsr* pUnoCrsr = GetCrsr();
+
+    sal_Bool bRet = sal_False;
     if(pUnoCrsr)
     {
+        // remember old position to check if cursor has moved
+        // since the called functions are sometimes a bit unreliable
+        // in specific cases...
+        SwPosition  *pPoint     = pUnoCrsr->GetPoint();
+        SwNode      *pOldNode   = &pPoint->nNode.GetNode();
+        xub_StrLen   nOldIndex  = pPoint->nContent.GetIndex();
+
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         //Absatzende?
         if(pUnoCrsr->GetCntntNode() &&
-                pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len())
-                bRet = pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+                pPoint->nContent == pUnoCrsr->GetCntntNode()->Len())
+            pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
         else
         {
-            bRet = pUnoCrsr->GoNextWord();
+            sal_Bool bTmp = pUnoCrsr->GoNextWordWT( i18n::WordType::DICTIONARY_WORD );
             //if there is no next word within the current paragraph try to go to the start of the next paragraph
-            if(!bRet)
-                bRet = pUnoCrsr->MovePara(fnParaNext, fnParaStart);
+            if(!bTmp)
+                pUnoCrsr->MovePara(fnParaNext, fnParaStart);
         }
+
+        // return true if cursor has moved
+        bRet = &pPoint->nNode.GetNode() != pOldNode  ||
+                pPoint->nContent.GetIndex() != nOldIndex;
     }
     else
     {
         throw uno::RuntimeException();
     }
+
     return bRet;
 }
 /*-- 09.12.98 14:18:45---------------------------------------------------
@@ -1525,25 +1545,35 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     // hier machen Leerzeichen am Absatzanfang Probleme
-    sal_Bool bRet = sal_False;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
+
+    sal_Bool bRet = sal_False;
     if(pUnoCrsr)
     {
+        SwPosition  *pPoint     = pUnoCrsr->GetPoint();
+        SwNode      *pOldNode   = &pPoint->nNode.GetNode();
+        xub_StrLen   nOldIndex  = pPoint->nContent.GetIndex();
+
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         //Absatzanfang ?
-        if(pUnoCrsr->GetPoint()->nContent == 0)
-            bRet = pUnoCrsr->Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        if(pPoint->nContent == 0)
+            pUnoCrsr->Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
         else
         {
-            bRet = pUnoCrsr->GoPrevWord();
-            if(pUnoCrsr->GetPoint()->nContent == 0)
+            pUnoCrsr->GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
+            if(pPoint->nContent == 0)
                 pUnoCrsr->Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
         }
+
+        // return true if cursor has moved
+        bRet = &pPoint->nNode.GetNode() != pOldNode  ||
+                pPoint->nContent.GetIndex() != nOldIndex;
     }
     else
     {
         throw uno::RuntimeException();
     }
+
     return bRet;
 }
 /*-- 09.12.98 14:18:45---------------------------------------------------
@@ -1552,20 +1582,34 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
 sal_Bool SwXTextCursor::gotoEndOfWord(sal_Bool Expand) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Bool bRet = sal_False;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
+
+    sal_Bool bRet = sal_False;
     if(pUnoCrsr)
     {
+        SwPosition  *pPoint     = pUnoCrsr->GetPoint();
+        SwNode      &rOldNode   = pPoint->nNode.GetNode();
+        xub_StrLen   nOldIndex  = pPoint->nContent.GetIndex();
+
+        sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
-        if(!pUnoCrsr->IsEndWord())
+        if(!pUnoCrsr->IsEndWordWT( nWordType ))
+            pUnoCrsr->GoEndWordWT( nWordType );
+
+        // restore old cursor if we are not at the end of a word by now
+        // otherwise use current one
+        bRet = pUnoCrsr->IsEndWordWT( nWordType );
+        if (!bRet)
         {
-            bRet = pUnoCrsr->GoEndWord();
+            pPoint->nNode       = rOldNode;
+            pPoint->nContent    = nOldIndex;
         }
     }
     else
     {
         throw uno::RuntimeException();
     }
+
     return bRet;
 }
 /*-- 09.12.98 14:18:46---------------------------------------------------
@@ -1575,19 +1619,33 @@ sal_Bool SwXTextCursor::gotoStartOfWord(sal_Bool Expand) throw( uno::RuntimeExce
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    sal_Bool bRet = FALSE;
+
+    sal_Bool bRet = sal_False;
     if(pUnoCrsr)
     {
+        SwPosition  *pPoint     = pUnoCrsr->GetPoint();
+        SwNode      &rOldNode   = pPoint->nNode.GetNode();
+        xub_StrLen   nOldIndex  = pPoint->nContent.GetIndex();
+
+        sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
-        if(!pUnoCrsr->IsStartWord())
+        if(!pUnoCrsr->IsStartWordWT( nWordType ))
+            pUnoCrsr->GoStartWordWT( nWordType );
+
+        // restore old cursor if we are not at the start of a word by now
+        // otherwise use current one
+        bRet = pUnoCrsr->IsStartWordWT( nWordType );
+        if (!bRet)
         {
-            bRet = pUnoCrsr->GoStartWord();
+            pPoint->nNode       = rOldNode;
+            pPoint->nContent    = nOldIndex;
         }
     }
     else
     {
         throw uno::RuntimeException();
     }
+
     return bRet;
 }
 /*-- 09.12.98 14:18:46---------------------------------------------------
@@ -1796,6 +1854,11 @@ sal_Bool SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand) throw( uno::Runtim
     }
     else
         throw uno::RuntimeException();
+
+    // since MovePara(fnParaCurr, fnParaStart) only returns false
+    // if we were already at the start of the paragraph this function
+    // should always complete successfully.
+    DBG_ASSERT( bRet, "gotoStartOfParagraph failed" );
     return bRet;
 }
 /*-- 09.12.98 14:18:49---------------------------------------------------
@@ -1815,6 +1878,11 @@ sal_Bool SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw( uno::RuntimeE
     }
     else
         throw uno::RuntimeException();
+
+    // since MovePara(fnParaCurr, fnParaEnd) only returns false
+    // if we were already at the end of the paragraph this function
+    // should always complete successfully.
+    DBG_ASSERT( bRet, "gotoEndOfParagraph failed" );
     return bRet;
 }
 /*-- 09.12.98 14:18:50---------------------------------------------------
@@ -2119,6 +2187,8 @@ void lcl_SelectParaAndReset ( SwPaM &rPaM, SwDoc* pDoc, const SvUShortsSort* pWh
         pTemp->MovePara(fnParaCurr, fnParaEnd);
     pDoc->ResetAttr(*pTemp, sal_True, pWhichIds);
 }
+
+
 void SwXTextCursor::SetPropertyToDefault(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
@@ -2131,7 +2201,7 @@ void SwXTextCursor::SetPropertyToDefault(
     if(pMap)
     {
         if ( pMap->nFlags & PropertyAttribute::READONLY)
-            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
+            throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, 0 );
         if(pMap->nWID < RES_FRMATR_END)
         {
             SvUShortsSort aWhichIds;
@@ -2369,7 +2439,7 @@ void SAL_CALL SwXTextCursor::setPropertiesToDefault( const Sequence< OUString >&
                         throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 }
                 if ( pMap->nFlags & PropertyAttribute::READONLY)
-                    throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
+                    throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
                 if( pMap->nWID < RES_FRMATR_END)
                 {
