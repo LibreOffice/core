@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:46:17 $
+#   last change: $Author: kz $ $Date: 2004-01-29 11:51:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -205,7 +205,8 @@ $(PAR)$/%.par :
     cpp.lcc -+ -P -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .ENDIF
-    +scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+#	+scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 
 .ENDIF			# "$(PARFILES)"!=""
 
