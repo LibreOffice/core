@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:27:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,22 +89,13 @@
 class OfaMiscTabPage : public SfxTabPage
 {
 private:
-    FixedLine           aGbTwoFigure;
-    FixedText           aFtInterpret;
-    NumericField        aNfYearValue;
-    FixedText           aFtTo;
-
-    FixedLine           aHelpAgentFL;
+    FixedLine           aHelpFL;
+    CheckBox            aToolTipsCB;
+    CheckBox            aExtHelpCB;
     CheckBox            aHelpAgentCB;
-    FixedText           aHelpAgentTimeFT;
-    NumericField        aHelpAgentTimeED;
-    FixedText           aHelpAgentTimeUnitFT;
-    FixedText           aHelpAgentResetFT;
     PushButton          aHelpAgentResetBtn;
-
-    FixedLine           aHelpFormattingFL;
-    FixedText           aStyleSheetFT;
-    ListBox             aStyleSheetLB;
+    FixedText           aHelpFormatFT;
+    ListBox             aHelpFormatLB;
 
     FixedLine           aFileDlgFL;
     CheckBox            aFileDlgCB;
@@ -112,11 +103,16 @@ private:
     FixedLine           aDocStatusFL;
     CheckBox            aDocStatusCB;
 
+    FixedLine           aTwoFigureFL;
+    FixedText           aInterpretFT;
+    NumericField        aYearValueField;
+    FixedText           aToYearFT;
+
     String              aStrDateInfo;
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
-    DECL_LINK( HelpAgentHdl_Impl, CheckBox* );
+    DECL_LINK( HelpCheckHdl_Impl, CheckBox* );
     DECL_LINK( HelpAgentResetHdl_Impl, PushButton* );
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
