@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:58:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_INTERACTION_HANDLER,"com.sun.star.sdb.InteractionHandler");
 }   // namespace svxform
 
+// ------------------------------------------------------------------------
 #define DECL_SERVICE(ImplName)                      \
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &) throw( ::com::sun::star::uno::Exception );
 
@@ -153,13 +154,34 @@ namespace svxform
     if (xSingleFactory.is())                                            \
         xSet->insert(::com::sun::star::uno::makeAny(xSingleFactory));
 
-    // declration of the service creation methods
-    // ------------------------------------------------------------------------
-    DECL_SERVICE(FmXGridControl);
-    DECL_SERVICE(FmXFormController);
 
+    DECL_SERVICE( FmXGridControl );
+    DECL_SERVICE( FmXFormController );
+
+
+// ------------------------------------------------------------------------
 namespace svxform
 {
+
+#define DECL_SELFAWARE_SERVICE( ClassName )                     \
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClassName##_Create(      \
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );  \
+    ::rtl::OUString SAL_CALL ClassName##_GetImplementationName();                                           \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ClassName##_GetSupportedServiceNames();     \
+
+
+#define REGISTER_SELFAWARE_SERVICE( ClassName )                     \
+    xSingleFactory = ::cppu::createSingleFactory( xServiceFactory,  \
+                        ClassName##_GetImplementationName(),        \
+                        ClassName##_Create,                         \
+                        ClassName##_GetSupportedServiceNames()      \
+                     );                                             \
+    if ( xSingleFactory.is() )                                      \
+        xSet->insert( ::com::sun::star::uno::makeAny( xSingleFactory ) );
+
+
+    // ------------------------------------------------------------------------
+    DECL_SELFAWARE_SERVICE( OAddConditionDialog )
 
     // ------------------------------------------------------------------------
     void ImplSmartRegisterUnoServices()
@@ -174,10 +196,16 @@ namespace svxform
 
         ::rtl::OUString sString;
 
+        // ------------------------------------------------------------------------
+        // FormController
         REGISTER_SERVICE(FmXFormController, FM_FORM_CONTROLLER);
 
-        // DBGridControl
         // ------------------------------------------------------------------------
+        // FormController
+        REGISTER_SELFAWARE_SERVICE( OAddConditionDialog );
+
+        // ------------------------------------------------------------------------
+        // DBGridControl
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);  // compatibility
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRIDCONTROL);
         REGISTER_SERVICE(FmXGridControl, FM_SUN_CONTROL_GRIDCONTROL);
