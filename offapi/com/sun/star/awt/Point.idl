@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Point.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:50:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** specifies a 2-dimensional point using the Cartesian coordinate system.
  */
-struct Point
+published struct Point
 {
     /** specifies the x-coordinate.
      */
