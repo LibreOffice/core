@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:20:29 $
+ *  last change: $Author: sj $ $Date: 2001-03-12 10:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,6 +865,9 @@ BOOL SdPPTImport::Import()
                             case PPT_PLACEHOLDER_OBJECT :
                                 eAutoLayout = AUTOLAYOUT_OBJ;
                             break;
+                            case PPT_PLACEHOLDER_VERTICALTEXTBODY :
+                                eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE;
+                            break;
                         }
                     }
                     break;
@@ -882,6 +885,8 @@ BOOL SdPPTImport::Import()
                             eAutoLayout = AUTOLAYOUT_TEXTCLIP;
                         else if ( nID1 == PPT_PLACEHOLDER_CLIPART && nID2 == PPT_PLACEHOLDER_BODY )
                             eAutoLayout = AUTOLAYOUT_CLIPTEXT;
+                        else if ( nID1 == PPT_PLACEHOLDER_CLIPART && nID2 == PPT_PLACEHOLDER_VERTICALTEXTBODY )
+                            eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART;
                         else if ( ( nID1 == PPT_PLACEHOLDER_BODY )
                             && ( ( nID2 == PPT_PLACEHOLDER_OBJECT ) || ( nID2 == PPT_PLACEHOLDER_MEDIACLIP ) ) )
                             eAutoLayout = AUTOLAYOUT_TEXTOBJ;
@@ -925,10 +930,10 @@ BOOL SdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_OBJ;
                     break;
                     case PPT_LAYOUT_TITLERIGHTBODYLEFT :
-                        eAutoLayout = AUTOLAYOUT_ENUM;
+                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE; // AUTOLAYOUT_ENUM;
                     break;
                     case PPT_LAYOUT_TITLERIGHT2BODIESLEFT :
-                        eAutoLayout = AUTOLAYOUT_TEXT2OBJ;
+                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART; // AUTOLAYOUT_TEXT2OBJ;
                     break;
 
                     case PPT_LAYOUT_BOTTOMROW2COLUMNS :
