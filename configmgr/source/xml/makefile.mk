@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: jb $ $Date: 2002-05-28 15:43:50 $
+#   last change: $Author: mh $ $Date: 2002-10-02 11:34:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,12 @@ SLOFILES=\
     $(SLO)$/layerwriter.obj \
     $(SLO)$/valueformatter.obj \
     $(SLO)$/xmlstrings.obj \
+
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
+NOOPTFILES= $(SLO)$/localsession.obj
+.ENDIF
+
 
 # --- Targets ---
 
