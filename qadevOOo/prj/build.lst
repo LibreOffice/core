@@ -18,6 +18,7 @@ qa  qadevOOo\tests\java\ifc\bridge                       nmake   -   all ifc_bri
 qa  qadevOOo\tests\java\ifc\chart                        nmake   -   all ifc_chart runner NULL
 qa  qadevOOo\tests\java\ifc\connection                   nmake   -   all ifc_connection runner NULL
 qa  qadevOOo\tests\java\ifc\configuration                nmake   -   all ifc_configuration runner NULL
+qa  qadevOOo\tests\java\ifc\configuration\backend        nmake   -   all ifc_configuration_backend runner NULL
 qa  qadevOOo\tests\java\ifc\container                    nmake   -   all ifc_container runner NULL
 qa  qadevOOo\tests\java\ifc\datatransfer                 nmake   -   all ifc_datatransfer runner NULL
 qa  qadevOOo\tests\java\ifc\datatransfer\clipboard       nmake   -   all ifc_datatransfer_clipboard runner NULL
@@ -78,7 +79,7 @@ qa  qadevOOo\tests\java\mod\_file\dbase                  nmake   -   all mod__fi
 qa  qadevOOo\tests\java\mod\_file\flat                   nmake   -   all mod__file_flat runner NULL
 qa  qadevOOo\tests\java\mod\_fileacc                     nmake   -   all mod__fileacc runner NULL
 qa  qadevOOo\tests\java\mod\_fop                         nmake   -   all mod__fop runner NULL
-qa  qadevOOo\tests\java\mod\_forms                       nmake   -   all mod__forms ifc_awt ifc_form ifc_sdbc runner NULL
+qa  qadevOOo\tests\java\mod\_forms                       nmake   -   all mod__forms ifc_awt ifc_form ifc_sdb ifc_sdbc runner NULL
 qa  qadevOOo\tests\java\mod\_fps                         nmake   -   all mod__fps runner NULL
 qa  qadevOOo\tests\java\mod\_ftransl                     nmake   -   all mod__ftransl runner NULL
 qa  qadevOOo\tests\java\mod\_fwk                         nmake   -   all mod__fwk runner NULL
@@ -112,7 +113,7 @@ qa  qadevOOo\tests\java\mod\_rdbtdp                      nmake   -   all mod__rd
 qa  qadevOOo\tests\java\mod\_regtypeprov.uno             nmake   -   all mod__regtypeprovuno runner NULL
 qa  qadevOOo\tests\java\mod\_remotebridge                nmake   -   all mod__remotebridge runner NULL
 qa  qadevOOo\tests\java\mod\_remotebridge.uno            nmake   -   all mod__remotebridgeuno runner NULL
-qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_util ifc_xml_sax ifc_accessibility ifc_document runner NULL
+qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_util ifc_xml_sax ifc_accessibility ifc_document ifc_sheet runner NULL
 qa  qadevOOo\tests\java\mod\_sch                         nmake   -   all mod__sch ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_sd                          nmake   -   all mod__sd ifc_accessibility runner NULL
 qa  qadevOOo\tests\java\mod\_sfx                         nmake   -   all mod__sfx runner NULL
