@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 11:12:17 $
+ *  last change: $Author: th $ $Date: 2001-08-07 12:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,16 +480,17 @@ SalInstance* CreateSalInstance()
             ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
             if ( !RegisterClassExW( &aWndClassEx ) )
                 return NULL;
+
+            aWndClassEx.hIcon           = 0;
+            aWndClassEx.hIconSm         = 0;
             aWndClassEx.style          |= CS_SAVEBITS;
-            aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAME_SBW;
+            aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
             if ( !RegisterClassExW( &aWndClassEx ) )
                 return NULL;
 
             aWndClassEx.style           = 0;
             aWndClassEx.lpfnWndProc     = SalComWndProcW;
             aWndClassEx.cbWndExtra      = 0;
-            aWndClassEx.hIcon           = 0;
-            aWndClassEx.hIconSm         = 0;
             aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
             if ( !RegisterClassExW( &aWndClassEx ) )
                 return NULL;
@@ -510,16 +511,17 @@ SalInstance* CreateSalInstance()
             ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
             if ( !RegisterClassExA( &aWndClassEx ) )
                 return NULL;
+
+            aWndClassEx.hIcon           = 0;
+            aWndClassEx.hIconSm         = 0;
             aWndClassEx.style          |= CS_SAVEBITS;
-            aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAME_SBA;
+            aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEA;
             if ( !RegisterClassExA( &aWndClassEx ) )
                 return NULL;
 
             aWndClassEx.style           = 0;
             aWndClassEx.lpfnWndProc     = SalComWndProcA;
             aWndClassEx.cbWndExtra      = 0;
-            aWndClassEx.hIcon           = 0;
-            aWndClassEx.hIconSm         = 0;
             aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEA;
             if ( !RegisterClassExA( &aWndClassEx ) )
                 return NULL;

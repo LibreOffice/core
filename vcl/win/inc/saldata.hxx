@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-22 14:15:36 $
+ *  last change: $Author: th $ $Date: 2001-08-07 12:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,8 +256,8 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_FRAME_THIS              0
 #define SAL_FRAME_CLASSNAMEA        "SALFRAME"
 #define SAL_FRAME_CLASSNAMEW        L"SALFRAME"
-#define SAL_FRAME_CLASSNAME_SBA     "SALFRAMESB"
-#define SAL_FRAME_CLASSNAME_SBW     L"SALFRAMESB"
+#define SAL_SUBFRAME_CLASSNAMEA     "SALSUBFRAME"
+#define SAL_SUBFRAME_CLASSNAMEW     L"SALSUBFRAME"
 #define SAL_OBJECT_WNDEXTRA         sizeof( DWORD )
 #define SAL_OBJECT_THIS             0
 #define SAL_OBJECT_CLASSNAMEA       "SALOBJECT"
