@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.45 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-24 03:38:13 $
+ *  $Revision: 1.46 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-25 05:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,6 +1111,9 @@ SalGraphics::SalGraphics()
 
 SalGraphics::~SalGraphics()
 {
+    // Release memory taken up by clip region, off-screen
+    // graph world, and colour graph port
+
     if ( maGraphicsData.mhClipRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhClipRgn );
@@ -1126,6 +1129,9 @@ SalGraphics::~SalGraphics()
         DisposePort( maGraphicsData.mpCGrafPort );
     } // if
 
+    // Initialize the rest of the fields to zero
+
+    memset ( &maGraphicsData, 0, sizeof(SalGraphicsData) );
 } // SalGraphics Class Destructor
 
 // =======================================================================
@@ -1248,50 +1254,37 @@ BOOL SalGraphics::UnionClipRegion( long nX,
 
     if ( hClipRegion != NULL )
     {
-        SInt8 nState = noErr;
+        short  nLeft   = nX;
+        short  nTop    = nY;
+        short  nRight  = nX+nWidth;
+        short  nBottom = nY+nHeight;
 
-        nState = HGetState( (Handle)hClipRegion );
+        MacSetRectRgn ( hClipRegion,
+                        nLeft,
+                        nTop,
+                        nRight,
+                        nBottom
+                      );
 
-        if ( nState == noErr )
+        if ( maGraphicsData.mhClipRgn != NULL )
         {
-            HLock( (Handle)hClipRegion );
+            MacUnionRgn ( maGraphicsData.mhClipRgn,
+                          hClipRegion,
+                          maGraphicsData.mhClipRgn
+                        );
 
-            short  nLeft   = nX;
-            short  nTop    = nY;
-            short  nRight  = nX+nWidth;
-            short  nBottom = nY+nHeight;
+            maGraphicsData.mnOSStatus = QDErr();
 
-            MacSetRectRgn ( hClipRegion,
-                            nLeft,
-                            nTop,
-                            nRight,
-                            nBottom
-                          );
+            DisposeRgn( hClipRegion );
+        } // if
+        else
+        {
+            maGraphicsData.mhClipRgn = hClipRegion;
+        } // else
 
-            if ( maGraphicsData.mhClipRgn != NULL )
-            {
-                MacUnionRgn ( maGraphicsData.mhClipRgn,
-                              hClipRegion,
-                              maGraphicsData.mhClipRgn
-                            );
-
-                maGraphicsData.mnOSStatus = QDErr();
-
-                HSetState( (Handle)hClipRegion, nState );
-
-                DisposeRgn( hClipRegion );
-            } // if
-            else
-            {
-                maGraphicsData.mhClipRgn = hClipRegion;
-
-                HSetState( (Handle)hClipRegion, nState );
-            } // else
-
-            if ( maGraphicsData.mnOSStatus == noErr )
-            {
-                bClipRegionsJoined = TRUE;
-            } // if
+        if ( maGraphicsData.mnOSStatus == noErr )
+        {
+            bClipRegionsJoined = TRUE;
         } // if
     } // if
 
