@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:39:11 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,8 +581,7 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
     ReleaseMouse();
     bFrmDrag = FALSE;
 
-    if ( rView.GetViewFrame() && rView.GetViewFrame()->GetFrame()  &&
-         !rView.GetViewFrame()->GetFrame()->TransferForReplaceInProgress() )
+    if ( rView.GetViewFrame() && rView.GetViewFrame()->GetFrame() )
     {
         bExecuteDrag = TRUE;
         StartExecuteDrag();
