@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Horiz. distance" ;
         Text [ norwegian ] = "Horiz. distance" ;
         Text [ italian ] = "Distanza ~orizzont." ;
-        Text [ portuguese_brazilian ] = "Dist?ncia horizontal" ;
+        Text [ portuguese_brazilian ] = "Passo hori~zontal" ;
         Text [ portuguese ] = "Espa�amento ~horiz." ;
         Text [ finnish ] = "~Vaakaet�isyys" ;
         Text [ danish ] = "Vandret afstand" ;
@@ -106,7 +106,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "水平间隔(~Z)";
         Text[ russian ] = "��� �� ��������.";
-        Text[ polish ] = "Odst�p poziomy";
+        Text[ polish ] = "~Odst�p poziomy";
         Text[ japanese ] = "横の間隔(~Z)";
         Text[ chinese_traditional ] = "水平間隔(~Z)";
         Text[ arabic ] = "������ �������";
@@ -116,6 +116,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dist�ncia ~horit.";
         Text[ thai ] = "ระยะห่างแนวน~อน";
+        Text[ czech ] = "Vodorovná rozteč";
+        Text[ hebrew ] = "‮מרווח אופקי‬";
+        Text[ hindi ] = "स~मतल पिच";
     };
     MetricField FLD_HDIST
     {
@@ -138,7 +141,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Vert. distance" ;
         Text [ norwegian ] = "Vert. distance" ;
         Text [ italian ] = "Distanza verticale" ;
-        Text [ portuguese_brazilian ] = "Dist?ncia vertical" ;
+        Text [ portuguese_brazilian ] = "Passo ~vertical" ;
         Text [ portuguese ] = "Espa�amento vertical" ;
         Text [ finnish ] = "~Pystyet�isyys" ;
         Text [ danish ] = "Lodret afstand" ;
@@ -150,7 +153,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "垂直间隔(~V)";
         Text[ russian ] = "��� �� ������.";
-        Text[ polish ] = "Odst�p pionowy";
+        Text[ polish ] = "Odst�p ~pionowy";
         Text[ japanese ] = "縦の間隔(~V)";
         Text[ chinese_traditional ] = "垂直間隔(~V)";
         Text[ arabic ] = "������ �������";
@@ -160,6 +163,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dist�ncia ~vert.";
         Text[ thai ] = "ระยะห่างแนว~ตั้ง";
+        Text[ czech ] = "Svislá rozteč";
+        Text[ hebrew ] = "‮מרווח אנכי‬";
+        Text[ hindi ] = "~लंबरूप पिच";
     };
     MetricField FLD_VDIST
     {
@@ -182,7 +188,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Width" ;
         Text [ norwegian ] = "Bredde " ;
         Text [ italian ] = "Larghezza" ;
-        Text [ portuguese_brazilian ] = "Largura" ;
+        Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
@@ -194,7 +200,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "宽度(~W)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "~Szeroko��";
         Text[ japanese ] = "幅(~W)";
         Text[ chinese_traditional ] = "寬度(~W)";
         Text[ arabic ] = "�����";
@@ -204,6 +210,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Amplada";
         Text[ thai ] = "ความ~กว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "~चौड़ाई";
     };
     MetricField FLD_WIDTH
     {
@@ -226,7 +235,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Height" ;
         Text [ norwegian ] = "H�yde " ;
         Text [ italian ] = "Altezza" ;
-        Text [ portuguese_brazilian ] = "Altura" ;
+        Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "Altura" ;
         Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "H�jde" ;
@@ -238,7 +247,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "高度(~H)";
         Text[ russian ] = "�~�����";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "~Wysoko��";
         Text[ japanese ] = "高さ(~H)";
         Text[ chinese_traditional ] = "高度(~H)";
         Text[ arabic ] = "��������";
@@ -248,6 +257,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~l�ada";
         Text[ thai ] = "ความ~สูง";
+        Text[ czech ] = "Výška";
+        Text[ hebrew ] = "‮גובה‬";
+        Text[ hindi ] = "~ऊँचाई";
     };
     MetricField FLD_HEIGHT
     {
@@ -270,7 +282,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Left margin" ;
         Text [ norwegian ] = "Left margin" ;
         Text [ italian ] = "Margine sinistro" ;
-        Text [ portuguese_brazilian ] = "Margem esquerda" ;
+        Text [ portuguese_brazilian ] = "Margem ~esquerda" ;
         Text [ portuguese ] = "Margem esquerda" ;
         Text [ finnish ] = "~Vasen reunus" ;
         Text [ danish ] = "Margen venstre" ;
@@ -282,7 +294,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "左方页边距(~L)";
         Text[ russian ] = "����� ����";
-        Text[ polish ] = "Lewy margines";
+        Text[ polish ] = "~Lewy margines";
         Text[ japanese ] = "左余白(~L)";
         Text[ chinese_traditional ] = "左邊框(~L)";
         Text[ arabic ] = "������ ������";
@@ -292,6 +304,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marge esquerre";
         Text[ thai ] = "ระยะขอบ~ซ้าย";
+        Text[ czech ] = "Levý okraj";
+        Text[ hebrew ] = "‮שוליים אנכיים‬";
+        Text[ hindi ] = "~बायाँ पृष्ठ-प्रान्त";
     };
     MetricField FLD_LEFT
     {
@@ -316,7 +331,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Upper margin" ;
         Text [ norwegian ] = "Upper margin" ;
         Text [ italian ] = "Margine superiore" ;
-        Text [ portuguese_brazilian ] = "Margem superior" ;
+        Text [ portuguese_brazilian ] = "Margem ~superior" ;
         Text [ portuguese ] = "Margem superior" ;
         Text [ finnish ] = "~Yl�marginaali" ;
         Text [ danish ] = "Margen foroven" ;
@@ -328,7 +343,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "上方页边距(~T)";
         Text[ russian ] = "������� ����";
-        Text[ polish ] = "Margines g�rny";
+        Text[ polish ] = "Margines ~g�rny";
         Text[ japanese ] = "上余白(~T)";
         Text[ chinese_traditional ] = "上邊框(~T)";
         Text[ arabic ] = "������ ������";
@@ -338,6 +353,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marge superior";
         Text[ thai ] = "ระยะขอบ~บน";
+        Text[ czech ] = "Horní okraj";
+        Text[ hebrew ] = "‮שוליים אופקיים‬";
+        Text[ hindi ] = "~ऊपरी पृष्ठ-प्रान्त";
     };
     MetricField FLD_UPPER
     {
@@ -362,7 +380,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Columns" ;
         Text [ norwegian ] = "Kolonner" ;
         Text [ italian ] = "~Colonne" ;
-        Text [ portuguese_brazilian ] = "Colunas" ;
+        Text [ portuguese_brazilian ] = "~Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
         Text [ finnish ] = "Pal~stat" ;
         Text [ danish ] = "Kolonner" ;
@@ -374,7 +392,7 @@ TabPage TP_LAB_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "列(~C)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Kolumny";
+        Text[ polish ] = "~Kolumny";
         Text[ japanese ] = "列(~C)";
         Text[ chinese_traditional ] = "欄(~C)";
         Text[ arabic ] = "�������";
@@ -384,6 +402,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columnes";
         Text[ thai ] = "~คอลัมน์";
+        Text[ czech ] = "Sloupce";
+        Text[ hebrew ] = "‮טורים‬";
+        Text[ hindi ] = "~स्तंभें";
     };
     NumericField FLD_COLUMNS
     {
@@ -405,7 +426,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Rows" ;
         Text [ norwegian ] = "Rows" ;
         Text [ italian ] = "Righe" ;
-        Text [ portuguese_brazilian ] = "Fileiras" ;
+        Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "Linhas" ;
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "R�kker" ;
@@ -427,6 +448,9 @@ TabPage TP_LAB_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~iles";
         Text[ thai ] = "แถ~ว";
+        Text[ czech ] = "Řádky";
+        Text[ hebrew ] = "‮שורות‬";
+        Text[ hindi ] = "पंक्ति~याँ";
     };
     NumericField FLD_ROWS
     {
@@ -456,17 +480,20 @@ TabPage TP_LAB_FMT
         Text[ italian ] = "~Salva...";
         Text[ danish ] = "~Gem...";
         Text[ swedish ] = "~Spara...";
-        Text[ polish ] = "Zapisz...";
-        Text[ portuguese_brazilian ] = "Save...";
+        Text[ polish ] = "~Zapisz...";
+        Text[ portuguese_brazilian ] = "~Salvar...";
         Text[ japanese ] = "保存(~S)...";
         Text[ korean ] = "저장(~S)...";
         Text[ chinese_simplified ] = "存盘(~S)...";
         Text[ chinese_traditional ] = "儲存(~S)...";
-        Text[ turkish ] = "Save...";
+        Text[ turkish ] = "Kaydet...";
         Text[ arabic ] = "���...";
         Text[ catalan ] = "~Desa...";
         Text[ finnish ] = "~Tallenna...";
         Text[ thai ] = "~บันทึก...";
+        Text[ czech ] = "Uložit...";
+        Text[ hebrew ] = "‮שמירה‬";
+        Text[ hindi ] = "~संचित करो...";
     };
 };
  // String *******************************************************************
@@ -476,7 +503,7 @@ String STR_HDIST
     Text [ English ] = "H. distance" ;
     Text [ norwegian ] = "H. distance" ;
     Text [ italian ] = "Distanza orizzontale" ;
-    Text [ portuguese_brazilian ] = "Dist?ncia h." ;
+    Text [ portuguese_brazilian ] = "Passo Hor." ;
     Text [ portuguese ] = "Espa�o H." ;
     Text [ finnish ] = "V.et�isyys" ;
     Text [ danish ] = "V. afstand" ;
@@ -497,6 +524,9 @@ String STR_HDIST
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dist�ncia h.";
     Text[ thai ] = "ระยะห่างแนวนอน";
+    Text[ czech ] = "Vodorovná rozteč";
+    Text[ hebrew ] = "H. Abstand";
+    Text[ hindi ] = "H. पिच";
 };
 String STR_VDIST
 {
@@ -504,7 +534,7 @@ String STR_VDIST
     Text [ English ] = "V. distance" ;
     Text [ norwegian ] = "V. distance" ;
     Text [ italian ] = "Distanza verticale" ;
-    Text [ portuguese_brazilian ] = "Dist?ncia v." ;
+    Text [ portuguese_brazilian ] = "Passo Vert." ;
     Text [ portuguese ] = "Espa�o V." ;
     Text [ finnish ] = "P.et�isyys" ;
     Text [ danish ] = "L. afstand" ;
@@ -525,6 +555,9 @@ String STR_VDIST
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dist�ncia v.";
     Text[ thai ] = "ระยะห่างแนวตั้ง";
+    Text[ czech ] = "Svislá rozteč";
+    Text[ hebrew ] = "V. Abstand";
+    Text[ hindi ] = "V. पिच";
 };
 String STR_WIDTH
 {
@@ -553,6 +586,9 @@ String STR_WIDTH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada";
     Text[ thai ] = "ความกว้าง";
+    Text[ czech ] = "Šířka";
+    Text[ hebrew ] = "‮רוחב‬";
+    Text[ hindi ] = "चौड़ाई";
 };
 String STR_HEIGHT
 {
@@ -581,6 +617,9 @@ String STR_HEIGHT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al�ada";
     Text[ thai ] = "ความสูง";
+    Text[ czech ] = "Výška";
+    Text[ hebrew ] = "‮גובה‬";
+    Text[ hindi ] = "ऊँचाई";
 };
 String STR_LEFT
 {
@@ -609,6 +648,9 @@ String STR_LEFT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marge esquerre";
     Text[ thai ] = "ระยะขอบซ้าย";
+    Text[ czech ] = "Levý okraj";
+    Text[ hebrew ] = "Rand links";
+    Text[ hindi ] = "बायाँ पृष्ठ-प्रान्त";
 };
 String STR_UPPER
 {
@@ -637,6 +679,9 @@ String STR_UPPER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marge superior";
     Text[ thai ] = "ระยะขอบบน";
+    Text[ czech ] = "Horní okraj";
+    Text[ hebrew ] = "Rand oben";
+    Text[ hindi ] = "ऊपरी पृष्ठ-प्रान्त";
 };
 String STR_COLS
 {
@@ -665,6 +710,9 @@ String STR_COLS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Columnes";
     Text[ thai ] = "คอลัมน์";
+    Text[ czech ] = "Sloupce";
+    Text[ hebrew ] = "‮טורים‬";
+    Text[ hindi ] = "स्तंभें";
 };
 String STR_ROWS
 {
@@ -672,7 +720,7 @@ String STR_ROWS
     Text [ English ] = "Rows" ;
     Text [ norwegian ] = "Rows" ;
     Text [ italian ] = "Righe" ;
-    Text [ portuguese_brazilian ] = "Fileiras" ;
+    Text [ portuguese_brazilian ] = "Linhas" ;
     Text [ portuguese ] = "Linhas" ;
     Text [ finnish ] = "Rivit" ;
     Text [ danish ] = "R�kker" ;
@@ -693,6 +741,9 @@ String STR_ROWS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Files";
     Text[ thai ] = "แถว";
+    Text[ czech ] = "Řádky";
+    Text[ hebrew ] = "Zeilen";
+    Text[ hindi ] = "पंक्तियाँ";
 };
 ModalDialog DLG_SAVE_LABEL
 {
@@ -709,7 +760,7 @@ ModalDialog DLG_SAVE_LABEL
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Marke" ;
         Text [ italian ] = "Marca" ;
-        Text [ portuguese_brazilian ] = "Fazer" ;
+        Text [ portuguese_brazilian ] = "Fabricante" ;
         Text [ portuguese ] = "~Marca" ;
         Text [ finnish ] = "Tuotemerkki" ;
         Text [ danish ] = "~M�rke" ;
@@ -721,16 +772,19 @@ ModalDialog DLG_SAVE_LABEL
         Left = TRUE ;
         Text[ chinese_simplified ] = "商标";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Marka";
+        Text[ polish ] = "Ma~rka";
         Text[ japanese ] = "製造元";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "商標";
         Text[ arabic ] = "�������";
         Text[ greek ] = "~�����";
         Text[ korean ] = "상표";
-        Text[ turkish ] = "Markas�";
+        Text[ turkish ] = "Marka";
         Text[ catalan ] = "Marca";
         Text[ thai ] = "ยี่ห้อ";
+        Text[ czech ] = "Značka";
+        Text[ hebrew ] = "~Marke";
+        Text[ hindi ] = "व्यापारिक चिन्ह";
     };
     ComboBox CB_MAKE
     {
@@ -747,7 +801,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ English ] = "Type" ;
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "~Tipo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "~Tipo" ;
         Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Typ~e" ;
@@ -759,16 +813,19 @@ ModalDialog DLG_SAVE_LABEL
         Left = TRUE ;
         Text[ chinese_simplified ] = "类型(~Y)";
         Text[ russian ] = "���";
-        Text[ polish ] = "Typ";
+        Text[ polish ] = "T~yp";
         Text[ japanese ] = "種類(~Y)";
         Text[ chinese_traditional ] = "類型(~Y)";
         Text[ arabic ] = "�����";
         Text[ greek ] = "~�����";
         Text[ korean ] = "유형(~Y)";
-        Text[ turkish ] = "Tipi";
+        Text[ turkish ] = "T�~r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "T~ipus";
         Text[ thai ] = "ช~นิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "~Typ";
+        Text[ hindi ] = "~वर्ग";
     };
     Edit ED_TYPE
     {
@@ -785,7 +842,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ english_us ] = "Options";
         Text[ portuguese ] = "Op��es";
         Text[ russian ] = "���������";
-        Text[ greek ] = "Options";
+        Text[ greek ] = "��������";
         Text[ dutch ] = "Opties";
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
@@ -793,16 +850,19 @@ ModalDialog DLG_SAVE_LABEL
         Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
-        Text[ portuguese_brazilian ] = "Options";
+        Text[ portuguese_brazilian ] = "Op��es";
         Text[ japanese ] = "オプション";
         Text[ korean ] = "옵션";
         Text[ chinese_simplified ] = "选项";
         Text[ chinese_traditional ] = "選項";
-        Text[ turkish ] = "Options";
+        Text[ turkish ] = "�e�enekler";
         Text[ arabic ] = "��������";
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "ตัวเลือก";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "‮אפשרויות‬";
+        Text[ hindi ] = "विकल्प";
     };
     OKButton PB_OK
     {
@@ -842,17 +902,20 @@ ModalDialog DLG_SAVE_LABEL
         Message[ italian ] = "L'etichetta \"%1 / %2\" esiste gi�.\nVolete sovrascriverla?";
         Message[ danish ] = "Etiketten \"%1 / %2\" findes allerede.\nVil du overskrive dataene?";
         Message[ swedish ] = "Etiketten \"%1 / %2\" finns redan.\nVill du skriva �ver den?";
-        Message[ polish ] = "Etykieta \"%1 / %2\" ju� istnieje.\nSkasowa� dane przez zapisanie?";
-        Message[ portuguese_brazilian ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ polish ] = "Etykieta \"%1/%2\" ju� istnieje.\nCzy j� zast�pi�?";
+        Message[ portuguese_brazilian ] = "A etiqueta '%1 / %2' j� existe.\nDeseja substitui-la?";
         Message[ japanese ] = "ラベル書き「%1 / %2」はすでにあります。\n上書きしますか。";
         Message[ korean ] = "\"%1 / %2\" 레이블은 이미 있습니다.\n데이터를 덮어쓰시겠습니까?";
         Message[ chinese_simplified ] = "这个贴标 \"%1 / %2\" 已经存在。\n要改写？";
         Message[ chinese_traditional ] = "這個貼標<%1 / %2>已經存在。\n要覆寫？";
-        Message[ turkish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ turkish ] = "Etiket \"%1 / %2\" zaten mevcut.\n�st�ne yazmak istioyor musunuz?";
         Message[ arabic ] = "����� ������� \"%1 / %2\" ������ ������.\n�� ���� ������� ��� �������ʿ";
         Message[ catalan ] = "L'etiqueta \"%1 / %2\" ja existeix.\nLa voleu sobreescriure?";
         Message[ finnish ] = "Selite \"%1 / %2\" on jo k�yt�ss�.\nHaluatko korvata sen?";
         Message[ thai ] = "ป้ายชื่อ \"%1 / %2\" มีอยู่แล้ว\nคุณต้องการเขียนทับมันหรือไม่?";
+        Message[ czech ] = "Popisek \"%1 / %2\" již existuje.\nChcete jej přepsat?";
+        Message[ hebrew ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?";
+        Message[ hindi ] = "लेबिल \"%1 / %2\" पहिले से ही अस्तित्व में है ।\nआप ओवररइट् करना चाहते है?";
     };
     Text[ english_us ] = "Save Label Format";
     Text[ portuguese ] = "Guardar formato de etiqueta";
@@ -865,17 +928,29 @@ ModalDialog DLG_SAVE_LABEL
     Text[ danish ] = "Gem etiketformat";
     Text[ swedish ] = "Spara etikettformat";
     Text[ polish ] = "Zapisz format etykiety";
-    Text[ portuguese_brazilian ] = "Save label format";
+    Text[ portuguese_brazilian ] = "Salvar Formato da Etiqueta";
     Text[ japanese ] = "ラベル書きの書式を保存";
     Text[ korean ] = "레이블 서식 저장";
     Text[ chinese_simplified ] = "存盘贴标格式";
     Text[ chinese_traditional ] = "儲存貼標格式";
-    Text[ turkish ] = "Save label format";
+    Text[ turkish ] = "Etiket Format�n� Kaydet";
     Text[ arabic ] = "��� ����� ������ �������";
     Text[ catalan ] = "Desa el format de l'etiqueta";
     Text[ finnish ] = "Tallenna tarramuoto";
     Text[ thai ] = "บันทึกรูปแบบป้ายชื่อ";
+    Text[ czech ] = "Uložit formát popisku";
+    Text[ hebrew ] = "Etikettenformat speichern";
+    Text[ hindi ] = "लेबिल रचना संचित करो";
 };
+
+
+
+
+
+
+
+
+
 
 
 
