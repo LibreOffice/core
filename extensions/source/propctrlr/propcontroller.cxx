@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:20:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ namespace pcr
         {
             // remove the pages
             if (m_nGenericPageId)
-                getPropertyBox()->RemovePage(m_nDataPageId);
+                getPropertyBox()->RemovePage(m_nGenericPageId);
             if (m_nDataPageId)
                 getPropertyBox()->RemovePage(m_nDataPageId);
             if (m_nEventPageId)
