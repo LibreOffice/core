@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-19 14:16:33 $
+ *  last change: $Author: mt $ $Date: 2001-04-24 16:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2073,6 +2073,8 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
     if ( pOut )
         pOut->SetTextLineColor();
 
+    const SvxLanguageItem* pCJKLanguageItem = NULL;
+
     if ( aStatus.UseCharAttribs() )
     {
         const CharAttribArray& rAttribs = pNode->GetCharAttribs().GetAttribs();
@@ -2092,17 +2094,20 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             {
                 DBG_ASSERT( ( pAttrib->Which() >= EE_CHAR_START ) && ( pAttrib->Which() <= EE_FEATURE_END ), "Unglueltiges Attribut in Seek() " );
                 if ( IsScriptItemValid( pAttrib->Which(), nScriptType ) )
-                #if SUPD >= 615
                     pAttrib->SetFont( rFont, pOut );
-                #else
-                    pAttrib->SetFont( rFont );
-                #endif
                 if ( pAttrib->Which() == EE_CHAR_FONTWIDTH )
                     nRelWidth = ((const SvxCharScaleWidthItem*)pAttrib->GetItem())->GetValue();
+                if ( pAttrib->Which() == EE_CHAR_LANGUAGE_CJK )
+                    pCJKLanguageItem = (const SvxLanguageItem*) pAttrib->GetItem();
             }
             pAttrib = GetAttrib( rAttribs, ++nAttr );
         }
     }
+
+    if ( !pCJKLanguageItem )
+        pCJKLanguageItem = (const SvxLanguageItem*) &pNode->GetContentAttribs().GetItem( EE_CHAR_LANGUAGE_CJK );
+
+    rFont.SetCJKContextLanguage( pCJKLanguageItem->GetLanguage() );
 
     if ( aStatus.DoNotUseColors() )
     {
