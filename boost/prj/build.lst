@@ -1,3 +1,3 @@
-bo	boost : NULL
+bo	boost : solenv NULL
 bo	boost		usr1	-	all	bo_mkout NULL
 bo	boost		nmake	-	all	bo_boost NULL

@@ -17,6 +17,15 @@ mkdir: %_DEST%\inc%_EXT%\external\boost\detail
 ..\%__SRC%\misc\build\boost_1_27_0\boost\cstdint.hpp    %_DEST%\inc%_EXT%\external\boost\cstdint.hpp
 ..\%__SRC%\misc\build\boost_1_27_0\boost\cstdlib.hpp    %_DEST%\inc%_EXT%\external\boost\cstdlib.hpp
 
+..\%__SRC%\misc\build\boost_1_27_0\boost\assert.hpp         %_DEST%\inc%_EXT%\external\boost\assert.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\checked_delete.hpp %_DEST%\inc%_EXT%\external\boost\checked_delete.hpp
+
+..\%__SRC%\misc\build\boost_1_27_0\boost\scoped_ptr.hpp     %_DEST%\inc%_EXT%\external\boost\scoped_ptr.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\scoped_array.hpp   %_DEST%\inc%_EXT%\external\boost\scoped_array.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\shared_ptr.hpp     %_DEST%\inc%_EXT%\external\boost\shared_ptr.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\shared_array.hpp   %_DEST%\inc%_EXT%\external\boost\shared_array.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\weak_ptr.hpp       %_DEST%\inc%_EXT%\external\boost\weak_ptr.hpp
+
 ..\%__SRC%\lib\*.lib    %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\lib\*.so     %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\bin\*.dll    %_DEST%\bin%_EXT%\*.dll

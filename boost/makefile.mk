@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: er $ $Date: 2002-10-25 17:59:05 $
+#   last change: $Author: hr $ $Date: 2003-03-18 18:48:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=ooo_boost
 TARFILE_NAME=boost_1_27_0
 TARFILE_ROOTDIR=boost_1_27_0
 
-#PATCH_FILE_NAME=boost_1_27_0.patch
+PATCH_FILE_NAME=boost_1_27_0.patch
 
 #ADDITIONAL_FILES=
 
