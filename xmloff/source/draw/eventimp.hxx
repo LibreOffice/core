@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: anim.hxx,v $
+ *  $RCSfile: eventimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:22:54 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,91 +59,38 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_ANIM_HXX
-#define _XMLOFF_ANIM_HXX
+#ifndef _XMLOFF_EVENTIMP_HXX
+#define _XMLOFF_EVENTIMP_HXX
 
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
-#include <com/sun/star/presentation/AnimationEffect.hpp>
+#ifndef _XMLOFF_XMLICTXT_HXX
+#include "xmlictxt.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 
-#ifndef _UNIVERSALL_REFERENCE_HXX
-#include <uniref.hxx>
-#endif
+//////////////////////////////////////////////////////////////////////////////
+// office:events inside a shape
 
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlement.hxx"
-#endif
-
-enum XMLEffect
+class SdXMLEventsContext : public SvXMLImportContext
 {
-    EK_none,
-    EK_fade,
-    EK_move,
-    EK_stripes,
-    EK_open,
-    EK_close,
-    EK_dissolve,
-    EK_wavyline,
-    EK_random,
-    EK_lines,
-    EK_laser,
-    EK_appear,
-    EK_hide,
-    EK_move_short,
-    EK_checkerboard,
-    EK_rotate,
-    EK_stretch
+private:
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
+
+public:
+    TYPEINFO();
+
+    SdXMLEventsContext( SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rxShape );
+    virtual ~SdXMLEventsContext();
+
+    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
-extern SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[];
-
-enum XMLEffectDirection
-{
-    ED_none,
-    ED_from_left,
-    ED_from_top,
-    ED_from_right,
-    ED_from_bottom,
-    ED_from_center,
-    ED_from_upperleft,
-    ED_from_upperright,
-    ED_from_lowerleft,
-    ED_from_lowerright,
-
-    ED_to_left,
-    ED_to_top,
-    ED_to_right,
-    ED_to_bottom,
-    ED_to_upperleft,
-    ED_to_upperright,
-    ED_to_lowerright,
-    ED_to_lowerleft,
-
-    ED_path,
-    ED_spiral_inward_left,
-    ED_spiral_inward_right,
-    ED_spiral_outward_left,
-    ED_spiral_outward_right,
-
-    ED_vertical,
-    ED_horizontal,
-
-    ED_to_center,
-
-    ED_clockwise,
-    ED_cclockwise
-};
-
-extern SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[];
-
-extern SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[];
-
-void SdXMLImplSetEffect( ::com::sun::star::presentation::AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDirection& eDirection, sal_Int16& nStartScale, sal_Bool& bIn );
-::com::sun::star::presentation::AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, sal_Bool bIn );
-
-#endif  //  _XMLOFF_ANIM_HXX
+#endif  //  _XMLOFF_EVENTIMP_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 16:34:28 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ XML_CONSTASCII_ACTION( sXML_accent, "accent" );
 XML_CONSTASCII_ACTION( sXML_accentunder, "accentunder" );
 XML_CONSTASCII_ACTION( sXML_acceptance_state, "acceptance-state" );
 XML_CONSTASCII_ACTION( sXML_accepted, "accepted" );
+XML_CONSTASCII_ACTION( sXML_action, "action" );
 XML_CONSTASCII_ACTION( sXML_active, "active" );
 XML_CONSTASCII_ACTION( sXML_actuate, "actuate" );
 XML_CONSTASCII_ACTION( sXML_add_in, "add-in" );
@@ -627,6 +628,7 @@ XML_CONSTASCII_ACTION( sXML_fade_from_top, "fade-from-top" );
 XML_CONSTASCII_ACTION( sXML_fade_from_upperleft, "fade-from-upperleft" );
 XML_CONSTASCII_ACTION( sXML_fade_from_upperright, "fade-from-upperright" );
 XML_CONSTASCII_ACTION( sXML_fade_to_center, "fade-to-center" );
+XML_CONSTASCII_ACTION( sXML_fade_out, "fade-out" );
 XML_CONSTASCII_ACTION( sXML_false, "false" );
 XML_CONSTASCII_ACTION( sXML_family, "family" );
 XML_CONSTASCII_ACTION( sXML_fast, "fast" );
@@ -646,6 +648,7 @@ XML_CONSTASCII_ACTION( sXML_filter_condition, "filter-condition");
 XML_CONSTASCII_ACTION( sXML_filter_name, "filter-name" );
 XML_CONSTASCII_ACTION( sXML_filter_options, "filter-options" );
 XML_CONSTASCII_ACTION( sXML_filter_or, "filter-or");
+XML_CONSTASCII_ACTION( sXML_first_page, "first-page");
 XML_CONSTASCII_ACTION( sXML_first_page_number, "first-page-number");
 XML_CONSTASCII_ACTION( sXML_fit_to_size, "fit-to-size" );
 XML_CONSTASCII_ACTION( sXML_fix, "fix" );
@@ -884,6 +887,7 @@ XML_CONSTASCII_ACTION( sXML_language, "language" );
 XML_CONSTASCII_ACTION( sXML_language_asian, "language-asian" );
 XML_CONSTASCII_ACTION( sXML_language_complex, "language-complex" );
 XML_CONSTASCII_ACTION( sXML_last_column_spanned, "last-column-spanned" );
+XML_CONSTASCII_ACTION( sXML_last_page, "last-page" );
 XML_CONSTASCII_ACTION( sXML_last_row_spanned, "last-row-spanned" );
 XML_CONSTASCII_ACTION( sXML_leader_char, "leader-char" );
 XML_CONSTASCII_ACTION( sXML_left, "left" );
@@ -1057,6 +1061,7 @@ XML_CONSTASCII_ACTION( sXML_navy, "navy");
 XML_CONSTASCII_ACTION( sXML_neq, "neq" );
 XML_CONSTASCII_ACTION( sXML_new, "new" );
 XML_CONSTASCII_ACTION( sXML_next, "next" );
+XML_CONSTASCII_ACTION( sXML_next_page, "next-page" );
 XML_CONSTASCII_ACTION( sXML_next_style_name, "next-style-name" );
 XML_CONSTASCII_ACTION( sXML_no_limit, "no-limit" );
 XML_CONSTASCII_ACTION( sXML_no_wrap, "no-wrap" );
@@ -1208,6 +1213,7 @@ XML_CONSTASCII_ACTION( sXML_presentation_subtitle , "subtitle" );
 XML_CONSTASCII_ACTION( sXML_presentation_table , "table" );
 XML_CONSTASCII_ACTION( sXML_presentation_title , "title" );
 XML_CONSTASCII_ACTION( sXML_previous, "previous" );
+XML_CONSTASCII_ACTION( sXML_previous_page, "previous-page" );
 XML_CONSTASCII_ACTION( sXML_print, "print" );
 XML_CONSTASCII_ACTION( sXML_printable, "printable" );
 XML_CONSTASCII_ACTION( sXML_print_content, "print-content");
@@ -1637,6 +1643,7 @@ XML_CONSTASCII_ACTION( sXML_variable_set, "variable-set" );
 XML_CONSTASCII_ACTION( sXML_variance, "variance" );
 XML_CONSTASCII_ACTION( sXML_varp, "varp" );
 XML_CONSTASCII_ACTION( sXML_vector, "vector" );
+XML_CONSTASCII_ACTION( sXML_verb, "verb" );
 XML_CONSTASCII_ACTION( sXML_version, "version" );
 XML_CONSTASCII_ACTION( sXML_vertical, "vertical" );
 XML_CONSTASCII_ACTION( sXML_vertical_align, "vertical-align" );

@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.34 2001-02-06 14:08:19 dvo Exp $
+	$Id: drawing.mod,v 1.35 2001-02-07 16:18:34 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -82,7 +82,7 @@
 <!ENTITY % presentationSpeeds "(slow|medium|fast)" >
 
 <!-- Drawing shapes -->
-<!ELEMENT draw:rect %draw-text;>
+<!ELEMENT draw:rect ( office:events?, %draw-text; )>
 <!ATTLIST draw:rect %draw-position; >
 <!ATTLIST draw:rect %draw-end-position; >
 <!ATTLIST draw:rect %table-background; >
@@ -95,7 +95,7 @@
 <!ATTLIST draw:rect %text-anchor;>
 <!ATTLIST draw:rect draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:line %draw-text;>
+<!ELEMENT draw:line ( office:events?, %draw-text; )>
 <!ATTLIST draw:line svg:x1 %length; #REQUIRED>
 <!ATTLIST draw:line svg:y1 %length; #REQUIRED>
 <!ATTLIST draw:line svg:x2 %length; #REQUIRED>
@@ -109,7 +109,7 @@
 <!ATTLIST draw:line %text-anchor;>
 <!ATTLIST draw:line draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:polyline %draw-text; >
+<!ELEMENT draw:polyline ( office:events?, %draw-text; )>
 <!ATTLIST draw:polyline %draw-position; >
 <!ATTLIST draw:polyline %draw-size; >
 <!ATTLIST draw:polyline %draw-viewbox; >
@@ -123,7 +123,7 @@
 <!ATTLIST draw:polyline %text-anchor;>
 <!ATTLIST draw:polyline draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:polygon %draw-text; >
+<!ELEMENT draw:polygon ( office:events?, %draw-text; )>
 <!ATTLIST draw:polygon %draw-position; >
 <!ATTLIST draw:polygon %draw-end-position; >
 <!ATTLIST draw:polygon %table-background; >
@@ -137,7 +137,7 @@
 <!ATTLIST draw:polygon %text-anchor;>
 <!ATTLIST draw:polygon draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:path %draw-text; >
+<!ELEMENT draw:path ( office:events?, %draw-text; )>
 <!ATTLIST draw:path %draw-position;>
 <!ATTLIST draw:path %draw-end-position; >
 <!ATTLIST draw:path %table-background; >
@@ -151,7 +151,7 @@
 <!ATTLIST draw:path %text-anchor;>
 <!ATTLIST draw:path draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:circle %draw-text; >
+<!ELEMENT draw:circle ( office:events?, %draw-text; )>
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
 <!ATTLIST draw:circle svg:cy %length; #REQUIRED >
 <!ATTLIST draw:circle svg:r %nonNegativeLength; #REQUIRED >
@@ -167,7 +167,7 @@
 <!ATTLIST draw:circle %text-anchor;>
 <!ATTLIST draw:circle draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:ellipse %draw-text; >
+<!ELEMENT draw:ellipse ( office:events?, %draw-text; )>
 <!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
 <!ATTLIST draw:ellipse svg:cy %length; #REQUIRED >
 <!ATTLIST draw:ellipse svg:rx %length; #REQUIRED >
@@ -184,7 +184,7 @@
 <!ATTLIST draw:ellipse  %text-anchor;>
 <!ATTLIST draw:ellipse draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:connector %draw-text;>
+<!ELEMENT draw:connector ( office:events?, %draw-text;)>
 <!ATTLIST draw:connector draw:type (standard|lines|line|curve) "standard">
 <!ATTLIST draw:connector draw:line-skew CDATA #IMPLIED>
 <!ATTLIST draw:connector %draw-style-name;>
@@ -236,7 +236,7 @@
 <!ATTLIST draw:page-thumbnail %text-anchor;>
 <!ATTLIST draw:page-thumbnail draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:caption %draw-text;>
+<!ELEMENT draw:caption ( office:events?, %draw-text;)>
 <!ATTLIST draw:caption %draw-position; >
 <!ATTLIST draw:caption %draw-end-position; >
 <!ATTLIST draw:caption %table-background; >
@@ -250,7 +250,7 @@
 <!ATTLIST draw:caption  %text-anchor;>
 <!ATTLIST draw:caption draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:measure %draw-text;>
+<!ELEMENT draw:measure ( office:events?, %draw-text;)>
 <!ATTLIST draw:measure svg:x1 %coordinate; #REQUIRED>
 <!ATTLIST draw:measure svg:y1 %coordinate; #REQUIRED>
 <!ATTLIST draw:measure svg:x2 %coordinate; #REQUIRED>
@@ -404,6 +404,7 @@
 <!ATTLIST presentation:show-shape presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:show-shape presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:show-shape presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:show-shape presentation:start-scale %percentage; "100%">
 <!ATTLIST presentation:show-shape presentation:path-id %shapeId; #IMPLIED>
 
 <!ELEMENT presentation:show-text (presentation:sound)?>
@@ -411,6 +412,7 @@
 <!ATTLIST presentation:show-text presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:show-text presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:show-text presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:show-text presentation:start-scale %percentage; "100%">
 <!ATTLIST presentation:show-text presentation:path-id %shapeId; #IMPLIED>
 
 <!ELEMENT presentation:hide-shape (presentation:sound)?>
@@ -418,6 +420,7 @@
 <!ATTLIST presentation:hide-shape presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:hide-shape presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:hide-shape presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:hide-shape presentation:start-scale %percentage; "100%">
 <!ATTLIST presentation:hide-shape presentation:path-id %shapeId; #IMPLIED>
 
 <!ELEMENT presentation:hide-text (presentation:sound)?>
@@ -425,6 +428,7 @@
 <!ATTLIST presentation:hide-text presentation:effect %presentationEffects; "none">
 <!ATTLIST presentation:hide-text presentation:direction %presentationEffectDirections; "none">
 <!ATTLIST presentation:hide-text presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:hide-text presentation:start-scale %percentage; "100%">
 <!ATTLIST presentation:hide-text presentation:path-id %shapeId; #IMPLIED>
 
 <!ELEMENT presentation:dim (presentation:sound)?>
@@ -507,6 +511,7 @@
 <!ATTLIST draw:image %presentation-class; >
 <!ATTLIST draw:image %zindex;>
 <!ATTLIST draw:image draw:id %shapeId;>
+<!ATTLIST draw:image draw:layer %layerName; #IMPLIED>
 
 <!-- objects -->
 <!ELEMENT draw:object (office:events?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
@@ -525,6 +530,7 @@
 <!ATTLIST draw:object %presentation-class; >
 <!ATTLIST draw:object %zindex;>
 <!ATTLIST draw:object draw:id %shapeId;>
+<!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:object-ole (office:events?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object-ole %draw-style-name;>
@@ -543,6 +549,7 @@
 <!ATTLIST draw:object-ole %presentation-class; >
 <!ATTLIST draw:object-ole %zindex;>
 <!ATTLIST draw:object-ole draw:id %shapeId;>
+<!ATTLIST draw:object-ole draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT svg:desc (#PCDATA)>
 
@@ -661,6 +668,8 @@
 <!ATTLIST dr3d:scene %draw-end-position; >
 <!ATTLIST dr3d:scene %table-background; >
 
+<!-- layer -->
+
 <!ELEMENT draw:layer-set (draw:layer*)>
 
 <!ELEMENT draw:layer EMPTY>
@@ -668,3 +677,17 @@
 <!ATTLIST draw:layer draw:locked %boolean; #IMPLIED>
 <!ATTLIST draw:layer draw:printable %boolean; #IMPLIED>
 <!ATTLIST draw:layer draw:visible %boolean; #IMPLIED>
+
+<!-- events -->
+<!ELEMENT presentation:event (presentation:sound)?>
+<!ATTLIST presentation:event %event-name;>
+<!ATTLIST presentation:event presentation:action (none|previous-page|next-page|first-page|last-page|hide|stop|execute|show|verb|fade-out|sound) #REQUIRED>
+<!ATTLIST presentation:event presentation:effect %presentationEffects; "none">
+<!ATTLIST presentation:event presentation:direction %presentationEffectDirections; "none">
+<!ATTLIST presentation:event presentation:speed %presentationSpeeds; "medium">
+<!ATTLIST presentation:event presentation:start-scale %percentage; "100%">
+<!ATTLIST presentation:event xlink:href %uriReference; #IMPLIED>
+<!ATTLIST presentation:event xlink:type (simple) #IMPLIED>
+<!ATTLIST presentation:event xlink:show (new|replace) #IMPLIED>
+<!ATTLIST presentation:event xlink:actuate (onRequest) #IMPLIED>
+<!ATTLIST presentation:event presentation:verb %nonNegativeInteger; #IMPLIED>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 16:29:47 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,189 +130,54 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 
-AnimationEffect getEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, sal_Bool bIn )
+AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, sal_Bool bIn )
 {
-    if( bIn )
+    switch( eKind )
     {
-        switch( eKind )
+    case EK_fade:
+        switch( eDirection )
         {
-        case EK_fade:
-            switch( eDirection )
-            {
-            case ED_from_left:          return AnimationEffect_FADE_FROM_LEFT;
-            case ED_from_top:           return AnimationEffect_FADE_FROM_TOP;
-            case ED_from_right:         return AnimationEffect_FADE_FROM_RIGHT;
-            case ED_from_bottom:        return AnimationEffect_FADE_FROM_BOTTOM;
-            case ED_from_center:        return AnimationEffect_FADE_FROM_CENTER;
-            case ED_from_upperleft:     return AnimationEffect_FADE_FROM_UPPERLEFT;
-            case ED_from_upperright:    return AnimationEffect_FADE_FROM_UPPERRIGHT;
-            case ED_from_lowerleft:     return AnimationEffect_FADE_FROM_LOWERLEFT;
-            case ED_from_lowerright:    return AnimationEffect_FADE_FROM_LOWERRIGHT;
-            case ED_to_center:          return AnimationEffect_FADE_TO_CENTER;
-            case ED_clockwise:          return AnimationEffect_CLOCKWISE;
-            case ED_cclockwise:         return AnimationEffect_COUNTERCLOCKWISE;
-            case ED_spiral_inward_left: return AnimationEffect_SPIRALIN_LEFT;
-            case ED_spiral_inward_right:return AnimationEffect_SPIRALIN_RIGHT;
-            case ED_spiral_outward_left:return AnimationEffect_SPIRALOUT_LEFT;
-            case ED_spiral_outward_right:return AnimationEffect_SPIRALOUT_RIGHT;
-            }
-            return AnimationEffect_FADE_FROM_LEFT;
-        case EK_move:
-            if( nStartScale == 200 )
-            {
-                return AnimationEffect_ZOOM_OUT_SMALL;
-            }
-            else if( nStartScale == 50 )
-            {
-                return AnimationEffect_ZOOM_IN_SMALL;
-            }
-            else if( nStartScale < 100 )
-            {
-                switch( eDirection )
-                {
-                case ED_from_left:          return AnimationEffect_ZOOM_IN_FROM_LEFT;
-                case ED_from_top:           return AnimationEffect_ZOOM_IN_FROM_TOP;
-                case ED_from_right:         return AnimationEffect_ZOOM_IN_FROM_RIGHT;
-                case ED_from_bottom:        return AnimationEffect_ZOOM_IN_FROM_BOTTOM;
-                case ED_from_upperleft:     return AnimationEffect_ZOOM_IN_FROM_UPPERLEFT;
-                case ED_from_upperright:    return AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT;
-                case ED_from_lowerleft:     return AnimationEffect_ZOOM_IN_FROM_LOWERLEFT;
-                case ED_from_lowerright:    return AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT;
-                case ED_from_center:        return AnimationEffect_ZOOM_IN_FROM_CENTER;
-                case ED_spiral_inward_left: return AnimationEffect_ZOOM_IN_SPIRAL;
-                }
-                return AnimationEffect_ZOOM_IN;
-            }
-            else if( nStartScale > 100 )
-            {
-                switch( eDirection )
-                {
-                case ED_from_left:          return AnimationEffect_ZOOM_OUT_FROM_LEFT;
-                case ED_from_top:           return AnimationEffect_ZOOM_OUT_FROM_TOP;
-                case ED_from_right:         return AnimationEffect_ZOOM_OUT_FROM_RIGHT;
-                case ED_from_bottom:        return AnimationEffect_ZOOM_OUT_FROM_BOTTOM;
-                case ED_from_upperleft:     return AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT;
-                case ED_from_upperright:    return AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT;
-                case ED_from_lowerleft:     return AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT;
-                case ED_from_lowerright:    return AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT;
-                case ED_from_center:        return AnimationEffect_ZOOM_OUT_FROM_CENTER;
-                case ED_spiral_inward_left: return AnimationEffect_ZOOM_OUT_SPIRAL;
-                }
-                return AnimationEffect_ZOOM_OUT;
-            }
-            else
-            {
-                switch( eDirection )
-                {
-                case ED_from_left:          return AnimationEffect_MOVE_FROM_LEFT;
-                case ED_from_top:           return AnimationEffect_MOVE_FROM_TOP;
-                case ED_from_right:         return AnimationEffect_MOVE_FROM_RIGHT;
-                case ED_from_bottom:        return AnimationEffect_MOVE_FROM_BOTTOM;
-                case ED_from_upperleft:     return AnimationEffect_MOVE_FROM_UPPERLEFT;
-                case ED_from_upperright:    return AnimationEffect_MOVE_FROM_UPPERRIGHT;
-                case ED_from_lowerleft:     return AnimationEffect_MOVE_FROM_LOWERLEFT;
-                case ED_from_lowerright:    return AnimationEffect_MOVE_FROM_LOWERRIGHT;
-                case ED_path:               return AnimationEffect_PATH;
-                }
-            }
-            return AnimationEffect_MOVE_FROM_LEFT;
-        case EK_stripes:
-            if( eDirection == ED_vertical )
-                return AnimationEffect_VERTICAL_STRIPES;
-            else
-                return AnimationEffect_HORIZONTAL_STRIPES;
-        case EK_open:
-            if( eDirection == ED_vertical )
-                return AnimationEffect_OPEN_VERTICAL;
-            else
-                return AnimationEffect_OPEN_HORIZONTAL;
-        case EK_close:
-            if( eDirection == ED_vertical )
-                return AnimationEffect_CLOSE_VERTICAL;
-            else
-                return AnimationEffect_CLOSE_HORIZONTAL;
-        case EK_dissolve:
-            return AnimationEffect_DISSOLVE;
-        case EK_wavyline:
-            switch( eDirection )
-            {
-            case ED_from_left:          return AnimationEffect_WAVYLINE_FROM_LEFT;
-            case ED_from_top:           return AnimationEffect_WAVYLINE_FROM_TOP;
-            case ED_from_right:         return AnimationEffect_WAVYLINE_FROM_RIGHT;
-            case ED_from_bottom:        return AnimationEffect_WAVYLINE_FROM_BOTTOM;
-            }
-            return AnimationEffect_WAVYLINE_FROM_LEFT;
-        case EK_random:
-            return AnimationEffect_RANDOM;
-        case EK_lines:
-            if( eDirection == ED_vertical )
-                return AnimationEffect_VERTICAL_LINES;
-            else
-                return AnimationEffect_HORIZONTAL_LINES;
-        case EK_laser:
-            switch( eDirection )
-            {
-            case ED_from_left:          return AnimationEffect_LASER_FROM_LEFT;
-            case ED_from_top:           return AnimationEffect_LASER_FROM_TOP;
-            case ED_from_right:         return AnimationEffect_LASER_FROM_RIGHT;
-            case ED_from_bottom:        return AnimationEffect_LASER_FROM_BOTTOM;
-            case ED_from_upperleft:     return AnimationEffect_LASER_FROM_UPPERLEFT;
-            case ED_from_upperright:    return AnimationEffect_LASER_FROM_UPPERRIGHT;
-            case ED_from_lowerleft:     return AnimationEffect_LASER_FROM_LOWERLEFT;
-            case ED_from_lowerright:    return AnimationEffect_LASER_FROM_LOWERRIGHT;
-            }
-            return AnimationEffect_LASER_FROM_LEFT;
-        case EK_appear:
-            return AnimationEffect_APPEAR;
-        case EK_hide:
-            return AnimationEffect_HIDE;
-        case EK_move_short:
-            switch( eDirection )
-            {
-            case ED_from_left:          return AnimationEffect_MOVE_SHORT_FROM_LEFT;
-            case ED_from_top:           return AnimationEffect_MOVE_SHORT_FROM_TOP;
-            case ED_from_right:         return AnimationEffect_MOVE_SHORT_FROM_RIGHT;
-            case ED_from_bottom:        return AnimationEffect_MOVE_SHORT_FROM_BOTTOM;
-            case ED_from_upperleft:     return AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT;
-            case ED_from_upperright:    return AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT;
-            case ED_from_lowerleft:     return AnimationEffect_FADE_FROM_LOWERLEFT;
-            case ED_from_lowerright:    return AnimationEffect_FADE_FROM_LOWERRIGHT;
-            }
-            return AnimationEffect_MOVE_SHORT_FROM_LEFT;
-        case EK_checkerboard:
-            if( eDirection == ED_vertical )
-                return AnimationEffect_VERTICAL_CHECKERBOARD;
-            else
-                return AnimationEffect_HORIZONTAL_CHECKERBOARD;
-        case EK_rotate:
-            if( eDirection == ED_vertical )
-                return AnimationEffect_VERTICAL_ROTATE;
-            else
-                return AnimationEffect_HORIZONTAL_ROTATE;
-        case EK_stretch:
-            switch( eDirection )
-            {
-            case ED_from_left:          return AnimationEffect_STRETCH_FROM_LEFT;
-            case ED_from_top:           return AnimationEffect_STRETCH_FROM_TOP;
-            case ED_from_right:         return AnimationEffect_STRETCH_FROM_RIGHT;
-            case ED_from_bottom:        return AnimationEffect_STRETCH_FROM_BOTTOM;
-            case ED_from_upperleft:     return AnimationEffect_STRETCH_FROM_UPPERLEFT;
-            case ED_from_upperright:    return AnimationEffect_STRETCH_FROM_UPPERRIGHT;
-            case ED_from_lowerleft:     return AnimationEffect_STRETCH_FROM_LOWERLEFT;
-            case ED_from_lowerright:    return AnimationEffect_STRETCH_FROM_LOWERRIGHT;
-            case ED_vertical:           return AnimationEffect_VERTICAL_STRETCH;
-            case ED_horizontal:         return AnimationEffect_HORIZONTAL_STRETCH;
-            }
-            return AnimationEffect_STRETCH_FROM_LEFT;
+        case ED_from_left:          return AnimationEffect_FADE_FROM_LEFT;
+        case ED_from_top:           return AnimationEffect_FADE_FROM_TOP;
+        case ED_from_right:         return AnimationEffect_FADE_FROM_RIGHT;
+        case ED_from_bottom:        return AnimationEffect_FADE_FROM_BOTTOM;
+        case ED_from_center:        return AnimationEffect_FADE_FROM_CENTER;
+        case ED_from_upperleft:     return AnimationEffect_FADE_FROM_UPPERLEFT;
+        case ED_from_upperright:    return AnimationEffect_FADE_FROM_UPPERRIGHT;
+        case ED_from_lowerleft:     return AnimationEffect_FADE_FROM_LOWERLEFT;
+        case ED_from_lowerright:    return AnimationEffect_FADE_FROM_LOWERRIGHT;
+        case ED_to_center:          return AnimationEffect_FADE_TO_CENTER;
+        case ED_clockwise:          return AnimationEffect_CLOCKWISE;
+        case ED_cclockwise:         return AnimationEffect_COUNTERCLOCKWISE;
+        case ED_spiral_inward_left: return AnimationEffect_SPIRALIN_LEFT;
+        case ED_spiral_inward_right:return AnimationEffect_SPIRALIN_RIGHT;
+        case ED_spiral_outward_left:return AnimationEffect_SPIRALOUT_LEFT;
+        case ED_spiral_outward_right:return AnimationEffect_SPIRALOUT_RIGHT;
         }
-    }
-    else
-    {
-        switch( eKind )
+        return AnimationEffect_FADE_FROM_LEFT;
+    case EK_move:
+        if( nStartScale == 200 )
         {
-        case EK_move:
+            return AnimationEffect_ZOOM_OUT_SMALL;
+        }
+        else if( nStartScale == 50 )
+        {
+            return AnimationEffect_ZOOM_IN_SMALL;
+        }
+        else if( nStartScale < 100 )
+        {
             switch( eDirection )
             {
+            case ED_from_left:          return AnimationEffect_ZOOM_IN_FROM_LEFT;
+            case ED_from_top:           return AnimationEffect_ZOOM_IN_FROM_TOP;
+            case ED_from_right:         return AnimationEffect_ZOOM_IN_FROM_RIGHT;
+            case ED_from_bottom:        return AnimationEffect_ZOOM_IN_FROM_BOTTOM;
+            case ED_from_upperleft:     return AnimationEffect_ZOOM_IN_FROM_UPPERLEFT;
+            case ED_from_upperright:    return AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT;
+            case ED_from_lowerleft:     return AnimationEffect_ZOOM_IN_FROM_LOWERLEFT;
+            case ED_from_lowerright:    return AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT;
+            case ED_from_center:        return AnimationEffect_ZOOM_IN_FROM_CENTER;
+            case ED_spiral_inward_left: return AnimationEffect_ZOOM_IN_SPIRAL;
             case ED_to_left:            return AnimationEffect_MOVE_TO_LEFT;
             case ED_to_top:             return AnimationEffect_MOVE_TO_TOP;
             case ED_to_right:           return AnimationEffect_MOVE_TO_RIGHT;
@@ -322,23 +187,137 @@ AnimationEffect getEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_I
             case ED_to_lowerright:      return AnimationEffect_MOVE_TO_LOWERRIGHT;
             case ED_to_lowerleft:       return AnimationEffect_MOVE_TO_LOWERLEFT;
             }
-            return AnimationEffect_MOVE_TO_LEFT;
-        case EK_hide:
-            return AnimationEffect_HIDE;
-        case EK_move_short:
+            return AnimationEffect_ZOOM_IN;
+        }
+        else if( nStartScale > 100 )
+        {
             switch( eDirection )
             {
-            case ED_to_left:            return AnimationEffect_MOVE_SHORT_TO_LEFT;
-            case ED_to_upperleft:       return AnimationEffect_MOVE_SHORT_TO_UPPERLEFT;
-            case ED_to_top:             return AnimationEffect_MOVE_SHORT_TO_TOP;
-            case ED_to_upperright:      return AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT;
-            case ED_to_right:           return AnimationEffect_MOVE_SHORT_TO_RIGHT;
-            case ED_to_lowerright:      return AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT;
-            case ED_to_bottom:          return AnimationEffect_MOVE_SHORT_TO_BOTTOM;
-            case ED_to_lowerleft:       return AnimationEffect_MOVE_SHORT_TO_LOWERLEFT;
+            case ED_from_left:          return AnimationEffect_ZOOM_OUT_FROM_LEFT;
+            case ED_from_top:           return AnimationEffect_ZOOM_OUT_FROM_TOP;
+            case ED_from_right:         return AnimationEffect_ZOOM_OUT_FROM_RIGHT;
+            case ED_from_bottom:        return AnimationEffect_ZOOM_OUT_FROM_BOTTOM;
+            case ED_from_upperleft:     return AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT;
+            case ED_from_upperright:    return AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT;
+            case ED_from_lowerleft:     return AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT;
+            case ED_from_lowerright:    return AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT;
+            case ED_from_center:        return AnimationEffect_ZOOM_OUT_FROM_CENTER;
+            case ED_spiral_inward_left: return AnimationEffect_ZOOM_OUT_SPIRAL;
             }
-            return AnimationEffect_MOVE_SHORT_TO_LEFT;
+            return AnimationEffect_ZOOM_OUT;
         }
+        else
+        {
+            switch( eDirection )
+            {
+            case ED_from_left:          return AnimationEffect_MOVE_FROM_LEFT;
+            case ED_from_top:           return AnimationEffect_MOVE_FROM_TOP;
+            case ED_from_right:         return AnimationEffect_MOVE_FROM_RIGHT;
+            case ED_from_bottom:        return AnimationEffect_MOVE_FROM_BOTTOM;
+            case ED_from_upperleft:     return AnimationEffect_MOVE_FROM_UPPERLEFT;
+            case ED_from_upperright:    return AnimationEffect_MOVE_FROM_UPPERRIGHT;
+            case ED_from_lowerleft:     return AnimationEffect_MOVE_FROM_LOWERLEFT;
+            case ED_from_lowerright:    return AnimationEffect_MOVE_FROM_LOWERRIGHT;
+            case ED_path:               return AnimationEffect_PATH;
+            }
+        }
+        return AnimationEffect_MOVE_FROM_LEFT;
+    case EK_stripes:
+        if( eDirection == ED_vertical )
+            return AnimationEffect_VERTICAL_STRIPES;
+        else
+            return AnimationEffect_HORIZONTAL_STRIPES;
+    case EK_open:
+        if( eDirection == ED_vertical )
+            return AnimationEffect_OPEN_VERTICAL;
+        else
+            return AnimationEffect_OPEN_HORIZONTAL;
+    case EK_close:
+        if( eDirection == ED_vertical )
+            return AnimationEffect_CLOSE_VERTICAL;
+        else
+            return AnimationEffect_CLOSE_HORIZONTAL;
+    case EK_dissolve:
+        return AnimationEffect_DISSOLVE;
+    case EK_wavyline:
+        switch( eDirection )
+        {
+        case ED_from_left:          return AnimationEffect_WAVYLINE_FROM_LEFT;
+        case ED_from_top:           return AnimationEffect_WAVYLINE_FROM_TOP;
+        case ED_from_right:         return AnimationEffect_WAVYLINE_FROM_RIGHT;
+        case ED_from_bottom:        return AnimationEffect_WAVYLINE_FROM_BOTTOM;
+        }
+        return AnimationEffect_WAVYLINE_FROM_LEFT;
+    case EK_random:
+        return AnimationEffect_RANDOM;
+    case EK_lines:
+        if( eDirection == ED_vertical )
+            return AnimationEffect_VERTICAL_LINES;
+        else
+            return AnimationEffect_HORIZONTAL_LINES;
+    case EK_laser:
+        switch( eDirection )
+        {
+        case ED_from_left:          return AnimationEffect_LASER_FROM_LEFT;
+        case ED_from_top:           return AnimationEffect_LASER_FROM_TOP;
+        case ED_from_right:         return AnimationEffect_LASER_FROM_RIGHT;
+        case ED_from_bottom:        return AnimationEffect_LASER_FROM_BOTTOM;
+        case ED_from_upperleft:     return AnimationEffect_LASER_FROM_UPPERLEFT;
+        case ED_from_upperright:    return AnimationEffect_LASER_FROM_UPPERRIGHT;
+        case ED_from_lowerleft:     return AnimationEffect_LASER_FROM_LOWERLEFT;
+        case ED_from_lowerright:    return AnimationEffect_LASER_FROM_LOWERRIGHT;
+        }
+        return AnimationEffect_LASER_FROM_LEFT;
+    case EK_appear:
+        return AnimationEffect_APPEAR;
+    case EK_hide:
+        return AnimationEffect_HIDE;
+    case EK_move_short:
+        switch( eDirection )
+        {
+        case ED_from_left:          return AnimationEffect_MOVE_SHORT_FROM_LEFT;
+        case ED_from_top:           return AnimationEffect_MOVE_SHORT_FROM_TOP;
+        case ED_from_right:         return AnimationEffect_MOVE_SHORT_FROM_RIGHT;
+        case ED_from_bottom:        return AnimationEffect_MOVE_SHORT_FROM_BOTTOM;
+        case ED_from_upperleft:     return AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT;
+        case ED_from_upperright:    return AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT;
+        case ED_from_lowerleft:     return AnimationEffect_FADE_FROM_LOWERLEFT;
+        case ED_from_lowerright:    return AnimationEffect_FADE_FROM_LOWERRIGHT;
+        case ED_to_left:            return AnimationEffect_MOVE_SHORT_TO_LEFT;
+        case ED_to_upperleft:       return AnimationEffect_MOVE_SHORT_TO_UPPERLEFT;
+        case ED_to_top:             return AnimationEffect_MOVE_SHORT_TO_TOP;
+        case ED_to_upperright:      return AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT;
+        case ED_to_right:           return AnimationEffect_MOVE_SHORT_TO_RIGHT;
+        case ED_to_lowerright:      return AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT;
+        case ED_to_bottom:          return AnimationEffect_MOVE_SHORT_TO_BOTTOM;
+        case ED_to_lowerleft:       return AnimationEffect_MOVE_SHORT_TO_LOWERLEFT;
+        }
+        return AnimationEffect_MOVE_SHORT_FROM_LEFT;
+    case EK_checkerboard:
+        if( eDirection == ED_vertical )
+            return AnimationEffect_VERTICAL_CHECKERBOARD;
+        else
+            return AnimationEffect_HORIZONTAL_CHECKERBOARD;
+    case EK_rotate:
+        if( eDirection == ED_vertical )
+            return AnimationEffect_VERTICAL_ROTATE;
+        else
+            return AnimationEffect_HORIZONTAL_ROTATE;
+    case EK_stretch:
+        switch( eDirection )
+        {
+        case ED_from_left:          return AnimationEffect_STRETCH_FROM_LEFT;
+        case ED_from_top:           return AnimationEffect_STRETCH_FROM_TOP;
+        case ED_from_right:         return AnimationEffect_STRETCH_FROM_RIGHT;
+        case ED_from_bottom:        return AnimationEffect_STRETCH_FROM_BOTTOM;
+        case ED_from_upperleft:     return AnimationEffect_STRETCH_FROM_UPPERLEFT;
+        case ED_from_upperright:    return AnimationEffect_STRETCH_FROM_UPPERRIGHT;
+        case ED_from_lowerleft:     return AnimationEffect_STRETCH_FROM_LOWERLEFT;
+        case ED_from_lowerright:    return AnimationEffect_STRETCH_FROM_LOWERRIGHT;
+        case ED_vertical:           return AnimationEffect_VERTICAL_STRETCH;
+        case ED_horizontal:         return AnimationEffect_HORIZONTAL_STRETCH;
+        }
+        return AnimationEffect_STRETCH_FROM_LEFT;
     }
 
     return AnimationEffect_NONE;
@@ -634,7 +613,7 @@ void XMLAnimationsEffectContext::EndElement()
                     }
                     else
                     {
-                        const AnimationEffect eEffect = getEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
+                        const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
                         aAny <<= eEffect;
                         xSet->setPropertyValue( mbTextEffect ? mpImpl->msTextEffect : mpImpl->msEffect, aAny );

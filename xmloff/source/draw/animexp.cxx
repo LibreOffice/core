@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 16:29:47 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
-#include <com/sun/star/presentation/AnimationEffect.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -300,7 +297,7 @@ const struct Effect
     { EK_move,  ED_from_center,    400, sal_True }  // AnimationEffect_ZOOM_OUT_FROM_CENTER
 };
 
-void setEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDirection& eDirection, sal_Int16& nStartScale, sal_Bool& bIn )
+void SdXMLImplSetEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDirection& eDirection, sal_Int16& nStartScale, sal_Bool& bIn )
 {
     if( eEffect < AnimationEffect_NONE || eEffect > AnimationEffect_ZOOM_OUT_FROM_CENTER )
     {
@@ -434,7 +431,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
             if( eEffect != AnimationEffect_NONE )
             {
                 sal_Bool bIn = sal_True;
-                setEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
+                SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
 
                 aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
 
@@ -461,7 +458,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
             if( eEffect != AnimationEffect_NONE )
             {
                 sal_Bool bIn = sal_True;
-                setEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
+                SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
                 aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
                 aEffect.mbTextEffect = sal_True;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 11:14:37 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
         // write 3DScene shape
         SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DR3D, sXML_scene, sal_True, sal_True);
+
+        ImpExportEvents( xShape );
 
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
         if( xPropSet.is() )

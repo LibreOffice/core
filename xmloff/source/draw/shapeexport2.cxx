@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 11:14:37 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,14 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
+
+#ifndef _XMLOFF_ANIM_HXX
+#include "anim.hxx"
 #endif
 
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
@@ -237,6 +245,251 @@ void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xSh
 
 //////////////////////////////////////////////////////////////////////////////
 
+#ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
+#include <com/sun/star/presentation/ClickAction.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#endif
+
+#define FOUND_CLICKACTION   0x0001
+#define FOUND_BOOKMARK      0x0002
+#define FOUND_EFFECT        0x0004
+#define FOUND_PLAYFULL      0x0008
+#define FOUND_VERB          0x0010
+#define FOUND_SOUNDURL      0x0020
+#define FOUND_SPEED         0x0040
+#define FOUND_EVENTTYPE     0x0080
+#define FOUND_MACRO         0x0100
+#define FOUND_LIBRARY       0x0200
+
+void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& xShape )
+{
+    do
+    {
+        uno::Reference< document::XEventsSupplier > xEventsSupplier( xShape, uno::UNO_QUERY );
+        if( !xEventsSupplier.is() )
+            break;
+
+        uno::Reference< container::XNameReplace > xEvents( xEventsSupplier->getEvents() );
+        DBG_ASSERT( xEvents.is(), "XEventsSupplier::getEvents() returned NULL" );
+        if( !xEvents.is() )
+            break;
+
+        uno::Sequence< beans::PropertyValue > aProperties;
+        if( !xEvents->hasByName( msOnClick ) )
+            break;
+
+        if( !(xEvents->getByName( msOnClick ) >>= aProperties) )
+            break;
+
+        sal_Int32 nFound = 0;
+        const beans::PropertyValue* pProperties = aProperties.getConstArray();
+
+        OUString aStrEventType;
+        presentation::ClickAction eClickAction;
+        presentation::AnimationEffect eEffect;
+        presentation::AnimationSpeed eSpeed;
+        OUString aStrSoundURL;
+        sal_Bool bPlayFull;
+        sal_Int32 nVerb;
+        OUString aStrMacro;
+        OUString aStrLibrary;
+        OUString aStrBookmark;
+
+        const sal_Int32 nCount = aProperties.getLength();
+        sal_Int32 nIndex;
+        for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
+        {
+            if( ( ( nFound & FOUND_EVENTTYPE ) == 0 ) && pProperties->Name == msEventType )
+            {
+                if( pProperties->Value >>= aStrEventType )
+                    nFound |= FOUND_EVENTTYPE;
+            }
+            else if( ( ( nFound & FOUND_CLICKACTION ) == 0 ) && pProperties->Name == msClickAction )
+            {
+                if( pProperties->Value >>= eClickAction )
+                    nFound |= FOUND_CLICKACTION;
+            }
+            else if( ( ( nFound & FOUND_MACRO ) == 0 ) && pProperties->Name == msMacroName )
+            {
+                if( pProperties->Value >>= aStrMacro )
+                    nFound |= FOUND_MACRO;
+            }
+            else if( ( ( nFound & FOUND_LIBRARY ) == 0 ) && pProperties->Name == msLibrary )
+            {
+                if( pProperties->Value >>= aStrLibrary )
+                    nFound |= FOUND_LIBRARY;
+            }
+            else if( ( ( nFound & FOUND_EFFECT ) == 0 ) && pProperties->Name == msEffect )
+            {
+                if( pProperties->Value >>= eEffect )
+                    nFound |= FOUND_EFFECT;
+            }
+            else if( ( ( nFound & FOUND_BOOKMARK ) == 0 ) && pProperties->Name == msBookmark )
+            {
+                if( pProperties->Value >>= aStrBookmark )
+                    nFound |= FOUND_BOOKMARK;
+            }
+            else if( ( ( nFound & FOUND_SPEED ) == 0 ) && pProperties->Name == msSpeed )
+            {
+                if( pProperties->Value >>= eSpeed )
+                    nFound |= FOUND_SPEED;
+            }
+            else if( ( ( nFound & FOUND_SOUNDURL ) == 0 ) && pProperties->Name == msSoundURL )
+            {
+                if( pProperties->Value >>= aStrSoundURL )
+                    nFound |= FOUND_SOUNDURL;
+            }
+            else if( ( ( nFound & FOUND_PLAYFULL ) == 0 ) && pProperties->Name == msPlayFull )
+            {
+                if( pProperties->Value >>= bPlayFull )
+                    nFound |= FOUND_PLAYFULL;
+            }
+            else if( ( ( nFound & FOUND_VERB ) == 0 ) && pProperties->Name == msVerb )
+            {
+                if( pProperties->Value >>= nVerb )
+                    nFound |= FOUND_VERB;
+            }
+        }
+
+        if( ( nFound & FOUND_EVENTTYPE ) == 0 )
+            break;
+
+        if( aStrEventType == msPresentation )
+        {
+            if( ( nFound & FOUND_CLICKACTION ) == 0 )
+                break;
+
+            if( eClickAction == presentation::ClickAction_NONE )
+                break;
+
+            SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_OFFICE, sXML_events, sal_True, sal_True);
+
+            OUString aStrAction;
+
+            switch( eClickAction )
+            {
+            case presentation::ClickAction_PREVPAGE:        aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_previous_page ) ); break;
+            case presentation::ClickAction_NEXTPAGE:        aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_next_page ) ); break;
+            case presentation::ClickAction_FIRSTPAGE:       aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_first_page ) ); break;
+            case presentation::ClickAction_LASTPAGE:        aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_last_page ) ); break;
+            case presentation::ClickAction_INVISIBLE:       aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_hide ) ); break;
+            case presentation::ClickAction_STOPPRESENTATION:aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stop ) ); break;
+            case presentation::ClickAction_PROGRAM:         aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_execute ) ); break;
+            case presentation::ClickAction_BOOKMARK:        aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_show ) ); break;
+            case presentation::ClickAction_DOCUMENT:        aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_show ) ); break;
+            case presentation::ClickAction_MACRO:           aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_execute_macro ) ); break;
+            case presentation::ClickAction_VERB:            aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_verb ) ); break;
+            case presentation::ClickAction_VANISH:          aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_fade_out ) ); break;
+            case presentation::ClickAction_SOUND:           aStrAction = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_sound ) ); break;
+            default:
+                DBG_ERROR( "unknown presentation::ClickAction found!" );
+            }
+
+            rExport.AddAttribute( XML_NAMESPACE_SCRIPT, sXML_event_name, OUString( RTL_CONSTASCII_USTRINGPARAM( "on-click" ) ) );
+            rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_action, aStrAction );
+
+            if( eClickAction == presentation::ClickAction_VANISH )
+            {
+                if( nFound & FOUND_EFFECT )
+                {
+                    XMLEffect eKind;
+                    XMLEffectDirection eDirection;
+                    sal_Int16 nStartScale;
+                    sal_Bool bIn;
+
+                    SdXMLImplSetEffect( eEffect, eKind, eDirection, nStartScale, bIn );
+
+                    if( eEffect != EK_none )
+                    {
+                        SvXMLUnitConverter::convertEnum( msBuffer, eKind, aXML_AnimationEffect_EnumMap );
+                        rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_effect, msBuffer.makeStringAndClear() );
+                    }
+
+                    if( eDirection != ED_none )
+                    {
+                        SvXMLUnitConverter::convertEnum( msBuffer, eDirection, aXML_AnimationDirection_EnumMap );
+                        rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_direction, msBuffer.makeStringAndClear() );
+                    }
+
+                    if( nStartScale != -1 )
+                    {
+                        SvXMLUnitConverter::convertPercent( msBuffer, nStartScale );
+                        rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_start_scale, msBuffer.makeStringAndClear() );
+                    }
+                }
+
+                if( nFound & FOUND_SPEED && eEffect != presentation::AnimationEffect_NONE )
+                {
+                    if( eSpeed != presentation::AnimationSpeed_MEDIUM )
+                    {
+                        SvXMLUnitConverter::convertEnum( msBuffer, eSpeed, aXML_AnimationSpeed_EnumMap );
+                        rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_speed, msBuffer.makeStringAndClear() );
+                    }
+                }
+            }
+
+            if( eClickAction == presentation::ClickAction_PROGRAM ||
+                eClickAction == presentation::ClickAction_BOOKMARK ||
+                eClickAction == presentation::ClickAction_DOCUMENT )
+            {
+                if( eClickAction == presentation::ClickAction_BOOKMARK )
+                    msBuffer.append( sal_Unicode('#') );
+
+                msBuffer.append( aStrBookmark );
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, msBuffer.makeStringAndClear() );
+                rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+                rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
+                rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
+            }
+
+            if( ( nFound & FOUND_VERB ) && eClickAction == presentation::ClickAction_VERB )
+            {
+                msBuffer.append( nVerb );
+                rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_verb, msBuffer.makeStringAndClear());
+            }
+
+            SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_PRESENTATION, sXML_event, sal_True, sal_True);
+
+            if( eClickAction == presentation::ClickAction_VANISH || eClickAction == presentation::ClickAction_SOUND )
+            {
+                if( ( nFound & FOUND_SOUNDURL ) && aStrSoundURL.getLength() != 0 )
+                {
+                    rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStrSoundURL );
+                    rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+                    rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
+                    rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
+                    if( nFound & FOUND_PLAYFULL && bPlayFull )
+                        rExport.AddAttributeASCII( XML_NAMESPACE_PRESENTATION, sXML_play_full, sXML_true );
+
+                    SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_sound, sal_True, sal_True );
+                }
+            }
+            break;
+        }
+        else if( aStrEventType == msStarBasic )
+        {
+            if( nFound & FOUND_MACRO )
+            {
+                SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_OFFICE, sXML_events, sal_True, sal_True);
+
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, sXML_language, OUString( RTL_CONSTASCII_USTRINGPARAM( "starbasic" ) ) );
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, sXML_event_name, OUString( RTL_CONSTASCII_USTRINGPARAM( "on-click" ) ) );
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, sXML_macro_name, aStrMacro );
+
+                if( nFound & FOUND_LIBRARY )
+                    rExport.AddAttribute( XML_NAMESPACE_SCRIPT, sXML_library, aStrLibrary );
+
+                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, sXML_event, sal_True, sal_True);
+            }
+        }
+    }
+    while(0);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
@@ -244,6 +497,8 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
     {
         // write group shape
         SvXMLElementExport aPGR(rExport, XML_NAMESPACE_DRAW, sXML_g, sal_True, sal_True);
+
+        ImpExportEvents( xShape );
 
         // write members
         exportShapes( xShapes, nFeatures, pRefPoint );
@@ -306,7 +561,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
         // write text-box
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_text_box, sal_True, sal_True);
 
-        // export text
+        ImpExportEvents( xShape );
         if(!bIsEmptyPresObj)
             ImpExportText( xShape );
     }
@@ -339,7 +594,7 @@ void XMLShapeExport::ImpExportRectangleShape(
         // write rectangle
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_rect, sal_True, sal_True);
 
-        // export text
+        ImpExportEvents( xShape );
         ImpExportText( xShape );
     }
 }
@@ -435,7 +690,7 @@ void XMLShapeExport::ImpExportLineShape(
         // write line
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_line, sal_True, sal_True);
 
-        // export text
+        ImpExportEvents( xShape );
         ImpExportText( xShape );
     }
 }
@@ -515,7 +770,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             // write circle
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_circle, sal_True, sal_True);
 
-            // export text
+            ImpExportEvents( xShape );
             ImpExportText( xShape );
         }
         else
@@ -533,7 +788,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             // write ellipse
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_ellipse, sal_True, sal_True);
 
-            // export text
+            ImpExportEvents( xShape );
             ImpExportText( xShape );
         }
     }
@@ -602,10 +857,8 @@ void XMLShapeExport::ImpExportPolygonShape(
                 // write object now
                 SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_path, sal_True, sal_True);
 
-                // export text
-                uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-                if( xText.is() && xText->getString().getLength() )
-                    rExport.GetTextParagraphExport()->exportText( xText );
+                ImpExportEvents( xShape );
+                ImpExportText( xShape );
             }
         }
         else
@@ -634,7 +887,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW,
                         bClosed ? sXML_polygon : sXML_polyline , sal_True, sal_True);
 
-                    // export text
+                    ImpExportEvents( xShape );
                     ImpExportText( xShape );
                 }
                 else
@@ -663,7 +916,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                     // write object now
                     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_path, sal_True, sal_True);
 
-                    // export text
+                    ImpExportEvents( xShape );
                     ImpExportText( xShape );
                 }
             }
@@ -722,6 +975,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         }
         // write graphic object
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_image, sal_True, sal_True);
+        ImpExportEvents( xShape );
     }
 }
 
@@ -752,7 +1006,7 @@ void XMLShapeExport::ImpExportChartShape(
         if( xChartDoc.is() )
         {
             // export chart data if the flag is not set (default)
-            sal_Bool bExportOwnData = (( nFeatures & SEF_EXPORT_NO_CHART_DATA ) == 0 );
+            sal_Bool bExportOwnData = ( nFeatures & SEF_EXPORT_NO_CHART_DATA ) == 0;
             rExport.GetChartExport()->exportChart( xChartDoc, bExportOwnData );
         }
         else
@@ -806,8 +1060,6 @@ void XMLShapeExport::ImpExportControlShape(
         }
     }
 
-    // this is a control shape, in this place the database team
-    // would have to export the control abilities. Add Export later
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_control, sal_True, sal_True);
 }
 
@@ -953,7 +1205,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     // write connector shape. Add Export later.
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_connector, sal_True, sal_True);
 
-    // export text
+    ImpExportEvents( xShape );
     ImpExportText( xShape );
 }
 
@@ -1023,7 +1275,8 @@ void XMLShapeExport::ImpExportMeasureShape(
     // write measure shape
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_measure, sal_True, sal_True);
 
-    // export text
+    ImpExportEvents( xShape );
+
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
     if( xText.is() )
         rExport.GetTextParagraphExport()->exportText( xText );
@@ -1047,6 +1300,8 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
         // write object
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML__unknown_, sal_True, sal_True);
+
+        ImpExportEvents( xShape );
     }
 }
 
@@ -1080,9 +1335,7 @@ void XMLShapeExport::ImpExportCaptionShape(
     // write Caption shape. Add export later.
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_caption, sal_True, sal_True);
 
-    // export text
-    uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() && xText->getString().getLength() )
-        rExport.GetTextParagraphExport()->exportText( xText );
+    ImpExportEvents( xShape );
+    ImpExportText( xShape );
 }
 

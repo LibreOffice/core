@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.29 2001-02-06 14:08:19 dvo Exp $
+	$Id: office.mod,v 1.30 2001-02-07 16:18:34 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -152,7 +152,7 @@
 		presentation:shows?)">
 <!ELEMENT office:body %body;>
 
-<!ELEMENT office:events (script:event*)>
+<!ELEMENT office:events (script:event|presentation:event)*>
 
 <!-- DDE source: for text sections and tables -->
 <!ELEMENT office:dde-source EMPTY>

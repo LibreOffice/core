@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@
 #include "sdpropls.hxx"
 #endif
 
+#ifndef _XMLOFF_EVENTIMP_HXX
+#include "eventimp.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -188,28 +192,35 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    // create text cursor on demand
-    if( !mxCursor.is() )
-    {
-        uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
-        if( xText.is() )
-        {
-            mxOldCursor = GetImport().GetTextImport()->GetCursor();
-            mxCursor = xText->createTextCursor();
-            if( mxCursor.is() )
-            {
-                GetImport().GetTextImport()->SetCursor( mxCursor );
-            }
-        }
-    }
-
     SvXMLImportContext * pContext = NULL;
 
-    // if we have a text cursor, lets  try to import some text
-    if( mxCursor.is() )
+    if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_events ) ) )
     {
-        pContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList );
+        pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+    }
+    else
+    {
+        // create text cursor on demand
+        if( !mxCursor.is() )
+        {
+            uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+            if( xText.is() )
+            {
+                mxOldCursor = GetImport().GetTextImport()->GetCursor();
+                mxCursor = xText->createTextCursor();
+                if( mxCursor.is() )
+                {
+                    GetImport().GetTextImport()->SetCursor( mxCursor );
+                }
+            }
+        }
+
+        // if we have a text cursor, lets  try to import some text
+        if( mxCursor.is() )
+        {
+            pContext = GetImport().GetTextImport()->CreateTextChildContext(
+                GetImport(), nPrefix, rLocalName, xAttrList );
+        }
     }
 
     // call parent for content

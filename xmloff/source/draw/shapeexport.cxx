@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 12:21:59 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,20 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
-    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
+    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
+    msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
+    msEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
+    msPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
+    msMacroName( RTL_CONSTASCII_USTRINGPARAM("MacroName") ),
+    msLibrary( RTL_CONSTASCII_USTRINGPARAM("Library") ),
+    msClickAction( RTL_CONSTASCII_USTRINGPARAM("ClickAction") ),
+    msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
+    msEffect( RTL_CONSTASCII_USTRINGPARAM("Effect") ),
+    msPlayFull( RTL_CONSTASCII_USTRINGPARAM("PlayFull") ),
+    msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
+    msSoundURL( RTL_CONSTASCII_USTRINGPARAM("SoundURL") ),
+    msSpeed( RTL_CONSTASCII_USTRINGPARAM("Speed") ),
+    msStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") )
 {
     // construct PropertyHandlerFactory
     xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel() );
