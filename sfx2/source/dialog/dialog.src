@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:57:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 21:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message [ norwegian ] = "Mal finnes allerede. Skriv over?" ;
     Message [ italian ] = "Il modello esiste già. Sovrascrivere?" ;
     Message [ portuguese_brazilian ] = "O estilo j? existe. Sobregravar?" ;
-    Message [ portuguese ] = "O modelo já existe. Sobregravar?" ;
+    Message [ portuguese ] = "O modelo já existe. Substituir?" ;
     Message [ finnish ] = "Tyyli on jo olemassa. Korvataanko?" ;
     Message [ danish ] = "Typografi eksisterer allerede. Skal den overskrives?" ;
     Message [ french ] = "Ce style existe déjà. Voulez-vous le remplacer ?" ;
@@ -631,7 +631,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸²Ğ´Ëü£¿";
     Message[ russian ] = "Øàáëîí óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
     Message[ polish ] = "Szablon ju¿ istnieje. Czy go zast¹piæ?";
-    Message[ japanese ] = "‚±‚Ì½À²Ù‚Í‚·‚Å‚É‘¶İ‚µ‚Ä‚¢‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©H";
+    Message[ japanese ] = "‚±‚Ì½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
     Message[ chinese_traditional ] = "¼Ë¦¡¤w¸g¦s¦b¡C±z­nÂĞ¼g¥¦¡S";
     Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
@@ -656,7 +656,7 @@ String STR_DELETE_STYLE
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÑùÊ½ $1 £¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ñòèëü $1?";
     Text[ polish ] = "Czy chcesz na pewno usun¹æ styl $1?";
-    Text[ japanese ] = "½À²Ù $1 ‚ğíœ‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©H";
+    Text[ japanese ] = "½À²Ù $1 ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "±z¯uªº­n§R°£¼Ë¦¡ $1 ¡S";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáäãØ $1¿";
     Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñÜøåôå ôï ğñüôõğï $1?";
@@ -682,7 +682,7 @@ String STR_DELETE_STYLE_USED
     Text[ chinese_simplified ] = "ÄúÒªÉ¾³ıµÄÊÇÒ»¸öÊ¹ÓÃµÄÑùÊ½£¡\n";
     Text[ russian ] = "Âû óäàëÿåòå èñïîëüçóåìûé ñòèëü!\n";
     Text[ polish ] = "Usuwasz zastosowany styl!\n";
-    Text[ japanese ] = "g—p‚µ‚½½À²Ù‚ğíœ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚Ü‚·!\n";
+    Text[ japanese ] = "g—p‚µ‚½½À²Ù‚ğíœ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚Ü‚·B\n";
     Text[ chinese_traditional ] = "±z­n§R°£ªº¬O¤@­Ó¨Ï¥Îªº¼Ë¦¡¡T\n";
     Text[ arabic ] = "ÃäÊ ÇáÂä ÈÕÏÏ ÍĞİ äãØ ŞíÏ ÇáÇÓÊÎÏÇã!\n";
     Text[ greek ] = "ÄéáãñÜöåôå İíá ğñüôõğï ğïõ åöáñìüóôçêå!\n";
@@ -1095,6 +1095,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
 
 
