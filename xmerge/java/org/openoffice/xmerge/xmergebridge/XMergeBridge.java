@@ -217,6 +217,8 @@ public class XMergeBridge {
 
         for  (int  i = 0 ; i < pValue.length; i++)
         {
+
+        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
         if (pValue[i].Name.compareTo("InputStream")==0){
             xis =(com.sun.star.io.XInputStream) pValue[i].Value;
 
@@ -255,21 +257,30 @@ public class XMergeBridge {
 
         XParser xParser = (XParser) UnoRuntime.queryInterface(
                         XParser.class , xSaxParserObj );
-
+        if (xParser==null){
+            System.out.println("\nParser creation Failed");
+        }
+        xOutStream.closeOutput();
         InputSource aInput = new InputSource();
+        if (sFileName==null){
+            sFileName="";
+            }
         aInput.sSystemId = sFileName;
         aInput.aInputStream =xInStream;
+
                 xParser.setDocumentHandler ( xDocHandler );
+
         xParser.parseStream ( aInput );
+
 
         }
         catch (IOException e){
-        System.out.println("Exception "+e);
+        System.out.println("XMergeBridge IO Exception "+e.getMessage());
           return false;
         }
          catch (Exception e){
-        System.out.println("Exception "+e.getMessage());
-          return false;
+        System.out.println("XMergeBridge Exception "+e+" "+e.getMessage());
+        //return false;
         }
         return true;
     }
@@ -302,10 +313,10 @@ public class XMergeBridge {
         for  (int  i = 0 ; i < pValue.length; i++)
         {
 
-
+        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
         if (pValue[i].Name.compareTo("OutputStream")==0){
             xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
-            //    System.out.println(pValue[i].Name+" "+xos);
+            //System.out.println(pValue[i].Name+" "+xos);
         }
         if (pValue[i].Name.compareTo("FileName")==0){
             sFileName=(String) pValue[i].Value;
@@ -317,13 +328,13 @@ public class XMergeBridge {
         }
         if (pValue[i].Name.compareTo("URL")==0){
             sURL = (String)pValue[i].Value;
-            //System.out.println("\nMediaDescriptor url "+pValue[i].Name+" "+sURL);
+            // System.out.println("\nMediaDescriptor url "+pValue[i].Name+" "+sURL);
         }
         }
 
 
         if (sFileName==null){
-        sFileName=title;
+        sFileName="";
         }
          try{
 
@@ -555,14 +566,17 @@ public class XMergeBridge {
              else
              {
                  cv.addInputStream(name,(InputStream)xis,false);
+                 //System.out.println("\nConverting");
                  ConvertData dataIn = cv.convert();
+                 //System.out.println("\nFinished Converting");
                  Enumeration docEnum = dataIn.getDocumentEnumeration();
                  while (docEnum.hasMoreElements()) {
                  OfficeDocument docIn      = (OfficeDocument)docEnum.nextElement();
+
                  docIn.write(newxos,false);
                  }
-                 newxos.write(-1); //EOF character
-                 newxos.flush();
+                 //newxos.write(-1); //EOF character
+                               //newxos.flush();
                  newxos.close();
              }
              ConverterInfoMgr.removeByJar(jarName);
