@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:14:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ TabPage TP_COLUMN
         Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Columns" ;
         Text[ language_user1 ] = " ";
-        Text[ english_us ] = "Columns";
+        Text[ english_us ] = "Settings";
         Text[ portuguese ] = "Predefinições";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "ĞñïåğéëïãŞ";
@@ -945,27 +945,27 @@ ModalDialog DLG_COLUMN
         Text = "~Anwenden auf" ;
         Text [ English ] = "~Apply to" ;
         Left = TRUE ;
-        Text[ english_us ] = "~Apply to";
-        Text[ portuguese ] = "~Aplicar a";
-        Text[ greek ] = "Åö~áñìïãŞ óå";
-        Text[ dutch ] = "~Toepassen op";
-        Text[ french ] = "~Appliquer à";
-        Text[ spanish ] = "~Aplicar a";
-        Text[ swedish ] = "~Använd på";
-        Text[ russian ] = "Ïğèìåíèòü ê";
-        Text[ italian ] = "~Applica a";
-        Text[ danish ] = "Anvend på";
+        Text[ english_us ] = "~Apply to:";
+        Text[ portuguese ] = "~Aplicar a:";
+        Text[ greek ] = "Åö~áñìïãŞ óå:";
+        Text[ dutch ] = "~Toepassen op:";
+        Text[ french ] = "~Appliquer à :";
+        Text[ spanish ] = "~Aplicar a:";
+        Text[ swedish ] = "~Använd på:";
+        Text[ russian ] = "Ïğèìåíèòü ê:";
+        Text[ italian ] = "~Applica a:";
+        Text[ danish ] = "Anvend på:";
         Text[ polish ] = "Zastosuj w";
-        Text[ portuguese_brazilian ] = "~Apply to";
-        Text[ japanese ] = "İ’è‘ÎÛ(~A)";
-        Text[ korean ] = "Àû¿ë(~A)";
+        Text[ portuguese_brazilian ] = "~Apply to:";
+        Text[ japanese ] = "İ’è‘ÎÛ(~A):";
+        Text[ korean ] = "Àû¿ë(~A):";
         Text[ chinese_simplified ] = "Ì×ÓÃµ½(~A)£º";
         Text[ chinese_traditional ] = "®M¥Î¨ì(~A)¡G";
-        Text[ arabic ] = "ÊØÈíŞ Úáì";
+        Text[ arabic ] = "ÊØÈíŞ Úáì:";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "~Uygulanacağı yer";
-        Text[ catalan ] = "~Aplicar a";
-        Text[ finnish ] = "~Käytä";
+        Text[ turkish ] = "~Uygulanacağı yer:";
+        Text[ catalan ] = "~Aplicar a:";
+        Text[ finnish ] = "~Käytä:";
     };
     ListBox LB_APPLY_TO
     {
@@ -1180,6 +1180,7 @@ ModalDialog DLG_COLUMN
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
 };
+
 
 
 
