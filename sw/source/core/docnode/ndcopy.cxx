@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:38:29 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,7 +1215,9 @@ void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
     SwDoc* pDest = rSttIdx.GetNode().GetDoc();
     _ZSortFlys aArr;
     USHORT nArrLen = GetSpzFrmFmts()->Count();
-    for( USHORT n = 0; n < nArrLen; ++n )
+    USHORT n;
+
+    for( n = 0; n < nArrLen; ++n )
     {
         const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[n];
         const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
