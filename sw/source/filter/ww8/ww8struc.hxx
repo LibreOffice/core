@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:51 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,6 +849,14 @@ struct WW67_ATRD                // fuer die 6/7-Version
                                     // annotation bookmark that locates the
                                     // range of CPs in the main document which
                                     // this annotation references.
+};
+
+struct WW8_TablePos
+{
+    INT16 nSp27;
+    INT16 nSp49;
+    BYTE nSp29;
+    BYTE nSp37;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 15:05:50 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,21 +289,56 @@ public:
     void SetNumRuleName( const String& rName );
 };
 
+BOOL SwWW8ImplReader::SearchRowEnd( BOOL bVer67, BOOL bComplex,
+    WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp )
+{
+    const BYTE* pB;
+    WW8PLCFxDesc aRes;
+    aRes.pMemPos = 0;
+    aRes.nEndPos = rStartCp;
+
+    while(     (    ( bVer67 && !bComplex )
+                 || ( pPap->GetPCDIdx() < pPap->GetPCDIMax()) )
+            && pPap->HasFkp() )
+    {
+        if( pPap->Where() != LONG_MAX )
+        {
+            pB = pPap->HasSprm( bVer67 ? 25 : 0x2417 );
+            if(     pB
+                && *pB == 1 )
+                return TRUE;    // RowEnd found
+        }
+
+        aRes.nStartPos = aRes.nEndPos;
+        aRes.pMemPos = 0;
+        //Seek to our next block of properties
+        if (!(pPap->SeekPos(aRes.nStartPos)))
+        {
+            aRes.nEndPos = LONG_MAX;
+            pPap->SetDirty(TRUE);
+        }
+        pPap->GetSprms(&aRes);
+        pPap->SetDirty(FALSE);
+        //Update our aRes to get the new starting point of the next properties
+        rStartCp = aRes.nEndPos;
+    }
+    return FALSE;
+}
+
 // TestApo() ist die aus ProcessSpecial() herausgeloeste Apo-Abfrage.
 // sie wird auch beim Aufbau der Tabellen-Struktur (ww8par6.cxx)
 // verwendet.
 // Die Parameter rbStartApo, rbStopApo und rbNowStyleApo sind reine
 // Rueckgabeparameter
 const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
-                                BOOL& rbNowStyleApo,
-                                BOOL  bInTable,   BOOL bTableRowEnd,
-                                BOOL  bStillInTable )
+    BOOL& rbNowStyleApo, BOOL bInTable, BOOL bTableRowEnd,
+    WW8_TablePos *pTabPos)
 {
     const BYTE* pSprm37;
     const BYTE* pSprm29;
     rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly); // Apo in StyleDef
+    rbStartApo = rbStopApo  = FALSE;
 
-#if 1
     /*
     ##1140##
     If I have a table and apply a style to one of its frames that should cause
@@ -320,8 +355,8 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
 
 
     #i1532#
-    If we are already a table in a frame then we must grab the para properties to
-    see if we are still in that frame.
+    If we are already a table in a frame then we must grab the para properties
+    to see if we are still in that frame.
     */
 
     if( !bApo && bInTable && rbNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
@@ -330,25 +365,33 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
         pSprm29       = 0;
         rbNowStyleApo = FALSE;
     }
-#else
-    if( bInTable && rbNowStyleApo )
-    {
-        pSprm37       = 0;
-        pSprm29       = 0;
-        rbNowStyleApo = FALSE;
-    }
-#endif
     else
     {
         pSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
         pSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
     }
 
-    // here Apo
-    BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37;
+    // Is there some frame data here
+    BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37 || pTabPos;
 
     rbStartApo = bNowApo && !bApo && !bTableRowEnd; // normal APO-start
     rbStopApo  = bApo && !bNowApo && !bTableRowEnd; // normal APO-end
+
+    //If it happens that we are in a table, then if its not the first cell
+    //then any attributes that might otherwise cause the contents to jump
+    //into another frame don't matter, a table row sticks together as one
+    //unit no matter what else happens. So if we are not in a table at
+    //all, or if we are in the first cell then test that the last frame
+    //data is the same as the current one
+    if( bApo && bNowApo && !bTableRowEnd)
+    {
+        if (!(bInTable && pTableDesc && pTableDesc->GetAktCol()))
+        {
+            // two bordering eachother
+            if (!TestSameApo( pSprm29, rbNowStyleApo, pTabPos))
+                rbStopApo = rbStartApo = TRUE;
+        }
+    }
 
 #if 0
     /*
@@ -367,31 +410,7 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     {
         rbStopApo = rbStartApo = TRUE;              // aneinandergrenzende APOs
     };
-#else
-#if 1
-    if( bApo && bNowApo && !bTableRowEnd)
-    {
-        //If it happens that we are in a table, then if its not the first cell
-        //then any attributes that might otherwise cause the contents to jump
-        //into another frame don't matter, a table row sticks together as one
-        //unit no matter what else happens
-        if (!(bInTable && pTableDesc && pTableDesc->GetAktCol()))
-            if (!TestSameApo( pSprm29, rbNowStyleApo ))
-        {
-            // two bordering eachother
-            rbStopApo = rbStartApo = TRUE;
-        }
-
-    }
-#else
-    if( bApo && bNowApo && !bTableRowEnd &&
-        !TestSameApo( pSprm29, rbNowStyleApo ) )
-    {
-        rbStopApo = rbStartApo = TRUE;              // two bordering eachother
-    }
 #endif
-#endif
-
     return pSprm29;
 }
 
@@ -1193,45 +1212,6 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
         pSHDs[i].SetWWValue( *pShd );
 }
 
-
-
-static BOOL SearchRowEnd( BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp )
-{
-    const BYTE* pB;
-    WW8PLCFxDesc aRes;
-    aRes.pMemPos = 0;
-    aRes.nEndPos = rStartCp;
-
-    while(     (    ( bVer67 && !bComplex )
-                 || ( pPap->GetPCDIdx() < pPap->GetPCDIMax()) )
-            && pPap->HasFkp() )
-    {
-        if( pPap->Where() != LONG_MAX )
-        {
-            pB = pPap->HasSprm( bVer67 ? 25 : 0x2417 );
-            if(     pB
-                && *pB == 1 )
-                return TRUE;    // RowEnd found
-        }
-
-        aRes.nStartPos = aRes.nEndPos;
-        aRes.pMemPos = 0;
-        //Seek to our next block of properties
-        if (!(pPap->SeekPos(aRes.nStartPos)))
-        {
-            aRes.nEndPos = LONG_MAX;
-            pPap->SetDirty(TRUE);
-        }
-        pPap->GetSprms(&aRes);
-        pPap->SetDirty(FALSE);
-        //Update our aRes to get the new starting point of the next properties
-        rStartCp = aRes.nEndPos;
-    }
-    return FALSE;
-}
-
-
-
 WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     : pIo( pIoClass ), pFirstBand( 0 ), pActBand( 0 ), pTmpPos( 0 ),
     pTable( 0 ), pTblNd( 0 ), pTabLines( 0 ), pTabLine( 0 ), pTabBoxes( 0 ),
@@ -1248,16 +1228,9 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
     BOOL bVer67   = pIo->bVer67;
     BOOL bComplex = pIo->pWwFib->fComplex;
+    WW8_TablePos aTabPos;
 
     WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
-
-
-                            // Dies ist auch eine moegliche Erkennung
-                            // fuer Dok-Start ( hat immer PageDesc ).
-                            // Allerdings werden die PageDescs
-                            // bei Bereichswechsel nicht erkannt
-//  bStartDoc = ( pIo->pPaM->GetPoint()->nNode.GetIndex()
-//               == pIo->rDoc.GetNodes().EndOfIcons.GetIndex() + 2 );
 
     WW8PLCFxSave1 aSave;
     pIoClass->pPlcxMan->GetPap()->Save( aSave );
@@ -1269,14 +1242,15 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     // process pPap until end of table found
     do
     {
-        short nTabeDxaNew     = SHRT_MAX;
-        pNewBand->nGapHalf    = 0;
-        pNewBand->nLineHeight = 0;
-        BOOL bTabRowJustRead  = FALSE;
-        const BYTE* pShadeSprm      = 0;
+        short nTabeDxaNew      = SHRT_MAX;
+        pNewBand->nGapHalf     = 0;
+        pNewBand->nLineHeight  = 0;
+        BOOL bTabRowJustRead   = FALSE;
+        const BYTE* pShadeSprm = 0;
+        WW8_TablePos *pTabPos  = 0;
 
         // Suche Ende einer TabZeile
-        if( !SearchRowEnd( bVer67, bComplex, pPap, nStartCp ) )
+        if(!(SwWW8ImplReader::SearchRowEnd(bVer67, bComplex, pPap, nStartCp)))
         {
             bOk = FALSE;
             break;
@@ -1455,6 +1429,15 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         nRows++;
         pActBand->nRows++;
 
+        WW8_CP nMyStartCp=nStartCp;
+        if (SwWW8ImplReader::SearchRowEnd(bVer67, bComplex, pPap, nMyStartCp))
+        {
+            const BYTE *pGiveMePatience = pPap->HasSprm(0x360D);
+            if (pGiveMePatience)
+                if (SwWW8ImplReader::ParseTabPos(&aTabPos,pGiveMePatience))
+                    pTabPos = &aTabPos;
+        }
+
         //Seek our pap to its next block of properties
         WW8PLCFxDesc aRes;
         aRes.pMemPos = 0;
@@ -1475,9 +1458,8 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
             ||  (1 != *pParams) )
             break;
 
-
         BOOL bStartApo, bStopApo, bNowStyleApo;
-        pIoClass->TestApo(bStartApo, bStopApo, bNowStyleApo, TRUE, FALSE, TRUE);
+        pIoClass->TestApo(bStartApo,bStopApo,bNowStyleApo,TRUE,FALSE,pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
@@ -1487,7 +1469,6 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         */
         if( bStartApo || bStopApo )
             break;
-
     }
     while( 1 );
 

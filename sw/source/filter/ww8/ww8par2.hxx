@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:32 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ struct WW8FlyPara
     BOOL Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap );
     BOOL ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo );
     BOOL Read( const BYTE* pSprm29, WW8RStyle* pStyle );
+    void ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29);
 };
 
 struct WW8SwFlyPara

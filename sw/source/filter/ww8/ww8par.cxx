@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 13:56:52 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,7 +1344,8 @@ void SwWW8ImplReader::UpdatePageDescs( USHORT nPageDescOffset )
     }
 }
 
-BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp )   // Apo / Table / Anl
+BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
+    WW8_CP nStartCp )   // Frame / Table / Anl
 {
     if( bInHyperlink )
         return FALSE;
@@ -1361,7 +1362,8 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStar
         return FALSE;
     }
 
-    BOOL bTableRowEnd = ( pPlcxMan->HasParaSprm( ( bVer67 ? 25 : 0x2417 )) != 0 );  // TabRowEnd
+    // TabRowEnd
+    BOOL bTableRowEnd = (pPlcxMan->HasParaSprm(bVer67 ? 25 : 0x2417) != 0 );
 
 // es muss leider fuer jeden Absatz zuerst nachgesehen werden,
 // ob sich unter den sprms
@@ -1388,21 +1390,39 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStar
 
 
 //  1st look for in-table flag
-    const BYTE* pSprm24 = pPlcxMan->HasParaSprm(  bVer67
-                                          ? 24
-                                          : 0x2416 ); // Flag: Absatz in(!) Tabelle
+    BOOL bSprm24 = (pPlcxMan->HasParaSprm(bVer67 ? 24 : 0x2416) != 0);
+
+    WW8_TablePos *pTabPos=0;
+    WW8_TablePos aTabPos;
+    if (bSprm24 && !bVer67)
+    {
+        WW8PLCFxSave1 aSave;
+        pPlcxMan->GetPap()->Save( aSave );
+        *pbReSync = TRUE;
+        WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
+        WW8_CP nMyStartCp=nStartCp;
+
+        if (SearchRowEnd( bVer67, pWwFib->fComplex, pPap, nMyStartCp ))
+        {
+            const BYTE *pGiveMePatience = pPap->HasSprm(0x360D);
+            if (pGiveMePatience && ParseTabPos(&aTabPos,pGiveMePatience))
+                pTabPos = &aTabPos;
+        }
+
+        pPlcxMan->GetPap()->Restore( aSave );
+    }
 
 //  then look if we are in an Apo
 
     BOOL bStartApo, bStopApo, bNowStyleApo;
-    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo,
-                                bTable, (bTableRowEnd && bTableInApo),
-                                bTable && (pSprm24 != 0) );
 
-//  look if we are in a Tabelle
-    BOOL bStartTab = pSprm24 && !bTable && !bFtnEdn; // Table in FtnEdn nicht erlaubt
+    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo, bTable,
+        bTableRowEnd && bTableInApo, pTabPos);
 
-    BOOL bStopTab = bTable && (bWasTabRowEnd && !pSprm24) && !bFtnEdn;
+    //look to see if we are in a Table, but Table in foot/end note not allowed
+    BOOL bStartTab = bSprm24 && !bTable && !bFtnEdn;
+
+    BOOL bStopTab = bTable && (bWasTabRowEnd && !bSprm24) && !bFtnEdn;
 
     bWasTabRowEnd = FALSE;  // must be deactivated right here to prevent next
                             // WW8TabDesc::TableCellEnd() from making nonsense
@@ -1412,8 +1432,8 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStar
         bStopTab = bStartTab = TRUE;    // ... dann auch neue Tabelle
     }
 
-//          Dann auf Anl (Nummerierung) testen
-//          und dann alle Ereignisse in der richtigen Reihenfolge bearbeiten
+//  Dann auf Anl (Nummerierung) testen
+//  und dann alle Ereignisse in der richtigen Reihenfolge bearbeiten
 
     if( bAnl && !bTableRowEnd )
     {
@@ -1450,7 +1470,7 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStar
 
     if( bStartApo && !( nIniFlags & WW8FL_NO_APO ) )
     {
-        bApo = StartApo( pSprm29, bNowStyleApo );
+        bApo = StartApo(pSprm29, bNowStyleApo, pTabPos);
         *pbReSync = TRUE;                   // nach StartApo ist ein ReSync
                                             // noetig ( eigentlich nur, falls
                                             // die Apo ueber eine FKP-Grenze

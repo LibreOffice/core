@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-05 10:23:20 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2064,35 +2064,6 @@ BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
 #define MAX_BORDER_SIZE 210         // so breit ist max. der Border
 #define MAX_EMPTY_BORDER 10         // fuer +-1-Fehler, mindestens 1
 
-#if 0
-static short GetLineWidth( BOOL bVer67, const WW8_BRC& rBor )
-{
-/*
-    register UINT16 nBits = SVBT16ToShort( rBor.aBits1 );
-    register short n = nBits & 0x7;      // dxpLineWidth
-    if( n >= 6 )
-        n = 1;
-    return n * ( ( nBits >> 3 & 0x3 ) + 1 ) * 15;   // aBor.brcType
-                            // brcType Linien mit je n * 3/4 point Dicke
-*/
-
-/*
-JP 19.11.98: wenn dann muss es so richtig sein, die Version MUSS beachtet werden
-    UINT16 nIdx = bVer67 ? ((rBor.aBits1[ 0 ] & 0x18) >> 3) + 1
-                         : rBor.aBits1[ 1 ];
-    UINT16 nWidth = bVer67  ? ((rBor.aBits1[ 0 ] & 0x7) * 15 )  // 3/4pt
-                            : (rBor.aBits1[ 0 ] * 5 / 2);       // 1/8pt
-    return nIdx * nWidth;
-*/
-
-//JP 19.11.98: aber warum werden nicht die SW-Borders zu Berechnung
-//              herangezogen??
-    SvxBorderLine aLine;
-    ::Set1Border( bVer67, aLine, rBor );
-    return aLine.GetOutWidth() + aLine.GetInWidth() + aLine.GetDistance();
-}
-#endif
-
 static void FlySecur1( short& rSize, const short nMgn1, const short nMgn2,
                        const BOOL bBorder )
 {
@@ -2119,6 +2090,25 @@ INLINE_AUSSER_HP BOOL SetValSprm( short* pVar, const WW8RStyle* pStyle,
     if( pS )
         *pVar = (INT16)SVBT16ToShort( pS );
     return ( pS != 0 );
+}
+
+/*
+#i1930 revealed that sprm 0x360D as used in tables can affect the frame
+around the table. Its full structure is not fully understood as yet.
+*/
+void WW8FlyPara::ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29)
+{
+    if (pTabPos)
+    {
+        nSp27 = pTabPos->nSp27;
+        nSp49 = pTabPos->nSp49;
+        if (!pSprm29)
+        {
+            //Assume that there are to be set in the absense of an override
+            nSp29 = pTabPos->nSp29;
+            nSp37 = pTabPos->nSp37;
+        }
+    }
 }
 
 WW8FlyPara::WW8FlyPara( BOOL bIsVer67, const WW8FlyPara* pSrc /* = 0 */ )
@@ -2750,18 +2740,22 @@ void WW8AnchoringProperties::Insert(SwFltControlStack *pCtrlStck)
     }
 }
 
-BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo )
+BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
+    WW8_TablePos *pTabPos)
 {
+    ASSERT(pSprm29 || pTabPos, "If no frame found, *MUST* be in a table");
+
     pWFlyPara = new WW8FlyPara ( bVer67, bNowStyleApo  ?
         pCollA[nAktColl].pWWFly : 0 );
 
     // APO-Parameter ermitteln und Test auf bGrafApo
-    if( !pWFlyPara->ReadFull( pSprm29, this ) )
+    if( pSprm29 && !pWFlyPara->ReadFull( pSprm29, this ) )
     {
         DELETEZ( pWFlyPara );
         return FALSE;
     }
 
+    pWFlyPara->ApplyTabPos(pTabPos,pSprm29);
 
     pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara, nPgTop, nPgLeft,
         (nPgWidth - nPgRight - nPgLeft), nIniFlyDx, nIniFlyDy );
@@ -2949,7 +2943,8 @@ void SwWW8ImplReader::StopApo()
 }
 
 // TestSameApo() beantwortet die Frage, ob es dasselbe APO oder ein neues ist
-BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo )
+BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
+    WW8_TablePos *pTabPos)
 {
     if( !pWFlyPara )
     {
@@ -2957,19 +2952,20 @@ BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo )
         return TRUE;
     }
 
-                        // Es muss ein kompletter Vergleich ( ausser Borders )
-                        // stattfinden, um alle Kombinationen Style / Hart
-                        // richtig einzuordnen. Deshalb wird ein temporaerer
-                        // WW8FlyPara angelegt ( abh. ob Style oder nicht ),
-                        // darauf die harten Attrs angewendet, und
-                        // dann verglichen
+    // Es muss ein kompletter Vergleich ( ausser Borders ) stattfinden, um
+    // alle Kombinationen Style / Hart richtig einzuordnen. Deshalb wird ein
+    // temporaerer WW8FlyPara angelegt ( abh. ob Style oder nicht ), darauf
+    // die harten Attrs angewendet, und dann verglichen
 
-    WW8FlyPara aF( bVer67, bNowStyleApo ? pCollA[nAktColl].pWWFly : 0 ); // Zum Vergleich
-    aF.Read( pSprm29, pPlcxMan->GetPapPLCF() );         // WWPara fuer akt. Para
+    // Zum Vergleich
+    WW8FlyPara aF( bVer67, bNowStyleApo ? pCollA[nAktColl].pWWFly : 0 );
+    // WWPara fuer akt. Para
+    if (pSprm29)
+        aF.Read( pSprm29, pPlcxMan->GetPapPLCF() );
+    aF.ApplyTabPos(pTabPos,pSprm29);
+
     return aF == *pWFlyPara;
 }
-
-
 
 /***************************************************************************
 #       Attribut - Verwaltung
@@ -4628,6 +4624,25 @@ void SwWW8ImplReader::Read_ApoPPC( USHORT, const BYTE* pData, short nLen )
     }
 }
 
+BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, const BYTE *pParams)
+{
+    BOOL bRet=FALSE;
+    UINT16 nLen = SVBT16ToShort( pParams - 2 );
+    if (nLen >= 8)
+    {
+        UINT16 nUnknown1 = SVBT16ToShort( pParams );
+        pTabPos->nSp27 = SVBT16ToShort( pParams+2 );
+        UINT16 nUnknown2 = SVBT16ToShort( pParams+4 );
+        pTabPos->nSp49 = SVBT16ToShort( pParams+6 );
+        pTabPos->nSp29 = 0x40; //?? a default, possible fail area
+        pTabPos->nSp37 = 0x01; //?? a default, possible fail area
+        if ((nUnknown1 == 0x940F) && (nUnknown2 == 0x9410))
+            bRet=TRUE;
+    }
+    ASSERT(bRet,"Winword undocumented 0x360D showing unseen behaviour, report");
+    return bRet;
+}
+
 /***************************************************************************
 #  Seiten - Attribute werden nicht mehr als Attribute gehandhabt
 #   ( ausser OLST )
@@ -5208,7 +5223,8 @@ SprmReadInfo aSprmReadTab[] = {
     0x845E, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft"
     0x8460, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft1"
     0x845D, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaRight"
-    0x3615, (FNReadRecord)0 //undocumented
+    0x3615, (FNReadRecord)0, //undocumented
+    0x360D, (FNReadRecord)0  //undocumented
 };
 
 //-----------------------------------------

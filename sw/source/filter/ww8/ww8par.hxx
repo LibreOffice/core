@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 13:56:52 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,12 +835,13 @@ friend class WW8FormulaControl;
     void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
         WW8_FSPA *pF );
 
-    BOOL StartApo( const BYTE* pSprm29, BOOL bNowStyleApo );
+    BOOL StartApo(const BYTE* pSprm29,BOOL bNowStyleApo,WW8_TablePos *pTabPos);
     void StopApo();
-    BOOL TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo );
+    BOOL TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
+        WW8_TablePos *pTabPos);
     const BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo, BOOL& rbNowStyleApo,
-                   BOOL bInTable,    BOOL bTableRowEnd,
-                   BOOL bStillInTable );
+        BOOL bInTable, BOOL bTableRowEnd, WW8_TablePos *pTabPos);
+
     BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp );
 
     ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
@@ -848,21 +849,21 @@ friend class WW8FormulaControl;
        const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, BOOL* pDelIt );
 
     SwFrmFmt* MakeGrafByFlyFmt( SdrTextObj* pReplaceTextObj,
-                                const SwFrmFmt& rOldFmt,const WW8PicDesc& rPD,
-                                const Graphic*  pGraph, const String& rFileName,
-                                const String&   rGrName,const SfxItemSet& rGrfSet,
-                                const BOOL  bSetToBackground );
-    SwFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD,
-                                 const Graphic* pGraph, const String& rFileName,
-                                 const String&  rGrName,const SfxItemSet& rGrfSet );
+        const SwFrmFmt& rOldFmt,const WW8PicDesc& rPD, const Graphic* pGraph,
+        const String& rFileName, const String& rGrName,
+        const SfxItemSet& rGrfSet, const BOOL  bSetToBackground );
+
+    SwFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD, const Graphic* pGraph,
+        const String& rFileName, const String& rGrName,
+        const SfxItemSet& rGrfSet );
+
     SwFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic,   const WW8PicDesc& rPD,
-                              const Graphic* pGraph, const String& rFileName,
-                              const String&  rGrName,const SfxItemSet& rGrfSet );
+        const Graphic* pGraph, const String& rFileName, const String& rGrName,
+        const SfxItemSet& rGrfSet );
 
     SwFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
-    SwFrmFmt* ImportGraf(  SdrTextObj* pTextObj = 0,
-                           SwFrmFmt*   pFlyFmt = 0,
-                           BOOL        bSetToBackground = FALSE );
+    SwFrmFmt* ImportGraf(  SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0,
+        BOOL bSetToBackground = FALSE );
     BOOL ImportURL(String &sURL,String &sMark,WW8_CP nStart);
 
     SdrObject* ImportOleBase( Graphic& rGraph, BOOL bTstOCXControls=FALSE,
@@ -1080,6 +1081,7 @@ public:     // eigentlich private, geht aber leider nur public
 
 
     void Read_TabRowEnd(        USHORT, const BYTE* pData, short nLen );
+    static BOOL ParseTabPos(WW8_TablePos *aTabPos, const BYTE *pParams);
     void Read_Shade(            USHORT, const BYTE* pData, short nLen );
     void Read_ANLevelNo(        USHORT, const BYTE* pData, short nLen );
     void Read_ANLevelDesc(      USHORT, const BYTE* pData, short nLen );
@@ -1155,6 +1157,9 @@ public:     // eigentlich private, geht aber leider nur public
 
                                 // Ver8: Listen Manager
     short ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId = 0 );
+
+    static BOOL SearchRowEnd(BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap,
+        WW8_CP &rStartCp );
 
     const WW8Fib& GetFib() const    { return *pWwFib; }
     SwDoc& GetDoc() const           { return rDoc;          }
