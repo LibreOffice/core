@@ -2,9 +2,17 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.12 $
+<<<<<<< salgdi.cxx
+ *  $Revision: 1.13 $
+=======
+ *  $Revision: 1.13 $
+>>>>>>> 1.12
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:54 $
+<<<<<<< salgdi.cxx
+ *  last change: $Author: bmahbod $ $Date: 2000-11-30 01:48:03 $
+=======
+ *  last change: $Author: bmahbod $ $Date: 2000-11-30 01:48:03 $
+>>>>>>> 1.12
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +240,7 @@ void SalGraphics::DrawPixel( long nX, long nY )
 {
     VCLVIEW hView = maGraphicsData.mhDC;
 
-    if ( hView )
+    if ( hView != NULL )
     {
         VCLGraphics_DrawPixel ( hView, nX, nY );
     } // if
@@ -244,7 +252,7 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 {
     VCLVIEW hView = maGraphicsData.mhDC;
 
-    if ( hView )
+    if ( hView != NULL )
     {
         RGBColor aPixelRGBColor;
 
@@ -262,7 +270,7 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     VCLVIEW  hView = maGraphicsData.mhDC;
 
-    if ( hView )
+    if ( hView != NULL )
     {
         if ( maGraphicsData.mbTransparentPen == TRUE )
         {
@@ -294,14 +302,29 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
     VCLVIEW hView = maGraphicsData.mhDC;
 
-    if ( hView )
+    if ( hView != NULL )
     {
-        VCLGraphics_DrawRect ( hView,
-                               nX,
-                       nY,
-                       nWidth,
-                       nHeight
-                     );
+        if ( maGraphicsData.mbTransparentBrush == TRUE )
+        {
+            VCLGraphics_DrawRect ( hView,
+                                   nX,
+                           nY,
+                           nWidth,
+                           nHeight
+                         );
+        } // if
+        else
+        {
+            RGBColor  aRectFillColor;
+
+            VCLGraphics_DrawColorRect (  hView,
+                                         nX,
+                                         nY,
+                                         nWidth,
+                                         nHeight,
+                                        &aRectFillColor
+                                      );
+        } // else
     } // if
 } // SalGraphics::DrawRect
 
@@ -322,7 +345,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
             pYPtsArray[i] = pPtAry[i].mnY;
         } // for
 
-        if ( hView )
+        if ( hView != NULL )
         {
             VCLGraphics_DrawPolygon ( hView,
                                       nPoints,
@@ -352,7 +375,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
             pYPtsArray[i] = pPtAry[i].mnY;
         } // for
 
-        if ( hView )
+        if ( hView != NULL )
         {
             VCLGraphics_DrawColorPolygon (  hView,
                                             nPoints,
@@ -455,6 +478,13 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight,
 
 void SalGraphics::SetTextColor( SalColor nSalColor )
 {
+    RGBColor aRGBColor;
+
+    aRGBColor.red   = SALCOLOR_RED   ( nSalColor );
+    aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
+    aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+
+    maGraphicsData. maTextColor = aRGBColor;
 }
 
 // -----------------------------------------------------------------------
