@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ssa $ $Date: 2001-08-03 15:17:47 $
+ *  last change: $Author: th $ $Date: 2001-08-07 12:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,11 +550,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         if ( nStyle & WB_MOVEABLE )
             nFrameStyle |= SAL_FRAME_STYLE_MOVEABLE;
         if ( nStyle & WB_SIZEABLE )
-        {
-            nFrameStyle |= SAL_FRAME_STYLE_SIZEABLE |
-                           SAL_FRAME_STYLE_MINABLE |
-                           SAL_FRAME_STYLE_MAXABLE;
-        }
+            nFrameStyle |= SAL_FRAME_STYLE_SIZEABLE;
         if ( nStyle & WB_CLOSEABLE )
             nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
         if ( nStyle & WB_APP )
