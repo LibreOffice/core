@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshaling_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 14:38:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,11 +273,11 @@ public final class Marshaling_Test extends ComplexTestCase {
         };
 
 
+        Unmarshal unmarshal = new Unmarshal(testBridge, cacheSize);
         for(int i = 0; i < dataTypes.length; ++ i) {
             Object op1 = data[i];
             marshal.writeValue(dataTypes[i], data[i]);
 
-            Unmarshal unmarshal = new Unmarshal(testBridge, cacheSize);
             unmarshal.reset(marshal.reset());
 
             Object op2 = unmarshal.readValue(dataTypes[i]);
