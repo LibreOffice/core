@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:49:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -103,11 +103,11 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     uno::Reference< container::XNameAccess > xUICommandLabels;
     uno::Reference< lang::XMultiServiceFactory > xServiceManager;
     uno::Reference< container::XNameAccess > xUICommandDescription;
-    uno::Reference< drafts::com::sun::star::frame::XModuleManager > xModuleManager;
+    uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager;
 
     static uno::WeakReference< lang::XMultiServiceFactory > xTmpServiceManager;
     static uno::WeakReference< container::XNameAccess >     xTmpNameAccess;
-    static uno::WeakReference< drafts::com::sun::star::frame::XModuleManager > xTmpModuleMgr;
+    static uno::WeakReference< ::com::sun::star::frame::XModuleManager > xTmpModuleMgr;
 
     xServiceManager = xTmpServiceManager;
     if ( !xServiceManager.is() )
@@ -122,7 +122,7 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
         xUICommandDescription = uno::Reference< container::XNameAccess >(
                                     xServiceManager->createInstance(
                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "drafts.com.sun.star.frame.UICommandDescription" ))),
+                                            "com.sun.star.frame.UICommandDescription" ))),
                                     uno::UNO_QUERY );
         xTmpNameAccess = xUICommandDescription;
     }
@@ -130,10 +130,10 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     xModuleManager = xTmpModuleMgr;
     if ( !xModuleManager.is() )
     {
-        xModuleManager = uno::Reference< drafts::com::sun::star::frame::XModuleManager >(
+        xModuleManager = uno::Reference< ::com::sun::star::frame::XModuleManager >(
             xServiceManager->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.frame.ModuleManager" ))),
+                    "com.sun.star.frame.ModuleManager" ))),
             uno::UNO_QUERY_THROW );
         xTmpModuleMgr = xModuleManager;
     }
