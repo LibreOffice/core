@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khz $ $Date: 2000-12-12 15:35:03 $
+ *  last change: $Author: cmc $ $Date: 2001-02-05 16:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,12 +712,17 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
         aLR.SetTxtLeft( 0 );
     else
     {
+#if 0
         long nLeft = rFmt.GetAbsLSpace(), nParaLeft = rLR.GetTxtLeft();
         if( 0 < rLR.GetTxtFirstLineOfst() )
             nParaLeft += rLR.GetTxtFirstLineOfst();
         else
             nParaLeft -= nLeft;
         aLR.SetTxtLeft( nParaLeft );
+#else   //#83154#, Don't think any of the older #80856# bugfix code is
+        //relevent anymore.
+        aLR.SetTxtLeft(rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst());
+#endif
     }
 
     if( aLR.GetTxtLeft() != rLR.GetTxtLeft() )
@@ -1544,6 +1549,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/12 15:35:03  khz
+      #80856# take into account negative indentation in SetNumLSpace()
+
       Revision 1.5  2000/12/02 11:03:48  mib
       #80795#: XML package filter
 
