@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:44:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ greek ] = "Υπάρχοντα πεδία";
         Text [ korean ] = "ΑΈΐηΗΟ΄Β ΗΚµε";
         Text [ turkish ] = "Mevcut alanlar";
+        Text[ catalan ] = "Campos existentes";
     };
     ListBox LB_EXISTING_FIELDS
     {
@@ -184,6 +185,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ greek ] = "Επιλεγμένα πεδία";
         Text [ korean ] = "ΗΚµε Ό±ΕΓ";
         Text [ turkish ] = "Seηilmiώ alanlar";
+        Text[ catalan ] = "Campos seleccionados";
     };
     ListBox LB_SELECTED_FIELDS
     {
@@ -195,6 +197,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Sort = FALSE;
         DropDown = FALSE;
     };
+    Text[ catalan ] = "Selecciσn de campo";
 };
 
 String RID_STR_DATEPOSTFIX
@@ -221,6 +224,7 @@ String RID_STR_DATEPOSTFIX
     Text [ korean ] = " (³―Β¥)";
     Text [ turkish ] = "(Tarih)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
+    Text[ catalan ] = "(Fecha)";
 };
 
 String RID_STR_TIMEPOSTFIX
@@ -247,11 +251,15 @@ String RID_STR_TIMEPOSTFIX
     Text [ korean ] = " (½Γ°£)";
     Text [ turkish ] = " (Saat)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
+    Text[ catalan ] = "(Hora)";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/19 11:44:53  kz
+ *  Merge SRC625: 19.03.01 - 12:44:47 (NoBranch)
+ *
  *  Revision 1.2  2001/03/09 20:51:30  kz
  *  Merge SRC624: 09.03.01 - 21:51:26 (NoBranch)
  *
