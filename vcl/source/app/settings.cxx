@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:31:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
 
 using namespace rtl;
 
-#pragma hdrstop
+
 
 // =======================================================================
 
@@ -473,11 +473,7 @@ ImplStyleData::ImplStyleData()
     mnIconVertSpace             = 40;
     mnAntialiasedMin            = 0;
     mnCursorSize                = 2;
-#ifdef REMOTE_APPSERVER
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
-#else
-    mnCursorBlinkTime           = 500;
-#endif
     mnScreenZoom                = 100;
     mnScreenFontZoom            = 100;
     mnRadioButtonStyle          = 0;
@@ -1214,18 +1210,12 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
 
 BOOL MiscSettings::GetEnableATToolSupport() const
 {
-#ifndef REMOTE_APPSERVER
     if( mpData->mnEnableATT == (USHORT)~0 )
     {
 #ifdef UNX
         mpData->mnEnableATT = 0;
 
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-#if 0
-        DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
-        if( ( pIntegrator && pIntegrator->GetDtType() == DtGNOME ) ||
-            ( pEnv && *pEnv ) )
-#endif
         {
             char buf[16];
             // use 2 shells to suppress the eventual "gcontool-2 not found" message
@@ -1302,9 +1292,6 @@ BOOL MiscSettings::GetEnableATToolSupport() const
     }
     return (BOOL)mpData->mnEnableATT;
 
-#else // REMOTE_APPSERVER
-    return FALSE;
-#endif
 }
 
 // -----------------------------------------------------------------------
