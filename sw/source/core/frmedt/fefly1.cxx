@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:20:28 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 08:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1488,8 +1488,11 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, SvEmbeddedObject *pIPO
         }
 
         // set the new Size at the fly themself
-        aSz.Width() += pFly->Frm().Width() - pFly->Prt().Width();
-        aSz.Height()+= pFly->Frm().Height()- pFly->Prt().Height();
+        if ( pFly->Prt().Height() > 0 && pFly->Prt().Width() > 0 )
+        {
+            aSz.Width() += pFly->Frm().Width() - pFly->Prt().Width();
+            aSz.Height()+= pFly->Frm().Height()- pFly->Prt().Height();
+        }
         pFly->ChgSize( aSz );
 
         //Wenn sich das Objekt aendert ist die Kontur hoechstwahrscheinlich daneben.
