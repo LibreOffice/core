@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-09 15:48:05 $
+ *  last change: $Author: cmc $ $Date: 2001-05-17 14:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1993,6 +1993,40 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     if ( eBlibType == WMF )
                         rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                     rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+
+#if 1
+                    /*
+                     ##913##
+                     For Word the stored size of the graphic is critical the
+                     metafile boundaries must match the actual graphics
+                     boundaries, and the width and height must be in EMU's
+
+                     If you don't do it this way then objects edited in the
+                     msoffice app may show strange behaviour as the size jumps
+                     around, and the original size and scaling factor in word
+                     will be a very strange figure
+
+                     The older code works in powerpoint probably because
+                     powerpoint uses the values of the graphic itself and
+                     ignores these ones.
+                     */
+                    Size aPrefSize = aGraphic.GetPrefSize();
+                    UINT32 nPrefWidth = aPrefSize.Width();
+                    UINT32 nPrefHeight = aPrefSize.Height();
+                    UINT32 nWidth = nPrefWidth * 360; //EMU
+                    UINT32 nHeight = nPrefHeight * 360; //EMU
+
+                    rPicOutStrm << nUncompressedSize // WMFSize without FileHeader
+                    << (sal_Int32)0     // da die Originalgroesse des WMF's (ohne FileHeader)
+                    << (sal_Int32)0     // nicht mehr feststellbar ist, schreiben wir 10cm / x
+                    << nPrefWidth
+                    << nPrefHeight
+                    << nWidth
+                    << nHeight
+                    << p_EscherBlibEntry->mnSize
+                    << (sal_uInt16)0xfe00;  // compression Flags
+                    rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+#else
                     UINT32 nWidth = rBoundRect.GetWidth() * 360;
                     UINT32 nHeight = rBoundRect.GetHeight() * 360;
                     double fWidth = (double)rBoundRect.GetWidth() / 10000.0 * 1027.0;
@@ -2007,6 +2041,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                                 << p_EscherBlibEntry->mnSize
                                 << (sal_uInt16)0xfe00;  // compression Flags
                     rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+#endif
                 }
             }
             if ( nAtomSize )
