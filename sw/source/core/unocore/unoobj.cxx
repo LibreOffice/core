@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-10-18 09:04:46 $
+ *  last change: $Author: os $ $Date: 2000-10-18 14:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5535,7 +5535,9 @@ struct SwXBookmarkPortion_Impl
 };
 BOOL SwXBookmarkPortion_Impl::operator ==(const SwXBookmarkPortion_Impl &rCmp) const
 {
-    return nIndex == rCmp.nIndex;
+    return nIndex == rCmp.nIndex &&
+        pBookmark == rCmp.pBookmark &&
+            nBkmType == rCmp.nBkmType;
 }
 
 BOOL SwXBookmarkPortion_Impl::operator < (const SwXBookmarkPortion_Impl &rCmp) const
