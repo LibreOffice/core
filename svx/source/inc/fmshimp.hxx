@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:49:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,9 @@
 #ifndef SVX_FORMCONTROLLING_HXX
 #include "formcontrolling.hxx"
 #endif
+#ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
+#include "fmdocumentclassification.hxx"
+#endif
 
 #include <queue>
 
@@ -292,6 +295,7 @@ namespace svx
 typedef FmXFormShell_Base_Disambiguation    FmXFormShell_BASE;
 typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
+struct SdrViewEvent;
 class FmXFormShell  :public FmXFormShell_BASE
                     ,public FmXFormShell_CFGBASE
                     ,public ::svxform::OStaticDataAccessTools
@@ -306,7 +310,7 @@ class FmXFormShell  :public FmXFormShell_BASE
     friend class SuspendPropertyTracking;
 
     // Timer um verzoegerte Markierung vorzunehmen
-    Timer              m_aMarkTimer;
+    Timer               m_aMarkTimer;
     SdrObjArray         m_arrSearchedControls;
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_arrSearchContexts;
@@ -374,15 +378,17 @@ class FmXFormShell  :public FmXFormShell_BASE
         // nur die Nummer des Feldes, die entspricht der Nummer der Spalte + <offset>, wobei der Offset von der Position
         // des GridControls im Formular abhaengt. Also hier eine Umrechnung.
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>         m_xLastGridFound;
-        // we want to be a DispatchInterceptor within our frame
+     // the frame we live in
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>              m_xAttachedFrame;
-        // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
+    // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>         m_xExternalViewController;      // the controller for the external form view
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>      m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xExternalDisplayedForm;       // the form which the external view is based on
 
     FmXDispatchInterceptorImpl*     m_pExternalViewInterceptor;
 
+    ::svxform::DocumentType
+                    m_eDocumentType;        /// the type of document we're living in
     sal_Int16       m_nLockSlotInvalidation;
     sal_Bool        m_bHadPropBrw:1;
 
@@ -497,6 +503,11 @@ public:
     const   ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getCurForm() const {return m_xCurForm;}
     const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& getCurControl() const {return m_xCurControl;}
     const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& getSelObject() const {return m_xSelObject;}
+
+    /// handles a MouseButtonDown event of the FmFormView
+    void handleMouseButtonDown( const SdrViewEvent& _rViewEvent );
+    /// handles the request for showing the "Properties"
+    void handleShowPropertiesRequest();
 
     sal_Bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
     sal_Bool hasDatabaseBar() const {return m_bDatabaseBar;}
