@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-24 16:21:17 $
+ *  last change: $Author: ama $ $Date: 2002-02-05 09:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             bValidSize = TRUE;  //Fixe Frms formatieren sich nicht.
                                 //Flys stellen ihre Groesse anhand des Attr ein.
             Size aSz( CalcRel( rFrmSz ) );
-            SwTwips nNewSize = bVert ? aSz.Height() : aSz.Width();
+            SwTwips nNewSize = bVert ? aSz.Width() : aSz.Height();
             nNewSize -= nUL;
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;
