@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ void OUserExtend::construct()
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 {
     Sequence< com::sun::star::beans::Property > aProps;
+    describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }
 // -------------------------------------------------------------------------
