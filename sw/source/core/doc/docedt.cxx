@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-24 16:03:18 $
+ *  last change: $Author: dvo $ $Date: 2002-10-10 16:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,7 +1079,8 @@ sal_Bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     else
         rPaM.DeleteMark();
 
-    ASSERT( *pSavePam->GetMark() == rPos,
+    ASSERT( *pSavePam->GetMark() == rPos ||
+            ( pSavePam->GetMark()->nNode.GetNode().GetCntntNode() == NULL ),
             "PaM wurde nicht verschoben, am Anfang/Ende keine ContentNodes?" );
     *pSavePam->GetMark() = rPos;
 

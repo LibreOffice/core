@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-27 13:24:29 $
+ *  last change: $Author: dvo $ $Date: 2002-10-10 16:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1665,7 +1665,16 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
                 AppendUndo( new SwUndoRedlineDelete( aPam, UNDO_DELETE ));
             }
-            AppendRedline( new SwRedline( REDLINE_DELETE, aPam ));
+
+            SwRedline* pNewRedline = new SwRedline( REDLINE_DELETE, aPam );
+
+            // #101654# prevent assertion from aPam's target being deleted
+            // (Alternatively, one could just let aPam go out of scope, but
+            //  that requires touching a lot of code.)
+            aPam.GetBound(TRUE).nContent.Assign( NULL, 0 );
+            aPam.GetBound(FALSE).nContent.Assign( NULL, 0 );
+
+            AppendRedline( pNewRedline );
 
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
