@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:03:50 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3645,8 +3645,8 @@
             </node>
             <node oor:name=".uno:ScriptOrganizer" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Organize Macros...</value>
-                    <value xml:lang="de">Makros verwalten...</value>
+                    <value xml:lang="en-US">~Organize Macros</value>
+                    <value xml:lang="de">Makros verwalten</value>
                 </prop>
             </node>
             <node oor:name=".uno:RunMacro" oor:op="replace">
