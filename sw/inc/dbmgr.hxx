@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:29:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
@@ -111,6 +113,9 @@ namespace com{namespace sun{namespace star{
     }
     namespace util{
         class XNumberFormatter;
+    }
+    namespace mail{
+        class XSmtpService;
     }
 }}}
 namespace svx {
@@ -200,6 +205,44 @@ struct SwDSParam : public SwDBData
 typedef SwDSParam* SwDSParamPtr;
 SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 
+struct SwMergeDescriptor
+{
+    USHORT                                              nMergeType;
+    SwWrtShell&                                         rSh;
+    const ::svx::ODataAccessDescriptor&                 rDescriptor;
+    String                                              sSaveToFilter; //export filter to save resulting files
+
+    String                                              sSubject;
+    String                                              sAddressFromColumn;
+    String                                              sMailBody;
+    String                                              sAttachmentName;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aCopiesTo;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlindCopiesTo;
+
+    ::com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService > xSmtpServer;
+
+    sal_Bool                                            bSendAsHTML;
+    sal_Bool                                            bSendAsAttachment;
+
+    sal_Bool                                            bPrintAsync;
+    sal_Bool                                            bCreateSingleFile;
+
+    SwMailMergeConfigItem*                              pMailMergeConfigItem;
+
+    ::com::sun::star::uno::Sequence<  ::com::sun::star::beans::PropertyValue >  aPrintOptions;
+
+    SwMergeDescriptor( USHORT nType, SwWrtShell& rShell, ::svx::ODataAccessDescriptor& rDesc ) :
+        nMergeType(nType),
+        rSh(rShell),
+        pMailMergeConfigItem(0),
+        rDescriptor(rDesc),
+        bPrintAsync( sal_True ),
+        bCreateSingleFile( sal_False ),
+        bSendAsHTML( sal_True ),
+        bSendAsAttachment( sal_False ){}
+
+};
+
 struct SwNewDBMgr_Impl;
 class SwConnectionDisposedListener_Impl;
 class AbstractMailMergeDlg;
@@ -242,11 +285,9 @@ friend class SwConnectionDisposedListener_Impl;
     // Einzelnen Datensatz als Text ins Dokument einfuegen
     SW_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
-    // Mischen von Datensaetzen in Felder, dann per email versenden
-    SW_DLLPRIVATE BOOL          MergeMailing(SwWrtShell* pSh);
-
-    // Mischen von Datensaetzen in Felder, dann als Datei abspeichern
-    SW_DLLPRIVATE BOOL          MergeMailFiles(SwWrtShell* pSh);
+    // merge to file _and_ merge to e-Mail
+    SW_DLLPRIVATE BOOL          MergeMailFiles(SwWrtShell* pSh,
+                                        const SwMergeDescriptor& rMergeDescriptor );
     SW_DLLPRIVATE BOOL          ToNextRecord(SwDSParam* pParam);
 
 public:
@@ -265,9 +306,7 @@ public:
     inline void     SetMergeSilent( BOOL bVal )     { bMergeSilent = bVal; }
 
     // Mischen von Datensaetzen in Felder
-    BOOL            MergeNew(USHORT nOpt, SwWrtShell& rSh,
-                             const ::svx::ODataAccessDescriptor& _rDescriptor,
-                             sal_Bool bPrintAsync = sal_True);
+    BOOL            MergeNew( const SwMergeDescriptor& rMergeDesc );
     BOOL            Merge(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann drucken
     BOOL            MergePrint( SwView& rView,
