@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:04:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _URLOBJ_HXX
 #include <urlobj.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #ifndef _ISOLANG_HXX
 #include <isolang.hxx>
@@ -158,18 +161,34 @@ static inline sal_Int32 NTOHL( sal_Int32 x )
 
 // =======================================================================
 
-extern ImplSVResourceData aResData;
-inline ImplSVResourceData* GetResData()
+struct ResData : public rtl::Static< ImplSVResourceData, ResData > {};
+
+void Resource::TestRes()
 {
-    return &aResData;
+    if( ResData::get().pAppResMgr )
+        GetResManager()->TestStack( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Resource::SetResManager( ResMgr* pNewResMgr )
+{
+    ResData::get().pAppResMgr = pNewResMgr;
+}
+
+// -----------------------------------------------------------------------
+
+ResMgr* Resource::GetResManager()
+{
+    return ResData::get().pAppResMgr;
 }
 
 static List & GetResMgrList()
 {
-    ImplSVResourceData * pRD = GetResData();
-    if ( !pRD->pInternalResMgrList )
-        pRD->pInternalResMgrList = new List();
-    return *pRD->pInternalResMgrList;
+    ImplSVResourceData &rRD = ResData::get();
+    if ( !rRD.pInternalResMgrList )
+        rRD.pInternalResMgrList = new List();
+    return *rRD.pInternalResMgrList;
 }
 
 struct ImpContent
@@ -798,11 +817,9 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
 
 void ResMgr::DestroyAllResMgr()
 {
-    ImplSVResourceData* pSVInData = GetResData();
-
     // Da auch von Abort gerufen werden kann, geben wir alle
     // ResMgr's und alle InternalResMgr's hier frei
-    List* pMgrList = pSVInData->pInternalResMgrList;
+    List* pMgrList = ResData::get().pInternalResMgrList;
     if ( pMgrList )
     {
         InternalResMgr* pEle = (InternalResMgr*)pMgrList->First();
@@ -944,7 +961,7 @@ BOOL ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 
 inline ResMgr* GetActualResMgr()
 {
-    return GetResData()->pAppResMgr;
+    return ResData::get().pAppResMgr;
 }
 
 // -----------------------------------------------------------------------
