@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:02:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
+#include "namebuff.hxx"
 
 #include <tools/urlobj.hxx>
 #include <string.h>
@@ -75,10 +69,8 @@
 #include "compiler.hxx"
 #include "scextopt.hxx"
 
-#include "namebuff.hxx"
 #include "root.hxx"
 #include "tokstack.hxx"
-#include "flttools.hxx"
 
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
@@ -198,11 +190,11 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 
     DBG_ASSERT( List::Count() + nBase <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
-    ScRangeData*    pData = new ScRangeData( pExcRoot->pDoc, aName, rToken, rRange.aStart, RT_SHARED );
+    ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
 
     pData->SetIndex( ( UINT16 ) ( List::Count() + nBase ) );
 
-    pExcRoot->pScRangeName->Insert( pData );
+    pExcRoot->pIR->GetNamedRanges().Insert( pData );
 
     ScRange*        pNew = new ScRange( rRange );
     Insert( pNew, LIST_APPEND );
@@ -299,7 +291,7 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
             SCTAB   nNewTabNum;
             if( pCur->bSWB )
             {// Tabelle ist im selben Workbook!
-                if( pExcRoot->pDoc->GetTable( pCur->aTab, nNewTabNum ) )
+                if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
                 {
                     rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
                     return TRUE;
@@ -307,14 +299,14 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
                 else
                     rTabNum = 0xFFFD;
             }
-            else if( pExcRoot->pDoc->GetDocumentShell() )
+            else if( pExcRoot->pIR->GetDocShell() )
             {// Tabelle ist 'echt' extern
-                if( pExcRoot->pIR->GetExtDocOptions().nLinkCnt < 1 )
+                if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
                 {
                     String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
-                                        pExcRoot->pDoc->GetDocumentShell() ) );
+                                        pExcRoot->pIR->GetDocShell() ) );
                     String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
-                    if( pExcRoot->pDoc->LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
+                    if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                     {
                         rScIndex = rTabNum = static_cast<UINT16>(nNewTabNum);
                         return TRUE;
