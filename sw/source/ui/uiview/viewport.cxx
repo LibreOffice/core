@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:08:13 $
+ *  last change: $Author: os $ $Date: 2002-07-05 12:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,7 @@ void ViewResizePixel( const Window &rRef,
     const BOOL bHLineal = pHLineal && pHLineal->IsVisible();
     const long nHLinSzHeight = bHLineal ?
                         pHLineal->GetSizePixel().Height() : 0;
-    const BOOL bVLineal = pVLineal->IsVisible();
+    const BOOL bVLineal = pVLineal && pVLineal->IsVisible();
     const long nVLinSzWidth = bVLineal ?
                         pVLineal->GetSizePixel().Width() : 0;
     long nHBSzHeight2= rHScrollbar.IsVisible() || !rHScrollbar.IsAuto() ?
@@ -980,6 +980,7 @@ void ViewResizePixel( const Window &rRef,
     long nVBSzWidth = rVScrollbar.IsVisible(TRUE) ||  (rVScrollbar.IsVisible() && !rVScrollbar.IsAuto()) ?
                          rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
+    if(pVLineal)
     {
         WinBits nStyle = pVLineal->GetStyle()&~WB_RIGHT_ALIGNED;
         Point aPos( rOfst.X(), rOfst.Y()+nHLinSzHeight );
@@ -997,6 +998,7 @@ void ViewResizePixel( const Window &rRef,
             pVLineal->Resize();
     }
 //  Lineal braucht ein Resize, sonst funktioniert es nicht im unischtbaren Zustand
+    if(pHLineal)
     {
         Size aSize( rSize.Width(), nHLinSzHeight );
         if ( nVBSzWidth && !bVRulerRight)
