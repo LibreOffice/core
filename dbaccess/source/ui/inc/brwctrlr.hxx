@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:47:59 $
+ *  last change: $Author: fs $ $Date: 2001-10-29 15:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xParser;      // for sorting 'n filtering
 
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
-        TransferableDataHelper  m_aSystemClipboard;
 
         ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
 
@@ -194,6 +193,10 @@ namespace dbaui
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
         sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
+
+    protected:
+        TransferableDataHelper  m_aSystemClipboard;
+
     protected:
         class FormErrorHelper
         {
@@ -296,7 +299,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // SbaGridListener
-        virtual void RowChanged()       { /* we're not interested in */ };
+        virtual void RowChanged();
         virtual void ColumnChanged();
         virtual void SelectionChanged();
         virtual void CellActivated();
@@ -402,6 +405,8 @@ namespace dbaui
         sal_Bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
 
     private:
+        void setCurrentModified( sal_Bool _bSet );
+
         // execute the filter or sort slot
         void ExecuteFilterSortCrit(sal_Bool bFilter);
 
