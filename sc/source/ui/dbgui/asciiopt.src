@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:14:37 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ DUTCH ] = "~Tekenset" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Zeichensatz" ;
         Text [ SWEDISH ] = "~Teckenuppsättning" ;
-        Text [ PORTUGUESE ] = "Tabela de caracteres" ;
+        Text [ PORTUGUESE ] = "Conjunto de caracteres" ;
         Text[ chinese_simplified ] = "×ÖÌå(~H)";
         Text[ russian ] = "Íàáîð çíàêîâ";
         Text[ polish ] = "Zbiór znaków";
