@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-10-24 14:06:12 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,15 +457,16 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
         Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
         if ( pParentWindow )
         {
-            WinBits nParentWinBits = pParentWindow->GetStyle();
-            pParentWindow->SetStyle( nParentWinBits & ~WB_CLIPCHILDREN );
+//            WinBits nParentWinBits = pParentWindow->GetStyle();
+//            pParentWindow->SetStyle( nParentWinBits & ~WB_CLIPCHILDREN );
 
-            OutputDevice* pOutDev = (OutputDevice*)pParentWindow;
-            pOutDev->SetBackgroundBrush( Brush( Color( COL_WHITE )) );
+//            OutputDevice* pOutDev = (OutputDevice*)pParentWindow;
+//            pOutDev->SetBackgroundBrush( Brush( Color( COL_WHITE )) );
 
-            pParentWindow->Invalidate( INVALIDATE_NOCLIPCHILDREN );
+            pParentWindow->Invalidate( INVALIDATE_CHILDREN );
             pParentWindow->Flush();
         }
+
         m_xParentWindow->setVisible   ( sal_True      );
         m_pStatusBar->Show();
         m_pStatusBar->StartProgressMode( sText );
@@ -531,8 +532,8 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
                 Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
                 if ( pParentWindow )
                 {
-                    WinBits nParentWinBits = pParentWindow->GetStyle();
-                    pParentWindow->SetStyle( nParentWinBits | WB_CLIPCHILDREN );
+//                    WinBits nParentWinBits = pParentWindow->GetStyle();
+//                    pParentWindow->SetStyle( nParentWinBits | WB_CLIPCHILDREN );
                 }
 
                 m_pStatusBar->Show( sal_False );
