@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-08 16:57:34 $
+ *  last change: $Author: sj $ $Date: 2002-10-09 13:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,10 +483,19 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
 
             case( META_EPS_ACTION ):
             {
-                const MetaEPSAction* pA = (const MetaEPSAction*) pAction;
+                const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
+                const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
 
                 rWriter.Push();
-                ImplWriteActions( rWriter, pA->GetSubstitute(), rDummyVDev, nCompressMode );
+                rDummyVDev.Push();
+
+                MapMode aMapMode( aSubstitute.GetPrefMapMode() );
+                aMapMode.SetOrigin( rDummyVDev.LogicToLogic( pA->GetPoint(), rDummyVDev.GetMapMode(), aMapMode ) );
+
+                rWriter.SetMapMode( aMapMode );
+                rDummyVDev.SetMapMode( aMapMode );
+                ImplWriteActions( rWriter, aSubstitute, rDummyVDev, nCompressMode );
+                rDummyVDev.Pop();
                 rWriter.Pop();
             }
             break;
