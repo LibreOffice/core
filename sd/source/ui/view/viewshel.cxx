@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:19:41 $
+ *  last change: $Author: thb $ $Date: 2002-02-27 15:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,23 @@ void SdViewShell::Activate(BOOL bIsMDIActivate)
     ReadFrameViewData( pFrameView );
 
     pDocSh->Connect(this);
+}
 
+void SdViewShell::UIActivate( SvInPlaceObject *pIPObj )
+{
+    SfxViewShell::UIActivate(pIPObj);
+
+    // #94252# Disable draw view controls when going inactive
+    aDrawBtn.Disable();
+    aOutlineBtn.Disable();
+    aSlideBtn.Disable();
+    aNotesBtn.Disable();
+    aHandoutBtn.Disable();
+    aPresentationBtn.Disable();
+}
+
+void SdViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
+{
     // #94252# Enable draw view controls when going active
     aDrawBtn.Enable();
     aOutlineBtn.Enable();
@@ -465,6 +481,8 @@ void SdViewShell::Activate(BOOL bIsMDIActivate)
     aNotesBtn.Enable();
     aHandoutBtn.Enable();
     aPresentationBtn.Enable();
+
+    SfxViewShell::UIDeactivate(pIPObj);
 }
 
 /*************************************************************************
@@ -516,14 +534,6 @@ void SdViewShell::Deactivate(BOOL bIsMDIActivate)
     for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
         if ( pVRulerArray[nY] )
             pVRulerArray[nY]->SetActive(FALSE);
-
-    // #94252# Disable draw view controls when going inactive
-    aDrawBtn.Disable();
-    aOutlineBtn.Disable();
-    aSlideBtn.Disable();
-    aNotesBtn.Disable();
-    aHandoutBtn.Disable();
-    aPresentationBtn.Disable();
 
     SfxViewShell::Deactivate(bIsMDIActivate);
 }

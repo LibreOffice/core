@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-05 13:33:17 $
+ *  last change: $Author: thb $ $Date: 2002-02-27 15:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,22 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
         GetViewFrame()->GetDispatcher()->Execute(
             SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }
+}
 
+void SdDrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
+{
+    SdViewShell::UIActivate(pIPObj);
+
+    // #94252# Disable own controls
+    aTabControl.Disable();
+    aLayerTab.Disable();
+    aPageBtn.Disable();
+    aMasterPageBtn.Disable();
+    aLayerBtn.Disable();
+}
+
+void SdDrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
+{
     // #94252# Enable own controls
     aTabControl.Enable();
     aLayerTab.Enable();
@@ -218,6 +233,8 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
         aMasterPageBtn.Enable();
         aLayerBtn.Enable();
     }
+
+    SdViewShell::UIDeactivate(pIPObj);
 }
 
 /*************************************************************************
@@ -228,13 +245,6 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
 
 void SdDrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
-    // #94252# Disable own controls
-    aTabControl.Disable();
-    aLayerTab.Disable();
-    aPageBtn.Disable();
-    aMasterPageBtn.Disable();
-    aLayerBtn.Disable();
-
     SdViewShell::Deactivate(bIsMDIActivate);
 }
 
