@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:21:44 $
+ *  last change: $Author: dr $ $Date: 2002-04-03 10:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ USHORT* ScDocumentPool::pVersionMap4 = 0;
 USHORT* ScDocumentPool::pVersionMap5 = 0;
 USHORT* ScDocumentPool::pVersionMap6 = 0;
 USHORT* ScDocumentPool::pVersionMap7 = 0;
+USHORT* ScDocumentPool::pVersionMap8 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
@@ -160,6 +161,7 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_ALIGN_ORIENTATION,   SFX_ITEM_POOLABLE },    // ATTR_ORIENTATION
     { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    ab 367
     { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     ab 367
+    { SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEM_POOLABLE },    // ATTR_VERTICAL_ASIAN  from 642
     { SID_ATTR_ALIGN_LINEBREAK,     SFX_ITEM_POOLABLE },    // ATTR_LINEBREAK
     { SID_ATTR_ALIGN_MARGIN,        SFX_ITEM_POOLABLE },    // ATTR_MARGIN
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE
@@ -286,6 +288,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_ORIENTATION     - ATTR_STARTINDEX ] = new SvxOrientationItem;
     ppPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new SfxInt32Item( ATTR_ROTATE_VALUE, 0 );
     ppPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
+    ppPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
     ppPoolDefaults[ ATTR_LINEBREAK       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_LINEBREAK );
     ppPoolDefaults[ ATTR_MARGIN          - ATTR_STARTINDEX ] = new SvxMarginItem;
     ppPoolDefaults[ ATTR_MERGE           - ATTR_STARTINDEX ] = new ScMergeAttr;
@@ -370,6 +373,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     // ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE from 632b
     SetVersionMap( 7, 100, 178, pVersionMap7 );
+
+    // ATTR_VERTICAL_ASIAN from 642q
+    SetVersionMap( 8, 100, 181, pVersionMap8 );
 }
 
 __EXPORT ScDocumentPool::~ScDocumentPool()
@@ -391,7 +397,7 @@ void ScDocumentPool::InitVersionMaps()
     DBG_ASSERT( !pVersionMap1 && !pVersionMap2 &&
                 !pVersionMap3 && !pVersionMap4 &&
                 !pVersionMap5 && !pVersionMap6 &&
-                !pVersionMap7, "InitVersionMaps call multiple times" );
+                !pVersionMap7 && !pVersionMap8, "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -487,6 +493,19 @@ void ScDocumentPool::InitVersionMaps()
     // 3 entries inserted
     for ( i=nMap7New, j=nMap7Start+nMap7New+3; i < nMap7Count; i++, j++ )
         pVersionMap7[i] = j;
+
+    //  eighth map: ATTR_VERTICAL_ASIAN added in 642q
+
+    const USHORT nMap8Start = 100;  // ATTR_STARTINDEX
+    const USHORT nMap8End   = 181;  // ATTR_ENDINDEX
+    const USHORT nMap8Count = nMap8End - nMap8Start + 1;
+    const USHORT nMap8New   = 34;   // ATTR_VERTICAL_ASIAN - ATTR_STARTINDEX
+    pVersionMap8 = new USHORT [ nMap8Count ];
+    for ( i=0, j=nMap8Start; i < nMap8New; i++, j++ )
+        pVersionMap8[i] = j;
+    // 1 entry inserted
+    for ( i=nMap8New, j=nMap8Start+nMap8New+1; i < nMap8Count; i++, j++ )
+        pVersionMap8[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
@@ -494,8 +513,10 @@ void ScDocumentPool::DeleteVersionMaps()
     DBG_ASSERT( pVersionMap1 && pVersionMap2 &&
                 pVersionMap3 && pVersionMap4 &&
                 pVersionMap5 && pVersionMap6 &&
-                pVersionMap7, "DeleteVersionMaps without maps" );
+                pVersionMap7 && pVersionMap8, "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap8;
+    pVersionMap8 = 0;
     delete[] pVersionMap7;
     pVersionMap7 = 0;
     delete[] pVersionMap6;

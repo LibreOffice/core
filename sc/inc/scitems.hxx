@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scitems.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-26 19:10:04 $
+ *  last change: $Author: dr $ $Date: 2002-04-03 10:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,63 +131,64 @@
 #define ATTR_ORIENTATION        131
 #define ATTR_ROTATE_VALUE       132
 #define ATTR_ROTATE_MODE        133
-#define ATTR_LINEBREAK          134
-#define ATTR_MARGIN             135
-#define ATTR_MERGE              136
-#define ATTR_MERGE_FLAG         137
-#define ATTR_VALUE_FORMAT       138
-#define ATTR_LANGUAGE_FORMAT    139
-#define ATTR_BACKGROUND         140
-#define ATTR_PROTECTION         141
-#define ATTR_BORDER             142
-#define ATTR_BORDER_INNER       143     // innen, wg. Vorlagen-EditDialog
-#define ATTR_SHADOW             144
-#define ATTR_VALIDDATA          145
-#define ATTR_CONDITIONAL        146
+#define ATTR_VERTICAL_ASIAN     134
+#define ATTR_LINEBREAK          135
+#define ATTR_MARGIN             136
+#define ATTR_MERGE              137
+#define ATTR_MERGE_FLAG         138
+#define ATTR_VALUE_FORMAT       139
+#define ATTR_LANGUAGE_FORMAT    140
+#define ATTR_BACKGROUND         141
+#define ATTR_PROTECTION         142
+#define ATTR_BORDER             143
+#define ATTR_BORDER_INNER       144     // innen, wg. Vorlagen-EditDialog
+#define ATTR_SHADOW             145
+#define ATTR_VALIDDATA          146
+#define ATTR_CONDITIONAL        147
 
-#define ATTR_PATTERN_END        146     // Ende Zellattribut-Pattern
+#define ATTR_PATTERN_END        147     // Ende Zellattribut-Pattern
 
-#define ATTR_PATTERN            147
+#define ATTR_PATTERN            148
                                         // Seitenattribute
-#define ATTR_LRSPACE            148     // Editor: PageDesc-TabPage
-#define ATTR_ULSPACE            149
-#define ATTR_PAGE               150
-#define ATTR_PAGE_PAPERTRAY     151
-#define ATTR_PAGE_PAPERBIN      152
-#define ATTR_PAGE_SIZE          153
-#define ATTR_PAGE_MAXSIZE       154
-#define ATTR_PAGE_HORCENTER     155
-#define ATTR_PAGE_VERCENTER     156
+#define ATTR_LRSPACE            149     // Editor: PageDesc-TabPage
+#define ATTR_ULSPACE            150
+#define ATTR_PAGE               151
+#define ATTR_PAGE_PAPERTRAY     152
+#define ATTR_PAGE_PAPERBIN      153
+#define ATTR_PAGE_SIZE          154
+#define ATTR_PAGE_MAXSIZE       155
+#define ATTR_PAGE_HORCENTER     156
+#define ATTR_PAGE_VERCENTER     157
 
-#define ATTR_PAGE_ON            157     // Editor: Header/Footer-Page
-#define ATTR_PAGE_DYNAMIC       158
-#define ATTR_PAGE_SHARED        159
+#define ATTR_PAGE_ON            158     // Editor: Header/Footer-Page
+#define ATTR_PAGE_DYNAMIC       159
+#define ATTR_PAGE_SHARED        160
 
-#define ATTR_PAGE_NOTES         160     // Editor: Tabelle
-#define ATTR_PAGE_GRID          161
-#define ATTR_PAGE_HEADERS       162
-#define ATTR_PAGE_CHARTS        163
-#define ATTR_PAGE_OBJECTS       164
-#define ATTR_PAGE_DRAWINGS      165
-#define ATTR_PAGE_TOPDOWN       166
-#define ATTR_PAGE_SCALE         167
-#define ATTR_PAGE_SCALETOPAGES  168
-#define ATTR_PAGE_FIRSTPAGENO   169
+#define ATTR_PAGE_NOTES         161     // Editor: Tabelle
+#define ATTR_PAGE_GRID          162
+#define ATTR_PAGE_HEADERS       163
+#define ATTR_PAGE_CHARTS        164
+#define ATTR_PAGE_OBJECTS       165
+#define ATTR_PAGE_DRAWINGS      166
+#define ATTR_PAGE_TOPDOWN       167
+#define ATTR_PAGE_SCALE         168
+#define ATTR_PAGE_SCALETOPAGES  169
+#define ATTR_PAGE_FIRSTPAGENO   170
 
-#define ATTR_PAGE_PRINTAREA     170     // Editor: Druckbereiche
-#define ATTR_PAGE_REPEATROW     171
-#define ATTR_PAGE_REPEATCOL     172
-#define ATTR_PAGE_PRINTTABLES   173
+#define ATTR_PAGE_PRINTAREA     171     // Editor: Druckbereiche
+#define ATTR_PAGE_REPEATROW     172
+#define ATTR_PAGE_REPEATCOL     173
+#define ATTR_PAGE_PRINTTABLES   174
 
-#define ATTR_PAGE_HEADERLEFT    174     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERLEFT    175     // Fusszeilen (links)
-#define ATTR_PAGE_HEADERRIGHT   176     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERRIGHT   177     // Fusszeilen (rechts)
-#define ATTR_PAGE_HEADERSET     178     // die Sets dazu...
-#define ATTR_PAGE_FOOTERSET     179
+#define ATTR_PAGE_HEADERLEFT    175     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERLEFT    176     // Fusszeilen (links)
+#define ATTR_PAGE_HEADERRIGHT   177     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERRIGHT   178     // Fusszeilen (rechts)
+#define ATTR_PAGE_HEADERSET     179     // die Sets dazu...
+#define ATTR_PAGE_FOOTERSET     180
 
-#define ATTR_PAGE_FORMULAS      180
-#define ATTR_PAGE_NULLVALS      181
+#define ATTR_PAGE_FORMULAS      181
+#define ATTR_PAGE_NULLVALS      182
 
 #define ATTR_ENDINDEX           ATTR_PAGE_NULLVALS      // Ende Pool-Range
 
