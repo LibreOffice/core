@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:47:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,10 @@ String KEY_VERSION_CHECK
     Text[ czech ] = "Varování: v Level 1 není možné uložit kompletní importovaný\nobrázek ve formátu EPS, protože části jsou v Level 2.";
     Text[ hebrew ] = "‮אזהרה: לא ניתן לשמור את כל הגרפיקה ה EPS ברמה 1\nכי חלק מהם ברמה גבוהה יותר‬";
     Text[ hindi ] = "चेतावनी: आयात की हुयी सभी EPS सुचित्र को सतह1 में संचित नहीं कर सकते है\nक्योंकि उनमें से कुछ उच्च सतह का है!";
+    Text[ slovak ] = "Upozornenie: Nie všetky importované EPS obrázky mohli byť uložené na úrovni1\npreto sú niektoré na vyšších úrovniach!";
 };
+
+
 
 
 
