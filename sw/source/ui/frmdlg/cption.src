@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:50:57 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ ModalDialog DLG_CAPTION
         Text[ portuguese_brazilian ] = "~Copy border and shadow";
         Text[ japanese ] = "ŠO˜g‚Æ‰e‚Ì“K—p(~A)";
         Text[ korean ] = "¿Ü°û¼±°ú ±×¸²ÀÚ Àû¿ë(~A)";
-        Text[ chinese_simplified ] = "Ì×ÓÃ±ß¿òºÍÒõÓ°(~A)";
+        Text[ chinese_simplified ] = "²ÉÓÃ±ß¿òºÍÒõÓ°(~A)";
         Text[ chinese_traditional ] = "±Ä¥ÎÃä®Ø©M³±¼v(~A)";
         Text[ arabic ] = "ÊØÈíŞ ÇáÍÏæÏ æÇáÙá";
         Text[ turkish ] = "~Kenarlık ve gölgeyi kullan";
@@ -749,6 +749,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
+
 
 
 
