@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_base.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-09-26 14:37:00 $
+ *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,7 @@
 #include <typelib/typedescription.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "jni_class_data.h"
-
+#include "jni_info.h"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -141,38 +140,34 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     if (0 == m_td)
     {
         throw BridgeRuntimeError(
-            OUSTR("cannot get comprehensive type description of") +
+            OUSTR("cannot get comprehensive type description for ") +
             *reinterpret_cast< ::rtl::OUString const * >( &td_ref->pTypeName ) );
     }
 }
 
 //##################################################################################################
 
-class JLocalAutoRef;
-
 //==================================================================================================
 class JNI_attach
 {
-    friend class JLocalAutoRef;
-
     sal_uInt32                  m_thread_id;
     ::JavaVMContext *           m_context;
-    JNI_class_data const *      m_class_data;
+    JNI_info const *            m_jni_info;
     JavaVM *                    m_vm;
     JNIEnv *                    m_env;
     bool                        m_detach;
 
 public:
+    JNI_attach( uno_Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () );
     JNI_attach( uno_Environment * java_env );
-    JNI_attach( uno_Environment * java_env, JNIEnv * jni_env );
     ~JNI_attach() SAL_THROW( () );
 
     inline JavaVM * get_vm() const SAL_THROW( () )
         { return m_vm; }
     inline JNIEnv * get_jni_env() const SAL_THROW( () )
         { return m_env; }
-    inline JNI_class_data const * get_class_data() const SAL_THROW( () )
-        { return m_class_data; }
+    inline JNI_info const * get_jni_info() const SAL_THROW( () )
+        { return m_jni_info; }
 
     inline JNIEnv * operator -> () const SAL_THROW( () )
         { return m_env; }
@@ -185,35 +180,42 @@ public:
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
-inline void jstring_to_ustring( rtl_uString ** out_ustr, jstring jstr, JNI_attach const & attach )
+inline void jstring_to_ustring( JNI_attach const & attach, rtl_uString ** out_ustr, jstring jstr )
 {
-    OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
-    jsize len = attach->GetStringLength( jstr );
-    ::std::auto_ptr< rtl_mem > mem(
-        rtl_mem::allocate( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
-    rtl_uString * ustr = (rtl_uString *)mem.get();
-    attach->GetStringRegion( jstr, 0, len, ustr->buffer );
-    attach.ensure_no_exception();
-    ustr->refCount = 1;
-    ustr->length = len;
-    ustr->buffer[ len ] = '\0';
-    mem.release();
-    if (0 != *out_ustr)
-        rtl_uString_release( *out_ustr );
-    *out_ustr = ustr;
+    if (0 == jstr)
+    {
+        rtl_uString_new( out_ustr );
+    }
+    else
+    {
+        OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
+        jsize len = attach->GetStringLength( jstr );
+        ::std::auto_ptr< rtl_mem > mem(
+            rtl_mem::allocate( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
+        rtl_uString * ustr = (rtl_uString *)mem.get();
+        attach->GetStringRegion( jstr, 0, len, ustr->buffer );
+        attach.ensure_no_exception();
+        ustr->refCount = 1;
+        ustr->length = len;
+        ustr->buffer[ len ] = '\0';
+        mem.release();
+        if (0 != *out_ustr)
+            rtl_uString_release( *out_ustr );
+        *out_ustr = ustr;
+    }
 }
 //--------------------------------------------------------------------------------------------------
-inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNI_attach const & attach )
+inline ::rtl::OUString jstring_to_oustring( JNI_attach const & attach, jstring jstr )
 {
     rtl_uString * ustr = 0;
-    jstring_to_ustring( &ustr, jstr, attach );
+    jstring_to_ustring( attach, &ustr, jstr );
     return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
 }
 //--------------------------------------------------------------------------------------------------
-inline jstring ustring_to_jstring( rtl_uString * ustr, JNI_attach const & attach )
+inline jstring ustring_to_jstring( JNI_attach const & attach, rtl_uString * ustr )
 {
     OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
-    jstring jstr = attach->NewString( (jchar const *)ustr->buffer, ustr->length );
+    jstring jstr = attach->NewString( ustr->buffer, ustr->length );
     attach.ensure_no_exception();
     return jstr;
 }
@@ -228,15 +230,15 @@ class JLocalAutoRef
 
 public:
     inline JLocalAutoRef() SAL_THROW( () )
-        : m_jo( 0 )
+        : m_attach( 0 ),
+          m_jo( 0 )
         {}
-    inline explicit JLocalAutoRef( jobject jo, JNI_attach const & attach ) SAL_THROW( () )
+    inline explicit JLocalAutoRef( JNI_attach const & attach, jobject jo ) SAL_THROW( () )
         : m_attach( &attach ),
           m_jo( jo )
         {}
     inline JLocalAutoRef( JLocalAutoRef const & auto_ref ) SAL_THROW( () );
-    inline ~JLocalAutoRef() SAL_THROW( () )
-        { if (0 != m_jo) m_attach->m_env->DeleteLocalRef( m_jo ); }
+    inline ~JLocalAutoRef() SAL_THROW( () );
 
     inline jobject get() const SAL_THROW( () )
         { return m_jo; }
@@ -244,7 +246,7 @@ public:
         { return (0 != m_jo); }
     inline jobject release() SAL_THROW( () );
     inline void reset() SAL_THROW( () );
-    inline void reset( jobject jo, JNI_attach const & attach ) SAL_THROW( () );
+    inline void reset( JNI_attach const & attach, jobject jo ) SAL_THROW( () );
     inline JLocalAutoRef & operator = ( JLocalAutoRef const & auto_ref ) SAL_THROW( () );
 
     //
@@ -252,11 +254,15 @@ public:
     inline ::rtl::OUString get_class_name() const;
 
     //
-    inline JNI_attach const & get_jni_attach() const SAL_THROW( () )
-        { return *m_attach; }
-//     inline JNIEnv * get_jni_env() const SAL_THROW( () )
-//         { return m_attach->get_jni_env(); }
+//     inline JNI_attach const & get_jni_attach() const SAL_THROW( () )
+//         { return *m_attach; }
 };
+//__________________________________________________________________________________________________
+inline JLocalAutoRef::~JLocalAutoRef() SAL_THROW( () )
+{
+    if (0 != m_jo)
+        (*m_attach)->DeleteLocalRef( m_jo );
+}
 //__________________________________________________________________________________________________
 inline JLocalAutoRef::JLocalAutoRef( JLocalAutoRef const & auto_ref ) SAL_THROW( () )
     : m_attach( auto_ref.m_attach ),
@@ -275,16 +281,16 @@ inline jobject JLocalAutoRef::release() SAL_THROW( () )
 inline void JLocalAutoRef::reset() SAL_THROW( () )
 {
     if (m_jo)
-        m_attach->m_env->DeleteLocalRef( m_jo );
+        (*m_attach)->DeleteLocalRef( m_jo );
     m_jo = 0;
 }
 //__________________________________________________________________________________________________
-inline void JLocalAutoRef::reset( jobject jo, JNI_attach const & attach ) SAL_THROW( () )
+inline void JLocalAutoRef::reset( JNI_attach const & attach, jobject jo ) SAL_THROW( () )
 {
     if (jo != m_jo)
     {
         if (m_jo)
-            m_attach->m_env->DeleteLocalRef( m_jo );
+            (*m_attach)->DeleteLocalRef( m_jo );
         m_jo = jo;
     }
     m_attach = &attach;
@@ -292,7 +298,7 @@ inline void JLocalAutoRef::reset( jobject jo, JNI_attach const & attach ) SAL_TH
 //__________________________________________________________________________________________________
 inline JLocalAutoRef & JLocalAutoRef::operator = ( JLocalAutoRef const & auto_ref ) SAL_THROW( () )
 {
-    reset( auto_ref.m_jo, *auto_ref.m_attach );
+    reset( *auto_ref.m_attach, auto_ref.m_jo );
     auto_ref.m_jo = 0;
     return *this;
 }
@@ -302,95 +308,87 @@ inline JLocalAutoRef JLocalAutoRef::get_class() const
     jobject jo_class = 0;
     if (0 != m_jo)
     {
-        jo_class = m_attach->m_env->CallObjectMethodA(
-            m_jo, m_attach->m_class_data->m_method_Object_getClass, 0 );
+        jo_class = (*m_attach)->CallObjectMethodA(
+            m_jo, m_attach->get_jni_info()->m_method_Object_getClass, 0 );
         m_attach->ensure_no_exception();
     }
-    return JLocalAutoRef( jo_class, *m_attach );
+    return JLocalAutoRef( *m_attach, jo_class );
 }
 //__________________________________________________________________________________________________
 inline ::rtl::OUString JLocalAutoRef::get_class_name() const
 {
     JLocalAutoRef jo_class( get_class() );
     JLocalAutoRef jo_name(
-        m_attach->m_env->CallObjectMethodA(
-            jo_class.get(), m_attach->m_class_data->m_method_Class_getName, 0 ), *m_attach );
+        *m_attach, (*m_attach)->CallObjectMethodA(
+            jo_class.get(), m_attach->get_jni_info()->m_method_Class_getName, 0 ) );
     m_attach->ensure_no_exception();
-    return jstring_to_oustring( (jstring)jo_name.get(), *m_attach );
+    return jstring_to_oustring( *m_attach, (jstring)jo_name.get() );
 }
 
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
-inline JLocalAutoRef find_class( char const * class_name, JNI_attach const & attach )
+inline JLocalAutoRef find_class( JNI_attach const & attach, char const * class_name )
 {
     jclass jo_class = attach->FindClass( class_name );
     attach.ensure_no_exception();
-    return JLocalAutoRef( jo_class, attach );
+    return JLocalAutoRef( attach, jo_class );
 }
 //--------------------------------------------------------------------------------------------------
-inline JLocalAutoRef find_class( ::rtl::OUString const & class_name, JNI_attach const & attach )
+inline JLocalAutoRef find_class( JNI_attach const & attach, ::rtl::OUString const & class_name )
 {
     ::rtl::OString cstr_name( ::rtl::OUStringToOString( class_name, RTL_TEXTENCODING_ASCII_US ) );
-    return find_class( cstr_name, attach );
+    return find_class( attach, cstr_name );
 }
 
-//##################################################################################################
-
 //--------------------------------------------------------------------------------------------------
-inline JLocalAutoRef create_type(
-    jclass clazz, JNI_attach const & attach )
+inline JLocalAutoRef create_type( JNI_attach const & attach, jclass clazz )
 {
-    JNI_class_data const * class_data = attach.get_class_data();
+    JNI_info const * jni_info = attach.get_jni_info();
 
     jvalue arg;
     arg.l = clazz;
     JLocalAutoRef jo_type(
-        attach->NewObjectA(
-            class_data->m_class_Type, class_data->m_ctor_Type_with_Class, &arg ), attach );
+        attach, attach->NewObjectA(
+            jni_info->m_class_Type, jni_info->m_ctor_Type_with_Class, &arg ) );
     attach.ensure_no_exception();
 
     return jo_type;
 }
 //--------------------------------------------------------------------------------------------------
 inline JLocalAutoRef create_type(
-    typelib_TypeDescriptionReference * type, JNI_attach const & attach )
+    JNI_attach const & attach, typelib_TypeDescriptionReference * type )
 {
-    JNI_class_data const * class_data = attach.get_class_data();
+    JNI_info const * jni_info = attach.get_jni_info();
 
     jvalue args[ 2 ];
     // get type class
     args[ 0 ].i = type->eTypeClass;
     JLocalAutoRef jo_type_class(
-        attach->CallStaticObjectMethodA(
-            class_data->m_class_TypeClass, class_data->m_method_TypeClass_fromInt, args ),
-        attach );
+        attach, attach->CallStaticObjectMethodA(
+            jni_info->m_class_TypeClass, jni_info->m_method_TypeClass_fromInt, args ) );
     attach.ensure_no_exception();
     // construct type
-    JLocalAutoRef jo_type_name( ustring_to_jstring( type->pTypeName, attach ), attach );
+    JLocalAutoRef jo_type_name( attach, ustring_to_jstring( attach, type->pTypeName ) );
     args[ 0 ].l = jo_type_name.get();
     args[ 1 ].l = jo_type_class.get();
     JLocalAutoRef jo_type(
-        attach->NewObjectA(
-            class_data->m_class_Type, class_data->m_ctor_Type_with_Name_TypeClass, args ),
-        attach );
+        attach, attach->NewObjectA(
+            jni_info->m_class_Type, jni_info->m_ctor_Type_with_Name_TypeClass, args ) );
     attach.ensure_no_exception();
 
     return jo_type;
 }
 
-//##################################################################################################
-
 //--------------------------------------------------------------------------------------------------
-inline JLocalAutoRef compute_oid( jobject jo, JNI_attach const & attach )
+inline JLocalAutoRef compute_oid( JNI_attach const & attach, jobject jo )
 {
-    JNI_class_data const * class_data = attach.get_class_data();
+    JNI_info const * jni_info = attach.get_jni_info();
     jvalue arg;
     arg.l= jo;
     JLocalAutoRef jo_oid(
-        attach->CallStaticObjectMethodA(
-            class_data->m_class_UnoRuntime, class_data->m_method_UnoRuntime_generateOid, &arg ),
-        attach );
+        attach, attach->CallStaticObjectMethodA(
+            jni_info->m_class_UnoRuntime, jni_info->m_method_UnoRuntime_generateOid, &arg ) );
     attach.ensure_no_exception();
     return jo_oid;
 }

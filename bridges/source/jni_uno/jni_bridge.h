@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-09-26 14:37:01 $
+ *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,46 +85,59 @@ struct jni_Bridge
 {
     mutable oslInterlockedCount m_ref;
 
-    uno_Environment *           m_java_env;
     uno_ExtEnvironment *        m_uno_env;
-
-    ::JavaVMContext *           m_jvm_context;
-    JNI_class_data const *      m_jni_class_data;
+    uno_Environment *           m_java_env;
+    JNI_info const *            m_jni_info;
 
     jni_Mapping                 m_java2uno;
     jni_Mapping                 m_uno2java;
 
     bool                        m_registered_java2uno;
 
+    ~jni_Bridge() SAL_THROW( () );
     jni_Bridge(
         uno_Environment * java_env, uno_ExtEnvironment * uno_env,
         bool register_java2uno ) SAL_THROW( () );
-    ~jni_Bridge() SAL_THROW( () );
 
-    //
     void acquire() const SAL_THROW( () );
     void release() const SAL_THROW( () );
 
-    //
+    // jni_uno2java.cxx
+    void call_java(
+        jobject javaI, JNI_type_info const * info, sal_Int32 function_pos,
+        typelib_TypeDescriptionReference * return_type,
+        typelib_MethodParameter * params, sal_Int32 nParams,
+        void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const;
+    // jni_java2uno.cxx
+    jobject call_uno(
+        JNI_attach const & attach,
+        uno_Interface * pUnoI, typelib_TypeDescription * member_td,
+        typelib_TypeDescriptionReference * return_tdref,
+        sal_Int32 nParams, typelib_MethodParameter const * pParams,
+        jobjectArray jo_args ) const;
+
+    // jni_java2uno.cxx
     uno_Interface * map_java2uno(
         JNI_attach const & attach,
         jobject javaI, JNI_type_info const * info ) const;
+    // jni_uno2java.cxx
     jobject map_uno2java(
         JNI_attach const & attach,
         uno_Interface * pUnoI, JNI_type_info const * info ) const;
 
-    //
+    // jni_data.cxx
     void map_to_uno(
         JNI_attach const & attach,
         void * uno_data, jvalue java_data,
         typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
-        bool assign, bool extract_out_param ) const;
+        bool assign, bool out_param,
+        bool special_wrapped_integral_types = false ) const;
     void map_to_java(
         JNI_attach const & attach,
         jvalue * java_data, void * uno_data,
         typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
         bool in_param, bool out_param,
-        bool special_wrap_integral_types = false ) const;
+        bool special_wrapped_integral_types = false ) const;
 };
 
 }

@@ -1,10 +1,10 @@
-UDK_3_0_0 {
+UDK_3_1_0 {
     global:
         uno_initEnvironment;
         uno_ext_getMapping;
         component_canUnload;
-        Java_jni_1uno_JNI_1proxy_free_1handles;
-        Java_jni_1uno_JNI_1proxy_dispatch_1method;
+        Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J;
+        Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call;
     local:
-    *;
+        *;
 };

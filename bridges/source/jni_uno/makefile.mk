@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2002-09-26 14:37:04 $
+#   last change: $Author: dbo $ $Date: 2002-10-28 18:20:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@ PRJ=..$/..
 
 PRJNAME=bridges
 TARGET=java_uno
-LIBTARGET=no
+USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -73,41 +73,32 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/jni_bridge.obj
-
-SHL1TARGET=$(TARGET)
-
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-SHL1IMPLIB=i$(TARGET)
-
-SHL1OBJS= \
-    $(SLO)$/jni_class_data.obj	\
+    $(SLO)$/jni_info.obj		\
     $(SLO)$/jni_data.obj		\
     $(SLO)$/jni_uno2java.obj	\
     $(SLO)$/jni_java2uno.obj	\
     $(SLO)$/jni_bridge.obj
 
+SHL1TARGET=$(TARGET)
+
 SHL1STDLIBS= \
     $(CPPULIB)			\
     $(SALLIB)
 
-.IF "$(OS)" == "WNT"
-SHL1STDLIBS+=jvm.lib
-SHL1VERSIONMAP=$(TARGET)_stdcall.map
-.ELSE
-SHL1STDLIBS+=-ljvm
 SHL1VERSIONMAP=$(TARGET).map
-.ENDIF
 
+SHL1IMPLIB=i$(TARGET)
+SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
-# --- Targets ------------------------------------------------------
-
-.IF "$(COM)" == "MSC"
 .IF "$(debug)" != ""
+.IF "$(COM)" == "MSC"
 CFLAGS += -Ob0
 .ENDIF
 .ENDIF
+
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
