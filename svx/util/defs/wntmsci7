@@ -19401,3 +19401,5 @@ _real@8@40088000000000000000
 ?release@Svx3DSceneObject@@WDA@AAXXZ
 ?release@Svx3DSceneObject@@WEA@AAXXZ
 ?release@Svx3DSceneObject@@WEE@AAXXZ
+?SvxUnoConvertFromMM@@YAXW4SfxMapUnit@@AAVAny@uno@star@sun@com@@@Z
+?SvxUnoConvertToMM@@YAXW4SfxMapUnit@@AAVAny@uno@star@sun@com@@@Z
