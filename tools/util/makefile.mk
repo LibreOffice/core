@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-30 08:25:57 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:15:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,7 +191,14 @@ SHL1TARGET=     tl$(VERSION)$(DLLPOSTFIX)
 SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
-SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(GPC3RDLIB)
+SHL1STDLIBS+=   $(SALLIB) $(VOSLIB)
+
+.IF "$(WITH_LIBART)"=="YES"
+SHL1STDLIBS+=   $(LIBART_LIBS)
+.ELSE
+SHL1STDLIBS+=   $(GPC3RDLIB)
+.ENDIF
+
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=   shell32.lib     \
