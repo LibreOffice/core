@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-26 11:58:29 $
+ *  last change: $Author: fme $ $Date: 2002-03-08 11:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,15 +2256,26 @@ FASTBOOL SwTxtNode::IsInSymbolFont( xub_StrLen nPos ) const
 //  return aFInfo.IsBullet( nPos );
 }
 
-
+#ifdef VERTICAL_LAYOUT
+USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen,
+                           USHORT nScript ) const
+#else
 USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
+#endif
 {
     USHORT nWhichId = RES_CHRATR_LANGUAGE;
     USHORT nRet = LANGUAGE_DONTKNOW;
     if( pSwpHints )
     {
+#ifdef VERTICAL_LAYOUT
+        if ( ! nScript )
+            nScript = pBreakIt->GetRealScriptOfText( aText, nBegin );
+
+        nWhichId = GetWhichOfScript( nWhichId, nScript );
+#else
         nWhichId = GetWhichOfScript( nWhichId,
                         pBreakIt->GetRealScriptOfText( aText, nBegin ));
+#endif
 
         xub_StrLen nEnd = nBegin + nLen;
         for( USHORT i = 0, nSize = pSwpHints->Count(); i < nSize; ++i )
