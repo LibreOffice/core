@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,6 @@
 #ifndef _VCLCANVAS_SPRITECANVAS_HXX_
 #define _VCLCANVAS_SPRITECANVAS_HXX_
 
-#include <memory>
-
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX
-#include <comphelper/uno3.hxx>
-#endif
-
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
@@ -95,20 +76,30 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
+#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
+#include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
+#endif
+
+#ifndef _CPPUHELPER_COMPBASE5_HXX_
+#include <cppuhelper/compbase5.hxx>
+#endif
+
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
-#endif
-
 #include <canvas/vclwrapper.hxx>
+#include <canvas/bitmapcanvasbase.hxx>
+
+#include <memory>
 
 #include "redrawmanager.hxx"
 #include "spritesurface.hxx"
-#include "outdevprovider.hxx"
-#include "canvasbase.hxx"
+#include "canvashelper.hxx"
+#include "backbuffer.hxx"
 #include "impltools.hxx"
 
 class OutputDevice;
@@ -120,131 +111,34 @@ namespace com { namespace sun { namespace star { namespace uno
     class RuntimeException;
 } } } }
 
-class Window;
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper4< ::drafts::com::sun::star::rendering::XSpriteCanvas,
-                         ::com::sun::star::lang::XInitialization,
-                         ::com::sun::star::lang::XServiceInfo,
-                         ::com::sun::star::lang::XServiceName >  SpriteCanvas_Base;
+    typedef ::cppu::WeakComponentImplHelper5< ::drafts::com::sun::star::rendering::XSpriteCanvas,
+                                               ::drafts::com::sun::star::rendering::XIntegerBitmap,
+                                               ::com::sun::star::lang::XInitialization,
+                                               ::com::sun::star::lang::XServiceInfo,
+                                               ::com::sun::star::lang::XServiceName >                   CanvasBase_Base;
+    typedef ::canvas::internal::BitmapCanvasBase< CanvasBase_Base, CanvasHelper, tools::LocalGuard >    SpriteCanvas_Base;
 
-    class SpriteCanvas : public ::comphelper::OBaseMutex,
-                         public SpriteSurface,
-                         public OutDevProvider,
-                         public SpriteCanvas_Base
-
+    class SpriteCanvas : public SpriteCanvas_Base,
+                         public SpriteSurface
     {
     public:
         typedef ::rtl::Reference< SpriteCanvas > ImplRef;
 
         SpriteCanvas( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
-        // XInterface
-
-        // Need to implement that, because OutDevProvide comes with an
-        // unimplemented version of XInterface.
-
-        // Forwarding the XInterface implementation to the
-        // cppu::ImplHelper templated base, which does the refcounting and
-        // queryInterface for us:  Classname     Base doing refcount and handling queryInterface
-        //                             |                 |
-        //                             V                 V
-        DECLARE_UNO3_AGG_DEFAULTS( SpriteCanvas, SpriteCanvas_Base );
-
-        // XCanvas
-        virtual void SAL_CALL drawPoint( const ::drafts::com::sun::star::geometry::RealPoint2D&     aPoint,
-                                         const ::drafts::com::sun::star::rendering::ViewState&      viewState,
-                                         const ::drafts::com::sun::star::rendering::RenderState&    renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL drawLine( const ::drafts::com::sun::star::geometry::RealPoint2D&  aStartPoint,
-                                        const ::drafts::com::sun::star::geometry::RealPoint2D&  aEndPoint,
-                                        const ::drafts::com::sun::star::rendering::ViewState&   viewState,
-                                        const ::drafts::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL drawBezier( const ::drafts::com::sun::star::geometry::RealBezierSegment2D&    aBezierSegment,
-                                          const ::drafts::com::sun::star::geometry::RealPoint2D&            aEndPoint,
-                                          const ::drafts::com::sun::star::rendering::ViewState&             viewState,
-                                          const ::drafts::com::sun::star::rendering::RenderState&           renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawPolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                             const ::drafts::com::sun::star::rendering::ViewState&                                          viewState,
-                             const ::drafts::com::sun::star::rendering::RenderState&                                        renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            strokePolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const ::drafts::com::sun::star::rendering::ViewState&                                            viewState,
-                               const ::drafts::com::sun::star::rendering::RenderState&                                          renderState,
-                               const ::drafts::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            strokeTexturedPolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                       const ::drafts::com::sun::star::rendering::ViewState&                                            viewState,
-                                       const ::drafts::com::sun::star::rendering::RenderState&                                          renderState,
-                                       const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::rendering::Texture >&           textures,
-                                       const ::drafts::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            strokeTextureMappedPolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                            const ::drafts::com::sun::star::rendering::ViewState&                                           viewState,
-                                            const ::drafts::com::sun::star::rendering::RenderState&                                         renderState,
-                                            const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::rendering::Texture >&          textures,
-                                            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::geometry::XMapping2D >&       xMapping,
-                                            const ::drafts::com::sun::star::rendering::StrokeAttributes&                                    strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >   SAL_CALL
-            queryStrokeShapes( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >&   xPolyPolygon,
-                               const ::drafts::com::sun::star::rendering::ViewState&                                            viewState,
-                               const ::drafts::com::sun::star::rendering::RenderState&                                          renderState,
-                               const ::drafts::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillPolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                             const ::drafts::com::sun::star::rendering::ViewState&                                          viewState,
-                             const ::drafts::com::sun::star::rendering::RenderState&                                        renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillTexturedPolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                                     const ::drafts::com::sun::star::rendering::ViewState&                                          viewState,
-                                     const ::drafts::com::sun::star::rendering::RenderState&                                        renderState,
-                                     const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::rendering::Texture >&         textures ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillTextureMappedPolyPolygon( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                          const ::drafts::com::sun::star::rendering::ViewState&                                             viewState,
-                                          const ::drafts::com::sun::star::rendering::RenderState&                                           renderState,
-                                          const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::rendering::Texture >&            textures,
-                                          const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::geometry::XMapping2D >&         xMapping ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvasFont >      SAL_CALL
-            queryFont( const ::drafts::com::sun::star::rendering::FontRequest&  fontRequest ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawText( const ::drafts::com::sun::star::rendering::StringContext&                                     text,
-                      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvasFont >&   xFont,
-                      const ::drafts::com::sun::star::rendering::ViewState&                                         viewState,
-                      const ::drafts::com::sun::star::rendering::RenderState&                                       renderState,
-                      sal_Int8                                                                                      textDirection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawOffsettedText( const ::drafts::com::sun::star::rendering::StringContext&                                    text,
-                               const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvasFont >&  xFont,
-                               const ::com::sun::star::uno::Sequence< double >&                                             offsets,
-                               const ::drafts::com::sun::star::rendering::ViewState&                                        viewState,
-                               const ::drafts::com::sun::star::rendering::RenderState&                                      renderState,
-                               sal_Int8                                                                                     textDirection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawBitmap( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap >& xBitmap,
-                        const ::drafts::com::sun::star::rendering::ViewState&                                   viewState,
-                        const ::drafts::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice >   SAL_CALL
-            getDevice() throw (::com::sun::star::uno::RuntimeException);
-
-        // XBitmapCanvas (only providing, not implementing the
-        // interface. Also note subtle method parameter differences)
-        virtual void SAL_CALL copyRect( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmapCanvas >&   sourceCanvas,
-                                        const ::drafts::com::sun::star::geometry::RealRectangle2D&                                      sourceRect,
-                                        const ::drafts::com::sun::star::rendering::ViewState&                                           sourceViewState,
-                                        const ::drafts::com::sun::star::rendering::RenderState&                                         sourceRenderState,
-                                        const ::drafts::com::sun::star::geometry::RealRectangle2D&                                      destRect,
-                                        const ::drafts::com::sun::star::rendering::ViewState&                                           destViewState,
-                                        const ::drafts::com::sun::star::rendering::RenderState&                                         destRenderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        /// Dispose all internal references
+        virtual void SAL_CALL disposing();
 
         // XSpriteCanvas
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap > >&   animationBitmaps,
-                                                                                                                                           sal_Int16                                                                                                                    interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap > >& animationBitmaps,
+                                                                                                                                           sal_Int8                                                                                                                   interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException, ::drafts::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::drafts::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL updateScreen() throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw( ::com::sun::star::uno::Exception,
@@ -271,10 +165,6 @@ namespace vclcanvas
                                    const Point&             rPos,
                                    const Rectangle&         rUpdateArea );
 
-        // OutDevProvider
-        virtual OutputDevice&       getOutDev();
-        virtual const OutputDevice& getOutDev() const;
-
     protected:
         ~SpriteCanvas(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
@@ -283,15 +173,10 @@ namespace vclcanvas
         SpriteCanvas(const SpriteCanvas&);
         SpriteCanvas& operator=( const SpriteCanvas& );
 
-        void checkOurState(); // throws
-        OutDevProvider::ImplRef     getImplRef();
-
-        // TODO: Lifetime issue. Cannot control pointer validity over
-        // object lifetime, since we're a UNO component
-        Window*                                         mpOutputWindow;     // for the screen output
-        ::canvas::vcltools::VCLObject<VirtualDevice>    maVDev;             // for the back-buffer
-        ::std::auto_ptr< RedrawManager >                mpRedrawManager;    // handles smooth screen updates for us
-        CanvasBase                                      maCanvasHelper;     // for the basic canvas implementation
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    mxComponentContext;
+        WindowGraphicDevice::ImplRef                                                    mxDevice;
+        BackBufferSharedPtr                                                             mpBackBuffer;
+        ::std::auto_ptr< RedrawManager >                                                mpRedrawManager;    // handles smooth screen updates for us
     };
 }
 
