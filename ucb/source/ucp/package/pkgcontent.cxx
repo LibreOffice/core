@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-28 08:25:10 $
+ *  last change: $Author: kso $ $Date: 2001-10-11 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ using namespace package_ucp;
 #define COMPRESSED_MODIFIED     sal_uInt32( 0x02 )
 #define ENCRYPTED_MODIFIED      sal_uInt32( 0x04 )
 #define SEGMENTSIZE_MODIFIED    sal_uInt32( 0x08 )
+#define ENCRYPTIONKEY_MODIFIED  sal_uInt32( 0x10 )
 
 //=========================================================================
 //=========================================================================
@@ -1383,51 +1384,31 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // @@@ This is a temporary solution. In the future submitting
             //     the key should be done using an interaction handler!
 
-            // Write-Only property. Only supported by root folder ( all
-            // streams of a package have the same encryption key ).
-            if ( m_aUri.isRootFolder() )
+            // Write-Only property. Only supported by root folder and streams
+            // (all non-root folders of a package have the same encryption key).
+            if ( m_aUri.isRootFolder() || m_aProps.bIsDocument )
             {
-                uno::Reference< beans::XPropertySet > xPropSet(
-                                            getPackage(), uno::UNO_QUERY );
-
-                OSL_ENSURE( xPropSet.is(),
-                            "Content::setPropertyValues - "
-                            "Got no XPropertySet interface from package!" );
-
-                if ( xPropSet.is() )
+                rtl::OUString aNewValue;
+                if ( rValue.Value >>= aNewValue )
                 {
-                    try
+                    if ( aNewValue != m_aProps.aEncryptionKey )
                     {
-                        xPropSet->setPropertyValue(
-                            rtl::OUString::createFromAscii( "EncryptionKey" ),
-                            rValue.Value );
-                    }
-                    catch ( beans::UnknownPropertyException const & e )
-                    {
-                        // setPropertyValue
-                        aRet[ n ] <<= e;
-                    }
-                    catch ( beans::PropertyVetoException const & e )
-                    {
-                        // setPropertyValue
-                        aRet[ n ] <<= e;
-                    }
-                    catch ( lang::IllegalArgumentException const & e )
-                    {
-                        // setPropertyValue
-                        aRet[ n ] <<= e;
-                    }
-                    catch ( lang::WrappedTargetException const & e )
-                    {
-                        // setPropertyValue
-                        aRet[ n ] <<= e;
+                        aEvent.PropertyName = rValue.Name;
+                        aEvent.OldValue     = uno::makeAny(
+                                                m_aProps.aEncryptionKey );
+                        aEvent.NewValue     = uno::makeAny( aNewValue );
+
+                        m_aProps.aEncryptionKey = aNewValue;
+                        nChanged++;
+                        bStore = sal_True;
+                        m_nModifiedProps |= ENCRYPTIONKEY_MODIFIED;
                     }
                 }
                 else
                 {
-                    aRet[ n ] <<= uno::Exception(
+                    aRet[ n ] <<= beans::IllegalTypeException(
                                 rtl::OUString::createFromAscii(
-                                    "No property set for storing the value!" ),
+                                    "Property value has wrong type!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1435,7 +1416,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 aRet[ n ] <<= beans::UnknownPropertyException(
                         rtl::OUString::createFromAscii(
-                            "EncryptionKey only supported by root folder!" ),
+                            "EncryptionKey not supported by non-root folder!" ),
                         static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1544,7 +1525,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     if ( nChanged > 0 )
     {
         // Save changes, if content was already made persistent.
-        if ( bStore && ( m_eState == PERSISTENT ) )
+        if ( ( m_nModifiedProps & ENCRYPTIONKEY_MODIFIED ) ||
+             ( bStore && ( m_eState == PERSISTENT ) ) )
         {
             if ( !storeData( uno::Reference< io::XInputStream >() ) )
             {
@@ -2703,43 +2685,73 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
     if ( !xNA.is() )
         return sal_False;
 
+    uno::Reference< beans::XPropertySet > xPackagePropSet(
+                                                    xNA, uno::UNO_QUERY );
+    OSL_ENSURE( xPackagePropSet.is(),
+                "Content::storeData - "
+                "Got no XPropertySet interface from package!" );
+
+    if ( !xPackagePropSet.is() )
+        return sal_False;
+
     if ( m_nModifiedProps & SEGMENTSIZE_MODIFIED )
     {
         if ( m_aUri.isRootFolder() )
         {
-            // Properties available only from package
-            uno::Reference< beans::XPropertySet > xPackagePropSet(
-                                                        xNA, uno::UNO_QUERY );
-
-            OSL_ENSURE( xPackagePropSet.is(),
-                        "Content::storeData - "
-                        "Got no XPropertySet interface from package!" );
-
-            if ( xPackagePropSet.is() )
+            // Property available only from package
+            try
             {
-                try
-                {
-                    xPackagePropSet->setPropertyValue(
+                xPackagePropSet->setPropertyValue(
                         rtl::OUString::createFromAscii( "SegmentSize" ),
                         uno::makeAny( m_aProps.nSegmentSize ) );
-                    m_nModifiedProps &= ~SEGMENTSIZE_MODIFIED;
-                }
-                catch ( beans::UnknownPropertyException const & )
-                {
-                    // setPropertyValue
-                }
-                catch ( beans::PropertyVetoException const & )
-                {
-                    // setPropertyValue
-                }
-                catch ( lang::IllegalArgumentException const & )
-                {
-                    // setPropertyValue
-                }
-                catch ( lang::WrappedTargetException const & )
-                {
-                    // setPropertyValue
-                }
+                m_nModifiedProps &= ~SEGMENTSIZE_MODIFIED;
+            }
+            catch ( beans::UnknownPropertyException const & )
+            {
+                // setPropertyValue
+            }
+            catch ( beans::PropertyVetoException const & )
+            {
+                // setPropertyValue
+            }
+            catch ( lang::IllegalArgumentException const & )
+            {
+                // setPropertyValue
+            }
+            catch ( lang::WrappedTargetException const & )
+            {
+                // setPropertyValue
+            }
+        }
+    }
+
+    if ( m_nModifiedProps & ENCRYPTIONKEY_MODIFIED )
+    {
+        if ( m_aUri.isRootFolder() )
+        {
+            // Property available only from package and from streams (see below)
+            try
+            {
+                xPackagePropSet->setPropertyValue(
+                        rtl::OUString::createFromAscii( "EncryptionKey" ),
+                        uno::makeAny( m_aProps.aEncryptionKey ) );
+                m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;
+            }
+            catch ( beans::UnknownPropertyException const & )
+            {
+                // setPropertyValue
+            }
+            catch ( beans::PropertyVetoException const & )
+            {
+                // setPropertyValue
+            }
+            catch ( lang::IllegalArgumentException const & )
+            {
+                // setPropertyValue
+            }
+            catch ( lang::WrappedTargetException const & )
+            {
+                // setPropertyValue
             }
         }
     }
@@ -2877,6 +2889,16 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
                                 uno::makeAny( m_aProps.bEncrypted ) );
 
             m_nModifiedProps &= ~ENCRYPTED_MODIFIED;
+        }
+
+        if ( m_nModifiedProps & ENCRYPTIONKEY_MODIFIED )
+        {
+            if ( !isFolder() )
+                xPropSet->setPropertyValue(
+                            rtl::OUString::createFromAscii( "EncryptionKey" ),
+                            uno::makeAny( m_aProps.aEncryptionKey ) );
+
+            m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;
         }
 
         //////////////////////////////////////////////////////////////////
