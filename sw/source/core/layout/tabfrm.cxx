@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-18 09:26:10 $
+ *  last change: $Author: ama $ $Date: 2001-05-09 14:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2350,6 +2350,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
 {
     BOOL bRet = FALSE;
     SwFrm *pFrm = pLay->Lower();
+    SwPageFrm* pPg = NULL;
     while ( pFrm )
     {
         if ( pFrm->Frm().Top() != lYStart )
@@ -2375,10 +2376,19 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if ( WEIT_WECH != pFly->Frm().Top() )
                             pFly->Frm().Pos().Y() += lDiff;
+                        pFly->GetVirtDrawObj()->_SetRectsDirty();
                         if ( pFly->IsFlyInCntFrm() )
                             ((SwFlyInCntFrm*)pFly)->AddRefOfst( lDiff );
-                        else if( pFly->IsAutoPos() )
-                            ((SwFlyAtCntFrm*)pFly)->AddLastCharY( lDiff );
+                        else
+                        {
+                            if( !pPg )
+                                pPg = pLay->FindPageFrm();
+                            SwPageFrm* pOld = pFly->FindPageFrm();
+                            if( pPg != pOld )
+                                pOld->MoveFly( pFly, pPg );
+                            if( pFly->IsAutoPos() )
+                                ((SwFlyAtCntFrm*)pFly)->AddLastCharY( lDiff );
+                        }
                         if ( ::lcl_ArrangeLowers( pFly, pFly->Frm().Top() +
                                 pFly->Prt().Top(), bInva ) )
                             pFly->SetCompletePaint();
