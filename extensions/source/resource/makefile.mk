@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+#   last change: $Author: patrick.luby $ $Date: 2000-09-28 04:20:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,13 @@ NO_BSYMBOLIC=TRUE
 SLOFILES=	$(SLO)$/resource.obj
 
 EXCEPTIONSFILES=	$(SLO)$/resource.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore m ultiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+EXCEPTIONSFILES+=$(SLO)$/staticmbresource.obj
+.ENDIF
 
 LIB1TARGET= 	$(SLB)$/$(TARGET).lib
 LIB1OBJFILES=	$(EXCEPTIONSFILES)
