@@ -28,7 +28,7 @@
 "SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"BorderTop#optional"
 "SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"Height#optional"
 "SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"Width#optional"
-"SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"Number"
+"SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"Number#optional"
 "SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"Orientation#optional"
 "SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"UserDefinedAttributes#optional"
 "SwXDrawPage";"com::sun::star::drawing::GenericDrawPage";"IsBackgroundDark#optional"
