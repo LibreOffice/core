@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:12:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLESCHER_HXX
 #include "xlescher.hxx"
 #endif
@@ -75,7 +73,6 @@
 #ifndef SC_XESTREAM_HXX
 #include "xestream.hxx"
 #endif
-
 
 // Escher client anchor =======================================================
 
@@ -167,7 +164,6 @@ void lclMirrorRectangle( Rectangle& rRect )
 
 } // namespace
 
-
 // ----------------------------------------------------------------------------
 
 XclEscherAnchor::XclEscherAnchor( SCTAB nScTab ) :
@@ -245,7 +241,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor )
         << rAnchor.mnRCol << rAnchor.mnRX
         << rAnchor.mnBRow << rAnchor.mnBY;
 }
-
 
 // ============================================================================
 
