@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-23 09:47:21 $
+ *  last change: $Author: as $ $Date: 2000-12-05 10:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,10 @@
 #include <rtl/ustring.hxx>
 #include <vos/process.hxx>
 #include <svtools/pathoptions.hxx>
+
+#ifndef _L2TXTENC_HXX
+#include <tools/l2txtenc.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -502,6 +506,7 @@ void SfxFilterContainer::RealLoad_Impl()
 
 {
     static sal_Bool bRecurse = sal_False;
+    rtl_TextEncoding aINIEncoding = RTL_TEXTENCODING_DONTKNOW;
 
     LoadArg_Impl* pArg = pImpl->pArg;
     String aString( pArg->aGroup);
@@ -524,8 +529,10 @@ void SfxFilterContainer::RealLoad_Impl()
         }
         else
         {
+            String sLang = String::CreateFromAscii(ResMgr::GetLang());
             aString += '-';
-            aString += String::CreateFromAscii(ResMgr::GetLang());
+            aString += sLang;
+            aINIEncoding = Langcode2TextEncoding((sal_uInt16)sLang.ToInt32());
         }
     }
 
@@ -540,7 +547,7 @@ void SfxFilterContainer::RealLoad_Impl()
     for( sal_uInt16 n = 0; n < nCount; n++ )
     {
         aName = pArg->bInstallIni ? String(S2U(pConfig->GetKeyName( n ))) : String();
-        aLine = pArg->bInstallIni ? String(S2U(pConfig->ReadKey( n ))) : String();
+        aLine = pArg->bInstallIni ? String( pConfig->ReadKey( n ), aINIEncoding ) : String();
         sal_uInt16 nTokCount = aLine.GetTokenCount( ',' );
         if( nTokCount < 8 )
         {
