@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleKeyBinding.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:49:25 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com { module sun { module star { module accessibility {
     pressing one or more keys after each other.  Each individual sequence of
     key strokes </p>
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
 {

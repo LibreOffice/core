@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleEventBroadcaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:48:01 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com { module sun { module star { module accessibility {
     @see AccessibleEventObject
     @see XAccessibleEventListener
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 published interface XAccessibleEventBroadcaster: ::com::sun::star::uno::XInterface
 {
