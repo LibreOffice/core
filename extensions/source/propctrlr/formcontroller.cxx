@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:57:39 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,11 +465,13 @@ namespace pcr
                 case PROPERTY_ID_TIMEFORMAT:
                 case PROPERTY_ID_BORDER:
                 case PROPERTY_ID_DEFAULT_CHECKED:
+                case PROPERTY_ID_STATE:
                 case PROPERTY_ID_COMMANDTYPE:
                 case PROPERTY_ID_CYCLE:
                 case PROPERTY_ID_LISTSOURCETYPE:
                 case PROPERTY_ID_NAVIGATION:
                 case PROPERTY_ID_BUTTONTYPE:
+                case PROPERTY_ID_PUSHBUTTONTYPE:
                 case PROPERTY_ID_SUBMIT_METHOD:
                 case PROPERTY_ID_SUBMIT_ENCODING:
                 case PROPERTY_ID_ORIENTATION:
@@ -656,11 +658,13 @@ namespace pcr
                 case PROPERTY_ID_TIMEFORMAT:
                 case PROPERTY_ID_BORDER:
                 case PROPERTY_ID_DEFAULT_CHECKED:
+                case PROPERTY_ID_STATE:
                 case PROPERTY_ID_COMMANDTYPE:
                 case PROPERTY_ID_CYCLE:
                 case PROPERTY_ID_LISTSOURCETYPE:
                 case PROPERTY_ID_NAVIGATION:
                 case PROPERTY_ID_BUTTONTYPE:
+                case PROPERTY_ID_PUSHBUTTONTYPE:
                 case PROPERTY_ID_SUBMIT_METHOD:
                 case PROPERTY_ID_SUBMIT_ENCODING:
                 case PROPERTY_ID_ORIENTATION:
@@ -1714,14 +1718,8 @@ namespace pcr
             ::rtl::OUString aStrVal;
             PropertyState eState;
 
-            // check, if this is a dialog control
-            sal_Bool bIsDialogControl = sal_False;
-            Reference< XPropertySetInfo >  xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
-            if ( xPropInfo->hasPropertyByName( PROPERTY_WIDTH ) &&
-                 xPropInfo->hasPropertyByName( PROPERTY_HEIGHT ) &&
-                 xPropInfo->hasPropertyByName( PROPERTY_POSITIONX ) &&
-                 xPropInfo->hasPropertyByName( PROPERTY_POSITIONY ) )
-                bIsDialogControl = sal_True;
+            // get control type
+            sal_Int16 nControlType = getControlType();
 
             for (sal_uInt32 i=0; i<nPropCount; ++i, ++pProps)
             {
@@ -1916,13 +1914,13 @@ namespace pcr
 
                 else if (TypeClass_BYTE <=eType && eType<=TypeClass_DOUBLE)
                 {
-                    if (nPropId==PROPERTY_ID_DATEMIN || nPropId==PROPERTY_ID_DATEMAX || nPropId==PROPERTY_ID_DEFAULT_DATE)
+                    if (nPropId==PROPERTY_ID_DATEMIN || nPropId==PROPERTY_ID_DATEMAX || nPropId==PROPERTY_ID_DEFAULT_DATE || nPropId==PROPERTY_ID_DATE)
                         pProperty->eControlType = BCT_DATEFIELD;
-                    else if (nPropId==PROPERTY_ID_TIMEMIN || nPropId==PROPERTY_ID_TIMEMAX|| nPropId==PROPERTY_ID_DEFAULT_TIME)
+                    else if (nPropId==PROPERTY_ID_TIMEMIN || nPropId==PROPERTY_ID_TIMEMAX || nPropId==PROPERTY_ID_DEFAULT_TIME || nPropId==PROPERTY_ID_TIME)
                         pProperty->eControlType = BCT_TIMEFIELD;
                     else
                     {
-                        if (nPropId== PROPERTY_ID_VALUEMIN || nPropId== PROPERTY_ID_VALUEMAX || nPropId==PROPERTY_ID_DEFAULT_VALUE)
+                        if (nPropId== PROPERTY_ID_VALUEMIN || nPropId== PROPERTY_ID_VALUEMAX || nPropId==PROPERTY_ID_DEFAULT_VALUE || nPropId==PROPERTY_ID_VALUE)
                         {
                             pProperty->eControlType = BCT_USERDEFINED;
                             pProperty->pControl = new OFormattedNumericControl(getPropertyBox(), WB_TABSTOP | WB_BORDER | WB_SPIN);
@@ -1954,13 +1952,14 @@ namespace pcr
                                 // just ignore it
                             }
 
-                            // and allow empty values only for the default value
+                            // and allow empty values only for the default value and the value
                             ((OFormattedNumericControl*)pProperty->pControl)->EnableEmptyField(PROPERTY_ID_DEFAULT_VALUE == nPropId);
+                            ((OFormattedNumericControl*)pProperty->pControl)->EnableEmptyField(PROPERTY_ID_VALUE == nPropId);
                         }
                         else
                         {
                             if ( (nPropId== PROPERTY_ID_HEIGHT || nPropId== PROPERTY_ID_WIDTH || nPropId== PROPERTY_ID_ROWHEIGHT)
-                                && !bIsDialogControl )
+                                && nControlType == CONTROL_TYPE_FORM )
                                 pProperty->nDigits=1;
 
                             pProperty->eControlType = BCT_NUMFIELD;
@@ -1968,9 +1967,9 @@ namespace pcr
                     }
                 }
 
-
-                if (bIsDialogControl)
-                    bFilter = sal_False;    // don't filter dialog controls
+                // don't filter dialog controls
+                if ( nControlType == CONTROL_TYPE_DIALOG )
+                    bFilter = sal_False;
 
                 //////////////////////////////////////////////////////////////////////
                 // Filter
@@ -2040,6 +2039,7 @@ namespace pcr
                     case PROPERTY_ID_COMMANDTYPE:
                     case PROPERTY_ID_ALIGN:
                     case PROPERTY_ID_BUTTONTYPE:
+                    case PROPERTY_ID_PUSHBUTTONTYPE:
                     case PROPERTY_ID_SUBMIT_METHOD:
                     case PROPERTY_ID_SUBMIT_ENCODING:
                     case PROPERTY_ID_DATEFORMAT:
@@ -2049,6 +2049,7 @@ namespace pcr
                     case PROPERTY_ID_NAVIGATION:
                     case PROPERTY_ID_TARGET_FRAME:
                     case PROPERTY_ID_DEFAULT_CHECKED:
+                    case PROPERTY_ID_STATE:
                     case PROPERTY_ID_LISTSOURCETYPE:
                     case PROPERTY_ID_ORIENTATION:
                     case PROPERTY_ID_IMAGEALIGN:
@@ -2058,7 +2059,7 @@ namespace pcr
                         const ::rtl::OUString* pEnd = pStart + aEnumValues.getLength();
 
                         // for a checkbox: if "ambiguous" is not allowed, remove this from the sequence
-                        if (PROPERTY_ID_DEFAULT_CHECKED == nPropId)
+                        if (PROPERTY_ID_DEFAULT_CHECKED == nPropId || PROPERTY_ID_STATE == nPropId)
                             if (::comphelper::hasProperty(PROPERTY_TRISTATE, m_xPropValueAccess))
                             {
                                 if (!::comphelper::getBOOL(m_xPropValueAccess->getPropertyValue(PROPERTY_TRISTATE)))
@@ -2182,7 +2183,14 @@ namespace pcr
                     pProperty->bUnknownValue = sal_True;
                     pProperty->sValue = String();
                 }
-                getPropertyBox()->InsertEntry(*pProperty);
+
+                sal_uInt32 nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( nPropId );
+                if ( ( nControlType == CONTROL_TYPE_FORM   && ((nPropertyUIFlags & PROP_FORM_VISIBLE) == PROP_FORM_VISIBLE) ) ||
+                     ( nControlType == CONTROL_TYPE_DIALOG && ((nPropertyUIFlags & PROP_DIALOG_VISIBLE) == PROP_DIALOG_VISIBLE) ) )
+                {
+                    getPropertyBox()->InsertEntry(*pProperty);
+                }
+
                 delete pProperty;
             }
 
@@ -2403,9 +2411,9 @@ namespace pcr
                 aValue = StringToAny( aUserVal, aProp, nPropId);
             }
 
-            if  (   (   (nPropId == PROPERTY_ID_DEFAULT_VALUE)
-                    ||  (nPropId == PROPERTY_ID_DEFAULT_DATE)
-                    ||  (nPropId == PROPERTY_ID_DEFAULT_TIME)
+            if  (   (   (nPropId == PROPERTY_ID_DEFAULT_VALUE) || (nPropId == PROPERTY_ID_VALUE)
+                    ||  (nPropId == PROPERTY_ID_DEFAULT_DATE)  || (nPropId == PROPERTY_ID_DATE)
+                    ||  (nPropId == PROPERTY_ID_DEFAULT_TIME)  || (nPropId == PROPERTY_ID_TIME)
                     ||  (nPropId==PROPERTY_ID_BOUNDCOLUMN)
                     )
                 &&  (0 == aVal.Len())
@@ -2438,16 +2446,31 @@ namespace pcr
 
             if (nPropId==PROPERTY_ID_TRISTATE)
             {
+                ::rtl::OUString aStateName;
+                sal_Int32 nStateId;
+                sal_Int16 nControlType = getControlType();
+
+                if ( nControlType == CONTROL_TYPE_FORM )
+                {
+                    aStateName = PROPERTY_DEFAULTCHECKED;
+                    nStateId = PROPERTY_ID_DEFAULT_CHECKED;
+                }
+                else if ( nControlType == CONTROL_TYPE_DIALOG )
+                {
+                    aStateName = PROPERTY_STATE;
+                    nStateId = PROPERTY_ID_STATE;
+                }
+
                 OLineDescriptor aProperty;
-                aProperty.sName             = (const ::rtl::OUString&)PROPERTY_DEFAULTCHECKED;
-                aProperty.sTitle            =   m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_DEFAULT_CHECKED);
-                aProperty.nHelpId           =   m_pPropertyInfo->getPropertyHelpId(PROPERTY_ID_DEFAULT_CHECKED);
+                aProperty.sName             =   aStateName;
+                aProperty.sTitle            =   m_pPropertyInfo->getPropertyTranslation(nStateId);
+                aProperty.nHelpId           =   m_pPropertyInfo->getPropertyHelpId(nStateId);
                 aProperty.eControlType      =   BCT_LISTBOX;
-                aProperty.sValue            =   getPropertyBox()->GetPropertyValue(PROPERTY_DEFAULTCHECKED);
-                sal_uInt16 nPos             =   getPropertyBox()->GetPropertyPos(PROPERTY_DEFAULTCHECKED);
+                aProperty.sValue            =   getPropertyBox()->GetPropertyValue(aStateName);
+                sal_uInt16 nPos             =   getPropertyBox()->GetPropertyPos(aStateName);
 
                 Sequence< ::rtl::OUString > aEntries =
-                    m_pPropertyInfo->getPropertyEnumRepresentations(PROPERTY_ID_DEFAULT_CHECKED);
+                    m_pPropertyInfo->getPropertyEnumRepresentations(nStateId);
                 sal_Int32 nEntryCount = aEntries.getLength();
 
                 if (!::comphelper::getBOOL(aNewValue))
@@ -2457,7 +2480,7 @@ namespace pcr
                 sal_Bool bValidDefaultCheckedValue = sal_False;
 
                 const ::rtl::OUString* pStart = aEntries.getConstArray();
-                const ::rtl::OUString* pEnd = pStart + aEntries.getLength();
+                const ::rtl::OUString* pEnd = pStart + nEntryCount;
                 for (const ::rtl::OUString* pLoop = pStart; pLoop != pEnd; ++pLoop)
                 {
                     aProperty.aListValues.push_back(*pLoop);
@@ -2585,6 +2608,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2001/08/27 16:57:39  fs
+ *  #91537# changed the runtime representation for form (control) StarBasic script events (now with 'application' resp. 'document')
+ *
  *  Revision 1.42  2001/08/20 07:53:50  ab
  *  #90513# application and document location prefixes
  *

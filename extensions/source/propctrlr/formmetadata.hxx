@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 10:37:54 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace pcr
         sal_Int32               getPropertyHelpId(sal_Int32 _nId) const;
         sal_Int16               getPropertyPos(sal_Int32 _nId) const;
         sal_Bool                getPropertyMultiFlag(sal_Int32 _nId) const;
+        sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const;
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 getPropertyEnumRepresentations(sal_Int32 _nId) const;
 
@@ -128,6 +129,14 @@ namespace pcr
     //= event helpers
     //========================================================================
     EventDisplayDescription* GetEvtTranslation(const ::rtl::OUString& _rName);
+
+    //========================================================================
+    //= UI flags (for all browseable properties)
+    //========================================================================
+
+    const sal_uInt32 PROP_NONE_VISIBLE              = 0x00000000;
+    const sal_uInt32 PROP_FORM_VISIBLE              = 0x00000001;
+    const sal_uInt32 PROP_DIALOG_VISIBLE            = 0x00000002;
 
     //========================================================================
     //= property ids (for all browseable properties)
@@ -243,6 +252,12 @@ namespace pcr
     #define PROPERTY_ID_VISIBLESIZE          110
     #define PROPERTY_ID_ORIENTATION          111
     #define PROPERTY_ID_IMAGEALIGN           112
+    #define PROPERTY_ID_DATE                 113
+    #define PROPERTY_ID_STATE                114
+    #define PROPERTY_ID_TIME                 115
+    #define PROPERTY_ID_VALUE                116
+    #define PROPERTY_ID_SCALEIMAGE           117
+    #define PROPERTY_ID_PUSHBUTTONTYPE       118
 
 //............................................................................
 } // namespace pcr
@@ -253,6 +268,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/06 10:37:54  fs
+ *  #86837# +PROPERTY_IMAGEALIGN
+ *
  *  Revision 1.8  2001/05/02 12:42:11  tbe
  *  added scrollbar properties
  *

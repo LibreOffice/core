@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 15:45:53 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,11 @@ namespace pcr
 
 #define OWN_PROPERTY_ID_INTROSPECTEDOBJECT  0x0010
 #define OWN_PROPERTY_ID_CURRENTPAGE         0x0011
+
+    // control types
+    const sal_Int16 CONTROL_TYPE_UNKNOWN    =   0;
+    const sal_Int16 CONTROL_TYPE_FORM       =   1;
+    const sal_Int16 CONTROL_TYPE_DIALOG     =   2;
 
     //========================================================================
     //= OPropertyBrowserController
@@ -406,6 +411,8 @@ namespace pcr
 
         sal_Bool Construct(Window* _pParentWin);
 
+        sal_Int16 getControlType() const;
+
     private:
         DECL_LINK(OnPageActivation, void*);
     };
@@ -419,6 +426,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/08/13 15:45:53  fs
+ *  #90958# +getRowSet / +ensureRowsetConnection
+ *
  *  Revision 1.11  2001/08/06 14:52:59  fs
  *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
  *

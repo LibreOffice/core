@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 08:46:10 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,11 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ORIENTATION,            "Orientation");
     PCR_CONSTASCII_STRING( PROPERTY_IMAGEALIGN,             "ImageAlign");
     PCR_CONSTASCII_STRING( PROPERTY_ACTIVE_CONNECTION,      "ActiveConnection");
+    PCR_CONSTASCII_STRING( PROPERTY_DATE,                   "Date");
+    PCR_CONSTASCII_STRING( PROPERTY_STATE,                  "State");
+    PCR_CONSTASCII_STRING( PROPERTY_TIME,                   "Time");
+    PCR_CONSTASCII_STRING( PROPERTY_SCALEIMAGE,             "ScaleImage");
+    PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
@@ -216,6 +221,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/08/07 08:46:10  fs
+ *  #87690# +ACTIVE_CONNECTION
+ *
  *  Revision 1.11  2001/08/06 14:51:43  fs
  *  #87690# PROPERTY_URL/PROPERTY_PASSWORD / removed some unused strings
  *

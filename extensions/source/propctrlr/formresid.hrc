@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-28 14:54:09 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,13 @@
 #define RID_STR_ENUM_ORIENTATION            ( RID_FORMBROWSER_START + 180 )
 #define RID_STR_ENUM_SIDE_ALIGN             ( RID_FORMBROWSER_START + 181 )
 #define RID_STR_EVT_ADJUSTMENTVALUECHANGED  ( RID_FORMBROWSER_START + 182 )
+#define RID_STR_DATE                        ( RID_FORMBROWSER_START + 183 )
+#define RID_STR_STATE                       ( RID_FORMBROWSER_START + 184 )
+#define RID_STR_TIME                        ( RID_FORMBROWSER_START + 185 )
+#define RID_STR_SCALEIMAGE                  ( RID_FORMBROWSER_START + 186 )
+#define RID_STR_PUSHBUTTONTYPE              ( RID_FORMBROWSER_START + 187 )
+#define RID_STR_ENUM_PUSHBUTTONTYPE         ( RID_FORMBROWSER_START + 188 )
+
 
 // -----------------------------------------------------------------------
 // - dialogs
@@ -285,6 +292,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/09/28 14:54:09  tbe
+ *  #92258# click handler for Basic Scrollbar
+ *
  *  Revision 1.10  2001/06/06 10:36:52  fs
  *  #86837# +RID_STR_ENUM_SIDE_ALIGN
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:31:43 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace pcr
         virtual sal_Int32               getPropertyHelpId(sal_Int32 _nId) const = 0;
         virtual sal_Int16               getPropertyPos(sal_Int32 _nId) const = 0;
         virtual sal_Bool                getPropertyMultiFlag(sal_Int32 _nId) const = 0;
+        virtual sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const = 0;
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                         getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
     };
@@ -104,6 +105,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:31:43  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 12:02:53  fs
  ************************************************************************/

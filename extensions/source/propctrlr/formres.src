@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-12 20:59:02 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4682,9 +4682,42 @@ String RID_STR_EVT_ADJUSTMENTVALUECHANGED
     Text[ arabic ] = "On adjust";
     Text[ catalan ] = "On adjust";
 };
+String RID_STR_DATE
+{
+    Text = "Datum" ;
+    Text [ ENGLISH ] = "Date" ;
+};
+String RID_STR_STATE
+{
+    Text = "Status" ;
+    Text [ ENGLISH ] = "State" ;
+};
+String RID_STR_TIME
+{
+    Text = "Zeit" ;
+    Text [ ENGLISH ] = "Time" ;
+};
+String RID_STR_SCALEIMAGE
+{
+    Text = "Skalieren" ;
+    Text [ ENGLISH ] = "Scaling" ;
+};
+String RID_STR_PUSHBUTTONTYPE
+{
+    Text = "Art der Schaltfläche" ;
+    Text [ ENGLISH ] = "Button type" ;
+};
+String RID_STR_ENUM_PUSHBUTTONTYPE
+{
+    Text = "Standard;OK;Cancel;Help" ;
+    Text [ ENGLISH ] = "Standard;OK;Cancel;Help" ;
+};
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/10/12 20:59:02  kz
+ *  Merge SRC641: 12.10.01 - 22:58:19
+ *
  *  Revision 1.27  2001/09/28 14:54:09  tbe
  *  #92258# click handler for Basic Scrollbar
  *

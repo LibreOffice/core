@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:52:59 $
+ *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,33 @@ namespace pcr
         return sReturn;
     }
 
+    //------------------------------------------------------------------------
+    sal_Int16 OPropertyBrowserController::getControlType() const
+    {
+        sal_Int16 nControlType = CONTROL_TYPE_UNKNOWN;
+
+        if ( m_xIntrospecteeAsProperty.is() )
+        {
+            Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
+
+            if ( xPropInfo.is() )
+            {
+                if ( xPropInfo->hasPropertyByName( PROPERTY_WIDTH ) &&
+                     xPropInfo->hasPropertyByName( PROPERTY_HEIGHT ) &&
+                     xPropInfo->hasPropertyByName( PROPERTY_POSITIONX ) &&
+                     xPropInfo->hasPropertyByName( PROPERTY_POSITIONY ) )
+                {
+                    nControlType = CONTROL_TYPE_DIALOG;
+                }
+                else
+                {
+                    nControlType = CONTROL_TYPE_FORM;
+                }
+            }
+        }
+        return nControlType;
+    }
+
 //............................................................................
 } // namespace pcr
 //............................................................................
@@ -1050,6 +1077,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/08/06 14:52:59  fs
+ *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
+ *
  *  Revision 1.14  2001/06/11 11:33:04  fs
  *  #86096# changed the implementation name for consistency
  *
