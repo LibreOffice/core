@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Sortieren der Eingabefelder
+    Description: Sorted list of input fields and DropDown fields
  --------------------------------------------------------------------*/
 
 class SwInputFieldList
