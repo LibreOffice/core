@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 14:57:14 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:43:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,3 +79,4 @@ SHL1VERSIONMAP := export.map
 DEF1NAME := $(SHL1TARGET)
 
 .INCLUDE: target.mk
+.INCLUDE : _cppunit.mk
