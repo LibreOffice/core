@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.36 2001-05-07 12:07:26 dvo Exp $
+	$Id: style.mod,v 1.37 2001-05-15 12:44:13 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -342,6 +342,7 @@
 >
 <!ELEMENT style:columns (style:column-sep?,style:column*)>
 <!ATTLIST style:columns fo:column-count %nonNegativeInteger; #IMPLIED>
+<!ATTLIST style:columns fo:column-gap %positiveLength; #IMPLIED>
 
 <!ELEMENT style:column EMPTY>
 <!ATTLIST style:column style:rel-width CDATA #IMPLIED>
