@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:28:27 $
+ *  last change:$Date: 2005-02-24 17:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,7 @@ public class FrameLoader extends TestCase {
         //now get the OButtonControl
         try {
             oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.frame.FrameLoaderFactory") ;
-            XMultiServiceFactory facMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                oInterface);
-            oInterface = facMSF.createInstance
-                ("com.sun.star.frame.Bibliography");
+                ("com.sun.star.comp.office.FrameLoader") ;
 
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
@@ -134,7 +129,7 @@ public class FrameLoader extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // adding relation for XFrameLoader
-        tEnv.addObjRelation("FrameLoader.URL",".component:Bibliography/View1");
+        tEnv.addObjRelation("FrameLoader.URL","private:factory/swriter");
 
         return tEnv;
     } // finish method getTestEnvironment
