@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.25 2002-05-27 20:14:54 kz Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.26 2002-06-10 15:12:10 vg Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: kz $ $Date: 2002-05-27 20:14:54 $ $Revision: 1.25 $
+ //  $Author: vg $ $Date: 2002-06-10 15:12:10 $ $Revision: 1.26 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -57,8 +57,8 @@ ModalDialog DLG_REL_PROPERTIES
             Text[ swedish ] = "inkluderade tabeller";
             Text[ polish ] = "implikowane tabele";
             Text[ portuguese_brazilian ] = "involved tables";
-            Text[ japanese ] = "関連ﾃｰﾌﾞﾙ";
-            Text[ korean ] = "관련 표";
+            Text[ japanese ] = "関連テーブル";
+            Text[ korean ] = "관련 테이블";
             Text[ chinese_simplified ] = "有关联的表格";
             Text[ chinese_traditional ] = "相關的表格";
             Text[ arabic ] = "������� �������";
@@ -106,7 +106,7 @@ ModalDialog DLG_REL_PROPERTIES
             Text[ swedish ] = "inkluderade f�lt";
             Text[ polish ] = "implikowane pola";
             Text[ portuguese_brazilian ] = "involved fields";
-            Text[ japanese ] = "関連ﾌｨｰﾙﾄﾞ";
+            Text[ japanese ] = "関連フィールド";
             Text[ korean ] = "관련 필드";
             Text[ chinese_simplified ] = "有关联的字段";
             Text[ chinese_traditional ] = "相關的欄位";
