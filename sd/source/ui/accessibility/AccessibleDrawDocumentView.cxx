@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:03:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,10 +660,18 @@ void
                     aAny >>= xShapes;
 
                     // Search shape to be selected in current selection.
-                    for(sal_Int32 i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bFound; ++i )
-                        if( xShapes->getByIndex( i ) == xShape )
-                            bFound = sal_True;
+                    if (xShapes.is())
+                    {
+                        sal_Int32 nCount = xShapes->getCount();
+                        for (sal_Int32 i=0; ( i < nCount ) && !bFound; ++i )
+                            if( xShapes->getByIndex( i ) == xShape )
+                                bFound = sal_True;
+                    }
+                    else
+                        // Create an empty selection to add the shape to.
+                        xShapes = new SvxShapeCollection();
 
+                    // Update the selection.
                     if( !bFound && bSelect )
                         xShapes->add( xShape );
                     else if( bFound && !bSelect )
