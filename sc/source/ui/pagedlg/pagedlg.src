@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 12:42:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
         QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_REPEATROW
     {
@@ -474,6 +475,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
         QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_REPEATCOL
     {
@@ -654,6 +656,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
         QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     Text [ swedish ] = "Redigera utskriftsomrÂden" ;
     Text [ danish ] = "Rediger udskriftsomrÂde" ;
