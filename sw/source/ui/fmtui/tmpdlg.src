@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:14:57 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,6 +973,26 @@ String STR_PAGE_TEXTGRID
 {
     Text = "Textraster" ;
     Text [ ENGLISH ] = "Text Grid" ;
+    Text[ english_us ] = "Text Grid";
+    Text[ portuguese ] = "Text Grid";
+    Text[ russian ] = "Text Grid";
+    Text[ greek ] = "Text Grid";
+    Text[ dutch ] = "Text Grid";
+    Text[ french ] = "Grille du texte";
+    Text[ spanish ] = "Cuadr�cula de texto";
+    Text[ finnish ] = "Text Grid";
+    Text[ italian ] = "Griglia di testo";
+    Text[ danish ] = "Text Grid";
+    Text[ swedish ] = "Textraster";
+    Text[ polish ] = "Text Grid";
+    Text[ portuguese_brazilian ] = "Text Grid";
+    Text[ japanese ] = "文字グリッド線";
+    Text[ korean ] = "문자 수/열 수";
+    Text[ chinese_simplified ] = "文字格子线";
+    Text[ chinese_traditional ] = "文字格子線";
+    Text[ turkish ] = "Text Grid";
+    Text[ arabic ] = "Text Grid";
+    Text[ catalan ] = "Text Grid";
 };
 String STR_PAGE_COLUMN
 {
