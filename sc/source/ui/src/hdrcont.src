@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:10:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
         Text[ czech ] = "Formát buněk...";\
         Text[ hebrew ] = "~Zellen formatieren...";\
         Text[ hindi ] = "कोष्ठों का ~रचना करो...";\
+        Text[ slovak ] = "~Formát buniek...";\
     };
 
 
@@ -130,6 +131,7 @@
         Text[ czech ] = "Vyjmout";\
         Text[ hebrew ] = "‮גזירה‬";\
         Text[ hindi ] = "का~टो";\
+        Text[ slovak ] = "Vys~trihnúť";\
     };\
     MenuItem\
     {\
@@ -162,6 +164,7 @@
         Text[ czech ] = "Kopírovat";\
         Text[ hebrew ] = "‮העתקה‬";\
         Text[ hindi ] = "~प्रतिलिपि";\
+        Text[ slovak ] = "~Kopírovať";\
     };\
     MenuItem\
     {\
@@ -196,6 +199,7 @@
         Text[ czech ] = "Vložit";\
         Text[ hebrew ] = "‮הדבקה‬";\
         Text[ hindi ] = "~छिपकाओ";\
+        Text[ slovak ] = "~Vložiť";\
     };
 
  //-------------------------------------------------------------------------------
@@ -241,6 +245,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Výška...";
             Text[ hebrew ] = "‮גובה...‬";
             Text[ hindi ] = "ऊँ~चाई...";
+            Text[ slovak ] = "Výš~ka...";
         };
         MenuItem
         {
@@ -275,6 +280,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Optimální výška řádku...";
             Text[ hebrew ] = "~Optimale Zeilenhöhe...";
             Text[ hindi ] = "योग्य ~पंक्ति की ऊँचाई...";
+            Text[ slovak ] = "Optimálna výška ~riadka...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -312,6 +318,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Vložit řádky";
             Text[ hebrew ] = "Zeilen ~einfügen";
             Text[ hindi ] = "पंक्तियों को ~जोड़ो";
+            Text[ slovak ] = "Vložiť r~iadky";
         };
         MenuItem
         {
@@ -346,6 +353,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Smazat řádky";
             Text[ hebrew ] = "Zeilen ~löschen";
             Text[ hindi ] = "पंक्तियों को ~मिटाओ";
+            Text[ slovak ] = "Zmazať ria~dky";
         };
         MenuItem
         {
@@ -381,6 +389,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Smazat obsah...";
             Text[ hebrew ] = "Inhalte l~öschen...";
             Text[ hindi ] = "विषयों को मि~टाओ...";
+            Text[ slovak ] = "Z~mazať obsah...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -416,6 +425,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Skrýt";
             Text[ hebrew ] = "~Ausblenden";
             Text[ hindi ] = "~छिपाओ";
+            Text[ slovak ] = "S~kryť";
         };
         MenuItem
         {
@@ -448,6 +458,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Zobrazit";
             Text[ hebrew ] = "Ein~blenden";
             Text[ hindi ] = "~दिखाओ";
+            Text[ slovak ] = "~Zobraziť";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -485,6 +496,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ czech ] = "Vložit jako...";
             Text[ hebrew ] = "‮הדבקה מיוחדת‬";
             Text[ hindi ] = "विशेष को छि~पकाओ...";
+            Text[ slovak ] = "Vložiť in~ak...";
         };
     };
 };
@@ -531,6 +543,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Šířka sloupce...";
             Text[ hebrew ] = "Spalte~nbreite...";
             Text[ hindi ] = "स्तं~भ चौड़ाई...";
+            Text[ slovak ] = "Ší~rka stĺpca...";
         };
         MenuItem
         {
@@ -563,6 +576,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Optimální šířka sloupce...";
             Text[ hebrew ] = "~Optimale Spaltenbreite...";
             Text[ hindi ] = "O~ptimal Column Width...";
+            Text[ slovak ] = "O~ptimálna šírka stĺpca...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -600,6 +614,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Vložit sloupce";
             Text[ hebrew ] = "Spalten ~einfügen";
             Text[ hindi ] = "स्तंभ ~जोड़ो";
+            Text[ slovak ] = "Vlož~iť stĺpce";
         };
         MenuItem
         {
@@ -634,6 +649,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Smazat sloupce";
             Text[ hebrew ] = "Spalten ~löschen";
             Text[ hindi ] = "स्तंभ ~मिटाओ";
+            Text[ slovak ] = "~Zmazať stĺpce";
         };
         MenuItem
         {
@@ -669,6 +685,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Smazat obsah...";
             Text[ hebrew ] = "Inhalte l~öschen...";
             Text[ hindi ] = "विषयों को मि~टाओ...";
+            Text[ slovak ] = "Zm~azať obsah...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -704,6 +721,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Skrýt";
             Text[ hebrew ] = "~Ausblenden";
             Text[ hindi ] = "~छिपाओ";
+            Text[ slovak ] = "S~kryť";
         };
         MenuItem
         {
@@ -736,6 +754,7 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Zobrazit";
             Text[ hebrew ] = "Ein~blenden";
             Text[ hindi ] = "~दिखाओ";
+            Text[ slovak ] = "~Zobraziť";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -773,9 +792,12 @@ Menu RID_POPUP_COLHEADER
             Text[ czech ] = "Vložit jinak...";
             Text[ hebrew ] = "‮הדבקה מיוחדת...‬";
             Text[ hindi ] = "~विशेष को छिपकाओ...";
+            Text[ slovak ] = "Vložiť i~nak...";
         };
     };
 };
+
+
 
 
 
