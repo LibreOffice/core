@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:30:07 $
+ *  last change: $Author: tl $ $Date: 2001-05-15 07:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4426,30 +4426,8 @@ ErrorBox RID_WRITESYMBOLERROR
 };
 ErrorBox RID_READSYMBOLERROR
 {
-    Message = "Die Symboldatei '%FILE%' kann nicht geladen werden !" ;
-    Message [ ENGLISH ] = "The symbolfile '%FILE%' can not load!" ;
-    Message [ norwegian ] = "The symbolfile '%FILE%' can not load!" ;
-    Message [ italian ] = "Impossibile caricare il file dei simboli '%FILE%'." ;
-    Message [ portuguese_brazilian ] = "O arquivo símbolo '%FILE%' não pode carregar!" ;
-    Message [ portuguese ] = "O ficheiro de símbolos '%FILE%' não pode ser carregado!" ;
-    Message [ finnish ] = "Symbolitiedostoa '%FILE%' ei voitu ladata." ;
-    Message [ danish ] = "Det er ikke muligt at indlæse symbolfilen '%FILE%'!" ;
-    Message [ french ] = "Impossible de charger le fichier de symboles '%FILE%' !" ;
-    Message [ swedish ] = "Symbolfilen '%FILE%' kan inte laddas !" ;
-    Message [ dutch ] = "Het symbolenbestand '%FILE%' kan niet worden geladen!" ;
-    Message [ spanish ] = "¡No se puede cargar el archivo de símbolos '%FILE%'!" ;
-    Message [ english_us ] = "The symbol file '%FILE%' cannot be loaded." ;
-    Message[ chinese_simplified ] = "ÎŞ·¨×°ÈëÍ¼±êÎÄ¼ş'%FILE%' £¡";
-    Message[ russian ] = "Çàãğóçèòü ôàéë ñèìâîëîâ '%FILE%' íå óäàåòñÿ !";
-    Message[ polish ] = "Pliku symboli '%FILE%' nie mo¿na za³adowaæ!";
-    Message[ japanese ] = "'%FILE%' ‹L†Ì§²Ù‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "µLªk¸ü¤J¹Ï¥ÜÀÉ®×'%FILE%' ¡I";
-    Message[ arabic ] = "áÇ íãßä ÊÍãíá ãáİ ÇáÑãæÒ '%FILE%'!";
-    Message[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé öüñôùóç ôïõ áñ÷åßïõ óõìâüëùí '%FILE%'!";
-    Message[ korean ] = "±âÈ£ ÆÄÀÏ'%FILE%'À»(¸¦) ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù!";
-    Message[ turkish ] = "Simge dosyası '%FILE%' yüklenemiyor!";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "¡No se puede cargar el archivo de símbolos '%FILE%'!";
+    Message = "Die Symbole konnten nicht geladen werden!" ;
+    Message [ ENGLISH ] = "The symbols could not be loaded!" ;
 };
 
 FloatingWindow RID_TOOLBOXWINDOW
