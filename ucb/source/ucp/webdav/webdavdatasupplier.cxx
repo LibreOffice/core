@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:14 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,13 +142,14 @@ struct DataSupplier_Impl
     uno::Reference< lang::XMultiServiceFactory > m_xSMgr;
     sal_Int32                                    m_nOpenMode;
     sal_Bool                                     m_bCountFinal;
+    sal_Bool                                     m_bThrowException;
 
     DataSupplier_Impl(
                 const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
                 const rtl::Reference< Content >& rContent,
                 sal_Int32 nOpenMode )
-    : m_xContent( rContent ), m_xSMgr( rxSMgr ),
-      m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
+    : m_xContent( rContent ), m_xSMgr( rxSMgr ), m_nOpenMode( nOpenMode ),
+      m_bCountFinal( sal_False ), m_bThrowException( sal_False ) {}
     ~DataSupplier_Impl();
 };
 
@@ -397,6 +398,8 @@ void DataSupplier::close()
 void DataSupplier::validate()
     throw( com::sun::star::ucb::ResultSetException )
 {
+    if ( m_pImpl->m_bThrowException )
+        throw com::sun::star::ucb::ResultSetException();
 }
 
 //=========================================================================
@@ -444,81 +447,89 @@ sal_Bool DataSupplier::getData()
           catch ( DAVException & )
         {
 //          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
-            return sal_False;
+            m_pImpl->m_bThrowException = sal_True;
           }
 
-        NeonUri aURI( m_pImpl->m_xContent->getResourceAccess().getURL() );
-        rtl::OUString aPath = aURI.GetPath();
-        if ( aPath.getStr()[ aPath.getLength() - 1 ] == sal_Unicode( '/' ) )
-            aPath = aPath.copy( 0, aPath.getLength() - 1 );
-
-        aPath = NeonUri::unescape( aPath );
-        bool bFoundParent = false;
-
-        for ( sal_uInt32 n = 0; n < resources.size(); ++n )
+        if ( !m_pImpl->m_bThrowException )
         {
-            const DAVResource & rRes = resources[ n ];
+            NeonUri aURI( m_pImpl->m_xContent->getResourceAccess().getURL() );
+            rtl::OUString aPath = aURI.GetPath();
+            if ( aPath.getStr()[ aPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+                aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
-            // Filter out parent, which is contained somewhere(!) in the vector.
-            if ( !bFoundParent )
+            aPath = NeonUri::unescape( aPath );
+            bool bFoundParent = false;
+
+            for ( sal_uInt32 n = 0; n < resources.size(); ++n )
             {
-                NeonUri aCurrURI( rRes.uri );
-                rtl::OUString aCurrPath = aCurrURI.GetPath();
-                if ( aCurrPath.getStr()[
-                        aCurrPath.getLength() - 1 ] == sal_Unicode( '/' ) )
-                    aCurrPath = aCurrPath.copy( 0, aCurrPath.getLength() - 1 );
+                const DAVResource & rRes = resources[ n ];
 
-                aCurrPath = NeonUri::unescape( aCurrPath );
-                if ( aPath == aCurrPath )
+                // Filter parent, which is contained somewhere(!) in the vector.
+                if ( !bFoundParent )
                 {
-                    bFoundParent = true;
-                    continue;
-                }
-            }
+                    NeonUri aCurrURI( rRes.uri );
+                    rtl::OUString aCurrPath = aCurrURI.GetPath();
+                    if ( aCurrPath.getStr()[
+                            aCurrPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+                        aCurrPath
+                            = aCurrPath.copy( 0, aCurrPath.getLength() - 1 );
 
-            ContentProperties* pContentProperties
-                = new ContentProperties( rRes );
-
-            // Check resource against open mode.
-            switch ( m_pImpl->m_nOpenMode )
-            {
-                case com::sun::star::ucb::OpenMode::FOLDERS:
-                {
-                    sal_Bool bFolder = sal_False;
-
-                    const uno::Any & rValue
-                        = pContentProperties->getValue(
-                            rtl::OUString::createFromAscii( "IsFolder" ) );
-                    rValue >>= bFolder;
-
-                    if ( !bFolder )
+                    aCurrPath = NeonUri::unescape( aCurrPath );
+                    if ( aPath == aCurrPath )
+                    {
+                        bFoundParent = true;
                         continue;
-
-                    break;
+                    }
                 }
 
-                case com::sun::star::ucb::OpenMode::DOCUMENTS:
+                ContentProperties* pContentProperties
+                    = new ContentProperties( rRes );
+
+                // Check resource against open mode.
+                switch ( m_pImpl->m_nOpenMode )
                 {
-                    sal_Bool bDocument = sal_False;
+                    case com::sun::star::ucb::OpenMode::FOLDERS:
+                    {
+                        sal_Bool bFolder = sal_False;
 
-                    const uno::Any & rValue
-                        = pContentProperties->getValue(
-                            rtl::OUString::createFromAscii( "IsDocument" ) );
-                    rValue >>= bDocument;
+                        const uno::Any & rValue
+                            = pContentProperties->getValue(
+                                rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "IsFolder" ) ) );
+                        rValue >>= bFolder;
 
-                    if ( !bDocument )
-                        continue;
+                        if ( !bFolder )
+                            continue;
 
-                    break;
+                        break;
+                    }
+
+                    case com::sun::star::ucb::OpenMode::DOCUMENTS:
+                    {
+                        sal_Bool bDocument = sal_False;
+
+                        const uno::Any & rValue
+                            = pContentProperties->getValue(
+                                rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "IsDocument" ) ) );
+                        rValue >>= bDocument;
+
+                        if ( !bDocument )
+                            continue;
+
+                        break;
+                    }
+
+                    case com::sun::star::ucb::OpenMode::ALL:
+                    default:
+                        break;
                 }
 
-                case com::sun::star::ucb::OpenMode::ALL:
-                default:
-                    break;
+                m_pImpl->m_aResults.push_back(
+                                    new ResultListEntry( pContentProperties ) );
             }
-
-              m_pImpl->m_aResults.push_back(
-                                new ResultListEntry( pContentProperties ) );
         }
 
           m_pImpl->m_bCountFinal = sal_True;
@@ -527,6 +538,6 @@ sal_Bool DataSupplier::getData()
         aGuard.clear();
         getResultSet()->rowCountFinal();
     }
-      return sal_True;
+    return !m_pImpl->m_bThrowException;
 }
 
