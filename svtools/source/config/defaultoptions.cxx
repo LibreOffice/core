@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-29 09:02:07 $
+ *  last change: $Author: mba $ $Date: 2001-08-28 11:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #endif
 
 #include <vos/process.hxx>
+#include <unotools/localfilehelper.hxx>
 
 using namespace osl;
 using namespace utl;
@@ -247,6 +248,17 @@ String SvtDefaultOptions_Impl::GetDefaultPath( USHORT nId ) const
         if ( nId == PathMap_Impl[nIdx]._ePath && PathMap_Impl[nIdx]._pDefaultPath )
         {
             aRet = this->*(PathMap_Impl[nIdx]._pDefaultPath);
+            if ( nId == SvtPathOptions::PATH_ADDIN ||
+                 nId == SvtPathOptions::PATH_FILTER ||
+                 nId == SvtPathOptions::PATH_HELP ||
+                 nId == SvtPathOptions::PATH_MODULE ||
+                 nId == SvtPathOptions::PATH_PLUGIN )
+            {
+                String aTmp;
+                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aRet, aTmp );
+                aRet = aTmp;
+            }
+
             break;
         }
         ++nIdx;
