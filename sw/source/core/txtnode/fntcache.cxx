@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-06 10:23:30 $
+ *  last change: $Author: fme $ $Date: 2001-07-10 15:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,11 +1465,6 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
     }
 }
 
-SwFntObj *SwFntAccess::Get( )
-{
-    return (SwFntObj *) SwCacheAccess::Get( );
-}
-
 SwCacheObj *SwFntAccess::NewObj( )
 {
     // Ein neuer Font, eine neue "MagicNumber".
@@ -1554,12 +1549,12 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 }
 
 // used during painting of small capitals
-void SwDrawTextInfo::Shift()
+void SwDrawTextInfo::Shift( USHORT nDir )
 {
     ASSERT( bPos, "DrawTextInfo: Undefined Position" );
     ASSERT( bSize, "DrawTextInfo: Undefined Width" );
 
-    switch ( pFnt->GetOrientation() )
+    switch ( nDir )
     {
     case 0 :
         ((Point*)pPos)->X() += GetSize().Width();

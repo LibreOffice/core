@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-06 10:26:31 $
+ *  last change: $Author: fme $ $Date: 2001-07-10 15:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,7 @@ public:
 #endif
     }
     void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
-    void Shift();
+    void Shift( USHORT nDir );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-06 10:23:30 $
+ *  last change: $Author: fme $ $Date: 2001-07-10 15:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,9 @@ void SwDoDrawCapital::Do()
         pLowerFnt->DrawText( rInf );
         rInf.SetBullet( bOldBullet );
     }
-    rInf.Shift();
+
+    ASSERT( pUpperFnt, "No upper font, dying soon!");
+    rInf.Shift( pUpperFnt->GetFont()->GetOrientation() );
     rInf.SetWidth( nOrgWidth );
 }
 
