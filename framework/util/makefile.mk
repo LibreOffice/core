@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 17:14:15 $
+#   last change: $Author: rt $ $Date: 2004-09-20 10:10:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -291,8 +291,18 @@ SHL4OBJS=       \
                 $(SLO)$/contenthandler.obj          \
                 $(SLO)$/containerquery.obj          \
                 $(SLO)$/loadenv.obj                 \
-                $(SLO)$/license.obj                 \
                 $(SLO)$/targethelper.obj            \
+                $(SLO)$/keymapping.obj              \
+                $(SLO)$/storageholder.obj                \
+                $(SLO)$/acceleratorcache.obj                \
+                $(SLO)$/acceleratorconfigurationreader.obj  \
+                $(SLO)$/acceleratorconfigurationwriter.obj  \
+                $(SLO)$/acceleratorconfiguration.obj        \
+                $(SLO)$/presethandler.obj                   \
+                $(SLO)$/globalacceleratorconfiguration.obj  \
+                $(SLO)$/moduleacceleratorconfiguration.obj  \
+                $(SLO)$/documentacceleratorconfiguration.obj \
+                $(SLO)$/license.obj                 \
                 $(SLO)$/windowstateconfiguration.obj    \
                 $(SLO)$/toolboxfactory.obj          \
                 $(SLO)$/addonstoolboxfactory.obj    \
