@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 15:59:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 08:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,6 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
     else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:outlookexp" ) )
         return ABT_OE;
 
-    DBG_ERROR( "AddressBookTypes::getAddressType: no valid address URL!" );
     return ABT_UNKNOWN;
 }
 
@@ -418,6 +417,9 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/07/31 15:59:13  fs
+ *  #88530# +AddressBookType(s)
+ *
  *  Revision 1.8  2001/05/29 13:11:51  oj
  *  #87149# addressbook ui impl
  *
