@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:55:45 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
                     static_cast< embed::XClassifiedObject* >( this ),
                     static_cast< embed::XComponentSupplier* >( this ),
                     static_cast< util::XCloseable* >( this ),
+                    static_cast< container::XChild* >( this ),
                     static_cast< document::XEventBroadcaster* >( this ) );
 
     if ( aReturn.hasValue() )
@@ -449,6 +450,7 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
                                             ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
                                             ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ),
                                             ::getCppuType( (const uno::Reference< embed::XCommonEmbedPersist >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< container::XChild >*)NULL ),
                                             ::getCppuType( (const uno::Reference< embed::XLinkageSupport >*)NULL ) );
 
                 pTypeCollection = &aTypeCollection ;
@@ -460,6 +462,7 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
                                             ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
                                             ::getCppuType( (const uno::Reference< embed::XInplaceObject >*)NULL ),
                                             ::getCppuType( (const uno::Reference< embed::XCommonEmbedPersist >*)NULL ),
+                                            ::getCppuType( (const uno::Reference< container::XChild >*)NULL ),
                                             ::getCppuType( (const uno::Reference< embed::XEmbedPersist >*)NULL ) );
 
                 pTypeCollection = &aTypeCollection ;
