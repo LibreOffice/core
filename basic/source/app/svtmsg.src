@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 11:01:45 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 15:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,7 +1058,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
     Text[ polish ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Method only allowed in floating mode at ($Arg1)";
-    Text[ korean ] = "($Arg1)에서 메소드는 부동 모드에서만 허용됩니다.";
+    Text[ korean ] = "메소드는 부동-모드 ($Arg1)에서만 허용됩니다.";
     Text[ chinese_simplified ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ chinese_traditional ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in floating mode at ($Arg1)";
