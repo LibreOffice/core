@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlEditModel.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:47 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,25 @@ service UnoControlEditModel
         the vertical direction.
      */
     [property] boolean VScroll;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which line end type should be used for multi line text
+
+        <p>Controls working with this model care for this setting when the user enters
+        text. Every line break entered into the control will be treated according to this
+        setting, so that the <member>Text</member> property always contains only
+        line ends in the format specified.</p>
+
+        <p>Possible values are all constants from the <type>LineEndFormat</type> group.</p>
+
+        <p>Note that this setting is usually not relevant when you set new text via the API.
+        No matter which line end format is used in this new text then, usual control implementations
+        should recognize all line end formats and display them properly.</p>
+
+        @since #i13497#
+     */
+    [optional, property] short LineEndFormat;
 
 };
 
