@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 09:54:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <osl/file.h>
 #include "secimpl.h"
 
-
 /*****************************************************************************/
 /* Data Type Definition */
 /*****************************************************************************/
@@ -112,19 +111,16 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
 /* Static Module Function Declarations */
 /*****************************************************************************/
 
-static sal_Bool isWNT();
+static sal_Bool isWNT(void);
 static sal_Bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
-static BOOL ObtainProfilePath(LPTSTR pszSid, LPTSTR pszProfilePath, DWORD dwPathSize);
 static BOOL Privilege(LPTSTR pszPrivilege, BOOL bEnable);
-static BOOL CheckHive(LPTSTR pszSid);
-static BOOL Hive(LPTSTR pszSid, LPTSTR pszProfilePath, BOOL bLoad);
 static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName, sal_Bool bIncludeDomain);
 
 /*****************************************************************************/
 /* Exported Module Functions */
 /*****************************************************************************/
 
-oslSecurity SAL_CALL osl_getCurrentSecurity()
+oslSecurity SAL_CALL osl_getCurrentSecurity(void)
 {
     oslSecurityImpl* pSecImpl = malloc(sizeof(oslSecurityImpl));
 
@@ -150,9 +146,12 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
         sal_Unicode*    strUser;
         sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
         HANDLE  hUserToken;
-        LUID    luid;
 
-        if (strUser = wcschr(strDomain, L'/'))
+        #if OSL_DEBUG_LEVEL > 0
+            LUID luid;
+        #endif
+
+        if (NULL != (strUser = wcschr(strDomain, L'/')))
             *strUser++ = L'\0';
         else
         {
@@ -311,7 +310,7 @@ void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
 
         if (pSecImpl->m_pNetResource != NULL)
         {
-            DWORD ret = WNetCancelConnection2W(pSecImpl->m_pNetResource->lpRemoteName, 0, sal_True);
+            WNetCancelConnection2W(pSecImpl->m_pNetResource->lpRemoteName, 0, sal_True);
 
             free(pSecImpl->m_pNetResource->lpRemoteName);
             free(pSecImpl->m_pNetResource);
@@ -467,7 +466,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
         {
             rtl_uString_newFromStr( &ustrSysDir, pSecImpl->m_pNetResource->lpRemoteName);
 
-            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory );
+            bSuccess = (sal_Bool)(osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory ));
         }
         else
         {
@@ -502,7 +501,8 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
             else
 #endif
 
-                bSuccess = GetSpecialFolder( &ustrSysDir, CSIDL_PERSONAL ) && (osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory ));
+                bSuccess = (sal_Bool)(GetSpecialFolder(&ustrSysDir, CSIDL_PERSONAL) &&
+                                     (osl_File_E_None == osl_getFileURLFromSystemPath(ustrSysDir, pustrDirectory)));
         }
     }
 
@@ -525,7 +525,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
             rtl_uString *ustrSysDir = NULL;
 
             rtl_uString_newFromStr( &ustrSysDir, pSecImpl->m_pNetResource->lpRemoteName);
-            bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory );
+            bSuccess = (sal_Bool)(osl_File_E_None == osl_getFileURLFromSystemPath( ustrSysDir, pustrDirectory));
 
             if ( ustrSysDir )
                 rtl_uString_release( ustrSysDir );
@@ -549,7 +549,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
                     rtl_uString_newFromStr( &ustrFile, sFile);
                 }
 
-                bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrFile, pustrDirectory );
+                bSuccess = (sal_Bool)(osl_File_E_None == osl_getFileURLFromSystemPath(ustrFile, pustrDirectory));
 
                 if ( ustrFile )
                     rtl_uString_release( ustrFile );
@@ -572,7 +572,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
     */
     BOOL bOk = FALSE;
 
-    LONG myError = RegCloseKey(HKEY_CURRENT_USER);
+    RegCloseKey(HKEY_CURRENT_USER);
 
     if (Privilege(SE_RESTORE_NAME, TRUE))
     {
@@ -634,7 +634,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
             CloseHandle(hAccessToken);
     }
 
-    return bOk;
+    return (sal_Bool)bOk;
 }
 
 
@@ -705,7 +705,10 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
         BOOL (WINAPI *pSHGetSpecialFolderPathA)(HWND, LPSTR, int, BOOL);
         BOOL (WINAPI *pSHGetSpecialFolderPathW)(HWND, LPWSTR, int, BOOL);
 
-        if (pSHGetSpecialFolderPathA = (BOOL (WINAPI *)(HWND, LPSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathA"))
+        pSHGetSpecialFolderPathA = (BOOL (WINAPI *)(HWND, LPSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathA");
+        pSHGetSpecialFolderPathW = (BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathW");
+
+        if (pSHGetSpecialFolderPathA)
         {
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
             {
@@ -713,7 +716,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                 bRet = sal_True;
             }
         }
-        else if (pSHGetSpecialFolderPathW = (BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL))GetProcAddress(hLibrary, "SHGetSpecialFolderPathW"))
+        else if (pSHGetSpecialFolderPathW)
         {
             if (pSHGetSpecialFolderPathW(GetActiveWindow(), PathW, nFolder, TRUE))
             {
@@ -747,17 +750,18 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
                                    &hRegKey) == ERROR_SUCCESS)
                     {
-                        LONG lRet, lSize = sizeof(PathW);
-                        DWORD Type;
+                        LONG lRet;
+                        DWORD lSize = sizeof(PathW);
+                        DWORD Type = REG_SZ;
 
                         switch (nFolder)
                         {
                             case CSIDL_APPDATA:
-                                lRet = RegQueryValueEx(hRegKey, "AppData", NULL, &Type, PathA, &lSize);
+                                lRet = RegQueryValueEx(hRegKey, "AppData", NULL, &Type, (LPBYTE)PathA, &lSize);
                                   break;
 
                             case CSIDL_PERSONAL:
-                                lRet = RegQueryValueEx(hRegKey, "Personal", NULL, &Type, PathA, &lSize);
+                                lRet = RegQueryValueEx(hRegKey, "Personal", NULL, &Type, (LPBYTE)PathA, &lSize);
                                 break;
 
                             default:
@@ -813,7 +817,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 }
 
 
-static sal_Bool isWNT()
+static sal_Bool isWNT(void)
 {
     static sal_Bool isInit = sal_False;
     static sal_Bool isWNT = sal_False;
@@ -843,62 +847,6 @@ static sal_Bool isWNT()
     }
 
     return(isWNT);
-}
-
-
-static BOOL ObtainProfilePath(LPTSTR strSid, LPTSTR strProfilePath, DWORD dwPathSize)
-{
-    TCHAR         szRegKey[1024] = TEXT("SOFTWARE\\Microsoft\\");
-    TCHAR         szTemp[256] = TEXT("");
-    DWORD         dwSizeProfilePath = dwPathSize;
-    DWORD         dwType;
-    HKEY          hKey;
-    LONG          lErrorCode;
-
-    /*
-        concat sid
-    */
-    strcat(szRegKey, TEXT("Windows NT\\CurrentVersion\\ProfileList\\"));
-    strcat(szRegKey, strSid);
-
-    /*
-        find the hive in the registry
-    */
-    lErrorCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegKey, 0, KEY_READ, &hKey);
-    if (lErrorCode != ERROR_SUCCESS)
-        return FALSE;
-
-    /*
-        query the value
-    */
-    lErrorCode = RegQueryValueEx(hKey, TEXT("ProfileImagePath"), NULL, &dwType, (LPBYTE)strProfilePath, &dwSizeProfilePath);
-    if (lErrorCode != ERROR_SUCCESS)
-        return FALSE;
-
-    /*
-         fix profile path by replacing "%SystemRoot%" with the actual path
-    */
-    strcpy(szTemp, strProfilePath);
-    ZeroMemory(strProfilePath, dwPathSize);
-    if (!ExpandEnvironmentStrings(szTemp, strProfilePath,dwPathSize))
-        return FALSE;
-
-    /*
-        determine if it is a file or directory, WinNT 4.0 it is a
-        directory
-        WinNT 3.51 it is a file
-    */
-    if ((GetFileAttributes(strProfilePath) & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY)
-        strcat(strProfilePath, TEXT("\\ntuser.dat"));
-
-    /*
-        close the key
-    */
-    lErrorCode = RegCloseKey(hKey);
-    if (lErrorCode != ERROR_SUCCESS)
-        return FALSE;
-
-    return TRUE;
 }
 
 static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
@@ -935,40 +883,6 @@ static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
         return FALSE;
 
     return TRUE;
-}
-
-static BOOL Hive(LPTSTR strSid, LPTSTR strProfilePath, BOOL bLoad)
-{
-    LONG lErrorCode;
-
-    if (bLoad)
-    {
-        lErrorCode = RegLoadKey(HKEY_USERS, strSid, strProfilePath);
-        if (lErrorCode != ERROR_SUCCESS)
-            return FALSE;
-    }
-    else
-    {
-        lErrorCode = RegUnLoadKey(HKEY_USERS, strSid);
-        if (lErrorCode != ERROR_SUCCESS)
-            return FALSE;
-    }
-    return TRUE;
-}
-
-static BOOL CheckHive(LPTSTR strSid)
-{
-    LONG lErrorCode;
-    HKEY hKey = NULL;
-
-    lErrorCode = RegOpenKey(HKEY_USERS, strSid, &hKey);
-
-    if (lErrorCode == ERROR_SUCCESS)
-    {
-        lErrorCode = RegCloseKey(hKey);
-        return TRUE;
-    }
-    return FALSE;
 }
 
 static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName,  sal_Bool bIncludeDomain)
