@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPooledConnection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 10:33:50 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
+
 
 namespace connectivity
 {
@@ -87,12 +91,14 @@ namespace connectivity
                              ,public OPooledConnection_Base
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xRealConnection;  // the connection fom driver
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;      // the connection which wraps the real connection
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >              m_xComponent;       // the connection which wraps the real connection
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
 
-        OPooledConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+        OPooledConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory);
 
         //XPooledConnection
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
@@ -93,6 +96,9 @@
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+#ifndef _RTL_DIGEST_H_
+#include <rtl/digest.h>
 #endif
 
 namespace connectivity
@@ -122,16 +128,37 @@ namespace connectivity
     // typedef for the interanl structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;
 
-    DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Any,PropertyMap);
      // contains the currently pooled connections
     typedef struct
     {
-        PropertyMap         aProps;
         TPooledConnections  aConnections;
         sal_Int32           nALiveCount; // will be decremented everytime a time says to, when will reach zero the pool will be deleted
     } TConnectionPool;
 
-    typedef ::std::multimap< ::rtl::OUString,TConnectionPool ,::comphelper::UStringLess> TConnectionMap;
+    struct TDigestHolder
+    {
+        sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
+        TDigestHolder()
+        {
+            m_pBuffer[0] = 0;
+        }
+
+    };
+
+    //  typedef TDigestHolder
+
+    struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
+    {
+        bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
+        {
+            sal_uInt32 i;
+            for(i=0;i < RTL_DIGEST_LENGTH_SHA1 && (x.m_pBuffer[i] >= y.m_pBuffer[i]); ++i)
+                ;
+            return i < RTL_DIGEST_LENGTH_SHA1;
+        }
+    };
+
+    typedef ::std::map< TDigestHolder,TConnectionPool,TDigestLess> TConnectionMap;
 
     // contains additional information about a activeconnection which is needed to put it back to the pool
     typedef struct
@@ -151,28 +178,26 @@ namespace connectivity
         ::osl::Mutex            m_aMutex;
         ::vos::ORef<OPoolTimer> m_xInvalidator;         // invalidates the conntection pool when shot
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >     m_xDriver;      // the one and only driver for this connectionpool
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xDriverNode;  // config node entry
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >           m_xDriverNode;  // config node entry
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory > m_xProxyFactory;
         sal_Int32               m_nTimeOut;
         sal_Int32               m_nALiveCount;
 
     private:
-        // check two maps
-        sal_Bool compareSequences(const PropertyMap& _rLh,const PropertyMap& _rRh);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createNewConnection(const ::rtl::OUString& _rURL,
                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator& _rIter);
-        // creates a map from a sequence of propertyValue
-        void createPropertyMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo,PropertyMap& _rMap);
         // calculate the timeout and the corresponding ALiveCount
         void calculateTimeOuts(sal_Int32 _nTimeOut);
 
     protected:
         // the dtor will be called from the last instance  (last release call)
-        ~OConnectionPool();
+        virtual ~OConnectionPool();
     public:
         OConnectionPool(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xDriverNode);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xDriverNode,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory);
 
         // delete all refs
         void clear();

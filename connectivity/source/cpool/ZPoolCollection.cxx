@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImp
         Reference<XPropertySet> xProp(_xDriverNode,UNO_QUERY);
         if(xProp.is())
             xProp->addPropertyChangeListener(getEnableNodeName(),this);
-        OConnectionPool* pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode);
+        OConnectionPool* pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
         pConnectionPool->acquire();
         aFind = m_aPools.insert(OConnectionPools::value_type(_sImplName,pConnectionPool)).first;
     }

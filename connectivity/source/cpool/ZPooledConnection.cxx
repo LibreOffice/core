@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPooledConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:06 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,44 @@
 #ifndef CONNECTIVITY_POOLEDCONNECTION_HXX
 #include "ZPooledConnection.hxx"
 #endif
-#ifndef _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
-#include "ZConnectionWrapper.hxx"
+#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
+#include "connectivity/ConnectionWrapper.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
+#include <com/sun/star/sdbc/XCloseable.hpp>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPONENT_HXX_
+#include <cppuhelper/component.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::reflection;
 using namespace connectivity;
 using namespace ::osl;
 
-OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnection)
+OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnection,
+                                    const Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory)
     : OPooledConnection_Base(m_aMutex)
     ,m_xRealConnection(_xConnection)
+    ,m_xProxyFactory(_rxProxyFactory)
 {
 
 }
@@ -86,31 +107,149 @@ OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnectio
 void SAL_CALL OPooledConnection::disposing(void)
 {
     MutexGuard aGuard(m_aMutex);
-    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(this);
-    m_xConnection = NULL;
+    if (m_xComponent.is())
+        m_xComponent->removeEventListener(this);
+    m_xComponent = NULL;
     ::comphelper::disposeComponent(m_xRealConnection);
 }
 // -----------------------------------------------------------------------------
 // XEventListener
-void SAL_CALL OPooledConnection::disposing( const EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPooledConnection::disposing( const EventObject& Source ) throw (RuntimeException)
 {
-    m_xConnection = NULL;
+    m_xComponent = NULL;
+}
+// -----------------------------------------------------------------------------
+namespace connectivity
+{
+    //=====================================================================
+    //= deriving from multiple XInterface-derived classes
+    //=====================================================================
+    //= forwarding/merging XInterface funtionality
+    //=====================================================================
+    #define DECLARE_XINTERFACE( )   \
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException); \
+        virtual void SAL_CALL acquire() throw(); \
+        virtual void SAL_CALL release() throw();
+
+    #define IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
+        void SAL_CALL classname::acquire() throw() { refcountbase::acquire(); } \
+        void SAL_CALL classname::release() throw() { refcountbase::release(); }
+
+    #define IMPLEMENT_FORWARD_XINTERFACE2( classname, refcountbase, baseclass2 ) \
+        IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
+        ::com::sun::star::uno::Any SAL_CALL classname::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException) \
+        { \
+            ::com::sun::star::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
+            if ( !aReturn.hasValue() ) \
+                aReturn = baseclass2::queryInterface( _rType ); \
+            return aReturn; \
+        }
+
+    #define IMPLEMENT_FORWARD_XINTERFACE3( classname, refcountbase, baseclass2, baseclass3 ) \
+        IMPLEMENT_FORWARD_REFCOUNT( classname, refcountbase ) \
+        ::com::sun::star::uno::Any SAL_CALL classname::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException) \
+        { \
+            ::com::sun::star::uno::Any aReturn = refcountbase::queryInterface( _rType ); \
+            if ( !aReturn.hasValue() ) \
+            { \
+                aReturn = baseclass2::queryInterface( _rType ); \
+                if ( !aReturn.hasValue() ) \
+                    aReturn = baseclass3::queryInterface( _rType ); \
+            } \
+            return aReturn; \
+        }
+
+    //=====================================================================
+    //= forwarding/merging XTypeProvider funtionality
+    //=====================================================================
+    #define DECLARE_XTYPEPROVIDER( )    \
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException); \
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
+        ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException) \
+        { \
+            static ::cppu::OImplementationId* pId = NULL; \
+            if (!pId) \
+            { \
+                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \
+                if (!pId) \
+                { \
+                    static ::cppu::OImplementationId aId; \
+                    pId = &aId; \
+                } \
+            } \
+            return pId->getImplementationId(); \
+        }
+
+    #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL classname::getTypes(  ) throw (::com::sun::star::uno::RuntimeException) \
+        { \
+            return ::comphelper::concatSequences( \
+                baseclass1::getTypes(), \
+                baseclass2::getTypes() \
+            ); \
+        } \
+        \
+        IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
+
+    #define IMPLEMENT_FORWARD_XTYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 ) \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL classname::getTypes(  ) throw (::com::sun::star::uno::RuntimeException) \
+        { \
+            return ::comphelper::concatSequences( \
+                baseclass1::getTypes(), \
+                baseclass2::getTypes(), \
+                baseclass3::getTypes() \
+            ); \
+        } \
+        \
+        IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
+
+    using namespace ::cppu;
+    typedef ::cppu::WeakComponentImplHelper1< XCloseable > OConnectionWeakWrapper_BASE;
+    class OConnectionWeakWrapper :  public ::comphelper::OBaseMutex
+                                  , public OConnectionWeakWrapper_BASE
+                                  , public OConnectionWrapper
+    {
+    public:
+        OConnectionWeakWrapper(Reference< XAggregation >& _xConnection)
+            : OConnectionWeakWrapper_BASE(m_aMutex)
+            ,OConnectionWrapper()
+        {
+            setDelegation(_xConnection,m_refCount);
+        }
+        DECLARE_XINTERFACE();
+        DECLARE_XTYPEPROVIDER( );
+        // --------------------------------------------------------------------------------
+        // XCloseable
+        void SAL_CALL close(  ) throw(SQLException, RuntimeException)
+        {
+            {
+                ::osl::MutexGuard aGuard( m_aMutex );
+                checkDisposed(rBHelper.bDisposed);
+
+            }
+            dispose();
+        }
+
+    };
+
+    IMPLEMENT_FORWARD_XINTERFACE2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
 }
 // -----------------------------------------------------------------------------
 //XPooledConnection
-Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, ::com::sun::star::uno::RuntimeException)
+Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, RuntimeException)
 {
-    if(!m_xConnection.is() && m_xRealConnection.is())
+    if(!m_xComponent.is() && m_xRealConnection.is())
     {
-        m_xConnection = new OConnectionWrapper(m_xRealConnection);
+        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(m_xRealConnection.get());
+        m_xComponent = new OConnectionWeakWrapper(xConProxy);
         // register as event listener for the new connection
-        Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->addEventListener(this);
+        if (m_xComponent.is())
+            m_xComponent->addEventListener(this);
     }
-    return m_xConnection;
+    return Reference< XConnection >(m_xComponent,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
 

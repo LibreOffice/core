@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:31:39 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
+#include "connectivity/ConnectionWrapper.hxx"
+#endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -106,20 +110,25 @@ void SAL_CALL OPoolTimer::onShot()
 {
     m_pPool->invalidatePooledConnections();
 }
-//--------------------------------------------------------------------
-static const ::rtl::OUString& getTimeoutNodeName()
+namespace
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
-    return s_sNodeName;
+    //--------------------------------------------------------------------
+    static const ::rtl::OUString& getTimeoutNodeName()
+    {
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
+        return s_sNodeName;
+    }
 }
 //==========================================================================
 //= OConnectionPool
 //==========================================================================
 //--------------------------------------------------------------------------
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
-                                 const Reference< XInterface >& _xDriverNode)
+                                 const Reference< XInterface >& _xDriverNode,
+                                 const Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory)
     :m_xDriver(_xDriver)
     ,m_xDriverNode(_xDriverNode)
+    ,m_xProxyFactory(_rxProxyFactory)
     ,m_nTimeOut(10)
     ,m_nALiveCount(10)
 {
@@ -229,22 +238,16 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
 
     Reference<XConnection> xConnection;
 
-    pair<TConnectionMap::iterator, TConnectionMap::iterator> aThisURLConns = m_aPool.equal_range(_rURL);
-    TConnectionMap::iterator aIter = aThisURLConns.first;
+    // create a unique id and look for it in our map
+    Sequence< PropertyValue > aInfo;
+    TConnectionMap::key_type nId;
+    OConnectionWrapper::createUniqueId(_rURL,aInfo,nId.m_pBuffer);
+    TConnectionMap::iterator aIter = m_aPool.find(nId);
 
-    if (aIter != aThisURLConns.second)
-    {// we know the url so we have to check if we found one without properties
-        PropertyMap aMap;
-        createPropertyMap(_rInfo,aMap);
+    if ( m_aPool.end() != aIter )
+        xConnection = getPooledConnection(aIter);
 
-        do
-        {
-            if (compareSequences(aIter->second.aProps,aMap))
-                xConnection = getPooledConnection(aIter);
-        }
-        while ((++aIter != aThisURLConns.second) && !xConnection.is());
-    }
-    if(!xConnection.is())
+    if ( !xConnection.is() )
         xConnection = createNewConnection(_rURL,_rInfo);
 
     return xConnection;
@@ -271,24 +274,10 @@ void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObj
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OConnectionPool::compareSequences(const PropertyMap& _rLh,const PropertyMap& _rRh)
-{
-    if(_rLh.size() != _rRh.size())
-        return sal_False;
-    sal_Bool bRet = sal_True;
-    PropertyMap::const_iterator aIter = _rLh.begin();
-    for (; bRet && aIter != _rLh.end(); ++aIter)
-    {
-        PropertyMap::const_iterator aFind = _rRh.find(aIter->first);
-        bRet = (aFind != _rRh.end()) ? ::comphelper::compare(aFind->second,aIter->second) : sal_False;
-    }
-    return bRet;
-}
-// -----------------------------------------------------------------------------
 Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUString& _rURL,const Sequence< PropertyValue >& _rInfo)
 {
     // create new pooled conenction
-    Reference< XPooledConnection > xPooledConnection = new ::connectivity::OPooledConnection(m_xDriver->connect(_rURL,_rInfo));
+    Reference< XPooledConnection > xPooledConnection = new ::connectivity::OPooledConnection(m_xDriver->connect(_rURL,_rInfo),m_xProxyFactory);
     // get the new connection from the pooled connection
     Reference<XConnection> xConnection = xPooledConnection->getConnection();
     if(xConnection.is())
@@ -299,13 +288,15 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
             xComponent->addEventListener(this);
 
         // save some information to find the right pool later on
+        Sequence< PropertyValue > aInfo(_rInfo);
+        TConnectionMap::key_type nId;
+        OConnectionWrapper::createUniqueId(_rURL,aInfo,nId.m_pBuffer);
         TConnectionPool aPack;
-        createPropertyMap(_rInfo,aPack.aProps); // by ref to avoid copying
 
         // insert the new connection and struct into the active connection map
         aPack.nALiveCount               = m_nALiveCount;
         TActiveConnectionInfo aActiveInfo;
-        aActiveInfo.aPos                = m_aPool.insert(TConnectionMap::value_type(_rURL,aPack));
+        aActiveInfo.aPos                = m_aPool.insert(TConnectionMap::value_type(nId,aPack)).first;
         aActiveInfo.xPooledConnection   = xPooledConnection;
         m_aActiveConnections.insert(TActiveConnectionMap::value_type(xConnection,aActiveInfo));
 
@@ -314,15 +305,6 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
     }
 
     return xConnection;
-}
-// -----------------------------------------------------------------------------
-void OConnectionPool::createPropertyMap(const Sequence< PropertyValue >& _rInfo,PropertyMap& _rMap)
-{
-    OSL_ENSURE(_rMap.empty(),"Map not empty");
-    const PropertyValue* pBegin   = _rInfo.getConstArray();
-    const PropertyValue* pEnd     = pBegin + _rInfo.getLength();
-    for(;pBegin != pEnd;++pBegin)
-        _rMap.insert(PropertyMap::value_type(pBegin->Name,pBegin->Value));
 }
 // -----------------------------------------------------------------------------
 void OConnectionPool::invalidatePooledConnections()

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
+#   last change: $Author: oj $ $Date: 2002-08-12 08:43:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 SLOFILES=\
         $(SLO)$/ZDriverWrapper.obj				\
-        $(SLO)$/ZConnectionWrapper.obj			\
         $(SLO)$/ZPooledConnection.obj			\
         $(SLO)$/ZConnectionPool.obj				\
         $(SLO)$/ZPoolCollection.obj				\
