@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 12:46:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@ package com.sun.star.wizards.report;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
 
 
@@ -145,8 +147,19 @@ public class CallReportWizard {
             bWizardstartedalready = false;
             }
             else if (sEvent.compareTo("fill") == 0){
-                Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
-                CurDataimport.createReport(xmultiservicefactory);
+                        Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
+                        XTextDocument xTextDocument = null;
+                        if ( databaseproperties != null )
+                        {
+                            for( int i=0;i < databaseproperties.length;++i)
+                            {
+                                if ( databaseproperties[i].Name.equals("TextDocument") )
+                                    xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
+
+                            }
+                            if ( xTextDocument != null )
+                                CurDataimport.createReport(xmultiservicefactory,xTextDocument);
+                        }
             }
         }
         catch( Exception exception ){
