@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:40:29 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XEPAGE_HXX
 #define SC_XEPAGE_HXX
 
@@ -74,40 +72,39 @@
 #include "xerecord.hxx"
 #endif
 
-
 // Page settings records ======================================================
+
+// Header/footer --------------------------------------------------------------
 
 /** Represents a HEADER or FOOTER record. */
 class XclExpHeaderFooter : public XclExpRecord
 {
 public:
-    explicit                    XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrString );
+    explicit            XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrString );
 
 private:
     /** Writes the header or footer string. Writes an empty record, if no header/footer present. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    String                      maHdrString;        /// Header or footer contents.
+    String              maHdrString;        /// Header or footer contents.
 };
 
-
-// ----------------------------------------------------------------------------
+// General page settings ------------------------------------------------------
 
 /** Represents a SETUP record that contains common page settings. */
 class XclExpSetup : public XclExpRecord
 {
 public:
-    explicit                    XclExpSetup( const XclPageData& rPageData );
+    explicit            XclExpSetup( const XclPageData& rPageData );
 
 private:
     /** Writes the contents of the SETUP record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    const XclPageData&          mrData;             /// Page settings data of current sheet.
+    const XclPageData&  mrData;             /// Page settings data of current sheet.
 };
-
 
 // Manual page breaks ---------------------------------------------------------
 
@@ -115,23 +112,22 @@ private:
 class XclExpPageBreaks : public XclExpRecord
 {
 public:
-    explicit                    XclExpPageBreaks(
-                                    sal_uInt16 nRecId,
-                                    const ScfUInt16Vec& rPageBreaks,
-                                    sal_uInt16 nMaxPos );
+    explicit            XclExpPageBreaks(
+                            sal_uInt16 nRecId,
+                            const ScfUInt16Vec& rPageBreaks,
+                            sal_uInt16 nMaxPos );
 
     /** Writes the record, if the list is not empty. */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
 
 private:
     /** Writes the page break list. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    const ScfUInt16Vec&         mrPageBreaks;       /// Page settings data of current sheet.
-    sal_uInt16                  mnMaxPos;           /// Maximum row/column for BIFF8 page breaks.
+    const ScfUInt16Vec& mrPageBreaks;       /// Page settings data of current sheet.
+    sal_uInt16          mnMaxPos;           /// Maximum row/column for BIFF8 page breaks.
 };
-
 
 // Background bitmap ----------------------------------------------------------
 
@@ -141,15 +137,14 @@ class Graphic;
 class XclExpBitmap : public XclExpRecordBase
 {
 public:
-    explicit                    XclExpBitmap( const Graphic& rGraphic );
+    explicit            XclExpBitmap( const Graphic& rGraphic );
 
     /** Writes the BITMAP record. */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
 
 private:
-    const Graphic&              mrGraphic;      /// The VCL graphic.
+    const Graphic&      mrGraphic;      /// The VCL graphic.
 };
-
 
 // Page settings ==============================================================
 
@@ -158,18 +153,17 @@ class XclExpPageSettings : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     /** Creates all records containing the current page settings. */
-    explicit                    XclExpPageSettings( const XclExpRoot& rRoot );
+    explicit            XclExpPageSettings( const XclExpRoot& rRoot );
 
     /** Returns read-only access to the page data. */
-    inline const XclPageData&   GetPageData() const { return maData; }
+    inline const XclPageData& GetPageData() const { return maData; }
 
     /** Writes all page settings records to the stream. */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
 
 private:
-    XclPageData                 maData;         /// Page settings data.
+    XclPageData         maData;         /// Page settings data.
 };
-
 
 // ============================================================================
 
