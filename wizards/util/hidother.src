@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bc $ $Date: 2001-07-16 15:35:50 $
+ *  last change: $Author: bc $ $Date: 2001-08-08 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,329 +58,349 @@
  *
  *
  ************************************************************************/
-WebWizard       34200
-Web_ListTemplate    34201
-Web_ListStyle       34202
-Web_BtnOK       34205
-Web_BtnCancel       34206
-Web_SaveAsTemplate  34207
-Web_optBackGraphicTiled 34208
-Web_optBackGraphicArea  34209
 
-SQL_0_cmdSQLStatement   34220
-SQL_0_cmdCancel 34221
-SQL_0_cmdPrev   34222
-SQL_0_cmdNextOrReady    34223
-SQL_Dialog      34224
-SQL_1_Preview1  34230
-SQL_1_cmbAvailDatabase  34231
-SQL_1_lbTables  34232
-SQL_1_lbFields  34233
-SQL_2_cmdMoveSelected   34234
-SQL_2_cmdMoveAll        34235
-SQL_2_cmdRemoveSelected 34236
-SQL_2_cmdRemoveAll      34237
-SQL_2_Selected  34238
-SQL_2_Available 34239
-SQL_3_cmbLogic1 34240
-SQL_3_cmbFieldName1     34241
-SQL_3_cmbCondition1     34242
-SQL_3_txtValue1         34243
-SQL_3_cmbLogic2 34244
-SQL_3_cmbFieldName2     34245
-SQL_3_cmbCondition2     34246
-SQL_3_txtValue2         34247
-SQL_3_cmbLogic3 34248
-SQL_3_cmbFieldName3     34249
-SQL_3_cmbCondition3     34460
-SQL_3_txtValue3         34461
-SQL_3_cmbLogic4 34462
-SQL_3_cmbFieldName4     34463
-SQL_3_cmbCondition4     34464
-SQL_3_txtValue4         34465
-SQL_3_cmbLogic5 34466
-SQL_3_cmbFieldName5     34467
-SQL_3_cmbCondition5     34468
-SQL_3_txtValue5         34469
-SQL_4_Preview3  34250
-SQL_4_cmbSort1  34251
-SQL_4_cmdSort1  34252
-SQL_4_cmbSort2  34253
-SQL_4_cmdSort2  34254
-SQL_4_cmbSort3  34255
-SQL_4_cmdSort3  34256
-SQL_4_cmbSort4  34257
-SQL_4_cmdSort4  34258
-SQL_5_Preview2  34260
-SQL_5_txtQueryTitle     34261
-SQL_5_optRunNow 34262
-SQL_5_optRunClosed      34263
-SQL_5_cmdReady  34264
-Table_0_cmdCancel       34270
-Table_0_cmdPrev 34271
-Table_0_cmdNextOrReady  34272
-Table_Dialog    34273
-Table_1_Preview1        34280
-Table_1_cmbAvailDatabase        34281
-Table_1_cmbSelectDataBase       34282
-Table_1_lbTables        34283
-Table_2_lbFields        34290
-Table_2_cmdMoveSelected 34291
-Table_2_cmdMoveAll      34292
-Table_2_cmdRemoveSelected       34293
-Table_2_cmdRemoveAll    34294
-Table_2_lbSelected      34295
-Table_3_txtTableName    34300
-Table_3_txtFieldName    34301
-Table_3_cmdAcceptNewFieldName   34302
-Table_3_Preview2        34310
-Table_3_optOpenTablleReadWrite  34311
-Table_3_optOpenTablleReadOnly   34312
-Table_3_optEdit 34313
-Table_3_cmdReady        34314
-DlgReport_Dialog        34320
-DlgReport_0_cmdCancel   34321
-DlgReport_0_cmdPrev     34322
-DlgReport_0_cmdNextOrReady      34323
-DlgReport_1_cmbAvailDatabase    34330
-DlgReport_1_lbTables    34331
-DlgReport_2_Available   34340
-DlgReport_2_Selected    34341
-DlgReport_2_cmdMoveSelected     34342
-DlgReport_2_cmdMoveAll  34343
-DlgReport_2_cmdRemoveSelected   34344
-DlgReport_2_cmdRemoveAll        34345
-DlgReport_3_Grouping    34350
-DlgReport_3_cmdGroup    34351
-DlgReport_3_cmdUnGroup  34352
-DlgReport_3_PreGroupingDest     34353
-DlgReport_4_Preview3    34360
-DlgReport_4_Sort1       34361
-DlgReport_4_cmdSort1    34362
-DlgReport_4_Sort2       34363
-DlgReport_4_cmdSort2    34364
-DlgReport_4_Sort3       34365
-DlgReport_4_cmdSort3    34366
-DlgReport_4_Sort4       34367
-DlgReport_4_cmdSort4    34368
-DlgReport_5_Preview4    34370
-DlgReport_5_Portrait    34371
-DlgReport_5_Landscape   34372
-DlgReport_5_Style1      34373
-DlgReport_5_Style2      34374
-DlgReport_5_Style3      34375
-DlgReport_5_Style4      34376
-DlgReport_5_Style5      34377
-DlgReport_5_Style6      34378
-DlgReport_6_DocumentStyles      34380
-DlgReport_7_txtReportTitle      34390
-DlgReport_7_optCreateAndViewOrStore     34391
-DlgReport_7_cmdReady            34392
-DlgReport_7_optCreateAndStore           34393
-DlgForm_Dialog                  34400
-DlgForm_cmdCancel               34401
-DlgForm_cmdPrev                 34402
-DlgForm_cmdNext                 34403
-DlgForm_cmbAvailDatabase        34410
-DlgForm_lbTables                34411
-DlgForm_FieldsAvailable         34420
-DlgForm_FieldsSelected          34421
-DlgForm_cmdMoveSelected         34422
-DlgForm_cmdMoveAll              34423
-DlgForm_cmdRemoveSelected       34424
-DlgForm_cmdRemoveAll            34425
-DlgForm_optBinariesasGraphics   34426
-DlgForm_optNoBinaries       34427
-DlgForm_cmdLeftLabeled      34431
-DlgForm_cmdTopLabeled       34432
-DlgForm_cmdTableStyle       34433
-DlgForm_cmdLeftJustified    34434
-DlgForm_cmdTopJustified     34435
-DlgForm_cmdNoBorder     34438
-DlgForm_cmd3DBorder     34439
-DlgForm_cmdSimpleBorder     34440
-DlgForm_cmdAlignLeft        34441
-DlgForm_cmdAlignRight       34442
-DlgForm_lstStyles       34443
-DlgForm_optBackGraphicTiled 34444
-DlgForm_optBackGraphicArea  34445
-DlgGrid_Dialog                  34470
-DlgGrid_0_cmdCancel             34471
-DlgGrid_0_cmdPrev               34472
-DlgGrid_0_cmdNext               34473
-DlgGrid_1_cmbAvailDatabase      34480
-DlgGrid_1_lbTables              34481
-DlgGrid_2_lbFields              34490
-DlgGrid_2_lbSelected            34491
-DlgGrid_2_cmdMoveSelected       34492
-DlgGrid_2_cmdMoveAll            34493
-DlgGrid_2_cmdRemoveSelected     34494
-DlgGrid_2_cmdRemoveAll          34495
-DlgGrid_2_cmdReady              34496
-DlgCombo_Dialog                 34500
-DlgCombo_0_cmdCancel            34501
-DlgCombo_0_cmdPrev              34502
-DlgCombo_0_cmdNext              34503
-DlgCombo_1_cmbAvailDatabase     34505
-DlgCombo_1_cmbAvailTable1       34506
-DlgCombo_1_cmbAvailTable2       34507
-DlgCombo_1_lbTables             34508
-DlgCombo_2_lbFields             34510
-DlgCombo_2_lbSelected           34511
-DlgCombo_2_cmdMoveSelected      34512
-DlgCombo_2_cmdRemoveSelected    34513
-DlgCombo_3_fdConnection1        34515
-DlgCombo_3_lbConnection1        34516
-DlgCombo_3_fdConnection2        34517
-DlgCombo_3_lbConnection2        34518
-DlgCombo_4_opDBField            34520
-DlgCombo_4_cbDBField            34521
-DlgCombo_4_opNoDBField          34522
-DlgCombo_4_cmdReady             34523
-DlgGroup_Dialog                 34530
-DlgGroup_0_cmdCancel            34531
-DlgGroup_0_cmdPrev              34532
-DlgGroup_0_cmdNext              34533
-DlgGroup_2_edEdit               34535
-DlgGroup_2_lbSelected           34536
-DlgGroup_2_cmdMoveSelected      34537
-DlgGroup_2_cmdRemoveSelected    34538
-DlgGroup_3_opField              34540
-DlgGroup_3_cbField              34541
-DlgGroup_3_opNoField            34542
-DlgGroup_4_edValue              34545
-DlgGroup_4_lbRadioCaptions      34546
-DlgGroup_4_lbRadioValues        34547
-DlgGroup_5_opDBField            34550
-DlgGroup_5_cbDBField            34551
-DlgGroup_5_opNoDBField          34552
-DlgGroup_6_edGroupTitle         34555
-DlgGroup_6_cmdReady             34556
+#define HID_WEBWIZARD       34200
+hidspecial HID { HelpID = HID_WEBWIZARD; };
+#define HID_WEB_LISTTEMPLATE    34201
+hidspecial HID { HelpID = HID_WEB_LISTTEMPLATE; };
+#define HID_WEB_LISTSTYLE       34202
+hidspecial HID { HelpID = HID_WEB_LISTSTYLE; };
+#define HID_WEB_BTNOK       34205
+hidspecial HID { HelpID = HID_WEB_BTNOK; };
+#define HID_WEB_BTNCANCEL       34206
+hidspecial HID { HelpID = HID_WEB_BTNCANCEL; };
+#define HID_WEB_SAVEASTEMPLATE  34207
+hidspecial HID { HelpID = HID_WEB_SAVEASTEMPLATE; };
+#define HID_WEB_OPTBACKGRAPHICTILED 34208
+hidspecial HID { HelpID = HID_WEB_OPTBACKGRAPHICTILED; };
+#define HID_WEB_OPTBACKGRAPHICAREA  34209
+hidspecial HID { HelpID = HID_WEB_OPTBACKGRAPHICAREA; };
 
-DlgImport_Dialog                34570
-DlgImport_0_cmdHelp             34571
-DlgImport_0_cmdCancel           34572
-DlgImport_0_cmdPrev             34573
-DlgImport_0_cmdNext             34574
-DlgImport_0_optSODocuments  34575
-DlgImport_0_optMSDocuments  34576
-DlgImport_0_chkLogFile      34577
-DlgImport_2_chkWord             34578
-DlgImport_2_chkExcel            34579
-DlgImport_2_chkPowerPoint       34580
-DlgImport_2_cbTemplate          34581
-DlgImport_2_cbTemplateRecurse   34582
-DlgImport_2_lbTemplatePath      34583
-DlgImport_2_edTemplatePath      34584
-DlgImport_2_cmdTemplatePathSelect   34585
-DlgImport_2_cbDocument          34586
-DlgImport_2_cbDocumentRecurse   34587
-DlgImport_2_lbDocumentPath      34588
-DlgImport_2_edDocumentPath      34589
-DlgImport_2_cmdDocumentPathSelect   34590
-DlgImport_2_lbExportDocumentPath    34591
-DlgImport_2_edExportDocumentPath    34592
-DlgImport_2_cmdExportPathSelect     34593
-DlgImport_3_tbSummary           34595
+#SQL_0_CMDSQLSTATEMENT   34220
+#SQL_0_CMDCANCEL 34221
+#SQL_0_CMDPREV   34222
+#SQL_0_CMDNEXTORREADY    34223
+#SQL_DIALOG      34224
+#SQL_1_PREVIEW1  34230
+#SQL_1_CMBAVAILDATABASE  34231
+#SQL_1_LBTABLES  34232
+#SQL_1_LBFIELDS  34233
+#SQL_2_CMDMOVESELECTED   34234
+#SQL_2_CMDMOVEALL        34235
+#SQL_2_CMDREMOVESELECTED 34236
+#SQL_2_CMDREMOVEALL      34237
+#SQL_2_SELECTED  34238
+#SQL_2_AVAILABLE 34239
+#SQL_3_CMBLOGIC1 34240
+#SQL_3_CMBFIELDNAME1     34241
+#SQL_3_CMBCONDITION1     34242
+#SQL_3_TXTVALUE1         34243
+#SQL_3_CMBLOGIC2 34244
+#SQL_3_CMBFIELDNAME2     34245
+#SQL_3_CMBCONDITION2     34246
+#SQL_3_TXTVALUE2         34247
+#SQL_3_CMBLOGIC3 34248
+#SQL_3_CMBFIELDNAME3     34249
+#SQL_3_CMBCONDITION3     34460
+#SQL_3_TXTVALUE3         34461
+#SQL_3_CMBLOGIC4 34462
+#SQL_3_CMBFIELDNAME4     34463
+#SQL_3_CMBCONDITION4     34464
+#SQL_3_TXTVALUE4         34465
+#SQL_3_CMBLOGIC5 34466
+#SQL_3_CMBFIELDNAME5     34467
+#SQL_3_CMBCONDITION5     34468
+#SQL_3_TXTVALUE5         34469
+#SQL_4_PREVIEW3  34250
+#SQL_4_CMBSORT1  34251
+#SQL_4_CMDSORT1  34252
+#SQL_4_CMBSORT2  34253
+#SQL_4_CMDSORT2  34254
+#SQL_4_CMBSORT3  34255
+#SQL_4_CMDSORT3  34256
+#SQL_4_CMBSORT4  34257
+#SQL_4_CMDSORT4  34258
+#SQL_5_PREVIEW2  34260
+#SQL_5_TXTQUERYTITLE     34261
+#SQL_5_OPTRUNNOW 34262
+#SQL_5_OPTRUNCLOSED      34263
+#SQL_5_CMDREADY  34264
+#TABLE_0_CMDCANCEL       34270
+#TABLE_0_CMDPREV 34271
+#TABLE_0_CMDNEXTORREADY  34272
+#TABLE_DIALOG    34273
+#TABLE_1_PREVIEW1        34280
+#TABLE_1_CMBAVAILDATABASE        34281
+#TABLE_1_CMBSELECTDATABASE       34282
+#TABLE_1_LBTABLES        34283
+#TABLE_2_LBFIELDS        34290
+#TABLE_2_CMDMOVESELECTED 34291
+#TABLE_2_CMDMOVEALL      34292
+#TABLE_2_CMDREMOVESELECTED       34293
+#TABLE_2_CMDREMOVEALL    34294
+#TABLE_2_LBSELECTED      34295
+#TABLE_3_TXTTABLENAME    34300
+#TABLE_3_TXTFIELDNAME    34301
+#TABLE_3_CMDACCEPTNEWFIELDNAME   34302
+#TABLE_3_PREVIEW2        34310
+#TABLE_3_OPTOPENTABLLEREADWRITE  34311
+#TABLE_3_OPTOPENTABLLEREADONLY   34312
+#TABLE_3_OPTEDIT 34313
+#TABLE_3_CMDREADY        34314
+#DLGREPORT_DIALOG        34320
+#DLGREPORT_0_CMDCANCEL   34321
+#DLGREPORT_0_CMDPREV     34322
+#DLGREPORT_0_CMDNEXTORREADY      34323
+#DLGREPORT_1_CMBAVAILDATABASE    34330
+#DLGREPORT_1_LBTABLES    34331
+#DLGREPORT_2_AVAILABLE   34340
+#DLGREPORT_2_SELECTED    34341
+#DLGREPORT_2_CMDMOVESELECTED     34342
+#DLGREPORT_2_CMDMOVEALL  34343
+#DLGREPORT_2_CMDREMOVESELECTED   34344
+#DLGREPORT_2_CMDREMOVEALL        34345
+#DLGREPORT_3_GROUPING    34350
+#DLGREPORT_3_CMDGROUP    34351
+#DLGREPORT_3_CMDUNGROUP  34352
+#DLGREPORT_3_PREGROUPINGDEST     34353
+#DLGREPORT_4_PREVIEW3    34360
+#DLGREPORT_4_SORT1       34361
+#DLGREPORT_4_CMDSORT1    34362
+#DLGREPORT_4_SORT2       34363
+#DLGREPORT_4_CMDSORT2    34364
+#DLGREPORT_4_SORT3       34365
+#DLGREPORT_4_CMDSORT3    34366
+#DLGREPORT_4_SORT4       34367
+#DLGREPORT_4_CMDSORT4    34368
+#DLGREPORT_5_PREVIEW4    34370
+#DLGREPORT_5_PORTRAIT    34371
+#DLGREPORT_5_LANDSCAPE   34372
+#DLGREPORT_5_STYLE1      34373
+#DLGREPORT_5_STYLE2      34374
+#DLGREPORT_5_STYLE3      34375
+#DLGREPORT_5_STYLE4      34376
+#DLGREPORT_5_STYLE5      34377
+#DLGREPORT_5_STYLE6      34378
+#DLGREPORT_6_DOCUMENTSTYLES      34380
+#DLGREPORT_7_TXTREPORTTITLE      34390
+#DLGREPORT_7_OPTCREATEANDVIEWORSTORE     34391
+#DLGREPORT_7_CMDREADY            34392
+#DLGREPORT_7_OPTCREATEANDSTORE           34393
 
-DlgImport_0_chWriter        34596
-DlgImport_0_chkCalc     34597
-DlgImport_0_chkImpress      34598
-DlgImport_0_chkMath/Global  34599
+#define HID_DLGFORM_DIALOG                  34400
+hidspecial HID { HelpID = HID_DLGFORM_DIALOG; };
+#define HID_DLGFORM_CMDCANCEL               34401
+hidspecial HID { HelpID = HID_DLGFORM_CMDCANCEL; };
+#define HID_DLGFORM_CMDPREV                 34402
+hidspecial HID { HelpID = HID_DLGFORM_CMDPREV; };
+#define HID_DLGFORM_CMDNEXT                 34403
+hidspecial HID { HelpID = HID_DLGFORM_CMDNEXT; };
+#define HID_DLGFORM_CMBAVAILDATABASE        34410
+hidspecial HID { HelpID = HID_DLGFORM_CMBAVAILDATABASE; };
+#define HID_DLGFORM_LBTABLES                34411
+hidspecial HID { HelpID = HID_DLGFORM_LBTABLES; };
+#define HID_DLGFORM_FIELDSAVAILABLE         34420
+hidspecial HID { HelpID = HID_DLGFORM_FIELDSAVAILABLE; };
+#define HID_DLGFORM_FIELDSSELECTED          34421
+hidspecial HID { HelpID = HID_DLGFORM_FIELDSSELECTED; };
+#define HID_DLGFORM_CMDMOVESELECTED         34422
+hidspecial HID { HelpID = HID_DLGFORM_CMDMOVESELECTED; };
+#define HID_DLGFORM_CMDMOVEALL              34423
+hidspecial HID { HelpID = HID_DLGFORM_CMDMOVEALL; };
+#define HID_DLGFORM_CMDREMOVESELECTED       34424
+hidspecial HID { HelpID = HID_DLGFORM_CMDREMOVESELECTED; };
+#define HID_DLGFORM_CMDREMOVEALL            34425
+hidspecial HID { HelpID = HID_DLGFORM_CMDREMOVEALL; };
+#define HID_DLGFORM_OPTBINARIESASGRAPHICS   34426
+hidspecial HID { HelpID = HID_DLGFORM_OPTBINARIESASGRAPHICS; };
+#define HID_DLGFORM_OPTNOBINARIES       34427
+hidspecial HID { HelpID = HID_DLGFORM_OPTNOBINARIES; };
+#define HID_DLGFORM_CMDLEFTLABELED      34431
+hidspecial HID { HelpID = HID_DLGFORM_CMDLEFTLABELED; };
+#define HID_DLGFORM_CMDTOPLABELED       34432
+hidspecial HID { HelpID = HID_DLGFORM_CMDTOPLABELED; };
+#define HID_DLGFORM_CMDTABLESTYLE       34433
+hidspecial HID { HelpID = HID_DLGFORM_CMDTABLESTYLE; };
+#define HID_DLGFORM_CMDLEFTJUSTIFIED    34434
+hidspecial HID { HelpID = HID_DLGFORM_CMDLEFTJUSTIFIED; };
+#define HID_DLGFORM_CMDTOPJUSTIFIED     34435
+hidspecial HID { HelpID = HID_DLGFORM_CMDTOPJUSTIFIED; };
+#define HID_DLGFORM_CMDNOBORDER     34438
+hidspecial HID { HelpID = HID_DLGFORM_CMDNOBORDER; };
+#define HID_DLGFORM_CMD3DBORDER     34439
+hidspecial HID { HelpID = HID_DLGFORM_CMD3DBORDER; };
+#define HID_DLGFORM_CMDSIMPLEBORDER     34440
+hidspecial HID { HelpID = HID_DLGFORM_CMDSIMPLEBORDER; };
+#define HID_DLGFORM_CMDALIGNLEFT        34441
+hidspecial HID { HelpID = HID_DLGFORM_CMDALIGNLEFT; };
+#define HID_DLGFORM_CMDALIGNRIGHT       34442
+hidspecial HID { HelpID = HID_DLGFORM_CMDALIGNRIGHT; };
+#define HID_DLGFORM_LSTSTYLES       34443
+hidspecial HID { HelpID = HID_DLGFORM_LSTSTYLES; };
+#define HID_DLGFORM_OPTBACKGRAPHICTILED 34444
+hidspecial HID { HelpID = HID_DLGFORM_OPTBACKGRAPHICTILED; };
+#define HID_DLGFORM_OPTBACKGRAPHICAREA  34445
+hidspecial HID { HelpID = HID_DLGFORM_OPTBACKGRAPHICAREA; };
 
-DlgTheme_0_Dialog               34610
-DlgTheme_0_lbThemes             34611
-DlgTheme_0_cmdCancel            34612
-DlgTheme_0_cmdOkay              34613
-DlgInternet_Dialog              34620
-DlgInternet_0_cmdHelp           34621
-DlgInternet_0_cmdCancel         34622
-DlgInternet_0_cmdPrev           34623
-DlgInternet_0_cmdNext           34624
-DlgInternet_1_cbStandardApp     34625
-DlgInternet_1_cbStandardBrowser 34626
-DlgInternet_1_cbStandardNews    34627
-DlgInternet_1_cbStandardFTP     34628
-DlgInternet_1_cbStandardSHTTP   34629
-DlgInternet_1_cbStandardMail    34630
-DlgInternet_1_cmdNoInternet     34631
-DlgInternet_2_opImportfromApp   34632
-DlgInternet_2_lbImportfromApp   34633
-DlgInternet_2_opSingleImport    34634
-DlgInternet_4_lbUser        34635
-DlgInternet_5_cmdThanks     34636
-DlgInternet_6_cbNoSetup     34637
-DlgInternet_6_lbAppList     34638
-DlgInternet_7_cbNoProxy     34639
-DlgInternet_7_edHTTPProxy   34640
-DlgInternet_7_edPort        34641
-DlgInternet_9_cbNoEmail     34642
-DlgInternet_9_edAccount     34643
-DlgInternet_9_edMailIn      34644
-DlgInternet_9_edMailOut     34645
-DlgInternet_9_edUserID      34646
-DlgInternet_9_edPassword    34647
-DlgInternet_11_cbNoNews     34648
-DlgInternet_11_edAccount    34649
-DlgInternet_11_edNewsServer 34650
-DlgInternet_12_cmdDontImport    34651
-DlgInternet_12_cmdImport    34652
-DlgInternet_s3OptManual    34653
-DlgInternet_s3OptImport     34654
-DlgInternet_s5OptImport     34655
-DlgInternet_s5OptManual     34656
-DlgInternet_s6OptPop3       34657
-DlgInternet_s6OptImap       34658
-DlgInternet_s8OptImport     34659
-DlgConvert_Dialog       34660
-DlgConvert_Checkbox1        34661
-DlgConvert_OptionButton1    34662
-DlgConvert_OptionButton2    34663
-DlgConvert_OptionButton3    34664
-DlgConvert_OptionButton4    34665
-DlgConvert_Listbox1     34666
-DlgConvert_OBFile       34667
-DlgConvert_OBDir        34668
-DlgConvert_ComboBox1        34669
-DlgConvert_TBSource     34670
-DlgConvert_CheckRecursive   34671
-DlgConvert_TBTarget     34672
-DlgConvert_CBCancel     34673
-DlgConvert_CBHelp       34674
-DlgConvert_CBBack       34675
-DlgConvert_CBGoOn       34676
-DlgConvert_CBSourceOpen     34677
-DlgConvert_CBTargetOpen     34678
-DlgConvert_chkProtect       34679
-DlgConvert_chkTextDocuments 34680
-DlgPassword_cmdGoOn     34690
-DlgPassword_cmdCancel       34691
-DlgPassword_cmdHelp     34692
-DlgPassword_txtPassword     34693
-DlgHolidayCal_Dialog    34700
-DlgHolidayCal_1_Preview     34701
-DlgHolidayCal_1_opYear      34702
-DlgHolidayCal_1_opMonth     34703
-DlgHolidayCal_1_edYear      34704
-DlgHolidayCal_1_edMonth     34705
-DlgHolidayCal_1_spinYear    34706
-DlgHolidayCal_1_spinMonth   34707
-DlgHolidayCal_1_cmbState    34708
-DlgHolidayCal_2_lbOwnData   34709
-DlgHolidayCal_2_cmdInsert   34710
-DlgHolidayCal_2_cmdDelete   34711
-DlgHolidayCal_2_edEvent     34712
-DlgHolidayCal_2_chkEvent    34713
-DlgHolidayCal_2_edEventDay  34714
-DlgHolidayCal_2_spinEventDay    34715
-DlgHolidayCal_2_edEventMonth    34716
-DlgHolidayCal_2_spinEventMonth  34717
-DlgHolidayCal_2_edEventYear     34718
-DlgHolidayCal_2_spinEventYear   34719
-DlgHolidayCal_0_cmdOwnData  34720
-DlgHolidayCal_0_cmdCancel   34721
-DlgHolidayCal_0_cmdOK   34722
-DlgHolidaySched_Dialog  34725
-DlgInternet_s8OptManual 34726
-DlgInternet_s2outlookimport     34727
+
+#define HID_DLGIMPORT_DIALOG                34570
+hidspecial HID { HelpID = HID_DLGIMPORT_DIALOG; };
+#define HID_DLGIMPORT_0_CMDHELP             34571
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CMDHELP; };
+#define HID_DLGIMPORT_0_CMDCANCEL           34572
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CMDCANCEL; };
+#define HID_DLGIMPORT_0_CMDPREV             34573
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CMDPREV; };
+#define HID_DLGIMPORT_0_CMDNEXT             34574
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CMDNEXT; };
+#define HID_DLGIMPORT_0_OPTSODOCUMENTS  34575
+hidspecial HID { HelpID = HID_DLGIMPORT_0_OPTSODOCUMENTS; };
+#define HID_DLGIMPORT_0_OPTMSDOCUMENTS  34576
+hidspecial HID { HelpID = HID_DLGIMPORT_0_OPTMSDOCUMENTS; };
+#define HID_DLGIMPORT_0_CHKLOGFILE      34577
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKLOGFILE; };
+#define HID_DLGIMPORT_2_CHKWORD             34578
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CHKWORD; };
+#define HID_DLGIMPORT_2_CHKEXCEL            34579
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CHKEXCEL; };
+#define HID_DLGIMPORT_2_CHKPOWERPOINT       34580
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CHKPOWERPOINT; };
+#define HID_DLGIMPORT_2_CBTEMPLATE          34581
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CBTEMPLATE; };
+#define HID_DLGIMPORT_2_CBTEMPLATERECURSE   34582
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CBTEMPLATERECURSE; };
+#define HID_DLGIMPORT_2_LBTEMPLATEPATH      34583
+hidspecial HID { HelpID = HID_DLGIMPORT_2_LBTEMPLATEPATH; };
+#define HID_DLGIMPORT_2_EDTEMPLATEPATH      34584
+hidspecial HID { HelpID = HID_DLGIMPORT_2_EDTEMPLATEPATH; };
+#define HID_DLGIMPORT_2_CBDOCUMENT          34586
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CBDOCUMENT; };
+#define HID_DLGIMPORT_2_CMDTEMPLATEPATHSELECT   34585
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDTEMPLATEPATHSELECT; };
+#define HID_DLGIMPORT_2_CBDOCUMENT          34586
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CBDOCUMENT; };
+#define HID_DLGIMPORT_2_CBDOCUMENTRECURSE   34587
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CBDOCUMENTRECURSE; };
+#define HID_DLGIMPORT_2_LBDOCUMENTPATH      34588
+hidspecial HID { HelpID = HID_DLGIMPORT_2_LBDOCUMENTPATH; };
+#define HID_DLGIMPORT_2_EDDOCUMENTPATH      34589
+hidspecial HID { HelpID = HID_DLGIMPORT_2_EDDOCUMENTPATH; };
+#define HID_DLGIMPORT_2_CMDDOCUMENTPATHSELECT   34590
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDDOCUMENTPATHSELECT; };
+#define HID_DLGIMPORT_2_LBEXPORTDOCUMENTPATH    34591
+hidspecial HID { HelpID = HID_DLGIMPORT_2_LBEXPORTDOCUMENTPATH; };
+#define HID_DLGIMPORT_2_EDEXPORTDOCUMENTPATH    34592
+hidspecial HID { HelpID = HID_DLGIMPORT_2_EDEXPORTDOCUMENTPATH; };
+#define HID_DLGIMPORT_2_CMDEXPORTPATHSELECT     34593
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDEXPORTPATHSELECT; };
+#define HID_DLGIMPORT_3_TBSUMMARY           34595
+hidspecial HID { HelpID = HID_DLGIMPORT_3_TBSUMMARY; };
+
+#define HID_DLGIMPORT_0_CHWRITER        34596
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CHWRITER; };
+#define HID_DLGIMPORT_0_CHKCALC     34597
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKCALC; };
+#define HID_DLGIMPORT_0_CHKIMPRESS      34598
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKIMPRESS; };
+#define HID_DLGIMPORT_0_CHKMATHGLOBAL  34599
+hidspecial HID { HelpID = HID_DLGIMPORT_0_CHKMATHGLOBAL; };
+
+#define HID_DLGCONVERT_DIALOG       34660
+hidspecial HID { HelpID = HID_DLGCONVERT_DIALOG; };
+#define HID_DLGCONVERT_CHECKBOX1        34661
+hidspecial HID { HelpID = HID_DLGCONVERT_CHECKBOX1; };
+#define HID_DLGCONVERT_OPTIONBUTTON1    34662
+hidspecial HID { HelpID = HID_DLGCONVERT_OPTIONBUTTON1; };
+#define HID_DLGCONVERT_OPTIONBUTTON2    34663
+hidspecial HID { HelpID = HID_DLGCONVERT_OPTIONBUTTON2; };
+#define HID_DLGCONVERT_OPTIONBUTTON3    34664
+hidspecial HID { HelpID = HID_DLGCONVERT_OPTIONBUTTON3; };
+#define HID_DLGCONVERT_OPTIONBUTTON4    34665
+hidspecial HID { HelpID = HID_DLGCONVERT_OPTIONBUTTON4; };
+#define HID_DLGCONVERT_LISTBOX1     34666
+hidspecial HID { HelpID = HID_DLGCONVERT_LISTBOX1; };
+#define HID_DLGCONVERT_OBFILE       34667
+hidspecial HID { HelpID = HID_DLGCONVERT_OBFILE; };
+#define HID_DLGCONVERT_OBDIR        34668
+hidspecial HID { HelpID = HID_DLGCONVERT_OBDIR; };
+#define HID_DLGCONVERT_COMBOBOX1        34669
+hidspecial HID { HelpID = HID_DLGCONVERT_COMBOBOX1; };
+#define HID_DLGCONVERT_TBSOURCE     34670
+hidspecial HID { HelpID = HID_DLGCONVERT_TBSOURCE; };
+#define HID_DLGCONVERT_CHECKRECURSIVE   34671
+hidspecial HID { HelpID = HID_DLGCONVERT_CHECKRECURSIVE; };
+#define HID_DLGCONVERT_TBTARGET     34672
+hidspecial HID { HelpID = HID_DLGCONVERT_TBTARGET; };
+#define HID_DLGCONVERT_CBCANCEL     34673
+hidspecial HID { HelpID = HID_DLGCONVERT_CBCANCEL; };
+#define HID_DLGCONVERT_CBHELP       34674
+hidspecial HID { HelpID = HID_DLGCONVERT_CBHELP; };
+#define HID_DLGCONVERT_CBBACK       34675
+hidspecial HID { HelpID = HID_DLGCONVERT_CBBACK; };
+#define HID_DLGCONVERT_CBGOON       34676
+hidspecial HID { HelpID = HID_DLGCONVERT_CBGOON; };
+#define HID_DLGCONVERT_CBSOURCEOPEN     34677
+hidspecial HID { HelpID = HID_DLGCONVERT_CBSOURCEOPEN; };
+#define HID_DLGCONVERT_CBTARGETOPEN     34678
+hidspecial HID { HelpID = HID_DLGCONVERT_CBTARGETOPEN; };
+#define HID_DLGCONVERT_CHKPROTECT       34679
+hidspecial HID { HelpID = HID_DLGCONVERT_CHKPROTECT; };
+#define HID_DLGCONVERT_CHKTEXTDOCUMENTS 34680
+hidspecial HID { HelpID = HID_DLGCONVERT_CHKTEXTDOCUMENTS; };
+
+#define HID_DLGPASSWORD_CMDGOON     34690
+hidspecial HID { HelpID = HID_DLGPASSWORD_CMDGOON; };
+#define HID_DLGPASSWORD_CMDCANCEL       34691
+hidspecial HID { HelpID = HID_DLGPASSWORD_CMDCANCEL; };
+#define HID_DLGPASSWORD_CMDHELP     34692
+hidspecial HID { HelpID = HID_DLGPASSWORD_CMDHELP; };
+#define HID_DLGPASSWORD_TXTPASSWORD     34693
+hidspecial HID { HelpID = HID_DLGPASSWORD_TXTPASSWORD; };
+
+#define HID_DLGHOLIDAYCAL_DIALOG    34700
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_DIALOG; };
+#define HID_DLGHOLIDAYCAL_1_PREVIEW     34701
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_PREVIEW; };
+#define HID_DLGHOLIDAYCAL_1_OPYEAR      34702
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_OPYEAR; };
+#define HID_DLGHOLIDAYCAL_1_OPMONTH     34703
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_OPMONTH; };
+#define HID_DLGHOLIDAYCAL_1_EDYEAR      34704
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_EDYEAR; };
+#define HID_DLGHOLIDAYCAL_1_EDMONTH     34705
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_EDMONTH; };
+#define HID_DLGHOLIDAYCAL_1_SPINYEAR    34706
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_SPINYEAR; };
+#define HID_DLGHOLIDAYCAL_1_SPINMONTH   34707
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_SPINMONTH; };
+#define HID_DLGHOLIDAYCAL_1_CMBSTATE    34708
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_1_CMBSTATE; };
+#define HID_DLGHOLIDAYCAL_2_LBOWNDATA   34709
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_LBOWNDATA; };
+#define HID_DLGHOLIDAYCAL_2_CMDINSERT   34710
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_CMDINSERT; };
+#define HID_DLGHOLIDAYCAL_2_CMDDELETE   34711
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_CMDDELETE; };
+#define HID_DLGHOLIDAYCAL_2_EDEVENT     34712
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_EDEVENT; };
+#define HID_DLGHOLIDAYCAL_2_CHKEVENT    34713
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_CHKEVENT; };
+#define HID_DLGHOLIDAYCAL_2_EDEVENTDAY  34714
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_EDEVENTDAY; };
+#define HID_DLGHOLIDAYCAL_2_SPINEVENTDAY    34715
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_SPINEVENTDAY; };
+#define HID_DLGHOLIDAYCAL_2_EDEVENTMONTH    34716
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_EDEVENTMONTH; };
+#define HID_DLGHOLIDAYCAL_2_SPINEVENTMONTH  34717
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_SPINEVENTMONTH; };
+#define HID_DLGHOLIDAYCAL_2_EDEVENTYEAR     34718
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_EDEVENTYEAR; };
+#define HID_DLGHOLIDAYCAL_2_SPINEVENTYEAR   34719
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_2_SPINEVENTYEAR; };
+#define HID_DLGHOLIDAYCAL_0_CMDOWNDATA  34720
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_0_CMDOWNDATA; };
+#define HID_DLGHOLIDAYCAL_0_CMDCANCEL   34721
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_0_CMDCANCEL; };
+#define HID_DLGHOLIDAYCAL_0_CMDOK   34722
+hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_0_CMDOK; };
 #Ende bei 34767
