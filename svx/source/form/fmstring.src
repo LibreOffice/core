@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:27:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ String RID_ERR_FIELDREQUIRED
     Text [ English ] = "The field '#' requires input. Insert a value." ;
     Text [ portuguese ] = "É necessária uma entrada para o campo '#'.\nEspecifique um valor!" ;
     Text [ english_us ] = "Input required in field '#'. Please enter a value." ;
-    Text [ portuguese_brazilian ] = "Für das Feld '#' ist eine Eingabe erforderlich.\nGeben Sie dort einen Wert ein!" ;
+    Text [ portuguese_brazilian ] = "F? das Feld '#' ist eine Eingabe erforderlich.\nGeben Sie dort einen Wert ein!" ;
     Text [ swedish ] = "I fältet '#' behövs en inmatning.\nVar vänlig och mata in ett värde!" ;
     Text [ danish ] = "Input kræves til feltet '#'.\nIndtast venligst en værdi!" ;
     Text [ italian ] = "Nel campo '#' è necessario immettere dei dati.\nDigitate un valore!" ;
@@ -102,7 +102,7 @@ String RID_ERR_FIELDREQUIRED
     Text [ dutch ] = "Veld '#' moet worden ingevuld.\nGeef hier een waarde aan!" ;
     Text[ chinese_simplified ] = "±ØĞëÎªÕâ¸ö×Ö¶Î '#' ÊäÈëÒ»¸öÊıÖµ£¡";
     Text[ russian ] = "Äëÿ ïîëÿ '#' òğåáóåòñÿ ââîä äàííûõ.\nÏîæàëóéñòà, ââåäèòå çíà÷åíèå!";
-    Text[ polish ] = "Dla pola '#' wymagany jest wpis.\nProszê wstawiæ wartoœæ!";
+    Text[ polish ] = "Dla pola '#' wymagany jest wpis.\nProszê wstawiæ warto?æ!";
     Text[ japanese ] = "'#' Ì¨°ÙÄŞ‚É‚Í“ü—Í‚ª•K—v‚Å‚·B\n”’l‚ğ“ü—Í‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "¥²¶·¬°³o­ÓÄæ¦ì '#' ¿é¤J¤@­Ó¼Æ­È¡T";
     Text[ greek ] = "Áğáéôåßôáé åéóáãùãŞ óôï ğåäßï '#'.\nĞáñáêáëş åéóÜãåôå ìéá ôéìŞ!";
@@ -119,7 +119,7 @@ String RID_ERR_DUPLICATE_NAME
     Text [ English ] = "Entry does already exist.\nPlease choose another name." ;
     Text [ portuguese ] = "Esta entrada já existe.\nSeleccione outro nome." ;
     Text [ english_us ] = "Entry already exists.\nPlease choose another name." ;
-    Text [ portuguese_brazilian ] = "Eintrag existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
+    Text [ portuguese_brazilian ] = "Eintrag existiert bereits.\nBitte w?hlen Sie einen anderen Namen." ;
     Text [ swedish ] = "Inmatningen finns redan.\nVar vänlig och välj ett annat namn." ;
     Text [ danish ] = "Elementet eksisterer allerede.\nVælg venligst et andet navn." ;
     Text [ italian ] = "La voce esiste giài.\nScegliete un altro nome." ;
@@ -180,7 +180,7 @@ String RID_STR_ALIGNMENT
     Text [ dutch ] = "Links;Gecentreerd;Rechts" ;
     Text[ chinese_simplified ] = "Ïò×ó£»¾ÓÖĞ£»ÏòÓÒ";
     Text[ russian ] = "Ñëåâà;Ïî öåíòğó;Ñïğàâà";
-    Text[ polish ] = "Do lewej;Wyœrodkowany;Do prawej";
+    Text[ polish ] = "Do lewej;Wy?rodkowany;Do prawej";
     Text[ japanese ] = "¶‘µ‚¦;’†‰›‘µ‚¦;‰E‘µ‚¦";
     Text[ chinese_traditional ] = "¦V¥ª¡F¸m¤¤¡F¦V¥k";
     Text[ greek ] = "ÁñéóôåñÜ;Êİíôñï;ÄåîéÜ";
@@ -362,7 +362,7 @@ String RID_STR_BORDER_TYPE
     Text [ dutch ] = "Zonder kader;3D-look;vlak" ;
     Text[ chinese_simplified ] = "ÎŞ¿ò£»3 Î¬ÏÔÊ¾£»Æ½Ãæ";
     Text[ russian ] = "Áåç ğàìêè;3-Ì-Âèä;Ïëîñêèé";
-    Text[ polish ] = "PrzeŸroczysty;Ustawienie 3-W;P³aski";
+    Text[ polish ] = "Prze?roczysty;Ustawienie 3-W;P³aski";
     Text[ japanese ] = "˜g‚È‚µ;3D Ù¯¸;•½‚½‚¢";
     Text[ chinese_traditional ] = "µL®Ø¡F3D Åã¥Ü¡F¥­­±";
     Text[ greek ] = "×ùñßò ğëáßóéï;ÅìöÜíéóç 3Ä;Åğßğåäï";
@@ -388,7 +388,7 @@ String RID_STR_DEFAULT_CONTROL
     Text [ dutch ] = "Standaard controle-element" ;
     Text[ chinese_simplified ] = "±ê×¼¿ØÖÆ";
     Text[ russian ] = "Ñòàíäàğòíûé ıëåìåíò óïğàâëåíèÿ";
-    Text[ polish ] = "Domyœlny formant";
+    Text[ polish ] = "Domy?lny formant";
     Text[ japanese ] = "•W€ºİÄÛ°Ù—v‘f";
     Text[ chinese_traditional ] = "¼Ğ·Ç±±¨î¶µ";
     Text[ greek ] = "Óôïé÷åßï åëİã÷ïõ ğñïåğéëïãŞò";
@@ -675,7 +675,7 @@ String RID_STR_LISTSOURCE
     Text [ dutch ] = "Lijstinhoud" ;
     Text[ chinese_simplified ] = "ÁĞ±íÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå ñïèñêà";
-    Text[ polish ] = "Zawartoœæ listy";
+    Text[ polish ] = "Zawarto?æ listy";
     Text[ japanese ] = "Ø½Ä‚Ì“à—e";
     Text[ chinese_traditional ] = "²M³æ¤º®e";
     Text[ greek ] = "Ğåñéå÷üìåíï ëßóôáò";
@@ -701,7 +701,7 @@ String RID_STR_LISTSOURCETYPE
     Text [ dutch ] = "Type lijstinhoud" ;
     Text[ chinese_simplified ] = "ÁĞ±íÄÚÈİµÄÀàĞÍ";
     Text[ russian ] = "Òèï ñîäåğæèìîãî ñïèñêà";
-    Text[ polish ] = "Rodzaj zawartoœci listy";
+    Text[ polish ] = "Rodzaj zawarto?ci listy";
     Text[ japanese ] = "Ø½Ä“à—e‚Ìí—Ş";
     Text[ chinese_traditional ] = "²M³æ¤º®eªºÃş«¬";
     Text[ greek ] = "Ôığïò ôïõ ğåñéå÷ïìİíïõ ëßóôáò";
@@ -726,7 +726,7 @@ String RID_STR_CURSORSOURCE
     Text[ italian ] = "Contenuto";
     Text[ danish ] = "Datakilde";
     Text[ swedish ] = "Innehåll";
-    Text[ polish ] = "Zawartoœæ";
+    Text[ polish ] = "Zawarto?æ";
     Text[ portuguese_brazilian ] = "Datenquelle";
     Text[ japanese ] = "“à—e";
     Text[ korean ] = "³»¿ë";
@@ -751,7 +751,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ italian ] = "Tipo di contenuto";
     Text[ danish ] = "Datakildetype";
     Text[ swedish ] = "Typ av innehåll";
-    Text[ polish ] = "Rodzaj zawartoœci";
+    Text[ polish ] = "Rodzaj zawarto?ci";
     Text[ portuguese_brazilian ] = "Typ der Datenquelle";
     Text[ japanese ] = "“à—e‚Ìí—Ş";
     Text[ korean ] = "³»¿ë Á¾·ù";
@@ -768,7 +768,7 @@ String RID_STR_ALLOW_ADDITIONS
     Text [ English ] = "Allow additions" ;
     Text [ portuguese ] = "Adicionar dados" ;
     Text [ english_us ] = "Allow additions" ;
-    Text [ portuguese_brazilian ] = "Daten hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Daten hinzuf?en" ;
     Text [ swedish ] = "Lägg till data" ;
     Text [ danish ] = "Tilføj data" ;
     Text [ italian ] = "Aggiungi dati" ;
@@ -794,7 +794,7 @@ String RID_STR_ALLOW_DELETIONS
     Text [ English ] = "Allow deletions" ;
     Text [ portuguese ] = "Eliminar dados" ;
     Text [ english_us ] = "Delete data" ;
-    Text [ portuguese_brazilian ] = "Daten löschen" ;
+    Text [ portuguese_brazilian ] = "Daten l?chen" ;
     Text [ swedish ] = "Radera data" ;
     Text [ danish ] = "Slet data" ;
     Text [ italian ] = "Elimina dati" ;
@@ -820,7 +820,7 @@ String RID_STR_ALLOW_EDITS
     Text [ English ] = "Allow edits" ;
     Text [ portuguese ] = "Modificar dados" ;
     Text [ english_us ] = "Allow modifications" ;
-    Text [ portuguese_brazilian ] = "Daten ändern" ;
+    Text [ portuguese_brazilian ] = "Daten ?ndern" ;
     Text [ swedish ] = "Ändra data" ;
     Text [ danish ] = "Modificer data" ;
     Text [ italian ] = "Modifica dati" ;
@@ -846,7 +846,7 @@ String RID_STR_DATAENTRY
     Text [ English ] = "Only additions allowed" ;
     Text [ portuguese ] = "Adicionar apenas dados" ;
     Text [ english_us ] = "Add data only " ;
-    Text [ portuguese_brazilian ] = "Nur Daten hinzufügen" ;
+    Text [ portuguese_brazilian ] = "Nur Daten hinzuf?en" ;
     Text [ swedish ] = "Lägg endast till data" ;
     Text [ danish ] = "Tilføj kun data" ;
     Text [ italian ] = "Aggiungi solo i dati" ;
@@ -880,7 +880,7 @@ String RID_STR_DATASOURCE
     Text[ italian ] = "Sorgente dati";
     Text[ danish ] = "Database";
     Text[ swedish ] = "Datakälla";
-    Text[ polish ] = "ród³o danych";
+    Text[ polish ] = "?ród³o danych";
     Text[ portuguese_brazilian ] = "Datenbank";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
@@ -923,7 +923,7 @@ String RID_STR_MASTERFIELDS
     Text [ English ] = "Master fields" ;
     Text [ portuguese ] = "Ligar de" ;
     Text [ english_us ] = "Link master fields" ;
-    Text [ portuguese_brazilian ] = "Übergeordnete Felder" ;
+    Text [ portuguese_brazilian ] = "?bergeordnete Felder" ;
     Text [ swedish ] = "Länka från" ;
     Text [ danish ] = "Kæde fra" ;
     Text [ italian ] = "Collega da" ;
@@ -1089,7 +1089,7 @@ String RID_STR_PROPERTIES_CONTROL
     Text [ dutch ] = "Eigenschappen    " ;
     Text[ chinese_simplified ] = "ÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà: ";
-    Text[ polish ] = "W³aœciwoœci: ";
+    Text[ polish ] = "W³a?ciwo?ci: ";
     Text[ japanese ] = "‘®« ";
     Text[ chinese_traditional ] = "Äİ©Ê¡G ";
     Text[ greek ] = "Éäéüôçôåò: ";
@@ -1115,7 +1115,7 @@ String RID_STR_PROPERTIES_COLUMN
     Text [ dutch ] = "Kolomeigenschappen:   " ;
     Text[ chinese_simplified ] = "ÁĞÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà êîëîíîê: ";
-    Text[ polish ] = "W³aœciwoœci kolumny ";
+    Text[ polish ] = "W³a?ciwo?ci kolumny ";
     Text[ japanese ] = "—ñ‚Ì‘®« ";
     Text[ chinese_traditional ] = "ÄæÄİ©Ê¡G ";
     Text[ greek ] = "Éäéüôçôåò óôŞëçò: ";
@@ -1141,7 +1141,7 @@ String RID_STR_PROPERTIES_FORM
     Text [ dutch ] = "Formuliereigenschappen" ;
     Text[ chinese_simplified ] = "±íµ¥ÊôĞÔ";
     Text[ russian ] = "Ñâîéñòâà ôîğìóëÿğà";
-    Text[ polish ] = "W³aœciwoœci formularza";
+    Text[ polish ] = "W³a?ciwo?ci formularza";
     Text[ japanese ] = "Ì«°Ñ‚Ì‘®«";
     Text[ chinese_traditional ] = "ªí³æÄİ©Ê";
     Text[ greek ] = "Éäéüôçôåò öüñìáò";
@@ -1193,7 +1193,7 @@ String RID_STR_LISTSOURCE_TYPE
     Text [ dutch ] = "Waardenlijst;Tabel;Query;Sql;Sql [Native];Tabelvelden" ;
     Text[ chinese_simplified ] = "ÊıÖµÁĞµ¥;±í¸ñ;²éÑ¯;Sql;Sql [Native];¹¤×÷±í×Ö¶Î";
     Text[ russian ] = "Ñïèñîê çíà÷åíèé;Òàáëèöà;Çàïğîñ;Sql;Sql [Native];Ïîëÿ òàáëèöû";
-    Text[ polish ] = "Lista wartoœci;Tabela;Kwerenda;Sql;Sql [Native];Pola tabeli";
+    Text[ polish ] = "Lista warto?ci;Tabela;Kwerenda;Sql;Sql [Native];Pola tabeli";
     Text[ japanese ] = "’lØ½Ä;Ã°ÌŞÙ;¸´Ø°;Sql;Sql [Native];Ã°ÌŞÙÌ¨°ÙÄŞ";
     Text[ greek ] = "Ëßóôá ôéìşí;Ğßíáêáò;Åñşôçìá;Sql;Sql [Native];Ğåäßá ğéíÜêùí";
     Text[ korean ] = "°ª ¸ñ·Ï;Ç¥;ÁúÀÇ;Sql;Sql [Native];Ç¥ ÇÊµå";
@@ -1505,7 +1505,7 @@ String RID_STR_STANDARD
     Text [ dutch ] = "Standaard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "•W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ greek ] = "ĞñïåğéëïãŞ";
@@ -1862,7 +1862,7 @@ String RID_STR_CONNECTERROR
     Text [ ENGLISH ] = "Can't create connection" ;
     Text [ norwegian ] = "Kan ikke opprette forbindelse" ;
     Text [ italian ] = "Impossibile creare la connessione" ;
-    Text [ portuguese_brazilian ] = "NÆo consigo criar a conexÆo" ;
+    Text [ portuguese_brazilian ] = "N?o consigo criar a conex?o" ;
     Text [ portuguese ] = "Não foi possível estabelecer a ligação." ;
     Text [ finnish ] = "Yhteyden muodostus ei onnistu" ;
     Text [ danish ] = "Det var ikke muligt at oprette forbindelsen" ;
@@ -1994,7 +1994,7 @@ String RID_STR_DELETECONFIRM_RECORD
     Text [ ENGLISH ] = "You are about to delete 1 record." ;
     Text [ english_us ] = "You intend to delete 1 record." ;
     Text [ portuguese ] = "Deseja eliminar 1 registo." ;
-    Text [ portuguese_brazilian ] = "Sie beabsichtigen # Datensatz zu löschen." ;
+    Text [ portuguese_brazilian ] = "Sie beabsichtigen # Datensatz zu l?chen." ;
     Text [ swedish ] = "Du kommer att radera 1 datapost." ;
     Text [ danish ] = "Du er i gang med at slette # datapost." ;
     Text [ italian ] = "Intendete eliminare 1 record di dati." ;
@@ -2020,7 +2020,7 @@ String RID_STR_DELETECONFIRM_RECORDS
     Text [ ENGLISH ] = "You are going to delete # records." ;
     Text [ english_us ] = "# records will be deleted." ;
     Text [ portuguese ] = "Eliminará # registos." ;
-    Text [ portuguese_brazilian ] = "Sie beabsichtigen # Datensätze zu löschen." ;
+    Text [ portuguese_brazilian ] = "Sie beabsichtigen # Datens?tze zu l?chen." ;
     Text [ swedish ] = "Du tänker radera # dataposter." ;
     Text [ danish ] = "Du er i gang med at slette # dataposter." ;
     Text [ italian ] = "Intendete eliminare i record # di dati." ;
@@ -2046,7 +2046,7 @@ String RID_STR_DELETECONFIRM
     Text [ ENGLISH ] = "If you click Yes, you won't be able to undo this operation!\n Continue deleting?" ;
     Text [ english_us ] = "If you click Yes, you won't be able to undo this operation!\nDo you want to continue anyway?" ;
     Text [ portuguese ] = "Se fizer clique em Sim, não lhe será possível anular esta operação!\nContinuar?" ;
-    Text [ portuguese_brazilian ] = "Wenn Ja ausgewählt wird, kann die Operation nicht mehr rückgängig gemacht werden!\nWollen Sie trotzdem fortfahren?" ;
+    Text [ portuguese_brazilian ] = "Wenn Ja ausgew?hlt wird, kann die Operation nicht mehr r?kg?ngig gemacht werden!\nWollen Sie trotzdem fortfahren?" ;
     Text [ swedish ] = "Om Du väljer Ja, kan Du inte ångra operationen mer!\nVill Du trots det fortsätta?" ;
     Text [ danish ] = "Hvis du vælger Ja, er det ikke længere muligt at fortyde denne operation!\nVil du fortsætte alligevel?" ;
     Text [ italian ] = "Se si sceglie Sì, non sarà più possibile annullare l'operazione!\nContinuare lo stesso?" ;
@@ -2055,9 +2055,9 @@ String RID_STR_DELETECONFIRM
     Text [ dutch ] = "Als Ja wordt geselecteerd kan de handeling niet meer ongedaan worden gemaakt!\nWilt u toch doorgaan?" ;
     Text[ chinese_simplified ] = "Èç¹ûÑ¡Ôñ\"ÊÇ\"£¬Õâ¸ö²Ù×÷¾Í²»ÄÜ±»³·»Ø£¡\nÄú»¹ÊÇÒª¼ÌĞøÂğ£¿";
     Text[ russian ] = "Åñëè Âû íàæìåòå êíîïêó Äà, îòìåíèòü îïåğàöèş óæå íåâîçìîæíî áóäåò!\nÂû õîòèòå ïğîäîëæèòü íåñìîòğÿ íà ıòî?";
-    Text[ polish ] = "Jeœli klikniesz Tak, nie bêdziesz móg³ cofn¹æ tej operacji!\nCzy chcesz mimo to kontynuowaæ?";
+    Text[ polish ] = "Je?li klikniesz Tak, nie bêdziesz móg³ cofn¹æ tej operacji!\nCzy chcesz mimo to kontynuowaæ?";
     Text[ japanese ] = "‚Í‚¢‚ğ‘I‘ğ‚·‚é‚ÆA‘€ì‚ğŒ³‚É–ß‚·‚±‚Æ‚ªo—ˆ‚Ü‚¹‚ñ!\n‚»‚ê‚Å‚à‘±s‚µ‚Ü‚·‚©?";
-    Text[ chinese_traditional ] = "­Y¿ï¾Ü¡§¬O¡¨¡A´N¤£¯à°÷ºM®ø³o­Ó§@·~¡I\n­nÄ~Äò¡H";
+    Text[ chinese_traditional ] = "­Y¿ï¾Ü?¬O?¡A´N¤£¯à°÷ºM®ø³o­Ó§@·~¡I\n­nÄ~Äò¡H";
     Text[ greek ] = "Áí åğéëİîåôå \"Íáé\" äåí èá åßíáé äõíáôüí íá áêõñùèåß áõôŞ ç åíİñãåéá!\nÓõíİ÷åéá;";
     Text[ korean ] = "'¿¹'¸¦ Å¬¸¯ÇÏ¸é ÀÌ ÀÛ¾÷ÀÇ ½ÇÇàÀ» Ãë¼ÒÇÒ ¼ö ¾ø½À´Ï´Ù.\n±×·¡µµ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Text[ arabic ] = "ÅĞÇ ŞãÊ ÈÇÎÊíÇÑ \"äÚã\"¡ İáä íãßäß ÇáÊÑÇÌÚ Úä ÇáÚãáíÉ ÈÚÏ Ğáß!\nåá ÊÑíÏ ÇáãÊÇÈÚÉ ÈÇáÑÛã ãä Ğáß¿";
@@ -2099,7 +2099,7 @@ String RID_STR_NO_FORM_CONNECT
     Text [ ENGLISH ] = "Couldn't establish connection between form '#' and form '#'" ;
     Text [ english_us ] = "Couldn't establish connection between form '#' and form '#'" ;
     Text[ italian ] = "Non è stato possibile ripristinare il collegamento dal formulario '#' al formulario '#'.";
-    Text[ portuguese_brazilian ] = "Die Verknüpfung von Formular '#' zu Formular '#' konnte nicht hergestellt werden.";
+    Text[ portuguese_brazilian ] = "Die Verkn?fung von Formular '#' zu Formular '#' konnte nicht hergestellt werden.";
     Text[ portuguese ] = "Foi impossível estabelecer a ligação do formulário '#' ao formulário '#'.";
     Text[ danish ] = "Det var ikke muligt at oprette kæden fra formular # til formular #.";
     Text[ french ] = "Le lien entre le formulaire '#' et le formulaire '#' n'a pas pu être établi.";
@@ -2234,7 +2234,7 @@ String RID_ERR_NO_ELEMENT
     Text [ ENGLISH ] = "Choose an entry of the list." ;
     Text [ english_us ] = "Choose an entry from the list or enter a text corresponding to one of the list items." ;
     Text[ italian ] = "Selezionate un elemento dell'elenco oppure inserite un testo corrispondente a uno degli elementi elencati.";
-    Text[ portuguese_brazilian ] = "Wählen Sie ein Element der Liste aus oder geben Sie Text ein, der mit einem der aufgelisteten Elemente übereinstimmt.";
+    Text[ portuguese_brazilian ] = "W?hlen Sie ein Element der Liste aus oder geben Sie Text ein, der mit einem der aufgelisteten Elemente ?ereinstimmt.";
     Text[ portuguese ] = "Seleccione um dos elementos da lista ou indique um texto correspondente a um dos elementos da referida lista.";
     Text[ danish ] = "Vælg et element fra listen eller indtast tekst, som svarer til et af elementerne fra listen.";
     Text[ french ] = "Sélectionnez une entrée de liste ou saisissez le texte concordant avec l'un des éléments listés.";
@@ -2322,7 +2322,7 @@ String RID_STR_TABINDEX
     Text [ dutch ] = "Volgorde" ;
     Text[ chinese_simplified ] = "Ë³Ğò";
     Text[ russian ] = "Ïîğÿäîê";
-    Text[ polish ] = "Kolejnoœæ";
+    Text[ polish ] = "Kolejno?æ";
     Text[ japanese ] = "‡˜";
     Text[ chinese_traditional ] = "¶¶§Ç";
     Text[ greek ] = "ÄéÜôáîç";
@@ -2477,7 +2477,7 @@ String RID_STR_ENUM_CYCLE
     Text[ danish ] = "Alle dataposter;Aktuel datapost;Aktuel side";
     Text[ swedish ] = "Alla dataposter;Aktuell datapost;Aktuell sida";
     Text[ polish ] = "Wszystkie rekordy;Aktualny rekord;Aktualna strona";
-    Text[ portuguese_brazilian ] = "Alle Datensätze;Aktueller Datensatz";
+    Text[ portuguese_brazilian ] = "Alle Datens?tze;Aktueller Datensatz";
     Text[ japanese ] = "‚·‚×‚Ä‚ÌÚº°ÄŞ;Œ»İ‚ÌÚº°ÄŞ;Œ»İ‚ÌÍß°¼Ş";
     Text[ chinese_simplified ] = "ËùÓĞµÄÊı¾İÌõÄ¿;µ±Ç°µÄÊı¾İÌõÄ¿;µ±Ç°Ò³Ãæ";
     Text[ chinese_traditional ] = "©Ò¦³ªº¸ê®Æ±ø¥Ø;·í«eªº¸ê®Æ±ø¥Ø;·í«e­¶­±";
@@ -2521,7 +2521,7 @@ String RID_STR_DIRTY
     Text [ ENGLISH ] = "Dirty" ;
     Text [ portuguese ] = "Modificado" ;
     Text [ english_us ] = "Modified" ;
-    Text [ portuguese_brazilian ] = "Geändert" ;
+    Text [ portuguese_brazilian ] = "Ge?ndert" ;
     Text [ swedish ] = "Ändrat" ;
     Text [ danish ] = "Ændret" ;
     Text [ italian ] = "Modificato" ;
@@ -2556,7 +2556,7 @@ String RID_STR_OLDVALUE
     Text [ dutch ] = "Oude waarde" ;
     Text[ chinese_simplified ] = "¾ÉµÄÊıÖµ";
     Text[ russian ] = "Ñòàğîå çíà÷åíèå";
-    Text[ polish ] = "Stara wartoœæ";
+    Text[ polish ] = "Stara warto?æ";
     Text[ japanese ] = "ŒÃ‚¢”’l";
     Text[ chinese_traditional ] = "ÂÂ¼Æ­È";
     Text[ greek ] = "ĞáëéÜ ôéìŞ";
@@ -2582,7 +2582,7 @@ String RID_STR_VALUE
     Text [ dutch ] = "Waarde" ;
     Text[ chinese_simplified ] = "ÊıÖµ";
     Text[ russian ] = "Çíà÷åíèå";
-    Text[ polish ] = "Wartoœæ";
+    Text[ polish ] = "Warto?æ";
     Text[ japanese ] = "’l";
     Text[ chinese_traditional ] = "¼Æ­È";
     Text[ greek ] = "ÔéìŞ";
@@ -2677,7 +2677,7 @@ String RID_STR_SIZE
     Text [ ENGLISH ] = "Size" ;
     Text [ portuguese ] = "Tamanho" ;
     Text [ english_us ] = "Size" ;
-    Text [ portuguese_brazilian ] = "Gesamtgröße" ;
+    Text [ portuguese_brazilian ] = "Gesamtgr?e" ;
     Text [ swedish ] = "Storlek" ;
     Text [ danish ] = "Størrelse" ;
     Text [ italian ] = "Dimensione" ;
@@ -2807,7 +2807,7 @@ String RID_STR_HEIGHT
     Text [ ENGLISH ] = "Height" ;
     Text [ portuguese ] = "Altura" ;
     Text [ english_us ] = "Height" ;
-    Text [ portuguese_brazilian ] = "Höhe" ;
+    Text [ portuguese_brazilian ] = "H?e" ;
     Text [ swedish ] = "Höjd" ;
     Text [ danish ] = "Højde" ;
     Text [ italian ] = "Altezza" ;
@@ -2816,7 +2816,7 @@ String RID_STR_HEIGHT
     Text [ dutch ] = "Hoogte" ;
     Text[ chinese_simplified ] = "¸ß¶È";
     Text[ russian ] = "Âûñîòà";
-    Text[ polish ] = "Wysokoœæ";
+    Text[ polish ] = "Wysoko?æ";
     Text[ japanese ] = "‚‚³";
     Text[ chinese_traditional ] = "°ª«×";
     Text[ greek ] = "¾øïò";
@@ -2842,7 +2842,7 @@ String RID_STR_WIDTH
     Text [ dutch ] = "Breedte" ;
     Text[ chinese_simplified ] = "¿í¶È";
     Text[ russian ] = "Øèğèíà";
-    Text[ polish ] = "Szerokoœæ";
+    Text[ polish ] = "Szeroko?æ";
     Text[ japanese ] = "•";
     Text[ chinese_traditional ] = "¼e«×";
     Text[ greek ] = "ĞëÜôïò";
@@ -2885,7 +2885,7 @@ String RID_STR_ROWHEIGHT
     Text [ English ] = "Background color" ;
     Text [ portuguese ] = "Altura da linha" ;
     Text [ english_us ] = "Row height" ;
-    Text [ portuguese_brazilian ] = "Zeilenhöhe" ;
+    Text [ portuguese_brazilian ] = "Zeilenh?e" ;
     Text [ swedish ] = "Radhöjd" ;
     Text [ danish ] = "Rækkehøjde" ;
     Text [ italian ] = "Altezza riga" ;
@@ -2894,7 +2894,7 @@ String RID_STR_ROWHEIGHT
     Text [ dutch ] = "Rijhoogte" ;
     Text[ chinese_simplified ] = "ĞĞ¸ß";
     Text[ russian ] = "Âûñîòà ñòğîê";
-    Text[ polish ] = "Wysokoœæ wierszy";
+    Text[ polish ] = "Wysoko?æ wierszy";
     Text[ japanese ] = "s‚Ì‚‚³";
     Text[ chinese_traditional ] = "¦æ°ª";
     Text[ greek ] = "¾øïò ãñáììŞò";
@@ -2911,7 +2911,7 @@ String RID_STR_FILLCOLOR
     Text [ English ] = "FillColor" ;
     Text [ portuguese ] = "Cor de preenchimento" ;
     Text [ english_us ] = "Fill Color" ;
-    Text [ portuguese_brazilian ] = "Füllfarbe" ;
+    Text [ portuguese_brazilian ] = "F?lfarbe" ;
     Text [ swedish ] = "Fyllningsfärg" ;
     Text [ danish ] = "Fyldfarve" ;
     Text [ italian ] = "Colore di riempimento" ;
@@ -2998,7 +2998,7 @@ String RID_STR_REFVALUE
     Text [ dutch ] = "Referentiewaarde" ;
     Text[ chinese_simplified ] = "ÒıÓÃÖµ";
     Text[ russian ] = "Çíà÷åíèå ññûëêè";
-    Text[ polish ] = "Wartoœæ odwo³ania";
+    Text[ polish ] = "Warto?æ odwo³ania";
     Text[ japanese ] = "QÆ’l";
     Text[ chinese_traditional ] = "°Ñ·Ó­È";
     Text[ greek ] = "ÔéìŞ áíáöïñÜò";
@@ -3015,7 +3015,7 @@ String RID_STR_STRINGITEMLIST
     Text [ English ] = "StringItemList" ;
     Text [ portuguese ] = "Entradas de listas" ;
     Text [ english_us ] = "List entries" ;
-    Text [ portuguese_brazilian ] = "Listen-Einträge" ;
+    Text [ portuguese_brazilian ] = "Listen-Eintr?ge" ;
     Text [ swedish ] = "Listposter" ;
     Text [ danish ] = "Liste-elementer" ;
     Text [ italian ] = "Voci dell'elenco" ;
@@ -3181,7 +3181,7 @@ String RID_STR_DEFAULTVALUE
     Text [ dutch ] = "Standaardwaarde" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏÖµ";
     Text[ russian ] = "Çíà÷åíèå ïî óìîë÷àíèş";
-    Text[ polish ] = "Wartoœæ domyœlna";
+    Text[ polish ] = "Warto?æ domy?lna";
     Text[ japanese ] = "•W€’l";
     Text[ chinese_traditional ] = "Àq»{­È";
     Text[ greek ] = "Ğñïåğéëåãìİíç ôéìŞ";
@@ -3311,7 +3311,7 @@ String RID_STR_DEFAULT_CHECKED
     Text [ dutch ] = "Standaardstatus" ;
     Text[ chinese_simplified ] = "±ê×¼×´Ì¬";
     Text[ russian ] = "Ñòàòóñ ïî óìîë÷àíèş";
-    Text[ polish ] = "Stan domyœlny";
+    Text[ polish ] = "Stan domy?lny";
     Text[ japanese ] = "•W€½Ã°À½";
     Text[ chinese_traditional ] = "¼Ğ·Çª¬ºA";
     Text[ greek ] = "Ğñïåğéëåãìİíç êáôÜóôáóç";
@@ -3337,7 +3337,7 @@ String RID_STR_ENUM_CHECKED
     Text [ dutch ] = "Niet geselecteerd;Wel geselecteerd;Onbepaald" ;
     Text[ chinese_simplified ] = "Ã»ÓĞÑ¡Ôñ;ÒÑÑ¡Ôñ;Î´¶¨";
     Text[ russian ] = "Íå âûáğàíî;Âûáğàíî;Íåîïğåäåëåíî";
-    Text[ polish ] = "Niewybrany;Wybrany;Nieokreœlony";
+    Text[ polish ] = "Niewybrany;Wybrany;Nieokre?lony";
     Text[ japanese ] = "‘I‘ğ‚µ‚Ä‚¢‚È‚¢;‘I‘ğ‚µ‚½;w’è‚È‚µ";
     Text[ chinese_traditional ] = "¨S¦³¿ï¾Ü;¤w¿ï¾Ü;¥¼©w";
     Text[ greek ] = "Ìç åğéëåãìİíá;Åğéëåãìİíá;Ìç ïñéóìİíï";
@@ -3393,7 +3393,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text [ dutch ] = "Standaardselectie" ;
     Text[ chinese_simplified ] = "±ê×¼Ñ¡Ôñ";
     Text[ russian ] = "Âûáîğ ïî óìîë÷àíèş";
-    Text[ polish ] = "Selekcja domyœlna";
+    Text[ polish ] = "Selekcja domy?lna";
     Text[ japanese ] = "•W€‘I‘ğ”ÍˆÍ";
     Text[ chinese_traditional ] = "¼Ğ·Ç¿ï¨ú";
     Text[ greek ] = "ÅğéëïãŞ ğñïåğéëïãŞò";
@@ -3419,7 +3419,7 @@ String RID_STR_UNDO_PROPERTY
     Text [ dutch ] = "Definiëren van eigenschap '#'" ;
     Text[ chinese_simplified ] = "Éè¶¨ÊôĞÔ '#'";
     Text[ russian ] = "Óñòàíîâêà ñâîéñòâ '#'";
-    Text[ polish ] = "Ustaw w³aœciwoœæ '#'";
+    Text[ polish ] = "Ustaw w³a?ciwo?æ '#'";
     Text[ japanese ] = "ÌßÛÊßÃ¨'#'‚Ìİ’è";
     Text[ chinese_traditional ] = "³]©wÄİ©Ê '#'";
     Text[ greek ] = "Ïñéóìüò ôçò éäéüôçôáò '#'";
@@ -3436,7 +3436,7 @@ String RID_STR_UNDO_CONTAINER_INSERT
     Text [ English ] = "Insert of #" ;
     Text [ english_us ] = "Insert in container" ;
     TEXT[ italian ] = "Inserisci nel container";
-    TEXT[ portuguese_brazilian ] = "Einfügen in Container";
+    TEXT[ portuguese_brazilian ] = "Einf?en in Container";
     TEXT[ portuguese ] = "Inserir no contentor";
     TEXT[ danish ] = "Indsæt i container";
     TEXT[ french ] = "Insérer dans le container";
@@ -3488,7 +3488,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
     Text [ English ] = "remove # objects" ;
     Text [ english_us ] = "Delete # objects" ;
     TEXT[ italian ] = "# Cancella oggetti";
-    TEXT[ portuguese_brazilian ] = "# Objekte löschen";
+    TEXT[ portuguese_brazilian ] = "# Objekte l?chen";
     TEXT[ portuguese ] = "Eliminar # objectos";
     TEXT[ danish ] = "Slet # objekter";
     TEXT[ french ] = "Supprimer des objets #";
@@ -3540,7 +3540,7 @@ String RID_STR_UNDO_DELETE_LOGICAL
     Text [ English ] = "delete structure" ;
     Text [ english_us ] = "Delete structure" ;
     TEXT[ italian ] = "Cancella struttura";
-    TEXT[ portuguese_brazilian ] = "Struktur löschen";
+    TEXT[ portuguese_brazilian ] = "Struktur l?chen";
     TEXT[ portuguese ] = "Eliminar estrutura";
     TEXT[ danish ] = "Slet struktur";
     TEXT[ french ] = "Supprimer la structure";
@@ -3575,7 +3575,7 @@ String RID_STR_UNDO_TABORDER
     Text [ dutch ] = "Bepalen van de activeringsvolgorde" ;
     Text[ chinese_simplified ] = "Éè¶¨Ë³Ğò";
     Text[ russian ] = "Óñòàíîâêà ïîğÿäêà àêòèâèğîâàíèÿ";
-    Text[ polish ] = "Ustaw kolejnoœæ aktywacji";
+    Text[ polish ] = "Ustaw kolejno?æ aktywacji";
     Text[ japanese ] = "ÀÌŞµ°ÀŞ°‚Ìİ’è";
     Text[ chinese_traditional ] = "³]©w±Ò°Ê¶¶§Ç";
     Text[ greek ] = "Ïñéóìüò ôçò äéÜôáîçò åíåñãïğïßçóçò";
@@ -3729,7 +3729,7 @@ String RID_STR_DATEFORMAT_LIST
     Text [ french ] = "Standard (court);Standard (court AA);Standard (court AAAA);Standard (long);JJ.MM.AA;MM.JJ.AA;AA.MM.JJ;JJ.MM.AAAA;MM.JJ.AAAA;.AAAA.MM.JJ;AA-MM-JJ (DIN5008);AAAA-MM-JJ (DIN5008)" ;
     Text [ dutch ] = "Standaard (kort);Standaard (kort JJ);Standaard (kort JJJJ);Standaard (lang);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT;JJJJ-MM-TT" ;
     Text[ chinese_simplified ] = "±ê×¼(ËõĞ´);±ê×¼(ËõĞ´ JJ);±ê×¼(ËõĞ´ JJJJ);±ê×¼ (ÍêÕû);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
-    Text[ russian ] = "Ñòàíäàğò (êğàòêèé);Ñòàíäàğò (êğàòêèé ÃÃ); (êğàòêèé ÃÃÃÃ);Ñòàíäàğò (ïîëíûé);ÄÄ.MM.ÃÃ;MM.ÄÄ.ÃÃ;ÃÃ.MM.ÄÄ;ÄÄ.ÌÌ.ÃÃÃÃ;ÃÃÃÃ.ÌÌ.ÄÄ;ÃÃ-ÌÌ-ÄÄ (DIN5008);ÃÃÃÃ-MM-ÄÄ (DIN5008)";
+    Text[ russian ] = "Ñòàíäàğò (êğàòêèé);Ñòàíäàğò (êğàòêèé ÃÃ); (êğàòêèé ÃÃÃÃ);Ñòàíäàğò (ïîëíûé);ÄÄ.MM.ÃÃ;MM.ÄÄ.ÃÃ;ÃÃ.MM.ÄÄ;ÄÄ.ÌÌ.ÃÃÃÃ;ÃÃÃÃ.ÌÌ.ÄÄ;ÃÃ-ÌÌ-ÄÄ (DIN5008);ÃÃÃÃ-MM-ÄÄ (DIN";
     Text[ polish ] = "Standardowy (krótki);Standardowy (krótki JJ);Standardowy (krótki JJJJ);Standardowy (d³ugi);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
     Text[ japanese ] = "•W€(’Z‚¢Œ`®);•W€(’Z‚¢Œ`® YY);•W€(’Z‚¢Œ`® YYYY);•W€(’·‚¢Œ`®j;DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ chinese_traditional ] = "¼Ğ·Ç(ÁY¼g);¼Ğ·Ç(ÁY¼g JJ);¼Ğ·Ç(ÁY¼g JJJJ);¼Ğ·Ç(§¹¾ã);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
@@ -3886,7 +3886,7 @@ String RID_STR_VALUEMIN
     Text [ dutch ] = "Min. waarde" ;
     Text[ chinese_simplified ] = "×îĞ¡ÊıÖµ";
     Text[ russian ] = "Ìèí. çíà÷åíèå";
-    Text[ polish ] = "Min. wartoœæ";
+    Text[ polish ] = "Min. warto?æ";
     Text[ japanese ] = "Å¬’l";
     Text[ chinese_traditional ] = "³Ì¤p¼Æ­È";
     Text[ greek ] = "ÅëÜ÷éóôç ôéìŞ";
@@ -3912,7 +3912,7 @@ String RID_STR_VALUEMAX
     Text [ dutch ] = "Max. waarde" ;
     Text[ chinese_simplified ] = "×î´óÊıÖµ";
     Text[ russian ] = "Ìàêñ. çíà÷åíèå";
-    Text[ polish ] = "Maks. wartoœæ";
+    Text[ polish ] = "Maks. warto?æ";
     Text[ japanese ] = "Å‘å’l";
     Text[ chinese_traditional ] = "³Ì¤j¼Æ­È";
     Text[ greek ] = "Ìİãéóôç ôéìŞ";
@@ -3955,7 +3955,7 @@ String RID_STR_CURRENCYSYMBOL
     Text [ English ] = "Currencysymbol" ;
     Text [ portuguese ] = "Símbolo de moeda" ;
     Text [ english_us ] = "Currency symbol" ;
-    Text [ portuguese_brazilian ] = "Währungssymbol" ;
+    Text [ portuguese_brazilian ] = "W?hrungssymbol" ;
     Text [ swedish ] = "Valutasymbol" ;
     Text [ danish ] = "Valutasymbol" ;
     Text [ italian ] = "Simbolo valuta" ;
@@ -4015,7 +4015,7 @@ String RID_STR_LIST_N_COMBO_FILLLIST
     Text[ italian ] = "Non è stato possibile determinare il contenuto di una casella combinata o di una casella di riepilogo.";
     Text[ danish ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
     Text[ swedish ] = "Innehållet i ett kombinationsfält eller en listruta kunde inte bestämmas.";
-    Text[ polish ] = "Nie mo¿na by³o ustaliæ zawartoœci pola kombi lub pola listy.";
+    Text[ polish ] = "Nie mo¿na by³o ustaliæ zawarto?ci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
     Text[ japanese ] = "ºİÎŞÎŞ¯¸½‚Ü‚½‚ÍØ½ÄÎŞ¯¸½‚Ì“à—e‚ªŠm‚ß‚ç‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "ÄŞº¸¹Ú½º³ª ¸ñ·ÏÇÊµåÀÇ ³»¿ëÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.";
@@ -4110,7 +4110,7 @@ String RID_STR_AUTOCOMPLETE
     Text [ English ] = "Autocomplete" ;
     Text [ portuguese ] = "AutoPreenchimento" ;
     Text [ english_us ] = "AutoFill" ;
-    Text [ portuguese_brazilian ] = "Automatisch füllen" ;
+    Text [ portuguese_brazilian ] = "Automatisch f?len" ;
     Text [ swedish ] = "Automatisk fyllning" ;
     Text [ danish ] = "Fyld automatisk" ;
     Text [ italian ] = "Riempi automaticamente" ;
@@ -4162,7 +4162,7 @@ String RID_STR_MAXTEXTLEN
     Text [ English ] = "Max. textlength" ;
     Text [ portuguese ] = "Comprimento máx. do texto" ;
     Text [ english_us ] = "Max. text length" ;
-    Text [ portuguese_brazilian ] = "Max. Textlänge" ;
+    Text [ portuguese_brazilian ] = "Max. Textl?nge" ;
     Text [ swedish ] = "Max. textlängd" ;
     Text [ danish ] = "Maks. tekstlængde" ;
     Text [ italian ] = "Lunghezza max. testo" ;
@@ -4171,7 +4171,7 @@ String RID_STR_MAXTEXTLEN
     Text [ dutch ] = "Max. tekstlengte" ;
     Text[ chinese_simplified ] = "×î³¤µÄÎÄ×Ö";
     Text[ russian ] = "Ìàêñ. äëèíà òåêñòà";
-    Text[ polish ] = "Maks. d³ugoœæ tekstu";
+    Text[ polish ] = "Maks. d³ugo?æ tekstu";
     Text[ japanese ] = "Å‘å•¶š”";
     Text[ chinese_traditional ] = "³Ìªøªº¤å¦r";
     Text[ greek ] = "Ìİãéóôï ìŞêïò êåéìİíïõ";
@@ -4214,7 +4214,7 @@ String RID_STR_STRICTFORMAT
     Text [ English ] = "Strict format" ;
     Text [ portuguese ] = "Controlar formato" ;
     Text [ english_us ] = "Strict format" ;
-    Text [ portuguese_brazilian ] = "Formatüberprüfung" ;
+    Text [ portuguese_brazilian ] = "Format?erpr?ung" ;
     Text [ swedish ] = "Formatkontroll" ;
     Text [ danish ] = "Formatkontrol" ;
     Text [ italian ] = "Controllo formato" ;
@@ -4370,7 +4370,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text [ English ] = "Insert graphic" ;
     Text [ portuguese ] = "Inserir imagem" ;
     Text [ english_us ] = "Insert graphics" ;
-    Text [ portuguese_brazilian ] = "Grafik einfügen" ;
+    Text [ portuguese_brazilian ] = "Grafik einf?en" ;
     Text [ swedish ] = "Infoga grafik" ;
     Text [ danish ] = "Indsæt grafik" ;
     Text [ italian ] = "Inserisci immagine" ;
@@ -4422,7 +4422,7 @@ String RID_STR_ECHO_CHAR
     Text [ English ] = "Password char" ;
     Text [ portuguese ] = "Caracteres para senhas" ;
     Text [ english_us ] = "Password characters" ;
-    Text [ portuguese_brazilian ] = "Zeichen für Passwörter" ;
+    Text [ portuguese_brazilian ] = "Zeichen f? Passw?ter" ;
     Text [ swedish ] = "Tecken för lösenord" ;
     Text [ danish ] = "Tegn til adgangskoder" ;
     Text [ italian ] = "Caratteri per le password" ;
@@ -4526,7 +4526,7 @@ String RID_STR_DEFAULT_BUTTON
     Text [ English ] = "Default button" ;
     Text [ portuguese ] = "Botão padrão" ;
     Text [ english_us ] = "Default button" ;
-    Text [ portuguese_brazilian ] = "Standard-Schaltfläche" ;
+    Text [ portuguese_brazilian ] = "Standard-Schaltfl?che" ;
     Text [ swedish ] = "Standardknapp" ;
     Text [ danish ] = "Standardknap" ;
     Text [ italian ] = "Pulsante standard" ;
@@ -4535,7 +4535,7 @@ String RID_STR_DEFAULT_BUTTON
     Text [ dutch ] = "Standaardknop" ;
     Text[ chinese_simplified ] = "±ê×¼°´Å¥";
     Text[ russian ] = "Ñòàíäàğòíàÿ êíîïêà";
-    Text[ polish ] = "Przycisk domyœlny";
+    Text[ polish ] = "Przycisk domy?lny";
     Text[ japanese ] = "•W€ÎŞÀİ";
     Text[ chinese_traditional ] = "¼Ğ·Ç«ö¶s";
     Text[ greek ] = "Ğåäßï åğéëïãŞò (ĞñïåğéëïãŞ)";
@@ -4580,7 +4580,7 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text [ English ] = "on click" ;
     Text [ portuguese ] = "Ao iniciar" ;
     Text [ english_us ] = "When initiating" ;
-    Text [ portuguese_brazilian ] = "Aktion ausgelöst" ;
+    Text [ portuguese_brazilian ] = "Aktion ausgel?t" ;
     Text [ swedish ] = "Vid utförande" ;
     Text [ danish ] = "Under udførelse" ;
     Text [ italian ] = "Durante l'esecuzione" ;
@@ -4606,7 +4606,7 @@ String RID_STR_EVT_AFTERDELETE
     Text [ English ] = "After delete" ;
     Text [ portuguese ] = "Depois de eliminar" ;
     Text [ english_us ] = "After deleting" ;
-    Text [ portuguese_brazilian ] = "Nach dem Löschen" ;
+    Text [ portuguese_brazilian ] = "Nach dem L?chen" ;
     Text [ swedish ] = "Efter radering" ;
     Text [ danish ] = "Efter sletning" ;
     Text [ italian ] = "Ad eliminazione avvenuta" ;
@@ -4632,7 +4632,7 @@ String RID_STR_EVT_AFTERINSERT
     Text [ English ] = "After insert" ;
     Text [ portuguese ] = "Depois de inserir" ;
     Text [ english_us ] = "After insert" ;
-    Text [ portuguese_brazilian ] = "Nach dem Einfügen" ;
+    Text [ portuguese_brazilian ] = "Nach dem Einf?en" ;
     Text [ swedish ] = "Efter infogning" ;
     Text [ danish ] = "Efter indsæt" ;
     Text [ italian ] = "Ad inserimento avvenuto" ;
@@ -4684,7 +4684,7 @@ String RID_STR_EVT_BEFOREDELETE
     Text [ English ] = "Before delete" ;
     Text [ portuguese ] = "Antes de eliminar" ;
     Text [ english_us ] = "Before deletion" ;
-    Text [ portuguese_brazilian ] = "Vor dem Löschen" ;
+    Text [ portuguese_brazilian ] = "Vor dem L?chen" ;
     Text [ swedish ] = "Innan radering" ;
     Text [ danish ] = "Inden sletning" ;
     Text [ italian ] = "Prima di eliminare" ;
@@ -4710,7 +4710,7 @@ String RID_STR_EVT_BEFOREINSERT
     Text [ English ] = "Before insert" ;
     Text [ portuguese ] = "Antes de inserir" ;
     Text [ english_us ] = "Before insert" ;
-    Text [ portuguese_brazilian ] = "Vor dem Einfügen" ;
+    Text [ portuguese_brazilian ] = "Vor dem Einf?en" ;
     Text [ swedish ] = "Före infogning" ;
     Text [ danish ] = "Inden indsæt" ;
     Text [ italian ] = "Prima di inserire" ;
@@ -4893,7 +4893,7 @@ String RID_STR_EVT_COMPONENTRESIZED
     Text [ English ] = "Component resized" ;
     Text [ portuguese ] = "Tamanho modificado" ;
     Text [ english_us ] = "Component resized" ;
-    Text [ portuguese_brazilian ] = "Größe geändert" ;
+    Text [ portuguese_brazilian ] = "Gr?e ge?ndert" ;
     Text [ swedish ] = "Storlek ändrad" ;
     Text [ danish ] = "Størrelse ændret" ;
     Text [ italian ] = "Dimensione cambiata" ;
@@ -4945,7 +4945,7 @@ String RID_STR_EVT_CONFIRMDELETE
     Text [ English ] = "Confirm delete" ;
     Text [ portuguese ] = "Confirmar eliminar" ;
     Text [ english_us ] = "Confirm Deletion" ;
-    Text [ portuguese_brazilian ] = "Löschen bestätigen" ;
+    Text [ portuguese_brazilian ] = "L?chen best?tigen" ;
     Text [ swedish ] = "Bekräfta radering" ;
     Text [ danish ] = "Bekræft sletning" ;
     Text [ italian ] = "Conferma 'Elimina'" ;
@@ -4954,7 +4954,7 @@ String RID_STR_EVT_CONFIRMDELETE
     Text [ dutch ] = "Wissen bevestigen" ;
     Text[ chinese_simplified ] = "È·¶¨É¾³ı";
     Text[ russian ] = "Ïîäòâåğäèòü óäàëåíèå";
-    Text[ polish ] = "PotwierdŸ usuniêcie";
+    Text[ polish ] = "Potwierd? usuniêcie";
     Text[ japanese ] = "íœ‚ÌŠm”F";
     Text[ chinese_traditional ] = "½T©w§R°£";
     Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
@@ -4971,7 +4971,7 @@ String RID_STR_EVT_ELEMENTINSERTED
     Text [ English ] = "Element inserted" ;
     Text [ portuguese ] = "Elemento inserido" ;
     Text [ english_us ] = "Element inserted" ;
-    Text [ portuguese_brazilian ] = "Element eingefügt" ;
+    Text [ portuguese_brazilian ] = "Element eingef?t" ;
     Text [ swedish ] = "Element infogat" ;
     Text [ danish ] = "Element indsat" ;
     Text [ italian ] = "Elemento inserito" ;
@@ -5075,7 +5075,7 @@ String RID_STR_EVT_FIRING
     Text [ English ] = "firing" ;
     Text [ portuguese ] = "Disparar" ;
     Text [ english_us ] = "Firing" ;
-    Text [ portuguese_brazilian ] = "Abschuß" ;
+    Text [ portuguese_brazilian ] = "Abschu?" ;
     Text [ swedish ] = "Avfyrning" ;
     Text [ danish ] = "Affyring" ;
     Text [ italian ] = "Lancio" ;
@@ -5153,7 +5153,7 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text [ English ] = "Item state changed" ;
     Text [ portuguese ] = "Estado modificado" ;
     Text [ english_us ] = "Item status changed" ;
-    Text [ portuguese_brazilian ] = "Status geändert" ;
+    Text [ portuguese_brazilian ] = "Status ge?ndert" ;
     Text [ swedish ] = "Status ändrad" ;
     Text [ danish ] = "Status ændret" ;
     Text [ italian ] = "Stato modificato" ;
@@ -5188,7 +5188,7 @@ String RID_STR_EVT_KEYTYPED
     Text [ dutch ] = "Met ingedrukte toets" ;
     Text[ chinese_simplified ] = "°´×¡°´¼ü";
     Text[ russian ] = "Êëàâèøà íàæàòà";
-    Text[ polish ] = "Wciœniêty klawisz";
+    Text[ polish ] = "Wci?niêty klawisz";
     Text[ japanese ] = "·°‚ğ‰Ÿ‚µ‚½";
     Text[ chinese_traditional ] = "«ö¦í«öÁä";
     Text[ greek ] = "ĞëŞêôñï ğáôçìİíï";
@@ -5321,7 +5321,7 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text [ dutch ] = "Muisbeweging bij indrukken toets" ;
     Text[ chinese_simplified ] = "°´×¡Êó±ê¼üÊ±ÒÆµ½Êó±ê";
     Text[ russian ] = "Ïåğåìåùåíèå ìûøè ïğè íàæàòèè êëàâèøè";
-    Text[ polish ] = "Przesuwanie myszy z naciœniêtym przyciskiem";
+    Text[ polish ] = "Przesuwanie myszy z naci?niêtym przyciskiem";
     Text[ japanese ] = "·°‚ğ‰Ÿ‚µÏ³½‘€ì‚·‚é";
     Text[ chinese_traditional ] = "¦b«ö¦í·Æ¹««öÁä²¾°Ê®É";
     Text[ greek ] = "Ìåôáêßíçóç ğïíôéêéïı ìå ğéåóìİíï ğëŞêôñï";
@@ -5416,7 +5416,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ English ] = "Mouse pressed" ;
     Text [ portuguese ] = "Botão do rato premido" ;
     Text [ english_us ] = "Mouse button pressed" ;
-    Text [ portuguese_brazilian ] = "Maustaste gedrückt" ;
+    Text [ portuguese_brazilian ] = "Maustaste gedr?kt" ;
     Text [ swedish ] = "Musknapp nedtryckt" ;
     Text [ danish ] = "Museknap trykket" ;
     Text [ italian ] = "Tasto del mouse premuto" ;
@@ -5425,7 +5425,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ dutch ] = "Muistoets ingedrukt" ;
     Text[ chinese_simplified ] = "°´×¡Êó±ê¼ü";
     Text[ russian ] = "Êëàâèøà ìûøè íàæàòà";
-    Text[ polish ] = "Naciœniêty przycisk myszy";
+    Text[ polish ] = "Naci?niêty przycisk myszy";
     Text[ japanese ] = "Ï³½ÎŞÀİ‚ğ‰Ÿ‚µ‚½";
     Text[ chinese_traditional ] = "«ö¦í·Æ¹«Áä";
     Text[ greek ] = "ĞëŞêôñï ğïíôéêéïı ğéåóìİíï";
@@ -5492,7 +5492,7 @@ String RID_STR_EVT_POSITIONED
     Text = "Nach dem Datensatzwechsel" ;
     Text [ English ] = "After positioning" ;
     Text [ english_us ] = "After record change" ;
-    Text [ portuguese_brazilian ] = "Position verändert" ;
+    Text [ portuguese_brazilian ] = "Position ver?ndert" ;
     Text [ swedish ] = "Efter datapostväxling" ;
     Text [ danish ] = "Efter datapostskift" ;
     Text [ italian ] = "Dopo il cambio record di dati" ;
@@ -5519,7 +5519,7 @@ String RID_STR_EVT_PROPERTIESCHANGE
     Text [ English ] = "Properties change" ;
     Text [ portuguese ] = "Propriedades modificadas" ;
     Text [ english_us ] = "Properties change" ;
-    Text [ portuguese_brazilian ] = "Eigenschaften geändert" ;
+    Text [ portuguese_brazilian ] = "Eigenschaften ge?ndert" ;
     Text [ swedish ] = "Egenskaper ändrade" ;
     Text [ danish ] = "Egenskaber ændret" ;
     Text [ italian ] = "Proprietà cambiate" ;
@@ -5528,7 +5528,7 @@ String RID_STR_EVT_PROPERTIESCHANGE
     Text [ dutch ] = "Eigenschappen gewijzigd" ;
     Text[ chinese_simplified ] = "ÊôĞÔÒÑ¾­¸ü¸Ä";
     Text[ russian ] = "Ñâîéñòâà èçìåíåíû";
-    Text[ polish ] = "Zmieniono w³aœciwoœci";
+    Text[ polish ] = "Zmieniono w³a?ciwo?ci";
     Text[ japanese ] = "ÌßÛÊßÃ¨‚Ì•ÏX";
     Text[ chinese_traditional ] = "Äİ©Ê¤w¸gÅÜ§ó";
     Text[ greek ] = "Éäéüôçôåò ôñïğïğïéŞèçêáí";
@@ -5545,7 +5545,7 @@ String RID_STR_EVT_PROPERTYCHANGE
     Text [ English ] = "Property changed" ;
     Text [ portuguese ] = "Propriedade modificada" ;
     Text [ english_us ] = "Property changed" ;
-    Text [ portuguese_brazilian ] = "Eigenschaft geändert" ;
+    Text [ portuguese_brazilian ] = "Eigenschaft ge?ndert" ;
     Text [ swedish ] = "Egenskap ändrad" ;
     Text [ danish ] = "Egenskab ændret" ;
     Text [ italian ] = "Proprietà cambiata" ;
@@ -5554,7 +5554,7 @@ String RID_STR_EVT_PROPERTYCHANGE
     Text [ dutch ] = "Eigenschap gewijzigd" ;
     Text[ chinese_simplified ] = "ÊôĞÔÒÑ¾­¸ü¸Ä";
     Text[ russian ] = "Ñâîéñòâà èçìåíåíû";
-    Text[ polish ] = "Zmieniono w³aœciwoœci";
+    Text[ polish ] = "Zmieniono w³a?ciwo?ci";
     Text[ japanese ] = "ÌßÛÊßÃ¨‚Ì•ÏX";
     Text[ chinese_traditional ] = "Äİ©Ê¤w¸gÅÜ§ó";
     Text[ greek ] = "Éäéüôçôá ôñïğïğïéŞèçêå";
@@ -5571,7 +5571,7 @@ String RID_STR_EVT_PROPERTYSTATECHANGE
     Text [ English ] = "Property state changed" ;
     Text [ portuguese ] = "Estado de propriedades modificado" ;
     Text [ english_us ] = "Property status changed" ;
-    Text [ portuguese_brazilian ] = "Statuseigenschaft geändert" ;
+    Text [ portuguese_brazilian ] = "Statuseigenschaft ge?ndert" ;
     Text [ swedish ] = "Statusegenskap ändrad" ;
     Text [ danish ] = "Statusegenskab ændret" ;
     Text [ italian ] = "Proprietà stato modificato" ;
@@ -5580,7 +5580,7 @@ String RID_STR_EVT_PROPERTYSTATECHANGE
     Text [ dutch ] = "Statuseigenschap gewijzigd" ;
     Text[ chinese_simplified ] = "×´Ì¬ÊôĞÔÒÑ¾­¸ü¸Ä";
     Text[ russian ] = "Ñâîéñòâî ñîñòîÿíèÿ èçìåíåíî";
-    Text[ polish ] = "Zmieniony stan w³aœciwoœci";
+    Text[ polish ] = "Zmieniony stan w³a?ciwo?ci";
     Text[ japanese ] = "½Ã°À½‚Ì‘®«‚É•ÏX";
     Text[ chinese_traditional ] = "ª¬ºAÄİ©Ê¤w¸gÅÜ§ó";
     Text[ greek ] = "Éäéüôçôá êáôÜóôáóçò ôñïğïğïéŞèçêå";
@@ -5597,7 +5597,7 @@ String RID_STR_EVT_RESETTED
     Text [ English ] = "After reset" ;
     Text [ portuguese ] = "Depois de restaurar" ;
     Text [ english_us ] = "After resetting" ;
-    Text [ portuguese_brazilian ] = "Zurückgesetzt" ;
+    Text [ portuguese_brazilian ] = "Zur?kgesetzt" ;
     Text [ swedish ] = "Efter återställande" ;
     Text [ danish ] = "Efter nulstilling" ;
     Text [ italian ] = "Dopo aver ripristinato" ;
@@ -5624,7 +5624,7 @@ String RID_STR_EVT_APPROVERESETTED
     Text [ English ] = "Approve resetted" ;
     Text [ portuguese ] = "Antes de restaurar" ;
     Text [ english_us ] = "Prior to Reset" ;
-    Text [ portuguese_brazilian ] = "Zurückgesetzt" ;
+    Text [ portuguese_brazilian ] = "Zur?kgesetzt" ;
     Text [ swedish ] = "Innan återställning" ;
     Text [ danish ] = "Inden nulstilning" ;
     Text [ italian ] = "Prima di ripristinare" ;
@@ -5651,7 +5651,7 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
     Text [ English ] = "Before click" ;
     Text [ portuguese ] = "Antes de executar" ;
     Text [ english_us ] = "Before commencing" ;
-    Text [ portuguese_brazilian ] = "Aktion ausgelöst" ;
+    Text [ portuguese_brazilian ] = "Aktion ausgel?t" ;
     Text [ swedish ] = "Innan utförande" ;
     Text [ danish ] = "Inden udførelse" ;
     Text [ italian ] = "Prima dell'esecuzione" ;
@@ -5758,7 +5758,7 @@ String RID_STR_EVT_UNLOADED
     Text [ English ] = "When unloading" ;
     Text [ portuguese ] = "Ao descarregar" ;
     Text [ english_us ] = "When unloading" ;
-    Text [ portuguese_brazilian ] = "Beim Schließen" ;
+    Text [ portuguese_brazilian ] = "Beim Schlie?en" ;
     Text [ swedish ] = "Vid avladdning" ;
     Text [ danish ] = "Under afladning" ;
     Text [ italian ] = "Durante lo scaricamento" ;
@@ -5810,7 +5810,7 @@ String RID_STR_EVT_VETOABLECHANGE
     Text [ English ] = "Vetoable change" ;
     Text [ portuguese ] = "Modificação rejeitável" ;
     Text [ english_us ] = "Rejectable modification" ;
-    Text [ portuguese_brazilian ] = "Ablehnbare Änderung" ;
+    Text [ portuguese_brazilian ] = "Ablehnbare ?nderung" ;
     Text [ swedish ] = "Ignorerbar ändring" ;
     Text [ danish ] = "Ændring som kan forkastes" ;
     Text [ italian ] = "Modifica ricusabile" ;
@@ -6026,7 +6026,7 @@ String RID_STR_MOVING_CURSOR
     Text[ italian ] = "Allinea sorgente dati";
     Text[ danish ] = "Juster datakilde";
     Text[ swedish ] = "Justera datakälla";
-    Text[ polish ] = "Wyrównaæ Ÿród³o danych";
+    Text[ polish ] = "Wyrównaæ ?ród³o danych";
     Text[ portuguese_brazilian ] = "align data source";
     Text[ japanese ] = "ÃŞ°À¿°½‚Ì”z’u";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¸ÂÃã";
@@ -6252,7 +6252,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text [ ENGLISH ] = "CurrencyField" ;
     Text [ portuguese ] = "Campo para moeda" ;
     Text [ english_us ] = "Currency Field" ;
-    Text [ portuguese_brazilian ] = "Währungsfeld" ;
+    Text [ portuguese_brazilian ] = "W?hrungsfeld" ;
     Text [ swedish ] = "Valutafält" ;
     Text [ danish ] = "Valutafelt" ;
     Text [ italian ] = "Campo di valuta" ;
@@ -6711,7 +6711,7 @@ String RID_STR_VETO_DATASOURCE
     Text[ italian ] = "La proprietà 'database' non può essere cambiata in quanto il formulario è già parte del database.";
     Text[ danish ] = "Det er ikke tilladt at ændre egenskaben 'Database', fordi formularen allerede er en del af en database!";
     Text[ swedish ] = "Egenskapen 'Databas' får inte ändras eftersom formuläret redan är del av en databas!";
-    Text[ polish ] = "W³aœciwoœci 'Bazy danych' nie wolno zmieniaæ, poniwa¿ formularz jest ju¿ czêœci¹ bazy danych.";
+    Text[ polish ] = "W³a?ciwo?ci 'Bazy danych' nie wolno zmieniaæ, poniwa¿ formularz jest ju¿ czê?ci¹ bazy danych.";
     Text[ portuguese_brazilian ] = "The property 'Database' can not be changed as the form already belongs to a database!";
     Text[ japanese ] = "Ì«°Ñ‚ª‚·‚Å‚ÉÃŞ°ÀÍŞ°½‚Ì\\¬—v‘f‚È‚Ì‚ÅÌßÛÊßÃ¨[ÃŞ°ÀÍŞ°½]‚Í•ÏX‚Å‚«‚Ü‚¹‚ñ!";
     Text[ korean ] = "¾ç½ÄÀº ÀÌ¹Ì ÇÑ µ¥ÀÌÅÍº£ÀÌ½ºÀÇ ±¸¼º¿ä¼ÒÀÌ¹Ç·Î µî·ÏÁ¤º¸ 'µ¥ÀÌÅÍº£ÀÌ½º'¸¦ º¯°æÇØ¼­´Â¡¡¾ÈµË´Ï´Ù!";
@@ -6764,7 +6764,7 @@ QueryBox RID_QRY_SAVEMODIFIED
     Message[ italian ] = "Il contenuto dell'attuale formulario è stato cambiato.\nSalvare le modifiche?";
     Message[ danish ] = "Den aktuelle formulars indhold er blevet ændret.\nSkal ændringerne gemmes?";
     Message[ swedish ] = "Innehållet i det aktuella formuläret har ändrats.\nVill Du spara ändringarna?";
-    Message[ polish ] = "Zawartoœæ aktualnego formularza zosta³a zmieniona.\nCzy zapisaæ zmiany?";
+    Message[ polish ] = "Zawarto?æ aktualnego formularza zosta³a zmieniona.\nCzy zapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The content of the current form has been modified.\nDo you want to save your changes?";
     Message[ japanese ] = "Œ»İ‚ÌŒ`®‚Ì“à—e‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_simplified ] = "±íµ¥µÄÄÚÈİÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª±£´æÕâĞ©¸ü¸ÄÂğ£¿";
@@ -6891,7 +6891,7 @@ String RID_ERR_REFRESHING_SUB_FORM
     Text[ italian ] = "Non è stato possibile aggiornare i contenuti del formulario.";
     Text[ danish ] = "Det var ikke muligt at opdatere underformularens dataindhold.";
     Text[ swedish ] = "Det gick inte att uppdatera datainnehållet i det underordnade formuläret.";
-    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawartoœci formularza podrzêdnego.";
+    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawarto?ci formularza podrzêdnego.";
     Text[ portuguese_brazilian ] = "The data content of the sub form could not be refreshed.";
     Text[ japanese ] = "»ÌŞÌ«°Ñ‚ÌÃŞ°À“à—e‚ªXV‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "ÇÏÀ§ ÆûÀÇ µ¥ÀÌÅÍ ³»¿ëÀ» °»½ÅÇÏÁö ¸øÇß½À´Ï´Ù.";
@@ -6916,7 +6916,7 @@ String RID_ERR_LOADING_FORM
     Text[ italian ] = "Non è stato possibile caricare i contenuti.";
     Text[ danish ] = "Det var ikke muligt at indlæse dataindholdet.";
     Text[ swedish ] = "Datainnehållet kunde inte laddas.";
-    Text[ polish ] = "Nie mo¿na by³o za³adowaæ zawartoœci danych.";
+    Text[ polish ] = "Nie mo¿na by³o za³adowaæ zawarto?ci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be loaded.";
     Text[ japanese ] = "ÃŞ°À“à—e‚ª“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
@@ -6941,7 +6941,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ italian ] = "Non è stato possibile aggiornare i contenuti.";
     Text[ danish ] = "Det var ikke muligt at opdatere dataindholdet.";
     Text[ swedish ] = "Datainnehållet kunde inte uppdateras.";
-    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawartoœci danych.";
+    Text[ polish ] = "Nie mo¿na by³o zaktualizowaæ zawarto?ci danych.";
     Text[ portuguese_brazilian ] = "The data content could not be refreshed.";
     Text[ japanese ] = "ÃŞ°À“à—e‚ªXV‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "µ¥ÀÌÅÍ ³»¿ëÀ» °»½ÅÇÏÁö ¸øÇß½À´Ï´Ù.";
@@ -7131,9 +7131,9 @@ String RID_STR_CREATECONTROLS_INVALIDSOURCE
     Text[ chinese_traditional ] = "µLªk¬°³o­Ó¤å¥óªºÄæ¦ì«Ø¥ß±±¨î¶µ¡G\n³o­Ó¤å¥óÄİ©ó¤@­Ó©T©wªº¸ê®Æ®w¡C¦]¬°©Ò¦³ªí³æª«É²³£¨Ï¥Î³o­Ó¸ê®Æ®w¨Ó·½¡C\n¨Ï¥ÎªºÄæ¦ìÄİ©ó¥t¤@­Ó¸ê®Æ®w($dropname$)ªºªí®æ©M¬d¸ß¡C";
     Text[ arabic ] = "áÇ íãßäß ÅäÔÇÁ ÍŞæá ÊÍßã ÎÇÕÉ ÈÇÓÊãÇÑÉ İí åĞÇ ÇáãÓÊäÏ áåĞå ÇáÃÚãÏÉ:\níäÊãí åĞÇ ÇáãÓÊäÏ Åáì ŞÇÚÏÉ ÈíÇäÇÊ ËÇÈÊÉ ($docname$) íÊã ÇÓÊÎÏÇãåÇ ãä ŞÈá ßÇİÉ ÚäÇÕÑ ÇáÇÓÊãÇÑÉ ßãÕÏÑ ááÈíÇäÇÊ. \nÃãÇ ÇáÃÚãÏÉ ÇáÊí ÊÓÊÎÏãåÇ İåí ÊäÊãí Åáì ÌÏæá Ãæ ÇÓÊİÓÇÑ İí ŞÇÚÏÉ ÈíÇäÇÊ ÃÎÑì ($dropname$).";
     Text[ portuguese_brazilian ] = "For this columns you can't create form controls within this document:\nThe document belongs to a fixed database ($docname$) which has to be used as data source for all form elements.\nBut the columns You dropped are part of a table or query within another database ($dropname$).";
-    Text[ turkish ] = "Bu sütun için form komut öğeleri oluşturamazsınız:\nBelge, tüm form öğeleri tarafından veri kaynağı olarak kullanılan, sabit bir veritabanı ($docname$).\nAncak sizin kullandığınız sütunlar, başka bir veritabanındaki ($dropname$) tablo ya da sorguya ait.";
+    Text[ turkish ] = "Bu sütun için form komut öğeleri oluşturamazsınız:\nBelge, tüm form öğeleri tarafından veri kaynağı olarak kullanılan, sabit bir veritabanı ($docname$).\nAncak sizin kullandığınız sütunlar, başka bir veritabanındaki ($dropname$) tabl";
     Text[ catalan ] = "Para estas columnas en este documento no puede crear campos de control:\nEl documento pertenece a una base de datos fija ($docname$), que es usada por todos los elementos del formulario como fuente de datos.\nLas columnas que usted usa pertenecen a una tabla o consulta en otra base de datos ($dropname$).";
-    Text[ finnish ] = "Et voi luoda lomakeohjauskenttiä näihin sarakkeisiin tässä asiakirjassa:\nAsiakirja ($docname$) on osa kiinteää tietokantaa, jota kaikki lomakeosat käyttävät tietolähteenä.\nSarakkeet kuuluvat toisen tietokannan taulukkoon tai kyselyyn ($dropname$).";
+    Text[ finnish ] = "Et voi luoda lomakeohjauskenttiä näihin sarakkeisiin tässä asiakirjassa:\nAsiakirja ($docname$) on osa kiinteää tietokantaa, jota kaikki lomakeosat käyttävät tietolähteenä.\nSarakkeet kuuluvat toisen tietokannan taulukkoon tai kyselyyn ($dropna";
 };
 
 Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
