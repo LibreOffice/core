@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-10 16:12:59 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 12:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
-#if defined(NETBSD) || defined(FREEBSD)
+#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
 # include <stdlib.h>
 #else
 # include <alloca.h>
@@ -356,7 +356,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX || defined MACOSX
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -364,7 +364,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX || defined MACOSX
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
