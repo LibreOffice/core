@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 15:49:21 $
+#   last change: $Author: hjs $ $Date: 2000-12-15 17:05:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -583,8 +583,15 @@ $(SLO)$/%.obj : %.asm
        $(ASM) $(AFLAGS) -D$(COM) $*.asm -fo=$(SLO)\$*.obj
        +-if exist $*.err @del $*.err
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+.IF "$(COM)"=="MSC"
+.IF "$(ASM)"=="ml"
+       $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
+       +-if exist $*.err @del $*.err
+.ELSE			# "$(ASM)"=="ml"
+        @+if exist $@ $(RM) /q $@ >& nul
         $(ASM) $(AFLAGS) $*.asm,$(SLO)\$*.obj;
+.ENDIF			# "$(ASM)"=="ml"
+.ENDIF			 "$(COM)"=="MSC"
 .ENDIF
        @$(SEMADEBUG)
 
@@ -595,8 +602,15 @@ $(OBJ)$/%.obj : %.asm
        $(ASM) $(AFLAGS) $*.asm -fo=$(OBJ)\$*.obj
        +-if exist $*.err @del $*.err
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+.IF "$(COM)"=="MSC"
+.IF "$(ASM)"=="ml"
+       $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
+       +-if exist $*.err @del $*.err
+.ELSE			# "$(ASM)"=="ml"
+        @+if exist $@ $(RM) /q $@ >& nul
         $(ASM) $(AFLAGS) $*.asm,$(OBJ)\$*.obj;
+.ENDIF			# "$(ASM)"=="ml"
+.ENDIF			 "$(COM)"=="MSC"
 .ENDIF
        @$(SEMADEBUG)
 #
