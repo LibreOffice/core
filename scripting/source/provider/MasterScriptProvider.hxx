@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:10:31 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #include "InvocationCtxProperties.hxx"
 #include "ProviderCache.hxx"
@@ -82,11 +82,10 @@ namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsss ::drafts::com::sun::star::script
 
  typedef ::cppu::WeakImplHelper5<
-     dcsss::provider::XScriptProvider,
-     dcsss::browse::XBrowseNode, css::lang::XServiceInfo,
+     css::script::provider::XScriptProvider,
+     css::script::browse::XBrowseNode, css::lang::XServiceInfo,
      css::lang::XInitialization,
      css::container::XNameContainer > t_helper;
 
@@ -106,7 +105,7 @@ public:
     // XBrowseNode implementation
     virtual ::rtl::OUString SAL_CALL getName()
         throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< css::uno::Reference< dcsss::browse::XBrowseNode > > SAL_CALL getChildNodes()
+    virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes()
         throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL hasChildNodes()
         throw ( css::uno::RuntimeException );
@@ -132,9 +131,9 @@ public:
         throw( css::uno::RuntimeException );
 
     // XScriptProvider implementation
-    virtual css::uno::Reference < dcsss::provider::XScript > SAL_CALL
+    virtual css::uno::Reference < css::script::provider::XScript > SAL_CALL
         getScript( const ::rtl::OUString& scriptURI )
-        throw( dcsss::provider::ScriptFrameworkErrorException,
+        throw( css::script::provider::ScriptFrameworkErrorException,
                css::uno::RuntimeException );
 
     /**
@@ -148,11 +147,11 @@ public:
 
     // Public method to return all Language Providers in this MasterScriptProviders
     // context.
-    css::uno::Sequence< css::uno::Reference< dcsss::provider::XScriptProvider > > SAL_CALL
+    css::uno::Sequence< css::uno::Reference< css::script::provider::XScriptProvider > > SAL_CALL
         getAllProviders() throw ( css::uno::RuntimeException );
 
     bool isPkgProvider() { return m_bIsPkgMSP; }
-    css::uno::Reference< dcsss::provider::XScriptProvider > getPkgProvider() { return m_xMSPPkg; }
+    css::uno::Reference< css::script::provider::XScriptProvider > getPkgProvider() { return m_xMSPPkg; }
     // returns context string for this provider, eg
     ::rtl::OUString getContextString() { return m_sCtxString; }
     css::uno::Reference< css::frame::XModel > getModel() { return m_xModel; }
@@ -181,7 +180,7 @@ private:
     // m_bInitialised ensure initialisation only takes place once.
     bool m_bInitialised;
     bool m_bIsPkgMSP;
-    css::uno::Reference< dcsss::provider::XScriptProvider > m_xMSPPkg;
+    css::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;
     ProviderCache* m_pPCache;
     osl::Mutex m_mutex;
     ::rtl::OUString m_sCtxString;
