@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:16:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,33 @@ String* pOldTabCat = 0;
 String* pOldFrmCat = 0;
 String* pOldDrwCat = 0;
 String* pCurrGlosGroup = 0;
+
+//CHINA001  add for swui to access global variables in sw. Begin
+String* GetOldGrfCat()
+{
+    return pOldGrfCat;
+}
+String* GetOldTabCat()
+{
+    return pOldTabCat;
+}
+String* GetOldFrmCat()
+{
+    return pOldFrmCat;
+}
+String* GetOldDrwCat()
+{
+    return pOldDrwCat;
+}
+String* GetCurrGlosGroup()
+{
+    return pCurrGlosGroup;
+}
+void SetCurrGlosGroup(String* pStr)
+{
+    pCurrGlosGroup = pStr;
+}
+//CHINA001 End for add
 
 SvStringsDtor* pDBNameList = 0;
 
