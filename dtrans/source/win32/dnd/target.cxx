@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 16:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
     {
         m_hWnd= *(HWND*)aArguments[0].getValue();
         OSL_ASSERT( IsWindow( m_hWnd) );
+
+        // should be active by default
+        setActive( sal_True );
     }
 }
 
@@ -146,15 +149,22 @@ void SAL_CALL DropTarget::setActive( sal_Bool _b ) throw(RuntimeException)
 {
     MutexGuard g(m_mutex);
 
+    // should be called from main thread (STA)
+    HRESULT hrInit = OleInitialize( 0 );
+    OSL_ASSERT(SUCCEEDED(hrInit));
+
     if( _b == sal_True)
     {
         if( SUCCEEDED( CoLockObjectExternal( static_cast<IDropTarget*>(this), TRUE, FALSE)))
-            if( SUCCEEDED( RegisterDragDrop( m_hWnd,  static_cast<IDropTarget*>(this))))
+        {
+            HRESULT hr = RegisterDragDrop( m_hWnd,  static_cast<IDropTarget*>(this));
+            if( SUCCEEDED( hr ) )
                 m_bDropTargetRegistered= sal_True;
             else
                 CoLockObjectExternal( static_cast<IDropTarget*>(this), FALSE, FALSE);
 
             OSL_ASSERT( m_bDropTargetRegistered);
+        }
     }
     else
     {
@@ -167,6 +177,9 @@ void SAL_CALL DropTarget::setActive( sal_Bool _b ) throw(RuntimeException)
             m_bDropTargetRegistered= sal_False;
         }
     }
+
+    if( SUCCEEDED(hrInit) )
+        OleUninitialize();
 }
 
 sal_Int8 SAL_CALL DropTarget::getDefaultActions(  ) throw(RuntimeException)
