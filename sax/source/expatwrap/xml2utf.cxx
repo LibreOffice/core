@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:40:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ sal_Bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 
 
 sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
 {
-    const sal_Int8 *pSource = seq.getConstArray();
+    const sal_uInt8 *pSource = reinterpret_cast<const sal_uInt8*>( seq.getConstArray() );
     sal_Bool bReturn = sal_True;
 
     if( seq.getLength() < 4 ) {
@@ -299,14 +299,14 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
             }
         }
     }
-    else if( 0xFE == static_cast<unsigned char> (pSource[0]) &&
-             0xFF == static_cast<unsigned char> (pSource[1]) ) {
+    else if( 0xFE == pSource[0] &&
+             0xFF == pSource[1] ) {
         // UTF-16 big endian
         // conversion is done so that encoding information can be easily extracted
         m_sEncoding = "utf-16";
     }
-    else if( 0xFF == static_cast<unsigned char> (pSource[0]) &&
-             0xFE == static_cast<unsigned char> (pSource[1]) ) {
+    else if( 0xFF == pSource[0] &&
+             0xFE == pSource[1] ) {
         // UTF-16 little endian
         // conversion is done so that encoding information can be easily extracted
         m_sEncoding = "utf-16";
@@ -333,6 +333,16 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         ((sal_uInt8*)seq.getArray())[1] = 0xFE;
 
         m_sEncoding = "utf-16";
+    }
+    else if( 0xEF == pSource[0] &&
+             0xBB == pSource[1] &&
+             0xBF == pSource[2] )
+    {
+        // UTF-8 BOM (byte order mark); signifies utf-8, and not byte order
+        // The BOM is removed.
+        memmove( seq.getArray(), &( seq.getArray()[3] ), seq.getLength()-3 );
+        seq.realloc( seq.getLength() - 3 );
+        m_sEncoding = "utf-8";
     }
     else if( 0x00 == pSource[0] && 0x00 == pSource[1]  && 0x00 == pSource[2] && 0x3c == pSource[3] ) {
         // UCS-4 big endian
