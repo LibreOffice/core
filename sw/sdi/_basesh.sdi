@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _basesh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:06:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,14 +263,7 @@ interface BaseTextSelection : Selection
         StateMethod = GetState ;
     ]
 
-    FN_INSERT_REGION // status(final|play)
-    [
-        ExecMethod = InsertRegionDialog ;
-        StateMethod = GetState;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    FN_INSERT_COLUMN_SECTION // status()
+    FN_INSERT_REGION // status()
     [
         ExecMethod = InsertRegionDialog;
         StateMethod = GetState;
