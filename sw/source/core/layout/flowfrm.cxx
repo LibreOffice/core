@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 10:31:00 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,7 +922,8 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                 return pLayLeaf;
 
             SwPageFrm *pNew = pLayLeaf->FindPageFrm();
-            if ( pNew != FindPageFrm() && !bNewPg )
+            // #111704# The pagedesc check does not make sense for frames in fly frames
+            if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() )
             {
                 if( WrongPageDesc( pNew ) )
                 {
