@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:52:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_VIEWUTIL_HXX
 #define SC_VIEWUTIL_HXX
 
@@ -85,14 +84,6 @@ class ScRange;
 class ScMarkData;
 
 enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
-
-/** Specifiers for sheet conversion (functions iterating over the sheet and modifying cells). */
-enum ScConversionType
-{
-    SC_CONVERSION_SPELLCHECK,       /// Spell checker.
-    SC_CONVERSION_HANGULHANJA,      /// Hangul-Hanja converter.
-    SC_CONVERSION_CHINESE_TRANSLATION   /// Chinese simplified/traditional converter.
-};
 
 // ---------------------------------------------------------------------------
 
