@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:56:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,11 @@
 #include <svsys.h>
 #endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
-#else
-#include <rmwindow.hxx>
-#include <rmevents.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -160,7 +155,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #endif
 
-#pragma hdrstop
+
 
 
 // =======================================================================
@@ -503,18 +498,14 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     // Ein paar Test ausfuehren und Message abfangen oder Status umsetzen
     if ( pChild )
     {
-#ifndef REMOTE_APPSERVER
         if( pChild->ImplHasMirroredGraphics() && !pChild->IsRTLEnabled() )
         {
             // - RTL - re-mirror frame pos at pChild
             pChild->ImplReMirror( aMousePos );
         }
-#endif
         // no mouse messages to system object windows
-#ifndef REMOTE_APPSERVER
         if ( pChild->mpSysObj )
             return 0;
-#endif
 
         // no mouse messages to disabled windows
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
@@ -1033,12 +1024,8 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     if ( nSVEvent == EVENT_KEYINPUT )
     {
 #ifdef DBG_UTIL
-#ifdef REMOTE_APPSERVER
-        if ( aKeyCode.IsShift() && aKeyCode.IsMod2() && (aKeyCode.GetCode() == KEY_D) )
-#else
         // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
         if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && aKeyCode.IsMod2() && (aKeyCode.GetCode() == KEY_D) )
-#endif
         {
             DBGGUI_START();
             return 1;
@@ -1949,8 +1936,6 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
 
 // =======================================================================
 
-#ifndef REMOTE_APPSERVER
-
 static USHORT ImplGetMouseMoveMode( SalMouseEvent* pEvent )
 {
     USHORT nMode = 0;
@@ -2377,212 +2362,3 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
 
     return nRet;
 }
-
-#else   // => REMOTE_APPSERVER
-
-void ImplUpdateCursorRect( Window *pWindow )
-{
-    RmFrameWindow *pFrame;
-    if( pWindow && ( ( pFrame = pWindow->ImplGetFrame() ) != NULL ) )
-    {
-        if( pFrame->IsInEvtHandler() )
-            return;     // we'll update later
-        Rectangle rRect;
-        long rWidth;
-        pFrame->IsInEvtHandler( true ); // avoid recursion
-        ImplHandleExtTextInputPos( pWindow, rRect, rWidth, 0 );
-        pFrame->IsInEvtHandler( false );
-        pFrame->SetCursorRect( &rRect, rWidth );
-    }
-}
-
-void ImplHandleGeometryChange( Window *pWindow, Rectangle *pRect )
-{
-    if( pWindow && pWindow->ImplGetFrame() && pRect )
-    {
-        pWindow->ImplGetFrame()->maGeometry.nX = pRect->nLeft;
-        pWindow->ImplGetFrame()->maGeometry.nY = pRect->nTop;
-        pWindow->ImplGetFrame()->maGeometry.nWidth = pRect->nRight - pRect->nLeft + 1;
-        pWindow->ImplGetFrame()->maGeometry.nHeight = pRect->nBottom - pRect->nTop + 1;
-        ImplHandleMoveResize( pWindow, pRect->nLeft, pRect->nTop,
-            pWindow->ImplGetFrame()->maGeometry.nWidth,
-            pWindow->ImplGetFrame()->maGeometry.nHeight );
-    }
-}
-
-void ImplHandleDecorationChange( Window *pWindow, Rectangle *pRect )
-{
-    if( pWindow && pWindow->ImplGetFrame() && pRect )
-    {
-        pWindow->ImplGetFrame()->maGeometry.nLeftDecoration = pRect->nLeft;
-        pWindow->ImplGetFrame()->maGeometry.nTopDecoration = pRect->nTop;
-        pWindow->ImplGetFrame()->maGeometry.nRightDecoration = pRect->nRight;
-        pWindow->ImplGetFrame()->maGeometry.nBottomDecoration = pRect->nBottom;
-    }
-}
-
-void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
-{
-    DBG_TESTSOLARMUTEX();
-
-    ImplDelData aDelData;
-    Window *pWindow = pEvent->GetWindow();
-    if( pWindow && pWindow->ImplGetFrame() )
-    {
-        pWindow->ImplAddDel( &aDelData );
-        // disable updates like remote CursorRect
-        pWindow->ImplGetFrame()->IsInEvtHandler( true );
-    }
-
-    ULONG nId = pEvent->GetId();
-    switch ( nId )
-    {
-        case RMEVENT_KEYINPUT:
-        {
-            RmKeyEventData* pData = (RmKeyEventData*)pEvent->GetData();
-            ImplHandleKey( pEvent->GetWindow(), EVENT_KEYINPUT,
-                           pData->nKeyCode, pData->nChar, pData->nCount, TRUE );
-        }
-        break;
-        case RMEVENT_KEYUP:
-        {
-            RmKeyEventData* pData = (RmKeyEventData*)pEvent->GetData();
-            ImplHandleKey( pEvent->GetWindow(), EVENT_KEYUP,
-                           pData->nKeyCode, pData->nChar, 0, TRUE );
-        }
-        break;
-        case RMEVENT_MOUSEBUTTONDOWN:
-        case RMEVENT_MOUSEBUTTONUP:
-        case RMEVENT_MOUSEMOVE:
-        {
-            USHORT nSVEvent;
-            if ( nId == RMEVENT_MOUSEBUTTONDOWN )
-                nSVEvent = EVENT_MOUSEBUTTONDOWN;
-            else if ( nId == RMEVENT_MOUSEBUTTONUP )
-                nSVEvent = EVENT_MOUSEBUTTONUP;
-            else
-                nSVEvent = EVENT_MOUSEMOVE;
-            RmMouseEventData* pData = (RmMouseEventData*)pEvent->GetData();
-            BOOL bMouseLeave = ( pData->nMode & MOUSE_LEAVEWINDOW ) ? TRUE : FALSE;
-            pData->nMode &= ~(MOUSE_ENTERWINDOW|MOUSE_LEAVEWINDOW);
-
-            // Bei MOUSE_MOVE eine Bestaetigung zurueckschicken, damit der
-            // RClient solange verzoegert...
-            // Vorm ImplHandleMouseEvent, falls dort z.B. ein modaler Dialog
-            // aufgemacht wird.
-            if ( nId == RMEVENT_MOUSEMOVE )
-            {
-                DBG_ASSERT( pEvent->GetWindow()->ImplGetFrame(), "RemoteWindowProc: Frame?" );
-                if ( pEvent->GetWindow()->ImplGetFrame() )
-                    pEvent->GetWindow()->ImplGetFrame()->MouseMoveProcessed();
-            }
-
-            ImplHandleMouseEvent( pEvent->GetWindow(), nSVEvent, bMouseLeave,
-                           pData->nX, pData->nY, pData->nSysTime,
-                           pData->nCode, pData->nMode );
-
-        }
-        break;
-        case RMEVENT_PAINT:
-        {
-            Rectangle* pRect = (Rectangle*)pEvent->GetData();
-            ImplHandlePaint( pEvent->GetWindow(), *pRect );
-        }
-        break;
-        case RMEVENT_RESIZE:
-        {
-            Size* pSize = (Size*)pEvent->GetData();
-            ImplHandleResize( pEvent->GetWindow(), pSize->Width(), pSize->Height() );
-        }
-        break;
-        case RMEVENT_USEREVENT:
-        {
-            ImplHandleUserEvent( (ImplSVEvent*)pEvent->GetData() );
-        }
-        break;
-        case RMEVENT_CLOSE:
-        {
-            ImplHandleClose( pEvent->GetWindow() );
-        }
-        break;
-        case RMEVENT_GETFOCUS:
-        {
-            ImplHandleGetFocus( pEvent->GetWindow() );
-        };
-        break;
-        case RMEVENT_LOSEFOCUS:
-        {
-            ImplSVData* pSVData = ImplGetSVData();
-            ULONG nOldFlags;
-            if ( pSVData->maWinData.mpFirstFloat )
-            {
-                nOldFlags = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
-                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags( nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-            }
-            ImplHandleLoseFocus( pEvent->GetWindow() );
-            if ( pSVData->maWinData.mpFirstFloat )
-                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags( nOldFlags );
-        };
-        break;
-        case RMEVENT_MOUSEWHEEL:
-        {
-            RmMouseWheelEventData* pData = (RmMouseWheelEventData*)pEvent->GetData();
-            ImplHandleWheelEvent( pEvent->GetWindow(),
-                                  pData->nX,
-                                  pData->nY,
-                                  pData->nSysTime,
-                                  pData->nDelta,
-                                  pData->nNotchDelta,
-                                  pData->nScrollLines,
-                                  pData->nCode,
-                                  pData->bHorz );
-        };
-        break;
-        case RMEVENT_STARTEXTTEXTINPUT:
-        {
-            // ???
-        }
-        break;
-        case RMEVENT_EXTTEXTINPUT:
-        {
-            RmExtTextInputData* pData = (RmExtTextInputData*)pEvent->GetData();
-            ImplHandleExtTextInput( pEvent->GetWindow(), pData->nSysTime,
-                                           pData->aText, pData->pTextAttr,
-                                           pData->nCursorPos, pData->nCursorFlags );
-        }
-        break;
-        case RMEVENT_ENDEXTTEXTINPUT:
-        {
-            ImplHandleEndExtTextInput( pEvent->GetWindow() );
-        }
-        break;
-        case RMEVENT_INPUTCONTEXTCHANGE:
-        {
-            LanguageType *pL = (LanguageType*)pEvent->GetData();
-            ImplHandleInputContextChange( pEvent->GetWindow(), *pL );
-        }
-        break;
-        case RMEVENT_GEOMETRYCHANGE:
-        {
-            Rectangle* pRect = (Rectangle*)pEvent->GetData();
-            ImplHandleGeometryChange( pEvent->GetWindow(), pRect );
-        }
-        break;
-        case RMEVENT_DECORATIONCHANGE:
-        {
-            Rectangle* pRect = (Rectangle*)pEvent->GetData();
-            ImplHandleDecorationChange( pEvent->GetWindow(), pRect );
-        }
-        break;
-    }
-
-    if( pWindow && !aDelData.IsDelete() )   // window not deleted ?
-    {
-        pWindow->ImplRemoveDel( &aDelData );
-        // enable updates like remote CursorRect
-        pWindow->ImplGetFrame()->IsInEvtHandler( false );
-        ImplUpdateCursorRect( pWindow );
-    }
-}
-
-#endif
