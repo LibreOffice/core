@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:50:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,7 @@ void ORelationController::AddSupportedFeatures()
 {
     OJoinController::AddSupportedFeatures();
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddRelation")]   = SID_RELATION_ADD_RELATION;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddTable")]  = ID_BROWSER_ADDTABLE;
 }
 // -----------------------------------------------------------------------------
 void ORelationController::loadData()
