@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:16:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,31 @@ static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
 }
 
 // -----------------------------------------------------------------------
+
+/*  #i34277# delayed context menu activation;
+*   necessary if there already was a popup menu running.
+*/
+
+struct ContextMenuEvent
+{
+    Window*         pWindow;
+    ImplDelData     aDelData;
+    Point           aChildPos;
+};
+
+static long ContextMenuEventLink( void* pCEvent, void* pDummy )
+{
+    ContextMenuEvent* pEv = (ContextMenuEvent*)pCEvent;
+
+    if( ! pEv->aDelData.IsDelete() )
+    {
+        pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
+        ImplCallCommand( pEv->pWindow, COMMAND_CONTEXTMENU, NULL, TRUE, &pEv->aChildPos );
+    }
+    delete pEv;
+
+    return 0;
+}
 
 long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                            long nX, long nY, ULONG nMsgTime,
@@ -943,7 +968,26 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                     else
                         bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONUP);
                     if ( bContextMenu )
-                        nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, TRUE, &aChildPos );
+                    {
+                        if( pSVData->maAppData.mpActivePopupMenu )
+                        {
+                            /*  #i34277# there already is a context menu open
+                            *   that was probably just closed with EndPopupMode.
+                            *   We need to give the eventual corresponding
+                            *   PopupMenu::Execute a chance to end properly.
+                            *   Therefore delay context menu command and
+                            *   issue only after popping one frame of the
+                            *   Yield stack.
+                            */
+                            ContextMenuEvent* pEv = new ContextMenuEvent;
+                            pEv->pWindow = pChild;
+                            pEv->aChildPos = aChildPos;
+                            pChild->ImplAddDel( &pEv->aDelData );
+                            Application::PostUserEvent( Link( pEv, ContextMenuEventLink ) );
+                        }
+                        else
+                            nRet = ! ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, TRUE, &aChildPos );
+                    }
                 }
             }
         }
