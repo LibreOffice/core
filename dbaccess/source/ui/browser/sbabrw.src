@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:57:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 10:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,11 @@
         ID_QUERY_ZOOM_IN;\
         ID_QUERY_ZOOM_OUT;\
         ID_REALTION_ADD_RELATION;\
+        SID_INDEXDESIGN; \
+        ID_BROWSER_DOCUMENT_DATASOURCE;\
     };\
     IdCount = {\
-    39;\
+    41;\
     }
 
  // Default Image-Liste ----------------------------------------------------------------
@@ -269,6 +271,11 @@ ToolBox RID_BRW_QRY_TOOLBOX
     };
     CUR_ITEM
     {
+        MID_BROWSER_DOCUMENT_DATASOURCE
+        HelpId = SID_DOCUMENT_DATA_SOURCE;
+    };
+    CUR_ITEM
+    {
         Identifier = ID_BROWSER_CLOSE ;
         HelpId = SID_CLOSEDOC ;
         Hide = TRUE;
@@ -295,92 +302,6 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ finnish ] = "Sulje";
             Text[ catalan ] = "Cerrar";
         };
-    };
-};
-
-
-ToolBox RID_BRW_TAB_TOOLBOX
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 3 , 1 ) ;
-    Size = MAP_APPFONT ( 200 , 14 ) ;
-    OutputSize = TRUE ;
-    Align = BOXALIGN_TOP ;
-    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
-    HideWhenDeactivate = TRUE ;
-    HelpId = HID_TLB_TABBROWSER ;
-    ItemList =
-    {
-    CUR_ITEM
-    {
-        MID_BROWSER_EXPLORER
-        HelpId = SID_DSBROWSER_EXPLORER ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_FM_SEARCH
-        HelpId = SID_FM_SEARCH ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_SORTUP
-        HelpId = SID_FM_SORTUP ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_SORTDOWN
-        HelpId = SID_FM_SORTDOWN ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_AUTOFILTER
-        HelpId = SID_FM_AUTOFILTER ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_FILTERCRIT
-        HelpId = SID_FM_FILTERCRIT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_ORDERCRIT
-        HelpId = SID_FM_ORDERCRIT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_REMOVEFILTER
-        HelpId = SID_FM_REMOVE_FILTER_SORT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_BROWSER_FILTERED
-        HelpId = SID_FM_FORM_FILTERED ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_REFRESH
-        HelpId = SID_FM_REFRESH ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_BROWSER_INSERTCOLUMNS
-        HelpId = SID_SBA_BRW_INSERT ;
-    };
-    CUR_ITEM
-    {
-        MID_BROWSER_INSERTCONTENT
-        HelpId = SID_SBA_BRW_UPDATE ;
-    };
-    CUR_ITEM
-    {
-        MID_BROWSER_FORMLETTER
-        HelpId = SID_SBA_BRW_MERGE ;
-    };
     };
 };
 
