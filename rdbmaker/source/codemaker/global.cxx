@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:49 $
+ *  last change: $Author: jsc $ $Date: 2001-11-26 12:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
         if ( bFindChanges )
         {
             if ( !unlink(targetFileName.getStr()) )
-                if ( !rename(targetFileName.getStr(), tmpFileName.getStr()) )
+                if ( !rename(tmpFileName.getStr(), targetFileName.getStr()) )
                     ret = sal_True;
         }
         else
