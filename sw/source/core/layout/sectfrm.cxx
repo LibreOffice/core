@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:37:05 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,8 +1079,12 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
     }
     nDiff = -(Frm().*fnRect->fnBottomDist)( nDeadLine );
     SetUndersized( !bMaximize && nDiff >= 0 );
-    BOOL bCalc = ( IsUndersized() || bMaximize ) && ( nDiff ||
-                 (Prt().*fnRect->fnGetTop)() > (Frm().*fnRect->fnGetHeight)() );
+    const bool bCalc = ( IsUndersized() || bMaximize ) &&
+                       ( nDiff ||
+                         (Prt().*fnRect->fnGetTop)() > (Frm().*fnRect->fnGetHeight)() );
+    // OD 03.11.2003 #i19737# - introduce local variable <bExtraCalc> to indicate
+    // that a calculation has to be done beside the value of <bCalc>.
+    bool bExtraCalc = false;
     if( !bCalc && !bGrow && IsAnyNoteAtEnd() && !IsInFtn() )
     {
         SwSectionFrm *pSect = this;
@@ -1092,15 +1096,13 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
             pFtn = pFtn->FindFtnBossFrm();
             SwFrm* pTmp = FindLastCntnt( FINDMODE_LASTCNT );
             // OD 08.11.2002 #104840# - use <SwLayoutFrm::IsBefore(..)>
-            if ( pTmp &&
-                 pFtn->IsBefore( pTmp->FindFtnBossFrm() )
-               )
-                bCalc = TRUE;
+            if ( pTmp && pFtn->IsBefore( pTmp->FindFtnBossFrm() ) )
+                bExtraCalc = true;
         }
         else if( GetFollow() && !GetFollow()->ContainsAny() )
-            bCalc = TRUE;
+            bExtraCalc = true;
     }
-    if( bCalc )
+    if ( bCalc || bExtraCalc )
     {
         nDiff = (*fnRect->fnYDiff)( nDeadLine, (Frm().*fnRect->fnGetTop)() );
         if( nDiff < 0 )
@@ -1116,18 +1118,21 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
             nTop = nDiff;
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
 
-        /// OD 18.09.2002 #100522#
-        /// Determine, if height has changed.
-        /// Note: In vertical layout the height equals the width value.
+        // OD 18.09.2002 #100522#
+        // Determine, if height has changed.
+        // Note: In vertical layout the height equals the width value.
         bool bHeightChanged = bVert ?
                             (aOldSz.Width() != Prt().Width()) :
                             (aOldSz.Height() != Prt().Height());
         // Wir haben zu guter Letzt noch einmal die Hoehe geaendert,
         // dann wird das innere Layout (Columns) kalkuliert und
         // der Inhalt ebenfalls.
-        /// OD 18.09.2002 #100522#
-        /// calculate content, only if height has changed.
-        if( bHeightChanged && Lower() )
+        // OD 18.09.2002 #100522#
+        // calculate content, only if height has changed.
+        // OD 03.11.2003 #i19737# - restriction of content calculation too strong.
+        // If an endnote has an incorrect position or a follow section contains
+        // no content except footnotes/endnotes, the content has also been calculated.
+        if ( ( bHeightChanged || bExtraCalc ) && Lower() )
         {
             if( Lower()->IsColumnFrm() )
             {
