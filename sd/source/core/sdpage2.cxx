@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:43:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,15 +108,21 @@
 
 #ifdef MAC
 #include "::ui:inc:strings.hrc"
-#include "::ui:inc:docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "::ui:inc:DrawDocShell.hxx"
+#endif
 #else
 #ifdef UNX
 #include "../ui/inc/strings.hrc"
-#include "../ui/inc/docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
+#endif
 #else
 #include "..\ui\inc\cfgids.hxx"
 #include "..\ui\inc\strings.hrc"
-#include "..\ui\inc\docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "..\ui\inc\DrawDocShell.hxx"
+#endif
 #endif
 #endif
 
@@ -683,7 +689,7 @@ void SdPage::ConnectLink()
         * Anmelden
         * Nur Standardseiten duerfen gelinkt sein
         **********************************************************************/
-        SdDrawDocShell* pDocSh = ((SdDrawDocument*) pModel)->GetDocSh();
+        ::sd::DrawDocShell* pDocSh = ((SdDrawDocument*) pModel)->GetDocSh();
 
         if (!pDocSh || pDocSh->GetMedium()->GetOrigURL() != aFileName)
         {
