@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-26 11:03:18 $
+ *  last change: $Author: ka $ $Date: 2002-07-18 13:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XFillGradientItem(pPool,aNullGrad));
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
 #ifndef SVX_LIGHT
-    Bitmap   aNullBmp(SdResId(BMP_PRESOBJ_OBJECT));   // irgendeine
+    Size    aNullSize( 32, 32 );
+    Color   aNullColor( COL_WHITE );
+    Bitmap  aNullBmp( aNullSize, 8 );
+    aNullBmp.Erase( aNullColor );
     rISet.Put(XFillBitmapItem(pPool,aNullBmp));
 #else
     // leave it empty to avoid resource usage
