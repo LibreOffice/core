@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 21:44:01 $
+ *  last change: $Author: vg $ $Date: 2001-10-22 05:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
