@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:54:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 
 #include <svtools/securityoptions.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring.h>
@@ -276,8 +278,8 @@ SfxEventList_Impl   *gp_Name_SortList = NULL;
 //==========================================================================
 
 SfxEventConfiguration::SfxEventConfiguration()
- : pDocEventConfig( NULL )
- , pAppEventConfig( NULL )
+ : pAppEventConfig( NULL )
+ , pDocEventConfig( NULL )
 {
     bIgnoreConfigure = sal_False;
 
@@ -433,10 +435,11 @@ SfxEventConfigItem_Impl::SfxEventConfigItem_Impl( USHORT nConfigId,
     SfxEventConfiguration *pCfg,
     SfxObjectShell *pObjSh)
     : SfxConfigItem( nConfigId, pObjSh ? NULL : SFX_APP()->GetConfigManager_Impl() )
-    , aMacroTable( 2, 2 )
     , pEvConfig( pCfg )
     , pObjShell( pObjSh )
+    , aMacroTable( 2, 2 )
     , bInitialized( FALSE )
+
 {
     bInitialized = TRUE;
 }
@@ -952,7 +955,7 @@ ULONG SfxEventConfiguration::GetPos_Impl( USHORT nId, sal_Bool &rFound )
     int     nCompVal = 1;
     long    nStart = 0;
     long    nEnd = gp_Id_SortList->Count() - 1;
-    long    nMid;
+    long    nMid = 0;
 
     EventNames_Impl* pMid;
 
@@ -998,7 +1001,7 @@ ULONG SfxEventConfiguration::GetPos_Impl( const String& rName, sal_Bool &rFound 
     int     nCompVal = 1;
     long    nStart = 0;
     long    nEnd = gp_Name_SortList->Count() - 1;
-    long    nMid;
+    long    nMid = 0;
 
     EventNames_Impl* pMid;
 
