@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:34:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,8 +503,7 @@ void SfxStateCache::SetCachedState( BOOL bAlways )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
-    DBG_ASSERT( pController, "Cache ohne ControllerItem" );
-    DBG_ASSERT( pController->GetId()==nId, "Cache mit falschem ControllerItem" );
+    DBG_ASSERT(pController==NULL||pController->GetId()==nId, "Cache mit falschem ControllerItem" );
     DBG_PROFSTART(SfxStateCacheSetState);
 
     // nur updaten wenn cached item vorhanden und auch verarbeitbar
