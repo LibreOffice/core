@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:18:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,6 @@
 #include <svtools/intitem.hxx>
 #include <so3/ipclient.hxx>
 #include <so3/client.hxx>
-#include <sfx2/cfgitem.hxx>
 #include <svtools/confitem.hxx>
 #include <markdata.hxx>
 #include <svx/optgrid.hxx>
