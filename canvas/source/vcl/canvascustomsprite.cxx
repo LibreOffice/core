@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:11:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,38 +379,39 @@ namespace vclcanvas
         if( !mpSpriteCanvas.get() || !mpBackBuffer.get() )
             return; // we're disposed
 
-        const Point         aEmptyPoint;
-
-        // TODO(F3): Support for alpha-VDev
-
-        // Prepare the outdev
-        rTargetSurface.EnableMapMode( FALSE );
-        rTargetSurface.SetClipRegion();
-
-        // apply clip (if any)
-        if( mxClipPoly.is() )
-        {
-            const ::basegfx::B2DPolyPolygon& rClipPoly( tools::polyPolygonFromXPolyPolygon2D( mxClipPoly ) );
-
-            if( rClipPoly.count() )
-            {
-                PolyPolygon aPolyPoly( rClipPoly );
-
-                aPolyPoly.Translate( rOutputPos );
-
-                const Region aClipRegion( aPolyPoly );
-
-                rTargetSurface.SetClipRegion( aClipRegion );
-            }
-        }
-
         // log output pos in device pixel
         VERBOSE_TRACE( "CanvasCustomSprite::redraw(): output pos is (%f, %f)",
                        maPosition.getX(),
                        maPosition.getY() );
 
-        if( !::basegfx::fTools::equalZero( mfAlpha ) )
+        // Prepare the outdev
+        rTargetSurface.EnableMapMode( FALSE );
+        rTargetSurface.SetClipRegion();
+
+        if( mbActive &&
+            !::basegfx::fTools::equalZero( mfAlpha ) )
         {
+            const Point aEmptyPoint;
+
+            // TODO(F3): Support for alpha-VDev
+
+            // apply clip (if any)
+            if( mxClipPoly.is() )
+            {
+                const ::basegfx::B2DPolyPolygon& rClipPoly( tools::polyPolygonFromXPolyPolygon2D( mxClipPoly ) );
+
+                if( rClipPoly.count() )
+                {
+                    PolyPolygon aPolyPoly( rClipPoly );
+
+                    aPolyPoly.Translate( rOutputPos );
+
+                    const Region aClipRegion( aPolyPoly );
+
+                    rTargetSurface.SetClipRegion( aClipRegion );
+                }
+            }
+
             // To we have to update our bitmaps (necessary when virdev was
             // painted to)?
             if( mbSurfaceDirty ||
@@ -454,9 +455,10 @@ namespace vclcanvas
                                              BitmapEx( maContent->GetBitmap(),
                                                        aAlpha ) );
             }
+
+            rTargetSurface.SetClipRegion();
         }
 
-        rTargetSurface.SetClipRegion();
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
         // Paint little red sprite area markers
