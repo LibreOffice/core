@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-07 11:15:33 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 14:59:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,17 +68,14 @@ TARGET=shlxthdl
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
-
 
 # --- Files --------------------------------------------------------
 
 
 RCFILES=$(RES)$/$(TARGET).rc
 
-LNGFILES=$(TARGET).lng
+ULFFILES=$(TARGET).ulf
 
 # --- Targets ------------------------------------------------------
 
@@ -88,6 +85,6 @@ LNGFILES=$(TARGET).lng
 # Generate the native Windows resource file
 # using lngconvex.exe 
 
-$(RCFILES) : $(LNGFILES) makefile.mk rcfooter.txt rcheader.txt rctmpl.txt ctrylnglist.txt
-    +$(BIN)$/lngconvex.exe -lng shlxthdl.lng -rc $(RES)$/shlxthdl.rc -c  ctrylnglist.txt  -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
-
+$(RCFILES) : $(COMMONMISC)$/$(TARGET)$/shlxthdl.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
+    +$(WRAPCMD) $(BIN)$/lngconvex.exe -ulf $(COMMONMISC)$/$(TARGET)$/shlxthdl.ulf -rc $(RES)$/shlxthdl.rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+    
