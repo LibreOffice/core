@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:24:04 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/waitobj.hxx>
@@ -149,7 +150,7 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
         const SfxFilter* pFilter = pMed->GetFilter();
         if( pFilter && (pFilter->GetFilterName() == aHTMLFilterName) )
         {
-            const SfxFilter* pNewFilter = pApp->GetFilter( ScDocShell::Factory(), aWebQFilterName );
+            const SfxFilter* pNewFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
             if( pNewFilter )
                 pMed->SetFilter( pNewFilter );
         }
