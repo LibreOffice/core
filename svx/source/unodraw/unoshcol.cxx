@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshcol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:12 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,12 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 OUString SAL_CALL SvxShapeCollection::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxShapeCollection") );
+    return getImplementationName_Static();
+}
+
+OUString SvxShapeCollection::getImplementationName_Static()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxShapeCollection") );
 }
 
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
@@ -270,9 +275,19 @@ sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq(1);
-    aSeq.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shapes") );
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames_Static()
+{
+    uno::Sequence< OUString > aSeq(2);
+    aSeq.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shapes") );
+    aSeq.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection") );
     return aSeq;
 }
 
+Reference< XInterface > SAL_CALL SvxShapeCollection_createInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr )
+{
+    return *( new SvxShapeCollection() );
+}
 
