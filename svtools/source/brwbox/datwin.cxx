@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 06:23:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,9 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent ) :
     nUpdateLock( 0 ),
     nCursorHidden( 0 ),
     pDtorNotify( 0 ),
-    bCallingDropCallback( FALSE )
+    bCallingDropCallback( FALSE ),
+    m_nDragRowDividerLimit( 0 ),
+    m_nDragRowDividerOffset( 0 )
 {
     aMouseTimer.SetTimeoutHdl( LINK( this, BrowserDataWin, RepeatedMouseMove ) );
     aMouseTimer.SetTimeout( 100 );
@@ -254,13 +256,6 @@ BrowserDataWin::~BrowserDataWin()
 {
     if( pDtorNotify )
         *pDtorNotify = TRUE;
-/*
- *  #90565# nobody knows why this was done. Since
- *  the mouse must NOT be captured on startDrag
- *  let's comment this out.
- */
-//  if ( IsMouseCaptured() )
-//      ReleaseMouse();
 }
 
 //-------------------------------------------------------------------
@@ -418,9 +413,12 @@ sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 //-------------------------------------------------------------------
 void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    Point aEventPos( _rPosPixel );
-    aEventPos.Y() += GetParent()->GetTitleHeight();
-    GetParent()->StartDrag( _nAction, aEventPos );
+    if ( !GetParent()->bRowDividerDrag )
+    {
+        Point aEventPos( _rPosPixel );
+        aEventPos.Y() += GetParent()->GetTitleHeight();
+        GetParent()->StartDrag( _nAction, aEventPos );
+    }
 }
 
 //-------------------------------------------------------------------
@@ -473,15 +471,33 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 
 //-------------------------------------------------------------------
 
+BOOL BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
+{
+    if ( ! (  GetParent()->IsInteractiveRowHeightEnabled()
+           && ( _rEvent.GetRow() >= 0 )
+           && ( _rEvent.GetRow() < GetParent()->GetRowCount() )
+           && ( _rEvent.GetColumnId() == 0 )
+           )
+       )
+       return FALSE;
+
+    long nDividerDistance = GetParent()->GetDataRowHeight() - ( _rEvent.GetPosPixel().Y() % GetParent()->GetDataRowHeight() );
+    return ( nDividerDistance <= 4 );
+}
+
+//-------------------------------------------------------------------
+
 void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 {
     aLastMousePos = OutputToScreenPixel( rEvt.GetPosPixel() );
-/*
- *  #90565# nobody knows why this was done. Since
- *  the mouse must NOT be captured on startDrag
- *  let's comment this out.
- */
-//  CaptureMouse();
+
+    BrowserMouseEvent aBrowserEvent( this, rEvt );
+    if ( ( aBrowserEvent.GetClicks() == 1 ) && ImplRowDividerHitTest( aBrowserEvent ) )
+    {
+        StartRowDividerDrag( aBrowserEvent.GetPosPixel() );
+        return;
+    }
+
     GetParent()->MouseButtonDown( BrowserMouseEvent( this, rEvt ) );
 }
 
@@ -491,21 +507,19 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 {
     // Pseudo MouseMoves verhindern
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
-    if ( aNewPos == aLastMousePos )
+    if ( ( aNewPos == aLastMousePos ) )
         return;
     aLastMousePos = aNewPos;
 
-/*
- *  #90565# nobody knows why this was done. Since
- *  the mouse must NOT be captured on startDrag
- *  let's comment this out.
- */
-    // Paint-Probleme abfangen
-//  if ( !IsMouseCaptured() )
-//      return;
-
     // transform to a BrowseEvent
-    GetParent()->MouseMove( BrowserMouseEvent( this, rEvt ) );
+    BrowserMouseEvent aBrowserEvent( this, rEvt );
+    GetParent()->MouseMove( aBrowserEvent );
+
+    // pointer shape
+    PointerStyle ePointerStyle = POINTER_ARROW;
+    if ( ImplRowDividerHitTest( aBrowserEvent ) )
+        ePointerStyle = POINTER_VSIZEBAR;
+    SetPointer( Pointer( ePointerStyle ) );
 
     // dragging out of the visible area?
     if ( rEvt.IsLeft() &&
@@ -539,15 +553,6 @@ void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
     aLastMousePos = aNewPos;
 
-/*
- *  #90565# nobody knows why this was done. Since
- *  the mouse must NOT be captured on startDrag
- *  let's comment this out.
- */
-    // Paint-Probleme abfangen
-//  if ( !IsMouseCaptured() )
-//      return;
-
     // Move an die aktuelle Position simulieren
     MouseMove( rEvt );
 
@@ -556,6 +561,76 @@ void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
     if ( aMouseTimer.IsActive() )
         aMouseTimer.Stop();
     GetParent()->MouseButtonUp( BrowserMouseEvent( this, rEvt ) );
+}
+
+//-------------------------------------------------------------------
+
+void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
+{
+    long nDataRowHeight = GetParent()->GetDataRowHeight();
+    // the exact separation pos of the two rows
+    long nDragRowDividerCurrentPos = _rStartPos.Y();
+    if ( ( nDragRowDividerCurrentPos % nDataRowHeight ) > nDataRowHeight / 2 )
+        nDragRowDividerCurrentPos += nDataRowHeight;
+    nDragRowDividerCurrentPos /= nDataRowHeight;
+    nDragRowDividerCurrentPos *= nDataRowHeight;
+
+    m_nDragRowDividerOffset = nDragRowDividerCurrentPos - _rStartPos.Y();
+
+    m_nDragRowDividerLimit = nDragRowDividerCurrentPos - nDataRowHeight;
+
+    GetParent()->bRowDividerDrag = TRUE;
+    GetParent()->ImplStartTracking();
+
+    Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
+    ShowTracking( aDragSplitRect, SHOWTRACK_SMALL );
+
+    StartTracking();
+}
+
+//-------------------------------------------------------------------
+
+void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
+{
+    if ( !GetParent()->bRowDividerDrag )
+        return;
+
+    Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
+    // stop resizing at our bottom line
+    if ( aMousePos.Y() > GetOutputSizePixel().Height() )
+        aMousePos.Y() = GetOutputSizePixel().Height();
+
+    if ( rTEvt.IsTrackingEnded() )
+    {
+        HideTracking();
+        GetParent()->bRowDividerDrag = FALSE;
+        GetParent()->ImplEndTracking();
+
+        if ( !rTEvt.IsTrackingCanceled() )
+        {
+            long nNewRowHeight = aMousePos.Y() + m_nDragRowDividerOffset - m_nDragRowDividerLimit;
+
+            // care for minimum row height
+            if ( nNewRowHeight < GetParent()->QueryMinimumRowHeight() )
+                nNewRowHeight = GetParent()->QueryMinimumRowHeight();
+
+            GetParent()->SetDataRowHeight( nNewRowHeight );
+            GetParent()->RowHeightChanged();
+        }
+    }
+    else
+    {
+        GetParent()->ImplTracking();
+
+        long nDragRowDividerCurrentPos = aMousePos.Y() + m_nDragRowDividerOffset;
+
+        // care for minimum row height
+        if ( nDragRowDividerCurrentPos < m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight() )
+            nDragRowDividerCurrentPos = m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight();
+
+        Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
+        ShowTracking( aDragSplitRect, SHOWTRACK_SMALL );
+    }
 }
 
 //-------------------------------------------------------------------
