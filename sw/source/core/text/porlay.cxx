@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:12:03 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,10 +586,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     USHORT nCnt = 0;
     // counter for compression information arrays
     USHORT nCntComp = 0;
-#ifdef BIDI
     // counter for kashida array
     USHORT nCntKash = 0;
-#endif
+
     BYTE nScript;
 
     const String& rTxt = rNode.GetTxt();
@@ -597,12 +596,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // compression type
     const SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
 
-#ifdef BIDI
     // justification type
     const sal_Bool bAdjustBlock = SVX_ADJUST_BLOCK ==
                                   rNode.GetSwAttrSet().GetAdjust().GetAdjust();
-#endif
-
 
     //
     // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:
@@ -616,40 +612,35 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         ASSERT( CountScriptChg(), "Where're my changes of script?" );
         while( nCnt < CountScriptChg() )
         {
-            if ( nChg <= GetScriptChg( nCnt ) )
+            if ( nChg > GetScriptChg( nCnt ) )
+                nCnt++;
+            else
             {
                 nScript = GetScriptType( nCnt );
                 break;
             }
-            else
-                nCnt++;
         }
         if( CHARCOMPRESS_NONE != aCompEnum )
         {
             while( nCntComp < CountCompChg() )
             {
-                if ( nChg <= GetCompStart( nCntComp ) )
-                    break;
-                else
+                if ( nChg > GetCompStart( nCntComp ) )
                     nCntComp++;
+                else
+                    break;
             }
         }
-#ifdef BIDI
         if ( bAdjustBlock )
         {
             while( nCntKash < CountKashida() )
             {
-                if ( nChg <= GetKashida( nCntKash ) )
-                    break;
-                else
+                if ( nChg > GetKashida( nCntKash ) )
                     nCntKash++;
+                else
+                    break;
             }
         }
-#endif
     }
-    else
-        nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, 0 );
-
 
     //
     // ADJUST nChg VALUE:
@@ -662,19 +653,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
     const xub_StrLen nGrpStart = nCnt ? GetScriptChg( nCnt - 1 ) : 0;
 
-#ifdef BIDI
     // we go back in our group until we reach the first character of
     // type nScript
     while ( nChg > nGrpStart &&
             nScript != pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
         --nChg;
-#else
-    // we go back in our group until we reach a non-weak character
-    while ( nChg > nGrpStart &&
-            WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
-        --nChg;
-#endif
 
+    // If we are at the start of a group, we do not trust nScript,
+    // we better get nScript from the breakiterator:
+    if ( nChg == nGrpStart )
+        nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
 
     //
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
@@ -704,7 +692,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     aCompLen.Remove( nCntComp, nCompRemove );
     aCompType.Remove( nCntComp, nCompRemove );
 
-#ifdef BIDI
     // get the start of the last kashida group
     USHORT nLastKashida = nChg;
     if( nCntKash && i18n::ScriptType::COMPLEX == nScript )
@@ -715,8 +702,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
     // remove invalid entries from kashida array
     aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
-#endif
-
 
     //
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
@@ -741,102 +726,26 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 i18n::ScriptType::ASIAN == nScript ||
                 i18n::ScriptType::COMPLEX == nScript, "Wrong default language" );
 
-/*
- * This code has been disabled since the glyph fallback should work now
- *
-
-        // map scripts to font indices, CTL font is always the last one
-        const BYTE nScripts[3] = {
-                 nScript - 1,
-                 i18n::ScriptType::LATIN == nScript ? 1 : 0,
-                 2 };
-
-        xub_StrLen nOldChg = nChg;
-        const SwFont* pCurrFont = rAH.GetFont();
-
-        SwFontIter* pIter = 0;
-
-        if ( rNode.GetpSwpHints() )
-        {
-            // this is only necessary if there are font changes within the
-            // weak region
-            pIter = new SwFontIter( rNode, rAH, 0, nEnd );
-            pCurrFont = &pIter->GetCurrFont( nChg );
-            // the next end is the next font change
-            nEnd = pIter->NextFontChg();
-        }
-
-        ASSERT( pCurrFont, "I told you not to use an AttrHandler without a font" )
-
-        while ( nChg < nEnd )
-        {
-            for ( BYTE i = 0; i < 3; ++i )
-            {
-                nChg = rOut.HasGlyphs(
-                         pCurrFont->GetFnt( nScripts[i] ), rTxt, nChg, nEnd - nChg );
-
-                if ( nChg > nOldChg )
-                {
-                    // add new group
-                    aScriptChg.Insert( nChg, nCnt );
-                    aScriptType.Insert( nScripts[i] + 1, nCnt++ );
-                    nOldChg = nChg;
-
-                    // specials: continue with font[0] font
-                    if ( 1 == i )
-                        break;
-                }
-                else if ( 2 == i )
-                {
-                    // if we did not make any progress with the font[2]: default
-                    ++nChg;
-                    aScriptChg.Insert( nChg, nCnt );
-                    aScriptType.Insert( nScripts[0] + 1, nCnt++ );
-                    nOldChg = nChg;
-                }
-
-                // check if already finished
-                if ( nChg == nEnd )
-                    break;
-            }
-
-            if ( pIter )
-            {
-                pCurrFont = &pIter->GetCurrFont( nChg );
-                // advance to the next font change
-                nEnd = pIter->NextFontChg();
-            }
-        }
-
-        delete pIter;
-
-        // Get next script type or set to weak in order to exit
-        nScript = ( nEnd < rTxt.Len() ) ?
-                  (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
-                  (BYTE)WEAK;
- */
         nChg = nEnd;
-        aScriptChg.Insert( nEnd, nCnt );
-        aScriptType.Insert( nScript, nCnt++ );
 
         // Get next script type or set to weak in order to exit
-        nScript = ( nEnd < rTxt.Len() ) ?
-                  (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
-                  (BYTE)WEAK;
+        BYTE nNextScript = ( nEnd < rTxt.Len() ) ?
+           (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
+           (BYTE)WEAK;
+
+        if ( nScript != nNextScript )
+        {
+            aScriptChg.Insert( nEnd, nCnt );
+            aScriptType.Insert( nScript, nCnt++ );
+            nScript = nNextScript;
+        }
     }
 
     //
     // UPDATE THE SCRIPT INFO ARRAYS:
     //
 
-    // if there are only weak characters in paragraph we are finished
-    if ( WEAK == nScript )
-        return;
-
-    ASSERT( WEAK != (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg ),
-            "Oh my god, it's weak again" );
-
-    do
+    while ( nChg < rTxt.Len() || ( !aScriptChg.Count() && !rTxt.Len() ) )
     {
         ASSERT( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
@@ -922,7 +831,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 }
             }
         }
-#ifdef BIDI
+
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
@@ -1028,18 +937,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                     aKashida.Insert( nKashidaPos, nCntKash++ );
             } // end of kashida search
         }
-#endif
 
-        if ( nChg >= rTxt.Len() )
-            break;
+        if ( nChg < rTxt.Len() )
+            nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
 
-        nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
         nLastCompression = nChg;
-#ifdef BIDI
         nLastKashida = nChg;
-#endif
-
-    } while ( TRUE );
+    };
 
 #ifndef PRODUCT
     // check kashida data
@@ -1064,33 +968,84 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     aDirType.Remove( 0, nDirRemove );
 
     // Perform Unicode Bidi Algorithm for text direction information
+    bool bPerformUBA = UBIDI_LTR != nDefaultDir;
     nCnt = 0;
-    sal_Bool bLatin = sal_False;
-    sal_Bool bAsian = sal_False;
-    sal_Bool bComplex = sal_False;
-
-    while( nCnt < CountScriptChg() )
+    while( !bPerformUBA && nCnt < CountScriptChg() )
     {
-        nScript = GetScriptType( nCnt++ );
-        switch ( nScript )
-        {
-        case i18n::ScriptType::LATIN:
-            bLatin = sal_True;
-            break;
-        case i18n::ScriptType::ASIAN:
-            bAsian = sal_True;
-            break;
-        case i18n::ScriptType::COMPLEX:
-            bComplex = sal_True;
-            break;
-        default:
-            ASSERT( ! rTxt.Len(), "Wrong script found" )
-        }
+        if ( i18n::ScriptType::COMPLEX == GetScriptType( nCnt++ ) )
+            bPerformUBA = true;
     }
 
     // do not call the unicode bidi algorithm if not required
-    if ( UBIDI_LTR != nDefaultDir || bComplex )
+    if ( bPerformUBA )
+    {
         UpdateBidiInfo( rTxt );
+
+        // #i16354# Change script type for RTL text to CTL.
+        for ( USHORT nDirIdx = 0; nDirIdx < aDirChg.Count(); ++nDirIdx )
+        {
+            if ( GetDirType( nDirIdx ) == UBIDI_RTL )
+            {
+                // nStart ist start of RTL run:
+                const xub_StrLen nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
+                // nEnd is end of RTL run:
+                const xub_StrLen nEnd = GetDirChg( nDirIdx );
+                // nScriptIdx points into the ScriptArrays:
+                USHORT nScriptIdx = 0;
+
+                // Skip entries in ScriptArray which are not inside the RTL run:
+                // Make nScriptIdx become the index of the script group with
+                // 1. nStartPosOfGroup <= nStart and
+                // 2. nEndPosOfGroup > nStart
+                while ( GetScriptChg( nScriptIdx ) <= nStart )
+                    ++nScriptIdx;
+
+                xub_StrLen nEndPosOfGroup = GetScriptChg( nScriptIdx );
+                xub_StrLen nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
+                BYTE nScriptTypeOfGroup = GetScriptType( nScriptIdx );
+
+                ASSERT( nStartPosOfGroup <= nStart && nEndPosOfGroup > nStart,
+                        "Script override with CTL font trouble" )
+
+                // Check if we have to insert a new script change at
+                // position nStart. If nStartPosOfGroup < nStart,
+                // we have to insert a new script change:
+                if ( nStart > 0 && nStartPosOfGroup < nStart )
+                {
+                    aScriptChg.Insert( nStart, nScriptIdx );
+                    aScriptType.Insert( nScriptTypeOfGroup, nScriptIdx );
+                    ++nScriptIdx;
+                }
+
+                // Remove entries in ScriptArray which end inside the RTL run:
+                while ( nScriptIdx < aScriptChg.Count() && GetScriptChg( nScriptIdx ) <= nEnd )
+                {
+                    aScriptChg.Remove( nScriptIdx, 1 );
+                    aScriptType.Remove( nScriptIdx, 1 );
+                }
+
+                // Insert a new entry in ScriptArray for the end of the RTL run:
+                aScriptChg.Insert( nEnd, nScriptIdx );
+                aScriptType.Insert( i18n::ScriptType::COMPLEX, nScriptIdx );
+
+#if OSL_DEBUG_LEVEL > 1
+                BYTE nScriptType;
+                BYTE nLastScriptType = i18n::ScriptType::WEAK;
+                xub_StrLen nScriptChg;
+                xub_StrLen nLastScriptChg = 0;
+
+                for ( int i = 0; i < aScriptChg.Count(); ++i )
+                {
+                    nScriptChg = GetScriptChg( i );
+                    nScriptType = GetScriptType( i );
+                    ASSERT( nLastScriptType != nScriptType &&
+                            nLastScriptChg < nScriptChg,
+                            "Heavy InitScriptType() confusion" )
+                }
+#endif
+            }
+        }
+    }
 }
 
 void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
@@ -1170,8 +1125,6 @@ BYTE SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
     return (BYTE)GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 }
 
-#ifdef BIDI
-
 xub_StrLen SwScriptInfo::NextDirChg( const xub_StrLen nPos,
                                      const BYTE* pLevel )  const
 {
@@ -1198,8 +1151,6 @@ BYTE SwScriptInfo::DirType( const xub_StrLen nPos ) const
 
     return 0;
 }
-
-#endif
 
 /*************************************************************************
  *                        SwScriptInfo::CompType(..)
@@ -1362,8 +1313,6 @@ long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
     return nSub;
 }
 
-#ifdef BIDI
-
 /*************************************************************************
  *                      SwScriptInfo::KashidaJustify()
  *************************************************************************/
@@ -1450,8 +1399,6 @@ sal_Bool SwScriptInfo::IsArabicLanguage( LanguageType aLang )
            LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
            LANGUAGE_ARABIC_QATAR == aLang;
 }
-
-#endif
 
 /*************************************************************************
  *                      SwScriptInfo::ThaiJustify()
