@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,7 @@ void SwSectionFrm::MakeAll()
     if( !bValidPos && ToMaximize( FALSE ) )
         bValidSize = FALSE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const SwFmtCol &rCol = GetFmt()->GetCol();
 #endif
     SwLayoutFrm::MakeAll();
