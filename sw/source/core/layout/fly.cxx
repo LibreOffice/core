@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-27 14:49:51 $
+ *  last change: $Author: fme $ $Date: 2002-10-01 11:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2168,18 +2168,16 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
 
                     // check if the new position
                     // would not exceed the margins of the page
+                    Rectangle aRect( pO->GetBoundRect() );
+
                     SwPageFrm* pPage = FindPageFrm();
-                    if ( pPage )
+
+                    if ( pPage &&
+                            ( aRect.Left() < pPage->Frm().Left() ||
+                              aRect.Right() > pPage->Frm().Right() ) )
                     {
-                        Rectangle aRect( pO->GetBoundRect() );
                         Point aNewRel( 0, pO->GetRelativePos().Y() );
-                        if ( aRect.Left() < Frm().Left() )
-                            pO->SetRelativePos( aNewRel );
-                        else if ( aRect.Right() > Frm().Right() )
-                        {
-                            aNewRel.X() = aRect.Left() - aRect.Right();
-                            pO->SetRelativePos( aNewRel );
-                        }
+                        pO->SetRelativePos( aNewRel );
                     }
 
                     ((SwDrawContact*)GetUserCall(pO))->ChkPage();

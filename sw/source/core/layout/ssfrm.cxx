@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:47:13 $
+ *  last change: $Author: fme $ $Date: 2002-10-01 11:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,17 +344,20 @@ void SwFrm::CheckDirChange()
                             }
                             else
                             {
-                                // change anchor position
-                                pObj->SetAnchorPos( GetAnchorPos() );
-                                // check if the new position
-                                // would not exceed the margins of the page
-                                Rectangle aRect( pObj->GetBoundRect() );
-                                Point aNewRel( 0, pObj->GetRelativePos().Y() );
-                                if ( aRect.Left() < Frm().Left() )
-                                    pObj->SetRelativePos( aNewRel );
-                                else if ( aRect.Right() > Frm().Right() )
+                                const SwDrawContact* pContact =
+                                    (SwDrawContact*)GetUserCall(pObj);
+                                if ( pContact && pContact->GetAnchor() == this )
                                 {
-                                    aNewRel.X() = aRect.Left() - aRect.Right();
+                                    // change anchor position
+                                    pObj->SetAnchorPos( GetAnchorPos() );
+                                    // check if the new position
+                                    // would not exceed the margins of the page
+                                    Rectangle aRect( pObj->GetBoundRect() );
+                                    Point aNewRel( pObj->GetRelativePos() );
+                                    if ( aRect.Left() < Frm().Left() )
+                                        aNewRel.X() = 0;
+                                    else if ( aRect.Right() > Frm().Right() )
+                                        aNewRel.X() -= aRect.Right() - Frm().Right();
                                     pObj->SetRelativePos( aNewRel );
                                 }
                             }
@@ -399,12 +402,10 @@ void SwFrm::CheckDirChange()
                         // check if the new position
                         // would not exceed the margins of the page
                         Rectangle aRect( pObj->GetBoundRect() );
-                        Point aNewRel( 0, pObj->GetRelativePos().Y() );
-                        if ( aRect.Left() < pPage->Frm().Left() )
-                            pObj->SetRelativePos( aNewRel );
-                        else if ( aRect.Right() > pPage->Frm().Right() )
+                        if ( aRect.Left() < pPage->Frm().Left() ||
+                             aRect.Right() > pPage->Frm().Right() )
                         {
-                            aNewRel.X() = aRect.Left() - aRect.Right();
+                            Point aNewRel( 0, pObj->GetRelativePos().Y() );
                             pObj->SetRelativePos( aNewRel );
                         }
                     }
