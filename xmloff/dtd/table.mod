@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.42 2002-11-08 08:40:55 sab Exp $
+	$Id: table.mod,v 1.43 2003-08-19 11:29:10 hjs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -332,6 +332,7 @@
 	table:condition CDATA #IMPLIED
 	table:base-cell-address %cell-address; #IMPLIED
 	table:allow-empty-cell %boolean; #IMPLIED
+	table:show-list (no | unsorted | sorted-ascending) #IMPLIED
 >
 <!ELEMENT table:help-message (text:p*)>
 <!ATTLIST table:help-message
