@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:10 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ english_us ] = "Transparency mode";
         Text[ portuguese ] = "Modo transparência";
         Text[ russian ] = "Ğåæèì ïğîçğà÷íîñòè";
-        Text[ greek ] = "Transparency mode";
+        Text[ greek ] = "ÊáôÜóôáóç äéáöÜíåéáò";
         Text[ dutch ] = "Modus Transparantie";
         Text[ french ] = "Mode Transparence";
         Text[ spanish ] = "Modo transparencia";
@@ -96,15 +96,18 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ danish ] = "Transparensmodus";
         Text[ swedish ] = "Transparensläge";
         Text[ polish ] = "Tryb przezroczystoœci";
-        Text[ portuguese_brazilian ] = "Transparency mode";
+        Text[ portuguese_brazilian ] = "Modo de transparência";
         Text[ japanese ] = "é€éæ€§ãƒ¢ãƒ¼ãƒ‰";
         Text[ korean ] = "íˆ¬ëª… íš¨ê³¼ ëª¨ë“œ";
         Text[ chinese_simplified ] = "é€æ˜æ¨¡å¼";
         Text[ chinese_traditional ] = "é€æ˜æ¨¡å¼";
-        Text[ turkish ] = "Transparency mode";
-        Text[ arabic ] = "Transparency mode";
+        Text[ turkish ] = "Şeffaflık kipi";
+        Text[ arabic ] = "ØÑíŞÉ ÇáÔİÇİíÉ";
         Text[ catalan ] = "Mode transparència";
         Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+        Text[ czech ] = "PrÅ¯hlednÃ½ reÅ¾im";
+        Text[ hebrew ] = "Transparenzmodus";
+        Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤°";
     };
     RadioButton RBT_TRANS_OFF
     {
@@ -123,7 +126,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ danish ] = "Ingen transparens";
         Text[ swedish ] = "~Ingen transparens";
         Text[ polish ] = "~Bez przezroczystoœci";
-        Text[ portuguese_brazilian ] = "~No transparence";
+        Text[ portuguese_brazilian ] = "~Sem transparência";
         Text[ japanese ] = "é€éæ€§ãªã—(~N)";
         Text[ korean ] = "íˆ¬ëª… íš¨ê³¼ ì—†ìŒ(~N)";
         Text[ chinese_simplified ] = "ä¸é€æ˜(~N)";
@@ -134,6 +137,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ finnish ] = "~Ei läpinäkyvyyttä";
         Text[ catalan ] = "~Sense transparència";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+        Text[ czech ] = "Å½Ã¡dnÃ¡ prÅ¯hlednost";
+        Text[ hebrew ] = "~Keine Transparenz";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ ~à¤¨à¤¹à¥€à¤‚";
     };
     RadioButton RBT_TRANS_LINEAR
     {
@@ -152,16 +158,19 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Trasparen~za";
         Text[ danish ] = "Tra~nsparens";
         Text[ swedish ] = "~Transparens";
-        Text[ polish ] = "Przezroczystoœæ";
-        Text[ portuguese_brazilian ] = "~Linear transparence";
+        Text[ polish ] = "P~rzezroczystoœæ";
+        Text[ portuguese_brazilian ] = "~Transparência";
         Text[ japanese ] = "é€éæ€§ã‚ã‚Š(~T)";
         Text[ korean ] = "íˆ¬ëª… íš¨ê³¼(~T)";
         Text[ chinese_simplified ] = "é€æ˜(~T)";
         Text[ chinese_traditional ] = "é€æ˜(~T)";
-        Text[ turkish ] = "~Doğrusal saydamlık";
+        Text[ turkish ] = "~Şeffaflık";
         Text[ arabic ] = "ÔİÇİíÉ ÎØíÉ";
         Text[ catalan ] = "~Transparència lineal";
         Text[ thai ] = "à¹‚~à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+        Text[ czech ] = "PrÅ¯hlednost";
+        Text[ hebrew ] = "~Transparenz";
+        Text[ hindi ] = "~à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
     };
     MetricField MTR_TRANSPARENT
     {
@@ -195,16 +204,19 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Trasparenza";
         Text[ danish ] = "~Graduering";
         Text[ swedish ] = "~Gradient";
-        Text[ polish ] = "~Gradient";
-        Text[ portuguese_brazilian ] = "~Transparence gradient";
+        Text[ polish ] = "Gradient";
+        Text[ portuguese_brazilian ] = "Gradiente";
         Text[ japanese ] = "é€éæ€§ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³";
         Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸";
         Text[ chinese_simplified ] = "é€æ˜å›¾æ¡ˆ";
         Text[ chinese_traditional ] = "é€æ˜åœ–æ¡ˆ";
-        Text[ turkish ] = "~Saydamlık geçisi";
+        Text[ turkish ] = "Eğim";
         Text[ arabic ] = "ÊÏÑÌ ÇáÔİÇİíÉ";
         Text[ catalan ] = "~Gradient transparència";
         Text[ thai ] = "à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
+        Text[ czech ] = "PÅ™echod";
+        Text[ hebrew ] = "~Verlauf";
+        Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥";
     };
     FixedText FT_TRGR_TYPE
     {
@@ -222,18 +234,21 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Tipo";
         Text[ danish ] = "Ty~pe";
         Text[ swedish ] = "Ty~p";
-        Text[ polish ] = "Ty~p";
-        Text[ portuguese_brazilian ] = "Ty~pe";
+        Text[ polish ] = "~Typ";
+        Text[ portuguese_brazilian ] = "Ti~po";
         Text[ japanese ] = "ç¨®é¡(~P)";
         Text[ korean ] = "ìœ í˜•(~P)";
         Text[ chinese_simplified ] = "ç±»å‹(~P)";
         Text[ chinese_traditional ] = "é¡å‹(~P)";
         Text[ arabic ] = "ÇáäæÚ";
-        Text[ turkish ] = "~Tip";
+        Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Tyyppi";
         Text[ catalan ] = "Ti~pus";
         Text[ thai ] = "à¸Šà¸™à¸´~à¸”";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "Ty~p";
+        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
     };
     ListBox LB_TRGR_GRADIENT_TYPES
     {
@@ -361,21 +376,21 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         };
         StringList [ polish ] =
         {
-            < "Linearny" ; Default ; > ;
+            < "Liniowy" ; Default ; > ;
             < "Osiowy" ; Default ; > ;
             < "Radialny" ; Default ; > ;
-            < "Elipsoida" ; Default ; > ;
+            < "Eliptyczny" ; Default ; > ;
+            < "Tetragonalny" ; Default ; > ;
             < "Kwadratowy" ; Default ; > ;
-            < "Prostok¹tny" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
             < "Linear" ; Default ; > ;
             < "Axial" ; Default ; > ;
             < "Radial" ; Default ; > ;
-            < "Ellipsoid" ; Default ; > ;
-            < "Quadratisch" ; Default ; > ;
-            < "Rechteckig" ; Default ; > ;
+            < "Elipsóide" ; Default ; > ;
+            < "Quadrático" ; Default ; > ;
+            < "Quadrado" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -458,6 +473,33 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         < "2 à¸Šà¸±à¹‰à¸™" ; Default ; > ;
         < "à¸ªà¸µà¹ˆà¹€à¸«à¸¥à¸µà¹ˆà¸¢à¸¡" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "LineÃ¡rnÃ­" ; Default ; > ;
+        < "AxiÃ¡lnÃ­" ; Default ; > ;
+        < "RadiÃ¡lnÃ­" ; Default ; > ;
+        < "OvÃ¡lnÃ½" ; Default ; > ;
+        < "KrychlovÃ½" ; Default ; > ;
+        < "ÄŒtvercovÃ½" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Linear" ; Default ; > ;
+        < "Axial" ; Default ; > ;
+        < "Radial" ; Default ; > ;
+        < "Ellipsoid" ; Default ; > ;
+        < "Quadratisch" ; Default ; > ;
+        < "Rechteckig" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "à¤¸à¤‚à¤•à¥à¤šà¤¿à¤¤" ; Default ; > ;
+        < "à¤§à¥à¤°à¥€-à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¥€" ; Default ; > ;
+        < "à¤•à¤¿à¤°à¤£-à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¥€" ; Default ; > ;
+        < "à¤¦à¥€à¤°à¥à¤˜à¤µà¥ƒà¤¤à¥à¤¤à¤œ" ; Default ; > ;
+        < "à¤šà¤¤à¥à¤°à¥à¤µà¤°à¥à¤—à¥€à¤¯" ; Default ; > ;
+        < "à¤¸à¤®à¤šà¤¤à¥à¤°à¥à¤­à¥à¤œ" ; Default ; > ;
+    };
     };
     FixedText FT_TRGR_CENTER_X
     {
@@ -475,18 +517,21 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Centro ~X";
         Text[ danish ] = "Center X";
         Text[ swedish ] = "Centrum X";
-        Text[ polish ] = "Centrum ~X";
-        Text[ portuguese_brazilian ] = "Center ~X";
+        Text[ polish ] = "Œrodek ~X";
+        Text[ portuguese_brazilian ] = "Centro ~X";
         Text[ japanese ] = "ä¸­å¿ƒ ~X";
         Text[ korean ] = "ì¤‘ì‹¬ ~X";
         Text[ chinese_simplified ] = "ä¸­å¿ƒ ~X";
         Text[ chinese_traditional ] = "ä¸­å¿ƒ ~X";
         Text[ arabic ] = "ãÑßÒ Ó";
-        Text[ turkish ] = "~X kaydır";
+        Text[ turkish ] = "X kaydır";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Keski ~X";
         Text[ catalan ] = "Centre ~X";
         Text[ thai ] = "à¸¨à¸¹à¸™à¸¢à¹Œà¸à¸¥à¸²à¸‡ ~X";
+        Text[ czech ] = "StÅ™ed X";
+        Text[ hebrew ] = "Zentrum ~X";
+        Text[ hindi ] = "à¤•à¥‡à¤¨à¥à¤¦à¥à¤° ~X";
     };
     MetricField MTR_TRGR_CENTER_X
     {
@@ -519,18 +564,21 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Centro ~Y";
         Text[ danish ] = "Center Y";
         Text[ swedish ] = "Centrum Y";
-        Text[ polish ] = "Centrum ~Y";
-        Text[ portuguese_brazilian ] = "Center ~Y";
+        Text[ polish ] = "Œrodek ~Y";
+        Text[ portuguese_brazilian ] = "Centro ~Y";
         Text[ japanese ] = "ä¸­å¿ƒ ~Y";
         Text[ korean ] = "ì¤‘ì‹¬ ~Y";
         Text[ chinese_simplified ] = "ä¸­å¿ƒ ~Y";
         Text[ chinese_traditional ] = "ä¸­å¿ƒ ~Y";
         Text[ arabic ] = "ãÑßÒ Õ";
-        Text[ turkish ] = "~Y kaydır";
+        Text[ turkish ] = "Y kaydır";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Keski ~Y";
         Text[ catalan ] = "Centre ~Y";
         Text[ thai ] = "à¸¨à¸¹à¸™à¸¢à¹Œà¸à¸¥à¸²à¸‡ ~Y";
+        Text[ czech ] = "StÅ™ed Y";
+        Text[ hebrew ] = "Zentrum ~Y";
+        Text[ hindi ] = "à¤•à¥‡à¤¨à¥à¤¦à¥à¤° ~Y";
     };
     MetricField MTR_TRGR_CENTER_Y
     {
@@ -563,8 +611,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Angolo";
         Text[ danish ] = "Vinkel";
         Text[ swedish ] = "Vinkel";
-        Text[ polish ] = "K¹t";
-        Text[ portuguese_brazilian ] = "~Angle";
+        Text[ polish ] = "~K¹t";
+        Text[ portuguese_brazilian ] = "Â~ngulo";
         Text[ japanese ] = "è§’åº¦(~A)";
         Text[ korean ] = "ê°ë„(~A)";
         Text[ chinese_simplified ] = "~è§’åº¦";
@@ -575,6 +623,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ finnish ] = "~Kulma";
         Text[ catalan ] = "~Angle";
         Text[ thai ] = "~à¸¡à¸¸à¸¡";
+        Text[ czech ] = "Ãšhel";
+        Text[ hebrew ] = "~Winkel";
+        Text[ hindi ] = "~à¤•à¥‹à¤£";
     };
     MetricField MTR_TRGR_ANGLE
     {
@@ -600,17 +651,20 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ italian ] = "grado";
         CustomUnitText[ danish ] = "grader";
         CustomUnitText[ swedish ] = " grader";
-        CustomUnitText[ polish ] = "stopni(e)";
-        CustomUnitText[ portuguese_brazilian ] = "degree";
+        CustomUnitText[ polish ] = " st.";
+        CustomUnitText[ portuguese_brazilian ] = " graus";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ korean ] = "ë„";
         CustomUnitText[ chinese_simplified ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
         CustomUnitText[ arabic ] = "ÏÑÌÉ";
-        CustomUnitText[ turkish ] = "Derece";
+        CustomUnitText[ turkish ] = "dereceler";
         CustomUnitText[ finnish ] = "  astetta";
         CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
+        CustomUnitText[ czech ] = " stupÅˆÅ¯";
+        CustomUnitText[ hebrew ] = " â€®××¢×œ×•×ªâ€¬";
+        CustomUnitText[ hindi ] = " à¤¡à¤¿à¤—à¥à¤°à¤¿à¤¯à¤¾à¤";
     };
     FixedText FT_TRGR_BORDER
     {
@@ -628,17 +682,20 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "~Margine";
         Text[ danish ] = "Rand";
         Text[ swedish ] = "Kant";
-        Text[ polish ] = "KrawêdŸ";
-        Text[ portuguese_brazilian ] = "~Border";
+        Text[ polish ] = "Kr~awêdŸ";
+        Text[ portuguese_brazilian ] = "~Borda";
         Text[ japanese ] = "ä½™ç™½(~B)";
         Text[ korean ] = "ì—¬ë°±(~B)";
         Text[ chinese_simplified ] = "è¾¹è·(~B)";
         Text[ chinese_traditional ] = "é éç©ºç™½(~B)";
         Text[ arabic ] = "ÇáÍÏ";
-        Text[ turkish ] = "~Kenar";
+        Text[ turkish ] = "Kenar";
         Text[ finnish ] = "~Reuna";
         Text[ catalan ] = "~Vores";
         Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¸‚à¸­à¸š";
+        Text[ czech ] = "Okraj";
+        Text[ hebrew ] = "~Rand";
+        Text[ hindi ] = "à¤•à¤¿~à¤¨à¤¾à¤°à¤¾";
     };
     MetricField MTR_TRGR_BORDER
     {
@@ -671,8 +728,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Valore iniziale";
         Text[ danish ] = "Startværdi";
         Text[ swedish ] = "Startvärde";
-        Text[ polish ] = "Wartoœæ pocz¹tk.";
-        Text[ portuguese_brazilian ] = "~From value";
+        Text[ polish ] = "Na ~pocz¹tku";
+        Text[ portuguese_brazilian ] = "Valor ~inicial";
         Text[ japanese ] = "é–‹å§‹å€¤(~S)";
         Text[ korean ] = "ì‹œì‘ê°’(~S)";
         Text[ chinese_simplified ] = "èµ·å§‹å€¼(~S)";
@@ -682,6 +739,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ finnish ] = "Alo~itusarvo";
         Text[ catalan ] = "Valor ~inicial";
         Text[ thai ] = "à¸„à¹ˆà¸²à¹€~à¸£à¸´à¹ˆà¸¡";
+        Text[ czech ] = "PoÄÃ¡teÄnÃ­ hodnota";
+        Text[ hebrew ] = "~Startwert";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤¾~à¤°à¤‚à¤­ à¤®à¥‚à¤²à¥à¤¯";
     };
     MetricField MTR_TRGR_START_VALUE
     {
@@ -714,8 +774,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ italian ] = "Valore finale";
         Text[ danish ] = "Slutværdi";
         Text[ swedish ] = "Slutvärde";
-        Text[ polish ] = "~Wartoœæ koñcowa";
-        Text[ portuguese_brazilian ] = "~To value";
+        Text[ polish ] = "Na koñ~cu";
+        Text[ portuguese_brazilian ] = "Valor ~final";
         Text[ japanese ] = "çµ‚äº†å€¤(~E)";
         Text[ korean ] = "ëê°’(~E)";
         Text[ chinese_simplified ] = "æœ€ç»ˆæ•°å€¼(~E)";
@@ -725,6 +785,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ finnish ] = "Lo~petusarvo";
         Text[ catalan ] = "Valor ~final";
         Text[ thai ] = "à¸„à¹ˆà¸²~à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”";
+        Text[ czech ] = "KoneÄnÃ¡ hodnota";
+        Text[ hebrew ] = "~Endwert";
+        Text[ hindi ] = "~à¤…à¤‚à¤¤à¤¿à¤® à¤®à¥‚à¤²à¥à¤¯";
     };
     MetricField MTR_TRGR_END_VALUE
     {
@@ -764,7 +827,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     Text[ danish ] = "Transparens";
     Text[ swedish ] = "Transparens";
     Text[ polish ] = "Przezroczystoœæ";
-    Text[ portuguese_brazilian ] = "Transparence";
+    Text[ portuguese_brazilian ] = "Transparência";
     Text[ japanese ] = "é€éæ€§";
     Text[ korean ] = "íˆ¬ëª…";
     Text[ chinese_simplified ] = "é€æ˜";
@@ -774,6 +837,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     Text[ finnish ] = "Läpinäkyvyys";
     Text[ catalan ] = "Transparència";
     Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+    Text[ czech ] = "PrÅ¯hlednost";
+    Text[ hebrew ] = "Transparenz";
+    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
 };
 
  // RID_SVXPAGE_AREA ------------------------------------------------------
@@ -786,7 +852,7 @@ TabPage RID_SVXPAGE_AREA
     Text [ English ] = "Object Fill" ;
     Text [ norwegian ] = "Object Fill" ;
     Text [ italian ] = "Area" ;
-    Text [ portuguese_brazilian ] = "Preenchimento do Objeto" ;
+    Text [ portuguese_brazilian ] = "Área" ;
     Text [ portuguese ] = "Preenchimento" ;
     Text [ finnish ] = "Alue" ;
     Text [ danish ] = "Flade" ;
@@ -825,15 +891,18 @@ TabPage RID_SVXPAGE_AREA
         Text[ danish ] = "Fyld";
         Text[ swedish ] = "Fyllning";
         Text[ polish ] = "Wype³nienie";
-        Text[ portuguese_brazilian ] = "Fill";
+        Text[ portuguese_brazilian ] = "Preencher";
         Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—";
         Text[ korean ] = "ì±„ìš°ê¸°";
         Text[ chinese_simplified ] = "å……å¡«";
         Text[ chinese_traditional ] = "å……å¡«";
-        Text[ turkish ] = "Fill";
+        Text[ turkish ] = "Dolgu";
         Text[ arabic ] = "Fill";
         Text[ catalan ] = "Omple";
         Text[ thai ] = "à¹€à¸•à¸´à¸¡";
+        Text[ czech ] = "VyplnÄ›nÃ­";
+        Text[ hebrew ] = "FÃ¼llung";
+        Text[ hindi ] = "à¤­à¤°à¥‹";
     };
     RadioButton RBT_FILL_OFF
     {
@@ -853,15 +922,18 @@ TabPage RID_SVXPAGE_AREA
         Text[ danish ] = "I~ngen";
         Text[ swedish ] = "~Ingen";
         Text[ polish ] = "Brak";
-        Text[ portuguese_brazilian ] = "No Fill";
+        Text[ portuguese_brazilian ] = "Nenhum";
         Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—ãªã—";
         Text[ korean ] = "ì—†ìŒ";
         Text[ chinese_simplified ] = "æ— å……å¡«è‰²";
         Text[ chinese_traditional ] = "ç„¡å……å¡«";
-        Text[ turkish ] = "No Fill";
+        Text[ turkish ] = "Dolgu Yok";
         Text[ arabic ] = "No Fill";
         Text[ catalan ] = "No omplis";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µ";
+        Text[ czech ] = "Å½Ã¡dnÃ©";
+        Text[ hebrew ] = "â€®×œ×œ×â€¬";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
     };
     RadioButton RBT_COLOR
     {
@@ -880,17 +952,20 @@ TabPage RID_SVXPAGE_AREA
         Text[ italian ] = "Colore";
         Text[ danish ] = "~Farve";
         Text[ swedish ] = "~Färg";
-        Text[ polish ] = "~Kolor";
-        Text[ portuguese_brazilian ] = "C~or";
+        Text[ polish ] = "Kolor";
+        Text[ portuguese_brazilian ] = "Cor";
         Text[ japanese ] = "è‰²";
         Text[ korean ] = "ìƒ‰ìƒ";
         Text[ chinese_simplified ] = "é¢œè‰²";
         Text[ chinese_traditional ] = "é¡è‰²";
-        Text[ turkish ] = "Ren~k";
+        Text[ turkish ] = "Renk";
         Text[ arabic ] = "áæä";
         Text[ catalan ] = "~Color";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¸ªà¸µ";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "â€®×¦×‘×¢â€¬";
+        Text[ hindi ] = "à¤°à¤‚à¤—";
     };
     RadioButton RBT_GRADIENT
     {
@@ -910,16 +985,19 @@ TabPage RID_SVXPAGE_AREA
         Text[ danish ] = "Farvegra~duering";
         Text[ swedish ] = "Färg~gradient";
         Text[ polish ] = "Gradient";
-        Text[ portuguese_brazilian ] = "~D?grad?";
+        Text[ portuguese_brazilian ] = "Gradiente";
         Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³";
         Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸";
         Text[ chinese_simplified ] = "å½©è‰²å›¾æ¡ˆ";
         Text[ chinese_traditional ] = "å½©è‰²åœ–æ¡ˆ";
-        Text[ turkish ] = "Grad~yan";
+        Text[ turkish ] = "Gradyan";
         Text[ arabic ] = "ÊÏÑÌ Çááæä";
         Text[ catalan ] = "~Gradient";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
+        Text[ czech ] = "PÅ™echod";
+        Text[ hebrew ] = "Farb~verlauf";
+        Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥";
     };
     RadioButton RBT_HATCH
     {
@@ -939,15 +1017,18 @@ TabPage RID_SVXPAGE_AREA
         Text[ danish ] = "Skr~avering";
         Text[ swedish ] = "~Skraffering";
         Text[ polish ] = "Kreskowanie";
-        Text[ portuguese_brazilian ] = "Hatching";
+        Text[ portuguese_brazilian ] = "Hachurado";
         Text[ japanese ] = "ãƒãƒƒãƒãƒ³ã‚°";
         Text[ korean ] = "í•´ì¹­";
         Text[ chinese_simplified ] = "é˜´å½±çº¿";
         Text[ chinese_traditional ] = "é™°å½±ç·š";
-        Text[ turkish ] = "Hatching";
+        Text[ turkish ] = "Tarama";
         Text[ arabic ] = "Hatching";
         Text[ catalan ] = "Trama";
         Text[ thai ] = "à¹à¸£à¹€à¸‡à¸²";
+        Text[ czech ] = "Å rafovÃ¡nÃ­";
+        Text[ hebrew ] = "Schraff~ur";
+        Text[ hindi ] = "à¤¹à¤¾à¤šà¤¿à¤‚à¤—";
     };
     RadioButton RBT_BITMAP
     {
@@ -966,17 +1047,20 @@ TabPage RID_SVXPAGE_AREA
         Text[ italian ] = "Bitmap";
         Text[ danish ] = "Bit~map";
         Text[ swedish ] = "~Bitmap";
-        Text[ polish ] = "Mapa bitowa";
-        Text[ portuguese_brazilian ] = "~Bitmap";
+        Text[ polish ] = "M~apa bitowa";
+        Text[ portuguese_brazilian ] = "Bitmap";
         Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—";
         Text[ korean ] = "ë¹„íŠ¸ë§µ";
         Text[ chinese_simplified ] = "ä½å›¾";
         Text[ chinese_traditional ] = "é»é™£åœ–";
-        Text[ turkish ] = "B~it eşlem";
+        Text[ turkish ] = "Bit eşlem";
         Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
         Text[ catalan ] = "~Mapa de bits";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¸šà¸´à¸—à¹à¸¡à¹‡à¸›";
+        Text[ czech ] = "BitovÃ¡ mapa";
+        Text[ hebrew ] = "~Bitmap";
+        Text[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥";
     };
     ListBox LB_COLOR
     {
@@ -1038,21 +1122,24 @@ TabPage RID_SVXPAGE_AREA
         Text [ french ] = "Pas de progression" ;
         Text [ swedish ] = "Steglängd" ;
         Text [ danish ] = "Trinvidde" ;
-        Text [ portuguese_brazilian ] = "Schrittweite" ;
+        Text [ portuguese_brazilian ] = "Incrementos" ;
         Text [ portuguese ] = "Incremento" ;
         Text[ chinese_simplified ] = "é€’å¢";
         Text[ russian ] = "Øàãè";
-        Text[ polish ] = "Inkrement";
+        Text[ polish ] = "Przyrosty";
         Text[ japanese ] = "ã‚¹ãƒ†ãƒƒãƒ—æ•°";
         Text[ chinese_traditional ] = "æ¼¸é€²";
         Text[ arabic ] = "ÇáÊÒÇíÏ";
         Text[ greek ] = "ÂŞìá";
         Text[ korean ] = "ì¦ê°€í­";
-        Text[ turkish ] = "Adım";
+        Text[ turkish ] = "Artış";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Lisäykset";
         Text[ catalan ] = "Increment";
         Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹€à¸à¸´à¹ˆà¸¡";
+        Text[ czech ] = "PÅ™Ã­rÅ¯stky";
+        Text[ hebrew ] = "Schrittweite";
+        Text[ hindi ] = "à¤¬à¤¢à¤¼à¤¤à¥€";
     };
     TriStateBox TSB_STEPCOUNT
     {
@@ -1067,22 +1154,25 @@ TabPage RID_SVXPAGE_AREA
         Text [ french ] = "Automatique" ;
         Text [ dutch ] = "~Automatisch" ;
         Text [ swedish ] = "~Automatisk" ;
-        Text [ danish ] = "~Automatisk" ;
+        Text [ danish ] = "automatisk" ;
         Text [ portuguese ] = "~Automaticamente" ;
-        Text [ portuguese_brazilian ] = "~automatisch" ;
+        Text [ portuguese_brazilian ] = "~Automático" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨(~U)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ polish ] = "Automatycznie";
+        Text[ polish ] = "A~utomatycznie";
         Text[ japanese ] = "è‡ªå‹•(~U)";
         Text[ chinese_traditional ] = "è‡ªå‹•(~U)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "~Áõôüìáôá";
         Text[ korean ] = "ìë™(~U)";
-        Text[ turkish ] = "~otomatik";
+        Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "A~utomaattinen";
         Text[ catalan ] = "~Automàtic";
         Text[ thai ] = "à¸­à¸±~à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿~à¤¤";
     };
     NumericField NUM_FLD_STEPCOUNT
     {
@@ -1118,18 +1208,21 @@ TabPage RID_SVXPAGE_AREA
         Text[ italian ] = "Colore di s~fondo";
         Text[ danish ] = "Baggr~undsfarve";
         Text[ swedish ] = "Ba~kgrundsfärg";
-        Text[ polish ] = "Kolor t³a";
-        Text[ portuguese_brazilian ] = "~Backgroundcolor";
+        Text[ polish ] = "~Kolor t³a";
+        Text[ portuguese_brazilian ] = "~Cor do Plano de Fundo";
         Text[ japanese ] = "èƒŒæ™¯è‰²(~B)";
         Text[ korean ] = "ë°°ê²½ ìƒ‰ìƒ(~B)";
         Text[ chinese_simplified ] = "èƒŒæ™¯é¢œè‰²(~B)";
         Text[ chinese_traditional ] = "èƒŒæ™¯é¡è‰²(~B)";
         Text[ arabic ] = "áæä ÇáÎáİíÉ";
-        Text[ turkish ] = "Artalan ~rengi";
+        Text[ turkish ] = "Artalan rengi";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Taustaväri";
         Text[ catalan ] = "Color de ~fons";
         Text[ thai ] = "à¸ªà¸µ~à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+        Text[ czech ] = "Barva pozadÃ­";
+        Text[ hebrew ] = "â€®×¦×‘×¢ ×¨×§×¢â€¬";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ~à¤­à¤¾à¤— à¤°à¤‚à¤—";
     };
     ListBox LB_HATCHBCKGRDCOLOR
     {
@@ -1156,7 +1249,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "Grootte" ;
         Text [ swedish ] = "Storlek" ;
         Text [ danish ] = "Størrelse" ;
-        Text [ portuguese_brazilian ] = "Größe" ;
+        Text [ portuguese_brazilian ] = "Tamanho" ;
         Text [ portuguese ] = "Tamanho" ;
         Text[ chinese_simplified ] = "å¤§å°";
         Text[ russian ] = "Ğàçìåğ";
@@ -1166,11 +1259,14 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
         Text[ korean ] = "í¬ê¸°";
-        Text[ turkish ] = "Boyutlar";
+        Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Koko";
         Text[ catalan ] = "Mida";
         Text[ thai ] = "à¸‚à¸™à¸²à¸”";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "â€®×’×•×“×œâ€¬";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£";
     };
     TriStateBox TSB_ORIGINAL
     {
@@ -1190,7 +1286,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ portuguese_brazilian ] = "~Original" ;
         Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ russian ] = "Îğèãèíàë";
-        Text[ polish ] = "Orygin~a³";
+        Text[ polish ] = "~Orygina³";
         Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«(~O)";
         Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
@@ -1201,6 +1297,9 @@ TabPage RID_SVXPAGE_AREA
         Text[ finnish ] = "~Alkuperäinen";
         Text[ catalan ] = "~Original";
         Text[ thai ] = "~à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
+        Text[ czech ] = "PÅ¯vodnÃ­";
+        Text[ hebrew ] = "~Original";
+        Text[ hindi ] = "~à¤¯à¤¥à¤¾à¤°à¥à¤¥";
     };
     TriStateBox TSB_SCALE
     {
@@ -1217,7 +1316,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ swedish ] = "Re~lativ" ;
         Text [ danish ] = "R~elativ" ;
         Text [ portuguese ] = "Rel~ativo" ;
-        Text [ portuguese_brazilian ] = "Rel~ativ" ;
+        Text [ portuguese_brazilian ] = "Rel~ativo" ;
         Text[ chinese_simplified ] = "ç›¸å¯¹(~L)";
         Text[ russian ] = "Îòíîñèòåëüíî";
         Text[ polish ] = "Wzglê~dny";
@@ -1226,11 +1325,14 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
         Text[ korean ] = "ë¹„ë¡€í•˜ì—¬(~L)";
-        Text[ turkish ] = "Göre~celi";
+        Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Suhteellinen";
         Text[ catalan ] = "Re~latiu";
         Text[ thai ] = "à¸ªà¸±à¸¡~à¸à¸±à¸—à¸˜à¹Œ";
+        Text[ czech ] = "RelativnÃ­";
+        Text[ hebrew ] = "Re~lativ";
+        Text[ hindi ] = "à¤¸à¤‚~à¤¬à¤¨à¥à¤§à¤¿à¤¤";
     };
     FixedText FT_X_SIZE
     {
@@ -1245,21 +1347,24 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "B~reedte" ;
         Text [ swedish ] = "Br~edd" ;
         Text [ danish ] = "~Bredde" ;
-        Text [ portuguese_brazilian ] = "B~reite" ;
+        Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text[ chinese_simplified ] = "å®½åº¦(~D)";
         Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "~Szerokoœæ";
         Text[ japanese ] = "å¹…(~D)";
         Text[ chinese_traditional ] = "å¯¬åº¦(~D)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "ë„ˆë¹„(~D)";
-        Text[ turkish ] = "~Genişlik";
+        Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Le~veys";
         Text[ catalan ] = "Ampla~da";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸~à¸§à¹‰à¸²à¸‡";
+        Text[ czech ] = "Å Ã­Å™ka";
+        Text[ hebrew ] = "â€®×¨×•×—×‘â€¬";
+        Text[ hindi ] = "à¤šà¥Œ~à¤¡à¤¼à¤¾à¤ˆ";
     };
     MetricField MTR_FLD_X_SIZE
     {
@@ -1292,21 +1397,24 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "Hoogt~e" ;
         Text [ swedish ] = "H~öjd" ;
         Text [ danish ] = "Hø~jde" ;
-        Text [ portuguese_brazilian ] = "H~?e" ;
+        Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "~Altura" ;
         Text[ chinese_simplified ] = "é«˜åº¦(~E)";
         Text[ russian ] = "Â~ûñîòà";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "Wyso~koœæ";
         Text[ japanese ] = "é«˜ã•(~E)";
         Text[ chinese_traditional ] = "é«˜åº¦(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
         Text[ korean ] = "ë†’ì´(~E)";
-        Text[ turkish ] = "~Yükseklik";
+        Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "K~orkeus";
         Text[ catalan ] = "A~ltura";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹~à¸‡";
+        Text[ czech ] = "VÃ½Å¡ka";
+        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
+        Text[ hindi ] = "à¤Šà¤~à¤šà¤¾à¤ˆ";
     };
     MetricField MTR_FLD_Y_SIZE
     {
@@ -1340,7 +1448,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "Positie" ;
         Text [ swedish ] = "Position" ;
         Text [ danish ] = "Placering" ;
-        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Posição" ;
         Text [ portuguese ] = "Posição" ;
         Text[ chinese_simplified ] = "ä½ç½®";
         Text[ russian ] = "Ïîëîæåíèå";
@@ -1355,6 +1463,9 @@ TabPage RID_SVXPAGE_AREA
         Text[ finnish ] = "Sijainti";
         Text[ catalan ] = "Posició";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
     };
 
     Control CTL_POSITION
@@ -1377,21 +1488,24 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "~X-offset" ;
         Text [ swedish ] = "~X-offset" ;
         Text [ danish ] = "X-offset" ;
-        Text [ portuguese_brazilian ] = "~X-Offset" ;
+        Text [ portuguese_brazilian ] = "Offset ~X" ;
         Text [ portuguese ] = "Offset ~X" ;
         Text[ chinese_simplified ] = "~X åç§»";
         Text[ russian ] = "Ñäâèã îñè X";
-        Text[ polish ] = "Ofset X";
+        Text[ polish ] = "Przesuniêcie ~X";
         Text[ japanese ] = "ã‚ªãƒ•ã‚»ãƒƒãƒˆ ~X";
         Text[ chinese_traditional ] = "~X åç§»";
         Text[ arabic ] = "ÇáÅÒÇÍÉ Ó";
         Text[ greek ] = "ÊáôÜ ~X";
         Text[ korean ] = "ì˜¤í”„ì…‹ ~X";
-        Text[ turkish ] = "~X kaydır";
+        Text[ turkish ] = "X kaydır";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~X-siirtymä";
         Text[ catalan ] = "Offset ~X";
         Text[ thai ] = "à¸­à¸­à¸Ÿà¹€à¸‹à¸• ~X ";
+        Text[ czech ] = "Odchylka X";
+        Text[ hebrew ] = "~X-Offset";
+        Text[ hindi ] = "~X à¤‘à¤«à¤¸à¥‡à¤Ÿà¥à¤Ÿ";
     };
     FixedText FT_Y_OFFSET
     {
@@ -1406,21 +1520,24 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "~Y-offset" ;
         Text [ swedish ] = "~Y-offset" ;
         Text [ danish ] = "Y-offset" ;
-        Text [ portuguese_brazilian ] = "~Y-Offset" ;
+        Text [ portuguese_brazilian ] = "Offset ~Y" ;
         Text [ portuguese ] = "Offset ~Y" ;
         Text[ chinese_simplified ] = "~Y åç§»";
         Text[ russian ] = "Ñäâèã îñè Y";
-        Text[ polish ] = "Ofset Y";
+        Text[ polish ] = "Przesuniêcie ~Y";
         Text[ japanese ] = "ã‚ªãƒ•ã‚»ãƒƒãƒˆ ~Y";
         Text[ chinese_traditional ] = "~Y åç§»";
         Text[ arabic ] = "ÇáÅÒÇÍÉ Õ";
         Text[ greek ] = "ÊáôÜ ~Õ";
         Text[ korean ] = "ì˜¤í”„ì…‹ ~Y";
-        Text[ turkish ] = "~Y kaydır";
+        Text[ turkish ] = "Y kaydır";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Y-siirtymä";
         Text[ catalan ] = "Offset ~Y";
         Text[ thai ] = "à¸­à¸­à¸Ÿà¹€à¸‹à¸• ~Y ";
+        Text[ czech ] = "Odchylka Y";
+        Text[ hebrew ] = "~Y-Offset";
+        Text[ hindi ] = "~Y à¤‘à¤«à¤¸à¥‡à¤Ÿà¥à¤Ÿ";
     };
     MetricField MTR_FLD_X_OFFSET
     {
@@ -1467,20 +1584,23 @@ TabPage RID_SVXPAGE_AREA
         Text [ swedish ] = "Sid~a vid sida" ;
         Text [ danish ] = "~Side om side" ;
         Text [ portuguese ] = "~Em mosaico" ;
-        Text [ portuguese_brazilian ] = "~Kacheln" ;
+        Text [ portuguese_brazilian ] = "~Lado a Lado" ;
         Text[ chinese_simplified ] = "å¹³é“º(~T)";
         Text[ russian ] = "Ìîçàèêà";
-        Text[ polish ] = "P³yt~ki";
+        Text[ polish ] = "S¹siaduj¹~co";
         Text[ japanese ] = "ä¸¦ã¹ã¦è¡¨ç¤º(~T)";
         Text[ chinese_traditional ] = "å¹³é‹ª(~T)";
         Text[ arabic ] = "ÈáÇØ";
         Text[ greek ] = "Óå ğáñÜèåóç";
         Text[ korean ] = "ë°”ë‘‘íŒì‹(~T)";
-        Text[ turkish ] = "~Döşe";
+        Text[ turkish ] = "Döşe";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Vi~erekkäin";
         Text[ catalan ] = "~Mosaic";
         Text[ thai ] = "~à¸‹à¹‰à¸­à¸™à¸—à¸±à¸š";
+        Text[ czech ] = "DlaÅ¾dice";
+        Text[ hebrew ] = "Ka~cheln";
+        Text[ hindi ] = "~à¤Ÿà¤‡à¤²";
     };
     TriStateBox TSB_STRETCH
     {
@@ -1497,20 +1617,23 @@ TabPage RID_SVXPAGE_AREA
         Text [ swedish ] = "A~npassa" ;
         Text [ danish ] = "Til~pas" ;
         Text [ portuguese ] = "~Ajustar" ;
-        Text [ portuguese_brazilian ] = "An~passen" ;
+        Text [ portuguese_brazilian ] = "~AutoAjuste" ;
         Text[ chinese_simplified ] = "è°ƒæ•´(~F)";
         Text[ russian ] = "Àâòîïîäáîğ";
-        Text[ polish ] = "Konfiguracja";
+        Text[ polish ] = "~Autodopasowanie";
         Text[ japanese ] = "é©åˆ(~F)";
         Text[ chinese_traditional ] = "èª¿æ•´(~F)";
         Text[ arabic ] = "ãáÇÁãÉ";
         Text[ greek ] = "ĞñïóáñìïãŞ";
         Text[ korean ] = "ë§ì¶¤(~F)";
-        Text[ turkish ] = "~Boyuta uydur";
+        Text[ turkish ] = "Boyuta uydur";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Autom. sovitus";
         Text[ catalan ] = "Aju~sta";
         Text[ thai ] = "~à¸à¸­à¸”à¸µà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "AutomatickÃ¡ Ãºprava";
+        Text[ hebrew ] = "A~npassen";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ ~à¤¯à¥‹à¤—à¥à¤¯";
     };
     FixedLine FL_OFFSET
     {
@@ -1525,7 +1648,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "Verplaatsing" ;
         Text [ swedish ] = "Förskjutning" ;
         Text [ danish ] = "Forskydning" ;
-        Text [ portuguese_brazilian ] = "Verschiebung" ;
+        Text [ portuguese_brazilian ] = "Offset" ;
         Text [ portuguese ] = "Deslocar" ;
         Text[ chinese_simplified ] = "åç§»";
         Text[ russian ] = "Ñìåùåíèå";
@@ -1535,11 +1658,14 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "ÇáÅÒÇÍÉ";
         Text[ greek ] = "Ìåôáôüğéóç";
         Text[ korean ] = "ì´ë™";
-        Text[ turkish ] = "Kaydırma";
+        Text[ turkish ] = "Ofset";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Siirtymä";
         Text[ catalan ] = "Desplaçament";
         Text[ thai ] = "à¸­à¸­à¸Ÿà¹€à¸‹à¸•";
+        Text[ czech ] = "Odchylka";
+        Text[ hebrew ] = "Verschiebung";
+        Text[ hindi ] = "à¤‘à¤«à¤¸à¥‡à¤Ÿà¥à¤Ÿ";
     };
     RadioButton RBT_ROW
     {
@@ -1554,21 +1680,24 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "R~ij" ;
         Text [ swedish ] = "~Rad" ;
         Text [ danish ] = "~Række" ;
-        Text [ portuguese_brazilian ] = "~Zeile" ;
+        Text [ portuguese_brazilian ] = "~Linha" ;
         Text [ portuguese ] = "~Linha" ;
         Text[ chinese_simplified ] = "è¡Œ(~W)";
         Text[ russian ] = "Ñòğîêà";
-        Text[ polish ] = "Wiersz";
+        Text[ polish ] = "~Wiersz";
         Text[ japanese ] = "è¡Œ(~W)";
         Text[ chinese_traditional ] = "æ¬„(~W)";
         Text[ arabic ] = "Õİ";
         Text[ greek ] = "ÃñáììŞ";
         Text[ korean ] = "í–‰(~W)";
-        Text[ turkish ] = "Sa~tır";
+        Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Ri~vi";
         Text[ catalan ] = "~Fila";
         Text[ thai ] = "à¹à¸–~à¸§";
+        Text[ czech ] = "Å˜Ã¡dek";
+        Text[ hebrew ] = "~Zeile";
+        Text[ hindi ] = "à¤ªà¤‚~à¤•à¥à¤¤à¤¿";
     };
     RadioButton RBT_COLUMN
     {
@@ -1583,7 +1712,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "Kolo~m" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ danish ] = "Kolonne" ;
-        Text [ portuguese_brazilian ] = "S~palte" ;
+        Text [ portuguese_brazilian ] = "~Coluna" ;
         Text [ portuguese ] = "~Coluna" ;
         Text[ chinese_simplified ] = "åˆ—(~M)";
         Text[ russian ] = "Ñòîëáåö";
@@ -1593,11 +1722,14 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "ÚãæÏ";
         Text[ greek ] = "ÓôŞëç";
         Text[ korean ] = "ì—´(~M)";
-        Text[ turkish ] = "S~ütun";
+        Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarake";
         Text[ catalan ] = "Colu~mna";
         Text[ thai ] = "à¸„à¸­à¸¥à¸±~à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Sloupec";
+        Text[ hebrew ] = "S~palte";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚~à¤­";
     };
     MetricField MTR_FLD_OFFSET
     {
@@ -1615,6 +1747,9 @@ TabPage RID_SVXPAGE_AREA
         SpinSize = 5 ;
     };
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
+    Text[ czech ] = "Oblast";
+    Text[ hebrew ] = "FlÃ¤che";
+    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
 };
  // RID_SVXPAGE_SHADOW ------------------------------------------------------
 TabPage RID_SVXPAGE_SHADOW
@@ -1631,7 +1766,7 @@ TabPage RID_SVXPAGE_SHADOW
     Text [ dutch ] = "Schaduw" ;
     Text [ swedish ] = "Skugga" ;
     Text [ danish ] = "Skygger" ;
-    Text [ portuguese_brazilian ] = "Schatten" ;
+    Text [ portuguese_brazilian ] = "Sombra" ;
     Text [ portuguese ] = "Sombras" ;
     Text[ chinese_simplified ] = "é˜´å½±";
     Text[ russian ] = "Òåíü";
@@ -1654,7 +1789,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ greek ] = "Properties";
+        Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
@@ -1663,15 +1798,18 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
         Text[ japanese ] = "å±æ€§";
         Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "Özellikler";
+        Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ catalan ] = "Propietats";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
     };
     TriStateBox TSB_SHOW_SHADOW
     {
@@ -1691,17 +1829,20 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ italian ] = "Applica ~ombra";
         Text[ danish ] = "Anvend s~kygger";
         Text[ swedish ] = "Använd ~skugga";
-        Text[ polish ] = "Zastosuj cieñ";
-        Text[ portuguese_brazilian ] = "~mostrar";
+        Text[ polish ] = "~Zastosuj cieñ";
+        Text[ portuguese_brazilian ] = "Usar ~sombra";
         Text[ japanese ] = "å½±ã‚’ä»˜ã‘ã‚‹(~U)";
         Text[ korean ] = "ê·¸ë¦¼ì ì‚¬ìš©(~U)";
         Text[ chinese_simplified ] = "ä½¿ç”¨é˜´å½±(~U)";
         Text[ chinese_traditional ] = "ä½¿ç”¨é™°å½±(~U)";
-        Text[ turkish ] = "~görüntüle";
+        Text[ turkish ] = "Gölge kullan";
         Text[ arabic ] = "ÅÙåÇÑ";
         Text[ catalan ] = "A~ctivat";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¹€à¸‡à¸²";
+        Text[ czech ] = "PouÅ¾Ã­t stÃ­n";
+        Text[ hebrew ] = "~Schatten anwenden";
+        Text[ hindi ] = "~à¤›à¤¾à¤¯à¤¾ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¥‹";
     };
     FixedText FT_POSITION
     {
@@ -1720,17 +1861,20 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ italian ] = "Allineamento";
         Text[ danish ] = "~Justering";
         Text[ swedish ] = "~Justering";
-        Text[ polish ] = "Wyrównanie";
-        Text[ portuguese_brazilian ] = "~Posi??o";
+        Text[ polish ] = "~Pozycja";
+        Text[ portuguese_brazilian ] = "~Posição";
         Text[ japanese ] = "ä½ç½®(~P)";
         Text[ korean ] = "ìœ„ì¹˜(~P)";
         Text[ chinese_simplified ] = "å¯¹é½(~P)";
         Text[ chinese_traditional ] = "å°é½Š(~P)";
-        Text[ turkish ] = "Konum";
+        Text[ turkish ] = "~Konum";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ catalan ] = "Posició";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "~à¤¸à¥à¤¥à¤¾à¤¨";
     };
     Control CTL_POSITION
     {
@@ -1757,17 +1901,20 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ italian ] = "Distanza";
         Text[ danish ] = "~Afstand";
         Text[ swedish ] = "Avstån~d";
-        Text[ polish ] = "Odleg³oœæ";
-        Text[ portuguese_brazilian ] = "~Dist?ncia";
+        Text[ polish ] = "~Odleg³oœæ";
+        Text[ portuguese_brazilian ] = "~Distância";
         Text[ japanese ] = "é–“éš”(~D)";
         Text[ korean ] = "ê°„ê²©(~D)";
         Text[ chinese_simplified ] = "é—´éš”(~D)";
         Text[ chinese_traditional ] = "é–“éš”(~D)";
-        Text[ turkish ] = "~Uzaklık";
+        Text[ turkish ] = "Uzaklık";
         Text[ arabic ] = "ÇáÈÚÏ";
         Text[ catalan ] = "~Distància";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "~à¸£à¸°à¸¢à¸°";
+        Text[ czech ] = "VzdÃ¡lenost";
+        Text[ hebrew ] = "~Distanz";
+        Text[ hindi ] = "~à¤¦à¥‚à¤°à¥€";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1814,16 +1961,19 @@ TabPage RID_SVXPAGE_SHADOW
         Text [ english_us ] = "~Color" ;
         Text[ chinese_simplified ] = "é¢œè‰²(~C)";
         Text[ russian ] = "Öâåò";
-        Text[ polish ] = "Kolor";
+        Text[ polish ] = "~Kolor";
         Text[ japanese ] = "è‰²(~C)";
         Text[ chinese_traditional ] = "é¡è‰²(~C)";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñşìá";
         Text[ korean ] = "ìƒ‰ìƒ(~C)";
-        Text[ turkish ] = "~Renk";
+        Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color";
         Text[ thai ] = "~à¸ªà¸µ";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "â€®×¦×‘×¢â€¬";
+        Text[ hindi ] = "~à¤°à¤‚à¤—";
     };
     FixedText FT_TRANSPARENT
     {
@@ -1842,17 +1992,20 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ italian ] = "~Trasparenza";
         Text[ danish ] = "Tra~nsparens";
         Text[ swedish ] = "~Transparens";
-        Text[ polish ] = "Przezroczystoœæ";
-        Text[ portuguese_brazilian ] = "~Transparenz";
+        Text[ polish ] = "P~rzezroczystoœæ";
+        Text[ portuguese_brazilian ] = "~Transparência";
         Text[ japanese ] = "å½±ã®æ¿ƒã•(~T)";
         Text[ korean ] = "íˆ¬ëª… íš¨ê³¼(~T)";
         Text[ chinese_simplified ] = "é€æ˜(~T)";
         Text[ chinese_traditional ] = "é€æ˜(~T)";
-        Text[ turkish ] = "~Saydamlık";
+        Text[ turkish ] = "Saydamlık";
         Text[ arabic ] = "ÔİÇİíÉ";
         Text[ catalan ] = "Tran~sparència";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¹€~à¸‚à¹‰à¸¡à¸‚à¸­à¸‡à¸ªà¸µ";
+        Text[ czech ] = "PrÅ¯hlednost";
+        Text[ hebrew ] = "~Transparenz";
+        Text[ hindi ] = "~à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
     };
     MetricField MTR_SHADOW_TRANSPARENT
     {
@@ -1877,6 +2030,9 @@ TabPage RID_SVXPAGE_SHADOW
         TabStop = FALSE ;
     };
     Text[ thai ] = "à¹€à¸‡à¸²";
+    Text[ czech ] = "StÃ­n";
+    Text[ hebrew ] = "â€®×”×¦×œ×œ×”â€¬";
+    Text[ hindi ] = "à¤›à¤¾à¤¯à¤¾";
 };
  // RID_SVXPAGE_HATCH --------------------------------------------------------
 TabPage RID_SVXPAGE_HATCH
@@ -1887,7 +2043,7 @@ TabPage RID_SVXPAGE_HATCH
     Text [ English ] = "Hatches" ;
     Text [ norwegian ] = "Skravering" ;
     Text [ italian ] = "Tratteggi" ;
-    Text [ portuguese_brazilian ] = "Tra?os de sombreado" ;
+    Text [ portuguese_brazilian ] = "Hachurado" ;
     Text [ portuguese ] = "Tracejados" ;
     Text [ finnish ] = "Viivoitus" ;
     Text [ danish ] = "Skraveringer" ;
@@ -1906,7 +2062,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ greek ] = "Properties";
+        Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
@@ -1915,15 +2071,18 @@ TabPage RID_SVXPAGE_HATCH
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
         Text[ japanese ] = "å±æ€§";
         Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "Özellikler";
+        Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ catalan ] = "Propietats";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
     };
     FixedText FT_LINE_DISTANCE
     {
@@ -1933,7 +2092,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "D~istance" ;
         Text [ norwegian ] = "A~vstand" ;
         Text [ italian ] = "D~istanza" ;
-        Text [ portuguese_brazilian ] = "D~ist?ncia" ;
+        Text [ portuguese_brazilian ] = "~Afastamento" ;
         Text [ portuguese ] = "~Espaçamento" ;
         Text [ finnish ] = "Väl~it" ;
         Text [ danish ] = "Afstand" ;
@@ -1944,16 +2103,19 @@ TabPage RID_SVXPAGE_HATCH
         Text [ english_us ] = "~Spacing" ;
         Text[ chinese_simplified ] = "é—´éš”(~S)";
         Text[ russian ] = "Èíòåğâàë";
-        Text[ polish ] = "Odstêp";
+        Text[ polish ] = "~Odstêp";
         Text[ japanese ] = "é–“éš”(~S)";
         Text[ chinese_traditional ] = "é–“éš”(~S)";
         Text[ arabic ] = "ÇáÊÈÇÚÏ";
         Text[ greek ] = "~Áğüóôáóç";
         Text[ korean ] = "ê°„ê²©(~S)";
-        Text[ turkish ] = "~Aralık";
+        Text[ turkish ] = "Aralık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~spaiat";
         Text[ thai ] = "~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
+        Text[ czech ] = "VzdÃ¡lenost";
+        Text[ hebrew ] = "â€®×¨×™×•×•×—â€¬";
+        Text[ hindi ] = "~à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1979,7 +2141,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "A~ngle" ;
         Text [ norwegian ] = "V~inkel" ;
         Text [ italian ] = "A~ngolo" ;
-        Text [ portuguese_brazilian ] = "?~ngulo" ;
+        Text [ portuguese_brazilian ] = "Â~ngulo" ;
         Text [ portuguese ] = "Â~ngulo" ;
         Text [ finnish ] = "~Kulma" ;
         Text [ danish ] = "Vinkel" ;
@@ -1990,16 +2152,19 @@ TabPage RID_SVXPAGE_HATCH
         Text [ english_us ] = "A~ngle" ;
         Text[ chinese_simplified ] = "è§’åº¦(~N)";
         Text[ russian ] = "Óãîë";
-        Text[ polish ] = "K¹t";
+        Text[ polish ] = "~K¹t";
         Text[ japanese ] = "è§’åº¦(~N)";
         Text[ chinese_traditional ] = "è§’åº¦(~N)";
         Text[ arabic ] = "ÇáÒÇæíÉ";
         Text[ greek ] = "Ãùíßá";
         Text[ korean ] = "ê°ë„(~N)";
-        Text[ turkish ] = "A~çı";
+        Text[ turkish ] = "Açı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ngle";
         Text[ thai ] = "~à¸¡à¸¸à¸¡";
+        Text[ czech ] = "Ãšhel";
+        Text[ hebrew ] = "~Winkel";
+        Text[ hindi ] = "à¤•à¥‹~à¤£";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -2015,7 +2180,7 @@ TabPage RID_SVXPAGE_HATCH
         CustomUnitText [ ENGLISH ] = " degree" ;
         CustomUnitText [ norwegian ] = " degree" ;
         CustomUnitText [ italian ] = "gradi" ;
-        CustomUnitText [ portuguese_brazilian ] = "grau" ;
+        CustomUnitText [ portuguese_brazilian ] = " graus" ;
         CustomUnitText [ portuguese ] = "grau" ;
         CustomUnitText [ finnish ] = " astetta" ;
         CustomUnitText [ danish ] = "grader" ;
@@ -2028,16 +2193,19 @@ TabPage RID_SVXPAGE_HATCH
         SpinSize = 15 ;
         CustomUnitText[ chinese_simplified ] = "åº¦";
         CustomUnitText[ russian ] = "ãğàäóñîâ";
-        CustomUnitText[ polish ] = "Stopni";
+        CustomUnitText[ polish ] = " st.";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
         CustomUnitText[ arabic ] = "ÏÑÌÉ";
         CustomUnitText[ greek ] = "ìïßñåò";
         CustomUnitText[ korean ] = "ë„";
-        CustomUnitText[ turkish ] = "Derece";
+        CustomUnitText[ turkish ] = "dereceler";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
+        CustomUnitText[ czech ] = " stupÅˆÅ¯";
+        CustomUnitText[ hebrew ] = " â€®××¢×œ×•×ªâ€¬";
+        CustomUnitText[ hindi ] = " à¤¡à¤¿à¤—à¥à¤°à¤¿à¤¯à¤¾à¤";
     };
     Control CTL_ANGLE
     {
@@ -2055,7 +2223,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "~Line Type" ;
         Text [ norwegian ] = "~Linje Type" ;
         Text [ italian ] = "~Tipo di linea" ;
-        Text [ portuguese_brazilian ] = "~Tipo de Linha" ;
+        Text [ portuguese_brazilian ] = "~Tipo de linha" ;
         Text [ portuguese ] = "~Tipo de linha" ;
         Text [ finnish ] = "Viivat~yyppi" ;
         Text [ danish ] = "Stregtype" ;
@@ -2066,16 +2234,19 @@ TabPage RID_SVXPAGE_HATCH
         Text [ english_us ] = "~Line type" ;
         Text[ chinese_simplified ] = "çº¿æ¡ç±»å‹(~L)";
         Text[ russian ] = "Òèï ëèíèè";
-        Text[ polish ] = "Typ linii";
+        Text[ polish ] = "Typ ~linii";
         Text[ japanese ] = "ç·šã®ç¨®é¡(~L)";
         Text[ chinese_traditional ] = "ç·šæ¢é¡å‹(~L)";
         Text[ arabic ] = "äæÚ ÇáÎØ";
         Text[ greek ] = "Ôığïò ãñáììŞò";
         Text[ korean ] = "ì„  ìœ í˜•(~L)";
-        Text[ turkish ] = "Çiz~gi tipi";
+        Text[ turkish ] = "Çizgi tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus de ~línia";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¹€~à¸ªà¹‰à¸™";
+        Text[ czech ] = "Typ ÄÃ¡ry";
+        Text[ hebrew ] = "Li~nientyp";
+        Text[ hindi ] = "~à¤°à¥‡à¤–à¤¾ à¤µà¤°à¥à¤—";
     };
     ListBox LB_LINE_TYPE
     {
@@ -2110,8 +2281,8 @@ TabPage RID_SVXPAGE_HATCH
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Einfach" ; Default ; > ;
-            < "Gekreuzt" ; Default ; > ;
+            < "Única" ; Default ; > ;
+            < "Cruzado" ; Default ; > ;
             < "Triplo" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -2213,7 +2384,7 @@ TabPage RID_SVXPAGE_HATCH
     StringList [ turkish ] =
     {
             < "Tek" ; Default ; > ;
-        < "Izgara" ; Default ; > ;
+        < "Çaprazla" ; Default ; > ;
         < "Üçlü" ; Default ; > ;
     };
     StringList [ language_user1 ] =
@@ -2234,6 +2405,24 @@ TabPage RID_SVXPAGE_HATCH
         < "à¹€à¸ªà¹‰à¸™à¸•à¸±à¸”" ; Default ; > ;
         < "à¸ªà¸²à¸¡à¹€à¸ªà¹‰à¸™" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "JednoduchÃ¡" ; Default ; > ;
+        < "ZkÅ™Ã­Å¾enÃ¡" ; Default ; > ;
+        < "TrojitÃ¡" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "â€®×™×—×™×“â€¬" ; Default ; > ;
+        < "Gekreuzt" ; Default ; > ;
+        < "Dreifach" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "à¤…à¤•à¥‡à¤²à¤¾" ; Default ; > ;
+        < "à¤•à¤Ÿà¤¾ à¤¹à¥à¤†" ; Default ; > ;
+        < "à¤¤à¤¿à¤—à¥à¤¨à¤¾" ; Default ; > ;
+    };
     };
     FixedText FT_LINE_COLOR
     {
@@ -2243,7 +2432,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "Line~color" ;
         Text [ norwegian ] = "Linje~farge" ;
         Text [ italian ] = "Colore ~linea" ;
-        Text [ portuguese_brazilian ] = "Linha~cor" ;
+        Text [ portuguese_brazilian ] = "~Cor da linha" ;
         Text [ portuguese ] = "~Cor da linha" ;
         Text [ finnish ] = "Viiva~n väri" ;
         Text [ danish ] = "Stregfarve" ;
@@ -2254,16 +2443,19 @@ TabPage RID_SVXPAGE_HATCH
         Text [ english_us ] = "Line ~color" ;
         Text[ chinese_simplified ] = "çº¿æ¡é¢œè‰²(~C)";
         Text[ russian ] = "Öâåò ëèíèè";
-        Text[ polish ] = "Kolor linii";
+        Text[ polish ] = "Kolor li~nii";
         Text[ japanese ] = "ç·šã®è‰²(~C)";
         Text[ chinese_traditional ] = "ç·šæ¢é¡è‰²(~C)";
         Text[ arabic ] = "áæä ÇáÎØ";
         Text[ greek ] = "×ñşìá ãñáììşí";
         Text[ korean ] = "ì„  ìƒ‰ìƒ(~C)";
-        Text[ turkish ] = "Çizgi ~rengi";
+        Text[ turkish ] = "Çizgi rengi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color de línia";
         Text[ thai ] = "~à¸ªà¸µà¸‚à¸­à¸‡à¹€à¸ªà¹‰à¸™";
+        Text[ czech ] = "Barva ÄÃ¡ry";
+        Text[ hebrew ] = "Linien~farbe";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤•à¤¾ ~à¤°à¤‚à¤—";
     };
     ListBox LB_LINE_COLOR
     {
@@ -2295,7 +2487,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "~Add..." ;
         Text [ norwegian ] = "~Add..." ;
         Text [ italian ] = "Aggiungi..." ;
-        Text [ portuguese_brazilian ] = "~Add..." ;
+        Text [ portuguese_brazilian ] = "~Adicionar..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text [ finnish ] = "~Lisää..." ;
         Text [ danish ] = "T~ilføj..." ;
@@ -2307,16 +2499,19 @@ TabPage RID_SVXPAGE_HATCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
-        Text[ polish ] = "Dodaj...";
+        Text[ polish ] = "Dod~aj...";
         Text[ japanese ] = "è¿½åŠ (~A)...";
         Text[ chinese_traditional ] = "æ–°å¢(~A)...";
         Text[ arabic ] = "...ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç...";
         Text[ korean ] = "ì¶”ê°€(~A)...";
-        Text[ turkish ] = "E~kle...";
+        Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix...";
         Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡...";
+        Text[ czech ] = "PÅ™idat...";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×ª...â€¬";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹...";
     };
     PushButton BTN_MODIFY
     {
@@ -2338,16 +2533,19 @@ TabPage RID_SVXPAGE_HATCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ›´æ”¹(~M)...";
         Text[ russian ] = "Èçìåíèòü...";
-        Text[ polish ] = "Modyfikuj...";
+        Text[ polish ] = "Mody~fikuj...";
         Text[ japanese ] = "å¤‰æ›´(~M)...";
         Text[ chinese_traditional ] = "è®Šæ›´(~M)...";
         Text[ arabic ] = "ÊÚÏíá...";
         Text[ greek ] = "Ôñïğïğïßçóç...";
-        Text[ korean ] = "ë³€ê²½(~M)...";
-        Text[ turkish ] = "~Değiştir...";
+        Text[ korean ] = "ìˆ˜ì •(~M)...";
+        Text[ turkish ] = "Değiştir...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚...";
+        Text[ czech ] = "ZmÄ›nit...";
+        Text[ hebrew ] = "â€®×©×™× ×•×™...â€¬";
+        Text[ hindi ] = "~à¤¸à¥à¤§à¤¾à¤°à¥‹...";
     };
     PushButton BTN_DELETE
     {
@@ -2357,7 +2555,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
         Text [ italian ] = "Elimina..." ;
-        Text [ portuguese_brazilian ] = "~Apagar..." ;
+        Text [ portuguese_brazilian ] = "~Excluir..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ finnish ] = "~Poista..." ;
         Text [ danish ] = "Slet..." ;
@@ -2369,16 +2567,19 @@ TabPage RID_SVXPAGE_HATCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
         Text[ russian ] = "Óäàëèòü...";
-        Text[ polish ] = "Usuñ...";
+        Text[ polish ] = "~Usuñ...";
         Text[ japanese ] = "å‰Šé™¤(~D)...";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ...";
         Text[ korean ] = "ì‚­ì œ(~D)...";
-        Text[ turkish ] = "~Sil...";
+        Text[ turkish ] = "Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~à¸¥à¸š...";
+        Text[ czech ] = "Smazat...";
+        Text[ hebrew ] = "â€®××—×™×§×”...â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“...";
     };
     ImageButton BTN_LOAD
     {
@@ -2389,7 +2590,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText [ ENGLISH ] = "Load hatching list" ;
         QuickHelpText [ norwegian ] = "Last inn skraveringsliste" ;
         QuickHelpText [ italian ] = "Carica tavola dei tratteggi" ;
-        QuickHelpText [ portuguese_brazilian ] = "Carregar lista de traços de sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Carregar lista de hachuras" ;
         QuickHelpText [ portuguese ] = "Carrega a lista de campos sombreados" ;
         QuickHelpText [ finnish ] = "Lataa viivoitusluettelo" ;
         QuickHelpText [ danish ] = "Indlæs skraveringstabel" ;
@@ -2421,6 +2622,9 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ turkish ] = "Tarama tablosu yükle";
         QuickHelpText[ catalan ] = "Carrega la taula de trames";
         QuickHelpText[ thai ] = "Load Hatches List";
+        QuickHelpText[ czech ] = "NaÄÃ­st seznam Å¡rafovÃ¡nÃ­";
+        QuickHelpText[ hebrew ] = "Schraffurentabelle laden";
+        QuickHelpText[ hindi ] = "à¤¹à¤¾à¤šà¥‡à¤¸ à¤¸à¥‚à¤šà¥€ à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
     };
     ImageButton BTN_SAVE
     {
@@ -2431,7 +2635,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText [ ENGLISH ] = "Save hatching list" ;
         QuickHelpText [ norwegian ] = "Lagre skraveringsliste" ;
         QuickHelpText [ italian ] = "Salva tavola dei tratteggi" ;
-        QuickHelpText [ portuguese_brazilian ] = "Gravar lista de traços de sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Salvar lista de hachuras" ;
         QuickHelpText [ portuguese ] = "Guarda a lista de campos sombreados" ;
         QuickHelpText [ finnish ] = "Tallenna viivoitusluettelo" ;
         QuickHelpText [ danish ] = "Gem skraveringstabel" ;
@@ -2463,6 +2667,9 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ turkish ] = "Tarama tablosunu kaydet";
         QuickHelpText[ catalan ] = "Desa la taula de trames";
         QuickHelpText[ thai ] = "Save Hatches List";
+        QuickHelpText[ czech ] = "UloÅ¾it seznam Å¡rafovÃ¡nÃ­";
+        QuickHelpText[ hebrew ] = "Schraffurentabelle sichern";
+        QuickHelpText[ hindi ] = "à¤¹à¤¾à¤šà¥‡à¤¸ à¤¸à¥‚à¤šà¥€ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
     };
     Text[ chinese_simplified ] = "é˜´å½±çº¿";
     Text[ russian ] = "Øòğèõîâêè";
@@ -2476,6 +2683,9 @@ TabPage RID_SVXPAGE_HATCH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ombreig";
     Text[ thai ] = "à¸‚à¸µà¸”";
+    Text[ czech ] = "Å rafovÃ¡nÃ­";
+    Text[ hebrew ] = "Schraffuren";
+    Text[ hindi ] = "à¤¹à¤¾à¤šà¤¿à¤‚à¤—";
 };
  // RID_SVXPAGE_BITMAP -------------------------------------------------------
 TabPage RID_SVXPAGE_BITMAP
@@ -2486,7 +2696,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text [ English ] = "Bitmaps" ;
     Text [ norwegian ] = "Punktmatriser" ;
     Text [ italian ] = "Bitmap" ;
-    Text [ portuguese_brazilian ] = "Bitmaps" ;
+    Text [ portuguese_brazilian ] = "Padrões de Bitmap" ;
     Text [ portuguese ] = "Modelos de bitmaps" ;
     Text [ finnish ] = "Bittikarttakuviot" ;
     Text [ danish ] = "Bitmapmønstre" ;
@@ -2505,7 +2715,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ greek ] = "Properties";
+        Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
@@ -2514,15 +2724,18 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
         Text[ japanese ] = "å±æ€§";
         Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "Özellikler";
+        Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ catalan ] = "Propietats";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
     };
     FixedText FT_PIXEL_EDIT
     {
@@ -2541,16 +2754,19 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ italian ] = "Editor modello";
         Text[ danish ] = "Mønsterredigering";
         Text[ swedish ] = "Mönstereditor";
-        Text[ polish ] = "Edytor wzorca";
-        Text[ portuguese_brazilian ] = "Pattern Edit";
+        Text[ polish ] = "Edytor deseni";
+        Text[ portuguese_brazilian ] = "Editor de Padrões";
         Text[ japanese ] = "ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚¨ãƒ‡ã‚£ã‚¿";
         Text[ korean ] = "íŒ¨í„´ í¸ì§‘";
         Text[ chinese_simplified ] = "ç¼–è¾‘å›¾æ¡ˆ";
         Text[ chinese_traditional ] = "ç·¨è¼¯åœ–æ¡ˆ";
-        Text[ turkish ] = "Pattern Edit";
+        Text[ turkish ] = "Desen Düzenleyici";
         Text[ arabic ] = "Pattern Edit";
         Text[ catalan ] = "Edició de patrons";
         Text[ thai ] = "à¸•à¸±à¸§à¹à¸à¹‰à¹„à¸‚à¸¥à¸§à¸”à¸¥à¸²à¸¢";
+        Text[ czech ] = "Editor vzorkÅ¯";
+        Text[ hebrew ] = "Muster Editor";
+        Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤•";
     };
     Control CTL_PIXEL
     {
@@ -2576,17 +2792,20 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ italian ] = "~Colore in primo piano";
         Text[ danish ] = "Forgrundsfar~ve";
         Text[ swedish ] = "För~grundsfärg";
-        Text[ polish ] = "Kolor pierwszego planu";
-        Text[ portuguese_brazilian ] = "~Primeiro plano";
+        Text[ polish ] = "~Pierwszy plan";
+        Text[ portuguese_brazilian ] = "~Cor do Primeiro Plano";
         Text[ japanese ] = "å‰æ™¯è‰²(~F)";
         Text[ korean ] = "ì „ê²½ìƒ‰(~F)";
         Text[ chinese_simplified ] = "å‰æ™¯é¢œè‰²(~F)";
         Text[ chinese_traditional ] = "å‰æ™¯é¡è‰²(~F)";
-        Text[ turkish ] = "~Önalan";
+        Text[ turkish ] = "Önalan rengi";
         Text[ arabic ] = "ÇáÃãÇãíÉ";
         Text[ catalan ] = "P~rimer pla";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¸ªà¸µà¸à¸·à¹‰à¸™~à¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Barva popÅ™edÃ­";
+        Text[ hebrew ] = "~Vordergrundfarbe";
+        Text[ hindi ] = "~à¤¸à¤¾à¤®à¤¨à¥‡ à¤•à¤¾ à¤°à¤‚à¤— ";
     };
     ListBox LB_COLOR
     {
@@ -2614,17 +2833,20 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ italian ] = "Colore di ~sfondo";
         Text[ danish ] = "Baggru~ndsfarve";
         Text[ swedish ] = "Bakgru~ndsfärg";
-        Text[ polish ] = "Kolor t³a";
-        Text[ portuguese_brazilian ] = "~Fundo";
+        Text[ polish ] = "~T³o";
+        Text[ portuguese_brazilian ] = "~Cor do Plano de Fundo";
         Text[ japanese ] = "èƒŒæ™¯è‰²(~B)";
         Text[ korean ] = "ë°°ê²½ ìƒ‰ìƒ(~B)";
         Text[ chinese_simplified ] = "èƒŒæ™¯é¢œè‰²(~B)";
         Text[ chinese_traditional ] = "èƒŒæ™¯é¡è‰²(~B)";
-        Text[ turkish ] = "A~rtalan";
+        Text[ turkish ] = "Artalan rengi";
         Text[ arabic ] = "ÇáÎáİíÉ";
         Text[ catalan ] = "~Fons";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "à¸ªà¸µ~à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
+        Text[ czech ] = "Barva pozadÃ­";
+        Text[ hebrew ] = "â€®×¦×‘×¢ ×¨×§×¢â€¬";
+        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤°à¤‚à¤—";
     };
     ListBox LB_BACKGROUND_COLOR
     {
@@ -2640,7 +2862,7 @@ TabPage RID_SVXPAGE_BITMAP
         // Hidden label that provides the name for the bitmaps list box.
         Text = "Bitmap" ;
         Text [ ENGLISH ] = "Bitmap" ;
-        Text[ portuguese ] = "Bitmap";
+        Text[ portuguese ] = "~Bitmap";
         Text[ russian ] = "Ğàñòğ";
         Text[ spanish ] = "Bitmap";
         Text[ italian ] = "Bitmap";
@@ -2649,18 +2871,21 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ portuguese_brazilian ] = "Bitmap";
         Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—";
         Text[ korean ] = "ë¹„íŠ¸ë§µ";
-        Text[ turkish ] = "Bit eşlem";
+        Text[ turkish ] = "Bitmap";
         Text[ thai ] = "à¸šà¸´à¸—à¹à¸¡à¸›";
         Text[ english_us ] = "Bitmap";
         Text[ greek ] = "Bitmap";
-        Text[ dutch ] = "Bitmap";
+        Text[ dutch ] = "~Bitmap";
         Text[ french ] = "Bitmap";
         Text[ finnish ] = "Bittikartta";
-        Text[ danish ] = "Bitmap";
+        Text[ danish ] = "~Bitmap";
         Text[ chinese_simplified ] = "ä½å›¾";
         Text[ chinese_traditional ] = "é»é™£åœ–";
         Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
         Text[ catalan ] = "Mapa de bits";
+        Text[ czech ] = "Rastr";
+        Text[ hebrew ] = "~Bitmap";
+        Text[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥";
     };
     ListBox LB_BITMAPS
     {
@@ -2683,7 +2908,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ ENGLISH ] = "~Add..." ;
         Text [ norwegian ] = "~Add..." ;
         Text [ italian ] = "Aggiungi..." ;
-        Text [ portuguese_brazilian ] = "~Add..." ;
+        Text [ portuguese_brazilian ] = "~Adicionar..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text [ finnish ] = "~Lisää..." ;
         Text [ danish ] = "Ti~lføj..." ;
@@ -2695,16 +2920,19 @@ TabPage RID_SVXPAGE_BITMAP
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
-        Text[ polish ] = "Dodaj...";
+        Text[ polish ] = "Dod~aj...";
         Text[ japanese ] = "è¿½åŠ (~A)...";
         Text[ chinese_traditional ] = "æ–°å¢(~A)...";
         Text[ arabic ] = "...ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç...";
         Text[ korean ] = "ì¶”ê°€(~A)...";
-        Text[ turkish ] = "~Ekle...";
+        Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix...";
         Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡...";
+        Text[ czech ] = "PÅ™idat...";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×ª...â€¬";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹...";
     };
     PushButton BTN_MODIFY
     {
@@ -2726,16 +2954,19 @@ TabPage RID_SVXPAGE_BITMAP
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ›´æ”¹(~M)...";
         Text[ russian ] = "Èçìåíèòü...";
-        Text[ polish ] = "Modyfikuj...";
+        Text[ polish ] = "Mody~fikuj...";
         Text[ japanese ] = "å¤‰æ›´(~M)...";
         Text[ chinese_traditional ] = "è®Šæ›´(~M)...";
         Text[ arabic ] = "ÊÚÏíá...";
         Text[ greek ] = "Ôñïğïğïßçóç...";
-        Text[ korean ] = "ë³€ê²½(~M)...";
-        Text[ turkish ] = "~Değiştir...";
+        Text[ korean ] = "ìˆ˜ì •(~M)...";
+        Text[ turkish ] = "Değiştir...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚...";
+        Text[ czech ] = "ZmÄ›nit...";
+        Text[ hebrew ] = "â€®×©×™× ×•×™...â€¬";
+        Text[ hindi ] = "~à¤¸à¥à¤§à¤¾à¤°à¥‹...";
     };
     PushButton BTN_IMPORT
     {
@@ -2757,16 +2988,19 @@ TabPage RID_SVXPAGE_BITMAP
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è¾“å…¥(~I)...";
         Text[ russian ] = "Èìïîğò...";
-        Text[ polish ] = "Import...";
+        Text[ polish ] = "~Importuj..";
         Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ(~I)...";
         Text[ chinese_traditional ] = "åŒ¯å…¥(~I)...";
         Text[ arabic ] = "ÇÓÊíÑÇÏ...";
         Text[ greek ] = "ÅéóáãùãŞ...";
         Text[ korean ] = "ê°€ì ¸ì˜¤ê¸°(~I)...";
-        Text[ turkish ] = "İ~çe aktar...";
+        Text[ turkish ] = "İçe aktar...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Importa...";
         Text[ thai ] = "~à¸™à¸³à¹€à¸‚à¹‰à¸²...";
+        Text[ czech ] = "Importovat...";
+        Text[ hebrew ] = "I~mport...";
+        Text[ hindi ] = "~à¤†à¤¯à¤¾à¤¤...";
     };
     PushButton BTN_DELETE
     {
@@ -2776,7 +3010,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
         Text [ italian ] = "~Elimina..." ;
-        Text [ portuguese_brazilian ] = "~Apagar..." ;
+        Text [ portuguese_brazilian ] = "~Excluir..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ finnish ] = "~Poista..." ;
         Text [ danish ] = "Slet..." ;
@@ -2788,16 +3022,19 @@ TabPage RID_SVXPAGE_BITMAP
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
         Text[ russian ] = "Óäàëèòü...";
-        Text[ polish ] = "Usuñ...";
+        Text[ polish ] = "~Usuñ...";
         Text[ japanese ] = "å‰Šé™¤(~D)...";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ...";
         Text[ korean ] = "ì‚­ì œ(~D)...";
-        Text[ turkish ] = "~Sil...";
+        Text[ turkish ] = "Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~à¸¥à¸š...";
+        Text[ czech ] = "Smazat...";
+        Text[ hebrew ] = "â€®××—×™×§×”...â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“...";
     };
     ImageButton BTN_LOAD
     {
@@ -2837,6 +3074,9 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ turkish ] = "Bitmaptabelle laden";
         QuickHelpText[ catalan ] = "Carrega la taula de mapes de bits";
         QuickHelpText[ thai ] = "Load Bitmap List";
+        QuickHelpText[ czech ] = "NaÄÃ­st seznam bitmap";
+        QuickHelpText[ hebrew ] = "Bitmaptabelle laden";
+        QuickHelpText[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥ à¤¸à¥‚à¤šà¥€ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
     };
     ImageButton BTN_SAVE
     {
@@ -2847,7 +3087,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText [ ENGLISH ] = "Save bitmap list" ;
         QuickHelpText [ norwegian ] = "Lagre liste over punktmatriser" ;
         QuickHelpText [ italian ] = "Salva tavola delle bitmap" ;
-        QuickHelpText [ portuguese_brazilian ] = "Gravar lista de bitmaps" ;
+        QuickHelpText [ portuguese_brazilian ] = "Salvar lista de bitmaps" ;
         QuickHelpText [ portuguese ] = "Guarda a lista de bitmaps" ;
         QuickHelpText [ finnish ] = "Tallenna bittikarttaluettelo" ;
         QuickHelpText [ danish ] = "Gem bitmaptabel" ;
@@ -2876,19 +3116,25 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ turkish ] = "Bitmaptabelle sichern";
         QuickHelpText[ catalan ] = "Desa la taula de mapes de bits";
         QuickHelpText[ thai ] = "Save Bitmap List";
+        QuickHelpText[ czech ] = "UloÅ¾it seznam bitmap";
+        QuickHelpText[ hebrew ] = "Bitmaptabelle sichern";
+        QuickHelpText[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥ à¤¸à¥‚à¤šà¥€ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
     };
     Text[ chinese_simplified ] = "ä½å›¾å›¾æ¡ˆ";
     Text[ russian ] = "Îáğàçöû ğàñòğà";
-    Text[ polish ] = "Wzorzec mapy bitowej";
+    Text[ polish ] = "Wzorce mapy bitowej";
     Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒ‘ã‚¿ãƒ¼ãƒ³";
     Text[ chinese_traditional ] = "é»é™£åœ–åœ–æ¡ˆ";
     Text[ arabic ] = "äãæĞÌ ÇáÕæÑÉ ÇáäŞØíÉ";
     Text[ greek ] = "Ó÷İäéï Bitmap";
     Text[ korean ] = "ë¹„íŠ¸ë§µ íŒ¨í„´";
-    Text[ turkish ] = "Bit eşlem";
+    Text[ turkish ] = "Bit eşlem desenleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Patrons de mapa de bits";
     Text[ thai ] = "à¸¥à¸§à¸”à¸¥à¸²à¸¢à¸šà¸´à¸—à¹à¸¡à¹‡à¸›";
+    Text[ czech ] = "BitmapovÃ© vzory";
+    Text[ hebrew ] = "Bitmapmuster";
+    Text[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
 };
  // RID_SVXPAGE_GRADIENT -----------------------------------------------------
 TabPage RID_SVXPAGE_GRADIENT
@@ -2899,7 +3145,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text [ English ] = "Gradients" ;
     Text [ norwegian ] = "+++Gradients" ;
     Text [ italian ] = "Sfumature" ;
-    Text [ portuguese_brazilian ] = "D?grad?s" ;
+    Text [ portuguese_brazilian ] = "Gradientes" ;
     Text [ portuguese ] = "Gradações" ;
     Text [ finnish ] = "Liukuvärjäykset" ;
     Text [ danish ] = "Farvegradueringer" ;
@@ -2918,7 +3164,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ greek ] = "Properties";
+        Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
@@ -2927,15 +3173,18 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
         Text[ japanese ] = "å±æ€§";
         Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "Özellikler";
+        Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ catalan ] = "Propietats";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
     };
     FixedText FT_TYPE
     {
@@ -2956,16 +3205,19 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "Ty~pe" ;
         Text[ chinese_simplified ] = "ç±»å‹(~P)";
         Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
+        Text[ polish ] = "Ty~p";
         Text[ japanese ] = "ç¨®é¡(~P)";
         Text[ chinese_traditional ] = "é¡å‹(~P)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
         Text[ korean ] = "ìœ í˜•(~P)";
-        Text[ turkish ] = "~Tip";
+        Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ti~pus";
         Text[ thai ] = "à¸Šà¸™à¸´~à¸”";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "~Typ";
+        Text[ hindi ] = "à¤µ~à¤°à¥à¤—";
     };
     ListBox LB_GRADIENT_TYPES
     {
@@ -3015,9 +3267,9 @@ TabPage RID_SVXPAGE_GRADIENT
             < "Linear" ; Default ; > ;
             < "Axial" ; Default ; > ;
             < "Radial" ; Default ; > ;
-            < "Ellipsoid" ; Default ; > ;
-            < "Quadratisch" ; Default ; > ;
-            < "Ret?ngulo" ; Default ; > ;
+            < "Elipsóide" ; Default ; > ;
+            < "Quadrado" ; Default ; > ;
+            < "Retangular" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -3114,9 +3366,9 @@ TabPage RID_SVXPAGE_GRADIENT
             < "Liniowy" ; Default ; > ;
         < "Osiowy" ; Default ; > ;
         < "Radialny" ; Default ; > ;
-        < "Elipsoida" ; Default ; > ;
+        < "Eliptyczny" ; Default ; > ;
         < "Kwadratowy" ; Default ; > ;
-        < "Prostok¹tny" ; Default ; > ;
+        < "Rombowy" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -3199,6 +3451,33 @@ TabPage RID_SVXPAGE_GRADIENT
         < "2 à¸Šà¸±à¹‰à¸™" ; Default ; > ;
         < "à¸ªà¸µà¹ˆà¹€à¸«à¸¥à¸µà¹ˆà¸¢à¸¡" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "LineÃ¡rnÃ­" ; Default ; > ;
+        < "AxiÃ¡lnÃ­" ; Default ; > ;
+        < "RadiÃ¡lnÃ­" ; Default ; > ;
+        < "OvÃ¡lnÃ½" ; Default ; > ;
+        < "ÄŒtvercovÃ½" ; Default ; > ;
+        < "PravoÃºhlÃ½" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Linear" ; Default ; > ;
+        < "Axial" ; Default ; > ;
+        < "Radial" ; Default ; > ;
+        < "Ellipsoid" ; Default ; > ;
+        < "Quadratisch" ; Default ; > ;
+        < "Rechteckig" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "à¤¸à¤‚à¤•à¥à¤šà¤¿à¤¤" ; Default ; > ;
+        < "à¤§à¥à¤°à¥€-à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¥€" ; Default ; > ;
+        < "à¤•à¤¿à¤°à¤£-à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¥€" ; Default ; > ;
+        < "à¤¦à¥€à¤°à¥à¤˜à¤µà¥ƒà¤¤à¥à¤¤à¤œ" ; Default ; > ;
+        < "à¤¸à¤®à¤šà¤¤à¥à¤°à¥à¤­à¥à¤œ" ; Default ; > ;
+        < "à¤†à¤¯à¤¤à¤¾à¤•à¤¾à¤°" ; Default ; > ;
+    };
     };
     FixedText FT_CENTER_X
     {
@@ -3219,7 +3498,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "Center ~X" ;
         Text[ chinese_simplified ] = "ä¸­å¿ƒ ~X";
         Text[ russian ] = "Öåíòğ ~X";
-        Text[ polish ] = "Centrum X";
+        Text[ polish ] = "Œrodek ~X";
         Text[ japanese ] = "~X ã®ä¸­å¤®";
         Text[ chinese_traditional ] = "ä¸­å¿ƒ(~X)";
         Text[ arabic ] = "ÇáãÑßÒ Ó";
@@ -3229,6 +3508,9 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centre ~X";
         Text[ thai ] = "à¸¨à¸¹à¸™à¸¢à¹Œà¸à¸¥à¸²à¸‡ ~X";
+        Text[ czech ] = "StÅ™ed X";
+        Text[ hebrew ] = "Zentrum ~X";
+        Text[ hindi ] = "à¤•à¥‡à¤¨à¥à¤¦à¥à¤° ~X";
     };
     MetricField MTR_CENTER_X
     {
@@ -3264,7 +3546,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "Center ~Y" ;
         Text[ chinese_simplified ] = "ä¸­å¿ƒ ~Y";
         Text[ russian ] = "Öåíòğ Y";
-        Text[ polish ] = "Centrum Y";
+        Text[ polish ] = "Œrodek ~Y";
         Text[ japanese ] = "~Y ã®ä¸­å¤®";
         Text[ chinese_traditional ] = "ä¸­å¿ƒ(~Y)";
         Text[ arabic ] = "ÇáãÑßÒ Õ";
@@ -3274,6 +3556,9 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centre ~Y";
         Text[ thai ] = "à¸¨à¸¹à¸™à¸¢à¹Œà¸à¸¥à¸²à¸‡ ~Y";
+        Text[ czech ] = "StÅ™ed Y";
+        Text[ hebrew ] = "Zentrum ~Y";
+        Text[ hindi ] = "à¤•à¥‡à¤¨à¥à¤¦à¥à¤° ~Y";
     };
     MetricField MTR_CENTER_Y
     {
@@ -3298,7 +3583,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ ENGLISH ] = "A~ngle" ;
         Text [ norwegian ] = "~Vinkel" ;
         Text [ italian ] = "A~ngolo" ;
-        Text [ portuguese_brazilian ] = "~?ngulo" ;
+        Text [ portuguese_brazilian ] = "Â~ngulo" ;
         Text [ portuguese ] = "~Ângulo" ;
         Text [ finnish ] = "K~ulma" ;
         Text [ danish ] = "Vinkel" ;
@@ -3309,16 +3594,19 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "A~ngle" ;
         Text[ chinese_simplified ] = "è§’åº¦(~N)";
         Text[ russian ] = "Óãîë";
-        Text[ polish ] = "K¹t";
+        Text[ polish ] = "~K¹t";
         Text[ japanese ] = "è§’åº¦(~N)";
         Text[ chinese_traditional ] = "è§’åº¦(~N)";
         Text[ arabic ] = "ÇáÒÇæíÉ";
         Text[ greek ] = "Ãùíßá";
         Text[ korean ] = "ê°ë„(~N)";
-        Text[ turkish ] = "A~çı";
+        Text[ turkish ] = "Açı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ngle";
         Text[ thai ] = "~à¸¡à¸¸à¸¡";
+        Text[ czech ] = "Ãšhel";
+        Text[ hebrew ] = "~Winkel";
+        Text[ hindi ] = "à¤•à¥‹~à¤£";
     };
     MetricField MTR_ANGLE
     {
@@ -3334,7 +3622,7 @@ TabPage RID_SVXPAGE_GRADIENT
         CustomUnitText [ ENGLISH ] = " degree" ;
         CustomUnitText [ norwegian ] = " degree" ;
         CustomUnitText [ italian ] = "gradi" ;
-        CustomUnitText [ portuguese_brazilian ] = "grau" ;
+        CustomUnitText [ portuguese_brazilian ] = " graus" ;
         CustomUnitText [ portuguese ] = "grau" ;
         CustomUnitText [ finnish ] = " astetta" ;
         CustomUnitText [ danish ] = "grader" ;
@@ -3347,16 +3635,19 @@ TabPage RID_SVXPAGE_GRADIENT
         SpinSize = 15 ;
         CustomUnitText[ chinese_simplified ] = "åº¦";
         CustomUnitText[ russian ] = "ãğàäóñîâ";
-        CustomUnitText[ polish ] = "stopni(e)";
+        CustomUnitText[ polish ] = " st.";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
         CustomUnitText[ arabic ] = "ÏÑÌÉ";
         CustomUnitText[ greek ] = "ìïßñåò";
         CustomUnitText[ korean ] = "ë„";
-        CustomUnitText[ turkish ] = "Derece";
+        CustomUnitText[ turkish ] = "dereceler";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = " graus";
         CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
+        CustomUnitText[ czech ] = " stupÅˆÅ¯";
+        CustomUnitText[ hebrew ] = " â€®××¢×œ×•×ªâ€¬";
+        CustomUnitText[ hindi ] = " à¤¡à¤¿à¤—à¥à¤°à¤¿à¤¯à¤¾à¤";
     };
     FixedText FT_BORDER
     {
@@ -3366,7 +3657,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ ENGLISH ] = "~Border" ;
         Text [ norwegian ] = "~Border" ;
         Text [ italian ] = "Mar~gine" ;
-        Text [ portuguese_brazilian ] = "~Borda" ;
+        Text [ portuguese_brazilian ] = "~Bordas" ;
         Text [ portuguese ] = "~Margem" ;
         Text [ finnish ] = "~Reuna" ;
         Text [ danish ] = "Rand" ;
@@ -3377,16 +3668,19 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "~Border" ;
         Text[ chinese_simplified ] = "è¾¹è·(~B)";
         Text[ russian ] = "Ïîëå";
-        Text[ polish ] = "Margines";
+        Text[ polish ] = "K~rawêdŸ";
         Text[ japanese ] = "ä½™ç™½(~B)";
         Text[ chinese_traditional ] = "é‚Šæ¡†(~B)";
         Text[ arabic ] = "ÇáÍÏ";
         Text[ greek ] = "Ğå~ñéèşñéï";
         Text[ korean ] = "ì—¬ë°±(~B)";
-        Text[ turkish ] = "~Kenar";
+        Text[ turkish ] = "Kenar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vores";
         Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¸‚à¸­à¸š";
+        Text[ czech ] = "Okraj";
+        Text[ hebrew ] = "~Rand";
+        Text[ hindi ] = "~à¤•à¤¿à¤¨à¤¾à¤°à¤¾";
     };
     MetricField MTR_BORDER
     {
@@ -3422,16 +3716,19 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "~From" ;
         Text[ chinese_simplified ] = "ä»(~F)";
         Text[ russian ] = "Îò";
-        Text[ polish ] = "Od";
+        Text[ polish ] = "~Od";
         Text[ japanese ] = "å§‹ã‚(~F)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "å¾(~F)";
         Text[ arabic ] = "ãä";
         Text[ greek ] = "Áğü";
         Text[ korean ] = "ì‹œì‘(~F)";
-        Text[ turkish ] = "~İlk";
+        Text[ turkish ] = "İlk";
         Text[ catalan ] = "~Des de";
         Text[ thai ] = "~à¸ˆà¸²à¸";
+        Text[ czech ] = "Od";
+        Text[ hebrew ] = "~Von";
+        Text[ hindi ] = "~à¤¸à¥‡";
     };
     ListBox LB_COLOR_FROM
     {
@@ -3476,16 +3773,19 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ english_us ] = "~To" ;
         Text[ chinese_simplified ] = "è‡³(~T)";
         Text[ russian ] = "Äî";
-        Text[ polish ] = "Do";
+        Text[ polish ] = "~Do";
         Text[ japanese ] = "çµ‚ã‚Š(~T)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "è‡³(~T)";
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "¸ùò";
         Text[ korean ] = "ë(~T)";
-        Text[ turkish ] = "~Son";
+        Text[ turkish ] = "Son";
         Text[ catalan ] = "~A";
         Text[ thai ] = "~à¸–à¸¶à¸‡";
+        Text[ czech ] = "Do";
+        Text[ hebrew ] = "~Bis";
+        Text[ hindi ] = "~à¤•à¥‹";
     };
     ListBox LB_COLOR_TO
     {
@@ -3532,7 +3832,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ ENGLISH ] = "~Add..." ;
         Text [ norwegian ] = "~Add..." ;
         Text [ italian ] = "~Aggiungi..." ;
-        Text [ portuguese_brazilian ] = "~Add..." ;
+        Text [ portuguese_brazilian ] = "~Adicionar..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text [ finnish ] = "~Lisää..." ;
         Text [ danish ] = "Tilfø~j..." ;
@@ -3544,16 +3844,19 @@ TabPage RID_SVXPAGE_GRADIENT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
-        Text[ polish ] = "Dodaj...";
+        Text[ polish ] = "Dod~aj...";
         Text[ japanese ] = "è¿½åŠ (~A)...";
         Text[ chinese_traditional ] = "æ–°å¢(~A)...";
         Text[ arabic ] = "...ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç...";
         Text[ korean ] = "ì¶”ê°€(~A)...";
-        Text[ turkish ] = "E~kle...";
+        Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix...";
         Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡...";
+        Text[ czech ] = "PÅ™idat...";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”...â€¬";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹...";
     };
     PushButton BTN_MODIFY
     {
@@ -3575,16 +3878,19 @@ TabPage RID_SVXPAGE_GRADIENT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ›´æ”¹(~M)...";
         Text[ russian ] = "Èçìåíèòü...";
-        Text[ polish ] = "Modyfikuj...";
+        Text[ polish ] = "Mody~fikuj...";
         Text[ japanese ] = "å¤‰æ›´(~M)...";
         Text[ chinese_traditional ] = "è®Šæ›´(~M)...";
         Text[ arabic ] = "ÊÚÏíá...";
         Text[ greek ] = "Ôñïğïğïßçóç...";
-        Text[ korean ] = "ë³€ê²½(~M)...";
-        Text[ turkish ] = "~Değiştir...";
+        Text[ korean ] = "ìˆ˜ì •(~M)...";
+        Text[ turkish ] = "Değiştir...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚...";
+        Text[ czech ] = "ZmÄ›nit...";
+        Text[ hebrew ] = "â€®×©×™× ×•×™...â€¬";
+        Text[ hindi ] = "à¤¸à¥~à¤§à¤¾à¤°à¥‹...";
     };
     PushButton BTN_DELETE
     {
@@ -3594,7 +3900,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
         Text [ italian ] = "~Elimina..." ;
-        Text [ portuguese_brazilian ] = "~Apagar..." ;
+        Text [ portuguese_brazilian ] = "~Excluir..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ finnish ] = "Poi~sta..." ;
         Text [ danish ] = "Slet..." ;
@@ -3606,16 +3912,19 @@ TabPage RID_SVXPAGE_GRADIENT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
         Text[ russian ] = "Óäàëèòü...";
-        Text[ polish ] = "Usuñ...";
+        Text[ polish ] = "~Usuñ...";
         Text[ japanese ] = "å‰Šé™¤(~D)...";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ...";
         Text[ korean ] = "ì‚­ì œ(~D)...";
-        Text[ turkish ] = "~Sil...";
+        Text[ turkish ] = "Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~à¸¥à¸š...";
+        Text[ czech ] = "Smazat...";
+        Text[ hebrew ] = "â€®××—×™×§×”...â€¬";
+        Text[ hindi ] = "à¤®à¤¿~à¤Ÿà¤¾à¤“...";
     };
     ImageButton BTN_LOAD
     {
@@ -3626,7 +3935,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText [ ENGLISH ] = "Load gradient list" ;
         QuickHelpText [ norwegian ] = "Last inn+++ gradient liste" ;
         QuickHelpText [ italian ] = "Carica tavola delle sfumature" ;
-        QuickHelpText [ portuguese_brazilian ] = "Carregar lista de dégradés" ;
+        QuickHelpText [ portuguese_brazilian ] = "Carregar lista de gradientes" ;
         QuickHelpText [ portuguese ] = "Carrega a lista de gradações de cores" ;
         QuickHelpText [ finnish ] = "Lataa gradienttiluettelo" ;
         QuickHelpText [ danish ] = "Indlæs farvegradueringstabel" ;
@@ -3650,11 +3959,14 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ chinese_traditional ] = "è¼‰å…¥å½©è‰²åœ–æ¡ˆè¡¨";
         QuickHelpText[ arabic ] = "ÊÍãíá ŞÇÆãÉ ÊÏÑÌ ÇáÃáæÇä";
         QuickHelpText[ greek ] = "Öüñôùóç ëßóôáò äéáâÜèìéóçò ÷ñùìÜôùí";
-        QuickHelpText[ korean ] = "ê²½ì‚¬ë„ ëª©ë¡ ë¡œë“œ";
+        QuickHelpText[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ ëª©ë¡ ë¡œë“œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbverlauftabelle laden";
         QuickHelpText[ catalan ] = "Carrega la taula de gradients";
         QuickHelpText[ thai ] = "Load Gradients List";
+        QuickHelpText[ czech ] = "NaÄÃ­st seznam pÅ™echodÅ¯";
+        QuickHelpText[ hebrew ] = "Farbverlauftabelle laden";
+        QuickHelpText[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥à¤¸ à¤¸à¥‚à¤šà¥€ à¤²à¥‹à¤¡ à¤•à¤°à¥‹";
     };
     ImageButton BTN_SAVE
     {
@@ -3665,7 +3977,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText [ ENGLISH ] = "Save gradient list" ;
         QuickHelpText [ norwegian ] = "Lagre +++gradient liste" ;
         QuickHelpText [ italian ] = "Salva tavola delle sfumature" ;
-        QuickHelpText [ portuguese_brazilian ] = "Gravar lista de dégradés" ;
+        QuickHelpText [ portuguese_brazilian ] = "Salvar lista de gradientes" ;
         QuickHelpText [ portuguese ] = "Guarda as gradações de cores" ;
         QuickHelpText [ finnish ] = "Tallenna gradienttiluettelo" ;
         QuickHelpText [ danish ] = "Gem farvegraduerings tabel" ;
@@ -3689,24 +4001,30 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ chinese_traditional ] = "ä¿å­˜é¡è‰²åœ–æ¡ˆè¡¨";
         QuickHelpText[ arabic ] = "ÍİÙ ŞÇÆãÉ ÊÏÑÌ ÇáÃáæÇä";
         QuickHelpText[ greek ] = "ÁğïèŞêåõóç ëßóôáò äéáâÜèìéóçò ÷ñùìÜôùí";
-        QuickHelpText[ korean ] = "ê²½ì‚¬ë„ ëª©ë¡ ì €ì¥";
+        QuickHelpText[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ ëª©ë¡ ì €ì¥";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbverlauftabelle sichern";
         QuickHelpText[ catalan ] = "Desa la taula de gradients";
         QuickHelpText[ thai ] = "Save Gradients List";
+        QuickHelpText[ czech ] = "UloÅ¾it seznam pÅ™echodÅ¯";
+        QuickHelpText[ hebrew ] = "Farbverlauftabelle sichern";
+        QuickHelpText[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥à¤¸ à¤¸à¥‚à¤šà¥€ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
     };
     Text[ chinese_simplified ] = "å½©è‰²å›¾æ¡ˆ";
     Text[ russian ] = "Ãğàäèåíòû";
-    Text[ polish ] = "Gradient";
+    Text[ polish ] = "Gradienty";
     Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "å½©è‰²åœ–æ¡ˆ";
     Text[ arabic ] = "ÊÏÑÌ Çááæä";
     Text[ greek ] = "Äéáâáèìßóåéò ÷ñùìÜôùí";
     Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸";
-    Text[ turkish ] = "Gradyan";
+    Text[ turkish ] = "Gradyanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gradacions";
     Text[ thai ] = "à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
+    Text[ czech ] = "PÅ™echody";
+    Text[ hebrew ] = "FarbverlÃ¤ufe";
+    Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥à¤¸";
 };
  // RID_SVXPAGE_COLOR --------------------------------------------------------
 TabPage RID_SVXPAGE_COLOR
@@ -3737,7 +4055,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ greek ] = "Properties";
+        Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propriétés";
         Text[ spanish ] = "Propiedades";
@@ -3746,15 +4064,18 @@ TabPage RID_SVXPAGE_COLOR
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Properties";
+        Text[ portuguese_brazilian ] = "Propriedades";
         Text[ japanese ] = "å±æ€§";
         Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "Özellikler";
+        Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ catalan ] = "Propietats";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
     };
     FixedText FT_NAME
     {
@@ -3775,16 +4096,19 @@ TabPage RID_SVXPAGE_COLOR
         Text [ english_us ] = "~Name" ;
         Text[ chinese_simplified ] = "åç§°(~N)";
         Text[ russian ] = "Èìÿ";
-        Text[ polish ] = "Nazwa";
+        Text[ polish ] = "~Nazwa";
         Text[ japanese ] = "åå‰(~N)";
         Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
         Text[ korean ] = "ì´ë¦„(~N)";
-        Text[ turkish ] = "~Ad";
+        Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nom";
         Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
+        Text[ czech ] = "NÃ¡zev";
+        Text[ hebrew ] = "~Name";
+        Text[ hindi ] = "~à¤¨à¤¾à¤®";
     };
     Edit EDT_NAME
     {
@@ -3812,16 +4136,19 @@ TabPage RID_SVXPAGE_COLOR
         Text [ english_us ] = "C~olor" ;
         Text[ chinese_simplified ] = "é¢œè‰²(~O)";
         Text[ russian ] = "Öâåò";
-        Text[ polish ] = "Kolor";
+        Text[ polish ] = "K~olor";
         Text[ japanese ] = "è‰²(~O)";
         Text[ chinese_traditional ] = "é¡è‰²(~O)";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñşìá";
         Text[ korean ] = "ìƒ‰ìƒ(~O)";
-        Text[ turkish ] = "~Renk";
+        Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~olor";
         Text[ thai ] = "~à¸ªà¸µ";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "~Farbe";
+        Text[ hindi ] = "à¤°à¤‚~à¤—";
     };
     ListBox LB_COLOR
     {
@@ -3862,6 +4189,9 @@ TabPage RID_SVXPAGE_COLOR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Taula de colors";
         Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡à¸ªà¸µ";
+        Text[ czech ] = "Tabulka barev";
+        Text[ hebrew ] = "Farbtabelle";
+        Text[ hindi ] = "à¤°à¤‚à¤— à¤•à¤¾ à¤¸à¤¾à¤°à¤£à¥€";
     };
     Control CTL_COLORTABLE
     {
@@ -4006,6 +4336,21 @@ TabPage RID_SVXPAGE_COLOR
          < "RGB" ; Default ; > ;
         < "CMYK" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
     };
     FixedText FT_1
     {
@@ -4091,7 +4436,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ ENGLISH ] = "~Add" ;
         Text [ norwegian ] = "Leg~g til" ;
         Text [ italian ] = "~Aggiungi" ;
-        Text [ portuguese_brazilian ] = "~Acrescentar" ;
+        Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "T~ilføj" ;
@@ -4103,16 +4448,19 @@ TabPage RID_SVXPAGE_COLOR
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "Dodaj";
+        Text[ polish ] = "Dod~aj";
         Text[ japanese ] = "è¿½åŠ (~A)";
         Text[ chinese_traditional ] = "æ–°å¢(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
         Text[ korean ] = "ì¶”ê°€(~A)";
-        Text[ turkish ] = "E~kle";
+        Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix";
         Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
+        Text[ czech ] = "PÅ™idat";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     PushButton BTN_WORK_ON
     {
@@ -4122,7 +4470,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ ENGLISH ] = "~Work on..." ;
         Text [ norwegian ] = "~Arbeide med..." ;
         Text [ italian ] = "Modi~fica..." ;
-        Text [ portuguese_brazilian ] = "~Operar em..." ;
+        Text [ portuguese_brazilian ] = "~Editar..." ;
         Text [ portuguese ] = "~Editar..." ;
         Text [ finnish ] = "M~uokkaa..." ;
         Text [ danish ] = "Rediger..." ;
@@ -4134,16 +4482,19 @@ TabPage RID_SVXPAGE_COLOR
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
         Text[ russian ] = "Ïğàâêà...";
-        Text[ polish ] = "Edytuj...";
+        Text[ polish ] = "Edytu~j...";
         Text[ japanese ] = "ç·¨é›†(~E)...";
         Text[ chinese_traditional ] = "ç·¨è¼¯(~E)...";
         Text[ arabic ] = "ÊÍÑíÑ...";
         Text[ greek ] = "Åğåîåñãáóßá...";
         Text[ korean ] = "í¸ì§‘(~E)...";
-        Text[ turkish ] = "D~üzenle...";
+        Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Edita...";
         Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
+        Text[ czech ] = "Upravit...";
+        Text[ hebrew ] = "â€®×¢×¨×™×›×”...â€¬";
+        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
     };
     PushButton BTN_DELETE
     {
@@ -4153,7 +4504,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ ENGLISH ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
         Text [ italian ] = "Elimina..." ;
-        Text [ portuguese_brazilian ] = "~Apagar..." ;
+        Text [ portuguese_brazilian ] = "~Excluir..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ finnish ] = "~Poista..." ;
         Text [ danish ] = "Slet..." ;
@@ -4165,16 +4516,19 @@ TabPage RID_SVXPAGE_COLOR
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
         Text[ russian ] = "Óäàëèòü...";
-        Text[ polish ] = "Usuñ...";
+        Text[ polish ] = "~Usuñ...";
         Text[ japanese ] = "å‰Šé™¤(~D)...";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ...";
         Text[ korean ] = "ì‚­ì œ(~D)...";
-        Text[ turkish ] = "~Sil...";
+        Text[ turkish ] = "Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~à¸¥à¸š...";
+        Text[ czech ] = "Smazat...";
+        Text[ hebrew ] = "â€®××—×™×§×”...â€¬";
+        Text[ hindi ] = "à¤®à¤¿~à¤Ÿà¤¾à¤“...";
     };
     PushButton BTN_MODIFY
     {
@@ -4196,16 +4550,19 @@ TabPage RID_SVXPAGE_COLOR
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ›´æ”¹(~M)";
         Text[ russian ] = "Èçìåíèòü";
-        Text[ polish ] = "Z~amieñ";
+        Text[ polish ] = "Mody~fikuj";
         Text[ japanese ] = "å¤‰æ›´(~M)";
         Text[ chinese_traditional ] = "è®Šæ›´(~M)";
         Text[ arabic ] = "ÊÛííÑ";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "ë³€ê²½(~M)";
-        Text[ turkish ] = "~Değiştir";
+        Text[ korean ] = "ìˆ˜ì •(~M)";
+        Text[ turkish ] = "Değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica";
         Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚";
+        Text[ czech ] = "ZmÄ›nit";
+        Text[ hebrew ] = "â€®×©×™× ×•×™â€¬";
+        Text[ hindi ] = "à¤¸à¥~à¤§à¤¾à¤°à¥‹";
     };
     ImageButton BTN_LOAD
     {
@@ -4245,6 +4602,9 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ turkish ] = "Farbtabelle laden";
         QuickHelpText[ catalan ] = "Carrega la taula de colors";
         QuickHelpText[ thai ] = "Load Color List";
+        QuickHelpText[ czech ] = "NaÄÃ­st seznam barev";
+        QuickHelpText[ hebrew ] = "Farbtabelle laden";
+        QuickHelpText[ hindi ] = "à¤°à¤‚à¤— à¤•à¤¾ à¤¸à¥‚à¤šà¥€ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
     };
     ImageButton BTN_SAVE
     {
@@ -4255,11 +4615,11 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText [ ENGLISH ] = "Save color list" ;
         QuickHelpText [ norwegian ] = "Lagre fargeliste" ;
         QuickHelpText [ italian ] = "Salva tavola dei colori" ;
-        QuickHelpText [ portuguese_brazilian ] = "Gravar lista de cores" ;
+        QuickHelpText [ portuguese_brazilian ] = "Salvar lista de cores" ;
         QuickHelpText [ portuguese ] = "Guarda a paleta de cores" ;
         QuickHelpText [ finnish ] = "Tallenna väriluettelo" ;
         QuickHelpText [ danish ] = "Gem farvetabel" ;
-        QuickHelpText [ french ] = "sauvegarder la palette de couleurs" ;
+        QuickHelpText [ french ] = "Sauvegarder la palette de couleurs" ;
         QuickHelpText [ swedish ] = "Spara färgtabell" ;
         QuickHelpText [ dutch ] = "Kleurenlijst opslaan" ;
         QuickHelpText [ spanish ] = "Guardar tabla de colores" ;
@@ -4284,6 +4644,9 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ turkish ] = "Farbtabelle sichern";
         QuickHelpText[ catalan ] = "Desa la taula de colors";
         QuickHelpText[ thai ] = "Save Color List";
+        QuickHelpText[ czech ] = "UloÅ¾it seznam barev";
+        QuickHelpText[ hebrew ] = "Farbtabelle sichern";
+        QuickHelpText[ hindi ] = "à¤°à¤‚à¤— à¤•à¤¾ à¤¸à¥‚à¤šà¥€ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
     };
     Text[ chinese_simplified ] = "é¢œè‰²";
     Text[ russian ] = "Öâåòà";
@@ -4297,6 +4660,9 @@ TabPage RID_SVXPAGE_COLOR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Colors";
     Text[ thai ] = "à¸ªà¸µ";
+    Text[ czech ] = "Barvy";
+    Text[ hebrew ] = "Farben";
+    Text[ hindi ] = "à¤°à¤‚à¤—";
 };
  // RID_SVXDLG_AREA ----------------------------------------------------------
 TabDialog RID_SVXDLG_AREA
@@ -4308,7 +4674,7 @@ TabDialog RID_SVXDLG_AREA
     Text [ ENGLISH ] = "Area" ;
     Text [ norwegian ] = "Area" ;
     Text [ italian ] = "Area" ;
-    Text [ portuguese_brazilian ] = "Preenchimento do Objeto" ;
+    Text [ portuguese_brazilian ] = "Área" ;
     Text [ portuguese ] = "Preenchimento" ;
     Text [ finnish ] = "Alue" ;
     Text [ danish ] = "Flade" ;
@@ -4331,7 +4697,7 @@ TabDialog RID_SVXDLG_AREA
                 Text [ ENGLISH ] = "Object Fill" ;
                 Text [ norwegian ] = "Object Fill" ;
                 Text [ italian ] = "Area" ;
-                Text [ portuguese_brazilian ] = "Preenchimento do Objeto" ;
+                Text [ portuguese_brazilian ] = "Área" ;
                 Text [ portuguese ] = "Preenchimento" ;
                 Text [ finnish ] = "Alue" ;
                 Text [ danish ] = "Flade" ;
@@ -4353,6 +4719,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Omplement";
                 Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
+                Text[ czech ] = "Oblast";
+                Text[ hebrew ] = "FlÃ¤che";
+                Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
             };
             PageItem
             {
@@ -4367,7 +4736,7 @@ TabDialog RID_SVXDLG_AREA
                 Text [ dutch ] = "Schaduw" ;
                 Text [ swedish ] = "Skugga" ;
                 Text [ danish ] = "Skygger" ;
-                Text [ portuguese_brazilian ] = "Schatten" ;
+                Text [ portuguese_brazilian ] = "Sombra" ;
                 Text [ portuguese ] = "Sombras" ;
                 Text[ chinese_simplified ] = "é˜´å½±";
                 Text[ russian ] = "Òåíü";
@@ -4382,6 +4751,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ finnish ] = "Varjo";
                 Text[ catalan ] = "Ombra";
                 Text[ thai ] = "à¹€à¸‡à¸²";
+                Text[ czech ] = "StÃ­n";
+                Text[ hebrew ] = "â€®×”×¦×œ×œ×”â€¬";
+                Text[ hindi ] = "à¤›à¤¾à¤¯à¤¾";
             };
             PageItem
             {
@@ -4399,7 +4771,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ danish ] = "Transparens";
                 Text[ swedish ] = "Transparens";
                 Text[ polish ] = "Przezroczystoœæ";
-                Text[ portuguese_brazilian ] = "Transparence";
+                Text[ portuguese_brazilian ] = "Transparência";
                 Text[ japanese ] = "é€éæ€§";
                 Text[ korean ] = "íˆ¬ëª…";
                 Text[ chinese_simplified ] = "é€æ˜";
@@ -4409,6 +4781,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ finnish ] = "Läpinäkyvyys";
                 Text[ catalan ] = "Transparència";
                 Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+                Text[ czech ] = "PrÅ¯hlednost";
+                Text[ hebrew ] = "Transparenz";
+                Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
             };
             PageItem
             {
@@ -4439,6 +4814,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Colors";
                 Text[ thai ] = "à¸ªà¸µ";
+                Text[ czech ] = "Barvy";
+                Text[ hebrew ] = "Farben";
+                Text[ hindi ] = "à¤°à¤‚à¤—";
             };
             PageItem
             {
@@ -4447,7 +4825,7 @@ TabDialog RID_SVXDLG_AREA
                 Text [ ENGLISH ] = "Gradients" ;
                 Text [ norwegian ] = "+++Gradients" ;
                 Text [ italian ] = "Sfumature" ;
-                Text [ portuguese_brazilian ] = "D?grad?s" ;
+                Text [ portuguese_brazilian ] = "Gradientes" ;
                 Text [ portuguese ] = "Gradações" ;
                 Text [ finnish ] = "Liukuvärjäykset" ;
                 Text [ danish ] = "Farvegradueringer" ;
@@ -4459,7 +4837,7 @@ TabDialog RID_SVXDLG_AREA
                 PageResID = RID_SVXPAGE_GRADIENT ;
                 Text[ chinese_simplified ] = "å½©è‰²å›¾æ¡ˆ";
                 Text[ russian ] = "Ãğàäèåíòû";
-                Text[ polish ] = "Gradient";
+                Text[ polish ] = "Gradienty";
                 Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³";
                 Text[ chinese_traditional ] = "å½©è‰²åœ–æ¡ˆ";
                 Text[ arabic ] = "ÊÏÑÌ Çááæä";
@@ -4469,6 +4847,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Gradacions";
                 Text[ thai ] = "à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
+                Text[ czech ] = "PÅ™echody";
+                Text[ hebrew ] = "FarbverlÃ¤ufe";
+                Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥à¤¸";
             };
             PageItem
             {
@@ -4477,7 +4858,7 @@ TabDialog RID_SVXDLG_AREA
                 Text [ ENGLISH ] = "Hatches" ;
                 Text [ norwegian ] = "Skravering" ;
                 Text [ italian ] = "Tratteggi" ;
-                Text [ portuguese_brazilian ] = "Tra?os de sombreado" ;
+                Text [ portuguese_brazilian ] = "Hachurado" ;
                 Text [ portuguese ] = "Tracejados" ;
                 Text [ finnish ] = "Viivoitus" ;
                 Text [ danish ] = "Skraveringer" ;
@@ -4499,6 +4880,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Ombreig";
                 Text[ thai ] = "à¹à¸£à¹€à¸‡à¸²";
+                Text[ czech ] = "Å rafovÃ¡nÃ­";
+                Text[ hebrew ] = "Schraffuren";
+                Text[ hindi ] = "à¤¹à¤¾à¤šà¤¿à¤‚à¤—";
             };
             PageItem
             {
@@ -4519,7 +4903,7 @@ TabDialog RID_SVXDLG_AREA
                 PageResID = RID_SVXPAGE_BITMAP ;
                 Text[ chinese_simplified ] = "ä½å›¾å›¾æ¡ˆ";
                 Text[ russian ] = "Ğàñòğû";
-                Text[ polish ] = "Wzorzec mapy bitowej";
+                Text[ polish ] = "Mapy bitowe";
                 Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—";
                 Text[ chinese_traditional ] = "é»é™£åœ–åœ–æ¡ˆ";
                 Text[ arabic ] = "äãÇĞÌ ÇáÕæÑ ÇáäŞØíÉ";
@@ -4529,6 +4913,9 @@ TabDialog RID_SVXDLG_AREA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Mapes de bits";
                 Text[ thai ] = "à¸šà¸´à¸—à¹à¸¡à¹‡à¸›";
+                Text[ czech ] = "BitovÃ© mapy";
+                Text[ hebrew ] = "Bitmapmuster";
+                Text[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥";
             };
         };
     };
@@ -4544,6 +4931,9 @@ TabDialog RID_SVXDLG_AREA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Omplement";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
+    Text[ czech ] = "Oblast";
+    Text[ hebrew ] = "FlÃ¤che";
+    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
 };
 
 Image RID_SVXIMG_LOAD_H
@@ -4565,6 +4955,19 @@ Image RID_SVXIMG_SAVE_H
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
