@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:41:49 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1706,14 +1706,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         getRowSet()->rowDeleted())
         return;
 
-    Reference< ::com::sun::star::container::XNamed >  xField;
-    Reference< XPropertySet >  xColSet = getBoundField();
-    xField = Reference< ::com::sun::star::container::XNamed > (xColSet, UNO_QUERY);
-
-    // auslesen der Searchflags
-    if (xColSet.is() && !::comphelper::getBOOL(xColSet->getPropertyValue(PROPERTY_ISSEARCHABLE)))
-        xField = NULL;
-
     ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
     try
     {
@@ -1722,7 +1714,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xCon;
         if(bFilter)
         {
-            DlgFilterCrit aDlg( getBrowserView(), m_xMultiServiceFacatory, xCon, m_xParser, xSup->getColumns(), xField->getName() );
+            DlgFilterCrit aDlg( getBrowserView(), m_xMultiServiceFacatory, xCon, m_xParser, xSup->getColumns() );
             String aFilter;
             if(!aDlg.Execute())
             {
@@ -1734,7 +1726,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         }
         else
         {
-            DlgOrderCrit aDlg(getBrowserView(),xCon,m_xParser,xSup->getColumns(),xColSet);
+            DlgOrderCrit aDlg( getBrowserView(),xCon,m_xParser,xSup->getColumns() );
             String aOrder;
             if(!aDlg.Execute())
             {
