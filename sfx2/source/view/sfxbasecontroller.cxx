@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-12-10 18:44:00 $
+ *  last change: $Author: mba $ $Date: 2001-12-14 16:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             {
                 // check for already loaded URL ... but with additional jumpmark!
                 REFERENCE< XMODEL > xModel = getModel();
-                if( xModel.is() )
+                if( xModel.is() && aURL.Mark.getLength() )
                 {
                     if( aURL.Main.getLength() && aURL.Main == xModel->getURL() )
                         nId = SID_JUMPTOMARK;
