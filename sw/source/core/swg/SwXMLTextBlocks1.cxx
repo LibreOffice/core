@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:21:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,8 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
 
             OUString sStreamName = OUString::createFromAscii("atevent.xml");
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
-                sStreamName, embed::ElementModes::READWRITE );
-            DBG_ASSERT(xDocStream.is(), "Can't create output stream");
+                sStreamName, embed::ElementModes::READ );
+            DBG_ASSERT(xDocStream.is(), "Can't create stream");
             if ( xDocStream.is() )
             {
                 Reference<io::XInputStream> xInputStream = xDocStream->getInputStream();
