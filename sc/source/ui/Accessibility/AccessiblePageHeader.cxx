@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:01:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,10 @@
 #include "sc.hrc"
 #endif
 
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #include <vcl/window.hxx>
@@ -114,7 +114,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 const sal_uInt8     MAX_AREAS = 3;
 
@@ -151,7 +151,7 @@ struct Dispose
 };
 
 ScAccessiblePageHeader::ScAccessiblePageHeader( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+                                ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, sal_Bool bHeader, sal_Int32 nIndex ) :
 ScAccessibleContextBase( rxParent, bHeader ? AccessibleRole::HEADER : AccessibleRole::FOOTER ),
     mpViewShell( pViewShell ),
@@ -210,7 +210,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (aOldAreas[i] && aOldAreas[i]->GetEditTextObject())
                     {
                         AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+                        aEvent.EventId = AccessibleEventId::CHILD;
                         aEvent.Source = uno::Reference< XAccessible >(this);
                         aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
 
@@ -220,7 +220,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (maAreas[i] && maAreas[i]->GetEditTextObject())
                     {
                         AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+                        aEvent.EventId = AccessibleEventId::CHILD;
                         aEvent.Source = uno::Reference< XAccessible >(this);
                         aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i]));
 
@@ -233,7 +233,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
             CommitChange(aEvent);
         }
@@ -244,12 +244,12 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPoint( const awt::Point& aPoint )
                                 throw (uno::RuntimeException)
 {
     uno::Reference<XAccessible> xRet;
 
-    if (contains(aPoint))
+    if (containsPoint(aPoint))
     {
         ScUnoGuard aGuard;
         IsObjectValid();
@@ -397,7 +397,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServic
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.text.AccessibleHeaderFooterView"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AccessibleHeaderFooterView"));
 
     return aSequence;
 }
