@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:19:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ TabPage TP_FLD_DB
         Text[ chinese_traditional ] = "±q¸ê®Æ®w";
         Text[ arabic ] = "ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Áğü âÜóç äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º·Î ºÎÅÍ";
+        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º·ÎºÎÅÍ";
         Text[ turkish ] = "Kaynak veritabanı";
     };
     RadioButton RB_DBFORMAT
