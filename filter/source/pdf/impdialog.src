@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-17 13:00:44 $
+ *  last change: $Author: kz $ $Date: 2002-09-19 19:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ ModalDialog DLG_PDFEXPORT
         Text[ french ] = "Optimisé pour presse à imprimer";
         Text[ spanish ] = "~Optima para la impresión";
         Text[ finnish ] = "Pr~ess optimized";
-        Text[ italian ] = "Ottimizza per la stampa";
+        Text[ italian ] = "Ottimizzato per la stampa";
         Text[ danish ] = "Pr~ess optimized";
         Text[ swedish ] = "Tr~yckoptimerad";
         Text[ polish ] = "Pr~ess optimized";
