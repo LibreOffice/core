@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:16:28 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ class ExtendedFontStruct : public SvRefBase
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
         sal_Size            GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray, ExtendedFontStruct *pFallback );
+        ULONG               GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 };
 
 // Declaration and Implementation for ExtendedFontStructRef: Add RefCounting
