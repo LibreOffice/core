@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 16:33:53 $
+ *  last change: $Author: dvo $ $Date: 2001-03-29 16:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@
 #include "xmluconv.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
+#include "XMLImageMapExport.hxx"
+#endif
+
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
 #endif
@@ -130,6 +134,7 @@
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
 #endif
+
 
 #include "xmlkywd.hxx"
 #include "xmlnmspe.hxx"
@@ -987,6 +992,9 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_image, sal_True, sal_True);
         ImpExportEvents( xShape );
         ImpExportText( xShape );
+
+        // image map
+        GetExport().GetImageMapExport().Export( xPropSet );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 16:33:02 $
+ *  last change: $Author: dvo $ $Date: 2001-03-29 16:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
+#include "XMLImageMapContext.hxx"
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -1699,6 +1703,33 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
+    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    if ( (XML_NAMESPACE_DRAW == nPrefix) &&
+         rLocalName.equalsAsciiL(sXML_image_map, sizeof(sXML_image_map)-1) )
+    {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape,uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            pContext = new XMLImageMapContext(GetImport(), nPrefix,
+                                              rLocalName, xPropSet);
+        }
+    }
+
+    // delegate to parent class if no context could be created
+    if ( NULL == pContext )
+        pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName,
+                                                         xAttrList);
+
+    return pContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////
