@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-15 08:35:27 $
+ *  last change: $Author: mt $ $Date: 2001-02-15 08:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1653,6 +1653,11 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
     else if ( ( nCode == KEY_Z ) && rKEvt.GetKeyCode().IsMod2() )
     {
         pEditView->RemoveAttribs();
+    }
+    else if ( ( nCode == KEY_V ) && rKEvt.GetKeyCode().IsMod2() )
+    {
+        pEditEngine->SetVertical( TRUE );
+        Invalidate();
     }
     else if ( ( ( nCode == KEY_ADD ) || ( nCode == KEY_SUBTRACT ) )&& rKEvt.GetKeyCode().IsMod2() )
     {
