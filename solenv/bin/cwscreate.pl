@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:23:20 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:10:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,11 +75,16 @@ use Sys::Hostname;
 use File::Spec;
 
 #### module lookup
+my @lib_dirs;
+BEGIN {
+    if ( !defined($ENV{SOLARENV}) ) {
+        die "No environment found (environment variable SOLARENV is undefined)";
+    }
+    push(@lib_dirs, "$ENV{SOLARENV}/bin/modules");
+    push(@lib_dirs, "$ENV{COMMON_ENV_TOOLS}/modules") if defined($ENV{COMMON_ENV_TOOLS});
+}
+use lib (@lib_dirs);
 
-use lib ("$ENV{SOLARENV}/bin/modules");
-if (defined $ENV{COMMON_ENV_TOOLS}) {
-    unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
-};
 use Cws;
 use CvsModule;
 use CwsConfig;
@@ -97,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.2 $ ';
+my $id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -105,6 +110,7 @@ print "$script_name -- version: $script_rev\n";
 
 #### hardcoded globals #####
 
+# support for setsolar style configuration
 my $b_server_wnt = 'r:/b_server/config';
 my $b_server_unx = $ENV{ENV_ROOT} . '/b_server/config' if defined $ENV{ENV_ROOT};
 $b_server_unx    = '/so/env/b_server/config' if ! -d $b_server_unx;
@@ -292,7 +298,7 @@ sub get_globalini
 
     # default
     if ( !defined($globalini) ) {
-        $globalini = ( $^O eq 'MSWin32' )
+        $globalini = ( $^O eq 'MSWin32' || $^O eq 'cygwin' )
             ?  $b_server_wnt : $b_server_unx;
     }
     return $globalini;

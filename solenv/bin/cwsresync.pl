@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:23:20 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:11:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,11 +79,15 @@ use Getopt::Long;
 use IO::Handle;
 
 #### module lookup
-
-use lib ("$ENV{SOLARENV}/bin/modules");
-if (defined $ENV{COMMON_ENV_TOOLS}) {
-    unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
-};
+my @lib_dirs;
+BEGIN {
+    if ( !defined($ENV{SOLARENV}) ) {
+        die "No environment found (environment variable SOLARENV is undefined)";
+    }
+    push(@lib_dirs, "$ENV{SOLARENV}/bin/modules");
+    push(@lib_dirs, "$ENV{COMMON_ENV_TOOLS}/modules") if defined($ENV{COMMON_ENV_TOOLS});
+}
+use lib (@lib_dirs);
 
 use Cws;
 eval { require Logging; import Logging; };
@@ -104,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.2 $ ';
+my $id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -873,8 +877,7 @@ sub relink_cws_action
     $mws_location = get_mws_location($new_master);
     if ( "$mws_location" ne "" ) {
         # our OS isn't windows
-        if ( $^O =~ "MSWin32" )
-        {
+        if ( $^O =~ "MSWin32" || $^O =~ "cygwin" ) {
             print_error("Sorry! not for windows",2);
         }
         $mws_accessible = 1;
