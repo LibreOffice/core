@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:00:06 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #pragma hdrstop
 
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
+
 #include <svtools/itemset.hxx>
 #include <editeng.hxx>
 #include <outliner.hxx>
@@ -110,12 +114,19 @@ String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
 
-SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel ) const
+SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
     //! gibt's das nicht am Outliner ???
     //! und warum ist GetAttribs an der EditEngine nicht const?
+    EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
-    return ((EditEngine&)rOutliner.GetEditEngine()).GetAttribs( rSel );
+    SfxItemSet aSet( rEditEngine.GetAttribs( rSel, bOnlyHardAttrib ) );
+
+    SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( rSel.nStartPara );
+    if( pStyle )
+        aSet.SetParent( &(pStyle->GetItemSet() ) );
+
+    return aSet;
 }
 
 SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
@@ -134,6 +145,10 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
         }
         nWhich++;
     }
+
+    SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( nPara );
+    if( pStyle )
+        aSet.SetParent( &(pStyle->GetItemSet() ) );
 
     return aSet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-05 14:52:32 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@ String SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
     return aRet;
 }
 
-SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel ) const
+SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
-    return rEditEngine.GetAttribs( rSel );
+    return rEditEngine.GetAttribs( rSel, bOnlyHardAttrib );
 }
 
 SfxItemSet SvxEditEngineForwarder::GetParaAttribs( USHORT nPara ) const

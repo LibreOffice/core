@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 09:02:54 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,54 +772,80 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
 
         ESelection aSel( GetSelection() );
 
+        sal_Bool bUnknownProperty = sal_False;
 
         const OUString* pPropertyNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
         sal_Int32 nCount = aPropertyNames.getLength();
 
+        const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
+        SfxItemSet* pOldSet = new SfxItemSet( aSet );
+        SfxItemSet* pNewSet = new SfxItemSet( *pOldSet->GetPool(), pOldSet->GetRanges() );
+
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
             const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), *pPropertyNames );
             if( NULL == pMap )
-                throw beans::UnknownPropertyException();
+            {
+                bUnknownProperty = sal_True;
+                break;
+            }
 
             sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
+/*
             if( nPara == -1 && !bParaAttrib )
             {
-                SfxItemSet aOldSet( pForwarder->GetAttribs( aSel ) );
-                // we have a selection and no para attribute
-                SfxItemSet aNewSet( *aOldSet.GetPool(), aOldSet.GetRanges() );
+*/
+                setPropertyValue( pMap, *pValues, GetSelection(), *pOldSet, *pNewSet );
 
-                setPropertyValue( pMap, *pValues, GetSelection(), aOldSet, aNewSet );
-
-
-                pForwarder->QuickSetAttribs( aNewSet, GetSelection() );
+                if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                {
+                    const SfxPoolItem* pItem;
+                    if( pNewSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                    {
+                        pOldSet->Put( *pItem );
+                    }
+                }
+/*
             }
             else
             {
                 sal_Int32 nEndPara = nPara;
+                sal_Int32 nTempPara = nPara;
 
-                if( nPara == -1 )
+                if( nTempPara == -1 )
                 {
-                    nPara = aSel.nStartPara;
+                    nTempPara = aSel.nStartPara;
                     nEndPara = aSel.nEndPara;
                 }
 
                 do
                 {
                     // we have a paragraph
-                    SfxItemSet aNewSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
+                    SfxItemSet aNewSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
 
                     setPropertyValue( pMap, *pValues, GetSelection(), aNewSet, aNewSet );
 
-                    pForwarder->SetParaAttribs( (USHORT)nPara, aNewSet );
-                    nPara++;
+                    pForwarder->SetParaAttribs( (USHORT)nTempPara, aNewSet );
+                    nTempPara++;
                 }
-                while( nPara < nEndPara );
+                while( nTempPara < nEndPara );
             }
+*/
         }
-        GetEditSource()->UpdateData();
+
+        if( !bUnknownProperty )
+        {
+            pForwarder->QuickSetAttribs( *pNewSet, GetSelection() );
+            GetEditSource()->UpdateData();
+        }
+
+        delete pNewSet;
+        delete pOldSet;
+
+        if( bUnknownProperty )
+            throw beans::UnknownPropertyException();
     }
 }
 
@@ -997,8 +1023,104 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     uno::Sequence< beans::PropertyState > aRet( nCount );
     beans::PropertyState* pState = aRet.getArray();
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        *pState++ = getPropertyState( *pNames++ );
+    ESelection aSel;
+
+    if( nPara != -1 )
+    {
+        aSel.nStartPara = (USHORT)nPara;
+        aSel.nStartPos = 0;
+        aSel.nEndPara = (USHORT)nPara;
+        aSel.nEndPara = 0xffff;
+    }
+    else
+    {
+        aSel = GetSelection();
+    }
+
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+    {
+        SfxItemSet aSet( pForwarder->GetAttribs( aSel, sal_True ) );
+
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        {
+            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), *pNames++ );
+            if( NULL == pMap )
+                throw beans::UnknownPropertyException();
+
+            SfxItemState eItemState = SFX_ITEM_UNKNOWN;
+            sal_uInt16 nWID = 0;
+
+            switch( pMap->nWID )
+            {
+                case WID_FONTDESC:
+                    {
+                        sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
+                        SfxItemState eTempItemState;
+                        while( *pWhichId )
+                        {
+                            eTempItemState = aSet.GetItemState( *pWhichId );
+
+                            switch( eTempItemState )
+                            {
+                            case SFX_ITEM_DISABLED:
+                            case SFX_ITEM_DONTCARE:
+                                eItemState = SFX_ITEM_DONTCARE;
+                                break;
+
+                            case SFX_ITEM_DEFAULT:
+                                if( eItemState != SFX_ITEM_DEFAULT )
+                                {
+                                    if( eItemState == SFX_ITEM_UNKNOWN )
+                                        eItemState = SFX_ITEM_DEFAULT;
+                                }
+                                break;
+
+                            case SFX_ITEM_READONLY:
+                            case SFX_ITEM_SET:
+                                if( eItemState != SFX_ITEM_SET )
+                                {
+                                    if( eItemState == SFX_ITEM_UNKNOWN )
+                                        eItemState = SFX_ITEM_SET;
+                                }
+                                break;
+                            default:
+                                throw beans::UnknownPropertyException();
+                            }
+
+                            pWhichId++;
+                        }
+                    }
+                    break;
+
+                case WID_NUMLEVEL:
+                    eItemState = SFX_ITEM_SET;
+                    break;
+
+                default:
+                    nWID = pMap->nWID;
+            }
+
+            if( nWID != 0 )
+                eItemState = aSet.GetItemState( nWID, sal_False );
+
+            switch( eItemState )
+            {
+                    case SFX_ITEM_READONLY:
+                    case SFX_ITEM_SET:
+                        *pState++ = beans::PropertyState_DIRECT_VALUE;
+                        break;
+                    case SFX_ITEM_DEFAULT:
+                        *pState++ = beans::PropertyState_DEFAULT_VALUE;
+                        break;
+//                  case SFX_ITEM_UNKNOWN:
+//                  case SFX_ITEM_DONTCARE:
+//                  case SFX_ITEM_DISABLED:
+                    default:
+                        *pState++ = beans::PropertyState_AMBIGUOUS_VALUE;
+            }
+        }
+    }
 
     return aRet;
 }
@@ -1292,9 +1414,11 @@ uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
     uno::Any aAny;
 
     QUERYINT( text::XTextRange );
-    else QUERYINT( beans::XPropertySet );
+    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
+        aAny <<= uno::Reference< beans::XPropertySet >(this);
     else QUERYINT( beans::XPropertyState );
-    else QUERYINT( beans::XMultiPropertySet );
+    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
+        aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( lang::XTypeProvider );
     else QUERYINT( lang::XUnoTunnel );
@@ -1918,4 +2042,101 @@ sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rI
     {
         return SvxUnoTextBase::getSomething( rId );
     }
+}
+
+
+// --------------------------------------------------------------------
+
+SvxDummyTextSource::~SvxDummyTextSource()
+{
+};
+
+SvxEditSource* SvxDummyTextSource::Clone() const
+{
+    return new SvxDummyTextSource();
+}
+
+SvxTextForwarder* SvxDummyTextSource::GetTextForwarder()
+{
+    return this;
+}
+
+void SvxDummyTextSource::UpdateData()
+{
+}
+
+sal_uInt16 SvxDummyTextSource::GetParagraphCount() const
+{
+    return 0;
+}
+
+sal_uInt16 SvxDummyTextSource::GetTextLen( sal_uInt16 nParagraph ) const
+{
+    return 0;
+}
+
+String SvxDummyTextSource::GetText( const ESelection& rSel ) const
+{
+    return String();
+}
+
+SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
+{
+    String aDummyStr(RTL_CONSTASCII_USTRINGPARAM("Dummy"));
+    SfxItemPool aPool(aDummyStr,0,0,NULL);
+    return SfxItemSet(aPool);
+}
+
+SfxItemSet SvxDummyTextSource::GetParaAttribs( sal_uInt16 nPara ) const
+{
+    return GetAttribs(ESelection());
+}
+
+void SvxDummyTextSource::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
+{
+}
+
+void SvxDummyTextSource::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
+{
+}
+
+sal_uInt16 SvxDummyTextSource::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
+{
+    return 0;
+}
+
+sal_uInt16 SvxDummyTextSource::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const
+{
+    return 0;
+}
+
+SfxItemPool* SvxDummyTextSource::GetPool() const
+{
+    return NULL;
+}
+
+void SvxDummyTextSource::QuickInsertText( const String& rText, const ESelection& rSel )
+{
+}
+
+void SvxDummyTextSource::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
+{
+}
+
+void SvxDummyTextSource::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
+{
+}
+
+void SvxDummyTextSource::QuickInsertLineBreak( const ESelection& rSel )
+{
+};
+
+XubString SvxDummyTextSource::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+{
+    return XubString();
+}
+
+sal_Bool SvxDummyTextSource::IsValid() const
+{
+    return sal_False;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:41:32 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType )
 
     QUERYINT( text::XTextRange );
     else QUERYINT( beans::XPropertySet );
+    else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
     else QUERYINT( text::XTextContent );
     else QUERYINT( lang::XComponent );
@@ -216,11 +217,12 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 8 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 9 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
@@ -500,6 +502,7 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
         aAny <<= uno::Reference< text::XTextRange >((text::XText*)(this));
     else QUERYINT( text::XTextCursor );
     else QUERYINT( beans::XPropertySet );
+    else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( lang::XTypeProvider );
@@ -532,12 +535,13 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 7 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 8 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCursor >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
