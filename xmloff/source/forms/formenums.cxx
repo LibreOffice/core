@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:04:13 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 13:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
 #include <com/sun/star/awt/FontRelief.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
 #endif
@@ -118,6 +121,8 @@ namespace xmloff
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
+        NULL,
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -323,6 +328,18 @@ namespace xmloff
                     rReturn = aListLinkageMap;
                 }
                 break;
+
+                case epOrientation:
+                {
+                    static SvXMLEnumMapEntry aOrientationMap[] =
+                    {
+                        { XML_HORIZONTAL,   ScrollBarOrientation::HORIZONTAL },
+                        { XML_VERTICAL,     ScrollBarOrientation::VERTICAL },
+                        { XML_TOKEN_INVALID, 0 }
+                    };
+                    rReturn = aOrientationMap;
+                }
+                break;
             }
         }
 
@@ -332,53 +349,4 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.9.24.2  2003/11/24 15:12:04  obo
- *  undo last change
- *
- *  Revision 1.9  2003/10/21 08:39:38  obo
- *  INTEGRATION: CWS formcelllinkage (1.8.188); FILE MERGED
- *  2003/10/01 09:55:21 fs 1.8.188.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.8.188.1  2003/10/01 09:55:21  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.8.184.1  2003/09/25 14:28:39  fs
- *  #18994# merging the changes from cws_srx645_fs002 branch
- *
- *  Revision 1.8.180.1  2003/09/18 14:00:38  fs
- *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
- *
- *  Revision 1.8  2001/06/29 21:07:14  dvo
- *  #86004# changes sXML_* strings to XML_* tokens
- *
- *  Revision 1.7  2001/06/15 10:37:07  dvo
- *  #86004# #88312#
- *  - changed convertEnum and appropriate maps to use token constants (rahter than sal_Char*)
- *  - user index marks in the process
- *
- *  Revision 1.6  2001/06/07 12:25:52  fs
- *  #86096# enums for FontEmphasis and FontRelief
- *
- *  Revision 1.5  2000/12/19 12:13:57  fs
- *  some changes ... now the exported styles are XSL conform
- *
- *  Revision 1.4  2000/12/19 08:42:19  fs
- *  removed the epFontWidth
- *
- *  Revision 1.3  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.2  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.1  2000/11/17 19:01:56  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 15.11.00 11:54:17  fs
- ************************************************************************/
 
