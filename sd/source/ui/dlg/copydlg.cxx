@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-14 07:03:47 $
+ *  last change: $Author: af $ $Date: 2002-11-25 10:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,9 @@ SdCopyDlg::SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
 {
     FreeResource();
 
+    // Set up the view data button (image and accessible name).
     aBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSetViewData.SetAccessibleName (aBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
     DBG_ASSERT( pColorTab, "Keine gueltige ColorTable uebergeben!" );
