@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:23:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
@@ -144,6 +148,11 @@
 
 #include "swabstdlg.hxx" //CHINA001
 #include "chrdlg.hrc" //CHINA001
+
+namespace swui
+{
+    SwAbstractDialogFactory * GetFactory();
+}
 
 static PopupMenu *pMenu;
 static long lUserW = 5669; // 10 cm
@@ -345,7 +354,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 aTmpSet.ClearItem( RES_BACKGROUND );
 
             //CHINA001 SwCharDlg* pDlg = new SwCharDlg(GetParent(), pSh->GetView(), aTmpSet, &pColl->GetName());
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
             SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet,ResId( DLG_CHAR ),&pColl->GetName() );
