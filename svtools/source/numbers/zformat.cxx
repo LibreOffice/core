@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2001-08-30 09:39:42 $
+ *  last change: $Author: er $ $Date: 2001-10-16 11:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3055,7 +3055,11 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
         fNumber = -fNumber;
     }
     else
+    {
         bSign = FALSE;
+        if ( SolarMath::IsSignBitSet( fNumber ) )
+            fNumber = -fNumber;     // yes, -0.0 is possible, eliminate '-'
+    }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     if (rInfo.eScannedType == NUMBERFORMAT_PERCENT)
     {
