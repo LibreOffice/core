@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-03 20:10:15 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8012,7 +8012,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "BASE";
         Text[ turkish ] = "BASE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Base anual";
+        Text[ catalan ] = "BASE";
         Text[ finnish ] = "BASE";
         Text[ thai ] = "ฐาน";
     };
