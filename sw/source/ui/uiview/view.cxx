@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:36:48 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,8 @@ void SwView::SelectShell()
     //jetzt das Tabellen-Update
     if(bUpdateTable)
         pWrtShell->UpdateTable();
+
+    GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 }
 
 //Zusammenspiel: AttrChangedNotify() und TimeoutHdl.
@@ -710,7 +712,6 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
             SelectShell();
 
     }
-    GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
     return 0;
 }
 
