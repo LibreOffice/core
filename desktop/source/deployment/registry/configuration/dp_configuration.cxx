@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_configuration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:11:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,9 +222,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         ::ucb::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
-            OUString title( extract_throw<OUString>(
-                                ucbContent.getPropertyValue(
-                                    StrTitle::get() ) ) );
+            const OUString title( ucbContent.getPropertyValue(
+                                      StrTitle::get() ).get<OUString>() );
             if (title.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(".xcu") )) {
                 mediaType = OUSTR("application/"
@@ -252,15 +251,15 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (subType.EqualsIgnoreCaseAscii(
                     "vnd.sun.star.configuration-data")) {
                 return new PackageImpl(
-                    this, url, extract_throw<OUString>(
-                        ucbContent.getPropertyValue( StrTitle::get() ) ),
+                    this, url, ucbContent.getPropertyValue(
+                        StrTitle::get() ).get<OUString>(),
                     m_xConfDataTypeInfo, false /* data file */ );
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.configuration-schema")) {
                 return new PackageImpl(
-                    this, url, extract_throw<OUString>(
-                        ucbContent.getPropertyValue( StrTitle::get() ) ),
+                    this, url, ucbContent.getPropertyValue(
+                        StrTitle::get() ).get<OUString>(),
                     m_xConfSchemaTypeInfo, true /* schema file */ );
             }
         }
@@ -557,7 +556,7 @@ void BackendImpl::PackageImpl::processPackage_(
                     makeURL( that->getConfigLayer(), OUSTR("schema") ),
                     xCmdEnv );
                 ucbSaveLayer.setPropertyValue(
-                    StrTitle::get(), makeAny( OUSTR("schema.bak") ) );
+                    StrTitle::get(), Any( OUSTR("schema.bak") ) );
                 try {
                     for ( ; iPos != iEnd; ++iPos )
                     {
@@ -575,12 +574,12 @@ void BackendImpl::PackageImpl::processPackage_(
                 }
                 catch (Exception &) {
                     ucbSaveLayer.setPropertyValue(
-                        StrTitle::get(), makeAny( OUSTR("schema") ) );
+                        StrTitle::get(), Any( OUSTR("schema") ) );
                     throw;
                 }
                 that->m_registeredPackages->erase( m_url );
                 ucbSaveLayer.executeCommand(
-                    OUSTR("delete"), makeAny( true /* delete physically */ ) );
+                    OUSTR("delete"), Any( true /* delete physically */ ) );
             }
         }
         else // data
@@ -591,7 +590,7 @@ void BackendImpl::PackageImpl::processPackage_(
                     makeURL( that->getConfigLayer(), OUSTR("data") ),
                     xCmdEnv );
                 ucbSaveLayer.setPropertyValue(
-                    StrTitle::get(), makeAny( OUSTR("data.bak") ) );
+                    StrTitle::get(), Any( OUSTR("data.bak") ) );
                 try {
                     for ( ; iPos != iEnd; ++iPos )
                     {
@@ -609,12 +608,12 @@ void BackendImpl::PackageImpl::processPackage_(
                 }
                 catch (Exception &) {
                     ucbSaveLayer.setPropertyValue(
-                        StrTitle::get(), makeAny( OUSTR("data") ) );
+                        StrTitle::get(), Any( OUSTR("data") ) );
                     throw;
                 }
                 that->m_registeredPackages->erase( m_url );
                 ucbSaveLayer.executeCommand(
-                    OUSTR("delete"), makeAny( true /* delete physically */ ) );
+                    OUSTR("delete"), Any( true /* delete physically */ ) );
             }
         }
     }
