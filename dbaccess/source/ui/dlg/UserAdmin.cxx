@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:13:22 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,13 +384,6 @@ String OUserAdmin::GetUser()
     return m_LB_USER.GetSelectEntry();
 }
 // -----------------------------------------------------------------------------
-int OUserAdmin::DeactivatePage(SfxItemSet* _pSet)
-{
-    int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
-    ::comphelper::disposeComponent(m_xConnection);
-    return nResult;
-}
-// -----------------------------------------------------------------------------
 void OUserAdmin::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
 {
 }
@@ -406,22 +399,22 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         if ( !m_xConnection.is() && m_pAdminDialog )
         {
-            Reference< XDataDefinitionSupplier > xDriver(m_pAdminDialog->getDriver(),UNO_QUERY);
-            if ( xDriver.is() )
+            m_xConnection = m_pAdminDialog->createConnection().first;
+            Reference< XTablesSupplier > xTablesSup(m_xConnection,UNO_QUERY);
+            Reference<XUsersSupplier> xUsersSup(xTablesSup,UNO_QUERY);
+            if ( !xUsersSup.is() )
             {
-                m_xConnection = m_pAdminDialog->createConnection().first;
-                if ( m_xConnection.is() )
+                Reference< XDataDefinitionSupplier > xDriver(m_pAdminDialog->getDriver(),UNO_QUERY);
+                if ( xDriver.is() )
                 {
-                    // now set the tables supplier at the table control
-                    Reference< XTablesSupplier > xTablesSup = xDriver->getDataDefinitionByConnection(m_xConnection);
-
-                    Reference<XUsersSupplier> xUsersSup(xTablesSup,UNO_QUERY);
-                    if ( xUsersSup.is() )
-                    {
-                        m_TableCtrl.setTablesSupplier(xTablesSup);
-                        m_xUsers = xUsersSup->getUsers();
-                    }
+                    xUsersSup.set(xDriver->getDataDefinitionByConnection(m_xConnection),UNO_QUERY);
+                    xTablesSup.set(xUsersSup,UNO_QUERY);
                 }
+            }
+            if ( xUsersSup.is() )
+            {
+                m_TableCtrl.setTablesSupplier(xTablesSup);
+                m_xUsers = xUsersSup->getUsers();
             }
         }
         FillUserNames();
