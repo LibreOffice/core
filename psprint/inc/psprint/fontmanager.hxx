@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:50:47 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,18 +179,29 @@ enum type {
 
 struct FastPrintFontInfo
 {
-    fontID                                  m_nID; // FontID
-    fonttype::type                          m_eType;
+    fontID                              m_nID; // FontID
+    fonttype::type                      m_eType;
 
     // font attributes
     rtl::OUString                       m_aFamilyName;
     std::list< rtl::OUString >          m_aAliases;
-    family::type                            m_eFamilyStyle;
-    italic::type                            m_eItalic;
-    width::type                             m_eWidth;
-    weight::type                            m_eWeight;
-    pitch::type                             m_ePitch;
-    rtl_TextEncoding                        m_aEncoding;
+    family::type                        m_eFamilyStyle;
+    italic::type                        m_eItalic;
+    width::type                         m_eWidth;
+    weight::type                        m_eWeight;
+    pitch::type                         m_ePitch;
+    rtl_TextEncoding                    m_aEncoding;
+
+    FastPrintFontInfo() :
+            m_nID( 0 ),
+            m_eType( fonttype::Unknown ),
+            m_eFamilyStyle( family::Unknown ),
+            m_eItalic( italic::Unknown ),
+            m_eWidth( width::Unknown ),
+            m_eWeight( weight::Unknown ),
+            m_ePitch( pitch::Unknown ),
+            m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
+    {}
 };
 
 struct PrintFontInfo : public FastPrintFontInfo
@@ -199,6 +210,14 @@ struct PrintFontInfo : public FastPrintFontInfo
     int                                     m_nDescend;
     int                                     m_nLeading;
     int                                     m_nWidth;
+
+    PrintFontInfo() :
+            FastPrintFontInfo(),
+            m_nAscend( 0 ),
+            m_nDescend( 0 ),
+            m_nLeading( 0 ),
+            m_nWidth( 0 )
+    {}
 };
 
 // the values are per thousand of the font size
@@ -208,6 +227,10 @@ struct CharacterMetric
     short int width, height;
 
     CharacterMetric() : width( 0 ), height( 0 ) {}
+    bool operator==( const CharacterMetric& rOther ) const
+    { return rOther.width == width && rOther.height == height; }
+    bool operator!=( const CharacterMetric& rOther ) const
+    { return rOther.width != width || rOther.height != height; }
 };
 
 struct KernPair
@@ -421,11 +444,18 @@ class PrintFontManager
 
     void getServerDirectories(); // get font server directories on e.g. redhat
 
-    // try to initialize from libfontconfig
-    // returns true if at least one font was added by libfontconfig,
-    // else returns false (e.g. no libfontconfig found
-    // called from initialize()
+    /* try to initialize fonts from libfontconfig
+
+    called from <code>initialize()</code>
+
+    @returns
+    true if at least one font was added by libfontconfig
+    false else (e.g. no libfontconfig found)
+    */
     bool initFontconfig();
+    /* deinitialize fontconfig
+     */
+    void deinitFontconfig();
 
     static bool parseXLFD( const rtl::OString& rXLFD, XLFDEntry& rEntry );
     void parseXLFD_appendAliases( const std::list< rtl::OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const;
@@ -657,6 +687,36 @@ public:
 
     // returns false if there were not any
     bool getAlternativeFamilyNames( fontID nFont, std::list< rtl::OUString >& rNames ) const;
+
+    /*  system dependendent font matching
+
+    <p>
+    <code>matchFont</code> matches a pattern of font characteristics
+    and returns the closest match if possibe. If a match was found
+    the <code>FastPrintFontInfo</code> passed in as parameter
+    will be update to the found matching font.
+    </p>
+    <p>
+    implementation note: currently the function is only implemented
+    for fontconfig.
+    </p>
+
+    @param rInfo
+    out of the FastPrintFontInfo structure the following
+    fields will be used for the match:
+    <ul>
+    <li>family name</li>
+    <li>italic</li>
+    <li>width</li>
+    <li>weight</li>
+    <li>pitch</li>
+    </ul>
+
+    @returns
+    true if a match was found
+    false else
+     */
+    bool matchFont( FastPrintFontInfo& rInfo );
 };
 
 } // namespace
