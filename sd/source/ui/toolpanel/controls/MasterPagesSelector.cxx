@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:00:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "MasterPagesSelector.hxx"
 
 #include "MasterPageContainer.hxx"
@@ -422,6 +421,10 @@ void MasterPagesSelector::AssignMasterPageToPageList (
         if (aCleanedList.size() == 0)
             break;
 
+        SfxUndoManager* pUndoMgr = mrDocument.GetDocSh()->GetUndoManager();
+        if( pUndoMgr )
+            pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
+
         SdPage* pMasterPageInDocument = ProvideMasterPage(pMasterPage,rPageList);
         if (pMasterPageInDocument == NULL)
             break;
@@ -436,6 +439,9 @@ void MasterPagesSelector::AssignMasterPageToPageList (
                 sBaseLayoutName,
                 *iPage);
         }
+
+        if( pUndoMgr )
+            pUndoMgr->LeaveListAction();
     }
     while (false);
 }
@@ -469,11 +475,18 @@ SdPage* MasterPagesSelector::ProvideMasterPage (
         }
 
         if (pMasterPage->GetModel() != &mrDocument)
+        {
             pMasterPageInDocument = AddMasterPage (&mrDocument, pMasterPage, nInsertionIndex);
+            mrDocument.AddUndo(new SdrUndoNewPage(*pClonedMasterPage));
+        }
         else
             pMasterPageInDocument = pMasterPage;
         if (pNotesMasterPage->GetModel() != &mrDocument)
-            AddMasterPage (&mrDocument, pNotesMasterPage, nInsertionIndex+1);
+        {
+            SdPage* pClonedNotesMasterPage
+                = AddMasterPage (&mrDocument, pNotesMasterPage, nInsertionIndex+1);
+            mrDocument.AddUndo(new SdrUndoNewPage(*pClonedNotesMasterPage));
+        }
     }
     return pMasterPageInDocument;
 }
