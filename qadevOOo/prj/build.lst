@@ -117,7 +117,7 @@ qa  qadevOOo\tests\java\mod\_rdbtdp                      nmake   -   all mod__rd
 qa  qadevOOo\tests\java\mod\_regtypeprov.uno             nmake   -   all mod__regtypeprovuno org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_remotebridge                nmake   -   all mod__remotebridge org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_remotebridge.uno            nmake   -   all mod__remotebridgeuno org_openoffice NULL
-qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_util ifc_xml_sax ifc_accessibility ifc_document ifc_sheet org_openoffice NULL
+qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_util ifc_xml_sax ifc_accessibility ifc_view ifc_document ifc_sheet org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_sch                         nmake   -   all mod__sch ifc_accessibility org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_sd                          nmake   -   all mod__sd ifc_accessibility ifc_view org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_sfx                         nmake   -   all mod__sfx org_openoffice NULL
