@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:40:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,16 @@ public:
                                    sal_Int32 nParam1,
                                    sal_Int32 nParam2,
                                    sal_Int32 nParam3 );
+
+    /** converts the '.' that separates fractions of seconds in a dateTime
+        string into a ',' that was used in the OOo format
+
+        @param rDateTime
+            A dateTime string that will be parsed and changed in case a match
+            was found.
+        @return <TRUE/> if the given string was changed
+     */
+    static bool ConvertRNGDateTimeToISO( ::rtl::OUString& rDateTime );
 
     ::xmloff::token::XMLTokenEnum GetToken( const ::rtl::OUString& rStr ) const;
 
