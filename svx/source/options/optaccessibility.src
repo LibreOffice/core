@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-17 13:24:01 $
+ *  last change: $Author: fs $ $Date: 2002-11-26 15:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,150 +70,163 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     Size = MAP_APPFONT ( 260 , WHOLE_HEIGHT ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    FixedLine GB_HIGHCONTRAST
+    FixedLine FL_MISCELLANEOUS
     {
         Pos = MAP_APPFONT ( COL0, ROWA_0 ) ;
-        Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Systemeinstellungen in Kontrastdarstellung verwenden" ;
-        Text [ English ] = "Use system settings in high contrast appearance" ;
-        Text[ english_us ] = "Use system settings in high contrast appearance";
-        Text[ portuguese ] = "Settings for high contrast appearance";
-        Text[ russian ] = "Settings for high contrast appearance";
-        Text[ greek ] = "Settings for high contrast appearance";
-        Text[ dutch ] = "Settings for high contrast appearance";
-        Text[ french ] = "Utiliser les param�tres syst�me pour le contraste �lev�";
-        Text[ spanish ] = "Utilizar la configuraci�n del sistema para la visualizaci�n del contraste";
-        Text[ finnish ] = "Settings for high contrast appearance";
-        Text[ italian ] = "Usa le impostazioni di sistema per immagine a contrasto elevato";
-        Text[ danish ] = "Settings for high contrast appearance";
-        Text[ swedish ] = "Anv�nd systeminst�llningar f�r h�gkontrastvisning";
-        Text[ polish ] = "Settings for high contrast appearance";
-        Text[ japanese ] = "ハイコントラスト設定の使用";
-        Text[ korean ] = "고대비 디스플레이로 설정하여 사용";
-        Text[ chinese_simplified ] = "使用作业系统的高对比度的设定";
-        Text[ chinese_traditional ] = "使用操作系統的高對比度的設定";
-        Text[ turkish ] = "Settings for high contrast appearance";
-        Text[ arabic ] = "Settings for high contrast appearance";
-    };
-    CheckBox CB_DRAWINGS
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWA_1 );
-        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "F�r ~Zeichnungen und Pr�sentationen" ;
-        Text [ ENGLISH ] = "For ~drawings and presentations" ;
-        Text[ english_us ] = "For ~drawings and presentations";
-        Text[ portuguese ] = "For ~drawings and presentations";
-        Text[ russian ] = "For ~drawings and presentations";
-        Text[ greek ] = "For ~drawings and presentations";
-        Text[ dutch ] = "For ~drawings and presentations";
-        Text[ french ] = "Pour les dessins et pr�sentations";
-        Text[ spanish ] = "Para ~dibujos y presentaciones";
-        Text[ finnish ] = "For ~drawings and presentations";
-        Text[ italian ] = "Per disegni e presentazioni";
-        Text[ danish ] = "For ~drawings and presentations";
-        Text[ swedish ] = "F�r te~ckningar och presentationer";
-        Text[ polish ] = "For ~drawings and presentations";
-        Text[ portuguese_brazilian ] = "For ~drawings and presentations";
-        Text[ japanese ] = "図形描画およびプレゼンテーションで使用";
-        Text[ korean ] = "그리기 및 프레젠테이션 사용";
-        Text[ chinese_simplified ] = "用于绘图和演示文稿(~D)";
-        Text[ chinese_traditional ] = "用於繪圖和簡報";
-        Text[ turkish ] = "For ~drawings and presentations";
-        Text[ arabic ] = "For ~drawings and presentations";
-        Text[ catalan ] = "For ~drawings and presentations";
-        Text[ thai ] = "For ~drawings and presentations";
-    };
-    CheckBox CB_BORDERS
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWA_2 );
-        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "F�r ~Umrandungen und Schatten von Seiten, Abs�tzen, Tabellen und Rahmen" ;
-        Text [ ENGLISH ] = "For ~borders and shadows of pages, paragraphs, tables and frames" ;
-        Text[ english_us ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ portuguese ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ russian ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ greek ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ dutch ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ french ] = "Pour les bordures et les ombres des pages, paragraphes, tables et cadres";
-        Text[ spanish ] = "Para los ~bordes y sombras de las p�ginas, p�rrafos, tablas y frames. ";
-        Text[ finnish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ italian ] = "Per margini e ombreggiature di pagine, paragrafi, tabelle e cornici";
-        Text[ danish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ swedish ] = "F�r ~inramningar och skugga f�r sidor, stycken, tabeller och ramar";
-        Text[ polish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ portuguese_brazilian ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ japanese ] = "ページ、段落、表、および枠の、外枠と影に使用";
-        Text[ korean ] = "페이지의 테두리와 음영, 단락과 표 및 프레임 사용";
-        Text[ chinese_simplified ] = "用于页面的、段落的、表格的和文本框的边框及阴影(~B)";
-        Text[ chinese_traditional ] = "用於頁面的、段落的、表格的和文字方塊的邊框及陰影";
-        Text[ turkish ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ arabic ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ catalan ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-        Text[ thai ] = "For ~borders and shadows of pages, paragraphs, tables and frames";
-    };
-    CheckBox CB_PAGE_PREVIEWS
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWA_3 );
-        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "In Seiten~ansicht/Seitendruck" ;
-        Text [ ENGLISH ] = "For page ~previews" ;
-        Text[ english_us ] = "For page ~previews";
-        Text[ portuguese ] = "For page ~previews";
-        Text[ russian ] = "For page ~previews";
-        Text[ greek ] = "For page ~previews";
-        Text[ dutch ] = "For page ~previews";
-        Text[ french ] = "Dans les aper�us avant impression";
-        Text[ spanish ] = "Para la~previsualizaci�n de p�gina";
-        Text[ finnish ] = "For page ~previews";
-        Text[ italian ] = "Per anteprima di pagina";
-        Text[ danish ] = "For page ~previews";
-        Text[ swedish ] = "F�r f�rh~andsgranskning/sidutskrift";
-        Text[ polish ] = "For page ~previews";
-        Text[ portuguese_brazilian ] = "For page ~previews";
-        Text[ japanese ] = "印刷プレビューで使用";
-        Text[ korean ] = "페이지 미리 보기 사용";
-        Text[ chinese_simplified ] = "用于页面视图/页面打印(~P)";
-        Text[ chinese_traditional ] = "用於頁面檢視/頁面列印";
-        Text[ turkish ] = "For page ~previews";
-        Text[ arabic ] = "For page ~previews";
-        Text[ catalan ] = "For page ~previews";
-        Text[ thai ] = "For page ~previews";
-    };
-    FixedLine GB_MISC
-    {
-        Pos = MAP_APPFONT ( COL0, ROWB_0 ) ;
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Sonstige Optionen" ;
         Text [ English ] = "Miscellaneous options" ;
         Text[ english_us ] = "Miscellaneous options";
-        Text[ portuguese ] = "Miscellaneous options";
-        Text[ russian ] = "Miscellaneous options";
-        Text[ greek ] = "Miscellaneous options";
-        Text[ dutch ] = "Miscellaneous options";
-        Text[ french ] = "Autres options";
-        Text[ spanish ] = "Otras opciones";
-        Text[ finnish ] = "Miscellaneous options";
-        Text[ italian ] = "Ulteriori opzioni";
-        Text[ danish ] = "Miscellaneous options";
-        Text[ swedish ] = "�vriga alternativ";
-        Text[ polish ] = "Miscellaneous options";
-        Text[ portuguese_brazilian ] = "Miscellaneous options";
-        Text[ japanese ] = "その他のオプション";
-        Text[ korean ] = "기타 옵션";
-        Text[ chinese_simplified ] = "其他选项";
-        Text[ chinese_traditional ] = "其他選項";
-        Text[ turkish ] = "Miscellaneous options";
-        Text[ arabic ] = "Miscellaneous options";
-        Text[ catalan ] = "Altres opcions";
-        Text[ thai ] = "ตัวเลือกเบ็ดเตล็ด";
+    };
+    CheckBox CB_ACCESSIBILITY_TOOL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_1 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT * 2 );
+        WordBreak = TRUE;
+        Text = "Unterst�tzung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
+        Text [ ENGLISH ] = "Support ~assistive technology tools (program restart required)" ;
+        Text[ english_us ] = "Support ~assistive technology tools (program restart required)";
+        Text[ portuguese ] = "Support ~assistive technology tools (program restart required)";
+        Text[ russian ] = "Support ~assistive technology tools (program restart required)";
+        Text[ greek ] = "Support ~assistive technology tools (program restart required)";
+        Text[ dutch ] = "Support ~assistive technology tools (program restart required)";
+        Text[ french ] = "Support des logiciels d'accessibilit� pour les personnes souffrant d'un handicap (red�marrage du programme requis)";
+        Text[ spanish ] = "~Soporte de los programas de acceso adaptados a disminuidos (reiniciar el programa)";
+        Text[ finnish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ italian ] = "Supporto per facilitare l'accesso da parte di persone disabili (riavviare il programma)";
+        Text[ danish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ swedish ] = "St�d f�r hj�lpprogram f�r funktionsnedsatta personer (program m�ste startas om)";
+        Text[ polish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
+        Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）";
+        Text[ korean ] = "자바 보조 기술 도구 지원 (프로그램 재시작 필요)";
+        Text[ chinese_simplified ] = "支持辅助功能程序(需要重新启动程序)";
+        Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)";
+        Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
+        Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
+        Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
+        Text[ thai ] = "Support ~assistive technology tools (program restart required)";
+    };
+    CheckBox CB_TEXTSELECTION
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_2 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Te~xtauswahlcursor in schreibgesch�tzten Textdokumenten verwenden" ;
+        Text[ english_us ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ portuguese ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ russian ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ greek ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ dutch ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ french ] = "Utilisation du curseur de s�lection dans les textes en lecture seule";
+        Text[ spanish ] = "Utilizar cursor de selecci�n de texto en documentos de texto de s�lo lectura";
+        Text[ finnish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ italian ] = "Usa il cursore per la selezione di testo nei documenti di sola lettura";
+        Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ swedish ] = "Anv�nd mark�r f�r te~xtmarkering i skrivskyddade textdokument";
+        Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ portuguese_brazilian ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ japanese ] = "読み取り専用の文書ドキュメントでテキスト選択カーソルを使用";
+        Text[ korean ] = "읽기 전용 텍스트 문서에서 텍스트 선택 커서를 사용";
+        Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标";
+        Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
+        Text[ turkish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ arabic ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ catalan ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ thai ] = "Use te~xt selection cursor in read-only text documents";
+    };
+    CheckBox CB_SYSTEM_FONT
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_3 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "~Systemschriftart f�r die Benutzeroberfl�che verwenden" ;
+        Text [ ENGLISH ] = "Use system ~font for user interface" ;
+        Text[ english_us ] = "Use system ~font for user interface";
+        Text[ portuguese ] = "Use system ~font for user interface";
+        Text[ russian ] = "Use system ~font for user interface";
+        Text[ greek ] = "Use system ~font for user interface";
+        Text[ dutch ] = "Use system ~font for user interface";
+        Text[ french ] = "Utiliser la police du syst�me pour l'interface utilisateur";
+        Text[ spanish ] = "Utilizar las ~fuentes del sistema para la interfaz del usuario";
+        Text[ finnish ] = "Use system ~font for user interface";
+        Text[ italian ] = "Usa i caratteri del sistema per l'interfaccia utente";
+        Text[ danish ] = "Use system ~font for user interface";
+        Text[ swedish ] = "Anv�nd ~systemteckensnitt f�r anv�ndargr�nssnittet";
+        Text[ polish ] = "Use system ~font for user interface";
+        Text[ portuguese_brazilian ] = "Use system ~font for user interface";
+        Text[ japanese ] = "ユーザーインターフェースにシステムフォントを使用";
+        Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용";
+        Text[ chinese_simplified ] = "采用使用者界面的系统字体";
+        Text[ chinese_traditional ] = "採用使用者介面的系統字型";
+        Text[ turkish ] = "Use system ~font for user interface";
+        Text[ arabic ] = "Use system ~font for user interface";
+        Text[ catalan ] = "Use system ~font for user interface";
+        Text[ thai ] = "Use system ~font for user interface";
+    };
+    CheckBox CB_ANIMATED_GRAPHICS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_4 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Animierte ~Grafiken zulassen" ;
+        Text [ ENGLISH ] = "Allow animated ~graphics" ;
+        Text[ english_us ] = "Allow animated ~graphics";
+        Text[ portuguese ] = "Allow animated ~graphics";
+        Text[ russian ] = "Allow animated ~graphics";
+        Text[ greek ] = "Allow animated ~graphics";
+        Text[ dutch ] = "Allow animated ~graphics";
+        Text[ french ] = "Autoriser les images anim�es";
+        Text[ spanish ] = "Permitir ~im�genes animadas ";
+        Text[ finnish ] = "Allow animated ~graphics";
+        Text[ italian ] = "Permetti animazioni";
+        Text[ danish ] = "Allow animated ~graphics";
+        Text[ swedish ] = "Till�t animerad ~grafik";
+        Text[ polish ] = "Allow animated ~graphics";
+        Text[ portuguese_brazilian ] = "Allow animated ~graphics";
+        Text[ japanese ] = "アニメーション画像を許可する";
+        Text[ korean ] = "애니메이션된 그래픽 허용";
+        Text[ chinese_simplified ] = "允许动画图形";
+        Text[ chinese_traditional ] = "允許動畫圖形";
+        Text[ turkish ] = "Allow animated ~graphics";
+        Text[ arabic ] = "Allow animated ~graphics";
+        Text[ catalan ] = "Allow animated ~graphics";
+        Text[ thai ] = "Allow animated ~graphics";
+    };
+    CheckBox CB_ANIMATED_TEXTS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_5 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Animierten ~Text zulassen" ;
+        Text [ ENGLISH ] = "Allow animated ~text" ;
+        Text[ english_us ] = "Allow animated ~text";
+        Text[ portuguese ] = "Allow animated ~text";
+        Text[ russian ] = "Allow animated ~text";
+        Text[ greek ] = "Allow animated ~text";
+        Text[ dutch ] = "Allow animated ~text";
+        Text[ french ] = "Autoriser le texte anim�";
+        Text[ spanish ] = "Permitir ~animaci�n de texto";
+        Text[ finnish ] = "Allow animated ~text";
+        Text[ italian ] = "Permetti animazione testo";
+        Text[ danish ] = "Allow animated ~text";
+        Text[ swedish ] = "Till�t animerad t~ext";
+        Text[ polish ] = "Allow animated ~text";
+        Text[ portuguese_brazilian ] = "Allow animated ~text";
+        Text[ japanese ] = "アニメーションテキストを許可する";
+        Text[ korean ] = "애니메이션된 텍스트 허용";
+        Text[ chinese_simplified ] = "允许动画文字(~T)";
+        Text[ chinese_traditional ] = "允許動畫文字";
+        Text[ turkish ] = "Allow animated ~text";
+        Text[ arabic ] = "Allow animated ~text";
+        Text[ catalan ] = "Allow animated ~text";
+        Text[ thai ] = "Allow animated ~text";
     };
     CheckBox CB_TIPHELP
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROWB_1 ) );
+        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROWA_6 ) );
         Size = MAP_APPFONT( DIFF(COL2,COL3), RSC_CD_CHECKBOX_HEIGHT );
         Text = "Tipp-~Hilfe verschwindet nach " ;
         Text [ ENGLISH ] = "~Help tips disappear after " ;
@@ -243,7 +256,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     {
         TabStop = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT( COL3, ROWB_1 );
+        Pos = MAP_APPFONT( COL3, ROWA_6 );
         Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
         Minimum = 1;
         Maximum = 99;
@@ -254,7 +267,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     };
     FixedText FT_TIPHELP
     {
-        Pos = MAP_APPFONT( COL4, OFFS_TEXTBOX_FIXEDTEXT( ROWB_1 ) );
+        Pos = MAP_APPFONT( COL4, OFFS_TEXTBOX_FIXEDTEXT( ROWA_6 ) );
         Size = MAP_APPFONT( UNIT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
         Text = "Sekunden" ;
         Text [ ENGLISH ] = "seconds" ;
@@ -280,179 +293,40 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ catalan ] = "segons";
         Text[ thai ] = "ชช:นน:วว";
     };
-    CheckBox CB_ANIMATED_GRAPHICS
+    FixedLine FL_HC_OPTIONS
     {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWB_2 );
-        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "Animierte ~Grafiken zulassen" ;
-        Text [ ENGLISH ] = "Allow animated ~graphics" ;
-        Text[ english_us ] = "Allow animated ~graphics";
-        Text[ portuguese ] = "Allow animated ~graphics";
-        Text[ russian ] = "Allow animated ~graphics";
-        Text[ greek ] = "Allow animated ~graphics";
-        Text[ dutch ] = "Allow animated ~graphics";
-        Text[ french ] = "Autoriser les images anim�es";
-        Text[ spanish ] = "Permitir ~im�genes animadas ";
-        Text[ finnish ] = "Allow animated ~graphics";
-        Text[ italian ] = "Permetti animazioni";
-        Text[ danish ] = "Allow animated ~graphics";
-        Text[ swedish ] = "Till�t animerad ~grafik";
-        Text[ polish ] = "Allow animated ~graphics";
-        Text[ portuguese_brazilian ] = "Allow animated ~graphics";
-        Text[ japanese ] = "アニメーション画像を許可する";
-        Text[ korean ] = "애니메이션된 그래픽 허용";
-        Text[ chinese_simplified ] = "允许动画图形";
-        Text[ chinese_traditional ] = "允許動畫圖形";
-        Text[ turkish ] = "Allow animated ~graphics";
-        Text[ arabic ] = "Allow animated ~graphics";
-        Text[ catalan ] = "Allow animated ~graphics";
-        Text[ thai ] = "Allow animated ~graphics";
+        Pos = MAP_APPFONT ( COL0, ROWB_0 ) ;
+        Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Optionen f�r die Kontrastdarstellung" ;
+        Text [ english ] = "Options for high contrast appearance" ;
+        Text [ english_us ] = "Options for high contrast appearance";
     };
-    CheckBox CB_ANIMATED_TEXTS
+    CheckBox CB_AUTO_DETECT_HC
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWB_3 );
+        Pos = MAP_APPFONT( COL1, ROWB_1 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "Animierten ~Text zulassen" ;
-        Text [ ENGLISH ] = "Allow animated ~text" ;
-        Text[ english_us ] = "Allow animated ~text";
-        Text[ portuguese ] = "Allow animated ~text";
-        Text[ russian ] = "Allow animated ~text";
-        Text[ greek ] = "Allow animated ~text";
-        Text[ dutch ] = "Allow animated ~text";
-        Text[ french ] = "Autoriser le texte anim�";
-        Text[ spanish ] = "Permitir ~animaci�n de texto";
-        Text[ finnish ] = "Allow animated ~text";
-        Text[ italian ] = "Permetti animazione testo";
-        Text[ danish ] = "Allow animated ~text";
-        Text[ swedish ] = "Till�t animerad t~ext";
-        Text[ polish ] = "Allow animated ~text";
-        Text[ portuguese_brazilian ] = "Allow animated ~text";
-        Text[ japanese ] = "アニメーションテキストを許可する";
-        Text[ korean ] = "애니메이션된 텍스트 허용";
-        Text[ chinese_simplified ] = "允许动画文字(~T)";
-        Text[ chinese_traditional ] = "允許動畫文字";
-        Text[ turkish ] = "Allow animated ~text";
-        Text[ arabic ] = "Allow animated ~text";
-        Text[ catalan ] = "Allow animated ~text";
-        Text[ thai ] = "Allow animated ~text";
+        Text = "~Kontrastdarstellungsmodus des Betriebssystems automatisch erkennen" ;
+        Text [ english ] = "Automatically detect high contrast mode of operating system" ;
+        Text [ english_us ] = "Automatically detect high contrast mode of operating system";
     };
     CheckBox CB_AUTOMATIC_FONT_COLOR
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWB_4 );
+        Pos = MAP_APPFONT( COL1, ROWB_2 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "Automatische Schrift~farbe f�r Bildschirmdarstellung" ;
+        Text = "Automatische Schrift~farbe f�r Bildschirmdarstellung verwenden" ;
         Text [ ENGLISH ] = "Always use automatic font ~color for screen display" ;
         Text[ english_us ] = "Always use automatic font ~color for screen display";
-        Text[ portuguese ] = "Always use automatic font ~color for screen display";
-        Text[ russian ] = "Always use automatic font ~color for screen display";
-        Text[ greek ] = "Always use automatic font ~color for screen display";
-        Text[ dutch ] = "Always use automatic font ~color for screen display";
-        Text[ french ] = "Couleur de police automatique pour la repr�sentation � l'�cran";
-        Text[ spanish ] = "Utilizar ~color de fuente autom�tico para la visualizaci�n en pantalla";
-        Text[ finnish ] = "Always use automatic font ~color for screen display";
-        Text[ italian ] = "Usa colore carattere automatico per le impostazioni dello schermo";
-        Text[ danish ] = "Always use automatic font ~color for screen display";
-        Text[ swedish ] = "Automatisk tecken~f�rg f�r bildsk�rmsvisning";
-        Text[ polish ] = "Always use automatic font ~color for screen display";
-        Text[ portuguese_brazilian ] = "Always use automatic font ~color for screen display";
-        Text[ japanese ] = "画面表示用フォント色を自動的に使用";
-        Text[ korean ] = "화면 표시용으로 항상 자동 글꼴 색상 사용 ";
-        Text[ chinese_simplified ] = "屏幕自动显示字体颜色";
-        Text[ chinese_traditional ] = "熒幕自動顯示字型顏色";
-        Text[ turkish ] = "Always use automatic font ~color for screen display";
-        Text[ arabic ] = "Always use automatic font ~color for screen display";
-        Text[ catalan ] = "Always use automatic font ~color for screen display";
-        Text[ thai ] = "Always use automatic font ~color for screen display";
     };
-    CheckBox CB_SYSTEM_FONT
+    CheckBox CB_PAGE_PREVIEWS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWB_5 );
+        Pos = MAP_APPFONT( COL1, ROWB_3 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "~Systemschriftart f�r die Benutzeroberfl�che verwenden" ;
-        Text [ ENGLISH ] = "Use system ~font for user interface" ;
-        Text[ english_us ] = "Use system ~font for user interface";
-        Text[ portuguese ] = "Use system ~font for user interface";
-        Text[ russian ] = "Use system ~font for user interface";
-        Text[ greek ] = "Use system ~font for user interface";
-        Text[ dutch ] = "Use system ~font for user interface";
-        Text[ french ] = "Utiliser la police du syst�me pour l'interface utilisateur";
-        Text[ spanish ] = "Utilizar las ~fuentes del sistema para la interfaz del usuario";
-        Text[ finnish ] = "Use system ~font for user interface";
-        Text[ italian ] = "Usa i caratteri del sistema per l'interfaccia utente";
-        Text[ danish ] = "Use system ~font for user interface";
-        Text[ swedish ] = "Anv�nd ~systemteckensnitt f�r anv�ndargr�nssnittet";
-        Text[ polish ] = "Use system ~font for user interface";
-        Text[ portuguese_brazilian ] = "Use system ~font for user interface";
-        Text[ japanese ] = "ユーザーインターフェースにシステムフォントを使用";
-        Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용";
-        Text[ chinese_simplified ] = "采用使用者界面的系统字体";
-        Text[ chinese_traditional ] = "採用使用者介面的系統字型";
-        Text[ turkish ] = "Use system ~font for user interface";
-        Text[ arabic ] = "Use system ~font for user interface";
-        Text[ catalan ] = "Use system ~font for user interface";
-        Text[ thai ] = "Use system ~font for user interface";
-    };
-    CheckBox CB_TEXTSELECTION
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWB_6 );
-        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "Te~xtauswahlcursor in schreibgesch�tzten Textdokumenten verwenden" ;
-        Text[ english_us ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ portuguese ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ russian ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ greek ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ dutch ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ french ] = "Utilisation du curseur de s�lection dans les textes en lecture seule";
-        Text[ spanish ] = "Utilizar cursor de selecci�n de texto en documentos de texto de s�lo lectura";
-        Text[ finnish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ italian ] = "Usa il cursore per la selezione di testo nei documenti di sola lettura";
-        Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ swedish ] = "Anv�nd mark�r f�r te~xtmarkering i skrivskyddade textdokument";
-        Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ portuguese_brazilian ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ japanese ] = "読み取り専用の文書ドキュメントでテキスト選択カーソルを使用";
-        Text[ korean ] = "읽기 전용 텍스트 문서에서 텍스트 선택 커서를 사용";
-        Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标";
-        Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
-        Text[ turkish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ arabic ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ catalan ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ thai ] = "Use te~xt selection cursor in read-only text documents";
-    };
-    CheckBox CB_ACCESSIBILITY_TOOL
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWB_7 );
-        Size = MAP_APPFONT( CB_WIDTH, SUM( RSC_CD_FIXEDLINE_HEIGHT, RSC_CD_FIXEDLINE_HEIGHT ) );
-        WordBreak = TRUE;
-        Text = "Unterst�tzung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
-        Text [ ENGLISH ] = "Support ~assistive technology tools (program restart required)" ;
-        Text[ english_us ] = "Support ~assistive technology tools (program restart required)";
-        Text[ portuguese ] = "Support ~assistive technology tools (program restart required)";
-        Text[ russian ] = "Support ~assistive technology tools (program restart required)";
-        Text[ greek ] = "Support ~assistive technology tools (program restart required)";
-        Text[ dutch ] = "Support ~assistive technology tools (program restart required)";
-        Text[ french ] = "Support des logiciels d'accessibilit� pour les personnes souffrant d'un handicap (red�marrage du programme requis)";
-        Text[ spanish ] = "~Soporte de los programas de acceso adaptados a disminuidos (reiniciar el programa)";
-        Text[ finnish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ italian ] = "Supporto per facilitare l'accesso da parte di persone disabili (riavviare il programma)";
-        Text[ danish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ swedish ] = "St�d f�r hj�lpprogram f�r funktionsnedsatta personer (program m�ste startas om)";
-        Text[ polish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
-        Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）";
-        Text[ korean ] = "자바 보조 기술 도구 지원 (프로그램 재시작 필요)";
-        Text[ chinese_simplified ] = "支持辅助功能程序(需要重新启动程序)";
-        Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)";
-        Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
-        Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
-        Text[ thai ] = "Support ~assistive technology tools (program restart required)";
+        Text = "Systemfarben f�r Seitenvorschau ~verwenden" ;
+        Text [ ENGLISH ] = "~Use system colors for page previews" ;
+        Text[ english_us ] = "~Use system colors for page previews";
     };
 };
 
