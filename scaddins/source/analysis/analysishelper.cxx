@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:29:14 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                     eS = S_Frac;
                 else if( IsImagUnit( c ) )
                 {
-                    rRet = bNegNum? -1.0 : 1.0;
+                    rRet = 0.0;
                     return sal_True;
                 }
                 else
@@ -2166,16 +2166,15 @@ inline sal_Bool Complex::IsImagUnit( sal_Unicode c )
     return c == 'i' || c == 'j';
 }
 
-
 sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 {
     const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
 
-
-    if( IsImagUnit( *pStr ) && rStr.getLength() == 1 )
+    if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
     {
         rCompl.r = 0.0;
         rCompl.i = 1.0;
+        rCompl.c = *pStr;
         return sal_True;
     }
 
@@ -2192,6 +2191,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
             double      r = f;
             if( IsImagUnit( pStr[ 1 ] ) )
             {
+                rCompl.c = pStr[ 1 ];
                 if( pStr[ 2 ] == 0 )
                 {
                     rCompl.r = f;
@@ -2201,6 +2201,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
             }
             else if( ParseDouble( pStr, f ) && IsImagUnit( *pStr ) )
             {
+                rCompl.c = *pStr;
                 pStr++;
                 if( *pStr == 0 )
                 {
@@ -2213,6 +2214,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
             break;
         case 'j':
         case 'i':
+            rCompl.c = *pStr;
             pStr++;
             if( *pStr == 0 )
             {
@@ -2231,25 +2233,32 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 }
 
 
-STRING Complex::GetString( sal_Bool bi ) const THROWDEF_RTE_IAE
+STRING Complex::GetString() const THROWDEF_RTE_IAE
 {
-    static const STRING aI( "i", 1, RTL_TEXTENCODING_MS_1252 );
-    static const STRING aJ( "j", 1, RTL_TEXTENCODING_MS_1252 );
-    static const STRING aPlus( "+", 1, RTL_TEXTENCODING_MS_1252 );
-    static const STRING aMinus( "-", 1, RTL_TEXTENCODING_MS_1252 );
+    static const STRING aI( 'i' );
+    static const STRING aJ( 'j' );
+    static const STRING aPlus( '+' );
+    static const STRING aMinus( '-' );
 
     CHK_FINITE(r);
     CHK_FINITE(i);
-    STRING              aRet( ::GetString( r ) );
+    STRING aRet;
+    bool   bHasReal = r != 0.0;
 
-    if( i == 1.0 )
-        aRet += aPlus;
+    if( bHasReal )
+        aRet = ::GetString( r );
+
+    if( i == 1.0)
+    {
+        if( bHasReal )
+            aRet += aPlus;
+    }
     else if( i == -1.0 )
         aRet += aMinus;
     else
-        aRet += ::GetString( i, sal_True );
+        aRet += ::GetString( i, bHasReal );
 
-    aRet += bi? aI : aJ;
+    aRet += (c == 'i') ? aI : aJ;
 
     return aRet;
 }
@@ -2721,7 +2730,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "Nmi3",       1.5742621468581148E-13, CDC_Volume ); // *** Cubic Nautical Mile
     NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
     NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
-    NEWD( "yd3",        1.3079506193143922E00,  CDC_Volume ); // *** Cubic Yard
+    NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); // *** Cubic Yard
     NEWD( "ang3",       1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
     NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica
     NEWD( "barrel",     6.289811E-03,           CDC_Volume ); // *** Barrel (=42gal?)
