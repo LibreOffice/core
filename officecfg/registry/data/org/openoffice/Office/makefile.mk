@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 16:55:02 $
+#   last change: $Author: rt $ $Date: 2005-01-07 10:02:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ XCUFILES= \
     Common.xcu \
     Compatibility.xcu \
     DataAccess.xcu \
+    Embedding.xcu \
     Jobs.xcu \
     Labels.xcu \
     Math.xcu \
@@ -102,17 +103,25 @@ MODULEFILES= \
     Common-ctl.xcu   \
     Common-korea.xcu   \
     Writer-cjk.xcu \
-    Writer-javamail.xcu
+    Writer-javamail.xcu \
+    Embedding-calc.xcu   \
+    Embedding-chart.xcu   \
+    Embedding-draw.xcu   \
+    Embedding-impress.xcu   \
+    Embedding-math.xcu   \
+    Embedding-writer.xcu
+
 
 LOCALIZEDFILES= \
     Common.xcu \
     SFX.xcu \
     DataAccess.xcu \
+    Embedding.xcu \
     TableWizard.xcu \
     UI.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
-    Writer.xcu 
+    Writer.xcu
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/registry$/data$/localtarget.mk
