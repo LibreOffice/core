@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-09 09:12:56 $
+ *  last change: $Author: cmc $ $Date: 2001-08-15 10:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3418,43 +3418,13 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( !pObj )
                 ApplyAttributes( rSt, aSet, pTextObj );
 
-            INT32 nTextRotationAngle=0;
-            if ( IsProperty( DFF_Prop_txflTextFlow ) )
-            {
-                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
-                    DFF_Prop_txflTextFlow) & 0xFFFF);
-                switch( eTextFlow )
-                {
-                    case mso_txflBtoT:
-                        pTextObj->SetVerticalWriting( sal_True );
-                        //We don't truly have this, but lets try anyway by
-                        //using vertical text and flipping it around.
-                        nTextRotationAngle = 18000;
-                    break;
-                    case mso_txflTtoBA :
-                    case mso_txflTtoBN :
-                    case mso_txflVertN :
-                        pTextObj->SetVerticalWriting( sal_True );
-                    break;
-                    case mso_txflHorzN :
-                    case mso_txflHorzA :
-                    default :
-                    break;
-                }
-            }
-
-            if ( nTextRotationAngle )
-            {
-                double a = nTextRotationAngle * nPi180;
-                pTextObj->NbcRotate( rTextRect.Center(), nTextRotationAngle, sin( a ), cos( a ) );
-            }
-
             switch ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
             {
                 case mso_wrapNone :
                 {
-                    if ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )  // be sure this is FitShapeToText
-                        aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                    // be sure this is FitShapeToText
+                    if ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )
+                            aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
                 }
                 break;
 
@@ -3535,15 +3505,50 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 if ( bTHASet )
                     aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
             }
-            aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
-            aSet.Put( SdrTextMinFrameWidthItem( rTextRect.Right() - rTextRect.Left() ) );
+            aSet.Put( SdrTextMinFrameHeightItem(
+                rTextRect.Bottom() - rTextRect.Top() ) );
+            aSet.Put( SdrTextMinFrameWidthItem(
+                rTextRect.Right() - rTextRect.Left() ) );
             pTextObj->SetItemSet(aSet);
+
+            INT32 nTextRotationAngle=0;
+            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+            {
+                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
+                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                switch( eTextFlow )
+                {
+                    case mso_txflBtoT:
+                        pTextObj->SetVerticalWriting( sal_True );
+                        //We don't truly have this, but lets try anyway by
+                        //using vertical text and flipping it around.
+                        nTextRotationAngle = 18000;
+                    break;
+                    case mso_txflTtoBA :
+                    case mso_txflTtoBN :
+                    case mso_txflVertN :
+                        pTextObj->SetVerticalWriting( sal_True );
+                    break;
+                    case mso_txflHorzN :
+                    case mso_txflHorzA :
+                    default :
+                    break;
+                }
+            }
+
+            if ( nTextRotationAngle )
+            {
+                double a = nTextRotationAngle * nPi180;
+                pTextObj->NbcRotate( rTextRect.Center(), nTextRotationAngle,
+                    sin( a ), cos( a ) );
+            }
 
             // rotate text with shape ?
             if ( mnFix16Angle )
             {
                 double a = mnFix16Angle * nPi180;
-                pTextObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle, sin( a ), cos( a ) );
+                pTextObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
+                    sin( a ), cos( a ) );
             }
 
             if( !pObj )
