@@ -4,8 +4,7 @@
     <module-name>   dnd </module-name>
     <component-description>
         <author> Joachim Lingner </author>
-        <name>  com.sun.star.comp.datatransfer.dnd.OleDragSource_V1 </name>
-        <name>  com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1 </name>
+        <name>  com.sun.star.comp.datatransfer.dnd.OleDragAndDrop </name>
         <description>
     The win32 implementation of the drop target service.
 </description>
