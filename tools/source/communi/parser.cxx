@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+ *  last change: $Author: nf $ $Date: 2001-04-23 13:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,18 @@ ByteString &InformationParser::ReadLine()
     }
     else {
         pActStream->ReadLine( sLine );
-        sLine.EraseLeadingChars( 0x09 );
-        sLine.EraseLeadingChars( ' ' );
+
+        ULONG nLen;
+        do {
+            nLen = sLine.Len();
+            sLine.EraseLeadingChars( 0x09 );
+            sLine.EraseLeadingChars( ' ' );
+        } while ( sLine.Len() < nLen );
+        do {
+            nLen = sLine.Len();
+            sLine.EraseTrailingChars( 0x09 );
+            sLine.EraseTrailingChars( ' ' );
+        } while ( sLine.Len() < nLen );
 
         if ( bReplaceVariables ) {
             while( sLine.SearchAndReplace( "%UPD", sUPD ) != (USHORT)-1 );
