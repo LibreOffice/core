@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextPortion.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:19 $
+ *  last change:$Date: 2003-09-08 11:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.text;
 
-import com.sun.star.text.ControlCharacter;
 import lib.MultiPropertyTest;
+
+import com.sun.star.text.ControlCharacter;
 
 /**
  * Testing <code>com.sun.star.text.TextPortion</code>
