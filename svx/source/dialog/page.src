@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:34:38 $
+ *  last change: $Author: pb $ $Date: 2001-01-26 11:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2135,16 +2135,10 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
         < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
         < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
-        /* ### ACHTUNG: Neuer Eintrag in Liste? 17 : C65 114 x 227 mm*/
         < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Dia" ; PAPERSIZE_DIA ; > ;
         < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2171,11 +2165,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Dia" ; PAPERSIZE_DIA ; > ;
         < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2202,11 +2191,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Diapositivo" ; PAPERSIZE_DIA ; > ;
         < "Ecrã" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2233,11 +2217,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Slide" ; PAPERSIZE_DIA ; > ;
         < "Screen" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8.5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2264,11 +2243,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Dia" ; PAPERSIZE_DIA ; > ;
         < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2295,11 +2269,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Diabild" ; PAPERSIZE_DIA ; > ;
         < "Bildskärm" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai stor 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2326,11 +2295,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Dias" ; PAPERSIZE_DIA ; > ;
         < "Skærm" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai stor 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2357,11 +2321,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Diapositiva" ; PAPERSIZE_DIA ; > ;
         < "Schermo" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2388,11 +2347,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Diapositiva" ; PAPERSIZE_DIA ; > ;
         < "Pantalla" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 pulgadas" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 pulgadas" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 pulgadas" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 pulgadas" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 pulgadas" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2419,11 +2373,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Diapo" ; PAPERSIZE_DIA ; > ;
         < "Écran" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2450,11 +2399,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Dia" ; PAPERSIZE_DIA ; > ;
         < "Scherm" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groot 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2481,11 +2425,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 ºÁÃ×" ; PAPERSIZE_DL ; > ;
         < "»ÃµÆÆ¬" ; PAPERSIZE_DIA ; > ;
         < "ÆÁÄ»" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 Ó¢´ç" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 Ó¢´ç" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 Ó¢´ç" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 Ó¢´ç" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 Ó¢´ç" ; PAPERSIZE_E ; > ;
         < "16 ¿ª 184 x 260 ºÁÃ×" ; PAPERSIZE_KAI16; > ;
         < "32 ¿ª 130 x 184 ºÁÃ×" ; PAPERSIZE_KAI32; > ;
         < "32 ¿ª 140 x 203 ºÁÃ×" ; PAPERSIZE_KAI32BIG; > ;
@@ -2512,11 +2451,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 ìì" ; PAPERSIZE_DL ; > ;
         < "Ñëàéä" ; PAPERSIZE_DIA ; > ;
         < "Ýêðàí" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 äþéì." ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 äþéì." ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 äþéì." ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 äþéì." ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 äþéì." ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 ìì" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 ìì" ; PAPERSIZE_KAI32; > ;
         < "32 kai áîëüøîé 140 x 203 ìì" ; PAPERSIZE_KAI32BIG; > ;
@@ -2543,11 +2477,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Slajd" ; PAPERSIZE_DIA ; > ;
         < "Ekran" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 cali" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 cali" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 cali" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 cali" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 cali" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai wielkoœæ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2574,11 +2503,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110x220 mm" ; PAPERSIZE_DL ; > ;
         < "½×²ÄÞ" ; PAPERSIZE_DIA ; > ;
         < "‰æ–Ê" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8.5x11 ²ÝÁ" ; PAPERSIZE_A ; > ;
-        < "B 11x17 ²ÝÁ" ; PAPERSIZE_B ; > ;
-        < "C 17x22 ²ÝÁ" ; PAPERSIZE_C ; > ;
-        < "D 22x34 ²ÝÁ" ; PAPERSIZE_D ; > ;
-        < "E 34x44 ²ÝÁ" ; PAPERSIZE_E ; > ;
         < "16 kai 184x260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130x184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai‘å 140x203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2605,11 +2529,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 ²@¦Ì" ; PAPERSIZE_DL ; > ;
         < "§ë¼v¤ù" ; PAPERSIZE_DIA ; > ;
         < "¿Ã¹õ" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 ­^¤o" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 ­^¤o" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 ­^¤o" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 ­^¤o" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 ­^¤o" ; PAPERSIZE_E ; > ;
         < "16 ¶} 184 x 260 ²@¦Ì" ; PAPERSIZE_KAI16; > ;
         < "32 ¶} 130 x 184 ²@¦Ì" ; PAPERSIZE_KAI32; > ;
         < "32 ¶} 140 x 203 ²@¦Ì" ; PAPERSIZE_KAI32BIG; > ;
@@ -2636,11 +2555,6 @@ ItemList [ chinese_simplified ] =
         < "DL (110 × 220 ãã)" ; PAPERSIZE_DL ; > ;
         < "ÇáÔÑíÍÉ" ; PAPERSIZE_DIA ; > ;
         < "ÇáÔÇÔÉ" ; PAPERSIZE_SCREEN ; > ;
-        < "A (þ1/2 8 × 11 ÈæÕÉ)" ; PAPERSIZE_A ; > ;
-        < "B (11 × 17 ÈæÕÉ)" ; PAPERSIZE_B ; > ;
-        < "C (17 × 22 ÈæÕÉ)" ; PAPERSIZE_C ; > ;
-        < "D (22 × 34 ÈæÕÉ)" ; PAPERSIZE_D ; > ;
-        < "E (34 × 44 ÈæÕÉ)" ; PAPERSIZE_E ; > ;
         < "16 kai (184 × 260 ãã)" ; PAPERSIZE_KAI16; > ;
         < "32 kai (130 × 184 ãã)" ; PAPERSIZE_KAI32; > ;
         < "32 kai ßÈíÑ (140 × 203 ãã)" ; PAPERSIZE_KAI32BIG; > ;
@@ -2667,11 +2581,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 ÷éë" ; PAPERSIZE_DL ; > ;
         < "ÄéáöÜíåéá" ; PAPERSIZE_DIA ; > ;
         < "Ïèüíç" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8.5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 éíôó." ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai groß 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2698,11 +2607,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "½½¶óÀÌµå" ; PAPERSIZE_DIA ; > ;
         < "È­¸é" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8.5 x 11 ÀÎÄ¡" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 ÀÎÄ¡" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 ÀÎÄ¡" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 ÀÎÄ¡" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 ÀÎÄ¡" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai Å©±â140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2729,11 +2633,6 @@ ItemList [ chinese_simplified ] =
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Slayt" ; PAPERSIZE_DIA ; > ;
         < "Ekran" ; PAPERSIZE_SCREEN ; > ;
-        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
-        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
-        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
-        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
-        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2760,11 +2659,6 @@ ItemList [ chinese_simplified ] =
         < " " ; PAPERSIZE_DL ; > ;
         < " " ; PAPERSIZE_DIA ; > ;
         < " " ; PAPERSIZE_SCREEN ; > ;
-        < " " ; PAPERSIZE_A ; > ;
-        < " " ; PAPERSIZE_B ; > ;
-        < " " ; PAPERSIZE_C ; > ;
-        < " " ; PAPERSIZE_D ; > ;
-        < " " ; PAPERSIZE_E ; > ;
         < " " ; PAPERSIZE_KAI16; > ;
         < " " ; PAPERSIZE_KAI32; > ;
         < " " ; PAPERSIZE_KAI32BIG; > ;
