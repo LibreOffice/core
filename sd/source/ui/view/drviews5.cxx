@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:44:04 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,10 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 
     if (pDrView->IsQuickTextEditMode() != pView->IsQuickEdit())
         pDrView->SetQuickTextEditMode( pView->IsQuickEdit() );
+
+    // #i26631#
+    if (pDrView->IsMasterPagePaintCaching() != pView->IsMasterPagePaintCaching())
+        pDrView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
     // Definition:
     //  grosse Handles: 9
