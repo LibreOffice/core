@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:52:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,12 +237,14 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    Reference< XConnection > OStaticDataAccessTools::calcConnection(const Reference< XRowSet >& _rxRowSet, const Reference< XMultiServiceFactory >& _rxFactory) const SAL_THROW ( (SQLException, RuntimeException) )
+    Reference< XConnection > OStaticDataAccessTools::connectRowset( const Reference< XRowSet >& _rxRowSet,
+        const Reference< XMultiServiceFactory >& _rxFactory, sal_Bool _bSetAsActiveConnection ) const
+        SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
     {
         Reference< XConnection > xReturn;
         checkIfLoaded();
         if (m_xDataAccessTools.is())
-            xReturn = m_xDataAccessTools->calcConnection(_rxRowSet, _rxFactory);
+            xReturn = m_xDataAccessTools->connectRowset( _rxRowSet, _rxFactory, _bSetAsActiveConnection );
         return xReturn;
     }
 
