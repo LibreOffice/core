@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:16:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 04:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,53 +94,41 @@
 
 ImageList IMG_INDEX_DLG_SC
 {
+    Prefix = "sc";
     MaskColor   = Color {
         Red   = 0xFFFF;
         Green = 0x0000;
         Blue  = 0xFFFF;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "sc_idx.bmp";
     };
     IL_TOOL ;
 };
 ImageList IMG_INDEX_DLG_SCH
 {
+    Prefix = "sch";
     MaskColor   = Color {
         Red   = 0xFFFF;
         Green = 0x0000;
         Blue  = 0xFFFF;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "sch_idx.bmp";
     };
     IL_TOOL ;
 };
 ImageList IMG_INDEX_DLG_LC
 {
+    Prefix = "lc";
     MaskColor   = Color {
         Red   = 0xFFFF;
         Green = 0x0000;
         Blue  = 0xFFFF;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "lc_idx.bmp";
     };
     IL_TOOL ;
 };
 ImageList IMG_INDEX_DLG_LCH
 {
+    Prefix = "lch";
     MaskColor   = Color {
         Red   = 0xFFFF;
         Green = 0x0000;
         Blue  = 0xFFFF;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "lch_idx.bmp";
     };
     IL_TOOL ;
 };
@@ -990,6 +978,13 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39.48.1  2004/04/27 14:31:18  ka
+ *  using new resource structure for images
+ *
+ *  Revision 1.39  2003/12/17 15:16:07  vg
+ *  INTEGRATION: CWS geordi2q11 (1.38.68); FILE MERGED
+ *  2003/12/16 11:05:12 hr 1.38.68.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.38.68.1  2003/12/16 11:05:12  hr
  *  #111934#: join CWS ooo111fix1
  *
