@@ -21,8 +21,8 @@ hedabu: ..\source\sdstor\stgdir.hxx %_DEST%\inc%_EXT%\sot\stgdir.hxx
 
 ..\%__SRC%\inc\sdintern.hxx %_DEST%\inc%_EXT%\sot\sdintern.hxx
 ..\%__SRC%\lib\sot.lib %_DEST%\lib%_EXT%\sot.lib
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
-..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
