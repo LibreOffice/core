@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:39:01 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
+#endif
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -400,6 +403,13 @@ void OApplicationController::updateTitle()
 
     String sTitle = String(ModuleRes(STR_APP_TITLE));
     sName = sName + sTitle;
+#ifndef PRODUCT
+    ::rtl::OUString aDefault;
+    sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
+    sName += utl::Bootstrap::getBuildIdData( aDefault );
+    sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+#endif
+
     OGenericUnoController::setTitle(sName);
 }
 // -----------------------------------------------------------------------------
