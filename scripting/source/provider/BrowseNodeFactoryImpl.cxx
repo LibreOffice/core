@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:17:25 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -335,54 +336,69 @@ namespace
 
 Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
-        Reference< lang::XMultiComponentFactory > mcf =
-            xCtx->getServiceManager();
+    Reference< lang::XMultiComponentFactory > mcf =
+        xCtx->getServiceManager();
 
-        Sequence< ::rtl::OUString > openDocs =
-            MiscUtils::allOpenTDocUrls( xCtx );
+    Sequence< ::rtl::OUString > openDocs =
+        MiscUtils::allOpenTDocUrls( xCtx );
 
     Reference< provider::XScriptProviderFactory > xFac;
-        sal_Int32 initialSize = openDocs.getLength() + 2;
-        sal_Int32 mspIndex = 0;
+    sal_Int32 initialSize = openDocs.getLength() + 2;
+    sal_Int32 mspIndex = 0;
 
-        Sequence < Reference < browse::XBrowseNode > > locnBNs( initialSize );
+    Sequence < Reference < browse::XBrowseNode > > locnBNs( initialSize );
+    try
+    {
+        xFac.set(
+            xCtx->getValueByName(
+                OUSTR("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("user") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("share") ) ), UNO_QUERY_THROW );
+    }
+    // TODO proper exception handling, should throw
+    catch( Exception& e )
+    {
+        e;
+        OSL_TRACE("Caught Exception %s",
+            ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        locnBNs.realloc( mspIndex );
+        return locnBNs;
+    }
+
+    for ( sal_Int32 i = 0; i < openDocs.getLength(); i++ )
+    {
         try
         {
-        xFac.set(
-                xCtx->getValueByName(
-                    OUSTR("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+            Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( openDocs[ i ] ), UNO_QUERY_THROW );
 
-            locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("user") ) ), UNO_QUERY_THROW );
-            locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("share") ) ), UNO_QUERY_THROW );
+            // #i44599 Check if it's a real document or something special like Hidden/Preview
+            css::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
+            if( xCurrentController.is() )
+            {
+                comphelper::MediaDescriptor aMD( model->getArgs() );
+                sal_Bool bDefault = false;
+                sal_Bool bHidden  = aMD.getUnpackedValueOrDefault( comphelper::MediaDescriptor::PROP_HIDDEN(),  bDefault );
+                sal_Bool bPreview = aMD.getUnpackedValueOrDefault( comphelper::MediaDescriptor::PROP_PREVIEW(), bDefault );
+                if( !bHidden && !bPreview )
+                    locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
+            }
         }
-        // TODO proper exception handling, should throw
         catch( Exception& e )
         {
             e;
-            OSL_TRACE("Caught Exception %s",
+            OSL_TRACE("Caught Exception creating MSP for %s exception msg: %s",
+                ::rtl::OUStringToOString( openDocs[ i ] , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                 ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        locnBNs.realloc( mspIndex );
-            return locnBNs;
         }
 
-    for ( sal_Int32 i = 0; i < openDocs.getLength(); i++ )
-        {
+    }
 
-            try
-            {
-                Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( openDocs[ i ] ), UNO_QUERY_THROW );
-            locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
-            }
-            catch( Exception& e )
-            {
-                e;
-                OSL_TRACE("Caught Exception creating MSP for %s exception msg: %s",
-                    ::rtl::OUStringToOString( openDocs[ i ] , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                    ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            }
+    Sequence < Reference < browse::XBrowseNode > > locnBNs_Return( mspIndex );
+    for ( sal_Int32 j = 0; j < mspIndex; j++ )
+        locnBNs_Return[j] = locnBNs[j];
 
-        }
-    return locnBNs;
+    return locnBNs_Return;
 }
 
 } // namespace
