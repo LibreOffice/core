@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:50:50 $
+ *  last change: $Author: jp $ $Date: 2001-08-15 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,6 +822,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     aTimer.SetTimeout( 120 );
 
     SwDocShell* pDocSh = PTR_CAST( SwDocShell, pFrame->GetObjectShell() );
+    BOOL bOldModifyFlag = pDocSh->IsEnableSetModified();
+    pDocSh->EnableSetModified( FALSE );
     ASSERT( pDocSh, "View ohne DocShell." );
     SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
 
@@ -1025,6 +1027,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     }
     aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     bAttrChgNotified = bAttrChgNotifiedWithRegistrations = sal_False;
+    pDocSh->EnableSetModified( bOldModifyFlag );
 }
 
 /*--------------------------------------------------------------------
