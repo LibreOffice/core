@@ -111,4 +111,24 @@
         <supported-service>com.sun.star.accessibility.Accessible</supported-service>
         <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dbu.OColumnControl</name>
+        <description>Allows the modification of a column descriptor.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControl</supported-service>
+        <supported-service>com.sun.star.sdb.ColumnDescriptorControl</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dbu.OColumnControlModel</name>
+        <description>The model to hold the column descriptor for the control.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControlModel</supported-service>
+        <supported-service>com.sun.star.sdb.ColumnDescriptorControlModel</supported-service>
+    </component-description>
 </module-description>
