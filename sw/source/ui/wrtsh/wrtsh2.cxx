@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 14:03:04 $
+ *  last change: $Author: ama $ $Date: 2002-07-04 16:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
+#endif
+#ifndef _TXTINET_HXX
+#include <txtinet.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -409,6 +412,13 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, USHORT nFilter )
 
     // damit die Vorlagenumsetzung sofort angezeigt wird
     ::LoadURL( rItem.GetValue(), this, nFilter, &rItem.GetTargetFrame() );
+    const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
+    if( pTxtAttr )
+    {
+        ((SwTxtINetFmt*)pTxtAttr)->SetVisited( sal_True );
+        ((SwTxtINetFmt*)pTxtAttr)->SetValidVis( sal_True );
+    }
+
     bIsInClickToEdit = FALSE;
 }
 
