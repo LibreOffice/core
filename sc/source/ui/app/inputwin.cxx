@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@
 #include <svx/fontitem.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
 #include "AccessibleEditObject.hxx"
@@ -1326,7 +1326,7 @@ void ScTextWnd::ImplInitSettings()
     Invalidate();
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScTextWnd::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
         rtl::OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
