@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 15:55:42 $
+ *  last change: $Author: mhu $ $Date: 2002-05-10 21:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,23 +929,13 @@ XubString SvxTabStop::GetValueString() const
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 nWhich ) :
     SfxPoolItem( nWhich ),
-    SvxTabStopArr( (sal_Int8)SVX_TAB_DEFCOUNT )
+    SvxTabStopArr( sal_Int8(SVX_TAB_DEFCOUNT) )
 {
     const sal_uInt16 nTabs = SVX_TAB_DEFCOUNT, nDist = SVX_TAB_DEFDIST;
     const SvxTabAdjust eAdjst= SVX_TAB_ADJUST_DEFAULT;
 
-    if( nTabs )
-    {
-        SvxTabStop aInitTab( nDist, eAdjst );
-        SvxTabStop* pInitArr =
-            (SvxTabStop*)new char[ sizeof(SvxTabStop) * nTabs ];
-        for( sal_uInt16 i = 0; i < nTabs; ++i )
-        {
-            *( pInitArr + i ) = aInitTab;
-            aInitTab.GetTabPos() += nDist;
-        }
-        SvxTabStopArr::InitData( pInitArr, nTabs );
-    }
+    for (sal_uInt16 i = 0; i < nTabs; ++i)
+        SvxTabStopArr::Insert( new SvxTabStop( (i + 1) * nDist, eAdjst ), i );
 }
 
 // -----------------------------------------------------------------------
@@ -955,20 +945,10 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
                                 const SvxTabAdjust eAdjst,
                                 sal_uInt16 nWhich ) :
     SfxPoolItem( nWhich ),
-    SvxTabStopArr( (sal_Int8)nTabs )
+    SvxTabStopArr( sal_Int8(nTabs) )
 {
-    if( nTabs )
-    {
-        SvxTabStop aInitTab( nDist, eAdjst );
-        SvxTabStop* pInitArr =
-            (SvxTabStop*)new char[ sizeof(SvxTabStop) * nTabs ];
-        for( sal_uInt16 i = 0; i < nTabs; ++i )
-        {
-            *( pInitArr + i ) = aInitTab;
-            aInitTab.GetTabPos() += nDist;
-        }
-        SvxTabStopArr::InitData( pInitArr, nTabs );
-    }
+    for ( sal_uInt16 i = 0; i < nTabs; ++i )
+        SvxTabStopArr::Insert( new SvxTabStop( (i + 1) * nDist, eAdjst ), i );
 }
 
 // -----------------------------------------------------------------------
