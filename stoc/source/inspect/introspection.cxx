@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-08 09:08:15 $
+ *  last change: $Author: ab $ $Date: 2002-08-26 14:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,83 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
     IntrospectionAccessStatic_Impl* pThis = (IntrospectionAccessStatic_Impl*)this;
     IntrospectionNameMap::iterator aIt = pThis->maMethodNameMap.find( aMethodName );
     if( !( aIt == pThis->maMethodNameMap.end() ) )
+    {
         iHashResult = (*aIt).second;
+    }
+    // #95159 Check if full qualified name matches
+    else
+    {
+        sal_Int32 nSearchFrom = aMethodName.getLength();
+        nSearchFrom = aMethodName.getLength();
+        while( true )
+        {
+            // Strategy: Search back until the first '_' is found
+            sal_Int32 nFound = aMethodName.lastIndexOf( '_', nSearchFrom );
+            if( nFound == -1 )
+                break;
+
+            OUString aPureMethodName = aMethodName.copy( nFound + 1 );
+
+            aIt = pThis->maMethodNameMap.find( aPureMethodName );
+            if( !( aIt == pThis->maMethodNameMap.end() ) )
+            {
+                // Check if it can be a type?
+                // Problem: Does not work if package names contain _ ?!
+                OUString aStr = aMethodName.copy( 0, nFound );
+                OUString aTypeName = aStr.replace( '_', '.' );
+                Reference< XIdlClass > xClass = mxCoreReflection->forName( aTypeName );
+                if( xClass.is() )
+                {
+                    // If this is a valid class it could be the right method
+
+                    // Could be the right method, type has to be checked
+                    iHashResult = (*aIt).second;
+
+                    const Reference<XIdlMethod>* pMethods = maAllMethodSeq.getConstArray();
+                    const Reference<XIdlMethod> xMethod = pMethods[ iHashResult ];
+
+                    Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
+                    if( xClass->equals( xMethClass ) )
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        iHashResult = -1;
+
+                        // Could also be another method with the same name
+                        // Iterate over all methods
+                        sal_Int32 nLen = maAllMethodSeq.getLength();
+                        for( int i = 0 ; i < nLen ; ++i )
+                        {
+                            const Reference<XIdlMethod> xMethod = pMethods[ i ];
+
+                            OUString aTestClassName = xMethod->getDeclaringClass()->getName();
+                            OUString aTestMethodName = xMethod->getName();
+
+                            if( xMethod->getName() == aPureMethodName )
+                            {
+                                Reference< XIdlClass > xMethClass = xMethod->getDeclaringClass();
+
+                                if( xClass->equals( xMethClass ) )
+                                {
+                                    iHashResult = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if( iHashResult != -1 )
+                            break;
+                    }
+                }
+            }
+
+            nSearchFrom = nFound - 1;
+            if( nSearchFrom < 0 )
+                break;
+        }
+    }
     return iHashResult;
 }
 
@@ -2832,18 +2908,11 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                 // Namen in Hashtable eintragen, wenn nicht schon bekannt
                                 OUString aMethName = rxMethod->getName();
                                 IntrospectionNameMap::iterator aIt = rMethodNameMap.find( aMethName );
-                                if( !( aIt == rMethodNameMap.end() ) )
+                                if( aIt == rMethodNameMap.end() )
                                 {
-                                    /* TODO:
-                                    OSL_TRACE(  String( "Introspection: Method \"" ) +
-                                                OOUStringToString( aMethName, CHARSET_SYSTEM ) +
-                                                String( "\" found more than once" ) );
-                                                */
-                                    continue;
+                                    // Eintragen
+                                    rMethodNameMap[ aMethName ] = iAllExportedMethod;
                                 }
-
-                                // Eintragen
-                                rMethodNameMap[ aMethName ] = iAllExportedMethod;
 
                                 // Tabelle fuer XExactName pflegen
                                 rLowerToExactNameMap[ toLower( aMethName ) ] = aMethName;
