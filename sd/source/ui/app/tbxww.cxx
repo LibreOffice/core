@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-31 13:12:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,48 @@ SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
         SetText( String() );
     }
 
-    Size aSize = aTbx.CalcWindowSizePixel();
-    aTbx.SetPosSizePixel( Point(), aSize );
+    AdaptToCTL();
+}
 
-    if ( aSdResIdWin.GetId() == RID_TEXT )
+
+void SdPopupWindowTbx::AdaptToCTL (void)
+{
+    Size aSize = aTbx.CalcWindowSizePixel();
+    if (aSdResIdWin.GetId() == RID_TEXT)
     {
         SvtCJKOptions aCJKOptions;
-        if( !aCJKOptions.IsVerticalTextEnabled() )
-            aSize.Height() /= 2;
-    }
+        if ( ! aCJKOptions.IsVerticalTextEnabled())
+        {
+            ToolBox& aToolBox = aTbx.GetToolBox();
 
+            // Iterate over all tool box items and remove those that are
+            // specific to complex text layout.
+            USHORT i=0;
+            while (i < aToolBox.GetItemCount())
+            {
+                USHORT nIndex = aToolBox.GetItemId(i);
+                switch (nIndex)
+                {
+                    case 0: // Line break.
+                    case SID_ATTR_CHAR_VERTICAL:
+                    case SID_TEXT_FITTOSIZE_VERTICAL:
+                    case SID_DRAW_CAPTION_VERTICAL:
+                        aToolBox.RemoveItem (i);
+                        break;
+
+                    default:
+                        // Leave the item unmodified.  Advance to the next one.
+                        i+=1;
+                }
+            }
+            aToolBox.RecalcItems();
+            // Why is this necessary?
+            aToolBox.SetLineCount(1);
+            USHORT nLineCount = aToolBox.GetLineCount();
+            aSize = aToolBox.CalcWindowSizePixel(nLineCount);
+        }
+    }
+    aTbx.SetPosSizePixel( Point(), aSize );
     SetOutputSizePixel( aSize );
 }
 
@@ -148,17 +180,7 @@ SfxPopupWindow* SdPopupWindowTbx::Clone() const
 
 void SdPopupWindowTbx::Update()
 {
-    Size aSize = aTbx.CalcWindowSizePixel();
-    aTbx.SetPosSizePixel( Point(), aSize );
-
-    if ( aSdResIdWin.GetId() == RID_TEXT )
-    {
-        SvtCJKOptions aCJKOptions;
-        if( !aCJKOptions.IsVerticalTextEnabled() )
-            aSize.Height() /= 2;
-    }
-
-    SetOutputSizePixel( aSize );
+    AdaptToCTL();
 
     ToolBox *pBox = &aTbx.GetToolBox();
     aTbx.Activate( pBox );
