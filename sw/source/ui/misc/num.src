@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:27:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "¼öÁØ";
         Text[ turkish ] = "Düzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nivel";
     };
     MultiListBox LB_LEVEL
     {
@@ -142,6 +143,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "À§Ä¡¿Í °£°Ý";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Konum ve aralýk";
+        Text[ catalan ] = "Posición y espacio";
     };
     FixedText FT_BORDERDIST
     {
@@ -168,6 +170,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "µé¿©¾²±â";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sangría";
     };
     CheckBox CB_RELATIVE
     {
@@ -194,6 +197,7 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "Ó÷åôéêÜ";
         Text[ korean ] = "ºñ·Ê(~V)";
         Text[ turkish ] = "Orantýlý";
+        Text[ catalan ] = "Relati~vo";
     };
     MetricField MF_BORDERDIST
     {
@@ -238,6 +242,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "ÅØ½ºÆ®¿ÍÀÇ °£°Ý(~X)";
         Text[ turkish ] = "Metin uzaklýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Distancia al texto";
     };
     MetricField MF_INDENT
     {
@@ -271,7 +276,7 @@ TabPage TP_NUM_POSITION
         Text [ french ] = "Écart ~minimum numéro <-> texte" ;
         Text [ dutch ] = "~Minimale afstand nummer <-> tekst" ;
         Text [ portuguese_brazilian ] = "Abstand Te~xt <-> Numerierung" ;
-        Text [ portuguese ] = "Distância mínima número <-> texto" ;
+        Text [ portuguese ] = "Distância ~mínima número <-> texto" ;
         Text[ chinese_simplified ] = "±àºÅÖÁÕýÎÄµÄ×îÐ¡¼ä¸ô(~M)";
         Text[ russian ] = "Ìèí. èíòåðâàë íîìåð <-> òåêñò";
         Text[ polish ] = "Min. odstêp miêdzy numerem a tekstem";
@@ -282,6 +287,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "ÃÖ¼Ò°£°Ý  ¹øÈ£ <-> ÅØ½ºÆ®(~M)";
         Text[ turkish ] = "Asgari numara <-> metin aralýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia mínima Número <-> Texto";
     };
     MetricField MF_NUMDIST
     {
@@ -326,6 +332,7 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "Óôïß÷éóç áñßèìçóçò";
         Text[ korean ] = "¹øÈ£¸Å±â±â ¸ÂÃã(~A)";
         Text[ turkish ] = "Numara hizalama";
+        Text[ catalan ] = "~Alineación de la numeración";
     };
     ListBox LB_ALIGN
     {
@@ -459,6 +466,12 @@ TabPage TP_NUM_POSITION
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Izquierda" ; > ;
+        < "Centrado" ; > ;
+        < "Derecha" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -485,6 +498,7 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "ÐñïåðéëïãÞ";
         Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "Standart";
+        Text[ catalan ] = "~Predeterminado";
     };
     GroupBox GB_PREVIEW
     {
@@ -511,6 +525,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Window WIN_PREVIEW
     {
@@ -560,6 +575,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "±Û¸Ó¸®±âÈ£";
                 Text[ turkish ] = "Madde iþaretleri";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Viñetas";
             };
             PageItem
             {
@@ -585,6 +601,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
                 Text[ language_user1 ] = "Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
+                Text[ catalan ] = "Tipo de numeración";
             };
             PageItem
             {
@@ -610,6 +627,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "´Ù´Ü°è";
                 Text[ turkish ] = "Anahat";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Esquema";
             };
             PageItem
             {
@@ -635,6 +653,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "±×·¡ÇÈ";
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Imágenes";
             };
             PageItem
             {
@@ -660,6 +679,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "À§Ä¡";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Posición";
             };
             PageItem
             {
@@ -686,6 +706,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = "KW had called this \"Customize\" which leads to unnecessary confusion in translation. EM";
+                Text[ catalan ] = "Opciones";
             };
         };
         Text[ english_us ] = "Numbering/Bullets";
@@ -727,6 +748,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ korean ] = "»èÁ¦(~R)";
         Text[ turkish ] = "Kaldýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     Text [ english_us ] = "Numbering/Bullets" ;
     Text [ portuguese_brazilian ] = "Numerierung/Aufzählung" ;
@@ -747,5 +769,6 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ korean ] = "¹øÈ£¸Å±â±â/±Û¸Ó¸®±âÈ£";
     Text[ turkish ] = "Numaralama/madde iþaretleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Numeración/Viñetas";
 };
 
