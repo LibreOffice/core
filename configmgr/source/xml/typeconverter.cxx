@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-14 12:06:27 $
+ *  last change: $Author: dg $ $Date: 2001-06-21 15:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,9 +413,11 @@ namespace configmgr
 // *************************************************************************
     ::rtl::OUString toTemplateName(const ::rtl::OUString& _rBasicTypeName, bool bList)
     {
-        ::rtl::OUString sName = _rBasicTypeName;
+        ::rtl::OUString sName = TEMPLATE_MODULE_NATIVE_PREFIX + _rBasicTypeName;
         if (bList)
             sName += TEMPLATE_LIST_SUFFIX;
+
+
         return sName;
     }
 
@@ -434,6 +436,10 @@ namespace configmgr
             bList = false;
             _rBasicName = sTypeName;
         }
+        // erase the default prefix 'cfg:'
+        if (_rBasicName.indexOf(TEMPLATE_MODULE_NATIVE_PREFIX) == 0)
+            _rBasicName = _rBasicName.copy(TEMPLATE_MODULE_NATIVE_PREFIX.m_nLen);
+
         return true;
 
     }
