@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:23:27 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1664,6 +1664,9 @@ void ToolBox::SetBorder( long nX, long nY )
 
 void ToolBox::SetOutStyle( USHORT nNewStyle )
 {
+    // always force flat looking toolbars since NWF
+    nNewStyle |= TOOLBOX_STYLE_FLAT;
+
     if ( mnOutStyle != nNewStyle )
     {
         mnOutStyle = nNewStyle;
