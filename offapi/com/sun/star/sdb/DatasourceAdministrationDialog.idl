@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatasourceAdministrationDialog.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
+ *  last change: $Author: kz $ $Date: 2002-07-09 10:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@ service DatasourceAdministrationDialog
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/10/25 15:00:32  mi
+ *  proofreading and corrections from Richard Holt
+ *
  *  Revision 1.6  2001/07/03 09:00:57  tra
  *  must change com/sun/star/ui -> com/sun/star/ui/dialogs/
  *
@@ -161,5 +164,6 @@ service DatasourceAdministrationDialog
  *  Revision 1.0 01.11.00 17:37:14  fs
  ************************************************************************/
 
-#endif  // __com_sun_star_sdb_DatasourceAdministrationDialog_idl__
+// __com_sun_star_sdb_DatasourceAdministrationDialog_idl__
 
+#endif
