@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+ *  last change: $Author: cl $ $Date: 2001-07-30 14:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,9 @@ SdXMLShapeContext::~SdXMLShapeContext()
 
     if(mxOldCursor.is())
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
+
+    if( mxLockable.is() )
+        mxLockable->removeActionLock();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -439,6 +442,12 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         if( mnShapeId != -1 )
             xImp->createShapeId( xShape, mnShapeId );
     }
+
+    mxLockable = uno::Reference< document::XActionLockable >::query( xShape );
+
+    if( mxLockable.is() )
+        mxLockable->addActionLock();
+
 }
 
 //////////////////////////////////////////////////////////////////////////////

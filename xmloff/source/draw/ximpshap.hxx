@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
+ *  last change: $Author: cl $ $Date: 2001-07-30 14:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _XIMPSHAPE_HXX
 #define _XIMPSHAPE_HXX
 
+#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
+#include <com/sun/star/document/XActionLockable.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #endif
@@ -111,6 +115,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxOldCursor;
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList> mxAttrList;
     com::sun::star::uno::Reference< com::sun::star::container::XIdentifierContainer > mxGluePoints;
+    com::sun::star::uno::Reference< com::sun::star::document::XActionLockable > mxLockable;
 
     rtl::OUString               maDrawStyleName;
     rtl::OUString               maTextStyleName;
