@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:09:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,19 +132,33 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "viewshel.hxx"
-#include "frmview.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "sdattr.hxx"
 #include "tpoption.hrc"
 #include "optsitem.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "sdresid.hxx"
 #include "pres.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
-#include "outlview.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
 #include "sdpage.hxx"
 #include "tpoption.hxx"
 #include "prntopts.hxx"
@@ -170,7 +184,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     if (pInfo)
     {
         const SvxFieldData* pField = pInfo->GetField().GetField();
-        SdDrawDocShell*     pDocShell = NULL;
+        ::sd::DrawDocShell*     pDocShell = NULL;
 
         if( pInfo->GetOutliner() )
         {
@@ -181,7 +195,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
 
         if( !pDocShell )
-            pDocShell = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+            pDocShell = PTR_CAST( ::sd::DrawDocShell, SfxObjectShell::Current() );
 
         if (pField && pField->ISA(SvxDateField))
         {
@@ -255,19 +269,21 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             String aRepresentation;
             aRepresentation += sal_Unicode( ' ' );
 
-            SdViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
 
             if( !pViewSh )
-                pViewSh = PTR_CAST( SdViewShell, SfxViewShell::Current() );
+                pViewSh = PTR_CAST( ::sd::ViewShell, SfxViewShell::Current() );
 
             if( pViewSh )
             {
                 // #110023#
                 // since the view from the SdOutlineViewShell can be zero during SdOutlineViewShell c'tor
                 // we have to check this here
-                SdOutlineView* pSdView = NULL;
-                if (pViewSh->ISA (SdOutlineViewShell))
-                    pSdView = static_cast<SdOutlineView*> (static_cast<SdOutlineViewShell*>(pViewSh)->GetView());
+                ::sd::OutlineView* pSdView = NULL;
+                if (pViewSh->ISA (::sd::OutlineViewShell))
+                    pSdView = static_cast< ::sd::OutlineView*>(
+                        static_cast< ::sd::OutlineViewShell*>(pViewSh)
+                        ->GetView());
                 if (pSdView != NULL
                     && (pInfo->GetOutliner() ==  pSdView->GetOutliner()))
                 {
@@ -394,8 +410,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 \************************************************************************/
 SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
 {
-    FrameView* pFrameView = NULL;
-    SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+    ::sd::FrameView* pFrameView = NULL;
+    ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
 
     // Hier wird der DocType vom Optionsdialog gesetzt (nicht Dokument!)
@@ -403,7 +419,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
         eDocType = DOCUMENT_TYPE_DRAW;
 
-    SdViewShell* pViewShell = NULL;
+    ::sd::ViewShell* pViewShell = NULL;
 
     if (pDocSh)
     {
@@ -470,7 +486,8 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     if ( pFrameView )
     {
         aSdOptionsMiscItem.SetSummationOfParagraphs( pDoc->IsSummationOfParagraphs() );
-        aSdOptionsMiscItem.SetPrinterIndependentLayout (pDoc->GetPrinterIndependentLayout());
+        aSdOptionsMiscItem.SetPrinterIndependentLayout (
+            (USHORT)pDoc->GetPrinterIndependentLayout());
     }
     pRet->Put( aSdOptionsMiscItem );
 
@@ -524,15 +541,15 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     BOOL bNewPrintOptions = FALSE;
     BOOL bMiscOptions = FALSE;
 
-    FrameView* pFrameView = NULL;
-    SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+    ::sd::FrameView* pFrameView = NULL;
+    ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
     // Hier wird der DocType vom Optionsdialog gesetzt (nicht Dokument!)
     DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
         eDocType = DOCUMENT_TYPE_DRAW;
 
-    SdViewShell* pViewShell = NULL;
+    ::sd::ViewShell* pViewShell = NULL;
 
     if (pDocSh)
     {
@@ -674,11 +691,11 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             SdDrawDocument* pDocument = pDocSh->GetDoc();
             pDocument->SetDefaultTabulator( nDefTab );
 
-            SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+            ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
             if( pOutl )
                 pOutl->SetDefTab( nDefTab );
 
-            SdOutliner* pInternalOutl = pDocument->GetInternalOutliner( FALSE );
+            ::sd::Outliner* pInternalOutl = pDocument->GetInternalOutliner( FALSE );
             if( pInternalOutl )
                 pInternalOutl->SetDefTab( nDefTab );
         }
@@ -692,7 +709,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
             nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
             rOutl.SetControlWord( nCntrl | nSum );
-            SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+            ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
             if( pOutl )
             {
                 nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -727,7 +744,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             if(pViewShell->GetView())
                 pViewShell->GetView()->EndTextEdit();
 
-            FrameView* pFrameView = pViewShell->GetFrameView();
+            ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
             pFrameView->Update(pOptions);
             pViewShell->ReadFrameViewData(pFrameView);
             pViewShell->SetUIUnit(eUIUnit);
