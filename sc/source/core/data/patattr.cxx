@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:55:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,6 +822,13 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
     if (rEditSet.GetItemState(EE_CHAR_RELIEF,TRUE,&pItem) == SFX_ITEM_SET)
         rDestSet.Put( SvxCharReliefItem( (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue(),
                         ATTR_FONT_RELIEF) );
+
+    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE,TRUE,&pItem) == SFX_ITEM_SET)
+        rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_FONT_LANGUAGE) );
+    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CJK,TRUE,&pItem) == SFX_ITEM_SET)
+        rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_CJK_FONT_LANGUAGE) );
+    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CTL,TRUE,&pItem) == SFX_ITEM_SET)
+        rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_CTL_FONT_LANGUAGE) );
 
     if (rEditSet.GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
     {
