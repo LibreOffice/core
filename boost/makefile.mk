@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 16:19:10 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:09:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,10 @@
 #
 #*************************************************************************
 
+# dmake create_clean -- just unpacks
+# dmake patch -- unpacks and applies patch file
+# dmake create_patch -- creates a patch file
+
 PRJ=.
 
 PRJNAME=ooo_boost
@@ -69,7 +73,9 @@ TARGET=ooo_boost
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_BOOST)" == "YES"
+# force patched boost for sunpro CC
+# to workaround opt bug when compiling with -xO3
+.IF "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
 all:
     @echo "An already available installation of boost should exist on your system."        
     @echo "Therefore the version provided here does not need to be built in addition."
@@ -78,6 +84,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=boost-1.30.2
+PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -88,8 +95,19 @@ BUILD_FLAGS=
 
 # --- Targets ------------------------------------------------------
 
+all: \
+    $(MISC)$/$(TARGET)_remove_build.flag \
+    ALLTAR
+
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+
+# Since you never know what will be in a patch (for example, it may already
+# patch at configure level), we remove the entire package directory if a patch
+# is newer.
+$(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
+    $(REMOVE_PACKAGE_COMMAND)
+    +$(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
 
 .ENDIF
