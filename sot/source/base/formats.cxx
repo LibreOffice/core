@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:12:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,6 +1652,9 @@ USHORT SotExchange::GetExchangeAction(
 USHORT SotExchange::IsChart(  const SvGlobalName& rName )
 {
     USHORT nRet=0;
+//  if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
+//      nRet = SOFFICE_FILEFORMAT_8;
+//  else
     if ( rName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SCH_CLASSID_50 ) )
@@ -1667,6 +1670,9 @@ USHORT SotExchange::IsChart(  const SvGlobalName& rName )
 USHORT SotExchange::IsMath(  const SvGlobalName& rName )
 {
     USHORT nRet=0;
+//  if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
+//      nRet = SOFFICE_FILEFORMAT_8;
+//  else
     if ( rName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SM_CLASSID_50 ) )
