@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: er $ $Date: 2002-11-25 18:12:53 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 08:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2137,6 +2137,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         bDocumentModifiedPending( FALSE ), \
         nDocumentLock   ( 0 ), \
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
+        bUpdateEnabled  ( TRUE ), \
         pVirtualDevice_100th_mm ( NULL )
 
 //------------------------------------------------------------------

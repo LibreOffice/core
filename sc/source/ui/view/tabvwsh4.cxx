@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-21 19:10:49 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 08:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1613,7 +1613,8 @@ void ScTabViewShell::Construct()
         }
 
         //  Link-Update nicht verschachteln
-        if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_INTERNAL )
+        if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_INTERNAL &&
+             pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
             BOOL bLink = FALSE;                                 // Links updaten
             USHORT nTabCount = pDoc->GetTableCount();
@@ -1667,6 +1668,9 @@ void ScTabViewShell::Construct()
     xDisProvInterceptor = new ScDispatchProviderInterceptor( this );
 
     bFirstActivate = TRUE; // NavigatorUpdate aufschieben bis Activate()
+
+    // #105575#; update only in the first creation of the ViewShell
+    pDocSh->SetUpdateEnabled(FALSE);
 }
 
 //------------------------------------------------------------------

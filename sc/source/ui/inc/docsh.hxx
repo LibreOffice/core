@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-25 09:58:20 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 08:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     BOOL                bDocumentModifiedPending;
     USHORT              nDocumentLock;
     sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
+    BOOL                bUpdateEnabled;
 
     ScSbxDocHelper*     pDocHelper;
 
@@ -386,6 +387,11 @@ public:
                         { bDocumentModifiedPending = bVal; }
     BOOL            IsDocumentModifiedPending() const
                         { return bDocumentModifiedPending; }
+
+    BOOL            IsUpdateEnabled() const
+                        { return bUpdateEnabled; }
+    void            SetUpdateEnabled(BOOL bValue)
+                        { bUpdateEnabled = bValue; }
 
     VirtualDevice*  GetVirtualDevice_100th_mm();
 
