@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 20:05:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ String STR_PRINT_NEWSIZE
 String STR_PRINT_NEWORISIZE
 {
     Text [ de ] = "Sie haben die Seitengröße und die\nSeitenorientierung geändert. Sollen\ndie geänderten Einstellungen in das\nDokument übernommen werden?" ;
-    Text [ en-US ] = "The page size and orientation have been modified\n. Would you like to  save the new settings in the\nactive document?" ;
+    Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
     Text [ x-comment ] = " ";
 };
 String STR_PLUGINVIEW
