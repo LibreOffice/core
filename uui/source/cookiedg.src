@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cookiedg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:09:31 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ ModalDialog DLG_COOKIES
         Text[ arabic ] = "ÅÑÓÇá";
         Text[ turkish ] = "Gönder";
         Text[ catalan ] = "~Aceptar";
+        Text[ finnish ] = "~Lähetä";
     };
     RadioButton RB_INFUTURE_IGNORE
     {
@@ -145,6 +146,7 @@ ModalDialog DLG_COOKIES
         Text[ arabic ] = "ÊÌÇåá";
         Text[ turkish ] = "Yok say";
         Text[ catalan ] = "I~gnorar";
+        Text[ finnish ] = "O~hita";
     };
     RadioButton RB_INFUTURE_INTERACTIVE
     {
@@ -171,6 +173,7 @@ ModalDialog DLG_COOKIES
         Text[ arabic ] = "ÊİÇÚá";
         Text[ turkish ] = "Etkileşimli";
         Text[ catalan ] = "~Interactivo";
+        Text[ finnish ] = "In~teraktiivinen";
     };
     GroupBox GB_INFUTURE
     {
@@ -197,6 +200,7 @@ ModalDialog DLG_COOKIES
         Text[ arabic ] = "ØÑíŞÉ ÇáÊÚÇãá ãÚ åĞå ÇáÜßæßíÒ (ı(Cookies ãÓÊŞÈáíÇğ";
         Text[ turkish ] = "Cookie'lerde uygulanacak kurallar";
         Text[ catalan ] = "Futuro tratamiento de estas cookies";
+        Text[ finnish ] = "Tuleva evästeiden käsittely";
     };
     PushButton BTN_COOKIES_CANCEL
     {
@@ -223,6 +227,7 @@ ModalDialog DLG_COOKIES
         Text[ arabic ] = "ÊÌÇåá";
         Text[ turkish ] = "Yok say";
         Text[ catalan ] = "~Ignorar";
+        Text[ finnish ] = "~Ohita";
     };
     PushButton BTN_COOKIES_OK
     {
@@ -250,6 +255,7 @@ ModalDialog DLG_COOKIES
         Text[ arabic ] = "ÅÑÓÇá";
         Text[ turkish ] = "Gönder";
         Text[ catalan ] = "~Aceptar";
+        Text[ finnish ] = "~Lähetä";
     };
 };
 
@@ -276,6 +282,7 @@ String STR_COOKIES_RECV_START
     Text[ arabic ] = "íÑíÏ ÇáãÒæÏ '${HOST}' ÊÚííä ßæßí æÇÍÏ Ãæ ÃßËÑ.\nÇáßæßíÒ (Cookies) åí ãÚáæãÇÊ ÎÇÕÉ ÈİÆÇÊ ãÚíäÉ ãä ÇáÚäÇæíä (URLs). ÅĞÇ ØáÈ %PRODUCTNAME áÇÍŞÇğ ãÓÊäÏÇğ íÊØÇÈŞ ÚäæÇäå ãÚ İÆÉ ßæßíÒ Êã ÇÓÊŞÈÇáåÇ ãä ŞÈá¡ íŞæã %PRODUCTNAME ÈÅÑÓÇá åĞå ÇáãÚáæãÇÊ Åáì ÇáãÒæÏ. ÈåĞå ÇáØÑíŞÉ íãßä ááãÒæÏÇÊ ãÚÑİÉ ÈíÇäÇÊ Úä ÇÓÊÎÏÇãÇÊ WWW (ãËáÇğ ÇáãÔÊÑíÇÊ ÇáãæÌæÏÉ İí ÍŞíÈÉ ÇáÔÑÇÁ ÃËäÇÁ ÇáÊÓæŞ ÚÈÑ ÇáÅäÊÑäÊ).\n\níõÑÇÏ ÊÚííä ÇáÜßæßíÒ ÇáÊÇáíÉ:\n\n";
     Text[ turkish ] = "Sunucu '${HOST}' bir ya da birden çok Cookie göndermek istiyor.\nCookie'ler, belirli URL sınıflarına ilişkin bilgilerdir. %PRODUCTNAME ileride daha önceden alınmış bir Cookie sınıfının URL'si ile örtüşen bir belge talep ettiğinde, bu bilgi %PRODUCTNAME tarafından ilgili sunucuya gönderilir. Böylece sunucu, bir WWW uygulamasının son durumunu (örn. bir alışveriş sisteminde, sepete konulan ürünleri) kaydedebilir. \n\nŞu Cookie'ler bilgisayarınızda belirlenmiş olmalı:\n\n";
     Text[ catalan ] = "El servidor '${HOST}' desea instalar una o más cookies.\nLas cookies son informaciones referentes a determinadas clases de URLs. Si %PRODUCTNAME solicita más tarde un documento que de acuerdo con su URL corresponda a una clase de una cookie recibida anteriormente, %PRODUCTNAME enviará esta información al servidor. De esta forma los servidores pueden recordar el estado de una aplicación www (p.ej. los artículos de una cesta de compra en un sistema de compras).\n\nLas siguientes cookies se deberán instalar:\n\n";
+    Text[ finnish ] = "Palvelin ${HOST} haluaa käyttää evästeitä.\nEvästeet sisältävät tiettyihin URL-luokkiin viittaavia tietoja. Jo %PRODUCTNAME myöhemmin pyytää asiakirjaa, jonka URL-osoite vastaa evästeen luokkaa, %PRODUCTNAME lähettää nämä tiedot palvelimelle. Näin palvelin pystyy tunnistamaan Web-sovelluksen tilan esimerkiksi online-kaupassa.\n\nSeuraavat evästeet ollaan ottamassa käyttöön:\n\n";
 };
 
 String STR_COOKIES_RECV_COOKIES
@@ -301,6 +308,7 @@ String STR_COOKIES_RECV_COOKIES
     Text[ arabic ] = "ÇáäØÇŞ: ${DOMAIN}, ÇáãÓÇÑ: ${PATH}, Çáßæßí: ${COOKIE}.\n";
     Text[ turkish ] = "Etki alanı: ${DOMAIN}, Veri yolu: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ catalan ] = "Dominio: ${DOMAIN}, Ruta: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ finnish ] = "Verkkoalue: ${DOMAIN}, Polku: ${PATH}, Eväste: ${COOKIE}.\n";
 };
 
 String STR_COOKIES_RECV_TITLE
@@ -326,6 +334,7 @@ String STR_COOKIES_RECV_TITLE
     Text[ arabic ] = "ÇÓÊŞÈÇá ßæßí";
     Text[ turkish ] = "Cookie al";
     Text[ catalan ] = "Recepción de cookies";
+    Text[ finnish ] = "Evästeen vastaanotto";
 };
 
 String STR_COOKIES_SEND_START
@@ -351,6 +360,7 @@ String STR_COOKIES_SEND_START
     Text[ arabic ] = "ŞÇã %PRODUCTNAME ÈÊÎÒí ßæßíÒ (Cookies) ááãÒæÏ '${HOST}'. Óæİ íÊã ÅÑÓÇá åĞå ÇáÜßæßíÒ ÚäÏ ØáÈ ÇáãÓÊäÏ.${PATH}\nÇáßæßíÒ åí ãÚáæãÇÊ ÎÇÕÉ ÈİÆÇÊ ãÚíäÉ ãä ÇáÚäÇæíä .(URLs) íÊã ÅÑÓÇá åĞå ÇáãÚáæãÇÊ ãä ŞÈá ÈÚÖ ÇáãÒæÏÇÊ Åáì %PRODUCTNAME ÚäÏ ÇÓÊÏÚÇÁ ãÓÊäÏÇÊ ÎÇÕÉ¡ ÍíË íÊã ÊÎÒíä åĞå ÇáãÚáæãÇÊ İí %PRODUCTNAME. ÅĞÇ ØáÈ %PRODUCTNAME áÇÍŞÇğ ãÓÊäÏÇğ íÊØÇÈŞ ÚäæÇäå ãÚ İÆÉ ßæßíÒ Êã ÇÓÊŞÈÇáåÇ ãä ŞÈá¡ íŞæã %PRODUCTNAME ÈÅÑÓÇá åĞå ÇáãÚáæãÇÊ Åáì ÇáãÒæÏ. ÈåĞå ÇáØÑíŞÉ íãßä ááãÒæÏÇÊ ãÚÑİÉ ÈíÇäÇÊ Úä ÇÓÊÎÏÇãÇÊ WWW (ãËáÇğ ÇáãÔÊÑíÇÊ ÇáãæÌæÏÉ İí ÍŞíÈÉ ÇáÔÑÇÁ ÃËäÇÁ ÇáÊÓæŞ ÚÈÑ ÇáÅäÊÑäÊ).\n\níõÑÇÏ ÊÚííä ÇáÜßæßíÒ ÇáÊÇáíÉ:\n\n";
     Text[ turkish ] = "%PRODUCTNAME, sunucu '${HOST}' için Cookie'ler kaydetti.  Bunlar, ${PATH} belgesi talep edildiğinde %PRODUCTNAME tarafından gönderilir.\nCookie'ler, belirli URL sınıflarına ilişkin bilgilerdir. %PRODUCTNAME ileride daha önceden alınmış bir Cookie sınıfının URL'si ile örtüşen bir belge talep ettiğinde, bu bilgi %PRODUCTNAME tarafından ilgili sunucuya gönderilir. Böylece sunucu, bir WWW uygulamasının son durumunu (örn. bir alışveriş sisteminde, sepete konulan ürünleri) kaydedebilir. \n\nŞu Cookie'ler bilgisayarınızda belirlenecek:\n\n";
     Text[ catalan ] = "%PRODUCTNAME ha guardado cookies para el servidor '${HOST}' que serán enviadas cuando se solicite el documento ${PATH}.\nLas cookies son informaciones referentes a determinadas clases de URLs. Cuando se solicita un documento, algunos servidores las envían a %PRODUCTNAME y las guardan allí. Si %PRODUCTNAME solicita más tarde un documento que de acuerdo con su URL corresponda a una clase de una cookie recibida anteriormente, %PRODUCTNAME enviará esta información al servidor. Así, los servidores pueden recordar el estado de una aplicación www, como por ejemplo los artículos en la cesta de un sistema de compras.\n\nEstas son las cookies a instalar:\n\n";
+    Text[ finnish ] = "%PRODUCTNAME on tallentanut palvelimen ${HOST} evästeet, jotka lähetetään palvelimelle asiakirjan ${PATH} pyytämisen yhteydessä.\nEvästeet sisältävät tiettyihin URL-luokkiin viittaavia tietoja. Jotkin palvelimet lähettävät evästeitä ohjelmaan %PRODUCTNAME, joka tallentaa ne tiettyjen asiakirjojen käytön yhteydessä. Jos %PRODUCTNAME lataa asiakirjan, jonka URL-osoite vastaa aikaisemmin vastaanotettujen evästeiden määrityksiä, %PRODUCTNAME lähettää nämä tiedot palvelimelle. Näin palvelin pystyy seuraamaan Web-sovelluksen tilaa esimerkiksi online-kaupassa.\n\nSeuraavat evästeet ollaan ottamassa käyttöön:\n\n";
 };
 
 String STR_COOKIES_SEND_COOKIES
@@ -376,6 +386,7 @@ String STR_COOKIES_SEND_COOKIES
     Text[ arabic ] = "ÇáäØÇŞ: ${DOMAIN}, ÇáãÓÇÑ: ${PATH}, Çáßæßí: ${COOKIE}.\n";
     Text[ turkish ] = "Etki alanı: ${DOMAIN}, Veri yolu: ${PATH}, Cookie: ${COOKIE}.\n";
     Text[ catalan ] = "Dominio: ${DOMAIN}, Ruta: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ finnish ] = "Verkkoalue: ${DOMAIN}, Polku: ${PATH}, Eväste: ${COOKIE}.\n";
 };
 
 String STR_COOKIES_SEND_TITLE
@@ -401,5 +412,6 @@ String STR_COOKIES_SEND_TITLE
     Text[ arabic ] = "ÅÑÓÇá ÇáßæßíÒ";
     Text[ turkish ] = "Cookies gönder";
     Text[ catalan ] = "Enviar cookies";
+    Text[ finnish ] = "Lähetä evästeet";
 };
 
