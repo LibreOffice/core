@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-19 15:22:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ using namespace com::sun::star::plugin;
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 
 static void logPlugin( OUString const & path_ )
@@ -176,7 +176,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
             OUString path( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
 #endif
             rPlugins[ aName ] = path;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             logPlugin( path );
 #endif
         }
@@ -468,7 +468,7 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                         s_aDescriptions.realloc( nTok );
                     }
                 }
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 else
                     DBG_ERROR( "### cannot get MIME type or extensions!" );
 #endif
