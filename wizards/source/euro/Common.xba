@@ -7,7 +7,8 @@ Public DialogPassword as Object
 Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
-	CurMimeType = oDocument.DocumentInfo.MimeType
+
+	CurMimeType = GetDocumentType(oDocument)
 	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
 	    oSheets = oDocument.Sheets
 		oSheet = oDocument.Sheets.GetbyIndex(0)
@@ -188,8 +189,10 @@ Sub StartConversion()
 				ConvertRangesorStylesofDocument()
 			End If
 		Case 2
+			bCancelTask = False
 			InitializeThirdStep()
 			ConvertDocuments()
+			bCancelTask = True
 		Case 3
 			DialogConvert.EndExecute()
 	End Select

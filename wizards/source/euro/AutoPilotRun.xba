@@ -191,7 +191,6 @@ End Sub
 
 Sub	InitializeThirdStep()
 Dim TextBoxText as String
-	bCancelTask = False
 	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
 	TargetDir = AssignFileName(DialogModel.txtTarget.Text, DialogModel.lblTarget.Label, False)
 	If Source &lt;&gt; &quot;&quot; And TargetDir &lt;&gt; &quot;&quot; Then

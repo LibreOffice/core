@@ -443,7 +443,6 @@ Dim i as Integer
 	CurrValue(11,3) = chr(916) &amp; chr(961) &amp; chr(967)
 	CurrValue(11,4) = chr(916) &amp; chr(961) &amp; chr(967)
 	CurrValue(11,5) = &quot;GRD&quot;
-
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;
 	CurrSymbolList(1) = &quot;&quot;
