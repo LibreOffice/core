@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:13:08 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 17:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
             {
                 rGrfObj.Draw( pOut, rGrfArea.Pos(), rGrfArea.SSize(),
                                 &aGrfAttr );
-                bForceSwap = TRUE;
                 bContinue = FALSE;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:19:52 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 17:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,10 @@
 #include <sot/formats.hxx>
 #endif
 
-
-#ifndef _FMTFSIZE_HXX //autogen
+#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
-#ifndef _FMTURL_HXX //autogen
+#ifndef _FMTURL_HXX
 #include <fmturl.hxx>
 #endif
 #ifndef _FRMFMT_HXX
@@ -146,6 +145,12 @@
 #endif
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
+#endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
 #endif
 
 // --------------------
@@ -1111,7 +1116,10 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 {
     SvStream* pRet;
-    if( refLink.Is() )
+
+    if( pGrfObj->IsInSwapOut() && IsSelected() )
+        pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
+    else if( refLink.Is() )
     {
         if( pGrfObj->IsInSwapIn() )
         {
@@ -1177,23 +1185,6 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     }
 
     return (long)pRet;
-
-/*
-    SvStream* pStream = GetSwapStream();
-
-    if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
-    {
-        if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
-            mbAutoSwapped = maGraphic.SwapOut( NULL );
-        else
-        {
-            if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )
-                mbAutoSwapped = maGraphic.SwapOut();
-            else
-                mbAutoSwapped = maGraphic.SwapOut( pStream );
-        }
-    }
-*/
 }
 
 
@@ -1286,3 +1277,23 @@ BOOL SwGrfNode::IsTransparent() const
 }
 
 
+BOOL SwGrfNode::IsSelected() const
+{
+    BOOL bRet = FALSE;
+    const SwEditShell* pESh = GetDoc()->GetEditShell();
+    if( pESh )
+    {
+        const SwNode* pN = this;
+        const ViewShell* pV = pESh;
+        do {
+            if( pV->ISA( SwEditShell ) && pN == &((SwCrsrShell*)pV)
+                                ->GetCrsr()->GetPoint()->nNode.GetNode() )
+            {
+                bRet = TRUE;
+                break;
+            }
+        }
+        while( pESh != ( pV = (ViewShell*)pV->GetNext() ));
+    }
+    return bRet;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-09 11:34:32 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 17:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,9 @@ public:
 #endif
         // steht in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
+#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
         // erneutes Einlesen, falls Graphic nicht Ok ist. Die
         // aktuelle wird durch die neue ersetzt.
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     BOOL ReRead( const String& rGrfName, const String& rFltName,
                   const Graphic* pGraphic = 0,
                   const GraphicObject* pGrfObj = 0,
@@ -181,6 +181,8 @@ public:
     void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     void SaveCompleted( BOOL bClear );
+    // is this node selected by any shell?
+    BOOL IsSelected() const;
 #endif
 
         // Der Grafik sagen, dass sich der Node im Undobereich befindet
