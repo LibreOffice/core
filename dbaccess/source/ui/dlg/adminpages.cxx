@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:39:28 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ namespace dbaui
 //-------------------------------------------------------------------------
 OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
     :SfxTabPage(_pParent, _rId, _rAttrSet)
+    ,m_bInReset(sal_False)
 {
     SetExchangeSupport(sal_True);
 }
@@ -160,7 +161,9 @@ int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
 //-------------------------------------------------------------------------
 void OGenericAdministrationPage::Reset(const SfxItemSet& _rCoreAttrs)
 {
+    m_bInReset = sal_True;
     implInitControls(_rCoreAttrs, sal_False);
+    m_bInReset = sal_False;
 }
 
 //-------------------------------------------------------------------------
@@ -199,6 +202,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
     ,m_aConnectionLabel     (this, ResId(FT_CONNECTURL))
     ,m_aConnection          (this, ResId(ET_CONNECTURL))
     ,m_aBrowseConnection    (this, ResId(PB_BROWSECONNECTION))
+    ,m_aNameInvalidMessage  (this, ResId(FT_NAMEINVALID))
     ,m_pCollection(NULL)
     ,m_eCurrentSelection(DST_UNKNOWN)
 {
@@ -229,7 +233,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
 
     // do some knittings
     m_aDatasourceType.SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
-    m_aName.SetModifyHdl(getControlModifiedLink());
+    m_aName.SetModifyHdl(LINK(this, OGeneralPage, OnNameModified));
     m_aConnection.SetModifyHdl(getControlModifiedLink());
 }
 
@@ -246,6 +250,14 @@ void OGeneralPage::initializeHistory()
             m_aSelectionHistory[aTypeLoop.getType()] = m_pCollection->getDatasourcePrefix(aTypeLoop.getType());
     }
 
+}
+
+//-------------------------------------------------------------------------
+void OGeneralPage::GetFocus()
+{
+    OGenericAdministrationPage::GetFocus();
+    if (m_aName.IsEnabled())
+        m_aName.GrabFocus();
 }
 
 //-------------------------------------------------------------------------
@@ -352,6 +364,9 @@ void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
         // this ensures that our type selection link will be called, even if the new is is the same as the
         // current one
     OGenericAdministrationPage::Reset(_rCoreAttrs);
+
+    // there are some things which depend on the current name
+    LINK(this, OGeneralPage, OnNameModified).Call(&m_aName);
 }
 
 //-------------------------------------------------------------------------
@@ -371,6 +386,26 @@ BOOL OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
     }
 
     return bChangedSomething;
+}
+
+//-------------------------------------------------------------------------
+IMPL_LINK(OGeneralPage, OnNameModified, Edit*, _pBox)
+{
+    sal_Bool bNewNameValid = sal_True;
+
+    if (m_aNameModifiedHandler.IsSet())
+        bNewNameValid = (0L != m_aNameModifiedHandler.Call(this));
+
+    // show a text if the name is invalid
+    String sNameMessage;
+    if (!bNewNameValid)
+    {
+        OLocalResourceAccess aStringResAccess(PAGE_GENERAL, RSC_TABPAGE);
+        sNameMessage = String(ResId(STR_NAMEINVALID));
+    }
+    m_aNameInvalidMessage.SetText(sNameMessage);
+
+    return 0L;
 }
 
 //-------------------------------------------------------------------------
@@ -1451,15 +1486,8 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
     // as the enable state has been changed, invalidate the control
     m_aTablesList.Invalidate();
 
-    callModifiedHdl();
-    return 0L;
-}
-
-//------------------------------------------------------------------------
-IMPL_LINK( OTableSubscriptionPage, AddAllClickHdl, PushButton*, pButton )
-{
-    CheckAll( !m_bCheckedAll );
-    callModifiedHdl();
+    if (!m_bInReset)
+        callModifiedHdl();
     return 0L;
 }
 
@@ -1470,6 +1498,9 @@ IMPL_LINK( OTableSubscriptionPage, AddAllClickHdl, PushButton*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:39:28  fs
+ *  some (a lot of) new imlpementations - still under development
+ *
  *  Revision 1.1  2000/10/05 10:04:12  fs
  *  initial checkin
  *

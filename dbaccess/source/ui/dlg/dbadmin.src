@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,6 @@ TabDialog DLG_DATABASE_ADMINISTRATION
 
         // the following window is just to have a border. In a tab dialog, we can't use a window with border
         // directly as view window
-        Window WND_SELECTORBORDER
-        {
-            Pos = MAP_APPFONT ( 0, 0 ) ;
-            Size = MAP_APPFONT ( 60, 200 ) ;
-            Border = TRUE;
-        };
         PushButton PB_NEW_DATASOURCE
         {
             Pos = MAP_APPFONT ( 0, 0 ) ;
@@ -300,6 +294,23 @@ TabDialog DLG_DATABASE_ADMINISTRATION
 };
 
 //-------------------------------------------------------------------------
+Image BMP_DATABASE
+{
+    ImageBitmap = Bitmap { File = "db.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image BMP_DATABASE_MODIFIED
+{
+    ImageBitmap = Bitmap { File = "db_modified.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+Image BMP_DATABASE_NEW
+{
+    ImageBitmap = Bitmap { File = "db_new.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
+
+//-------------------------------------------------------------------------
 TabPage PAGE_GENERAL
 {
     SVLook = TRUE ;
@@ -397,16 +408,31 @@ TabPage PAGE_GENERAL
         Text [ danish ] = "Gennemse..." ;
         Text [ portuguese_brazilian ] = "Durchsuchen..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
-        Text[ chinese_simplified ] = "‰Ø¿¿...";
-        Text[ russian ] = "Œ·ÁÓ...";
-        Text[ polish ] = "Przeglπdaj...";
-        Text[ japanese ] = "åüçı...";
-        Text[ chinese_traditional ] = "¬sƒ˝...";
-        Text[ arabic ] = "«” ⁄—«÷...";
-        Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
-        Text[ korean ] = "≈Ωªˆ...";
-        Text[ turkish ] = "Tara...";
-        Text[ language_user1 ] = " ";
+        Text [ chinese_simplified ] = "‰Ø¿¿...";
+        Text [ russian ] = "Œ·ÁÓ...";
+        Text [ polish ] = "Przeglπdaj...";
+        Text [ japanese ] = "åüçı...";
+        Text [ chinese_traditional ] = "¬sƒ˝...";
+        Text [ arabic ] = "«” ⁄—«÷...";
+        Text [ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
+        Text [ korean ] = "≈Ωªˆ...";
+        Text [ turkish ] = "Tara...";
+        Text [ language_user1 ] = " ";
+    };
+    FixedText FT_NAMEINVALID
+    {
+        Pos = MAP_APPFONT ( 6, 112 );
+        Size = MAP_APPFONT ( 248, 20 );
+        WordBreak = TRUE;
+    };
+    String STR_NAMEINVALID
+    {
+        Text =  "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sein "
+            "m¸ssen, sollten sie einen anderen w‰hlen.";
+        Text [ english ] = "There already is another data source with this name. Since data source names have to be "
+                "globally unique, you have to choose another one.";
+        Text [ english_us ] = "There already is another data source with this name. Since data source names have to be "
+                "globally unique, you have to choose another one.";
     };
 };
 
@@ -694,27 +720,9 @@ TabPage PAGE_JDBC
     {
         Pos = MAP_APPFONT ( 90 , 66 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "beim ÷ffnen ~fragen";
-        Text [ ENGLISH ] = "beim ÷ffnen ~fragen";
-        Text[ italian ] = "Chiedi all'apertura";
-        Text[ portuguese_brazilian ] = "beim ÷ffnen ~fragen";
-        Text[ portuguese ] = "~Perguntar ao abrir";
-        Text[ danish ] = "sp¯rg ved Âbning";
-        Text[ french ] = "~RequÍte ‡ l'ouverture";
-        Text[ swedish ] = "~frÂga vid ˆppnandet";
-        Text[ dutch ] = "bij openen ~vragen";
-        Text[ spanish ] = "preguntar al ~abrir";
-        Text[ english_us ] = "Request when opened";
-        Text[ chinese_simplified ] = "‘⁄¥Úø™ ±—ØŒ ";
-        Text[ russian ] = "«‡Ô‡¯Ë‚‡Ú¸ ÔË ÓÚÍ˚‚‡ÌËË";
-        Text[ polish ] = "Pytaj przy otwieraniu";
-        Text[ japanese ] = "äJÇ≠ç€Ç…êqÇÀÇÈ";
-        Text[ chinese_traditional ] = "¶b∂}±“Æ…∏ﬂ∞›";
-        Text[ arabic ] = "«·«” ›”«— ⁄‰œ «·› Õ";
-        Text[ greek ] = "≈Ò˛ÙÁÛÁ Í·Ù‹ ÙÔ ‹ÌÔÈ„Ï·";
-        Text[ korean ] = "ø≠ ∂ß ø‰√ª";
-        Text[ turkish ] = "AÁarken sor";
-        Text[ language_user1 ] = " ";
+        Text = "Passwort erforderlich";
+        Text [ english ] = "Password required";
+        Text [ english_us ] = "Password required";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1394,10 +1402,19 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ english ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ english_us ] = "Connecting to data source \"$name$\" requires you to enter a password.";
 };
+String STR_DATASOURCE_DEFAULTNAME
+{
+    Text = "Datenquelle";
+    Text [ english ] = "data source";
+    Text [ english_us ] = "datas source";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:39:29  fs
+ *  some (a lot of) new imlpementations - still under development
+ *
  *  Revision 1.1  2000/10/05 10:05:05  fs
  *  initial checkin
  *

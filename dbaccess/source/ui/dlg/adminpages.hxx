@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class OGenericAdministrationPage : public SfxTabPage
 {
 protected:
     Link        m_aModifiedHandler;     /// to be called if something on the page has been modified
+    sal_Bool    m_bInReset;             /// sal_True if and only if we're within Reset
 
 public:
     OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
@@ -166,13 +167,15 @@ private:
     FixedText           m_aConnectionLabel;
     OConnectionURLEdit  m_aConnection;
     PushButton          m_aBrowseConnection;
+    FixedText           m_aNameInvalidMessage;
 
     ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
     DECLARE_STL_MAP(DATASOURCE_TYPE, String, ::std::less< DATASOURCE_TYPE >, SelectionHistory);
     DATASOURCE_TYPE     m_eCurrentSelection;    /// currently selected type
     SelectionHistory    m_aSelectionHistory;    /// last selected ConnectURLs for all types
 
-    Link        m_aTypeSelectHandler;   /// to be called if a new type is selected
+    Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
+    Link                m_aNameModifiedHandler; /// to be called whenever the name of the data source is changed by the user
 
 public:
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet);
@@ -182,6 +185,11 @@ public:
     /// get the currently selected datasource type
     DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
 
+    /// set a handler which gets called every time the user changes the data source name
+    void            SetNameModifyHandler(const Link& _rHandler) { m_aNameModifiedHandler = _rHandler; }
+    /// get the current name the user wants the data source to have
+    String          GetCurrentName() const { return m_aName.GetText(); }
+
 protected:
     // SfxTabPage overridables
     virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
@@ -189,12 +197,14 @@ protected:
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
+    virtual void GetFocus();
+
 protected:
     void onTypeSelected(DATASOURCE_TYPE _eType);
     void initializeHistory();
 
     DECL_LINK(OnDatasourceTypeSelected, ListBox*);
-    DECL_LINK(OnEditModified, Edit*);
+    DECL_LINK(OnNameModified, Edit*);
 };
 
 
@@ -413,8 +423,6 @@ private:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
 
     void CheckAll( BOOL bCheck=TRUE );
-    DECL_LINK( AddAllClickHdl, PushButton* );
-
     DECL_LINK( OnRadioButtonClicked, Button* );
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
@@ -429,6 +437,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:39:29  fs
+ *  some (a lot of) new imlpementations - still under development
+ *
  *  Revision 1.1  2000/10/05 10:04:22  fs
  *  initial checkin
  *
