@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 09:17:44 $
+ *  last change: $Author: bustamam $ $Date: 2001-05-10 21:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,17 +114,17 @@ constants BreakType
 */
 constants ScriptType
 {
-    /// latin characters (english, .. )
-    const short LATIN                   = 1;
+        /// latin characters (english, .. )
+        const short LATIN                                       = 1;
 
-    /// asian characters (japanese, .. )
-    const short ASIAN                   = 2;
+        /// asian characters (japanese, .. )
+        const short ASIAN                                       = 2;
 
-    /// complex characters (arabic, ..)
-    const short COMPLEX                 = 3;
+        /// complex characters (arabic, ..)
+        const short COMPLEX                                     = 3;
 
-    /// undefined characters (punctuation, .. )
-    const short WEAK                    = 4;
+        /// undefined characters (punctuation, .. )
+        const short WEAK                                        = 4;
 };
 
 //--------------------------------------------------------------------------
@@ -154,11 +154,39 @@ constants WordType
 */
 constants CharType
 {
-    /// all alpha characters allowed
-    const short ANY_CHAR                 = 0;
+        /// all alpha characters allowed
+        const short ANY_CHAR                = 0;
 
-    /// only lower alpha characters allowed
-    const short LOWER_CASE_CHAR          = 1;
+        const short UPPERCASE_LETTER        = 1;
+        const short LOWERCASE_LETTER        = 2;
+        const short TITLECASE_LETTER        = 3;
+        const short MODIFIER_LETTER         = 4;
+        const short OTHER_LETTER            = 5;
+        const short NON_SPACING_MARK        = 6;
+        const short ENCLOSING_MARK          = 7;
+        const short COMBINING_SPACING_MARK  = 8;
+        const short DECIMAL_DIGIT_NUMBER    = 9;
+        const short LETTER_NUMBER           = 10;
+        const short OTHER_NUMBER            = 11;
+        const short SPACE_SEPARATOR         = 12;
+        const short LINE_SEPARATOR          = 13;
+        const short PARAGRAPH_SEPARATOR     = 14;
+        const short CONTROL                 = 15;
+        const short FORMAT                  = 16;
+        const short PRIVATE_USE             = 17;
+        const short SURROGATE               = 18;
+        const short DASH_PUNCTUATION        = 19;
+        const short START_PUNCTUATION       = 20;
+        const short END_PUNCTUATION         = 21;
+        const short CONNECTOR_PUNCTUATION   = 22;
+        const short OTHER_PUNCTUATION       = 23;
+        const short MATH_SYMBOL             = 24;
+        const short CURRENCY_SYMBOL         = 25;
+        const short MODIFIER_SYMBOL         = 26;
+        const short OTHER_SYMBOL            = 27;
+        const short INITIAL_PUNCTUATION     = 28;
+        const short FINAL_PUNCTUATION       = 29;
+        const short GENERAL_TYPES_COUNT     = 30;
 };
 
 //--------------------------------------------------------------------------
@@ -415,6 +443,9 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/28 09:17:44  tl
+    #84966 aHyphenationOptions added LineBreakHyphenationOptions
+
     Revision 1.4  2001/03/16 16:41:27  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
