@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="helpid:10126" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:helpid="helpid:10469" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="helpid:10143" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="helpid:10301" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:helpid="helpid:10169" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:helpid="helpid:10171" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:helpid="helpid:10172" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:GrafMode" toolbar:helpid="helpid:10871" toolbar:text="" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="helpid:10142" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="helpid:10164" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:GrafRed" toolbar:helpid="helpid:10865" toolbar:text="" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="helpid:10299" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:helpid="helpid:10371" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:GrafGreen" toolbar:helpid="helpid:10866" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafBlue" toolbar:helpid="helpid:10867" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafLuminance" toolbar:helpid="helpid:10867" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafContrast" toolbar:helpid="helpid:10867" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafGamma" toolbar:helpid="helpid:10867" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="helpid:10867" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafAttrCrop" toolbar:helpid="helpid:10883" toolbar:text="" />
 </toolbar:toolbar>
