@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readline.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-01 13:22:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,13 @@
 /** Helper data and function
 */
 
-static struct _Buffer
+struct _Buffer
 {
     sal_Char*   m_pMem;
-    sal_uInt64  m_Capacity;           // elements possible in buffer
-    sal_uInt64  m_Size;               // elements actually in buffer
-    sal_uInt64  m_ActiveSectionStart; // buffer was lastly filled from here to (m_Size - 1)
+    sal_uInt64  m_Capacity;           /* elements possible in buffer */
+    sal_uInt64  m_Size;               /* elements actually in buffer */
+    sal_uInt64  m_ActiveSectionStart; /* buffer was lastly filled from here to
+                                         (m_Size - 1) */
 };
 
 typedef struct _Buffer Buffer;
@@ -319,7 +320,7 @@ oslFileError SAL_CALL osl_readLine(oslFileHandle Handle, sal_Sequence** ppSeq)
             return osl_File_E_None;
         }
 
-        // scann buffer for line end
+        /* scan buffer for line end */
         for (pos = line_buffer.m_ActiveSectionStart; pos < line_buffer.m_Size; pos++)
         {
             switch(line_buffer.m_pMem[pos])
