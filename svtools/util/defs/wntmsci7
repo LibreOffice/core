@@ -10099,3 +10099,9 @@ _real@8@3ffeccccccccccccd000
 ?lcl_MoveControl@?%O:/SRC650/src/svtools/source/filepicker\iodlg.cxx2148624481@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:/SRC650/src/svtools/source/filepicker\iodlg.cxx2148624481@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:/SRC650/src/svtools/source/filepicker\iodlgimp.cxx2117031456@@YA?AVString@@ABV2@@Z
+??RFilterTitleMatch@?%O:\SRC650\src\svtools\source\filepicker\filepicker.cxx2064828572@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC650\src\svtools\source\filepicker\iodlg.cxx90224173@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC650\src\svtools\source\filepicker\iodlg.cxx90224173@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC650\src\svtools\source\filepicker\iodlg.cxx90224173@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC650\src\svtools\source\filepicker\iodlg.cxx90224173@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC650\src\svtools\source\filepicker\iodlg.cxx90224173@@YAEABVString@@AAV2@@Z
