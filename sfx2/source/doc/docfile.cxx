@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-09 16:50:39 $
+ *  last change: $Author: sb $ $Date: 2001-05-03 08:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,7 @@ sal_Bool SfxMedium::TryStorage()
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteractionHandler(
-                xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.uui.InteractionHandler") ), UNO_QUERY );
+                xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), UNO_QUERY );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs(1);
     aArgs.getArray()[0].Name = DEFINE_CONST_UNICODE( "InteractionHandler" );

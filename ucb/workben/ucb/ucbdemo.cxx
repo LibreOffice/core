@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:19:34 $
+ *  last change: $Author: sb $ $Date: 2001-05-03 08:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,7 @@ Any UcbCommandProcessor::executeCommand( const OUString& rName,
                       m_rUCB.getServiceFactory()->
                           createInstance(
                               OUString::createFromAscii(
-                                  "com.sun.star.uui.InteractionHandler")),
+                                  "com.sun.star.task.InteractionHandler")),
                       UNO_QUERY);
         Reference< XProgressHandler >
             xProgressHandler(new ProgressHandler(m_rUCB));
@@ -1535,7 +1535,7 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
                           m_rUCB.getServiceFactory()->
                               createInstance(
                                   OUString::createFromAscii(
-                                      "com.sun.star.uui.InteractionHandler")),
+                                      "com.sun.star.task.InteractionHandler")),
                           UNO_QUERY);
         Reference< XProgressHandler > xProgressHandler(
             new ProgressHandler(m_rUCB));

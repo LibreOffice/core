@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 06:32:11 $
+ *  last change: $Author: sb $ $Date: 2001-05-03 08:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 #if SUPD>521
         Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
         Content aCnt( aFolderObj.GetMainURL(), new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
 #else
