@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undostyl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,13 @@ public:
 class ScUndoApplyPageStyle: public ScSimpleUndo
 {
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     String          aOldStyle;
     String          aNewStyle;
 
 public:
                     TYPEINFO();
-                    ScUndoApplyPageStyle( ScDocShell* pDocSh, USHORT nT,
+                    ScUndoApplyPageStyle( ScDocShell* pDocSh, SCTAB nT,
                                         const String& rOld, const String& rNew );
     virtual         ~ScUndoApplyPageStyle();
 
