@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:12:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2592,10 +2592,9 @@ inline Color ImplWinColorToSal( COLORREF nColor )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalUpdateStyleFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont,
-                                     BOOL bReplaceFont )
+static void ImplSalUpdateStyleFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont )
 {
-    ImplSalLogFontToFontA( hDC, rLogFont, rFont, bReplaceFont );
+    ImplSalLogFontToFontA( hDC, rLogFont, rFont );
 
     // On Windows 9x, Windows NT we get sometimes very small sizes
     // (for example for the small Caption height).
@@ -2613,10 +2612,9 @@ static void ImplSalUpdateStyleFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rF
 
 // -----------------------------------------------------------------------
 
-static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont,
-                                     BOOL bReplaceFont )
+static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    ImplSalLogFontToFontW( hDC, rLogFont, rFont, bReplaceFont );
+    ImplSalLogFontToFontW( hDC, rLogFont, rFont );
 
     // On Windows 9x, Windows NT we get sometimes very small sizes
     // (for example for the small Caption height).
@@ -2792,25 +2790,21 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aAppFont = aStyleSettings.GetAppFont();
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
-    BOOL    bReplaceFont = !ImplIsFontAvailable( hDC, XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) ) );
-
-    bReplaceFont |= aStyleSettings.GetUseSystemUIFonts();
-
     if ( aSalShlData.mbWNT )
     {
         NONCLIENTMETRICSW aNonClientMetrics;
         aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
         if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
         {
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont, bReplaceFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont, bReplaceFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont, bReplaceFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont, bReplaceFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont, bReplaceFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
+            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
 
             LOGFONTW aLogFont;
             if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont, bReplaceFont );
+                ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
         }
     }
     else
@@ -2819,15 +2813,15 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
         if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
         {
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMenuFont, aMenuFont, bReplaceFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont, bReplaceFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont, bReplaceFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfStatusFont, aHelpFont, bReplaceFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMessageFont, aAppFont, bReplaceFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
+            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
 
             LOGFONTA aLogFont;
             if ( SystemParametersInfoA( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont, bReplaceFont );
+                ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont );
         }
     }
 
