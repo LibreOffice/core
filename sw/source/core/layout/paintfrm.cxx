@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:07:39 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,10 @@
 // OD 02.07.2003 #108784#
 #ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
@@ -1400,24 +1404,24 @@ void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
 void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
                            const SwRect &rRect, SwRegionRects &rRegion )
 {
-    const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
-    const SwFlyFrm *pSelfFly = pFrm->IsInFly() ? pFrm->FindFlyFrm() : pRetoucheFly2;
+    const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
+    const SwFlyFrm* pSelfFly = pFrm->IsInFly() ? pFrm->FindFlyFrm() : pRetoucheFly2;
     if ( !pRetoucheFly )
         pRetoucheFly = pRetoucheFly2;
 
     for ( USHORT j = 0; (j < rObjs.Count()) && rRegion.Count(); ++j )
     {
-        SdrObject *pO = rObjs[j];
-        if ( !pO->ISA(SwVirtFlyDrawObj) )
-            continue;
+        const SwAnchoredObject* pAnchoredObj = rObjs[j];
+        const SdrObject* pSdrObj = pAnchoredObj->GetDrawObj();
 
         // OD 2004-01-15 #110582# - do not consider invisible objects
-        if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
-        {
+        if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pSdrObj->GetLayer() ) )
             continue;
-        }
 
-        const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+        if ( !pAnchoredObj->ISA(SwFlyFrm) )
+            continue;
+
+        const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
 
         if ( pSelfFly == pFly || pRetoucheFly == pFly || !rRect.IsOver( pFly->Frm() ) )
             continue;
@@ -1448,7 +1452,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( pSelfFly && bLowerOfSelf )
         {
             ASSERT( pFly->IsFlyInCntFrm() ||
-                    pO->GetOrdNumDirect() > pSelfFly->GetVirtDrawObj()->GetOrdNumDirect(),
+                    pSdrObj->GetOrdNumDirect() > pSelfFly->GetVirtDrawObj()->GetOrdNumDirect(),
                     "Fly with wrong z-Order" );
         }
 #endif
@@ -1457,9 +1461,9 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( pSelfFly )
         {
             const SdrObject *pTmp = pSelfFly->GetVirtDrawObj();
-            if ( pO->GetLayer() == pTmp->GetLayer() )
+            if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
-                if ( pO->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
                     //Im gleichen Layer werden nur obenliegende beachtet.
                     continue;
             }
@@ -1475,9 +1479,9 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( pRetoucheFly )
         {
             const SdrObject *pTmp = pRetoucheFly->GetVirtDrawObj();
-            if ( pO->GetLayer() == pTmp->GetLayer() )
+            if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
-                if ( pO->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
                     //Im gleichen Layer werden nur obenliegende beachtet.
                     continue;
             }
@@ -1493,7 +1497,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
         //Wenn der Inhalt des Fly Transparent ist, wird er nicht abgezogen, es sei denn
         //er steht im Hell-Layer (#31941#)
-        BOOL bHell = pO->GetLayer() == pFly->GetFmt()->GetDoc()->GetHellId();
+        BOOL bHell = pSdrObj->GetLayer() == pFly->GetFmt()->GetDoc()->GetHellId();
         if ( (bStopOnHell && bHell) ||
              /// OD 05.08.2002 - change internal order of condition
              ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
@@ -1507,22 +1511,22 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
            )
             continue;
 
-        /// OD 08.10.2002 #103898#
-        /// Own if-statements for transparent background/shadow of fly frames
-        /// (#99657#) in order to handle special conditions.
+        // OD 08.10.2002 #103898#
+        // Own if-statements for transparent background/shadow of fly frames
+        // (#99657#) in order to handle special conditions.
         if ( pFly->IsBackgroundTransparent() )
         {
-            /// Background <pFly> is transparent drawn. Thus normally, its region
-            /// have not to be substracted from given region.
-            /// But, if method is called for a fly frame and
-            /// <pFly> is a direct lower of this fly frame and
-            /// <pFly> inherites its transparent background brush from its parent,
-            /// then <pFly> frame area have to be subtracted from given region.
-            /// NOTE: Because in Status Quo transparent backgrounds can only be
-            ///     assigned to fly frames, the handle of this special case
-            ///     avoids drawing of transparent areas more than once, if
-            ///     a fly frame inherites a transparent background from its
-            ///     parent fly frame.
+            // Background <pFly> is transparent drawn. Thus normally, its region
+            // have not to be substracted from given region.
+            // But, if method is called for a fly frame and
+            // <pFly> is a direct lower of this fly frame and
+            // <pFly> inherites its transparent background brush from its parent,
+            // then <pFly> frame area have to be subtracted from given region.
+            // NOTE: Because in Status Quo transparent backgrounds can only be
+            //     assigned to fly frames, the handle of this special case
+            //     avoids drawing of transparent areas more than once, if
+            //     a fly frame inherites a transparent background from its
+            //     parent fly frame.
             if ( pFrm->IsFlyFrm() &&
                  (pFly->GetAnchorFrm()->FindFlyFrm() == pFrm) &&
                  static_cast<const SwFlyFrmFmt*>(pFly->GetFmt())->IsBackgroundBrushInherited()
@@ -5463,14 +5467,16 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                 ((const SwLayoutFrm*)pLow)->RefreshLaySubsidiary( pPage, rRect);
             else if ( pLow->GetDrawObjs() )
             {
-                const SwDrawObjs &rObjs = *pLow->GetDrawObjs();
-                for ( USHORT i = 0; i < rObjs.Count(); ++i )
+                const SwSortedObjs& rObjs = *(pLow->GetDrawObjs());
+                for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
                 {
-                    SdrObject *pO = rObjs[i];
-                    if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) &&
-                         pO->ISA(SwVirtFlyDrawObj) )
+                    const SwAnchoredObject* pAnchoredObj = rObjs[i];
+                    if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
+                                    pAnchoredObj->GetDrawObj()->GetLayer() ) &&
+                         pAnchoredObj->ISA(SwFlyFrm) )
                     {
-                        const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        const SwFlyFrm *pFly =
+                                    static_cast<const SwFlyFrm*>(pAnchoredObj);
                         if ( pFly->IsFlyInCntFrm() && pFly->Frm().IsOver( rRect ) )
                         {
                             if ( !pFly->Lower() || !pFly->Lower()->IsNoTxtFrm() ||
@@ -5775,10 +5781,10 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
         if ( bLineInFly && GetSortedObjs() )
             for ( USHORT i = 0; i < GetSortedObjs()->Count(); ++i )
             {
-                SdrObject *pO = (*GetSortedObjs())[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                const SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->Frm().Top() <= aRect.Bottom() &&
                          pFly->Frm().Bottom() >= aRect.Top() )
                         pFly->RefreshExtraData( aRect );
@@ -5808,12 +5814,12 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
             ((SwTxtFrm*)pCnt)->PaintExtraData( rRect );
         }
         if ( bLineInFly && pCnt->GetDrawObjs() )
-            for ( USHORT i = 0; i < pCnt->GetDrawObjs()->Count(); ++i )
+            for ( sal_uInt32 i = 0; i < pCnt->GetDrawObjs()->Count(); ++i )
             {
-                SdrObject *pO = (*pCnt->GetDrawObjs())[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                const SwAnchoredObject* pAnchoredObj = (*pCnt->GetDrawObjs())[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->IsFlyInCntFrm() &&
                          pFly->Frm().Top() <= rRect.Bottom() &&
                          pFly->Frm().Bottom() >= rRect.Top() )
