@@ -32,6 +32,9 @@
         <service-dependency>
             com.sun.star.ucb.DefaultHierarchyDataSource
         </service-dependency>
+        <service-dependency>
+            com.sun.star.util.OfficeeInstallationDirectories
+        </service-dependency>
     </component-description>
 
     <component-description>
@@ -116,4 +119,5 @@
     <type> com.sun.star.uno.XWeak                              </type>
     <type> com.sun.star.util.XChangesBatch                     </type>
     <type> com.sun.star.util.XChangesNotifier                  </type>
+    <type> com.sun.star.util.XOfficeInstallationDirectories    </type>
 </module-description>
