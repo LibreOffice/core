@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:22:08 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _SVX_HLNKITEM_HXX
 #include <svx/hlnkitem.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -121,6 +118,10 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #pragma hdrstop
+
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -574,8 +575,10 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 case SID_INSERT_FLD_AUTHOR:
                 {
-                    SvxAddressItem aAdrItem;
-                    pFieldItem = new SvxFieldItem( SvxAuthorField( aAdrItem ) );
+                    SvtUserOptions aUserOptions;
+                    pFieldItem = new SvxFieldItem(
+                            SvxAuthorField(
+                                aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() ) );
                 }
                 break;
 
