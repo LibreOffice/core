@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,16 @@ void SAL_CALL uno_type_any_constructAndConvert(
                             defaults (0) to uno
 */
 void SAL_CALL uno_any_destruct(
+    uno_Any * pValue, uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C();
+
+/** Sets value to void.
+
+    @param pValue           pointer to any
+    @param release          function called each time an interface needs to be released;
+                            defaults (0) to uno
+*/
+void SAL_CALL uno_any_clear(
     uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 

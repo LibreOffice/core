@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ void SAL_CALL uno_type_any_assign(
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( (uno_Any *)pDest );
+        __CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -114,7 +114,7 @@ void SAL_CALL uno_type_any_construct(
     }
     else
     {
-        __CONSTRUCT_EMPTY_ANY( (uno_Any *)pDest );
+        __CONSTRUCT_EMPTY_ANY( pDest );
     }
 }
 //##################################################################################################
@@ -170,5 +170,12 @@ void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     __destructAny( pValue, release );
+}
+//##################################################################################################
+void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
+    SAL_THROW_EXTERN_C()
+{
+    __destructAny( pValue, release );
+    __CONSTRUCT_EMPTY_ANY( pValue );
 }
 }

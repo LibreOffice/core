@@ -55,6 +55,7 @@ UDK_3_0_0 {
         uno_any_constructAndConvert;
         uno_type_any_constructAndConvert;
         uno_any_destruct;
+        uno_any_clear;
 
         uno_sequence_assign;
         uno_type_sequence_assign;
