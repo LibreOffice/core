@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: jp $ $Date: 2002-01-17 14:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,6 +771,15 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             WW8PicDesc aPD( aPic );
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );
+
+            //JP 17.1.2002: the correct anchor is set in Read_F_IncludePicture
+            //              and the current PaM point's behind the position if
+            //              it is anchored in content; because this anchor add
+            //              a character into the textnode.
+            //              IussueZilla task 2806
+            if( FLY_IN_CNTNT ==
+                pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
+                aFlySet.ClearItem( RES_ANCHOR );
 
             pFlyFmtOfJustInsertedGraphic->SetAttr( aFlySet );
 
