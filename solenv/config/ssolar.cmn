@@ -154,6 +154,7 @@ common
 		bsclient
 		{
 			BSCLIENT TRUE
+			DISABLE_SAL_DBGBOX TRUE
 		}
 	}
 }
