@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2003-12-08 13:24:06 $
+ *  last change: $Author: thb $ $Date: 2004-02-04 12:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,32 +221,50 @@ namespace
 
             double fCurrAngle( ::std::numeric_limits<double>::max() );
 
+            // are vecAD, vecDB, start and end tangent collinear? If
+            // yes, we're already done, and no further subdivision can
+            // bring us any closer to a straight line...
+            if( ::basegfx::fTools::equalZero( crossVecADDB ) &&
+                ::basegfx::fTools::equalZero( crossVecStartTangentAD ) &&
+                ::basegfx::fTools::equalZero( crossVecDBEndTangent )     )
+            {
+                mfLastTanAngle = 0.0;
+                return false;
+            }
+
             // anyone has zero denominator? then we're at
             // +infinity, anyway, and should better keep on
             // subdividing
-            if( !::basegfx::fTools::equalZero( scalarVecADDB ) &&
-                !::basegfx::fTools::equalZero( scalarVecStartTangentAD ) &&
-                !::basegfx::fTools::equalZero( scalarVecDBEndTangent ) )
+            if( ::basegfx::fTools::equalZero( scalarVecADDB ) ||
+                ::basegfx::fTools::equalZero( scalarVecStartTangentAD ) ||
+                ::basegfx::fTools::equalZero( scalarVecDBEndTangent ) )
             {
-                // now, sieve out quadrants which have
-                // deviating angles of more than 90
-                // degrees. By inspection, this is everything
-                // with a negative scalar product. If we
-                // encounter such a negative scalar product,
-                // we can simply keep on subdividing, since at
-                // least one angle is then >90 degrees.
-                if( !::basegfx::fTools::less( scalarVecADDB, 0.0 ) &&
-                    !::basegfx::fTools::less( scalarVecStartTangentAD, 0.0 ) &&
-                    !::basegfx::fTools::less( scalarVecDBEndTangent, 0.0 ) )
-                {
-                    // take the maximum tangens of angle
-                    // deviation, to compare against the threshold
-                    // below
-                    fCurrAngle = ::std::max( fabs( crossVecADDB / scalarVecADDB ),
-                                             ::std::max( fabs( crossVecStartTangentAD / scalarVecStartTangentAD ),
-                                                         fabs( crossVecDBEndTangent / scalarVecDBEndTangent ) ) );
-                }
+                mfLastTanAngle = fCurrAngle;
+                return true;
             }
+
+            // now, sieve out quadrants which have
+            // deviating angles of more than 90
+            // degrees. By inspection, this is everything
+            // with a negative scalar product. If we
+            // encounter such a negative scalar product,
+            // we can simply keep on subdividing, since at
+            // least one angle is then >90 degrees.
+            if( ::basegfx::fTools::less( scalarVecADDB, 0.0 ) ||
+                ::basegfx::fTools::less( scalarVecStartTangentAD, 0.0 ) ||
+                ::basegfx::fTools::less( scalarVecDBEndTangent, 0.0 ) )
+            {
+                mfLastTanAngle = fCurrAngle; // TODO: Do we need the
+                                             // correct value here?
+                return true;
+            }
+
+            // take the maximum tangens of angle
+            // deviation, to compare against the threshold
+            // below
+            fCurrAngle = ::std::max( fabs( crossVecADDB / scalarVecADDB ),
+                                     ::std::max( fabs( crossVecStartTangentAD / scalarVecStartTangentAD ),
+                                                 fabs( crossVecDBEndTangent / scalarVecDBEndTangent ) ) );
 
             // stop if error measure does not improve anymore. This is a
             // safety guard against floating point inaccuracies.
@@ -293,8 +311,10 @@ namespace
                                                                const double P4x, const double P4y,
                                                                int                            recursionDepth )
     {
-        // Hard limit on recursion depth, empiric number.
-        enum {maxRecursionDepth=128};
+        // Hard limit on recursion depth, empiric number. Note that if
+        // for some obscure reason, we're subdividing always, this
+        // would lead to 2^maxRecursionDepth points generated
+        enum {maxRecursionDepth=30};
 
         // deCasteljau bezier arc, split at t=0.5
         // Foley/vanDam, p. 508
@@ -515,13 +535,17 @@ namespace basegfx
         const B2DPoint control2( rCurve.getControlPointB() );
         const B2DPoint end( rCurve.getEndPoint() );
 
-        return ImplAdaptiveSubdivide( rPoly,
-                                      DistanceErrorFunctor( distanceBounds ),
-                                      start.getX(),     start.getY(),
-                                      control1.getX(),  control1.getY(),
-                                      control2.getX(),  control2.getY(),
-                                      end.getX(),       end.getY(),
-                                      0 );
+        const sal_Int32 nPoints( ImplAdaptiveSubdivide( rPoly,
+                                                        DistanceErrorFunctor( distanceBounds ),
+                                                        start.getX(),   start.getY(),
+                                                        control1.getX(),    control1.getY(),
+                                                        control2.getX(),    control2.getY(),
+                                                        end.getX(),         end.getY(),
+                                                        0 ) );
+        // finish polygon
+        rPoly.append( end );
+
+        return nPoints;
     }
 
     sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&             rPoly,
@@ -533,13 +557,17 @@ namespace basegfx
         const B2DPoint control2( rCurve.getControlPointB() );
         const B2DPoint end( rCurve.getEndPoint() );
 
-        return ImplAdaptiveSubdivide( rPoly,
-                                      AngleErrorFunctor( angleBounds ),
-                                      start.getX(),     start.getY(),
-                                      control1.getX(),  control1.getY(),
-                                      control2.getX(),  control2.getY(),
-                                      end.getX(),       end.getY(),
-                                      0 );
+        const sal_Int32 nPoints( ImplAdaptiveSubdivide( rPoly,
+                                                        AngleErrorFunctor( angleBounds ),
+                                                        start.getX(),   start.getY(),
+                                                        control1.getX(),    control1.getY(),
+                                                        control2.getX(),    control2.getY(),
+                                                        end.getX(),         end.getY(),
+                                                        0 ) );
+        // finish polygon
+        rPoly.append( end );
+
+        return nPoints;
     }
 
     sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&                  rPoly,
