@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,12 +375,19 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 else
                 {
                     // execute "NewDocument" request
-                    SfxViewShell *pView = pFrame->GetCurrentViewFrame() ? pFrame->GetCurrentViewFrame()->GetViewShell() : NULL;
+                    /* Attention!
+                        #107913#
+                        Pointers can't be used to check if two objects are equals!
+                        E.g. the memory manager can reuse freed memory ...
+                        and then the holded copy of a pointer will point to another
+                        (and different!) object - may using the same type then before.
+                        In such case we compare one object with itself ...
+                     */
                     SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
                     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
                     aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, String::CreateFromAscii(pFactory->GetShortName()) ) );
                     const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
-                    if ( pFrame->GetCurrentViewFrame() && pView != pFrame->GetCurrentViewFrame()->GetViewShell() )
+                    if (pRet)
                     {
                         bLoadState = sal_True;
                     }
