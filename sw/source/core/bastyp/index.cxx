@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:54:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ void SwIndexReg::ChkArr()
 
 
 SwIndex::SwIndex( SwIndexReg* pArr, xub_StrLen nIdx )
-    : pArray( pArr ), nIndex( nIdx ), pNext( 0 ), pPrev( 0 )
+    : nIndex( nIdx ), pArray( pArr ), pNext( 0 ), pPrev( 0 )
 {
     if( !pArray )
     {
@@ -170,7 +170,7 @@ IDX_CHK_ARRAY
 
 
 SwIndex::SwIndex( const SwIndex& rIdx )
-    : pArray( rIdx.pArray ), nIndex( rIdx.nIndex ), pNext( 0 ), pPrev( 0 )
+    : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex );
 #ifndef PRODUCT
