@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ portuguese_brazilian ] = "Estilos" ;
         Text [ portuguese ] = "Estilos" ;
         Text [ finnish ] = "Tyylit" ;
-        Text [ danish ] = "Typografi" ;
+        Text [ danish ] = "Typografier" ;
         Text [ french ] = "Styles" ;
         Text [ swedish ] = "Formatmallar" ;
         Text [ dutch ] = "Opmaakprofielen" ;
@@ -837,7 +837,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ portuguese_brazilian ] = "~Iniciado" ;
         Text [ portuguese ] = "~Página seguinte" ;
         Text [ finnish ] = "~Alkaa" ;
-        Text [ danish ] = "På følgesiden" ;
+        Text [ danish ] = "På næste side" ;
         Text [ french ] = "~Sur la page suivante" ;
         Text [ swedish ] = "~På följande sida" ;
         Text [ dutch ] = "V~olgende pagina" ;
@@ -1195,7 +1195,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ portuguese_brazilian ] = "Estilos" ;
         Text [ portuguese ] = "Estilos" ;
         Text [ finnish ] = "Tyylit" ;
-        Text [ danish ] = "Typografi" ;
+        Text [ danish ] = "Typografier" ;
         Text [ french ] = "Styles" ;
         Text [ swedish ] = "Formatmallar" ;
         Text [ dutch ] = "Opmaakprofielen" ;
@@ -1509,7 +1509,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ portuguese_brazilian ] = "~Continuado" ;
         Text [ portuguese ] = "Página ~seguinte" ;
         Text [ finnish ] = "~Jatkuu" ;
-        Text [ danish ] = "Følgeside" ;
+        Text [ danish ] = "Næste side" ;
         Text [ french ] = "~Page suivante" ;
         Text [ swedish ] = "~Följande sida" ;
         Text [ dutch ] = "~Volg. pagina" ;
