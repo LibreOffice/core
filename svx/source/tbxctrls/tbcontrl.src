@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 09:47:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,172 +95,33 @@ ImageList RID_SVXIL_FRAME_HC
 };
 String RID_SVXSTR_TRANSPARENT
 {
-    Text = "Keine Füllung" ;
-    Text [ ENGLISH ] = "No filling" ;
-    Text [ dutch ] = "Geen vulling" ;
-    Text [ english_us ] = "No Fill" ;
-    Text [ italian ] = "Trasparente" ;
-    Text [ spanish ] = "Sin relleno" ;
-    Text [ french ] = "Sans remplissage" ;
-    Text [ swedish ] = "Transparent" ;
-    Text [ danish ] = "Ingen fyld" ;
-    Text [ portuguese ] = "Sem preenchimento" ;
-    Text [ portuguese_brazilian ] = "Sem Preenchimento" ;
-    Text[ chinese_simplified ] = "ä¸å¡«å……";
-    Text[ russian ] = "Áåç çàëèâêè";
-    Text[ polish ] = "Bez wype³nienia";
-    Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—ãªã—";
-    Text[ chinese_traditional ] = "ä¸å……å¡«";
-    Text[ arabic ] = "ÈÏæä ÊÚÈÆÉ";
-    Text[ greek ] = "×ùñßò ãİìéóìá";
-    Text[ korean ] = "ì±„ìš°ê¸° ì—†ìŒ";
-    Text[ turkish ] = "Dolgu yok";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sense emplenament";
-    Text[ finnish ] = "Ei täyttöä";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¹€à¸•à¸´à¸¡";
-    Text[ czech ] = "Bez vÃ½plnÄ›";
-    Text[ hebrew ] = "â€®×œ×œ× ××™×œ×•×™â€¬";
-    Text[ hindi ] = "à¤¨à¤¹à¥€à¤‚ à¤­à¤°à¤¨à¤¾";
-    Text[ slovak ] = "Bez vÃ½plne";
-    Text[ hungarian ] = "Nincs kitÃ¶ltÃ©s";
-    Text[ slovenian ] = "Brez polnila";
+    Text [ de ] = "Keine Füllung" ;
+    Text [ en-US ] = "No Fill" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FILLPATTERN
 {
-    Text = "Muster" ;
-    Text [ ENGLISH ] = "Pattern" ;
-    Text [ norwegian ] = "Mønster" ;
-    Text [ italian ] = "Modello" ;
-    Text [ portuguese_brazilian ] = "Padrão" ;
-    Text [ portuguese ] = "Modelo" ;
-    Text [ finnish ] = "Kuvio" ;
-    Text [ danish ] = "Mønster" ;
-    Text [ french ] = "Motif" ;
-    Text [ swedish ] = "Mönster" ;
-    Text [ dutch ] = "Patroon" ;
-    Text [ spanish ] = "Modelo" ;
-    Text [ english_us ] = "Pattern" ;
-    Text[ chinese_simplified ] = "å›¾æ¡ˆ";
-    Text[ russian ] = "Îğíàìåíò";
-    Text[ polish ] = "Deseñ";
-    Text[ japanese ] = "ãƒ‘ã‚¿ãƒ¼ãƒ³";
-    Text[ chinese_traditional ] = "åœ–æ¡ˆ";
-    Text[ arabic ] = "äŞÔ";
-    Text[ greek ] = "Ìïôßâï";
-    Text[ korean ] = "íŒ¨í„´";
-    Text[ turkish ] = "Desen";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Model";
-    Text[ thai ] = "à¸¥à¸§à¸”à¸¥à¸²à¸¢";
-    Text[ czech ] = "Vzorek";
-    Text[ hebrew ] = "â€®×“×•×’××”â€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¤¾";
-    Text[ slovak ] = "Vzorka";
-    Text[ hungarian ] = "MintÃ¡zat";
-    Text[ slovenian ] = "Vzorec";
+    Text [ de ] = "Muster" ;
+    Text [ en-US ] = "Pattern" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FRAME
 {
-    Text = "Umrandung" ;
-    Text [ ENGLISH ] = "Border" ;
-    Text [ norwegian ] = "Border" ;
-    Text [ italian ] = "Bordo" ;
-    Text [ portuguese_brazilian ] = "Bordas" ;
-    Text [ portuguese ] = "Contornos" ;
-    Text [ finnish ] = "Reunat" ;
-    Text [ danish ] = "Kanter" ;
-    Text [ french ] = "Bordure" ;
-    Text [ swedish ] = "Inramning" ;
-    Text [ dutch ] = "Omranding" ;
-    Text [ spanish ] = "Bordes" ;
-    Text [ english_us ] = "Borders" ;
-    Text[ chinese_simplified ] = "è¾¹æ¡†";
-    Text[ russian ] = "Îáğàìëåíèå";
-    Text[ polish ] = "Krawêdzie";
-    Text[ japanese ] = "å¤–æ ";
-    Text[ chinese_traditional ] = "é‚Šæ¡†";
-    Text[ arabic ] = "ÇáÍÏæÏ";
-    Text[ greek ] = "Ğåñßãñáììá";
-    Text[ korean ] = "í…Œë‘ë¦¬";
-    Text[ turkish ] = "Kenarlıklar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Vores";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-    Text[ czech ] = "Okraje";
-    Text[ hebrew ] = "â€®××¡×’×¨×•×ªâ€¬";
-    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Okraje";
-    Text[ hungarian ] = "SzegÃ©lyek";
-    Text[ slovenian ] = "Obrobe";
+    Text [ de ] = "Umrandung" ;
+    Text [ en-US ] = "Borders" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FRAME_STYLE
 {
-    Text = "Umrandungsstil" ;
-    Text [ ENGLISH ] = "Border Style" ;
-    Text [ norwegian ] = "Kantlinje mal" ;
-    Text [ italian ] = "Stile bordo" ;
-    Text [ portuguese_brazilian ] = "Estilo da Borda" ;
-    Text [ portuguese ] = "Estilo do contorno" ;
-    Text [ finnish ] = "Reunan tyyli" ;
-    Text [ danish ] = "Kanttype" ;
-    Text [ french ] = "Style de bordure" ;
-    Text [ swedish ] = "Inramningsstil" ;
-    Text [ dutch ] = "Omrandingstype" ;
-    Text [ spanish ] = "Estilo de borde" ;
-    Text [ english_us ] = "Border Style" ;
-    Text[ chinese_simplified ] = "è¾¹è·æ ·å¼";
-    Text[ russian ] = "Ñòèëü îáğàìëåíèÿ";
-    Text[ polish ] = "Styl krawêdzi";
-    Text[ japanese ] = "å¤–æ ã‚¹ã‚¿ã‚¤ãƒ«";
-    Text[ chinese_traditional ] = "é‚Šæ¡†æ¨£å¼";
-    Text[ arabic ] = "äãØ ÇáÍÏæÏ";
-    Text[ greek ] = "Óôõë ğåñéãñÜììáôïò";
-    Text[ korean ] = "í…Œë‘ë¦¬ ìŠ¤íƒ€ì¼";
-    Text[ turkish ] = "Kenarlık biçimi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estil de la vora";
-    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-    Text[ czech ] = "Styl okrajÅ¯";
-    Text[ hebrew ] = "â€®×¡×’× ×•×Ÿ ××¡×’×¨×ªâ€¬";
-    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡ à¤•à¥€ à¤¶à¥ˆà¤²à¥€";
-    Text[ slovak ] = "Å tÃ½l okrajov";
-    Text[ hungarian ] = "SzegÃ©ly stÃ­lusa";
-    Text[ slovenian ] = "Slog obrobe";
+    Text [ de ] = "Umrandungsstil" ;
+    Text [ en-US ] = "Border Style" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FRAME_COLOR
 {
-    Text = "Umrandungsfarbe" ;
-    Text [ ENGLISH ] = "Border Color" ;
-    Text [ norwegian ] = "Kantlinjefarge" ;
-    Text [ italian ] = "Colore bordo" ;
-    Text [ portuguese_brazilian ] = "Cor da Borda" ;
-    Text [ portuguese ] = "Cor do contorno" ;
-    Text [ finnish ] = "Reunan väri" ;
-    Text [ danish ] = "Kantfarve" ;
-    Text [ french ] = "Couleur de bordure" ;
-    Text [ swedish ] = "Inramningsfärg" ;
-    Text [ dutch ] = "Omrandingskleur" ;
-    Text [ spanish ] = "Color del borde" ;
-    Text [ english_us ] = "Border Color" ;
-    Text[ chinese_simplified ] = "è¾¹æ¡†é¢œè‰²";
-    Text[ russian ] = "Öâåò îáğàìëåíèÿ";
-    Text[ polish ] = "Kolor krawêdzi";
-    Text[ japanese ] = "å¤–æ ã®è‰²";
-    Text[ chinese_traditional ] = "é‚Šæ¡†é¡è‰²";
-    Text[ arabic ] = "áæä ÇáÍÏæÏ";
-    Text[ greek ] = "×ñşìáôá ğåñéãñáììÜôùí";
-    Text[ korean ] = "í…Œë‘ë¦¬ ìƒ‰ìƒ";
-    Text[ turkish ] = "Kenarlık rengi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color de la vora";
-    Text[ thai ] = "à¸ªà¸µà¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-    Text[ czech ] = "Barva okrajÅ¯";
-    Text[ hebrew ] = "â€®×¦×‘×¢ ××¡×’×¨×ªâ€¬";
-    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡ à¤•à¥€ à¤°à¤‚à¤—";
-    Text[ slovak ] = "Farba okrajov";
-    Text[ hungarian ] = "SzegÃ©ly szÃ­ne";
-    Text[ slovenian ] = "Barva obrobe";
+    Text [ de ] = "Umrandungsfarbe" ;
+    Text [ en-US ] = "Border Color" ;
+    Text [ x-comment ] = " ";
 };
 ListBox RID_SVXTBX_STYLE
 {
@@ -275,131 +136,24 @@ ListBox RID_SVXTBX_STYLE
 };
 String RID_SVXSTR_EXTRAS_CHARBACKGROUND
 {
-    Text = "Zeichenhintergrund" ;
-    Text [ English ] = "Character background" ;
-    Text [ english_us ] = "Highlighting" ;
-    Text [ portuguese_brazilian ] = "Destaque" ;
-    Text [ swedish ] = "Teckenbakgrund" ;
-    Text [ danish ] = "Fremhævelse" ;
-    Text [ italian ] = "Sfondo caratteri" ;
-    Text [ spanish ] = "Fondo del carácter" ;
-    Text [ french ] = "Trame de fond" ;
-    Text [ dutch ] = "Tekenachtergrond" ;
-    Text [ portuguese ] = "Destacar caracteres" ;
-    Text[ chinese_simplified ] = "å­—ç¬¦èƒŒæ™¯";
-    Text[ russian ] = "Âûäåëåíèå öâåòîì";
-    Text[ polish ] = "Wyró¿nienie";
-    Text[ japanese ] = "æ–‡å­—ã®èƒŒæ™¯";
-    Text[ chinese_traditional ] = "å­—å…ƒèƒŒæ™¯";
-    Text[ arabic ] = "ÎáİíÉ ÇáÎØ";
-    Text[ greek ] = "Öüíôï ÷áñáêôŞñùí";
-    Text[ korean ] = "ë¬¸ì ë°°ê²½";
-    Text[ turkish ] = "Vurgu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ressaltament";
-    Text[ finnish ] = "Korostus";
-    Text[ thai ] = "à¹„à¸®à¹„à¸¥à¸•à¹Œ";
-    Text[ czech ] = "ZvÃ½raznÄ›nÃ­";
-    Text[ hebrew ] = "â€®×”×‘×œ×˜×”â€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤· à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¥‡ à¤¦à¤¿à¤–à¤¾à¤¨à¤¾";
-    Text[ slovak ] = "ZvÃ½raznenie";
-    Text[ hungarian ] = "KiemelÃ©s";
-    Text[ slovenian ] = "Poudarjanje";
+    Text [ de ] = "Zeichenhintergrund" ;
+    Text [ en-US ] = "Highlighting" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_BACKGROUND
 {
-    Text = "Hintergrund" ;
-    Text [ English ] = "Background" ;
-    Text[ english_us ] = "Background";
-    Text[ portuguese ] = "Plano de fundo";
-    Text[ russian ] = "Ôîí";
-    Text[ greek ] = "Öüíôï";
-    Text[ dutch ] = "Achtergrond";
-    Text[ french ] = "Arrière-plan";
-    Text[ spanish ] = "Fondo";
-    Text[ italian ] = "Colore di sfondo";
-    Text[ danish ] = "Baggrund";
-    Text[ swedish ] = "Bakgrund";
-    Text[ polish ] = "T³o";
-    Text[ portuguese_brazilian ] = "Plano de fundo";
-    Text[ japanese ] = "èƒŒæ™¯";
-    Text[ korean ] = "ë°°ê²½";
-    Text[ chinese_simplified ] = "èƒŒæ™¯";
-    Text[ chinese_traditional ] = "èƒŒæ™¯";
-    Text[ arabic ] = "ÇáÎáİíÉ";
-    Text[ turkish ] = "Artalan";
-    Text[ catalan ] = "Fons";
-    Text[ finnish ] = "Tausta";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-    Text[ czech ] = "PozadÃ­";
-    Text[ hebrew ] = "â€®×¨×§×¢â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
-    Text[ slovak ] = "Pozadie";
-    Text[ hungarian ] = "HÃ¡ttÃ©r";
-    Text[ slovenian ] = "Ozadje";
+    Text [ de ] = "Hintergrund" ;
+    Text [ en-US ] = "Background";
 };
 String RID_SVXSTR_AUTOMATIC
 {
-    Text = "Automatisch";
-    Text[ENGLISH] = "Automatic";
-    Text[ english_us ] = "Automatic";
-    Text[ portuguese ] = "Automático";
-    Text[ russian ] = "Àâòîìàòè÷åñêè";
-    Text[ greek ] = "Áõôüìáôá";
-    Text[ dutch ] = "Automatisch";
-    Text[ french ] = "Automatique";
-    Text[ spanish ] = "Automático";
-    Text[ italian ] = "Automatico";
-    Text[ danish ] = "Automatisk";
-    Text[ swedish ] = "Automatiskt";
-    Text[ polish ] = "Automatycznie";
-    Text[ portuguese_brazilian ] = "automático";
-    Text[ japanese ] = "è‡ªå‹•";
-    Text[ korean ] = "ìë™";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨";
-    Text[ chinese_traditional ] = "è‡ªå‹•";
-    Text[ turkish ] = "Otomatik";
-    Text[ arabic ] = "ÊáŞÇÆí";
-    Text[ catalan ] = "Automàtic";
-    Text[ finnish ] = "Automaattinen";
-    Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "Automaticky";
-    Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
-    Text[ slovak ] = "Automaticky";
-    Text[ hungarian ] = "Automatikus";
-    Text[ slovenian ] = "Samodejno";
+    Text [ de ] = "Automatisch";
+    Text [ en-US ] = "Automatic";
 };
 String RID_SVXSTR_PAGES
 {
-    Text = "Seiten";
-    Text[ english_us ] = "Pages";
-    Text[ portuguese ] = "Páginas";
-    Text[ russian ] = "Ñòğàíèöû";
-    Text[ greek ] = "Óåëßäåò";
-    Text[ dutch ] = "Pagina's";
-    Text[ french ] = "Pages";
-    Text[ spanish ] = "Páginas";
-    Text[ finnish ] = "Sivut";
-    Text[ italian ] = "Pagine";
-    Text[ danish ] = "Sider";
-    Text[ swedish ] = "Pages";
-    Text[ polish ] = "Strony";
-    Text[ japanese ] = "ãƒšãƒ¼ã‚¸";
-    Text[ korean ] = "í˜ì´ì§€";
-    Text[ chinese_simplified ] = "é¡µ";
-    Text[ chinese_traditional ] = "é ";
-    Text[ turkish ] = "Sayfalar";
-    Text[ arabic ] = "ÕİÍÇÊ";
-    Text[ catalan ] = "Pàgines";
-    Text[ thai ] = "à¸«à¸™à¹‰à¸²";
-    Text[ czech ] = "StrÃ¡nky";
-    Text[ hebrew ] = "â€®×¢××•×“×™×â€¬";
-    Text[ portuguese_brazilian ] = "Pages";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ";
-    Text[ slovak ] = "StrÃ¡nky";
-    Text[ hungarian ] = "Oldal";
-    Text[ slovenian ] = "Strani";
+    Text [ de ] = "Seiten";
+    Text [ en-US ] = "Pages";
 };
 Image RID_SVXIMG_GRAF_RED
 {
