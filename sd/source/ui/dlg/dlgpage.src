@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:40:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,8 @@ TabDialog TAB_PAGE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Seite einrichten" ;
-    Text [ ENGLISH ] = "Page Setup" ;
-    Text [ norwegian ] = "Side Oppsett" ;
-    Text [ italian ] = "Impostazione pagina" ;
-    Text [ portuguese_brazilian ] = "Configurar Página" ;
-    Text [ portuguese ] = "Configurar página" ;
-    Text [ finnish ] = "Sivun asetukset" ;
-    Text [ danish ] = "Sideopsætning" ;
-    Text [ french ] = "Paramétrage de la page" ;
-    Text [ swedish ] = "Ställ in sida" ;
-    Text [ dutch ] = "Pagina-instelling" ;
-    Text [ spanish ] = "Preparar página" ;
-    Text [ english_us ] = "Page Setup" ;
+    Text [ de ] = "Seite einrichten" ;
+    Text [ en-US ] = "Page Setup" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     TabControl 1
@@ -91,74 +80,19 @@ TabDialog TAB_PAGE
             PageItem
             {
                 Identifier = RID_SVXPAGE_PAGE ;
-                Text = "Seite" ;
-                Text [ ENGLISH ] = "Page" ;
-                Text [ norwegian ] = "Page" ;
-                Text [ italian ] = "Pagina" ;
-                Text [ portuguese_brazilian ] = "Página" ;
-                Text [ portuguese ] = "Página" ;
-                Text [ finnish ] = "Sivu" ;
-                Text [ danish ] = "Side" ;
-                Text [ french ] = "Page" ;
-                Text [ swedish ] = "Sida" ;
-                Text [ dutch ] = "Pagina" ;
-                Text [ spanish ] = "Página" ;
-                Text [ english_us ] = "Page" ;
+                Text [ de ] = "Seite" ;
+                Text [ en-US ] = "Page" ;
                 PageResID = RID_SVXPAGE_PAGE ;
-                Text[ chinese_simplified ] = "é¡µ";
-                Text[ russian ] = "Ñòğàíèöà";
-                Text[ polish ] = "Strona";
-                Text[ japanese ] = "ãƒšãƒ¼ã‚¸";
-                Text[ chinese_traditional ] = "é ";
-                Text[ arabic ] = "ÕİÍÉ";
-                Text[ greek ] = "Óåëßäá";
-                Text[ korean ] = "í˜ì´ì§€";
-                Text[ turkish ] = "Sayfa";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pàgina";
-                Text[ thai ] = "à¸«à¸™à¹‰à¸²";
-                Text[ czech ] = "StrÃ¡nka";
-                Text[ hebrew ] = "â€®×“×£â€¬";
-                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ";
-                Text[ slovak ] = "StrÃ¡nka";
-                Text[ hungarian ] = "Oldal";
-                Text[ slovenian ] = "Stran";
+                Text [ x-comment ] = " ";
             };
 
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA;
-                Text = "Hintergrund";
-                Text [ ENGLISH ] = "Background";
+                Text [ de ] = "Hintergrund";
                 PageResID = RID_SVXPAGE_AREA;
-                Text[ italian ] = "Sfondo";
-                Text[ portuguese_brazilian ] = "Plano de fundo";
-                Text[ portuguese ] = "Plano de fundo";
-                Text[ danish ] = "Baggrund";
-                Text[ french ] = "Arrière-plan";
-                Text[ swedish ] = "Bakgrund";
-                Text[ dutch ] = "Achtergrond";
-                Text[ spanish ] = "Fondo";
-                Text[ english_us ] = "Background";
-                Text[ chinese_simplified ] = "èƒŒæ™¯";
-                Text[ russian ] = "Ôîí";
-                Text[ polish ] = "T³o";
-                Text[ japanese ] = "èƒŒæ™¯";
-                Text[ chinese_traditional ] = "èƒŒæ™¯";
-                Text[ arabic ] = "ÇáÎáİíÉ";
-                Text[ greek ] = "Öüíôï";
-                Text[ korean ] = "ë°°ê²½";
-                Text[ turkish ] = "Artalan";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fons";
-                Text[ finnish ] = "Tausta";
-                Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-                Text[ czech ] = "PozadÃ­";
-                Text[ hebrew ] = "â€®×¨×§×¢â€¬";
-                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
-                Text[ slovak ] = "Pozadie";
-                Text[ hungarian ] = "HÃ¡ttÃ©r";
-                Text[ slovenian ] = "Ozadje";
+                Text [ en-US ] = "Background";
+                Text [ x-comment ] = " ";
             };
         };
     };
@@ -185,57 +119,12 @@ TabDialog TAB_PAGE
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text = "Zurück" ;
-        Text [ ENGLISH ] = "Return" ;
-        Text [ norwegian ] = "Return" ;
-        Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Retornar" ;
-        Text [ portuguese ] = "Anterior" ;
-        Text [ finnish ] = "Takaisin" ;
-        Text [ danish ] = "Tilbage" ;
-        Text [ french ] = "Précédent" ;
-        Text [ swedish ] = "Tillbaka" ;
-        Text [ dutch ] = "Vorige" ;
-        Text [ spanish ] = "Regresar" ;
-        Text [ english_us ] = "Return" ;
+        Text [ de ] = "Zurück" ;
+        Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "è¿”å›";
-        Text[ russian ] = "Âåğíóòüñÿ";
-        Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "æˆ»ã‚‹";
-        Text[ chinese_traditional ] = "è¿”å›";
-        Text[ arabic ] = "ÇáÓÇÈŞ";
-        Text[ greek ] = "ÅğéóôñïöŞ";
-        Text[ korean ] = "ë’¤ë¡œ";
-        Text[ turkish ] = "Geri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Torna";
-        Text[ thai ] = "à¸ªà¹ˆà¸‡à¸à¸¥à¸±à¸š";
-        Text[ czech ] = "NÃ¡vrat";
-        Text[ hebrew ] = "ZurÃ¼ck";
-        Text[ hindi ] = "à¤²à¥Œà¤Ÿà¤¨à¤¾";
-        Text[ slovak ] = "NÃ¡vrat";
-        Text[ hungarian ] = "VisszatÃ©rÃ©s";
-        Text[ slovenian ] = "Vrnitev";
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "è®¾å®šé¡µé¢";
-    Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû";
-    Text[ polish ] = "Ustawienia strony";
-    Text[ japanese ] = "ãƒšãƒ¼ã‚¸è¨­å®š";
-    Text[ chinese_traditional ] = "é é¢è¨­å®š";
-    Text[ arabic ] = "ÅÚÏÇÏ ÇáÕİÍÉ";
-    Text[ greek ] = "Äéáìüñöùóç óåëßäáò";
-    Text[ korean ] = "í˜ì´ì§€ ì„¤ì •";
-    Text[ turkish ] = "Sayfa yapısı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Prepara la pàgina";
-    Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸«à¸™à¹‰à¸²à¸à¸£à¸°à¸”à¸²à¸©";
-    Text[ czech ] = "NastavenÃ­ strÃ¡nky";
-    Text[ hebrew ] = "Seite einrichten";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤¸à¥‡à¤Ÿà¤ª";
-    Text[ slovak ] = "Nastavenie strÃ¡nky";
-    Text[ hungarian ] = "OldalbeÃ¡llÃ­tÃ¡s";
-    Text[ slovenian ] = "Priprava strani";
+    Text [ x-comment ] = " ";
 };
 
 
