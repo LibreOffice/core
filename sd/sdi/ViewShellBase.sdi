@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:10:54 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -152,7 +152,7 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
