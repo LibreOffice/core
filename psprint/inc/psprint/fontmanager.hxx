@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-25 14:40:23 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ class PrintFontManager
 
     void getFontAttributesFromXLFD( PrintFont* pFont, const ByteString& rXLFD ) const;
 
-    bool analyzeFontFile( int nDirID, const ::rtl::OString& rFileName, bool bReadFile, const ::rtl::OString& rXLFD, ::std::list< PrintFont* >& rNewFonts ) const;
+    bool analyzeFontFile( int nDirID, const ::rtl::OString& rFileName, bool bReadFile, const ::std::list< ::rtl::OString >& rXLFDs, ::std::list< PrintFont* >& rNewFonts ) const;
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
     // finds the FIRST id for this font file; there may be more
     // for TrueType collections
@@ -554,6 +554,9 @@ public:
     bool removeFonts( const ::std::list< fontID >& rFonts );
 
     bool isPrivateFontFile( fontID ) const;
+
+    // returns false if there were not any
+    bool getAlternativeFamilyNames( fontID nFont, ::std::list< ::rtl::OUString >& rNames ) const;
 };
 
 } // namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-25 14:40:25 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #include <parseAFM.hxx>
@@ -811,7 +814,7 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum
     if( !nFontId )
     {
         ::std::list< PrintFont* > aNewFonts;
-        if( analyzeFontFile( nDirID, aName, false, OString(), aNewFonts ) )
+        if( analyzeFontFile( nDirID, aName, false, ::std::list<OString>(), aNewFonts ) )
         {
             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin();
                  it != aNewFonts.end(); ++it )
@@ -822,7 +825,7 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum
 }
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bool bReadFile, const OString& rXLFD, ::std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
+bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bool bReadFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
 {
     rNewFonts.clear();
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -868,7 +871,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
             pFont->m_aFontFile      = rFontFile;
             pFont->m_aMetricFile    = aAfmFile;
 
-            if( bReadFile )
+            if( bReadFile || ! rXLFDs.size() )
             {
                 if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms ) )
                 {
@@ -877,7 +880,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
                 }
             }
             else
-                getFontAttributesFromXLFD( pFont, rXLFD );
+                getFontAttributesFromXLFD( pFont, rXLFDs.front() );
             if( pFont )
                 rNewFonts.push_back( pFont );
         }
@@ -889,7 +892,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         pFont->m_aFontFile          = rFontFile;
         pFont->m_nCollectionEntry   = -1;
 
-        if( bReadFile )
+        if( bReadFile || ! rXLFDs.size() )
         {
             if( ! analyzeTrueTypeFile( pFont ) )
             {
@@ -898,7 +901,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
             }
         }
         else
-            getFontAttributesFromXLFD( pFont, rXLFD );
+            getFontAttributesFromXLFD( pFont, rXLFDs.front() );
         if( pFont )
             rNewFonts.push_back( pFont );
     }
@@ -913,15 +916,25 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         if( nLength )
         {
 #ifdef DEBUG
-            fprintf( stderr, "%s contains %d fonts\n   XLFD=\"%s\"\n", aFullPath.getStr(), nLength, rXLFD.getStr() );
+            fprintf( stderr, "%s contains %d fonts\n", aFullPath.getStr(), nLength );
 #endif
+            ::std::list<OString>::const_iterator xlfd_it = rXLFDs.begin();
             for( int i = 0; i < nLength; i++ )
             {
+                OString aXLFD;
+                if( xlfd_it != rXLFDs.end() )
+                {
+                    aXLFD = *xlfd_it;
+                    ++xlfd_it;
+                }
+#ifdef DEBUG
+                fprintf( stderr, "   XLFD=\"%s\"\n", aXLFD.getStr() );
+#endif
                 TrueTypeFontFile* pFont     = new TrueTypeFontFile();
                 pFont->m_nDirectory         = nDirID;
                 pFont->m_aFontFile          = rFontFile;
                 pFont->m_nCollectionEntry   = i;
-                getFontAttributesFromXLFD( pFont, rXLFD );
+                getFontAttributesFromXLFD( pFont, aXLFD );
                 if( ! analyzeTrueTypeFile( pFont ) )
                 {
                     delete pFont;
@@ -1008,9 +1021,10 @@ void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const ByteSt
         aFamilyName += aNewToken;
     }
 
+    ByteString aAddStyle( rXLFD.GetToken( 6, '-' ) );
     pFont->m_nFamilyName =
         m_pAtoms->getAtom( ATOM_FAMILYNAME,
-                           String( aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ),
+                           String( aFamilyName, aAddStyle.Search( "utf8" ) != STRING_NOTFOUND ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1 ),
                            sal_True );
     ByteString aToken;
 
@@ -1082,7 +1096,11 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
     }
 
     ByteString aXLFD( "-misc-" );
-    aXLFD += ByteString( String( m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ) ), RTL_TEXTENCODING_ISO_8859_1 );
+    ByteString aFamily( String( m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ) ), RTL_TEXTENCODING_UTF8 );
+    aFamily.SearchAndReplaceAll( '-',' ' );
+    aFamily.SearchAndReplaceAll( '?',' ' );
+    aFamily.SearchAndReplaceAll( '*',' ' );
+    aXLFD += aFamily;
     aXLFD += '-';
     switch( pFont->m_eWeight )
     {
@@ -1117,7 +1135,7 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
         case width::ExtraExpanded:      aXLFD += "extraexpanded";break;
         case width::UltraExpanded:      aXLFD += "ultraexpanded";break;
     }
-    aXLFD += "--0-0-0-0-";
+    aXLFD += "-utf8-0-0-0-0-";
     aXLFD += pFont->m_ePitch == pitch::Fixed ? "m" : "p";
     aXLFD += "-0-";
     aXLFD += rtl_getBestUnixCharsetFromTextEncoding( pFont->m_aEncoding );
@@ -1143,12 +1161,14 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         // set family name from XLFD if possible
         if( ! pFont->m_nFamilyName )
         {
-            if( ! aInfo.family || ! *aInfo.family )
+            if( aInfo.ufamily && *aInfo.ufamily )
+                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OUString( aInfo.ufamily ), sal_True );
+            else if( aInfo.family && *aInfo.family )
+                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, String( ByteString( aInfo.family ), aEncoding ), sal_True );
+            else
                 // poor font does not have a family name
                 // name it to file name minus ".tt{f|c}"
                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, pTTFontFile->m_aFontFile.getLength()-4 ), aEncoding ) );
-            else
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, String( ByteString( aInfo.family ), aEncoding ), sal_True );
         }
 
 
@@ -1359,7 +1379,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         // contain any of our recognbizeable fonts
 
         // read fonts.dir if possible
-        ::std::hash_map< OString, ByteString, OStringHash > aFontsDir;
+        ::std::hash_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
         ByteString aGccDummy( aPath );
         String aFontsDirPath( aGccDummy, aEncoding );
         aFontsDirPath.AppendAscii( "/fonts.dir" );
@@ -1374,7 +1394,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                 ByteString aFileName( GetCommandLineToken( 0, aLine ) );
                 ByteString aXLFD( aLine.Copy( aFileName.Len() ) );
                 if( aFileName.Len() && aXLFD.Len() )
-                    aFontsDir[ aFileName ] = aXLFD;
+                    aFontsDir[ aFileName ].push_back(aXLFD);
             }
         }
 
@@ -1394,16 +1414,16 @@ void PrintFontManager::initialize( void* pInitDisplay )
                 {
                     if( findFontFileID( nDirID, aFileName ) == 0 )
                     {
-                        ByteString aXLFD;
-                        ::std::hash_map< OString, ByteString, OStringHash >::const_iterator it =
+                        ::std::list<OString> aXLFDs;
+                        ::std::hash_map< OString, ::std::list<OString>, OStringHash >::const_iterator it =
                               aFontsDir.find( aFileName );
                         if( it != aFontsDir.end() )
-                            aXLFD = (*it).second;
+                            aXLFDs = (*it).second;
 
                         // fill in font attributes from XLFD rather
                         // than reading every file
                         ::std::list< PrintFont* > aNewFonts;
-                        if( analyzeFontFile( nDirID, aFileName, aXLFD.Len() ? false : true, aXLFD, aNewFonts ) )
+                        if( analyzeFontFile( nDirID, aFileName, aXLFDs.size() ? false : true, aXLFDs, aNewFonts ) )
                         {
                             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
                             {
@@ -1795,7 +1815,7 @@ family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily )
         { InitializeClass( "zapfchancery",           family::Script ) }
     };
 
-    rtl::OString aFamily = rtl::OUStringToOString( rFamily, RTL_TEXTENCODING_ISO_8859_1 );
+    rtl::OString aFamily = rtl::OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
     sal_uInt32 nLower = 0;
     sal_uInt32 nUpper = sizeof(pFamilyMatch) / sizeof(pFamilyMatch[0]);
 
@@ -1969,7 +1989,14 @@ int PrintFontManager::getFontLeading( fontID nFontID ) const
 OUString PrintFontManager::getFontXLFD( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
-    return pFont ? OStringToOUString( getXLFD( pFont ), RTL_TEXTENCODING_ISO_8859_1 ) : OUString();
+    OUString aRet;
+    if( pFont )
+    {
+        ByteString aXLFD( getXLFD( pFont ) );
+        rtl_TextEncoding aEncoding = aXLFD.GetToken( 6, '-' ).Search( "utf8" ) != STRING_NOTFOUND ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1;
+        aRet = OStringToOUString( aXLFD, aEncoding );
+    }
+    return aRet;
 }
 
 // -------------------------------------------------------------------------
@@ -2269,7 +2296,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
 
             ::std::list< PrintFont* > aNewFonts;
             ::std::list< PrintFont* >::iterator it;
-            if( analyzeFontFile( nDirID, OUStringToOString( aTo.GetName(), aEncoding ), true, OString(), aNewFonts ) )
+            if( analyzeFontFile( nDirID, OUStringToOString( aTo.GetName(), aEncoding ), true, ::std::list<OString>(), aNewFonts ) )
             {
                 // remove all fonts for the same file
                 // discarding their font ids
@@ -2312,13 +2339,22 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                     aLine += ' ';
                     aLine += getXLFD( *it );
 
+                    int nTTCnumber = -1;
+                    if( (*it)->m_eType == fonttype::TrueType )
+                        nTTCnumber = static_cast<TrueTypeFontFile*>(*it)->m_nCollectionEntry;
+
                     ByteString aFile( aTo.GetName(), aEncoding );
                     for( line_it = aLines.begin(); line_it != aLines.end(); ++line_it )
                     {
                         if( line_it->GetToken( 0, ' ' ).Equals( aFile ) )
                         {
-                            *line_it = aLine;
-                            break;
+                            if( nTTCnumber <= 0 )
+                            {
+                                *line_it = aLine;
+                                break;
+                            }
+                            else
+                                nTTCnumber--;
                         }
                     }
                     if( line_it == aLines.end() )
@@ -2429,6 +2465,7 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
     OString aFontsDirPath;
     ByteString aFontFile;
 
+    int nTTCnumber = -1;
     switch( pFont->m_eType )
     {
         case fonttype::Type1:
@@ -2438,6 +2475,7 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
         case fonttype::TrueType:
             aFontsDirPath = getDirectory( static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory );
             aFontFile = static_cast< TrueTypeFontFile* >(pFont)->m_aFontFile;
+            nTTCnumber = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
             break;
     }
     OUString aUniPath, aFDPath;
@@ -2448,7 +2486,13 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
     aFontsDir.SetLineDelimiter( LINEEND_LF );
     if( aFontsDir.IsOpen() && aFontsDir.IsWritable() )
     {
-        ByteString aXLFD( OUStringToOString( rXLFD, RTL_TEXTENCODING_ISO_8859_1 ) );
+        ByteString aXLFD( OUStringToOString( rXLFD, RTL_TEXTENCODING_UTF8 ) );
+        ByteString aAddStyle = aXLFD.GetToken( '-', 6 );
+        if( aAddStyle.Search( "utf8" ) == STRING_NOTFOUND )
+        {
+            aAddStyle.Append( aAddStyle.Len() ? ";utf8" : "utf8" );
+            aXLFD.SetToken( 6, ';', aAddStyle );
+        }
         ::std::list< ByteString > aLines;
         ByteString aLine;
         aFontsDir.ReadLine( aLine ); // pop line count
@@ -2457,15 +2501,20 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
             aFontsDir.ReadLine( aLine );
             if( GetCommandLineToken( 0, aLine ) == aFontFile )
             {
-                bSuccess = true;
-                aLine = aFontFile;
-                aLine += ' ';
-                aLine += aXLFD;
+                if( nTTCnumber <= 0 )
+                {
+                    bSuccess = true;
+                    aLine = aFontFile;
+                    aLine += ' ';
+                    aLine += aXLFD;
+                }
+                else
+                    nTTCnumber--;
             }
             if( aLine.Len() )
                 aLines.push_back( aLine );
         }
-        if( ! bSuccess ) // ??? this should not happen
+        if( ! bSuccess )
         {
             bSuccess = true;
             aLine = aFontFile;
@@ -2503,7 +2552,7 @@ getImportableFontProperties(
         aDir = rFile.copy( 0, nIndex );
     int nDirID = getDirectoryAtom( aDir, true );
     ::std::list< PrintFont* > aFonts;
-    bool bRet = analyzeFontFile( nDirID, aFile, true, OString(), aFonts );
+    bool bRet = analyzeFontFile( nDirID, aFile, true, ::std::list<OString>(), aFonts );
     while( aFonts.begin() != aFonts.end() )
     {
         PrintFont* pFont = aFonts.front();
@@ -2573,10 +2622,14 @@ bool PrintFontManager::removeFonts( const ::std::list< fontID >& rFonts )
             if( unlink( aFile.GetBuffer() ) )
             {
                 bRet = false;
+#ifdef DEBUG
                 fprintf( stderr, "failed\n" );
+#endif
                 continue;
             }
+#ifdef DEBUG
             fprintf( stderr, "succeeded\n" );
+#endif
             OString aAfm( getAfmFile( pFont ) );
             if( aAfm.getLength() )
             {
@@ -2661,4 +2714,52 @@ bool PrintFontManager::isPrivateFontFile( fontID nFont ) const
         }
     }
     return bRet;
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUString >& rNames ) const
+{
+    rNames.clear();
+
+    PrintFont* pFont = getFont( nFont );
+    if( pFont && pFont->m_eType == fonttype::TrueType )
+    {
+        TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
+        ByteString aFile( getFontFile( pFont ) );
+        TrueTypeFont* pTTFont;
+        if( OpenTTFont( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+        {
+            NameRecord* pNameRecords = NULL;
+            int nNameRecords = GetTTNameRecords( pTTFont, &pNameRecords );
+            for( int i = 0; i < nNameRecords; i++ )
+            {
+                if( pNameRecords[i].nameID != 1 ) // family name
+                    continue;
+
+                if(
+                   ( pNameRecords[i].platformID == 3 && pNameRecords[i].encodingID == 1 )  // MS, Unicode
+                   ||
+                   ( pNameRecords[i].platformID == 0 ) // Apple, Unicode
+                   )
+                {
+                    OUStringBuffer aName( pNameRecords[i].slen/2 );
+                    const byte* pNameBuffer = pNameRecords[i].sptr;
+                    for(int n = 0; n < pNameRecords[i].slen/2; n++ )
+                        aName.append( (sal_Unicode)getUInt16BE( pNameBuffer ) );
+                    if( aName.getLength() )
+                    {
+                        OUString aFamily( aName.makeStringAndClear() );
+                        if( m_pAtoms->getAtom( ATOM_FAMILYNAME, aFamily, sal_True ) != pFont->m_nFamilyName )
+                            rNames.push_back( aFamily );
+                    }
+                }
+            }
+
+            if( nNameRecords )
+                DisposeNameRecords( pNameRecords, nNameRecords );
+            CloseTTFont( pTTFont );
+        }
+    }
+    return rNames.begin() != rNames.end();
 }
