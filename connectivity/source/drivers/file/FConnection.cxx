@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:08:02 $
+ *  last change: $Author: oj $ $Date: 2001-04-26 13:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,15 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
         aError.ErrorCode = 0;
         aError.Context = static_cast< XConnection* >(this);
+        SQLException aUrlError;
+        aUrlError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL: "));
+        aUrlError.Message += url;
+        aError.NextException <<= aUrlError;
         if (e.Message.getLength())
-            aError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += e.Message, aError.Context, ::rtl::OUString(), 0, Any());
-        throw SQLException(aError);
+        {
+            aUrlError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += e.Message, aError.Context, ::rtl::OUString(), 0, Any());
+        }
+        throw aError;
     }
 
 //  if (aFileStat.IsKind(FSYS_KIND_WILD))
