@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-30 09:54:52 $
+ *  last change: $Author: as $ $Date: 2001-01-26 13:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,11 @@ typedef HASH_MAP<   OUSTRING                    ,                       // struc
                     TStringHashFunction         ,
                     ::std::equal_to< OUSTRING > >   TPerformanceHash;
 
+typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< internal name >{ value< TType > }
+                    OUSTRING                    ,
+                    TStringHashFunction         ,
+                    ::std::equal_to< OUSTRING > >   TPreferredHash;     // structure of hash:   key< extension >{ value< internal type name > }
+
 //*****************************************************************************************************************
 // Defines "pointers" to items of our hash maps.
 typedef TStringList::const_iterator                                 TConstStringIterator        ;
@@ -243,6 +248,7 @@ typedef TFilterHash::const_iterator                                 TConstFilter
 typedef TDetectorHash::const_iterator                               TConstDetectorIterator      ;
 typedef TLoaderHash::const_iterator                                 TConstLoaderIterator        ;
 typedef TPerformanceHash::const_iterator                            TConstPerformanceIterator   ;
+typedef TPreferredHash::const_iterator                              TConstPreferredIterator     ;
 typedef CheckedIterator< TStringList >                              TCheckedStringListIterator  ;
 typedef CheckedIterator< TTypeHash >                                TCheckedTypeIterator        ;
 
@@ -581,18 +587,19 @@ class FilterCache
 
     private:
 
-        static TTypeHash*           m_pTypeCache        ;
-        static TFilterHash*         m_pFilterCache      ;
-        static TDetectorHash*       m_pDetectorCache    ;
-        static TLoaderHash*         m_pLoaderCache      ;
-        static TPerformanceHash*    m_pFastFilterCache  ;
-        static TPerformanceHash*    m_pFastDetectorCache;
-        static TPerformanceHash*    m_pFastLoaderCache  ;
-        static sal_Int32            m_nRefCount         ;
-        static OUSTRING             m_sDefaultDetector  ;
-        static OUSTRING             m_sGenericLoader    ;
-        static TDetector*           m_pDefaultDetector  ;
-        static TLoader*             m_pGenericLoader    ;
+        static TTypeHash*           m_pTypeCache            ;
+        static TFilterHash*         m_pFilterCache          ;
+        static TDetectorHash*       m_pDetectorCache        ;
+        static TLoaderHash*         m_pLoaderCache          ;
+        static TPerformanceHash*    m_pFastFilterCache      ;
+        static TPerformanceHash*    m_pFastDetectorCache    ;
+        static TPerformanceHash*    m_pFastLoaderCache      ;
+        static TPreferredHash*      m_pPreferredTypesCache  ;
+        static sal_Int32            m_nRefCount             ;
+        static OUSTRING             m_sDefaultDetector      ;
+        static OUSTRING             m_sGenericLoader        ;
+        static TDetector*           m_pDefaultDetector      ;
+        static TLoader*             m_pGenericLoader        ;
 
 };      //  class FilterCache
 
