@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-26 12:33:39 $
+ *  last change: $Author: tbe $ $Date: 2001-10-11 13:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
 
     aMacroTreeList.SetWindowBits( WB_HASLINES );
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
-    aMacroTreeList.SetDragDropMode( SV_DRAGDROP_CTRL_COPY );
 
     aMacroTreeList.ScanAllBasics();
     aMacroTreeList.ExpandAllTrees();
