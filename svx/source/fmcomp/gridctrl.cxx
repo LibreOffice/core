@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-01 15:33:28 $
+ *  last change: $Author: fs $ $Date: 2001-11-02 15:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3498,9 +3498,15 @@ void DbGridControl::implAdjustInSolarThread(BOOL _bRows)
         else
             TRACE_RANGE_MESSAGE("doing an AdjustDataSource")
 #endif
-        if (_bRows)
-            AdjustRows();
-        else
+        // always adjust the rows before adjusting the data source
+        // If this is not necessary (because the row count did not change), nothing is done
+        // The problem is that we can't rely on the order of which the calls come in: If the cursor was moved
+        // to a position behind row count know 'til now, the cursorMoved notification may come before the
+        // RowCountChanged notification
+        // 94093 - 02.11.2001 - frank.schoenheit@sun.com
+        AdjustRows();
+
+        if ( !_bRows )
             AdjustDataSource();
     }
 }
@@ -3509,10 +3515,13 @@ void DbGridControl::implAdjustInSolarThread(BOOL _bRows)
 IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat)
 {
     m_nAsynAdjustEvent = 0;
-    if (pAdjustWhat)
-        AdjustRows();
-    else
+
+    AdjustRows();
+        // see implAdjustInSolarThread for a comment why we do this every time
+
+    if ( !pAdjustWhat )
         AdjustDataSource();
+
     return 0L;
 }
 
