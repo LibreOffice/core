@@ -1,0 +1,15 @@
+ba	dbaccess	:	connectivity offmgr NULL
+ba	dbaccess								usr1	-	all	ba_mkout NULL
+ba	dbaccess\source\core\api				nmake	-	all	ba_capi NULL
+ba	dbaccess\source\core\dataaccess			nmake	-	all	ba_cdaccess ba_capi NULL
+ba	dbaccess\source\core\misc				nmake	-	all	ba_cmisc ba_cdaccess NULL
+ba	dbaccess\source\core\resource			nmake	-	all	ba_cres ba_cmisc NULL
+ba	dbaccess\source\shared					nmake	-	all	ba_shared ba_cres NULL
+ba	dbaccess\source\ui\browser				nmake	-	all	ba_uibrowser NULL
+ba	dbaccess\source\ui\dlg					nmake	-	all	ba_uidlg NULL
+ba	dbaccess\source\ui\control				nmake	-	all	ba_uicontrol NULL
+ba	dbaccess\source\ui\misc					nmake	-	all	ba_uimisc NULL
+ba	dbaccess\source\ui\querydesign			nmake	-	all	ba_uiquery NULL
+ba	dbaccess\source\ui\tabledesign			nmake	-	all	ba_uitabledesign NULL
+ba	dbaccess\source\ui\uno					nmake	-	all	ba_uiuno ba_uimisc NULL
+ba	dbaccess\util							nmake	-	all	ba_util ba_capi ba_shared ba_uibrowser ba_uicontrol ba_uidlg ba_uimisc ba_uiquery ba_uitabledesign ba_uiuno NULL
