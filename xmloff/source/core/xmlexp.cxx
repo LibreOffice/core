@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 16:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,96 +237,49 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
 
 void SvXMLExport::_InitCtor()
 {
-    pNamespaceMap->AddAtIndex( XML_NAMESPACE_OFFICE,
-                               GetXMLToken(XML_NP_OFFICE),
-                               GetXMLToken(XML_N_OFFICE),
-                               XML_NAMESPACE_OFFICE );
+    pNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_FO, GetXMLToken(XML_NP_FO),
-                                   GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
     }
     if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_XLINK,
-                                   GetXMLToken(XML_NP_XLINK),
-                                   GetXMLToken(XML_N_XLINK),
-                                   XML_NAMESPACE_XLINK );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
     if( (getExportFlags() & EXPORT_SETTINGS) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CONFIG,
-                                   GetXMLToken(XML_NP_CONFIG),
-                                   GetXMLToken(XML_N_CONFIG),
-                                   XML_NAMESPACE_CONFIG );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
     if( (getExportFlags() & EXPORT_META) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DC, GetXMLToken(XML_NP_DC),
-                                   GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_META,
-                                   GetXMLToken(XML_NP_META),
-                                   GetXMLToken(XML_N_META),
-                                   XML_NAMESPACE_META );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_STYLE,
-                                   GetXMLToken(XML_NP_STYLE),
-                                   GetXMLToken(XML_N_STYLE),
-                                   XML_NAMESPACE_STYLE );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
 
     // namespaces for documents
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_TEXT,
-                                   GetXMLToken(XML_NP_TEXT),
-                                   GetXMLToken(XML_N_TEXT),
-                                   XML_NAMESPACE_TEXT );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DRAW,
-                                   GetXMLToken(XML_NP_DRAW),
-                                   GetXMLToken(XML_N_DRAW),
-                                   XML_NAMESPACE_DRAW );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_DR3D,
-                                   GetXMLToken(XML_NP_DR3D),
-                                   GetXMLToken(XML_N_DR3D),
-                                   XML_NAMESPACE_DR3D );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_SVG,
-                                   GetXMLToken(XML_NP_SVG),
-                                   GetXMLToken(XML_N_SVG),
-                                   XML_NAMESPACE_SVG );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_CHART,
-                                   GetXMLToken(XML_NP_CHART),
-                                   GetXMLToken(XML_N_CHART),
-                                   XML_NAMESPACE_CHART );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_TABLE,
-                                   GetXMLToken(XML_NP_TABLE),
-                                   GetXMLToken(XML_N_TABLE),
-                                   XML_NAMESPACE_TABLE );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_NUMBER,
-                                   GetXMLToken(XML_NP_NUMBER),
-                                   GetXMLToken(XML_N_NUMBER),
-                                   XML_NAMESPACE_NUMBER );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_DR3D), GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_CHART), GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH,
-                                   GetXMLToken(XML_NP_MATH),
-                                   GetXMLToken(XML_N_MATH),
-                                   XML_NAMESPACE_MATH );
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM,
-                                   GetXMLToken(XML_NP_FORM),
-                                   GetXMLToken(XML_N_FORM),
-                                   XML_NAMESPACE_FORM );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
     }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS) ) != 0 )
     {
-        pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT,
-                                   GetXMLToken(XML_NP_SCRIPT),
-                                   GetXMLToken(XML_N_SCRIPT),
-                                   XML_NAMESPACE_SCRIPT );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
     }
 
 
@@ -818,13 +771,13 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     // ( The namespace decls should be first attributes in the element;
     //   some faulty XML parsers (JAXP1.1) have a problem with this,
     //   also it's more elegant )
-    sal_uInt16 nPos = pNamespaceMap->GetFirstIndex();
+    sal_uInt16 nPos = pNamespaceMap->GetFirstKey();
     while( USHRT_MAX != nPos )
     {
-        pAttrList->AddAttribute( pNamespaceMap->GetAttrNameByIndex( nPos ),
+        pAttrList->AddAttribute( pNamespaceMap->GetAttrNameByKey( nPos ),
                                  sCDATA,
-                                 pNamespaceMap->GetNameByIndex( nPos ) );
-        nPos = pNamespaceMap->GetNextIndex( nPos );
+                                 pNamespaceMap->GetNameByKey( nPos ) );
+        nPos = pNamespaceMap->GetNextKey( nPos );
     }
 
     // office:class = ... (only for stream containing the content)
