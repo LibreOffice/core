@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-04 11:59:40 $
+ *  last change: $Author: dv $ $Date: 2001-05-16 13:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,7 +1630,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
             }
 
-            if ( aFileDlg.Execute() != ERRCODE_NONE )
+            if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
                 return sal_False;
@@ -1656,11 +1656,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 SetError(ERRCODE_SFX_ALREADYOPEN);
                 return sal_False;
             }
-
-            // Parameter aus Dialog holen
-            const String aFilter( aFileDlg.GetCurrentFilter() );
-            if( aFilter.Len() )
-                aFilterName = aFilter;
 
             // --**-- pParams->Put( *pDlg->GetItemSet() );
             Reference< XFilePickerControlAccess > xExtFileDlg( aFileDlg.GetFilePicker(), UNO_QUERY );
@@ -1737,7 +1732,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         // create the file dialog
         sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
 
-        if ( aFileDlg.Execute() != ERRCODE_NONE )
+        if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
         {
             SetError(ERRCODE_IO_ABORT);
             return sal_False;
@@ -1745,9 +1740,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
         // get the path from the dialog
         aURL.SetURL( aFileDlg.GetPath() );
-
-        // get the filter name from the dialog
-        aFilterName = aFileDlg.GetCurrentFilter();
 #endif
     }
     else if ( pFileNameItem )

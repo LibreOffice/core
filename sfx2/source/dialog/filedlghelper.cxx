@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-11 12:38:01 $
+ *  last change: $Author: dv $ $Date: 2001-05-16 13:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -111,6 +115,9 @@
 #endif
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
 #endif
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -136,6 +143,9 @@
 #endif
 #ifndef _SFX_OPENFLAG_HXX
 #include "openflag.hxx"
+#endif
+#ifndef _SFX_PASSWD_HXX
+#include <passwd.hxx>
 #endif
 
 #include "sfxresid.hxx"
@@ -459,12 +469,35 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
+        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+
+        // check, wether or not we have to display a password box
+        if ( mbHasPassword && xCtrlAccess.is() )
+        {
+            Any aValue = xCtrlAccess->getValue( FilePickerElementID::CBX_PASSWORD );
+            sal_Bool bPassWord = sal_False;
+            if ( ( aValue >>= bPassWord ) && bPassWord )
+            {
+                // ask for the password
+                SfxPasswordDialog aPasswordDlg( NULL );
+                aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
+                BOOL bOK = FALSE;
+                short nRet = aPasswordDlg.Execute();
+                if ( RET_OK == nRet )
+                {
+                    String aPasswd = aPasswordDlg.GetPassword();
+                    rpSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
+                }
+                else
+                    return ERRCODE_ABORT;
+            }
+        }
+
         // set the read-only flag. When inserting a file, this flag is always set
         if ( mbInsert )
             rpSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
         else
         {
-            Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
             if ( xCtrlAccess.is() )
             {
                 try
@@ -477,20 +510,16 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
                 catch( IllegalArgumentException ){}
             }
         }
-        if ( mbHasVersions )
+        if ( mbHasVersions && xCtrlAccess.is() )
         {
-            Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-            if ( xCtrlAccess.is() )
+            try
             {
-                try
-                {
-                    Any aValue = xCtrlAccess->getValue( FilePickerElementID::CBO_VERSION );
-                    sal_Int16 nVersion = 0;
-                    if ( aValue >>= nVersion )
-                        rpSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
-                }
-                catch( IllegalArgumentException ){}
+                Any aValue = xCtrlAccess->getValue( FilePickerElementID::CBO_VERSION );
+                sal_Int16 nVersion = 0;
+                if ( aValue >>= nVersion )
+                    rpSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
             }
+            catch( IllegalArgumentException ){}
         }
 
         // set the filter
@@ -822,6 +851,21 @@ ErrCode FileDialogHelper::Execute( const String&   rPath,
 ErrCode FileDialogHelper::Execute()
 {
     return mpImp->execute();
+}
+
+// ------------------------------------------------------------------------
+ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
+                                   String&         rFilter)
+{
+    ErrCode nRet;
+    String  aPath;
+    SvStringsDtor* pURLList;
+
+    nRet = mpImp->execute( aPath, pURLList, rpSet, rFilter );
+
+    delete pURLList;
+
+    return nRet;
 }
 
 // ------------------------------------------------------------------------
