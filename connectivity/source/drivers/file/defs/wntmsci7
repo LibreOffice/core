@@ -2572,3 +2572,14 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?deallocate@?$allocator@VType@uno@star@sun@com@@@_STL@@QBEXPAVType@uno@star@sun@com@@I@Z
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx136315512@@YAEABVString@@0@Z
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2321512888@@YAEABVString@@0@Z
+?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2785025696@@YAEABVString@@0@Z
+??1?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_Select1st@U?$pair@$$CBJJ@_STL@@@2@U?$less@J@2@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE@XZ
+??1OSkipDeletedSet@connectivity@@QAE@XZ
+??_7OResultSet@file@connectivity@@6B?$OPropertyArrayUsageHelper@VOResultSet@file@connectivity@@@comphelper@@@
+??_7OResultSet@file@connectivity@@6BIResultSetHelper@2@@
+?ExecuteRow@OResultSet@file@connectivity@@IAEEW4Movement@IResultSetHelper@3@JEEE@Z
+?Move@OResultSet@file@connectivity@@IAEEW4Movement@IResultSetHelper@3@JE@Z
+?deletedVisible@OResultSet@file@connectivity@@UBEEXZ
+?getDriverPos@OResultSet@file@connectivity@@UBEJXZ
+?isRowDeleted@OResultSet@file@connectivity@@UBEEXZ
+?move@OResultSet@file@connectivity@@UAEEW4Movement@IResultSetHelper@3@JE@Z
