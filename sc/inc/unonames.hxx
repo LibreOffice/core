@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-21 11:39:06 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,26 @@
 #define SC_UNONAME_CFFAMIL          "CharFontFamily"
 #define SC_UNONAME_CFCHARS          "CharFontCharSet"
 #define SC_UNONAME_CFPITCH          "CharFontPitch"
+
+#define SC_UNO_CJK_CFNAME           "CharFontNameAsian"
+#define SC_UNO_CJK_CFSTYLE          "CharFontStyleNameAsian"
+#define SC_UNO_CJK_CFFAMIL          "CharFontFamilyAsian"
+#define SC_UNO_CJK_CFCHARS          "CharFontCharSetAsian"
+#define SC_UNO_CJK_CFPITCH          "CharFontPitchAsian"
+#define SC_UNO_CJK_CHEIGHT          "CharHeightAsian"
+#define SC_UNO_CJK_CWEIGHT          "CharWeightAsian"
+#define SC_UNO_CJK_CPOST            "CharPostureAsian"
+#define SC_UNO_CJK_CLOCAL           "CharLocaleAsian"
+
+#define SC_UNO_CTL_CFNAME           "CharFontNameComplex"
+#define SC_UNO_CTL_CFSTYLE          "CharFontStyleNameComplex"
+#define SC_UNO_CTL_CFFAMIL          "CharFontFamilyComplex"
+#define SC_UNO_CTL_CFCHARS          "CharFontCharSetComplex"
+#define SC_UNO_CTL_CFPITCH          "CharFontPitchComplex"
+#define SC_UNO_CTL_CHEIGHT          "CharHeightComplex"
+#define SC_UNO_CTL_CWEIGHT          "CharWeightComplex"
+#define SC_UNO_CTL_CPOST            "CharPostureComplex"
+#define SC_UNO_CTL_CLOCAL           "CharLocaleComplex"
 
 //  CellProperties
 #define SC_UNONAME_CELLSTYL         "CellStyle"
