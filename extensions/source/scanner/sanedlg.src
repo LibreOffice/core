@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:46:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog RID_SANE_DIALOG
         Text [ English ] = "Device ~info" ;
         Text [ english_us ] = "About\n Dev~ice" ;
         Text [ portuguese_brazilian ] = "Ger?einformation" ;
-        Text [ swedish ] = "Apparat\n~information" ;
+        Text [ swedish ] = "Enhets-\n~information" ;
         Text [ danish ] = "Information\n om enheden" ;
         Text [ italian ] = "Informazione\napparecchiatura" ;
         Text [ spanish ] = "Informaciуn sobre\n ~dispositivo" ;
@@ -401,7 +401,7 @@ ModalDialog RID_SANE_DIALOG
         Text [ portuguese ] = "Resoluзгo [~DPI]:" ;
         Text[ chinese_simplified ] = "Ј÷±ж¬ [~DPI]";
         Text[ russian ] = "–азрешение [DPI]:";
-        Text[ polish ] = "Rozdzielczo?ж [~DPI]:";
+        Text[ polish ] = "RozdzielczoЬж [~DPI]:";
         Text[ japanese ] = "ЙрСЬУx [~DPI]";
         Text[ greek ] = "Ѕн№лхуз [~DPI]:";
         Text[ korean ] = "«Ўїуµµ [~DPI]:";
@@ -585,7 +585,7 @@ ModalDialog RID_SANE_DIALOG
         Text [ portuguese ] = "Definir" ;
         Text[ chinese_simplified ] = "…иґ®";
         Text[ russian ] = "”становить";
-        Text[ polish ] = "Osad?";
+        Text[ polish ] = "OsadЯ";
         Text[ japanese ] = "РЁТи";
         Text[ chinese_traditional ] = "≥]©w";
         Text[ arabic ] = " Џннд";
@@ -696,8 +696,8 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ french ] = "Le pйriphйrique utilisй ne permet pas de crйer un aperзu. Il permet uniquement une digitalisation normale en guise d'aperзu, ce qui peut durer nettement plus longtemps." ;
     Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
     Text[ chinese_simplified ] = "’вЄц…и±Є√ї”–‘§јјє¶ƒ№°£≤…”√∆’Ќ®…®√иЈљ љ‘§јјњ…ƒ№–и“™љѕ≥§µƒ ±Љд°£";
-    Text[ russian ] = "”стройство не настроено на создание предварительного просмотра. ¬место этого используетс€ в качестве предварительного просмотра обычное";
-    Text[ polish ] = "To urzєdzenie nie moњe utworzyж podglєdu. Zamiast tego zostanie zastosowany jako podglєd normalny tryb przeglєdu. To moњe trochк d≥uњej potrwaж.";
+    Text[ russian ] = "”стройство не настроено на создание предварительного просмотра. ¬место этого используетс€ обычный просмотр, что может продлитьс€ немного дольше.";
+    Text[ polish ] = "Urzєdzenie to nie potrafi utworzyж podglєdu. Zastosowany zostanie zwyk≥y tryb przeglєdu. To moњe trochк d≥uњej potrwaж.";
     Text[ japanese ] = "В±Вћ√ё ё≤љВЌћяЏЋё≠∞ВћНмРђВ…ВЌУKВµВƒВҐВ№ВєВсБBВ©ВнВиВ…ћяЏЋё≠∞В∆ВµВƒХБТ ВћљЈђЁВ™ОgЧpВ≥ВкВ№ВЈВ™ОЮК‘В™П≠ВµВ©В©ВиВ№ВЈБB";
     Text[ chinese_traditional ] = "≥o≠”≥]≥∆®S¶≥≥]©wєwµш•\\ѓа°C¶]¶є±ƒ•ќіґ≥q™Ї±љіy§и¶°єwµшЈ|їЁ≠nЄы™ш™ЇЃ…ґ°°C";
     Text[ arabic ] = "«бће«“ џн— гхЏѕ б≈д‘«Ѕ гЏ«нд…. »ѕб«р гд е–«° ”жЁ н г «” ќѕ«г г”Ќ Џ«ѕн ягЏ«нд…. нгяд √д н” џ—ё –бя Ё —… √Ўжб »яЋн—.";
@@ -736,3 +736,4 @@ String RID_SANE_NOSANELIB_TXT
     Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningъn proceso de digitalizaciуn.";
     Text[ finnish ] = "SANE-liittymдд ei voitu alustaa. Skannausta ei voida suorittaa.";
 };
+
