@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ ODocumentDefinition::ODocumentDefinition(ODocumentDefinition::AccessControl&)
 ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rElementName, const OConfigurationTreeRoot& _rObjectNode)
     :OConfigurationFlushable(m_aMutex)
     ,OPropertySetHelper(m_aBHelper)
+    ,m_xContainer(_rxContainer)
     ,m_sElementName(_rElementName)
     ,m_aFlushListeners(m_aMutex)
 {
@@ -145,7 +146,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
 
     DBG_ASSERT(m_xContainer.is(), "ODocumentDefinition::ODocumentDefinition : invalid container !");
     DBG_ASSERT(m_sElementName.getLength() != 0, "ODocumentDefinition::ODocumentDefinition : invalid name !");
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODocumentDefinition::ODocumentDefinition : invalid configuration node !");
+    DBG_ASSERT(_rObjectNode.isValid(), "ODocumentDefinition::ODocumentDefinition : invalid configuration node !");
 
     m_aConfigurationNode = _rObjectNode;
     if (m_aConfigurationNode.isValid())
@@ -169,6 +170,9 @@ Any SAL_CALL ODocumentDefinition::queryInterface( const Type& _rType ) throw(Run
 
     if (!aReturn.hasValue())
         aReturn = ODocumentDefinition_Base::queryInterface(_rType);
+
+    if (!aReturn.hasValue())
+        aReturn = OConfigurationFlushable::queryInterface(_rType);
 
     return aReturn;
 }
