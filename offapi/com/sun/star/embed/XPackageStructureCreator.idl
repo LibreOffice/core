@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageStructureCreator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:55:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
  module com {  module sun {  module star {  module embed {
 
 //=============================================================================
-/** allows to convert file system folder tree in to a package
+/** allows to convert file system folder tree in to a package.
  */
 interface XPackageStructureCreator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** converts file system folder tree in to a package
+    /** converts file system folder tree in to a package.
 
-        @param aFolderUrl
+        @param sFolderURL
             the URL of folder that must be converted,
             the URL must be in format accepted by UCB
 
@@ -91,7 +91,9 @@ interface XPackageStructureCreator: com::sun::star::uno::XInterface
         @throws ::com::sun::star::io::IOException
             in case any problem on reading/writing appears
      */
-    void convertToPackage( [in] string aFolderUrl, [in] ::com::sun::star::io::XOutputStream xTargetStream )
+    void convertToPackage(
+            [in] string sFolderURL,
+            [in] ::com::sun::star::io::XOutputStream xTargetStream )
         raises( ::com::sun::star::io::IOException );
 };
 
