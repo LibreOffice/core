@@ -16,6 +16,8 @@ mkdir: %_DEST%\inc%_EXT%\external\twain
 mkdir: %_DEST%\inc%_EXT%\external\zlib
 mkdir: %_DEST%\inc%_EXT%\audio
 mkdir: %_DEST%\inc%_EXT%\external\neon
+mkdir: %_DEST%\inc%_EXT%\X11
+mkdir: %_DEST%\inc%_EXT%\X11\extensions
 
 ..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
 ..\audio\rtufiles\lib\audio\*.h %_DEST%\inc%_EXT%\audio\*
@@ -79,6 +81,7 @@ mkdir: %_DEST%\inc%_EXT%\external\neon
 ..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
 ..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
 
+..\X11\extensions\*.h %_DEST%\inc%_EXT%\X11\extensions\*.h
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
