@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:48:05 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 17:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,13 +953,19 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
         ErrCode nE = pOwnStg->GetError();
         BaseStorage * p = pOwnStg->OpenStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-        pStor = new SotStorage( p );
-        if( !nE )
-            pOwnStg->ResetError(); // kein Fehler setzen
+        if( p )
+        {
+            pStor = new SotStorage( p );
+            if( !nE )
+                pOwnStg->ResetError(); // kein Fehler setzen
+
+            return pStor;
+        }
     }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-    return pStor;
+
+    SetError( SVSTREAM_GENERALERROR );
+
+    return NULL;
 }
 
 SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
