@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:06:17 $
+ *  last change: $Author: as $ $Date: 2001-10-22 10:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,10 +205,11 @@ void SfxFilter::InitMembers_Impl()
     bPlugDataSearched = 0;
     pPlugData = 0;
 
-    aName = pContainer->GetName();
-    aName += DEFINE_CONST_UNICODE( ": " );
-    aName += aFilterName;
-
+    // Don't add factory to internal name ... because
+    // names of TypeDetection.xml and aName must match!!!
+    aName = aFilterName;
+    // Use given filtername as fallback for UI too ...
+    // But user should set right one after construct of these instance.
     aUIName = aFilterName;
 }
 
