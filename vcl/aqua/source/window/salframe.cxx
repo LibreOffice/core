@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:30 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 21:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ SalFrame::SalFrame()
     maFrameData.mpGraphics          = NULL;
     maFrameData.mpInst              = NULL;
     maFrameData.mpProc              = ImplSalFrameCallbackDummy;
-    maFrameData.mnWidth             = 0;
-    maFrameData.mnHeight            = 0;
+    maFrameData.mnWidth             = 100;  // 0 size causes problems
+    maFrameData.mnHeight            = 100;  // 0 size causes problems
     maFrameData.mbGraphics          = FALSE;
 
     // insert frame in framelist
