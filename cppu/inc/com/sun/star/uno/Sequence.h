@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
+ *  last change: $Author: dbo $ $Date: 2001-02-16 16:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,12 +176,19 @@ public:
     */
     inline const Type & getElementType() const throw ()
         { return ::getCppuType( (const ElementType *)0 ); }
+
     /** Gets length of sequence.
         <br>
         @return length of sequence
     */
     inline sal_Int32 SAL_CALL getLength() const throw ()
         { return _pSequence->nElements; }
+    /** Tests whether the sequence has elements, i.e. elements count is greater than zero.
+        <br>
+        @return true, if elements count is greater than zero
+    */
+    inline sal_Bool SAL_CALL hasElements() const throw ()
+        { return (_pSequence->nElements > 0); }
 
     /** Gets a pointer to elements array for <b>reading</b>.
         If the sequence has a length of 0, then the returned pointer is undefined.
@@ -250,10 +257,10 @@ public:
     inline void SAL_CALL realloc( sal_Int32 nSize ) throw ();
 };
 
-/** Creates an UNO byte sequence from a SAL byte sequence.
+/** Creates a UNO byte sequence from a SAL byte sequence.
     <br>
     @param rByteSequence a byte sequence
-    @return an UNO byte sequence
+    @return a UNO byte sequence
 */
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence ) throw ();
