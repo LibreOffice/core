@@ -57,8 +57,8 @@ $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN
 OleActvieXComponentExample : $(COMPONENT_IMPL)
 ifeq "$(OS)" "WIN"
 	@echo --------------------------------------------------------------------------------
-	@echo The activex control was created, please load the example.html file in your
-	@echo InternetExplorer to use the activex control.
+	@echo The activex control was created, please load the "$(QM)example.html$(QM)" file
+	@echo in your InternetExplorer to use the activex control.
 	@echo --------------------------------------------------------------------------------
 else
 	@echo --------------------------------------------------------------------------------
