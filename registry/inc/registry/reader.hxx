@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:17:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ public:
        invalid, an empty string is returned
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
+       @deprecated
      */
     rtl::OUString getFileName() const {
         rtl_uString * s = 0;
@@ -317,6 +318,7 @@ public:
        @return the file name of the given field
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
+       @deprecated
      */
     rtl::OUString getFieldFileName(sal_uInt16 index) const {
         rtl_uString * s = 0;
