@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:41:38 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ TabPage TP_CONTENT_OPT
         Text[ polish ] = "R~uler";
         Text[ portuguese_brazilian ] = "R~uler";
         Text[ japanese ] = "R~uler";
-        Text[ korean ] = "R~uler";
+        Text[ korean ] = "ëˆˆê¸ˆì";
         Text[ chinese_simplified ] = "R~uler";
         Text[ chinese_traditional ] = "æ¨™å°º";
         Text[ turkish ] = "R~uler";
@@ -1312,7 +1312,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ arabic ] = "ÏÑÌ ÇáæÑŞ ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
         Text[ finnish ] = "~Paperilokero tulostimen asetuksista";
         Text[ catalan ] = "Safata segons c~onfiguració d'impressora";
-        Text[ language_user1 ] = "EM19.3.01: appears to be the continuation of \"Paper tray...\" so NO cap at start.";
+        Text[ language_user1 ] = "EM19; EM19.3.01: appears to be the continuation of \"Paper tray...\" so NO cap at start.";
         Text[ thai ] = "à¸–à¸²à¸”~à¸à¸£à¸°à¸”à¸²à¸©à¸ˆà¸²à¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
     };
     FixedText FT_FAX
@@ -1663,7 +1663,7 @@ TabPage TP_STD_FONT
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
+        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
         Text[ turkish ] = "S~tandart";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Oletus";
@@ -1688,7 +1688,7 @@ TabPage TP_STD_FONT
         Text[ polish ] = "Azjatyckie";
         Text[ portuguese_brazilian ] = "Asian";
         Text[ japanese ] = "ã‚¢ã‚¸ã‚¢è«¸å›½èª";
-        Text[ korean ] = "ì•„ì‹œì•„";
+        Text[ korean ] = "ì•„ì‹œì•„ê¶Œ ì–¸ì–´";
         Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©";
         Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“";
         Text[ turkish ] = "Asian";
@@ -1738,7 +1738,7 @@ TabPage TP_STD_FONT
         Text[ polish ] = "Zachodnie";
         Text[ portuguese_brazilian ] = "Western";
         Text[ japanese ] = "è¥¿æ´‹è«¸å›½èª";
-        Text[ korean ] = "ì„œì–‘";
+        Text[ korean ] = "ì„œì–‘ì–´ê¶Œ ì–¸ì–´";
         Text[ chinese_simplified ] = "è¥¿æ–‡";
         Text[ chinese_traditional ] = "è¥¿æ–‡";
         Text[ turkish ] = "Western";
@@ -2841,7 +2841,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_traditional ] = "ç›´æ¥å®šä½æ¸¸æ¨™(~D)";
         Text[ arabic ] = "ãÄÔÑ ãÈÇÔÑ";
         Text[ greek ] = "¢ìåóïò äñïìİáò";
-        Text[ korean ] = "ë‹¤ì´ë ‰íŠ¸ ì»¤ì„œ(~D)";
+        Text[ korean ] = "ì»¤ì„œ ìœ„ì¹˜ ì§ì ‘ ì¡°ì •(~D)";
         Text[ turkish ] = "Serbest imleç";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Suora ko~hdistin";
