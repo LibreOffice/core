@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:09:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
-#endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
 #endif
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
