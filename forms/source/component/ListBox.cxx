@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.30 $
+*   $Revision: 1.31 $
 *
-*   last change: $Author: rt $ $Date: 2004-04-02 10:54:18 $
+*   last change: $Author: hr $ $Date: 2004-05-10 12:46:20 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -200,7 +200,7 @@ namespace frm
     DBG_NAME(OListBoxModel);
     //------------------------------------------------------------------
     OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
+        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
         // use the old control name for compytibility reasons
         ,OEntryListHelper( m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -453,6 +453,42 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
+    void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    {
+        // if both SelectedItems and StringItemList are set, care for this
+        // #i27024# / 2004-04-05 / fs@openoffice.org
+        const Any* pSelectSequenceValue = NULL;
+
+        const ::rtl::OUString* pStartPos = _rPropertyNames.getConstArray();
+        const ::rtl::OUString* pEndPos   = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
+        const ::rtl::OUString* pSelectedItemsPos = ::std::find_if(
+            pStartPos, pEndPos,
+             ::std::bind2nd( ::std::equal_to< ::rtl::OUString >(), PROPERTY_SELECT_SEQ )
+        );
+        const ::rtl::OUString* pStringItemListPos = ::std::find_if(
+            pStartPos, pEndPos,
+             ::std::bind2nd( ::std::equal_to< ::rtl::OUString >(), PROPERTY_STRINGITEMLIST )
+        );
+        if ( ( pSelectedItemsPos != pEndPos ) && ( pStringItemListPos != pEndPos ) )
+        {
+            // both properties are present
+            // -> remember the value for the select sequence
+            pSelectSequenceValue = _rValues.getConstArray() + ( pSelectedItemsPos - pStartPos );
+        }
+
+        OBoundControlModel::setPropertyValues( _rPropertyNames, _rValues );
+
+        if ( pSelectSequenceValue )
+        {
+            setPropertyValue( PROPERTY_SELECT_SEQ, *pSelectSequenceValue );
+            // Note that this is the only reliable way, since one of the properties is implemented
+            // by ourself, and one is implemented by the aggregate, we cannot rely on any particular
+            // results when setting them both - too many undocumented behavior in all the involved
+            // classes
+        }
+    }
+
+    //------------------------------------------------------------------------------
     Reference<XPropertySetInfo> SAL_CALL OListBoxModel::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -535,6 +571,19 @@ namespace frm
 
         OBoundControlModel::read(_rxInStream);
         ::osl::MutexGuard aGuard(m_aMutex);
+
+        // since we are "overwriting" the StringItemList of our aggregate (means we have
+        // an own place to store the value, instead of relying on our aggregate storing it),
+        // we need to respect what the aggregate just read for the StringItemList property.
+        try
+        {
+            if ( m_xAggregateSet.is() )
+                setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+        }
 
         // Version
         sal_uInt16 nVersion = _rxInStream->readShort();
