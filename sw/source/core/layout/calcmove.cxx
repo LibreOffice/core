@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:18:24 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,7 +632,7 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
     {
         SdrObject *pObj = (*pSortedObjs)[i];
         long nTmp = 0;
-        if ( pObj->IsWriterFlyFrame() )
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if( pFly->Frm().Top() != WEIT_WECH &&
@@ -645,7 +645,7 @@ void lcl_CheckObjects( SwSortDrawObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
             }
         }
         else
-            nTmp = pObj->GetBoundRect().Bottom();
+            nTmp = pObj->GetCurrentBoundRect().Bottom();
         nMax = Max( nTmp, nMax );
     }
     ++nMax; //Unterkante vs. Hoehe!
@@ -934,7 +934,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 {
                     SdrObject *pObj = (*GetDrawObjs())[i];
                     SwFrmFmt *pFmt = ::FindFrmFmt( pObj );
-                    const FASTBOOL bFly = pObj->IsWriterFlyFrame();
+                    const FASTBOOL bFly = pObj->ISA(SwVirtFlyDrawObj);
                     if ( bFly &&
                          WEIT_WECH == ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Width()||
                          pFmt->GetFrmSize().GetWidthPercent() )
@@ -943,7 +943,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                     if ( FLY_IN_CNTNT == pFmt->GetAnchor().GetAnchorId() )
                         nMinWidth = Max( nMinWidth,
                                       bFly ? pFmt->GetFrmSize().GetWidth()
-                                           : pObj->GetBoundRect().GetWidth() );
+                                           : pObj->GetCurrentBoundRect().GetWidth() );
                 }
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
@@ -1536,7 +1536,7 @@ void SwCntntFrm::MakeAll()
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                     ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->InvalidatePos();
             }
         }
