@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:15:38 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@
 #endif
 #include "app.hxx"
 #include "sdattr.hxx"
-#include "ins_page.hxx"
+//CHINA001 #include "ins_page.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "sdresid.hxx"
@@ -144,7 +144,7 @@
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#include "dlgfield.hxx"
+//CHINA001 #include "dlgfield.hxx"
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
@@ -153,6 +153,11 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlgfield.hrc" //CHINA001
+#include "ins_page.hrc" //CHINA001
+
+#define RET_DELETE  100 //CHINA001
 
 namespace sd {
 
@@ -195,8 +200,11 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerLocked() );
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
-                SdInsertLayerDlg* pDlg = new SdInsertLayerDlg( NULL, aNewAttr );
-
+                //CHINA001 SdInsertLayerDlg* pDlg = new SdInsertLayerDlg( NULL, aNewAttr );
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+                AbstractSdInsertLayerDlg* pDlg = pFact->CreateSdInsertLayerDlg(ResId( DLG_INSERT_LAYER ), NULL, aNewAttr, TRUE, String( SdResId( STR_INSERTLAYER ) ) );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->SetHelpId( SID_INSERTLAYER );
 
                 // Ueberpruefung auf schon vorhandene Namen
@@ -341,9 +349,13 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerPrintable( pDrView->IsLayerPrintable(aLayerName) ) );
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
-                SdInsertLayerDlg* pDlg = new SdInsertLayerDlg( NULL,
+//CHINA001              SdInsertLayerDlg* pDlg = new SdInsertLayerDlg( NULL,
+//CHINA001              aNewAttr, bDelete, String( SdResId( STR_MODIFYLAYER ) ) );
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+                AbstractSdInsertLayerDlg* pDlg = pFact->CreateSdInsertLayerDlg(ResId( DLG_INSERT_LAYER ), NULL,
                                                 aNewAttr, bDelete, String( SdResId( STR_MODIFYLAYER ) ) );
-
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->SetHelpId( SID_MODIFYLAYER );
 
                 // Ueberpruefung auf schon vorhandene Namen
@@ -680,13 +692,17 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                                  pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
                 {
                     // Dialog...
-                    SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
-                    if( aDlg.Execute() == RET_OK )
+                    //CHINA001 SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
+                    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+                    AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                     {
                         // #108538#
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
-                        SvxFieldData* pField = aDlg.GetField();
+                        SvxFieldData* pField = pDlg->GetField(); //CHINA001 SvxFieldData* pField = aDlg.GetField();
                         ESelection aSel = pOLV->GetSelection();
                         sal_Bool bSelectionWasModified(sal_False);
 
@@ -707,7 +723,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                             pOLV->SetSelection( aSel );
                         }
 
-                        SfxItemSet aSet( aDlg.GetItemSet() );
+                        SfxItemSet aSet( pDlg->GetItemSet() ); //CHINA001 SfxItemSet aSet( aDlg.GetItemSet() );
 
                         if( aSet.Count() )
                         {
@@ -730,6 +746,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                             delete pField;
                         }
                     }
+                    delete pDlg; //add by CHINA001
                 }
             }
 
