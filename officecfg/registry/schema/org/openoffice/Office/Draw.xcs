@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,24 @@
 						<label xml:lang="en-US"/>
 					</info>
 					<value>5000</value>
+				</prop>
+			</group>
+            <group oor:name="Compatibility">
+				<info>
+					<desc xml:lang="en-US">Contains the group of options that control the compatibility to other applications.</desc>
+					<label xml:lang="en-US">Compatibility options.</label>
+				</info>
+				<prop oor:name="PrinterIndependentLayout" oor:type="xs:short">
+					<!-- UIHints: Tools - Options - Draw - Other - [Section] Compatibility -->
+					<info>
+						<author>AF</author>
+						<desc xml:lang="en-US">Indicates whether to use printer independent 
+                        metrics for document formatting (2) or to use metrics derived from the 
+                        current printer (1).  Refer to com::sun::star::document::PrinterIndependentLayout 
+                        for valid values.</desc> 
+						<label xml:lang="en-US">Use printer independent metrics for document formatting</label>
+					</info>
+					<value>2</value>
 				</prop>
 			</group>
 		</group>
