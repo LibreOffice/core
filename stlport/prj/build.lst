@@ -1,0 +1,2 @@
+sl	stlport	: NULL
+sl	stlport						nmake	-	all	sl_mkout NULL
