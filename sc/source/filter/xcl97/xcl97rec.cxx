@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:48:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1814,16 +1814,17 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
     String  sTmpName;
     String  sTmpComm;
     Color   aDummyCol;
-    UINT16  nDummyFlags;
+    USHORT  nFlags;
 
     rDoc.GetName( nTab, sTmpName );
     sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
     nRecLen = 8 + sName.GetBufferSize();
 
-    rDoc.GetScenarioData( nTab, sTmpComm, aDummyCol, nDummyFlags );
+    rDoc.GetScenarioData( nTab, sTmpComm, aDummyCol, nFlags );
     sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
     if( sComment.Len() )
         nRecLen += sComment.GetSize();
+    nProtected = (nFlags & SC_SCENARIO_PROTECT) ? 1 : 0;
 
     if( !sUsername.Len() )
     {
@@ -1885,7 +1886,7 @@ BOOL ExcEScenario::Append( UINT16 nCol, UINT16 nRow, const String& rTxt )
 void ExcEScenario::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (UINT16) List::Count()       // number of cells
-            << (UINT8) 1                    // fLocked
+            << nProtected                   // fProtection
             << (UINT8) 0                    // fHidden
             << (UINT8) sName.Len()          // length of scen name
             << (UINT8) sComment.Len()       // length of comment
