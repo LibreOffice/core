@@ -54,10 +54,10 @@ public abstract class LetterWizardDialog  extends WizardDialog implements Letter
   XCheckBox chkUseSigns;
   XCheckBox chkUseSubject;
   XCheckBox chkUseSalutation;
-  XListBox lstSalutation;
+  XComboBox lstSalutation;
   XCheckBox chkUseBendMarks;
   XCheckBox chkUseGreeting;
-  XListBox lstGreeting;
+  XComboBox lstGreeting;
   XCheckBox chkUseFooter;
   XFixedText lblLetterNorm;
   XFixedText lblTitle3;
@@ -178,8 +178,8 @@ LetterWizardDialogResources resources;
       new Object[] { new Integer(39),resources.reslblIntroduction_value,Boolean.TRUE,"lblIntroduction",new Integer(104),new Integer(145),INTEGERS[1],new Short((short)80),new Integer(199)}
     );
     ImageControl3 = insertImage("ImageControl3",
-      new String[] {"Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[10],translateURL(imageURLImageControl3),"ImageControl3",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[1],new Short((short)81),INTEGERS[10]}
+      new String[] {"Border", "Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
+      new Object[] { new Short((short)0), INTEGERS[10],"private:resource/dbu/image/19205","ImageControl3",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[1],new Short((short)81),INTEGERS[10]}
     );
   }
 
@@ -195,7 +195,7 @@ LetterWizardDialogResources resources;
     );
     numLogoX = insertNumericField("numLogoX", NUMLOGOX_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"},
-      new Object[] { INTEGER_12,"HID:" + ( HID + 10 ),"numLogoX",new Integer(236),INTEGER_40,Boolean.TRUE,INTEGERS[2],new Short((short)10),INTEGERS[0],new Integer(30)}
+      new Object[] { INTEGER_12,"HID:" + ( HID + 10 ),"numLogoX",new Integer(266),INTEGER_40,Boolean.TRUE,INTEGERS[2],new Short((short)10),INTEGERS[0],new Integer(30)}
     );
     numLogoWidth = insertNumericField("numLogoWidth", NUMLOGOWIDTH_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"},
@@ -203,7 +203,7 @@ LetterWizardDialogResources resources;
     );
     numLogoY = insertNumericField("numLogoY", NUMLOGOY_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"},
-      new Object[] { INTEGER_12,"HID:" + ( HID + 12 ),"numLogoY",new Integer(236),new Integer(56),Boolean.TRUE,INTEGERS[2],new Short((short)12),new Double(-3.4),new Integer(30)}
+      new Object[] { INTEGER_12,"HID:" + ( HID + 12 ),"numLogoY",new Integer(266),new Integer(56),Boolean.TRUE,INTEGERS[2],new Short((short)12),new Double(-3.4),new Integer(30)}
     );
     chkPaperCompanyAddress = insertCheckBox("chkPaperCompanyAddress", CHKPAPERCOMPANYADDRESS_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
@@ -215,7 +215,7 @@ LetterWizardDialogResources resources;
     );
     numAddressX = insertNumericField("numAddressX", NUMADDRESSX_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"},
-      new Object[] { INTEGER_12,"HID:" + ( HID + 15 ),"numAddressX",new Integer(236),new Integer(96),Boolean.TRUE,INTEGERS[2],new Short((short)15),new Double(3.8),new Integer(30)}
+      new Object[] { INTEGER_12,"HID:" + ( HID + 15 ),"numAddressX",new Integer(266),new Integer(96),Boolean.TRUE,INTEGERS[2],new Short((short)15),new Double(3.8),new Integer(30)}
     );
     numAddressWidth = insertNumericField("numAddressWidth", NUMADDRESSWIDTH_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"},
@@ -223,7 +223,7 @@ LetterWizardDialogResources resources;
     );
     numAddressY = insertNumericField("numAddressY", NUMADDRESSY_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"},
-      new Object[] { INTEGER_12,"HID:" + ( HID + 17 ),"numAddressY",new Integer(236),new Integer(112),Boolean.TRUE,INTEGERS[2],new Short((short)17),new Double(-3.4),new Integer(30)}
+      new Object[] { INTEGER_12,"HID:" + ( HID + 17 ),"numAddressY",new Integer(266),new Integer(112),Boolean.TRUE,INTEGERS[2],new Short((short)17),new Double(-3.4),new Integer(30)}
     );
     chkCompanyReceiver = insertCheckBox("chkCompanyReceiver", CHKCOMPANYRECEIVER_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
@@ -259,11 +259,11 @@ LetterWizardDialogResources resources;
     );
     lblLogoX = insertLabel("lblLogoX",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblLogoX_value,"lblLogoX",new Integer(170),new Integer(42),INTEGERS[2],new Short((short)84),new Integer(64)}
+      new Object[] { INTEGERS[8],resources.reslblLogoX_value,"lblLogoX",new Integer(170),new Integer(42),INTEGERS[2],new Short((short)84),new Integer(94)}
     );
     lblLogoY = insertLabel("lblLogoY",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblLogoY_value,"lblLogoY",new Integer(170),new Integer(58),INTEGERS[2],new Short((short)85),new Integer(64)}
+      new Object[] { INTEGERS[8],resources.reslblLogoY_value,"lblLogoY",new Integer(170),new Integer(58),INTEGERS[2],new Short((short)85),new Integer(94)}
     );
     lblAddressHeight = insertLabel("lblAddressHeight",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -275,11 +275,11 @@ LetterWizardDialogResources resources;
     );
     lblAddressX = insertLabel("lblAddressX",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblAddressX_value,"lblAddressX",new Integer(170),new Integer(98),INTEGERS[2],new Short((short)88),new Integer(64)}
+      new Object[] { INTEGERS[8],resources.reslblAddressX_value,"lblAddressX",new Integer(170),new Integer(98),INTEGERS[2],new Short((short)88),new Integer(94)}
     );
     lblAddressY = insertLabel("lblAddressY",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblAddressY_value,"lblAddressY",new Integer(170),new Integer(114),INTEGERS[2],new Short((short)89),new Integer(64)}
+      new Object[] { INTEGERS[8],resources.reslblAddressY_value,"lblAddressY",new Integer(170),new Integer(114),INTEGERS[2],new Short((short)89),new Integer(94)}
     );
     lblTitle2 = insertLabel("lblTitle2",
       new String[] {"FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -290,7 +290,7 @@ LetterWizardDialogResources resources;
   public void buildStep3() {
     lstLetterNorm = insertListBox("lstLetterNorm", LSTLETTERNORM_ACTION_PERFORMED,LSTLETTERNORM_ITEM_CHANGED,
       new String[] {"Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { Boolean.TRUE,INTEGER_12,"HID:" + ( HID + 21 ),"lstLetterNorm",new Integer(210),new Integer(26),INTEGERS[3],new Short((short)21),new Integer(74)}
+      new Object[] { Boolean.TRUE,INTEGER_12,"HID:" + ( HID + 21 ),"lstLetterNorm",new Integer(210),new Integer(34),INTEGERS[3],new Short((short)21),new Integer(74)}
     );
     chkUseLogo = insertCheckBox("chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
@@ -312,7 +312,7 @@ LetterWizardDialogResources resources;
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
       new Object[] { INTEGERS[8],"HID:" + ( HID + 26 ),resources.reschkUseSalutation_value,"chkUseSalutation",new Integer(97),new Integer(113),new Short((short)0),INTEGERS[3],new Short((short)26),new Integer(66)}
     );
-    lstSalutation = insertListBox("lstSalutation", LSTSALUTATION_ACTION_PERFORMED,LSTSALUTATION_ITEM_CHANGED,
+    lstSalutation = insertComboBox("lstSalutation", LSTSALUTATION_ACTION_PERFORMED,LSTSALUTATION_ITEM_CHANGED,LSTSALUTATION_TEXT_CHANGED,
       new String[] {"Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
       new Object[] { Boolean.TRUE,INTEGER_12,"HID:" + ( HID + 27 ),"lstSalutation",new Integer(210),new Integer(110),INTEGERS[3],new Short((short)27),new Integer(74)}
     );
@@ -324,7 +324,7 @@ LetterWizardDialogResources resources;
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
       new Object[] { INTEGERS[8],"HID:" + ( HID + 29 ),resources.reschkUseGreeting_value,"chkUseGreeting",new Integer(97),new Integer(142),new Short((short)0),INTEGERS[3],new Short((short)29),new Integer(66)}
     );
-    lstGreeting = insertListBox("lstGreeting", LSTGREETING_ACTION_PERFORMED,LSTGREETING_ITEM_CHANGED,
+    lstGreeting = insertComboBox("lstGreeting", LSTGREETING_ACTION_PERFORMED,LSTGREETING_ITEM_CHANGED,LSTGREETING_TEXT_CHANGED,
       new String[] {"Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
       new Object[] { Boolean.TRUE,INTEGER_12,"HID:" + ( HID + 30 ),"lstGreeting",new Integer(210),new Integer(141),INTEGERS[3],new Short((short)30),new Integer(74)}
     );
@@ -333,8 +333,8 @@ LetterWizardDialogResources resources;
       new Object[] { INTEGERS[8],"HID:" + ( HID + 31 ),resources.reschkUseFooter_value,"chkUseFooter",new Integer(97),new Integer(158),new Short((short)0),INTEGERS[3],new Short((short)31),new Integer(212)}
     );
     lblLetterNorm = insertLabel("lblLetterNorm",
-      new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblLetterNorm_value,"lblLetterNorm",new Integer(97),new Integer(28),INTEGERS[3],new Short((short)50),new Integer(109)}
+      new String[] {"Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+      new Object[] { INTEGER_16,resources.reslblLetterNorm_value,Boolean.TRUE,"lblLetterNorm",new Integer(97),new Integer(28),INTEGERS[3],new Short((short)50),new Integer(109)}
     );
     lblTitle3 = insertLabel("lblTitle3",
       new String[] {"FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -393,15 +393,15 @@ LetterWizardDialogResources resources;
     );
     lblSenderName = insertLabel("lblSenderName",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblSenderName_value,"lblSenderName",new Integer(111),new Integer(69),INTEGERS[4],new Short((short)77),new Integer(70)}
+      new Object[] { INTEGERS[8],resources.reslblSenderName_value,"lblSenderName",new Integer(113),new Integer(69),INTEGERS[4],new Short((short)77),new Integer(68)}
     );
     lblSenderStreet = insertLabel("lblSenderStreet",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblSenderStreet_value,"lblSenderStreet",new Integer(111),new Integer(82),INTEGERS[4],new Short((short)78),new Integer(70)}
+      new Object[] { INTEGERS[8],resources.reslblSenderStreet_value,"lblSenderStreet",new Integer(113),new Integer(82),INTEGERS[4],new Short((short)78),new Integer(68)}
     );
     lblPostCodeCity = insertLabel("lblPostCodeCity",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblPostCodeCity_value,"lblPostCodeCity",new Integer(111),new Integer(97),INTEGERS[4],new Short((short)79),new Integer(70)}
+      new Object[] { INTEGERS[8],resources.reslblPostCodeCity_value,"lblPostCodeCity",new Integer(113),new Integer(97),INTEGERS[4],new Short((short)79),new Integer(68)}
     );
     lblTitle4 = insertLabel("lblTitle4",
       new String[] {"FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -435,7 +435,7 @@ LetterWizardDialogResources resources;
   public void buildStep6() {
     txtTemplateName = insertTextField("txtTemplateName", TXTTEMPLATENAME_TEXT_CHANGED,
       new String[] {"Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
-      new Object[] { INTEGER_12,"HID:" + ( HID + 44 ),"txtTemplateName",new Integer(172),new Integer(60),INTEGERS[6],new Short((short)44),resources.restxtTemplateName_value,new Integer(130)}
+      new Object[] { INTEGER_12,"HID:" + ( HID + 44 ),"txtTemplateName",new Integer(202),new Integer(56),INTEGERS[6],new Short((short)44),resources.restxtTemplateName_value,new Integer(100)}
     );
     optCreateLetter = insertRadioButton("optCreateLetter", OPTCREATELETTER_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -458,12 +458,12 @@ LetterWizardDialogResources resources;
       new Object[] { new Integer(33),resources.reslblFinalExplanation2_value,Boolean.TRUE,"lblFinalExplanation2",new Integer(104),new Integer(145),INTEGERS[6],new Short((short)54),new Integer(199)}
     );
     ImageControl2 = insertImage("ImageControl2",
-      new String[] {"Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[10],translateURL(imageURLImageControl2),"ImageControl2",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[6],new Short((short)66),INTEGERS[10]}
+      new String[] {"Border", "Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
+      new Object[] { new Short((short)0),INTEGERS[10],"private:resource/dbu/image/19205","ImageControl2",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[6],new Short((short)66),INTEGERS[10]}
     );
     lblTemplateName = insertLabel("lblTemplateName",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],resources.reslblTemplateName_value,"lblTemplateName",new Integer(97),new Integer(62),INTEGERS[6],new Short((short)82),new Integer(71)}
+      new Object[] { INTEGERS[8],resources.reslblTemplateName_value,"lblTemplateName",new Integer(97),new Integer(58),INTEGERS[6],new Short((short)82),new Integer(101)}
     );
     lblTitle6 = insertLabel("lblTitle6",
       new String[] {"FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
