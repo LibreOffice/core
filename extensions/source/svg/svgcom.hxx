@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgcom.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-22 17:49:17 $
+ *  last change: $Author: ka $ $Date: 2001-11-21 12:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,6 @@
 #define SEQ( _def_Obj )                     NMSP_UNO::Sequence< _def_Obj >
 #define ANY                                 NMSP_UNO::Any
 #define B2UCONST( _def_pChar )              (NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
-#define SVG_DTD_STRING                      B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20001102//EN\" \"http://www.w3.org/TR/2000/CR-SVG-20001102/DTD/svg-20001102.dtd\">" )
+#define SVG_DTD_STRING                      B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" )
 
 #endif // _SYNCCOM_HXX
