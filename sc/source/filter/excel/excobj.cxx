@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 10:37:14 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,8 +943,10 @@ void ExcEscherOle::CreateSdrOle( Biff8MSDffManager& rDffMan, UINT32 nOLEImpFlgs 
         Graphic             aGraph;
         if( rDffMan.GetBLIP( nBlipId, aGraph ) )
         {
-            SvStorageRef    xSrc = pExcRoot->pRootStorage;
-            SvStorageRef    xDst( pExcRoot->pDoc->GetDocumentShell()->GetStorage() );
+            SvStorageRef        xSrc = pExcRoot->pRootStorage;
+            SvStorageRef        xDst( pExcRoot->pDoc->GetDocumentShell()->GetStorage() );
+            UINT32              nOLEImpFlgs = 0;
+
             SdrOle2Obj*     pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
                     aStorageName, xSrc, xDst, aGraph, *pAnchor, NULL, nOLEImpFlgs );
             if( pRet )

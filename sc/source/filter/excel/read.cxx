@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:22:20 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,6 +1022,8 @@ FltError ImportExcel8::Read( void )
             return eERR_OK;
     }
 #endif
+
+    CreateTmpCtrlStorage();
 
     UINT16              nOpcode;            // aktueller Opcode
     UINT16              nLaengeRec;         // Laenge aktueller Record

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-30 14:28:59 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ RootData::RootData( void )
     pSupbookBuffer = NULL;
     pCurrSupbook = NULL;
 
-    pRootStorage = pPivotCacheStorage = NULL;
+    pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
     pImpPivotCacheList = NULL;
 
     nCondRangeCnt = 0;
@@ -358,6 +358,8 @@ RootData::~RootData()
     if( pExtDocOpt )
         delete pExtDocOpt;
 
+//  if( pCtrlStorage )
+//      delete pCtrlStorage;
 }
 
 

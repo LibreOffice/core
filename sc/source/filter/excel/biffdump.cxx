@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-29 11:55:23 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5107,6 +5107,29 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 }
 
 
+void Biff8RecDumper::ControlsDump( SvStream& rIn )
+{
+    if( !pDumpStream )
+        return;
+
+    SvStream&   rOut = *pDumpStream;
+    SvStream*   pOldIn = pIn;
+    pIn = &rIn;
+    rIn.Seek( STREAM_SEEK_TO_END );
+    UINT32      nLen = rIn.Tell();
+    rIn.Seek( STREAM_SEEK_TO_BEGIN );
+
+    while( nLen )
+    {
+        UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
+        ContDump( nPart );
+        nLen -= nPart;
+    }
+
+    pIn = pOldIn;
+}
+
+
 const sal_Char* Biff8RecDumper::GetBlanks( const UINT16 nNumOfBlanks )
 {
     DBG_ASSERT( pBlankLine, "-Biff8RecDumper::GetBlanks(): nicht so schnell mein Freund!" );
@@ -6375,6 +6398,14 @@ BOOL Biff8RecDumper::Dump( SvStream& r )
 
         if( pTitle )
             *pDumpStream << pTitle->GetBuffer();
+
+        SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
+        if( pContrIn )
+        {
+            *pDumpStream << "### start Ctls stream ###\n";
+            ControlsDump( *pContrIn );
+            *pDumpStream << "\n### end Ctls stream ###\n";
+        }
 
         const UINT32        nStartPos = r.Tell();
         pIn = &r;

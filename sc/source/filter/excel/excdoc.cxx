@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:23:08 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,7 @@ void ExcTable::FillAsTable( void )
     }
 
     // Header und Default-Recs
-    if ( eDateiTyp < Biff8 )
+    if( eDateiTyp < Biff8 )
     {
         Add( new ExcBof );
         // CALCMODE bis VCENTER
@@ -613,8 +613,13 @@ void ExcTable::FillAsTable( void )
     Add( new ExcFooter( &rR, eDateiTyp >= Biff8 ) );
     Add( new ExcSetup( &rR ) );
 
-    if( rDoc.IsTabProtected( nScTab ) )
-        Add( new XclProtection() );
+    if( eDateiTyp >= Biff8 )
+    {
+        Add( new XclBGPic( rR ) );
+
+        if( rDoc.IsTabProtected( nScTab ) )
+            Add( new XclProtection() );
+    }
 
     if ( eDateiTyp < Biff8 && rR.pExtSheetCntAndRecs )
         Add( new ExcExternDup( *rR.pExtSheetCntAndRecs ) );

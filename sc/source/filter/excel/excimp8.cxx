@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 10:37:14 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/exchange.hxx>
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -2891,7 +2892,6 @@ void ImportExcel8::PostDocLoad( void )
             BOOL                        bRangeTest;
 
             UINT32                      nOLEImpFlags = 0;
-
             OfaFilterOptions*           pFltOpts = OFF_APP()->GetFilterOptions();
             if( pFltOpts )
             {
@@ -3100,6 +3100,45 @@ String ImportExcel8::ReadCString( UINT16 n, const BOOL b )
     }
     else
         return EMPTY_STRING;
+}
+
+
+void ImportExcel8::CreateTmpCtrlStorage( void )
+{
+//  if( pExcRoot->pCtrlStorage )
+    if( pExcRoot->xCtrlStorage.Is() )
+        return;     // already done
+
+    SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
+    if( pContrIn )
+    {
+        SvStorageRef    xStrg( new SvStorage( new SvMemoryStream(), TRUE ) );
+        pExcRoot->xCtrlStorage = SvStorageRef( new SvStorage( new SvMemoryStream(), TRUE ) );
+//      SvStorage*      pStrg = new SvStorage( new SvMemoryStream(), TRUE );
+
+//      SvStorageStreamRef  xTemp = pStrg->OpenStream( _STRINGCONST( "contents" ) );
+        SvStorageStreamRef  xTemp = xStrg->OpenStream( _STRINGCONST( "contents" ) );
+        if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
+        {
+            pContrIn->Seek( 16 );   // no need for class id at this point
+            *xTemp << *pContrIn;
+
+        SvGlobalName    aName( 0xD7053240, 0xCE69, 0x11CD, 0xA7, 0x77,
+                                    0x00, 0xDD, 0x01, 0x14, 0x3C, 0x57 );
+        UINT32              nClip = Exchange::RegisterFormatName( _STRING( "Embedded Object" ) );
+//      pStrg->SetClass( aName, nClip, _STRING( "Microsoft Forms 2.0 CommandButton" ) );
+        xStrg->SetClass( aName, nClip, _STRING( "Microsoft Forms 2.0 CommandButton" ) );
+
+        pExcRoot->xCtrlStorage = xStrg;
+        }
+/*      else
+        {
+            delete pStrg;
+            pStrg = NULL;
+        }*/
+
+//      pExcRoot->pCtrlStorage = pStrg;
+    }
 }
 
 
