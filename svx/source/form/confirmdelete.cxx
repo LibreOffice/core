@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confirmdelete.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-07-31 14:27:38 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 08:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,10 @@ namespace svxform
         aProductName >>= sProductName;
 
         String aTitle = sProductName;
-        aTitle.AppendAscii(" Base");
+        aProductName = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTVERSION);
+        aProductName >>= sProductName;
+        aTitle.AppendAscii(" ");
+        aTitle += String(sProductName);
         SetText(aTitle);
 
         SetHelpId(HID_DLG_DBMSG);
@@ -176,6 +179,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/07/31 14:27:38  mh
+ *  chg: header
+ *
  *  Revision 1.1  2001/07/25 13:37:28  fs
  *  initial checkin - replacement of the SvxDbMsgBox, now only used for deletion confirmation
  *
