@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:58:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@ defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_TH
 
 /**
  * An exception indicating a bootstrap error.
+ *
+ * @since UDK 3.2.0
  */
 class BootstrapException
 {
@@ -214,6 +216,8 @@ private:
  * @exception BootstrapException
  * Thrown in case bootstrap() signals an exception due to a
  * bootstrap error.
+ *
+ * @since UDK 3.2.0
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
 SAL_CALL bootstrap();
