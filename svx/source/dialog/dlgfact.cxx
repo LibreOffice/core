@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:26:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
 #include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
+#include "SpellDialog.hxx"
 #include "cfg.hxx"    //add for SvxConfigDialog
 #define ITEMID_TABSTOP  0 //add for #include "tabstpge.hxx"
 #include "numpages.hxx" // add for
@@ -163,6 +164,7 @@ IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 
 void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
@@ -319,6 +321,43 @@ const SfxItemSet* AbstractSvxZoomDialog_Impl::GetOutputItemSet() const
 }
 
 //for SvxZoomDialog end
+// svx::SvxSpellDialog
+/*-- 04.05.2004 08:26:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void AbstractSpellDialog_Impl::SetLanguage( sal_uInt16 nLang )
+{
+    pDlg->SetLanguage(nLang);
+}
+/*-- 04.05.2004 08:26:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool AbstractSpellDialog_Impl::Close()
+{
+    return pDlg->Close();
+}
+/*-- 04.05.2004 08:26:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void  AbstractSpellDialog_Impl::Invalidate()
+{
+    pDlg->Invalidate();
+}
+/*-- 04.05.2004 08:26:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Window*     AbstractSpellDialog_Impl::GetWindow()
+{
+    return pDlg;
+}
+/*-- 04.05.2004 08:26:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SfxBindings& AbstractSpellDialog_Impl::GetBindings()
+{
+    return pDlg->GetBindings();
+}
+// end svx::SvxSpellDialog
 
 //for SvxSpellCheckDialog begin
 //STRIP001 void AbstractSvxSpellCheckDialog_Impl::SetNewEditWord( const String& _rNew )
@@ -1059,6 +1098,18 @@ AbstractSvxZoomDialog * AbstractDialogFactory_Impl::CreateSvxZoomDialog( Window*
     if ( pDlg )
         return new AbstractSvxZoomDialog_Impl( pDlg );
     return 0;
+}
+
+/*-- 04.05.2004 08:18:17---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+AbstractSpellDialog *  AbstractDialogFactory_Impl::CreateSvxSpellDialog(
+                        Window* pParent,
+                        SfxBindings* pBindings,
+                        svx::SpellDialogChildWindow* pSpellChildWindow )
+{
+    svx::SpellDialog* pDlg = new svx::SpellDialog(pSpellChildWindow, pParent, pBindings);
+    return new AbstractSpellDialog_Impl(pDlg);
 }
 
 //CHINA001 GalleryDialog start
