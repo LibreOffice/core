@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 15:23:09 $
+#   last change: $Author: hjs $ $Date: 2000-11-16 14:23:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,10 +104,10 @@ SLOFILES= 	\
         $(SLO)$/urp_bridgeimpl.obj \
         $(SLO)$/urp_propertyobject.obj
 
-.IF "$(OS)$(COM)"=="LINUXGCC"
+.IF "$(COM)"=="GCC"
 NOOPTFILES= \
         $(SLO)$/urp_reader.obj
-.ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
+.ENDIF			# "$(COM)"=="GCC"
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
