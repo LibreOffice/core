@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
+ *  last change: $Author: cl $ $Date: 2000-09-25 15:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,12 +1558,13 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
 
+/*
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID,
                                    *GetAutoFramePropMapper().get(),
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
-
+*/
     pListAutoPool->exportXML();
 }
 
