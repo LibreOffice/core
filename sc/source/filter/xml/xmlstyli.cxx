@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,9 @@ using namespace xmloff::token;
 //using namespace ::com::sun::star::text;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper ) :
-    SvXMLImportPropertyMapper( rMapper )
+        const UniReference< XMLPropertySetMapper >& rMapper,
+        SvXMLImport& rImport) :
+    SvXMLImportPropertyMapper( rMapper, rImport )
 {
 }
 
@@ -232,8 +233,9 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
 }
 
 ScXMLRowImportPropertyMapper::ScXMLRowImportPropertyMapper(
-        const UniReference< XMLPropertySetMapper >& rMapper ) :
-    SvXMLImportPropertyMapper( rMapper )
+        const UniReference< XMLPropertySetMapper >& rMapper,
+        SvXMLImport& rImport) :
+    SvXMLImportPropertyMapper( rMapper, rImport )
 {
 }
 
@@ -776,8 +778,8 @@ UniReference < SvXMLImportPropertyMapper >
                 if( !xCellImpPropMapper.is() )
                 {
                     ((XMLTableStylesContext *)this)->xCellImpPropMapper =
-                        new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper() );
-                    xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateCharExtPropMapper(const_cast<XMLFontStylesContext*>(GetScImport().GetFontDecls())));
+                        new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper(), (SvXMLImport)GetImport() );
+                    xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateCharExtPropMapper((SvXMLImport)GetImport(), const_cast<XMLFontStylesContext*>(GetScImport().GetFontDecls())));
                 }
                 xMapper = xCellImpPropMapper;
             }
@@ -786,7 +788,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xColumnImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xColumnImpPropMapper =
-                        new SvXMLImportPropertyMapper( GetScImport().GetColumnStylesPropertySetMapper() );
+                        new SvXMLImportPropertyMapper( GetScImport().GetColumnStylesPropertySetMapper(), (SvXMLImport)GetImport() );
                 xMapper = xColumnImpPropMapper;
             }
              break;
@@ -794,7 +796,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xRowImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xRowImpPropMapper =
-                        new ScXMLRowImportPropertyMapper( GetScImport().GetRowStylesPropertySetMapper() );
+                        new ScXMLRowImportPropertyMapper( GetScImport().GetRowStylesPropertySetMapper(), (SvXMLImport)GetImport() );
                 xMapper = xRowImpPropMapper;
             }
              break;
@@ -802,7 +804,7 @@ UniReference < SvXMLImportPropertyMapper >
             {
                 if( !xTableImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xTableImpPropMapper =
-                        new SvXMLImportPropertyMapper( GetScImport().GetTableStylesPropertySetMapper() );
+                        new SvXMLImportPropertyMapper( GetScImport().GetTableStylesPropertySetMapper(), (SvXMLImport)GetImport() );
                 xMapper = xTableImpPropMapper;
             }
              break;

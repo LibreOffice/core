@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ protected:
 public:
 
     ScXMLCellImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const UniReference< XMLPropertySetMapper >& rMapper,
+            SvXMLImport& rImport);
     virtual ~ScXMLCellImportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
@@ -132,7 +133,8 @@ protected:
 public:
 
     ScXMLRowImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper );
+            const UniReference< XMLPropertySetMapper >& rMapper,
+            SvXMLImport& rImport);
     virtual ~ScXMLRowImportPropertyMapper();
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
