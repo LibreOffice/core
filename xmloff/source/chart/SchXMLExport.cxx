@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-22 11:57:05 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 16:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ SchXMLExportHelper::SchXMLExportHelper(
     }
 
     mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper );
+    // chain draw properties
+    mxExpPropMapper->ChainExportMapper( XMLShapeExport::CreateShapePropMapper( rExport ));
 
     // register chart auto-style family
     mrAutoStylePool.AddFamily(
@@ -1771,8 +1773,7 @@ SchXMLExport::~SchXMLExport()
 
 void SchXMLExport::_ExportStyles( sal_Bool bUsed )
 {
-    // not available in chart
-    DBG_WARNING( "Style Export requested. Not available for Chart" );
+    SvXMLExport::_ExportStyles( bUsed );
 }
 
 void SchXMLExport::_ExportMasterStyles()

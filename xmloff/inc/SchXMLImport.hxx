@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-08 12:55:32 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 16:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 enum SchXMLDocElemTokenMap
 {
     XML_TOK_DOC_AUTOSTYLES,
+    XML_TOK_DOC_STYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY
 };

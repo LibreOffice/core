@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-08 12:55:10 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 16:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ using namespace com::sun::star;
 static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, sXML_automatic_styles,  XML_TOK_DOC_AUTOSTYLES  },
+    { XML_NAMESPACE_OFFICE, sXML_styles,            XML_TOK_DOC_STYLES  },
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META    },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY    },
     XML_TOKEN_MAP_END
