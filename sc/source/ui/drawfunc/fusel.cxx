@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:54:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <svtools/imapobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/svdocapt.hxx>
@@ -466,10 +467,11 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     }
 
                     //
-                    //  Text: editieren
-                    //  #49458# nicht bei Uno-Controls
+                    //  Edit text
+                    //  #49458# not in UNO controls
+                    //  #i32352# not in media objects
                     //
-                    else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
+                    else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )
                     {
                         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                         BOOL bVertical = ( pOPO && pOPO->IsVertical() );
