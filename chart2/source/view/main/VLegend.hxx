@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:45 $
+ *  last change: $Author: bm $ $Date: 2003-10-10 11:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,11 @@ public:
 
     void createShapes();
 
-    void setMaxSize( const ::com::sun::star::awt::Size & rSize );
+//     void setMaxSize( const ::com::sun::star::awt::Size & rSize );
 
     void changePosition( const ::com::sun::star::awt::Point & rPos );
+
+    ::com::sun::star::awt::Size getSize() const;
 
 protected:
 
@@ -112,6 +114,7 @@ protected:
             ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xParent,
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xRootParent,
+        sal_Int32 & nOutCurrentWidth,
         sal_Int32 & nOutCurrentHeight );
 
 private:
@@ -124,7 +127,7 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
 
-    ::com::sun::star::awt::Size                                     m_aMaxSize;
+//     ::com::sun::star::awt::Size                                     m_aMaxSize;
     ::com::sun::star::awt::Rectangle                                m_aBoundRect;
 };
 

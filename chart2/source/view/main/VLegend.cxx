@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:45 $
+ *  last change: $Author: bm $ $Date: 2003-10-10 11:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#include <vector>
+
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 
@@ -197,14 +199,21 @@ uno::Reference< drawing::XShape > lcl_getSymbol(
             // legend symbols
 
             if( aChartType.equals( C2U( "com.sun.star.chart2.BarChart" )) ||
-                aChartType.equals( C2U( "com.sun.star.chart2.AreaChart" )) ||
-                aChartType.equals( C2U( "com.sun.star.chart2.PieChart" )))
+                aChartType.equals( C2U( "com.sun.star.chart2.AreaChart" )))
             {
                 eSymbolStyle = chart2::LegendSymbolStyle_BOX;
             }
             else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )))
             {
                 eSymbolStyle = chart2::LegendSymbolStyle_LINE;
+            }
+            else if( aChartType.equals( C2U( "com.sun.star.chart2.PieChart" )))
+            {
+                eSymbolStyle = chart2::LegendSymbolStyle_CIRCLE;
+            }
+            else if( aChartType.equals( C2U( "com.sun.star.chart2.NetChart" )))
+            {
+                eSymbolStyle = chart2::LegendSymbolStyle_DIAGONAL_LINE;
             }
 
             ::chart::VLegendSymbolFactory::createSymbol( xGroup, eSymbolStyle, xFact, xSeriesProp );
@@ -227,8 +236,8 @@ namespace chart
 
 VLegend::VLegend(
     const uno::Reference< chart2::XLegend > & xLegend ) :
-        m_xLegend( xLegend ),
-        m_aMaxSize( -1, -1 )
+        m_xLegend( xLegend )
+//         m_aMaxSize( -1, -1 )
 {
 }
 
@@ -244,6 +253,7 @@ void VLegend::createLegendEntries(
     const uno::Reference< drawing::XShapes > & xShapeContainer,
     const uno::Reference< chart2::XDataSeriesTreeParent > & xParent,
     const uno::Reference< chart2::XDataSeriesTreeParent > & xRootParent,
+    sal_Int32 & nOutCurrentWidth,
     sal_Int32 & nOutCurrentHeight )
 {
     if( ! xParent.is())
@@ -275,7 +285,7 @@ void VLegend::createLegendEntries(
             // be the place to create and place them.
 
             // recurse !
-            createLegendEntries( xShapeContainer, xNewParent, xRootParent, nOutCurrentHeight );
+            createLegendEntries( xShapeContainer, xNewParent, xRootParent, nOutCurrentWidth, nOutCurrentHeight );
         }
         else
         {
@@ -319,7 +329,7 @@ void VLegend::createLegendEntries(
                 }
 
                 awt::Size aTextSize( xEntry->getSize());
-                xEntry->setPosition( awt::Point( 2*nXOffset + 2 * aTextSize.Height, nYOffset + nOutCurrentHeight ));
+                xEntry->setPosition( awt::Point( 2*nXOffset + aTextSize.Height * 3/2, nOutCurrentHeight ));
 
                 // symbol
                 uno::Reference< drawing::XShape > xSymbol(
@@ -328,16 +338,24 @@ void VLegend::createLegendEntries(
                                        xSeriesSource, uno::UNO_QUERY ),
                                    m_xShapeFactory,
                                    xShapeContainer));
+
+                sal_Int32 nSymbolHeight = 0;
+                sal_Int32 nDiff = 0;
+
                 if( xSymbol.is())
                 {
-                    sal_Int32 nSymbolHeight = aTextSize.Height * 75 / 100;
-                    sal_Int32 nDiff = (aTextSize.Height - nSymbolHeight) / 2;
-                    xSymbol->setSize( awt::Size( 2 * nSymbolHeight, nSymbolHeight ));
-                    xSymbol->setPosition( awt::Point( nXOffset + nDiff,
-                                                      nYOffset + nOutCurrentHeight + nDiff ));
+                    // aspect ratio should always be 3:2
+                    nSymbolHeight = aTextSize.Height * 75 / 100;
+                    nDiff = (aTextSize.Height - nSymbolHeight) / 2;
+                    xSymbol->setSize( awt::Size( nSymbolHeight * 3/2, nSymbolHeight ));
+                    xSymbol->setPosition( awt::Point( nXOffset + nDiff, nOutCurrentHeight + nDiff ));
                 }
 
-                nOutCurrentHeight += aTextSize.Height;
+                nOutCurrentHeight += (aTextSize.Height + nYOffset);
+
+                nOutCurrentWidth = ::std::max< sal_Int32 >(
+                    nOutCurrentWidth,
+                    aTextSize.Width + aTextSize.Height * 3/2 + 2*nXOffset + 2*nDiff );
             }
             catch( uno::Exception & ex )
             {
@@ -357,10 +375,7 @@ void VLegend::createShapes()
 
     try
     {
-        awt::Size aSize( 3000, 5000 );
-        if( m_aMaxSize.Width > 0 &&
-            m_aMaxSize.Height > 0 )
-            aSize = m_aMaxSize;
+        awt::Size aSize;
 
         //create shape and add to page
         m_xShape.set(
@@ -381,6 +396,7 @@ void VLegend::createShapes()
             }
         }
 
+        // create and insert sub-shapes
         uno::Reference< drawing::XShapes > xLegendContainer( m_xShape, uno::UNO_QUERY );
         if( xLegendContainer.is())
         {
@@ -414,18 +430,22 @@ void VLegend::createShapes()
             }
 
             const sal_Int32 nVerticalPadding = 200;
-            const sal_Int32 nSeparatorDist = 100;
+            const sal_Int32 nSeparatorDist = 200;
+            sal_Int32 nCurrentWidth = aSize.Width;
             sal_Int32 nCurrentHeight = nVerticalPadding;
 
+            // create entries
             uno::Sequence< uno::Reference< chart2::XLegendEntry > > aEntries( m_xLegend->getEntries());
             const sal_Int32 nNumOfChartTypes = aEntries.getLength();
+
+            std::vector< uno::Reference< drawing::XShape > > aSeparators;
 
             for( sal_Int32 nI = 0; nI < nNumOfChartTypes; ++nI )
             {
                 uno::Reference< chart2::XDataSeriesTreeParent > xGroup( aEntries[ nI ], uno::UNO_QUERY );
                 if( xGroup.is())
                 {
-                    createLegendEntries( xLegendContainer, xGroup, xGroup, nCurrentHeight );
+                    createLegendEntries( xLegendContainer, xGroup, xGroup, nCurrentWidth, nCurrentHeight );
                 }
 
                 // separator between chart type groups
@@ -443,7 +463,8 @@ void VLegend::createShapes()
 
                         nCurrentHeight += nSeparatorDist + nLineWidth/2;
                         xLegendContainer->add( xSeparator );
-                        xSeparator->setSize( awt::Size( aSize.Width, 0 ));
+                        // correct resizing is done later, when the required size is known
+                        xSeparator->setSize( awt::Size( 100, 0 ));
                         xSeparator->setPosition( awt::Point( 0, nCurrentHeight ));
                         nCurrentHeight += nSeparatorDist + nLineWidth/2;
 
@@ -452,14 +473,23 @@ void VLegend::createShapes()
                         tAnySequence aPropValues;
                         PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
                         PropertyMapper::setMultiProperties( aPropNames, aPropValues, xSeparator );
+
+                        aSeparators.push_back( xSeparator );
                     }
                 }
             }
 
             aSize.Height = nCurrentHeight + nVerticalPadding;
-
+            aSize.Width = nCurrentWidth;
             if( xBorder.is())
                 xBorder->setSize( aSize );
+
+            for( std::vector< uno::Reference< drawing::XShape > >::const_iterator aIt = aSeparators.begin();
+                 aIt != aSeparators.end(); ++aIt )
+            {
+                if( (*aIt).is())
+                    (*aIt)->setSize( ::awt::Size( aSize.Width, 0 ));
+            }
         }
 
         m_aBoundRect.Width = aSize.Width;
@@ -471,10 +501,10 @@ void VLegend::createShapes()
     }
 }
 
-void VLegend::setMaxSize( const awt::Size & rSize )
-{
-    m_aMaxSize = rSize;
-}
+// void VLegend::setMaxSize( const awt::Size & rSize )
+// {
+//     m_aMaxSize = rSize;
+// }
 
 void VLegend::changePosition( const awt::Point & rPos )
 {
@@ -489,6 +519,11 @@ void VLegend::changePosition( const awt::Point & rPos )
     aUpperLeft.Y -= (m_aBoundRect.Height / 2);
 
     m_xShape->setPosition( aUpperLeft );
+}
+
+awt::Size VLegend::getSize() const
+{
+    return awt::Size( m_aBoundRect.Width, m_aBoundRect.Height );
 }
 
 //.............................................................................

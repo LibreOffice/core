@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegendSymbolFactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:46 $
+ *  last change: $Author: bm $ $Date: 2003-10-10 11:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,8 @@ void VLegendSymbolFactory::createSymbol(
     const uno::Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const uno::Reference< beans::XPropertySet > & xSeriesProperties )
 {
-    awt::Size aBoundSize( 2000, 1000 );
+    // aspect ratio of symbols is always 3:2
+    awt::Size aBoundSize( 3000, 2000 );
 
     // add an invisible square box to maintain aspect ratio
     switch( eStyle )
@@ -165,39 +166,47 @@ void VLegendSymbolFactory::createSymbol(
         case chart2::LegendSymbolStyle_BAR:
         case chart2::LegendSymbolStyle_RECTANGLE:
         case chart2::LegendSymbolStyle_STRETCHED_RECTANGLE:
+        case chart2::LegendSymbolStyle_CIRCLE:
         {
             try
             {
-                uno::Reference< drawing::XShape > xRect(
-                    xShapeFactory->createInstance(
-                        C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
-                if( xRect.is())
+                uno::Reference< drawing::XShape > xShape;
+
+                if( eStyle == chart2::LegendSymbolStyle_CIRCLE )
+                    xShape.set( xShapeFactory->createInstance(
+                                    C2U( "com.sun.star.drawing.EllipseShape" )), uno::UNO_QUERY );
+                else
+                    xShape.set( xShapeFactory->createInstance(
+                                    C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+
+                if( xShape.is())
                 {
-                    xSymbolGroup->add( xRect );
-                    if( eStyle == chart2::LegendSymbolStyle_BOX )
+                    xSymbolGroup->add( xShape );
+                    if( eStyle == chart2::LegendSymbolStyle_BOX ||
+                        eStyle == chart2::LegendSymbolStyle_CIRCLE )
                     {
-                        xRect->setSize( awt::Size( 1000, 1000 ));
-                        xRect->setPosition( awt::Point( 500, 0 ));
+                        xShape->setSize( awt::Size( 2000, 2000 ));
+                        xShape->setPosition( awt::Point( 500, 0 ));
                     }
                     else
                     {
-                        xRect->setSize( aBoundSize );
+                        xShape->setSize( aBoundSize );
                     }
                 }
 
-                lcl_setPropetiesToShape( xSeriesProperties, xRect, true /* bFilledSeries */ );
+                lcl_setPropetiesToShape( xSeriesProperties, xShape, true /* bFilledSeries */ );
 
 #ifdef DISABLE_DASHES_AT_BORDER
                 // don't allow dashed border style
-                uno::Reference< beans::XPropertySet > xRectProp( xRect, uno::UNO_QUERY );
-                if( xRectProp.is())
+                uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                if( xShapeProp.is())
                 {
                     drawing::LineStyle aLineStyle;
-                    if( ( xRectProp->getPropertyValue( C2U("LineStyle")) >>= aLineStyle ) &&
+                    if( ( xShapeProp->getPropertyValue( C2U("LineStyle")) >>= aLineStyle ) &&
                         aLineStyle == drawing::LineStyle_DASH )
                     {
                         aLineStyle = drawing::LineStyle_SOLID;
-                        xRectProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( aLineStyle ));
+                        xShapeProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( aLineStyle ));
                     }
                 }
 #endif
@@ -219,8 +228,8 @@ void VLegendSymbolFactory::createSymbol(
                 if( xLine.is())
                 {
                     xSymbolGroup->add( xLine );
-                    xLine->setSize(  awt::Size( 2000, 0 ));
-                    xLine->setPosition( awt::Point( 0, 500 ));
+                    xLine->setSize(  awt::Size( 3000, 0 ));
+                    xLine->setPosition( awt::Point( 0, 1000 ));
 
                     lcl_setPropetiesToShape( xSeriesProperties, xLine, false /* bFilledSeries */ );
                 }
@@ -242,7 +251,7 @@ void VLegendSymbolFactory::createSymbol(
                 if( xLine.is())
                 {
                     xSymbolGroup->add( xLine );
-                    xLine->setSize(  awt::Size( 1000, 1000 ));
+                    xLine->setSize(  awt::Size( 2000, 2000 ));
                     xLine->setPosition( awt::Point( 500, 0 ));
 
                     lcl_setPropetiesToShape( xSeriesProperties, xLine, false /* bFilledSeries */ );
@@ -265,8 +274,8 @@ void VLegendSymbolFactory::createSymbol(
                 if( xLine.is())
                 {
                     xSymbolGroup->add( xLine );
-                    xLine->setSize(  awt::Size( 1000, 0 ));
-                    xLine->setPosition( awt::Point( 0, 500 ));
+                    xLine->setSize(  awt::Size( 3000, 0 ));
+                    xLine->setPosition( awt::Point( 0, 1000 ));
 
                     lcl_setPropetiesToShape( xSeriesProperties, xLine, false /* bFilledSeries */ );
                 }
@@ -277,8 +286,9 @@ void VLegendSymbolFactory::createSymbol(
                 if( xSymbol.is())
                 {
                     xSymbolGroup->add( xSymbol );
-                    xSymbol->setSize( awt::Size( 250, 250 ));
-                    xSymbol->setPosition( awt::Point( 375, 375 ));
+                    sal_Int32 nSize = 1000;
+                    xSymbol->setSize( awt::Size( nSize, nSize ));
+                    xSymbol->setPosition( awt::Point( 1500 - nSize/2, 1000 - nSize/2 ));
 
                     lcl_setPropetiesToShape( xSeriesProperties, xSymbol, true /* bFilledSeries */ );
                 }
@@ -289,10 +299,15 @@ void VLegendSymbolFactory::createSymbol(
             }
             break;
         }
+
         case chart2::LegendSymbolStyle_LINE_WITH_SYMBOL:
-        case chart2::LegendSymbolStyle_CIRCLE:
+            break;
+
         case chart2::LegendSymbolStyle_USER_DEFINED:
+            break;
+
         default:
+            // just to remove warning (there is an auto-generated extra label)
             break;
     }
 }
