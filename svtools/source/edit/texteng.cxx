@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 07:43:22 $
+ *  last change: $Author: mt $ $Date: 2001-11-08 14:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/metric.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -246,14 +248,18 @@ void TextEngine::SetFont( const Font& rFont )
         if ( !mnDefTab )
             mnDefTab = 1;
         mnCharHeight = (USHORT)aTextSize.Height();
-        if ( rFont.GetPitch() == PITCH_FIXED )
+/*
+        // #93746# Doesn't work with CJK HalfWidth/FullWidth
+        FontMetric aRealFont( mpRefDev->GetFontMetric() );
+        if ( aRealFont.GetPitch() == PITCH_FIXED )
         {
             String aX100;
             aX100.Fill( 100, 'X' );
             mnFixCharWidth100 = (USHORT)mpRefDev->GetTextWidth( aX100 );
         }
         else
-            mnFixCharWidth100 = 0;
+*/
+        mnFixCharWidth100 = 0;
 
         FormatFullDoc();
     }
