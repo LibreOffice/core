@@ -8,6 +8,7 @@ use Getopt::Std;
 use Cwd;
 
 my ($startdir,$outdir,$pfx);
+my $verbose = 0;
 
 sub usage() {
     print STDERR "usage: $0 -o <outdir> [-f <file>]\n"
@@ -50,9 +51,9 @@ sub wanted {
     (
     /^.*\.html\z/s
     ||
-        /^license\.txt\z/s
+        /^license.*\.txt\z/s
         ||
-        /^LICENSE\z/s
+        /^LICENSE.*\z/s
         ||
         /^readme\.txt\z/s
         ||
@@ -67,7 +68,7 @@ sub doconv {
     $dest=$dir;
     $dest=~s/^$pfx//g;
     $dest=$outdir.$dest;
-    convertfile($dest,$name);
+    convertfile($dest,$name) if $name =~ /\/$ENV{GUI}\//i;
 }
 
 sub convertfile {
@@ -84,7 +85,7 @@ sub convertfile {
 
     open(IN,"<$file") || die "can not open $file";
     open(OUT,">$destfile") || die "can not open $destfile";
-
+    print "converting: $file -> $destfile\n" if $verbose;
     while (<IN> ) {
         chop while ( /\n$/ || /\r$/ );
         print OUT "$_\n";
