@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:16:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,10 @@
  *
  *
  ************************************************************************/
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
 
-// ============================================================================
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
@@ -71,18 +69,14 @@
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #endif
-
-#include <toolkit/helper/vclunohelper.hxx>
-
-#ifndef SC_XIESCHER_HXX
-#include "xiescher.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
 
 #ifndef _RTL_LOGFILE_HXX_
@@ -99,6 +93,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
@@ -205,6 +202,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::script::ScriptEventDescriptor;
 
 // Escher stream consumer =====================================================
 
@@ -643,7 +641,7 @@ void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
 
     // other list box settings
     sal_Int16 nEntryCount;
-    sal_uInt16 nStyle;
+    sal_uInt16 nStyle, nComboStyle;
     rStrm >> nEntryCount >> mnSelEntry >> nStyle;
     rStrm.Ignore( 2 );  // linked edit field
 
@@ -659,8 +657,10 @@ void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
                         maMultiSel.push_back( nEntry );
         break;
         case EXC_OBJ_CMO_COMBOBOX:
-            rStrm.Ignore( 2 );
-            rStrm >> mnLineCount;
+            rStrm >> nComboStyle >> mnLineCount;
+            // comboboxes of auto-filters have 'simple' style, they don't have an edit area
+            if( (nComboStyle & EXC_OBJ_LBS_COMBOMASK) == EXC_OBJ_LBS_COMBO_SIMPLE )
+                SetSkip();
         break;
     }
 
@@ -686,24 +686,32 @@ void XclImpEscherTbxCtrl::ReadGboData( XclImpStream& rStrm )
     mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_GBO_FLAT );
 }
 
+void XclImpEscherTbxCtrl::ReadMacro( XclImpStream& rStrm )
+{
+    maMacroName.Erase();
+    if( rStrm.GetRecLeft() > 6 )
+    {
+        // macro is stored in a tNameXR token containing a link to a defined name
+        sal_uInt16 nFmlaSize;
+        rStrm >> nFmlaSize;
+        rStrm.Ignore( 4 );
+        DBG_ASSERT( nFmlaSize == 7, "XclImpEscherTbxCtrl::ReadMacro - unexpected formula size" );
+        if( nFmlaSize == 7 )
+        {
+            sal_uInt8 nTokenId;
+            sal_uInt16 nExtSheet, nExtName;
+            rStrm >> nTokenId >> nExtSheet >> nExtName;
+            DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
+                "XclImpEscherTbxCtrl::ReadMacro - tNameXR token expected" );
+            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
+                maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
+        }
+    }
+}
+
 OUString XclImpEscherTbxCtrl::GetServiceName() const
 {
-#define LCL_CREATE_NAME( name ) CREATE_OUSTRING( "com.sun.star.form.component." name )
-    switch( mnCtrlType )
-    {
-        case EXC_OBJ_CMO_BUTTON:        return LCL_CREATE_NAME( "CommandButton" );
-        case EXC_OBJ_CMO_CHECKBOX:      return LCL_CREATE_NAME( "CheckBox" );
-        case EXC_OBJ_CMO_OPTIONBUTTON:  return LCL_CREATE_NAME( "RadioButton" );
-        case EXC_OBJ_CMO_LABEL:         return LCL_CREATE_NAME( "FixedText" );
-        case EXC_OBJ_CMO_LISTBOX:       return LCL_CREATE_NAME( "ListBox" );
-        case EXC_OBJ_CMO_GROUPBOX:      return LCL_CREATE_NAME( "GroupBox" );
-        case EXC_OBJ_CMO_COMBOBOX:      return LCL_CREATE_NAME( "ListBox" );    // it's a dropdown listbox
-        case EXC_OBJ_CMO_SPIN:          return LCL_CREATE_NAME( "SpinButton" );
-        case EXC_OBJ_CMO_SCROLLBAR:     return LCL_CREATE_NAME( "ScrollBar" );
-    }
-    DBG_ERRORFILE( "XclImpEscherTbxCtrl::GetServiceName - unknown control type" );
-    return OUString();
-#undef LCL_CREATE_NAME
+    return XclTbxControlHelper::GetServiceName( mnCtrlType );
 }
 
 void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) const
@@ -715,19 +723,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
 
     // control name -----------------------------------------------------------
 
-    OUString aName;
-    switch( mnCtrlType )
-    {
-        case EXC_OBJ_CMO_BUTTON:        aName = CREATE_OUSTRING( "CommandButton" ); break;
-        case EXC_OBJ_CMO_CHECKBOX:      aName = CREATE_OUSTRING( "CheckBox" );      break;
-        case EXC_OBJ_CMO_OPTIONBUTTON:  aName = CREATE_OUSTRING( "OptionButton" );  break;
-        case EXC_OBJ_CMO_LABEL:         aName = CREATE_OUSTRING( "Label" );         break;
-        case EXC_OBJ_CMO_LISTBOX:       aName = CREATE_OUSTRING( "ListBox" );       break;
-        case EXC_OBJ_CMO_GROUPBOX:      aName = CREATE_OUSTRING( "GroupBox" );      break;
-        case EXC_OBJ_CMO_COMBOBOX:      aName = CREATE_OUSTRING( "ComboBox" );      break;
-        case EXC_OBJ_CMO_SPIN:          aName = CREATE_OUSTRING( "SpinButton" );    break;
-        case EXC_OBJ_CMO_SCROLLBAR:     aName = CREATE_OUSTRING( "ScrollBar" );     break;
-    }
+    OUString aName = XclTbxControlHelper::GetControlName( mnCtrlType );
     if( aName.getLength() )
         ::setPropValue( rxPropSet, CREATE_OUSTRING( "Name" ), aName );
 
@@ -877,6 +873,24 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         }
         break;
     }
+}
+
+bool XclImpEscherTbxCtrl::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) const
+{
+    if( maMacroName.Len() )
+    {
+        // type of action is dependent on control type
+        rEvent.ListenerType = XclTbxControlHelper::GetListenerType( mnCtrlType );
+        rEvent.EventMethod = XclTbxControlHelper::GetEventMethod( mnCtrlType );
+        if( rEvent.ListenerType.getLength() && rEvent.EventMethod.getLength() )
+        {
+            // set the macro name
+            rEvent.ScriptType = XclTbxControlHelper::GetScriptType();
+            rEvent.ScriptCode = XclTbxControlHelper::GetScMacroName( maMacroName );
+            return true;
+        }
+    }
+    return false;
 }
 
 void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
@@ -1764,7 +1778,8 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
             case EXC_ID_OBJ_FTLBSDATA:
             case EXC_ID_OBJ_FTCBLSFMLA:
             case EXC_ID_OBJ_FTSBS:
-            case EXC_ID_OBJ_FTGBODATA:  ReadObjTbxSubRec( rStrm, nSubRecId );       break;
+            case EXC_ID_OBJ_FTGBODATA:
+            case EXC_ID_OBJ_FTMACRO:    ReadObjTbxSubRec( rStrm, nSubRecId );       break;
         }
 
         rStrm.PopPosition();
@@ -2004,6 +2019,7 @@ void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSub
             case EXC_ID_OBJ_FTCBLSFMLA: pCtrlObj->ReadCblsFmla( rStrm );    break;
             case EXC_ID_OBJ_FTSBS:      pCtrlObj->ReadSbs( rStrm );         break;
             case EXC_ID_OBJ_FTGBODATA:  pCtrlObj->ReadGboData( rStrm );     break;
+            case EXC_ID_OBJ_FTMACRO:    pCtrlObj->ReadMacro( rStrm );       break;
 
             default:    DBG_ERRORFILE( "XclImpObjectManager::ReadObjTbxSubRec - unknown subrecord" );
         }
