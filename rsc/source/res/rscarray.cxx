@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscarray.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 |*    Letzte Aenderung  MM 06.08.91
 |*
 *************************************************************************/
-RscInstNode::RscInstNode( USHORT nId )
+RscInstNode::RscInstNode( sal_uInt32 nId )
 {
     nTypeId = nId;
 }
@@ -106,7 +106,7 @@ RscInstNode::~RscInstNode()
     if( aInst.IsInst() )
     {
         aInst.pClass->Destroy( aInst );
-        RscMem::Free( aInst.pData );
+        rtl_freeMemory( aInst.pData );
     }
 }
 
@@ -119,7 +119,7 @@ RscInstNode::~RscInstNode()
 |*    Letzte Aenderung  MM 06.08.91
 |*
 *************************************************************************/
-USHORT RscInstNode::GetId() const
+sal_uInt32 RscInstNode::GetId() const
 {
     return nTypeId;
 }
@@ -134,7 +134,7 @@ USHORT RscInstNode::GetId() const
 |*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
-RscArray::RscArray( HASHID nId, USHORT nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
+RscArray::RscArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
         : RscTop( nId, nTypeId, pSuper )
 {
     pTypeClass = pTypeCl;
@@ -219,7 +219,7 @@ RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA) RscMem::Malloc( Size() );
+        aInst.pData = (CLASS_DATA) rtl_allocateMemory( Size() );
     }
     else
         aInst = *pInst;
@@ -292,15 +292,14 @@ ERRTYPE RscArray::GetValueEle
 
     ERRTYPE     aError;
 
-    HASHID  nId;
-    if( (lValue < 0) || (lValue > 0xFFFF)
-      || !pTypeClass->GetValueConst( (USHORT)lValue, &nId ) )
+    Atom  nId;
+    if( !pTypeClass->GetValueConst( sal_uInt32(lValue), &nId ) )
     { // nicht gefunden
         return ERR_ARRAY_INVALIDINDEX;
     }
 
     if( pClassData->pNode )
-        pNode = pClassData->pNode->Search( (USHORT)lValue );
+        pNode = pClassData->pNode->Search( sal_uInt32(lValue) );
     else
         pNode = NULL;
 
@@ -318,7 +317,7 @@ ERRTYPE RscArray::GetValueEle
 */
     if( !pNode )
     {
-        pNode = new RscInstNode( (USHORT)lValue );
+        pNode = new RscInstNode( sal_uInt32(lValue) );
         if( pCreateClass && GetSuperClass()->InHierarchy( pCreateClass ) )
             pNode->aInst = pCreateClass->Create( NULL, rInst );
         else
@@ -344,7 +343,7 @@ ERRTYPE RscArray::GetValueEle
 ERRTYPE RscArray::GetArrayEle
 (
     const RSCINST & rInst,
-    HASHID nId,
+    Atom nId,
     RscTop * pCreateClass,
     RSCINST * pGetInst
 )
@@ -509,7 +508,7 @@ BOOL RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 |*    Beschreibung
 *************************************************************************/
 void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
-                               RscTypCont * pTC, USHORT nTab,
+                               RscTypCont * pTC, sal_uInt32 nTab,
                                const RscId & aId, const char * pVarName )
 {
     RscArrayInst * pClassData;
@@ -521,7 +520,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
         RscInstNode *   pNode = NULL;
         if( pClassData->pNode )
         {
-            std::vector< USHORT >::const_iterator it;
+            std::vector< sal_uInt32 >::const_iterator it;
             for( it = pTC->GetFallbacks().begin(); !pNode && it != pTC->GetFallbacks().end(); ++it )
                 pNode = pClassData->pNode->Search( *it );
         }
@@ -556,7 +555,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 |*    Beschreibung
 *************************************************************************/
 static void WriteSrc( RscInstNode * pNode, FILE * fOutput, RscTypCont * pTC,
-                         USHORT nTab, const char * pVarName,
+                         sal_uInt32 nTab, const char * pVarName,
                          CLASS_DATA pDfltData, RscConst * pTypeClass )
 {
     if( pNode )
@@ -566,12 +565,12 @@ static void WriteSrc( RscInstNode * pNode, FILE * fOutput, RscTypCont * pTC,
         if( !pNode->aInst.pClass->IsValueDefault( pNode->aInst, pDfltData ) )
         {
             fprintf( fOutput, ";\n" );
-            for( USHORT n = 0; n < nTab; n++ )
+            for( sal_uInt32 n = 0; n < nTab; n++ )
                 fputc( '\t', fOutput );
 
-            HASHID  nIdxId;
+            Atom  nIdxId;
             pTypeClass->GetValueConst( pNode->GetId(), &nIdxId );
-            fprintf( fOutput, "%s[ %s ] = ", pVarName, pHS->Get( nIdxId ) );
+            fprintf( fOutput, "%s[ %s ] = ", pVarName, pHS->getString( nIdxId ).getStr() );
             pNode->aInst.pClass->WriteSrcHeader( pNode->aInst, fOutput, pTC,
                                                 nTab, RscId(), pVarName );
         }
@@ -581,7 +580,7 @@ static void WriteSrc( RscInstNode * pNode, FILE * fOutput, RscTypCont * pTC,
 }
 
 void RscArray::WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
-                             RscTypCont * pTC, USHORT nTab,
+                             RscTypCont * pTC, sal_uInt32 nTab,
                              const char * pVarName )
 {
     RscArrayInst * pClassData;
@@ -593,7 +592,7 @@ void RscArray::WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
 };
 
 void RscArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                         RscTypCont * pTC, USHORT nTab,
+                         RscTypCont * pTC, sal_uInt32 nTab,
                          const char * pVarName )
 {
     WriteSrcArray( rInst, fOutput, pTC, nTab, pVarName );
@@ -605,7 +604,7 @@ void RscArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*    Beschreibung
 *************************************************************************/
 ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, USHORT nDeep, BOOL bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
     ERRTYPE aError;
     RscArrayInst * pClassData;
@@ -615,18 +614,18 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( pClassData->pNode )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "RscArray::WriteRc: Fallback " );
 #endif
-        std::vector< USHORT >::const_iterator it;
+        std::vector< sal_uInt32 >::const_iterator it;
         for( it = pTC->GetFallbacks().begin(); !pNode && it != pTC->GetFallbacks().end(); ++it )
         {
             pNode = pClassData->pNode->Search( *it );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, " 0x%hx", *it );
 #endif
         }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, "\n" );
 #endif
     }
@@ -660,7 +659,7 @@ void RscArray::WriteRcAccess
 |*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
-RscClassArray::RscClassArray( HASHID nId, USHORT nTypeId, RscTop * pSuper,
+RscClassArray::RscClassArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
                               RscEnum * pTypeCl )
     : RscArray( nId, nTypeId, pSuper, pTypeCl )
 {
@@ -689,7 +688,7 @@ RscClassArray::~RscClassArray()
 |*
 *************************************************************************/
 void RscClassArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, USHORT nTab,
+                                    RscTypCont * pTC, sal_uInt32 nTab,
                                     const RscId & aId, const char * pName )
 {
     RscArray::WriteSrcHeader( rInst, fOutput, pTC, nTab, aId, pName );
@@ -705,7 +704,7 @@ void RscClassArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 void RscClassArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                             RscTypCont * pTC, USHORT nTab,
+                             RscTypCont * pTC, sal_uInt32 nTab,
                                  const char * pVarName )
 {
     RscArray::WriteSrc( rInst, fOutput, pTC, nTab, pVarName );
@@ -722,7 +721,7 @@ void RscClassArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 *************************************************************************/
 ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                        RscTypCont * pTC, const RscId & aId,
-                                       USHORT nDeep, BOOL bExtra )
+                                       sal_uInt32 nDeep, BOOL bExtra )
 {
     // Eigenen Typ schreiben
     return GetSuperClass()->WriteRcHeader( rInst, aMem, pTC, aId,
@@ -738,7 +737,7 @@ ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
 |*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
-RscLangArray::RscLangArray( HASHID nId, USHORT nTypeId, RscTop * pSuper,
+RscLangArray::RscLangArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
                           RscEnum * pTypeCl )
     : RscArray( nId, nTypeId, pSuper, pTypeCl )
 {
