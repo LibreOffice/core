@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicIfcTest.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:24 $
+ *  last change:$Date: 2003-05-27 12:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import com.sun.star.container.NoSuchElementException;
 
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.PropertyValue;
@@ -117,7 +118,7 @@ public class BasicIfcTest {
         // Get Handler, that was created during object creation.
         oBasicHandler = (BasicHandler)tEnv.getObjRelation("BasicHandler");
 
-        if (!oBasicHandler.isUptodate(tParam.getMSF())) {
+        if (!oBasicHandler.isUptodate((XMultiServiceFactory)tParam.getMSF())) {
             // If Handler uses old MSF (in case of Office's GPF) then don't test
             // interface.
             return null;

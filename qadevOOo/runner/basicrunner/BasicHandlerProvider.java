@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicHandlerProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:25 $
+ *  last change:$Date: 2003-05-27 12:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class BasicHandlerProvider {
      */
     static public BasicHandler getHandler(TestParameters tParam, LogWriter log) {
 
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
 
         if (!xMSF.equals(MSF)) {
             MSF = xMSF;
