@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:05:17 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/deployment/XPackageRegistry.hpp"
+#include "com/sun/star/awt/XWindow.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
