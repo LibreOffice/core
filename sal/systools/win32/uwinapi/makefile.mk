@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 12:56:07 $
+#   last change: $Author: hro $ $Date: 2002-08-26 13:36:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ SLOFILES=\
         $(SLO)$/GetUserDomainW.obj\
         $(SLO)$/GetDiskFreeSpaceExA.obj\
         $(SLO)$/GetDiskFreeSpaceExW.obj\
-        $(SLO)$/MCIWndCreateW.obj\
         $(SLO)$/MoveFileExA.obj\
         $(SLO)$/MoveFileExW.obj\
         $(SLO)$/DllGetVersion.obj\
@@ -120,7 +119,6 @@ SHL1STDLIBS=\
         user32.lib\
         advapi32.lib\
         version.lib\
-        vfw32.lib\
         msvcrt.lib
 
         
