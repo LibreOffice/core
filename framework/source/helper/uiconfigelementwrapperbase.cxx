@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigelementwrapperbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:47:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -103,13 +107,15 @@
 #include <vcl/svapp.hxx>
 #endif
 
-const int UIELEMENT_PROPHANDLE_CONFIGSOURCE = 1;
-const int UIELEMENT_PROPHANDLE_FRAME        = 2;
-const int UIELEMENT_PROPHANDLE_PERSISTENT   = 3;
-const int UIELEMENT_PROPHANDLE_RESOURCEURL  = 4;
-const int UIELEMENT_PROPHANDLE_TYPE         = 5;
-const int UIELEMENT_PROPHANDLE_XMENUBAR     = 6;
-const int UIELEMENT_PROPCOUNT               = 6;
+const int UIELEMENT_PROPHANDLE_CONFIGSOURCE     = 1;
+const int UIELEMENT_PROPHANDLE_FRAME            = 2;
+const int UIELEMENT_PROPHANDLE_PERSISTENT       = 3;
+const int UIELEMENT_PROPHANDLE_RESOURCEURL      = 4;
+const int UIELEMENT_PROPHANDLE_TYPE             = 5;
+const int UIELEMENT_PROPHANDLE_XMENUBAR         = 6;
+const int UIELEMENT_PROPHANDLE_CONFIGLISTENER   = 7;
+const int UIELEMENT_PROPCOUNT                   = 7;
+const rtl::OUString UIELEMENT_PROPNAME_CONFIGLISTENER( RTL_CONSTASCII_USTRINGPARAM( "ConfigListener" ));
 const rtl::OUString UIELEMENT_PROPNAME_CONFIGSOURCE( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
 const rtl::OUString UIELEMENT_PROPNAME_FRAME( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
 const rtl::OUString UIELEMENT_PROPNAME_PERSISTENT( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
@@ -121,6 +127,8 @@ using namespace rtl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
+using namespace com::sun::star::lang;
+using namespace ::drafts::com::sun::star::ui;
 
 namespace framework
 {
@@ -128,27 +136,31 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_8     (   UIConfigElementWrapperBase                                          ,
-                            OWeakObject                                                         ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider             ),
-                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElement          ),
-                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElementSettings  ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet        ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet         ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet             ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization           ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                )
+DEFINE_XINTERFACE_10    (   UIConfigElementWrapperBase                                               ,
+                            OWeakObject                                                              ,
+                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider                  ),
+                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElement               ),
+                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElementSettings       ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet             ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet              ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet                  ),
+                            DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization                ),
+                            DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                     ),
+                            DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable                     ),
+                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIConfigurationListener )
                         )
 
-DEFINE_XTYPEPROVIDER_8  (   UIConfigElementWrapperBase                          ,
-                            ::com::sun::star::lang::XTypeProvider               ,
-                            ::drafts::com::sun::star::ui::XUIElement            ,
-                            ::drafts::com::sun::star::ui::XUIElementSettings    ,
-                            ::com::sun::star::beans::XMultiPropertySet          ,
-                            ::com::sun::star::beans::XFastPropertySet           ,
-                            ::com::sun::star::beans::XPropertySet               ,
-                            ::com::sun::star::lang::XInitialization             ,
-                            ::com::sun::star::lang::XComponent
+DEFINE_XTYPEPROVIDER_10 (   UIConfigElementWrapperBase                              ,
+                            ::com::sun::star::lang::XTypeProvider                   ,
+                            ::drafts::com::sun::star::ui::XUIElement                ,
+                            ::drafts::com::sun::star::ui::XUIElementSettings        ,
+                            ::com::sun::star::beans::XMultiPropertySet              ,
+                            ::com::sun::star::beans::XFastPropertySet               ,
+                            ::com::sun::star::beans::XPropertySet                   ,
+                            ::com::sun::star::lang::XInitialization                 ,
+                            ::com::sun::star::lang::XComponent                      ,
+                            ::com::sun::star::util::XUpdatable                      ,
+                            ::drafts::com::sun::star::ui::XUIConfigurationListener
                         )
 
 UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
@@ -160,6 +172,8 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     ,   m_nType                     ( nType                                             )
     ,   m_bInitialized              ( sal_False                                         )
     ,   m_bPersistent               ( sal_True                                          )
+    ,   m_bConfigListener           ( sal_False                                         )
+    ,   m_bConfigListening          ( sal_False                                         )
     ,   m_bDisposed                 ( sal_False                                         )
 {
 }
@@ -186,6 +200,14 @@ void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun:
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), aListener );
 }
 
+// XEventListener
+void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& aEvent )
+throw( RuntimeException )
+{
+    ResetableGuard aLock( m_aLock );
+    m_xConfigSource.clear();
+}
+
 void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException )
 {
@@ -208,11 +230,34 @@ throw ( Exception, RuntimeException )
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_RESOURCEURL, aPropValue.Value );
                 else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_TYPE ))
                     setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_TYPE, aPropValue.Value );
+                else if ( aPropValue.Name.equals( UIELEMENT_PROPNAME_CONFIGLISTENER ))
+                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGLISTENER, aPropValue.Value );
             }
         }
 
         m_bInitialized = sal_True;
     }
+}
+
+// XUpdatable
+void SAL_CALL UIConfigElementWrapperBase::update() throw (::com::sun::star::uno::RuntimeException)
+{
+    // can be implemented by derived class
+}
+
+void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // can be implemented by derived class
+}
+
+void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // can be implemented by derived class
+}
+
+void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // can be implemented by derived class
 }
 
 // XPropertySet helper
@@ -227,6 +272,14 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
     switch( nHandle )
     {
+        case UIELEMENT_PROPHANDLE_CONFIGLISTENER:
+            bReturn = PropHelper::willPropertyBeChanged(
+                        com::sun::star::uno::makeAny(m_bConfigListener),
+                        aValue,
+                        aOldValue,
+                        aConvertedValue);
+            break;
+
         case UIELEMENT_PROPHANDLE_CONFIGSOURCE:
             bReturn = PropHelper::willPropertyBeChanged(
                         com::sun::star::uno::makeAny(m_xConfigSource),
@@ -288,6 +341,53 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
 {
     switch( nHandle )
     {
+        case UIELEMENT_PROPHANDLE_CONFIGLISTENER:
+        {
+            sal_Bool bBool( m_bConfigListener );
+            aValue >>= bBool;
+            if ( m_bConfigListener != bBool )
+            {
+                if ( m_bConfigListening )
+                {
+                    if ( m_xConfigSource.is() && !bBool )
+                    {
+                        try
+                        {
+                            Reference< XUIConfiguration > xUIConfig( m_xConfigSource, UNO_QUERY );
+                            if ( xUIConfig.is() )
+                            {
+                                xUIConfig->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                                m_bConfigListening = sal_False;
+                            }
+                        }
+                        catch ( Exception& )
+                        {
+                        }
+                    }
+                }
+                else
+                {
+                    if ( m_xConfigSource.is() && bBool )
+                    {
+                        try
+                        {
+                            Reference< XUIConfiguration > xUIConfig( m_xConfigSource, UNO_QUERY );
+                            if ( xUIConfig.is() )
+                            {
+                                xUIConfig->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                                m_bConfigListening = sal_True;
+                            }
+                        }
+                        catch ( Exception& )
+                        {
+                        }
+                    }
+                }
+
+                m_bConfigListener = bBool;
+            }
+        }
+        break;
         case UIELEMENT_PROPHANDLE_CONFIGSOURCE:
             aValue >>= m_xConfigSource;
             break;
@@ -323,6 +423,9 @@ void SAL_CALL UIConfigElementWrapperBase::getFastPropertyValue( com::sun::star::
 {
     switch( nHandle )
     {
+        case UIELEMENT_PROPHANDLE_CONFIGLISTENER:
+            aValue <<= m_bConfigListener;
+            break;
         case UIELEMENT_PROPHANDLE_CONFIGSOURCE:
             aValue <<= m_xConfigSource;
             break;
@@ -408,6 +511,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
 
     static const com::sun::star::beans::Property pProperties[] =
     {
+        com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE  , UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< drafts::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_FRAME         , UIELEMENT_PROPHANDLE_FRAME          , ::getCppuType((const Reference< com::sun::star::frame::XFrame >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_PERSISTENT    , UIELEMENT_PROPHANDLE_PERSISTENT     , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
