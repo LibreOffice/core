@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-27 14:25:52 $
+ *  last change: $Author: thb $ $Date: 2001-04-30 11:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2051,6 +2051,7 @@ void SdrModel::AfterRead()
         GetPage(i)->AfterRead();
     }
 
+#ifndef SVX_LIGHT
     if( pPersist )
     {
         SvInfoObjectMemberList* pList = (SvInfoObjectMemberList*) pPersist->GetObjectList();
@@ -2102,7 +2103,7 @@ void SdrModel::AfterRead()
             }
         }
     }
-
+#endif
 }
 
 ULONG SdrModel::ImpCountAllSteamComponents() const
