@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: npower $ $Date: 2003-02-14 09:09:35 $
+#   last change: $Author: toconnor $ $Date: 2003-02-20 17:37:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -281,5 +281,5 @@
   </target>
 
   <!-- ========================= All In One Build ======================= -->
-  <target name="all" depends="clean,idesupport.jar,localoffice.jar,netbeans.jar,jedit.jar,jar"/>
+  <target name="all" depends="clean,idesupport.jar,localoffice.jar,netbeans.jar,jar"/>
 </project>
