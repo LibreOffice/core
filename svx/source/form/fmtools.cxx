@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:59:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,13 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
+#include <com/sun/star/form/XGridColumnFactory.hpp>
+#endif
+
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -291,6 +298,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::form;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 
@@ -1244,3 +1252,82 @@ sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
     return bIsAlive;
 }
 
+// -----------------------------------------------------------------------------
+namespace
+{
+    //....................................................................
+    static Sequence< PropertyValue > lcl_getDataSourceIndirectProperties( const Reference< XPropertySet >& _rxControlModel,
+        const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW(())
+    {
+        OSL_PRECOND( _rxControlModel.is(), "lcl_getDataSourceIndirectProperties: invalid model!" );
+
+        Sequence< PropertyValue > aInfo;
+        try
+        {
+            Reference< XChild > xChild( _rxControlModel, UNO_QUERY );
+            Reference< XPropertySet > xForm;
+            if ( xChild.is() )
+                xForm = xForm.query( xChild->getParent() );
+
+            if ( Reference< XGridColumnFactory >( xForm, UNO_QUERY ).is() )
+            {   // hmm. the model is a grid column, in real
+                xChild = xChild.query( xForm );
+                xForm = xForm.query( xChild->getParent() );
+            }
+
+            OSL_ENSURE( xForm.is(), "lcl_getDataSourceIndirectProperties: could not determine the form!" );
+            if ( !xForm.is() )
+                return aInfo;
+            ::rtl::OUString sDataSourceName;
+            xForm->getPropertyValue( FM_PROP_DATASOURCE ) >>= sDataSourceName;
+
+            Reference< XPropertySet > xDsProperties;
+            if ( sDataSourceName.getLength() )
+                xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rxORB ) );
+            if ( xDsProperties.is() )
+                xDsProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Info" ) ) ) >>= aInfo;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_getDataSourceIndirectProperties: caught an exception!" );
+        }
+        return aInfo;
+    }
+}
+
+//------------------------------------------------------------------------------
+void initializeTextFieldLineEnds( const Reference< XPropertySet >& _rxModel, const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW(())
+{
+    OSL_PRECOND( _rxModel.is(), "initializeTextFieldLineEnds: invalid model!" );
+    if ( !_rxModel.is() )
+        return;
+
+    try
+    {
+        Reference< XPropertySetInfo > xInfo = _rxModel->getPropertySetInfo();
+        if ( !xInfo.is() || !xInfo->hasPropertyByName( FM_PROP_LINEENDFORMAT ) )
+            return;
+
+        // let's see if the data source which the form belongs to (if any)
+        // has a setting for the preferred line end format
+        sal_Bool bDosLineEnds = sal_False;
+        Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, _rxORB );
+        const PropertyValue* pInfo = aInfo.getConstArray();
+        const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
+        for ( ; pInfo != pInfoEnd; ++pInfo )
+        {
+            if ( pInfo->Name.equalsAscii( "PreferDosLikeLineEnds" ) )
+            {
+                pInfo->Value >>= bDosLineEnds;
+                break;
+            }
+        }
+
+        sal_Int16 nLineEndFormat = bDosLineEnds ? LineEndFormat::CARRIAGE_RETURN_LINE_FEED : LineEndFormat::LINE_FEED;
+        _rxModel->setPropertyValue( FM_PROP_LINEENDFORMAT, makeAny( nLineEndFormat ) );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "initializeTextFieldLineEnds: caught an exception!" );
+    }
+}
