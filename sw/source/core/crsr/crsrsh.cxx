@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:38:44 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2725,7 +2725,7 @@ FASTBOOL SwCrsrShell::IsCrsrReadonly() const
             return FALSE;
         }
         // --> FME 2004-06-22 #114856# edit in readonly sections
-        else if ( pFrm->IsInSct() &&
+        else if ( pFrm && pFrm->IsInSct() &&
                   0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
                   pSection->IsEditInReadonlyFlag() )
         {
