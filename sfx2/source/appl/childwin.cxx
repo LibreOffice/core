@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:24:03 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         //aWinOpt.GetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
 
         // Sichtbarkeit laden: ist als ein char codiert
-        rInfo.bVisible = (aWinData.Copy(0,1) == 0x0056); // 'V' = 56h
+        rInfo.bVisible = (aWinData.GetChar(0) == 0x0056); // 'V' = 56h
         aWinData.Erase(0,1);
         nPos = aWinData.Search( cToken );
         if (nPos != STRING_NOTFOUND)
