@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: od $ $Date: 2002-10-10 08:04:59 $
+ *  last change: $Author: od $ $Date: 2002-10-17 14:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,9 +1217,18 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
     {
         if ( bBrowse )
         {
+            /// OD 15.10.2002 #103517# - format complete page
+            /// Thus, loop on all lowers of the page <prPage>, instead of only
+            /// format its first lower.
+            /// NOTE: In online layout (bBrowse == TRUE) a page can contain
+            ///     a header frame and/or a footer frame beside the body frame.
             prPage->Calc();
-            if ( prPage->Lower() )
-                prPage->Lower()->Calc();
+            SwFrm* pPageLowerFrm = prPage->Lower();
+            while ( pPageLowerFrm )
+            {
+                pPageLowerFrm->Calc();
+                pPageLowerFrm = pPageLowerFrm->GetNext();
+            }
         }
         else
             FormatLayout( prPage );
