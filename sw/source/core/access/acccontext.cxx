@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:29:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,22 +612,6 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           const SwFrm *pF ) :
     SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
                        pM->GetShell()->IsPreView() ),
-    pMap( pM ),
-        nClientId(0),
-    nRole( nR ),
-    bDisposing( sal_False )
-{
-    InitStates();
-    DBG_MSG_CD( "constructed" )
-}
-
-SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
-                                          const OUString& rName,
-                                          sal_Int16 nR,
-                                          const SwFrm *pF ) :
-    SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
-                       pM->GetShell()->IsPreView() ),
-    sName( rName ),
     pMap( pM ),
         nClientId(0),
     nRole( nR ),
