@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:45:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,10 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "docshell.hxx"
-#include "viewshel.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
@@ -90,7 +92,11 @@
 |*
 \************************************************************************/
 
-SdPresLayoutDlg::SdPresLayoutDlg( SdDrawDocShell* pDocShell, SdViewShell* pViewShell, Window* pWindow, const SfxItemSet& rInAttrs ):
+SdPresLayoutDlg::SdPresLayoutDlg(
+    ::sd::DrawDocShell* pDocShell,
+    ::sd::ViewShell* pViewShell,
+    ::Window* pWindow,
+    const SfxItemSet& rInAttrs ):
                 ModalDialog         (pWindow, SdResId(DLG_PRESLT)),
                 pDocSh              ( pDocShell ),
                 pViewSh             ( pViewShell ),
@@ -222,7 +228,7 @@ void SdPresLayoutDlg::FillValueSet()
     aVS.SetLineCount(2);
     aVS.SetExtraSpacing(2);
 
-    SdView* pView = pViewSh->GetView();
+    ::sd::View* pView = pViewSh->GetView();
     SdDrawDocument* pDoc = pDocSh->GetDoc();
 
     USHORT nCount = pDoc->GetMasterPageCount();
@@ -337,7 +343,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, p)
 
                 if (pTemplDoc)
                 {
-                    SdDrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
+                    ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
 /*                  SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
                     pLayoutNames->Insert( new String( aName ), LIST_APPEND );
@@ -386,7 +392,3 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, p)
 
     return( 0 );
 }
-
-
-
-
