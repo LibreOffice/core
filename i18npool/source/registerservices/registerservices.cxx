@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-07 00:20:26 $
+ *  last change: $Author: khong $ $Date: 2002-09-06 07:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ IMPL_CREATEINSTANCE_MSF( BreakIteratorImpl )
 IMPL_CREATEINSTANCE( BreakIterator_Unicode )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
+IMPL_CREATEINSTANCE( BreakIterator_ko )
 IMPL_CREATEINSTANCE( BreakIterator_th )
 IMPL_CREATEINSTANCE( BreakIterator_hi )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
@@ -342,6 +343,8 @@ IMPL_CREATEINSTANCE( NumToTextHangulJamo_ko )
 IMPL_CREATEINSTANCE( NumToTextHangulSyllable_ko )
 IMPL_CREATEINSTANCE( NumToTextHangulCircledJamo_ko )
 IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
+IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
+IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -465,6 +468,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.BreakIterator_zh",
         "com.sun.star.i18n.BreakIterator_zh",
         &BreakIterator_zh_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_ko",
+        "com.sun.star.i18n.BreakIterator_ko",
+        &BreakIterator_ko_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_th",
         "com.sun.star.i18n.BreakIterator_th",
         &BreakIterator_th_CreateInstance },
@@ -672,6 +678,8 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledJamo_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
+    IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
 
 // add here new services !!
     { 0, 0, 0 }
