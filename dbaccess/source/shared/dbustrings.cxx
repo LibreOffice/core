@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:32:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,10 @@ namespace dbaui
     //============================================================
     //= other
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,  "QueryPreview");
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLESQL92CHECK, "EnableSQL92Check");
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS, "AppendTableAlias");
+    IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,          "QueryPreview");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLESQL92CHECK,         "EnableSQL92Check");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS,         "AppendTableAlias");
+    IMPLEMENT_CONSTASCII_USTRING( PARAM_INDEPENDENT_SQL_COMMAND,    "IndependentSQLCommand");
 
     //============================================================
     //= properties
