@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:10:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -798,6 +802,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager( com::sun::star::uno:
     , m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
     , m_xServiceManager( xServiceManager )
     , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
+    , m_aStorageHandler( xServiceManager )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
@@ -866,6 +871,19 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
 
     if ( !m_bInitialized )
     {
+        ::comphelper::SequenceAsHashMap lArgs(aArguments);
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
+
+        m_aStorageHandler.connectToResource(PresetHandler::E_MODULES,
+                                            PresetHandler::RESOURCETYPE_MENUBAR(), // this path wont be used later ... seee next lines!
+                                            m_aModuleIdentifier,
+                                            css::uno::Reference< css::embed::XStorage >()); // no document root used here!
+
+        m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(m_aStorageHandler.getOrCreateRootStorageUser(), css::uno::UNO_QUERY_THROW);
+        m_xDefaultConfigStorage = m_aStorageHandler.getParentStorageShare(m_aStorageHandler.getWorkingStorageShare());
+        m_xUserConfigStorage    = m_aStorageHandler.getParentStorageUser(m_aStorageHandler.getWorkingStorageUser());
+
+/*TODO_AS
         for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
         {
             PropertyValue aPropValue;
@@ -893,7 +911,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
                 }
             }
         }
-
+*/
         if ( m_xUserConfigStorage.is() )
         {
             Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
@@ -978,11 +996,14 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
             // Commit changes
             if ( bCommit )
             {
+                /*TODO_AS
                 Reference< XTransactedObject > xTransactedObject( m_xUserConfigStorage, UNO_QUERY );
                 if ( xTransactedObject.is() )
                     xTransactedObject->commit();
                 if ( m_xUserRootCommit.is() )
                     m_xUserRootCommit->commit();
+                */
+                m_aStorageHandler.commitUserChanges();
             }
             bResetStorage = true;
 
@@ -1422,7 +1443,24 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XInterface >();
+    ResetableGuard aGuard( m_aLock );
+    Reference< XMultiServiceFactory > xSMGR   = m_xServiceManager;
+    ::rtl::OUString                   aModule = m_aModuleIdentifier;
+    aGuard.unlock();
+
+    Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);
+    Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
+
+    PropertyValue aProp;
+    aProp.Name    = ::rtl::OUString::createFromAscii("ModuleIdentifier");
+    aProp.Value <<= aModule;
+
+    Sequence< Any > lArgs(1);
+    lArgs[0] <<= aProp;
+
+    xInit->initialize(lArgs);
+
+    return xManager;
 }
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getEventsManager() throw (::com::sun::star::uno::RuntimeException)
@@ -1556,11 +1594,14 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
         }
 
         m_bModified = false;
+        /*TODO_AS
         Reference< XTransactedObject > xTransactedObject( m_xUserConfigStorage, UNO_QUERY );
         xTransactedObject->commit();
 
         if ( m_xUserRootCommit.is() )
             m_xUserRootCommit->commit(); // commit also our root storage
+        */
+        m_aStorageHandler.commitUserChanges();
     }
 }
 
