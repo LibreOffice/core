@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:07:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ void OSqlEditUndoAct::ToggleText()
 {
     String strNext = m_pOwner->GetText();
     m_pOwner->OverloadedSetText(m_strNextText);
-    m_strNextText = strNext;
+    m_strNextText  =strNext;
 }
 // -----------------------------------------------------------------------------
 } // namespace
