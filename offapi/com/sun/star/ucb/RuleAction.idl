@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RuleAction.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,79 +67,73 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**These are the possible values for the "RuleAction".
+/**  These are the possible values for <member>Rule::Action</member>.
+
+     @see RuleSet
 */
 constants RuleAction
 {
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "None" - Do nothing.
+    /** "None" - Do nothing.
     */
     const short NONE = 0;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Show" - Shows object when term matches.
+    /** "Show" - Shows object when term matches.
     */
     const short SHOW = 1;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Hide" - Hides object when term matches.
+    /** "Hide" - Hides object when term matches.
     */
     const short HIDE = 2;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Mark" - Marks object when term matches.
+    /** "Mark" - Marks object when term matches.
     */
     const short MARK = 3;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "UnMark" - Removes mark from object when term matches.
+    /** "UnMark" - Removes mark from object when term matches.
     */
     const short UNMARK = 4;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "MarkRead" - Marks object as read when term matches.
+    /** "MarkRead" - Marks object as read when term matches.
     */
     const short MARKREAD = 5;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "MarkUnRead" - Marks object as not read when term matches.
+    /** "MarkUnRead" - Marks object as not read when term matches.
     */
     const short MARKUNREAD = 6;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Move" - Moves object to "parameter" when term matches.
+    /** "Move" - Moves object to <member>Rule::Parameter</member> when term
+        matches.
     */
     const short MOVE = 7;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Copy" - Copies object to "parameter" when term matches.
+    /** "Copy" - Copies object to <member>Rule::Parameter</member> when term
+        matches.
     */
     const short COPY = 8;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Delete" - Deletes object when term matches.
+    /** "Delete" - Deletes object when term matches.
     */
     const short DELETE = 9;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Link" - Creates a link to the object when term matches.
+    /** "Link" - Creates a link to <member>Rule::Parameter</member> when term
+        matches.
     */
     const short LINK = 10;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Action" value.<BR>
-        "Forward" - Forwards object to "parameter" when term matches.
+    /** "Forward" - Forwards object to <member>Rule::Parameter</member> when
+        term matches.
     */
     const short FORWARD = 11;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentAction.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 09:34:33 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ constants ContentAction
     /** A content was inserted into a folder content (i.e., while updating the
         folder).
 
-        This action must be notified at the listeners of the folder content.
+        <p>This action must be notified at the listeners of the folder content.
     */
     const long INSERTED = 0;
 
@@ -154,16 +154,18 @@ constants ContentAction
     /** A content was removed from a folder content, but not physically
         destroyed (i.e., due to rules just applied to the folder).
 
-        This action must be notified at the listeners of the folder content.
+        <p>This action must be notified at the listeners of the folder content.
     */
     const long REMOVED = 1;
 
     //-------------------------------------------------------------------------
-    /** A content was physically destroyed. Events containing this action
-        may be generated at any time. So a content event listener should
-        be prepared to get notified the "death" of the related content!
+    /** A content was physically destroyed.
 
-        This action must be notified at the listeners of the deleted
+        <p>Events containing this action may be generated at any time. So a
+        content event listener should be prepared to get notified the "death"
+        of the related content!
+
+        <p>This action must be notified at the listeners of the deleted
         content.
     */
     const long DELETED = 2;
@@ -172,13 +174,15 @@ constants ContentAction
     /** This Action indicates that a content has changed its identity (i.e.
         after renaming a file system folder).
 
-        This action must be notified at the listeners of the exchanged
+        <p>This action must be notified at the listeners of the exchanged
         content.
     */
     const long EXCHANGED = 4;
 
     //-------------------------------------------------------------------------
     /** This is obsolete and should no longer be used.
+
+        @deprecated
     */
     const long SEARCH_MATCHED = 128;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RuleOperator.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,55 +67,53 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**These are the possible values for the "RuleOperator".
+/** These are the possible values for <member>RuleTerm::RuleOperator</member>.
+
+    @see RuleSet
+    @see Rule
 */
 constants RuleOperator
 {
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "Contains" - Object contains "operand".
+    /** "Contains" - Object contains <member>RuleTerm::Operand</member>.
     */
     const short CONTAINS = 1;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "Containsnot" - Object does not contain "operand".
+    /** "ContainsNot" - Object does not contain
+        <member>RuleTerm::Operand</member>.
     */
     const short CONTAINSNOT = 2;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "GreaterEqual" - Object is greater than or equal to "operand".
+    /** "GreaterEqual" - Object is greater than or equal to
+        <member>RuleTerm::Operand</member>.
     */
     const short GREATEREQUAL = 3;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "LessEqual" - Object is less than or equal to "operand".
+    /** "LessEqual" - Object is less than or equal to
+        <member>RuleTerm::Operand</member>.
     */
     const short LESSEQUAL = 4;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "Equal" - Object is equal to "operand".
+    /** "Equal" - Object is equal to <member>RuleTerm::Operand</member>.
     */
     const short EQUAL = 5;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "NotEqual" - Object is not equal to "operand".
+    /** "NotEqual" - Object is not equal to <member>RuleTerm::Operand</member>.
     */
     const short NOTEQUAL = 6;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "True" - Object has the value TRUE.
+    /** "True" - Object has the value <TRUE/>.
     */
     const short VALUE_TRUE = 7;
 
     //-------------------------------------------------------------------------
-    /** the property "RuleSet.Rule.Term.Operator" value.<BR>
-        "FALSE" - Object has the value FALSE.
+    /** "False" - Object has the value <FALSE/>.
     */
     const short VALUE_FALSE = 8;
 

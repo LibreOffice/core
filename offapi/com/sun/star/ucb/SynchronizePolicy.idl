@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SynchronizePolicy.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,25 +67,25 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**These are the possible values for the property "SynchronizePolicy".
+/** These are the possible values for the property "SynchronizePolicy".
+
+    @see XCommandProcessor
+    @see Content
 */
 enum SynchronizePolicy
 {
     //-------------------------------------------------------------------------
-    /** the property "SynchronizePolicy" value.<BR>
-        Server is master.
+    /** Server is master.
     */
     SERVER_IS_MASTER,
 
     //-------------------------------------------------------------------------
-    /** the property "SynchronizePolicy" value.<BR>
-        Client is master.
+    /** Client is master.
     */
     CLIENT_IS_MASTER,
 
     //-------------------------------------------------------------------------
-    /** the property "SynchronizePolicy" value.<BR>
-        None is master.
+    /** None is master.
     */
     NONE_IS_MASTER
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfoAttribute.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 08:21:37 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,25 +78,29 @@ constants ContentInfoAttribute
 
     //-------------------------------------------------------------------------
     /** Supply an input stream with the <type>InsertCommandArgument</type>,
-        when committing the new content by executing the command "insert" on it.
+        when committing the new content by executing the command "insert" at it.
     */
     const short INSERT_WITH_INPUTSTREAM = 1;
 
     //-------------------------------------------------------------------------
-    /** The new content is of kind document. It's value for the property
-        "IsDocument" will be true.
+    /** The new content is of kind document.
+
+        <p>It's value for the property "IsDocument" will be true.
     */
     const short KIND_DOCUMENT = 2;
 
     //-------------------------------------------------------------------------
-    /** The new content is of kind folder. It's value for the property
-        "IsFolder" will be true.
+    /** The new content is of kind folder.
+
+        <p>It's value for the property "IsFolder" will be true.
     */
     const short KIND_FOLDER = 4;
 
     //-------------------------------------------------------------------------
-    /** The new content is of kind link. It will support the property
-        "TargetURL" ( which identifies it as a link ).
+    /** The new content is of kind link.
+
+        <p>It will support the property "TargetURL" ( which identifies it as
+        a link ).
     */
     const short KIND_LINK = 8;
 };

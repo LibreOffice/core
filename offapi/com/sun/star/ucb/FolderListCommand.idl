@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FolderListCommand.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** The various commands to process on a list of folders.
+
+    @see FolderList
 */
 enum FolderListCommand
 {
@@ -77,7 +79,7 @@ enum FolderListCommand
     GET,
 
     //-------------------------------------------------------------------------
-    /** Get a list of only the subscribed folders.
+    /** Get a list of subscribed folders.
     */
     GET_SUBSCRIBED,
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListActionType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,10 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** These values are used to specify the type of change happened to a list.
 
-<p>A change happened is sended from an interface <type>XDynamicResultSet</type>
-as <type>ListAction</type> to a <type>XDynamicResultSetListener</type>.
+    <p>A change happened is sended from an <type>XDynamicResultSet</type>
+    as <type>ListAction</type> to a <type>XDynamicResultSetListener</type>.
 
-<p>The values are contained in <member>ListAction::ListActionType</member>
+    <p>The values are contained in <member>ListAction::ListActionType</member>
 */
 
 constants ListActionType
@@ -80,25 +80,25 @@ constants ListActionType
     //-------------------------------------------------------------------------
     /** first notification to a single listener for purpose of initialization.
 
-    <p>This type of notification is required to be sended first and only once to
-    a new listener.
+    <p>This type of notification is required to be sended first and only once
+    to a new listener.
 
     <p>The member <member>ListAction::ActionInfo</member> is required to
     contain a struct <type>WelcomeDynamicResultSetStruct</type>.
     This struct contains two <type>XResultSet</type>s ( old and new ).
-    During and after the notification only the new is valid for access.
+    During and after the notification only the new set is valid for access.
     But the listener is required to remind both <type>XResultSet</type>s as he
     will not get another chance to get them again.
 
     <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> are useless.
+    <member>ListAction::Position</member> are not used.
     */
     const long WELCOME = 20;
 
     //-------------------------------------------------------------------------
     /** One or more rows were inserted into the list.
 
-    <p>This action is related to <type>ContentAction</type> == INSERTED.
+    <p>This action is related to <member>ContentAction::INSERTED</member>.
 
     <p>The memners <member>ListAction::Count</member> and
     <member>ListAction::Position</member> contain the position and count of
@@ -106,9 +106,9 @@ constants ListActionType
     have to be one after the other.
 
     <p> <member>ListAction::ActionInfo</member> could contain something but
-    this is not required.
-    E.g it could contain the properties of the new rows ( e.g. for remote
-    optimizing ), but this is not required nor unrestrictly recommended.
+    this is not required. For example, it could contain the properties of
+    the new rows ( e.g. for remote optimizing ), but this is not required
+    nor unrestrictly recommended.
     @todo ... further description of allowed contents for
     <member>ListAction::ActionInfo</member> is needed
     */
@@ -117,14 +117,14 @@ constants ListActionType
     //-------------------------------------------------------------------------
     /** One or more rows were removed from the list.
 
-    <p>This action is related to <type>ContentAction</type> == REMOVED or DELETED.
+    <p>This action is related to <member>ContentAction::REMOVED</member>.
 
     <p>The members <member>ListAction::Count</member> and
     <member>ListAction::Position</member> contain the position and count of the
     removed rows. If the count is greater than one, the removed rows have to be
     one after the other.
 
-    <p>The member <member>ListAction::ListActionType</member> is useless.
+    <p>The member <member>ListAction::ListActionType</member> is not used.
     */
     const long REMOVED = 22;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenMode.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** These are the possible values for the member Mode of the struct
-    <type>OpenCommandArgument</type>.
+/** These are the possible values for the
+    <member>OpenCommandArgument::Mode</member>.
 */
 constants OpenMode
 {
@@ -89,10 +89,10 @@ constants OpenMode
     const short DOCUMENTS = 3;
 
     //-------------------------------------------------------------------------
-    /** open a document. There are no special requirements for data
-        access sharing.
+    /** open a document. There are no special requirements for data access
+        sharing.
 
-        Note; There must be a data sink supplied in the
+        <p>Note: There must be a data sink supplied in the
         <type>OpenCommandArgument</type> struct, if this value is set. This
         sink will be used by the content implementation to supply the document
         data.
@@ -102,7 +102,7 @@ constants OpenMode
     //-------------------------------------------------------------------------
     /** open a document. Allow shared read and write access.
 
-        Note; There must be a data sink supplied in the
+        <p>Note: There must be a data sink supplied in the
         <type>OpenCommandArgument</type> struct, if this value is set. This
         sink will be used by the content implementation to supply the document
         data.
@@ -112,7 +112,7 @@ constants OpenMode
     //-------------------------------------------------------------------------
     /** open a document. Deny shared write access.
 
-        Note; There must be a data sink supplied in the
+        <p>Note: There must be a data sink supplied in the
         <type>OpenCommandArgument</type> struct, if this value is set. This
         sink will be used by the content implementation to supply the document
         data.

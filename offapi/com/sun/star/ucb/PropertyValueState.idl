@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyValueState.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,22 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** This enum defines the possible states of a property to be processed
-    by a property task.
+/** defines the states of a property value in the process of obtaining the
+    value (asynchronously).
+
+    @see PropertyValueInfo
 */
 enum PropertyValueState
 {
     //-------------------------------------------------------------------------
-    /** The property value is to be processed by the task.
+    /** The property value was not obtained yet.
     */
     UNPROCESSED,
 
     //-------------------------------------------------------------------------
-    /** The value was set or it was obtained by the task. In last case
-        the value is stored in member "Value" of struct PropertyValueInfo.
+    /** The value was obtained.
+
+        <p>The value is stored in <member>PropertyValueInfo::Value</member>.
     */
     PROCESSED,
 

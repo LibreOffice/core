@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetchError.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,10 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** These values are used to specify, whether and which error has occured, while
-fetching data of some rows.
+/** These values are used to specify whether and which error has occured
+    while fetching data of some <type>ContentResultSet</type> rows.
 
-@see FetchResult
+    @see FetchResult
 */
 constants FetchError
 {
@@ -80,18 +80,20 @@ constants FetchError
 
     //-------------------------------------------------------------------------
     /** indicates that during fetching we went beyond the last or first row.
-    Therefore the <type>FetchResult</type> does not contain the full count of
-    demanded rows, but the maximum possible count must be contained.
+
+        <p>Therefore the <type>FetchResult</type> does not contain the full
+        count of demanded rows, but the maximum possible count must be
+        contained.
     */
     const short ENDOFDATA = 1;
 
     //-------------------------------------------------------------------------
     /** indicates that during fetching we got an exception.
 
-    <p> The row, that causes the exceptione, and all following ( 'following' in
-    readorder! ) rows are not contained in the <type>FetchResult</type>.
-    Therefore the <type>FetchResult</type> does not contain the full count of
-    demanded rows. But all properly readed rows so far must be contained.
+        <p>The row, that causes the exceptione, and all following ( 'following'
+        in readorder! ) rows are not contained in the <type>FetchResult</type>.
+        Therefore the <type>FetchResult</type> does not contain the full count
+        of demanded rows. But all properly readed rows so far must be contained.
     */
     const short EXCEPTION = 2;
 };

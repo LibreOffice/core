@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutgoingMessageState.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,54 +67,49 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**These are the possible values for the member "State" of struct "RecipientInfo".
+/** These are the possible values for <member>RecipientInfo::State</member>.
 */
 enum OutgoingMessageState
 {
     //-------------------------------------------------------------------------
-    /**Message has just been placed into the out tray.
+    /** Message has just been placed into the out tray.
     */
     WRITTEN,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Message has been sent upstream to some recipients.
+    /** Message has been sent upstream to some recipients.
     */
     PARTIALLY_LOCALLY_SENT,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Message has been sent upstream to all recipients.
+    /** Message has been sent upstream to all recipients.
     */
     COMPLETELY_LOCALLY_SENT,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Local, non-fatal error (e.g. network temporarily not available).
+    /** Local, non-fatal error (e.g. network temporarily not available).
     */
     RECOVERABLE_LOCAL_ERROR,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Local fatal error (e.g. first SMTP server upstream did not accept the msg).
+    /** Local fatal error (e.g. first SMTP server upstream did not accept the
+        message).
     */
     NONRECOVERABLE_LOCAL_ERROR,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Global fatal error (e.g. last member in SMTP chain could not deliver msg).
+    /** Global fatal error (e.g. last member in SMTP chain could not deliver
+        the message).
     */
     EXTERNAL_ERROR,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Message was sent; we are waiting for confirmation.
+    /** Message was sent; we are waiting for confirmation.
     */
     WAITING_CONFIRMATION,
 
     //-------------------------------------------------------------------------
-    /**Property "OutMessageState" value.<BR>
-        Recipient confirmed reading.
+    /** Recipient confirmed reading.
     */
     CONFIRMED
 
