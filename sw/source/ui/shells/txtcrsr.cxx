@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:47:56 $
+ *  last change: $Author: os $ $Date: 2002-04-09 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,13 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_CNTNT_TO_NEXT_FRAME:
-            bRet = rSh.GotoFlyTxt();
-            break;
+            bRet = rSh.GotoObj(TRUE, GOTO_ANY);
+            if(bRet)
+            {
+                rSh.HideCrsr();
+                rSh.EnterSelFrmMode();
+            }
+        break;
         case FN_NEXT_FOOTNOTE:
             rSh.MoveCrsr();
             bRet = rSh.GotoNextFtnAnchor();
@@ -334,101 +339,4 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
         rReq.SetReturnValue(SfxBoolItem( nSlot, bRet ));
 
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.47  2000/09/18 16:06:07  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.46  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.45  2000/05/09 14:41:35  os
-    BASIC interface partially removed
-
-    Revision 1.44  1999/04/26 11:06:12  KZ
-    #include <svtools/args.hxx> eingefuegt
-
-
-      Rev 1.43   26 Apr 1999 13:06:12   KZ
-   #include <svtools/args.hxx> eingefuegt
-
-      Rev 1.42   14 Jan 1999 15:50:26   JP
-   Bug #60794#: Fehlererkennung beim Tabellenrechnen und anspringen von Formeln
-
-      Rev 1.41   27 Nov 1998 14:56:08   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.40   17 Aug 1998 16:09:12   OS
-   GPF nach Shellwechsel waehrend Recording #55041#
-
-      Rev 1.39   12 Feb 1998 20:12:44   JP
-   Left-/RightMargin: zus. Flag fuer BasicCall
-
-      Rev 1.38   24 Nov 1997 09:47:54   MA
-   includes
-
-      Rev 1.37   03 Nov 1997 13:55:54   MA
-   precomp entfernt
-
-      Rev 1.36   04 Sep 1997 17:12:04   MA
-   includes
-
-      Rev 1.35   07 Apr 1997 17:48:12   MH
-   chg: header
-
-      Rev 1.34   06 Mar 1997 12:28:12   JP
-   Left/Right/Up/Down: bei API-Calls in ReadOnly Docs normale verhalten
-
-      Rev 1.33   23 Feb 1997 22:27:04   OS
-   diverse Move-Slots mit BOOL - return
-
-      Rev 1.32   20 Feb 1997 17:17:38   OS
-   JumpToPrev/NextRegion
-
-      Rev 1.31   07 Feb 1997 14:06:06   OS
-   GoLeft/Right/Up/Down ueber for-Schleife aufrufen #35596#
-
-      Rev 1.30   29 Aug 1996 11:40:04   OS
-   Next/PrevFootnote liefern BOOL
-
-      Rev 1.29   28 Aug 1996 15:54:56   OS
-   includes
-
-      Rev 1.28   13 Feb 1996 09:51:28   OS
-   JumpToPrev/NextTable/Frame erhalten return type BOOL
-
-      Rev 1.27   24 Jan 1996 15:18:36   OS
-   Selection-Param ist Bool und nicht Int16, Bug #23549#
-
-      Rev 1.26   24 Nov 1995 16:59:36   OM
-   PCH->PRECOMPILED
-
-      Rev 1.25   23 Nov 1995 19:52:02   OS
-   +FN_SELECT_ALL fuer PM2, +Next/PrevPara
-
-      Rev 1.24   10 Nov 1995 15:29:44   OS
-   GotoVariable/Region an die Baseshell
-
-      Rev 1.23   09 Nov 1995 17:59:54   OS
-   neue Slots fuer Grosskunden
-
-      Rev 1.22   23 Oct 1995 17:33:36   OS
-   *_SEL auf * umgeappt
-
-      Rev 1.21   22 Sep 1995 16:58:18   OS
-   Schoenheitskorrektur: GetArgs() fuellt immer pArgs!
-
-      Rev 1.20   18 Sep 1995 14:04:38   OS
-   geht wieder mit PCH
-
-      Rev 1.19   04 Sep 1995 14:13:08   HJS
-   add: #include <sbx.hxx>
-
-------------------------------------------------------------------------*/
-
 
