@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2002-01-14 15:08:36 $
+#   last change: $Author: hr $ $Date: 2002-01-14 15:40:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,7 @@ BUILD_FLAGS=-f sunpro.mak
 
 .IF "$(COM)"=="C52"
 OUT2INC= \
-    stlport$/SC5$/*.SUNWCCh
+    stlport$/*.SUNWCCh
 
 .ENDIF          # "$(COM)"=="C52"
 
