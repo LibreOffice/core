@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-28 10:02:35 $
+ *  last change: $Author: pb $ $Date: 2002-12-02 07:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
-                    <desc xml:lang="en-US">Specifies the filtername that was choosen to load the document.</desc>
+					<desc xml:lang="en-US">Specifies the filtername that was choosen to load the document.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
@@ -668,10 +668,8 @@
 				<author>MAV</author>
 				<desc xml:lang="en-US">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 			</info>
-			<prop oor:name="Name" oor:type="xs:string" oor:localized="true">
-			</prop>
-			<prop oor:name="Key" oor:type="xs:string">
-			</prop>
+			<prop oor:name="Name" oor:type="xs:string" oor:localized="true"/>
+			<prop oor:name="Key" oor:type="xs:string"/>
 		</group>
 		<group oor:name="RecoveryEntry">
 			<info>
@@ -805,24 +803,24 @@
 				<author>AS</author>
 			</info>
 			<prop oor:name="ServiceName" oor:type="xs:string">
-                <info>
-                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
-                </info>
+				<info>
+					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+				</info>
 			</prop>
 			<prop oor:name="UserInteraction" oor:type="xs:boolean">
-                <info>
-                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
-                </info>
+				<info>
+					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+				</info>
 			</prop>
 			<prop oor:name="AllowAsync" oor:type="xs:boolean">
-                <info>
-                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
-                </info>
+				<info>
+					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+				</info>
 			</prop>
 			<group oor:name="ExecutionArguments" oor:extensible="true">
-                <info>
-                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
-                </info>
+				<info>
+					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+				</info>
 			</group>
 		</group>
 	</templates>
@@ -1183,7 +1181,8 @@
 						<author>MBA</author>
 						<desc xml:lang="en-US">Contains the Office installation path.</desc>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="OfficeInstallURL" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
@@ -1191,7 +1190,8 @@
 						<author>MBA</author>
 						<desc xml:lang="en-US">Contains the Office installation path in URL notation. Must match the UCB configuration.</desc>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Addin" oor:type="xs:string">
 					<info>
@@ -1647,16 +1647,16 @@
 					<desc xml:lang="en-US">Describes the range and current size of the history list.</desc>
 				</info>
 				<constraints>
-                    <minInclusive oor:value="0">
-                        <info>
-                            <desc xml:lang="en-US">It's the min range for the history size.</desc>
-                        </info>
-                    </minInclusive>
-                    <maxInclusive oor:value="100">
-                        <info>
-                            <desc xml:lang="en-US">It's the max range for the history size.</desc>
-                        </info>
-                    </maxInclusive>
+					<minInclusive oor:value="0">
+						<info>
+							<desc xml:lang="en-US">It's the min range for the history size.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="100">
+						<info>
+							<desc xml:lang="en-US">It's the max range for the history size.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>100</value>
 			</prop>
@@ -1666,16 +1666,16 @@
 					<desc xml:lang="en-US">Describes the range and current size of the picklist shown inside the menu.</desc>
 				</info>
 				<constraints>
-                    <minInclusive oor:value="0">
-                        <info>
-                            <desc xml:lang="en-US">It's the min range for the picklist size.</desc>
-                        </info>
-                    </minInclusive>
-                    <maxInclusive oor:value="9">
-                        <info>
-                            <desc xml:lang="en-US">It's the max range for the picklist size.</desc>
-                        </info>
-                    </maxInclusive>
+					<minInclusive oor:value="0">
+						<info>
+							<desc xml:lang="en-US">It's the min range for the picklist size.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="9">
+						<info>
+							<desc xml:lang="en-US">It's the max range for the picklist size.</desc>
+						</info>
+					</maxInclusive>
 				</constraints>
 				<value>4</value>
 			</prop>
@@ -1738,7 +1738,8 @@
 					<author>CD</author>
 					<desc xml:lang="en-US">Specifies the current or last temp directory. This directory will be removed during shutdown or next office start.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
 				<info>
@@ -2333,7 +2334,8 @@
 					<info>
 						<deprecated/>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="State" oor:type="xs:boolean">
 					<!-- OldPath: soffice_View/Window -->
@@ -2391,7 +2393,8 @@
 					<info>
 						<deprecated/>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="SplitWindow">
@@ -2407,7 +2410,8 @@
 						<deprecated/>
 						<author>MBA</author>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Version" oor:type="xs:int">
 					<!-- OldPath: soffice_View/SplitWindow -->
@@ -2857,14 +2861,16 @@
 					<author>ABI</author>
 					<desc xml:lang="en-US">Determines the locale for the help pages.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="System" oor:type="xs:string">
 				<info>
 					<author>ABI</author>
 					<desc xml:lang="en-US">Determines the operating system on which the help system is displayed.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Tip" oor:type="xs:boolean">
 				<!-- OldLocation: Soffice.cfg -->
@@ -2933,13 +2939,15 @@
 					<info>
 						<desc xml:lang="en-US">Contains a string specifying the URL to be used for online registration.</desc>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="ReminderDate" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Contains a string representation of the date on which the user recieves a reminder (e.g. "13.02.2002").</desc>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="RequestDialog" oor:type="xs:int">
 					<info>
@@ -4954,24 +4962,38 @@
 					</info>
 					<value>false</value>
 				</prop>
+				<prop oor:name="CTLCursorMovement" oor:type="xs:int">
+					<!-- UIHints: options-->
+					<info>
+						<desc xml:lang="en-US">Specifies the kind of text cursor movement (logical (0) or visual (1)) within mixed text (RTL and LTR).</desc>
+					</info>
+					<value>0</value>
+				</prop>
+				<prop oor:name="CTLTextNumerals" oor:type="xs:int">
+					<!-- UIHints: options-->
+					<info>
+						<desc xml:lang="en-US">Specifies the kind of numerals (arabic (0), hindi (1) or system settings (2)) is used per default in all applications.</desc>
+					</info>
+					<value>0</value>
+				</prop>
 			</group>
 		</group>
 		<group oor:name="Startup">
 			<info>
-                <deprecated>Use cfg package Jobs instead of this.</deprecated>
+				<deprecated>Use cfg package Jobs instead of this.</deprecated>
 				<author>AS</author>
-                <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+				<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
 			</info>
 			<set oor:name="Run" oor:node-type="JobDescription">
 				<info>
-                    <deprecated>Use cfg package Jobs instead of this.</deprecated>
-                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+					<deprecated>Use cfg package Jobs instead of this.</deprecated>
+					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</set>
 			<set oor:name="RunOnce" oor:node-type="JobDescription">
 				<info>
 					<deprecated>Use cfg package Jobs instead of this.</deprecated>
-                    <desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</set>
 		</group>
