@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:44:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ void OQuery::implCollectColumns( )
         // fill the columns with columns from the statement
         Reference< XSQLQueryComposerFactory >  xFactory(m_xConnection, UNO_QUERY);
         Reference< XSQLQueryComposer > xComposer;
-        if (xFactory.is())
+        if ( xFactory.is() && m_bEscapeProcessing )
         {
             try
             {
