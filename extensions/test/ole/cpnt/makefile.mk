@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2002-09-13 06:37:46 $
+#   last change: $Author: jl $ $Date: 2002-09-17 10:55:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb $(BIN)$/oletest.rdb
 UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
 #INCPRE+= -I$(SOLARINCDIR)$/external$/atl
-LIBCMT=msvcrtd.lib
 
 UNOTYPES= oletest.XTestSequence oletest.XTestStruct	\
     oletest.XTestOther 				\
