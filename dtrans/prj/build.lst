@@ -1,6 +1,6 @@
 dr	dtrans	:	offapi offuh rdbmaker vos stoc NULL
 dr	dtrans									usr1	-	all	dr_mkout NULL
-dr	dtrans\source\cnttype					nmake	-	all	dr_cnttype	NULL
+dr	dtrans\source\cnttype					nmake	-	all	dr_cnttype dr_generic NULL
 dr	dtrans\source\win32\misc				nmake	-	w	dr_win32_misc NULL
 dr	dtrans\source\win32\mtaole				nmake	-	w	dr_win32_mtaole NULL
 dr	dtrans\source\win32\ftransl				nmake	-	w	dr_win32_ftransl dr_cnttype dr_win32_misc.w NULL 
