@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:07:19 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,11 +197,10 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 
 
 
-ImportExcel::ImportExcel( SfxMedium& rMedium, SvStream& rSvStrm, XclBiff eBiff, ScDocument* pDoc ):
-    XclImpRootData( eBiff, rMedium, *pDoc, RTL_TEXTENCODING_MS_1252 ),
-    ImportTyp( pDoc, RTL_TEXTENCODING_MS_1252 ),
-    XclImpRoot( static_cast< XclImpRootData& >( *this ) ),
-    maStrm( rSvStrm, *this ),
+ImportExcel::ImportExcel( XclImpRootData& rImpData ):
+    ImportTyp( &rImpData.mrDoc, rImpData.meCharSet ),
+    XclImpRoot( rImpData ),
+    maStrm( rImpData.mrBookStrm, GetRoot() ),
     aIn( maStrm )
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
@@ -212,9 +211,9 @@ ImportExcel::ImportExcel( SfxMedium& rMedium, SvStream& rSvStrm, XclBiff eBiff, 
 
     // Root-Daten fuellen - nach new's ohne Root als Parameter
     pExcRoot = mpRD;
-    pExcRoot->pDoc = pDoc;
+    pExcRoot->pDoc = GetDocPtr();
     pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
-    pExcRoot->pScRangeName = pDoc->GetRangeName();
+    pExcRoot->pScRangeName = GetDoc().GetRangeName();
     pExcRoot->aStandard.AssignAscii( "General" );
     pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
@@ -387,38 +386,6 @@ void ImportExcel::Number25( void )
         bTabTruncated = TRUE;
         GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
     }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel::Label25( void )
-{
-    UINT16  nR, nC, nXF;
-    bool    b16BitLen;
-
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
-    {// nur fuer BIFF2
-        BYTE    nAttr0, nAttr1, nAttr2;
-
-        aIn >> nR >> nC >> nAttr0 >> nAttr1 >> nAttr2;
-
-        nXF = nAttr0 & 0x3F;
-        if( nXF == 63 )
-            // IXFE-record stand davor
-            nXF = nIxfeIndex;
-
-        b16BitLen = false;
-    }
-    else
-    {
-        aIn >> nR >> nC >> nXF;
-
-        b16BitLen = true;
-    }
-
-    String aTmpStr( aIn.ReadByteString( b16BitLen ) );
-    SetTextCell( nC, nR, aTmpStr, nXF );
 
     pLastFormCell = NULL;
 }
@@ -1093,32 +1060,26 @@ void ImportExcel::Mulblank( void )
 
 void ImportExcel::Rstring( void )
 {
-    UINT16      nRow, nCol, nXF;
-    BYTE        nCount;
-
+    UINT16 nRow, nCol, nXF;
     aIn >> nRow >> nCol >> nXF;
-
-    String aString( aIn.ReadByteString( TRUE ) );
-
-    aIn >> nCount;
 
     SCCOL nScCol = static_cast< SCCOL >( nCol );
     SCROW nScRow = static_cast< SCROW >( nRow );
 
     if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        if( aString.Len() )
-        {
-            EditTextObject* pTextObj = CreateFormText( nCount, aString, nXF );
-
-            ScBaseCell*     pZelle = new ScEditCell( pTextObj, pD, GetEditEngine().GetEditTextObjectPool() );
-
-            delete pTextObj;
-
-            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pZelle );
-        }
-        pColRowBuff->Used( nScCol, nScRow );
         GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
+
+        // unformatted Unicode string with separate formatting information
+        XclImpString aString( maStrm );
+        if( !aString.IsRich() )
+            aString.ReadFormats( maStrm );
+
+        ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
+        if( pCell )
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
+
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
     {
@@ -1195,14 +1156,41 @@ void ImportExcel::Number34( void )
 }
 
 
-void ImportExcel::Label34( void )
+void ImportExcel::Label( void )
 {
-    UINT16  nR, nC, nXF;
+    sal_uInt16 nRow, nCol, nXFIndex;
+    maStrm >> nRow >> nCol;
 
-    aIn >> nR >> nC >> nXF;
+    if( GetBiff() == xlBiff2 )
+    {
+        sal_uInt8 nAttr0, nAttr1, nAttr2;
+        maStrm >> nAttr0 >> nAttr1 >> nAttr2;
 
-    String aTmpStr( aIn.ReadByteString( TRUE ) );
-    SetTextCell( nC, nR, aTmpStr, nXF );
+        nXFIndex = nAttr0 & 0x3F;
+        if( nXFIndex == 63 )
+            nXFIndex = nIxfeIndex;
+    }
+    else
+        maStrm >> nXFIndex;
+
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
+    {
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXFIndex );
+        pColRowBuff->Used( nScCol, nScRow );
+
+        XclStrFlags nFlags = (GetBiff() == xlBiff2) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT;
+        XclImpString aString( maStrm, nFlags );
+        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIndex ) )
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
+    }
+    else
+    {
+        bTabTruncated = TRUE;
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1580,74 +1568,6 @@ const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, do
 }
 
 
-EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, const UINT16 nXF )
-{
-    EditEngine&     rEdEng = GetEditEngine();
-
-    rEdEng.SetText( rS );
-
-    SfxItemSet      aItemSet( rEdEng.GetEmptyItemSet() );
-    GetFontBuffer().FillToItemSet( aItemSet, xlFontEEIDs, GetXFBuffer().GetFontIndex( nXF ) );
-
-    ESelection      aSel( 0, 0 );
-
-    if( nAnzFrms )
-    {
-        BYTE                nChar, nFont;
-        const sal_Unicode*  pAktChar = rS.GetBuffer();
-        sal_Unicode         cAkt = *pAktChar;
-        UINT16              nCnt = 0;
-
-        aIn >> nChar >> nFont;
-        nAnzFrms--;
-
-        while( cAkt )
-        {
-            if( nCnt >= nChar )
-            {// neuer Item-Set
-                rEdEng.QuickSetAttribs( aItemSet, aSel );
-
-                aItemSet.ClearItem( 0 );
-
-                GetFontBuffer().FillToItemSet( aItemSet, xlFontEEIDs, nFont );
-                if( nAnzFrms )
-                {
-                    aIn >> nChar >> nFont;
-                    nAnzFrms--;
-                }
-                else
-                    nChar = 0xFF;
-
-                aSel.nStartPara = aSel.nEndPara;
-                aSel.nStartPos = aSel.nEndPos;
-            }
-
-            if( cAkt == '\n' )
-            {// new Paragraph
-                aSel.nEndPara++;
-                aSel.nEndPos = 0;
-            }
-            else
-                aSel.nEndPos++;
-
-            pAktChar++;
-            cAkt = *pAktChar;
-            nCnt++;
-        }
-
-        // letzten ItemSet setzten
-        rEdEng.QuickSetAttribs( aItemSet, aSel );
-    }
-    else
-    {
-        aSel.nEndPos = rS.Len();
-        rEdEng.QuickSetAttribs( aItemSet, aSel );
-    }
-
-    return rEdEng.CreateTextObject();
-}
-
-
 void ImportExcel::AdjustRowHeight()
 {
     // #93255# speed up chart import: import all sheets without charts, then
@@ -1765,42 +1685,6 @@ void ImportExcel::PostDocLoad( void )
         }
     }
 }
-
-
-void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, const UINT16 nXF )
-{
-    SCCOL nScCol = static_cast< SCCOL >( nC );
-    SCROW nScRow = static_cast< SCROW >( nR );
-
-    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
-    {
-        if( r.Len() )
-        {
-            ScBaseCell*             pZelle;
-
-            if( GetXFBuffer().HasEscapement( nXF ) )
-            {// jetzt kommt 'ne Edit-Engine in's Spiel!
-                EditTextObject*     pTObj = CreateFormText( 0, r, nXF );
-
-                pZelle = new ScEditCell( pTObj, pD, GetEditEngine().GetEditTextObjectPool() );
-
-                delete pTObj;
-            }
-            else
-                pZelle = ScBaseCell::CreateTextCell( r, pD );
-
-            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pZelle );
-        }
-        pColRowBuff->Used( nScCol, nScRow );
-        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
-    }
-    else
-    {
-        bTabTruncated = TRUE;
-        GetTracer().TraceInvalidRow(GetCurrScTab(), nR, MAXROW);
-    }
-}
-
 
 OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, SCTAB nTabNo) :
     nTab (nTabNo)
