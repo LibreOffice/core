@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 10:11:48 $
+ *  last change: $Author: os $ $Date: 2000-10-24 14:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,15 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
+#include <com/sun/star/drawing/PointSequence.hpp>
+#endif
+#ifndef _SV_POLY_HXX //autogen
+#include <vcl/poly.hxx>
+#endif
 #ifndef SW_UNOMID_HXX
 #include <unomid.h>
 #endif
@@ -213,6 +222,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
 
@@ -335,9 +345,10 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
+        { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 53
+    #define GRPH_PROP_COUNT 54
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -1028,7 +1039,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)||
                     (pCur &&
                     (pCur->nWID == RES_GRFATR_CROPGRF ||
-                        pCur->nWID == RES_GRFATR_MIRRORGRF))))
+                        pCur->nWID == RES_GRFATR_MIRRORGRF ||
+                            pCur->nWID == FN_PARAM_COUNTOUR_PP))))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1040,6 +1052,31 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     OUString uTemp;
                     aValue >>= uTemp;
                     pNoTxt->SetAlternateText(uTemp);
+                }
+                else if(pCur->nWID == FN_PARAM_COUNTOUR_PP)
+                {
+                    PointSequenceSequence aParam;
+                    if(!aValue.hasValue())
+                        pNoTxt->SetContour(0);
+                    else if(aValue >>= aParam)
+                    {
+                        PolyPolygon aPoly(aParam.getLength());
+                        for(sal_Int32 i = 0; i < aParam.getLength(); i++)
+                        {
+                            const PointSequence* pPointSeq = aParam.getConstArray();
+                            Polygon aSet(pPointSeq[i].getLength());
+                            for(sal_Int32 j = 0; j < pPointSeq[i].getLength(); j++)
+                            {
+                                const awt::Point* pPoints = pPointSeq[i].getConstArray();
+                                Point aPoint(MM100_TO_TWIP(pPoints[j].X), MM100_TO_TWIP(pPoints[j].Y));
+                                aSet.SetPoint(aPoint, j);
+                            }
+                            aPoly.Insert( aSet );
+                        }
+                        pNoTxt->SetContour(&aPoly);
+                    }
+                    else
+                        throw IllegalArgumentException();
                 }
                 else
                 {
@@ -1182,15 +1219,41 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         if(eType == FLYCNTTYPE_GRF &&
                 pCur &&
                 (pCur->nWID == RES_GRFATR_CROPGRF ||
-                    pCur->nWID == RES_GRFATR_MIRRORGRF))
+                    pCur->nWID == RES_GRFATR_MIRRORGRF ||
+                        pCur->nWID == FN_PARAM_COUNTOUR_PP ))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                SfxItemSet aSet(pNoTxt->GetSwAttrSet());
-                aAny = aPropSet.getPropertyValue(rPropertyName, aSet);
+                if(pCur->nWID == FN_PARAM_COUNTOUR_PP)
+                {
+                    const PolyPolygon* pContour = pNoTxt->HasContour();
+                    if(pContour)
+                    {
+                        PointSequenceSequence aPtSeq(pContour->Count());
+                        PointSequence* pPSeq = aPtSeq.getArray();
+                        for(USHORT i = 0; i < pContour->Count(); i++)
+                        {
+                            const Polygon& rPoly = pContour->GetObject(i);
+                            pPSeq[i].realloc(rPoly.GetSize());
+                            awt::Point* pPoints = pPSeq[i].getArray();
+                            for(USHORT j = 0; j < rPoly.GetSize(); j++)
+                            {
+                                const Point& rPoint = rPoly.GetPoint(j);
+                                pPoints[j].X = TWIP_TO_MM100(rPoint.X());
+                                pPoints[j].Y = TWIP_TO_MM100(rPoint.Y());
+                            }
+                        }
+                        aAny <<= aPtSeq;
+                    }
+                }
+                else
+                {
+                    SfxItemSet aSet(pNoTxt->GetSwAttrSet());
+                    aAny = aPropSet.getPropertyValue(rPropertyName, aSet);
+                }
             }
         }
         else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL)||
@@ -1655,7 +1718,11 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 pGFmt->Add(this);
                 if(sName.Len())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pGFmt, sName);
+
             }
+            uno::Any* pContourPoly;
+            if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_POLY_POLYGON), pContourPoly))
+                setPropertyValue(C2U(UNO_NAME_CONTOUR_POLY_POLYGON), *pContourPoly);
             if(pProps->GetProperty(C2S(UNO_NAME_ALTERNATIVE_TEXT), pAltText))
                 setPropertyValue(C2U(UNO_NAME_ALTERNATIVE_TEXT), *pAltText);
         }
@@ -2558,6 +2625,9 @@ sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/24 10:11:48  os
+    graphic mirror properties changed
+
     Revision 1.3  2000/10/23 11:52:34  os
     property defines according to the expansion
 

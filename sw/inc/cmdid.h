@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
+ *  last change: $Author: os $ $Date: 2000-10-24 14:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,6 +1116,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PARAM_TOX_TYPE               (FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
 #define FN_PARAM_NUM_LEVEL              (FN_PARAM2+16) /* rtf filter*/
+#define FN_PARAM_COUNTOUR_PP            (FN_PARAM2+17) /* contour PolyPolygon*/
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen
  --------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 10:00:22 $
+ *  last change: $Author: os $ $Date: 2000-10-24 14:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_IS_AUTO_HEIGHT                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_TYPE                              (MAP_CHAR_LEN("SizeType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HINT                                   (MAP_CHAR_LEN("Hint"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_ORIENT                            (MAP_CHAR_LEN("HoriOrient"));
-//const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_MIRRORED                        (MAP_CHAR_LEN("HoriMirrored"));
 const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES             (MAP_CHAR_LEN("HoriMirroredOnEvenPages"));
 const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES              (MAP_CHAR_LEN("HoriMirroredOnOddPages"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_ORIENT_RELATION                   (MAP_CHAR_LEN("HoriOrientRelation"));
@@ -324,7 +323,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_LEVEL                                  
 const SwPropNameLen __FAR_DATA  UNO_NAME_LINE_INTERVAL                          (MAP_CHAR_LEN("LineInterval"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LINK_REGION                            (MAP_CHAR_LEN("LinkRegion"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_MACRO                                  (MAP_CHAR_LEN("Macro"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_MIRROR_PAGE_TOGGLE                     (MAP_CHAR_LEN("MirrorPageToggle"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SPLIT                                  (MAP_CHAR_LEN("Split"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_SPLIT                             (MAP_CHAR_LEN("ParaSplit"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_NUMBER_FORMAT                          (MAP_CHAR_LEN("NumberFormat"));
@@ -546,3 +544,4 @@ const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_NUMBERING_RESTART               
 const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS                         (MAP_CHAR_LEN("HideFieldTips"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT                      (MAP_CHAR_LEN("ParaShadowFormat"));
 
+const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_POLY_POLYGON                    (MAP_CHAR_LEN("ContourPolyPolygon"));

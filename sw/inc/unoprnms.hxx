@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 09:57:11 $
+ *  last change: $Author: os $ $Date: 2000-10-24 14:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_AUTO_HEIGHT                   
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SIZE_TYPE                        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HINT                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_ORIENT                  ;
-//extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_ORIENT_RELATION             ;
@@ -328,7 +327,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_LEVEL                            
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LINE_INTERVAL                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LINK_REGION                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_MACRO                            ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_MIRROR_PAGE_TOGGLE           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SPLIT                        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SPLIT                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_NUMBER_FORMAT                    ;
@@ -547,6 +545,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_USER_DEFINED_ATTRIBUTES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_POLY_POLYGON;
 #endif
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 10:10:40 $
+ *  last change: $Author: os $ $Date: 2000-10-24 14:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,22 +335,19 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#endif
 #ifndef _SVX_PBINITEM_HXX //autogen
 #include <svx/pbinitem.hxx>
 #endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
 SwUnoPropertyMapProvider aSwMapProvider;
-
-
-
-
-//  { SW_PROP_NAME(UNO_NAME_WIDTH),             FN_SET_TABLE_WIDTH, &::getCppuType((const long*)0), PROPERTY_NONE},
-//  { SW_PROP_NAME(UNO_NAME_GRAPHIC           ),        RES_BACKGROUND,         &,                              PROPERTY_NONE, MID_GRAPHIC
-//  { SW_PROP_NAME(UNO_NAME_PAGE_DESC_NAME),        RES_PAGEDESC,           &::getCppuType((const String*)0),           PROPERTY_NONE, MID_PAGEDESC_PAGEDESCNAME    },
 
 /******************************************************************************
     UI-Maps
@@ -1234,6 +1231,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aGraphicPropertyMap_Impl;
