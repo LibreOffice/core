@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:25:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5583,20 +5583,6 @@ void SwHTMLParser::ParseMoreMetaOptions()
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }
-
-/*  */
-
-#ifdef USED
-void __EXPORT SwHTMLParser::SaveState( int nToken )
-{
-    HTMLParser::SaveState( nToken );
-}
-
-void __EXPORT SwHTMLParser::RestoreState()
-{
-    HTMLParser::RestoreState();
-}
-#endif
 
 /*  */
 
