@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2001-06-04 23:04:45 $
+ *  last change: $Author: nf $ $Date: 2001-06-12 10:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,9 +801,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.9 $\n"
+        "#   $Revision: 1.10 $\n"
         "#\n"
-        "#   last change: $Author: svesik $ $Date: 2001-06-04 23:04:45 $\n"
+        "#   last change: $Author: nf $ $Date: 2001-06-12 10:39:45 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
@@ -899,13 +899,13 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
             );
             if ( nDepth == 1 )
                 sHeader += ByteString(
-                    ".IF \"$(deliver)\"==\"true\"\n"
+                    ".IF \"$(build_deliver)\"==\"true\"\n"
                     "all_target:\t\t\\\n"
                     "\tTG_DELIVER\t\\\n"
                     "\tALLTAR\n"
-                    ".ELSE # \"$(deliver)\"==\"true\"\n"
+                    ".ELSE # \"$(build_deliver)\"==\"true\"\n"
                     "all_target: ALLTAR\n"
-                    ".ENDIF # \"$(deliver)\"==\"true\"\n"
+                    ".ENDIF # \"$(build_deliver)\"==\"true\"\n"
                 );
             else
                 sHeader += ByteString(
@@ -916,13 +916,13 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
     else {
         if ( nDepth == 1 )
             sHeader += ByteString(
-                ".IF \"$(deliver)\"==\"true\"\n"
+                ".IF \"$(build_deliver)\"==\"true\"\n"
                 "all_target:\t\t\\\n"
                 "\tTG_DELIVER\t\\\n"
                 "\tALLTAR\n"
-                ".ELSE # \"$(deliver)\"==\"true\"\n"
+                ".ELSE # \"$(build_deliver)\"==\"true\"\n"
                 "all_target: ALLTAR\n"
-                ".ENDIF # \"$(deliver)\"==\"true\"\n"
+                ".ENDIF # \"$(build_deliver)\"==\"true\"\n"
             );
     }
     sHeader += ByteString(
