@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
+ *  last change: $Author: os $ $Date: 2000-12-15 11:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,6 +809,7 @@ void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent) throw( uno::Runt
  ---------------------------------------------------------------------------*/
 void BibGeneralPage::focusLost(const awt::FocusEvent& ) throw( uno::RuntimeException )
 {
+    CommitActiveControl();
 }
 /* -----------------------------14.04.00 12:52--------------------------------
 
