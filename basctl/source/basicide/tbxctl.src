@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:46:27 $
+ *  last change: $Author: tbe $ $Date: 2002-05-08 17:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ FloatingWindow RID_TBXCONTROLS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Controls";
         Text[ finnish ] = "Ohjaimet";
+        Text[ thai ] = "ตัวควบคุม";
     };
     Text[ chinese_simplified ] = "控制";
     Text[ russian ] = "�������� ����������";
@@ -118,6 +119,7 @@ FloatingWindow RID_TBXCONTROLS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Controls";
     Text[ finnish ] = "Ohjaimet";
+    Text[ thai ] = "ตัวควบคุม";
 };
 ToolBox RID_TOOLBOX
 {
@@ -155,6 +157,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Bot� d'ordre";
             Text[ finnish ] = "Painike";
+            Text[ thai ] = "ปุ่่ม";
         };
         ToolBoxItem
         {
@@ -185,6 +188,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Quadre de verificaci�";
             Text[ finnish ] = "Valintaruutu";
+            Text[ thai ] = "กล่องกาเครื่องหมาย";
         };
         ToolBoxItem
         {
@@ -215,6 +219,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Etiqueta";
             Text[ finnish ] = "Nimi�kentt�";
+            Text[ thai ] = "เขตข้อมูลป้ายชื่อ";
         };
         ToolBoxItem
         {
@@ -245,6 +250,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Quadre de llista";
             Text[ finnish ] = "Luetteloruutu";
+            Text[ thai ] = "กล่องรายการ";
         };
         ToolBoxItem
         {
@@ -275,6 +281,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de despla�ament horitzontal";
             Text[ finnish ] = "Vaakavierityspalkki";
+            Text[ thai ] = "แถบเลื่อนแนวนอน";
         };
         ToolBoxItem
         {
@@ -305,6 +312,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Control del marc";
             Text[ finnish ] = "Ryhm�ruutu";
+            Text[ thai ] = "กล่องที่จัดเป็นกลุ่ม";
         };
         ToolBoxItem
         {
@@ -333,6 +341,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "HFixedLine";
             Text[ arabic ] = "HFixedLine";
             Text[ catalan ] = "L�nia fixa horitzontal";
+            Text[ thai ] = "เส้นแนวนอน";
         };
         ToolBoxItem
         {
@@ -361,6 +370,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "DateField";
             Text[ arabic ] = "DateField";
             Text[ catalan ] = "DateField";
+            Text[ thai ] = "Date Field";
         };
         ToolBoxItem
         {
@@ -389,6 +399,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "NumericField";
             Text[ arabic ] = "NumericField";
             Text[ catalan ] = "NumericField";
+            Text[ thai ] = "Numeric Field";
         };
         ToolBoxItem
         {
@@ -417,6 +428,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "FormattedField";
             Text[ arabic ] = "FormattedField";
             Text[ catalan ] = "FormattedField";
+            Text[ thai ] = "Formatted Field";
         };
         ToolBoxItem
         {
@@ -445,6 +457,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "FileControl";
             Text[ arabic ] = "FileControl";
             Text[ catalan ] = "FileControl";
+            Text[ thai ] = "File Selection";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -475,6 +488,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "�zellikler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Propietats";
+            Text[ thai ] = "คุณสมบัติ";
         };
         ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
         ToolBoxItem
@@ -504,6 +518,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "ImageControl";
             Text[ arabic ] = "ImageControl";
             Text[ catalan ] = "Control d'imatge";
+            Text[ thai ] = "ตัวควบคุมภาพ";
         };
         ToolBoxItem
         {
@@ -534,6 +549,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Bot� d'opci�";
             Text[ finnish ] = "Valintanappi";
+            Text[ thai ] = "ปุ่มเลือก";
         };
         ToolBoxItem
         {
@@ -564,6 +580,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Camp de text";
             Text[ finnish ] = "Tekstikehys";
+            Text[ thai ] = "กล่องข้อความ";
         };
         ToolBoxItem
         {
@@ -594,6 +611,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Quadre combinat";
             Text[ finnish ] = "Yhdistelm�ruutu";
+            Text[ thai ] = "กล่องคอมโบ้";
         };
         ToolBoxItem
         {
@@ -624,6 +642,7 @@ ToolBox RID_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de despla�ament vertical";
             Text[ finnish ] = "Pystyvierityspalkki";
+            Text[ thai ] = "แถบเลื่อนสถานะแนวตั้้ง";
         };
         ToolBoxItem
         {
@@ -652,6 +671,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "ProgressBar";
             Text[ arabic ] = "ProgressBar";
             Text[ catalan ] = "Barra de progr�s";
+            Text[ thai ] = "แถบแสดงความคืบหน้า";
         };
         ToolBoxItem
         {
@@ -680,6 +700,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "VFixedLine";
             Text[ arabic ] = "VFixedLine";
             Text[ catalan ] = "L�nia fixa vertical";
+            Text[ thai ] = "เส้นแนวตั้ง";
         };
         ToolBoxItem
         {
@@ -708,6 +729,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "TimeField";
             Text[ arabic ] = "TimeField";
             Text[ catalan ] = "TimeField";
+            Text[ thai ] = "Time Field";
         };
         ToolBoxItem
         {
@@ -736,6 +758,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "CurrencyField";
             Text[ arabic ] = "CurrencyField";
             Text[ catalan ] = "CurrencyField";
+            Text[ thai ] = "Currency Field";
         };
         ToolBoxItem
         {
@@ -764,11 +787,12 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "PatternField";
             Text[ arabic ] = "PatternField";
             Text[ catalan ] = "PatternField";
+            Text[ thai ] = "Pattern Field";
         };
         ToolBoxItem
         {
-            HelpId = SID_OBJECT_SELECT ;
-            Identifier = SID_OBJECT_SELECT ;
+            HelpId = SID_INSERT_SELECT ;
+            Identifier = SID_INSERT_SELECT ;
             RadioCheck = TRUE ;
             Text = "Auswahl" ;
             Text [ english ] = "Select" ;
@@ -794,6 +818,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Se�im";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Seleccioneu";
+            Text[ thai ] = "เลือก";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -824,6 +849,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Deneme kipini etkinle�tir";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Activar el mode de prova";
+            Text[ thai ] = "เรียกใช้งานโหมดทดสอบ";
         };
     };
 };
