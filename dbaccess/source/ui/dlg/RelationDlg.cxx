@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 13:55:15 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 14:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,9 +278,6 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, pButton )
         ::dbaui::showError( SQLExceptionInfo(e),
                             this,
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController()->getORB());
-    }
-    catch(const ElementExistException&)
-    {
     }
     catch(const Exception&)
     {
