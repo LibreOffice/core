@@ -3,12 +3,12 @@ ju	jurt									usr1	-	all	ju_mkout NULL
 ju	jurt\com\sun\star\lib\util				nmake	-	all	ju_libutil NULL
 ju	jurt\com\sun\star\uno					nmake	-	all	ju_uno ju_libutil NULL
 ju	jurt\com\sun\star\comp\loader			nmake	-	all	ju_co_loader ju_uno ju_libutil NULL
-ju	jurt\com\sun\star\comp\bridgefactory	nmake	-	all	ju_co_bfactr ju_co_loader NULL
+ju	jurt\com\sun\star\comp\bridgefactory	nmake	-	all	ju_co_bfactr ju_co_loader ju_uno NULL
 ju  jurt\com\sun\star\lib\uno               nmake   -   all ju_cssl_uno NULL
 ju	jurt\com\sun\star\lib\uno\environments\java			nmake	-	all	ju_env_java ju_uno ju_cssl_uno NULL
-ju	jurt\com\sun\star\lib\uno\environments\remote		nmake	-	all	ju_env_remote ju_env_java NULL
+ju	jurt\com\sun\star\lib\uno\environments\remote		nmake	-	all	ju_env_remote ju_env_java ju_libutil ju_uno NULL
 ju	jurt\com\sun\star\lib\uno\protocols\urp	nmake	-	all	ju_prot_urp ju_env_remote NULL
-ju	jurt\com\sun\star\lib\uno\bridges\java_remote		nmake	-	all	ju_brid_jrm ju_co_loader ju_env_remote NULL
+ju	jurt\com\sun\star\lib\uno\bridges\java_remote		nmake	-	all	ju_brid_jrm ju_co_loader ju_cssl_uno ju_env_remote ju_libutil ju_uno NULL
 ju	jurt\com\sun\star\lib\connections\socket			nmake	-	all	ju_con_sock ju_co_loader NULL
 ju	jurt\com\sun\star\lib\connections\pipe			nmake	-	all	ju_con_pipe ju_co_loader NULL
 ju	jurt\com\sun\star\comp\connections		nmake	-	all	ju_con ju_co_loader NULL
