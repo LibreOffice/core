@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-15 10:03:32 $
+ *  last change: $Author: ka $ $Date: 2002-07-17 15:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,15 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE2 );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
+
+        rSet.DisableItem( SID_INSERT_FLD_DATE_FIX );
+        rSet.DisableItem( SID_INSERT_FLD_DATE_VAR );
+        rSet.DisableItem( SID_INSERT_FLD_TIME_FIX );
+        rSet.DisableItem( SID_INSERT_FLD_TIME_VAR );
+        rSet.DisableItem( SID_INSERT_FLD_AUTHOR );
+        rSet.DisableItem( SID_INSERT_FLD_PAGE );
+        rSet.DisableItem( SID_INSERT_FLD_FILE );
+
         rSet.DisableItem( SID_INSERT_GRAPHIC );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_INSERT_OBJECT );
@@ -1050,6 +1059,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_VIDEO );
         rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
+
 #ifdef STARIMAGE_AVAILABLE
         rSet.DisableItem( SID_INSERT_IMAGE );
 #endif
@@ -1058,7 +1068,11 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERTFILE );
         rSet.DisableItem( SID_ATTR_TABLE );
         rSet.DisableItem( SID_COPYOBJECTS );
+
         rSet.DisableItem( SID_SCAN );
+        rSet.DisableItem( SID_TWAIN_SELECT );
+        rSet.DisableItem( SID_TWAIN_TRANSFER );
+
 //        rSet.DisableItem( SID_BEZIER_EDIT );
         rSet.DisableItem( SID_GLUE_EDITMODE );
         rSet.DisableItem( SID_OBJECT_ROTATE );
