@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: obo $ $Date: 2001-10-10 11:52:26 $
+#   last change: $Author: hjs $ $Date: 2001-10-10 17:22:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,9 @@ PRJ=$(TEMP)
 #PRJNAME=makefilerc
 DPCTARGET=
 .ELSE
+#.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 DPCTARGET=$(MISC)$/$(TARGET).dpc
+#.ENDIF          # "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ENDIF
 .IF "$(RC_SUBDIRS)"!=""
 SUBDIRS:=$(RC_SUBDIRS)
@@ -2842,9 +2844,9 @@ $(INCCOM)$/_version.h : $(SOLARVERSION)$/$(UPD)minor.mk
 
 .IF "$(MAKEFILERC)"==""
 warn_target_empty:
-    @+echo *
-    @+echo * error $$(TARGET) is empty - this will cause problems
-    @+echo *
+    @+echo '*'
+    @+echo '* error $$(TARGET) is empty - this will cause problems'
+    @+echo '*'
     force_dmake_to_error
 .ELSE
 warn_target_empty:
