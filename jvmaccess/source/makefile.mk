@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 12:03:28 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:49:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ TARGET = $(PRJNAME)
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
-
-.IF "$(SOLAR_JAVA)"==""
-nojava:
-    @echo "Not building jvmaccess because Java is disabled"
-.ENDIF
 
 UNOTYPES= com.sun.star.uno.TypeClass com.sun.star.uno.XInterface
 
