@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:46:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ TabPage RID_TP_GENERAL
         Text[ english_us ] = "The following column names could not be assigned:\n";
         Text[ portuguese ] = "Foi impossνvel atribuir os seguintes nomes de coluna:\n";
         Text[ russian ] = "Ρλεδσώωθε θμενΰ ρςξλαφξβ νε μξγσς αϋςό νΰηνΰχενϋ:\n";
-        Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αντιστοίχιση του ακόλουθου ονόματος στήλης:\n";
+        Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάθεση του ακόλουθου ονόματος στήλης:\n";
         Text[ dutch ] = "De volgende kolomnaam kan niet worden toegewezen:\n";
         Text[ french ] = "Impossible d'assigner les noms de colonnes :\n";
         Text[ spanish ] = "No se pudieron asignar los siguientes nombres de columnas:\n";
@@ -335,7 +335,7 @@ TabPage RID_TP_GENERAL
         Text[ english_us ] = "Brochures";
         Text[ portuguese ] = "Brochura";
         Text[ russian ] = "Απξψώπΰ";
-        Text[ greek ] = "Μπροσούρα";
+        Text[ greek ] = "Διαφημιστικό φυλλάδιο";
         Text[ dutch ] = "Brochure";
         Text[ french ] = "Brochure";
         Text[ spanish ] = "Folleto";
@@ -343,7 +343,7 @@ TabPage RID_TP_GENERAL
         Text[ danish ] = "Brochure";
         Text[ swedish ] = "Broschyr";
         Text[ polish ] = "Broszury";
-        Text[ portuguese_brazilian ] = "Brochuras";
+        Text[ portuguese_brazilian ] = "Brochura";
         Text[ japanese ] = "ε†ε­";
         Text[ korean ] = "μ•λ‚΄ μ±…μ";
         Text[ chinese_simplified ] = "ε°ε†ε­";
@@ -498,7 +498,7 @@ TabPage RID_TP_GENERAL
         Text[ danish ] = "Tidsskrift";
         Text[ swedish ] = "Tidskrift";
         Text[ polish ] = "Czasopismo";
-        Text[ portuguese_brazilian ] = "Jornal";
+        Text[ portuguese_brazilian ] = "Revista";
         Text[ japanese ] = "ι›‘θª";
         Text[ korean ] = "μ΅μ§€";
         Text[ chinese_simplified ] = "ζ‚εΏ—";
@@ -987,7 +987,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ english_us ] = "Insert Section...";
             Text[ portuguese ] = "Inserir secηγo...";
             Text[ russian ] = "Βρςΰβθςό πΰηδελ...";
-            Text[ greek ] = "Εισαγωγή τμήματος...";
+            Text[ greek ] = "Εισαγωγή ενότητας...";
             Text[ dutch ] = "Sectie invoegen...";
             Text[ french ] = "Insιrer une section...";
             Text[ spanish ] = "Insertar una secciσn...";
@@ -1019,7 +1019,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ english_us ] = "Delete Section...";
             Text[ portuguese ] = "Eliminar secηγo...";
             Text[ russian ] = "Σδΰλθςό πΰηδελ...";
-            Text[ greek ] = "Διαγραφή τμήματος...";
+            Text[ greek ] = "Διαγραφή ενότητας...";
             Text[ dutch ] = "Sectie wissen...";
             Text[ french ] = "Supprimer une section...";
             Text[ spanish ] = "Borrar secciσn...";
@@ -1085,7 +1085,7 @@ String ST_IDENTIFIER
     Text[ english_us ] = "~Short name";
     Text[ portuguese ] = "~Abreviatura";
     Text[ russian ] = "Ρξκπΰωεννξ";
-    Text[ greek ] = "Συντομογραφία";
+    Text[ greek ] = "~Σύντομο όνομα";
     Text[ dutch ] = "~Beknopte aanduiding";
     Text[ french ] = "Abrιgι";
     Text[ spanish ] = "~Abreviatura";
@@ -1116,7 +1116,7 @@ String ST_AUTHTYPE
     Text[ english_us ] = "~Type";
     Text[ portuguese ] = "~Tipo";
     Text[ russian ] = "Òθο";
-    Text[ greek ] = "Τύπος";
+    Text[ greek ] = "~Τύπος";
     Text[ dutch ] = "~Type";
     Text[ french ] = "Type";
     Text[ spanish ] = "~Tipo";
@@ -1147,7 +1147,7 @@ String ST_YEAR
     Text[ english_us ] = "~Year";
     Text[ portuguese ] = "A~no";
     Text[ russian ] = "Γξδ";
-    Text[ greek ] = "Έτος";
+    Text[ greek ] = "Έτ~ος";
     Text[ dutch ] = "~Jaar";
     Text[ french ] = "Annιe";
     Text[ spanish ] = "Aρo";
@@ -1178,7 +1178,7 @@ String ST_AUTHOR
     Text[ english_us ] = "Author(s)";
     Text[ portuguese ] = "A~utor(es)";
     Text[ russian ] = "ΐβςξπ(ϋ)";
-    Text[ greek ] = "Συγγραφέας(-εις)";
+    Text[ greek ] = "Συντάκτης(-ες)";
     Text[ dutch ] = "A~uteur(s)";
     Text[ french ] = "Auteur(s)";
     Text[ spanish ] = "Autor(es)";
@@ -1208,7 +1208,7 @@ String ST_TITLE
     Text[ english_us ] = "Tit~le";
     Text[ portuguese ] = "Tνtu~lo";
     Text[ russian ] = "Ηΰγξλξβξκ";
-    Text[ greek ] = "Τίτλος";
+    Text[ greek ] = "Τίτ~λος";
     Text[ dutch ] = "~Titel";
     Text[ french ] = "Titre";
     Text[ spanish ] = "Tνtu~lo";
@@ -1239,7 +1239,7 @@ String ST_PUBLISHER
     Text[ english_us ] = "~Publisher";
     Text[ portuguese ] = "~Editora";
     Text[ russian ] = "Θηδΰςελό";
-    Text[ greek ] = "Εκδότης";
+    Text[ greek ] = "Εκ~δότης";
     Text[ dutch ] = "~Uitgeverij";
     Text[ french ] = "Maison d'ιdition";
     Text[ spanish ] = "Editorial";
@@ -1270,7 +1270,7 @@ String ST_ADDRESS
     Text[ english_us ] = "A~ddress";
     Text[ portuguese ] = "En~dereηo";
     Text[ russian ] = "ΐδπερ";
-    Text[ greek ] = "Διεύθυνση";
+    Text[ greek ] = "Διεύ~θυνση";
     Text[ dutch ] = "A~dres";
     Text[ french ] = "Adresse";
     Text[ spanish ] = "~Direcciσn";
@@ -1301,7 +1301,7 @@ String ST_ISBN
     Text[ english_us ] = "~ISBN";
     Text[ portuguese ] = "~ISBN";
     Text[ russian ] = "ISBN";
-    Text[ greek ] = "ISBN";
+    Text[ greek ] = "I~SBN";
     Text[ dutch ] = "~ISBN";
     Text[ french ] = "ISBN";
     Text[ spanish ] = "~ISBN";
@@ -1332,7 +1332,7 @@ String ST_CHAPTER
     Text[ english_us ] = "~Chapter";
     Text[ portuguese ] = "~Capνtulo";
     Text[ russian ] = "Γλΰβΰ";
-    Text[ greek ] = "Κεφάλαιο";
+    Text[ greek ] = "Κε~φάλαιο";
     Text[ dutch ] = "~Hoofdstuk";
     Text[ french ] = "~Chapitre";
     Text[ spanish ] = "~Capνtulo";
@@ -1363,7 +1363,7 @@ String ST_PAGE
     Text[ english_us ] = "Pa~ge(s)";
     Text[ portuguese ] = "Pα~gina(s)";
     Text[ russian ] = "Ρςπΰνθφ(ΰ)";
-    Text[ greek ] = "Σελίδα/-ες";
+    Text[ greek ] = "Σελίδ~α/-ες";
     Text[ dutch ] = "~Pagina's";
     Text[ french ] = "~Page(s)";
     Text[ spanish ] = "~Pαgina(s)";
@@ -1373,7 +1373,7 @@ String ST_PAGE
     Text[ polish ] = "~Strony";
     Text[ portuguese_brazilian ] = "Pα~gina(s)";
     Text[ japanese ] = "γƒγƒΌγ‚Έ(~G)";
-    Text[ korean ] = "νμ΄μ§€";
+    Text[ korean ] = "νμ΄μ§€(~G)";
     Text[ chinese_simplified ] = "ι΅µ(~G)";
     Text[ chinese_traditional ] = "ι (~G)";
     Text[ arabic ] = "ΥέΝΙ (ΥέΝΗΚ)";
@@ -1394,7 +1394,7 @@ String ST_EDITOR
     Text[ english_us ] = "Editor";
     Text[ portuguese ] = "Edi~tor";
     Text[ russian ] = "Πεδΰκςξπ";
-    Text[ greek ] = "Εκδότ~ης";
+    Text[ greek ] = "Εκδότης";
     Text[ dutch ] = "Uit~gever";
     Text[ french ] = "Ιditeur";
     Text[ spanish ] = "Editor";
@@ -1425,7 +1425,7 @@ String ST_EDITION
     Text[ english_us ] = "Ed~ition";
     Text[ portuguese ] = "~Ediηγo";
     Text[ russian ] = "Θηδΰνθε";
-    Text[ greek ] = "Εξα~γωγή";
+    Text[ greek ] = "Έκδοσ~η";
     Text[ dutch ] = "E~ditie";
     Text[ french ] = "Ιdition";
     Text[ spanish ] = "Ediciσn";
@@ -1456,7 +1456,7 @@ String ST_BOOKTITLE
     Text[ english_us ] = "~Book title";
     Text[ portuguese ] = "~Tνtulo do livro";
     Text[ russian ] = "Νΰηβΰνθε κνθγθ";
-    Text[ greek ] = "Τίτλος βιβλίου";
+    Text[ greek ] = "Τίτλος ~βιβλίου";
     Text[ dutch ] = "Bo~ektitel";
     Text[ french ] = "Titre du livre";
     Text[ spanish ] = "Tνtulo del libro";
@@ -1517,7 +1517,7 @@ String ST_HOWPUBLISHED
     Text[ english_us ] = "Publication t~ype";
     Text[ portuguese ] = "~Tipo de ediηγo";
     Text[ russian ] = "Òθο θηδΰνθÿ";
-    Text[ greek ] = "Τύπο~ς έκδοσης";
+    Text[ greek ] = "Τύ~πος έκδοσης";
     Text[ dutch ] = "Wijze van ~publiceren";
     Text[ french ] = "Type de publication";
     Text[ spanish ] = "Tipo de publicaciσn";
@@ -1548,7 +1548,7 @@ String ST_ORGANIZATION
     Text[ english_us ] = "Organi~zation";
     Text[ portuguese ] = "~Organizaηγo";
     Text[ russian ] = "Ξπγΰνθηΰφθÿ";
-    Text[ greek ] = "~Οργανισμός";
+    Text[ greek ] = "Ορ~γανισμός";
     Text[ dutch ] = "~Organisatie";
     Text[ french ] = "Or~ganisation";
     Text[ spanish ] = "~Organizaciσn";
@@ -1579,7 +1579,7 @@ String ST_INSTITUTION
     Text[ english_us ] = "Instit~ution";
     Text[ portuguese ] = "~Instituiηγo";
     Text[ russian ] = "Θνρςθςσς";
-    Text[ greek ] = "Ίδρυμα";
+    Text[ greek ] = "Ίδρ~υμα";
     Text[ dutch ] = "~Instelling";
     Text[ french ] = "Institution";
     Text[ spanish ] = "I~nstituciσn";
@@ -1610,7 +1610,7 @@ String ST_SCHOOL
     Text[ english_us ] = "University";
     Text[ portuguese ] = "~Universidade/Escola superior";
     Text[ russian ] = "Σνθβεπρθςες";
-    Text[ greek ] = "Τ.Ε.Ι/Α.Ε.Ι.";
+    Text[ greek ] = "Α.Ε.Ι./Τ.Ε.Ι.";
     Text[ dutch ] = "Hogeschool/Uni~versiteit";
     Text[ french ] = "Ιcole supιrieure/Universitι";
     Text[ spanish ] = "~Universidad";
@@ -1640,7 +1640,7 @@ String ST_REPORT
     Text[ english_us ] = "Type of re~port";
     Text[ portuguese ] = "~Tipo de relatσrio";
     Text[ russian ] = "Òθο ξςχεςΰ";
-    Text[ greek ] = "Type of proceedings";
+    Text[ greek ] = "Τύπος αναφο~ράς";
     Text[ dutch ] = "Soort rapport";
     Text[ french ] = "Type de rapport";
     Text[ spanish ] = "Tipo de informe";
@@ -1670,7 +1670,7 @@ String ST_MONTH
     Text[ english_us ] = "~Month";
     Text[ portuguese ] = "~Mκs";
     Text[ russian ] = "Μερÿφ";
-    Text[ greek ] = "Μήνας";
+    Text[ greek ] = "~Μήνας";
     Text[ dutch ] = "~Maand";
     Text[ french ] = "Mois";
     Text[ spanish ] = "~Mes";
@@ -1701,7 +1701,7 @@ String ST_JOURNAL
     Text[ english_us ] = "~Journal";
     Text[ portuguese ] = "~Revista";
     Text[ russian ] = "Ζσπνΰλ";
-    Text[ greek ] = "Περιοδικό";
+    Text[ greek ] = "~Χρονικό";
     Text[ dutch ] = "~Tijdschrift";
     Text[ french ] = "Magazine";
     Text[ spanish ] = "~Revista";
@@ -1709,7 +1709,7 @@ String ST_JOURNAL
     Text[ danish ] = "Tidsskri~ft";
     Text[ swedish ] = "Tidskrift";
     Text[ polish ] = "Czaso~pismo";
-    Text[ portuguese_brazilian ] = "~Jornal";
+    Text[ portuguese_brazilian ] = "Re~vista";
     Text[ japanese ] = "ι›‘θª(~J)";
     Text[ korean ] = "μ΅μ§€(~J)";
     Text[ chinese_simplified ] = "ζ‚εΏ—(~J)";
@@ -1733,7 +1733,7 @@ String ST_NUMBER
     Text[ english_us ] = "Numb~er";
     Text[ portuguese ] = "Nϊm~ero";
     Text[ russian ] = "Νξμεπ";
-    Text[ greek ] = "Αριθμός";
+    Text[ greek ] = "Αριθμό~ς";
     Text[ dutch ] = "~Nummer";
     Text[ french ] = "Numιro";
     Text[ spanish ] = "Nϊmero";
@@ -1747,7 +1747,7 @@ String ST_NUMBER
     Text[ chinese_simplified ] = "ηΌ–ε·(~E)";
     Text[ chinese_traditional ] = "θ™ηΆΌ(~E)";
     Text[ arabic ] = "Ρήγ";
-    Text[ language_user1 ] = "\"Sayύ\" burada istisna (dergi iηin)";
+    Text[ language_user1 ] = "; \"Sayύ\" burada istisna (dergi iηin)";
     Text[ turkish ] = "S~ayύ";
     Text[ catalan ] = "~Nϊmero";
     Text[ finnish ] = "Luku";
@@ -1764,7 +1764,7 @@ String ST_SERIES
     Text[ english_us ] = "Se~ries";
     Text[ portuguese ] = "~Sιrie";
     Text[ russian ] = "Πÿδ";
-    Text[ greek ] = "Σειρά";
+    Text[ greek ] = "Σε~ιρά";
     Text[ dutch ] = "~Serie";
     Text[ french ] = "Sιrie";
     Text[ spanish ] = "Serie";
@@ -1795,7 +1795,7 @@ String ST_ANNOTE
     Text[ english_us ] = "Ann~otation";
     Text[ portuguese ] = "Ob~servaηγo";
     Text[ russian ] = "Κξμμενςΰπθι";
-    Text[ greek ] = "Παρατήρηση";
+    Text[ greek ] = "~Σχόλιο";
     Text[ dutch ] = "~Opmerkingen";
     Text[ french ] = "Ann~otation";
     Text[ spanish ] = "Observaciσn";
@@ -1826,7 +1826,7 @@ String ST_NOTE
     Text[ english_us ] = "~Note";
     Text[ portuguese ] = "~Anotaηγo";
     Text[ russian ] = "Οπθμεχΰνθε";
-    Text[ greek ] = "Σημείωση";
+    Text[ greek ] = "Σημεί~ωση";
     Text[ dutch ] = "~Aantekening";
     Text[ french ] = "Note";
     Text[ spanish ] = "Nota";
@@ -1888,7 +1888,7 @@ String ST_CUSTOM1
     Text[ english_us ] = "User-defined field ~1";
     Text[ portuguese ] = "Campo personalizado ~1";
     Text[ russian ] = "Οξλε οξλόηξβΰςελÿ 1";
-    Text[ greek ] = "Πεδίο χρήστη 1";
+    Text[ greek ] = "Προσαρμοσμένο πεδίο ~1";
     Text[ dutch ] = "Gebruikersveld ~1";
     Text[ french ] = "Champ d'utilisateur ~1";
     Text[ spanish ] = "Campo de usuario ~1";
@@ -1919,7 +1919,7 @@ String ST_CUSTOM2
     Text[ english_us ] = "User-defined field ~2";
     Text[ portuguese ] = "Campo personalizado ~2";
     Text[ russian ] = "Οξλε οξλόηξβΰςελÿ 2";
-    Text[ greek ] = "Πεδίο χρήστη 2";
+    Text[ greek ] = "Προσαρμοσμένο πεδίο ~2";
     Text[ dutch ] = "Gebruikersveld ~2";
     Text[ french ] = "Champ d'utilisateur ~2";
     Text[ spanish ] = "Campo de usuario ~2";
@@ -1950,7 +1950,7 @@ String ST_CUSTOM3
     Text[ english_us ] = "User-defined field ~3";
     Text[ portuguese ] = "Campo personalizado ~3";
     Text[ russian ] = "Οξλε οξλόηξβΰςελÿ 3";
-    Text[ greek ] = "Πεδίο χρήστη 3";
+    Text[ greek ] = "Προσαρμοσμένο πεδίο ~3";
     Text[ dutch ] = "Gebruikersveld ~3";
     Text[ french ] = "Champ d'utilisateur ~3";
     Text[ spanish ] = "Campo de usuario ~3";
@@ -1981,7 +1981,7 @@ String ST_CUSTOM4
     Text[ english_us ] = "User-defined field ~4";
     Text[ portuguese ] = "Campo personalizado ~4";
     Text[ russian ] = "Οξλε οξλόηξβΰςελÿ 4";
-    Text[ greek ] = "Πεδίο χρήστη 4";
+    Text[ greek ] = "Προσαρμοσμένο πεδίο ~4";
     Text[ dutch ] = "Gebruikersveld ~4";
     Text[ french ] = "Champ d'utilisateur ~4";
     Text[ spanish ] = "Campo de usuario ~4";
@@ -2012,7 +2012,7 @@ String ST_CUSTOM5
     Text[ english_us ] = "User-defined field ~5";
     Text[ portuguese ] = "Campo personalizado ~5";
     Text[ russian ] = "Οξλε οξλόηξβΰςελÿ 5";
-    Text[ greek ] = "Πεδίο χρήστη 5";
+    Text[ greek ] = "Προσαρμοσμένο πεδίο ~5";
     Text[ dutch ] = "Gebruikersveld ~5";
     Text[ french ] = "Champ d'utilisateur ~5";
     Text[ spanish ] = "Campo de usuario ~5";
@@ -2036,6 +2036,7 @@ String ST_CUSTOM5
     Text[ hindi ] = "ΰ¤‰ΰ¤ªΰ¤­ΰ¥‹ΰ¤•ΰ¥ΰ¤¤ΰ¤Ύ ΰ¤Έΰ¥‡ ΰ¤ªΰ¤°ΰ¤Ώΰ¤­ΰ¤Ύΰ¤·ΰ¤Ώΰ¤¤ ΰ¤•ΰ¥ΰ¤·ΰ¥‡ΰ¤¤ΰ¥ΰ¤° ~5";
     Text[ slovak ] = "UΕΎΓ­vateΔΎom definovanΓ© pole ~5";
 };
+
 
 
 
