@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:22:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,10 @@ public:
     static const sal_Char* getAttributeTag( PDFWriter::StructAttribute eAtr );
     static const sal_Char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
 
+    // returns true if compression was done
+    // else false
+    static bool compressStream( SvMemoryStream* );
+
 private:
     static const BuiltinFont m_aBuiltinFonts[14];
 
@@ -807,10 +811,10 @@ public:
     const MapMode& getMapMode() { return m_aGraphicsStack.front().m_aMapMode; }
 
     void setLineColor( const Color& rColor )
-    { m_aGraphicsStack.front().m_aLineColor = rColor; }
+    { m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor; }
 
     void setFillColor( const Color& rColor )
-    { m_aGraphicsStack.front().m_aFillColor = rColor; }
+    { m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? Color( COL_TRANSPARENT ) : rColor; }
 
     void setTextLineColor()
     { m_aGraphicsStack.front().m_aTextLineColor = Color( COL_TRANSPARENT ); }
@@ -866,6 +870,7 @@ public:
     void drawPolyPolygon( const PolyPolygon& rPolyPoly );
     void drawPolyLine( const Polygon& rPoly );
     void drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo );
+    void drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo );
     void drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth );
 
     void drawPixel( const Point& rPt, const Color& rColor );
