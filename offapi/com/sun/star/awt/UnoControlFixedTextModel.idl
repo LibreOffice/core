@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFixedTextModel.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:49 $
+ *  last change: $Author: fs $ $Date: 2002-12-18 13:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,12 +167,6 @@ service UnoControlFixedTextModel
     /** specifies that the control will be printed with the document.
      */
     [property] boolean Printable;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies that the control can be reached with the TAB key.
-     */
-    [property] boolean Tabstop;
 
     //-------------------------------------------------------------------------
 
