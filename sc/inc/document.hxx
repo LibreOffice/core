@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:07:25 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,8 @@ public:
     void            InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 BOOL bColInfo = FALSE, BOOL bRowInfo = FALSE );
     void            AddUndoTab( SCTAB nTab1, SCTAB nTab2,
+                                BOOL bColInfo = FALSE, BOOL bRowInfo = FALSE );
+    void            InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 BOOL bColInfo = FALSE, BOOL bRowInfo = FALSE );
 
                     //  nicht mehr benutzen:
