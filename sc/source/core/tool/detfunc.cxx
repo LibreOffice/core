@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:45:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,19 +900,19 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
     }
     else
     {
-        // SDR_* items must be applied before InsertObject()
-        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
         pPage->InsertObject( pCaption );
 
+        // Keep the existing rectangle size.
+        if(!bNewNote)
+            pCaption->SetLogicRect(aTextRect);
+
         ScPostIt aNote(pDoc);
-        OutlinerParaObject* pOPO = NULL;
         if(pDoc->GetNote( nCol, nRow, nTab, aNote ))
         {
             if(const EditTextObject* pEditText = aNote.GetEditTextObject())
             {
-                pOPO = new OutlinerParaObject( *pEditText );
+                OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                pOPO->SetVertical( FALSE );  // notes are always horizontal
                 pCaption->NbcSetOutlinerParaObject( pOPO );
                 // EE_* items must be applied after NbcSetOutlinerParaObject()
                 const SfxPoolItem* pItem = NULL;
@@ -923,28 +923,15 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
                 }
             }
         }
-    }
+        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
+     }
 
-    Rectangle aLogic = pCaption->GetLogicRect();
-    Rectangle aOld = aLogic;
     if (bHasUserText)
-        pCaption->AdjustTextFrameWidthAndHeight( aLogic, TRUE, TRUE );
+        pCaption->AdjustTextFrameWidthAndHeight( aTextRect, TRUE, TRUE );
     else
-        pCaption->AdjustTextFrameWidthAndHeight( aLogic, TRUE, FALSE );
-    if (rVisible.Bottom())
-    {
-        //  unterer Rand kann erst nach dem AdjustTextFrameWidthAndHeight getestet werden
-        if ( aLogic.Bottom() > rVisible.Bottom() )
-        {
-            long nDif = aLogic.Bottom() - rVisible.Bottom();
-            aLogic.Bottom() = rVisible.Bottom();
-            aLogic.Top() = Max( rVisible.Top(), (long)(aLogic.Top() - nDif) );
-        }
-    }
-    if (aLogic != aOld)
-        pCaption->SetLogicRect(aLogic);
+        pCaption->AdjustTextFrameWidthAndHeight( aTextRect, TRUE, FALSE );
 
-    // InsertObject() modifies the rectangle.
+    // InsertObject() modifies the rectangle as 'fit height to text' is set by default.
     aTextRect = pCaption->GetLogicRect();
     aCellNote.SetRectangle(aTextRect);
     pDoc->SetNote( nCol, nRow, nTab, aCellNote );
