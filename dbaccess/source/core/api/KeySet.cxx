@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:24:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,12 @@
 #ifndef _COM_SUN_STAR_SDBCxParameterS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XGENERATEDRESULTSET_HPP_
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #endif
@@ -256,20 +261,12 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
         if(aIter != (*m_pKeyColumnNames).end())
             aFilter += aAnd;
     }
-    // don't simply overwrite an existent filter, this would lead to problems if this existent
-    // filter contains paramters (since we're going to add parameters ourself)
-    // 2003-12-12 - #23418# - fs@openoffice.org
+
     ::rtl::OUString sOldFilter = m_xComposer->getFilter();
-    if ( sOldFilter.getLength() )
-    {
-        FilterCreator aCreator;
-        aCreator.append(sOldFilter);
-        aCreator.append(aFilter);
-        aFilter = aCreator.m_sFilter;
-    }
-    Reference<XSingleSelectQueryComposer> xComp(m_xComposer,UNO_QUERY);
-    xComp->setFilter(aFilter);
+    Reference<XSingleSelectQueryComposer> xQu(m_xComposer,UNO_QUERY);
+    xQu->setFilter(aFilter);
     m_xStatement = m_xConnection->prepareStatement(m_xComposer->getQuery());
+    xQu->setFilter(sOldFilter);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
@@ -1024,83 +1021,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
     OSL_ENSURE(xParameter.is(),"No Parameter interface!");
     xParameter->clearParameters();
-    connectivity::ORowVector< ORowSetValue >::const_iterator aExternParamIter = m_aParameterRow.begin();
     sal_Int32 nPos=1;
-    for(;aExternParamIter != m_aParameterRow.end();++aExternParamIter,++nPos)
-    {
-
-        switch(aExternParamIter->getTypeKind())
-        {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-        case DataType::LONGVARCHAR:
-            xParameter->setString(nPos,*aExternParamIter);
-            break;
-        case DataType::BIGINT:
-            if ( aExternParamIter->isSigned() )
-                xParameter->setLong(nPos,*aExternParamIter);
-            else
-                xParameter->setString(nPos,*aExternParamIter);
-            break;
-        case DataType::FLOAT:
-            xParameter->setFloat(nPos,*aExternParamIter);
-            break;
-        case DataType::DOUBLE:
-        case DataType::REAL:
-            xParameter->setDouble(nPos,*aExternParamIter);
-            break;
-        case DataType::DATE:
-            xParameter->setDate(nPos,*aExternParamIter);
-            break;
-        case DataType::TIME:
-            xParameter->setTime(nPos,*aExternParamIter);
-            break;
-        case DataType::TIMESTAMP:
-            xParameter->setTimestamp(nPos,*aExternParamIter);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            xParameter->setBytes(nPos,*aExternParamIter);
-            break;
-        case DataType::BIT:
-            xParameter->setBoolean(nPos,*aExternParamIter);
-            break;
-        case DataType::TINYINT:
-            if ( aExternParamIter->isSigned() )
-                xParameter->setByte(nPos,*aExternParamIter);
-            else
-                xParameter->setShort(nPos,*aExternParamIter);
-            break;
-        case DataType::SMALLINT:
-            if ( aExternParamIter->isSigned() )
-                xParameter->setShort(nPos,*aExternParamIter);
-            else
-                xParameter->setInt(nPos,*aExternParamIter);
-            break;
-        case DataType::INTEGER:
-            if ( aExternParamIter->isSigned() )
-                xParameter->setInt(nPos,*aExternParamIter);
-            else
-                xParameter->setLong(nPos,*aExternParamIter);
-            break;
-        case DataType::CLOB:
-            {
-                Reference<XInputStream> xStream(aExternParamIter->getAny(),UNO_QUERY);
-                xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
-            }
-            break;
-        case DataType::BLOB:
-            {
-                Reference<XInputStream> xStream(aExternParamIter->getAny(),UNO_QUERY);
-                xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
-            }
-            break;
-        }
-    }
-
     connectivity::ORowVector< ORowSetValue >::const_iterator aIter = m_aKeyIter->second.first->begin();
     OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter,++nPos)
@@ -1278,11 +1199,6 @@ sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
     sal_Bool bDeleted = m_bDeleted;
     m_bDeleted = sal_False;
     return bDeleted;
-}
-// -----------------------------------------------------------------------------
-void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >& _rParameterRow)
-{
-    m_aParameterRow = _rParameterRow;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OKeySet::getComposedTableName(const ::rtl::OUString& _sCatalog,
