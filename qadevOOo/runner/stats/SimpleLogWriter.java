@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleLogWriter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:48 $
+ *  last change:$Date: 2003-10-06 12:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@ package stats;
 import share.LogWriter;
 
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SimpleLogWriter extends PrintWriter implements LogWriter {
 
@@ -71,7 +75,17 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
     share.DescEntry entry = null;
 
     public SimpleLogWriter() {
-         super(new PrintWriter(System.out));
+        super(System.out);
+        Calendar cal = new GregorianCalendar();
+        DecimalFormat dfmt = new DecimalFormat("00");
+        super.println("LOG> Log started " +
+                    dfmt.format(cal.get(Calendar.DAY_OF_MONTH)) + "." +
+                    dfmt.format(cal.get(Calendar.MONTH)) + "." +
+                    dfmt.format(cal.get(Calendar.YEAR)) + " - " +
+                    dfmt.format(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
+                    dfmt.format(cal.get(Calendar.MINUTE)) + ":" +
+                    dfmt.format(cal.get(Calendar.SECOND)));
+        super.flush();
     }
 
     public boolean initialize(share.DescEntry entry, boolean logging) {
@@ -87,7 +101,8 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
             ow.ping();
         }
         if (logging) {
-            System.out.println("LOG> "+msg);
+            super.println("LOG> "+msg);
+            super.flush();
         }
     }
 
