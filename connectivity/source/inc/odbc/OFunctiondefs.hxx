@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 11:02:28 $
+ *  last change: $Author: oj $ $Date: 2001-01-10 14:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,14 @@
 
 #if defined(WIN) || defined(WNT)
 
+// just to go with calling convention of windows
+#define SQL_API __stdcall
+#ifndef __SQLEXT_H
 #include <odbc/sqlext.h>
+#endif
+#undef SQL_API
+#define SQL_API __stdcall
+
 
 #ifndef SQL_C_BOOKMARK
 #define SQL_C_BOOKMARK   SQL_C_ULONG                     /* BOOKMARK         */
