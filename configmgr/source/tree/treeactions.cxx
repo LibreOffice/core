@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-18 11:46:41 $
+ *  last change: $Author: lla $ $Date: 2001-05-04 09:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ void OMergeTreeAction::handle(AddNode& _rChange)
 
     // if the node exists, this must be a ValueNode,
     // otherwise we are not able to clone
-    if (pChild)
+    if (pChild && pChild->ISA(ValueNode))
     {
         const ValueNode* pValueNode = pChild->asValueNode();
 
@@ -297,6 +297,10 @@ void OMergeTreeAction::handle(AddNode& _rChange)
     {
         std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
         AddNode* pChange = new AddNode(aNewNode,_rChange.getNodeName());
+        if (pChild != NULL)
+        {
+            pChange->setReplacing();
+        }
         m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
     }
 }
