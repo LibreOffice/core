@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2001-09-16 15:23:00 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-26 13:29:54 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -79,7 +79,11 @@ SLOFILES=   \
 
 # Make symbol renaming match library name for Mac OS X
 .IF "$(OS)"=="MACOSX"
+.IF $(UPD)>=625
 SYMBOLPREFIX=i18n$(UPD)$(DLLPOSTFIX)
+.ELSE
+SYMBOLPREFIX=int$(UPD)$(DLLPOSTFIX)
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
