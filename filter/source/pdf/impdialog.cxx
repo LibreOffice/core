@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 10:28:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
 
 // ----------------
 // - ImpPDFDialog -
@@ -81,31 +87,57 @@
 
 using namespace ::com::sun::star;
 
-ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData, const Any& rSelection ) :
-    ModalDialog( pParent, ResId( RID_PDF_OLD_EXPORT_DLG, &rResMgr ) ),
-    maBtnOK( this, ResId( BT_OLD_OK ) ),
-    maBtnCancel( this, ResId( BT_OLD_CANCEL ) ),
-    maBtnHelp( this, ResId( BT_OLD_HELP ) ),
-    maFlPages( this, ResId( FL_OLD_PAGES ) ),
-    maRbAll( this, ResId( RB_OLD_ALL ) ),
-    maRbRange( this, ResId( RB_OLD_RANGE ) ),
-    maRbSelection( this, ResId( RB_OLD_SELECTION ) ),
-    maEdPages( this, ResId( ED_OLD_PAGES ) ),
-    maFlCompression( this, ResId( FL_OLD_COMPRESSION ) ),
-    maRbScreen( this, ResId( RB_OLD_SCREEN ) ),
-    maRbPrint( this, ResId( RB_OLD_PRINT ) ),
-    maRbPress( this, ResId( RB_OLD_PRESS ) ),
+ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData, const Reference< XComponent >& rxDoc ) :
+    ModalDialog( pParent, ResId( RID_PDF_EXPORT_DLG, &rResMgr ) ),
+    maBtnOK( this, ResId( BT_OK ) ),
+    maBtnCancel( this, ResId( BT_CANCEL ) ),
+    maBtnHelp( this, ResId( BT_HELP ) ),
+    maFlPages( this, ResId( FL_PAGES ) ),
+    maRbAll( this, ResId( RB_ALL ) ),
+    maRbRange( this, ResId( RB_RANGE ) ),
+    maRbSelection( this, ResId( RB_SELECTION ) ),
+    maEdPages( this, ResId( ED_PAGES ) ),
+    maFlCompression( this, ResId( FL_IMAGES ) ),
+    maRbLosslessCompression( this, ResId( RB_LOSSLESSCOMPRESSION ) ),
+    maRbJPEGCompression( this, ResId( RB_JPEGCOMPRESSION ) ),
+    maFtQuality( this, ResId( FT_QUALITY ) ),
+    maNfQuality( this, ResId( NF_QUALITY ) ),
+    maCbReduceImageResolution( this, ResId( CB_REDUCEIMAGERESOLUTION ) ),
+    maFtReduceImageResolution( this, ResId( FT_REDUCEIMAGERESOLUTION ) ),
+    maCoReduceImageResolution( this, ResId( CO_REDUCEIMAGERESOLUTION ) ),
+    maFlGeneral( this, ResId( FL_GENERAL ) ),
+    maCbTaggedPDF( this, ResId( CB_TAGGEDPDF ) ),
+    maFtTaggedPDF( this, ResId( FT_TAGGEDPDF ) ),
+    maCbExportNotes( this, ResId( CB_EXPORTNOTES ) ),
+    maFtExportNotes( this, ResId( FT_EXPORTNOTES ) ),
+    maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS ) ),
+    maFtTransitionEffects( this, ResId( FT_TRANSITIONEFFECTS ) ),
+    maFtFormsFormat( this, ResId( FT_FORMSFORMAT ) ),
+    maLbFormsFormat( this, ResId( LB_FORMSFORMAT ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
-    maSelection( rSelection )
+    mbIsPresentation( sal_False )
 {
-    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 1 );
-
     FreeResource();
     maRbRange.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
 
     maRbAll.Check();
     TogglePagesHdl( NULL );
 
+
+    // check for selection
+    try
+    {
+        Reference< frame::XController > xController( Reference< frame::XModel >( rxDoc, UNO_QUERY )->getCurrentController() );
+        if( xController.is() )
+        {
+            Reference< view::XSelectionSupplier > xView( xController, UNO_QUERY );
+            if( xView.is() )
+                xView->getSelection() >>= maSelection;
+        }
+    }
+    catch( RuntimeException )
+    {
+    }
     sal_Bool bHasSelection = maSelection.hasValue();
     if ( bHasSelection )
     {
@@ -130,15 +162,57 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     }
     maRbSelection.Enable( bHasSelection );
 
-    switch( nCompressMode )
-    {
-        case( 0 ): maRbScreen.Check(); break;
-        case( 2 ): maRbPress.Check(); break;
 
-        default:
-            maRbPrint.Check();
-        break;
+    // check if source document is a presentation
+    try
+    {
+        Reference< XServiceInfo > xInfo( rxDoc, UNO_QUERY );
+        if ( xInfo.is() )
+        {
+            if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+                mbIsPresentation = sal_True;
+        }
     }
+    catch( RuntimeException )
+    {
+    }
+    maCbTransitionEffects.Enable( mbIsPresentation );
+
+
+//  SJ: Dont know if there are Notes available also for writer.
+//  maCbExportNotes.Enable( bIsPresentation );
+
+
+    maRbLosslessCompression.SetToggleHdl( LINK( this, ImpPDFDialog, ToggleCompressionHdl ) );
+    const sal_Bool  bUseLosslessCompression = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), sal_False );
+    if ( bUseLosslessCompression )
+        maRbLosslessCompression.Check();
+    else
+        maRbJPEGCompression.Check();
+    maNfQuality.SetValue( maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 90 ) );
+    maNfQuality.Enable( bUseLosslessCompression == sal_False );
+
+    maCbReduceImageResolution.SetToggleHdl( LINK( this, ImpPDFDialog, ToggleReduceImageResolutionHdl ) );
+    const sal_Bool  bReduceImageResolution = maConfigItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), sal_False );
+    maCbReduceImageResolution.Check( bReduceImageResolution );
+    String aStrRes( String::CreateFromInt32( maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 ) ) );
+    aStrRes.Append( String( RTL_CONSTASCII_USTRINGPARAM( " DPI" ) ) );
+    maCoReduceImageResolution.SetText( aStrRes );
+    maCoReduceImageResolution.Enable( bReduceImageResolution );
+
+    maCbTaggedPDF.Check( maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False ) );
+
+    if ( mbIsPresentation )
+        maCbExportNotes.Check( maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False ) );
+    else
+        maCbExportNotes.Check( maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_True ) );
+
+    maCbTransitionEffects.Check( maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True ) );
+
+    sal_Int32 nFormsType = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
+    if ( ( nFormsType < 0 ) || ( nFormsType > 3 ) )
+        nFormsType = 0;
+    maLbFormsFormat.SelectEntryPos( (sal_uInt16)nFormsType );
 }
 
 // -----------------------------------------------------------------------------
@@ -151,16 +225,19 @@ ImpPDFDialog::~ImpPDFDialog()
 
 Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
 {
-    sal_Int32 nCompressMode;
-
-    if( maRbPrint.IsChecked() )
-        nCompressMode = 1;
-    else if( maRbPress.IsChecked() )
-        nCompressMode = 2;
+    // updating the FilterData sequence and storing FilterData to configuration
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), maRbLosslessCompression.IsChecked() );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), maNfQuality.GetValue() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), maCbReduceImageResolution.IsChecked() );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), maCoReduceImageResolution.GetText().ToInt32() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), maCbTaggedPDF.IsChecked() );
+    if ( mbIsPresentation )
+        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), maCbExportNotes.IsChecked() );
     else
-        nCompressMode = 0;
+        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), maCbExportNotes.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), maCbTransitionEffects.IsChecked() );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), maLbFormsFormat.GetSelectEntryPos() );
 
-    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), nCompressMode );
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
     aRet.realloc( aRet.getLength() + 1 );
@@ -175,7 +252,6 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
         aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
         aRet[ aRet.getLength() - 1 ].Value <<= maSelection;
     }
-
     return aRet;
 }
 
@@ -186,5 +262,21 @@ IMPL_LINK( ImpPDFDialog, TogglePagesHdl, void*, p )
     maEdPages.Enable( maRbRange.IsChecked() );
     maEdPages.SetReadOnly( !maRbRange.IsChecked() );
 
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( ImpPDFDialog, ToggleCompressionHdl, void*, p )
+{
+    maNfQuality.Enable( maRbJPEGCompression.IsChecked() );
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( ImpPDFDialog, ToggleReduceImageResolutionHdl, void*, p )
+{
+    maCoReduceImageResolution.Enable( maCbReduceImageResolution.IsChecked() );
     return 0;
 }
