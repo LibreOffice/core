@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2002-04-08 10:37:59 $
+ *  last change: $Author: ka $ $Date: 2002-04-09 13:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
+#endif
+#ifndef _SVDOGRAF_HXX
+#include <svx/svdograf.hxx>
 #endif
 #ifndef _SV_SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
@@ -385,10 +388,13 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         pView->HideMarkHdl(NULL);
                         pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
                     }
+                    else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
+                    {
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                    }
                     else
                     {
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                     }
 
                     // consumed
