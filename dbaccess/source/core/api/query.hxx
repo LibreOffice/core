@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:06:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 13:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ public:
 protected:
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-    using OQuery_ArrayHelperBase::getArrayHelper;
+    ::cppu::IPropertyArrayHelper*   getArrayHelper() { return OQuery_ArrayHelperBase::getArrayHelper(); }
 
 // ::com::sun::star::uno::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
