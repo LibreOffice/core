@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleMailClientSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-03 13:22:04 $
+ *  last change: $Author: arellano $ $Date: 2001-07-16 15:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,12 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/** specifies an interface for executing a system command
+/** specifies an interface for executing a system command.
 
     @author     tra
     @version    0.1
+
+    <!-- Dennis: Should the previous two lines be in the comments? -->
 */
 
 
@@ -96,7 +98,7 @@ interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
     /**
         @returns
         an interface to a mail client if there is one available on the system
-        or an empty reference
+        or an empty reference.
     */
     XSimpleMailClient querySimpleMailClient( );
 };
