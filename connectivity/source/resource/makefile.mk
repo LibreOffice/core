@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+#   last change: $Author: oj $ $Date: 2001-03-28 11:32:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-        $(SLO)$/ModuleContext.obj			\
+        $(SLO)$/ModuleContext.obj
 
 
 # --- Targets ------------------------------------------------------
