@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:00:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,18 @@ namespace xmloff
         void exportForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
+        /** exports the XForms model data
+        */
+        void exportXForms() const;
+
+        /** determines whether the given page contains logical forms
+        */
+        bool pageContainsForms( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage ) const;
+
+        /** determines whether the given page contains XForm instances
+        */
+        bool documentContainsXForms() const;
+
         /** exports the controls number styles
         */
         void    exportControlNumberStyles();
@@ -350,6 +362,12 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13.430.1  2004/12/13 17:27:33  fs
+ *  #i36597# +exportXForms/pageContainsForms/documentContainsXForms
+ *
+ *  Revision 1.13  2002/10/25 08:00:10  fs
+ *  #104402# now exporting the style of a grid column (Align/formatting) as style
+ *
  *  Revision 1.12  2002/09/25 12:04:19  fs
  *  #103597# +excludeFromExport/m_aIgnoreList
  *
