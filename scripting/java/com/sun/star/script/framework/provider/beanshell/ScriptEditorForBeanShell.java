@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptEditorForBeanShell.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:02:55 $
+*  last change: $Author: rt $ $Date: 2004-10-22 13:58:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -85,7 +85,7 @@ import java.util.HashMap;
 
 import bsh.Interpreter;
 
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.provider.ScriptEditor;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
