@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:53:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,10 @@ const PPDParser* PPDParser::getParser( String aFile )
 
     aFile = getPPDFile( aFile );
     if( ! aFile.Len() )
+{
+fprintf( stderr, "Could not get printer PPD file!\n" );
         return NULL;
+}
 
     for( ::std::list< PPDParser* >::const_iterator it = aAllParsers.begin(); it != aAllParsers.end(); ++it )
         if( (*it)->m_aFile == aFile )
@@ -444,6 +447,25 @@ PPDParser::PPDParser( const String& rFile ) :
         m_nLanguageLevel = pKey->getValue( 0 )->m_aValue.ToInt32();
     if( pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "TTRasterizer" ) ) ) )
         m_bType42Capable = pKey->getValue( 0 )->m_aValue.EqualsIgnoreCaseAscii( "Type42" ) ? true : false;
+
+#ifdef MACOSX
+    // Many Mac OS X PPDs for inkjet printers simply use CUPS to convert the output to a PDF,
+    // and to take advantage of that we wish to embed fonts for these printers even if its
+    // minimal CUPS PPD doesn't have TTRasterizer.
+    // To determine if this printer is supposed to take PDF input, look for the "cupsFilter" key,
+    // and if it exists, for the string "application/pdf" which specifies the CUPS filter to use for it
+    // If present, we assume that we can embed TrueType fonts and that the CUPS filter will take care
+    // of rasterizing them appropriately.
+    if ( m_bType42Capable == false )
+    {
+        if ( pKey = getKey( String(RTL_CONSTASCII_USTRINGPARAM("cupsFilter")) ) )
+        {
+            ByteString    aCupsFilterString( pKey->getValue( 0 )->m_aValue, RTL_TEXTENCODING_ISO_8859_1 );
+            if ( strstr(aCupsFilterString.GetBuffer(), "application/pdf") > 0 )
+                m_bType42Capable = true;
+        }
+    }
+#endif
 }
 
 PPDParser::~PPDParser()
@@ -568,6 +590,10 @@ void PPDParser::parse( ::std::list< String >& rLines )
         // found a colon, there may be an option
         String aLine = aCurrentLine.Copy( 1, nPos-1 );
         aLine = WhitespaceToSpace( aLine );
+    #ifdef MACOSX
+        // Some Epson PPDs use <20> to encodes spaces in UI strings
+        aLine.SearchAndReplaceAllAscii( "<20>", String(RTL_CONSTASCII_USTRINGPARAM(" ")) );
+    #endif
         int nTransPos = aLine.Search( '/' );
         if( nTransPos != STRING_NOTFOUND )
             pValue->m_aOptionTranslation = aLine.Copy( nTransPos+1 );
