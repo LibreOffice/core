@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:06:21 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,11 @@
 ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
             FloatingWindow  ( pParent, 0 ),
             mnRepaintTime   ( 1UL ),
-            mnActDist       ( 0UL ),
+            mnTimeout       ( DEF_TIMEOUT ),
             mnWheelMode     ( WHEELMODE_NONE ),
+            mnActDist       ( 0UL ),
             mnActDeltaX     ( 0L ),
-            mnActDeltaY     ( 0L ),
-            mnTimeout       ( DEF_TIMEOUT )
+            mnActDeltaY     ( 0L )
 {
     // we need a parent
     DBG_ASSERT( pParent, "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );
