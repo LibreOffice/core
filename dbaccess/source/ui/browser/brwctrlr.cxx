@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 11:03:46 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,6 +1476,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                     break;
 
                 aReturn.bEnabled = ::comphelper::getBOOL(xCurrentField->getPropertyValue(PROPERTY_ISSEARCHABLE));
+                if(aReturn.bEnabled && getRowSet().is()) // check if we stand on a valid row
+                    aReturn.bEnabled = !(getRowSet()->isBeforeFirst() || getRowSet()->isAfterLast() ||getRowSet()->rowDeleted());
             }
             break;
 
@@ -1483,10 +1485,18 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
             case ID_BROWSER_FILTERCRIT:
                 if (!m_xParser.is())
                     break;
-                // we are not in the handle column
-                aReturn.bEnabled = getBrowserView()->getVclControl()->GetCurColumnId() != 0;
-                // a native statement can't be filtered or sorted
-                //  aReturn.bEnabled &= m_xParser.is();
+                {
+                    Reference< XPropertySet >  xCurrentField = getBoundField();
+                    // we are not in the handle column
+                    aReturn.bEnabled = getBrowserView()->getVclControl()->GetCurColumnId() != 0 &&
+                                        xCurrentField.is() &&
+                                       ::comphelper::getBOOL(xCurrentField->getPropertyValue(PROPERTY_ISSEARCHABLE));
+
+                    if(aReturn.bEnabled && getRowSet().is()) // check if we stand on a valid row
+                        aReturn.bEnabled = !(getRowSet()->isBeforeFirst() || getRowSet()->isAfterLast() ||getRowSet()->rowDeleted());
+                    // a native statement can't be filtered or sorted
+                    //  aReturn.bEnabled &= m_xParser.is();
+                }
                 break;
 
             case ID_BROWSER_REMOVEFILTER:
