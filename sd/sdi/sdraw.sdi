@@ -14,10 +14,10 @@ SfxVoidItem PresentationEnd SID_PRESENTATION_END
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 
