@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:22:56 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,14 +1008,9 @@ sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
     return sal_False;
 }
 
-#ifdef BIDI
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                                                 SwMultiPortion* pMulti ) const
-#else
-SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
-#endif
 {
-#ifdef BIDI
     SwScriptInfo& rSI = ((SwParaPortion*)GetParaPortion())->GetScriptInfo();
 
     // get the last embedding level
@@ -1073,7 +1068,6 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
     // a bidi portion can only contain other bidi portions
     if ( pMulti )
         return NULL;
-#endif
 
     const SvxCharRotateItem* pRotate = NULL;
     const SfxPoolItem* pRotItem;
