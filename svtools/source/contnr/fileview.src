@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 09:55:48 $
+ *  last change: $Author: dv $ $Date: 2001-07-17 12:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,172 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text = "~Umbenennen" ;
             Text[ English ] = "Rename" ;
         };
+    };
+};
+
+ModalDialog DLG_SVT_QUERYDELETE
+{
+    SVLook = TRUE ;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 221 , 67 ) ;
+    Text = "Löschbestätigung" ;
+    Text [ English ] = "Confirm delete" ;
+    Text [ english_us ] = "Confirm Delete" ;
+    Text [ italian ] = "Conferma eliminazione" ;
+    Text [ spanish ] = "Confirmar eliminación" ;
+    Text [ french ] = "Confirmation de suppression" ;
+    Text [ dutch ] = "Wisopdracht bevestigen" ;
+    Text [ swedish ] = "Bekräfta radering" ;
+    Text [ danish ] = "Bekræft sletning" ;
+    Text [ portuguese_brazilian ] = "L?chbest?tigung" ;
+    Text [ portuguese ] = "Confirmação eliminar" ;
+    Text [ chinese_simplified ] = "È·ÈÏÉ¾³ı";
+    Text [ russian ] = "Ïîäòâåğæäåíèå óäàëåíèÿ";
+    Text [ polish ] = "Potwierdzenie usuniêcia";
+    Text [ japanese ] = "íœ‚ÌŠm”F";
+    Text [ chinese_traditional ] = "½T»{§R°£";
+    Text [ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
+    Text[ dutch ] = "Wisopdracht bevestigen";
+    Text[ chinese_simplified ] = "È·ÈÏÉ¾³ı";
+    Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
+    Text[ korean ] = "»èÁ¦ È®ÀÎ";
+    Text[ turkish ] = "Silmeyi onayla";
+    Text[ finnish ] = "Vahvista poisto";
+    Text[ catalan ] = "Confirmar eliminación";
+
+    FixedText TXT_ENTRY
+    {
+        NoLabel = TRUE;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ dutch ] = "Item:" ;
+        Text [ english_us ] = "Entry:" ;
+        Text = "Eintrag:" ;
+        Text [ swedish ] = "Inmatning:" ;
+        Text [ danish ] = "Element:" ;
+        Text [ italian ] = "Registrazione:" ;
+        Text [ spanish ] = "Entrada:" ;
+        Text [ french ] = "Entrée :" ;
+        Text [ portuguese_brazilian ] = "Eintrag:" ;
+        Text [ portuguese ] = "Registo:" ;
+        Text [ chinese_simplified ] = "ÌõÄ¿£º";
+        Text [ russian ] = "Çàïèñü:";
+        Text [ polish ] = "Wpis:";
+        Text [ japanese ] = "“ü—Í:";
+        Text [ chinese_traditional ] = "¶µ¥Ø¡G";
+        Text [ arabic ] = ":ÅÏÎÇá";
+        Text[ dutch ] = "Item:";
+        Text[ chinese_simplified ] = "ÌõÄ¿£º";
+        Text[ greek ] = "Êáôá÷şñéóç:";
+        Text[ korean ] = "Ç×¸ñ:";
+        Text[ turkish ] = "Giriş:";
+        Text[ finnish ] = "Merkintä:";
+        Text[ catalan ] = "Entrada:";
+    };
+
+    FixedText TXT_ENTRYNAME
+    {
+        Pos = MAP_APPFONT ( 52 , 6 ) ;
+        Size = MAP_APPFONT ( 163 , 10 ) ;
+        NoLabel = TRUE ;
+    };
+
+    FixedText TXT_QUERYMSG
+    {
+        NoLabel = TRUE;
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 209 , 22 ) ;
+        Text = "Sind Sie sicher, dass Sie die selektierten Daten löschen wollen?" ;
+        Text [ english_us ] = "Are you sure you want to delete the selected data?" ;
+        Text [ swedish ] = "Är Du säker på att Du vill radera de markerade data?" ;
+        Text [ danish ] = "Er du sikker på, at du vil slette de markerede data?" ;
+        Text [ italian ] = "Volete davvero cancellare i dati selezionati?" ;
+        Text [ spanish ] = "¿Desea realmente eliminar los datos seleccionados?" ;
+        Text [ french ] = "Êtes vous sûr de vouloir supprimer les données sélectionnées ?" ;
+        Text [ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?" ;
+        Text [ portuguese_brazilian ] = "Sind Sie sicher, da? Sie die selektierten Daten l?chen wollen?" ;
+        Text [ portuguese ] = "Deseja realmente eliminar os dados seleccionados?" ;
+        Text [ chinese_simplified ] = "ÄúÕæÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İ£¿";
+        Text [ russian ] = "Âû óâåğåíû â òîì, ÷òî õîòèòå óäàëèòü âûäåëåííûå äàííûå?";
+        Text [ polish ] = "Czy na pewno usun¹æ zaznaczone dane?";
+        Text [ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+        Text [ chinese_traditional ] = "±z¯u­n§R°£¿ï¨úªº¸ê®Æ¡H";
+        Text [ arabic ] = "åá ÊÑíÏ ÈÇáÊÃßíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
+        Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
+        Text[ chinese_simplified ] = "ÄúÕæÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İ£¿";
+        Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöïıí ôá åğéëåãìİíá äåäïìİíá;";
+        Text[ korean ] = "¼±ÅÃµÈ µ¥ÀÌÅÍ¸¦ Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "Seçilen verileri gerçekten silmek istiyor musunuz?";
+        Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
+        Text[ catalan ] = "¿Desea realmente eliminar los datos seleccionados?";
+    };
+
+    PushButton BTN_YES
+    {
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text = "~Löschen" ;
+        Text [ English ] = "~Delete" ;
+        Text [ english_us ] = "~Delete" ;
+        Text[ portuguese ] = "E~liminar";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ dutch ] = "~Wissen";
+        Text[ french ] = "~Supprimer";
+        Text[ spanish ] = "~Eliminar";
+        Text[ swedish ] = "~Radera";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ italian ] = "E~limina";
+        Text[ danish ] = "Slet";
+        Text[ polish ] = "Usuñ";
+        Text[ portuguese_brazilian ] = "~Ja";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ turkish ] = "~Sil";
+        Text[ finnish ] = "~Poista";
+        Text[ catalan ] = "~Eliminar";
+    };
+
+    PushButton BTN_NO
+    {
+        Pos = MAP_APPFONT ( 112 , 47 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Nicht löschen" ;
+        Text [ English ] = "Do~nt delete" ;
+        Text [ english_us ] = "Do ~Not Delete" ;
+        Text[ portuguese ] = "~Não eliminar";
+        Text[ greek ] = "~Íá ìç äéáãñáöåß";
+        Text[ dutch ] = "~Niet wissen";
+        Text[ french ] = "~Ne pas supprimer";
+        Text[ spanish ] = "~No eliminar";
+        Text[ swedish ] = "Radera i~nte";
+        Text[ russian ] = "Íå óäàëÿòü";
+        Text[ italian ] = "~Non eliminare";
+        Text[ danish ] = "Slet ikke";
+        Text[ polish ] = "Nie usuwaj";
+        Text[ portuguese_brazilian ] = "~Nein";
+        Text[ japanese ] = "íœ‚µ‚È‚¢(~N)";
+        Text[ korean ] = "»èÁ¦ ¾ÈÇÔ(~N)";
+        Text[ chinese_simplified ] = "²»É¾³ı(~N)";
+        Text[ chinese_traditional ] = "¤£­n§R°£(~N)";
+        Text[ arabic ] = "ÚÏã ÇáÍĞİ";
+        Text[ turkish ] = "S~ilme";
+        Text[ finnish ] = "~Älä poista";
+        Text[ catalan ] = "~No eliminar";
+    };
+
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 165 , 47 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
     };
 };
 
