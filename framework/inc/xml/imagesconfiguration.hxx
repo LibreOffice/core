@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesconfiguration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:39:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,11 @@
 #include <tools/color.hxx>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 namespace framework
 {
 
@@ -135,8 +140,15 @@ struct ImageListsDescriptor
 class ImagesConfiguration
 {
     public:
-        static sal_Bool LoadImages( SvStream& rInStream, ImageListsDescriptor& aItems );
-        static sal_Bool StoreImages( SvStream& rOutStream, const ImageListsDescriptor& aItems );
+        // #110897#
+        static sal_Bool LoadImages(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rInStream, ImageListsDescriptor& aItems );
+
+        // #110897#
+        static sal_Bool StoreImages(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rOutStream, const ImageListsDescriptor& aItems );
 };
 
 } // namespace framework
