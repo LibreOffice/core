@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 12:02:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2141,6 +2141,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     SbModule* pModule = pCurMethod ? pCurMethod->GetModule() : 0;
 
     SbxError eOld = SbxBase::GetError();
+    setBasicWatchMode( true );
 
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
@@ -2330,6 +2331,6 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     SbxBase::ResetError();
     if( eOld != SbxERR_OK )
         SbxBase::SetError( eOld );
-
+    setBasicWatchMode( false );
 }
 
