@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2001-12-04 11:40:27 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 18:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String RID_SVXSTR_SEARCH_STYLES
     Text[ chinese_simplified ] = "ε…ζ‹¬ζ ·εΌ";
     Text[ russian ] = "Βκλώχΰÿ ρςθλθ";
     Text[ polish ] = "£Ήcznie ze stylami";
-    Text[ japanese ] = "ο½½οΎ€ο½²οΎ™γ‚’ε«γ‚€";
+    Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«γ‚’ε«γ‚€";
     Text[ chinese_traditional ] = "ε…ζ‹¬ζ¨£εΌ";
     Text[ arabic ] = "ΘγΗ έν Παί ΗαΓδγΗΨ";
     Text[ greek ] = "Συμπεριλαμβ. πρότυπα";
@@ -201,7 +201,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ζε―»ε†…ε®Ή(~S)";
         Text[ russian ] = "Νΰιςθ";
         Text[ polish ] = "Szukaj";
-        Text[ japanese ] = "ζ¤η΄ΆοΎƒο½·ο½½οΎ„(~S)";
+        Text[ japanese ] = "ζ¤η΄Άγƒ†γ‚­γ‚Ήγƒ(~S)";
         Text[ chinese_traditional ] = "ζε°‹ε…§ε®Ή(~S)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ";
         Text[ greek ] = "Aναζήτηση για";
@@ -271,7 +271,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ζ›ΏζΆζ(~P)";
         Text[ russian ] = "Ηΰμενθςό νΰ";
         Text[ polish ] = "Zamieρ na";
-        Text[ japanese ] = "η½®ζ›οΎƒο½·ο½½οΎ„(~P)";
+        Text[ japanese ] = "η½®ζ›γƒ†γ‚­γ‚Ήγƒ(~P)";
         Text[ chinese_traditional ] = "ζ›΄ζ›Ώζ(~P)";
         Text[ arabic ] = "ΗαίαγΙ ΗαΘΟναΙ";
         Text[ greek ] = "Αντικατάσταση με";
@@ -400,7 +400,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ε‘ε(~K)";
         Text[ russian ] = "Ξαπΰςνϋι οξθρκ";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "οΎοΎο½―ο½Έγ™γ‚‹(~K)";
+        Text[ japanese ] = "γƒγƒƒγ‚―γ™γ‚‹(~K)";
         Text[ chinese_traditional ] = "ε‘εΎ(~K)";
         Text[ arabic ] = "ααΞαέ";
         Text[ greek ] = "Προς τα πίσω";
@@ -431,7 +431,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Òξλόκξ β βϋδελενθθ";
         Text[ polish ] = "Tylko za~znaczone";
         Text[ japanese ] = "ιΈζη―„ε›²γ®γΏ(~O)";
-        Text[ chinese_traditional ] = "εªε…θ¨±η•¶ε‰η„ιΈε–(~O)";
+        Text[ chinese_traditional ] = "εªε…θ¨±η›®ε‰η„ιΈε–(~O)";
         Text[ arabic ] = "ΗαΚΝΟνΟ έήΨ";
         Text[ greek ] = "Μό~νο στην επιλογή";
         Text[ korean ] = "ν„μ¬ μ„ νƒ μ‚¬ν•­λ§(~O)";
@@ -490,7 +490,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ζε―»ζ ·εΌ(~Y)";
         Text[ russian ] = "Οξθρκ ρςθλει";
         Text[ polish ] = "Szu~kaj stylσw";
-        Text[ japanese ] = "ο½½οΎ€ο½²οΎ™γ®ζ¤η΄Ά(~Y)";
+        Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«γ®ζ¤η΄Ά(~Y)";
         Text[ chinese_traditional ] = "ζε°‹ζ¨£εΌ(~Y)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ ΓδγΗΨ";
         Text[ greek ] = "Aναζήτηση για πρότυπα";
@@ -518,7 +518,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "η±»δΌΌζε―»(~I)";
         Text[ russian ] = "Οξθρκ οξυξζθυ";
         Text[ polish ] = "Szukaj podo~bnych";
-        Text[ japanese ] = "ι΅δΌΌο½½οΎοΎοΎ™γ®ζ¤η΄Ά(~I)";
+        Text[ japanese ] = "ι΅δΌΌγ‚Ήγƒγƒ«γ®ζ¤η΄Ά(~I)";
         Text[ chinese_traditional ] = "η›ΈδΌΌε­—ζε°‹(~I)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ ίαγΗΚ γΚΤΗΘεΙ";
         Text[ greek ] = "Αναζήτηση ομοιότητας";
@@ -556,7 +556,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ polish ] = "Uwzglκdnij szerokoζ znakσw";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "ε…¨θ§’γ¨εθ§’γ‚’εΊε¥γ™γ‚‹";
-        Text[ korean ] = "λ°ν­/μ „ν­ ν•μ‹";
+        Text[ korean ] = "λ¬Έμ ν­μ— μ£Όμν•μ‹­μ‹μ¤";
         Text[ chinese_simplified ] = "ι΅Ύε…¨ε­—η¬¦ε®½εΊ¦";
         Text[ chinese_traditional ] = "ι΅§εε­—ε…ƒε―¬εΊ¦";
         Text[ turkish ] = "Match half/full width forms";
@@ -618,7 +618,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ι€‰ι΅Ή";
         Text[ russian ] = "Οΰπΰμεςπϋ";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ";
+        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³";
         Text[ chinese_traditional ] = "ιΈι …";
         Text[ arabic ] = "ΗαΞνΗΡΗΚ";
         Text[ language_user1 ] = " ";
@@ -708,7 +708,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ε¤‡ζ³¨(~N)";
         Text[ russian ] = "οπθμεχΰνθÿυ";
         Text[ polish ] = "~notatkach";
-        Text[ japanese ] = "οΎ‰ο½°οΎ„(~N)";
+        Text[ japanese ] = "γƒγƒΌγƒ(~N)";
         Text[ chinese_traditional ] = "ε‚™θ¨»(~N)";
         Text[ arabic ] = "ΗαγαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
@@ -865,14 +865,14 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ spanish ] = "~Buscar en todas las hojas" ;
         Text [ french ] = "~Rechercher dans toutes les feuilles" ;
         Text [ dutch ] = "~In alle werkbladen zoeken" ;
-        Text[ chinese_simplified ] = "ε¨ζ‰€ζ‰θ΅¨ζ ΌδΈ­ζε―»(~S)";
+        Text[ chinese_simplified ] = "ε¨ζ‰€ζ‰θ΅¨ζ ΌδΈ­ζε―»";
         Text[ russian ] = "Οξθρκ βξ βρευ ςΰαλθφΰυ";
         Text[ polish ] = "Szukaj we wszystkich arkuszach";
-        Text[ japanese ] = "γ™γΉγ¦γ®θ΅¨γ‚’ζ¤η΄Ά(~S)";
-        Text[ chinese_traditional ] = "ζε°‹ε…¨ιƒ¨η„θ΅¨ζ Ό(~S)";
+        Text[ japanese ] = "γ™γΉγ¦γ®θ΅¨γ‚’ζ¤η΄Ά";
+        Text[ chinese_traditional ] = "ζε°‹ε…¨ιƒ¨η„θ΅¨ζ Ό";
         Text[ arabic ] = "ΗαΘΝΛ έν ία ΗαΜΟΗζα";
         Text[ greek ] = "Αναζήτηση σε όλους τους πίνακες";
-        Text[ korean ] = "μ „μ²΄ μ‹νΈμ—μ„ μ°ΎκΈ°(~S)";
+        Text[ korean ] = "μ „μ²΄ μ‹νΈμ—μ„ μ°ΎκΈ°";
         Text[ turkish ] = "~Tόm tablolarda ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Buscar en todas las hojas";
@@ -1088,7 +1088,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ι™„ε (~M)";
         Text[ russian ] = "Αξλόψε";
         Text[ polish ] = "~Dodatki";
-        Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ(~M)";
+        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³(~M)";
         Text[ chinese_traditional ] = "ι™„ε (~M)";
         Text[ arabic ] = "ΕΦΗέΗΚ";
         Text[ greek ] = "Πρόσ~θετα";
@@ -1205,7 +1205,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "εªζ―ζ•΄δΈªε•ε…ƒζ Όε†…ε®Ή(~E)";
         Text[ russian ] = "Òξλόκξ ρςπξκσ φελθκξμ";
         Text[ polish ] = "Tylko ca³e komσrki";
-        Text[ japanese ] = "ο½ΎοΎ™ε…¨δ½“(~E)";
+        Text[ japanese ] = "γ‚»γƒ«ε…¨δ½“(~E)";
         Text[ chinese_traditional ] = "εªζ―ζ•΄ε€‹ε„²ε­ζ Ό(~E)";
         Text[ arabic ] = "ΞαΗνΗ ίΗγαΙ έήΨ";
         Text[ language_user1 ] = " ";
@@ -1218,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
