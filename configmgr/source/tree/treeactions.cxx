@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:38:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,64 +89,6 @@ void forceWritable(INode& _rNode)
     ForceWritable aVisitor;
 
     aVisitor.applyToNode(_rNode);
-}
-
-//==========================================================================
-//= OIdPropagator
-//==========================================================================
-
-void OIdPropagator::propagateIdToChildren(ISubtree& rTree)
-{
-    if (rTree.hasId())
-    {
-        OIdPropagator aAction(rTree.getId());
-        aAction.applyToChildren(rTree);
-    }
-}
-//--------------------------------------------------------------------------
-
-void OIdPropagator::propagateIdToTree(OUString const& aId, ISubtree& rTree)
-{
-    OSL_ENSURE(!rTree.hasId(), "OIdPropagator::propagateIdToTree: Tree already has an Id, propagating may not work");
-    rTree.setId(aId);
-    propagateIdToChildren(rTree);
-}
-//--------------------------------------------------------------------------
-
-void OIdPropagator::handle(ValueNode& _rValueNode)
-{ /* not interested in value nodes */ }
-//--------------------------------------------------------------------------
-
-void OIdPropagator::handle(ISubtree& _rSubtree)
-{
-    if (!_rSubtree.hasId())
-    {
-        _rSubtree.setId(sId);
-        applyToChildren(_rSubtree);
-    }
-}
-
-//==========================================================================
-//= OIdRemover
-//==========================================================================
-
-void OIdRemover::removeIds(INode& rNode)
-{
-    OIdRemover().applyToNode(rNode);
-}
-//--------------------------------------------------------------------------
-
-void OIdRemover::handle(ValueNode& _rValueNode)
-{ /* not interested in value nodes */ }
-//--------------------------------------------------------------------------
-
-void OIdRemover::handle(ISubtree& _rSubtree)
-{
-    if (_rSubtree.hasId())
-    {
-        _rSubtree.setId(OUString());
-        applyToChildren(_rSubtree);
-    }
 }
 
 //==========================================================================
