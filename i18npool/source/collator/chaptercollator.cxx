@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chaptercollator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:02:11 $
+ *  last change: $Author: khong $ $Date: 2002-06-20 06:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,11 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
 
     OUString &aAddAllowed = OUString::createFromAscii("?");
     ParseResult res1, res2;
-    res1 = cclass->parseAnyToken( str1, off1+i1, nLocale, DIGIT, aAddAllowed, DIGIT, aAddAllowed );
-    res2 = cclass->parseAnyToken( str2, off2+i2, nLocale, DIGIT, aAddAllowed, DIGIT, aAddAllowed );
+    // Bug #100323#, since parseAnyToken does not take length as parameter, we have to copy
+    // it to a temp. string.
+    OUString s1 = str1.copy(off1+i1, len1-i1), s2 = str2.copy(off2+i2, len2-i2);
+    res1 = cclass->parseAnyToken( s1, 0, nLocale, DIGIT, aAddAllowed, DIGIT, aAddAllowed );
+    res2 = cclass->parseAnyToken( s2, 0, nLocale, DIGIT, aAddAllowed, DIGIT, aAddAllowed );
 
     return res1.Value == res2.Value ? 0 : res1.Value > res2.Value ? 1 : -1;
 }
