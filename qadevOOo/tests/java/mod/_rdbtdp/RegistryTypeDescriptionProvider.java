@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryTypeDescriptionProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 12:52:02 $
+ *  last change:$Date: 2003-05-27 12:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context
