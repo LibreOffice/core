@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.135 $
+#   $Revision: 1.136 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-24 12:50:09 $
+#   last change: $Author: hr $ $Date: 2005-04-06 14:28:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.135 $ ';
+    $id_str = ' $Revision: 1.136 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -2130,7 +2130,7 @@ sub mark_force_deliver {
 sub get_deliver_commando {
     my $module_name = shift;
     return $deliver_commando if (!defined $force_deliver{$module_name});
-    return $deliver_commando . ' -force';
+    return $deliver_commando ;
 };
 
 #
