@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:21:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,7 +1293,7 @@ namespace svt
         ArrangeControls(nX, (sal_uInt16)aPoint.Y());
 
         if (!nX)
-            nX = 0;
+            nX = USHRT_MAX;
         ReserveControlArea((sal_uInt16)nX);
     }
 
