@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-26 15:11:19 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 16:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+
+#define LOGFILE_AUTHOR "mb93740"
 
 SwXMLWriter::SwXMLWriter( sal_Bool bPl ) :
     bPlain( bPl )
@@ -473,6 +475,10 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     DBG_ASSERT( NULL != pStreamName, "Need stream name!" );
     DBG_ASSERT( NULL != pServiceName, "Need service name!" );
 
+    RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
+                               "SwXMLWriter::WriteThroughComponent : stream %s",
+                               pStreamName );
+
     Reference< io::XOutputStream > xOutputStream;
     SvStorageStreamRef xDocStream;
 
@@ -499,7 +505,6 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
     }
-#if SUPD > 630
     else
     {
         OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
@@ -507,7 +512,6 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
     }
-#endif
 
 
     // set buffer and create outputstream
@@ -539,7 +543,8 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     ASSERT( xComponent.is(), "Need component!" );
     ASSERT( NULL != pServiceName, "Need component name!" );
 
-    RTL_LOGFILE_CONTEXT( aFilterLog, "SwXMLWriter::WriteThroughComponent" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aFilterLog, "sw", LOGFILE_AUTHOR,
+                                "SwXMLWriter::WriteThroughComponent" );
 
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
@@ -605,176 +610,3 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 }
 
 // -----------------------------------------------------------------------
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.34 2001-07-26 15:11:19 dvo Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.33  2001/06/19 15:30:45  mib
-      #87313#: embedded images as base64
-
-      Revision 1.32  2001/06/18 17:27:51  dvo
-      #86004#
-      - changed SvXMLItemMaps to use XMLTokenEnum
-      - removed remaining xmlkywd.hxx inclusions and usages
-      -> sw is now xmlkywd.hxx-free!
-
-      Revision 1.31  2001/05/29 12:55:39  mib
-      #87530#: Load/Save layout
-
-      Revision 1.30  2001/05/21 06:00:38  mib
-      #87246#: OLE support for flat files
-
-      Revision 1.29  2001/05/14 12:26:47  dvo
-      - fixed: no settings or meta data in block mode
-      - fixed: use OUString instead of String
-
-      Revision 1.28  2001/05/07 06:01:50  mib
-      improved error messages for XML filter
-
-      Revision 1.27  2001/05/03 15:49:03  dvo
-      - support for encrypting streams added
-      - turned functions into private methods
-
-      Revision 1.26  2001/04/30 14:13:15  mib
-      Don't export doc info in OLE objects
-
-      Revision 1.25  2001/04/23 14:41:38  dvo
-      implemented MUST-change from SAB: number styles properties added
-
-      Revision 1.24  2001/04/06 05:21:32  mib
-      #85808#: Improve progress bar behaviour
-
-      Revision 1.23  2001/04/02 11:26:14  dvo
-      #85021# progress bar enabled (change mail from SAB)
-
-      Revision 1.22  2001/03/19 13:45:17  mtg
-      added support for export of settings.xml
-
-      Revision 1.21  2001/03/09 14:58:43  dvo
-      - fixed: unnecessary attext.xml stream removed (this is handled in core/swg)
-
-      Revision 1.20  2001/03/07 15:23:07  mib
-      set mime types
-
-      Revision 1.19  2001/03/06 11:05:07  mib
-      organizer support
-
-      Revision 1.18  2001/03/02 21:02:30  dvo
-      - changed: content and styles are written as separate streams
-
-      Revision 1.17  2001/03/01 15:47:53  dvo
-      - #84291# fixed: assertion removed (it's legal for the asserted condition to occur)
-
-      Revision 1.16  2001/02/13 17:54:54  dvo
-      - changed: in wrtxml.cxx substreams now use common code
-      - added: document classes for global, label, etc. documents
-      - added: support for bSaveLinkedSections flag
-
-      Revision 1.15  2001/02/06 15:41:55  dvo
-      - added: auto text event ex- and import
-
-      Revision 1.14  2001/01/26 11:22:48  mib
-      ole objects continued
-
-      Revision 1.13  2001/01/22 12:31:45  mib
-      block mode
-
-      Revision 1.12  2001/01/17 10:55:18  mib
-      XML filter now is a component
-
-      Revision 1.11  2001/01/12 16:34:01  cl
-      #82042# added support for xml filter components
-
-      Revision 1.10  2001/01/08 09:44:55  mib
-      Removed SwDoc and SvStorage members from SwXMLExport
-
-      Revision 1.9  2001/01/03 11:40:56  mib
-      support for OLE objects in XML files
-
-      Revision 1.8  2000/12/06 08:39:34  mib
-      #81388#: Content stream now is called Content.xml
-
-      Revision 1.7  2000/12/02 10:57:15  mib
-      #80795#: use packages
-
-      Revision 1.6  2000/11/27 13:44:40  mib
-      #80795#: Use packages within XML filter
-
-      Revision 1.5  2000/11/20 11:17:53  mib
-      Put edit engine's and numbering rules' fonts into the pool
-
-      Revision 1.4  2000/11/20 09:18:37  jp
-      must change: processfactory moved
-
-      Revision 1.3  2000/11/14 08:03:32  mib
-      Adding of EditEngine- and Bullet-Font-Items temporarily removed
-
-      Revision 1.2  2000/11/13 08:44:24  mib
-      font declarations and asian/complex font properties
-
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.17  2000/09/18 16:05:04  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.16  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.15  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.14  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.13  2000/03/21 15:10:56  os
-      UNOIII
-
-      Revision 1.12  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.11  2000/03/03 16:07:54  pl
-      #73771# workaround for c50 intel compiler
-
-      Revision 1.10  2000/02/11 14:40:52  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.9  1999/11/26 11:09:47  mib
-      progress, export-flags
-
-      Revision 1.8  1999/11/19 16:40:21  os
-      modules renamed
-
-      Revision 1.7  1999/10/26 13:34:30  mib
-      removed 'using namespace' from header files
-
-      Revision 1.6  1999/10/25 10:41:48  mib
-      Using new OUString ASCII methods
-
-      Revision 1.5  1999/10/15 14:48:25  hr
-      export() -> exportDoc()
-
-      Revision 1.4  1999/10/15 12:36:39  mib
-      added document class attribute
-
-      Revision 1.3  1999/10/08 11:47:06  mib
-      moved some file to SVTOOLS/SVX
-
-      Revision 1.2  1999/09/22 11:56:36  mib
-      string -> wstring
-
-      Revision 1.1  1999/08/12 10:28:26  MIB
-      Initial revision.
-
-
-      Rev 1.0   12 Aug 1999 12:28:26   MIB
-   Initial revision.
-
-*************************************************************************/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-31 15:02:59 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 16:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #include "xmlimp.hxx"
 #endif
 
+#define LOGFILE_AUTHOR "mb93740"
+
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -188,7 +191,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT(rFactory.is(), "factory missing");
     DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
 
-    RTL_LOGFILE_CONTEXT( aLog, "ReadThroughComponent" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", LOGFILE_AUTHOR, "ReadThroughComponent" );
 
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
@@ -249,8 +252,14 @@ sal_Int32 ReadThroughComponent(
         }
     }
 
+#ifdef TIMELOG
+    // if we do profiling, we want to know the stream
+    ByteString aString( (String)rStreamName, RTL_TEXTENCODING_ASCII_US );
+    RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
+                               "ReadThroughComponent : parsing \"%s\"", aString.GetBuffer() );
+#endif
+
     // finally, parser the stream
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parsing stream" );
     try
     {
         xParser->parseStream( aParserInput );
