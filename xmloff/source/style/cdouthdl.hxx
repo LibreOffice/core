@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdouthdl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,37 @@
 /**
     PropertyHandler for the XML-data-type:
 */
-class XMLCrossedOutPropHdl : public XMLPropertyHandler
+class XMLCrossedOutTypePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLCrossedOutPropHdl();
+    virtual ~XMLCrossedOutTypePropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XMLCrossedOutStylePropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLCrossedOutStylePropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XMLCrossedOutWidthPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLCrossedOutWidthPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XMLCrossedOutTextPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLCrossedOutTextPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
