@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:00:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,33 @@ FASTBOOL SwOszControl::ChkOsz()
     return bRet;
 }
 
+//
+// SwFlyAtCntFrm::MakeAll wants to calculate the section, if it contains
+// the anchor frame. We do not want to calculate the section, if there
+// is a table between the anchor frame and the section frame
+//
+void lcl_CalcUpperSection( const SwFrm& rFrm )
+{
+    if( rFrm.IsInSct() )
+    {
+        // Do not calculate the section, if there is a table between
+        // the anchor and the section.
+        ASSERT( rFrm.IsInSct(), "lcl_SectionBeforeTable without section" )
+        const SwFrm* pUpper = rFrm.GetUpper();
+        while ( pUpper )
+        {
+            if ( pUpper->IsSctFrm() || pUpper->IsCellFrm() )
+                break;
+            pUpper = pUpper->GetUpper();
+        }
+
+        ASSERT( pUpper, "lcl_SectionBeforeTable without section" )
+        if ( pUpper->IsSctFrm() )
+            pUpper->Calc();
+    }
+}
+
+
 void SwFlyAtCntFrm::MakeAll()
 {
     // OD 2004-01-19 #110582#
@@ -525,12 +552,9 @@ void SwFlyAtCntFrm::MakeAll()
 
             if ( !bLockedAnchor )
             {
-                if( GetAnchor()->IsInSct() )
-                {
-                    SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
-                    pSct->Calc();
-                }
-
+                // If the anchor is located inside a section, we better calculate
+                // the section first:
+                lcl_CalcUpperSection( *GetAnchor() );
                 GetAnchor()->Calc();
             }
 
@@ -548,12 +572,9 @@ void SwFlyAtCntFrm::MakeAll()
 
                 if ( !bLockedAnchor )
                 {
-                    if( GetAnchor()->IsInSct() )
-                    {
-                        SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
-                        pSct->Calc();
-                    }
-
+                    // If the anchor is located inside a section, we better calculate
+                    // the section first:
+                    lcl_CalcUpperSection( *GetAnchor() );
                     GetAnchor()->Calc();
                 }
 
