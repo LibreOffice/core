@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-15 13:37:45 $
+ *  last change: $Author: ka $ $Date: 2001-06-13 08:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
 
     if( pBmpInfoHdr->biBitCount <= 8 )
         nOffset += ( pBmpInfoHdr->biClrUsed ? pBmpInfoHdr->biClrUsed : ( 1 << pBmpInfoHdr->biBitCount ) ) << 2;
+    else if( ( BI_BITFIELDS == pBmpInfoHdr->biCompression ) && ( ( 16 == pBmpInfoHdr->biBitCount ) || ( 32 == pBmpInfoHdr->biBitCount ) ) )
+        nOffset += 12;
 
     pBmpFileHdr->bfType      = 'MB';
     pBmpFileHdr->bfSize      = 0; // maybe: nMemSize + sizeof(BITMAPFILEHEADER)
