@@ -50,10 +50,11 @@ $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) : DocumentLoader.cxx $(OUT) $(TYPEFLAGF
 $(OUT_BIN)$(PS)DocumentLoader$(EXE_EXT) : $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT)
 ifeq "$(OS)" "WIN"
 	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_MISC)$(PS)DocumentLoader.map \
-	  $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) isal.lib icppu.lib icppuhelper.lib
+	  $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) \
+	  $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) \
-	  $(SALLIB) $(VOSLIB) $(CPPULIB) $(CPPUHELPERLIB) $(STDC++_LIB)
+	 $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
 
 $(REGISTERFLAGFILE) : $(TYPEFLAGFILE) 
