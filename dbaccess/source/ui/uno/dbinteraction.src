@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 07:44:56 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ greek ] = "Απο~μνημόνευση κωδικού έως το τέλος της εφαρμογής";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
     Text[ japanese ] = "Κί½ά°Δή‚Ν±ΜίΨΉ°Ό®έI—Ή‚ά‚Ε‹L‰―‚µ‚Δ‚¨‚­(~R)";
-    Text[ korean ] = "ΌΌΌΗΐ» ΑΎ·αΗÒ ¶§±ξΑφ ΖΠ½ΊΏφµε ±βΎο";
+    Text[ korean ] = "ΐΐΏλΗΑ·Ξ±Χ·¥ΐ» ΑΎ·αΗÒ ¶§±ξΑφ ΖΠ½ΊΏφµε ±βΎο";
     Text[ polish ] = "Zapamiκtaj has³o do koρca aplikacji";
     Text[ portuguese ] = "~Lembrar senha atι terminar a aplicaηγo";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -119,6 +119,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/27 07:44:56  rt
+ *  Merge SRC614: 27.11.00 - 08:44:34 (NoBranch)
+ *
  *  Revision 1.2  2000/11/09 12:30:25  kz
  *  Merge SRC612: 09.11.00 - 13:30:00 (NoBranch)
  *
