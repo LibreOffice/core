@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:03:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,11 @@
 #include <vcl/outdev.hxx>
 #include <math.h>
 
+#ifndef _SVSTDARR_USHORTS
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
+#endif
+
 #include "output.hxx"
 #include "document.hxx"
 #include "cell.hxx"
@@ -102,12 +107,14 @@
 #include "editutil.hxx"
 #include "progress.hxx"
 #include "scmod.hxx"
+#include "fillinfo.hxx"
 
             //! Autofilter-Breite mit column.cxx zusammenfassen
 #define DROPDOWN_BITMAP_SIZE        17
 
 #define DRAWTEXT_MAX    32767
 
+const USHORT SC_SHRINKAGAIN_MAX = 7;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -139,6 +146,8 @@ class ScDrawStringsVars
     ScBaseCell*         pLastCell;
     ULONG               nValueFormat;
     BOOL                bLineBreak;
+    BOOL                bRepeat;
+    BOOL                bShrink;
 
     BOOL                bPixelToLogic;
     BOOL                bCellContrast;
@@ -159,6 +168,7 @@ public:
     BOOL        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
     void        ResetText();
     void        SetHashText();
+    void        SetAutoText( const String& rAutoText );
 
     const ScPatternAttr*    GetPattern() const      { return pPattern; }
     SvxCellOrientation      GetOrient() const       { return eAttrOrient; }
@@ -174,9 +184,13 @@ public:
 
     ULONG   GetValueFormat() const                  { return nValueFormat; }
     BOOL    GetLineBreak() const                    { return bLineBreak; }
+    BOOL    IsRepeat() const                        { return bRepeat; }
+    BOOL    IsShrink() const                        { return bShrink; }
 
     long    GetAscent() const   { return nAscentPixel; }
     BOOL    IsRotated() const   { return bRotated; }
+
+    void    SetShrinkScale( long nScale, BYTE nScript );
 
     BOOL    HasCondHeight() const   { return pCondSet && SFX_ITEM_SET ==
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT, TRUE ); }
@@ -199,6 +213,8 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
     eAttrOrient ( SVX_ORIENTATION_STANDARD ),
     bLineBreak  ( FALSE ),
+    bRepeat     ( FALSE ),
+    bShrink     ( FALSE ),
     nValueFormat( 0 ),
     pLastCell   ( NULL )
 {
@@ -216,6 +232,46 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
 
 ScDrawStringsVars::~ScDrawStringsVars()
 {
+}
+
+void ScDrawStringsVars::SetShrinkScale( long nScale, BYTE nScript )
+{
+    // text remains valid, size is updated
+
+    OutputDevice* pDev = pOutput->pDev;
+    OutputDevice* pRefDevice = pOutput->pRefDevice;
+    OutputDevice* pFmtDevice = pOutput->pFmtDevice;
+
+    // call GetFont with a modified fraction, use only the height
+
+    Fraction aFraction( nScale, 100 );
+    if ( !bPixelToLogic )
+        aFraction *= pOutput->aZoomY;
+    Font aTmpFont;
+    pPattern->GetFont( aTmpFont, SC_AUTOCOL_RAW, pFmtDevice, &aFraction, pCondSet, nScript );
+    aFont.SetHeight( aTmpFont.GetHeight() );
+
+    // set font and dependent variables as in SetPattern
+
+    pDev->SetFont( aFont );
+    if ( pFmtDevice != pDev )
+        pFmtDevice->SetFont( aFont );
+
+    aMetric = pFmtDevice->GetFontMetric();
+    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetIntLeading() == 0 )
+    {
+        OutputDevice* pDefaultDev = Application::GetDefaultDevice();
+        MapMode aOld = pDefaultDev->GetMapMode();
+        pDefaultDev->SetMapMode( pFmtDevice->GetMapMode() );
+        aMetric = pDefaultDev->GetFontMetric( aFont );
+        pDefaultDev->SetMapMode( aOld );
+    }
+
+    nAscentPixel = aMetric.GetAscent();
+    if ( bPixelToLogic )
+        nAscentPixel = pRefDevice->LogicToPixel( Size( 0, nAscentPixel ) ).Height();
+
+    SetAutoText( aString );     // same text again, to get text size
 }
 
 void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet,
@@ -253,25 +309,36 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Orientierung
 
-    const SfxPoolItem* pCondItem;
-    if ( pCondSet && pCondSet->GetItemState( ATTR_ORIENTATION, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        eAttrOrient = (SvxCellOrientation)((const SvxOrientationItem*)pCondItem)->GetValue();
-    else
-        eAttrOrient = (SvxCellOrientation)
-            ((const SvxOrientationItem&)pPattern->GetItem(ATTR_ORIENTATION)).GetValue();
+    eAttrOrient = pPattern->GetCellOrientation( pCondSet );
+
+    //  alignment
+
+    eAttrHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
+
+    eAttrVerJust = (SvxCellVerJustify)((const SvxVerJustifyItem&)pPattern->GetItem( ATTR_VER_JUSTIFY, pCondSet )).GetValue();
+    if ( eAttrVerJust == SVX_VER_JUSTIFY_STANDARD )
+        eAttrVerJust = SVX_VER_JUSTIFY_BOTTOM;
+
+    //  line break
+
+    bLineBreak = ((const SfxBoolItem&)pPattern->GetItem( ATTR_LINEBREAK, pCondSet )).GetValue();
+
+    //  handle "repeat" alignment
+
+    bRepeat = ( eAttrHorJust == SVX_HOR_JUSTIFY_REPEAT );
+    if ( bRepeat )
+    {
+        // "repeat" disables rotation (before constructing the font)
+        eAttrOrient = SVX_ORIENTATION_STANDARD;
+    }
 
     short nRot;
     switch (eAttrOrient)
     {
         case SVX_ORIENTATION_STANDARD:
             nRot = 0;
-            long nRotate;
-            if ( pCondSet && pCondSet->GetItemState( ATTR_ROTATE_VALUE, TRUE, &pCondItem ) ==
-                                SFX_ITEM_SET )
-                nRotate = ((const SfxInt32Item*)pCondItem)->GetValue();
-            else
-                nRotate = ((const SfxInt32Item&)pPattern->GetItem(ATTR_ROTATE_VALUE)).GetValue();
-            bRotated = ( nRotate != 0 );
+            bRotated = (((const SfxInt32Item&)pPattern->GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue() != 0) &&
+                       !bRepeat;
             break;
         case SVX_ORIENTATION_STACKED:
             nRot = 0;
@@ -322,37 +389,8 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     if ( bPixelToLogic )
         nAscentPixel = pRefDevice->LogicToPixel( Size( 0, nAscentPixel ) ).Height();
 
-    Color aULineColor;
-    if ( pCondSet && pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        aULineColor = ((const SvxUnderlineItem*)pCondItem)->GetColor();
-    else
-        aULineColor = ((const SvxUnderlineItem&)pPattern->GetItem(ATTR_FONT_UNDERLINE)).GetColor();
+    Color aULineColor( ((const SvxUnderlineItem&)pPattern->GetItem( ATTR_FONT_UNDERLINE, pCondSet )).GetColor() );
     pDev->SetTextLineColor( aULineColor );
-
-    //  Ausrichtung
-
-    if ( pCondSet && pCondSet->GetItemState( ATTR_HOR_JUSTIFY, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        eAttrHorJust = (SvxCellHorJustify)
-            ((const SvxHorJustifyItem*)pCondItem)->GetValue();
-    else
-        eAttrHorJust = (SvxCellHorJustify)
-            ((const SvxHorJustifyItem&)pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue();
-
-    if ( pCondSet && pCondSet->GetItemState( ATTR_VER_JUSTIFY, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        eAttrVerJust = (SvxCellVerJustify)
-            ((const SvxVerJustifyItem*)pCondItem)->GetValue();
-    else
-        eAttrVerJust = (SvxCellVerJustify)
-            ((const SvxVerJustifyItem&)pPattern->GetItem(ATTR_VER_JUSTIFY)).GetValue();
-    if ( eAttrVerJust == SVX_VER_JUSTIFY_STANDARD )
-        eAttrVerJust = SVX_VER_JUSTIFY_BOTTOM;
-
-    //  Umbruch
-
-    if ( pCondSet && pCondSet->GetItemState( ATTR_LINEBREAK, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        bLineBreak = ((const SfxBoolItem*)pCondItem)->GetValue();
-    else
-        bLineBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
 
     //  Zahlenformat
 
@@ -365,19 +403,15 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 */
     //  Raender
 
-    if ( pCondSet && pCondSet->GetItemState( ATTR_MARGIN, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        pMargin = (const SvxMarginItem*)pCondItem;
-    else
-        pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
+    pMargin = (const SvxMarginItem*)&pPattern->GetItem( ATTR_MARGIN, pCondSet );
     if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT )
-    {
-        if ( pCondSet && pCondSet->GetItemState( ATTR_INDENT, TRUE, &pCondItem ) == SFX_ITEM_SET )
-            nIndent = ((const SfxUInt16Item*)pCondItem)->GetValue();
-        else
-            nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
-    }
+        nIndent = ((const SfxUInt16Item&)pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
+
+    //  "Shrink to fit"
+
+    bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
 
     //  zumindest die Text-Groesse muss neu geholt werden
     //! unterscheiden, und den Text nicht neu vom Numberformatter holen?
@@ -411,18 +445,10 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 
     //  Raender
 
-    const SfxPoolItem* pCondItem;
-    if ( pCondSet && pCondSet->GetItemState( ATTR_MARGIN, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        pMargin = (const SvxMarginItem*)pCondItem;
-    else
-        pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
+    pMargin = (const SvxMarginItem*)&pPattern->GetItem( ATTR_MARGIN, pCondSet );
+
     if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT )
-    {
-        if ( pCondSet && pCondSet->GetItemState( ATTR_INDENT, TRUE, &pCondItem ) == SFX_ITEM_SET )
-            nIndent = ((const SfxUInt16Item*)pCondItem)->GetValue();
-        else
-            nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
-    }
+        nIndent = ((const SfxUInt16Item&)pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
 }
@@ -511,7 +537,12 @@ void ScDrawStringsVars::ResetText()
 
 void ScDrawStringsVars::SetHashText()
 {
-    aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###"));
+    SetAutoText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+}
+
+void ScDrawStringsVars::SetAutoText( const String& rAutoText )
+{
+    aString = rAutoText;
 
     OutputDevice* pRefDevice = pOutput->pRefDevice;
     OutputDevice* pFmtDevice = pOutput->pFmtDevice;
@@ -762,7 +793,7 @@ inline BOOL StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_VER_JUSTIFY ) != &rpOldPattern->GetItem( ATTR_VER_JUSTIFY ) )
         return TRUE;
-    else if ( &rpNewPattern->GetItem( ATTR_ORIENTATION ) != &rpOldPattern->GetItem( ATTR_ORIENTATION ) )
+    else if ( &rpNewPattern->GetItem( ATTR_STACKED ) != &rpOldPattern->GetItem( ATTR_STACKED ) )
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_LINEBREAK ) != &rpOldPattern->GetItem( ATTR_LINEBREAK ) )
         return TRUE;
@@ -1363,14 +1394,66 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
 
                     BOOL bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
+                    BOOL bRepeat = aVars.IsRepeat() && !bBreak;
+                    BOOL bShrink = aVars.IsShrink() && !bBreak && !bRepeat;
 
-                    nNeededWidth = aVars.GetTextSize().Width() +
-                                (long) ( aVars.GetLeftTotal() * nPPTX ) +
-                                (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX );
+                    long nTotalMargin = (long) ( aVars.GetLeftTotal() * nPPTX ) +
+                                        (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX );
+                    nNeededWidth = aVars.GetTextSize().Width() + nTotalMargin;
                     // GetOutputArea gives justfied rectangles
                     GetOutputArea( nX, nArrY, nPosX, nPosY, nCellX, nCellY, nNeededWidth,
-                                    *pPattern, eOutHorJust, bCellIsValue, bBreak, FALSE,
+                                    *pPattern, eOutHorJust, bCellIsValue || bRepeat || bShrink, bBreak, FALSE,
                                     aAlignRect, aClipRect, bLeftClip, bRightClip );
+
+                    if ( bShrink && ( bLeftClip || bRightClip ) )
+                    {
+                        long nAvailable = aAlignRect.GetWidth() - nTotalMargin;
+                        long nScaleSize = aVars.GetTextSize().Width();         // without margin
+                        long nScale = ( nAvailable * 100 ) / nScaleSize;
+
+                        aVars.SetShrinkScale( nScale, nOldScript );
+                        long nNewSize = aVars.GetTextSize().Width();
+
+                        USHORT nShrinkAgain = 0;
+                        while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                        {
+                            // If the text is still too large, reduce the scale again by 10%, until it fits,
+                            // at most 7 times (it's less than 50% of the calculated scale then).
+
+                            nScale = ( nScale * 9 ) / 10;
+                            aVars.SetShrinkScale( nScale, nOldScript );
+                            nNewSize = aVars.GetTextSize().Width();
+                            ++nShrinkAgain;
+                        }
+                        // If even at half the size the font still isn't rendered smaller,
+                        // fall back to normal clipping (showing ### for numbers).
+                        if ( nNewSize <= nAvailable )
+                            bLeftClip = bRightClip = FALSE;
+
+                        pOldPattern = NULL;
+                    }
+
+                    if ( bRepeat && !bLeftClip && !bRightClip )
+                    {
+                        long nAvailable = aAlignRect.GetWidth() - nTotalMargin;
+                        long nRepeatSize = aVars.GetTextSize().Width();         // without margin
+                        // When formatting for the printer, the text sizes don't always add up.
+                        // Round down (too few repetitions) rather than exceeding the cell size then:
+                        if ( pFmtDevice != pRefDevice )
+                            ++nRepeatSize;
+                        if ( nRepeatSize > 0 )
+                        {
+                            long nRepeatCount = nAvailable / nRepeatSize;
+                            if ( nRepeatCount > 1 )
+                            {
+                                String aCellStr = aVars.GetString();
+                                String aRepeated = aCellStr;
+                                for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
+                                    aRepeated.Append( aCellStr );
+                                aVars.SetAutoText( aRepeated );
+                            }
+                        }
+                    }
 
                     //  use edit engine if automatic line breaks are needed
                     if ( bBreak )
@@ -1659,6 +1742,48 @@ BOOL lcl_SafeIsValue( ScBaseCell* pCell )
     return bRet;
 }
 
+void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
+{
+    BOOL bUpdateMode = rEngine.GetUpdateMode();
+    if ( bUpdateMode )
+        rEngine.SetUpdateMode( FALSE );
+
+    USHORT nParCount = rEngine.GetParagraphCount();
+    for (USHORT nPar=0; nPar<nParCount; nPar++)
+    {
+        SvUShorts aPortions;
+        rEngine.GetPortions( nPar, aPortions );
+
+        USHORT nPCount = aPortions.Count();
+        USHORT nStart = 0;
+        for ( USHORT nPos=0; nPos<nPCount; nPos++ )
+        {
+            USHORT nEnd = aPortions.GetObject( nPos );
+            ESelection aSel( nPar, nStart, nPar, nEnd );
+            SfxItemSet aAttribs = rEngine.GetAttribs( aSel );
+
+            long nWestern = static_cast<const SvxFontHeightItem&>(aAttribs.Get(EE_CHAR_FONTHEIGHT)).GetHeight();
+            long nCJK = static_cast<const SvxFontHeightItem&>(aAttribs.Get(EE_CHAR_FONTHEIGHT_CJK)).GetHeight();
+            long nCTL = static_cast<const SvxFontHeightItem&>(aAttribs.Get(EE_CHAR_FONTHEIGHT_CTL)).GetHeight();
+
+            nWestern = ( nWestern * nPercent ) / 100;
+            nCJK     = ( nCJK     * nPercent ) / 100;
+            nCTL     = ( nCTL     * nPercent ) / 100;
+
+            aAttribs.Put( SvxFontHeightItem( nWestern, 100, EE_CHAR_FONTHEIGHT ) );
+            aAttribs.Put( SvxFontHeightItem( nCJK, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+            aAttribs.Put( SvxFontHeightItem( nCTL, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+
+            rEngine.QuickSetAttribs( aAttribs, aSel );      //! remove paragraph attributes from aAttribs?
+
+            nStart = nEnd;
+        }
+    }
+
+    if ( bUpdateMode )
+        rEngine.SetUpdateMode( TRUE );
+}
+
 void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
@@ -1817,10 +1942,18 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
                         BOOL bBreak = ( eHorJust == SVX_HOR_JUSTIFY_BLOCK ) ||
                                         ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue();
-                        SvxCellOrientation eOrient = (SvxCellOrientation)((const SvxOrientationItem&)
-                                            pPattern->GetItem(ATTR_ORIENTATION, pCondSet)).GetValue();
+                        BOOL bRepeat = ( eHorJust == SVX_HOR_JUSTIFY_REPEAT && !bBreak );
+                        BOOL bShrink = !bBreak && !bRepeat && static_cast<const SfxBoolItem&>
+                                        (pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
+                        SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
                         long nAttrRotate = ((const SfxInt32Item&)pPattern->
                                             GetItem(ATTR_ROTATE_VALUE, pCondSet)).GetValue();
+                        if ( eHorJust == SVX_HOR_JUSTIFY_REPEAT )
+                        {
+                            // ignore orientation/rotation if "repeat" is active
+                            eOrient = SVX_ORIENTATION_STANDARD;
+                            nAttrRotate = 0;
+                        }
                         if ( eOrient==SVX_ORIENTATION_STANDARD && nAttrRotate )
                         {
                             //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
@@ -2183,8 +2316,77 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             {
                                 // for break, the first GetOutputArea call is sufficient
                                 GetOutputArea( nXForPos, nArrYForPos, nPosX, nPosY, nCellX, nCellY, nNeededPixel,
-                                                *pPattern, eOutHorJust, bCellIsValue, FALSE, FALSE,
+                                                *pPattern, eOutHorJust, bCellIsValue || bRepeat || bShrink, FALSE, FALSE,
                                                 aAlignRect, aClipRect, bLeftClip, bRightClip );
+
+                                if ( bShrink && ( bLeftClip || bRightClip ) )
+                                {
+                                    long nAvailable = aAlignRect.GetWidth() - nLeftM - nRightM;
+                                    long nScaleSize = nNeededPixel - nLeftM - nRightM;      // without margin
+                                    long nScale = ( nAvailable * 100 ) / nScaleSize;
+
+                                    lcl_ScaleFonts( *pEngine, nScale );
+                                    nEngineWidth = (long) pEngine->CalcTextWidth();
+                                    long nNewSize = bPixelToLogic ?
+                                        pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
+
+                                    USHORT nShrinkAgain = 0;
+                                    while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                                    {
+                                        // further reduce, like in DrawStrings
+                                        lcl_ScaleFonts( *pEngine, 90 );     // reduce by 10%
+                                        nEngineWidth = (long) pEngine->CalcTextWidth();
+                                        nNewSize = bPixelToLogic ?
+                                            pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
+                                        ++nShrinkAgain;
+                                    }
+                                    if ( nNewSize <= nAvailable )
+                                        bLeftClip = bRightClip = FALSE;
+
+                                    // sizes for further processing (alignment etc):
+                                    nNeededPixel = nNewSize + nLeftM + nRightM;
+                                    nEngineHeight = pEngine->GetTextHeight();
+                                }
+
+                                if ( bRepeat && !bLeftClip && !bRightClip && pEngine->GetParagraphCount() == 1 )
+                                {
+                                    // First check if twice the space for the formatted text is available
+                                    // (otherwise just keep it unchanged).
+
+                                    long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
+                                    long nAvailable = aAlignRect.GetWidth() - nLeftM - nRightM;
+                                    if ( nAvailable >= 2 * nFormatted )
+                                    {
+                                        // "repeat" is handled with unformatted text (for performance reasons)
+                                        String aCellStr = pEngine->GetText();
+                                        pEngine->SetText( aCellStr );
+
+                                        long nRepeatSize = (long) pEngine->CalcTextWidth();
+                                        if (bPixelToLogic)
+                                            nRepeatSize = pRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
+                                        if ( pFmtDevice != pRefDevice )
+                                            ++nRepeatSize;
+                                        if ( nRepeatSize > 0 )
+                                        {
+                                            long nRepeatCount = nAvailable / nRepeatSize;
+                                            if ( nRepeatCount > 1 )
+                                            {
+                                                String aRepeated = aCellStr;
+                                                for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
+                                                    aRepeated.Append( aCellStr );
+                                                pEngine->SetText( aRepeated );
+
+                                                nEngineHeight = pEngine->GetTextHeight();
+                                                nEngineWidth = (long) pEngine->CalcTextWidth();
+                                                if (bPixelToLogic)
+                                                    nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
+                                                else
+                                                    nNeededPixel = nEngineWidth;
+                                                nNeededPixel += nLeftM + nRightM;
+                                            }
+                                        }
+                                    }
+                                }
 
                                 if ( bCellIsValue && ( bLeftClip || bRightClip ) )
                                 {
@@ -2651,8 +2853,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
                         BOOL bBreak = ( eHorJust == SVX_HOR_JUSTIFY_BLOCK ) ||
                                     ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue();
-                        SvxCellOrientation eOrient = (SvxCellOrientation)((const SvxOrientationItem&)
-                                            pPattern->GetItem(ATTR_ORIENTATION, pCondSet)).GetValue();
+                        SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
 
                         const ScMergeAttr* pMerge =
                                 (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
