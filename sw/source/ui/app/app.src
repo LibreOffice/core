@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 20:03:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ String STR_PRINT_MERGE_MACRO
     Text[ greek ] = "Åêôığùóç åãêõêëßïõ åğéóôïëŞò";
     Text[ korean ] = "Æû ·¹ÅÍ ÀÎ¼â";
     Text[ turkish ] = "Standart mektup yazdır";
+    Text[ catalan ] = "Imprimir cartas en serie";
 };
 
 String STR_PAGE_COUNT_MACRO
@@ -134,6 +135,7 @@ String STR_PAGE_COUNT_MACRO
     Text[ korean ] = "ÂÊ ¼ö¡¡º¯°æ";
     Text[ turkish ] = "Sayfa sayısının değiştirilmesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificación del número de páginas";
 };
 
  // Image-Liste ----------------------------------------------------------------
@@ -748,6 +750,21 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "HTML biçimi" ; SWSTYLEBIT_HTML ; > ;
             < "Koşullu biçim" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
+        Text[ catalan ] = "Estilos de párrafo";
+            FilterList [ catalan ] =
+        {
+            < "Automático" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Todos los estilos" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos aplicados" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos del usuario" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos de texto" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos de capítulos" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos de listas" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos de índices" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos de áreas especiales" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos HTML" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
     };
         SfxStyleFamilyItem
         {
@@ -925,6 +942,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Tümü" ; SFXSTYLEBIT_ALL ; > ;
             < "Uygulanan biçim" ; SFXSTYLEBIT_USED ; > ;
             < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ catalan ] = "Estilos de caracteres";
+            FilterList [ catalan ] =
+        {
+            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -1104,6 +1128,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Uygulanan biçim" ; SFXSTYLEBIT_USED ; > ;
             < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
         };
+        Text[ catalan ] = "Estilos de marcos";
+            FilterList [ catalan ] =
+        {
+            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
     };
         SfxStyleFamilyItem
         {
@@ -1282,7 +1313,14 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Estilos de página";
+            FilterList [ catalan ] =
+        {
+            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
         };
+    };
         SfxStyleFamilyItem
         {
             StyleImage = Image
@@ -1458,6 +1496,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Kullanılan biçim" ; SFXSTYLEBIT_USED ; > ;
             < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
         };
+        Text[ catalan ] = "Estilos de numeración";
+            FilterList [ catalan ] =
+        {
+            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
     };
     };
 };
@@ -1496,6 +1541,7 @@ String STR_ENV_TITLE
     Text[ korean ] = "ºÀÅõ";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sobre";
 };
 
 String STR_LAB_TITLE
@@ -1525,6 +1571,7 @@ String STR_LAB_TITLE
     Text[ korean ] = "¶óº§";
     Text[ turkish ] = "Etiket";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Etiquetas";
 };
 
  // ShortName!!!
@@ -1554,6 +1601,7 @@ String STR_HUMAN_SWDOC_NAME
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_31
@@ -1581,6 +1629,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ korean ] = "%PRODUCTNAME 3.0 Text ";
     Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME 3.0 Texto";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_40
@@ -1608,6 +1657,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ greek ] = "Êåßìåíï (%PRODUCTNAME 4.0)";
     Text[ korean ] = "%PRODUCTNAME 4.0¡¡Text ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
+    Text[ catalan ] = "%PRODUCTNAME 4.0 texto";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_50
@@ -1635,6 +1685,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text[ korean ] = "ÅØ½ºÆ® (%PRODUCTNAME 5.0)";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME 5.0 Texto";
 };
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
@@ -1644,20 +1695,21 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Texto";
     Text[ russian ] = "Òåêñòîâûé äîêóìåíò (%PRODUCTNAME 6.0)";
     Text[ greek ] = "Êåßìåíï %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Tekst";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Tekstdocument";
     Text[ french ] = "%PRODUCTNAME 6.0 Texte";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Documento de texto";
-    Text[ italian ] = "Testo %PRODUCTNAME 6.0";
+    Text[ italian ] = "Documento di testo %PRODUCTNAME 6.0";
     Text[ danish ] = "%PRODUCTNAME 4.0 tekst";
     Text[ swedish ] = "Textdokument %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 •¶‘";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 •¶‘ÄŞ·­ÒİÄ";
     Text[ korean ] = "%PRODUCTNAME 5.0¡¡Text ";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ÎÄ×Ö";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¤å¦r";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ arabic ] = "äÕ ãä %PRODUCTNAME 6.0";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Texto";
 };
 
 
@@ -1688,6 +1740,7 @@ String STR_CANTOPEN
     TEXT[ korean ] = "¹®¼­¸¦ ¿­¼ö ¾ø½À´Ï´Ù.";
     TEXT[ turkish ] = "Belge açılamıyor.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No es posible abrir el documento.";
 };
 
 String STR_CANTCREATE
@@ -1715,6 +1768,7 @@ String STR_CANTCREATE
     TEXT[ korean ] = "¹®¼­¸¦ ¸¸µé ¼ö ¾ø¾ú½À´Ï´Ù.";
     TEXT[ turkish ] = "Belge oluşturulamadı.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "El documento no pudo ser creado.";
 };
 String STR_DLLNOTFOUND
 {
@@ -1743,6 +1797,7 @@ String STR_DLLNOTFOUND
     TEXT[ korean ] = "ÇÊÅÍ¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
     TEXT[ turkish ] = "Filtre bulunamadı.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No se encontró el filtro.";
 };
 
 
@@ -1773,6 +1828,7 @@ String STR_UNBENANNT
     TEXT[ korean ] = "Á¦¸ñ ¾øÀ½";
     TEXT[ turkish ] = "Adsız";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Sin nombre";
 };
 
 
@@ -1801,6 +1857,7 @@ String STR_LOAD_GLOBAL_DOC
     Text[ korean ] = "¸¶½ºÅÍ ¹®¼­ÀÇ ÀÌ¸§°ú °æ·Î";
     Text[ turkish ] = "Ana belgenin adı ve veri yolu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre y ruta del documento maestro";
 };
 
 String STR_LOAD_HTML_DOC
@@ -1828,6 +1885,7 @@ String STR_LOAD_HTML_DOC
     Text[ korean ] = "HTML ¸¶½ºÅÍ ¹®¼­ÀÇ ÀÌ¸§°ú °æ·Î";
     Text[ turkish ] = "HTML belgesinin adı ve veri yolu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre y ruta del documento HTML ";
 };
 
 InfoBox MSG_ERROR_SEND_MAIL
@@ -1859,6 +1917,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áğïóôïëŞ ôïõ ìçíıìáôïò.";
     MESSAGE[ korean ] = "¸ŞÀÏ º¸³»±â ¿À·ù.";
     MESSAGE[ turkish ] = "İleti gönderilirken hata oluştu.";
+    MESSAGE[ catalan ] = "Error al enviar el mensaje.";
 };
 InfoBox MSG_ERROR_PASSWD
 {
@@ -1889,6 +1948,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆĞ½º¿öµå";
     MESSAGE[ turkish ] = "Yanlış şifre.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Contraseña no válida";
 };
 
 /*
@@ -2003,6 +2063,7 @@ String STR_FMT_STD
     TEXT[ korean ] = "(¾øÀ½)";
     TEXT[ turkish ] = "(yok)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "(ninguna)";
 };
 
 String STR_DOC_STAT
@@ -2032,6 +2093,7 @@ String STR_DOC_STAT
     TEXT[ korean ] = "Åë°è";
     TEXT[ turkish ] = "İstatistik";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Estadística";
 };
 
  // ----------------------------
@@ -2065,6 +2127,7 @@ String STR_STATSTR_W4WREAD
     Text[ korean ] = "¹®¼­ °¡Á®¿À±â...";
     Text[ turkish ] = "Belge içe aktarılıyor...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Importando el documento...";
 };
 
 String STR_STATSTR_W4WWRITE
@@ -2094,6 +2157,7 @@ String STR_STATSTR_W4WWRITE
     Text[ korean ] = "¹®¼­ ³»º¸³»±â...";
     Text[ turkish ] = "Belge dışa aktarılıyor...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Exportando el documento...";
 };
 
 String STR_STATSTR_SWGREAD
@@ -2123,6 +2187,7 @@ String STR_STATSTR_SWGREAD
     Text[ greek ] = "Ôï İããñáöï öïñôşíåôáé...";
     Text[ korean ] = "¹®¼­ ·Îµå Áß...";
     Text[ turkish ] = "Belge yükleniyor...";
+    Text[ catalan ] = "Cargando el documento...";
 };
 
 String STR_STATSTR_SWGWRITE
@@ -2153,6 +2218,7 @@ String STR_STATSTR_SWGWRITE
     Text[ korean ] = "¹®¼­ ÀúÀå...";
     Text[ turkish ] = "Belge kaydediliyor...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardando el documento...";
 };
 
 String STR_STATSTR_REFORMAT
@@ -2182,6 +2248,7 @@ String STR_STATSTR_REFORMAT
     TEXT[ greek ] = "Ìïñöïğïßçóç åê íİïõ ôïõ åããñÜöïõ...";
     TEXT[ korean ] = "¹®¼­¡¡´Ù½Ã¡¡Æ÷¸ËÆÃ...";
     TEXT[ turkish ] = "Belge yeniden formatlanıyor...";
+    TEXT[ catalan ] = "Reformateado del documento...";
 };
 
 String STR_STATSTR_AUTOFORMAT
@@ -2211,6 +2278,7 @@ String STR_STATSTR_AUTOFORMAT
     TEXT[ greek ] = "Áõôüìáôç ìïñöïğïßçóç ôïõ åããñÜöïõ...";
     TEXT[ korean ] = "¹®¼­¡¡ÀÚµ¿Æ÷¸ËÆÃ...";
     TEXT[ turkish ] = "Otomatik belge formatlama...";
+    TEXT[ catalan ] = "AutoFormato del documento...";
 };
 
 String STR_STATSTR_IMPGRF
@@ -2240,6 +2308,7 @@ String STR_STATSTR_IMPGRF
     Text[ korean ] = "±×·¡ÇÈ °¡Á®¿À±â...";
     Text[ turkish ] = "Grafik içe aktarılıyor...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Importando imagen...";
 };
 
 String STR_STATSTR_SEARCH
@@ -2269,6 +2338,7 @@ String STR_STATSTR_SEARCH
     Text[ greek ] = "ÁíáæŞôçóç...";
     Text[ korean ] = "Ã£±â...";
     Text[ turkish ] = "Ara...";
+    Text[ catalan ] = "Búsqueda...";
 };
 
 String STR_STATSTR_FORMAT
@@ -2298,6 +2368,7 @@ String STR_STATSTR_FORMAT
     Text[ greek ] = "Ìïñöïğïßçóç...";
     Text[ korean ] = "Æ÷¸ËÆÃ...";
     Text[ turkish ] = "Formatlanıyor...";
+    Text[ catalan ] = "Formateando...";
 };
 
 String STR_STATSTR_PRINT
@@ -2327,6 +2398,7 @@ String STR_STATSTR_PRINT
     Text[ korean ] = "ÀÎ¼â...";
     Text[ turkish ] = "Yazdırılıyor...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimiendo...";
 };
 
 String STR_STATSTR_LAYOUTINIT
@@ -2356,6 +2428,7 @@ String STR_STATSTR_LAYOUTINIT
     Text[ korean ] = "º¯È¯...";
     Text[ turkish ] = "Dönüştürülüyor...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Convirtiendo...";
 };
 
 String STR_STATSTR_LETTER
@@ -2383,6 +2456,7 @@ String STR_STATSTR_LETTER
     Text[ korean ] = "ÆíÁö";
     Text[ turkish ] = "Mektup";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carta";
 };
 
 String STR_STATSTR_SPELL
@@ -2410,6 +2484,7 @@ String STR_STATSTR_SPELL
     Text[ korean ] = "¸ÂÃã¹ı °Ë»ç...";
     Text[ turkish ] = "Yazım denetimi...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Revisión ortográfica...";
 };
 
 String STR_STATSTR_HYPHEN
@@ -2437,6 +2512,7 @@ String STR_STATSTR_HYPHEN
     Text[ korean ] = "ÇÏÀÌÇÂ ...";
     Text[ turkish ] = "Heceleme...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Separación silábica...";
 };
 
 String STR_STATSTR_TOX_INSERT
@@ -2464,6 +2540,7 @@ String STR_STATSTR_TOX_INSERT
     Text[ greek ] = "ÅéóáãùãŞ êáôáëüãïõ...";
     Text[ korean ] = "»öÀÎ »ğÀÔ...";
     Text[ turkish ] = "Dizin ekleniyor...";
+    Text[ catalan ] = "Insertando directorio...";
 };
 
 String STR_STATSTR_TOX_UPDATE
@@ -2491,6 +2568,7 @@ String STR_STATSTR_TOX_UPDATE
     Text[ greek ] = "Åíçìİñùóç êáôáëüãïõ...";
     Text[ korean ] = "»öÀÎ ¾÷µ¥ÀÌÆ®...";
     Text[ turkish ] = "Dizin güncelleniyor...";
+    Text[ catalan ] = "Actualizando directorio...";
 };
 
 String STR_STATSTR_SUMMARY
@@ -2518,6 +2596,7 @@ String STR_STATSTR_SUMMARY
     Text[ greek ] = "Äçìéïõñãßá abstract...";
     Text[ korean ] = "¿ä¾à ¸¸µé±â...";
     Text[ turkish ] = "Özet oluşturuluyor...";
+    Text[ catalan ] = "Creando el extracto...";
 };
 
 String STR_STATSTR_SWGPRTOLENOTIFY
@@ -2545,6 +2624,7 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text[ korean ] = "°³Ã¼ Á¶Á¤...";
     Text[ turkish ] = "Nesneleri uyarla...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ajustar objetos...";
 };
 
 
@@ -2577,6 +2657,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ korean ] = "ÀÌ ÀÛµ¿À» ½ÇÇàÃë¼ÒÇÏ±â À§ÇØ¼­´Â ´ë¿ë·®ÀÇ ¸Ş¸ğ¸®°¡ ¿ä±¸µË´Ï´Ù.\n½ÇÇàÃë¼Ò¸¦ Ãë¼ÒÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bu işlemde geri alma için büyük miktarda bellek gerekiyor.\nGeri alma işlevini kapatmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Esta acción necesita mucha memoria para la operación de Deshacer.\n¿Desea desactivar la opción de deshacer?";
 };
 
 Bitmap RID_GRAPHIC_REPLACEBMP
@@ -2616,6 +2697,7 @@ String STR_TABLE_DEFNAME
     Text[ korean ] = "Ç¥";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla";
 };
 
 String STR_GRAPHIC_DEFNAME
@@ -2645,6 +2727,7 @@ String STR_GRAPHIC_DEFNAME
     TEXT[ korean ] = "±×·¡ÇÈ";
     TEXT[ turkish ] = "Grafik";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Imagen";
 };
 
 String STR_OBJECT_DEFNAME
@@ -2674,6 +2757,7 @@ String STR_OBJECT_DEFNAME
     TEXT[ korean ] = "°³Ã¼";
     TEXT[ turkish ] = "Nesne";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Objeto";
 };
 
 String STR_FRAME_DEFNAME
@@ -2703,6 +2787,7 @@ String STR_FRAME_DEFNAME
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco";
 };
 String STR_REGION_DEFNAME
 {
@@ -2731,6 +2816,7 @@ String STR_REGION_DEFNAME
     Text[ korean ] = "¿µ¿ª";
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Area";
 };
 String STR_NUMRULE_DEFNAME
 {
@@ -2759,6 +2845,7 @@ String STR_NUMRULE_DEFNAME
     Text[ korean ] = "¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Numaralama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Numeración";
 };
 String STR_EMPTYPAGE
 {
@@ -2785,6 +2872,7 @@ String STR_EMPTYPAGE
     Text[ korean ] = "ºó ÂÊ";
     Text[ turkish ] = "Boş sayfa";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Página vacía";
 };
 
 QueryBox MSG_CLPBRD_CLEAR
@@ -2816,6 +2904,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE[ greek ] = "¸÷åôå áğïèçêåıóåé ìåãÜëï áñéèìü äåäïìİíùí óôï ğñü÷åéñï.\nÈİëåôå íá ğáñáìåßíåé äéáèİóéìï ôï ğåñéå÷üìåíü ôïõ êáé ãéá Üëëåò åöáñìïãİò;";
     MESSAGE[ korean ] = "Å¬¸³º¸µå¾È¿¡ ÀúÀåµÈ ´ë¿ë·®ÀÇ µ¥ÀÌÅÍ°¡ ÀÖ½À´Ï´Ù.\nÅ¬¸³º¸µåÀÇ ³»¿ëÀ» ´Ù¸¥ ÀÀ¿ëÇÁ·Î±×·¥¿¡¼­ À¯È¿ÇÏµµ·Ï ³²°ÜµÎ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Panoya büyük miktarda veri aktardınız.\nPano içeriğini başka uygulamalarda kullanmak istiyor musunuz?";
+    MESSAGE[ catalan ] = "Usted tiene muchos datos en el portapapeles.\n¿Desea mantener disponible el contenido del portapapeles para otras aplicaciones?";
 };
 
 QueryBox MSG_SAVE_HTML_QUERY
@@ -2846,6 +2935,7 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ korean ] = "HTML ¼­½ÄÀ¸·Î º¯È¯Àº \nÁ¤º¸ ¼Õ½ÇÀÇ ¿øÀÎÀÌ µË´Ï´Ù. \n¹®¼­¸¦ ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "HTML formatına \ndönüşüm sonucunda veri kaybı olabilir. \nBelgeyi kaydetmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La transformación en el formato HTML \npuede causar la pérdida de información. \n¿Desea guardar el documento?";
 };
 
 String STR_ABSTRACT_TITLE
@@ -2873,6 +2963,7 @@ String STR_ABSTRACT_TITLE
     Text[ greek ] = "Abstract: ";
     Text[ korean ] = "Ãß»ó: ";
     Text[ turkish ] = "Özet: ";
+    Text[ catalan ] = "Extracto:  ";
 };
 
 String STR_FDLG_TEMPLATE_BUTTON
@@ -2900,6 +2991,7 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text[ korean ] = "À¯Çü";
     Text[ turkish ] = "Biçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantilla";
 };
 
 String STR_FDLG_TEMPLATE_NAME
@@ -2927,6 +3019,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ korean ] = "ÇöÀç ¼­½ÄÆÄÀÏ: ";
     Text[ turkish ] = "Yürürlükteki biçim: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantilla actual:  ";
 };
 
 String STR_PAGEOFFSET
@@ -2954,6 +3047,7 @@ String STR_PAGEOFFSET
     Text[ korean ] = "ÂÊ ¹øÈ£: ";
     Text[ turkish ] = "Sayfa numarası: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Número de página:  ";
 };
 String STR_PAGEBREAK
 {
@@ -2982,6 +3076,7 @@ String STR_PAGEBREAK
     Text[ korean ] = "»õ ÂÊ ¾Õ¿¡¼­ ³ª´©±â";
     Text[ turkish ] = "Yeni sayfa öncesi kesme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Salto antes de página nueva";
 };
 
 String STR_REDLINE_UNKNOWN_AUTHOR
@@ -3006,5 +3101,6 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ chinese_traditional ] = "¤£©ú";
     Text[ turkish ] = "unknown";
     Text[ arabic ] = "ÛíÑ ãÚÑæİ";
+    Text[ catalan ] = "desconocido";
 };
 
