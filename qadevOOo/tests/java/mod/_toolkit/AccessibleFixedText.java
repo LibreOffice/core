@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleFixedText.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-05-28 10:03:36 $
+ *  last change: $Date: 2003-09-08 12:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,30 @@
 
 package mod._toolkit;
 
-import com.sun.star.awt.PosSize;
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlContainer;
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XFixedText;
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleText;
-import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
 import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XFixedText;
+import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by accesible component
@@ -123,7 +125,7 @@ public class AccessibleFixedText extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF() ;
+        XMultiServiceFactory xMSF =  (XMultiServiceFactory) Param.getMSF() ;
         XControlModel dlgModel = null ;
 
         XControl txtControl = null ;
@@ -152,7 +154,7 @@ public class AccessibleFixedText extends TestCase {
 
             XFixedText xFT = (XFixedText) UnoRuntime.queryInterface
                 (XFixedText.class, txtControl);
-            xFT.setText("AccessibleFixedText");
+            xFT.setText("FxedText");
 
             XControlContainer ctrlCont = (XControlContainer)
                 UnoRuntime.queryInterface(XControlContainer.class, dlgControl) ;
@@ -171,7 +173,7 @@ public class AccessibleFixedText extends TestCase {
         }
 
         try {
-            oObj = (XInterface) xMSF.createInstance
+            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
