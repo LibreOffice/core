@@ -431,10 +431,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleButton</supported-service>
     </component-description>
 
     <component-description>
@@ -444,10 +441,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleRadioButton</supported-service>
     </component-description>
 
     <component-description>
@@ -457,10 +451,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleCheckBox</supported-service>
     </component-description>
 
     <component-description>
@@ -470,8 +461,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleFixedText</supported-service>
     </component-description>
 
     <component-description>
@@ -481,9 +471,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleEditableText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleEdit</supported-service>
     </component-description>
 
     <component-description>
@@ -493,8 +481,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleScrollBar</supported-service>
     </component-description>
 
     <component-description>
@@ -504,8 +491,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleListBox</supported-service>
     </component-description>
 
     <component-description>
@@ -515,8 +501,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleListItem</supported-service>
     </component-description>
 
     <component-description>
@@ -526,9 +511,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleDropDownListBox</supported-service>
     </component-description>
 
     <component-description>
@@ -538,8 +521,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleComboBox</supported-service>
     </component-description>
 
     <component-description>
@@ -549,8 +531,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleDropDownComboBox</supported-service>
     </component-description>
 
     <component-description>
@@ -560,7 +541,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleToolBox</supported-service>
     </component-description>
 
     <component-description>
@@ -570,10 +551,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleToolBoxItem</supported-service>
     </component-description>
 
     <component-description>
@@ -583,8 +561,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessiblePopupMenu</supported-service>
     </component-description>
 
     <component-description>
@@ -594,8 +571,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleMenuBar</supported-service>
     </component-description>
 
     <component-description>
@@ -605,11 +581,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleMenu</supported-service>
     </component-description>
 
     <component-description>
@@ -619,10 +591,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleMenuItem</supported-service>
     </component-description>
 
     <component-description>
@@ -632,7 +601,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleMenuSeparator</supported-service>
     </component-description>
 
     <component-description>
@@ -642,8 +611,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTabControl</supported-service>
     </component-description>
 
     <component-description>
@@ -653,6 +621,6 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTabPage</supported-service>
     </component-description>
 </module-description>
