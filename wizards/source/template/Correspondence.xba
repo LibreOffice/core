@@ -8,16 +8,36 @@ Public Table
 Public sCompany$, sFirstName$, sLastName$, sStreet$, sPostalCode$, sCity$, sState$, sInitials$, sPosition$
 Public DialogExited
 Public oDocument, oText, oBookMarks, oBookMark, oBookMarkCursor, oBookText as Object
+Public bTemplate, bDBFields as Boolean
 
 Sub Main
+	bTemplate = true
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	TemplateDialog = LoadDialog(&quot;Template&quot;, &quot;TemplateDialog&quot;)
 	DialogModel = TemplateDialog.Model
 	DialogModel.Step = 2
 	DialogModel.Optmerge.State = True
-	LoadLanguageCorrespondence()
+	LoadLanguageCorrespondence()	
 	TemplateDialog.Execute
 	TemplateDialog.Dispose()
+End Sub
+
+
+Sub Placeholder
+	bTemplate = false
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	LoadLanguageCorrespondence()
+	bDBFields = false
+	OK()
+End Sub
+
+
+Sub Database
+	bTemplate = false
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	LoadLanguageCorrespondence()
+	bDBFields = true
+	OK()
 End Sub
 
 
@@ -25,12 +45,14 @@ Function LoadLanguageCorrespondence() as Boolean
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
 		msgNoTextmark$ = GetResText(1303) &amp; Chr(13) &amp; Chr(10) &amp; GetResText(1301)
 		msgError$ = GetResText(1302)
-		DialogModel.Title = GetResText(1303+3)
-		DialogModel.CmdCancel.Label = GetResText(1102)
-		DialogModel.CmdCorrGoOn.Label = GetResText(1103)
-		DialogModel.OptSingle.Label = GetResText(1303 + 1)
-		DialogModel.Optmerge.Label = GetResText(1303 + 2)
-		DialogModel.FrmLetter.Label = GetResText(1303)
+		If bTemplate Then
+			DialogModel.Title = GetResText(1303+3)
+			DialogModel.CmdCancel.Label = GetResText(1102)
+			DialogModel.CmdCorrGoOn.Label = GetResText(1103)
+			DialogModel.OptSingle.Label = GetResText(1303 + 1)
+			DialogModel.Optmerge.Label = GetResText(1303 + 2)
+			DialogModel.FrmLetter.Label = GetResText(1303)
+		End If
 		LoadLanguageCorrespondence() = True
 	Else
 		msgbox(&quot;Warning: Resource could not be loaded!&quot;)
@@ -50,7 +72,6 @@ End Function
 Sub OK
 Dim ParaBreak
 Dim sDocLang as String
-Dim bDBFields as Boolean
 Dim oSearchDesc as Object
 Dim oFoundAll as Object
 Dim oFound as Object
@@ -66,11 +87,13 @@ Dim oDocSettings as Object
 Dim oContext as Object
 Dim bDBvalid as Boolean
 	&apos;On Local Error Goto GENERALERROR
-	bDBFields = DialogModel.Optmerge.State              &apos;database or placeholder
 	
-	TemplateDialog.EndExecute()
-	DialogExited = TRUE
-
+	If bTemplate Then
+		bDBFields = DialogModel.Optmerge.State              &apos;database or placeholder
+		TemplateDialog.EndExecute()
+		DialogExited = TRUE
+	End If
+	
 	If bDBFields Then
 		oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
 		sAddressbook = oDBAccess.DataSourceName
