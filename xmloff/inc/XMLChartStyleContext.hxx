@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:27:09 $
+ *  last change: $Author: bm $ $Date: 2001-02-14 17:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,26 +68,29 @@
 class XMLChartStyleContext : public XMLPropStyleContext
 {
 private:
-public:
+    ::rtl::OUString msDataStyleName;
+    SvXMLStylesContext& mrStyles;
 
+protected:
+    /// is called when an attribute at the (auto)style element is found
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                               const ::rtl::OUString& rLocalName,
+                               const ::rtl::OUString& rValue );
+
+public:
     TYPEINFO();
 
-    XMLChartStyleContext( SvXMLImport& rImport, sal_uInt16 nPrefix,
-                          const ::rtl::OUString& rLName,
-                          const com::sun::star::uno::Reference<
-                              com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                          SvXMLStylesContext& rStyles,
-                          sal_uInt16 nFamily=0 );
+    XMLChartStyleContext(
+        SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
     virtual ~XMLChartStyleContext();
 
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList > & xAttrList );
-
-    virtual void CreateAndInsert( sal_Bool bOverwrite );
-    virtual void Finish( sal_Bool bOverwrite );
+    /// is called after all styles have been read to apply styles
+    void FillPropertySet(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet > & rPropSet );
 };
 
 #endif  // _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_

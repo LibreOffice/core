@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:32:42 $
+ *  last change: $Author: bm $ $Date: 2001-02-14 17:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,47 +58,71 @@
  *
  *
  ************************************************************************/
-
 #include "XMLChartStyleContext.hxx"
+
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include "xmlkywd.hxx"
+#endif
+#ifndef _XMLOFF_XMLNUMFI_HXX
+#include "xmlnumfi.hxx"
+#endif
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include "families.hxx"
+#endif
 
 using namespace com::sun::star;
 
 TYPEINIT1( XMLChartStyleContext, XMLPropStyleContext );
 
-XMLChartStyleContext::XMLChartStyleContext(
-    SvXMLImport& rImport, sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-    SvXMLStylesContext& rStyles,
-    sal_uInt16 nFamily ) :
-        XMLPropStyleContext( rImport, nPrefix, rLName, xAttrList, rStyles, nFamily )
+// protected
+
+void XMLChartStyleContext::SetAttribute(
+    sal_uInt16 nPrefixKey,
+    const ::rtl::OUString& rLocalName,
+    const ::rtl::OUString& rValue )
 {
+    if( rLocalName.compareToAscii( sXML_data_style_name ) == 0 )
+    {
+        msDataStyleName = rValue;
+    }
+    else
+    {
+        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+    }
 }
 
+//public
+
+// CTOR
+XMLChartStyleContext::XMLChartStyleContext(
+    SvXMLImport& rImport, sal_uInt16 nPrfx,
+    const ::rtl::OUString& rLName,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
+
+        XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+        mrStyles( rStyles )
+{}
+
+// DTOR
 XMLChartStyleContext::~XMLChartStyleContext()
 {}
 
-SvXMLImportContext* XMLChartStyleContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+void XMLChartStyleContext::FillPropertySet(
+    const uno::Reference< beans::XPropertySet > & rPropSet )
 {
-    SvXMLImportContext *pContext = 0;
-
-    if( !pContext )
-        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                            xAttrList );
-
-    return pContext;
+    XMLPropStyleContext::FillPropertySet( rPropSet );
+    if( msDataStyleName.getLength())
+    {
+        SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)mrStyles.FindStyleChildContext(
+            XML_STYLE_FAMILY_DATA_STYLE, msDataStyleName, sal_True );
+        if( pStyle )
+        {
+            uno::Any aNumberFormat;
+            sal_Int32 nNumberFormat = pStyle->GetKey();
+            aNumberFormat <<= nNumberFormat;
+            rPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" )),
+                                        aNumberFormat );
+        }
+    }
 }
-
-void XMLChartStyleContext::CreateAndInsert( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::CreateAndInsert( bOverwrite );
-}
-
-void XMLChartStyleContext::Finish( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::Finish( bOverwrite );
-}
-
