@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercalls.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:51:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,9 @@ void ScUnoListenerCalls::ExecuteAndClear()
 
     if (!aEntries.empty())
     {
-        std::list<ScUnoListenerEntry>::iterator aItr = aEntries.begin();
-        while ( aItr != aEntries.end() )
+        std::list<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
+        std::list<ScUnoListenerEntry>::iterator aEndItr(aEntries.end());
+        while ( aItr != aEndItr )
         {
             ScUnoListenerEntry aEntry = *aItr;
             try
