@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-28 13:15:15 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 12:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,12 +361,21 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument );
         refPar->Get(2)->PutString( aPosStr );
 
+        //  use link-update flag to prevent closing the document
+        //  while the macro is running
+        BOOL bWasInLinkUpdate = pDocument->IsInLinkUpdate();
+        if ( !bWasInLinkUpdate )
+            pDocument->SetInLinkUpdate( TRUE );
+
         if ( pCell )
             pDocument->LockTable( rPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
         ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, NULL, refPar, refRes );
         if ( pCell )
             pDocument->UnlockTable( rPos.Tab() );
+
+        if ( !bWasInLinkUpdate )
+            pDocument->SetInLinkUpdate( FALSE );
 
         //  Eingabe abbrechen, wenn Basic-Makro FALSE zurueckgibt
         if ( eRet == ERRCODE_NONE && refRes->GetType() == SbxBOOL && refRes->GetBool() == FALSE )
