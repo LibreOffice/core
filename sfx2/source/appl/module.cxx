@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:57:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 14:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,19 @@ SfxModuleArr_Impl& SfxModule::GetModules_Impl()
     return *pModules;
 };
 
+void SfxModule::DestroyModules_Impl()
+{
+    if ( pModules )
+    {
+        SfxModuleArr_Impl& rModules = *pModules;
+        for( USHORT nPos = rModules.Count(); nPos--; )
+    {
+        SfxModule* pMod = rModules.GetObject(nPos);
+        delete pMod;
+    }
+    }
+}
+
 void SfxModule::Invalidate( USHORT nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
@@ -440,3 +453,4 @@ BOOL SfxModule::IsActive()
         return TRUE;
     return FALSE;
 }
+
