@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 07:47:12 $
+ *  last change: $Author: os $ $Date: 2001-07-09 12:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _BIB_DATMAN_HXX
 #include "datman.hxx"
-#endif
-#ifndef _BIB_FIELDWIN_HXX
-#include "fieldwin.hxx"
 #endif
 #ifndef ADRRESID_HXX
 #include "bibresid.hxx"
@@ -186,8 +183,7 @@ void BibFrameCtrl_Impl::disposing( const lang::EventObject& Source )
 
 BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent):
     xWindow( xComponent ),
-    pDatMan(NULL),
-    pFieldWin(NULL)
+    pDatMan(NULL)
 
 {
     Window* pParent = VCLUnoHelper::GetWindow( xWindow );
@@ -206,7 +202,6 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
                                                 BibDataManager* pDataManager):
     xWindow( xComponent ),
     pDatMan(pDataManager),
-    pFieldWin(NULL),
     pBibMod(NULL)
 {
     Window* pParent = VCLUnoHelper::GetWindow( xWindow );
@@ -273,7 +268,6 @@ uno::Reference< XModel >  BibFrameController_Impl::getModel()
 
 void BibFrameController_Impl::dispose()
 {
-    delete pFieldWin;
     bDisposing = sal_True;
     lang::EventObject aObject;
     aObject.Source = (XController*)this;
@@ -626,17 +620,13 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
 
     }
     pDatMan->loadDatabase();
-    if(pFieldWin)
-        pFieldWin->Update(pDatMan->getDatabaseForm());
 }
 
 void BibFrameController_Impl::activate()
 {
-    if(pFieldWin) pFieldWin->Show();
 }
 void BibFrameController_Impl::deactivate()
 {
-    if(pFieldWin) pFieldWin->Hide();
 }
 
 

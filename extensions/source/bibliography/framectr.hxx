@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 11:11:00 $
+ *  last change: $Author: os $ $Date: 2001-07-09 12:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,52 +61,18 @@
 
 #ifndef _BIB_FRAMECTR_HXX
 #define _BIB_FRAMECTR_HXX
-//#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-//#include <com/sun/star/frame/XController.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-//#include <com/sun/star/frame/XStorable.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-//#include <com/sun/star/frame/XModel.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
-//#include <com/sun/star/frame/XFrameActionListener.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
-//#include <com/sun/star/frame/XComponentLoader.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-//#include <com/sun/star/frame/XFrame.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_FRAMEACTIONEVENT_HPP_
-//#include <com/sun/star/frame/FrameActionEvent.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
-//#include <com/sun/star/frame/FrameAction.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-//#include <com/sun/star/util/XURLTransformer.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
-//#include <com/sun/star/awt/XTopWindow.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-//#include <com/sun/star/awt/XWindow.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
-//#include <com/sun/star/awt/PosSize.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
-//#include <usr/uno.hxx>
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -116,9 +82,6 @@
 #include <svtools/svarray.hxx>
 #endif
 
-#ifndef _BIB_FIELDWIN_HXX
-#include "fieldwin.hxx"
-#endif
 #include "bibmod.hxx"
 class BibDataManager;
 
@@ -151,7 +114,6 @@ friend class BibFrameCtrl_Impl;
     sal_Bool                        bHierarchical;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    xDatman;
     BibDataManager*             pDatMan;
-    BibFieldWin*                pFieldWin;
     HdlBibModul                 pBibMod;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );

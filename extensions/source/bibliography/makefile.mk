@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+#   last change: $Author: os $ $Date: 2001-07-09 12:08:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,6 @@ CXXFILES=			bibconfig.cxx\
                     bibbeam.cxx  \
                     toolbar.cxx	 \
                     datman.cxx	 \
-                    bibexch.cxx	 \
-                    fieldwin.cxx
 
 
 SLOFILES=			$(SLO)$/bibconfig.obj \
@@ -97,8 +95,6 @@ SLOFILES=			$(SLO)$/bibconfig.obj \
                     $(SLO)$/bibbeam.obj  \
                     $(SLO)$/toolbar.obj  \
                     $(SLO)$/datman.obj	\
-                    $(SLO)$/bibexch.obj \
-                    $(SLO)$/fieldwin.obj
 
 
 SRCFILES=			bib.src	 \
