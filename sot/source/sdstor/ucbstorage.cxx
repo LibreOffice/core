@@ -639,7 +639,7 @@ void UCBStorage_Impl::Init()
                 if ( !bIsFolder )
                 {
                     // will be replaced by a detection using the MediaType
-                    BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), m_nMode, m_bDirect );
+                    BaseStorageStream* pStream = m_pAntiImpl->OpenStream( xRow->getString(1), STREAM_READ, m_bDirect );
                     if ( Storage::IsStorageFile( const_cast < SvStream* > ( pStream->GetSvStream() ) ) )
                         pElement->m_bIsStorage = TRUE;
                     delete pStream;
