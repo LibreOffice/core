@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:00:27 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ typedef javaPluginError (*jfw_plugin_getAllJavaInfos_ptr)(
 
 typedef javaPluginError (*jfw_plugin_getJavaInfoByPath_ptr)(
     rtl_uString * sPath,
+    rtl_uString * sVendor,
     rtl_uString * sMinVersion,
     rtl_uString * sMaxVersion,
     rtl_uString * * arExcludeList,
@@ -100,7 +101,6 @@ typedef javaPluginError (*jfw_plugin_startJavaVirtualMachine_ptr)(
 
 namespace jfw
 {
-
 
 class CJavaInfo
 {
