@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-02 11:40:37 $
+ *  last change: $Author: pl $ $Date: 2001-11-02 14:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,10 +207,17 @@ static void doTab( Printer* pPrinter )
                         aMaterial >>= aSeq;
                         for( int i = 0; i < aSeq.getLength(); i++ )
                         {
-                            ::rtl::OUString aLine;
-                            aSeq[i].Value >>= aLine;
-                            if( aLine.getLength() )
-                                aLines.push_back( aLine );
+                            ::rtl::OUString aL;
+                            aSeq[i].Value >>= aL;
+                            String aLine( aL );
+                            if( aLine.Len() )
+                            {
+                                ::std::list<String>::const_iterator it;
+                                for( it = aLines.begin(); it != aLines.end() && ! (*it).Equals( aLine ); ++it )
+                                    ;
+                                if( it == aLines.end() )
+                                    aLines.push_back( aLine );
+                            }
                         }
                     }
                 }
