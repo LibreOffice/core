@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-23 11:41:04 $
+ *  last change: $Author: mib $ $Date: 2001-08-01 14:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX //autogen
+#include <tools/tenccvt.hxx>
 #endif
 
 #include <rtl/ustring>
@@ -456,7 +459,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
         GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
     rStrm << (BYTE) GetFamily()
           << (BYTE) GetPitch()
-          << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() ) );
+          << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding( GetCharSet(), (USHORT)rStrm.GetVersion() ) );
 
     if( bToBats )
     {
