@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:47:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,12 +498,11 @@ short SvInsertPlugInDialog::Execute()
         else
             *m_pURL = INetURLObject();
 
-        m_pURL->SetSmartProtocol( INET_PROT_FILE );
         m_aCommands = GetPlugInOptions();
         String aURL = GetPlugInFile();
-        if( aURL.Len() )
-            aURL = URIHelper::SmartRelToAbs( aURL );
 
+        // URL can be a valid and absolute URL or a system file name
+        m_pURL->SetSmartProtocol( INET_PROT_FILE );
         if ( !aURL.Len() || m_pURL->SetSmartURL( aURL ) )
         {
             // create a plugin object
@@ -917,7 +916,13 @@ short SfxInsertFloatingFrameDialog::Execute()
     {
         ::rtl::OUString aURL;
         if ( aEDURL.GetText().Len() )
-            aURL = URIHelper::SmartRelToAbs( aEDURL.GetText() );
+        {
+            // URL can be a valid and absolute URL or a system file name
+            INetURLObject aObj;
+            aObj.SetSmartProtocol( INET_PROT_FILE );
+            if ( aObj.SetSmartURL( aEDURL.GetText() ) )
+                aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
+        }
 
         if ( !m_xObj.is() && aURL.getLength() )
         {
