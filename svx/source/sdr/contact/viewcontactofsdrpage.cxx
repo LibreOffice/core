@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:31:35 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,11 @@ namespace sdr
                 return sal_False;
             }
 
-            // #115593#
-            // As preparation for AF, the ViewContactOfSdrPage says it's painting so that the
-            // invalidates for the hierarchy will work
-            return sal_True;
+            // #i29089#
+            // Instead of simply returning sal_True, look for the state
+            // of PagePainting which is per default disabled for the applications
+            // which do not need let the page be painted (but do it themselves).
+            return rDisplayInfo.GetPagePainting();
         }
 
         // Paint this object. This is before evtl. SubObjects get painted. It needs to return
