@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:38:45 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,14 +194,14 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Opnieuw laden";
             Text[ spanish ] = "~Recargar";
             Text[ english_us ] = "Re~load";
-            Text[ chinese_simplified ] = "ЦШРВЧ°ФШ(~L)";
+            Text[ chinese_simplified ] = "ЦШРВЧ°Ил(~L)";
             Text[ russian ] = "Перезагрузить";
             Text[ polish ] = "Zaіaduj ponownie";
             Text[ japanese ] = "ЌД“З‚ЭЌћ‚Э(~L)";
-            Text[ chinese_traditional ] = "­«·sёЛёь(~L)";
+            Text[ chinese_traditional ] = "­«·sёь¤J(~L)";
             Text[ arabic ] = "ЕЪЗПЙ КНгнб";
             Text[ dutch ] = "~Opnieuw laden";
-            Text[ chinese_simplified ] = "ЦШРВЧ°ФШ(~L)";
+            Text[ chinese_simplified ] = "ЦШРВЧ°Ил(~L)";
             Text[ greek ] = "Ерб~нбцьсфщуз";
             Text[ korean ] = "Аз ·Оµе(~L)";
             Text[ turkish ] = "Yeniden yьkle";
@@ -222,14 +222,14 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Frame opnieuw laden";
             Text[ spanish ] = "~Recargar frame";
             Text[ english_us ] = "Reload Frame";
-            Text[ chinese_simplified ] = "ЦШРВЧ°ФШїт¶ФПу";
+            Text[ chinese_simplified ] = "ЦШРВЧ°Илїт¶ФПу";
             Text[ russian ] = "Перезагрузить рамку";
             Text[ polish ] = "Zaіaduj ponownie Frame";
             Text[ japanese ] = "МЪ°С‚МЌД“З‚ЭЌћ‚Э(~R)";
-            Text[ chinese_traditional ] = "­«·sёЛёь°T®Ш";
+            Text[ chinese_traditional ] = "­«·sёь¤J°T®Ш";
             Text[ arabic ] = "ЕЪЗПЙ КНгнб ЗбЕШЗС";
             Text[ dutch ] = "~Frame opnieuw laden";
-            Text[ chinese_simplified ] = "ЦШРВЧ°ФШїт¶ФПу";
+            Text[ chinese_simplified ] = "ЦШРВЧ°Илїт¶ФПу";
             Text[ greek ] = "Ербнбцьсфщуз ~рлбйуЯпх";
             Text[ korean ] = "ЗБ·№АУ ґЩЅГ ·Оµе";
             Text[ turkish ] = "Frame'i yeniden yьkle";
@@ -723,14 +723,14 @@ Menu MN_READONLY_POPUP
             Text [ french ] = "Charger des i~mages" ;
             Text [ portuguese ] = "~Carregar imagens" ;
             Text [ portuguese_brazilian ] = "G~rafiken laden" ;
-            Text[ chinese_simplified ] = "Ч°ФШНјРО";
+            Text[ chinese_simplified ] = "Ч°ИлНјРО";
             Text[ russian ] = "Загрузить рисунки";
             Text[ polish ] = "Zaіaduj grafiki";
             Text[ japanese ] = "ёЮЧМЁЇё‚М“З‚ЭЌћ‚Э(~L)";
             Text[ chinese_traditional ] = "ёь¤J№П¤щ";
             Text[ arabic ] = "КНгнб ЗбХжС";
             Text[ dutch ] = "A~fbeeldingen laden";
-            Text[ chinese_simplified ] = "Ч°ФШНјРО";
+            Text[ chinese_simplified ] = "Ч°ИлНјРО";
             Text[ greek ] = "Ць~сфщуз гсбцйкюн";
             Text[ korean ] = "±Ч·ЎЗИ ·Оµе";
             Text[ turkish ] = "Grafikleri yьkle";
@@ -1193,7 +1193,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE [ English ] = "Readonly content may not be changed." ;
     MESSAGE[ english_us ] = "Readonly content cannot be changed.\nNo modifications will be accepted";
     MESSAGE[ portuguese ] = "A selecзгo encontra-se numa posiзгo protegida.\nImpossнvel qualquer modificaзгo.";
-    MESSAGE[ russian ] = "Метка записи или выдаление находится в защищенной позиции.\nПоэтому изменения не принимаются.";
+    MESSAGE[ russian ] = "Метка записи или выделение находится в защищенной позиции.\nПоэтому изменения не принимаются.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ french ] = "Le contenu du signet ou de la sйlection est en lecture seule.\nAucune modification permise.";
     MESSAGE[ spanish ] = "La marca o selecciуn se encuentra en una posiciуn protegida.\nPor ello no se puede aceptar una modificaciуn.";
