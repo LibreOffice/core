@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:34:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
