@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:44:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1522,6 +1522,13 @@ public:
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
                                  USHORT nOp);
     // <- #116530#
+
+    // --> FME 2005-03-16 #i44963# The html import sometimes overwrites the
+    // page sizes set in the page descriptions. This function is used to
+    // correct this.
+    void CheckDefaultPageFmt();
+    // <--
+
         // Methoden fuer die Verzeichnisse:
         // - Verzeichnismarke einfuegen loeschen travel
     sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
