@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartLine.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:21:13 $
+ *  last change:$Date: 2003-09-08 12:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,18 @@
 
 package mod._sch;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.chart.XChartDocument;
-import com.sun.star.chart.XDiagram;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.chart.XChartDocument;
+import com.sun.star.chart.XDiagram;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
