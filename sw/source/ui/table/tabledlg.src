@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 13:21:19 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 10:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1976,145 +1976,66 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ hungarian ] = "C√≠msor ism√©tl√©s~e";
         Text[ slovenian ] = "P~onovi naslov";
     };
+    FixedText FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "Textrichtung" ;
+        Text [ english_us ] = "~Text direction" ;
+    };
+    ListBox LB_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 85 , 115 ) ;
+        Size = MAP_APPFONT ( 166 , 50 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList =
+        {
+            < "Links-nach-rechts" ; 0; > ;
+            < "Rechts-nach-links (vertikal)" ; 2; > ;
+            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ english_us ] =
+        {
+             < "Left-to-right" ; 0; > ;
+             < "Right-to-left (vertical)" ; 2; > ;
+             < "Use superordinate object settings" ; 4; > ;
+        };
+    };
+
     FixedLine FL_VERT_ORIENT
     {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Pos = MAP_APPFONT ( 6 , 135 ) ;
         Size = MAP_APPFONT ( 251 , 8 ) ;
+        Text = "Ausrichtung" ;
+        Text [ english_us ] = "Alignment" ;
+    };
+
+    FixedText FT_VERTORIENT
+    {
+        Pos = MAP_APPFONT ( 12 , 148 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "Vertikale Ausrichtung" ;
-        Text [ ENGLISH ] = "Vertical Alignment" ;
-        Text [ english_us ] = "Vertical alignment" ;
-        Text [ swedish ] = "Vertikal justering" ;
-        Text [ danish ] = "Lodret justering" ;
-        Text [ italian ] = "Allineamento verticale" ;
-        Text [ spanish ] = "AlineaciÛn vertical" ;
-        Text [ french ] = "Alignement vertical" ;
-        Text [ dutch ] = "Verticale tekstuitlijning" ;
-        Text [ portuguese_brazilian ] = "Alinhamento vertical" ;
-        Text [ portuguese ] = "Alinhamento vertical" ;
-        Text[ chinese_simplified ] = "ÂûÇÁõ¥ÊñπÂêëÂØπÈΩê";
-        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÔÓ ‚ÂÚËÍ‡ÎË";
-        Text[ polish ] = "WyrÛwnanie w pionie";
-        Text[ japanese ] = "Á∏¶‰ΩçÁΩÆ";
-        Text[ chinese_traditional ] = "ÂûÇÁõ¥Â∞çÈΩä";
-        Text[ arabic ] = "„Õ«–«… —√”Ì…";
-        Text[ greek ] = " ·Ù·Í¸ÒıˆÁ ÛÙÔﬂ˜ÈÛÁ";
-        Text[ korean ] = "ÏàòÏßÅ ÎßûÏ∂§";
-        Text[ turkish ] = "Dikey hizalama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Alineament vertical";
-        Text[ finnish ] = "Tasaus pystysuunnassa";
-        Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ä‡∏¥‡∏î‡πÅ‡∏ô‡∏ß‡∏ï‡∏±‡πâ‡∏á";
-        Text[ czech ] = "Svisl√© zarovn√°n√≠";
-        Text[ hebrew ] = "Vertikale Ausrichtung";
-        Text[ hindi ] = "‡§≤‡§Ç‡§¨‡§∞‡•Ç‡§™ ‡§™‡§Ç‡§ï‡•ç‡§§‡§ø‡§ï‡§∞‡§£";
-        Text[ slovak ] = "Zvisl√© zarovnanie";
-        Text[ hungarian ] = "F√ºgg≈ëleges igaz√≠t√°s";
-        Text[ slovenian ] = "Navpiƒçna poravnava";
+        Text [ english_us ] = "~Vertical alignment" ;
     };
-    RadioButton RB_VERT_TOP
+    ListBox LB_VERTORIENT
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "~Oben" ;
-        Text [ ENGLISH ] = "Top" ;
-        Text [ english_us ] = "T~op" ;
-        Text [ swedish ] = "~Uppe" ;
-        Text [ danish ] = "To~p" ;
-        Text [ italian ] = "Alto" ;
-        Text [ spanish ] = "~Arriba" ;
-        Text [ french ] = "En haut" ;
-        Text [ dutch ] = "~Boven" ;
-        Text [ portuguese_brazilian ] = "~Em cima " ;
-        Text [ portuguese ] = "Em cima" ;
-        Text[ chinese_simplified ] = "‰∏ä(~O)";
-        Text[ russian ] = "¬‚ÂıÛ";
-        Text[ polish ] = "Na gÛr~ze";
-        Text[ japanese ] = "‰∏ä(~O)";
-        Text[ chinese_traditional ] = "‰∏ä(~O)";
-        Text[ arabic ] = "√⁄·Ï";
-        Text[ greek ] = "–‹Ì˘";
-        Text[ korean ] = "ÏúÑ(~O)";
-        Text[ turkish ] = "‹~st";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~uperior";
-        Text[ finnish ] = "~Yl‰reuna";
-        Text[ thai ] = "‡∏ö~‡∏ô";
-        Text[ czech ] = "Naho≈ôe";
-        Text[ hebrew ] = "~Oben";
-        Text[ hindi ] = "~‡§ä‡§™‡§∞ ";
-        Text[ slovak ] = "H~ore";
-        Text[ hungarian ] = "~Fent";
-        Text[ slovenian ] = "Z~goraj";
-    };
-    RadioButton RB_VERT_CENTER
-    {
-        Pos = MAP_APPFONT ( 12 , 140 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "~Mitte" ;
-        Text [ ENGLISH ] = "Middle" ;
-        Text [ english_us ] = "Cente~red" ;
-        Text [ swedish ] = "~Mitten" ;
-        Text [ danish ] = "~Centreret" ;
-        Text [ italian ] = "Centro" ;
-        Text [ spanish ] = "Centrado" ;
-        Text [ french ] = "Centre" ;
-        Text [ dutch ] = "~Midden" ;
-        Text [ portuguese_brazilian ] = "~Centralizado" ;
-        Text [ portuguese ] = "~Centro" ;
-        Text[ chinese_simplified ] = "‰∏≠(~R)";
-        Text[ russian ] = "œÓÒÂÂ‰ËÌÂ";
-        Text[ polish ] = "Poú~rodku";
-        Text[ japanese ] = "‰∏≠Â§Æ(~R)";
-        Text[ chinese_traditional ] = "‰∏≠(~R)";
-        Text[ arabic ] = "«·Ê”ÿ";
-        Text[ greek ] = " ›ÌÙÒÔ";
-        Text[ korean ] = "Í∞ÄÏö¥Îç∞(~R)";
-        Text[ turkish ] = "Ortalanm˝˛";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cent~rat";
-        Text[ finnish ] = "~Keskitetty";
-        Text[ thai ] = "‡∏ï‡∏£‡∏á~‡∏Å‡∏•‡∏≤‡∏á";
-        Text[ czech ] = "St≈ôed";
-        Text[ hebrew ] = "~Mitte";
-        Text[ hindi ] = "~‡§ï‡•á‡§®‡•ç‡§¶‡•ç‡§∞‡§ø‡§§";
-        Text[ slovak ] = "St~red";
-        Text[ hungarian ] = "~K√∂z√©pre";
-        Text[ slovenian ] = "Na sre~dini";
-    };
-    RadioButton RB_VERT_BOTTOM
-    {
-        Pos = MAP_APPFONT ( 12 , 154 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Unt~en" ;
-        Text [ ENGLISH ] = "Bottom" ;
-        Text [ english_us ] = "Bottom" ;
-        Text [ swedish ] = "~Nere" ;
-        Text [ danish ] = "Bund" ;
-        Text [ italian ] = "Basso" ;
-        Text [ spanish ] = "A~bajo" ;
-        Text [ french ] = "En bas" ;
-        Text [ dutch ] = "~Beneden" ;
-        Text [ portuguese_brazilian ] = "Em baixo" ;
-        Text [ portuguese ] = "Em ~baixo" ;
-        Text[ chinese_simplified ] = "‰∏ã";
-        Text[ russian ] = "¬ÌËÁÛ";
-        Text[ polish ] = "U do≥u";
-        Text[ japanese ] = "‰∏ã";
-        Text[ chinese_traditional ] = "‰∏ã";
-        Text[ arabic ] = "√”›·";
-        Text[ greek ] = " ‹Ù˘";
-        Text[ korean ] = "ÏïÑÎûò";
-        Text[ turkish ] = "A˛a˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Part inferior";
-        Text[ finnish ] = "Alareuna";
-        Text[ thai ] = "‡∏•‡πà‡∏≤‡∏á";
-        Text[ czech ] = "Dole";
-        Text[ hebrew ] = "Unt~en";
-        Text[ hindi ] = "‡§®‡•Ä‡§ö‡•á";
-        Text[ slovak ] = "Dole";
-        Text[ hungarian ] = "Lent";
-        Text[ slovenian ] = "Spodaj";
+        Pos = MAP_APPFONT ( 85 , 146 ) ;
+        Size = MAP_APPFONT ( 61 , 50 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList =
+        {
+            < "Oben" ; 0; > ;
+            < "Mitte" ; 1; > ;
+            < "Unten" ; 2; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Top" ; 0; > ;
+            < "Centered" ; 1; > ;
+            < "Bottom" ; 2; > ;
+        };
     };
 };
 InfoBox MSG_WRONG_TABLENAME
