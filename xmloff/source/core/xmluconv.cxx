@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:04:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #endif
 
 #endif
+
+#include <tools/time.hxx>
 
 #ifndef _VCL_FLDUNIT_HXX
 #include <vcl/fldunit.hxx>
@@ -2125,6 +2127,156 @@ OUString SvXMLUnitConverter::encodeStyleName(
     }
 
     return aBuffer.makeStringAndClear();
+}
+
+// static
+rtl::OUString SvXMLUnitConverter::convertTimeDuration( const Time& rTime, sal_Int32 nSecondsFraction )
+{
+    //  return ISO time period string
+    rtl::OUStringBuffer sTmp;
+    sTmp.append( sal_Unicode('P') );                // "period"
+
+    sal_uInt16 nHours = rTime.GetHour();
+    sal_Bool bHasHours = ( nHours > 0 );
+    if ( nHours >= 24 )
+    {
+        //  add days
+
+        sal_uInt16 nDays = nHours / 24;
+        sTmp.append( (sal_Int32) nDays );
+        sTmp.append( sal_Unicode('D') );            // "days"
+
+        nHours -= nDays * 24;
+    }
+    sTmp.append( sal_Unicode('T') );                // "time"
+
+    if ( bHasHours )
+    {
+        sTmp.append( (sal_Int32) nHours );
+        sTmp.append( sal_Unicode('H') );            // "hours"
+    }
+    sal_uInt16 nMinutes = rTime.GetMin();
+    if ( bHasHours || nMinutes > 0 )
+    {
+        sTmp.append( (sal_Int32) nMinutes );
+        sTmp.append( sal_Unicode('M') );            // "minutes"
+    }
+    sal_uInt16 nSeconds = rTime.GetSec();
+    sTmp.append( (sal_Int32) nSeconds );
+    if ( nSecondsFraction )
+    {
+        sTmp.append( sal_Unicode( '.' ) );
+        ::rtl::OUStringBuffer aFractional;
+        convertNumber( aFractional, nSecondsFraction );
+        sTmp.append( aFractional.getStr() );
+    }
+    sTmp.append( sal_Unicode('S') );            // "seconds"
+
+    return sTmp.makeStringAndClear();
+}
+
+// static
+bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time& rTime, sal_Int32* pSecondsFraction )
+{
+    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
+    const sal_Unicode* pStr = aTrimmed.getStr();
+
+    if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
+        return false;
+
+    bool bSuccess = true;
+    sal_Bool bDone = sal_False;
+    sal_Bool bTimePart = sal_False;
+    sal_Bool bFractional = sal_False;
+    sal_Int32 nDays  = 0;
+    sal_Int32 nHours = 0;
+    sal_Int32 nMins  = 0;
+    sal_Int32 nSecs  = 0;
+    sal_Int32 nTemp = 0;
+    sal_Int32 nSecondsFraction = 0;
+
+    while ( bSuccess && !bDone )
+    {
+        sal_Unicode c = *(pStr++);
+        if ( !c )                               // end
+            bDone = sal_True;
+        else if ( sal_Unicode('0') <= c && sal_Unicode('9') >= c )
+        {
+            if ( bFractional )
+            {
+                if ( nSecondsFraction >= LONG_MAX / 10 )
+                    bSuccess = false;
+                else
+                {
+                    nSecondsFraction *= 10;
+                    nSecondsFraction += (c - sal_Unicode('0'));
+                }
+            }
+            else
+            {
+                if ( nTemp >= LONG_MAX / 10 )
+                    bSuccess = false;
+                else
+                {
+                    nTemp *= 10;
+                    nTemp += (c - sal_Unicode('0'));
+                }
+            }
+        }
+        else if ( bTimePart )
+        {
+            if ( c == sal_Unicode('H') )
+            {
+                nHours = nTemp;
+                nTemp = 0;
+            }
+            else if ( c == sal_Unicode('M') )
+            {
+                nMins = nTemp;
+                nTemp = 0;
+            }
+            else if ( c == sal_Unicode('S') )
+            {
+                nSecs = nTemp;
+                nTemp = 0;
+            }
+            else if ( c == '.' )
+            {
+                bFractional = sal_True;
+            }
+            else
+                bSuccess = false;               // invalid characted
+        }
+        else
+        {
+            if ( c == sal_Unicode('T') )            // "T" starts time part
+                bTimePart = TRUE;
+            else if ( c == sal_Unicode('D') )
+            {
+                nDays = nTemp;
+                nTemp = 0;
+            }
+            else if ( c == sal_Unicode('Y') || c == sal_Unicode('M') )
+            {
+                //! how many days is a year or month?
+
+                DBG_ERROR("years or months in duration: not implemented");
+                bSuccess = false;
+            }
+            else
+                bSuccess = false;               // invalid characted
+        }
+    }
+
+    if ( bSuccess )
+    {
+        if ( nDays )
+            nHours += nDays * 24;               // add the days to the hours part
+        rTime = Time( nHours, nMins, nSecs );
+        if ( pSecondsFraction )
+            *pSecondsFraction = nSecondsFraction % 1000;
+    }
+    return bSuccess;
 }
 
 sal_Bool SvXMLUnitConverter::convertAny(      ::rtl::OUStringBuffer&    sValue,
