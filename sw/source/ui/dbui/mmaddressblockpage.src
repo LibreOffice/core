@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:48:32 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     };
     String ST_PREVIEW
     {
-        Text [ de ] = "Preview" ;
+        Text [ de ] = "Vorschau" ;
         Text[ en-US ] = "Preview" ;
     };
     String ST_NONE
