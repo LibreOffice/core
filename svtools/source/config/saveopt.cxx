@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 15:52:42 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 15:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ SvtSaveOptions::SaveGraphicsMode SvtSaveOptions::GetSaveGraphicsMode() const
 
 void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )
 {
-    // don't allow setting of this property
+    // #87097#: don't allow setting of this property (it isn't needed anymore)
     // pImp->SetSaveGraphicsMode( eMode );
 }
 
