@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:31:47 $
+ *  last change: $Author: pb $ $Date: 2001-07-13 09:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,8 +355,10 @@
 #define HID_HELP_TABPAGE_SEARCH                     (HID_SFX_START + 290)
 #define HID_HELP_TABPAGE_BOOKMARKS                  (HID_SFX_START + 291)
 #define HID_TBXCONTROL_FILENEW                      (HID_SFX_START + 292)
+#define HID_ORGANIZE_STDTEMPLATE_ADD                (HID_SFX_START + 293)
+#define HID_ORGANIZE_STDTEMPLATE_DEL                (HID_SFX_START + 294)
 
-#define ACT_SFX_HID_END HID_HELP_TOOLBOXITEM_BOOKMARKS
+#define ACT_SFX_HID_END HID_ORGANIZE_STDTEMPLATE_DEL
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
