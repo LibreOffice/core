@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 15:29:50 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ using namespace com::sun::star;
 
 #define XML_TYPE "Type"
 #define XML_CURRENCYSYMBOL "CurrencySymbol"
-#define XML_CURRENCYEXTENSION "CurrencyExtension"
+#define XML_CURRENCYABBREVIATION "CurrencyAbbreviation"
 #define XML_STANDARDFORMAT "StandardFormat"
 
 sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& sCurrencySymbol,
@@ -113,27 +113,21 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
             {
                 uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
                 uno::Any aCurrencySymbol = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)));
-                uno::Any aCurrencyExtension = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYEXTENSION)));
                 if ( aCurrencySymbol >>= sCurrencySymbol)
                 {
-                    rtl::OUString sCurrencyExtension;
-                    if ( aCurrencyExtension >>= sCurrencyExtension)
+                    rtl::OUString sCurrencyAbbreviation;
+                    uno::Any aCurrencyAbbreviation = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)));
+                    if ( aCurrencyAbbreviation >>= sCurrencyAbbreviation)
                     {
-                        if ( sCurrencyExtension.getLength() != 0 )
-                        {
-                            International IntTest((sCurrencyExtension.toInt32(16) * -1));
-                            sCurrencySymbol = rtl::OUString(IntTest.GetCurrBankSymbol());
-                            return sal_True;
-                        }
+                        if ( sCurrencyAbbreviation.getLength() != 0 )
+                            sCurrencySymbol = sCurrencyAbbreviation;
                         else
                         {
                             if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
                                 sCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
-                            return sal_True;
                         }
                     }
-                    else
-                        return sal_True;
+                    return sal_True;
                 }
             }
             catch ( uno::Exception& )
