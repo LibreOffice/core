@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOffice.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:45:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ public class LocalOffice
         Vector      path    = new Vector();
         path.addElement(officePath + "/program/classes/ridl.jar");
         path.addElement(officePath + "/program/classes/jurt.jar");
-        path.addElement(officePath + "/program/classes/sandbox.jar");
         path.addElement(officePath + "/program/classes/unoil.jar");
         path.addElement(officePath + "/program/classes/juh.jar");
         path.addElement(System.getProperties().getProperty("netbeans.home") +
