@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:02:10 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 08:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,14 +427,14 @@
 #define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STRING_START + 169
 #define STR_DIRECTSQL_CONNECTIONLOST        RID_STRING_START + 170
 
-#define STR_TABLE_PRIV_SELECT               RID_STRING_START + 169
-#define STR_TABLE_PRIV_INSERT               RID_STRING_START + 170
-#define STR_TABLE_PRIV_DELETE               RID_STRING_START + 171
-#define STR_TABLE_PRIV_UPDATE               RID_STRING_START + 172
-#define STR_TABLE_PRIV_ALTER                RID_STRING_START + 173
-#define STR_TABLE_PRIV_REFERENCE            RID_STRING_START + 174
-#define STR_TABLE_PRIV_DROP                 RID_STRING_START + 175
-#define STR_TABLE_PRIV_NAME                 RID_STRING_START + 176
+#define STR_TABLE_PRIV_SELECT               RID_STRING_START + 171
+#define STR_TABLE_PRIV_INSERT               RID_STRING_START + 172
+#define STR_TABLE_PRIV_DELETE               RID_STRING_START + 173
+#define STR_TABLE_PRIV_UPDATE               RID_STRING_START + 174
+#define STR_TABLE_PRIV_ALTER                RID_STRING_START + 175
+#define STR_TABLE_PRIV_REFERENCE            RID_STRING_START + 176
+#define STR_TABLE_PRIV_DROP                 RID_STRING_START + 177
+#define STR_TABLE_PRIV_NAME                 RID_STRING_START + 178
 
 
 //========================================================================
@@ -450,6 +450,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2001/06/20 07:02:10  oj
+ *  #88434# new id for user admin page
+ *
  *  Revision 1.48  2001/06/19 10:58:12  fs
  *  #88393# new direct sql dialog
  *
