@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-29 14:06:19 $
+ *  last change: $Author: ab $ $Date: 2001-07-09 15:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,15 +172,13 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener
 
 class BasMgrContainerListenerImpl: public ContainerListenerHelper
 {
-    Reference< XLibraryContainer > mxScriptCont;
     BasicManager* mpMgr;
     OUString maLibName;     // empty -> no lib, but lib container
 
 public:
     BasMgrContainerListenerImpl( const Reference< XLibraryContainer >& xScriptCont,
         BasicManager* pMgr, OUString aLibName )
-            : mxScriptCont( xScriptCont )
-            , mpMgr( pMgr )
+            : mpMgr( pMgr )
             , maLibName( aLibName ) {}
 
     static void insertLibraryImpl( const Reference< XLibraryContainer >& xScriptCont, BasicManager* pMgr,
@@ -288,7 +286,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
 
     if( bLibContainer )
     {
-        insertLibraryImpl( mxScriptCont, mpMgr, Event.Element, aName );
+        Reference< XLibraryContainer > xScriptCont( Event.Source, UNO_QUERY );
+        insertLibraryImpl( xScriptCont, mpMgr, Event.Element, aName );
     }
     else
     {
