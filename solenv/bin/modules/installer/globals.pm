@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.19 $
-#   last change: $Author: pjunck $ $Date: 2004-11-03 07:56:09 $
+#   $Revision: 1.20 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:32:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -216,6 +216,20 @@ BEGIN
         $quote = "\"";
         $isunix = 0;
         $iswin = 1;
+        $wrapcmd = "";
+    }
+    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" ))
+    {
+        $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
+        $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
+        $checksumfile = "so_checksum";
+        $separator = "/";
+        $pathseparator = "\:";
+        $libextension = "\.dll";
+        $quote = "\'";
+        $isunix = 0;
+        $iswin = 1;
+        $wrapcmd = $ENV{'WRAPCMD'}." -env ";
     }
     else
     {
@@ -228,6 +242,7 @@ BEGIN
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
+        $wrapcmd = "";
     }
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
