@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessController.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-12 17:02:56 $
+ *  last change: $Author: dbo $ $Date: 2000-12-13 13:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,11 @@ module com {  module sun {  module star {  module security {
 //=============================================================================
 
 /** Interface for checking permissions and invoking privileged code.
+    <p>
     A privileged call runs at least in the protection domain of the callers
     code, although you can give an additional AccessControlContext to restrict
     access.
+    </p>
 */
 [ uik(2E78F3CB-3172-44b3-BE60EDCB-91384BC9), ident( "XAccessController", 1.0 ) ]
 interface XAccessController : com::sun::star::uno::XInterface
@@ -99,11 +101,14 @@ interface XAccessController : com::sun::star::uno::XInterface
     /** Determines whether the access request indicated by the specified
         permission should be allowed or denied, based on the security policy
         currently in effect.
+        <p>
         This method quietly returns if the access request is permitted,
         or throws a suitable AccessControlException otherwise.
-
-        @param perm access permission to be checked
-        @exception AccessControlException thrown if access is denied
+        </p>
+        @param perm
+               access permission to be checked
+        @throws AccessControlException
+                thrown if access is denied
     */
     void checkPermission(
         [in] Permission perm )
@@ -111,15 +116,21 @@ interface XAccessController : com::sun::star::uno::XInterface
 
     /** Perform the specified action with privileges enabled and restricted
         by the specified AccessControlContext.
+        <p>
         The action is performed with the intersection of the the permissions
         possessed by the caller's protection domain, and those possessed by
         the domains represented by the specified AccessControlContext.
         If specified XAccessControlContext is null, then the action is performed
         only with the permissions possessed by the caller's protection domain.
-
-        @param action action object to be execute
-        @return result
-        @param restriction access control context to restrict permission; null for no restriction
+        </p>
+        @param action
+               action object to be execute
+        @param restriction
+               access control context to restrict permission; null for no restriction
+        @return
+                result
+        @throws com::sun::star::uno::Exception
+                any UNO exception may be thrown
     */
     any doPrivileged(
         [in] XPrivilegedAction action,
@@ -128,9 +139,11 @@ interface XAccessController : com::sun::star::uno::XInterface
 
     /** This method takes a "snapshot" of the current calling context
         and returns it.
+        <p>
         This context may then be checked at a later point, possibly in another thread.
-
-        @return snapshot of context
+        </p>
+        @return
+                snapshot of context
     */
     XAccessControlContext getContext();
 };

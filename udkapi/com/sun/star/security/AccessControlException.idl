@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessControlException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-12 17:02:56 $
+ *  last change: $Author: dbo $ $Date: 2000-12-13 13:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ module com {  module sun {  module star {  module security {
 */
 exception AccessControlException : com::sun::star::uno::SecurityException
 {
+    /** denied permission
+    */
     Permission LackingPermission;
 };
 
