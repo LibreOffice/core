@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 09:52:10 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,9 +182,7 @@ class SwMasterUsrPref : public SwViewOption
     SwWebColorConfig*   pWebColorConfig;
 
     sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
-    sal_Bool    bFldUpdateInCurrDoc;
     sal_Int32   nLinkUpdateMode;
-    sal_Bool    bLinkUpdateInCurrDoc;
     FieldUnit   eUserMetric;
 
     sal_Int32   nDefTab;            //default tab stop distance
@@ -216,13 +214,6 @@ public:
 
     void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
-
-    sal_Bool    IsUpdateLinksToCurrDoc() const {return bLinkUpdateInCurrDoc;}
-    void        SetUpdateLinksToCurrDoc(sal_Bool bSet){ bLinkUpdateInCurrDoc = bSet; SetModified();}
-
-    sal_Bool    IsUpdateFieldsToCurrDoc() const {return bFldUpdateInCurrDoc;}
-    void        SetUpdateFieldsToCurrDoc(sal_Bool bSet){ bFldUpdateInCurrDoc = bSet; SetModified();}
-
 
     void SetUpdateFields(BOOL bSet)
         {

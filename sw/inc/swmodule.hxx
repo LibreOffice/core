@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:47:40 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,6 @@ public:
     void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
     void ApplyFldUpdateFlags(sal_Int32 nFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
-    void ApplyLinkFieldToDocMode(BOOL bFldDocOnly, BOOL bLinkDocOnly);
-
 
     // ConfigItems erzeugen
     SwSrcViewConfig*    GetSourceViewConfig();
