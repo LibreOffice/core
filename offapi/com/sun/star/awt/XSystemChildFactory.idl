@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemChildFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:05:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@ module com { module sun { module star { module awt {
 
 //=============================================================================
 
-interface XWindowPeer;
+ published interface XWindowPeer;
 
 /** specifies a factory interface for creating system child windows.
  */
-interface XSystemChildFactory : com::sun::star::uno::XInterface
+published interface XSystemChildFactory : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
