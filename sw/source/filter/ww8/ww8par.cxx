@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-16 10:08:12 $
+ *  last change: $Author: cmc $ $Date: 2001-02-20 15:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,8 +863,18 @@ long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
     if( nIniFlags & WW8FL_NO_FTN )
         return 0;
 
+#if 0
     if ( pPaM->GetPoint()->nNode < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
-        return 0;       // ignoriere Footnote ausserhalb des normalen Textes
+#else
+    /*
+    #84095#
+    Ignoring Footnote outside of the normal Text. People will put footnotes
+    into field results and field commands.
+    */
+    if (bIgnoreText ||
+        pPaM->GetPoint()->nNode < rDoc.GetNodes().GetEndOfExtras().GetIndex())
+#endif
+        return 0;
 
     USHORT nType;
     BOOL bAutoNum = TRUE;
@@ -3038,11 +3048,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.11 2001-02-16 10:08:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.12 2001-02-20 15:24:20 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/16 10:08:12  cmc
+      Normalize japanese doptypography variable names
+
       Revision 1.10  2001/02/01 16:11:30  cmc
       #83362# Missing i18n header include
 
