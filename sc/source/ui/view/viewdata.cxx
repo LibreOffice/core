@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:27:23 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
         bDelMarkValid( FALSE ),
         bActive     ( TRUE ),                   //! wie initialisieren?
         bPagebreak  ( FALSE ),
+        eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
         pSpellingView ( NULL ),
         bSelCtrlMouseClick( FALSE )
 {
@@ -393,6 +394,7 @@ ScViewData::ScViewData( const ScViewData& rViewData )
         bDelMarkValid( FALSE ),
         bActive     ( TRUE ),                               //! wie initialisieren?
         bPagebreak  ( rViewData.bPagebreak ),
+        eEditActivePart( rViewData.eEditActivePart ),
         pSpellingView ( rViewData.pSpellingView ),
         bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick )
 {
@@ -922,6 +924,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     if ( bActive && eWhich == GetActivePart() )
     {
+        // keep the part that has the active edit view available after
+        // switching sheets or reference input on a different part
+        eEditActivePart = eWhich;
+
         //  modify members nEditCol etc. only if also extending for needed area
         nEditCol = nNewX;
         nEditRow = nNewY;
