@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-15 13:38:09 $
+ *  last change: $Author: vg $ $Date: 2001-10-18 20:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ Resource RSC_DATASOURCE_TYPES
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ;ãÓÊäÏ ÌÏÇæá";
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
         Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de cálculo";
+        Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
     };
 };
 
@@ -206,7 +206,7 @@ String STR_GENERAL_SDB_ERROR
     Text[ turkish ] = "Error while connecting to the data source";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteyttä tietolähteeseen";
-    Text[ catalan ] = "Error durante la conexión con la fuente de datos";
+    Text[ catalan ] = "S'ha produït un error en connectar amb la font de dades";
 };
 
 String STR_OBJECT_ALREADY_EXSISTS
@@ -232,7 +232,7 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ turkish ] = "Error while creating!";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÅäÔÇÁ!";
     Text[ finnish ] = "Fehler beim Erzeugen!";
-    Text[ catalan ] = "¡Error al crear el objeto!";
+    Text[ catalan ] = "S'ha produït un error durant el procés de creació";
 };
 
 String STR_UNEXPECTED_ERROR
@@ -258,7 +258,7 @@ String STR_UNEXPECTED_ERROR
     Text[ chinese_traditional ] = "ç™¼ç”Ÿä¸€å€‹æ„å¤–çš„éŒ¯èª¤ã€‚ç„¡æ³•åŸ·è¡Œé€™å€‹å‹•ä½œã€‚";
     Text[ turkish ] = "An unexpected error occured. The operation could not be completed.";
     Text[ arabic ] = "An unexpected error occured. The operation could not be completed.";
-    Text[ catalan ] = "An unexpected error occured. The operation could not be completed.";
+    Text[ catalan ] = "S'ha produït un error inesperat. L'operació no s'ha pogut realitzar.";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
@@ -284,7 +284,7 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶\n\n$file$\n\nç„¡æ³•é–‹å•Ÿã€‚";
     Text[ turkish ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ arabic ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text[ catalan ] = "Th document\n\n$file$\n\ncould not be opened.";
+    Text[ catalan ] = "No s'ha pogut obrir el document\n\n$file$.\n\n";
 };
 
 String STR_MISSING_TABLES_XDROP
@@ -310,7 +310,7 @@ String STR_MISSING_TABLES_XDROP
     Text[ chinese_traditional ] = "å› ç‚ºè³‡æ–™åº«é€£ç·šä¸æ”¯æ´é€™å€‹å‹•ä½œè€Œç„¡æ³•åˆªé™¤é€™å€‹è¡¨æ ¼ã€‚";
     Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ catalan ] = "The table can't be dropped, 'cause the database connection does not support this.";
+    Text[ catalan ] = "No es pot suprimir la taula perquè la connexió de la base de dades no ho permet.";
 };
 
 String STR_BUTTON_TEXT_ALL
@@ -338,12 +338,15 @@ String STR_BUTTON_TEXT_ALL
     Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
     Text[ turkish ] = "~All";
     Text[ arabic ] = "~All";
-    Text[ catalan ] = "~All";
+    Text[ catalan ] = "~Tots";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36  2001/10/15 13:38:09  fs
+ *  #93204# new supported charset IBM866 (cyrillic)
+ *
  *  Revision 1.35  2001/08/29 13:53:33  rt
  *  Merge SRC638: 29.08.01 - 15:52:55
  *
@@ -409,6 +412,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
