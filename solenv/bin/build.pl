@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-10 10:25:03 $
+#   last change: $Author: vg $ $Date: 2001-08-10 14:20:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.31 $ ';
+$id_str = ' $Revision: 1.32 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -183,6 +183,11 @@ sub BuildAll {
             print "Building project $Prj\n";
             print   "=============\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
+            if ($ENV{GUI} eq "UNX") {
+                use Cwd 'chdir';
+            };
+            chdir $PrjDir;
+            cwd();
             BuildPrj($PrjDir) if (!$deliver);
             system ("$ENV{DELIVER}") if (!$show);
             RemoveFromDependencies($Prj, \%ParentDepsHash);
@@ -278,11 +283,6 @@ sub get_prj_platform {
 sub BuildPrj {
     my ($dummy, $PrjToBuild);
     $PrjToBuild = shift;
-    if ($ENV{GUI} eq "UNX") {
-        use Cwd 'chdir';
-    };
-    chdir $PrjToBuild;
-    cwd();
     open (PrjBuildFile, "prj/build.lst");
     &get_prj_platform;
     BuildLstLoop:
