@@ -10943,3 +10943,10 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ??0SchXMLStatisticsObjectContext@@QAE@AAVSchXMLImportHelper@@AAVSvXMLImport@@GABVOUString@rtl@@AAV?$list@UDataRowPointStyle@chartxml@@V?$allocator@UDataRowPointStyle@chartxml@@@_STL@@@_STL@@JW4ContextType@0@@Z
 ??1SchXMLStatisticsObjectContext@@UAE@XZ
 ?StartElement@SchXMLStatisticsObjectContext@@UAEXABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+?IsTransient@SvXMLStyleContext@@UBEEXZ
+?IsTransient@XMLBitmapStyleContext@@UBEEXZ
+?IsTransient@XMLDashStyleContext@@UBEEXZ
+?IsTransient@XMLGradientStyleContext@@UBEEXZ
+?IsTransient@XMLHatchStyleContext@@UBEEXZ
+?IsTransient@XMLMarkerStyleContext@@UBEEXZ
+?IsTransient@XMLTransGradientStyleContext@@UBEEXZ
