@@ -553,7 +553,8 @@ void AreaChart::createShapes()
             {
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xLogicTarget);
 
-                fLogicZ = nZ;
+                if(m_nDimension==3)
+                    fLogicZ = nZ;
                 (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                 //collect data point information (logic coordinates, style ):
