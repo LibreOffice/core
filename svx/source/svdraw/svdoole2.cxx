@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-10 12:59:59 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 09:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,22 +461,6 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     SdrRectObj::SetModel( pNewModel );
 
-    if( pModel && bChg && !aName.Len() )
-    {
-        String aStr( mpImpl->aPersistName );
-        USHORT i = 1;
-        while( pModel->GetPersist() && pModel->GetPersist()->Find( aStr ) )
-        {
-            i++;
-            aStr = mpImpl->aPersistName;
-            aStr += String::CreateFromInt32(i);
-        }
-
-        aName = ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
-        aName += sal_Unicode(' ');
-        aName += String::CreateFromInt32( i );
-    }
-
     if( bChg )
         Connect();
 }
@@ -537,6 +521,21 @@ void SdrOle2Obj::SetName(const XubString& rStr)
 XubString SdrOle2Obj::GetName() const
 {
     return aName;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::SetPersistName( const String& rPersistName )
+{
+    mpImpl->aPersistName = rPersistName;
+    SetChanged();
+}
+
+// -----------------------------------------------------------------------------
+
+String SdrOle2Obj::GetPersistName() const
+{
+    return mpImpl->aPersistName;
 }
 
 // -----------------------------------------------------------------------------
@@ -748,6 +747,9 @@ void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, 
 
     if( pInfo != NULL )
     {
+        SvPersistRef    xNewRef;
+        const String    aOldPersistName( rPersistName );
+
         // loop because of storage bug 46033
         for( USHORT i = 1, n = 0; n < 100; i++, n++ )
         {
@@ -757,18 +759,17 @@ void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, 
 
             while( rDstPersist.Find( aStr ) )
             {
-                i++;
                 aStr = rPersistName;
-                aStr += String::CreateFromInt32( i );
+                aStr += String::CreateFromInt32( ++i );
             }
 
-            const SvInPlaceObjectRef& rRef = &rSrcPersist.GetObject( rPersistName = aStr );
+            xNewRef = rDstPersist.CopyObject( aOldPersistName, rPersistName = aStr, &rSrcPersist );
 
-            if( rDstPersist.Copy( rPersistName, rPersistName, pInfo, &rSrcPersist ) )
+            if( xNewRef.Is() )
                 break;
         }
 
-        *ppObjRef = &rDstPersist.GetObject( rPersistName );
+        *ppObjRef = &xNewRef;
     }
 }
 
@@ -787,7 +788,12 @@ SdrObject* SdrOle2Obj::Clone( SdrPage* pNewPage, SdrModel* pNewModel ) const
     SdrOle2Obj* pObj = static_cast< SdrOle2Obj* >( SdrObjFactory::MakeNewObject( GetObjInventor(), GetObjIdentifier(),NULL ) );
 
     if( pObj )
+    {
         pObj->ImpAssign( *this, pNewPage, pNewModel );
+
+        if( pNewModel )
+            pObj->SetModel( pNewModel );
+    }
 
     return pObj;
 }
@@ -1119,9 +1125,8 @@ void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
     aStr+=String::CreateFromInt32( i );
     while( pPers->Find( aStr ) )
     {
-        i++;
         aStr = mpImpl->aPersistName;
-        aStr += String::CreateFromInt32(i);
+        aStr += String::CreateFromInt32(++i);
     }
     mpImpl->aPersistName = aStr;
 }
