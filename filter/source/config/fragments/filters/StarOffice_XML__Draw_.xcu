@@ -1,4 +1,4 @@
-    <node oor:name="StarOffice XML (Draw)" oor:op="replace">
+    <node oor:name="StarOffice XML (Draw)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>draw_StarOffice_XML_Draw</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
@@ -9,10 +9,10 @@
         <prop oor:name="UIName">
             <value xml:lang="pl">%productname% %formatversion% - Rysunek</value>
             <value xml:lang="hu">%productname% %formatversion%-rajz</value>
-            <value xml:lang="ja">%productname% %formatversion% 図形描画</value>
+            <value xml:lang="ja">%productname% %formatversion% 図形�??画</value>
             <value xml:lang="es">%productname% %formatversion% Dibujo</value>
             <value xml:lang="tr">%productname% %formatversion% Drawing</value>
-            <value xml:lang="ru">%productname% %formatversion% Рисунок</value>
+            <value xml:lang="ru">%productname% %formatversion% Ри�?унок</value>
             <value xml:lang="th">%productname% %formatversion% Drawing</value>
             <value xml:lang="x-comment">%productname% %formatversion% Zeichnung</value>
             <value xml:lang="ca">%productname% %formatversion% Drawing</value>
@@ -38,5 +38,5 @@
             <value xml:lang="it">%productname% %formatversion% Disegno</value>
             <value xml:lang="x-translate">%productname% %formatversion% Zeichnung</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED</value></prop>
     </node>
