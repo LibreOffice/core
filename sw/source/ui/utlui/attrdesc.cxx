@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:31:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,11 +469,11 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
                 rText += ::GetMetricText( GetWidth(), eCoreUnit, ePresUnit, pIntl );
                 rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
-            if ( ATT_VAR_SIZE != GetSizeType() )
+            if ( ATT_VAR_SIZE != GetHeightSizeType() )
             {
                 rText += ',';
                 rText += ' ';
-                const USHORT nId = ATT_FIX_SIZE == eFrmSize ?
+                const USHORT nId = ATT_FIX_SIZE == eFrmHeightType ?
                                         STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
                 rText += SW_RESSTR( nId );
                 rText += ' ';
