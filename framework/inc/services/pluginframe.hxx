@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pluginframe.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:05:16 $
+ *  last change: $Author: cd $ $Date: 2002-05-16 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
                 to run our code synchronized with our main thread!
 
     @implements
-    @base       SolarThreadExecutor
+    @base       -
 *//*-*************************************************************************************************************/
 
 enum eIMPL_PluginCommand
@@ -527,35 +527,18 @@ enum eIMPL_PluginCommand
     NEWURL
 };
 
-class cIMPL_MainThreadExecutor  :   public ::vcl::SolarThreadExecutor
+class cIMPL_MainThreadExecutorRequest
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        cIMPL_MainThreadExecutor(           eIMPL_PluginCommand                             eCommand                ,
+        cIMPL_MainThreadExecutorRequest(    eIMPL_PluginCommand                             eCommand                ,
                                             PlugInFrame*                                    pPluginInstance         );
 
-        cIMPL_MainThreadExecutor(           eIMPL_PluginCommand                             eCommand                ,
+        cIMPL_MainThreadExecutorRequest(    eIMPL_PluginCommand                             eCommand                ,
                                             PlugInFrame*                                    pPluginInstance         ,
                                     const   css::uno::Any&                                  aPlatformWindowHandle   ,
                                             sal_Bool                                        bEmbedded               );
 
-        cIMPL_MainThreadExecutor(           eIMPL_PluginCommand                             eCommand                ,
+        cIMPL_MainThreadExecutorRequest(    eIMPL_PluginCommand                             eCommand                ,
                                             PlugInFrame*                                    pPluginInstance         ,
                                     const   ::rtl::OUString&                                sMIMEDescription        ,
                                     const   ::rtl::OUString&                                sURL                    ,
@@ -563,12 +546,6 @@ class cIMPL_MainThreadExecutor  :   public ::vcl::SolarThreadExecutor
                                     const   css::uno::Reference< css::io::XInputStream >&   xStream                 ,
                                     const   css::uno::Any&                                  aSessionId              );
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
         /*-****************************************************************************************************//**
             @short      -
             @descr      -
@@ -581,7 +558,7 @@ class cIMPL_MainThreadExecutor  :   public ::vcl::SolarThreadExecutor
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    virtual long doIt();
+        virtual long doIt();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
@@ -590,6 +567,7 @@ class cIMPL_MainThreadExecutor  :   public ::vcl::SolarThreadExecutor
 
         eIMPL_PluginCommand                             m_eCommand              ;   /// switch to specify forward function
         PlugInFrame*                                    m_pPluginInstance       ;   /// instance wich has started this swicth mechanism and wish to called back from us
+        css::uno::Reference< css::uno::XInterface >     m_xPluginInstance       ;   /// reference to our plugin frame to prevent that plugin frame dies before we call back
         css::uno::Any                                   m_aPlatformWindowHandle ;   /// parameter for XPluginInstance->createWindow()
         sal_Bool                                        m_bEmbedded             ;   /// parameter for XPluginInstance->createWindow()
         ::rtl::OUString                                 m_sMIMEDescription      ;   /// parameter for XPluginInstance->newStream()/newURL()
@@ -597,6 +575,28 @@ class cIMPL_MainThreadExecutor  :   public ::vcl::SolarThreadExecutor
         ::rtl::OUString                                 m_sFilter               ;   /// parameter for XPluginInstance->newStream()/newURL()
         css::uno::Reference< css::io::XInputStream >    m_xStream               ;   /// parameter for XPluginInstance->newStream()/newURL()
         css::uno::Any                                   m_aSessionId            ;   /// parameter for XPluginInstance->newStream()/newURL()
+};
+
+class cIMPL_MainThreadExecutor
+{
+    //-------------------------------------------------------------------------------------------------------------
+    //  public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        static void execute( cIMPL_MainThreadExecutorRequest* pRequest );
+
+        /*-****************************************************************************************************//**
+            @short      -
+            @descr      -
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        DECL_STATIC_LINK( cIMPL_MainThreadExecutor, worker, cIMPL_MainThreadExecutorRequest* );
 };
 
 }       //  namespace framework
