@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-12-03 10:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,9 +238,12 @@ sal_Bool XMLMarkerStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
                                             awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
                                             rUnitConverter );
             const drawing::PointSequenceSequence& rSequence = aPoints.GetPointSequenceSequence();
-            const drawing::PointSequence *pSequences = rSequence.getConstArray();
+            if( rSequence.getLength() )
+            {
+                const drawing::PointSequence *pSequences = rSequence.getConstArray();
 
-            aPointSequence = drawing::PointSequence( pSequences[0] );
+                aPointSequence = drawing::PointSequence( pSequences[0] );
+            }
         }
     }
 
