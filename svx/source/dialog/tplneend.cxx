@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:36 $
+ *  last change: $Author: iha $ $Date: 2002-10-17 17:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
         // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
         if( pLineEndList )
         {
-            if( *pPageType == 1 && *pPosLineEndLb >= 0 &&
+            if( *pPosLineEndLb >= 0 &&
                 *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
             {
                 aLbLineEnds.SelectEntryPos( *pPosLineEndLb );
