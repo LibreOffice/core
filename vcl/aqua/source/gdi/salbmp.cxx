@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-06 02:56:38 $
+ *  last change: $Author: pluby $ $Date: 2001-01-06 18:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,7 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
 
                 if ( mhPixMap )
                 {
-                    USHORT nBits = (**mhPixMap).pixelSize;
-                    mnBitCount = ( nBits <= 8 ) ? nBits : 24;
+                    mnBitCount = (**mhPixMap).pixelSize;
                     maSize = rSize;
                     bRet = TRUE;
                 }
@@ -138,14 +137,27 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
 {
-    return Create( rSalBmp, rSalBmp.mnBitCount );
+    return Create( rSalBmp, rSalBmp.GetBitCount() );
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
-    return Create( rSalBmp, rSalBmp.mnBitCount );
+    USHORT nBitCount = 0;
+
+    if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+    {
+        mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+
+        if ( mhPixMap )
+            nBitCount = (**mhPixMap).pixelSize;
+    }
+
+    if ( !nBitCount )
+        nBitCount = rSalBmp.GetBitCount();
+
+    return Create( rSalBmp, nBitCount );
 }
 
 // ------------------------------------------------------------------
@@ -225,7 +237,7 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
                 LockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
 
                 pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN;
-                pBuffer->mnBitCount = ( nBits <= 8 ) ? nBits : 24;
+                pBuffer->mnBitCount = nBits;
 
                 switch ( nBits )
                 {
