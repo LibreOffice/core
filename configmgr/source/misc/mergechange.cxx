@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:17:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,11 +535,12 @@ namespace configmgr
         {
             RelativePath::Iterator const firstEnsure = aEnsurePath.begin();
             RelativePath::Iterator lastEnsure = aEnsurePath.end();
+            RelativePath::Iterator it;
 
             OSL_ASSERT( firstEnsure != lastEnsure );
             --lastEnsure; // last to ensure is the actual root
 
-            for(RelativePath::Iterator it = firstEnsure; it != lastEnsure; ++it)
+            for( it = firstEnsure; it != lastEnsure; ++it)
             {
                 OSL_ASSERT( it != aEnsurePath.end() );
 
@@ -837,11 +838,12 @@ namespace configmgr
 
             RelativePath::Iterator const firstEnsure = _aPathToChange.begin();
             RelativePath::Iterator lastEnsure = _aPathToChange.end();
+            RelativePath::Iterator it;
 
             OSL_ASSERT( firstEnsure != lastEnsure );
             --lastEnsure; // last to ensure is the actual root
 
-            for(RelativePath::Iterator it = firstEnsure; it != lastEnsure; ++it)
+            for( it = firstEnsure; it != lastEnsure; ++it)
             {
                 OSL_ASSERT( it != _aPathToChange.end() );
 
