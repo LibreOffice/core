@@ -165,6 +165,8 @@ public final class DocumentSerializerImpl
         org.w3c.dom.Document contentDom = sxwDoc.getContentDOM();
         org.w3c.dom.Document styleDom   = sxwDoc.getStyleDOM();
 
+        styleCat = new StyleCatalog(25);
+
         NodeList nl = null;
         String families[] = new String[] { PocketWordConstants.TEXT_STYLE_FAMILY,
                                            PocketWordConstants.PARAGRAPH_STYLE_FAMILY,
@@ -172,18 +174,27 @@ public final class DocumentSerializerImpl
         Class classes[]   = new Class[] { TextStyle.class,
                                           ParaStyle.class,
                                           TextStyle.class };
-        styleCat = new StyleCatalog(25);
 
         String[] styleTypes = new String[] { TAG_OFFICE_STYLES,
                                              TAG_OFFICE_AUTOMATIC_STYLES,
                                              TAG_OFFICE_MASTER_STYLES };
 
-        // Process the Style XML tree
-        for (int i = 0; i < styleTypes.length; i++ ) {
-            nl = styleDom.getElementsByTagName(styleTypes[i]);
-            if (nl.getLength() != 0) {
-                styleCat.add(nl.item(0), families, classes, null, false);
-            }
+        /*
+         * Documents converted from PSW -> SXW will not have a style.xml when
+         * being converted back to PSW.  This would occur if a document was
+         * not modified within Writer between conversions.
+         *
+         * Any Writer modifications and saves create the style.xml and other
+         * portions of a complete Writer SXW file.
+         */
+        if (styleDom != null) {
+           // Process the Style XML tree
+           for (int i = 0; i < styleTypes.length; i++ ) {
+               nl = styleDom.getElementsByTagName(styleTypes[i]);
+               if (nl.getLength() != 0) {
+                   styleCat.add(nl.item(0), families, classes, null, false);
+               }
+           }
         }
 
         /*
@@ -238,12 +249,16 @@ public final class DocumentSerializerImpl
         ParaStyle pstyle = (ParaStyle)styleCat.lookup(styleName,
                                 PocketWordConstants.PARAGRAPH_STYLE_FAMILY, null,
                                 ParaStyle.class);
-        pstyle = (ParaStyle)pstyle.getResolved();
+        if (pstyle != null) {
+            pstyle = (ParaStyle)pstyle.getResolved();
+        }
 
         TextStyle tstyle = (TextStyle)styleCat.lookup(styleName,
                                 PocketWordConstants.PARAGRAPH_STYLE_FAMILY, null,
                                 TextStyle.class);
-        tstyle = (TextStyle)tstyle.getResolved();
+        if (pstyle != null) {
+            tstyle = (TextStyle)tstyle.getResolved();
+        }
 
         try {
             pswDoc.addParagraph(pstyle, inList);
