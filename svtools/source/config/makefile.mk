@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 20:47:13 $
+#   last change: $Author: obo $ $Date: 2004-03-17 10:12:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,8 +99,7 @@ SLOFILES = \
     $(SLO)$/searchopt.obj				\
     $(SLO)$/printwarningoptions.obj		\
     $(SLO)$/printoptions.obj			\
-    $(SLO)$/syslocaleoptions.obj        \
-    $(SLO)$/cacheoptions.obj			\
+    $(SLO)$/cacheoptions.obj            \
     $(SLO)$/regoptions.obj				\
     $(SLO)$/cmdoptions.obj				\
     $(SLO)$/extendedsecurityoptions.obj \
@@ -127,7 +126,8 @@ LIB1OBJFILES=  \
         $(SLO)$/languageoptions.obj     \
         $(SLO)$/ctloptions.obj          \
         $(SLO)$/cjkoptions.obj          \
-        $(SLO)$/colorcfg.obj
+        $(SLO)$/colorcfg.obj            \
+    $(SLO)$/syslocaleoptions.obj        
 
 # --- Targets ------------------------------------------------------
 
