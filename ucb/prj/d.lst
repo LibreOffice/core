@@ -28,6 +28,7 @@
 ..\source\ucp\hierarchy\ucphier.xml %_DEST%\xml%_EXT%\ucphier.xml
 ..\source\ucp\package\ucppkg.xml %_DEST%\xml%_EXT%\ucppkg.xml
 ..\source\ucp\webdav\ucpdav.xml %_DEST%\xml%_EXT%\ucpdav.xml
+..\source\ucp\gvfs\ucpgvfs.xml %_DEST%\xml%_EXT%\ucpgvfs.xml
 ..\source\ucp\tdoc\ucptdoc.xml %_DEST%\xml%_EXT%\ucptdoc.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
