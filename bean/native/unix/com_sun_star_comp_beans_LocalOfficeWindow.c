@@ -2,9 +2,9 @@
  *
  *  $RCSfile: com_sun_star_comp_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-14 15:10:23 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <X11/Xutil.h>
 #include <X11/Intrinsic.h>
 
+#include "jni.h"
 #include "jawt.h"
 #include "jawt_md.h"
 
