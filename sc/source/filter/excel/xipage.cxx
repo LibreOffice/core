@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:20:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,12 +183,7 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
 {
     String aString;
     if( rStrm.GetRecLeft() )
-    {
-        if( GetBiff() < xlBiff8 )
-            rStrm.AppendByteString( aString, false );
-        else
-            rStrm.AppendUniString( aString );
-    }
+        aString = (GetBiff() < xlBiff8) ? rStrm.ReadByteString( false ) : rStrm.ReadUniString();
 
     switch( rStrm.GetRecId() )
     {
