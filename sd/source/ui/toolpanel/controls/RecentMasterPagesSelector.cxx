@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:47:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,20 +132,15 @@ void RecentMasterPagesSelector::Fill (void)
     int nPageCount = RecentlyUsedMasterPages::Instance().GetMasterPageCount();
     for (nIndex=0; nIndex<nPageCount; nIndex++)
     {
-        SdPage* pMasterPage =
-            RecentlyUsedMasterPages::Instance().GetMasterPage(nIndex);
-        if (pMasterPage != NULL)
+        String sPageName (RecentlyUsedMasterPages::Instance().GetMasterPageName(nIndex));
+        if (aCurrentNames.find(sPageName) == aCurrentNames.end())
         {
-            if (aCurrentNames.find(pMasterPage->GetName())
-                == aCurrentNames.end())
-            {
-                AddItemForPage (
-                    String(),
-                    pMasterPage->GetName(),
-                    pMasterPage,
-                    Image());
-                aCurrentNames.insert (pMasterPage->GetName());
-            }
+            AddItemForPage (
+                String(),
+                sPageName,
+                NULL,
+                Image());
+            aCurrentNames.insert (sPageName);
         }
     }
     mpPageSet->Rearrange ();
