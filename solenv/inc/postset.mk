@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:09 $
+#   last change: $Author: hr $ $Date: 2003-07-16 18:20:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -317,7 +317,7 @@ finn$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_35=finn
 longlang_35=finnish
 langext_35=35
-rsclang_35=-lgFINNiSH 
+rsclang_35=-lgFINNISH 
 rescharset_35=$(finn$(LANG_GUI))
 RCLANGFLAGS_35+= -d FINNISH
 iso_35=fi
