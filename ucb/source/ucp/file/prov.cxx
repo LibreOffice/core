@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-18 10:11:12 $
+ *  last change: $Author: sb $ $Date: 2000-11-13 11:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,4 +820,46 @@ rtl::OUString SAL_CALL FileProvider::getNormalizedPathFromFileURL( const rtl::OU
         return rtl::OUString();
 
     return aRed;
+}
+
+rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUString& BaseURL,
+                                                               const rtl::OUString& SystemPath )
+    throw( uno::RuntimeException )
+{
+    rtl::OUString aNormalizedPath;
+    if ( osl::FileBase::normalizePath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
+        return rtl::OUString();
+
+    rtl::OUString aRed;
+    sal_Bool success = m_pMyShell->uncheckMountPoint( aNormalizedPath,aRed );
+    if( ! success )
+        return rtl::OUString();
+
+    rtl::OUString aUrl;
+    sal_Bool err = m_pMyShell->getUrlFromUnq( aRed,aUrl );
+    if( err )
+        return rtl::OUString();
+
+    return aUrl;
+}
+
+rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUString& BaseURL,
+                                                               const rtl::OUString& URL )
+    throw( uno::RuntimeException )
+{
+    rtl::OUString aUnq;
+    sal_Bool err = m_pMyShell->getUnqFromUrl( URL,aUnq );
+    if( err )
+        return rtl::OUString();
+
+    rtl::OUString aRed;
+    sal_Bool success = m_pMyShell->checkMountPoint( aUnq,aRed );
+    if( ! success )
+        return rtl::OUString();
+
+    rtl::OUString aSystemPath;
+    if (osl::FileBase::getSystemPathFromNormalizedPath( aRed,aSystemPath ) != osl::FileBase::E_None )
+        return rtl::OUString();
+
+    return aSystemPath;
 }

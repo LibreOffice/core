@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-18 10:11:12 $
+ *  last change: $Author: sb $ $Date: 2000-11-13 11:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,14 @@ namespace fileaccess {
 
         virtual rtl::OUString SAL_CALL getNormalizedPathFromFileURL( const rtl::OUString& HostName,
                                                                      const rtl::OUString& URL )
+            throw( com::sun::star::uno::RuntimeException );
+
+        virtual rtl::OUString SAL_CALL getFileURLFromSystemPath( const rtl::OUString& BaseURL,
+                                                                 const rtl::OUString& SystemPath )
+            throw( com::sun::star::uno::RuntimeException );
+
+        virtual rtl::OUString SAL_CALL getSystemPathFromFileURL( const rtl::OUString& BaseURL,
+                                                                 const rtl::OUString& URL )
             throw( com::sun::star::uno::RuntimeException );
 
 
