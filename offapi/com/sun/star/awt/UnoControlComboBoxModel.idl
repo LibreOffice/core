@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlComboBoxModel.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:19:20 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,18 @@ published service UnoControlComboBoxModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the alignment of the text in the control.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+     */
+    [optional, property] short Align;
+
+    //-------------------------------------------------------------------------
+
     /** specifies whether automatic completion of text is enabled.
      */
     [property] boolean Autocomplete;
@@ -109,6 +121,17 @@ published service UnoControlComboBoxModel
         </pre>
      */
     [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since #i24694#
+     */
+    [optional, property] long BorderColor;
 
     //-------------------------------------------------------------------------
 
@@ -210,6 +233,12 @@ published service UnoControlComboBoxModel
      */
     [property] com::sun::star::util::Color TextLineColor;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the selection in the control should be hidden when the control is not
+        active (focused).
+    */
+    [optional, property] boolean HideInactiveSelection;
 };
 
 //=============================================================================
