@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:33:07 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "Distanza dal contenuto";
         Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Avstånd till innehåll";
-        Text[ polish ] = "Odstêp od zawartoœci";
+        Text[ polish ] = "Odstêp od zawarto?ci";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "“à—e‚Ü‚Å‚ÌŠÔŠu";
         Text[ korean ] = "³»¿ë¿¡ °£°Ý";
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
         Text [ italian ] = "~Posizione" ;
-        Text [ portuguese_brazilian ] = "~Posição" ;
+        Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~Posição" ;
         Text [ finnish ] = "~Sijainti" ;
         Text [ danish ] = "Placering" ;
