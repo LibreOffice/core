@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:51:10 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,6 +964,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_COLUMN_DLG, FALSE);
         }
         break;
+        case FN_CONVERT_TABLE_TO_TEXT:
+        case FN_CONVERT_TEXT_TO_TABLE:
         case FN_CONVERT_TEXT_TABLE:
         {
             sal_Unicode cDelim = 0;
@@ -1440,6 +1442,22 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     !rSh.IsInsRegionAvailable() )
                     rSet.DisableItem( nWhich );
                 break;
+            case FN_CONVERT_TABLE_TO_TEXT:
+            {
+                USHORT eFrmType = rSh.GetFrmType(0,TRUE);
+                if( (eFrmType & FRMTYPE_FOOTNOTE) ||
+                    !rSh.GetTableFmt() )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
+            case FN_CONVERT_TEXT_TO_TABLE:
+            {
+                USHORT eFrmType = rSh.GetFrmType(0,TRUE);
+                if( (eFrmType & FRMTYPE_FOOTNOTE) ||
+                    !rSh.IsTextToTableAvailable()  )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
             case FN_CONVERT_TEXT_TABLE:
             {
                 USHORT eFrmType = rSh.GetFrmType(0,TRUE);
