@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:16:24 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 }
 
                 String aFileToOpen;
-                AssistentDlg* pPilotDlg=new AssistentDlg( NULL, !bNewDocDirect );
+                AssistentDlg* pPilotDlg=new AssistentDlg( DIALOG_NO_PARENT, !bNewDocDirect );
 
                 // Open the Pilot
                 if( pPilotDlg->Execute()==RET_CANCEL )
@@ -336,7 +336,10 @@ void SdModule::Execute(SfxRequest& rReq)
                                 SfxAllItemSet aSet( *pSet->GetPool() );
                                 aSet.Put( aFile );
                                 aSet.Put( aReferer );
-                                aSet.Put( aPassword );
+                                // Put the password into the request
+                                // only if it is not empty.
+                                if (aPasswrd.Len() > 0)
+                                    aSet.Put( aPassword );
 
                                 const SfxPoolItem* pRet = pFrame->LoadDocumentSynchron( aSet );
                             }
@@ -346,7 +349,10 @@ void SdModule::Execute(SfxRequest& rReq)
                                     SFX_APP()->GetPool());
                                 aRequest.AppendItem (aFile);
                                 aRequest.AppendItem (aReferer);
-                                aRequest.AppendItem (aPassword);
+                                // Put the password into the request
+                                // only if it is not empty.
+                                if (aPasswrd.Len() > 0)
+                                    aRequest.AppendItem (aPassword);
                                 aRequest.AppendItem (SfxStringItem (
                                     SID_TARGETNAME,
                                     String (RTL_CONSTASCII_USTRINGPARAM ("_default"))));
