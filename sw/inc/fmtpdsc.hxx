@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtpdsc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 13:24:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ public:
 };
 
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(BOOL bInP) const
     { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }
