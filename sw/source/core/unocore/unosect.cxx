@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:23:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,12 @@
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -662,7 +668,12 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                                     aSection.SetType(FILE_LINK_SECTION);
                                 String sFileName;
                                 if(aLink.FileURL.getLength())
-                                    sFileName += URIHelper::SmartRelToAbs( aLink.FileURL);
+                                {
+                                    sFileName += URIHelper::SmartRel2Abs(
+                                            pFmt->GetDoc()->GetDocShell()->GetMedium()->GetURLObject(),
+                                            aLink.FileURL,
+                                            URIHelper::GetMaybeFileHdl());
+                                }
                                 sFileName += sfx2::cTokenSeperator;
                                 sFileName += String(aLink.FilterName);
                                 sFileName += sfx2::cTokenSeperator;
