@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
+ *  last change: $Author: sb $ $Date: 2001-02-14 08:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,8 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aNameED.ClearModifyFlag();
 
     // Bestimmung des R/O-Flags
-    if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, FALSE, &pItem ) )
+    if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, FALSE, &pItem )
+         || !pItem )
         aReadOnlyCB.Hide();
     else
         aReadOnlyCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
