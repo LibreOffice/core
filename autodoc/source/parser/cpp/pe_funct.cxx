@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_funct.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: np $ $Date: 2002-05-28 16:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ PE_Function::On_afterStdOperatorLeftBracket_RightBracket(const char * i_sText)
     SetTokenResult(done,stay);
     pStati->SetCur(afterName);
 
-    aName;
+    aName << i_sText;
 }
 
 void
