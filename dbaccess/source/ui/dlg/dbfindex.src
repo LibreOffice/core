@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:00:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,13 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29.6.1  2003/07/16 17:11:08  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.29  2003/07/03 18:00:07  hr
+ *  INTEGRATION: CWS rc2merge (1.28.8); FILE MERGED
+ *  2003/07/03 14:44:10 ihi 1.28.8.1: rc-2 merge all languages
+ *
  *  Revision 1.28.8.1  2003/07/03 14:44:10  ihi
  *  rc-2 merge all languages
  *
@@ -531,6 +538,8 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
+
 
 
 
