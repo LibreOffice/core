@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 16:20:40 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 18:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #define RID_STR_START        2000
-#define RID_FWK_DIALOG_START 0
+#define RID_FWK_DIALOG_START 10000
 
 #define STR_MENU_ADDONS         (RID_STR_START+0)
 #define STR_MENU_ADDONHELP      (RID_STR_START+1)
@@ -70,18 +70,18 @@
 #define STR_SAVECOPYDOC         (RID_STR_START+5)
 
 // License Dialog
-#define DLG_LICENSE                         (RID_FWK_DIALOG_START+256)
-#define ML_LICENSE                          (RID_FWK_DIALOG_START+11)
-#define FT_INFO1                            (RID_FWK_DIALOG_START+12)
-#define FT_INFO2                            (RID_FWK_DIALOG_START+13)
-#define FT_INFO3                            (RID_FWK_DIALOG_START+14)
-#define FT_INFO2_1                          (RID_FWK_DIALOG_START+15)
-#define FT_INFO3_1                          (RID_FWK_DIALOG_START+16)
-#define FL_DIVIDE                           (RID_FWK_DIALOG_START+17)
-#define PB_PAGEDOWN                         (RID_FWK_DIALOG_START+18)
-#define IMG_ARROW                           (RID_FWK_DIALOG_START+19)
-#define LICENSE_ACCEPT                      (RID_FWK_DIALOG_START+20)
-#define LICENSE_NOTACCEPT                   (RID_FWK_DIALOG_START+21)
-#define PB_DECLINE                          (RID_FWK_DIALOG_START+22)
-#define PB_ACCEPT                           (RID_FWK_DIALOG_START+23)
+#define DLG_LICENSE                         (RID_FWK_DIALOG_START+110)
+#define ML_LICENSE                          (RID_FWK_DIALOG_START+111)
+#define FT_INFO1                            (RID_FWK_DIALOG_START+112)
+#define FT_INFO2                            (RID_FWK_DIALOG_START+113)
+#define FT_INFO3                            (RID_FWK_DIALOG_START+114)
+#define FT_INFO2_1                          (RID_FWK_DIALOG_START+115)
+#define FT_INFO3_1                          (RID_FWK_DIALOG_START+116)
+#define FL_DIVIDE                           (RID_FWK_DIALOG_START+117)
+#define PB_PAGEDOWN                         (RID_FWK_DIALOG_START+118)
+#define IMG_ARROW                           (RID_FWK_DIALOG_START+119)
+#define LICENSE_ACCEPT                      (RID_FWK_DIALOG_START+120)
+#define LICENSE_NOTACCEPT                   (RID_FWK_DIALOG_START+121)
+#define PB_DECLINE                          (RID_FWK_DIALOG_START+122)
+#define PB_ACCEPT                           (RID_FWK_DIALOG_START+123)
 
