@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:11:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,10 @@ mnRangeId(rOld.mnRangeId)
 ScShapeChild::~ScShapeChild()
 {
     if (mpAccShape)
+    {
+        mpAccShape->dispose();
         mpAccShape->release();
+    }
 }
 
 struct ScShapeChildLess
@@ -1753,7 +1756,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 
 void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard();
+    ScUnoGuard aGuard;
     IsObjectValid();
     if (getAccessibleParent().is())
     {
