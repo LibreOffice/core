@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:47:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,12 @@ protected:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
     SvStrings & rSectionList;
-    SwXMLSectionList ( SvStrings & rNewSectionList );
+
+    // #110680#
+    SwXMLSectionList(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SvStrings & rNewSectionList );
+
     virtual ~SwXMLSectionList ( )
         throw();
 };
