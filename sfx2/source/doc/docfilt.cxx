@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 11:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,18 +300,6 @@ String SfxFilter::GetSuffixes() const
     while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND );
     while( aRet.SearchAndReplace( ';', ',' ) != STRING_NOTFOUND );
     return aRet;
-}
-
-SfxOfficeFilter::SfxOfficeFilter( const SfxFilterContainer* pContainer ) :
-    SfxFilter(
-        String( SfxResId( RID_OFFICEFILTER ) ),
-        String( SfxResId( RID_OFFICEFILTER_WILDCARD ) ),
-        SFX_FILTER_IMPORT | SFX_FILTER_REDIRECT | SFX_FILTER_NOTINCHOOSER,
-        SotExchange::RegisterFormatName( DEFINE_CONST_UNICODE("OfficeDocument") ),
-        String( SfxResId( RID_OFFICEFILTER_MACTYPE ) ),
-        String( SfxResId( RID_OFFICEFILTER_OS2TYPE ) ),
-        0, String(), pContainer, String() )
-{
 }
 
 String SfxFilter::GetFilterNameWithPrefix() const
