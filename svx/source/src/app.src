@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:04:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,9 +412,11 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
         SID_ATTR_PARA_RIGHT_TO_LEFT;\
         SID_DIRECTEXPORTDOCASPDF;\
         SID_ADDONS;\
+        SID_SET_SUPER_SCRIPT;   \
+        SID_SET_SUB_SCRIPT;     \
     };\
     IdCount = {\
-        300;\
+        303;\
     };
 
 #define OFFICE_ID_LIST\
