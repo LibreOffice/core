@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:04:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
+#include "document.hxx"
 #include "sc.hrc"
 
 
@@ -92,7 +93,8 @@
 
 void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScViewData* pData = GetViewData();
+    ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     USHORT              nSlotId  = rReq.GetSlot();
     short               nRepeat = 1;
@@ -122,6 +124,13 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         }
     }
 
+    short nRTLSign = 1;
+    if ( pData->GetDocument()->IsLayoutRTL( pData->GetTabNo() ) )
+    {
+        //! evaluate cursor movement option?
+        nRTLSign = -1;
+    }
+
     // einmal extra, damit der Cursor bei ExecuteInputDirect nicht zuoft gemalt wird:
     pTabViewShell->HideAllCursors();
 
@@ -146,19 +155,19 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORLEFT:
-            pTabViewShell->MoveCursorRel( -nRepeat, 0, SC_FOLLOW_LINE, bSel, bKeep );
+            pTabViewShell->MoveCursorRel( -nRepeat * nRTLSign, 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKLEFT:
-            pTabViewShell->MoveCursorArea( -nRepeat, 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( -nRepeat * nRTLSign, 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORRIGHT:
-            pTabViewShell->MoveCursorRel(   nRepeat, 0, SC_FOLLOW_LINE, bSel, bKeep );
+            pTabViewShell->MoveCursorRel(   nRepeat * nRTLSign, 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKRIGHT:
-            pTabViewShell->MoveCursorArea( nRepeat, 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( nRepeat * nRTLSign, 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORPAGEDOWN:
