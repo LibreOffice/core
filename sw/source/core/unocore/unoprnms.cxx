@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:27:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,9 +769,11 @@ const SwPropNameTab aPropNameTab = {
 /* 0687 UNO_NAME_SAVE_AS_SINGLE_FILE */  {MAP_CHAR_LEN("SaveAsSingleFile")},
 /* 0688 UNO_NAME_SAVE_FILTER         */  {MAP_CHAR_LEN("SaveFilter")},
 /* 0689 UNO_NAME_COPIES_TO           */  {MAP_CHAR_LEN("CopiesTo")},
-/* 0890 UNO_NAME_BLIND_COPIES_TO     */  {MAP_CHAR_LEN("BlindCopiesTo")},
-/* 0891 UNO_NAME_IN_SERVER_PASSWORD  */  {MAP_CHAR_LEN("InServerPassword")},
-/* 0892 UNO_NAME_OUT_SERVER_PASSWORD */  {MAP_CHAR_LEN("OutServerPassword")}
+/* 0690 UNO_NAME_BLIND_COPIES_TO     */  {MAP_CHAR_LEN("BlindCopiesTo")},
+/* 0691 UNO_NAME_IN_SERVER_PASSWORD  */  {MAP_CHAR_LEN("InServerPassword")},
+/* 0692 UNO_NAME_OUT_SERVER_PASSWORD */  {MAP_CHAR_LEN("OutServerPassword")},
+/* 0693 UNO_NAME_SAVE_FILTER         */  {MAP_CHAR_LEN("SaveFilterOptions")},
+/* 0694 UNO_NAME_SAVE_DATA           */  {MAP_CHAR_LEN("SaveFilterData")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
