@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextFieldHandler.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:48:50 $
+*  last change: $Author: kz $ $Date: 2004-11-27 09:07:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,23 +60,37 @@
 
 package com.sun.star.wizards.text;
 
+import java.awt.TextField;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.Vector;
 
+import com.sun.star.text.UserDataPart;
 import com.sun.star.text.XDependentTextField;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.text.XTextRange;
+import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.DateTime;
 import com.sun.star.util.XRefreshable;
+import com.sun.star.util.XUpdatable;
 import com.sun.star.wizards.common.Helper;
 
 public class TextFieldHandler {
@@ -202,6 +216,53 @@ public class TextFieldHandler {
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        }
+    }
+
+
+    public void updateDocInfoFields() {
+        try {
+            XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
+            while (xEnum.hasMoreElements()) {
+                Object oTextField = xEnum.nextElement();
+                XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+
+                if (xSI.supportsService("com.sun.star.text.TextField.ExtendedUser")) {
+                       XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
+                    xUp.update();
+                }
+                if (xSI.supportsService("com.sun.star.text.TextField.User")) {
+                       XUpdatable xUp = (XUpdatable) UnoRuntime.queryInterface(XUpdatable.class, oTextField);
+                    xUp.update();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void updateDateFields() {
+        try {
+            XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
+            Calendar cal = new GregorianCalendar();
+            DateTime dt = new DateTime();
+            dt.Day = (short) cal.get(Calendar.DAY_OF_MONTH);
+            dt.Year = (short) cal.get(Calendar.YEAR);
+            dt.Month = (short) cal.get(Calendar.MONTH);
+            dt.Month++;
+
+            while (xEnum.hasMoreElements()) {
+                Object oTextField = xEnum.nextElement();
+                XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+
+                if (xSI.supportsService("com.sun.star.text.TextField.DateTime")) {
+                    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
+                    xPSet.setPropertyValue("DateTimeValue", dt);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
