@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 12:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 #include "dataobj.hxx"
+#include "transobj.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -87,6 +88,7 @@
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
             TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL |
                                     WB_RANGESELECT | WB_MULTISELECT | WB_DRAG | WB_SIZEABLE ) ),
+            DropTargetHelper( this ),
             pViewData( pData ),
             bDragging( FALSE ),
             bErrorShown( FALSE ),
@@ -457,58 +459,57 @@ USHORT lcl_DocShellNr( ScDocument* pDoc )
     return 0;
 }
 
-BOOL __EXPORT ScTabControl::Drop( const DropEvent& rEvt )
+sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     EndSwitchPage();
 
-#ifdef OLD_DND
     ScModule* pScMod = SC_MOD();
-    ScDocument* pSourceDoc = pScMod->GetDragData().pDoc;
-    if (pSourceDoc && bDragging)
+    const ScDragData& rData = pScMod->GetDragData();
+    if ( rData.pCellTransfer && bDragging )
     {
-        USHORT nPos = GetPrivatDropPos( rEvt.GetPosPixel() );
+        USHORT nPos = GetPrivatDropPos( rEvt.maPosPixel );
         HideDropPos();
+        ScDocument* pSourceDoc = rData.pCellTransfer->GetSourceDocument();
         ScDocument* pDestDoc = pViewData->GetDocument();
         if ( pSourceDoc == pDestDoc && pSourceDoc->IsDocEditable() )
         {
-            pViewData->GetView()->MoveTable( lcl_DocShellNr(pDestDoc), nPos, rEvt.GetAction()==DROP_COPY );
+            pViewData->GetView()->MoveTable( lcl_DocShellNr(pDestDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
-            pScMod->SetDragIntern();                // nicht loeschen
+            rData.pCellTransfer->SetDragWasInternal();          // don't delete
             return TRUE;
         }
         else
             Sound::Beep();
     }
-#endif
 
-    return FALSE;
+    return 0;
 }
 
-BOOL __EXPORT ScTabControl::QueryDrop( DropEvent& rEvt )
+sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    if (rEvt.IsLeaveWindow())
+    if ( rEvt.mbLeaving )
     {
         EndSwitchPage();
         HideDropPos();
-        return TRUE;
+        return rEvt.mnAction;
     }
 
-    if (bDragging)          // innerhalb eines TabControls
+    if (bDragging)          // within one TabControl
     {
         const ScDocument* pDoc = pViewData->GetDocument();
         if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
         {
-            ShowDropPos( rEvt.GetPosPixel() );
-            return TRUE;
+            ShowDropPos( rEvt.maPosPixel );
+            return rEvt.mnAction;
         }
     }
-    else        // umschalten fuer alle Formate
+    else                    // switch sheets for all formats
     {
-        SwitchPage( rEvt.GetPosPixel() );   // switch sheet after timeout
-        return FALSE;                       // nothing can be dropped here
+        SwitchPage( rEvt.maPosPixel );      // switch sheet after timeout
+        return 0;                           // nothing can be dropped here
     }
 
-    return FALSE;
+    return 0;
 }
 
 long ScTabControl::StartRenaming()

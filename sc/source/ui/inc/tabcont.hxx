@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2001-05-04 12:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svtools/tabbar.hxx>
 #endif
 
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 
 class ScViewData;
 
@@ -75,7 +79,7 @@ class ScViewData;
 #define SC_TABBAR_DEFWIDTH      270
 
 
-class ScTabControl : public TabBar
+class ScTabControl : public TabBar, public DropTargetHelper
 {
 private:
     ScViewData*     pViewData;
@@ -93,10 +97,11 @@ private:
 protected:
     virtual void    Select();
     virtual void    Command( const CommandEvent& rCEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     virtual long    StartRenaming();
     virtual long    AllowRenaming();
