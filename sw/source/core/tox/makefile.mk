@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:32:20 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:51:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=tox
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -77,18 +75,7 @@ AUTOSEG=true
 CDEFS+=-Dmydebug
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:128
-.ENDIF
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        tox.cxx \
-        toxhlp.cxx \
-        txmsrt.cxx
-
-
 
 SLOFILES =  \
         $(SLO)$/tox.obj \
