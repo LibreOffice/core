@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:28:33 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,8 +934,6 @@ void SfxObjectShell::RegisterTransfer( SfxMedium& rMedium )
     werden. So kann dokumentweise abgebrochen werden.  */
 {
     rMedium.SetCancelManager_Impl( GetMedium()->GetCancelManager_Impl() );
-    if( IsReloading() )
-        rMedium.SetUsesCache( sal_False );
     rMedium.SetReferer( GetMedium()->GetName() );
 }
 
@@ -946,17 +944,6 @@ void SfxObjectShell::PrepareReload( )
     Wird vor dem Reload gerufen und gibt die Moeglichkeit,
     etwaige Caches zu leeren. */
 {
-}
-
-//-------------------------------------------------------------------------
-
-sal_Bool SfxObjectShell::IsReloading() const
-/*  [Beschreibung ]
-    Wird beim Aufsetzen neuer Downloads abgefragt, um gegebenenfalls
-    am SfxMedium SetUsesCache( sal_False ) zu rufen. */
-
-{
-    return !GetMedium()->UsesCache();
 }
 
 //-------------------------------------------------------------------------
@@ -1058,15 +1045,9 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
         Invalidate( SID_SAVEASDOC );
-        SfxFrame* pFrame = GetMedium()->GetLoadTargetFrame();
-        if( pFrame ) pFrame->SetLoadCancelable_Impl( 0 );
     }
 
     pImp->nLoadedFlags |= nFlags;
-
-    if( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT &&
-        pImp->nLoadedFlags & SFX_LOADED_IMAGES )
-        GetMedium()->SetUsesCache( sal_True );
 
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem,
                      SfxBoolItem, SID_HIDDEN, sal_False );
@@ -1178,30 +1159,6 @@ void AutoReloadTimer_Impl::Timeout()
 
     pObjSh->Get_Impl()->pReloadTimer = 0;
     delete this;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::SetActualSize( const Size &rSize )
-{
-    pImp->aViewSize = rSize;
-}
-
-//-------------------------------------------------------------------------
-
-Size SfxObjectShell::GetActualSize() const
-{
-    return pImp->aViewSize;
-}
-
-sal_Bool SfxObjectShell::IsInFrame() const
-{
-    return pImp->bInFrame;
-}
-
-void SfxObjectShell::SetInFrame( sal_Bool bOn )
-{
-    pImp->bInFrame = bOn;
 }
 
 SfxModule* SfxObjectShell::GetModule() const
@@ -1835,7 +1792,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     if ( !pLoadingMedium )
         // if there is no loading medium, take the medium of this document
         pLoadingMedium = pMedium;
-
+/*
     if ( !pWindow && pLoadingMedium )
     {
         // is this document is loading currently?
@@ -1852,7 +1809,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
                 pWindow->Show();
         }
     }
-
+*/
     return pWindow;
 }
 
