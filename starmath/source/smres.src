@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: nf $ $Date: 2003-07-17 15:47:55 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13196,6 +13196,7 @@ String RID_MATH_TOOLBOX
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
     Text[ slovak ] = "Hlavný panel nástrojov";
 };
+
 
 
 
