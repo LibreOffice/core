@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:31:53 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 10:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,33 @@ public:
     ScChangeAction*                 GetAction()         { return pAction; }
 };
 
+// --- ScChangeActionCellListEntry -----------------------------------------
+// this is only for the XML Export in the hxx
+class ScChangeActionContent;
+
+class ScChangeActionCellListEntry
+{
+    friend class ScChangeAction;
+    friend class ScChangeActionDel;
+    friend class ScChangeActionMove;
+    friend class ScChangeTrack;
+
+            ScChangeActionCellListEntry*    pNext;
+            ScChangeActionContent*          pContent;
+
+                                ScChangeActionCellListEntry(
+                                    ScChangeActionContent* pContentP,
+                                    ScChangeActionCellListEntry* pNextP )
+                                    :   pContent( pContentP ),
+                                        pNext( pNextP )
+                                    {}
+
+public:
+    const ScChangeActionCellListEntry* GetNext() const { return pNext; } // this is only for the XML Export public
+    const ScChangeActionContent* GetContent() const { return pContent; } // this is only for the XML Export public
+
+    DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
+};
 
 // --- ScChangeAction -------------------------------------------------------
 
@@ -249,7 +276,6 @@ class ScChangeTrack;
 class ScChangeActionIns;
 class ScChangeActionDel;
 class ScChangeActionContent;
-class ScChangeActionCellListEntry;
 
 class ScChangeAction
 {
@@ -294,10 +320,10 @@ protected:
                                                 const ScChangeActionState eState,
                                                 const DateTime& aDateTime,
                                                 const String& aUser,
-                                                const String& aComment );
+                                                const String& aComment ); // only to use in the XML import
                                 ScChangeAction( ScChangeActionType,
                                                 const ScBigRange&,
-                                                const ULONG nAction);
+                                                const ULONG nAction); // only to use in the XML import
                                 ScChangeAction( SvStream&,
                                     ScMultipleReadHeader&, ScChangeTrack* );
     virtual                     ~ScChangeAction();
@@ -357,7 +383,7 @@ protected:
                                     }
             BOOL                RemoveDeletedIn( const ScChangeAction* );
             void                RemoveAllDeletedIn();
-//          void                SetDeletedIn( ScChangeAction* );
+            void                SetDeletedIn( ScChangeAction* );
 
             ScChangeActionLinkEntry*    AddDeleted( ScChangeAction* p )
                                     {
@@ -395,7 +421,6 @@ protected:
 
 public:
 
-            void                SetDeletedIn( ScChangeAction* );
             BOOL                IsInsertType() const
                                     {
                                         return eType == SC_CAT_INSERT_COLS ||
@@ -495,6 +520,11 @@ public:
                                 // Benutzerkommentar setzen
             void                SetComment( const String& rStr )
                                     { aComment = rStr; }
+
+            void                LoadDeleted(const ULONG nActionNumber,
+                                            ScChangeTrack* pTrack); // only use this with the XML import
+            void                LoadDependent(const ULONG nActionNumber,
+                                            ScChangeTrack* pTrack); // only use this with the XML import
 };
 
 
@@ -517,8 +547,14 @@ class ScChangeActionIns : public ScChangeAction
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
 
 public:
-                                ScChangeActionIns(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
-                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment, const ScChangeActionType eType);
+                                ScChangeActionIns(const ULONG nActionNumber,
+                                        const ScChangeActionState eState,
+                                        const ULONG nRejectingNumber,
+                                        const ScBigRange& aBigRange,
+                                        const String& aUser,
+                                        const DateTime& aDateTime,
+                                        const String &sComment,
+                                        const ScChangeActionType eType); // only to use in the XML import
 
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE ) const;
@@ -597,19 +633,11 @@ class ScChangeActionDel : public ScChangeAction
                                     USHORT nVer, ScChangeTrack* );
     virtual                     ~ScChangeActionDel();
 
-            void                SetCutOffInsert( ScChangeActionIns* p, short n )
-                                    { pCutOff = p; nCutOff = n; }
             ScChangeActionIns*  GetCutOffInsert() { return pCutOff; }
 
     virtual void                AddContent( ScChangeActionContent* );
     virtual void                DeleteCellEntries();
 
-            ScChangeActionDelMoveEntry* AddCutOffMove( ScChangeActionMove* pMove,
-                                        short nFrom, short nTo )
-                                    {
-                                        return new ScChangeActionDelMoveEntry(
-                                        &pLinkMove, pMove, nFrom, nTo );
-                                    }
             void                UndoCutOffMoves();
             void                UndoCutOffInsert();
 
@@ -624,9 +652,17 @@ class ScChangeActionDel : public ScChangeAction
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 public:
-                                ScChangeActionDel(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
-                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
-                                                const ScChangeActionType eType, const short nD, ScChangeTrack* pTrack); // wich of nDx and nDy is set is depend on the type
+                                ScChangeActionDel(const ULONG nActionNumber,
+                                                const ScChangeActionState eState,
+                                                const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange,
+                                                const String& aUser,
+                                                const DateTime& aDateTime,
+                                                const String &sComment,
+                                                const ScChangeActionType eType,
+                                                const short nD,
+                                                ScChangeTrack* pTrack); // only to use in the XML import
+                                                                        // wich of nDx and nDy is set is depend on the type
 
                                 // ob dieses das unterste einer Reihe (oder
                                 // auch einzeln) ist
@@ -655,6 +691,19 @@ public:
 
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE ) const;
+            void                LoadCellContent(ULONG nActionNumber,
+                                            ScChangeTrack* pTrack); // only to use in the XML import
+            void                SetCutOffInsert( ScChangeActionIns* p, short n )
+                                    { pCutOff = p; nCutOff = n; }   // only to use in the XML import
+                                                                    // this should be protected, but for the XML import it is public
+            // only to use in the XML import
+            // this should be protected, but for the XML import it is public
+            ScChangeActionDelMoveEntry* AddCutOffMove( ScChangeActionMove* pMove,
+                                        short nFrom, short nTo )
+                                    {
+                                        return new ScChangeActionDelMoveEntry(
+                                        &pLinkMove, pMove, nFrom, nTo );
+                                    }
 };
 
 
@@ -706,9 +755,17 @@ class ScChangeActionMove : public ScChangeAction
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 public:
-                                ScChangeActionMove(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
-                                                const ScBigRange& aToBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
-                                                const ScBigRange& aFromBigRange, ScChangeTrack* pTrack);
+                                ScChangeActionMove(const ULONG nActionNumber,
+                                                const ScChangeActionState eState,
+                                                const ULONG nRejectingNumber,
+                                                const ScBigRange& aToBigRange,
+                                                const String& aUser,
+                                                const DateTime& aDateTime,
+                                                const String &sComment,
+                                                const ScBigRange& aFromBigRange,
+                                                ScChangeTrack* pTrack); // only to use in the XML import
+            const ScChangeActionCellListEntry* GetFirstCellEntry() const
+                                    { return pFirstCell; } // only to use in the XML export
 
             const ScBigRange&   GetFromRange() const { return aFromRange; }
             void                GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const;
@@ -718,6 +775,8 @@ public:
 
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
+            void                LoadCellContent(ULONG nActionNumber,
+                                            ScChangeTrack* pTrack); // only to use in the XML import
 };
 
 
@@ -739,11 +798,6 @@ class ScChangeActionContent : public ScChangeAction
                                 ScChangeActionContent( SvStream&,
                                     ScMultipleReadHeader&, ScDocument*,
                                     USHORT nVer, ScChangeTrack* );
-
-            void                SetNextContent( ScChangeActionContent* p )
-                                    { pNextContent = p; }
-            void                SetPrevContent( ScChangeActionContent* p )
-                                    { pPrevContent = p; }
 
             void                InsertInSlot( ScChangeActionContent** pp )
                                     {
@@ -838,10 +892,19 @@ public:
                                         pNextInSlot( NULL ),
                                         ppPrevInSlot( NULL )
                                     {}
-                                ScChangeActionContent(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
-                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
-                                                ScBaseCell* pOldCell); // to use for XML Import
-                                ScChangeActionContent(const ULONG nActionNumber, ScBaseCell* pOldCell, const ScBigRange& aBigRange); // to use for XML Import of Generated Actions
+                                ScChangeActionContent(const ULONG nActionNumber,
+                                                const ScChangeActionState eState,
+                                                const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange,
+                                                const String& aUser,
+                                                const DateTime& aDateTime,
+                                                const String &sComment,
+                                                ScBaseCell* pOldCell,
+                                                ScDocument* pDoc); // to use for XML Import
+                                ScChangeActionContent(const ULONG nActionNumber,
+                                                ScBaseCell* pOldCell,
+                                                const ScBigRange& aBigRange,
+                                                ScDocument* pDoc); // to use for XML Import of Generated Actions
     virtual                     ~ScChangeActionContent();
 
         ScChangeActionContent*  GetNextContent() const { return pNextContent; }
@@ -872,6 +935,14 @@ public:
             void                SetOldNewCells( ScBaseCell* pOldCell,
                                     ULONG nOldFormat, ScBaseCell* pNewCell,
                                     ULONG nNewFormat, ScDocument* pDoc );
+
+                                // use this only in the XML import
+            void                SetNewCell(ScBaseCell* pNewCell, ScDocument* pDoc);
+                                // this functions should be protected but for the XML import they are public
+            void                SetNextContent( ScChangeActionContent* p )
+                                    { pNextContent = p; }
+            void                SetPrevContent( ScChangeActionContent* p )
+                                    { pPrevContent = p; }
 
                                 // moeglichst nicht verwenden,
                                 // setzt nur String bzw. generiert Formelzelle
@@ -913,8 +984,13 @@ class ScChangeActionReject : public ScChangeAction
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
 
 public:
-                                ScChangeActionReject(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
-                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment);
+                                ScChangeActionReject(const ULONG nActionNumber,
+                                                const ScChangeActionState eState,
+                                                const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange,
+                                                const String& aUser,
+                                                const DateTime& aDateTime,
+                                                const String &sComment); // only to use in the XML import
 };
 
 
@@ -1102,7 +1178,8 @@ public:
                                     }
 
                                 ScChangeTrack( ScDocument* );
-                                ScChangeTrack( ScDocument*, const StrCollection& );
+                                ScChangeTrack( ScDocument*,
+                                            const StrCollection& ); // only to use in the XML import
     virtual                     ~ScChangeTrack();
             void                Clear();
 
@@ -1307,9 +1384,11 @@ public:
             USHORT              GetLoadedFileFormatVersion() const
                                     { return nLoadedFileFormatVersion; }
 
-            ULONG               AddLoadedGenerated(ScBaseCell* pOldCell, const ScBigRange& aBigRange );
-            void                AppendLoaded( ScChangeAction* pAppend );
-            void                SetActionMax(ULONG nTempActionMax) { nActionMax = nTempActionMax; }
+            ULONG               AddLoadedGenerated(ScBaseCell* pOldCell,
+                                                const ScBigRange& aBigRange ); // only to use in the XML import
+            void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
+            void                SetActionMax(ULONG nTempActionMax)
+                                    { nActionMax = nTempActionMax; } // only to use in the XML import
 
 };
 
