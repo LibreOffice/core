@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:06:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8995,6 +8995,12 @@ void Window::EnableNativeWidget( BOOL bEnable )
     if( bEnable != ImplGetWinData()->mbEnableNativeWidget )
     {
         ImplGetWinData()->mbEnableNativeWidget = bEnable;
+
+        // send datachanged event to allow for internal changes required for NWF
+        // like clipmode, transparency, etc.
+        DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &maSettings, SETTINGS_STYLE );
+        DataChanged( aDCEvt );
+
         // sometimes the borderwindow is queried, so keep it in sync
         if( mpWindowImpl->mpBorderWindow )
             mpWindowImpl->mpBorderWindow->ImplGetWinData()->mbEnableNativeWidget = bEnable;
