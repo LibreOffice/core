@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:50 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 10:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,9 +1445,16 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             }
             break;
 
+            case ID_BROWSER_PASTE:
+                    aReturn.aState = makeAny( (sal_Bool)sal_False );
+                        // since fixing 99030, this is defined as meaning "please do not display a drop down
+                        // menu for the clipboard formats to paste".
+                        // 22.05.2002 - 99030 - fs@openoffice.org
+
+                    // NO BREAK
+
             case ID_BROWSER_COPY:
             case ID_BROWSER_CUT:
-            case ID_BROWSER_PASTE:
             {
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
                 if (xCurrentController.Is() && xCurrentController->ISA(EditCellController))
@@ -1465,11 +1472,6 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                             {
                                 aReturn.bEnabled = aReturn.bEnabled && IsFormatSupported( m_aSystemClipboard.GetDataFlavorExVector(), FORMAT_STRING );
                             }
-
-                            aReturn.aState = makeAny( (sal_Bool)sal_False );
-                                // since fixing 99030, this is defined as meaning "please do not display a drop down
-                                // menu for the clipboard formats to paste".
-                                // 22.05.2002 - 99030 - fs@openoffice.org
                             break;
                     }
                 }
