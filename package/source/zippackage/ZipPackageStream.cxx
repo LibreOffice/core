@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:43:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const ::rtl::OUString& aProper
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (aPropertyName == L"MediaType")
-        aValue >>= sMediaType;
+        aValue >>= aEntry.sComment;
     else if (aPropertyName == L"Size")
         aValue >>= aEntry.nSize;
     else
@@ -168,7 +168,7 @@ uno::Any SAL_CALL ZipPackageStream::getPropertyValue( const ::rtl::OUString& Pro
     if (PropertyName == L"MediaType")
     {
         uno::Any aAny;
-        aAny <<= sMediaType;
+        aAny <<= aEntry.sComment;
         return aAny;
     }
     else if (PropertyName == L"Size")

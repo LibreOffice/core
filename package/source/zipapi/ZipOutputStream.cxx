@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-22 16:55:27 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
         case STORED:
             if (pNonConstEntry->nSize == -1)
                 pNonConstEntry->nSize = pNonConstEntry->nCompressedSize;
-            else if (pNonConstEntry->nCompressedSize == -1)
+            else if (pNonConstEntry->nCompressedSize == -1 || pNonConstEntry->nCompressedSize == 0)
                 pNonConstEntry->nCompressedSize = pNonConstEntry->nSize;
             pNonConstEntry->nVersion = 10;
             pNonConstEntry->nFlag = 0;
@@ -209,7 +209,7 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
             if (!aDeflater.finished())
             {
                 aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
-                while (!aDeflater.needsInput())
+                 while (!aDeflater.needsInput())
                     doDeflate();
             }
             break;
@@ -243,9 +243,11 @@ void SAL_CALL ZipOutputStream::finish(  )
 }
 void ZipOutputStream::doDeflate()
 {
+    //sal_Int32 nOldOut = aDeflater.getTotalOut();
     sal_Int32 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
     sal_Int32 nOldLength = aBuffer.getLength();
-    if (nLength > 0 )
+    //sal_Int32 nNewOut = aDeflater.getTotalOut() - nOldOut;
+    if (nLength> 0 )
     {
         aBuffer.realloc(nLength);
         aChucker.writeBytes(aBuffer);
@@ -276,7 +278,7 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
 void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
 {
     sal_Int16 nNameLength = rEntry.sName.getLength(),
-              nCommentLength = rEntry.sName.getLength(),
+              nCommentLength = rEntry.sComment.getLength(),
               nExtraLength = rEntry.extra.getLength(), i = 0;
 
     aChucker << CENSIG;
@@ -310,7 +312,7 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
     if (nCommentLength)
     {
         aSequence.realloc (nCommentLength);
-        for (i=0, pChar = rEntry.sName.getStr(); i < nCommentLength; i++)
+        for (i=0, pChar = rEntry.sComment.getStr(); i < nCommentLength; i++)
         {
             VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry comment!");
             aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,12 @@
 #include "ZipPackageBuffer.hxx"
 #endif
 
+#ifdef _DEBUG_RECURSION_
+#include "testzip.hxx"
+#endif
+
+#include <vector>
+
 class ZipPackage : public cppu::WeakImplHelper4<
                         com::sun::star::lang::XInitialization,
                         com::sun::star::container::XHierarchicalNameAccess,
@@ -126,14 +132,26 @@ private:
     ZipOutputStream  *pZipOut;
     ZipPackageBuffer *pZipBuffer;
     ::ucb::Content  *pContent;
+    ::std::vector < com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > > aContainedZips;
     ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
     ::com::sun::star::uno::Reference < com::sun::star::package::XZipOutputStream > xZipOut;
     ::com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xBuffer;
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    sal_Bool isZipFile(com::sun::star::package::ZipEntry &rEntry);
 public:
-    ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput);
+    ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
+                ZipPackageBuffer *pNewBuffer,
+                ZipOutputStream *pNewZipOut);
     ZipPackage (void);
+    ZipPackageFolder * getRootFolder()
+    {
+        return pRootFolder;
+    }
+    ZipPackageBuffer * getZipBuffer()
+    {
+        return pZipBuffer;
+    }
     virtual ~ZipPackage( void );
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )

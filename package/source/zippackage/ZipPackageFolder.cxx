@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:08:47 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,11 @@ void SAL_CALL ZipPackageFolder::removeVetoableChangeListener( const ::rtl::OUStr
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
+#ifdef _DEBUG_RECURSION_
+void ZipPackageFolder::saveContents(rtl::OUString &rPath, TestZip &rFoo)
+#else
 void ZipPackageFolder::saveContents(rtl::OUString &rPath)
+#endif
 {
     uno::Reference < lang::XUnoTunnel > xTunnel;
     package::ZipEntry *aEntry = NULL;
@@ -265,14 +269,38 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath)
         {
             time_t nTime = 0;
             pFolder->aEntry.sName = rPath + pFolder->getName() + L"/";
+#ifdef _DEBUG_RECURSION_
+            /*pFolder->aEntry.nMethod = STORED;*/
+            ByteString sByte(String(pFolder->aEntry.sName),RTL_TEXTENCODING_ASCII_US);
+            uno::Sequence < sal_Int8 > aSeq ((sal_Int8*) sByte.GetBuffer(), sByte.Len());
+            rFoo.writeBytes(aSeq);
+            sal_Int8 me[] = {(sal_Int8) '\n'};
+            uno::Sequence < sal_Int8 > bSeq (me, 1);
+            rFoo.writeBytes(bSeq);
+#endif
+
             pFolder->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
             rZipOut.putNextEntry(pFolder->aEntry);
             rZipOut.closeEntry();
+#ifdef _DEBUG_RECURSION_
+            pFolder->saveContents(pFolder->aEntry.sName, rFoo);
+#else
             pFolder->saveContents(pFolder->aEntry.sName);
+#endif
         }
         else
         {
             pStream->aEntry.sName = rPath + pStream->getName();
+
+#ifdef _DEBUG_RECURSION_
+            /*pStream->aEntry.nMethod = STORED;*/
+            ByteString sByte(String(pStream->aEntry.sName),RTL_TEXTENCODING_ASCII_US);
+            uno::Sequence < sal_Int8 > aSeq ((sal_Int8*) sByte.GetBuffer(), sByte.Len());
+            rFoo.writeBytes(aSeq);
+            sal_Int8 me[] = {(sal_Int8) '\n'};
+            uno::Sequence < sal_Int8 > bSeq (me, 1);
+            rFoo.writeBytes(bSeq);
+#endif
             uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
             rZipOut.putNextEntry(pStream->aEntry);
             while (1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,10 +440,10 @@ sal_Int32 ZipFile::readCEN()
         pEntry->nOffset = nOffset + nLocPos;
 
         pEntry->nOffset *= -1;
-
+        /*
         if (nHow == STORED)
             pEntry->nCompressedSize = 0;
-
+        */
         uno::Sequence < sal_Int8> aSequence (nNameLen);
         aGrabber.readBytes(aSequence, nNameLen);
         pEntry->sName = OUString((sal_Char*)aSequence.getConstArray(), nNameLen, RTL_TEXTENCODING_ASCII_US);

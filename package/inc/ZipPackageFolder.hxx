@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@ struct hashFunc
 #include "ZipOutputStream.hxx"
 #endif
 
+#ifdef _DEBUG_RECURSION_
+#include "testzip.hxx"
+#endif
+
 typedef std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > , hashFunc, eqFunc > TunnelHash;
 
 class ZipPackageFolder : public ZipPackageEntry,
@@ -152,7 +156,11 @@ private:
     com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
 public:
     ZipPackageFolder (ZipOutputStream &rStream );//ZipPackage &rInPackage);
+#ifdef _DEBUG_RECURSION_
+    void  saveContents(rtl::OUString &rPath, TestZip &rFoo);
+#else
     void  saveContents(rtl::OUString &rPath);
+#endif
     inline sal_Bool isFolder( void ) {return sal_True;}
     inline sal_Bool isStream( void ) {return sal_False;}
 

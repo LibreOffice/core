@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
+ *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,18 +72,103 @@ using namespace com::sun::star::package;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::package::ZipConstants;
 
-ZipPackage::ZipPackage (Reference < XInputStream > xInput)
+ZipPackage::ZipPackage (Reference < XInputStream > xNewInput,
+                        ZipPackageBuffer *pNewBuffer,
+                        ZipOutputStream *pNewZipOut)
 : pContent(NULL)
 , pZipFile(NULL)
-, pZipOut(NULL)
-, pZipBuffer(NULL)
+, pZipOut(pNewZipOut)
+, pZipBuffer(pNewBuffer)
 , pRootFolder(NULL)
-, xStream (NULL)
+, xStream (xNewInput)
 , xFolder (NULL)
 , xZipFile (NULL)
 , xBuffer (NULL)
 , xZipOut(NULL)
 {
+    pZipFile    = new ZipFile(xStream);
+
+    xZipFile    = Reference < XZipFile >         (pZipFile);
+    xBuffer     = Reference < XOutputStream >    (pZipBuffer);
+
+    pRootFolder = new ZipPackageFolder(*pZipOut);
+
+    xZipOut     = Reference < XZipOutputStream > (pZipOut);
+    xFolder     = Reference < XNameContainer >   (pRootFolder );
+
+    Reference< XEnumeration > xEnum = pZipFile->entries();
+    Reference< XNameContainer > xCurrent  = xFolder;
+    ZipPackageStream *pPkgStream;
+    ZipPackageFolder *pPkgFolder;
+    ZipEntry aEntry;
+    pZipOut->setMethod(DEFLATED);
+    pZipOut->setLevel(DEFAULT_COMPRESSION);
+
+    while (xEnum->hasMoreElements())
+    {
+        xCurrent  = Reference < XNameContainer > (pRootFolder);
+        sal_Int32 nOldIndex =0,nIndex = 0;
+        Any aAny = xEnum->nextElement();
+        aAny >>= aEntry;
+        OUString &rName = aEntry.sName;
+
+        if (rName.lastIndexOf('/') == rName.getLength()-1)
+        {
+            while ((nIndex = rName.indexOf('/', nOldIndex)) != -1)
+            {
+                OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
+                if (nIndex == nOldIndex) //sTemp.getLength() == 1)
+                    break;
+                if (!xCurrent->hasByName(sTemp))
+                {
+                    pPkgFolder = new ZipPackageFolder(*pZipOut);//*this);
+                    pPkgFolder->setName(sTemp);
+                    pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
+                    aAny <<= Reference < XUnoTunnel > (pPkgFolder);
+                    xCurrent->insertByName(sTemp, aAny);
+                    xCurrent = Reference < XNameContainer > (pPkgFolder);
+                }
+                else
+                {
+                    aAny = xCurrent->getByName(sTemp);
+                    Reference < XUnoTunnel> xRef;
+                    aAny >>= xRef;
+                    xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
+                }
+
+                nOldIndex = nIndex+1;
+            }
+        }
+        else
+        {
+            while ((nIndex = rName.indexOf('/', nOldIndex)) != -1)
+            {
+                OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
+                if (nIndex == nOldIndex) //sTemp.getLength() == 1)
+                    break;
+                if (xCurrent->hasByName(sTemp))
+                {
+                    Reference < XUnoTunnel > xChildRef;
+                    aAny = xCurrent->getByName(sTemp);
+                    aAny >>= xChildRef;
+                    xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
+                }
+                nOldIndex = nIndex+1;
+            }
+            OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
+            if (isZipFile(aEntry))
+            {
+                // do stuff
+            }
+            pPkgStream = new ZipPackageStream( *pZipFile );
+            pPkgStream->bPackageMember = sal_True;
+            pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
+            pPkgStream->setZipEntry( aEntry );
+            pPkgStream->setName( sStreamName );
+            aAny <<= Reference < XUnoTunnel > (pPkgStream);
+            xCurrent->insertByName(sStreamName, aAny);
+        }
+    }
 }
 
 ZipPackage::ZipPackage( void )
@@ -198,16 +283,29 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 nOldIndex = nIndex+1;
             }
             OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
-            pPkgStream = new ZipPackageStream( *pZipFile );
-            pPkgStream->bPackageMember = sal_True;
-            pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
-            pPkgStream->setZipEntry( aEntry );
-            pPkgStream->setName( sStreamName );
-            aAny <<= Reference < XUnoTunnel > (pPkgStream);
-            xCurrent->insertByName(sStreamName, aAny);
+            if (isZipFile(aEntry))
+            {
+                Reference < XInputStream > xStream = pZipFile->getInputStream(aEntry);
+                ZipPackage *pInZip = new ZipPackage (xStream, pZipBuffer, pZipOut);
+                aContainedZips.push_back (Reference < XSingleServiceFactory > (pInZip));
+                pPkgFolder = pInZip->getRootFolder();
+                pPkgFolder->setName(sStreamName);
+                pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
+                aAny <<= Reference < XUnoTunnel > (pPkgFolder);
+                xCurrent->insertByName(sStreamName, aAny);
+            }
+            else
+            {
+                pPkgStream = new ZipPackageStream( *pZipFile );
+                pPkgStream->bPackageMember = sal_True;
+                pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
+                pPkgStream->setZipEntry( aEntry );
+                pPkgStream->setName( sStreamName );
+                aAny <<= Reference < XUnoTunnel > (pPkgStream);
+                xCurrent->insertByName(sStreamName, aAny);
+            }
         }
     }
-
 }
 // XHierarchicalNameAccess
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
@@ -326,7 +424,14 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
 void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
 {
+#ifdef _DEBUG_RECURSION_
+    TestZip *pFoo = new TestZip(L"e:/clean/foo.txt", sal_False);
+    pRootFolder->saveContents(OUString::createFromAscii(""), *pFoo);
+    pFoo->closeInput();
+#else
     pRootFolder->saveContents(OUString::createFromAscii(""));
+#endif
+
     pZipOut->finish();
 }
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
@@ -338,6 +443,22 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
         throw(RuntimeException)
 {
     return Sequence < ElementChange > ( NULL, 0 );
+}
+
+sal_Bool ZipPackage::isZipFile(com::sun::star::package::ZipEntry &rEntry)
+{
+    Reference < XInputStream > xStream = pZipFile->getInputStream(rEntry);
+    Sequence < sal_Int8 > aSequence (4);
+    xStream->readBytes(aSequence, 4);
+    sal_uInt32 nTestSig = static_cast < sal_uInt32 >
+            (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
+           | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8
+           | static_cast < sal_uInt8> (aSequence[2]& 0xFF) << 16
+           | static_cast < sal_uInt8> (aSequence[3]& 0xFF) << 24);
+    if (nTestSig == LOCSIG)
+        return sal_True;
+    else
+        return sal_False;
 }
 
 /**
