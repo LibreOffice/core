@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:01:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,10 @@ class TargetObject : public t_impl
 public:
     static int s_obj;
 
-    virtual ~TargetObject()
-        { --s_obj;  OSL_TRACE( "~TargetObject()" ); }
+    virtual ~TargetObject() {
+        --s_obj;
+        OSL_TRACE( "~TargetObject()" );
+    }
     TargetObject()
         { ++s_obj; }
 
@@ -141,6 +143,7 @@ int TargetObject::s_obj = 0;
 class TestMaster : public WeakImplHelper1< lang::XServiceInfo >
 {
     Reference< XAggregation > m_xProxyTarget;
+    Reference<lang::XServiceInfo> m_xOtherProxyTargetBeforeSetDelegator;
 
     inline TestMaster() { ++s_obj; }
 public:
@@ -151,8 +154,10 @@ public:
         Reference< XInterface > const & xTarget,
         Reference< reflection::XProxyFactory > const & xProxyFac );
 
-    virtual ~TestMaster()
-        { --s_obj;  OSL_TRACE( "~TestMaster()" ); }
+    virtual ~TestMaster() {
+        --s_obj;
+        OSL_TRACE( "~TestMaster()" );
+    }
 
     virtual Any SAL_CALL queryInterface( const Type & rType )
         throw (RuntimeException)
@@ -182,12 +187,15 @@ Reference< XInterface > TestMaster::create(
     Reference< XInterface > const & xTarget,
     Reference< reflection::XProxyFactory > const & xProxyFac )
 {
-    Reference< XAggregation > xAgg( xProxyFac->createProxy( xTarget ) );
     TestMaster * that = new TestMaster;
     Reference< XInterface > xRet( static_cast< OWeakObject * >( that ) );
-    // ownership take over
-    that->m_xProxyTarget.set( xAgg );
-    xAgg.clear();
+    {
+        Reference< XAggregation > xAgg( xProxyFac->createProxy( xTarget ) );
+        // ownership take over
+        that->m_xProxyTarget.set( xAgg, UNO_QUERY_THROW );
+        that->m_xOtherProxyTargetBeforeSetDelegator.set(
+            that->m_xProxyTarget, UNO_QUERY );
+    }
     that->m_xProxyTarget->setDelegator( xRet );
     return xRet;
 }
