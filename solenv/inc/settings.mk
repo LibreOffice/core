@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.139 $
+#   $Revision: 1.140 $
 #
-#   last change: $Author: rt $ $Date: 2003-12-01 16:17:41 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:38:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1012,7 +1012,7 @@ MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) -I$(SOLARVERSION)$/$
 MKDEPLOCAL=-I$(INCCOM)
 
 BISON=bison
-YACCFLAGS*=-d -o 
+YACCFLAGS*=-d 
 
 .IF "$(GUI)"=="UNX"
 SVIDL=svidl
