@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:05:28 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 10:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
-ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize)
-: nBufferSize (nNewBufferSize)
-, aBuffer (static_cast < sal_Int32 > (nNewBufferSize))
-, nCurrent(0)
-, nEnd(0)
+ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
+: m_nBufferSize (nNewBufferSize)
+, m_bMustInitBuffer ( sal_True )
+, m_nCurrent(0)
+, m_nEnd(0)
 {
 }
 ZipPackageBuffer::~ZipPackageBuffer(void)
@@ -101,67 +101,21 @@ void SAL_CALL  ZipPackageBuffer::release(void)
 sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    //const sal_Int8 *pBuffer = aBuffer.getConstArray()+nCurrent;
-
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(::rtl::OUString(),*this);
 
-    if (nBytesToRead + nCurrent > nEnd)
-        nBytesToRead = static_cast < sal_Int32 > (nEnd - nCurrent);
+    if (nBytesToRead + m_nCurrent > m_nEnd)
+        nBytesToRead = static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
 
     aData.realloc ( nBytesToRead );
-    memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
-    nCurrent +=nBytesToRead;
+    memcpy(aData.getArray(), m_aBuffer.getConstArray() + m_nCurrent, nBytesToRead);
+    m_nCurrent +=nBytesToRead;
     return nBytesToRead;
-    //aData.realloc(nBytesToRead);
-    //memcpy(aData.getArray(), pBuffer + nCurrent, nBytesToRead);
-    //memcpy(pData, pBuffer, nBytesToRead);
-
-    // Optimisations for often called cases
-    /*
-    switch (nBytesToRead)
-    {
-        case 0:
-            return 0;
-        case 1:
-            *(pData++)    = *pBuffer;
-            nCurrent +=1;
-            return 1;
-        case 2:
-            *(pData++)   = *(pBuffer++);
-            * pData      = *pBuffer;
-            nCurrent +=2;
-            return 2;
-        case 4:
-            *(pData++) = *(pBuffer++);
-            *(pData++) = *(pBuffer++);
-            *(pData++) = *(pBuffer++);
-            * pData    = * pBuffer;
-            nCurrent +=4;
-            return 4;
-        default:
-            memcpy(pData, pBuffer, nBytesToRead);
-            nCurrent +=nBytesToRead;
-            return nBytesToRead;
-    }
-    //return nBytesToRead;
-    */
 }
 
 sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    /*
-    if (nMaxBytesToRead + nCurrent > nEnd)
-        nMaxBytesToRead = nEnd - nCurrent;
-    sal_Int64 nEndRead = nMaxBytesToRead+nCurrent;
-
-    for (sal_Int64 i =0; nCurrent < nEndRead; nCurrent++, i++)
-        aData[i] = aBuffer[nCurrent];
-    return nMaxBytesToRead;
-    */
-
-    // all data is available at once
     return readBytes(aData, nMaxBytesToRead);
 }
 void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
@@ -170,15 +124,15 @@ void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
     if (nBytesToSkip < 0)
         throw BufferSizeExceededException(::rtl::OUString(),*this);
 
-    if (nBytesToSkip + nCurrent > nEnd)
-        nBytesToSkip = static_cast < sal_Int32 > (nEnd - nCurrent);
+    if (nBytesToSkip + m_nCurrent > m_nEnd)
+        nBytesToSkip = static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
 
-    nCurrent+=nBytesToSkip;
+    m_nCurrent+=nBytesToSkip;
 }
 sal_Int32 SAL_CALL ZipPackageBuffer::available(  )
         throw(NotConnectedException, IOException, RuntimeException)
 {
-    return static_cast < sal_Int32 > (nEnd - nCurrent);
+    return static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
 }
 void SAL_CALL ZipPackageBuffer::closeInput(  )
         throw(NotConnectedException, IOException, RuntimeException)
@@ -190,45 +144,22 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
     sal_Int64 nDataLen = aData.getLength();
     const sal_Int8 *pData   = aData.getConstArray();
 
-    if (nEnd + nDataLen > nBufferSize)
+    if (m_nEnd + nDataLen > m_nBufferSize)
     {
-        while (nEnd + nDataLen > nBufferSize)
-            nBufferSize *=2;
-        aBuffer.realloc(static_cast < sal_Int32 > (nBufferSize));
+        while (m_nEnd + nDataLen > m_nBufferSize)
+            m_nBufferSize *=2;
+        m_aBuffer.realloc(static_cast < sal_Int32 > (m_nBufferSize));
+        m_bMustInitBuffer = sal_False;
     }
-    /*
-    sal_Int8 *pBuffer = aBuffer.getArray()+nCurrent;
-    switch (nDataLen)
+    else if (m_bMustInitBuffer)
     {
-        case 0:
-            break;
-        case 1:
-            * pBuffer    = *pData;
-            nCurrent++;
-            break;
-        case 2:
-            *(pBuffer++) = *(pData++);
-            * pBuffer    = * pData   ;
-            nCurrent +=2;
-            break;
-        case 4:
-            *(pBuffer++) = *(pData++);
-            *(pBuffer++) = *(pData++);
-            *(pBuffer++) = *(pData++);
-            * pBuffer    = * pData   ;
-            nCurrent +=4;
-            break;
-        default:
-            memcpy(pBuffer, pData, static_cast < sal_Int32 > (nDataLen));
-            nCurrent += nDataLen;
-            break;
+         m_aBuffer.realloc ( static_cast < sal_Int32 > ( m_nBufferSize ) );
+        m_bMustInitBuffer = sal_False;
     }
-    */
-    //memcpy( pBuffer + nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
-    memcpy( aBuffer.getArray() + nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
-    nCurrent+=nDataLen;
-    if (nCurrent>nEnd)
-        nEnd = nCurrent;
+    memcpy( m_aBuffer.getArray() + m_nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
+    m_nCurrent+=nDataLen;
+    if (m_nCurrent>m_nEnd)
+        m_nEnd = m_nCurrent;
 }
 void SAL_CALL ZipPackageBuffer::flush(  )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
@@ -241,15 +172,15 @@ void SAL_CALL ZipPackageBuffer::closeOutput(  )
 void SAL_CALL ZipPackageBuffer::seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, IOException, RuntimeException)
 {
-    nCurrent = location;
+    m_nCurrent = location;
 }
 sal_Int64 SAL_CALL ZipPackageBuffer::getPosition(  )
         throw(IOException, RuntimeException)
 {
-    return nCurrent;
+    return m_nCurrent;
 }
 sal_Int64 SAL_CALL ZipPackageBuffer::getLength(  )
         throw(IOException, RuntimeException)
 {
-    return nEnd;
+    return m_nEnd;
 }
