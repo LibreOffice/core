@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:57:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,19 +1183,21 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
         pSdrObj->GetNewReplacement();
         delete pMemChart;
 
-        uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY );
-        Reference< XComponent > xComp( xSup->getComponent(), uno::UNO_QUERY );
-        if( xComp.is() )
-            mxChart->Apply( xComp, maAnchorRect, rProgress );
+        if ( svt::EmbeddedObjectRef::TryRunningState(xObj) )
+        {
+            Reference< XComponent > xComp( xObj->getComponent(), uno::UNO_QUERY );
+            if( xComp.is() )
+                mxChart->Apply( xComp, maAnchorRect, rProgress );
 
-        //TODO/LATER: hacking?!
-        //if( bEnabled )
-        //    xIPObj->EnableSetModified( TRUE );
-        //xIPObj->SetModified();
+            //TODO/LATER: hacking?!
+            //if( bEnabled )
+            //    xIPObj->EnableSetModified( TRUE );
+            //xIPObj->SetModified();
 
-        uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
-        if ( xPers.is() )
-            xPers->storeOwn();
+            uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
+            if ( xPers.is() )
+                xPers->storeOwn();
+        }
     }
 }
 
