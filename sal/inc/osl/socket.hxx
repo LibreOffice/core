@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-19 16:54:15 $
+ *  last change: $Author: obo $ $Date: 2004-01-05 21:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ namespace osl
         ::rtl::OUString hostname;
         oslSocketResult result = osl_getLocalHostname( &(hostname.pData) );
         if(pResult )
-            result = *pResult;
+            *pResult = result;
         return hostname;
     }
 
