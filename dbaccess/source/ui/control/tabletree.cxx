@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 14:44:53 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
                         sSchema     = xCurrentRow->getString(2);
                         sName       = xCurrentRow->getString(3);
                         sType       = xCurrentRow->getString(4);
-                        composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
+                        ::dbtools::composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
                         if (s_sTableTypeView.equals(sType))
                             aViewNames.insert(sComposedName);
                         else
@@ -526,6 +526,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/02/05 14:44:53  oj
+ *  new member for hiding first entry
+ *
  *  Revision 1.7  2001/01/30 08:29:43  fs
  *  'wildcard checking'
  *
