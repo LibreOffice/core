@@ -3,9 +3,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:08:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,8 @@ TabPage RID_SVXPAGE_BORDER
         Text[ portuguese_brazilian ] = "Left";
         Text[ japanese ] = "¶(~L)";
         Text[ korean ] = "¿ŞÂÊ(~L)";
-        Text[ chinese_simplified ] = "×ó";
-        Text[ chinese_traditional ] = "¥ª";
+        Text[ chinese_simplified ] = "×ó(~L)";
+        Text[ chinese_traditional ] = "¥ª(~L)";
         Text[ arabic ] = "íÓÇÑ";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
@@ -302,8 +302,8 @@ TabPage RID_SVXPAGE_BORDER
         Text[ portuguese_brazilian ] = "Top";
         Text[ japanese ] = "ã(~T)";
         Text[ korean ] = "À§(~T)";
-        Text[ chinese_simplified ] = "ÉÏ";
-        Text[ chinese_traditional ] = "¤W";
+        Text[ chinese_simplified ] = "ÉÏ(~T)";
+        Text[ chinese_traditional ] = "¤W(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ turkish ] = "~Üst";
         Text[ language_user1 ] = " ";
@@ -345,8 +345,8 @@ TabPage RID_SVXPAGE_BORDER
         Text[ portuguese_brazilian ] = "Bottom";
         Text[ japanese ] = "‰º(~B)";
         Text[ korean ] = "¾Æ·¡(~B)";
-        Text[ chinese_simplified ] = "ÏÂ";
-        Text[ chinese_traditional ] = "¤U";
+        Text[ chinese_simplified ] = "ÏÂ(~B)";
+        Text[ chinese_traditional ] = "¤U(~B)";
         Text[ arabic ] = "ÃÓİá";
         Text[ turkish ] = "Al~t";
         Text[ catalan ] = "~Abajo";
@@ -414,7 +414,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ polish ] = "Odstêp od zawartoœci";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "“à—e‚Ü‚Å‚ÌŠÔŠu";
-        Text[ korean ] = "³»¿ë¿¡ °£°İ";
+        Text[ korean ] = "³»¿ë¿¡ ´ëÇÑ °£°İ";
         Text[ chinese_simplified ] = "ÖÁÄÚÈİµÄ¾àÀë";
         Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÂ÷";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáãÍÊæíÇÊ";
@@ -472,7 +472,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "Ğàññòîÿíèå";
         Text[ greek ] = "Ìİãåèïò";
         Text[ dutch ] = "~Grootte";
-        Text[ french ] = "~Distance";
+        Text[ french ] = "Distance";
         Text[ spanish ] = "~Distancia";
         Text[ finnish ] = "~Koko";
         Text[ italian ] = "~Distanza";
@@ -480,10 +480,10 @@ TabPage RID_SVXPAGE_BORDER
         Text[ swedish ] = "~Distans";
         Text[ polish ] = "Odleg³oœæ";
         Text[ portuguese_brazilian ] = "Ta~manho";
-        Text[ japanese ] = "ŠÔŠu";
-        Text[ korean ] = "Å©±â(~Z)";
-        Text[ chinese_simplified ] = "¼ä¸ô";
-        Text[ chinese_traditional ] = "¶¡¹j(~Z)";
+        Text[ japanese ] = "ŠÔŠu(~C)";
+        Text[ korean ] = "°Å¸®(~C)";
+        Text[ chinese_simplified ] = "¼ä¸ô(~C)";
+        Text[ chinese_traditional ] = "¶¡¹j(~C)";
         Text[ turkish ] = "~Büyüklük";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ catalan ] = "~Tamaño";
@@ -527,7 +527,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "ÃC¦â(~O)";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "»ö»ó(~O)";
+        Text[ korean ] = "»ö(~O)";
         Text[ turkish ] = "Re~nk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~olor";
@@ -604,6 +604,7 @@ TabPage RID_SVXPAGE_BORDER
     Text[ catalan ] = "Borde";
 };
  // **********************************************************************
+
 
 
 
