@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:05:47 $
+ *  last change: $Author: ama $ $Date: 2000-10-17 10:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
 void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurr )
 {
-    if( SVX_ADJUST_LEFT != GetAdjust() )
+    if( SVX_ADJUST_LEFT != GetAdjust() && !pMulti)
     {
         pCurr->SetFormatAdj(sal_True);
         if( IsFlyInCntBase() )
