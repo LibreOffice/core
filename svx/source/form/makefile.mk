@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-09 10:23:16 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:26:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,8 +80,9 @@ SRC1FILES= \
     filtnav.src		\
     fmstring.src 	\
     tbxform.src		\
-    fmsearch.src    \
-    formshell.src
+    fmsearch.src	\
+    formshell.src   \
+    datanavi.src
 
 
 SLOFILES = \
@@ -120,7 +121,6 @@ SLOFILES = \
     $(SLO)$/typemap.obj		\
     $(SLO)$/fmexch.obj      \
     $(SLO)$/tabwin.obj      \
-    $(SLO)$/multipro.obj	\
     $(SLO)$/fmurl.obj		\
     $(SLO)$/filtnav.obj		\
     $(SLO)$/fmtools.obj     \
@@ -132,10 +132,13 @@ SLOFILES = \
     $(SLO)$/siimport.obj	\
     $(SLO)$/sdbdatacolumn.obj \
     $(SLO)$/formcontrolling.obj \
-    $(SLO)$/fmdispatch.obj \
-    $(SLO)$/formpdfexport.obj
+    $(SLO)$/fmdispatch.obj  \
+    $(SLO)$/datanavi.obj \
+    $(SLO)$/xfm_addcondition.obj \
+    $(SLO)$/formpdfexport.obj \
+    $(SLO)$/datalistener.obj
 
-.IF "$(OS)$(CPU)"=="SOLARISI" 
+.IF "$(OS)$(CPU)"=="SOLARISI"
 NOOPTFILES=$(SLO)$/fmprop.obj
 .ENDIF
 
@@ -146,3 +149,4 @@ SVXLIGHTOBJFILES= \
 # --- Targets ----------------------------------
 
 .INCLUDE :  target.mk
+
