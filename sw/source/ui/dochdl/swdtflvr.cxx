@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:54:31 $
+ *  last change: $Author: cl $ $Date: 2001-10-04 11:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,11 @@
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+
+#include <svx/unomodel.hxx>
 
 #ifndef _FMTURL_HXX
 #include <fmturl.hxx>
@@ -688,14 +693,14 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             SdrModel *pModel = (SdrModel*)pObject;
             pModel->SetStreamingSdrModel( TRUE );
             xStream->SetBufferSize( 16348 );
-            xStream->SetVersion( SOFFICE_FILEFORMAT_50 );
-            pModel->GetItemPool().SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
-            pModel->PreSave();
-            pModel->GetItemPool().GetSecondaryPool()->Store( *xStream );
-            *xStream << *pModel;
-            xStream->Commit();
+
+            {
+                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *xStream ) );
+                if( SvxDrawingLayerExport( pModel, xDocOut ) )
+                    xStream->Commit();
+            }
+
             pModel->SetStreamingSdrModel( FALSE );
-            pModel->PostSave();
 
             bRet = ERRCODE_NONE == xStream->GetError();
         }

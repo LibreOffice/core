@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:14:03 $
+ *  last change: $Author: cl $ $Date: 2001-10-04 11:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,12 @@
 #endif
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
+#endif
+#ifndef SVX_UNOMODEL_HXX
+#include <svx/unomodel.hxx>
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX
@@ -1153,10 +1159,14 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
     SvtPathOptions aPathOpt;
     FmFormModel* pModel = new FmFormModel( aPathOpt.GetPalettePath(),
                                             0, GetDoc()->GetDocShell() );
+    pModel->GetItemPool().FreezeIdRanges();
     pModel->SetStreamingSdrModel(TRUE);
+
     rStrm.Seek(0);
-    pModel->GetItemPool().Load( rStrm );
-    rStrm >> *pModel;
+
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rStrm ) );
+    SvxDrawingLayerImport( pModel, xInputStream );
+
     if ( !Imp()->HasDrawView() )
         Imp()->MakeDrawView();
 
