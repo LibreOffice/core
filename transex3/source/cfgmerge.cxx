@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-28 14:53:39 $
+ *  last change: $Author: nf $ $Date: 2000-12-05 10:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ CfgStackData *CfgStack::GetStackData( ULONG nPos )
 /*****************************************************************************/
 CfgParser::CfgParser()
 /*****************************************************************************/
-                : pStackData( NULL )
+                : pStackData( NULL ),
+                bLocalize( FALSE )
 {
 }
 
@@ -424,6 +425,12 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     sTokenId = sTemp.GetToken( 1, '\"' ).GetToken( 0, '\"' );
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
+                if ( sSearch == "cfg:name=" ) {
+                    ByteString sTemp( sToken );
+                    sTemp.ToUpperAscii();
+                    bLocalize = (( sTemp.Search( "CFG:TYPE=\"STRING\"" ) != STRING_NOTFOUND ) &&
+                        ( sTemp.Search( "CFG:LOCALIZED=\"TRUE\"" ) != STRING_NOTFOUND ));
+                }
             }
         }
         break;
@@ -560,7 +567,7 @@ CfgExport::~CfgExport()
 void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
-    if ( pOutputStream ) {
+    if ( pOutputStream && bLocalize ) {
         if ( pStackData->sText[ GERMAN_INDEX ].Len() &&
             ( pStackData->sText[ ENGLISH_US_INDEX ].Len() ||
                 pStackData->sText[ ENGLISH_INDEX ].Len())
@@ -664,7 +671,7 @@ void CfgMerge::WorkOnText(
 )
 /*****************************************************************************/
 {
-    if ( pMergeDataFile ) {
+    if ( pMergeDataFile && bLocalize ) {
         if ( !pResData ) {
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
@@ -711,7 +718,7 @@ void CfgMerge::Output( const ByteString& rOutput )
 void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
-    if ( pMergeDataFile && pResData ) {
+    if ( pMergeDataFile && pResData && bLocalize ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
             for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
