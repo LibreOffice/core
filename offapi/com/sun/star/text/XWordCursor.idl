@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWordCursor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:41:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,50 +72,69 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XWordCursor
 /** makes it possible to move a cursor word by word.
  */
 published interface XWordCursor: com::sun::star::text::XTextCursor
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XWordCursor::isStartOfWord
     /** determines if the cursor is positioned at the start of a word.
      */
     boolean isStartOfWord();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XWordCursor::isEndOfWord
     /** determines if the cursor is positioned at the end of a word.
      */
     boolean isEndOfWord();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XWordCursor::gotoNextWord
     /** moves the cursor to the next word.
+
+        <p>Note: the function returning <true/> does not necessarily mean
+        that the cursor is located at the next word, or any word at all!
+        This may happen for example if it travels over empty paragraphs.</p>
+
+        @returns
+            <true/> if the cursor was moved. It returns <false/> it the
+            cursor can not advance further.
      */
     boolean gotoNextWord( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XWordCursor::gotoPreviousWord
     /** moves the cursor to the previous word.
+
+        <p>Note: the function returning <true/> does not necessarily mean
+        that the cursor is located at the previous word, or any word at all!
+        This may happen for example if it travels over empty paragraphs.</p>
+
+        @returns
+            <true/> if the cursor was moved. It returns <false/> it the
+            cursor can not advance further.
      */
     boolean gotoPreviousWord( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XWordCursor::gotoEndOfWord
     /** moves the cursor to the end of the current word.
+
+        @returns
+            <true/> if the cursor is now at the end of a word,
+            <false/> otherwise. If <false/> was returned the cursor
+            will remain at its original position.
      */
     boolean gotoEndOfWord( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XWordCursor::gotoStartOfWord
     /** moves the cursor to the start of the current word.
+
+        @returns
+            <true/> if the cursor is now at the start of a word,
+            <false/> otherwise. If <false/> was returned the cursor
+            will remain at its original position.
      */
     boolean gotoStartOfWord( [in] boolean bExpand );
 
