@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:37:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ class MediatorListener : public NAMESPACE_VOS( OThread )
     virtual void onTerminated();
 };
 
-inline void medDebug( int condition, char* pFormat, ... )
+inline void medDebug( int condition, const char* pFormat, ... )
 {
 #if OSL_DEBUG_LEVEL > 1
     if( condition )
