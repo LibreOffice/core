@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:58:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #include <ndindex.hxx>      // fuer SwNodeIndex
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 class SwFmt;
 class SfxPoolItem;
@@ -108,8 +111,8 @@ struct SwPosition
     SwPosition( const SwNode& rNode );
     SwPosition( const SwNodeIndex &rNode );
     SwPosition( const SwNodeIndex &rNode, const SwIndex &rCntnt );
-    SwPosition( const SwPosition & );
 
+    SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
 
     // #111827#
@@ -153,10 +156,17 @@ SwComparePosition ComparePosition(
 // SwPointAndMark / SwPaM
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
-extern SwMoveFn fnMoveForward, fnMoveBackward;
+SW_DLLPUBLIC extern SwMoveFn fnMoveForward; // SwPam::Move()/Find() default argument.
+extern SwMoveFn fnMoveBackward;
 
 typedef FASTBOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
-extern SwGoInDoc fnGoDoc, fnGoSection, fnGoNode, fnGoCntnt, fnGoCntntCells, fnGoCntntSkipHidden, fnGoCntntCellsSkipHidden;
+extern SwGoInDoc fnGoDoc;
+extern SwGoInDoc fnGoSection;
+extern SwGoInDoc fnGoNode;
+SW_DLLPUBLIC extern SwGoInDoc fnGoCntnt; // SwPam::Move() default argument.
+extern SwGoInDoc fnGoCntntCells;
+extern SwGoInDoc fnGoCntntSkipHidden;
+extern SwGoInDoc fnGoCntntCellsSkipHidden;
 
 void _InitPam();
 
@@ -173,7 +183,6 @@ class SwPaM : public Ring
 public:
     SwPaM( const SwPosition& rPos, SwPaM* pRing = 0 );
     SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing = 0 );
-    SwPaM( SwPaM & );
     SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
     SwPaM( const SwNode& rMk, const SwNode& rPt,
@@ -185,6 +194,11 @@ public:
     SwPaM( const SwNode& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
     SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt = 0, SwPaM* pRing = 0 );
     virtual ~SwPaM();
+
+    // @@@ semantic: no copy ctor.
+    SwPaM( SwPaM & );
+    // @@@ semantic: no copy assignment for super class Ring.
+    SwPaM& operator=( const SwPaM & );
 
     // Bewegen des Cursors
     FASTBOOL Move( SwMoveFn fnMove = fnMoveForward,
@@ -244,8 +258,6 @@ public:
                     { return (*pPoint) > (*pMark)? pPoint: pMark; }
           SwPosition *End()
                     { return (*pPoint) > (*pMark)? pPoint: pMark; }
-
-    SwPaM& operator=( SwPaM & );
 
     // erfrage vom SwPaM den aktuellen Node/ContentNode am SPoint / Mark
     SwNode* GetNode( BOOL bPoint = TRUE ) const
