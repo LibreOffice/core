@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
+ *  last change: $Author: fme $ $Date: 2002-06-19 07:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,8 @@
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -186,26 +184,20 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-#define DARK_COLOR 154
 #define CHAR_UNDERSCORE ((sal_Unicode)0x005F)
-
-#ifdef VERTICAL_LAYOUT
 #define CHAR_LEFT_ARROW ((sal_Unicode)0x25C0)
 #define CHAR_RIGHT_ARROW ((sal_Unicode)0x25B6)
 #define CHAR_TAB ((sal_Unicode)0x2192)
 #define CHAR_TAB_RTL ((sal_Unicode)0x2190)
 #define CHAR_LINEBREAK ((sal_Unicode)0x21B5)
 #define CHAR_LINEBREAK_RTL ((sal_Unicode)0x21B3)
-#endif
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
 
 extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
 
-#ifdef VERTICAL_LAYOUT
 extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
-#endif
 
 #ifndef PRODUCT
 // Test2: WYSIWYG++
@@ -325,9 +317,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
       bForbiddenChars( rNew.HasForbiddenChars() ),
-#ifdef VERTICAL_LAYOUT
       bSnapToGrid( rNew.SnapToGrid() ),
-#endif
       nDirection( rNew.GetDirection() )
 {
 #ifndef PRODUCT
@@ -389,10 +379,8 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bURLNotify = pNoteURL && !bOnWin
         && (pOut && OUTDEV_PRINTER != pOut->GetOutDevType());
 
-#ifdef VERTICAL_LAYOUT
     SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
                    pFrm->IsInDocBody() );
-#endif
 
     pFnt = pNewFnt;
     pUnderFnt = 0;
@@ -455,9 +443,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
       bForbiddenChars( rNew.HasForbiddenChars() ),
-#ifdef VERTICAL_LAYOUT
       bSnapToGrid( rNew.SnapToGrid() ),
-#endif
       nDirection( rNew.GetDirection() )
 {
 #ifndef PRODUCT
@@ -506,11 +492,9 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const USHORT nComp ) const
 {
     SwDrawTextInfo aDrawInf( pVsh, *pOutDev, pSI, rTxt, nIdx, nLen );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-#endif
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
     return aSize;
@@ -534,11 +518,9 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
                                 0 ;
 
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nLen );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-#endif
     aDrawInf.SetKanaComp( nComp );
     return pFnt->_GetTxtSize( aDrawInf );
 }
@@ -552,11 +534,9 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
                                 USHORT& nMinSize, USHORT& nMaxSizeDiff ) const
 {
     SwDrawTextInfo aDrawInf( pVsh, *pOut, pSI, *pTxt, nIdx, nLen );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-#endif
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
     nMaxSizeDiff = aDrawInf.GetKanaDiff();
@@ -582,11 +562,9 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                 0 ;
 
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nMaxLen );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-#endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
     return pFnt->GetTxtBreak( aDrawInf, nLineWidth );
@@ -605,11 +583,9 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-#endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
 
@@ -630,11 +606,9 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-#endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( &rExtraCharPos );
 
@@ -683,6 +657,31 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
 { }
 
 extern Color aGlobalRetoucheColor;
+
+/*************************************************************************
+ *                          lcl_IsDarkBackground
+ *
+ * Returns if the current background color is dark.
+ *************************************************************************/
+
+sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
+{
+    const Color* pCol = rInf.GetFont()->GetBackColor();
+    if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
+    {
+        const SvxBrushItem* pItem;
+        SwRect aOrigBackRect;
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) &&
+            ! pItem->GetColor().GetTransparency() )
+            pCol = &pItem->GetColor();
+        else
+            pCol = NULL;
+    }
+    if( !pCol )
+        pCol = &aGlobalRetoucheColor;
+
+    return DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue();
+}
 
 /*************************************************************************
  *                     SwTxtPaintInfo::_DrawText()
@@ -768,7 +767,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetSpace( nSpaceAdd );
     aDrawInf.SetKanaComp( nComp );
 
-#ifdef VERTICAL_LAYOUT
     // the font is used to identify the current script via nActual
     aDrawInf.SetFont( pFnt );
     // the frame is used to identify the orientation
@@ -780,26 +778,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetSpaceStop( ! rPor.GetPortion() ||
                              rPor.GetPortion()->InFixMargGrp() ||
                              rPor.GetPortion()->IsHolePortion() );
-#endif
-
-    if( COL_AUTO == GetFont()->GetColor().GetColor() )
-    {
-        const Color* pCol = GetFont()->GetBackColor();
-        if( !pCol || COL_TRANSPARENT == pCol->GetColor() )
-        {
-            const SvxBrushItem* pItem;
-            SwRect aOrigBackRect;
-            if( GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect,
-                FALSE ) && !pItem->GetColor().GetTransparency() )
-                pCol = &pItem->GetColor();
-            else
-                pCol = NULL;
-        }
-        if( !pCol )
-            pCol = &aGlobalRetoucheColor;
-        aDrawInf.SetDarkBack(
-            DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() );
-    }
 
     if( !pPrt )
         aDrawInf.GetZoom() = GetParaPortion()->GetZoom();
@@ -894,10 +872,8 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
         pInf->GetTxtFrm()->SwitchLTRtoRTL( aRect );
 #endif
 
-#ifdef VERTICAL_LAYOUT
     if ( pInf->GetTxtFrm()->IsVertical() )
         pInf->GetTxtFrm()->SwitchHorizontalToVertical( aRect );
-#endif
 
     if ( pRect )
         *pRect = aRect;
@@ -915,8 +891,6 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
         *pIntersect = aRect;
     }
 }
-
-#ifdef VERTICAL_LAYOUT
 
 /*************************************************************************
  *                          lcl_DrawSpecial
@@ -1048,8 +1022,6 @@ void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
     ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
 }
 
-#endif
-
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawRect()
  *************************************************************************/
@@ -1094,11 +1066,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 #endif
 #endif
 
-#ifdef VERTICAL_LAYOUT
         lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_TAB, sal_True, sal_True );
-#else
-        pOpt->PaintTab( pWin, aRect );
-#endif
     }
 }
 
@@ -1111,31 +1079,20 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         KSHORT nOldWidth = rPor.Width();
-#ifdef VERTICAL_LAYOUT
         ((SwLinePortion&)rPor).Width( ((SwBreakPortion&)rPor).GetRestWidth() );
-#else
-        ((SwLinePortion&)rPor).Width( pOpt->GetLineBreakWidth( pWin ) );
-#endif
 
         SwRect aRect;
 
         lcl_CalcRect( this, rPor, &aRect, 0 );
 
-#ifdef VERTICAL_LAYOUT
         if( aRect.HasArea() )
             lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_LINEBREAK,
                              sal_False, sal_False );
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
-#else
-        ((SwLinePortion&)rPor).Width( nOldWidth );
-        if( aRect.HasArea() )
-             pOpt->PaintLineBreak( pWin, aRect.SVRect() );
-#endif
     }
 }
 
-#ifdef VERTICAL_LAYOUT
 
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawRedArrow()
@@ -1172,7 +1129,6 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
         lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, sal_False, sal_False );
 }
 
-#endif
 
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawPostIts()
@@ -1189,12 +1145,8 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
         const USHORT nFontHeight = pFnt->GetHeight( pVsh, GetOut() );
         const USHORT nFontAscent = pFnt->GetAscent( pVsh, GetOut() );
 
-#ifdef VERTICAL_LAYOUT
         switch ( UnMapDirection( pFnt->GetOrientation(),
                                  GetTxtFrm()->IsVertical() ) )
-#else
-        switch ( pFnt->GetOrientation() )
-#endif
         {
         case 0 :
             aSize.Width() = nPostItsWidth;
@@ -1217,7 +1169,6 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
             break;
         }
 
-#ifdef VERTICAL_LAYOUT
         SwRect aTmpRect( aTmp, aSize );
 
 #ifdef BIDI
@@ -1229,9 +1180,6 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
 
         const Rectangle aRect( aTmpRect.SVRect() );
-#else
-        const Rectangle aRect( aTmp, aSize );
-#endif
         pOpt->PaintPostIts( pWin, aRect, bScript );
     }
 }
@@ -1251,16 +1199,38 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     if ( aIntersect.HasArea() )
     {
         OutputDevice *pOut = (OutputDevice*)GetOut();
-        Color aCol( SwViewOption::GetFieldShadingsColor() );
-        const Color aOldColor( pOut->GetFillColor() );
-        sal_Bool bChgBrsh;
-        if( 0 != (bChgBrsh = aOldColor != aCol) )
-            pOut->SetFillColor( aCol );
+        sal_Bool bChgColor = sal_False;
 
-        DrawRect( aIntersect, sal_True );
+        // For dark background we do not want to have a filled rectangle
+        if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
+        {
+            const StyleSettings& rS = GetVsh()->GetWin()->
+                                      GetSettings().GetStyleSettings();
 
-        if ( bChgBrsh )
-            pOut->SetFillColor( aOldColor );
+            Color aCol( rS.GetWindowTextColor().GetColor() );
+            Color aOldColor( pOut->GetLineColor() );
+
+            if ( 0 != ( bChgColor = aOldColor != aCol ) )
+                pOut->SetLineColor( aCol );
+
+            DrawRect( aIntersect, sal_True );
+
+            if ( bChgColor )
+                pOut->SetLineColor( aOldColor );
+        }
+        else
+        {
+            Color aCol( SwViewOption::GetFieldShadingsColor() );
+            Color aOldColor( pOut->GetFillColor() );
+
+            if( 0 != ( bChgColor = aOldColor != aCol ) )
+                pOut->SetFillColor( aCol );
+
+            DrawRect( aIntersect, sal_True );
+
+            if ( bChgColor )
+                pOut->SetFillColor( aOldColor );
+        }
     }
 }
 
@@ -1851,12 +1821,8 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
 
     const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
             pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
-#ifdef VERTICAL_LAYOUT
     const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation() &&
                                 ! rInf.GetTxtFrm()->IsVertical();
-#else
-    const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation();
-#endif
 
     if( bFamily || bRotation )
     {
@@ -1873,11 +1839,7 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         }
 
         if ( bRotation )
-#ifdef VERTICAL_LAYOUT
             pNewFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
-#else
-            pNewFnt->SetVertical( 0 );
-#endif
 
         pInf = &((SwTxtSizeInfo&)rInf);
         pNewFnt->Invalidate();

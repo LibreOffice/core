@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-07 14:19:05 $
+ *  last change: $Author: fme $ $Date: 2002-06-19 07:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,6 @@
 #include <drawfont.hxx>     // SwDrawTextInfo
 #endif
 #include "dbg_lay.hxx"
-
-#ifdef VERTICAL_LAYOUT
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
 #endif
@@ -122,6 +120,8 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+#ifndef _SVX_BRSHITEM_HXX //autogen
+#include <svx/brshitem.hxx>
 #endif
 
 // Enable this to use the helpclass SwRVPMark
@@ -145,9 +145,7 @@ long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
 
-#ifdef VERTICAL_LAYOUT
 extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
-#endif
 
 #ifdef _RVP_MARK_HXX
 
@@ -705,7 +703,6 @@ void lcl_Pos( USHORT nWhich, long& rPos, long nWidth, long nLeft, long nRight )
 
 #endif
 
-#ifdef VERTICAL_LAYOUT
 BYTE lcl_WhichPunctuation( xub_Unicode cChar )
 {
     if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
@@ -726,7 +723,6 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
 
     return SwScriptInfo::SPECIAL_LEFT;
 }
-#endif
 
 // ER 09.07.95 20:34
 // mit -Ox Optimierung stuerzt's unter win95 ab
@@ -1660,7 +1656,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
 #endif
 
-#ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -1696,7 +1691,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             return aTxtSize;
         }
     }
-#endif
 
     BOOL bCompress = rInf.GetKanaComp() && nLn;
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
@@ -2128,7 +2122,6 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     USHORT nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
                                                : rInf.GetLen() );
 
-#ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() &&
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -2160,7 +2153,6 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             return nTxtBreak + rInf.GetIdx();
         }
     }
-#endif
 
     if( aSub[nActual].IsCapital() && nLn )
         nTxtBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
@@ -2261,6 +2253,8 @@ void SwDrawTextInfo::Shift( USHORT nDir )
     }
 }
 
+extern Color aGlobalRetoucheColor;
+
 sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
 {
     const Font& rFnt = pFnt ? *pFnt : GetOut().GetFont();
@@ -2293,16 +2287,61 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
 
         if ( bChgFntColor )
         {
+            // check if current background has a user defined setting
+            const Color* pCol = GetFont() ? GetFont()->GetBackColor() : NULL;
+            if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
+            {
+                const SvxBrushItem* pItem;
+                SwRect aOrigBackRect;
+                if( GetFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) &&
+                    ! pItem->GetColor().GetTransparency() )
+                    pCol = &pItem->GetColor();
+                else
+                    pCol = NULL;
+            }
+
+            // !!! EINSCHUB BEGIN
+            if ( ! pCol )
+                pCol = &aGlobalRetoucheColor;
+
+            sal_Bool bDarkBack = DARK_COLOR > pCol->GetRed() +
+                                              pCol->GetGreen() +
+                                              pCol->GetBlue();
+
             if( GetShell() && GetShell()->GetWin() )
             {
                 const StyleSettings& rS = GetShell()->GetWin()->
                                           GetSettings().GetStyleSettings();
-                nNewColor = GetDarkBack() ?
+                nNewColor = bDarkBack ?
                             COL_WHITE :
                             rS.GetWindowTextColor().GetColor();
             }
             else
-                nNewColor = GetDarkBack() ? COL_WHITE : COL_BLACK;
+                nNewColor = bDarkBack ? COL_WHITE : COL_BLACK;
+            /// !!! EINSCHUB END
+
+//            if ( ! pCol )
+//            {
+//                // no user defined color at paragraph or font background
+//                if( GetShell() && GetShell()->GetWin() )
+//                {
+//                    // we take the window text color for painting
+//                    nNewColor = GetShell()->GetWin()->GetSettings().
+//                                GetStyleSettings().GetWindowTextColor().
+//                                GetColor();
+//                }
+//                else
+//                    pCol = &aGlobalRetoucheColor;
+//            }
+
+//            if ( pCol )
+//            {
+//                // we invert the color set at the background
+//                nNewColor = ( DARK_COLOR > pCol->GetRed() +
+//                                           pCol->GetGreen() +
+//                                           pCol->GetBlue() ) ?
+//                                           COL_WHITE : COL_BLACK;
+//            }
         }
     }
 

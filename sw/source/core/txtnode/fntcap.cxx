@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-07 15:47:51 $
+ *  last change: $Author: fme $ $Date: 2002-06-19 07:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,10 +235,7 @@ xub_StrLen SwFont::GetCapitalBreak( ViewShell *pSh, const OutputDevice *pOut,
     aInfo.SetDrawSpace( FALSE );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );
-
-#ifdef VERTICAL_LAYOUT
     aInfo.SetFont( this );
-#endif
 
     SwDoGetCapitalBreak aDo( aInfo, nTextWidth, pExtra );
     DoOnCapitals( aDo );
@@ -379,11 +376,8 @@ void SwDoCapitalCrsrOfst::Do()
             aDrawInf.SetOfst( nOfst );
             aDrawInf.SetKern( rInf.GetKern() );
             aDrawInf.SetKanaComp( rInf.GetKanaComp() );
-
-#ifdef VERTICAL_LAYOUT
             aDrawInf.SetFrm( rInf.GetFrm() );
             aDrawInf.SetFont( rInf.GetFont() );
-#endif
 
             if ( rInf.GetUpper() )
             {
@@ -460,7 +454,10 @@ void SwDoDrawStretchCapital::Do()
                 nPartWidth = USHORT(nDiff);
         }
 
+        rInf.ApplyAutoColor();
+
         // Optimierung:
+
         if( 1 >= rInf.GetLen() )
             GetOut()->DrawText( rInf.GetPos(), rInf.GetText(), rInf.GetIdx(),
                 rInf.GetLen() );

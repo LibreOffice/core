@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-07 14:17:25 $
+ *  last change: $Author: fme $ $Date: 2002-06-19 07:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,9 @@ class Font;
 class ViewShell;
 class SwTxtNode;
 class SwAttrHandler;
-
-#ifdef VERTICAL_LAYOUT
 class SwTxtFrm;
-#endif
+
+#define DARK_COLOR 154
 
 #ifdef BIDI
 
@@ -318,9 +317,7 @@ inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
 
 class SwDrawTextInfo
 {
-#ifdef VERTICAL_LAYOUT
     const SwTxtFrm* pFrm;
-#endif
     OutputDevice* pOut;
     ViewShell* pSh;
     const SwScriptInfo* pScriptInfo;
@@ -348,13 +345,10 @@ class SwDrawTextInfo
     BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
     BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
     BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
-    BOOL bDarkBack : 1;     // Dark background sets automatic font color to white
-#ifdef VERTICAL_LAYOUT
     BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
                             // is right in front of a hole portion or a
                             // fix margin portion.
     BOOL bSnapToGrid : 1;   // Does paragraph snap to grid?
-#endif
     SwDrawTextInfo();       // nicht zulaessig
 public:
 #ifndef PRODUCT
@@ -387,13 +381,10 @@ public:
                     USHORT nW = 0, BOOL bB = FALSE)
     {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
         nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
-#ifdef VERTICAL_LAYOUT
-        bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = bSpaceStop =
+        bBullet = bB; pUnderFnt = 0; bGreyWave = bSpaceStop =
         bSnapToGrid = FALSE;
         pFrm = 0;
-#else
-        bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = FALSE;
-#endif
+
 #ifndef PRODUCT
         bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec =
             bGreyWv = TRUE;
@@ -402,10 +393,8 @@ public:
 #endif
     }
 
-#ifdef VERTICAL_LAYOUT
     const SwTxtFrm* GetFrm() const { return pFrm; }
     void SetFrm( const SwTxtFrm* pNewFrm ) { pFrm = pNewFrm; }
-#endif
 
     ViewShell *GetShell() const { return pSh; }
     OutputDevice& GetOut() const {
@@ -519,17 +508,12 @@ public:
         ASSERT( bGreyWv, "DrawTextInfo: Undefined GreyWave" );
         return bGreyWave;
     }
-    BOOL GetDarkBack() const {
-        return bDarkBack;
-    }
-#ifdef VERTICAL_LAYOUT
     BOOL IsSpaceStop() const {
         return bSpaceStop;
     }
     BOOL SnapToGrid() const {
         return bSnapToGrid;
     }
-#endif
 
     void SetOut( OutputDevice &rNew ){ pOut = &rNew;
 #ifndef PRODUCT
@@ -659,12 +643,9 @@ public:
         bGreyWv = TRUE;
 #endif
     }
-    void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
 
-#ifdef VERTICAL_LAYOUT
     void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew; }
     void SetSnapToGrid( BOOL bNew ) { bSnapToGrid = bNew; }
-#endif
 
     void Shift( USHORT nDir );
 
