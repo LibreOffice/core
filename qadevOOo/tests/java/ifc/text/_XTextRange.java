@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextRange.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:20:37 $
+ *  last change:$Date: 2005-02-24 17:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package ifc.text;
 
 import lib.MultiMethodTest;
@@ -127,6 +126,9 @@ public class _XTextRange extends MultiMethodTest {
         tRes.tested( "getStart()", oStartRange != null &&
             exp.startsWith("Start"));
 
+
+        oStartRange.setString("");
+
     }
 
     /**
@@ -160,6 +162,8 @@ public class _XTextRange extends MultiMethodTest {
 
         tRes.tested( "getEnd()", oEndRange != null &&
             exp.endsWith("End"));
+
+        oEndRange.setString("");
     }
 
     /**
@@ -181,7 +185,7 @@ public class _XTextRange extends MultiMethodTest {
         XText txt = oObj.getText() ;
 
         tRes.tested( "getText()", txt != null &&
-            txt.getString().equals("StartMiddleEnd"));
+            txt.getString().equals("StartMiddle"));
     }
 
     /**
