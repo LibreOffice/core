@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:16:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace ::xmloff::token;
 
 #define PROP_TITLE          "Title"
 #define PROP_DESCRIPTION    "Description"
-#define PROP_THEME          "Theme"
+#define PROP_SUBJECT          "Subject"
 #define PROP_KEYWORDS       "Keywords"
 #define PROP_AUTHOR         "Author"
 #define PROP_CREATIONDATE   "CreationDate"
@@ -601,7 +601,7 @@ void SfxXMLMetaElementContext::EndElement()
             break;
         case XML_TOK_META_SUBJECT:
             aPropAny <<= sContent;
-            xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii(PROP_THEME), aPropAny );
+            xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii(PROP_SUBJECT), aPropAny );
             break;
         case XML_TOK_META_INITIALCREATOR:
             aPropAny <<= sContent;
