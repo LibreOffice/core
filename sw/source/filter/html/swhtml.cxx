@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:38:22 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2395,7 +2395,11 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
     if( bUpdateNum )
     {
         if( GetNumInfo().GetDepth() )
-            SetNodeNum( GetNumInfo().GetLevel() | NO_NUMLEVEL );
+        {
+            BYTE nLvl = GetNumInfo().GetLevel();
+            SetNoNum (&nLvl, TRUE);
+            SetNodeNum( nLvl);
+        }
         else
             pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
     }
@@ -4828,7 +4832,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
         ASSERT( pNodeNum, "Kein SwNodeNum am Absatz in Aufzaehlung" );
 
         BOOL bNumbered = FALSE;
-        if( pNodeNum && !(NO_NUMLEVEL & pNodeNum->GetLevel()) )
+        if( pNodeNum && pNodeNum.IsNum())
         {
             // der Erstzeilen-Einzug des List-Items muss noch zu dem
             // sowieso schon bestehenden addiert werden, weil er im
