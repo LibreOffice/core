@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:58 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,14 @@
 #ifndef SC_XLCONTENT_HXX
 #include "xlcontent.hxx"
 #endif
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
+#endif
 #ifndef SC_XERECORD_HXX
 #include "xerecord.hxx"
 #endif
-#ifndef SC_XEHELPER_HXX
-#include "xehelper.hxx"
+#ifndef SC_XESTRING_HXX
+#include "xestring.hxx"
 #endif
 
 
@@ -83,7 +86,6 @@
 Classes to export the big Excel document contents (related to several cells or
 globals for the document).
 - Shared string table
-- Background bitmap
 - Hyperlinks
 - Label ranges
 - Conditional formatting
@@ -93,41 +95,26 @@ globals for the document).
 
 // Shared string table ========================================================
 
+class XclExpSst_Impl;
+
 /** Provides export of the SST (shared string table) record.
     @descr  Contains all strings in the document and writes the SST. */
 class XclExpSst : public XclExpRecordBase
 {
-private:
-    ScfDelList< XclExpString >  maStringList; /// List with formatted and unformatted strings.
-
 public:
-    inline explicit             XclExpSst() {}
+    explicit                    XclExpSst();
     virtual                     ~XclExpSst();
 
     /** Inserts a new string into the table.
-        @return  The index of the string in the SST. */
-    sal_uInt32                  Insert( XclExpString* pString );
+        @return  The index of the string in the SST, used in other records. */
+    sal_uInt32                  Insert( XclExpStringPtr pString );
 
     /** Writes the complete SST and EXTSST records. */
     virtual void                Save( XclExpStream& rStrm );
-};
 
-
-// Background bitmap ==========================================================
-
-class Graphic;
-
-/** Provides export of a background bitmap of a sheet. */
-class XclExpBitmap : public XclExpRecord
-{
 private:
-    const Graphic*              mpGraphic;      /// Pointer to the bitmap in a brush item.
-
-public:
-    explicit                    XclExpBitmap( const XclExpRoot& rRoot );
-
-    /** Writes the BITMAP record, if mpGraphic points to a bitmap. */
-    virtual void                Save( XclExpStream& rStrm );
+    typedef ::std::auto_ptr< XclExpSst_Impl > XclExpSst_ImplPtr;
+    XclExpSst_ImplPtr           mpImpl;
 };
 
 
@@ -139,16 +126,6 @@ class INetURLObject;
 /** Provides export of hyperlink data. */
 class XclExpHyperlink : public XclExpRecord
 {
-private:
-    typedef ::std::auto_ptr< String >   StringPtr;
-    typedef ::std::auto_ptr< SvStream > SvStreamPtr;
-
-private:
-    ScAddress                   maPos;              /// Position of the hyperlink.
-    sal_uInt32                  mnFlags;            /// Option flags.
-    StringPtr                   mpRepr;             /// Cell representation text.
-    SvStreamPtr                 mpVarData;          /// Buffer stream with variable data.
-
 public:
     /** Constructs the HLINK record from an URL text field. */
     explicit                    XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rUrlField );
@@ -171,6 +148,15 @@ private:
 
     /** Writes the body of the HLINK record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    typedef ::std::auto_ptr< String >   StringPtr;
+    typedef ::std::auto_ptr< SvStream > SvStreamPtr;
+
+    ScAddress                   maPos;              /// Position of the hyperlink.
+    StringPtr                   mpRepr;             /// Cell representation text.
+    SvStreamPtr                 mpVarData;          /// Buffer stream with variable data.
+    sal_uInt32                  mnFlags;            /// Option flags.
 };
 
 
@@ -363,7 +349,7 @@ public:
 private:
     XclExpString                maDestRange;    /// Destination range.
     XclExpString                maUrl;          /// Source document URL.
-    XclExpString*               mpQryTables;    /// List of source range names.
+    XclExpStringPtr             mpQryTables;    /// List of source range names.
     sal_Int16                   mnRefresh;      /// Refresh time in minutes.
     bool                        mbEntireDoc;    /// true = entire document.
 };
