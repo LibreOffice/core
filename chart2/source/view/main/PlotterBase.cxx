@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 10:00:37 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 10:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #include "PlotterBase.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
-#include "StatisticsHelper.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -71,9 +68,6 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
 #include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/ErrorBarStyle.hpp>
 #endif
 
 /*
@@ -84,8 +78,6 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
-#include <algorithm>
 
 //.............................................................................
 namespace chart
@@ -160,240 +152,6 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
         //create and added to target
         return m_pShapeFactory->createGroup3D( xTarget, rName );
     }
-}
-
-namespace
-{
-double lcl_getErrorBarLogicLength(
-    const uno::Sequence< double > & rData,
-    uno::Reference< beans::XPropertySet > xProp,
-    ErrorBarStyle eErrorBarStyle,
-    sal_Int32 nIndex,
-    bool bPositive )
-{
-    double fResult;
-    ::rtl::math::setNan( & fResult );
-    try
-    {
-        switch( eErrorBarStyle )
-        {
-            case ErrorBarStyle_VARIANCE:
-                fResult = StatisticsHelper::getVariance( rData );
-                break;
-            case ErrorBarStyle_STANDARD_DEVIATION:
-                fResult = StatisticsHelper::getStandardDeviation( rData );
-                break;
-            case ErrorBarStyle_RELATIVE:
-            {
-                double fPercent;
-                if( xProp->getPropertyValue( bPositive
-                                             ? C2U("PositiveError")
-                                             : C2U("NegativeError")) >>= fPercent )
-                {
-                    if( ! ::rtl::math::isNan( rData[nIndex] ) &&
-                        ! ::rtl::math::isNan( fPercent ))
-                    {
-                        fResult = rData[nIndex] * fPercent / 100.0;
-                    }
-                }
-            }
-            break;
-            case ErrorBarStyle_ABSOLUTE:
-                xProp->getPropertyValue( bPositive
-                                         ? C2U("PositiveError")
-                                         : C2U("NegativeError")) >>= fResult;
-                break;
-            case ErrorBarStyle_ERROR_MARGIN:
-            {
-                // todo: check if this is really what's called error-margin
-                double fPercent;
-                if( xProp->getPropertyValue( bPositive
-                                             ? C2U("PositiveError")
-                                             : C2U("NegativeError")) >>= fPercent )
-                {
-                    double fMaxValue = *(::std::max_element(
-                                             rData.getConstArray(),
-                                             rData.getConstArray() + rData.getLength()));
-                    if( ! ::rtl::math::isNan( fMaxValue ) &&
-                        ! ::rtl::math::isNan( fPercent ))
-                    {
-                        fResult = fMaxValue * fPercent / 100.0;
-                    }
-                }
-            }
-            break;
-            case ErrorBarStyle_STANDARD_ERROR:
-                fResult = StatisticsHelper::getStandardError( rData );
-                break;
-            case ErrorBarStyle_FROM_DATA:
-                // todo: implement
-                break;
-
-                // to avoid warning
-            case ErrorBarStyle_MAKE_FIXED_SIZE:
-                break;
-        }
-    }
-    catch( uno::Exception & e )
-    {
-        ASSERT_EXCEPTION( e );
-    }
-
-    return fResult;
-}
-
-bool lcl_getErrorBarPosAndSize(
-    double fErrorBarLength,
-    ShapeFactory::tErrorBarDirection eDirection,
-    const uno::Reference< XTransformation > & xTrans,
-    const PlottingPositionHelper & rPositionHelper,
-    drawing::Position3D & rInOutNewPos,
-    drawing::Direction3D & rOutNewSize )
-{
-    bool bClipped = false;
-
-    if( xTrans.is())
-    {
-        drawing::Position3D aUpperLeft( rInOutNewPos ), aLowerRight( rInOutNewPos );
-        switch( eDirection )
-        {
-            case ShapeFactory::ERROR_BAR_UP:
-                aUpperLeft.PositionY += fErrorBarLength;
-                break;
-            case ShapeFactory::ERROR_BAR_DOWN:
-                aLowerRight.PositionY -= fErrorBarLength;
-                break;
-            case ShapeFactory::ERROR_BAR_RIGHT:
-                aLowerRight.PositionX += fErrorBarLength;
-                break;
-            case ShapeFactory::ERROR_BAR_LEFT:
-                aUpperLeft.PositionX -= fErrorBarLength;
-                break;
-        }
-
-        rPositionHelper.clipLogicValues(
-            & rInOutNewPos.PositionX, & rInOutNewPos.PositionY, & rInOutNewPos.PositionZ );
-        rPositionHelper.doLogicScaling(
-            & rInOutNewPos.PositionX, & rInOutNewPos.PositionY, & rInOutNewPos.PositionZ );
-        rInOutNewPos = drawing::Position3D(
-            SequenceToPosition3D( xTrans->transform( Position3DToSequence( rInOutNewPos ))));
-
-        double fOldX = aUpperLeft.PositionX;
-        double fOldY = aUpperLeft.PositionY;
-        rPositionHelper.clipLogicValues(
-            & aUpperLeft.PositionX, & aUpperLeft.PositionY, & aUpperLeft.PositionZ );
-        bClipped = bClipped ||
-            ( ( eDirection == ShapeFactory::ERROR_BAR_UP ||
-                eDirection == ShapeFactory::ERROR_BAR_LEFT ) &&
-              ( fOldX != aUpperLeft.PositionX ||
-                fOldY != aUpperLeft.PositionY ));
-        rPositionHelper.doLogicScaling(
-            & aUpperLeft.PositionX, & aUpperLeft.PositionY, & aUpperLeft.PositionZ );
-        drawing::Position3D aNewUpperLeft(
-            SequenceToPosition3D( xTrans->transform( Position3DToSequence( aUpperLeft ))));
-
-        fOldX = aLowerRight.PositionX;
-        fOldY = aLowerRight.PositionY;
-        rPositionHelper.clipLogicValues(
-            & aLowerRight.PositionX, & aLowerRight.PositionY, & aLowerRight.PositionZ );
-        bClipped = bClipped ||
-            ( ( eDirection == ShapeFactory::ERROR_BAR_DOWN ||
-                eDirection == ShapeFactory::ERROR_BAR_RIGHT ) &&
-              ( fOldX != aLowerRight.PositionX ||
-                fOldY != aLowerRight.PositionY ));
-        rPositionHelper.doLogicScaling(
-            & aLowerRight.PositionX, & aLowerRight.PositionY, & aLowerRight.PositionZ );
-        drawing::Position3D aNewLowerRight(
-            SequenceToPosition3D( xTrans->transform( Position3DToSequence( aLowerRight ))));
-
-        rOutNewSize = drawing::Direction3D(
-            aNewLowerRight.PositionX - aNewUpperLeft.PositionX,
-            aNewLowerRight.PositionY - aNewUpperLeft.PositionY,
-            rInOutNewPos.PositionZ );
-
-        // in 100th of a mm
-        double fFixedWidth = 200.0;
-        if( eDirection == ShapeFactory::ERROR_BAR_LEFT ||
-            eDirection == ShapeFactory::ERROR_BAR_RIGHT )
-        {
-            rOutNewSize.DirectionY = fFixedWidth;
-        }
-        else
-        {
-            rOutNewSize.DirectionX = fFixedWidth;
-        }
-    }
-    return bClipped;
-}
-
-} // anonymous namespace
-
-// virtual
-void PlotterBase::createErrorBar(
-      const uno::Reference< drawing::XShapes >& xTarget
-    , const drawing::Position3D& rPos
-    , const uno::Reference< beans::XPropertySet > & xErrorBarProperties
-    , const uno::Sequence< double > & rData
-    , sal_Int32 nIndex
-    , bool bVertical /* = true */
-    )
-{
-    if( ! xErrorBarProperties.is())
-        return;
-
-    try
-    {
-        sal_Bool bShowPos, bShowNeg;
-        ErrorBarStyle eErrorBarStyle;
-
-        if( ! (xErrorBarProperties->getPropertyValue( C2U( "ShowPositiveError" )) >>= bShowPos ))
-            bShowPos = sal_False;
-        if( ! (xErrorBarProperties->getPropertyValue( C2U( "ShowNegativeError" )) >>= bShowNeg ))
-            bShowNeg = sal_False;
-        if( ! (xErrorBarProperties->getPropertyValue( C2U( "ErrorBarStyle" )) >>= eErrorBarStyle ))
-            eErrorBarStyle = ErrorBarStyle_VARIANCE;
-
-        uno::Reference< XTransformation > xTrans( m_pPosHelper->getTransformationLogicToScene() );
-
-        if( bShowPos )
-        {
-            ShapeFactory::tErrorBarDirection eErrorBarDir =
-                bVertical
-                ? ShapeFactory::ERROR_BAR_UP
-                : ShapeFactory::ERROR_BAR_RIGHT;
-            double fErrorBarLength = lcl_getErrorBarLogicLength(
-                rData, xErrorBarProperties, eErrorBarStyle, nIndex, true /* positive */ );
-
-            drawing::Position3D  aPos( rPos );
-            drawing::Direction3D aSize;
-            bool bClipped =
-                lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
-
-            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped );
-        }
-
-        if( bShowNeg )
-        {
-            ShapeFactory::tErrorBarDirection eErrorBarDir =
-                bVertical
-                ? ShapeFactory::ERROR_BAR_DOWN
-                : ShapeFactory::ERROR_BAR_LEFT;
-            double fErrorBarLength = lcl_getErrorBarLogicLength(
-                rData, xErrorBarProperties, eErrorBarStyle, nIndex, false /* negative */ );
-
-            drawing::Position3D  aPos( rPos );
-            drawing::Direction3D aSize;
-            bool bClipped =
-                lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
-
-            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped );
-        }
-    }
-    catch( uno::Exception & e )
-    {
-        ASSERT_EXCEPTION( e );
-    }
-
 }
 
 /*

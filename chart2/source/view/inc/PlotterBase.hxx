@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 08:35:30 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 10:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,33 +142,6 @@ public:
     void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
     virtual void SAL_CALL createShapes() = 0;
-
-    /**
-
-        @param rPos
-            logic coordinates
-
-        @param xErrorBarProperties
-            the XPropertySet returned by the DataPoint-property "ErrorBarX" or
-            "ErrorBarY".
-
-        @param nIndex
-            the index of the data point in rData for which the calculation is
-            done.
-
-        @param bVertical
-            for y-error bars this is true, for x-error-bars it is false.
-     */
-    virtual void PlotterBase::createErrorBar(
-          const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget
-        , const ::com::sun::star::drawing::Position3D & rPos
-        , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & xErrorBarProperties
-        , const ::com::sun::star::uno::Sequence< double > & rData
-        , sal_Int32 nIndex
-        , bool bVertical
-        );
 
     /*
     virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 22:02:00 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 10:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,34 @@ protected: //methods
                 , double fValue
                 , double fSumValue
                 , const ::com::sun::star::awt::Point& rScreenPosition2D );
+
+    /** creates two T-shaped error bars in both directions (up/down or
+        left/right depending on the bVertical parameter)
+
+        @param rPos
+            logic coordinates
+
+        @param xErrorBarProperties
+            the XPropertySet returned by the DataPoint-property "ErrorBarX" or
+            "ErrorBarY".
+
+        @param nIndex
+            the index of the data point in rData for which the calculation is
+            done.
+
+        @param bVertical
+            for y-error bars this is true, for x-error-bars it is false.
+     */
+    virtual void createErrorBar(
+          const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget
+        , const ::com::sun::star::drawing::Position3D & rPos
+        , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > & xErrorBarProperties
+        , const ::com::sun::star::uno::Sequence< double > & rData
+        , sal_Int32 nIndex
+        , bool bVertical
+        );
 
     virtual void setMappedProperties(
           const ::com::sun::star::uno::Reference<
