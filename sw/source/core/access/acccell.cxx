@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:05 $
+ *  last change: $Author: mib $ $Date: 2002-11-25 15:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,6 @@ Any SwAccessibleCell::getMinimumValue(  )
     throw( RuntimeException )
 {
     Any aAny;
-    aAny <<= DBL_MIN;
+    aAny <<= -DBL_MAX;
     return aAny;
 }
