@@ -13481,3 +13481,12 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?SetRightToLeft@MultiLineEdit@@QAEXE@Z
 ReadJPEG
 WriteJPEG
+?iquery@BaseReference@uno@star@sun@com@@KAPAVXInterface@2345@PAV62345@ABVType@2345@@Z
+??1?$Reference@VXFastPropertySet@beans@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXStringSubstitution@util@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1EnumToHandleMap@@QAE@XZ
+??1NameToHandleMap@@QAE@XZ
+??1VarNameToEnumMap@@QAE@XZ
+?s_pType_com_sun_star_util_XStringSubstitution@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXStringSubstitution@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXFastPropertySet@beans@star@sun@com@@@uno@star@sun@com@@QAAEPAVXFastPropertySet@beans@345@@Z
+?set@?$Reference@VXStringSubstitution@util@star@sun@com@@@uno@star@sun@com@@QAAEPAVXStringSubstitution@util@345@@Z
