@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:41:33 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,15 @@ String RID_STR_QRY_TITLE
     Text [ spanish ] = "Consulta #" ;
     Text [ french ] = "Requête #" ;
     Text [ dutch ] = "Query #" ;
-    Text[ chinese_simplified ] = "²éÑ¯ #";
+    Text[ chinese_simplified ] = "æŸ¥è¯¢ #";
     Text[ russian ] = "Çàïğîñ #";
     Text[ polish ] = "Kwerenda #";
-    Text[ japanese ] = "¸´Ø° #";
+    Text[ japanese ] = "ï½¸ï½´ï¾˜ï½° #";
     Text[ dutch ] = "Query #";
-    Text[ chinese_simplified ] = "²éÑ¯ #";
+    Text[ chinese_simplified ] = "æŸ¥è¯¢ #";
     Text[ greek ] = "Åñşôçìá #";
-    Text[ korean ] = "ÁúÀÇ #";
-    Text[ chinese_traditional ] = "¬d¸ß #";
+    Text[ korean ] = "ì§ˆì˜ #";
+    Text[ chinese_traditional ] = "æŸ¥è©¢ #";
     Text[ arabic ] = "ÇáÇÓÊİÓÇÑ #";
     Text[ turkish ] = "Sorgu #";
     Text[ language_user1 ] = " ";
@@ -104,21 +104,22 @@ String RID_STR_TBL_TITLE
     Text [ spanish ] = "Tabla #" ;
     Text [ french ] = "Table #" ;
     Text [ dutch ] = "Tabel #" ;
-    Text[ chinese_simplified ] = "±í¸ñ #";
+    Text[ chinese_simplified ] = "è¡¨æ ¼ #";
     Text[ russian ] = "Òàáëèöà #";
     Text[ polish ] = "Tabela #";
-    Text[ japanese ] = "Ã°ÌŞÙ #";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ #";
     Text[ dutch ] = "Tabel #";
-    Text[ chinese_simplified ] = "±í¸ñ #";
+    Text[ chinese_simplified ] = "è¡¨æ ¼ #";
     Text[ greek ] = "Ğßíáêáò #";
-    Text[ korean ] = "Ç¥ #";
-    Text[ chinese_traditional ] = "ªí®æ #";
+    Text[ korean ] = "í‘œ #";
+    Text[ chinese_traditional ] = "è¡¨æ ¼ #";
     Text[ arabic ] = "ÇáÌÏæá #";
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla #";
     Text[ finnish ] = "Taulukko ";
 };
+
 
 
 
