@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: th $ $Date: 2001-06-29 15:29:24 $
+ *  last change: $Author: th $ $Date: 2001-06-29 16:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,8 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 #define IMPL_FONT_ATTR_OTHERSTYLE    ((ULONG)0x80000000)
 
 #define IMPL_FONT_ATTR_CJK_ALLLANG   (IMPL_FONT_ATTR_CJK_JP | IMPL_FONT_ATTR_CJK_SC | IMPL_FONT_ATTR_CJK_TC | IMPL_FONT_ATTR_CJK_KR)
-#define IMPL_FONT_ATTR_ALLLSCRIPT    (IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
+#define IMPL_FONT_ATTR_ALLSCRIPT     (IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
+#define IMPL_FONT_ATTR_ALLSUBSCRIPT  (IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
 
 struct ImplFontAttrTypeSearchData
 {
@@ -2809,20 +2810,20 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                      aSearchFamilyName.Len() )
                     nTestMatch += 1000000*3;
 
-                if ( nSearchType & IMPL_FONT_ATTR_ALLLSCRIPT )
+                if ( nSearchType & IMPL_FONT_ATTR_ALLSCRIPT )
                 {
-                    if ( nMatchType & IMPL_FONT_ATTR_ALLLSCRIPT )
+                    if ( nMatchType & IMPL_FONT_ATTR_ALLSCRIPT )
                     {
                         nTestMatch += 1000000*2;
-                        if ( (nSearchType & IMPL_FONT_ATTR_ALLLSCRIPT) ==
-                             (nMatchType & IMPL_FONT_ATTR_ALLLSCRIPT) )
+                        if ( (nSearchType & IMPL_FONT_ATTR_ALLSUBSCRIPT) ==
+                             (nMatchType & IMPL_FONT_ATTR_ALLSUBSCRIPT) )
                             nTestMatch += 1000000*2;
-                        if ( (nSearchType & IMPL_FONT_ATTR_BRUSHSCRIPT) !=
-                             (nMatchType & IMPL_FONT_ATTR_BRUSHSCRIPT) )
+                        if ( (nSearchType & IMPL_FONT_ATTR_BRUSHSCRIPT) &&
+                             !(nMatchType & IMPL_FONT_ATTR_BRUSHSCRIPT) )
                             nTestMatch -= 1000000;
                     }
                 }
-                else if ( nMatchType & IMPL_FONT_ATTR_ALLLSCRIPT )
+                else if ( nMatchType & IMPL_FONT_ATTR_ALLSCRIPT )
                     nTestMatch -= 1000000;
 
                 if ( nSearchType & IMPL_FONT_ATTR_FIXED )
@@ -2831,9 +2832,9 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                     {
                         nTestMatch += 1000000*2;
                         // Typewriter has now a higher prio
-                        if ( (nSearchType & IMPL_FONT_ATTR_TYPEWRITER) ==
+                        if ( (nSearchType & IMPL_FONT_ATTR_TYPEWRITER) &&
                              (nMatchType & IMPL_FONT_ATTR_TYPEWRITER) )
-                             nTestMatch += 100000;
+                             nTestMatch += 10000*2;
                     }
                 }
                 else if ( nMatchType & IMPL_FONT_ATTR_FIXED )
