@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:28:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,7 +1268,7 @@ String RID_STR_TARGET_FRAME
     Text [ english_us ] = "Frame" ;
     Text [ portuguese_brazilian ] = "Frame" ;
     Text [ swedish ] = "Ram" ;
-    Text [ danish ] = "Frame" ;
+    Text [ danish ] = "Ramme" ;
     Text [ italian ] = "Frame" ;
     Text [ spanish ] = "Marco" ;
     Text [ french ] = "Cadre" ;
@@ -3495,7 +3495,7 @@ String RID_STR_SUBMIT_TARGET
     Text [ english_us ] = "Frame" ;
     Text [ portuguese_brazilian ] = "Moldura" ;
     Text [ swedish ] = "Ram" ;
-    Text [ danish ] = "Frame" ;
+    Text [ danish ] = "Ramme" ;
     Text [ italian ] = "Frame" ;
     Text [ spanish ] = "Marco" ;
     Text [ french ] = "Cadre" ;
@@ -5775,6 +5775,13 @@ String RID_STR_TEXT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51.6.1  2003/07/16 17:08:05  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.51  2003/07/03 17:28:53  hr
+ *  INTEGRATION: CWS rc2merge (1.50.8); FILE MERGED
+ *  2003/07/03 14:40:48 ihi 1.50.8.1: rc-2 merge all languages
+ *
  *  Revision 1.50.8.1  2003/07/03 14:40:48  ihi
  *  rc-2 merge all languages
  *
@@ -5958,6 +5965,74 @@ String RID_STR_TEXT
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
