@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-06 07:54:10 $
+ *  last change: $Author: aw $ $Date: 2002-07-02 15:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -17727,6 +17727,12 @@ Bitmap SIP_SA_MARKERS
 Bitmap SIP_SA_FINE_MARKERS
 {
     File = "markers2.bmp";
+};
+
+// #100499#
+Bitmap BMP_OLEOBJ
+{
+    File = "oleobj.bmp" ;
 };
 
 // ******************************************************************* EOF
