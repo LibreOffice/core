@@ -1,3 +1,5 @@
+all_fragments+=web
+
 # -----------------------------------------------
 # count = 12
 T4_WEB = \
@@ -50,6 +52,6 @@ CONTENTHANDLERS_4fcfg_web = $(foreach,i,$(C4_WEB) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_web = \
     $(TYPES_4fcfg_web) \
-    $(FILTERS_4fcfg_web) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_web) \
     $(CONTENTHANDLERS_4fcfg_web)
