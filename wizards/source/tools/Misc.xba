@@ -755,18 +755,18 @@ Dim ErrMsg as String
 	oDocument = StarDesktop.LoadComponentFromURL(sUrl,&quot;_default&quot;,0, NoArgs())
 NOMODULEINSTALLED:
 	If (Err &lt;&gt; 0) OR IsNull(oDocument) Then
-		If InitResources(&quot;&quot;, &quot;com&quot;) Then
+		If InitResources(&quot;&quot;, &quot;dbw&quot;) Then
 			Select Case sType
 				Case &quot;swriter&quot;
-					ErrMsg = GetResText(1001)
+					ErrMsg = GetResText(501)
 				Case &quot;scalc&quot;
-					ErrMsg = GetResText(1002)
+					ErrMsg = GetResText(502)
 				Case &quot;simpress&quot;
-					ErrMsg = GetResText(1003)
+					ErrMsg = GetResText(503)
 				Case &quot;sdraw&quot;
-					ErrMsg = GetResText(1004)
+					ErrMsg = GetResText(504)
 				Case &quot;smath&quot;
-					ErrMsg = GetResText(1005)
+					ErrMsg = GetResText(505)
 				Case Else
 					ErrMsg = &quot;Invalid Document Type!&quot;
 			End Select
