@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 10:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,91 @@
  *
  ************************************************************************/
 #include "LineChartType.hxx"
+#include "PropertyHelper.hxx"
+#include "algohelper.hxx"
+#include "macros.hxx"
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
+
+using ::rtl::OUString;
+using ::com::sun::star::beans::Property;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::osl::MutexGuard;
+
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
+
+namespace
+{
+
+enum
+{
+    PROP_LINECHARTTYPE_DIMENSION,
+    PROP_LINECHARTTYPE_SPLINE
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "Dimension" ),
+                  PROP_LINECHARTTYPE_DIMENSION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "Offset" ),
+                  PROP_LINECHARTTYPE_SPLINE,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+}
+
+void lcl_AddDefaultsToMap(
+    ::chart::helper::tPropertyValueMap & rOutMap )
+{
+    // must match default in CTOR!
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_DIMENSION ));
+    rOutMap[ PROP_LINECHARTTYPE_DIMENSION ] =
+        uno::makeAny( sal_Int32( 2 ) );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_SPLINE ));
+    rOutMap[ PROP_LINECHARTTYPE_SPLINE ] =
+        uno::makeAny( sal_Int32( 0 ) );
+}
+
+const Sequence< Property > & lcl_GetPropertySequence()
+{
+    static Sequence< Property > aPropSeq;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
+    {
+        // get properties
+        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
+
+        // and sort them for access via bsearch
+        ::std::sort( aProperties.begin(), aProperties.end(),
+                     ::chart::helper::PropertyNameLess() );
+
+        // transfer result to static Sequence
+        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+    }
+
+    return aPropSeq;
+}
+
+} // anonymous namespace
 
 namespace chart
 {
@@ -78,6 +160,60 @@ LineChartType::~LineChartType()
     throw (uno::RuntimeException)
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChart" ));
+}
+
+
+// ____ OPropertySet ____
+uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
+    throw(beans::UnknownPropertyException)
+{
+    static helper::tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    helper::tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
+        return uno::Any();
+
+    return (*aFound).second;
+    // \--
+}
+
+// ____ OPropertySet ____
+::cppu::IPropertyArrayHelper & SAL_CALL LineChartType::getInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
+                                                      /* bSorted = */ sal_True );
+
+    return aArrayHelper;
+}
+
+
+// ____ XPropertySet ____
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    LineChartType::getPropertySetInfo()
+    throw (uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
 }
 
 } //  namespace chart

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartType.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 10:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,10 @@ PieChartType::PieChartType(
     sal_Int32 nOffset /* = 0 */ ) :
         ChartType( nDim )
 {
-    setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_OFFSET, uno::makeAny( nOffset ));
+    if( nDim != 2 )
+        setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_DIMENSION, uno::makeAny( nDim ));
+    if( nOffset != 0 )
+        setFastPropertyValue_NoBroadcast( PROP_PIECHARTTYPE_OFFSET, uno::makeAny( nOffset ));
 }
 
 PieChartType::~PieChartType()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 10:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,18 @@ public:
 protected:
     // ____ XChartType ____
     virtual ::rtl::OUString SAL_CALL getChartType()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ OPropertySet ____
+    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(::com::sun::star::beans::UnknownPropertyException);
+
+    // ____ OPropertySet ____
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    // ____ XPropertySet ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
