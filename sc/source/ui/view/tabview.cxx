@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 15:09:14 $
+ *  last change: $Author: nn $ $Date: 2002-10-18 14:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2029,6 +2029,10 @@ void ScTabView::FreezeSplitters( BOOL bFreeze )
     PaintLeft();
     PaintTop();
     PaintGrid();
+
+    //  SC_FOLLOW_NONE: only update active part
+    AlignToCursor( aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_NONE );
+    UpdateAutoFillMark();
 
     InvalidateSplit();
 }
