@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:29:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ private:
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName,
         sal_Bool bEncrypted );
 
@@ -114,6 +116,8 @@ private:
         const sal_Char* pStreamName,
         const sal_Char* pCompatibilityStreamName,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pFilterName );
 
     sal_Bool WriteThroughComponent(
