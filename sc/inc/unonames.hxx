@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:59 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,8 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+/*Stampit enable/disable print cancel */
+#define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
