@@ -63,27 +63,35 @@ import com.sun.star.uno.*;
 
 import org.openoffice.java.accessibility.logging.*;
 
+import java.text.BreakIterator;
+import java.util.Locale;
+
 import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleText;
 
 import javax.swing.text.StyleConstants;
-
 
 /** The GenericAccessibleEditableText mapps the calls to the java AccessibleEditableText
  *  interface to the corresponding methods of the UNO XAccessibleEditableText interface.
  */
 public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     final static double toPointFactor = 1 / ((7 / 10) + 34.5);
-    static String[] attributeList = {
+    final static String[] attributeList = {
         "ParaAdjust", "CharBackColor", "CharWeight", "ParaFirstLineIndent",
         "CharFontPitch", "CharHeight", "CharColor", "CharPosture",
         "ParaLeftMargin", "ParaLineSpacing", "ParaTopMargin", "ParaBottomMargin",
         "CharStrikeout", "CharEscapement", "ParaTabStops", "CharUnderline"
     };
+
+    final static String[] localeAttributeList = {
+        "CharLocale", "CharLocaleAsian", "CharLocaleComplex"
+    };
+
     XAccessibleText unoObject;
     private javax.swing.text.TabSet tabSet = null;
     private javax.swing.text.TabStop[] tabStops = null;
     private static Type TextSegmentType = new Type(TextSegment.class);
+    private static Type UnoLocaleType = new Type(com.sun.star.lang.Locale.class);
 
     /** Creates new GenericAccessibleEditableText object */
     public AccessibleTextImpl(XAccessibleText xAccessibleText) {
@@ -100,6 +108,9 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         }
     }
 
+    public AccessibleTextImpl() {
+    }
+
     public static javax.accessibility.AccessibleText get(com.sun.star.uno.XInterface unoObject) {
         try {
             XAccessibleText unoAccessibleText = (XAccessibleText)
@@ -110,42 +121,6 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         } catch (com.sun.star.uno.RuntimeException e) {
         }
         return null;
-    }
-
-    protected static short toTextType(int part) {
-        short type = 0;
-
-        switch (part) {
-            case AccessibleText.CHARACTER:
-                type = AccessibleTextType.CHARACTER;
-
-                break;
-
-            case AccessibleText.WORD:
-                type = AccessibleTextType.WORD;
-
-                break;
-
-            case AccessibleText.SENTENCE:
-                type = AccessibleTextType.SENTENCE;
-
-                break;
-
-            case 4:
-                type = AccessibleTextType.LINE;
-
-                break;
-
-            case 5:
-                type = AccessibleTextType.ATTRIBUTE_RUN;
-
-                break;
-
-            default:
-                break;
-        }
-
-        return type;
     }
 
     protected static Object convertTextSegment(Object any) {
@@ -167,32 +142,121 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         return null;
     }
 
-    /** Returns the string after a given index */
-    public String getAfterIndex(int part, int index) {
-        short type = toTextType(part);
+    /** Returns the locale object.
+     *
+     *  Since switching the UI language only takes effect on the next
+     *  office start, UI elements can return a cached value here - given
+     *  that Java UNO initializes the default locale correctly, this is
+     *  the perfect place to grab this cached values.
+     *
+     *  However, since there are more sophisticated components with
+     *  potentially more than one locale, we first check for the
+     *  CharLocale[Asian|Complex] property.
+     */
 
+    protected java.util.Locale getLocale(int index) {
         try {
-            TextSegment ts = unoObject.getTextBehindIndex(index, type);
+            com.sun.star.beans.PropertyValue[] propertyValues =
+                unoObject.getCharacterAttributes(index, localeAttributeList);
 
-            // the office returns an empty string when asking for the word at
-            // the position of a blank
-            if ((part == AccessibleText.WORD) &&
-                    (ts.SegmentText.length() == 0)) {
-                // FIXME: should potentially return more than one blank, but
-                // since this will be fixed in the office at some time ..
-                return " ";
+            if (null != propertyValues) {
+                for (int i = 0; i < propertyValues.length; i++) {
+                    com.sun.star.lang.Locale unoLocale = (com.sun.star.lang.Locale)
+                        AnyConverter.toObject(UnoLocaleType, propertyValues[i]);
+                    if (unoLocale != null) {
+                        return new java.util.Locale(unoLocale.Language, unoLocale.Country);
+                    }
+                }
             }
 
-            return ts.SegmentText;
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Workaround for #104847#
-            if ((type == AccessibleTextType.LINE) && (index > 0) && (getCharCount() == index)) {
-                return getAfterIndex(part, index - 1);
-            }
+            return java.util.Locale.getDefault();
         } catch (com.sun.star.lang.IllegalArgumentException e) {
+            return java.util.Locale.getDefault();
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            return java.util.Locale.getDefault();
         }
+    }
 
-        return null;
+
+    /** Returns the string after a given index
+     *
+     *  The Java word iterator has a different understanding of what
+     *  a word is than the word iterator used by OOo, so we use the
+     *  Java iterators to ensure maximal compatibility with Java.
+     */
+    public String getAfterIndex(int part, int index) {
+        switch (part) {
+        case AccessibleText.CHARACTER:
+            try {
+                String s = unoObject.getText();
+                return s.substring(index+1, index+2);
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case AccessibleText.WORD:
+            try {
+                String s = unoObject.getText();
+                BreakIterator words = BreakIterator.getWordInstance(getLocale(index));
+                words.setText(s);
+                int start = words.following(index);
+                if (start == BreakIterator.DONE || start >= s.length()) {
+                    return null;
+                }
+                int end = words.following(start);
+                if (end == BreakIterator.DONE || end >= s.length()) {
+                    return null;
+                }
+                return s.substring(start, end);
+            } catch (IllegalArgumentException e) {
+                return null;
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case AccessibleText.SENTENCE:
+            try {
+                String s = unoObject.getText();
+                BreakIterator sentence =
+                    BreakIterator.getSentenceInstance(getLocale(index));
+                sentence.setText(s);
+                int start = sentence.following(index);
+                if (start == BreakIterator.DONE || start >= s.length()) {
+                    return null;
+                }
+                int end = sentence.following(start);
+                if (end == BreakIterator.DONE || end >= s.length()) {
+                    return null;
+                }
+                return s.substring(start, end);
+            } catch (IllegalArgumentException e) {
+                return null;
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case 4:
+            try {
+                TextSegment ts = unoObject.getTextBehindIndex(index, AccessibleTextType.LINE);
+                return ts.SegmentText;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                // Workaround for #104847#
+                if (index > 0 && getCharCount() == index) {
+                    return getAfterIndex(part, index - 1);
+                }
+                return null;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                return null;
+            }
+        case 5:
+            try {
+                TextSegment ts = unoObject.getTextBehindIndex(index, AccessibleTextType.ATTRIBUTE_RUN);
+                return ts.SegmentText;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                return null;
+            }
+        default:
+            return null;
+        }
     }
 
     /** Returns the zero-based offset of the caret */
@@ -461,60 +525,150 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         }
     }
 
-    /** Returns the string before a given index */
+    /** Returns the string before a given index
+     *
+     *  The Java word iterator has a different understanding of what
+     *  a word is than the word iterator used by OOo, so we use the
+     *  Java iterators to ensure maximal compatibility with Java.
+     */
     public java.lang.String getBeforeIndex(int part, int index) {
-        short type = toTextType(part);
-
-        try {
-            // the office returns an empty string when asking for the word at
-            // the position of a blank
-            TextSegment ts = unoObject.getTextBeforeIndex(index, type);
-
-            if ((part == AccessibleText.WORD) &&
-                    (ts.SegmentText.length() == 0)) {
-                // FIXME: should potentially return more than one blank, but
-                // since this will be fixed in the office at some time ..
-                return " ";
+        switch (part) {
+        case AccessibleText.CHARACTER:
+            try {
+                String s = unoObject.getText();
+                return s.substring(index-1, index);
+            } catch (IndexOutOfBoundsException e) {
+                return null;
             }
-
-            return ts.SegmentText;
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Workaround for #104847#
-            if ((type == AccessibleTextType.LINE) && (index > 0) && (getCharCount() == index)) {
-                return getBeforeIndex(part, index - 1);
+        case AccessibleText.WORD:
+            try {
+                String s = unoObject.getText();
+                BreakIterator words = BreakIterator.getWordInstance(getLocale(index));
+                words.setText(s);
+                int end = words.following(index);
+                end = words.previous();
+                int start = words.previous();
+                if (start == BreakIterator.DONE) {
+                    return null;
+                }
+                return s.substring(start, end);
+            } catch (IllegalArgumentException e) {
+                return null;
+            } catch (IndexOutOfBoundsException e) {
+                return null;
             }
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
+        case AccessibleText.SENTENCE:
+            try {
+                String s = unoObject.getText();
+                BreakIterator sentence =
+                    BreakIterator.getSentenceInstance(getLocale(index));
+                sentence.setText(s);
+                int end = sentence.following(index);
+                end = sentence.previous();
+                int start = sentence.previous();
+                if (start == BreakIterator.DONE) {
+                    return null;
+                }
+                return s.substring(start, end);
+            } catch (IllegalArgumentException e) {
+                return null;
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case 4:
+            try {
+                TextSegment ts = unoObject.getTextBeforeIndex(index, AccessibleTextType.LINE);
+                return ts.SegmentText;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                // Workaround for #104847#
+                if (index > 0 && getCharCount() == index) {
+                    return getBeforeIndex(part, index - 1);
+                }
+                return null;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                return null;
+            }
+        case 5:
+            try {
+                TextSegment ts = unoObject.getTextBeforeIndex(index, AccessibleTextType.ATTRIBUTE_RUN);
+                return ts.SegmentText;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                return null;
+            }
+        default:
+            return null;
         }
-
-        return null;
     }
 
-    /** Returns the string at a given index */
+
+    /** Returns the string at a given index
+     *
+     *  The Java word iterator has a different understanding of what
+     *  a word is than the word iterator used by OOo, so we use the
+     *  Java iterators to ensure maximal compatibility with Java.
+     */
     public java.lang.String getAtIndex(int part, int index) {
-        short type = toTextType(part);
-
-        try {
-            // the office returns an empty string when asking for the word at
-            // the position of a blank
-            TextSegment ts = unoObject.getTextAtIndex(index, type);
-
-            if ((part == AccessibleText.WORD) &&
-                    (ts.SegmentText.length() == 0)) {
-                // FIXME: should potentially return more than one blank, but
-                // since this will be fixed in the office at some time ..
-                return " ";
+        switch (part) {
+        case AccessibleText.CHARACTER:
+            try {
+                String s = unoObject.getText();
+                return s.substring(index, index + 1);
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case AccessibleText.WORD:
+            try {
+                String s = unoObject.getText();
+                BreakIterator words = BreakIterator.getWordInstance(getLocale(index));
+                words.setText(s);
+                int end = words.following(index);
+                return s.substring(words.previous(), end);
+            } catch (IllegalArgumentException e) {
+                return null;
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case AccessibleText.SENTENCE:
+            try {
+                String s = unoObject.getText();
+                BreakIterator sentence =
+                    BreakIterator.getSentenceInstance(getLocale(index));
+                sentence.setText(s);
+                int end = sentence.following(index);
+                return s.substring(sentence.previous(), end);
+            } catch (IllegalArgumentException e) {
+                return null;
+            } catch (IndexOutOfBoundsException e) {
+                return null;
+            }
+        case 4:
+            try {
+                TextSegment ts = unoObject.getTextAtIndex(index, AccessibleTextType.LINE);
+                return ts.SegmentText;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                // Workaround for #104847#
+                if (index > 0 && getCharCount() == index) {
+                    return getAtIndex(part, index - 1);
+                }
+                return null;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                return null;
+            }
+        case 5:
+            try {
+                TextSegment ts = unoObject.getTextAtIndex(index, AccessibleTextType.ATTRIBUTE_RUN);
+                return ts.SegmentText;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                return null;
             }
 
-            return ts.SegmentText;
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Workaround for #104847#
-            if ((type == AccessibleTextType.LINE) && (index > 0) && (getCharCount() == index)) {
-                return getAtIndex(part, index - 1);
-            }
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
+        default:
+            return null;
         }
-
-        return null;
     }
 
     /** Returns the number of characters (valid indicies) */
