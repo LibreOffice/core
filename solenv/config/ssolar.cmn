@@ -152,6 +152,7 @@ common
 		USE_MAPFILES
 		USE_NAMESPACE
 		USE_NEW_RSC
+		USE_NEW_SDK
 		USE_NEWCHARSET
 		USE_SHELL
 		use_shl_versions
