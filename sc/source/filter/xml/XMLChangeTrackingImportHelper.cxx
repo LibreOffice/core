@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,21 +126,24 @@ ScMyCellInfo::~ScMyCellInfo()
 
 ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
 {
-    if (!pCell && sFormula.getLength() && sFormulaAddress.getLength())
+    if (pDoc)
     {
-        ScAddress aPos;
-        sal_Int32 nOffset(0);
-        ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
-        pCell = new ScFormulaCell(pDoc, aPos, sFormula, nMatrixFlag);
-        static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<sal_uInt16>(nMatrixCols), static_cast<sal_uInt16>(nMatrixRows));
-    }
+        if (!pCell && sFormula.getLength() && sFormulaAddress.getLength())
+        {
+            ScAddress aPos;
+            sal_Int32 nOffset(0);
+            ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
+            pCell = new ScFormulaCell(pDoc, aPos, sFormula, nMatrixFlag);
+            static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<sal_uInt16>(nMatrixCols), static_cast<sal_uInt16>(nMatrixRows));
+        }
 
-    if (nType != NUMBERFORMAT_ALL)
-    {
-        if (nType == NUMBERFORMAT_DATE)
-            pDoc->GetFormatTable()->GetInputLineString(fValue, NF_DATE_SYS_DDMMYYYY, sResult);
-        else if (nType == NUMBERFORMAT_TIME)
-            pDoc->GetFormatTable()->GetInputLineString(fValue, NF_TIME_HHMMSS, sResult);
+        if (nType != NUMBERFORMAT_ALL)
+        {
+            if (nType == NUMBERFORMAT_DATE)
+                pDoc->GetFormatTable()->GetInputLineString(fValue, NF_DATE_SYS_DDMMYYYY, sResult);
+            else if (nType == NUMBERFORMAT_TIME)
+                pDoc->GetFormatTable()->GetInputLineString(fValue, NF_TIME_HHMMSS, sResult);
+        }
     }
 
     if (pCell)

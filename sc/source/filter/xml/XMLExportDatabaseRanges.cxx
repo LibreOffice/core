@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,52 +144,55 @@ ScXMLExportDatabaseRanges::~ScXMLExportDatabaseRanges()
 ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRanges()
 {
     ScMyEmptyDatabaseRangesContainer aSkipRanges;
-    sal_Int32 nSkipRangesCount = 0;
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rExport.GetModel(), uno::UNO_QUERY );
-    if ( xSpreadDoc.is() )
+    if (rExport.GetModel().is())
     {
-        uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-        if (xPropertySet.is())
+        sal_Int32 nSkipRangesCount = 0;
+        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rExport.GetModel(), uno::UNO_QUERY );
+        if ( xSpreadDoc.is() )
         {
-            uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG)));
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
-            rExport.CheckAttrList();
-            if (aDatabaseRanges >>= xDatabaseRanges)
+            uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
+            if (xPropertySet.is())
             {
-                uno::Sequence <rtl::OUString> aRanges = xDatabaseRanges->getElementNames();
-                sal_Int32 nDatabaseRangesCount = aRanges.getLength();
-                for (sal_Int32 i = 0; i < nDatabaseRangesCount; i++)
+                uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG)));
+                uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
+                rExport.CheckAttrList();
+                if (aDatabaseRanges >>= xDatabaseRanges)
                 {
-                    rtl::OUString sDatabaseRangeName = aRanges[i];
-                    uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
-                    uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
-                    if (aDatabaseRange >>= xDatabaseRange)
+                    uno::Sequence <rtl::OUString> aRanges = xDatabaseRanges->getElementNames();
+                    sal_Int32 nDatabaseRangesCount = aRanges.getLength();
+                    for (sal_Int32 i = 0; i < nDatabaseRangesCount; i++)
                     {
-                        uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
-                        if (xDatabaseRangePropertySet.is())
+                        rtl::OUString sDatabaseRangeName = aRanges[i];
+                        uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
+                        uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
+                        if (aDatabaseRange >>= xDatabaseRange)
                         {
-                            uno::Any aStripDataProperty = xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)));
-                            sal_Bool bStripData = sal_False;
-                            if (aStripDataProperty >>= bStripData)
-                                if (bStripData)
-                                {
-                                    uno::Sequence <beans::PropertyValue> aImportProperties = xDatabaseRange->getImportDescriptor();
-                                    sal_Int32 nLength = aImportProperties.getLength();
-                                    sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
-                                    for (sal_Int32 j = 0; j < nLength; j++)
-                                        if (aImportProperties[j].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
-                                        {
-                                            uno::Any aSourceType = aImportProperties[j].Value;
-                                            aSourceType >>= nSourceType;
-                                        }
-                                    if (nSourceType != sheet::DataImportMode_NONE)
-                                        aSkipRanges.AddNewEmptyDatabaseRange(xDatabaseRange->getDataArea());
-                                }
+                            uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
+                            if (xDatabaseRangePropertySet.is())
+                            {
+                                uno::Any aStripDataProperty = xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)));
+                                sal_Bool bStripData = sal_False;
+                                if (aStripDataProperty >>= bStripData)
+                                    if (bStripData)
+                                    {
+                                        uno::Sequence <beans::PropertyValue> aImportProperties = xDatabaseRange->getImportDescriptor();
+                                        sal_Int32 nLength = aImportProperties.getLength();
+                                        sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
+                                        for (sal_Int32 j = 0; j < nLength; j++)
+                                            if (aImportProperties[j].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
+                                            {
+                                                uno::Any aSourceType = aImportProperties[j].Value;
+                                                aSourceType >>= nSourceType;
+                                            }
+                                        if (nSourceType != sheet::DataImportMode_NONE)
+                                            aSkipRanges.AddNewEmptyDatabaseRange(xDatabaseRange->getDataArea());
+                                    }
+                            }
                         }
                     }
+                    if (nSkipRangesCount > 1)
+                        aSkipRanges.Sort();
                 }
-                if (nSkipRangesCount > 1)
-                    aSkipRanges.Sort();
             }
         }
     }

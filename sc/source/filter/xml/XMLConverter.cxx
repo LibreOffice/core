@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,12 @@ void ScXMLConverter::AppendString( OUString& rString, const OUString& rNewStr )
 
 ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xModel )
 {
-    ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
-    return pDocObj ? pDocObj->GetDocument() : NULL;
+    if (xModel.is())
+    {
+        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+        return pDocObj ? pDocObj->GetDocument() : NULL;
+    }
+    return NULL;
 }
 
 
@@ -363,7 +367,7 @@ void ScXMLConverter::GetStringFromAddress(
         sal_Bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
-    if (pDocument->HasTable(rAddress.Tab()))
+    if (pDocument && pDocument->HasTable(rAddress.Tab()))
     {
         String sAddress;
         rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument );
@@ -378,7 +382,7 @@ void ScXMLConverter::GetStringFromRange(
         sal_Bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
-    if (pDocument->HasTable(rRange.aStart.Tab()))
+    if (pDocument && pDocument->HasTable(rRange.aStart.Tab()))
     {
         ScAddress aStartAddress( rRange.aStart );
         ScAddress aEndAddress( rRange.aEnd );

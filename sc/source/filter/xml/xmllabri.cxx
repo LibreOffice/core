@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,22 +186,25 @@ SvXMLImportContext* ScXMLLabelRangeContext::CreateChildContext(
 
 void ScXMLLabelRangeContext::EndElement()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( GetScImport().GetModel(), uno::UNO_QUERY );
-    if( xPropSet.is() )
+    if (GetScImport().GetModel().is())
     {
-        uno::Any aAny = xPropSet->getPropertyValue( bColumnOrientation ?
-            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_COLLABELRNG ) ) :
-            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ROWLABELRNG ) ) );
-        uno::Reference< sheet::XLabelRanges > xLabelRanges;
-        if( aAny >>= xLabelRanges )
+        uno::Reference< beans::XPropertySet > xPropSet( GetScImport().GetModel(), uno::UNO_QUERY );
+        if( xPropSet.is() )
         {
-            table::CellRangeAddress aLabelRange;
-            table::CellRangeAddress aDataRange;
-            sal_Int32 nOffset1(0);
-            sal_Int32 nOffset2(0);
-            if (ScXMLConverter::GetRangeFromString( aLabelRange, sLabelRangeStr, GetScImport().GetDocument(), nOffset1 ) &&
-                ScXMLConverter::GetRangeFromString( aDataRange, sDataRangeStr, GetScImport().GetDocument(), nOffset2 ))
-                xLabelRanges->addNew( aLabelRange, aDataRange );
+            uno::Any aAny = xPropSet->getPropertyValue( bColumnOrientation ?
+                OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_COLLABELRNG ) ) :
+                OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ROWLABELRNG ) ) );
+            uno::Reference< sheet::XLabelRanges > xLabelRanges;
+            if( aAny >>= xLabelRanges )
+            {
+                table::CellRangeAddress aLabelRange;
+                table::CellRangeAddress aDataRange;
+                sal_Int32 nOffset1(0);
+                sal_Int32 nOffset2(0);
+                if (ScXMLConverter::GetRangeFromString( aLabelRange, sLabelRangeStr, GetScImport().GetDocument(), nOffset1 ) &&
+                    ScXMLConverter::GetRangeFromString( aDataRange, sDataRangeStr, GetScImport().GetDocument(), nOffset2 ))
+                    xLabelRanges->addNew( aLabelRange, aDataRange );
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-29 08:30:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::X
 class ScXMLExport : public SvXMLExport
 {
     ScDocument*                 pDoc;
-    com::sun::star::uno::Reference <com::sun::star::frame::XModel> xModel;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
@@ -234,9 +233,6 @@ public:
     ScXMLExport(const sal_uInt16 nExportFlag);
     virtual ~ScXMLExport();
 
-    com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() { return xModel; }
-    const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() const { return xModel; }
-
     static sal_Int16 GetFieldUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
@@ -278,6 +274,8 @@ public:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void DisposingModel();
 };
 
 #endif

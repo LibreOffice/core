@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-06 14:51:56 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #include <xmloff/xmluconv.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
@@ -240,87 +237,90 @@ ScMyTables::~ScMyTables()
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
                         const sal_Bool bTempProtection, const rtl::OUString& sTempPassword)
 {
-    nCurrentColStylePos = 0;
-    sCurrentSheetName = sTableName;
-    ScMyTableData* aTable;
-    while (nTableCount > 0)
+    if (rImport.GetModel().is())
     {
-        aTable = aTableVec[nTableCount - 1];
-        delete aTable;
-        aTableVec[nTableCount - 1] = NULL;
-        nTableCount--;
-    }
-    nCurrentSheet++;
-
-    bProtection = bTempProtection;
-    sPassword = sTempPassword;
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
-    if ( xSpreadDoc.is() )
-    {
-        uno::Reference <sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-        if (xSheets.is())
+        nCurrentColStylePos = 0;
+        sCurrentSheetName = sTableName;
+        ScMyTableData* aTable;
+        while (nTableCount > 0)
         {
-            if (nCurrentSheet > 0)
+            aTable = aTableVec[nTableCount - 1];
+            delete aTable;
+            aTableVec[nTableCount - 1] = NULL;
+            nTableCount--;
+        }
+        nCurrentSheet++;
+
+        bProtection = bTempProtection;
+        sPassword = sTempPassword;
+        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
+        if ( xSpreadDoc.is() )
+        {
+            uno::Reference <sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+            if (xSheets.is())
             {
-                try
+                if (nCurrentSheet > 0)
                 {
-                    xSheets->insertNewByName(sTableName, nCurrentSheet);
-                }
-                catch ( uno::RuntimeException& )
-                {
-                    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-                    if (pDoc)
+                    try
                     {
-                        String sTabName = String::CreateFromAscii("Table");
-                        pDoc->CreateValidTabName(sTabName);
-                        rtl::OUString sOUTabName(sTabName);
-                        xSheets->insertNewByName(sOUTabName, nCurrentSheet);
+                        xSheets->insertNewByName(sTableName, nCurrentSheet);
                     }
-                }
-            }
-            uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-            if ( xIndex.is() )
-            {
-                uno::Any aSheet = xIndex->getByIndex(nCurrentSheet);
-                if ( aSheet >>= xCurrentSheet )
-                {
-                    xCurrentCellRange = uno::Reference<table::XCellRange>(xCurrentSheet, uno::UNO_QUERY);
-                    if (!(nCurrentSheet > 0))
+                    catch ( uno::RuntimeException& )
                     {
-                        uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
-                        if ( xNamed.is() )
-                            try
-                            {
-                                xNamed->setName(sTableName);
-                            }
-                            catch ( uno::RuntimeException& )
-                            {
-                                ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-                                if (pDoc)
-                                {
-                                    String sTabName = String::CreateFromAscii("Table");
-                                    pDoc->CreateValidTabName(sTabName);
-                                    rtl::OUString sOUTabName(sTabName);
-                                    xNamed->setName(sOUTabName);
-                                }
-                            }
-                    }
-                    if (nCurrentSheet > 0 && sStyleName.getLength())
-                    {
-                        uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-                        if (xProperties.is())
+                        ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+                        if (pDoc)
                         {
-                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
-                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
-                            if (pStyle)
-                                pStyle->FillPropertySet(xProperties);
+                            String sTabName = String::CreateFromAscii("Table");
+                            pDoc->CreateValidTabName(sTabName);
+                            rtl::OUString sOUTabName(sTabName);
+                            xSheets->insertNewByName(sOUTabName, nCurrentSheet);
                         }
                     }
-                    else
-                        rImport.SetFirstTableStyle(sStyleName);
                 }
+                uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+                if ( xIndex.is() )
+                {
+                    uno::Any aSheet = xIndex->getByIndex(nCurrentSheet);
+                    if ( aSheet >>= xCurrentSheet )
+                    {
+                        xCurrentCellRange = uno::Reference<table::XCellRange>(xCurrentSheet, uno::UNO_QUERY);
+                        if (!(nCurrentSheet > 0))
+                        {
+                            uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
+                            if ( xNamed.is() )
+                                try
+                                {
+                                    xNamed->setName(sTableName);
+                                }
+                                catch ( uno::RuntimeException& )
+                                {
+                                    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+                                    if (pDoc)
+                                    {
+                                        String sTabName = String::CreateFromAscii("Table");
+                                        pDoc->CreateValidTabName(sTabName);
+                                        rtl::OUString sOUTabName(sTabName);
+                                        xNamed->setName(sOUTabName);
+                                    }
+                                }
+                        }
+                        if (nCurrentSheet > 0 && sStyleName.getLength())
+                        {
+                            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
+                            if (xProperties.is())
+                            {
+                                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
+                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                    XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
+                                if (pStyle)
+                                    pStyle->FillPropertySet(xProperties);
+                            }
+                        }
+                        else
+                            rImport.SetFirstTableStyle(sStyleName);
+                    }
 
+                }
             }
         }
     }
@@ -655,10 +655,13 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 
 void ScMyTables::UpdateRowHeights()
 {
-    // update automatic row heights
-    sal_Int16 nTableCount(rImport.GetDocument()->GetTableCount());
-    for (sal_Int16 i = 0; i < nTableCount; i++)
-        ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
+    if (rImport.GetModel().is())
+    {
+        // update automatic row heights
+        sal_Int16 nTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
+        for (sal_Int16 i = 0; i < nTableCount; i++)
+            ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
+    }
 }
 
 void ScMyTables::DeleteTable()
@@ -676,7 +679,7 @@ void ScMyTables::DeleteTable()
         rImport.GetStylesImportHelper()->SetStylesToRanges();
         rImport.SetStylesToRangesFinished();
     }
-    if (bProtection)
+    if (rImport.GetDocument() && bProtection)
     {
         uno::Sequence<sal_Int8> aPass;
         SvXMLUnitConverter::decodeBase64(aPass, sPassword);

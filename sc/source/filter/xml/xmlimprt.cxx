@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-13 10:15:40 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1573,13 +1573,17 @@ ScXMLImport::~ScXMLImport() throw()
 
     if (getImportFlags() & IMPORT_CONTENT)
     {
-        pDoc->CompileXML();
+        if (pDoc)
+            pDoc->CompileXML();
         aTables.UpdateRowHeights();
         aTables.ResizeShapes();
     }
-    uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
-    if (xActionLockable.is())
-        xActionLockable->removeActionLock();
+    if (GetModel().is())
+    {
+        uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
+        if (xActionLockable.is())
+            xActionLockable->removeActionLock();
+    }
 }
 
 // ---------------------------------------------------------------------
@@ -1752,84 +1756,87 @@ void ScXMLImport::InsertStyles()
 
 void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps)
 {
-    sal_Int32 nCount(rChangeProps.getLength());
-    if (nCount)
+    if (pDoc)
     {
-        sal_Int32 nTemp32(0);
-        sal_Int16 nTemp16(0);
-        ScChangeViewSettings* pViewSettings = new ScChangeViewSettings();
-        for (sal_Int32 i = 0; i < nCount; i++)
+        sal_Int32 nCount(rChangeProps.getLength());
+        if (nCount)
         {
-            rtl::OUString sName(rChangeProps[i].Name);
-            if (sName.compareToAscii("ShowChanges") == 0)
-                pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowAcceptedChanges") == 0)
-                pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowRejectedChanges") == 0)
-                pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowChangesByDatetime") == 0)
-                pViewSettings->SetHasDate(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowChangesByDatetimeMode") == 0)
+            sal_Int32 nTemp32(0);
+            sal_Int16 nTemp16(0);
+            ScChangeViewSettings* pViewSettings = new ScChangeViewSettings();
+            for (sal_Int32 i = 0; i < nCount; i++)
             {
-                if (rChangeProps[i].Value >>= nTemp16)
-                    pViewSettings->SetTheDateMode(ScChgsDateMode(nTemp16));
-            }
-            else if (sName.compareToAscii("ShowChangesByDatetimeFirstDatetime") == 0)
-            {
-                util::DateTime aDateTime;
-                if (rChangeProps[i].Value >>= aDateTime)
+                rtl::OUString sName(rChangeProps[i].Name);
+                if (sName.compareToAscii("ShowChanges") == 0)
+                    pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowAcceptedChanges") == 0)
+                    pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowRejectedChanges") == 0)
+                    pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowChangesByDatetime") == 0)
+                    pViewSettings->SetHasDate(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowChangesByDatetimeMode") == 0)
                 {
-                    DateTime aCoreDateTime;
-                    ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
-                    pViewSettings->SetTheFirstDateTime(aCoreDateTime);
+                    if (rChangeProps[i].Value >>= nTemp16)
+                        pViewSettings->SetTheDateMode(ScChgsDateMode(nTemp16));
+                }
+                else if (sName.compareToAscii("ShowChangesByDatetimeFirstDatetime") == 0)
+                {
+                    util::DateTime aDateTime;
+                    if (rChangeProps[i].Value >>= aDateTime)
+                    {
+                        DateTime aCoreDateTime;
+                        ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
+                        pViewSettings->SetTheFirstDateTime(aCoreDateTime);
+                    }
+                }
+                else if (sName.compareToAscii("ShowChangesByDatetimeSecondDatetime") == 0)
+                {
+                    util::DateTime aDateTime;
+                    if (rChangeProps[i].Value >>= aDateTime)
+                    {
+                        DateTime aCoreDateTime;
+                        ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
+                        pViewSettings->SetTheLastDateTime(aCoreDateTime);
+                    }
+                }
+                else if (sName.compareToAscii("ShowChangesByAuthor") == 0)
+                    pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowChangesByAuthorName") == 0)
+                {
+                    rtl::OUString sOUName;
+                    if (rChangeProps[i].Value >>= sOUName)
+                    {
+                        String sName(sOUName);
+                        pViewSettings->SetTheAuthorToShow(sName);
+                    }
+                }
+                else if (sName.compareToAscii("ShowChangesByComment") == 0)
+                    pViewSettings->SetHasComment(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowChangesByCommentText") == 0)
+                {
+                    rtl::OUString sOUComment;
+                    if (rChangeProps[i].Value >>= sOUComment)
+                    {
+                        String sComment(sOUComment);
+                        pViewSettings->SetTheComment(sComment);
+                    }
+                }
+                else if (sName.compareToAscii("ShowChangesByRanges") == 0)
+                    pViewSettings->SetHasRange(::cppu::any2bool(rChangeProps[i].Value));
+                else if (sName.compareToAscii("ShowChangesByRangesList") == 0)
+                {
+                    rtl::OUString sRanges;
+                    if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
+                    {
+                        ScRangeList aRangeList;
+                        ScXMLConverter::GetRangeListFromString(aRangeList, sRanges, GetDocument());
+                        pViewSettings->SetTheRangeList(aRangeList);
+                    }
                 }
             }
-            else if (sName.compareToAscii("ShowChangesByDatetimeSecondDatetime") == 0)
-            {
-                util::DateTime aDateTime;
-                if (rChangeProps[i].Value >>= aDateTime)
-                {
-                    DateTime aCoreDateTime;
-                    ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
-                    pViewSettings->SetTheLastDateTime(aCoreDateTime);
-                }
-            }
-            else if (sName.compareToAscii("ShowChangesByAuthor") == 0)
-                pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowChangesByAuthorName") == 0)
-            {
-                rtl::OUString sOUName;
-                if (rChangeProps[i].Value >>= sOUName)
-                {
-                    String sName(sOUName);
-                    pViewSettings->SetTheAuthorToShow(sName);
-                }
-            }
-            else if (sName.compareToAscii("ShowChangesByComment") == 0)
-                pViewSettings->SetHasComment(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowChangesByCommentText") == 0)
-            {
-                rtl::OUString sOUComment;
-                if (rChangeProps[i].Value >>= sOUComment)
-                {
-                    String sComment(sOUComment);
-                    pViewSettings->SetTheComment(sComment);
-                }
-            }
-            else if (sName.compareToAscii("ShowChangesByRanges") == 0)
-                pViewSettings->SetHasRange(::cppu::any2bool(rChangeProps[i].Value));
-            else if (sName.compareToAscii("ShowChangesByRangesList") == 0)
-            {
-                rtl::OUString sRanges;
-                if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
-                {
-                    ScRangeList aRangeList;
-                    ScXMLConverter::GetRangeListFromString(aRangeList, sRanges, GetDocument());
-                    pViewSettings->SetTheRangeList(aRangeList);
-                }
-            }
+            pDoc->SetChangeViewSettings(*pViewSettings);
         }
-        pDoc->SetChangeViewSettings(*pViewSettings);
     }
 }
 
@@ -1860,18 +1867,21 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
     }
     if (nHeight && nWidth)
     {
-        ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
-        if (pDocObj)
+        if (GetModel().is())
         {
-            SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
-            if (pEmbeddedObj)
+            ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
+            if (pDocObj)
             {
-                Rectangle aRect;
-                aRect.setX( nLeft );
-                aRect.setY( nTop );
-                aRect.setWidth( nWidth );
-                aRect.setHeight( nHeight );
-                pEmbeddedObj->SetVisArea(aRect);
+                SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+                if (pEmbeddedObj)
+                {
+                    Rectangle aRect;
+                    aRect.setX( nLeft );
+                    aRect.setY( nTop );
+                    aRect.setWidth( nWidth );
+                    aRect.setHeight( nHeight );
+                    pEmbeddedObj->SetVisArea(aRect);
+                }
             }
         }
     }
@@ -1879,13 +1889,16 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
 
 void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
 {
-    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
-    if (xMultiServiceFactory.is())
+    if (GetModel().is())
     {
-        uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.SpreadsheetSettings")));
-        uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
-        if (xProperties.is())
-            SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
+        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+        if (xMultiServiceFactory.is())
+        {
+            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.SpreadsheetSettings")));
+            uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
+            if (xProperties.is())
+                SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
+        }
     }
 }
 
@@ -1904,7 +1917,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                 {
                     uno::Any aAny = xProperties->getPropertyValue(sLocale);
                     lang::Locale aLocale;
-                    if (aAny >>= aLocale)
+                    if (GetDocument() && (aAny >>= aLocale))
                     {
                         LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
                         rtl::OUStringBuffer aBuffer(15);
@@ -2009,7 +2022,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
 
 void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 {
-    if (!xSheetCellRanges.is())
+    if (!xSheetCellRanges.is() && GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
@@ -2049,9 +2062,15 @@ void ScXMLImport::SetStyleToRanges()
             }
         }
     }
-    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
-    if (xMultiServiceFactory.is())
-        xSheetCellRanges = uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))), uno::UNO_QUERY);
+    if (GetModel().is())
+    {
+        uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+        if (xMultiServiceFactory.is())
+            xSheetCellRanges = uno::Reference <sheet::XSheetCellRangeContainer>(
+                xMultiServiceFactory->createInstance(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))),
+                uno::UNO_QUERY);
+    }
     DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 }
 
@@ -2261,4 +2280,10 @@ sal_Bool SAL_CALL ScXMLImport::supportsService( const ::rtl::OUString& ServiceNa
     return SvXMLImport::getSupportedServiceNames();
 }
 
+// XEventListener
+void ScXMLImport::DisposingModel()
+{
+    SvXMLImport::DisposingModel();
+    pDoc = NULL;
+}
 

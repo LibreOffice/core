@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-15 09:11:27 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ void ScXMLDataPilotTableContext::SetButtons()
         {
             ScAddress aScAddress;
             sal_Int32 nOffset(0);
-            if (ScXMLConverter::GetAddressFromString( aScAddress, sAddress, pDoc, nOffset ))
+            if (pDoc && ScXMLConverter::GetAddressFromString( aScAddress, sAddress, pDoc, nOffset ))
             {
                 ScMergeFlagAttr aAttr( SC_MF_BUTTON );
                 pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
@@ -377,9 +377,12 @@ void ScXMLDataPilotTableContext::EndElement()
         pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
         pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
         pDPObject->SetSaveData(*pDPSave);
-        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-        pDPObject->SetAlive(sal_True);
-        pDPCollection->Insert(pDPObject);
+        if (pDoc)
+        {
+            ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+            pDPObject->SetAlive(sal_True);
+            pDPCollection->Insert(pDPObject);
+        }
         SetButtons();
     }
 }

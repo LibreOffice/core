@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,8 @@ SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLDDELinkContext::CreateDDELink()
 {
-    if (sApplication.getLength() &&
+    if (GetScImport().GetDocument() &&
+        sApplication.getLength() &&
         sTopic.getLength() &&
         sItem.getLength())
     {
@@ -210,7 +211,8 @@ void ScXMLDDELinkContext::EndElement()
     if (nPosition > -1 && nColumns && nRows)
     {
         ScMatrix* pMatrix;
-        if (GetScImport().GetDocument()->CreateDdeLinkResultDimension(static_cast<USHORT>(nPosition),
+        if (GetScImport().GetDocument() &&
+            GetScImport().GetDocument()->CreateDdeLinkResultDimension(static_cast<USHORT>(nPosition),
             static_cast<USHORT>(nColumns), static_cast<USHORT>(nRows), pMatrix))
         {
             if (pMatrix)

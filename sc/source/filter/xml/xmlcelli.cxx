@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-12 13:01:47 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                 aCellPos.Column = MAXCOL;
             if (aCellPos.Row > MAXROW)
                 aCellPos.Row = MAXROW;
-            ScDocument* pDoc = rXMLImport.GetDocument();
             XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
             pTableShapeImport->SetOnTable(sal_False);
             pTableShapeImport->SetCell(aCellPos);
@@ -655,26 +654,29 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
             double fDate;
             rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, aMyAnnotation.sCreateDate);
             ScDocument* pDoc = rXMLImport.GetDocument();
-            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-            String sDate;
-            Color* pColor = NULL;
-            Color** ppColor = &pColor;
-            pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
-            ScPostIt aNote(String(aMyAnnotation.sText), sDate, String(aMyAnnotation.sAuthor));
-            aNote.SetShown(aMyAnnotation.bDisplay);
-            pDoc->SetNote(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), aCellAddress.Sheet, aNote);
-            if (aMyAnnotation.bDisplay)
+            if (pDoc)
             {
-                uno::Reference < drawing::XShapes > xShapes (rXMLImport.GetTables().GetCurrentXShapes());   // make draw page
-                ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
-                aDetFunc.ShowComment(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), sal_False);
-                uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
-                if (xShapesIndex.is())
+                SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+                sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+                String sDate;
+                Color* pColor = NULL;
+                Color** ppColor = &pColor;
+                pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
+                ScPostIt aNote(String(aMyAnnotation.sText), sDate, String(aMyAnnotation.sAuthor));
+                aNote.SetShown(aMyAnnotation.bDisplay);
+                pDoc->SetNote(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), aCellAddress.Sheet, aNote);
+                if (aMyAnnotation.bDisplay)
                 {
-                    sal_Int32 nShapes = xShapesIndex->getCount();
-                    uno::Reference < drawing::XShape > xShape;
-                    rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+                    uno::Reference < drawing::XShapes > xShapes (rXMLImport.GetTables().GetCurrentXShapes());   // make draw page
+                    ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
+                    aDetFunc.ShowComment(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), sal_False);
+                    uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
+                    if (xShapesIndex.is())
+                    {
+                        sal_Int32 nShapes = xShapesIndex->getCount();
+                        uno::Reference < drawing::XShape > xShape;
+                        rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+                    }
                 }
             }
         }
@@ -715,10 +717,13 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
         String sFilterName( aCellRangeSource.sFilterName );
         String sSourceStr( aCellRangeSource.sSourceStr );
         ScDocument* pDoc = rXMLImport.GetDocument();
-        ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), aCellRangeSource.sURL,
-            sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange, aCellRangeSource.nRefresh );
-        SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
+        if (pDoc)
+        {
+            ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), aCellRangeSource.sURL,
+                sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange, aCellRangeSource.nRefresh );
+            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+            pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,22 +1296,25 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLChangeCellContext::CreateTextPContext(sal_Bool bIsNewParagraph)
 {
-    pEditTextObj = new ScEditEngineTextObj();
-    pEditTextObj->acquire();
-    pEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
-    uno::Reference <text::XText> xText = pEditTextObj;
-    if (xText.is())
+    if (GetScImport().GetDocument())
     {
-        uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-        if (bIsNewParagraph)
+        pEditTextObj = new ScEditEngineTextObj();
+        pEditTextObj->acquire();
+        pEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
+        uno::Reference <text::XText> xText = pEditTextObj;
+        if (xText.is())
         {
-            xText->setString(sText);
-            xTextCursor->gotoEnd(sal_False);
-            uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
-            if (xTextRange.is())
-                xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+            uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+            if (bIsNewParagraph)
+            {
+                xText->setString(sText);
+                xTextCursor->gotoEnd(sal_False);
+                uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
+                if (xTextRange.is())
+                    xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+            }
+            GetScImport().GetTextImport()->SetCursor(xTextCursor);
         }
-        GetScImport().GetTextImport()->SetCursor(xTextCursor);
     }
 }
 
@@ -1332,7 +1335,8 @@ void ScXMLChangeCellContext::EndElement()
                         sal_True );
                 }
             }
-            rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
+            if (GetScImport().GetDocument())
+                rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
             GetScImport().GetTextImport()->ResetCursor();
             // delete pEditTextObj;
             pEditTextObj->release();

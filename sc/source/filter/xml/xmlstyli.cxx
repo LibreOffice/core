@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ void XMLTableStyleContext::FillPropertySet(
 
 void XMLTableStyleContext::SetDefaults()
 {
-    if (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL)
+    if ((GetFamily() == XML_STYLE_FAMILY_TABLE_CELL) && GetImport().GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetImport().GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
@@ -858,7 +858,7 @@ Reference < XNameContainer >
             }
             break;
         }
-        if( !xStyles.is() && sName.getLength() )
+        if( !xStyles.is() && sName.getLength() && GetScImport().GetModel().is() )
         {
             Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                             GetScImport().GetModel(), UNO_QUERY );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,41 +184,44 @@ sal_Int32 ScXMLNamedExpressionsContext::GetRangeType(const rtl::OUString sRangeT
 
 void ScXMLNamedExpressionsContext::EndElement()
 {
-    uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
-    if (xPropertySet.is())
+    if (GetScImport().GetModel().is())
     {
-        uno::Any aNamedRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES)));
-        uno::Reference <sheet::XNamedRanges> xNamedRanges;
-        if (aNamedRanges >>= xNamedRanges)
+        uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
+        if (xPropertySet.is())
         {
-            ScMyNamedExpressions* pNamedExpressions = GetScImport().GetNamedExpressions();
-            ScMyNamedExpressions::const_iterator i = pNamedExpressions->begin();
-            table::CellAddress aCellAddress;
-            rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
-            while (i != pNamedExpressions->end())
+            uno::Any aNamedRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES)));
+            uno::Reference <sheet::XNamedRanges> xNamedRanges;
+            if (aNamedRanges >>= xNamedRanges)
             {
-                sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetAddressFromString(
-                    aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
-                    xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
-                i++;
-            }
-            i = pNamedExpressions->begin();
-            while (i != pNamedExpressions->end())
-            {
-                sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetAddressFromString(
-                    aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
+                ScMyNamedExpressions* pNamedExpressions = GetScImport().GetNamedExpressions();
+                ScMyNamedExpressions::const_iterator i = pNamedExpressions->begin();
+                table::CellAddress aCellAddress;
+                rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
+                while (i != pNamedExpressions->end())
                 {
-                    sTempContent = (*i)->sContent;
-                    ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
-                    uno::Any aNamedRange = xNamedRanges->getByName((*i)->sName);
-                    uno::Reference <sheet::XNamedRange> xNamedRange;
-                    if (aNamedRange >>= xNamedRange)
-                        xNamedRange->setContent(sTempContent);
+                    sal_Int32 nOffset(0);
+                    if (ScXMLConverter::GetAddressFromString(
+                        aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
+                        xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
+                    i++;
                 }
-                delete *i;
-                i++;
+                i = pNamedExpressions->begin();
+                while (i != pNamedExpressions->end())
+                {
+                    sal_Int32 nOffset(0);
+                    if (ScXMLConverter::GetAddressFromString(
+                        aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
+                    {
+                        sTempContent = (*i)->sContent;
+                        ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
+                        uno::Any aNamedRange = xNamedRanges->getByName((*i)->sName);
+                        uno::Reference <sheet::XNamedRange> xNamedRange;
+                        if (aNamedRange >>= xNamedRange)
+                            xNamedRange->setContent(sTempContent);
+                    }
+                    delete *i;
+                    i++;
+                }
             }
         }
     }

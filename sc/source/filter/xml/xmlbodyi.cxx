@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:29:28 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,45 +238,48 @@ void ScXMLBodyContext::EndElement()
     ScDocument*                 pDoc        = GetScImport().GetDocument();
     ScMyImpDetectiveOp          rDetOp;
 
-    rDetOpArray.Sort();
-    while( rDetOpArray.GetFirstOp( rDetOp ) )
+    if (pDoc && GetScImport().GetModel().is())
     {
-        ScDetOpData aOpData( rDetOp.aPosition, rDetOp.eOpType );
-        pDoc->AddDetectiveOperation( aOpData );
-    }
-
-    if (pChangeTrackingImportHelper)
-        pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
-
-    if (bProtected)
-    {
-        uno::Sequence<sal_Int8> aPass;
-        if (sPassword.getLength())
-            SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-        pDoc->SetDocProtection(bProtected, aPass);
-    }
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
-    if ( xSpreadDoc.is() )
-    {
-        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-        uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-        if ( xIndex.is() )
+        rDetOpArray.Sort();
+        while( rDetOpArray.GetFirstOp( rDetOp ) )
         {
-            uno::Any aSheet = xIndex->getByIndex(0);
-            uno::Reference< sheet::XSpreadsheet > xSheet;
-            if ( aSheet >>= xSheet )
+            ScDetOpData aOpData( rDetOp.aPosition, rDetOp.eOpType );
+            pDoc->AddDetectiveOperation( aOpData );
+        }
+
+        if (pChangeTrackingImportHelper)
+            pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
+
+        if (bProtected)
+        {
+            uno::Sequence<sal_Int8> aPass;
+            if (sPassword.getLength())
+                SvXMLUnitConverter::decodeBase64(aPass, sPassword);
+            pDoc->SetDocProtection(bProtected, aPass);
+        }
+        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
+        if ( xSpreadDoc.is() )
+        {
+            uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+            uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+            if ( xIndex.is() )
             {
-                uno::Reference <beans::XPropertySet> xProperties(xSheet, uno::UNO_QUERY);
-                if (xProperties.is())
+                uno::Any aSheet = xIndex->getByIndex(0);
+                uno::Reference< sheet::XSpreadsheet > xSheet;
+                if ( aSheet >>= xSheet )
                 {
-                    XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
-                    rtl::OUString sTableStyleName(GetScImport().GetFirstTableStyle());
-                    if (sTableStyleName.getLength())
+                    uno::Reference <beans::XPropertySet> xProperties(xSheet, uno::UNO_QUERY);
+                    if (xProperties.is())
                     {
-                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
-                        if (pStyle)
-                            pStyle->FillPropertySet(xProperties);
+                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
+                        rtl::OUString sTableStyleName(GetScImport().GetFirstTableStyle());
+                        if (sTableStyleName.getLength())
+                        {
+                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                XML_STYLE_FAMILY_TABLE_TABLE, sTableStyleName, sal_True);
+                            if (pStyle)
+                                pStyle->FillPropertySet(xProperties);
+                        }
                     }
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     pEditTextObj(NULL),
     pDependings(NULL)
 {
-    pChangeTrack = rExport.GetDocument()->GetChangeTrack();
+    pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : NULL;
     pDependings = new ScChangeActionTable();
 }
 
@@ -326,7 +326,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
     {
         sal_uInt32 nIndex;
         double fTempValue;
-        if (rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
+        if (rExport.GetDocument() && rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
         {
             sal_uInt16 nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
             switch(nType & NUMBERFORMAT_DEFINED)
@@ -817,7 +817,7 @@ void ScChangeTrackingExportHelper::CollectAutoStyles()
 
 void ScChangeTrackingExportHelper::WriteChangeViewSettings()
 {
-    ScChangeViewSettings* pViewSettings = rExport.GetDocument()->GetChangeViewSettings();
+    ScChangeViewSettings* pViewSettings = rExport.GetDocument() ? rExport.GetDocument()->GetChangeViewSettings() : NULL;
     if (pViewSettings && pChangeTrack)
     {
         if (!pViewSettings->ShowChanges())

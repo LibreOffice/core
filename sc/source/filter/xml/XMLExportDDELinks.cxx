@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,8 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
     sal_Int32 nColCount;
     ScMatrix* pMatrix = NULL;
     sal_uInt16 nuRow, nuCol;
-    if (rExport.GetDocument()->GetDdeLinkResultDimension(static_cast<USHORT>(nPos), nuCol, nuRow, pMatrix))
+    if (rExport.GetDocument() &&
+        rExport.GetDocument()->GetDdeLinkResultDimension(static_cast<USHORT>(nPos), nuCol, nuRow, pMatrix))
     {
         nRowCount = nuRow;
         nColCount = nuCol;
@@ -237,7 +238,8 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_ITEM, xDDELink->getItem());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE, XML_TRUE);
                             sal_uInt16 nMode;
-                            if (rExport.GetDocument()->GetDdeLinkMode(nDDELink, nMode))
+                            if (rExport.GetDocument() &&
+                                rExport.GetDocument()->GetDdeLinkMode(nDDELink, nMode))
                             {
                                 switch (nMode)
                                 {

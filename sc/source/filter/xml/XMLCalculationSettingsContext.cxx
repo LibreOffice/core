@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,33 +200,39 @@ SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( USHORT 
 
 void ScXMLCalculationSettingsContext::EndElement()
 {
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc (GetScImport().GetModel(), uno::UNO_QUERY);
-    if (xSpreadDoc.is())
+    if (GetScImport().GetModel().is())
     {
-        uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-        if (xPropertySet.is())
+        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc (GetScImport().GetModel(), uno::UNO_QUERY);
+        if (xSpreadDoc.is())
         {
-            uno::Any aAny = ::cppu::bool2any( bCalcAsShown );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_CALCASSHOWN)), aAny );
-            aAny = ::cppu::bool2any( bIgnoreCase );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_IGNORECASE)), aAny );
-            aAny = ::cppu::bool2any( bLookUpLabels );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LOOKUPLABELS)), aAny );
-            aAny = ::cppu::bool2any( bMatchWholeCell );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MATCHWHOLE)), aAny );
-            aAny = ::cppu::bool2any( bUseRegularExpressions );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REGEXENABLED)), aAny );
-            aAny = ::cppu::bool2any( bIsIterationEnabled );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERENABLED)), aAny );
-            aAny <<= nIterationCount;
-            xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERCOUNT)), aAny);
-            aAny <<= fIterationEpsilon;
-            xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON)), aAny);
-            aAny <<= aNullDate;
-            xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), aAny);
-            ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
-            aDocOptions.SetYear2000(nYear2000);
-            GetScImport().GetDocument()->SetDocOptions(aDocOptions);
+            uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
+            if (xPropertySet.is())
+            {
+                uno::Any aAny = ::cppu::bool2any( bCalcAsShown );
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_CALCASSHOWN)), aAny );
+                aAny = ::cppu::bool2any( bIgnoreCase );
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_IGNORECASE)), aAny );
+                aAny = ::cppu::bool2any( bLookUpLabels );
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LOOKUPLABELS)), aAny );
+                aAny = ::cppu::bool2any( bMatchWholeCell );
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MATCHWHOLE)), aAny );
+                aAny = ::cppu::bool2any( bUseRegularExpressions );
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REGEXENABLED)), aAny );
+                aAny = ::cppu::bool2any( bIsIterationEnabled );
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERENABLED)), aAny );
+                aAny <<= nIterationCount;
+                xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERCOUNT)), aAny);
+                aAny <<= fIterationEpsilon;
+                xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON)), aAny);
+                aAny <<= aNullDate;
+                xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), aAny);
+                if (GetScImport().GetDocument())
+                {
+                    ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
+                    aDocOptions.SetYear2000(nYear2000);
+                    GetScImport().GetDocument()->SetDocOptions(aDocOptions);
+                }
+            }
         }
     }
 }

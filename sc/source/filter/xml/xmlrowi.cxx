@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-06 14:51:56 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,10 +401,13 @@ void ScXMLTableRowsContext::EndElement()
         if (nGroupStartRow <= nGroupEndRow)
         {
             ScDocument* pDoc = GetScImport().GetDocument();
-            ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
-            ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
-            sal_Bool bResized;
-            pRowArray->Insert(static_cast<USHORT>(nGroupStartRow), static_cast<USHORT>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
+            if (pDoc)
+            {
+                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+                ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
+                sal_Bool bResized;
+                pRowArray->Insert(static_cast<USHORT>(nGroupStartRow), static_cast<USHORT>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
+            }
         }
     }
 }

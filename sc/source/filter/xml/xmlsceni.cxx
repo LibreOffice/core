@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,25 +177,27 @@ void ScXMLTableScenarioContext::EndElement()
 {
     sal_Int16   nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc = GetScImport().GetDocument();
-
-    pDoc->SetScenario( nCurrTable, TRUE );
-    USHORT nFlags( 0 );
-    if( bDisplayBorder )
-        nFlags |= SC_SCENARIO_SHOWFRAME;
-    if( bCopyBack )
-        nFlags |= SC_SCENARIO_TWOWAY;
-    if( bCopyStyles )
-        nFlags |= SC_SCENARIO_ATTRIB;
-    if( !bCopyFormulas )
-        nFlags |= SC_SCENARIO_VALUE;
-    pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
-    for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); i++ )
+    if (pDoc)
     {
-        ScRange* pRange = aScenarioRanges.GetObject( i );
-        if( pRange )
-            pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
+        pDoc->SetScenario( nCurrTable, TRUE );
+        USHORT nFlags( 0 );
+        if( bDisplayBorder )
+            nFlags |= SC_SCENARIO_SHOWFRAME;
+        if( bCopyBack )
+            nFlags |= SC_SCENARIO_TWOWAY;
+        if( bCopyStyles )
+            nFlags |= SC_SCENARIO_ATTRIB;
+        if( !bCopyFormulas )
+            nFlags |= SC_SCENARIO_VALUE;
+        pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
+        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); i++ )
+        {
+            ScRange* pRange = aScenarioRanges.GetObject( i );
+            if( pRange )
+                pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
+                    pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
+        }
+        pDoc->SetActiveScenario( nCurrTable, bIsActive );
     }
-    pDoc->SetActiveScenario( nCurrTable, bIsActive );
 }
 

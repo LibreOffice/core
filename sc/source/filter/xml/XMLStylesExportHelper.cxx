@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-06 14:14:32 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,77 +502,80 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
     const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc,
     const sal_Bool bRow)
 {
-    sal_uInt16 nPos;
-    sal_Int32 nLast;
-    ScMyDefaultStyleList* pDefaults;
-    if (bRow)
+    if (pDoc)
     {
-        pDefaults = pRowDefaults;
-        nLast = nLastRow;
-    }
-    else
-    {
-        pDefaults = pColDefaults;
-        nLast = nLastCol;
-    }
-    sal_Bool bPrevAutoStyle;
-    sal_Bool bIsAutoStyle;
-    sal_Bool bResult;
-    sal_Int32 nPrevIndex;
-    sal_Int32 nIndex;
-    sal_Int32 nRepeat(0);
-    sal_Int32 nEmptyRepeat(0);
-    for (sal_Int32 i = nLast; i >= 0; i--)
-    {
+        sal_uInt16 nPos;
+        sal_Int32 nLast;
+        ScMyDefaultStyleList* pDefaults;
         if (bRow)
-            bResult = pDoc->GetRowDefault(nTable,
-                static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastCol), nPos);
-        else
-            bResult = pDoc->GetColDefault(nTable,
-                static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastRow), nPos);
-        if (bResult)
         {
-            nEmptyRepeat = 0;
-            if (!nRepeat)
-            {
-                nPrevIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
-                                            bRow, bPrevAutoStyle);
-                (*pDefaults)[i].nIndex = nPrevIndex;
-                (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                nRepeat = 1;
-            }
-            else
-            {
-                nIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
-                                        bRow, bIsAutoStyle);
-                if ((nIndex != nPrevIndex) || (bIsAutoStyle != bPrevAutoStyle))
-                {
-                    nRepeat = 1;
-                    nPrevIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
-                                            bRow, bPrevAutoStyle);
-                    (*pDefaults)[i].nIndex = nPrevIndex;
-                    (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                }
-                else
-                {
-                    (*pDefaults)[i].nIndex = nPrevIndex;
-                    (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                    nRepeat++;
-                    if (nRepeat > 1)
-                        (*pDefaults)[i].nRepeat = nRepeat;
-                }
-            }
+            pDefaults = pRowDefaults;
+            nLast = nLastRow;
         }
         else
         {
-            nRepeat = 0;
-            if (!nEmptyRepeat)
-                nEmptyRepeat = 1;
+            pDefaults = pColDefaults;
+            nLast = nLastCol;
+        }
+        sal_Bool bPrevAutoStyle;
+        sal_Bool bIsAutoStyle;
+        sal_Bool bResult;
+        sal_Int32 nPrevIndex;
+        sal_Int32 nIndex;
+        sal_Int32 nRepeat(0);
+        sal_Int32 nEmptyRepeat(0);
+        for (sal_Int32 i = nLast; i >= 0; i--)
+        {
+            if (bRow)
+                bResult = pDoc->GetRowDefault(nTable,
+                    static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastCol), nPos);
+            else
+                bResult = pDoc->GetColDefault(nTable,
+                    static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastRow), nPos);
+            if (bResult)
+            {
+                nEmptyRepeat = 0;
+                if (!nRepeat)
+                {
+                    nPrevIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
+                                                bRow, bPrevAutoStyle);
+                    (*pDefaults)[i].nIndex = nPrevIndex;
+                    (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
+                    nRepeat = 1;
+                }
+                else
+                {
+                    nIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
+                                            bRow, bIsAutoStyle);
+                    if ((nIndex != nPrevIndex) || (bIsAutoStyle != bPrevAutoStyle))
+                    {
+                        nRepeat = 1;
+                        nPrevIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
+                                                bRow, bPrevAutoStyle);
+                        (*pDefaults)[i].nIndex = nPrevIndex;
+                        (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
+                    }
+                    else
+                    {
+                        (*pDefaults)[i].nIndex = nPrevIndex;
+                        (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
+                        nRepeat++;
+                        if (nRepeat > 1)
+                            (*pDefaults)[i].nRepeat = nRepeat;
+                    }
+                }
+            }
             else
             {
-                nEmptyRepeat++;
-                if (nEmptyRepeat > 1)
-                    (*pDefaults)[i].nRepeat = nEmptyRepeat;
+                nRepeat = 0;
+                if (!nEmptyRepeat)
+                    nEmptyRepeat = 1;
+                else
+                {
+                    nEmptyRepeat++;
+                    if (nEmptyRepeat > 1)
+                        (*pDefaults)[i].nRepeat = nEmptyRepeat;
+                }
             }
         }
     }

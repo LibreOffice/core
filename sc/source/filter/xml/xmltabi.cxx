@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:16 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,69 +244,72 @@ void ScXMLTableContext::EndElement()
 {
     GetScImport().GetStylesImportHelper()->EndTable();
     ScDocument* pDoc = GetScImport().GetDocument();
-    if (sPrintRanges.getLength())
+    if (pDoc)
     {
-        uno::Reference< sheet::XSpreadsheet > xTable = GetScImport().GetTables().GetCurrentXSheet();
-        if( xTable.is() )
+        if (sPrintRanges.getLength())
         {
-            uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
-            if( xPrintAreas.is() )
+            uno::Reference< sheet::XSpreadsheet > xTable = GetScImport().GetTables().GetCurrentXSheet();
+            if( xTable.is() )
             {
-                uno::Sequence< table::CellRangeAddress > aRangeList;
-                ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
-                xPrintAreas->setPrintAreas( aRangeList );
-            }
-        }
-    }
-
-    ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
-    if (pOutlineTable)
-    {
-        ScOutlineArray* pColArray = pOutlineTable->GetColArray();
-        sal_Int32 nDepth = pColArray->GetDepth();
-        for (sal_Int32 i = 0; i < nDepth; i++)
-        {
-            sal_Int32 nCount = pColArray->GetCount(static_cast<USHORT>(i));
-            sal_Bool bChanged(sal_False);
-            for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
-            {
-                ScOutlineEntry* pEntry = pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
-                if (pEntry->IsHidden())
+                uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
+                if( xPrintAreas.is() )
                 {
-                    pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
-                    bChanged = sal_True;
+                    uno::Sequence< table::CellRangeAddress > aRangeList;
+                    ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
+                    xPrintAreas->setPrintAreas( aRangeList );
                 }
             }
         }
-        ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
-        nDepth = pRowArray->GetDepth();
-        for (i = 0; i < nDepth; i++)
+
+        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
+        if (pOutlineTable)
         {
-            sal_Int32 nCount = pRowArray->GetCount(static_cast<USHORT>(i));
-            sal_Bool bChanged(sal_False);
-            for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+            ScOutlineArray* pColArray = pOutlineTable->GetColArray();
+            sal_Int32 nDepth = pColArray->GetDepth();
+            for (sal_Int32 i = 0; i < nDepth; i++)
             {
-                ScOutlineEntry* pEntry = pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
-                if (pEntry->IsHidden())
+                sal_Int32 nCount = pColArray->GetCount(static_cast<USHORT>(i));
+                sal_Bool bChanged(sal_False);
+                for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
                 {
-                    pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
-                    bChanged = sal_True;
+                    ScOutlineEntry* pEntry = pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
+                    if (pEntry->IsHidden())
+                    {
+                        pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                        bChanged = sal_True;
+                    }
+                }
+            }
+            ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
+            nDepth = pRowArray->GetDepth();
+            for (i = 0; i < nDepth; i++)
+            {
+                sal_Int32 nCount = pRowArray->GetCount(static_cast<USHORT>(i));
+                sal_Bool bChanged(sal_False);
+                for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+                {
+                    ScOutlineEntry* pEntry = pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
+                    if (pEntry->IsHidden())
+                    {
+                        pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                        bChanged = sal_True;
+                    }
                 }
             }
         }
-    }
-    if (GetScImport().GetTables().HasDrawPage())
-    {
-        if (GetScImport().GetTables().HasXShapes())
+        if (GetScImport().GetTables().HasDrawPage())
         {
-            GetScImport().GetShapeImport()->popGroupAndSort();
-            GetScImport().GetShapeImport()->endPage(GetScImport().GetTables().GetCurrentXShapes());
+            if (GetScImport().GetTables().HasXShapes())
+            {
+                GetScImport().GetShapeImport()->popGroupAndSort();
+                GetScImport().GetShapeImport()->endPage(GetScImport().GetTables().GetCurrentXShapes());
+            }
+            if (bStartFormPage)
+                GetScImport().GetFormImport()->endPage();
         }
-        if (bStartFormPage)
-            GetScImport().GetFormImport()->endPage();
-    }
 
-    GetScImport().GetTables().DeleteTable();
-    GetScImport().GetProgressBarHelper()->Increment();
+        GetScImport().GetTables().DeleteTable();
+        GetScImport().GetProgressBarHelper()->Increment();
+    }
 }
 

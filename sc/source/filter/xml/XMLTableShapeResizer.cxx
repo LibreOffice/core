@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:14 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
 
 void ScMyShapeResizer::ResizeShapes()
 {
-    if (!aShapes.empty())
+    if (!aShapes.empty() && rImport.GetModel().is())
     {
         rtl::OUString sRowHeight(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLHGT));
         uno::Reference<table::XCellRange> xTableRow;
@@ -176,9 +176,9 @@ void ScMyShapeResizer::ResizeShapes()
         {
             uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
             uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-            if ( xIndex.is() )
+            ScDocument* pDoc = rImport.GetDocument();
+            if ( pDoc && xIndex.is() )
             {
-                ScDocument* pDoc = rImport.GetDocument();
                 while (aItr != aShapes.end())
                 {
                     if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
@@ -211,12 +211,12 @@ void ScMyShapeResizer::ResizeShapes()
                                 {
                                     if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
                                     {
-                                        Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                        Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
                                             static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
                                         awt::Point aRefPoint;
                                         aRefPoint.X = aRec.Left();
                                         aRefPoint.Y = aRec.Top();
-                                        pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
+                                        pRect = new Rectangle(pDoc->GetMMRect(
                                             static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
                                             static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
                                         aItr->nEndX += pRect->Left();
@@ -238,7 +238,7 @@ void ScMyShapeResizer::ResizeShapes()
                                     {
                                         DBG_ASSERT(aItr->xShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))),
                                             "no end address of this shape");
-                                        Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                        Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
                                             static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
                                         awt::Point aRefPoint;
                                         aRefPoint.X = aRec.Left();

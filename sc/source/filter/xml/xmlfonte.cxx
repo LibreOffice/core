@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-27 16:05:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,12 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
     sal_uInt16 aPageWhichIds[4] = { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
                                     ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
 
-    const SfxItemPool* pPool = rExport.GetDocument()->GetPool();
+    const SfxItemPool* pPool = rExport.GetDocument() ? rExport.GetDocument()->GetPool() : NULL;
     AddFontItems(aWhichIds, 3, pPool, sal_True);
     const SfxItemPool* pEditPool = rExport.GetDocument()->GetEditPool();
     AddFontItems(aEditWhichIds, 3, pEditPool, sal_False);
 
-    SfxStyleSheetIterator* pItr = rExport.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF);
+    SfxStyleSheetIterator* pItr = rExport.GetDocument() ? rExport.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF) : NULL;
     if(pItr)
     {
         SfxStyleSheetBase* pStyle = pItr->First();
