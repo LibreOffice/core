@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:12:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class SwRowFrm: public SwLayoutFrm
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
     bool bIsFollowFlowRow;
+    bool bIsRepeatedHeadline;
 
 protected:
     virtual void MakeAll();
@@ -112,6 +113,9 @@ public:
 
     bool IsFollowFlowRow() const { return bIsFollowFlowRow; }
     void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
+
+    bool IsRepeatedHeadline() const { return bIsRepeatedHeadline; }
+    void SetRepeatedHeadline( bool bNew ) { bIsRepeatedHeadline = bNew; }
 
     bool IsRowSplitAllowed() const;
 
