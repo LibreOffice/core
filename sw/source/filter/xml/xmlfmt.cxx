@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:10:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,8 +649,8 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                        SwXTextCursor::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SfxItemPool& rItemPool = pTxtCrsr->GetDoc()->GetAttrPool();
     switch( GetFamily() )
@@ -736,8 +736,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                        SwXTextCursor::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -803,8 +803,8 @@ sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
                 Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                                    UNO_QUERY);
                 ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-                SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                                    SwXTextCursor::getUnoTunnelId() );
+                OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                                    OTextCursorHelper::getUnoTunnelId() );
                 ASSERT( pTxtCrsr, "SwXTextCursor missing" );
                 SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -1141,9 +1141,9 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
         ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-        SwXTextCursor *pTxtCrsr =
-                (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+        OTextCursorHelper *pTxtCrsr =
+                (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
         ASSERT( pTxtCrsr, "SwXTextCursor missing" );
         pDoc = pTxtCrsr->GetDoc();
 
