@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:19:12 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.DisposedException;
 
+import com.sun.star.lib.uno.environments.java.java_environment;
 import com.sun.star.lib.uno.environments.remote.IMessage;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.environments.remote.IReceiver;
@@ -127,7 +128,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.36 $ $ $Date: 2004-03-30 16:19:12 $
+ * @version     $Revision: 1.37 $ $ $Date: 2004-05-19 10:28:42 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -754,8 +755,10 @@ public class java_remote_bridge
             // interrupt all jobs queued by this bridge
             _iThreadPool.dispose(throwable);
 
-            // release all outmapped objects
+            // release all out-mapped objects and all in-mapped proxies:
             freeHolders();
+            // assert _java_environment instanceof java_environment;
+            ((java_environment) _java_environment).revokeAllProxies();
 
             if (DEBUG) {
                 if (_life_count != 0) {
