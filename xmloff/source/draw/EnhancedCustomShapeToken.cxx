@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeToken.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:09:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ static const TokenTable pTokenTableArray[] =
     { "glue-point-leaving-directions",      EAS_glue_point_leaving_directions },
     { "text-path",                          EAS_text_path },
     { "text-path-mode",                     EAS_text_path_mode },
-    { "text-path-scale-x",                  EAS_text_path_scale_x },
+    { "text-path-scale",                    EAS_text_path_scale },
     { "text-path-same-letter-heights",      EAS_text_path_same_letter_heights },
     { "modifiers",                          EAS_modifiers },
     { "equation",                           EAS_equation },
