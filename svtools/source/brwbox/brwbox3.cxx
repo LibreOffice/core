@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-03 10:55:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
             break;
         case ::svt::BBTYPE_TABLECELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell[ " ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
@@ -270,7 +270,7 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
@@ -279,7 +279,7 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderCell" ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
