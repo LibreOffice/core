@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 12:32:52 $
+ *  last change: $Author: oj $ $Date: 2002-09-30 07:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2652,7 +2652,8 @@ sal_Bool DbFilterField::commitControl()
                 xParseNode->parseNodeToPredicateStr(aPreparedText,
                                                     xConnection->getMetaData(),
                                                     xNumberFormatter,
-                                                    m_rColumn.GetField(),aAppLocale,'.');
+                                                    m_rColumn.GetField(),aAppLocale,'.',
+                                                    getParseContext());
                 m_aText = aPreparedText;
             }
             else
