@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:41:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
+#endif
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -320,6 +324,9 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
         else
         if (lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE) != lTokens.end())
             lEnumSet = impl_queryMatchByDocumentService(lTokens);
+        else
+        if (lTokens.find(QUERY_IDENTIFIER_GET_SORTED_FILTERLIST) != lTokens.end())
+            lEnumSet = impl_getSortedFilterList(lTokens);
     }
 
     // pack list of item names as an enum list
@@ -500,7 +507,220 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     // <- SAFE ----------------------
 
     return lResult;
- }
+}
+
+/*-----------------------------------------------
+    21.01.2005 13:39
+-----------------------------------------------*/
+class stlcomp_removeIfMatchFlags
+{
+    private:
+        FilterCache* m_pCache ;
+        sal_Int32    m_nFlags ;
+        sal_Bool     m_bIFlags;
+
+    public:
+        stlcomp_removeIfMatchFlags(FilterCache* pCache ,
+                                   sal_Int32    nFlags ,
+                                   sal_Bool     bIFlags)
+            : m_pCache (pCache )
+            , m_nFlags (nFlags )
+            , m_bIFlags(bIFlags)
+        {}
+
+        bool operator() (const ::rtl::OUString& sFilter) const
+        {
+            const CacheItem aFilter = m_pCache->getItem(FilterCache::E_FILTER, sFilter);
+                    sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, ((sal_Int32)0));
+
+            bool bMatch = false;
+            if (m_bIFlags)
+                // IFlags are interpeted as ALL_FLAGS_MUST_MATCH !
+                bMatch = ((nFlags & m_nFlags) == m_nFlags);
+            else
+                // EFlags are interpreted as ATE_LEAST_ONE_FLAG_MUST_MATCH !
+                bMatch = !(nFlags & m_nFlags);
+            // We are asked for bRemove ! And bMatch = !bRemove => so bRemove = !bMatch .-)
+            return !bMatch;
+        }
+};
+
+/*-----------------------------------------------
+    21.01.2005 13:39
+-----------------------------------------------*/
+OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lTokens) const
+{
+    // analyze the given query parameter
+    QueryTokenizer::const_iterator pIt1;
+
+    ::rtl::OUString sModule;
+    sal_Int32       nIFlags = -1;
+    sal_Int32       nEFlags = -1;
+
+    pIt1 = lTokens.find(QUERY_PARAM_MODULE);
+    if (pIt1 != lTokens.end())
+        sModule = pIt1->second;
+    pIt1 = lTokens.find(QUERY_PARAM_IFLAGS);
+    if (pIt1 != lTokens.end())
+        nIFlags = ::rtl::OUString(pIt1->second).toInt32();
+    pIt1 = lTokens.find(QUERY_PARAM_EFLAGS);
+    if (pIt1 != lTokens.end())
+        nEFlags = ::rtl::OUString(pIt1->second).toInt32();
+
+    // simple search for filters of one specific module.
+    OUStringList lFilterList;
+    if (sModule.getLength())
+        lFilterList = impl_getSortedFilterListForModule(sModule, nIFlags, nEFlags);
+    else
+    {
+        // more complex search for all filters
+        // We check first, which office modules are installed ...
+        OUStringList lModules = impl_getListOfInstalledModules();
+        OUStringList::const_iterator pIt2;
+        for (  pIt2  = lModules.begin();
+               pIt2 != lModules.end()  ;
+             ++pIt2                    )
+        {
+            sModule = *pIt2;
+            OUStringList lFilters4Module = impl_getSortedFilterListForModule(sModule, nIFlags, nEFlags);
+            OUStringList::const_iterator pIt3;
+            for (  pIt3  = lFilters4Module.begin();
+                   pIt3 != lFilters4Module.end()  ;
+                 ++pIt3                           )
+            {
+                const ::rtl::OUString& sFilter = *pIt3;
+                lFilterList.push_back(sFilter);
+            }
+        }
+    }
+
+    return lFilterList;
+}
+
+/*-----------------------------------------------
+    21.01.2005 10:19
+-----------------------------------------------*/
+OUStringList FilterFactory::impl_getListOfInstalledModules() const
+{
+    // SAFE -> ----------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aLock.clear();
+    // <- SAFE ----------------------
+
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xModuleConfig(
+            ::comphelper::ConfigurationHelper::openConfig(xSMGR,
+                                                          CFGPACKAGE_OOO_MODULES,
+                                                          ::comphelper::ConfigurationHelper::E_READONLY),
+            css::uno::UNO_QUERY_THROW);
+        OUStringList lModules(xModuleConfig->getElementNames());
+        return lModules;
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+
+    return OUStringList();
+}
+
+/*-----------------------------------------------
+    21.01.2005 10:19
+-----------------------------------------------*/
+OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUString& sModule,
+                                                                    sal_Int32        nIFlags,
+                                                                    sal_Int32        nEFlags) const
+{
+    OUStringList lSortedFilters = impl_readSortedFilterListFromConfig(sModule);
+
+    // get all filters for the requested module
+    CacheItem lIProps;
+    lIProps[PROPNAME_DOCUMENTSERVICE] <<= sModule;
+
+    // SAFE -> ----------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    FilterCache* pCache        = impl_getWorkingCache();
+    OUStringList lOtherFilters = pCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps);
+    aLock.clear();
+    // <- SAFE ----------------------
+
+    // bring "other" filters in an alphabeticly order
+    // It's needed below.
+    ::std::sort(lOtherFilters.begin(), lOtherFilters.end());
+
+    // merge both lists together
+    OUStringList           lMergedFilters = lSortedFilters;
+    OUStringList::iterator pIt2;
+    OUStringList::iterator pIt3;
+    for (  pIt2  = lOtherFilters.begin();
+           pIt2 != lOtherFilters.end()  ;
+         ++pIt2                         )
+    {
+        const ::rtl::OUString& rFilter = *pIt2;
+        pIt3 = ::std::find(lSortedFilters.begin(), lSortedFilters.end(), rFilter);
+        if (pIt3 == lSortedFilters.end())
+            lMergedFilters.push_back(rFilter);
+    }
+
+    // remove all filters from this merged list, which does not fit the flag specification
+    if (nIFlags != -1)
+    {
+        pIt2 = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, sal_True));
+        lMergedFilters.erase(pIt2, lMergedFilters.end());
+    }
+    if (nEFlags != -1)
+    {
+        pIt2 = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, sal_False));
+        lMergedFilters.erase(pIt2, lMergedFilters.end());
+    }
+
+    // sort the default filter to the front of this list
+    // TODO
+
+    return lMergedFilters;
+}
+
+/*-----------------------------------------------
+    21.01.2005 10:19
+-----------------------------------------------*/
+OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUString& sModule) const
+{
+    // SAFE -> ----------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aLock.clear();
+    // <- SAFE ----------------------
+
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xUISortConfig(
+            ::comphelper::ConfigurationHelper::openConfig(xSMGR,
+                                                          CFGPACKAGE_TD_UISORT,
+                                                          ::comphelper::ConfigurationHelper::E_READONLY),
+            css::uno::UNO_QUERY_THROW);
+
+        // dont ccheck the module name here. If it does not exists, an exception is thrown and catched below.
+        // We return an empty list as result then.
+        css::uno::Reference< css::container::XNameAccess > xModule;
+        xUISortConfig->getByName(sModule) >>= xModule;
+        if (xModule.is()) // only to be on the safe side of life if the exception was not thrown .-)
+        {
+            // Note: convertion of the returned Any to OUStringList throws
+            // an IllegalArgumentException if the type does not match ...
+            // but it resets the OUStringList to a length of 0 if the Any is empty!
+            OUStringList lSortedFilters(xModule->getByName(PROPNAME_SORTEDFILTERLIST));
+            return lSortedFilters;
+        }
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+
+    return OUStringList();
+}
 
 /*-----------------------------------------------
     09.07.2003 07:43

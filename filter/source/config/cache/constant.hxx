@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:40:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,11 @@
  */
 #define  PROPNAME_TYPES     _FILTER_CONFIG_FROM_ASCII_("Types")
 
+/** @short  used to identify the list of sorted filters for a specific
+            office module
+ */
+#define  PROPNAME_SORTEDFILTERLIST     _FILTER_CONFIG_FROM_ASCII_("SortedFilterList")
+
 /** @short  implicit properties. which are used at the container interface only.
  */
 #define  PROPNAME_FINALIZED _FILTER_CONFIG_FROM_ASCII_("Finalized")
@@ -207,7 +212,9 @@
 #define  CFGPACKAGE_TD_TYPES           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Types" )
 #define  CFGPACKAGE_TD_FILTERS         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Filter")
 #define  CFGPACKAGE_TD_OTHERS          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Misc"  )
+#define  CFGPACKAGE_TD_UISORT          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.UISort/ModuleDependendFilterOrder")
 #define  CFGPACKAGE_TD_OLD             _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Office.TypeDetection")
+#define  CFGPACKAGE_OOO_MODULES        _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Office/Factories")
 
 /** @short  some default values.
  */
@@ -217,11 +224,14 @@
 
 /** @short  used for the queries of the FilterFactory service.
  */
-#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    _FILTER_CONFIG_FROM_ASCII_("matchByDocumentService")
+#define  QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE    _FILTER_CONFIG_FROM_ASCII_("matchByDocumentService" )
+#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE _FILTER_CONFIG_FROM_ASCII_("getDefaultFilterForType")
+#define  QUERY_IDENTIFIER_GET_SORTED_FILTERLIST     _FILTER_CONFIG_FROM_ASCII_("getSortedFilterList()"  )
+
 #define  QUERY_PARAM_IFLAGS                         _FILTER_CONFIG_FROM_ASCII_("iflags")
 #define  QUERY_PARAM_EFLAGS                         _FILTER_CONFIG_FROM_ASCII_("eflags")
+#define  QUERY_PARAM_MODULE                         _FILTER_CONFIG_FROM_ASCII_("module")
+#define  QUERY_PARAM_DEFAULTFIRST                   _FILTER_CONFIG_FROM_ASCII_("default_first")
 #define  QUERY_CONSTVALUE_ALL                       _FILTER_CONFIG_FROM_ASCII_("all")
 
-#define  QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE _FILTER_CONFIG_FROM_ASCII_("getDefaultFilterForType")
-
-#endif // _FILTER_CONFIG_static constANT_HXX_
+#endif // _FILTER_CONFIG_CONSTANT_HXX_
