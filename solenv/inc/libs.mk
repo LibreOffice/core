@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-08 08:13:46 $
+#   last change: $Author: obo $ $Date: 2002-10-21 10:45:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.57 $$"
+LIBSMKREV!:="$$Revision: 1.58 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -209,6 +209,7 @@ SDLLIB=-lsdl
 SWLIB=-lswlib
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
+SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
 
 #
 # USED_%NAME%_LIBS
@@ -360,6 +361,8 @@ FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
 PKGCHKLIB=$(LIBPRE) ipkgchk.lib
 SYSSHELLLIB=sysshell.lib
+SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
+
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
