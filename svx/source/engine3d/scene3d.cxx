@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ void E3dScene::FitSnapRectToBoundVol()
     Volume3D aFitVol;
 
     SetBoundVolInvalid();
-    Matrix4D aTransform = GetFullTransform() * aCamera.GetViewTransform();
+    Matrix4D aTransform = aCamera.GetViewTransform() * GetFullTransform(); // #112587#
     Vol3DPointIterator aIter(GetBoundVolume(), &aTransform);
     Rectangle aRect;
 
