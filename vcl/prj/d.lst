@@ -13,10 +13,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\unx
 ..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
 ..\%__SRC%\bin\getstyle-gnome %_DEST%\bin%_EXT%\getstyle-gnome
 ..\%__SRC%\bin\msgbox-gnome %_DEST%\bin%_EXT%\msgbox-gnome
-..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
-..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
-..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\libvcl*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\app16.lib %_DEST%\lib%_EXT%\app16.lib
 ..\%__SRC%\lib\gdi16.lib %_DEST%\lib%_EXT%\gdi16.lib
