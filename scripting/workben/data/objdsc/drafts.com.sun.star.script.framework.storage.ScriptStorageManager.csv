@@ -2,4 +2,5 @@
 "ScriptStorageManager";"drafts::com::sun::star::script::framework::storage::XScriptStorageManager";"createScriptStorageWithURI()"
 "ScriptStorageManager";"drafts::com::sun::star::script::framework::storage::XScriptStorageManager";"getScriptStorage()"
 "ScriptStorageManager";"drafts::com::sun::star::script::framework::storage::XScriptStorageManager";"refreshScriptStorage()"
+"ScriptStorageManager";"drafts::com::sun::star::script::framework::storage::XScriptSecurity";"checkPermission()"
 "ScriptStorageManager";"::com::sun::star::lang::XEventListener";"disposing()"

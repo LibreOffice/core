@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptSecurity.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-26 09:53:01 $
+ *  last change:$Date: 2003-02-26 13:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ import com.sun.star.container.XNameReplace;
 import com.sun.star.util.XChangesBatch;
 import com.sun.star.reflection.InvocationTargetException;
 
+import ifc.script.framework.SecurityDialogUtil;
 
 import lib.MultiMethodTest;
 import lib.StatusException;
@@ -123,14 +124,33 @@ public class _XScriptSecurity extends MultiMethodTest {
     }
 
     private boolean runCheckPermissionTest(Parameters testdata) {
+        // description of test
         String description = testdata.get("description");
+
+        // document location
         String location = testdata.get("location");
-        String logicalname = testdata.get("logicalname");
+
+        //security settings
         String runmacro = testdata.get("runmacro");
+        String confirm = testdata.get("confirm");
+        String warning = testdata.get("warning");
         String pathlist = testdata.get("pathlist");
+
+        //do this test produce a dialog?
+        String dialog = testdata.get("dialog");
+        //is checkbox to be ticked?
+        String checkBoxStr = testdata.get("checkbox");
+        //name of button in dialog to press
+        String buttonName = testdata.get("buttonName");
+
+        //expected result
         String expected = testdata.get("expected");
+        //do we need to check the pathlist?
+        String checkpath = testdata.get("checkpath");
+
         String output = null;
 
+        // get the officeBasic setting
         String officeBasic = null;
         if( runmacro.equals("never") )
         {
@@ -145,6 +165,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             officeBasic = "2";
         }
 
+        // should pathlist include doc?
         String secureURLs = null;
         if( pathlist.equals("true") )
         {
@@ -155,12 +176,23 @@ public class _XScriptSecurity extends MultiMethodTest {
         {
             secureURLs = "";
         }
-        if ( !setSecurity( officeBasic, secureURLs ) )
+
+        if ( !setSecurity( officeBasic, confirm, warning, secureURLs ) )
         {
-            System.err.println( "failed to set security" );
+            log.println( "failed to set security" );
             return false;
         }
 
+        if( dialog.equals( "true" ) )
+        {
+            // is the checkbox to be ticked?
+            boolean checkBox = false;
+            if( checkBoxStr.equals( "true" ) )
+            {
+                checkBox = true;
+            }
+            new SecurityDialogUtil( tParam.getMSF(), buttonName, checkBox ).start();
+        }
         // need to set up dialog utils thread first
         int storageId = getStorageId(location);
 
@@ -182,12 +214,69 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         log.println("expected: " + expected + ", output: " + output);
         if (output.equals(expected))
+        {
+            if( checkpath.equals("true") )
+            {
+                String setPath  = getPathList();
+                String expectedPath = "";
+                if( checkBoxStr.equals( "true" ) )
+                {
+                    String uri = util.utils.getFullTestURL(location);
+                    expectedPath = uri.substring(0,  uri.lastIndexOf('/'));
+                }
+                log.println("pathlist: expected: " + expectedPath + ", output: " + setPath);
+                if( setPath.equals( expectedPath ) )
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
             return true;
+        }
         else
             return false;
     }
 
-    private boolean setSecurity( String officeBasic, String secureURLs )
+    private String getPathList()
+    {
+        String result = "";
+        try {
+        Object oProv = tParam.getMSF().createInstance(
+            "com.sun.star.configuration.ConfigurationProvider" );
+
+        XMultiServiceFactory xProv = (XMultiServiceFactory)
+            UnoRuntime.queryInterface(XMultiServiceFactory.class, oProv);
+
+        //the path to the security settings in the registry
+        PropertyValue aPathArg = new PropertyValue();
+        aPathArg.Name="nodepath";
+        aPathArg.Value="org.openoffice.Office.Common/Security/Scripting";
+        // we don't want to cache the write
+        PropertyValue aModeArg = new PropertyValue();
+        aModeArg.Name="lazywrite";
+        aModeArg.Value=new Boolean(false);
+
+        Object[]  aArgs = new Object[2];
+        aArgs[0]=aPathArg;
+        aArgs[1]=aModeArg;
+        Object oConfigUpdate = xProv.createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationAccess",
+            aArgs );
+        XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, oConfigUpdate );
+        result = (String) xPropertySet.getPropertyValue( "SecureURL" );
+        } catch (Exception e)
+        {
+            result = "Exception getting list of secure URLs";
+        }
+        return result;
+    }
+
+    private boolean setSecurity( String officeBasic, String confirm,
+                                String warning, String secureURLs )
     {
         boolean success=false;
         try {
@@ -216,16 +305,46 @@ public class _XScriptSecurity extends MultiMethodTest {
                 XNameReplace.class, oConfigUpdate );
         XChangesBatch xChangesBatch = (XChangesBatch)UnoRuntime.queryInterface(
                 XChangesBatch.class, oConfigUpdate );
+
         Object[] aSecureURLs = new Object[1];
         aSecureURLs[0]=secureURLs;
         xNameReplace.replaceByName( "SecureURL", aSecureURLs );
+
         Object[] aOfficeBasic = new Object[1];
         aOfficeBasic[0]=officeBasic;
         xNameReplace.replaceByName( "OfficeBasic", aOfficeBasic );
+
+        Boolean bConfirm = null;
+        if( ( confirm != null ) && ( confirm.equals("true") ) )
+        {
+            bConfirm = new Boolean( true );
+        }
+        else
+        {
+            bConfirm = new Boolean( false );
+        }
+        Object[] aConfirm = new Object[1];
+        aConfirm[0] = bConfirm;
+        xNameReplace.replaceByName( "Confirmation", aConfirm );
+
+        Boolean bWarning = null;
+        if( ( warning != null ) && ( warning.equals("true") ) )
+        {
+            bWarning = new Boolean( true );
+        }
+        else
+        {
+            bWarning = new Boolean( false );
+        }
+        Object[] aWarning = new Object[1];
+        aWarning[0] = bWarning;
+        xNameReplace.replaceByName( "Warning", aWarning );
+
+        // and now commit the changes
         xChangesBatch.commitChanges();
         success=true;
         } catch (Exception e) {
-            System.err.println("Error updating security settings: " +
+            log.println("Error updating security settings: " +
                 e.getMessage() );
         }
         return success;
