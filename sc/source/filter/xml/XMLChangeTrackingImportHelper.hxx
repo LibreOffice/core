@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:45:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ class ScXMLChangeTrackingImportHelper
     sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
-    sal_Bool            bChangeTrack : 1;
+    sal_Bool            bChangeTrack;
 
 private:
     void ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime);
