@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:15:44 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@
 #include <svx/hlnkitem.hxx>
 #include <svx/lspcitem.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/outlobj.hxx>
 #include <svx/postitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/shdditem.hxx>
@@ -274,7 +275,8 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
     }
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    switch ( rReq.GetSlot() )
+    USHORT nSlot = rReq.GetSlot();
+    switch ( nSlot )
     {
         case SID_COPY:
             pOutView->Copy();
@@ -396,6 +398,18 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     //  InsertURL an der ViewShell schaltet bei "Text" die DrawShell ab !!!
                 }
             }
+            break;
+
+        case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+            if ( pOutliner->IsVertical() )
+                pOutliner->SetVertical( FALSE );
+            ExecuteGlobal( rReq );                  // also for the whole object
+            break;
+
+        case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+            if(  !pOutliner->IsVertical() )
+                pOutliner->SetVertical( TRUE );
+            ExecuteGlobal( rReq );                  // also for the whole object
             break;
     }
 }
@@ -914,6 +928,59 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         }
         rDestSet.Put( SfxBoolItem( nId, TRUE ) );
     }
+
+    //  horizontal / vertical
+
+    BOOL bLeftToRight = FALSE;
+    BOOL bTopToBottom = FALSE;
+
+    SdrOutliner* pOutl = pView->GetTextEditOutliner();
+    if( pOutl )
+    {
+        if( pOutl->IsVertical() )
+            bTopToBottom = TRUE;
+        else
+            bLeftToRight = TRUE;
+    }
+    else
+    {
+        const SdrMarkList& rMark = pView->GetMarkList();
+        USHORT nCount = (USHORT) Min( rMark.GetMarkCount(), (ULONG) 10 );
+        OutlinerParaObject* pOPO = 0;
+        for( USHORT i = 0; i < nCount; i++ )
+        {
+            pOPO = rMark.GetMark( i )->GetObj()->GetOutlinerParaObject();
+            if( !pOPO )
+            {
+                bLeftToRight = FALSE;
+                bTopToBottom = FALSE;
+                 break;
+            }
+            else if ( pOPO->IsVertical() )
+            {
+                if( bLeftToRight )
+                {
+                    bLeftToRight = FALSE;
+                    break;
+                }
+                else
+                    bTopToBottom = TRUE;
+            }
+            else
+            {
+                if( bTopToBottom )
+                {
+                    bTopToBottom = FALSE;
+                    break;
+                }
+                else
+                    bLeftToRight = TRUE;
+            }
+        }
+    }
+
+    rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
+    rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, bTopToBottom ) );
 }
 
 

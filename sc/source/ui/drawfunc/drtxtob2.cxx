@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:21:33 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@
 #include "scitems.hxx"
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
+#include <svx/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xtextit.hxx>
 #include <sfx2/bindings.hxx>
@@ -386,7 +387,8 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
 
-    switch ( rReq.GetSlot() )
+    USHORT nSlot = rReq.GetSlot();
+    switch ( nSlot )
     {
         case SID_COPY:
             pView->DoCopy();
@@ -406,6 +408,45 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_SELECTALL:
             pView->MarkAll();
+            break;
+
+        case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+        case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+            {
+                const SdrMarkList& rMark = pView->GetMarkList();
+                SdrObject* pObj = NULL;
+                OutlinerParaObject* pOPO = 0;
+                for( ULONG i = 0; i < rMark.GetMarkCount(); i++ )
+                {
+                    pObj = rMark.GetMark( i )->GetObj();
+                    pOPO = pObj->GetOutlinerParaObject();
+                    if( pOPO )
+                    {
+                        SdrOutliner* pOutl = pView->GetTextEditOutliner();
+                        if( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
+                        {
+                            if( pOPO && pOPO->IsVertical() )
+                            {
+                                pOPO->SetVertical( FALSE );
+                                pObj->SendRepaintBroadcast();
+                            }
+                        }
+                        else
+                        {
+                            if( pOPO && !pOPO->IsVertical() )
+                            {
+                                pOPO->SetVertical( TRUE );
+                                pObj->SendRepaintBroadcast();
+                            }
+                        }
+                    }
+                }
+
+                Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
+                Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
+
+                rReq.Done();
+            }
             break;
     }
 }
