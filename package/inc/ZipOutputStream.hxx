@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 21:59:46 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,27 +70,26 @@
 #ifndef _CRC32_HXX
 #include <CRC32.hxx>
 #endif
-#ifndef __SGI_STL_VECTOR
-#include <vector>
-#endif
 #ifndef _RTL_CIPHER_H_
 #include <rtl/cipher.h>
-#endif
-#ifndef _VOS_REF_H_
-#include <vos/ref.hxx>
 #endif
 #ifndef RTL_DIGEST_H_
 #include <rtl/digest.h>
 #endif
 
+#include <vector>
+
 struct ZipEntry;
 class EncryptionData;
-
+namespace vos
+{
+    template < class T > class ORef;
+}
 class ZipOutputStream
 {
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
-    ::std::vector < ZipEntry *>         aZipList;
+    ::std::vector < ZipEntry * >            aZipList;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer, aEncryptionBuffer;
     ::rtl::OUString     sComment;
     Deflater            aDeflater;
@@ -101,11 +100,11 @@ protected:
     ZipEntry            *pCurrentEntry;
     sal_Int16           nMethod, nLevel, mnDigested;
     sal_Bool            bFinished, bEncryptCurrentEntry, bSpanning;
-    ::vos::ORef < EncryptionData >  xCurrentEncryptData;
+    EncryptionData      *pCurrentEncryptData;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Bool bNewSpanning );
-    ~ZipOutputStream(void);
+    ~ZipOutputStream();
 
     // rawWrite to support a direct write to the output stream
     void SAL_CALL rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
