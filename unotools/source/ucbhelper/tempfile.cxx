@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ SvStream* TempFile::GetStream( StreamMode eMode )
         if ( GetURL().Len() )
             pImp->pStream = UcbStreamHelper::CreateStream( pImp->aURL, eMode, sal_True /* bFileExists */ );
         else
-            pImp->pStream = new SvFileStream( pImp->aName, eMode );
+            pImp->pStream = new SvMemoryStream( eMode );
     }
 
     return pImp->pStream;
