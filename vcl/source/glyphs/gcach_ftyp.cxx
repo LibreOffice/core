@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.47 $
- *  last change: $Author: hdu $ $Date: 2001-06-22 12:28:32 $
+ *  $Revision: 1.48 $
+ *  last change: $Author: cp $ $Date: 2001-07-05 15:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,10 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #if (FTVERSION < 200)
         eEncoding = ft_encoding_none;
 #else
-        eEncoding = ft_encoding_symbol;
+        if (FT_IS_SFNT( maFaceFT ))
+            eEncoding = ft_encoding_symbol;
+        else
+            eEncoding = ft_encoding_adobe_custom;
 #endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
@@ -591,7 +594,10 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
         else {
             if( (aChar&0xFF00) == 0xF000)
                 aChar &= 0x00FF;    // PS font symbol mapping
-            return (aChar<256) ? aChar : 0;
+            if (aChar<256)
+                return FT_Get_Char_Index( maFaceFT, aChar );
+            else
+                return 0;
         }
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
