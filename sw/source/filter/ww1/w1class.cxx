@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:29:19 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include "filt_pch.hxx"
 #endif
 
-#pragma hdrstop
-
 #include <string.h>
 
 #ifndef _STREAM_HXX //autogen
@@ -97,6 +95,13 @@ Ww1Fib::Ww1Fib( SvStream& rStream )
 }
 
 ///////////////////////////////////////////////////////////// PlainText
+
+Ww1PlainText::Ww1PlainText(Ww1Fib& rWwFib, ULONG nFilePos, ULONG nCountBytes)
+    : rFib(rWwFib), ulFilePos(nFilePos), ulCountBytes(nCountBytes),
+    ulSeek(0), bOK(true)
+{
+}
+
 sal_Unicode Ww1PlainText::operator [] ( ULONG ulOffset )
 {
     DBG_ASSERT( ulOffset<Count(), "Ww1PlainText" );
@@ -125,11 +130,7 @@ String Ww1PlainText::GetText( ULONG ulOffset, ULONG nLen ) const
 
 ///////////////////////////////////////////////////////////////// Style
 Ww1Style::Ww1Style()
-    : stcBase(0),
-    stcNext(0),
-    bUsed(FALSE),
-    pParent(NULL),
-    pPapx(NULL)
+    : pPapx(0), pParent(0), stcBase(0), stcNext(0), bUsed(false)
 {
 }
 
@@ -194,13 +195,14 @@ USHORT Ww1Style::ReadName( BYTE*&p, USHORT& rnCountBytes, USHORT stc )
             };//256
 
         const sal_Char* pStr;
-        if( !stc )
+        size_t nSize(stc);
+        if (!nSize)
             pStr = "W1 Normal";
-        else if( stc - 222 >= sizeof( names ) / sizeof( *names ))
+        else if (nSize - 222 >= sizeof(names) / sizeof(*names))
             pStr = "?";
         else
-            pStr = names[ stc-222 ];
-        SetName( String( pStr, RTL_TEXTENCODING_MS_1252 ));
+            pStr = names[nSize-222];
+        SetName(String(pStr, RTL_TEXTENCODING_MS_1252));
     }
     else if( 255 > nCountBytes ) // unused
     {
@@ -363,8 +365,8 @@ USHORT Ww1StyleSheet::ReadEstcp(BYTE*& p, USHORT& rnCountBytes)
 
 ///////////////////////////////////////////////////////////////// Fonts
 
-Ww1Fonts::Ww1Fonts(Ww1Fib& rFib, ULONG nFieldFlgs)
-    : nMax(0), rFib(rFib), pFontA(0), nFieldFlags( nFieldFlgs ), bOK(FALSE)
+Ww1Fonts::Ww1Fonts(Ww1Fib& rInFib, ULONG nFieldFlgs)
+    : pFontA(0), rFib(rInFib), nFieldFlags(nFieldFlgs), nMax(0), bOK(false)
 {
     if(rFib.GetFIB().cbSttbfffnGet() > 2 ) // ueberhaupt fonts?
     {
@@ -446,7 +448,7 @@ Ww1Dop::Ww1Dop(Ww1Fib& rFib)
 
 /////////////////////////////////////////////////////////////// Picture
 Ww1Picture::Ww1Picture(SvStream& rStream, ULONG ulFilePos)
-    : pPic(NULL), bOK(FALSE)
+    : bOK(false), pPic(0)
 {
     ulFilePos &= 0xffffff; //~ ww1: warum auch immer - im highbyte steht eine 5?!?!
     SVBT32 lcb;
@@ -458,7 +460,7 @@ Ww1Picture::Ww1Picture(SvStream& rStream, ULONG ulFilePos)
                         if (rStream.Read(pPic, SVBT32ToLong(lcb)) == (ULONG)SVBT32ToLong(lcb))
                         {
                             DBG_ASSERT(pPic->cbHeaderGet()==sizeof(*pPic)-sizeof(pPic->rgb), "Ww1Picture");
-                            bOK = TRUE;
+                            bOK = true;
                         }
 }
 
@@ -624,16 +626,13 @@ BOOL Ww1Sprm::ReCalc()
     return bRet;
 }
 
-
 void Ww1Sprm::DeinitTab()
 {
-    for( int i=0; i < sizeof(aTab)/sizeof(*aTab);i++)
+    for (size_t i=0; i < sizeof(aTab)/sizeof(*aTab); ++i)
         delete aTab[i];
-    memset( aTab, sizeof(aTab)/sizeof(*aTab), 0 );
+    memset(aTab, sizeof(aTab)/sizeof(*aTab), 0);
     delete pSingleSprm;
 }
-
-
 
 void Ww1Sprm::InitTab()
 {
@@ -778,26 +777,30 @@ BYTE* Ww1SprmPapx::Sprm(BYTE* p, USHORT nSize)
 }
 
 /////////////////////////////////////////////////////////////////// Plc
-Ww1Plc::Ww1Plc(Ww1Fib& rFib, ULONG ulFilePos, USHORT nCountBytes, USHORT nItemSize) :
-    p(NULL),
-    nCountBytes(nCountBytes),
-    iMac(0),
-    bOK(FALSE),
-    nItemSize(nItemSize),
-    rFib(rFib)
+Ww1Plc::Ww1Plc(Ww1Fib& rInFib, ULONG ulFilePos, USHORT nInCountBytes,
+    USHORT nInItemSize)
+    : p(0), nCountBytes(nInCountBytes), iMac(0), nItemSize(nInItemSize),
+    bOK(false), rFib(rInFib)
 {
     if (!nCountBytes)
-        bOK = TRUE;
+        bOK = true;
     else
+    {
         if (rFib.GetStream().Seek(ulFilePos) == (ULONG)ulFilePos)
+        {
             if ((p = new BYTE[nCountBytes]) != NULL)
+            {
                 if (rFib.GetStream().Read(p, nCountBytes) == (ULONG)nCountBytes)
                 {
-                    bOK = TRUE;
-                    iMac = (nCountBytes - sizeof(SVBT32)) / (sizeof(SVBT32) + nItemSize);
+                    bOK = true;
+                    iMac = (nCountBytes -
+                        sizeof(SVBT32)) / (sizeof(SVBT32) + nItemSize);
                     DBG_ASSERT(iMac * ((USHORT)sizeof(ULONG) + nItemSize) +
                      (USHORT)sizeof(SVBT32) == nCountBytes, "Ww1Plc");
                 }
+            }
+        }
+    }
 }
 
 Ww1Plc::~Ww1Plc()
@@ -919,8 +922,8 @@ const String Ww1StringList::GetStr( USHORT nNum ) const
     return sRet;
 }
 
-Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rFib)
-    : rFib(rFib), aNames(rFib), nIsEnd(0)
+Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rInFib)
+    : aNames(rInFib), rFib(rInFib), nIsEnd(0)
 {
     pPos[0] = new Ww1PlcBookmarkPos(rFib, rFib.GetFIB().fcPlcfbkfGet(),
                                     rFib.GetFIB().cbPlcfbkfGet(), FALSE);
@@ -930,7 +933,6 @@ Ww1Bookmarks::Ww1Bookmarks(Ww1Fib& rFib)
     nPlcIdx[1] = 0;
     bOK = !aNames.GetError() && !pPos[0]->GetError() && !pPos[1]->GetError();
 }
-
 
 // Der Operator ++ hat eine Tuecke: Wenn 2 Bookmarks aneinandergrenzen, dann
 // sollte erst das Ende des ersten und dann der Anfang des 2. erreicht werden.
@@ -1131,14 +1133,9 @@ String Ww1Assoc::GetStr(USHORT code)
 }
 
 /////////////////////////////////////////////////////////////////// Pap
-Ww1Pap::Ww1Pap(Ww1Fib& rFib) :
-    Ww1PlcPap(rFib),
-    nPlcIndex(0),
-    nFkpIndex(0),
-    nPushedPlcIndex(0xffff),
-    nPushedFkpIndex(0xffff),
-    ulOffset(0),
-    pPap(0)
+Ww1Pap::Ww1Pap(Ww1Fib& rFib)
+    : Ww1PlcPap(rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
+    nPushedFkpIndex(0xffff), ulOffset(0), pPap(0)
 {
 }
 
@@ -1255,14 +1252,9 @@ BOOL Ww1Pap::NextHas(USHORT nId)
 }
 
 /////////////////////////////////////////////////////////////////// Chp
-Ww1Chp::Ww1Chp(Ww1Fib& rFib) :
-    Ww1PlcChp(rFib),
-    nPlcIndex(0),
-    nFkpIndex(0),
-    nPushedPlcIndex(0xffff),
-    nPushedFkpIndex(0xffff),
-    ulOffset(0),
-    pChp(0)
+Ww1Chp::Ww1Chp(Ww1Fib& rFib)
+    : Ww1PlcChp(rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
+    nPushedFkpIndex(0xffff), ulOffset(0), pChp(0)
 {
 }
 
@@ -1308,27 +1300,14 @@ void Ww1Chp::operator++(int)
 }
 
 ////////////////////////////////////////////////////////////// Manager
-Ww1Manager::Ww1Manager(SvStream& rStrm, ULONG nFieldFlgs) :
-        bOK(FALSE),
-        bInTtp(FALSE),
-        bInStyle(FALSE),
-        bStopAll(FALSE),
-        aFib(rStrm),
-        aDop(aFib),
-        aFonts(aFib, nFieldFlgs),
-        aSep(aFib, aDop.GetDOP().grpfIhdtGet()),
-        aDoc(aFib),
-        pDoc(&aDoc),
-        ulDocSeek(0),
-        pSeek(&ulDocSeek),
-        aPap(aFib),
-        aChp(aFib),
-        aFld(aFib),
-        pFld(&aFld),
-        aFtn(aFib),
-        aBooks(aFib)
+Ww1Manager::Ww1Manager(SvStream& rStrm, ULONG nFieldFlgs)
+    : bOK(FALSE), bInTtp(FALSE), bInStyle(FALSE), bStopAll(FALSE), aFib(rStrm),
+    aDop(aFib), aFonts(aFib, nFieldFlgs), aDoc(aFib), pDoc(&aDoc),
+    ulDocSeek(0), pSeek(&ulDocSeek), aFld(aFib), pFld(&aFld), aChp(aFib),
+    aPap(aFib), aFtn(aFib), aBooks(aFib),
+    aSep(aFib, aDop.GetDOP().grpfIhdtGet())
 {
-    bOK = !aFib.GetError()
+    bOK =  !aFib.GetError()
         && !aFib.GetFIB().fComplexGet()
         && !aDoc.GetError()
         && !aSep.GetError()
