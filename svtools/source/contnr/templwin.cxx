@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-07 09:43:01 $
+ *  last change: $Author: gt $ $Date: 2001-11-07 10:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,6 +1303,12 @@ void SvtTemplateWindow::SetPrevLevelButtonState( const String& rURL )
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, !pIconWin->IsRootURL( rURL ) );
 }
 
+void SvtTemplateWindow::ClearHistory()
+{
+    if( pHistoryList )
+        pHistoryList->Clear();
+}
+
 // ------------------------------------------------------------------------
 void SvtTemplateWindow::ReadViewSettings( )
 {
@@ -1607,7 +1613,10 @@ void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
         WaitObject aWaitCursor( this );
         xTemplates->update();
         if ( pImpl->pWin->IsTemplateFolderOpen() )
+        {
+            pImpl->pWin->ClearHistory();
             pImpl->pWin->OpenTemplateRoot();
+        }
     }
 }
 

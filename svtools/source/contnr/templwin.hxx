@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-07 09:43:01 $
+ *  last change: $Author: gt $ $Date: 2001-11-07 10:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,8 +304,8 @@ public:
     void                SetFocus( sal_Bool bIconWin );
     sal_Bool            HasIconWinFocus() const { return pIconWin->HasChildPathFocus(); }
     void                OpenTemplateRoot();
-
     void                SetPrevLevelButtonState( const String& rURL );  // sets state (enable/disable) for previous level button
+    void                ClearHistory();
 };
 
 
