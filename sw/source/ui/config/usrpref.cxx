@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 09:52:11 $
+ *  last change: $Author: os $ $Date: 2001-02-28 11:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,8 +600,8 @@ void SwCursorConfig::Commit()
         switch(nProp)
         {
             case  0: bSet = rParent.IsShadowCursor();       break;//  "DirectCursor/UseDirectCursor",
-            case  1: pValues[nProp] <<= rParent.GetShdwCrsrColor().GetColor();  break;//  "DirectCursor/Insert",
-            case  2: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode();   break;//  "DirectCursor/Color",
+            case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode();   break;//  "DirectCursor/Insert",
+            case  2: pValues[nProp] <<= rParent.GetShdwCrsrColor().GetColor();  break;//  "DirectCursor/Color",
             case  3: bSet = rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
         }
         if(nProp == 0  || nProp == 3 )
@@ -621,7 +621,7 @@ void SwCursorConfig::Load()
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
     {
-        Size aSnap(rParent.GetSnapSize());
+
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
@@ -635,13 +635,13 @@ void SwCursorConfig::Load()
                 switch(nProp)
                 {
                     case  0: rParent.SetShadowCursor(bSet);         break;//  "DirectCursor/UseDirectCursor",
-                    case  1: rParent.SetShdwCrsrColor(nSet);        break;//  "DirectCursor/Insert",
-                    case  2: rParent.SetShdwCrsrFillMode((BYTE)nSet);   break;//  "DirectCursor/Color",
+                    case  1: rParent.SetShdwCrsrFillMode((BYTE)nSet);       break;//  "DirectCursor/Insert",
+                    case  2: rParent.SetShdwCrsrColor(nSet);    break;//  "DirectCursor/Color",
                     case  3: rParent.SetCursorInProtectedArea(bSet); break;// "Option/ProtectedArea"
                 }
             }
         }
-        rParent.SetSnapSize(aSnap);
+
     }
 }
 /*-- 28.09.00 09:55:33---------------------------------------------------
