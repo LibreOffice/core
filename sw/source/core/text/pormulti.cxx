@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-03 11:42:00 $
+ *  last change: $Author: fme $ $Date: 2002-12-10 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ void SwMultiPortion::ActualizeTabulator()
  * --------------------------------------------------*/
 
 SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
-    xub_StrLen nEnd ) : SwMultiPortion( nEnd )
+    xub_StrLen nEnd, sal_Bool bRTL ) : SwMultiPortion( nEnd )
 {
     const SvxCharRotateItem* pRot = (SvxCharRotateItem*)rCreate.pItem;
     if( !pRot )
@@ -303,7 +303,15 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
         }
     }
     if( pRot )
-        SetDirection( pRot->IsBottomToTop() ? 1 : 3 );
+    {
+        sal_uInt8 nDir;
+        if ( bRTL )
+            nDir = pRot->IsBottomToTop() ? 3 : 1;
+        else
+            nDir = pRot->IsBottomToTop() ? 1 : 3;
+
+        SetDirection( nDir );
+    }
 }
 
 #ifdef BIDI
@@ -1731,8 +1739,16 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         }
 
 #ifdef BIDI
+        if ( rMulti.IsBidi() )
+        {
+            // we do not allow any rotation inside a bidi portion
+            SwFont* pFnt = GetInfo().GetFont();
+            pFnt->SetVertical( 0, GetInfo().GetTxtFrm()->IsVertical() );
+        }
+
         if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
         {
+            // but we do allow nested bidi portions
             ASSERT( rMulti.IsBidi(), "Only nesting of bidi portions is allowed" )
             PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor, &rMulti );
         }
