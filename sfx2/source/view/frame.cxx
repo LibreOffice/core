@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:02:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -1593,7 +1596,7 @@ void SfxFrame::Resize()
         {
             SfxWorkWindow *pWork = GetWorkWindow_Impl();
             SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell()->GetIPClient();
-            if ( pClient )
+            if ( pClient && pClient->GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
             {
                 uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
                 uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
