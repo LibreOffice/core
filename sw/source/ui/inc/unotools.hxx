@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:32:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,9 @@
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
 #endif
-
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 /* -----------------09.06.99 14:36-------------------
  *
@@ -172,7 +174,7 @@ public:
 #define EX_SHOW_BUSINESS_CARDS  0x02
 
 class SwView;
-class SwOneExampleFrame
+class SW_DLLPUBLIC SwOneExampleFrame
 {
     STAR_REFERENCE( awt::XControl )         _xControl;
     STAR_REFERENCE( frame::XModel )         _xModel;
@@ -196,11 +198,12 @@ class SwOneExampleFrame
 
     static  sal_Bool    bShowServiceNotAvailableMessage;
 
-    DECL_LINK( TimeoutHdl, Timer* );
-    DECL_LINK( PopupHdl, Menu* );
+    SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer* );
+    SW_DLLPRIVATE DECL_LINK( PopupHdl, Menu* );
 
-    void    CreateControl();
-    void    DisposeControl();
+    SW_DLLPRIVATE void  CreateControl();
+    SW_DLLPRIVATE void  DisposeControl();
+
 public:
     SwOneExampleFrame(Window& rWin,
                     sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,
