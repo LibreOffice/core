@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
+ *  last change: $Author: gt $ $Date: 2001-02-16 13:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,8 +596,7 @@ void OutlineBuffer::Reset( ScOutlineArray *pOArray )
 INT32   FilterProgressBar::nInstances = 0;
 
 
-FilterProgressBar::FilterProgressBar( SvStream& rStream ) :
-    pStr( &rStream )
+FilterProgressBar::FilterProgressBar( SvStream& rStream ) : pStr( &rStream ), pXIStr( NULL )
 {
     ULONG nOldPos = rStream.Tell();
     rStream.Seek( STREAM_SEEK_TO_END );
@@ -607,8 +606,7 @@ FilterProgressBar::FilterProgressBar( SvStream& rStream ) :
 }
 
 
-FilterProgressBar::FilterProgressBar( XclImpStream& rStream ) :
-    pXIStr( &rStream )
+FilterProgressBar::FilterProgressBar( XclImpStream& rStream ) : pStr( NULL ), pXIStr( &rStream )
 {
     Init( rStream.GetStreamPos(), rStream.GetStreamLen() );
 }
