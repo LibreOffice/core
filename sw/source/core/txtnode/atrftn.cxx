@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrftn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:33:26 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,11 @@ void SwTxtFtn::DelFrms()
                     delete pFtn;
                     pFtn = pFoll;
                 }
-                pPage->UpdateFtnNum();
+
+                // #i20556# During hiding of a section, the connection
+                // to the layout is already lost. pPage may be 0:
+                if ( pPage )
+                    pPage->UpdateFtnNum();
             }
         }
     }
