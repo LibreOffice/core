@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
+#ifndef _BGFX_POINT_B2IPOINT_HXX
+#include <basegfx/point/b2ipoint.hxx>
+#endif
+
 namespace basegfx
 {
     // predeclaration
@@ -110,6 +114,15 @@ namespace basegfx
             The 2D Point which will be copied.
         */
         B2DPoint(const B2DPoint& rPoint)
+        :   B2DTuple(rPoint)
+        {}
+
+        /** Create a copy of a 2D Point
+
+            @param rPoint
+            The 2D Point which will be copied.
+        */
+        B2DPoint(const ::basegfx::B2IPoint& rPoint)
         :   B2DTuple(rPoint)
         {}
 
@@ -168,7 +181,6 @@ namespace basegfx
         matrix are used.
     */
     B2DPoint operator*( const B2DHomMatrix& rMat, const B2DPoint& rPoint );
-
 } // end of namespace basegfx
 
 #endif /* _BGFX_POINT_B2DPOINT_HXX */
