@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:32:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
     { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
-    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_PA_CATEGORIES       },
     { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },
     { XML_NAMESPACE_CHART,  XML_FLOOR,                  XML_TOK_PA_FLOOR            },
     { XML_NAMESPACE_DR3D,   XML_LIGHT,                  XML_TOK_PA_LIGHT_SOURCE     },
@@ -170,6 +169,14 @@ static __FAR_DATA SvXMLTokenMapEntry aSeriesElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aAxisElemTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
+    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
+    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
+    XML_TOKEN_MAP_END
+};
+
 // ----------------------------------------
 // attribute maps
 // ----------------------------------------
@@ -180,7 +187,6 @@ static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH         },
     { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT        },
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
-    { XML_NAMESPACE_CHART,  XML_ADD_IN_NAME,            XML_TOK_CHART_ADDIN_NAME    },
     { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
     { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
     XML_TOKEN_MAP_END
@@ -226,8 +232,8 @@ static __FAR_DATA SvXMLTokenMapEntry aAutoStyleAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE,  XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
-    { XML_NAMESPACE_TABLE,  XML_VALUE,                  XML_TOK_CELL_VALUE          },
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
+    { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE          },
     XML_TOKEN_MAP_END
 };
 
@@ -251,6 +257,7 @@ SchXMLImportHelper::SchXMLImportHelper() :
         mpChartElemTokenMap( 0 ),
         mpPlotAreaElemTokenMap( 0 ),
         mpSeriesElemTokenMap( 0 ),
+        mpAxisElemTokenMap( 0 ),
 
         mpChartAttrTokenMap( 0 ),
         mpPlotAreaAttrTokenMap( 0 ),
@@ -275,6 +282,8 @@ SchXMLImportHelper::~SchXMLImportHelper()
         delete mpPlotAreaElemTokenMap;
     if( mpSeriesElemTokenMap )
         delete mpSeriesElemTokenMap;
+    if( mpAxisElemTokenMap )
+        delete mpAxisElemTokenMap;
 
     if( mpChartAttrTokenMap )
         delete mpChartAttrTokenMap;
@@ -352,6 +361,13 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     if( ! mpSeriesElemTokenMap )
         mpSeriesElemTokenMap = new SvXMLTokenMap( aSeriesElemTokenMap );
     return *mpSeriesElemTokenMap;
+}
+
+const SvXMLTokenMap& SchXMLImportHelper::GetAxisElemTokenMap()
+{
+    if( ! mpAxisElemTokenMap )
+        mpAxisElemTokenMap = new SvXMLTokenMap( aAxisElemTokenMap );
+    return *mpAxisElemTokenMap;
 }
 
 // ----------------------------------------
@@ -610,7 +626,7 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
 
 uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLImporter" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -633,7 +649,7 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno
 
 uno::Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLStylesImporter" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisStylesImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -654,7 +670,7 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(co
 
 uno::Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLContentImporter" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisContentImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -675,7 +691,7 @@ uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(c
 
 uno::Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLMetaImporter" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLOasisMetaImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
