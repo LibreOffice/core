@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-07-09 12:55:25 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
+
+#include <classes/wildcard.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -164,13 +166,15 @@ namespace framework{
 #define SUBLIST_DETECTSERVICES                      DECLARE_ASCII("DetectServices"                                  )
 #define SUBLIST_FRAMELOADERS                        DECLARE_ASCII("FrameLoaders"                                    )
 #define SUBLIST_CONTENTHANDLERS                     DECLARE_ASCII("ContentHandlers"                                 )
+#define SUBLIST_PROTOCOLHANDLERS                    DECLARE_ASCII("ProtocolHandlers"                                )
 #define SUBLIST_DEFAULTS                            DECLARE_ASCII("Defaults"                                        )
 
-#define TEMPLATE_TYPE                               DECLARE_ASCII("Type"                                            )
-#define TEMPLATE_FILTER                             DECLARE_ASCII("Filter"                                          )
-#define TEMPLATE_DETECTSERVICE                      DECLARE_ASCII("DetectService"                                   )
-#define TEMPLATE_FRAMELOADER                        DECLARE_ASCII("FrameLoader"                                     )
-#define TEMPLATE_CONTENTHANDLER                     DECLARE_ASCII("ContentHandler"                                  )
+#define TEMPLATENAME_TYPE                           DECLARE_ASCII("Type"                                            )
+#define TEMPLATENAME_FILTER                         DECLARE_ASCII("Filter"                                          )
+#define TEMPLATENAME_DETECTSERVICE                  DECLARE_ASCII("DetectService"                                   )
+#define TEMPLATENAME_FRAMELOADER                    DECLARE_ASCII("FrameLoader"                                     )
+#define TEMPLATENAME_CONTENTHANDLER                 DECLARE_ASCII("ContentHandler"                                  )
+#define TEMPLATENAME_PROTOCOLHANDLER                DECLARE_ASCII("ProtocolHandler"                                 )
 
 //*****************************************************************************************************************
 // These defines declare all supported names of configuration key names.
@@ -197,6 +201,7 @@ namespace framework{
 #define SUBKEY_DEFAULTDETECTOR                      DECLARE_ASCII("DetectService"                                   )
 #define SUBKEY_GENERICLOADER                        DECLARE_ASCII("FrameLoader"                                     )
 #define SUBKEY_DATA                                 DECLARE_ASCII("Data"                                            )
+#define SUBKEY_PROTOCOLS                            DECLARE_ASCII("Protocols"                                       )
 
 //*****************************************************************************************************************
 // These defines declare all supported property names for our name container interface.
@@ -220,39 +225,47 @@ namespace framework{
 #define PROPERTY_TEMPLATENAME                       DECLARE_ASCII("TemplateName"                                    )
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 #define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
+#define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )
 
 //*****************************************************************************************************************
 // These values specify count of supported properties at our NameContainer interface!
 // Attention: It's not the count of properties of a type, filter ... written in configuration.
 //            That value is named as SUBKEYCOUNT_...! See there for further informations.
 //*****************************************************************************************************************
+/*
 #define PROPCOUNT_TYPE                              8
 #define PROPCOUNT_FILTER                            10
 #define PROPCOUNT_DETECTOR                          1
 #define PROPCOUNT_LOADER                            3
 #define PROPCOUNT_CONTENTHANDLER                    1
-
+#define PROPCOUNT_PROTOCOLHANDLER                   1
+*/
 //*****************************************************************************************************************
 // These values specify count of properties of every configuration item.
 // We support different versions and so we must handle different counts of type- and filter-properties.
 // Attention: Look for different values on PROPCOUNT_... and SUBKEYCOUNT_...!
 //*****************************************************************************************************************
+/*
 #define SUBKEYCOUNT_TYPE_VERSION_1                  7
 #define SUBKEYCOUNT_TYPE_VERSION_2                  SUBKEYCOUNT_TYPE_VERSION_1
 #define SUBKEYCOUNT_TYPE_VERSION_3                  2
 #define SUBKEYCOUNT_TYPE_VERSION_4                  SUBKEYCOUNT_TYPE_VERSION_3
 #define SUBKEYCOUNT_TYPE_VERSION_5                  SUBKEYCOUNT_TYPE_VERSION_3
 #define SUBKEYCOUNT_TYPE_VERSION_6                  SUBKEYCOUNT_TYPE_VERSION_3
+#define SUBKEYCOUNT_TYPE_VERSION_7                  SUBKEYCOUNT_TYPE_VERSION_3
 #define SUBKEYCOUNT_FILTER_VERSION_1                9
 #define SUBKEYCOUNT_FILTER_VERSION_2                10
 #define SUBKEYCOUNT_FILTER_VERSION_3                3
 #define SUBKEYCOUNT_FILTER_VERSION_4                SUBKEYCOUNT_FILTER_VERSION_3
 #define SUBKEYCOUNT_FILTER_VERSION_5                SUBKEYCOUNT_FILTER_VERSION_3
 #define SUBKEYCOUNT_FILTER_VERSION_6                SUBKEYCOUNT_FILTER_VERSION_3
+#define SUBKEYCOUNT_FILTER_VERSION_7                SUBKEYCOUNT_FILTER_VERSION_3
 #define SUBKEYCOUNT_DETECTOR                        1
 #define SUBKEYCOUNT_LOADER                          2
 #define SUBKEYCOUNT_CONTENTHANDLER                  1
-
+#define SUBKEYCOUNT_PROTOCOLHANDLER                 1
+*/
+/*
 #define CFGPROPERTY_NODEPATH                        DECLARE_ASCII("nodepath"                                        )   // describe path of cfg entry
 #define CFGPROPERTY_LAZYWRITE                       DECLARE_ASCII("lazywrite"                                       )   // true->async. update; false->sync. update
 #define CFGPROPERTY_DEPTH                           DECLARE_ASCII("depth"                                           )   // depth of view
@@ -262,7 +275,7 @@ namespace framework{
 #define CFGPROPERTY_SERVERTYPE                      DECLARE_ASCII("servertype"                                      )   // specify type of used configuration (fatoffice, network, webtop)
 #define CFGPROPERTY_SOURCEPATH                      DECLARE_ASCII("sourcepath"                                      )   // specify path to "share/config/registry" files
 #define CFGPROPERTY_UPDATEPATH                      DECLARE_ASCII("updatepath"                                      )   // specify path to "user/config/registry" files
-
+*/
 //_________________________________________________________________________________________________________________
 //  exported definitions
 //_________________________________________________________________________________________________________________
@@ -548,7 +561,7 @@ struct Loader
 };
 
 //*****************************************************************************************************************
-// Programmer can register his own services to handle a FileType.
+// Programmer can register his own services to handle a FileType and intercept dispatches.
 // Don't forget: It's not a FrameLoader - it's a ContentHandler! (normaly without any UI)
 //*****************************************************************************************************************
 struct ContentHandler
@@ -592,125 +605,101 @@ struct ContentHandler
 };
 
 //*****************************************************************************************************************
-// This struct is used to collect informations about added, changed or removed cache entries.
+// Programmer can register his own services to handle different protocols and intercept dispatches.
+// Don't forget: It doesn't mean "handling of documents" ... these services could handle protocols ...
+// e.g. "mailto:*", "file://*"
 //*****************************************************************************************************************
-class ModifiedList
+struct ProtocolHandler
 {
+    //-------------------------------------------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------------------------------------------
     public:
-        //---------------------------------------------------------------------------------------------------------
-        inline void append( const ::rtl::OUString& sName, EModifyState eState )
+
+        inline                   ProtocolHandler(                              ) { impl_clear();               }
+        inline                   ProtocolHandler( const ProtocolHandler& rCopy ) { impl_copy( rCopy );         }
+        inline                  ~ProtocolHandler(                              ) { impl_clear();               }
+        inline ProtocolHandler&  operator=      ( const ProtocolHandler& rCopy ) { return impl_copy( rCopy );  }
+        inline void              free           (                              ) { impl_clear();               }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        inline void impl_clear()
         {
-            switch( eState )
-            {
-                case E_ADDED   :  lAddedItems.push_back  ( sName );
-                                  break;
-                case E_CHANGED :  lChangedItems.push_back( sName );
-                                  break;
-                case E_REMOVED :  lRemovedItems.push_back( sName );
-                                  break;
-            }
+            sName = ::rtl::OUString();
+            lProtocols.free();
         }
 
+        inline ProtocolHandler& impl_copy( const ProtocolHandler& rCopy )
+        {
+            sName       = rCopy.sName       ;
+            lProtocols  = rCopy.lProtocols  ;
+            return (*this);
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        ::rtl::OUString     sName       ;
+        StringList          lProtocols  ;
+};
+
+//*****************************************************************************************************************
+// We need different hash maps for different tables of our configuration management.
+// Follow maps convert <names> to <properties> of type, filter, detector, loader ...
+// and could be used in a generic way
+//*****************************************************************************************************************
+template< class HashType >
+class SetNodeHash : public ::std::hash_map< ::rtl::OUString                    ,
+                                            HashType                           ,
+                                            StringHashFunction                 ,
+                                            ::std::equal_to< ::rtl::OUString > >
+{
+    //-------------------------------------------------------------------------------------------------------------
+    // interface
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        //---------------------------------------------------------------------------------------------------------
+        // The only way to free ALL memory realy!
         //---------------------------------------------------------------------------------------------------------
         inline void free()
         {
+            SetNodeHash().swap( *this );
             lAddedItems.free  ();
             lChangedItems.free();
             lRemovedItems.free();
         }
 
+        //---------------------------------------------------------------------------------------------------------
+        // Append changed, added or removed items to special lists
+        // Neccessary for saving changes
+        //---------------------------------------------------------------------------------------------------------
+        inline void appendChange( const ::rtl::OUString& sItemName ,
+                                        EModifyState     eState    )
+        {
+            switch( eState )
+            {
+                case E_ADDED   :  lAddedItems.push_back  ( sItemName );
+                                    break;
+                case E_CHANGED :  lChangedItems.push_back( sItemName );
+                                    break;
+                case E_REMOVED :  lRemovedItems.push_back( sItemName );
+                                    break;
+            }
+}
+
+    //-------------------------------------------------------------------------------------------------------------
+    // member
+    //-------------------------------------------------------------------------------------------------------------
     public:
         StringList  lAddedItems    ;
         StringList  lChangedItems  ;
         StringList  lRemovedItems  ;
-};
-
-//*****************************************************************************************************************
-// We need different hash maps for different tables of our configuration management.
-// Follow maps convert <names> to <properties> of type, filter, detector, loader
-//*****************************************************************************************************************
-class FileTypeHash  :   public  ::std::hash_map<    ::rtl::OUString                     ,
-                                                    FileType                            ,
-                                                    StringHashFunction                  ,
-                                                    ::std::equal_to< ::rtl::OUString >  >
-{
-    public:
-        inline void free()
-        {
-            FileTypeHash().swap( *this );
-            lModifiedTypes.free();
-        }
-
-    public:
-        ModifiedList    lModifiedTypes;
-};
-
-//*****************************************************************************************************************
-class FilterHash    :   public  ::std::hash_map<    ::rtl::OUString                     ,
-                                                    Filter                              ,
-                                                    StringHashFunction                  ,
-                                                    ::std::equal_to< ::rtl::OUString >  >
-{
-    public:
-        inline void free()
-        {
-            FilterHash().swap( *this );
-            lModifiedFilters.free();
-        }
-
-    public:
-        ModifiedList    lModifiedFilters;
-};
-
-//*****************************************************************************************************************
-class DetectorHash  :   public  ::std::hash_map<    ::rtl::OUString                     ,
-                                                    Detector                            ,
-                                                    StringHashFunction                  ,
-                                                    ::std::equal_to< ::rtl::OUString >  >
-{
-    public:
-        inline void free()
-        {
-            DetectorHash().swap( *this );
-            lModifiedDetectors.free();
-        }
-
-    public:
-        ModifiedList    lModifiedDetectors;
-};
-
-//*****************************************************************************************************************
-class LoaderHash    :   public  ::std::hash_map<    ::rtl::OUString                     ,
-                                                    Loader                              ,
-                                                    StringHashFunction                  ,
-                                                    ::std::equal_to< ::rtl::OUString >  >
-{
-    public:
-        inline void free()
-        {
-            LoaderHash().swap( *this );
-            lModifiedLoaders.free();
-        }
-
-    public:
-        ModifiedList    lModifiedLoaders;
-};
-
-//*****************************************************************************************************************
-class ContentHandlerHash    :   public  ::std::hash_map<   ::rtl::OUString                      ,
-                                                            ContentHandler                      ,
-                                                            StringHashFunction                  ,
-                                                            ::std::equal_to< ::rtl::OUString >  >
-{
-    public:
-        inline void free()
-        {
-            ContentHandlerHash().swap( *this );
-            lModifiedHandlers.free();
-        }
-
-    public:
-        ModifiedList    lModifiedHandlers;
 };
 
 //*****************************************************************************************************************
@@ -724,19 +713,61 @@ class PerformanceHash   :   public  ::std::hash_map<    ::rtl::OUString         
                                                         ::std::equal_to< ::rtl::OUString >  >
 {
     public:
+        //---------------------------------------------------------------------------------------------------------
+        //  try to free all used memory REALY!
+        //---------------------------------------------------------------------------------------------------------
         inline void free()
         {
             PerformanceHash().swap( *this );
         }
+
+        //---------------------------------------------------------------------------------------------------------
+        //  normaly a complete string must match our hash key values ...
+        //  But sometimes we need a search by using these key values as pattern!
+        //  The in/out parameter "pStepper" is used to return a pointer to found element in hash ...
+        //  and could be used for further searches again, which should be started at next element!
+        //  We stop search at the end of hash. You can start it again by setting it to the begin by himself.
+        //---------------------------------------------------------------------------------------------------------
+        inline sal_Bool findPatternKey( const ::rtl::OUString& sSearchValue ,
+                                              const_iterator&  pStepper     )
+        {
+            sal_Bool bFound = sal_False;
+
+            // If this is the forst call - start search on first element.
+            // Otherwise start search on further elements!
+            if( pStepper != begin() )
+            {
+                ++pStepper;
+            }
+
+            while(
+                    ( pStepper != end()     )   &&
+                    ( bFound   == sal_False )
+                )
+            {
+                bFound = Wildcard::match( sSearchValue, pStepper->first );
+                // If element was found - break loop by setting right return value
+                // and don't change "pStepper". He must point to found element!
+                // Otherwise step to next one.
+                if( bFound == sal_False )
+                    ++pStepper;
+            }
+            return bFound;
+        }
 };
 
 //*****************************************************************************************************************
-typedef StringHash  PreferredHash;
-typedef StringList  OrderList    ;
+// Define easy usable types
+//*****************************************************************************************************************
+typedef SetNodeHash< FileType >                                     FileTypeHash                ;
+typedef SetNodeHash< Filter >                                       FilterHash                  ;
+typedef SetNodeHash< Detector >                                     DetectorHash                ;
+typedef SetNodeHash< Loader >                                       LoaderHash                  ;
+typedef SetNodeHash< ContentHandler >                               ContentHandlerHash          ;
+typedef SetNodeHash< ProtocolHandler >                              ProtocolHandlerHash         ;
+typedef StringHash                                                  PreferredHash               ;
+typedef StringList                                                  OrderList                   ;
 
-//*****************************************************************************************************************
-// Defines "pointers" to items of our hash maps.
-//*****************************************************************************************************************
 typedef StringList::iterator                                        StringListIterator          ;
 typedef StringList::const_iterator                                  ConstStringListIterator     ;
 typedef StringHash::const_iterator                                  ConstStringHashIterator     ;
@@ -745,10 +776,13 @@ typedef FilterHash::const_iterator                                  ConstFilterI
 typedef DetectorHash::const_iterator                                ConstDetectorIterator       ;
 typedef LoaderHash::const_iterator                                  ConstLoaderIterator         ;
 typedef ContentHandlerHash::const_iterator                          ConstContentHandlerIterator ;
+typedef ProtocolHandlerHash::const_iterator                         ConstProtocolHandlerIterator;
 typedef PerformanceHash::const_iterator                             ConstPerformanceIterator    ;
 typedef PreferredHash::const_iterator                               ConstPreferredIterator      ;
+
 typedef CheckedIterator< StringList >                               CheckedStringListIterator   ;
 typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator         ;
+typedef CheckedIterator< PerformanceHash >                          CheckedPerformanceIterator  ;
 
 //*****************************************************************************************************************
 // Use private static data container to hold all values of configuration!
@@ -756,26 +790,29 @@ typedef CheckedIterator< FileTypeHash >                             CheckedTypeI
 class DataContainer
 {
     public:
-        void free();
-        void mergeData( const DataContainer& rData );
+        void free                   (                                                                   );
+        void mergeData              (   const   DataContainer&      rData                               );
 
         void addType                (   const   FileType&           aType       , sal_Bool bSetModified );
         void addFilter              (   const   Filter&             aFilter     , sal_Bool bSetModified );
         void addDetector            (   const   Detector&           aDetector   , sal_Bool bSetModified );
         void addLoader              (   const   Loader&             aLoader     , sal_Bool bSetModified );
         void addContentHandler      (   const   ContentHandler&     aHandler    , sal_Bool bSetModified );
+        void addProtocolHandler     (   const   ProtocolHandler&    aHandler    , sal_Bool bSetModified );
 
         void replaceType            (   const   FileType&           aType       , sal_Bool bSetModified );
         void replaceFilter          (   const   Filter&             aFilter     , sal_Bool bSetModified );
         void replaceDetector        (   const   Detector&           aDetector   , sal_Bool bSetModified );
         void replaceLoader          (   const   Loader&             aLoader     , sal_Bool bSetModified );
         void replaceContentHandler  (   const   ContentHandler&     aHandler    , sal_Bool bSetModified );
+        void replaceProtocolHandler (   const   ProtocolHandler&    aHandler    , sal_Bool bSetModified );
 
         void removeType             (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeFilter           (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeDetector         (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeLoader           (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeContentHandler   (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
+        void removeProtocolHandler  (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
 
         static void             convertStringSequenceToVector              ( const css::uno::Sequence< ::rtl::OUString >&              lSource         ,
                                                                                    StringList&                                         lDestination    );
@@ -793,6 +830,8 @@ class DataContainer
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
                                                                              const ::rtl::OUString&                                    sCurrentLocale  );
         static void             convertContentHandlerToPropertySequence    ( const ContentHandler&                                     aSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void             convertProtocolHandlerToPropertySequence   ( const ProtocolHandler&                                    aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
         static void             convertPropertySequenceToFilter            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    Filter&                                             aDestination    ,
@@ -820,11 +859,13 @@ class DataContainer
         FilterHash              m_aFilterCache              ;     /// hold all informations about registered filters
         DetectorHash            m_aDetectorCache            ;     /// hold all informations about registered detect services
         LoaderHash              m_aLoaderCache              ;     /// hold all informations about registered loader services
-        ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all informations about registered handler services
+        ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all informations about registered content handler services
+        ProtocolHandlerHash     m_aProtocolHandlerCache     ;     /// hold all informations about registered protocol handler services
         PerformanceHash         m_aFastFilterCache          ;     /// hold all registered filter for a special file type
         PerformanceHash         m_aFastDetectorCache        ;     /// hold all registered detect services for a special file type
         PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
         PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
+        PerformanceHash         m_aFastProtocolHandlerCache ;     /// hold all registered protocol handler services for a special protocol pattern
         PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for this ~
         Detector                m_aDefaultDetector          ;     /// informations about our default deep detection service
         Loader                  m_aGenericLoader            ;     /// informations about our default frame loader
@@ -832,32 +873,25 @@ class DataContainer
         sal_Bool                m_bIsModified               ;     /// Was cache modified since last flush()?
 };
 
-//*****************************************************************************************************************
-// We use config item mechanism to read/write values from/to configuration.
-// This implementation could be used to handle standard AND additional filter configurations in the same way.
-// We set a data container pointer for filling or reading ... this class use it.
-// After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
-// After successfuly calling of write() all values of given data container are flushed to our configuration.
-//*****************************************************************************************************************
+/*-************************************************************************************************************//**
+    @short          capsulate configuration access for fiter configuration
+    @descr          We use the ConfigItem mechanism to read/write values from/to configuration.
+                    This implementation could be used to handle standard AND additional filter configurations in the same way.
+                    We set a data container pointer for filling or reading ... this class use it temp.
+                    After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
+                    After successfuly calling of write() all values of given data container are flushed to our configuration.
 
-enum ETemplateType
-{
-    E_TEMPLATE_TYPE              ,
-    E_TEMPLATE_FILTER            ,
-    E_TEMPLATE_DETECTSERVICE     ,
-    E_TEMPLATE_FRAMELOADER       ,
-    E_TEMPLATE_CONTENTHANDLER
-};
+    @implements     -
+    @base           ConfigItem
 
-#ifdef ENABLE_TIMEMEASURE
-//_________________________________________________________________________________________________________________
-class FilterCFGAccess   :   private DBGTimeMeasureBase // We need some informations about calling of baseclass "ConfigItem"! :-)
-                        ,   public  ::utl::ConfigItem
-#else
-//_________________________________________________________________________________________________________________
-class FilterCFGAccess   :   public  ::utl::ConfigItem
-#endif
+    @devstatus      ready to use
+    @threadsafe     no
+*//*-*************************************************************************************************************/
+class FilterCFGAccess : public ::utl::ConfigItem
 {
+    //-------------------------------------------------------------------------------------------------------------
+    //  interface
+    //-------------------------------------------------------------------------------------------------------------
     public:
                                     FilterCFGAccess ( const ::rtl::OUString& sPath                                  ,
                                                             sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ,
@@ -865,10 +899,6 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
         virtual                     ~FilterCFGAccess(                                                               );
         void                        read            (       DataContainer&   rData                                  ); // read values from configuration into given struct
         void                        write           (       DataContainer&   rData                                  ); // write values from given struct to configuration
-        static   ::rtl::OUString    encodeSetName   ( const ::rtl::OUString& sName                                  ,
-                                                            ETemplateType    eType                                  ); // <name>            => <entry>["<name>"]
-        static   ::rtl::OUString    decodeSetName   ( const ::rtl::OUString& sName                                  ,
-                                                            ETemplateType    eType                                  ); // <entry>["<name>"] => <name>
         static   ::rtl::OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
         static   void               decodeTypeData  ( const ::rtl::OUString& sData                                  ,
                                                             FileType&        aType                                  );
@@ -878,24 +908,52 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
         static   ::rtl::OUString    encodeStringList( const StringList&      lList                                  ); // build own formated string of StringList
         static   StringList         decodeStringList( const ::rtl::OUString& sValue                                 );
 
+    //-------------------------------------------------------------------------------------------------------------
+    //  internal helper
+    //-------------------------------------------------------------------------------------------------------------
     private:
-        void     impl_loadTypes             ( DataContainer& rData );
-        void     impl_loadFilters           ( DataContainer& rData );
-        void     impl_loadDetectors         ( DataContainer& rData );
-        void     impl_loadLoaders           ( DataContainer& rData );
-        void     impl_loadContentHandlers   ( DataContainer& rData );
-        void     impl_loadDefaults          ( DataContainer& rData );
-        void     impl_saveTypes             ( DataContainer& rData );
-        void     impl_saveFilters           ( DataContainer& rData );
-        void     impl_saveDetectors         ( DataContainer& rData );
-        void     impl_saveLoaders           ( DataContainer& rData );
-        void     impl_saveContentHandlers   ( DataContainer& rData );
+        void impl_initKeyCounts        (                                            );    // set right key counts, which are used at reading/writing of set node properties
+        void impl_removeNodes          (       StringList&          rChangesList    ,     // helper to remove list of set nodes
+                                         const ::rtl::OUString&     sTemplateType   ,
+                                         const ::rtl::OUString&     sSetName        );
 
+        void impl_loadTypes            ( DataContainer&             rData           );    // helper to load configuration parts
+        void impl_loadFilters          ( DataContainer&             rData           );
+        void impl_loadDetectors        ( DataContainer&             rData           );
+        void impl_loadLoaders          ( DataContainer&             rData           );
+        void impl_loadContentHandlers  ( DataContainer&             rData           );
+        void impl_loadProtocolHandlers ( DataContainer&             rData           );
+        void impl_loadDefaults         ( DataContainer&             rData           );
+
+        void impl_saveTypes            ( DataContainer&             rData           );    // helper to save configuration parts
+        void impl_saveFilters          ( DataContainer&             rData           );
+        void impl_saveDetectors        ( DataContainer&             rData           );
+        void impl_saveLoaders          ( DataContainer&             rData           );
+        void impl_saveContentHandlers  ( DataContainer&             rData           );
+        void impl_saveProtocolHandlers ( DataContainer&             rData           );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  debug checks
+    //-------------------------------------------------------------------------------------------------------------
     private:
-        EFilterPackage   m_ePackage         ; // obsolete? ...
-        sal_Int32        m_nVersion         ; // file format version of configuration! (neccessary for "xml2xcd" transformation!)
-        sal_uInt32       m_nKeyCountTypes   ;
-        sal_uInt32       m_nKeyCountFilters ;
+        static sal_Bool implcp_ctor ( const ::rtl::OUString& sPath    ,     // methods to check incoming parameter on our interface methods!
+                                            sal_Int32        nVersion ,
+                                            sal_Int16        nMode    );
+        static sal_Bool implcp_read ( const DataContainer&   rData    );
+        static sal_Bool implcp_write( const DataContainer&   rData    );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  member
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+        EFilterPackage  m_ePackage                     ;   // ... not realy used yet! should split configuration in STANDARD and ADDITIONAL filter
+        sal_Int32       m_nVersion                     ;   // file format version of configuration! (neccessary for "xml2xcd" transformation!)
+        sal_Int32       m_nKeyCountTypes               ;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
+        sal_Int32       m_nKeyCountFilters             ;
+        sal_Int32       m_nKeyCountDetectors           ;
+        sal_Int32       m_nKeyCountLoaders             ;
+        sal_Int32       m_nKeyCountContentHandlers     ;
+        sal_Int32       m_nKeyCountProtocolHandlers    ;
 };
 
 }       //  namespace framework

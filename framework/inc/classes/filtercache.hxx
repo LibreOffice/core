@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: as $ $Date: 2001-07-06 13:21:46 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ class FilterCache   :   private ThreadHelpBase
         sal_Bool hasDetectors       () const;
         sal_Bool hasLoaders         () const;
         sal_Bool hasContentHandlers () const;
+        sal_Bool hasProtocolHandlers() const;
 
         /*-****************************************************************************************************//**
             @short      search routines to find items which match given parameter
@@ -261,6 +262,10 @@ class FilterCache   :   private ThreadHelpBase
                                                             CheckedStringListIterator&  aStartEntry         ,
                                                             ::rtl::OUString&            sResult             ) const;
 
+        sal_Bool searchProtocolHandler          (   const   ::rtl::OUString&            sProtocolURL        ,
+                                                            CheckedStringListIterator&  aStartEntry         ,
+                                                            ::rtl::OUString&            sResult             ) const;
+
         /*-****************************************************************************************************//**
             @short      get all properties of a cache entry by given name
             @descr      If you need additional informations about our internal cache values
@@ -280,6 +285,7 @@ class FilterCache   :   private ThreadHelpBase
         css::uno::Sequence< ::rtl::OUString >               getAllDetectorNames             () const;   // without default detector!
         css::uno::Sequence< ::rtl::OUString >               getAllLoaderNames               () const;   // without default loader!
         css::uno::Sequence< ::rtl::OUString >               getAllContentHandlerNames       () const;
+        css::uno::Sequence< ::rtl::OUString >               getAllProtocolHandlerNames      () const;
         css::uno::Sequence< ::rtl::OUString >               getAllDetectorNamesWithDefault  () const;   // default detector is last one!
         css::uno::Sequence< ::rtl::OUString >               getAllLoaderNamesWithDefault    () const;   // default loader is last one!
         ::rtl::OUString                                     getDefaultDetector              () const;
@@ -290,18 +296,21 @@ class FilterCache   :   private ThreadHelpBase
         css::uno::Sequence< css::beans::PropertyValue >     getDetectorProperties           (   const   ::rtl::OUString&    sName   ) const;
         css::uno::Sequence< css::beans::PropertyValue >     getLoaderProperties             (   const   ::rtl::OUString&    sName   ) const;
         css::uno::Sequence< css::beans::PropertyValue >     getContentHandlerProperties     (   const   ::rtl::OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getProtocolHandlerProperties    (   const   ::rtl::OUString&    sName   ) const;
 
         FileType                                            getType                         (   const   ::rtl::OUString&    sName   ) const;
         Filter                                              getFilter                       (   const   ::rtl::OUString&    sName   ) const;
         Detector                                            getDetector                     (   const   ::rtl::OUString&    sName   ) const;
         Loader                                              getLoader                       (   const   ::rtl::OUString&    sName   ) const;
         ContentHandler                                      getContentHandler               (   const   ::rtl::OUString&    sName   ) const;
+        ProtocolHandler                                     getProtocolHandler              (   const   ::rtl::OUString&    sName   ) const;
 
         sal_Bool                                            existsType                      (   const   ::rtl::OUString&    sName   ) const;
         sal_Bool                                            existsFilter                    (   const   ::rtl::OUString&    sName   ) const;
         sal_Bool                                            existsDetector                  (   const   ::rtl::OUString&    sName   ) const;
         sal_Bool                                            existsLoader                    (   const   ::rtl::OUString&    sName   ) const;
         sal_Bool                                            existsContentHandler            (   const   ::rtl::OUString&    sName   ) const;
+        sal_Bool                                            existsProtocolHandler           (   const   ::rtl::OUString&    sName   ) const;
 
         /*-****************************************************************************************************//**
             @short      support special query modes
@@ -462,21 +471,27 @@ class FilterCache   :   private ThreadHelpBase
         static sal_Bool implcp_searchContentHandlerForType          (   const   ::rtl::OUString&                                    sInternalTypeName   ,
                                                                         const   CheckedStringListIterator&                          aStartEntry         ,
                                                                         const   ::rtl::OUString&                                    sResult             );
+        static sal_Bool implcp_searchProtocolHandler                (   const   ::rtl::OUString&                                    sProtocolURL        ,
+                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
+                                                                        const   ::rtl::OUString&                                    sResult             );
         static sal_Bool implcp_getTypeProperties                    (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getFilterProperties                  (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getDetectorProperties                (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getLoaderProperties                  (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getContentHandlerProperties          (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getProtocolHandlerProperties         (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getType                              (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getFilter                            (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getDetector                          (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getLoader                            (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_getContentHandler                    (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getProtocolHandler                   (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_existsType                           (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_existsFilter                         (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_existsDetector                       (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_existsLoader                         (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_existsContentHandler                 (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_existsProtocolHandler                (   const   ::rtl::OUString&                                    sName               );
         static sal_Bool implcp_addFilter                            (   const   ::rtl::OUString&                                    sName               ,
                                                                         const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
         static sal_Bool implcp_replaceFilter                        (   const   ::rtl::OUString&                                    sName               ,
