@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-08 07:11:36 $
+ *  last change: $Author: vg $ $Date: 2001-11-14 18:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,10 +1497,12 @@ void OResultSet::fillRowData()
         // For other types we stick to the old behaviour of using
         // card:nsIAbCard.
         OSL_ENSURE(m_pStatement, "Cannot determine Parent Statement");
+        ::rtl::OUString aStr;
         if (xConnection->isLDAP())
-            eVector.push_back( new MQueryExpressionString(::rtl::OUString::createFromAscii("FirstName"), MQueryOp::Exists) );
+            aStr = ::rtl::OUString::createFromAscii("FirstName");
         else
-            eVector.push_back( new MQueryExpressionString(::rtl::OUString::createFromAscii("card:nsIAbCard"), MQueryOp::Exists) );
+            aStr = ::rtl::OUString::createFromAscii("card:nsIAbCard");
+        eVector.push_back( new MQueryExpressionString(aStr, MQueryOp::Exists) );
 
         queryExpression.setExpressions( eVector );
     }
