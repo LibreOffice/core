@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:28:27 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace dbaui
     public:
         OSqlEditUndoAct(OSqlEdit* pEdit) : OCommentUndoAction(STR_QUERY_UNDO_MODIFYSQLEDIT), m_pOwner(pEdit) { }
 
-        void SetOriginalText(const String& strText) { m_strNextText = strText; }
+        void SetOriginalText(const String& strText) { m_strNextText =strText; }
     };
 }
 #endif // DBAUI_UNDOSQLEDIT_HXX
