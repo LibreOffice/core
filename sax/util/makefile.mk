@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2001-08-31 13:59:45 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,13 +62,14 @@
 PRJ=..
 
 PRJNAME=sax
-TARGET=sax
+TARGET = sax.uno
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+DLLPRE =
 #-----------------------------------------------------------
 
 
