@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-24 17:46:33 $
+ *  last change: $Author: mtg $ $Date: 2001-11-14 17:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,8 +692,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0610 PARA_STYLELEVEL9 */             {MAP_CHAR_LEN("ParaStyleLevel9")},
 /* 0611 PARA_STYLESEPARATOR */          {MAP_CHAR_LEN("ParaStyleSeparator")},
 /* 0612 MACRO_LIBRARY */                {MAP_CHAR_LEN("MacroLibrary")},
-/* 0613 CELL_NAME */                    {MAP_CHAR_LEN("CellName")}
-
+/* 0613 CELL_NAME */                    {MAP_CHAR_LEN("CellName")},
+/* 0614 PARA_USER_DEFINED_ATTRIBUTES */ {MAP_CHAR_LEN("ParaUserDefinedAttributes")}
 };
 
 #ifndef PRODUCT
