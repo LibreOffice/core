@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CollectionView.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:39:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,31 +139,34 @@ ModalDialog DLG_COLLECTION_VIEW
 
     FixedLine FL_1
     {
-        Pos = MAP_APPFONT ( RELATED_CONTROLS , WIN_Y - 2*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT) ;
-        Size = MAP_APPFONT ( WIN_X - 2*RELATED_CONTROLS , FIXEDLINE_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 0 , WIN_Y - 2*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT) ;
+        Size = MAP_APPFONT ( WIN_X , FIXEDLINE_HEIGHT ) ;
     };
 
-    HelpButton PB_HELP
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( WIN_X - 2*UNRELATED_CONTROLS - RELATED_CONTROLS - 150, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
-    };
-    CancelButton PB_CANCEL
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - RELATED_CONTROLS - 100, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
-    };
     PushButton BTN_EXPLORERFILE_SAVE
     {
-        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - 50, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
+        Pos = MAP_APPFONT ( WIN_X - 2*UNRELATED_CONTROLS - RELATED_CONTROLS - 150, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
         Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
         DefButton = TRUE ;
         TabStop = TRUE ;
         Text [ de ] = "Speichern" ;
         Text [ en-US ] = "Save" ;
     };
+
+    CancelButton PB_CANCEL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( WIN_X - 2*UNRELATED_CONTROLS - 100, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
+    };
+
+    HelpButton PB_HELP
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - 50, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
+    };
+
 
     String STR_PATHNAME
     {
