@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:56:39 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ String STR_EVENT_OBJECT_SELECT
     Text[ chinese_simplified ] = "°´»÷¶ÔÏó";
     Text[ russian ] = "Âûáîğ îáúåêòà";
     Text[ polish ] = "Kliknij obiekt";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚ğ¸Ø¯¸‚·‚é";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì¸Ø¯¸";
     Text[ chinese_traditional ] = "¥Î·Æ¹««öÀ»ª«¥ó";
     Text[ arabic ] = "ÇáäŞÑ İæŞ ÇáßÇÆä";
     Text[ greek ] = "ÅğéëïãŞ áíôéêåéìİíïõ";
@@ -1031,7 +1031,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     TEXT [ English ] = "Bookmarks" ;
     Text [ dutch ] = "Tekstmarkeringen" ;
     Text [ english_us ] = "Bookmarks" ;
-    Text [ italian ] = "Segnalibri di testo" ;
+    Text [ italian ] = "Segnalibri" ;
     Text [ spanish ] = "Marcas de texto" ;
     Text [ french ] = "Repères de texte" ;
     Text [ swedish ] = "Bokmärken" ;
