@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:45:09 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     ,m_bFreeHandle(sal_False)
     ,m_pConnection(_pConnection)
     ,m_nDriverColumnCount(0)
+    ,m_bWasNull(sal_True)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
     osl_incrementInterlockedCount( &m_refCount );
@@ -282,8 +283,9 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     {
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_TINYINT,m_bWasNull,**this,&nVal,sizeof nVal);
 
-        if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-            return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
+        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
+        if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+            return sal_Int8((*aValueRangeIter).second[(sal_Int32)nVal]);
     }
     else
         m_bWasNull = sal_True;
@@ -389,8 +391,9 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
     {
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nVal,sizeof nVal);
 
-        if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-            return (*m_aValueRangeIter).second[(sal_Int32)nVal];
+        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
+        if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+            return (*aValueRangeIter).second[(sal_Int32)nVal];
     }
     else
         m_bWasNull = sal_True;
@@ -459,8 +462,9 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     {
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nVal,sizeof nVal);
 
-        if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-            return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
+        ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator   aValueRangeIter;
+        if ( !m_aValueRange.empty() && (aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+            return sal_Int16((*aValueRangeIter).second[(sal_Int32)nVal]);
     }
     else
         m_bWasNull = sal_True;
