@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-11 16:33:29 $
+ *  last change: $Author: sj $ $Date: 2002-11-19 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4129,9 +4129,11 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nBulletColor = rParaLevel.mnBulletColor;
     nTextOfs = rParaLevel.mnTextOfs;
     nBulletOfs = rParaLevel.mnBulletOfs;
-    ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, 0xffffffff, rCharLevel.mnFontHeight, NULL );
-    ImplGetNumberFormat( rManager, rNumberFormat, nLevel );
 
+    ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, 0xffffffff, rCharLevel.mnFontHeight, NULL );
+    if ( ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP ) && ( nBulletHeight > 0x7fff ) )
+        nBulletHeight = rCharLevel.mnFontHeight ? ((-((sal_Int16)nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
+    ImplGetNumberFormat( rManager, rNumberFormat, nLevel );
     switch ( rNumberFormat.GetNumberingType() )
     {
         case SVX_NUM_CHARS_UPPER_LETTER :
@@ -6099,18 +6101,19 @@ void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 
 void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
 {
-    if ( mpPortionList )
+    if ( nBulletRelSize > 0x7fff )      // a negative value is the absolute bullet height
     {
-        PPTPortionObj* pPortion = mpPortionList[ 0 ];
-        if ( pPortion )
+        sal_uInt16 nFontHeight = 0;
+        if ( mpPortionList )
         {
-            if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontHeight ) )
-            {
-                sal_uInt32 nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
-                if ( nFontHeight )
-                    nBulletRelSize = ( nBulletRelSize * pPortion->pCharSet->mnFontHeight ) / nFontHeight;
-            }
+            PPTPortionObj* pPortion = mpPortionList[ 0 ];
+            if ( pPortion && ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontHeight ) ) )
+                nFontHeight = pPortion->pCharSet->mnFontHeight;
         }
+        // if we do not have a hard attributed fontheight, the fontheight is taken from the style
+        if ( !nFontHeight )
+            nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
+        nBulletRelSize = nFontHeight ? ((-((sal_Int16)nBulletRelSize)) * 100 ) / nFontHeight : 100;
     }
 }
 
