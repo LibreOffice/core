@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-25 18:12:16 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * Es erfolgt ein SetBase() !
  *************************************************************************/
 SwFlyCntPortion::SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase,
-    long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, sal_Bool bQuick ) :
+    long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
     pContact( pFly ),
     bDraw( sal_False ),
     bMax( sal_False ),
@@ -349,15 +349,13 @@ SwFlyCntPortion::SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase,
 {
     ASSERT( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
     nLineLength = 1;
-    sal_uInt8 nFlags = SETBASE_ULSPACE | SETBASE_INIT;
-    if( bQuick )
-        nFlags |= SETBASE_QUICK;
+    nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
     SetBase( rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
     SetWhichPor( POR_FLYCNT );
 }
 SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
         const Point &rBase, long nLnAscent, long nLnDescent,
-        long nFlyAsc, long nFlyDesc, sal_Bool bQuick ) :
+        long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
     pContact( pDrawContact ),
     bDraw( sal_True ),
     bMax( sal_False ),
@@ -366,7 +364,7 @@ SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
     ASSERT( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );
     if( !pDrawContact->GetAnchor() )
     {
-        if( bQuick )
+        if( nFlags & SETBASE_QUICK )
         {
             Point aAnchorPos = pDrawContact->GetMaster()->GetAnchorPos();
             pDrawContact->ConnectToLayout();
@@ -376,9 +374,7 @@ SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
             pDrawContact->ConnectToLayout();
     }
     nLineLength = 1;
-    sal_uInt8 nFlags = SETBASE_ULSPACE | SETBASE_INIT;
-    if( bQuick )
-        nFlags |= SETBASE_QUICK;
+    nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
     SetBase( rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
     SetWhichPor( POR_FLYCNT );
 }
@@ -413,7 +409,6 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     //Die vertikale Position wird berechnet, die relative horizontale
     //Position ist stets 0.
 
-    Point aRelPos;
     SdrObject *pSdrObj;
     SwRect aBoundRect;
     long nOldWidth;
@@ -441,32 +436,34 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     aBoundRect.Width( aBoundRect.Width() + rLRSpace.GetRight() );
     aBoundRect.Top( aBoundRect.Top() - rULSpace.GetUpper() );
     aBoundRect.Height( aBoundRect.Height() + rULSpace.GetLower() );
-
+    SwTwips nBoundHeight = ( nFlags & SETBASE_ROTATE ) ?
+                            aBoundRect.Width() : aBoundRect.Height();
+    SwTwips nRelPos = 0;
     if ( eOri == VERT_NONE )
-        aRelPos.Y() = rVert.GetPos();
+        nRelPos = rVert.GetPos();
     else
     {
-        aRelPos.Y() = 0;
+        nRelPos = 0;
         if ( eOri == VERT_CENTER )
-            aRelPos.Y() -= aBoundRect.Height() /  2;
+            nRelPos -= nBoundHeight /  2;
         else if ( eOri == VERT_TOP )
-            aRelPos.Y() -= aBoundRect.Height();
+            nRelPos -= nBoundHeight;
         else if ( eOri == VERT_BOTTOM )
             ;
         else if ( eOri == VERT_CHAR_CENTER )
-            aRelPos.Y() -= ( aBoundRect.Height() + nLnAscent - nLnDescent ) / 2;
+            nRelPos -= ( nBoundHeight + nLnAscent - nLnDescent ) / 2;
         else if ( eOri == VERT_CHAR_TOP )
-            aRelPos.Y() -= nLnAscent;
+            nRelPos -= nLnAscent;
         else if ( eOri == VERT_CHAR_BOTTOM )
-            aRelPos.Y() += nLnDescent - aBoundRect.Height();
+            nRelPos += nLnDescent - nBoundHeight;
         else
         {
-            if( aBoundRect.Height() >= nFlyAsc + nFlyDesc )
+            if( nBoundHeight >= nFlyAsc + nFlyDesc )
             {
                 // wenn ich genauso gross bin wie die Zeile, brauche ich mich
                 // nicht an der Zeile nicht weiter ausrichten, ich lasse
                 // dann auch den max. Ascent der Zeile zunaechst unveraendert
-                aRelPos.Y() -= nFlyAsc;
+                nRelPos -= nFlyAsc;
                 if ( eOri == VERT_LINE_CENTER )
                     SetAlign( 2 );
                 else if ( eOri == VERT_LINE_TOP )
@@ -476,35 +473,53 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             }
             else if ( eOri == VERT_LINE_CENTER )
             {
-                aRelPos.Y() -= ( aBoundRect.Height() +nFlyAsc -nFlyDesc ) / 2;
+                nRelPos -= ( nBoundHeight +nFlyAsc -nFlyDesc ) / 2;
                 SetAlign( 2 );
             }
             else if ( eOri == VERT_LINE_TOP )
             {
-                aRelPos.Y() -= nFlyAsc;
+                nRelPos -= nFlyAsc;
                 SetAlign( 1 );
             }
             else if ( eOri == VERT_LINE_BOTTOM )
             {
-                aRelPos.Y() += nFlyDesc - aBoundRect.Height();
+                nRelPos += nFlyDesc - nBoundHeight;
                 SetAlign( 3 );
             }
         }
     }
 
-    if( nFlags & SETBASE_INIT && aRelPos.Y() < 0 && nFlyAsc < -aRelPos.Y() )
-        aBase.Y() -= nFlyAsc + aRelPos.Y();
+    if( nFlags & SETBASE_INIT && nRelPos < 0 && nFlyAsc < -nRelPos )
+    {
+        if( nFlags & SETBASE_ROTATE )
+            aBase.X() -= nFlyAsc + nRelPos;
+        else
+            aBase.Y() -= nFlyAsc + nRelPos;
+    }
 
+    Point aRelPos;
+    if( nFlags & SETBASE_ROTATE )
+    {
+        if( nFlags & SETBASE_REVERSE )
+            aRelPos.X() = -nRelPos;
+        else
+        {
+            aRelPos.X() = nRelPos;
+            aRelPos.Y() = -aBoundRect.Height();
+        }
+    }
+    else
+        aRelPos.Y() = nRelPos;
     if( bDraw )
     {
         if( !( nFlags & SETBASE_QUICK ) )
         {
-            if( rVert.GetPos() != aRelPos.Y() && eOri != VERT_NONE )
+            if( rVert.GetPos() != nRelPos && eOri != VERT_NONE )
             {
                 // Das aRelPos wird gepflegt, weil sonst SwDrawContact::_Changed
                 // auf die Idee kommen koennte, auf VERT_NONE umzuschalten.
                 SwFmtVertOrient aVert( rVert );
-                aVert.SetPos( aRelPos.Y() );
+                aVert.SetPos( nRelPos );
                 ((SwFrmFmt*)pFmt)->LockModify();
                 ((SwFrmFmt*)pFmt)->SetAttr( aVert );
                 ((SwFrmFmt*)pFmt)->UnlockModify();
@@ -517,10 +532,11 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     }
     else
     {
+        Point aRelAttr( 0, nRelPos );
         if ( !(nFlags & SETBASE_QUICK) && (aBase != GetFlyFrm()->GetRefPoint() ||
-                         aRelPos != GetFlyFrm()->GetCurRelPos()) )
+                         aRelAttr != GetFlyFrm()->GetCurRelPos()) )
         {
-            GetFlyFrm()->SetRefPoint( aBase, aRelPos );
+            GetFlyFrm()->SetRefPoint( aBase, aRelAttr, aRelPos );
             if( nOldWidth != GetFlyFrm()->Frm().Width() )
             {
                 aBoundRect = GetFlyFrm()->Frm();
@@ -534,19 +550,22 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
             "SwFlyCntPortion::SetBase: flyfrm has an invalid height" );
     }
     aRef = aBase;
-    SvLSize( aBoundRect.SSize() );
+    if( nFlags & SETBASE_ROTATE )
+        SvXSize( aBoundRect.SSize() );
+    else
+        SvLSize( aBoundRect.SSize() );
     if( Height() )
     {
-        if ( aRelPos.Y() < 0 )
+        if ( nRelPos < 0 )
         {
-            nAscent = Abs( int( aRelPos.Y() ) );
+            nAscent = Abs( int( nRelPos ) );
             if( nAscent > Height() )
                 Height( nAscent );
         }
         else
         {
             nAscent = 0;
-            Height( Height() + int( aRelPos.Y() ) );
+            Height( Height() + int( nRelPos ) );
         }
     }
     else

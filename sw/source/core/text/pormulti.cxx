@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-19 15:27:04 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,10 +153,13 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
     Width( 0 );
     Height( 0 );
     SetAscent( 0 );
+    SetFlyInCntnt( sal_False );
     SwLineLayout *pLay = &GetRoot();
     do
     {
         pLay->CalcLine( rLine, rInf );
+        if( rLine.IsFlyInCntBase() )
+            SetFlyInCntnt( sal_True );
         if( IsRuby() && ( OnTop() == ( pLay == &GetRoot() ) ) )
         {
             // An empty phonetic line don't need an ascent or a height.
