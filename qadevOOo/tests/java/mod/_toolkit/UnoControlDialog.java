@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:20 $
+ *  last change:$Date: 2003-05-27 14:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public class UnoControlDialog extends TestCase {
         ( TestParameters Param,PrintWriter log ) {
 
         XInterface oObj = null;
-        XMultiServiceFactory xMSF = Param.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF() ;
         XControlModel dlgModel = null ;
 
         XWindowPeer the_win = null;
@@ -245,7 +245,7 @@ public class UnoControlDialog extends TestCase {
     }
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
