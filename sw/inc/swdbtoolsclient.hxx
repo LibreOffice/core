@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdbtoolsclient.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:18:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,22 +71,26 @@
 #include <osl/module.h>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 /* -----------------------------30.08.2001 11:01------------------------------
     Client to use the dbtools library as load-on-call
  ---------------------------------------------------------------------------*/
-class SwDbtoolsClient
+class SW_DLLPUBLIC SwDbtoolsClient
 {
 private:
     ::rtl::Reference< ::connectivity::simple::IDataAccessTools >            m_xDataAccessTools;
     ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >   m_xAccessTypeConversion;
     ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >     m_xDataAccessFactory;
 
-    static void registerClient();
-    static void revokeClient();
-    void getFactory();
+    SW_DLLPRIVATE static void registerClient();
+    SW_DLLPRIVATE static void revokeClient();
+    SW_DLLPRIVATE void getFactory();
 
-    ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    getDataAccessTools();
-    ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > getAccessTypeConversion();
+    SW_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    getDataAccessTools();
+    SW_DLLPRIVATE ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > getAccessTypeConversion();
 
 public:
     SwDbtoolsClient();
