@@ -17,6 +17,5 @@
  <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="10164"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
- <toolbar:toolbaritem xlink:href=".uno:CommonTaskBarVisible" toolbar:helpid="5928"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
 </toolbar:toolbar>
