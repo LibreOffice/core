@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-22 12:07:32 $
+ *  last change: $Author: jp $ $Date: 2001-01-22 13:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     }
                     pSet->Put( aSize );
                 }
-//              else
-//                  pSet->ClearItem( RES_FRM_SIZE );
 
                 // Vorlagen-AutoUpdate
                 SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
@@ -940,8 +938,6 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
             }
             pSet->Put( aSize );
         }
-        else
-            pSet->ClearItem( RES_FRM_SIZE );
 
         pFrmMgr->SetAttrSet( *pSet );
 
@@ -972,6 +968,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/12/22 12:07:32  jp
+    Bug #81672#: asynch loaded graphics for status updates
+
     Revision 1.7  2000/12/02 15:23:54  jp
     Task #80752#: integrate the grafik filter
 
