@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-06-14 13:04:56 $
+#   last change: $Author: cd $ $Date: 2001-07-06 07:19:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,8 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=\
         $(SLO)$/confignode.obj \
         $(SLO)$/configitem.obj \
-        $(SLO)$/configmgr.obj
+        $(SLO)$/configmgr.obj  \
+        $(SLO)$/bootstrap.obj
 
 # --- Targets ----------------------------------
 
