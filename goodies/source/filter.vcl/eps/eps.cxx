@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:14:02 $
+ *  last change: $Author: sj $ $Date: 2001-04-28 15:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,10 @@ struct StackMember
     Color       aBackgroundCol;
     Font        aFont;
     MapMode     aMapMode;
-    double      nXScale;
-    double      nYScale;
-    double      nXOrig;
-    double      nYOrig;
+    double      fXScale;
+    double      fYScale;
+    double      fXOrig;
+    double      fYOrig;
     BOOL        bRegionChanged;
     Region      bClipRegion;
     TextAlign   eTextAlign;
@@ -154,6 +154,7 @@ private:
     BOOL                mbGrayScale;
     BOOL                mbCompression;
     sal_Int32           mnPreview;
+    sal_Int32           mnTextMode;
 
     SvStream*           mpPS;
     const GDIMetaFile*  pMTF;
@@ -166,11 +167,11 @@ private:
     double              nBoundingX2;
     double              nBoundingY2;
 
-    double              nXScaling;          // represents the factor of the current ( MapMode to 100THmm )
-    double              nYScaling;
-    double              nXOrigin;           // this points to the origin ( in 100THmm )
-    double              nYOrigin;           // ( eg. is the BoundingBox ( 100, 200 ... )
-                                            // nXOrigin and nYOrigin starts with -100 -200;
+    double              fXScaling;          // represents the factor of the current ( MapMode to 100THmm )
+    double              fYScaling;
+    double              fXOrigin;           // this points to the origin ( in 100THmm )
+    double              fYOrigin;           //
+                                            //
     StackMember*        pGDIStack;
     ULONG               mnCursorPos;        // aktuelle Cursorposition im Output
     Color               aColor;             // aktuelle Farbe die fuer den Output benutzt wird
@@ -203,7 +204,8 @@ private:
     ULONG               dwShift;
 
     void                MayCallback( ULONG nPercent );
-    void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
+
+        void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
     void                ImplWriteEpilog();
     void                ImplWriteActions( const GDIMetaFile& rMtf);
 
@@ -232,24 +234,30 @@ private:
                         // writes nNumb as number from 0.000 till 1.000 in ASCII format to stream
     void                ImplWriteB1( BYTE nNumb, ULONG nMode = PS_SPACE );
 
-    inline void         ImplWritePoint( Point, ULONG nMode = PS_SPACE );
-    void                ImplMoveTo( Point, ULONG nMode = PS_SPACE );
-    void                ImplLineTo( Point, ULONG nMode = PS_SPACE );
-    void                ImplLine( const Polygon & rPolygon );
-    void                ImplLine( const PolyPolygon & rPolyPolygon );
+    inline void         ImplWritePoint( const Point&, sal_uInt32 nMode = PS_SPACE );
+    void                ImplMoveTo( const Point&, sal_uInt32 nMode = PS_SPACE );
+    void                ImplLineTo( const Point&, sal_uInt32 nMode = PS_SPACE );
+    void                ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode = PS_SPACE );
+    void                ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
+    void                ImplScale( const double& fX, const double& fY, sal_uInt32 nMode = PS_RET );
+
+    void                ImplWriteLine( const Polygon & rPolygon );
+    void                ImplAddPath( const Polygon & rPolygon );
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const Rectangle & rRectangle );
     void                ImplRectFill ( const Rectangle & rRectangle );
-    void                ImplPoly( const Polygon & rPolygon );
+    void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, sal_Bool bTextOutline = sal_False );
 
     void                ImplSetClipRegion();
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
-    void                ImplSetAttrForText( Point & rPoint );
+    void                ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nResolution, VirtualDevice& rVirDev,
+                                            const Point& rPos, const Size& rSize, sal_Int32 nWidth );
+    void                ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth );
+    void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
     void                ImplWriteString( const ByteString&, const INT32* pDXArry = NULL, BOOL bStretch = FALSE );
     void                ImplDefineFont( char*, char* );
 
-    void                ImplClosePathFill( ULONG nMode = PS_RET );
     void                ImplClosePathDraw( ULONG nMode = PS_RET );
     void                ImplPathDraw( ULONG nMode = PS_RET );
 
@@ -326,6 +334,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     mnLevel = 2;
     mbGrayScale = FALSE;
     mbCompression = TRUE;
+    mnTextMode = 1;     // default : export text as bitmap only when using non standard fonts
 
     // try to get the dialog selection
     if ( pConfigItem )
@@ -349,6 +358,12 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
                 mnLevel = 2;
             mbGrayScale = pConfigItem->ReadInt32( aColorStr, 1 ) == 2;
             mbCompression = pConfigItem->ReadInt32( aComprStr, 1 ) == 1;
+
+            String sTextMode( ResId( KEY_TEXTMODE, pResMgr ) );
+            mnTextMode = pConfigItem->ReadInt32( sTextMode, 1 );
+            if ( mnTextMode > 1 )
+                mnTextMode = 0;
+
             delete pResMgr;
         }
     }
@@ -404,8 +419,8 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     ImplGetMapMode( pMTF->GetPrefMapMode() );
 
     nBoundingX1 = nBoundingY1 = 0;
-    nBoundingX2 = pMTF->GetPrefSize().Width() * nXScaling;
-    nBoundingY2 = pMTF->GetPrefSize().Height() * nYScaling;
+    nBoundingX2 = pMTF->GetPrefSize().Width() * fXScaling;
+    nBoundingY2 = pMTF->GetPrefSize().Height() * fYScaling;
 
     pGDIStack = NULL;
     aColor = Color( COL_TRANSPARENT );
@@ -565,8 +580,10 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "/lw {setlinewidth} bdef" );
     ImplWriteLine( "/ld {setdash} bdef" );
     ImplWriteLine( "/m {neg moveto} bdef" );
+    ImplWriteLine( "/ct {6 2 roll neg 6 2 roll neg 6 2 roll neg curveto} bdef" );
     ImplWriteLine( "/r {rotate} bdef" );
-    ImplWriteLine( "/t {translate} bdef" );
+    ImplWriteLine( "/t {neg translate} bdef" );
+    ImplWriteLine( "/s {scale} bdef" );
     ImplWriteLine( "/gs {gsave} bdef" );
     ImplWriteLine( "/gr {grestore} bdef" );
 
@@ -574,11 +591,10 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "{1 index /FID ne {def} {pop pop} ifelse} forall /Encoding ISOLatin1Encoding def" );
     ImplWriteLine( "currentdict end /NFont exch definefont pop /NFont findfont} bdef" );
 
-    ImplWriteLine( "/s {show} bdef" );
     ImplWriteLine( "/p {closepath} bdef" );
     ImplWriteLine( "/sf {scalefont setfont} bdef" );
 
-    ImplWriteLine( "/pf {closepath fill}bdef" );        // close path and fill
+    ImplWriteLine( "/ef {eofill}bdef"           );      // close path and fill
     ImplWriteLine( "/pc {closepath stroke}bdef" );      // close path and draw
     ImplWriteLine( "/ps {stroke}bdef" );                // draw current path
     ImplWriteLine( "/pum {matrix currentmatrix}bdef" ); // pushes the current matrix
@@ -591,27 +607,22 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "%%Page: 1 1" );
     ImplWriteLine( "%%BeginPageSetup" );
     ImplWriteLine( "%%EndPageSetup" );
-
     ImplWriteLine( "pum" );
-    ImplWriteDouble( (double)aSizePoint.Width() / (double)nBoundingX2 );
-    ImplWriteDouble( (double)aSizePoint.Height() / (double)nBoundingY2 );
-    ImplWriteLine( "scale" );
-    ImplWriteLong( 0 );
-    ImplWriteDouble( nBoundingY2 );
-    ImplWriteLine( "t" );
+    ImplScale( (double)aSizePoint.Width() / (double)nBoundingX2, (double)aSizePoint.Height() / (double)nBoundingY2 );
+    ImplTranslate( 0, - nBoundingY2 );
 }
 
 //---------------------------------------------------------------------------------
 
 void PSWriter::ImplWriteEpilog()
 {
-    ImplWriteLong( 0 );
-    ImplWriteDouble( - nBoundingY2 );
-    ImplWriteLine( "t" );
+    ImplTranslate( 0, nBoundingY2 );
     ImplWriteLine( "pom" );
+    ImplWriteLine( "count op_count sub {pop} repeat countdictstack dict_count sub {end} repeat b4_inc_state restore" );
+
     ImplWriteLine( "%%PageTrailer" );
     ImplWriteLine( "%%Trailer" );
-    ImplWriteLine( "count op_count sub {pop} repeat countdictstack dict_count sub {end} repeat b4_inc_state restore" );
+
     ImplWriteLine( "%%EOF" );
 }
 
@@ -681,10 +692,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_ELLIPSE_ACTION :
             {
-                Rectangle aRect = ( ( (const MetaEllipseAction*) pMA )->GetRect() );
-                Point     aCenter = aRect.Center();
-                Polygon   aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
-                ImplPoly( aPoly );
+                Rectangle   aRect = ( ( (const MetaEllipseAction*) pMA )->GetRect() );
+                Point       aCenter = aRect.Center();
+                Polygon     aPoly( aCenter, aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
+                PolyPolygon aPolyPoly( aPoly );
+                ImplPolyPoly( aPolyPoly );
             }
             break;
 
@@ -692,7 +704,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             {
                 Polygon aPoly( ( (const MetaArcAction*)pMA )->GetRect(), ( (const MetaArcAction*)pMA )->GetStartPoint(),
                     ( (const MetaArcAction*)pMA )->GetEndPoint(), POLY_ARC );
-                ImplPoly( aPoly );
+                PolyPolygon aPolyPoly( aPoly );
+                ImplPolyPoly( aPolyPoly );
             }
             break;
 
@@ -700,7 +713,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             {
                 Polygon aPoly( ( (const MetaPieAction*)pMA )->GetRect(), ( (const MetaPieAction*)pMA )->GetStartPoint(),
                     ( (const MetaPieAction*)pMA )->GetEndPoint(), POLY_PIE );
-                ImplPoly( aPoly );
+                PolyPolygon aPolyPoly( aPoly );
+                ImplPolyPoly( aPolyPoly );
             }
             break;
 
@@ -708,7 +722,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             {
                 Polygon aPoly( ( (const MetaChordAction*)pMA )->GetRect(), ( (const MetaChordAction*)pMA )->GetStartPoint(),
                     ( (const MetaChordAction*)pMA )->GetEndPoint(), POLY_CHORD );
-                ImplPoly( aPoly );
+                PolyPolygon aPolyPoly( aPoly );
+                ImplPolyPoly( aPolyPoly );
             }
             break;
 
@@ -716,27 +731,40 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             {
                 if ( bLineColor )
                 {
-                    const LineInfo& rLineInfo = ( ( const MetaPolyLineAction*)pMA )->GetLineInfo();
-                    ImplWriteLineColor( PS_SPACE );
-                    if ( !rLineInfo.IsDefault() )
-                        ImplWriteLineInfo( rLineInfo );
-                    ImplLine( ( (const MetaPolyLineAction*) pMA )->GetPolygon() );
-                    ImplPathDraw();
-                    if ( !rLineInfo.IsDefault() )
-                        ImplWriteLine( "lc ld lw" ); // LineWidth, LineDash, LineCap zuruecksetzen
+                    Polygon aPoly( ( (const MetaPolyLineAction*) pMA )->GetPolygon() );
+                    sal_uInt16 i, nPointCount = aPoly.GetSize();
+                    if ( nPointCount )
+                    {
+                        const LineInfo& rLineInfo = ( ( const MetaPolyLineAction*)pMA )->GetLineInfo();
+                        ImplWriteLineColor( PS_SPACE );
+                        if ( !rLineInfo.IsDefault() )
+                            ImplWriteLineInfo( rLineInfo );
+
+                        if ( nPointCount > 1 )
+                        {
+                            ImplMoveTo( aPoly.GetPoint( 0 ) );
+                            i = 1;
+                            while ( i < nPointCount )
+                                ImplLineTo( aPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
+                        }
+                        ImplPathDraw();
+                        if ( !rLineInfo.IsDefault() )
+                            ImplWriteLine( "lc ld lw" ); // LineWidth, LineDash, LineCap zuruecksetzen
+                    }
                 }
             }
             break;
 
             case META_POLYGON_ACTION :
             {
-                ImplPoly( ( (const MetaPolygonAction*) pMA )->GetPolygon() );
+                PolyPolygon aPolyPoly( ( (const MetaPolygonAction*) pMA )->GetPolygon() );
+                ImplPolyPoly( aPolyPoly );
             }
             break;
 
             case META_POLYPOLYGON_ACTION :
             {
-                ImplLine( ( (const MetaPolyPolygonAction*) pMA )->GetPolyPolygon() );
+                ImplPolyPoly( ( (const MetaPolyPolygonAction*) pMA )->GetPolyPolygon() );
             }
             break;
 
@@ -747,11 +775,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 Point   aPoint( pA->GetPoint() );
 
-                ImplSetAttrForText( aPoint );
-                ByteString aStr( aUniStr, maFont.GetCharSet() );
-                ImplWriteString( aStr );
-                if ( maFont.GetOrientation() )
-                    ImplWriteLine( "gr" );
+                ImplText( aUniStr, aPoint, NULL, 0 );
             }
             break;
 
@@ -767,13 +791,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 Point   aPoint( pA->GetPoint() );
 
-                ImplSetAttrForText( aPoint );
-
-                ByteString aStr( aUniStr, maFont.GetCharSet() );
-                ImplWriteString( aStr, NULL, TRUE );
-
-                if ( maFont.GetOrientation() )
-                    ImplWriteLine( "gr" );
+                ImplText( aUniStr, aPoint, NULL, pA->GetWidth() );
             }
             break;
 
@@ -783,13 +801,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 Point   aPoint( pA->GetPoint() );
 
-                ImplSetAttrForText( aPoint );
-
-                ByteString aStr( aUniStr, maFont.GetCharSet() );
-                ImplWriteString( aStr, pA->GetDXArray(), FALSE );
-
-                if ( maFont.GetOrientation() )
-                    ImplWriteLine( "gr" );
+                ImplText( aUniStr, aPoint, pA->GetDXArray(), 0 );
             }
             break;
 
@@ -1039,10 +1051,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
                 if( aMapMode.GetMapUnit() == MAP_RELATIVE )
                 {
-                    nXScaling *= (double)aMapMode.GetScaleX();
-                    nYScaling *= (double)aMapMode.GetScaleY();
-                    nXOrigin  += (double)aMapMode.GetOrigin().X() * nXScaling;
-                    nYOrigin  += (double)aMapMode.GetOrigin().Y() * nYScaling;
+                    fXScaling *= (double)aMapMode.GetScaleX();
+                    fYScaling *= (double)aMapMode.GetScaleY();
+                    fXOrigin  += (double)aMapMode.GetOrigin().X() * fXScaling;
+                    fYOrigin  += (double)aMapMode.GetOrigin().Y() * fYScaling;
                 }
                 else
                     ImplGetMapMode( aMapMode );
@@ -1076,10 +1088,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 pGS->aMapMode = aMapMode;
                 bRegionChanged = FALSE;
                 pGS->aFont = maFont;
-                pGS->nXScale = nXScaling;
-                pGS->nYScale = nYScaling;
-                pGS->nXOrig = nXOrigin;
-                pGS->nYOrig = nYOrigin;
+                pGS->fXScale = fXScaling;
+                pGS->fYScale = fYScaling;
+                pGS->fXOrig = fXOrigin;
+                pGS->fYOrig = fYOrigin;
                 mnLatestPush = mpPS->Tell();
                 ImplWriteLine( "gs" );
             }
@@ -1115,10 +1127,10 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     bRegionChanged = pGS->bRegionChanged;
                     maFont = pGS->aFont;
                     maLastFont = Font();                // set maLastFont != maFont -> so that
-                    nXScaling = pGS->nXScale;
-                    nYScaling = pGS->nYScale;
-                    nXOrigin = pGS->nXOrig;
-                    nYOrigin = pGS->nYOrig;
+                    fXScaling = pGS->fXScale;
+                    fYScaling = pGS->fYScale;
+                    fXOrigin = pGS->fXOrig;
+                    fYOrigin = pGS->fYOrig;
                     delete pGS;
                     UINT32 nCurrentPos = mpPS->Tell();
                     if ( nCurrentPos - 6 == mnLatestPush )
@@ -1174,15 +1186,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     {
                         Point   aPoint = ( (const MetaEPSAction*) pMA )->GetPoint();
                         Size    aSize = ( (const MetaEPSAction*) pMA )->GetSize();
-                        double nXScale = (double)aSize.Width() * (double)nXScaling / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] );
-                        double nYScale = (double)aSize.Height() * (double)nYScaling / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] );
+                        double fXScale = (double)aSize.Width() * (double)fXScaling / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] );
+                        double fYScale = (double)aSize.Height() * (double)fYScaling / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] );
                         ImplWriteLine( "gs\n%%BeginDocument:" );
-                        ImplWriteDouble( aPoint.X() * nXScaling + nXOrigin );
-                        ImplWriteDouble( - ( aPoint.Y() * nYScaling + nYOrigin + nBoundingBox[ 3 ] * nYScale ) );
-                        ImplWriteLine( "t" );
-                        ImplWriteDouble( nXScale );
-                        ImplWriteDouble( nYScale );
-                        ImplWriteLine( "scale" );
+                        ImplTranslate( aPoint.X() * fXScaling + fXOrigin, aPoint.Y() * fYScaling + fYOrigin + nBoundingBox[ 3 ] * fYScale );
+                        ImplScale( fXScale, fYScale );
                         mpPS->Write( pSource, aGfxLink.GetDataSize() );
                         ImplWriteLine( "%%EndDocument\ngr" );
                     }
@@ -1192,7 +1200,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_TRANSPARENT_ACTION:
             {
-                ImplLine( ( (const MetaTransparentAction*) pMA )->GetPolyPolygon() );
+//              ImplLine( ( (const MetaTransparentAction*) pMA )->GetPolyPolygon() );
             }
             break;
 
@@ -1231,66 +1239,59 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
 //---------------------------------------------------------------------------------
 
-inline void PSWriter::ImplWritePoint( Point nPoint, ULONG nMode )
+inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
 {
-    ImplWriteDouble( nPoint.X() * nXScaling + nXOrigin );
-    ImplWriteDouble( nPoint.Y() * nYScaling + nYOrigin, nMode );
+    ImplWriteDouble( rPoint.X() * fXScaling + fXOrigin );
+    ImplWriteDouble( rPoint.Y() * fYScaling + fYOrigin, nMode );
 }
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplMoveTo( Point nPoint, ULONG nMode )
+void PSWriter::ImplMoveTo( const Point& rPoint, sal_uInt32 nMode )
 {
-    ImplWritePoint( nPoint );
+    ImplWritePoint( rPoint );
     ImplWriteByte( 'm' );
     ImplExecMode( nMode );
 }
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplLineTo( Point nPoint, ULONG nMode )
+void PSWriter::ImplLineTo( const Point& rPoint, sal_uInt32 nMode )
 {
-    ImplWritePoint( nPoint );
+    ImplWritePoint( rPoint );
     ImplWriteByte( 'l' );
     ImplExecMode( nMode );
 }
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplLine( const Polygon &rPolygon )
+void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3, sal_uInt32 nMode )
 {
-    USHORT i = 1;
-    USHORT nPointCount = rPolygon.GetSize();
-    if ( nPointCount > 1 )
-    {
-        ImplMoveTo( rPolygon.GetPoint( 0 ) );
-        while ( i < nPointCount )
-        {
-            ImplLineTo( rPolygon.GetPoint( i++ ), PS_SPACE | PS_WRAP );
-        }
-    }
+    ImplWritePoint( rP1 );
+    ImplWritePoint( rP2 );
+    ImplWritePoint( rP3 );
+    *mpPS << "ct ";
+    ImplExecMode( nMode );
 }
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplLine( const PolyPolygon &rPolyPolygon )
+void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode )
 {
-    USHORT i, nCount = rPolyPolygon.Count();
-    for ( i = 0; i < nCount; i++ )
-    {
-        if ( bFillColor )
-        {
-            ImplWriteFillColor( PS_SPACE );
-            ImplLine( rPolyPolygon.GetObject( i ) );
-            ImplClosePathFill();
-        }
-        if ( bLineColor )
-        {
-            ImplWriteLineColor( PS_SPACE );
-            ImplLine( rPolyPolygon.GetObject( i ) );
-            ImplClosePathDraw();
-        }
-    }
+    ImplWriteDouble( fX );
+    ImplWriteDouble( fY );
+    ImplWriteByte( 't' );
+    ImplExecMode( nMode );
+}
+
+//---------------------------------------------------------------------------------
+
+void PSWriter::ImplScale( const double& fX, const double& fY, sal_uInt32 nMode )
+{
+    ImplWriteDouble( fX );
+    ImplWriteDouble( fY );
+    ImplWriteByte( 's' );
+    ImplExecMode( nMode );
 }
 
 //---------------------------------------------------------------------------------
@@ -1302,8 +1303,8 @@ void PSWriter::ImplRect( const Rectangle & rRect )
     if ( bLineColor )
     {
 
-        double nWidth = rRect.GetWidth() * nXScaling;
-        double nHeight = rRect.GetHeight() * nYScaling;
+        double nWidth = rRect.GetWidth() * fXScaling;
+        double nHeight = rRect.GetHeight() * fYScaling;
 
         ImplWriteLineColor( PS_SPACE );
         ImplMoveTo( rRect.TopLeft() );
@@ -1323,8 +1324,8 @@ void PSWriter::ImplRect( const Rectangle & rRect )
 
 void PSWriter::ImplRectFill( const Rectangle & rRect )
 {
-    double nWidth = rRect.GetWidth() * nXScaling;
-    double nHeight = rRect.GetHeight() * nYScaling;
+    double nWidth = rRect.GetWidth() * fXScaling;
+    double nHeight = rRect.GetHeight() * fYScaling;
 
     ImplWriteFillColor( PS_SPACE );
     ImplMoveTo( rRect.TopLeft() );
@@ -1333,27 +1334,70 @@ void PSWriter::ImplRectFill( const Rectangle & rRect )
     ImplWriteDouble( nHeight );
     *mpPS << "rl ";
     ImplWriteDouble( nWidth );
-    *mpPS << "neg 0 rl ";
-    ImplClosePathFill();
+    *mpPS << "neg 0 rl ef";
+    *mpPS << "p ef";
+    mnCursorPos += 2;
+    ImplExecMode( PS_RET );
 }
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplPoly( const Polygon & rPoly )
+void PSWriter::ImplAddPath( const Polygon & rPolygon )
 {
-    if ( rPoly.GetSize() > 1 )
+    USHORT i = 1;
+    USHORT nPointCount = rPolygon.GetSize();
+    if ( nPointCount > 1 )
     {
-        if ( bFillColor )
+        ImplMoveTo( rPolygon.GetPoint( 0 ) );
+        while ( i < nPointCount )
         {
-            ImplWriteFillColor( PS_SPACE );
-            ImplLine( rPoly );
-            ImplClosePathFill();
+            if ( ( rPolygon.GetFlags( i ) == POLY_CONTROL )
+                    && ( ( i + 2 ) < nPointCount )
+                        && ( rPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
+                            && ( rPolygon.GetFlags( i + 2 ) == POLY_NORMAL ) )
+            {
+                ImplCurveTo( rPolygon[ i ], rPolygon[ i + 1 ], rPolygon[ i + 2 ], PS_WRAP );
+                i += 3;
+            }
+            else
+                ImplLineTo( rPolygon.GetPoint( i++ ), PS_SPACE | PS_WRAP );
+        }
+    }
+}
+
+//---------------------------------------------------------------------------------
+
+void PSWriter::ImplPolyPoly( const PolyPolygon & rPolyPoly, sal_Bool bTextOutline )
+{
+    sal_uInt16 i, nPolyCount = rPolyPoly.Count();
+    if ( nPolyCount )
+    {
+        if ( bFillColor || bTextOutline )
+        {
+            if ( bTextOutline )
+                ImplWriteTextColor( PS_SPACE );
+            else
+                ImplWriteFillColor( PS_SPACE );
+            for ( i = 0; i < nPolyCount; )
+            {
+                ImplAddPath( rPolyPoly.GetObject( i ) );
+                if ( ++i < nPolyCount )
+                {
+                    *mpPS << "p";
+                    mnCursorPos += 2;
+                    ImplExecMode( PS_RET );
+                }
+            }
+            *mpPS << "p ef";
+            mnCursorPos += 4;
+            ImplExecMode( PS_RET );
         }
         if ( bLineColor )
         {
             ImplWriteLineColor( PS_SPACE );
-            ImplLine( rPoly );
-            ImplClosePathDraw();
+            for ( i = 0; i < nPolyCount; i++ )
+                ImplAddPath( rPolyPoly.GetObject( i ) );
+            ImplClosePathDraw( PS_RET );
         }
     }
 }
@@ -1369,10 +1413,10 @@ void PSWriter::ImplSetClipRegion()
 
         while ( aClipRegion.GetNextEnumRect( hRegionHandle, aRect ) )
         {
-            double nX1 = aRect.Left() * nXScaling + nXOrigin;
-            double nY1 = aRect.Top() * nYScaling + nYOrigin;
-            double nX2 = aRect.Right() * nXScaling + nXOrigin;
-            double nY2 = aRect.Bottom() * nYScaling + nYOrigin;
+            double nX1 = aRect.Left() * fXScaling + fXOrigin;
+            double nY1 = aRect.Top() * fYScaling + fYOrigin;
+            double nX2 = aRect.Right() * fXScaling + fXOrigin;
+            double nY2 = aRect.Bottom() * fYScaling + fYOrigin;
             ImplWriteDouble( nX1 );
             ImplWriteDouble( nY1 );
             ImplWriteByte( 'm' );
@@ -1456,13 +1500,8 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if ( bDoTrans )
         {
             ImplWriteLine( "gs\npum" );
-            ImplWriteDouble( aSourcePos.X() * nXScaling + nXOrigin );
-            ImplWriteDouble( -aSourcePos.Y() * nYScaling - nYOrigin );
-            ImplWriteLine( "t" );
-            ImplWriteDouble( nXWidth * nXScaling / nWidth );
-            ImplWriteDouble( nYHeight * nYScaling / nHeight );
-            ImplWriteLine( "scale" );
-
+            ImplTranslate( aSourcePos.X() * fXScaling + fXOrigin, - ( -aSourcePos.Y() * fYScaling - fYOrigin ) );
+            ImplScale( nXWidth * fXScaling / nWidth,  nYHeight * fYScaling / nHeight );
             if ( !aClipRegion.IsEmpty() )
             {
     //          aRegion.Intersect( aClipRegion );
@@ -1495,12 +1534,8 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if (!bDoTrans )
             ImplWriteLine( "pum" );
 
-        ImplWriteDouble( aSourcePos.X() * nXScaling + nXOrigin );
-        ImplWriteDouble( -aSourcePos.Y() * nYScaling - nYOrigin - nYHeight * nYScaling );
-        ImplWriteLine( "t" );
-        ImplWriteDouble( nXWidth * nXScaling );
-        ImplWriteDouble( nYHeight * nYScaling );
-        ImplWriteLine( "scale" );
+        ImplTranslate( aSourcePos.X() * fXScaling + fXOrigin, - ( -aSourcePos.Y() * fYScaling - fYOrigin - nYHeight * fYScaling ) );
+        ImplScale( nXWidth * fXScaling, nYHeight * fYScaling );
         if ( mnLevel == 1 )                 // level 1 is always grayscale !!!
         {
             ImplWriteLong( nWidth );
@@ -1737,8 +1772,8 @@ void PSWriter::ImplWriteString( const ByteString& rString, const INT32* pDXArry,
             for( i = 0; i < nLen; i++ )
             {
                 if ( i > 0 )
-                    nx = pDXArry[ i - 1 ] * nXScaling;
-                ImplWriteDouble( ( bStretch ) ? nx : aOutputDevice.GetTextWidth( rString.GetChar( i ) ) * nXScaling );
+                    nx = pDXArry[ i - 1 ] * fXScaling;
+                ImplWriteDouble( ( bStretch ) ? nx : aOutputDevice.GetTextWidth( rString.GetChar( i ) ) * fXScaling );
                 ImplWriteDouble( nx );
                 ImplWriteLine( "(", PS_NONE );
                 ImplWriteCharacter( rString.GetChar( i ) );
@@ -1757,8 +1792,144 @@ void PSWriter::ImplWriteString( const ByteString& rString, const INT32* pDXArry,
 
 // ------------------------------------------------------------------------
 
-void PSWriter::ImplSetAttrForText( Point & aPoint )
+void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution, VirtualDevice& rVirDev,
+                                    const Point& rPos, const Size& rSize, sal_Int32 nWidth )
 {
+    Point       aEmptyPoint( 0, 0 );
+    Fraction    aFract( 1, nTextResolution );
+    MapMode     aMapModeInch( MAP_INCH, aEmptyPoint, aFract, aFract );
+    Size        aSizePixel = OutputDevice::LogicToLogic( rSize, aMapMode, aMapModeInch );
+
+    Color aTextColor( COL_BLACK );
+    rVirDev.SetTextColor( aTextColor );
+    rVirDev.SetTextAlign( ALIGN_TOP );
+    const Size aOutSize( rVirDev.PixelToLogic( aSizePixel, aMapMode ) );
+    rVirDev.SetOutputSize( aOutSize );
+    MapMode aScaledMapMode( aMapMode );
+    Fraction aFracX = aScaledMapMode.GetScaleX();
+    Fraction aFracY = aScaledMapMode.GetScaleY();
+    aFracX *= Fraction( aOutSize.Width(), rSize.Width() );
+    aFracY *= Fraction( aOutSize.Height(), rSize.Height() );
+    aScaledMapMode.SetScaleX( aFracX );
+    aScaledMapMode.SetScaleY( aFracY );
+    rVirDev.SetMapMode( aScaledMapMode );
+
+    String aUniString( nChar );
+    if ( nWidth )
+        rVirDev.DrawStretchText( aEmptyPoint, nWidth, aUniString );
+    else
+        rVirDev.DrawTextArray( aEmptyPoint, aUniString, NULL );
+
+    rVirDev.SetMapMode( aMapMode );
+    Bitmap aBmp = rVirDev.GetBitmap( aEmptyPoint, aOutSize );       // aBmp is a bitmap of the whole text in nTextResolution dpi
+
+    Bitmap aMask( aBmp );
+    BitmapEx aBmpEx( aBmp, aMask );
+
+//      SvFileStream aNew( String( ByteString( "d:\\test.png" ), RTL_TEXTENCODING_UTF8 ), STREAM_WRITE | STREAM_TRUNC );
+//      sal_uInt32 nErrCode = GraphicConverter::Export( aNew, Graphic( aBmpEx ), CVT_PNG );
+
+    ImplBmp( &aBmp, &aMask, rPos, rSize.Width(), rSize.Height() );
+}
+
+
+void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth )
+{
+    sal_uInt16 i, nLen = rUniString.Len();
+    if ( !nLen )
+        return;
+    sal_Bool bGlyph = sal_False;
+    if ( mnTextMode == 0 )
+        bGlyph = sal_True;
+    if ( bGlyph )
+    {
+        Font    aNotRotatedFont( maFont );
+        aNotRotatedFont.SetOrientation( 0 );
+
+        VirtualDevice aVirDev( 1 );
+        aVirDev.SetMapMode( aMapMode );
+        aVirDev.SetFont( aNotRotatedFont );
+
+        Size    aNormSize;
+        long*   pOwnArray;
+        long*   pDX;
+
+        // get text sizes
+        if( pDXArry )
+        {
+            pOwnArray = NULL;
+            aNormSize = Size( aVirDev.GetTextWidth( rUniString ), 0 );
+            pDX = (long*) pDXArry;
+        }
+        else
+        {
+            pOwnArray = new long[ nLen ];
+            aNormSize = Size( aVirDev.GetTextArray( rUniString, pOwnArray ), 0 );
+            pDX = pOwnArray;
+        }
+        if( nLen > 1 )
+        {
+            aNormSize.Width() = pDX[ nLen - 2 ] + aVirDev.GetTextWidth( rUniString.GetChar( nLen - 1 ) );
+
+            if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
+            {
+                const double fFactor = (double) nWidth / aNormSize.Width();
+
+                for( i = 0; i < ( nLen - 1 ); i++ )
+                    pDX[ i ] = FRound( pDX[ i ] * fFactor );
+            }
+        }
+        const FontMetric aMetric( aVirDev.GetFontMetric() );
+        aNormSize.Height() = aMetric.GetLineHeight();
+
+//
+
+        sal_Int16 nRotation = maFont.GetOrientation();
+        Polygon aPolyDummy( 1 );
+
+        for ( i = 0; i < nLen; i++ )
+        {
+            PolyPolygon aPolyPoly;
+            sal_Unicode nChar = rUniString.GetChar( i );
+
+            Point aPos( rPos );
+            if ( i > 0 )
+                aPos.X() += pDX[ i - 1 ];
+            Size aSize( aVirDev.GetTextWidth( nChar ), aNormSize.Height() );
+
+            if ( aVirDev.GetGlyphOutline( nChar, aPolyPoly, sal_True ) )
+            {
+                ImplWriteLine( "pum" );
+                if ( nRotation )
+                {
+                    ImplWriteF( nRotation, 1 );
+                    *mpPS << "r ";
+                }
+                ImplTranslate( aPos.X() * fXScaling + fXOrigin, ( aPos.Y() - aNormSize.Height() ) * fYScaling + fYOrigin );
+                ImplPolyPoly( aPolyPoly, sal_True );
+                ImplWriteLine( "pom" );
+            }
+//          else
+//              ImplGenerateBitmap( nChar, 300, aVirDev, aPos, aSize, nWidth );
+        }
+        delete[] pOwnArray;
+    }
+    else
+    {
+        ImplSetAttrForText( rPos );
+        ByteString aStr( rUniString, maFont.GetCharSet() );
+        ImplWriteString( aStr, pDXArry, nWidth != 0 );
+        if ( maFont.GetOrientation() )
+            ImplWriteLine( "gr" );
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void PSWriter::ImplSetAttrForText( const Point& rPoint )
+{
+    Point aPoint( rPoint );
+
     long nRotation = maFont.GetOrientation();
     ImplWriteTextColor();
 
@@ -1777,7 +1948,7 @@ void PSWriter::ImplSetAttrForText( Point & aPoint )
 
         maLastFont = maFont;
         aSize = maFont.GetSize();
-        ImplWriteDouble( aSize.Height() * nYScaling );      ///???????????????????
+        ImplWriteDouble( aSize.Height() * fYScaling );      ///???????????????????
         *mpPS << "sf ";
     }
     if ( eTextAlign != ALIGN_BASELINE )
@@ -1823,13 +1994,6 @@ void PSWriter::ImplDefineFont( char* pOriginalName, char* pItalic )
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
-
-void PSWriter::ImplClosePathFill( ULONG nMode )
-{
-    *mpPS << "pf";
-    mnCursorPos += 2;
-    ImplExecMode( nMode );
-}
 
 void PSWriter::ImplClosePathDraw( ULONG nMode )
 {
@@ -1947,12 +2111,12 @@ void PSWriter::ImplGetMapMode( const MapMode& aMapMode )
             // that does not look right
             break;
     }
-    nXOrigin = aMapMode.GetOrigin().X() * nMul;
-    nYOrigin = aMapMode.GetOrigin().Y() * nMul;
+    fXOrigin = aMapMode.GetOrigin().X() * nMul;
+    fYOrigin = aMapMode.GetOrigin().Y() * nMul;
     double nScale = aMapMode.GetScaleX();
-    nXScaling = nMul * nScale;
+    fXScaling = nMul * nScale;
     nScale = aMapMode.GetScaleY();
-    nYScaling = nMul * nScale;
+    fYScaling = nMul * nScale;
 }
 
 //---------------------------------------------------------------------------------
@@ -1997,7 +2161,7 @@ inline void PSWriter::ImplWriteLine( char pString[], ULONG nMode )
 
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
-    double fLineWidth = ( ( rLineInfo.GetWidth() + 1 ) * nXScaling + ( rLineInfo.GetWidth() + 1 ) * nYScaling ) * 0.5;
+    double fLineWidth = ( ( rLineInfo.GetWidth() + 1 ) * fXScaling + ( rLineInfo.GetWidth() + 1 ) * fYScaling ) * 0.5;
     ImplWriteLine( "cl", PS_SPACE );    // currentLineWidth & currentDash auf den Stack
     ImplWriteDouble( fLineWidth );
     ImplWriteLine( " lw", PS_SPACE );
@@ -2026,7 +2190,7 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
     sal_Int32 n, nLen;
 
     sal_Int32   nPTemp = (sal_Int32)fNumber;
-    sal_Int32   nATemp = (sal_Int32)abs( ( fNumber - nPTemp ) * 100000 );
+    sal_Int32   nATemp = abs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         *mpPS << (sal_Char)'-';
@@ -2044,7 +2208,7 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
         mnCursorPos++;
         const ByteString aNumber2( ByteString::CreateFromInt32( nATemp ) );
 
-        ULONG nLen = aNumber2.Len();
+        sal_Int16 n, nLen = aNumber2.Len();
         if ( nLen < 8 )
         {
             mnCursorPos += 6 - nLen;
@@ -2054,7 +2218,7 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
             }
         }
         mnCursorPos += nLen;
-        for ( USHORT n = 0; n < nLen; n++ )
+        for ( n = 0; n < nLen; n++ )
         {
             *mpPS << aNumber2.GetChar( n );
             zCount--;
