@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 04:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,7 @@
 
 ImageList IMG_TABLESUBCRIPTION_SC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc_tblscr.bmp";
-    };
+    Prefix = "sc";
     MaskColor   = Color {
     Red   = 0xFFFF;
     Green = 0x0000;
@@ -111,23 +108,17 @@ ImageList IMG_TABLESUBCRIPTION_SC
 };
 ImageList IMG_TABLESUBCRIPTION_SCH
 {
+    Prefix = "sch";
     MaskColor   = Color {
             Red   = 0xffff;
             Green = 0x0000;
             Blue  = 0xffff;
     };
-    ImageBitmap = Bitmap
-    {
-        File = "sch_tblscr.bmp";
-    };
     IL_TABLESUBCRIPTION ;
 };
 ImageList IMG_TABLESUBCRIPTION_LC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lc_tblscr.bmp";
-    };
+    Prefix = "lc";
     MaskColor   = Color {
     Red   = 0xFFFF;
     Green = 0x0000;
@@ -137,15 +128,12 @@ ImageList IMG_TABLESUBCRIPTION_LC
 };
 ImageList IMG_TABLESUBCRIPTION_LCH
 {
+    Prefix = "lch";
     MaskColor   = Color {
                 Red   = 0xffff;
                 Green = 0x0000;
                 Blue  = 0xffff;
         };
-    ImageBitmap = Bitmap
-    {
-        File = "lch_tblscr.bmp";
-    };
     IL_TABLESUBCRIPTION ;
 };
 
@@ -167,54 +155,42 @@ ImageList IMG_TABLESUBCRIPTION_LCH
 
 ImageList IMG_QUERYADMINISTRATION_SC
 {
+    Prefix = "sc";
     MaskColor   = Color {
     Red   = 0xFFFF;
     Green = 0x0000;
     Blue  = 0xFFFF;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "sc_qryadmin.bmp";
     };
     IL_QUERYADMINISTRATION ;
 };
 ImageList IMG_QUERYADMINISTRATION_SCH
 {
+    Prefix = "sch";
     MaskColor   = Color {
                 Red   = 0xffff;
                 Green = 0x0000;
                 Blue  = 0xffff;
         };
-    ImageBitmap = Bitmap
-    {
-        File = "sch_qryadmin.bmp";
-    };
     IL_QUERYADMINISTRATION ;
 };
 ImageList IMG_QUERYADMINISTRATION_LC
 {
+    Prefix = "lc";
     MaskColor   = Color {
     Red   = 0xFFFF;
     Green = 0x0000;
     Blue  = 0xFFFF;
     };
-    ImageBitmap = Bitmap
-    {
-        File = "lc_qryadmin.bmp";
-    };
     IL_QUERYADMINISTRATION ;
 };
 ImageList IMG_QUERYADMINISTRATION_LCH
 {
+    Prefix = "lch";
     MaskColor   = Color {
                 Red   = 0xffff;
                 Green = 0x0000;
                 Blue  = 0xffff;
         };
-    ImageBitmap = Bitmap
-    {
-        File = "lch_qryadmin.bmp";
-    };
     IL_QUERYADMINISTRATION ;
 };
 //-------------------------------------------------------------------------
@@ -234,53 +210,41 @@ ImageList IMG_QUERYADMINISTRATION_LCH
 
 ImageList IMG_DOCUMENTLINKS_SC
 {
+    Prefix = "sc";
     MaskColor   = Color {
     Red   = 0xFFFF;
     Green = 0x0000;
     Blue  = 0xFFFF;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "sc_doclinks.bmp";
     };
     IL_DOCUMENTLINKS ;
 };
 ImageList IMG_DOCUMENTLINKS_SCH
 {
+    Prefix = "sch";
     MaskColor   = Color {
             Red   = 0xffff;
             Green = 0x0000;
             Blue  = 0xffff;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "sch_doclinks.bmp";
     };
     IL_DOCUMENTLINKS ;
 };
 ImageList IMG_DOCUMENTLINKS_LC
 {
+    Prefix = "lc";
     MaskColor   = Color {
     Red   = 0xFFFF;
     Green = 0x0000;
     Blue  = 0xFFFF;
     };
-    ImageBitmap = Bitmap
-    {
-        File = "lc_doclinks.bmp";
-    };
     IL_DOCUMENTLINKS ;
 };
 ImageList IMG_DOCUMENTLINKS_LCH
 {
+    Prefix = "lch";
     MaskColor   = Color {
             Red   = 0xffff;
             Green = 0x0000;
             Blue  = 0xffff;
-    };
-    ImageBitmap = Bitmap
-    {
-        File = "lch_doclinks.bmp";
     };
     IL_DOCUMENTLINKS ;
 };
