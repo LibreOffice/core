@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:01:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,7 +1224,7 @@ FASTBOOL SwCursor::GoStartWord()
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             FALSE ).startPos;
 
-        if( 0 <= nPtPos && nPtPos < pTxtNd->GetTxt().Len() )
+        if( nPtPos < pTxtNd->GetTxt().Len() )
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1248,7 +1248,7 @@ FASTBOOL SwCursor::GoEndWord()
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             TRUE ).endPos;
 
-        if( 0 <= nPtPos && nPtPos <= pTxtNd->GetTxt().Len() &&
+        if( nPtPos <= pTxtNd->GetTxt().Len() &&
             GetPoint()->nContent.GetIndex() != nPtPos )
         {
             GetPoint()->nContent = nPtPos;
@@ -1273,7 +1273,7 @@ FASTBOOL SwCursor::GoNextWord()
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
 
-        if( 0 <= nPtPos && nPtPos < pTxtNd->GetTxt().Len() )
+        if( nPtPos < pTxtNd->GetTxt().Len() )
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1300,7 +1300,7 @@ FASTBOOL SwCursor::GoPrevWord()
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
 
-        if( 0 <= nPtPos && nPtPos < pTxtNd->GetTxt().Len() )
+        if( nPtPos < pTxtNd->GetTxt().Len() )
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1408,7 +1408,7 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
 
         // it is allowed to place the PaM just behind the last
         // character in the text thus <= ...Len
-        if( 0 <= nPtPos && nPtPos <= pTxtNd->GetTxt().Len() )
+        if( nPtPos <= pTxtNd->GetTxt().Len() )
         {
             GetPoint()->nContent = nPtPos;
             if( !IsSelOvr() )
@@ -1543,9 +1543,10 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
             SwRect aTmpRect;
             pFrm->GetCharRect( aTmpRect, *GetPoint() );
             aPt = aTmpRect.Pos();
+
             nUpDownX = pFrm->IsVertical() ?
-                       aPt.Y() - pFrm->Frm().Top() :
-                       aPt.X() - pFrm->Frm().Left();
+                aPt.Y() - pFrm->Frm().Top() :
+                aPt.X() - pFrm->Frm().Left();
         }
 
         // Bei Fussnoten ist auch die Bewegung in eine andere Fussnote erlaubt.
@@ -1648,7 +1649,12 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                 }
             }
         }
+
+        // #i27615#
+        if (GetPoint()->nContent.GetIndex() != 0)
+            SetInFrontOfLabel(FALSE);
     }
+
     return bRet;
 }
 
@@ -1656,13 +1662,33 @@ FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
 {
     Point aPt;
     SwCntntFrm * pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+    FASTBOOL bRet;
 
     // calculate cursor bidi level
     if ( pFrm )
         SetCrsrBidiLevel( pFrm->IsRightToLeft() ? 1 : 0 );
 
-    return pFrm && (bLeft ? pFrm->LeftMargin( this )
-                          : pFrm->RightMargin( this, bAPI ));
+    // #i27615# Manage cursor in front of label.
+    if (pFrm)
+    {
+        if (bLeft)
+        {
+            FASTBOOL bWasAtLeftMargin = IsAtLeftRightMargin(TRUE, bAPI);
+            bRet = pFrm->LeftMargin( this );
+
+            if (! bAPI && bWasAtLeftMargin)
+                SetInFrontOfLabel(TRUE);
+        }
+        else
+        {
+            bRet = pFrm->RightMargin( this, bAPI );
+
+            if (! bAPI )
+                SetInFrontOfLabel(FALSE);
+        }
+    }
+
+    return bRet;
 }
 
 FASTBOOL SwCursor::IsAtLeftRightMargin( BOOL bLeft, BOOL bAPI ) const
