@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 16:06:33 $
+ *  last change: $Author: mt $ $Date: 2001-04-05 10:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,25 +1229,19 @@ void UnoControlButtonModel::removeConsumer( const ::com::sun::star::uno::Referen
 
 void UnoControlButtonModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Any aArg = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
-    rtl::OUString aURL;
-    aArg >>= aURL;
-    if ( aURL.getLength() )
+    uno::Sequence<uno::Any> aArgs(1);
+    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
+    if ( xImageProducer.is() )
     {
-        uno::Sequence<uno::Any> aArgs(1);
-        aArgs.getArray()[0] = aArg;
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
-        if ( xImageProducer.is() )
+        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
+        while ( aIter != maListeners.end() )
         {
-            std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
-            while ( aIter != maListeners.end() )
-            {
-                xImageProducer->addConsumer( *aIter );
-                aIter++;
-            }
-            xImageProducer->startProduction();
+            xImageProducer->addConsumer( *aIter );
+            aIter++;
         }
+        xImageProducer->startProduction();
     }
 }
 
@@ -1311,9 +1305,10 @@ void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, co
         uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
         uno::Reference < awt::XImageConsumer > xImgCons( mxPeer, uno::UNO_QUERY );
 
+#ifdef DEBUG
         uno::Reference < awt::XImageConsumer > xTest1( (awt::XImageConsumer*)this, uno::UNO_QUERY );
         uno::Reference < awt::XImageProducer > xTest2( (awt::XImageConsumer*)this, uno::UNO_QUERY );
-
+#endif
         if ( xImgProd.is() && xImgCons.is() )
         {
             xImgProd->addConsumer( xImgCons );
