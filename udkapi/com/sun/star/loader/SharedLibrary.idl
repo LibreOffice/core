@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibrary.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 
  module com {  module sun {  module star {  module loader {
 
-interface XImplementationLoader;
+ published interface XImplementationLoader;
 
 
 /** allows to access a native component stored in a shared library.
  */
-service SharedLibrary
+published service SharedLibrary
 {
 
     /** is used for writing persistent information in the registry for

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Java.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@
 
  module com {  module sun {  module star {  module loader {
 
-interface XImplementationLoader;
+ published interface XImplementationLoader;
 
 
 // DocMerge from xml: service com::sun::star::loader::Java
 /** allows to access a java component stored with a .jar file
  */
-service Java
+published service Java
 {
 
     /** is used for writing persistent information in the registry for
