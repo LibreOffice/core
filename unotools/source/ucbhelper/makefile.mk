@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:59 $
+#   last change: $Author: mtg $ $Date: 2001-08-01 12:46:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,9 +95,10 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=\
                         $(SLO)$/ucblockbytes.obj \
                         $(SLO)$/localfilehelper.obj \
-                        $(SLO)$/ucbhelper.obj \
+                        $(SLO)$/ucbhelper.obj 		\
                         $(SLO)$/ucbstreamhelper.obj \
-                        $(SLO)$/tempfile.obj
+                        $(SLO)$/tempfile.obj		\
+                        $(SLO)$/XTempFile.obj
 
 # --- Targets ----------------------------------
 
