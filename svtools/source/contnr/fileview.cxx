@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:21:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include "svtools.hrc"
 #include "fileview.hrc"
 
+#ifndef SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
+#include "contentenumeration.hxx"
+#endif
+
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
 #include "AccessibleBrowseBoxObjType.hxx"
 #endif
@@ -122,6 +126,7 @@
 #endif
 
 #include <algorithm>
+#include <memory>
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -156,6 +161,12 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
+#ifndef _VOS_TIMER_HXX_
+#include <vos/timer.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -185,8 +196,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
-using namespace ::rtl;
 using namespace ::ucb;
+using ::svt::SortingData_Impl;
+using ::svt::FolderDescriptor;
+using ::vos::TTimeValue;
+using ::rtl::OUString;
 
 #define ALL_FILES_FILTER    "*.*"
 
@@ -195,23 +209,67 @@ using namespace ::ucb;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-#define ROW_TITLE           1
-#define ROW_SIZE            2
-#define ROW_DATE_MOD        3
-#define ROW_DATE_CREATE     4
-#define ROW_IS_FOLDER       5
-#define ROW_TARGET_URL      6
-#define ROW_IS_HIDDEN       7
-#define ROW_IS_VOLUME       8
-#define ROW_IS_REMOTE       9
-#define ROW_IS_REMOVEABLE   10
-#define ROW_IS_FLOPPY       11
-#define ROW_IS_COMPACTDISC  12
-
 DECLARE_LIST( StringList_Impl, OUString* );
 
 #define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
+
+namespace
+{
+    //====================================================================
+    //= ReleaseSolarMutex
+    //====================================================================
+    struct ReleaseSolarMutex
+    {
+    private:
+        ULONG   m_nCount;
+
+    public:
+        inline ReleaseSolarMutex()
+        {
+            m_nCount = Application::ReleaseSolarMutex();
+        }
+        inline ~ReleaseSolarMutex()
+        {
+            Application::AcquireSolarMutex( m_nCount );
+        }
+    };
+
+    //====================================================================
+    //= ITimeoutHandler
+    //====================================================================
+    class CallbackTimer;
+    class ITimeoutHandler
+    {
+    public:
+        virtual void onTimeout( CallbackTimer* _pInstigator ) = 0;
+    };
+
+    //====================================================================
+    //= CallbackTimer
+    //====================================================================
+    class CallbackTimer : public ::vos::OTimer
+    {
+    protected:
+        ITimeoutHandler* m_pTimeoutHandler;
+
+    public:
+        CallbackTimer( ITimeoutHandler* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
+
+    protected:
+        virtual void SAL_CALL onShot();
+    };
+
+    //--------------------------------------------------------------------
+    void SAL_CALL CallbackTimer::onShot()
+    {
+        OSL_ENSURE( m_pTimeoutHandler, "CallbackTimer::onShot: nobody interested in?" );
+        ITimeoutHandler* pHandler( m_pTimeoutHandler );
+        if ( pHandler )
+            pHandler->onTimeout( this );
+    }
+
+}
 
 // -----------------------------------------------------------------------
 
@@ -244,84 +302,6 @@ void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vec
         // no filter is given -> match all
         _rFilters.push_back( WildCard( String::CreateFromAscii( "*" ) ) );
 }
-// structs   -------------------------------------------------------------
-
-struct SortingData_Impl
-{
-private:
-    OUString    maFilename;     // only filename in upper case - for compare purposes
-    OUString    maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
-    OUString    maLowerTitle;
-
-public:
-    OUString    maType;
-    OUString    maTargetURL;
-    OUString    maImageURL;
-    OUString    maDisplayText;
-    DateTime    maModDate;
-    Image       maImage;
-    sal_Int64   maSize;
-    sal_Bool    mbIsFolder;
-    sal_Bool    mbIsVolume;
-    sal_Bool    mbIsRemote;
-    sal_Bool    mbIsRemoveable;
-    sal_Bool    mbIsFloppy;
-    sal_Bool    mbIsCompactDisc;
-
-    inline                  SortingData_Impl();
-    inline const OUString&  GetTitle() const;
-    inline const OUString&  GetLowerTitle() const;
-    inline const OUString&  GetFileName() const;
-    inline void             SetNewTitle( const OUString& rNewTitle );       // new maTitle is set -> maFilename is set to same!
-    inline void             ChangeTitle( const OUString& rChangedTitle );   // maTitle is changed, maFilename is unchanged!
-
-private:
-    void                    SetTitles( const OUString& rNewTitle );
-};
-
-inline SortingData_Impl::SortingData_Impl() :
-    maSize          ( 0 ),
-    mbIsFolder      ( sal_False ),
-    mbIsVolume      ( sal_False ),
-    mbIsRemote      ( sal_False ),
-    mbIsRemoveable  ( sal_False ),
-    mbIsFloppy      ( sal_False ),
-    mbIsCompactDisc ( sal_False )
-{
-}
-
-inline const OUString& SortingData_Impl::GetTitle() const
-{
-    return maTitle;
-}
-
-inline const OUString& SortingData_Impl::GetLowerTitle() const
-{
-    return maLowerTitle;
-}
-
-inline const OUString& SortingData_Impl::GetFileName() const
-{
-    return maFilename;
-}
-
-inline void SortingData_Impl::SetNewTitle( const OUString& rNewTitle )
-{
-    SetTitles( rNewTitle );
-    maFilename = rNewTitle.toAsciiUpperCase();
-}
-
-inline void SortingData_Impl::ChangeTitle( const OUString& rChangedTitle )
-{
-    SetTitles( rChangedTitle );
-}
-
-void SortingData_Impl::SetTitles( const OUString& rNewTitle )
-{
-    maTitle = rNewTitle;
-    maLowerTitle = rNewTitle.toAsciiLowerCase();
-}
-
 // class ViewTabListBox_Impl ---------------------------------------------
 
 class ViewTabListBox_Impl : public SvHeaderTabListBox
@@ -641,9 +621,10 @@ inline void NameTranslationList::Update()
 
 // class NameTranslator_Impl ------------------------------------------
 
-class NameTranslator_Impl
-{   // enables the user to get string substitutions (translations for the content) for a given folder
-    // see more explanations above in the description for NameTranslationList
+// enables the user to get string substitutions (translations for the content) for a given folder
+// see more explanations above in the description for NameTranslationList
+class NameTranslator_Impl : public ::svt::IContentTitleTranslation
+{
 private:
     NameTranslationList*    mpActFolder;
 public:
@@ -651,21 +632,35 @@ public:
                             NameTranslator_Impl( const INetURLObject& rActualFolder );
                             ~NameTranslator_Impl();
 
+     // IContentTitleTranslation
+    virtual sal_Bool        GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
+
     void                    UpdateTranslationTable();   // reads the translation file again
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
-    sal_Bool                GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
-                                // does nothing with rTranslatedName, when translation is not possible
     const String*           GetTransTableFileName() const;
                                             // returns the name for the file, which contains the translation strings
 };
 
-// class SvtFileView_Impl ---------------------------------------------
+//====================================================================
+//= SvtFileView_Impl
+//====================================================================
 
-class SvtFileView_Impl
+class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
+                        ,public ITimeoutHandler
 {
 protected:
-    Link                    m_aSelectHandler;
+    SvtFileView*                mpAntiImpl;
+    Link                        m_aSelectHandler;
+
+    ::rtl::Reference< ::svt::FileViewContentEnumerator >
+                                        m_pContentEnumerator;
+    Link                                m_aCurrentAsyncActionHandler;
+    ::osl::Condition                    m_aAsyncActionFinished;
+    ::rtl::Reference< ::vos::OTimer >   m_pCancelAsyncTimer;
+    ::svt::EnumerationResult            m_eAsyncActionResult;
+    bool                                m_bRunningAsyncAction;
+    bool                                m_bAsyncActionCancelled;
 
 public:
 
@@ -675,7 +670,6 @@ public:
     ViewTabListBox_Impl*    mpView;
     NameTranslator_Impl*    mpNameTrans;
     const IUrlFilter*       mpUrlFilter;
-    Reference< XPersist >   xDocInfo;
     sal_uInt16              mnSortColumn;
     sal_Bool                mbAscending     : 1;
     sal_Bool                mbOnlyFolder    : 1;
@@ -691,16 +685,17 @@ public:
     Image                   maFolderImage;
     Link                    maOpenDoneLink;
 
-                            SvtFileView_Impl( Window* pParent,
+                            SvtFileView_Impl( SvtFileView* pAntiImpl,
                                               sal_Int16 nFlags,
                                               sal_Bool bOnlyFolder );
                            ~SvtFileView_Impl();
 
     void                    Clear();
 
-    sal_Bool                GetFolderContent_Impl( const String& rFolder );
-    sal_Bool                GetFolderContent_Impl( Content& _rContent);
+    FileViewResult          GetFolderContent_Impl( const String& rFolder, const FileViewAsyncAction* pAsyncDescriptor );
+    FileViewResult          GetFolderContent_Impl( const FolderDescriptor& _rFolder, const FileViewAsyncAction* pAsyncDescriptor );
     void                    FilterFolderContent_Impl( const OUString &rFilter );
+    void                    CancelRunningAsyncAction();
 
     void                    OpenFolder_Impl();
     // #83004# -------
@@ -727,7 +722,6 @@ public:
 
     inline sal_Bool         EnableNameReplacing( sal_Bool bEnable = sal_True ); // returns false, if action wasn't possible
     void                    SetActualFolder( const INetURLObject& rActualFolder );
-    sal_Bool                GetTranslatedName( const OUString& rName, OUString& rTranslatedName ) const;
 
     sal_Bool                GetDocTitle( const OUString& rTargetURL, OUString& rDocTitle ) const;
 
@@ -738,6 +732,14 @@ public:
 
 protected:
     DECL_LINK( SelectionMultiplexer, void* );
+
+protected:
+    // IEnumerationResultHandler overridables
+    virtual void        enumerationDone( ::svt::EnumerationResult _eResult );
+            void        implEnumerationSuccess();
+
+    // ITimeoutHandler
+    virtual void onTimeout( CallbackTimer* _pInstigator );
 };
 
 inline void SvtFileView_Impl::EnableContextMenu( sal_Bool bEnable )
@@ -771,23 +773,6 @@ inline sal_Bool SvtFileView_Impl::EnableNameReplacing( sal_Bool bEnable )
     return bRet;
 }
 // functions -------------------------------------------------------------
-
-#define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
-    aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
-                         Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds ) );
-
-void AppendDateTime_Impl( const ::com::sun::star::util::DateTime& rDT,
-                          const Locale& rLocale, String& rRow )
-{
-    DateTime aDT;
-    CONVERT_DATETIME( rDT, aDT );
-    SvtSysLocale aSysLocale;
-    const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-    String aDateStr = rLocaleData.getDate( aDT );
-    aDateStr += String::CreateFromAscii( ", " );
-    aDateStr += rLocaleData.getTime( aDT );
-    rRow += aDateStr;
-}
 
 OUString CreateExactSizeText_Impl( sal_Int64 nSize )
 {
@@ -1371,7 +1356,20 @@ sal_Bool SvtFileView::CreateNewFolder( const String& rNewFolder )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtFileView::HasPreviousLevel( String& rParentURL ) const
+FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDescriptor )
+{
+    FileViewResult eResult = eFailure;
+
+    String sParentURL;
+    if ( GetParentURL( sParentURL ) )
+        eResult = Initialize( sParentURL, mpImp->maCurrentFilter, pAsyncDescriptor );
+
+    return eResult;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
 {
     sal_Bool bRet = sal_False;
     try
@@ -1393,17 +1391,6 @@ sal_Bool SvtFileView::HasPreviousLevel( String& rParentURL ) const
     {
         // perhaps an unkown url protocol (e.g. "private:newdoc")
     }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvtFileView::PreviousLevel( String& rNewURL )
-{
-    sal_Bool bRet = sal_False;
-    if ( HasPreviousLevel( rNewURL ) )
-        bRet = Initialize( rNewURL, mpImp->maCurrentFilter );
 
     return bRet;
 }
@@ -1438,32 +1425,16 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     SetSizePixel( rNewSize );
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool SvtFileView::Initialize( const String& rURL, const String& rFilter )
-{
-    WaitObject aWaitCursor( this );
-
-    String sPushURL( mpImp->maViewURL );
-
-    mpImp->maViewURL = rURL;
-    if ( !ExecuteFilter( rFilter ) )
-    {
-        mpImp->maViewURL = sPushURL;
-        return sal_False;
-    }
-
-    mpImp->maOpenDoneLink.Call( this );
-    return sal_True;
-}
 // -----------------------------------------------------------------------------
 sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const String& rFilter  )
 {
     WaitObject aWaitCursor( this );
 
     mpImp->Clear();
-    Content aCnt(_xContent,Reference< XCommandEnvironment >());
-    if ( !mpImp->GetFolderContent_Impl( aCnt ) )
+    Content aContent(_xContent,Reference< XCommandEnvironment >());
+    FileViewResult eResult = mpImp->GetFolderContent_Impl( FolderDescriptor( aContent ), NULL );
+    OSL_ENSURE( eResult != eStillRunning, "SvtFileView::Initialize: this was expected to be synchronous!" );
+    if ( eResult != eSuccess )
         return sal_False;
 
     mpImp->FilterFolderContent_Impl( rFilter );
@@ -1475,13 +1446,39 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
     mpImp->maOpenDoneLink.Call( this );
     return sal_True;
 }
-// -----------------------------------------------------------------------
 
-sal_Bool SvtFileView::Initialize( const String& rURL, const Sequence< OUString >& aContents )
+// -----------------------------------------------------------------------
+FileViewResult SvtFileView::Initialize( const String& rURL, const String& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
 {
     WaitObject aWaitCursor( this );
 
+    String sPushURL( mpImp->maViewURL );
+
     mpImp->maViewURL = rURL;
+    FileViewResult eResult = ExecuteFilter( rFilter, pAsyncDescriptor );
+    switch ( eResult )
+    {
+    case eFailure:
+    case eTimeout:
+        mpImp->maViewURL = sPushURL;
+        return eResult;
+
+    case eStillRunning:
+        OSL_ENSURE( pAsyncDescriptor, "SvtFileView::Initialize: we told it to read synchronously!" );
+    case eSuccess:
+        return eResult;
+    }
+
+    OSL_ENSURE( sal_False, "SvtFileView::Initialize: unreachable!" );
+    return eFailure;
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
+{
+    WaitObject aWaitCursor( this );
+
+    mpImp->maViewURL = String();
     mpImp->maCurrentFilter = mpImp->maAllFilter;
 
     mpImp->Clear();
@@ -1497,21 +1494,22 @@ sal_Bool SvtFileView::Initialize( const String& rURL, const Sequence< OUString >
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtFileView::ExecuteFilter( const String& rFilter )
+FileViewResult SvtFileView::ExecuteFilter( const String& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
 {
     mpImp->maCurrentFilter = rFilter;
     mpImp->maCurrentFilter.ToLowerAscii();
 
     mpImp->Clear();
-    if ( !mpImp->GetFolderContent_Impl( mpImp->maViewURL ) )
-        return sal_False;
+    FileViewResult eResult = mpImp->GetFolderContent_Impl( FolderDescriptor( mpImp->maViewURL ), pAsyncDescriptor );
+    OSL_ENSURE( ( eResult != eStillRunning ) || pAsyncDescriptor, "SvtFileView::ExecuteFilter: we told it to read synchronously!" );
+    return eResult;
+}
 
-    mpImp->FilterFolderContent_Impl( rFilter );
+// -----------------------------------------------------------------------
 
-    mpImp->SortFolderContent_Impl();    // possibly not necessary!!!!!!!!!!
-    mpImp->CreateDisplayText_Impl();
-    mpImp->OpenFolder_Impl();
-    return sal_True;
+void SvtFileView::CancelRunningAsyncAction()
+{
+    mpImp->CancelRunningAsyncAction();
 }
 
 // -----------------------------------------------------------------------
@@ -1756,6 +1754,14 @@ const IUrlFilter* SvtFileView::GetUrlFilter( ) const
 }
 
 // -----------------------------------------------------------------------
+void SvtFileView::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_ENABLE )
+        Invalidate();
+    Control::StateChanged( nStateChange );
+}
+
+// -----------------------------------------------------------------------
 // class NameTranslator_Impl
 // -----------------------------------------------------------------------
 
@@ -1823,9 +1829,10 @@ const String* NameTranslator_Impl::GetTransTableFileName() const
 // class SvtFileView_Impl
 // -----------------------------------------------------------------------
 
-SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool bOnlyFolder )
+SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, sal_Int16 nFlags, sal_Bool bOnlyFolder )
 
-    :mnSortColumn               ( COLUMN_TITLE )
+    :mpAntiImpl                 ( pAntiImpl )
+    ,mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( sal_True )
     ,mbOnlyFolder               ( bOnlyFolder )
     ,mbReplaceNames             ( sal_False )
@@ -1835,10 +1842,13 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool 
     ,mnSuspendSelectCallback    ( 0 )
     ,mbIsFirstResort            ( sal_True )
     ,mpUrlFilter                ( NULL )
+    ,m_bRunningAsyncAction      ( false )
+    ,m_bAsyncActionCancelled    ( false )
+    ,m_eAsyncActionResult       ( ::svt::ERROR )
 
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
-    mpView = new ViewTabListBox_Impl( pParent, this, nFlags );
+    mpView = new ViewTabListBox_Impl( mpAntiImpl, this, nFlags );
     mpView->EnableCellFocus();
 }
 
@@ -1870,19 +1880,22 @@ void SvtFileView_Impl::Clear()
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
+FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder, const FileViewAsyncAction* pAsyncDescriptor )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::osl::ClearableMutexGuard aGuard( maMutex );
 
-    INetURLObject aFolderObj( rFolder );
-    DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    Content aCnt;
     try
     {
+        INetURLObject aFolderObj( rFolder );
+        DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
         // prepare name translation
         SetActualFolder( aFolderObj );
-        aCnt = Content( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
+
+        FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
+
+        aGuard.clear();
+        return GetFolderContent_Impl( aFolder, pAsyncDescriptor );
     }
     catch( CommandAbortedException& )
     {
@@ -1892,170 +1905,103 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
-
-
-    return GetFolderContent_Impl( aCnt );
+    return eFailure;
 }
+
 // -----------------------------------------------------------------------
-sal_Bool SvtFileView_Impl::GetFolderContent_Impl( Content& _rContent )
+FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const FolderDescriptor& _rFolder, const FileViewAsyncAction* pAsyncDescriptor )
 {
+    DBG_TESTSOLARMUTEX();
+    ::osl::ClearableMutexGuard aGuard( maMutex );
 
-    SortingData_Impl* pData;
-    sal_Bool bSuccess = sal_False;
+    OSL_ENSURE( !m_pContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
+    m_pContentEnumerator = new ::svt::FileViewContentEnumerator(
+        mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans : NULL );
+        // TODO: should we cache and re-use this thread?
 
-    try
+    if ( !pAsyncDescriptor )
     {
-
-        Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(12);
-
-        aProps[0] = OUString::createFromAscii( "Title" );
-        aProps[1] = OUString::createFromAscii( "Size" );
-        aProps[2] = OUString::createFromAscii( "DateModified" );
-        aProps[3] = OUString::createFromAscii( "DateCreated" );
-        aProps[4] = OUString::createFromAscii( "IsFolder" );
-        aProps[5] = OUString::createFromAscii( "TargetURL" );
-        aProps[6] = OUString::createFromAscii( "IsHidden" );
-        aProps[7] = OUString::createFromAscii( "IsVolume" );
-        aProps[8] = OUString::createFromAscii( "IsRemote" );
-        aProps[9] = OUString::createFromAscii( "IsRemoveable" );
-        aProps[10] = OUString::createFromAscii( "IsFloppy" );
-        aProps[11] = OUString::createFromAscii( "IsCompactDisc" );
-
-        try
+        ::svt::EnumerationResult eResult = m_pContentEnumerator->enumerateFolderContentSync( _rFolder, mpUrlFilter );
+        if ( ::svt::SUCCESS == eResult )
         {
-            Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-            ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
-            xDynResultSet = _rContent.createDynamicCursor( aProps, eInclude );
-
-            if ( xDynResultSet.is() )
-                xResultSet = xDynResultSet->getStaticResultSet();
+            implEnumerationSuccess();
+            m_pContentEnumerator = NULL;
+            return eSuccess;
         }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-        }
-        catch( ::com::sun::star::uno::Exception& e )
-        {
-            e; // make compiler happy
-        }
-
-        if ( xResultSet.is() )
-        {
-            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-
-            try
-            {
-                ::com::sun::star::util::DateTime aDT;
-
-                while ( xResultSet->next() )
-                {
-                    sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
-                    // don't show hidden files
-                    if ( !bIsHidden || xRow->wasNull() )
-                    {
-                        pData = NULL;
-
-                        aDT = xRow->getTimestamp( ROW_DATE_MOD );
-                        sal_Bool bContainsDate = !xRow->wasNull();
-                        if ( !bContainsDate )
-                        {
-                            aDT = xRow->getTimestamp( ROW_DATE_CREATE );
-                            bContainsDate = !xRow->wasNull();
-                        }
-
-                        OUString aContentURL = xContentAccess->queryContentIdentifierString();
-                        OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                        sal_Bool bHasTargetURL = !xRow->wasNull() && aTargetURL.getLength() > 0;
-
-                        OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
-
-                        // check for restrictions
-                        if ( mpUrlFilter && !mpUrlFilter->isUrlAllowed( sRealURL ) )
-                            continue;
-
-                        pData = new SortingData_Impl;
-                        pData->maTargetURL = sRealURL;
-
-                        pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER ) && !xRow->wasNull();
-                        pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME ) && !xRow->wasNull();
-                        pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
-                        pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
-                        pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY ) && !xRow->wasNull();
-                        pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC ) && !xRow->wasNull();
-                        pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
-                        pData->maSize = xRow->getLong( ROW_SIZE );
-
-                        if ( bHasTargetURL &&
-                             INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
-                        {
-                            Content aCnt( aTargetURL, Reference< XCommandEnvironment > () );
-                            aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
-                            aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
-                        }
-
-                        if ( bContainsDate )
-                        {
-                            CONVERT_DATETIME( aDT, pData->maModDate );
-                        }
-
-                        if ( pData->mbIsFolder )
-                        {
-                            ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
-                                                            pData->mbIsRemoveable, pData->mbIsFloppy,
-                                                            pData->mbIsCompactDisc );
-                            pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-                        }
-                        else
-                            pData->maType = SvFileInformationManager::GetFileDescription(
-                                INetURLObject( pData->maTargetURL ) );
-
-                        // replace names on demand
-                        if( mbReplaceNames )
-                        {
-                            OUString aNewTitle;
-                            sal_Bool bTranslated;
-
-                            if( pData->mbIsFolder )
-                                bTranslated = GetTranslatedName( pData->GetTitle(), aNewTitle );
-                            else
-                                bTranslated = GetDocTitle( pData->maTargetURL, aNewTitle );
-
-                            if( bTranslated )
-                                pData->ChangeTitle( aNewTitle );
-                        }
-
-                        maContent.push_back( pData );
-                    }
-                }
-                bSuccess = sal_True;
-            }
-            catch( CommandAbortedException& )
-            {
-                DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-            }
-            catch( ::com::sun::star::uno::Exception& )
-            {
-                DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
-            }
-        }
-    }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "GetFolderContents: CommandAbortedException" );
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        DBG_ERRORFILE( "GetFolderContents: Any other exception" );
+        return eFailure;
     }
 
-    if ( !bSuccess )
-        // clear any "intermediate" and unfinished result
-        maContent.clear();
+    m_bRunningAsyncAction = true;
+    m_bAsyncActionCancelled = false;
+    m_eAsyncActionResult = ::svt::ERROR;
+    m_aAsyncActionFinished.reset();
 
-    return bSuccess;
+    // don't (yet) set m_aCurrentAsyncActionHandler to pTimeout->aFinishHandler.
+    // By definition, this handler *only* get's called when the result cannot be obtained
+    // during the minimum wait time, so it is only set below, when needed.
+    m_aCurrentAsyncActionHandler = Link();
+
+    // minimum time to wait
+    ::std::auto_ptr< TimeValue > pTimeout( new TimeValue );
+    sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
+    OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
+    if ( nMinTimeout <= 0 )
+        nMinTimeout = 1000L;
+    pTimeout->Seconds = nMinTimeout / 1000L;
+    pTimeout->Nanosec = ( nMinTimeout % 1000L ) * 1000000L;
+
+    m_pContentEnumerator->enumerateFolderContent( _rFolder, mpUrlFilter, this );
+
+    // wait until the enumeration is finished
+    // for this, release our own mutex (which is used by the enumerator thread)
+    aGuard.clear();
+
+    ::osl::Condition::Result eResult = ::osl::Condition::result_ok;
+    {
+        // also release the SolarMutex. Not all code which is needed during the enumeration
+        // is Solar-Thread-Safe, in particular there is some code which needs to access
+        // string resources (and our resource system relies on the SolarMutex :()
+        ReleaseSolarMutex aSolarRelease;
+
+        // now wait. Note that if we didn't get an pAsyncDescriptor, then this is an infinite wait.
+        eResult = m_aAsyncActionFinished.wait( pTimeout.get() );
+    }
+
+    ::osl::MutexGuard aGuard2( maMutex );
+    if ( ::osl::Condition::result_timeout == eResult )
+    {
+        // maximum time to wait
+        OSL_ENSURE( !m_pCancelAsyncTimer.get(), "SvtFileView_Impl::GetFolderContent_Impl: there's still a previous timer!" );
+        m_pCancelAsyncTimer = new CallbackTimer( this );
+        sal_Int32 nMaxTimeout = pAsyncDescriptor->nMaxTimeout;
+        OSL_ENSURE( nMaxTimeout > nMinTimeout,
+            "SvtFileView_Impl::GetFolderContent_Impl: invalid maximum timeout!" );
+        if ( nMaxTimeout <= nMinTimeout )
+            nMaxTimeout = nMinTimeout + 5000;
+        m_pCancelAsyncTimer->setRemainingTime( TTimeValue( nMaxTimeout - nMinTimeout ) );
+            // we already waited for nMinTimeout milliseconds, so take this into account
+        m_pCancelAsyncTimer->start();
+
+        m_aCurrentAsyncActionHandler = pAsyncDescriptor->aFinishHandler;
+        DBG_ASSERT( m_aCurrentAsyncActionHandler.IsSet(), "SvtFileView_Impl::GetFolderContent_Impl: nobody interested when it's finished?" );
+        mpView->ClearAll();
+        return eStillRunning;
+    }
+
+    m_bRunningAsyncAction = false;
+    switch ( m_eAsyncActionResult )
+    {
+    case ::svt::SUCCESS:
+        return eSuccess;
+
+    case ::svt::ERROR:
+        return eFailure;
+    }
+
+    DBG_ERRORFILE( "SvtFileView_Impl::GetFolderContent_Impl: unreachable!" );
+    return eFailure;
 }
+
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
@@ -2081,7 +2027,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
     ::osl::MutexGuard aGuard( maMutex );
 
-    if ( maContent.size() == 0 )
+    if ( maContent.empty() )
         return;
 
     // count (estimate) the number of filter tokens
@@ -2224,7 +2170,83 @@ void SvtFileView_Impl::ResetCursor()
     mpView->Update();
 }
 
-// #83004# -------
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::CancelRunningAsyncAction()
+{
+    DBG_TESTSOLARMUTEX();
+    ::osl::MutexGuard aGuard( maMutex );
+    if ( !m_pContentEnumerator.is() )
+        return;
+
+    m_bAsyncActionCancelled = true;
+    m_pContentEnumerator->cancel();
+    m_bRunningAsyncAction = false;
+
+    m_pContentEnumerator = NULL;
+    if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
+        m_pCancelAsyncTimer->stop();
+    m_pCancelAsyncTimer = NULL;
+}
+
+//-----------------------------------------------------------------------
+void SvtFileView_Impl::onTimeout( CallbackTimer* _pInstigator )
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( maMutex );
+    if ( !m_bRunningAsyncAction )
+        // there might have been a race condition while we waited for the mutex
+        return;
+
+    CancelRunningAsyncAction();
+
+    if ( m_aCurrentAsyncActionHandler.IsSet() )
+    {
+        Application::PostUserEvent( m_aCurrentAsyncActionHandler, reinterpret_cast< void* >( eTimeout ) );
+        m_aCurrentAsyncActionHandler = Link();
+    }
+}
+
+//-----------------------------------------------------------------------
+void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult _eResult )
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( maMutex );
+
+    m_pContentEnumerator = NULL;
+    if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
+        m_pCancelAsyncTimer->stop();
+    m_pCancelAsyncTimer = NULL;
+
+    if ( m_bAsyncActionCancelled )
+        // this is to prevent race conditions
+        return;
+
+    m_eAsyncActionResult = _eResult;
+    m_bRunningAsyncAction = false;
+
+    m_aAsyncActionFinished.set();
+
+    if ( eSuccess == _eResult )
+        implEnumerationSuccess();
+
+    if ( m_aCurrentAsyncActionHandler.IsSet() )
+    {
+        Application::PostUserEvent( m_aCurrentAsyncActionHandler, reinterpret_cast< void* >( m_eAsyncActionResult ) );
+        m_aCurrentAsyncActionHandler = Link();
+    }
+}
+
+//-----------------------------------------------------------------------
+void SvtFileView_Impl::implEnumerationSuccess()
+{
+    FilterFolderContent_Impl( maCurrentFilter );
+    SortFolderContent_Impl();
+    CreateDisplayText_Impl();
+    OpenFolder_Impl();
+    maOpenDoneLink.Call( mpAntiImpl );
+}
+
+// -----------------------------------------------------------------------
 void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
 {
     OUString aTab     = OUString::createFromAscii( "\t" );
@@ -2661,54 +2683,6 @@ void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
             mpNameTrans = new NameTranslator_Impl( rActualFolder );
     }
 }
-
-// -----------------------------------------------------------------------
-sal_Bool SvtFileView_Impl::GetTranslatedName( const OUString& rName, OUString& rRet ) const
-{
-    sal_Bool bRet;
-
-    if( mbReplaceNames && mpNameTrans )
-        bRet = mpNameTrans->GetTranslation( rName, rRet );
-    else
-        bRet = sal_False;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-sal_Bool SvtFileView_Impl::GetDocTitle( const OUString& rTargetURL, OUString& rRet ) const
-{
-    SvtFileView_Impl* p = const_cast< SvtFileView_Impl* >( this );
-    sal_Bool bRet = sal_False;
-
-    if( !xDocInfo.is() )
-        p->xDocInfo = Reference< XPersist > (
-               ::comphelper::getProcessServiceFactory()->createInstance(
-               String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties") ) ), UNO_QUERY );
-
-    DBG_ASSERT( xDocInfo.is(), "SvtFileView_Impl::GetDocTitle(): I don't understand the world any more!" );
-
-    try
-    {
-        p->xDocInfo->read( rTargetURL );
-        Reference< XPropertySet > xPropSet( xDocInfo, UNO_QUERY );
-
-        Any aAny = xPropSet->getPropertyValue( OUString::createFromAscii( "Title" ) );
-
-        OUString aTitle;
-        if ( ( aAny >>= aTitle ) && aTitle.getLength() > 0 )
-        {
-            rRet = aTitle;
-            bRet = sal_True;
-        }
-    }
-    catch ( IOException& ) {}
-    catch ( UnknownPropertyException& ) {}
-    catch ( Exception& ) {}
-
-    return bRet;
-}
-
 
 namespace svtools {
 
