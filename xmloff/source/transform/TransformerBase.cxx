@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:28:02 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1417,6 +1417,8 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
         if( bPackage && bSupportPackage )
         {
             OUString sTmp( OUString::valueOf( sal_Unicode( '#' ) ) );
+            if( 0 == rURI.compareToAscii( "./", 2 ) )
+                rURI = rURI.copy( 2 );
             sTmp += rURI;
             rURI = sTmp;
             bRet = sal_True;
