@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=drawing
+Icon=oasis-drawing-template
 Type=MimeType
-Patterns=*.otd
-MimeType=application/x-vnd.oasis.openoffice.drawing-template
-Comment=Open Office Drawing Template
+Patterns=*.otg
+MimeType=application/vnd.oasis.opendocument.drawing-template
+Comment=OpenDocument Drawing Template
