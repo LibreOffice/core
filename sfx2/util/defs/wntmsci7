@@ -8265,3 +8265,4 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?lcl_ReadClassification@sfx2@@YAXAAV?$list@U_tagFilterClass@sfx2@@V?$allocator@U_tagFilterClass@sfx2@@@_STL@@@_STL@@AAV?$vector@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@3@0@Z
 ?lcl_ReadGlobalFilters@sfx2@@YAXABVOConfigurationNode@utl@@AAV?$list@U_tagFilterClass@sfx2@@V?$allocator@U_tagFilterClass@sfx2@@@_STL@@@_STL@@AAV?$vector@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@5@@Z
 ?resize@?$vector@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@_STL@@QAEXIABVOUString@rtl@@@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx614724087@@YAXABVSbxVariableRef@@PAX@Z
