@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:22:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,8 @@ enum SwMoveFlags
 #define DUMMY_ADD_FLY_OFFSETS       0x01
 #define DUMMY_ADD_EXTERNAL_LEADING  0x02
 #define DUMMY_USE_HIRES_VIR_DEV     0x04
+// OD 06.01.2004 #i11859#
+#define DUMMY_USE_FORMER_LINESPACING 0x08
 
 //
 // COMPATIBILITY FLAGS END
@@ -1963,6 +1965,23 @@ public:
 
     short IsUseVirtualDevice() const;
     void _SetUseVirtualDevice( short nNew );
+
+    // OD 06.01.2004 #i11859#
+    sal_Bool IsFormerLineSpacing() const
+    {
+        return n8Dummy2 & DUMMY_USE_FORMER_LINESPACING;
+    }
+    void SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing )
+    {
+        if ( _bUseFormerLineSpacing )
+        {
+            n8Dummy2 |= DUMMY_USE_FORMER_LINESPACING;
+        }
+        else
+        {
+            n8Dummy2 &= ~DUMMY_USE_FORMER_LINESPACING;
+        }
+    }
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
