@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:18 $
+ *  last change: $Author: cmc $ $Date: 2002-11-08 12:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,7 +2065,7 @@ void WW8TabDesc::CreateSwTable()
     {
         const SwPosition* pAPos =
             pIo->pFmtOfJustInsertedApo->GetAnchor().GetCntntAnchor();
-        if (&pAPos->nNode.GetNode() == &pPoint->nNode.GetNode())
+        if (pAPos && &pAPos->nNode.GetNode() == &pPoint->nNode.GetNode())
         {
             bInsNode = true;
             bSetMinHeight = true;

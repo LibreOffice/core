@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:18 $
+ *  last change: $Author: cmc $ $Date: 2002-11-08 12:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,11 +534,15 @@ private:
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
+#if 0
+    //#i3029# we are no longer importing editboxes as uno textboxes, using
+    //input fields instead for superior layout.
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz);
+#endif
 };
 
 class SwMSConvertControls: public SvxMSConvertOCXControls

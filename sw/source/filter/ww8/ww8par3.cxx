@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:19 $
+ *  last change: $Author: cmc $ $Date: 2002-11-08 12:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,12 @@
 #ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
 #endif
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
+#endif
 
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
@@ -263,9 +269,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (!pFormImpl)
-        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-
     if (0x01 == rStr.GetChar( pF->nLCode-1 ))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
 
@@ -281,22 +284,18 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     */
     aFormula.sDefault = GetFieldResult(pF);
 
-    /* #80205#
-    And also a blank TextBox is indicated by 5 of these
-    placeholder chars, convert a field result of this stuff
-    into an empty string.
-    */
-    static sal_Unicode __READONLY_DATA aFormTextBoxBlank[] =
-    {
-        0x2002,0x2002,0x2002,0x2002,0x2002
-    };
-    if (aFormula.sDefault == aFormTextBoxBlank)
-        aFormula.sDefault.Erase();
+    //substituting Unicode spacing 0x2002 with double space for layout
+    aFormula.sDefault.SearchAndReplaceAll(String(0x2002),
+        CREATE_CONST_ASC("  "));
 
-    pFormImpl->InsertFormula(aFormula);
+    //replace CR 0x0D with LF 0x0A
+    aFormula.sDefault.SearchAndReplaceAll(0x0D, 0x0A);
+
+    SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
+        aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
+    rDoc.Insert(*pPaM, SwFmtFld(aFld));
 
     return FLD_OK;
-
 }
 
 eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
@@ -2048,6 +2047,12 @@ WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
 {
 }
 
+/*
+#i3029#
+We are no longer importing the lagacy word95 edit boxes as uno textboxes,
+instead they are imported as writer input fields.
+*/
+#if 0
 sal_Bool WW8FormulaEditBox::Import(const uno::Reference<
     lang::XMultiServiceFactory >& rServiceFactory,
     uno::Reference< form::XFormComponent >& rFComp, awt::Size &rSz)
@@ -2103,6 +2108,7 @@ sal_Bool WW8FormulaEditBox::Import(const uno::Reference<
 
     return sal_True;
 }
+#endif
 
 sal_Bool SwMSConvertControls::InsertControl(
     const uno::Reference< form::XFormComponent > & rFComp,
