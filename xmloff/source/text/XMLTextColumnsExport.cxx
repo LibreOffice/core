@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,13 +223,13 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
         // fo:margin-left
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                        pColumns->LeftMargin );
-        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MARGIN_LEFT,
+        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_START_INDENT,
                                        sValue.makeStringAndClear() );
 
         // fo:margin-right
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                        pColumns->RightMargin );
-        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MARGIN_RIGHT,
+        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_END_INDENT,
                                     sValue.makeStringAndClear() );
 
         // style:column
