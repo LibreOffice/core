@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:44:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,88 +661,6 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
 
     return sName;
 }
-
-//------------------------------------------------------------------------------
-//BFS01void FmFormPageImpl::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01    // anlegen eines output streams fuer UNO
-//BFS01    Reference< ::com::sun::star::io::XActiveDataSource >  xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), UNO_QUERY);
-//BFS01    Reference< ::com::sun::star::io::XOutputStream >  xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), UNO_QUERY);
-//BFS01    Reference< ::com::sun::star::io::XActiveDataSource >  xMarkSource(xMarkOut, UNO_QUERY);
-//BFS01
-//BFS01    if (xSource.is())
-//BFS01    {
-//BFS01        xMarkSource->setOutputStream(new ::utl::OOutputStreamWrapper(rOut));
-//BFS01        xSource->setOutputStream(xMarkOut);
-//BFS01
-//BFS01        Reference< ::com::sun::star::io::XObjectOutputStream >  xOutStrm(xSource, UNO_QUERY);
-//BFS01        try
-//BFS01        {
-//BFS01            write(xOutStrm);
-//BFS01        }
-//BFS01        catch(Exception&)
-//BFS01        {
-//BFS01            rOut.SetError( ERRCODE_CLASS_WRITE | ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_WARNING_MASK );
-//BFS01        }
-//BFS01
-//BFS01        xOutStrm->closeOutput();
-//BFS01    }
-//BFS01    else
-//BFS01    {
-//BFS01        // let's do a hack : in former versions we didn't use UNO-stream but SvStreams, so there was
-//BFS01        // no possibility that we couldn't write because of the lack of stream objects. Now, with UNO, this may happen
-//BFS01        // (as it happended here). But the read-methods of the older versions don't expect that (there is no flag in
-//BFS01        // the fileformat as it never was neccessary). To allow the old versions the read of the documents, we fake the
-//BFS01        // write : the first token usually written by our impl is an sal_Int32 giving the number of forms within the forms
-//BFS01        // collection. If this number is 0, no further reading will occur.
-//BFS01        sal_Int32 nDummLength = 0; rOut << nDummLength;     // this means 'no forms'
-//BFS01        nDummLength = 0; rOut << nDummLength;           // this means 'no form controls"
-//BFS01        // To tell the user that something went wrong we set a warning on the stream.
-//BFS01        rOut.SetError( ERRCODE_CLASS_WRITE | ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_WARNING_MASK );
-//BFS01    }
-//BFS01}
-
-//------------------------------------------------------------------------------
-//BFS01void FmFormPageImpl::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01    // Abholen des InputStreams ueber uno
-//BFS01    Reference< ::com::sun::star::io::XActiveDataSink >  xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
-//BFS01
-//BFS01    // creating the mark streams
-//BFS01    Reference< ::com::sun::star::io::XInputStream >  xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), UNO_QUERY);
-//BFS01    Reference< ::com::sun::star::io::XActiveDataSink >  xMarkSink(xMarkIn, UNO_QUERY);
-//BFS01
-//BFS01    if (xSink.is())
-//BFS01    {
-//BFS01        ::utl::OInputStreamWrapper* pUnoStream = new ::utl::OInputStreamWrapper(rIn);
-//BFS01        xMarkSink->setInputStream(Reference< ::com::sun::star::io::XInputStream > (pUnoStream));
-//BFS01        xSink->setInputStream(xMarkIn);
-//BFS01
-//BFS01        // freigeben aller forms
-//BFS01        xCurrentForm = NULL;
-//BFS01
-//BFS01        if (xForms->hasElements())
-//BFS01        {
-//BFS01            ::comphelper::disposeComponent(xForms);
-//BFS01            Init();
-//BFS01        }
-//BFS01
-//BFS01        Reference< ::com::sun::star::io::XObjectInputStream >  xInStrm(xSink,UNO_QUERY);
-//BFS01        try
-//BFS01        {
-//BFS01            read(xInStrm);
-//BFS01        }
-//BFS01        catch(Exception&)
-//BFS01        {
-//BFS01            rIn.SetError( ERRCODE_CLASS_READ | ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_WARNING_MASK );
-//BFS01        }
-//BFS01
-//BFS01
-//BFS01        xInStrm->closeInput();
-//BFS01    }
-//BFS01    else
-//BFS01        rIn.SetError( ERRCODE_CLASS_READ | ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_WARNING_MASK );
-//BFS01}
 
 //------------------------------------------------------------------------------
 void FmFormPageImpl::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & xOutStrm) const
