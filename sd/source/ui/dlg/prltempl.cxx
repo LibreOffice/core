@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:18:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,7 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     }
 }
 
-const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet()
+const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
 {
     if( pOutSet )
     {
