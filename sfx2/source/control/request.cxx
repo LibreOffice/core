@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-06-10 16:57:11 $ $Revision: 1.8 $
+// $Author: mba $ $Date: 2002-06-14 07:35:55 $ $Revision: 1.9 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -123,8 +123,7 @@ SfxRequest::~SfxRequest()
 
     // nicht mit Done() marktierte Requests mit 'rem' rausschreiben
     if ( pImp->xRecorder.is() && !pImp->bDone && !pImp->bIgnored )
-//        pImp->Record( uno::Sequence < beans::PropertyValue >() );
-        Done();
+        pImp->Record( uno::Sequence < beans::PropertyValue >() );
 
     // Objekt abr"aumen
     delete pArgs;
@@ -875,6 +874,9 @@ void SfxRequest::SetTarget( const String &rTarget )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/06/10 16:57:11  mba
+    #100024#: better assertion
+
     Revision 1.7  2002/06/07 08:42:29  mba
     #99966#: better error message
 
