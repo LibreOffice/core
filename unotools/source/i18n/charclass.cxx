@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,35 +387,13 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
 
 String CharClass::toUpper( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
 {
-    try
-    {
-        if ( xCC.is() )
-            return xCC->toUpper( rStr, nPos, nCount, aLocale );
-        else
-            return rStr.Copy( nPos, nCount );
-    }
-    catch ( Exception& )
-    {
-        DBG_ERRORFILE( "toUpper: Exception caught!" );
-        return rStr.Copy( nPos, nCount );
-    }
+    return toUpper_rtl(rStr, nPos, nCount);
 }
 
 
 String CharClass::toLower( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
 {
-    try
-    {
-        if ( xCC.is() )
-            return xCC->toLower( rStr, nPos, nCount, aLocale );
-        else
-            return rStr.Copy( nPos, nCount );
-    }
-    catch ( Exception& )
-    {
-        DBG_ERRORFILE( "toLower: Exception caught!" );
-        return rStr.Copy( nPos, nCount );
-    }
+    return toLower_rtl(::rtl::OUString(rStr), nPos, nCount);
 }
 
 
@@ -432,6 +410,40 @@ String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCoun
     {
         DBG_ERRORFILE( "toTitle: Exception caught!" );
         return rStr.Copy( nPos, nCount );
+    }
+}
+
+
+::rtl::OUString CharClass::toUpper_rtl( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+{
+    try
+    {
+        if ( xCC.is() )
+            return xCC->toUpper( rStr, nPos, nCount, aLocale );
+        else
+            return rStr.copy( nPos, nCount );
+    }
+    catch ( Exception& )
+    {
+        DBG_ERRORFILE( "toUpper: Exception caught!" );
+        return rStr.copy( nPos, nCount );
+    }
+}
+
+
+::rtl::OUString CharClass::toLower_rtl( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+{
+    try
+    {
+        if ( xCC.is() )
+            return xCC->toLower( rStr, nPos, nCount, aLocale );
+        else
+            return rStr.copy( nPos, nCount );
+    }
+    catch ( Exception& )
+    {
+        DBG_ERRORFILE( "toLower: Exception caught!" );
+        return rStr.copy( nPos, nCount );
     }
 }
 
