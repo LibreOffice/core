@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:57 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,6 @@ void SvColorControl::CreateBitmap()
         USHORT nY = (USHORT) aSize.Height();
 
         UINT16      nHue, nSat;
-        UINT16      nBri = mnLuminance;
         ColorHSB    aColHSB( 0, 0, mnLuminance );
 
         for( USHORT i = 0; i < nY; i++ )
@@ -493,7 +492,8 @@ void ColorMixingControl::SetColor( CMCPosition ePos, const Color& rCol )
     if( rCol != maColor[ ePos ] )
     {
         maColor[ ePos ] = rCol;
-        USHORT nPos, nColumn;
+        USHORT nPos = 0;
+        USHORT nColumn = 0;
         String aStr( GetRGBString( rCol ) );
 
         switch( ePos )
@@ -517,6 +517,8 @@ void ColorMixingControl::SetColor( CMCPosition ePos, const Color& rCol )
                 nPos = mnRows * mnColumns;
                 nColumn = mnColumns - 1;
             break;
+            case CMC_OTHER:
+            break;  // -Wall not handled.
         }
         SetItemColor( nPos, rCol );
         SetItemText( nPos, aStr );
@@ -610,7 +612,7 @@ ColorHSB::ColorHSB( const Color& rColor )
         mnHue = 0; // Default = undefined
     else
     {
-        double dHue;
+        double dHue = 0;
 
         if( c[0] == cMax )
         {
@@ -624,6 +626,7 @@ ColorHSB::ColorHSB( const Color& rColor )
         {
             dHue = 4.0 + (double)( c[0] - c[1] ) / (double)cDelta;
         }
+        // else dHue = ???   -Wall   FIXME
         dHue *= 60.0;
 
         if( dHue < 0.0 )
@@ -680,6 +683,7 @@ Color ColorHSB::GetRGB() const
             case 3: cR = a;     cG = b;     cB = nB;    break;
             case 4: cR = c;     cG = a;     cB = nB;    break;
             case 5: cR = nB;    cG = a;     cB = b;     break;
+            default: cR = 0;    cG = 0;     cB = 0;     break;  // -Wall ????
         }
     }
 
