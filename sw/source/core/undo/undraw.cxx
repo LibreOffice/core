@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:38:40 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
     pObjArr->SetRelPos( pObj->GetRelativePos() );
 
     //loescht sich selbst!
-    pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
+    pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
@@ -382,7 +382,7 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
 
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         //loescht sich selbst!
-        pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
+        pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
         pObj->SetUserCall( 0 );
 
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
@@ -447,7 +447,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     pObjArr->SetAnchorPos( pObj->GetAnchorPos() );
 
     //loescht sich selbst!
-    pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
+    pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
@@ -494,7 +494,7 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
 
         //loescht sich selbst!
         pContact->Changed( *rSave.pObj, SDRUSERCALL_DELETE,
-            rSave.pObj->GetBoundRect() );
+            rSave.pObj->GetLastBoundRect() );
         rSave.pObj->SetUserCall( 0 );
 
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
@@ -526,7 +526,7 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
 
     //loescht sich selbst!
     pContact->Changed( *pObjArr->pObj, SDRUSERCALL_DELETE,
-        pObjArr->pObj->GetBoundRect() );
+        pObjArr->pObj->GetLastBoundRect() );
     pObjArr->pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
@@ -615,7 +615,7 @@ void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
         //loescht sich selbst!
-        pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
+        pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
         pObj->SetUserCall( 0 );
 
         // alle Uno-Objecte sollten sich jetzt abmelden
