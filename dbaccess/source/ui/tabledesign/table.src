@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:35:15 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 07:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2219,7 +2219,7 @@ QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message = "Sie versuchen alle Spalten der Tabelle zu löschen. Ohne Spalten kann eine Tabelle nicht bestehen, soll die Tabelle aus der Datenbank gelöscht werden? Falls nicht, bleibt die Tabelle unverändert." ;
+    Message = "Sie versuchen alle Spalten der Tabelle zu löschen. Ohne Spalten kann eine Tabelle nicht bestehen. Soll die Tabelle aus der Datenbank gelöscht werden? Falls nicht, bleibt die Tabelle unverändert." ;
     Message [ English ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged." ;
 };
 
