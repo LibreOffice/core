@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-01 17:41:47 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 15:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <tools/debug.hxx>
 
 SV_IMPL_PTRARR( TextLines, TextLinePtr );
+SV_IMPL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo );
 
 
 // -------------------------------------------------------------------------
@@ -123,23 +124,41 @@ void TETextPortionList::DeleteFromPortion( USHORT nDelFrom )
     Remove( nDelFrom, Count()-nDelFrom );
 }
 
-USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart )
+USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOOL bPreferStartingPortion )
 {
     // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
     USHORT nTmpPos = 0;
     for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
     {
-        TextPortion* pPortion = GetObject( nPortion );
+        TETextPortion* pPortion = GetObject( nPortion );
         nTmpPos += pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
-            nPortionStart = nTmpPos - pPortion->GetLen();
-            return nPortion;
+            // take this one if we don't prefer the starting portion, or if it's the last one
+            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == Count() - 1 ) )
+            {
+                nPortionStart = nTmpPos - pPortion->GetLen();
+                return nPortion;
+            }
         }
     }
     DBG_ERROR( "FindPortion: Nicht gefunden!" );
     return ( Count() - 1 );
 }
+
+/*
+USHORT TETextPortionList::GetPortionStartIndex( USHORT nPortion )
+{
+    USHORT nPos = 0;
+    for ( USHORT nP = 0; nP < nPortion; nP++ )
+    {
+        TETextPortion* pPortion = GetObject( nP );
+        nPos += pPortion->GetLen();
+    }
+    return nPos;
+}
+*/
+
 
 // -------------------------------------------------------------------------
 // (+) class TEParaPortion
@@ -185,6 +204,9 @@ void TEParaPortion::MarkInvalid( USHORT nStart, short nDiff )
             mbSimple = FALSE;
         }
     }
+
+    maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
+
     mbInvalid = TRUE;
 }
 
@@ -200,6 +222,9 @@ void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
         mnInvalidPosStart = Min( mnInvalidPosStart, nStart );
 //      nInvalidPosEnd = pNode->Len();
     }
+
+    maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
+
     mnInvalidDiff = 0;
     mbInvalid = TRUE;
     mbSimple = FALSE;

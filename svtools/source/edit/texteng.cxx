@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-01 14:09:23 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 15:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/metric.hxx>
 
+#include <unicode/ubidi.h>
 
 using namespace ::com::sun::star;
 
@@ -135,6 +136,7 @@ TextEngine::TextEngine() : maWordDelimiters( String::CreateFromAscii( RTL_CONSTA
     mbUndoEnabled   = FALSE;
     mbIsInUndo      = FALSE;
     mbDowning       = FALSE;
+    mbRightToLeft   = FALSE;
 
     meAlign         = TXTALIGN_LEFT;
 
@@ -143,12 +145,13 @@ TextEngine::TextEngine() : maWordDelimiters( String::CreateFromAscii( RTL_CONSTA
     mnCurTextHeight = 0;
 
     mpUndoManager   = NULL;
+       mpIMEInfos       = NULL;
 
     mpIdleFormatter = new IdleFormatter;
 
-       mpIMEInfos       = NULL;
-
     mpRefDev = new VirtualDevice;
+
+    ImpInitLayoutMode( mpRefDev );
 
     ImpInitDoc();
 
@@ -930,28 +933,72 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial )
     aEditCursor.Bottom() = nY-1;
 
     // innerhalb der Zeile suchen....
-    long nX = pLine->GetStartX();
-    for ( USHORT i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
-    {
-        TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( i );
-        nCurIndex += pTextPortion->GetLen();
-        if ( nCurIndex <= rPaM.GetIndex() )
-        {
-            nX += pTextPortion->GetWidth();
+    long nX = ImpGetXPos( rPaM.GetPara(), pLine, rPaM.GetIndex() );
+    aEditCursor.Left() = aEditCursor.Right() = nX;
+    return aEditCursor;
+}
 
-            if ( nCurIndex == rPaM.GetIndex() )
-                break;  // for
-        }
-        else    // suchen und Ende
+long TextEngine::ImpGetXPos( ULONG nPara, TextLine* pLine, USHORT nIndex, BOOL bPreferPortionStart )
+{
+    DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "ImpGetXPos muss richtig gerufen werden!" );
+
+    BOOL bDoPreferPortionStart = bPreferPortionStart;
+    // Assure that the portion belongs to this line:
+    if ( nIndex == pLine->GetStart() )
+        bDoPreferPortionStart = TRUE;
+    else if ( nIndex == pLine->GetEnd() )
+        bDoPreferPortionStart = FALSE;
+
+    TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
+
+    USHORT nTextPortionStart = 0;
+    USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
+
+    DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line! " );
+
+    TETextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+
+    long nX = ImpGetPortionXOffset( nPara, pLine, nTextPortion );
+
+    long nPortionTextWidth = pPortion->GetWidth();
+
+    if ( nTextPortionStart != nIndex )
+    {
+        // Search within portion...
+        if ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) )
         {
-            nCurIndex -= pTextPortion->GetLen();
-            nX += (long)CalcTextWidth( rPaM.GetPara(), nCurIndex, rPaM.GetIndex()-nCurIndex );
-            break;  // for
+            // End of Portion
+            if ( ( !IsRightToLeft() && !pPortion->IsRightToLeft() ) ||
+                 ( IsRightToLeft() && pPortion->IsRightToLeft() ) )
+                nX += nPortionTextWidth;
+        }
+        else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
+        {
+            DBG_ASSERT( nIndex != pLine->GetStart(), "Strange behavior in new ImpGetXPos()" );
+
+            long nPosInPortion = (long)CalcTextWidth( nPara, nTextPortionStart, nIndex-nTextPortionStart );
+
+            if ( ( !IsRightToLeft() && !pPortion->IsRightToLeft() ) ||
+                 ( IsRightToLeft() && pPortion->IsRightToLeft() ) )
+            {
+                nX += nPosInPortion;
+            }
+            else
+            {
+                nX += nPortionTextWidth - nPosInPortion;
+            }
+        }
+    }
+    else // if ( nIndex == pLine->GetStart() )
+    {
+        if ( ( !IsRightToLeft() && pPortion->IsRightToLeft() ) ||
+             ( IsRightToLeft() && !pPortion->IsRightToLeft() ) )
+        {
+            nX += nPortionTextWidth;
         }
     }
 
-    aEditCursor.Left() = aEditCursor.Right() = nX;
-    return aEditCursor;
+    return nX;
 }
 
 const TextAttrib* TextEngine::FindAttrib( const TextPaM& rPaM, USHORT nWhich ) const
@@ -1059,7 +1106,7 @@ USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL bS
     long nTmpX = pLine->GetStartX();
     for ( USHORT i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
     {
-        TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( i );
+        TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( i );
         nTmpX += pTextPortion->GetWidth();
 
         if ( nTmpX > nXPos )
@@ -1130,7 +1177,7 @@ ULONG TextEngine::CalcTextWidth()
             nCurWidth = 0;
             for ( USHORT nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
             {
-                TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
+                TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
                 nCurWidth += pTextPortion->GetWidth();
             }
             if ( nCurWidth > nMaxWidth )
@@ -1158,7 +1205,9 @@ ULONG TextEngine::CalcTextWidth( ULONG nPara, USHORT nPortionStart, USHORT nLen,
 
     ULONG nWidth;
     if ( mnFixCharWidth100 )
+    {
         nWidth = (ULONG)nLen*mnFixCharWidth100/100;
+    }
     else
     {
         if ( pFont )
@@ -1429,12 +1478,16 @@ void TextEngine::UpdateViews( TextView* pCurView )
         pView->HideCursor();
 
         Rectangle aClipRec( maInvalidRec );
-        Rectangle aVisArea( pView->GetStartDocPos(), pView->GetWindow()->GetOutputSizePixel() );
+        Size aOutSz = pView->GetWindow()->GetOutputSizePixel();
+        Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
         aClipRec.Intersection( aVisArea );
         if ( !aClipRec.IsEmpty() )
         {
             // in Fensterkoordinaten umwandeln....
-            aClipRec.SetPos( pView->GetWindowPos( aClipRec.TopLeft() ) );
+            Point aNewPos = pView->GetWindowPos( aClipRec.TopLeft() );
+            if ( IsRightToLeft() )
+                aNewPos.X() -= aOutSz.Width() - 1;
+            aClipRec.SetPos( aNewPos );
 
             if ( pView == pCurView )
                 pView->ImpPaint( aClipRec, TRUE );
@@ -1560,16 +1613,16 @@ void TextEngine::CreateAndInsertEmptyLine( ULONG nPara )
     pTmpLine->SetEnd( pTmpLine->GetStart() );
     pTEParaPortion->GetLines().Insert( pTmpLine, pTEParaPortion->GetLines().Count() );
 
-    if ( meAlign == TXTALIGN_CENTER )
+    if ( ImpGetAlign() == TXTALIGN_CENTER )
         pTmpLine->SetStartX( (short)(mnMaxTextWidth / 2) );
-    else if ( meAlign == TXTALIGN_RIGHT )
+    else if ( ImpGetAlign() == TXTALIGN_RIGHT )
         pTmpLine->SetStartX( (short)mnMaxTextWidth );
     else
         pTmpLine->SetStartX( mpDoc->GetLeftMargin() );
 
     BOOL bLineBreak = pNode->GetText().Len() ? TRUE : FALSE;
 
-    TextPortion* pDummyPortion = new TextPortion( 0 );
+    TETextPortion* pDummyPortion = new TETextPortion( 0 );
     pDummyPortion->GetWidth() = 0;
     pTEParaPortion->GetTextPortions().Insert( pDummyPortion, pTEParaPortion->GetTextPortions().Count() );
 
@@ -1584,7 +1637,7 @@ void TextEngine::CreateAndInsertEmptyLine( ULONG nPara )
     }
 }
 
-void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TextPortion* pPortion, USHORT nPortionStart, long nRemainingWidth )
+void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion* pPortion, USHORT nPortionStart, long nRemainingWidth )
 {
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
 
@@ -1619,7 +1672,7 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TextPortion* pPorti
     {
         // Blanks am Zeilenende generell unterdruecken...
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-        TextPortion* pTP = pTEParaPortion->GetTextPortions().GetObject( nEndPortion );
+        TETextPortion* pTP = pTEParaPortion->GetTextPortions().GetObject( nEndPortion );
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion am Anfang der Zeile?" );
         pTP->GetWidth() = (long)CalcTextWidth( nPara, nBreakPos-pTP->GetLen(), pTP->GetLen()-1 );
     }
@@ -1636,12 +1689,12 @@ USHORT TextEngine::SplitTextPortion( ULONG nPara, USHORT nPos )
 
     USHORT nSplitPortion;
     USHORT nTmpPos = 0;
-    TextPortion* pTextPortion = 0;
+    TETextPortion* pTextPortion = 0;
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     USHORT nPortions = pTEParaPortion->GetTextPortions().Count();
     for ( nSplitPortion = 0; nSplitPortion < nPortions; nSplitPortion++ )
     {
-        TextPortion* pTP = pTEParaPortion->GetTextPortions().GetObject(nSplitPortion);
+        TETextPortion* pTP = pTEParaPortion->GetTextPortions().GetObject(nSplitPortion);
         nTmpPos += pTP->GetLen();
         if ( nTmpPos >= nPos )
         {
@@ -1656,7 +1709,7 @@ USHORT TextEngine::SplitTextPortion( ULONG nPara, USHORT nPos )
 
     USHORT nOverlapp = nTmpPos - nPos;
     pTextPortion->GetLen() -= nOverlapp;
-    TextPortion* pNewPortion = new TextPortion( nOverlapp );
+    TETextPortion* pNewPortion = new TETextPortion( nOverlapp );
     pTEParaPortion->GetTextPortions().Insert( pNewPortion, nSplitPortion+1 );
     pTextPortion->GetWidth() = (long)CalcTextWidth( nPara, nPos-pTextPortion->GetLen(), pTextPortion->GetLen() );
 
@@ -1684,6 +1737,10 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
         aPositions.Insert( pAttrib->GetEnd() );
     }
     aPositions.Insert( pNode->GetText().Len() );
+
+    const TEWritingDirectionInfos& rWritingDirections = pTEParaPortion->GetWritingDirectionInfos();
+    for ( USHORT nD = 0; nD < rWritingDirections.Count(); nD++ )
+        aPositions.Insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetPara() == nPara ) )
     {
@@ -1713,7 +1770,7 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
     USHORT nInvPortion = 0;
     for ( USHORT nP = 0; nP < pTEParaPortion->GetTextPortions().Count(); nP++ )
     {
-        TextPortion* pTmpPortion = pTEParaPortion->GetTextPortions().GetObject(nP);
+        TETextPortion* pTmpPortion = pTEParaPortion->GetTextPortions().GetObject(nP);
         nPortionStart += pTmpPortion->GetLen();
         if ( nPortionStart >= nStartPos )
         {
@@ -1741,7 +1798,7 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
     DBG_ASSERT( bFound && ( nInvPos < (aPositions.Count()-1) ), "InvPos ?!" );
     for ( USHORT i = nInvPos+1; i < aPositions.Count(); i++ )
     {
-        TextPortion* pNew = new TextPortion( (USHORT)aPositions[i] - (USHORT)aPositions[i-1] );
+        TETextPortion* pNew = new TETextPortion( (USHORT)aPositions[i] - (USHORT)aPositions[i-1] );
         pTEParaPortion->GetTextPortions().Insert( pNew, pTEParaPortion->GetTextPortions().Count());
     }
 
@@ -1786,7 +1843,7 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
             }
             else
             {
-                TextPortion* pNewPortion = new TextPortion( nNewChars );
+                TETextPortion* pNewPortion = new TETextPortion( nNewChars );
                 pTEParaPortion->GetTextPortions().Insert( pNewPortion, nNewPortionPos );
             }
         }
@@ -1795,7 +1852,7 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
             USHORT nPortionStart;
             const USHORT nTP = pTEParaPortion->GetTextPortions().
                 FindPortion( nStartPos, nPortionStart );
-            TextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
+            TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
             DBG_ASSERT( pTP, "RecalcTextPortion: Portion nicht gefunden"  );
             pTP->GetLen() += nNewChars;
             pTP->GetWidth() = (-1);
@@ -1813,7 +1870,7 @@ void TextEngine::RecalcTextPortion( ULONG nPara, USHORT nStartPos, short nNewCha
         USHORT nPos = 0;
         USHORT nEnd = nStartPos-nNewChars;
         USHORT nPortions = pTEParaPortion->GetTextPortions().Count();
-        TextPortion* pTP = 0;
+        TETextPortion* pTP = 0;
         for ( nPortion = 0; nPortion < nPortions; nPortion++ )
         {
             pTP = pTEParaPortion->GetTextPortions()[ nPortion ];
@@ -1903,10 +1960,13 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                     for ( USHORT y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Zeile ohne Textportion im Paint!" );
-                        TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( y );
+                        TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( y );
                         DBG_ASSERT( pTextPortion, "NULL-Pointer im Portioniterator in UpdateViews" );
 
+                        ImpInitLayoutMode( pOutDev /*, pTextPortion->IsRightToLeft() */);
+
                         long nTxtWidth = pTextPortion->GetWidth();
+                        aTmpPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nIndex, nIndex );
 
                         // nur ausgeben, was im sichtbaren Bereich beginnt:
                         if ( ( ( aTmpPos.X() + nTxtWidth ) >= 0 )
@@ -1934,10 +1994,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             if ( ( pPaintRange->GetStart().GetPara() == nPara )
                                                     && ( nTmpIndex < pPaintRange->GetStart().GetIndex() ) )
                                             {
-                                                USHORT nL = pPaintRange->GetStart().GetIndex() - nTmpIndex;
-    //                                          aPos.X() += pOutDev->GetTextSize( pPortion->GetNode()->GetText(), nTmpIndex, nL ).Width();
-                                                aPos.X() += (long)CalcTextWidth( nPara, nTmpIndex, nL, &aFont );
-                                                nTmpIndex += nL;
+                                                nTmpIndex = pPaintRange->GetStart().GetIndex();
                                             }
                                             if ( ( pPaintRange->GetEnd().GetPara() == nPara )
                                                     && ( nEnd > pPaintRange->GetEnd().GetIndex() ) )
@@ -1961,9 +2018,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                 {
                                                     nL = pSelStart->GetIndex() - nTmpIndex;
                                                     pOutDev->SetFont( aFont );
+                                                    aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
-    //                                              aPos.X() += pOutDev->GetTextSize( pPortion->GetNode()->GetText(), nTmpIndex, nL ).Width();
-                                                    aPos.X() += (long)CalcTextWidth( nPara, nTmpIndex, nL, &aFont );
                                                     nTmpIndex += nL;
 
                                                 }
@@ -1973,22 +2029,26 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     nL = pSelEnd->GetIndex() - nTmpIndex;
                                                 pOutDev->SetTextColor( rStyleSettings.GetHighlightTextColor() );
                                                 pOutDev->SetTextFillColor( rStyleSettings.GetHighlightColor() );
+                                                aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                 pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
-    //                                          aPos.X() += pOutDev->GetTextSize( pPortion->GetNode()->GetText(), nTmpIndex, nL ).Width();
-                                                aPos.X() += (long)CalcTextWidth( nPara, nTmpIndex, nL, &aFont );
                                                 nTmpIndex += nL;
 
                                                 // 3) Bereich nach Selektion
                                                 if ( nTmpIndex < nEnd )
                                                 {
                                                     pOutDev->SetFont( aFont );
+                                                    nL = nEnd-nTmpIndex;
+                                                    aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
                                                 }
                                                 bDone = TRUE;
                                             }
                                         }
                                         if ( !bDone )
+                                        {
+                                            aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nEnd );
                                             pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
+                                        }
                                     }
 
                                 }
@@ -2025,9 +2085,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                 default:    DBG_ERROR( "ImpPaint: Unknown Portion-Type !" );
                             }
                         }
-                        aTmpPos.X() += nTxtWidth;
-                        if ( pPaintArea && ( aTmpPos.X() > pPaintArea->Right() ) )
-                            break;  // Keine weitere Ausgabe in Zeile noetig
 
                         nIndex += pTextPortion->GetLen();
                     }
@@ -2103,7 +2160,7 @@ BOOL TextEngine::CreateLines( ULONG nPara )
         for ( USHORT nTP = 0; nTP < nPortions; nTP++ )
         {
             // Es darf kein Start/Ende im geloeschten Bereich liegen.
-            TextPortion* const pTP = pTEParaPortion->GetTextPortions().GetObject( nTP );
+            TETextPortion* const pTP = pTEParaPortion->GetTextPortions().GetObject( nTP );
             nPos += pTP->GetLen();
             if ( ( nPos > nStart ) && ( nPos < nEnd ) )
             {
@@ -2113,7 +2170,10 @@ BOOL TextEngine::CreateLines( ULONG nPara )
         }
     }
 
-    if ( bQuickFormat )
+    if ( !pTEParaPortion->GetWritingDirectionInfos().Count() )
+        ImpInitWritingDirections( nPara );
+
+    if ( bQuickFormat && ( pTEParaPortion->GetWritingDirectionInfos().Count() == 1 ) )
         RecalcTextPortion( nPara, nInvalidStart, nInvalidDiff );
     else
         CreateTextPortions( nPara, nInvalidStart );
@@ -2171,7 +2231,7 @@ BOOL TextEngine::CreateLines( ULONG nPara )
             nXWidth = nTmpWidth;
 
         // Portion suchen, die nicht mehr in Zeile passt....
-        TextPortion* pPortion;
+        TETextPortion* pPortion;
         BOOL bBrokenLine = FALSE;
         bLineBreak = FALSE;
 
@@ -2199,9 +2259,13 @@ BOOL TextEngine::CreateLines( ULONG nPara )
             }
             else
             {
+
                 if ( bCalcPortion || !pPortion->HasValidSize() )
                     pPortion->GetWidth() = (long)CalcTextWidth( nPara, nTmpPos, pPortion->GetLen() );
                 nTmpWidth += pPortion->GetWidth();
+
+                pPortion->GetRightToLeft() = ImpGetRightToLeft( nPara, nTmpPos+1 );
+                pPortion->GetKind() = PORTIONKIND_TEXT;
             }
 
             nTmpPos += pPortion->GetLen();
@@ -2254,19 +2318,19 @@ BOOL TextEngine::CreateLines( ULONG nPara )
             ImpBreakLine( nPara, pLine, pPortion, nPortionStart, nRemainingWidth );
         }
 
-        if ( ( meAlign == TXTALIGN_CENTER ) || ( meAlign == TXTALIGN_RIGHT ) )
+        if ( ( ImpGetAlign() == TXTALIGN_CENTER ) || ( ImpGetAlign() == TXTALIGN_RIGHT ) )
         {
             // Ausrichten...
             long nTextWidth = 0;
             for ( USHORT nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
             {
-                TextPortion* pTextPortion = pTEParaPortion->GetTextPortions().GetObject( nTP );
+                TETextPortion* pTextPortion = pTEParaPortion->GetTextPortions().GetObject( nTP );
                 nTextWidth += pTextPortion->GetWidth();
             }
             long nSpace = mnMaxTextWidth - nTextWidth;
             if ( nSpace > 0 )
             {
-                if ( meAlign == TXTALIGN_CENTER )
+                if ( ImpGetAlign() == TXTALIGN_CENTER )
                     pLine->SetStartX( (USHORT)(nSpace / 2) );
                 else    // TXTALIGN_RIGHT
                     pLine->SetStartX( (USHORT)nSpace );
@@ -2583,6 +2647,7 @@ void TextEngine::SetTextAlign( TxtAlign eAlign )
     {
         meAlign = eAlign;
         FormatFullDoc();
+        UpdateViews();
     }
 }
 
@@ -2771,4 +2836,230 @@ void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
         maLocale.Country = aCountry;
     }
     return maLocale;
+}
+
+void TextEngine::SetRightToLeft( BOOL bR2L )
+{
+    if ( mbRightToLeft != bR2L )
+    {
+        mbRightToLeft = bR2L;
+        FormatFullDoc();
+        UpdateViews();
+    }
+}
+
+void TextEngine::ImpInitWritingDirections( ULONG nPara )
+{
+    TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
+    TEWritingDirectionInfos& rInfos = pParaPortion->GetWritingDirectionInfos();
+    rInfos.Remove( 0, rInfos.Count() );
+
+    if ( pParaPortion->GetNode()->GetText().Len() )
+    {
+        const BYTE nDefaultDir = IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR;
+        String aText( pParaPortion->GetNode()->GetText() );
+
+        //
+        // Bidi functions from icu 2.0
+        //
+        UErrorCode nError = U_ZERO_ERROR;
+        UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
+        nError = U_ZERO_ERROR;
+
+        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nDefaultDir, NULL, &nError );
+        nError = U_ZERO_ERROR;
+
+        long nCount = ubidi_countRuns( pBidi, &nError );
+
+        UTextOffset nStart = 0;
+        UTextOffset nEnd;
+        UBiDiLevel nCurrDir;
+
+        for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
+        {
+            ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
+            rInfos.Insert( TEWritingDirectionInfo( nCurrDir, (USHORT)nStart, (USHORT)nEnd ), rInfos.Count() );
+            nStart = nEnd;
+        }
+
+        ubidi_close( pBidi );
+    }
+
+    // No infos mean no CTL and default dir is L2R...
+    if ( !rInfos.Count() )
+        rInfos.Insert( TEWritingDirectionInfo( 0, 0, (USHORT)pParaPortion->GetNode()->GetText().Len() ), rInfos.Count() );
+
+}
+
+BYTE TextEngine::ImpGetRightToLeft( ULONG nPara, USHORT nPos, USHORT* pStart, USHORT* pEnd )
+{
+    BYTE nRightToLeft = 0;
+
+    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    if ( pNode && pNode->GetText().Len() )
+    {
+        TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
+        if ( !pParaPortion->GetWritingDirectionInfos().Count() )
+            ImpInitWritingDirections( nPara );
+
+        BYTE nType = 0;
+        TEWritingDirectionInfos& rDirInfos = pParaPortion->GetWritingDirectionInfos();
+        for ( USHORT n = 0; n < rDirInfos.Count(); n++ )
+        {
+            if ( ( rDirInfos[n].nStartPos <= nPos ) && ( rDirInfos[n].nEndPos >= nPos ) )
+               {
+                nRightToLeft = rDirInfos[n].nType;
+                if ( pStart )
+                    *pStart = rDirInfos[n].nStartPos;
+                if ( pEnd )
+                    *pEnd = rDirInfos[n].nEndPos;
+                break;
+            }
+        }
+    }
+    return nRightToLeft;
+}
+
+long TextEngine::ImpGetPortionXOffset( ULONG nPara, TextLine* pLine, USHORT nTextPortion )
+{
+    long nX = pLine->GetStartX();
+
+    TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
+
+    for ( USHORT i = pLine->GetStartPortion(); i < nTextPortion; i++ )
+    {
+        TETextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( i );
+        nX += pPortion->GetWidth();
+    }
+
+    TETextPortion* pDestPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+    if ( !IsRightToLeft() && pDestPortion->GetRightToLeft() )
+    {
+        // Portions behind must be added, visual before this portion
+        sal_uInt16 nTmpPortion = nTextPortion+1;
+        while ( nTmpPortion <= pLine->GetEndPortion() )
+        {
+            TETextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                nX += pNextTextPortion->GetWidth();
+            else
+                break;
+            nTmpPortion++;
+        }
+        // Portions before must be removed, visual behind this portion
+        nTmpPortion = nTextPortion;
+        while ( nTmpPortion > pLine->GetStartPortion() )
+        {
+            --nTmpPortion;
+            TETextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                nX -= pPrevTextPortion->GetWidth();
+            else
+                break;
+        }
+    }
+    else if ( IsRightToLeft() && !pDestPortion->IsRightToLeft() )
+    {
+        // Portions behind must be removed, visual behind this portion
+        sal_uInt16 nTmpPortion = nTextPortion+1;
+        while ( nTmpPortion <= pLine->GetEndPortion() )
+        {
+            TETextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                nX += pNextTextPortion->GetWidth();
+            else
+                break;
+            nTmpPortion++;
+        }
+        // Portions before must be added, visual before this portion
+        nTmpPortion = nTextPortion;
+        while ( nTmpPortion > pLine->GetStartPortion() )
+        {
+            --nTmpPortion;
+            TETextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                nX -= pPrevTextPortion->GetWidth();
+            else
+                break;
+        }
+    }
+
+/*
+    if ( IsRightToLeft() )
+    {
+        // Switch X postions...
+        DBG_ASSERT( GetMaxTextWidth(), "GetPortionXOffset - max text width?!" );
+        DBG_ASSERT( nX <= (long)GetMaxTextWidth(), "GetPortionXOffset - position out of paper size!" );
+        nX = GetMaxTextWidth() - nX;
+        nX -= pDestPortion->GetWidth();
+    }
+*/
+
+    return nX;
+}
+
+void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev, BOOL bDrawingR2LPortion )
+{
+    ULONG nLayoutMode = pOutDev->GetLayoutMode();
+
+    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+    if ( bDrawingR2LPortion )
+        nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
+
+    pOutDev->SetLayoutMode( nLayoutMode );
+}
+
+TxtAlign TextEngine::ImpGetAlign() const
+{
+    TxtAlign eAlign = meAlign;
+    if ( IsRightToLeft() )
+    {
+        if ( eAlign == TXTALIGN_LEFT )
+            eAlign = TXTALIGN_RIGHT;
+        else if ( eAlign == TXTALIGN_RIGHT )
+            eAlign = TXTALIGN_LEFT;
+    }
+    return eAlign;
+}
+
+long TextEngine::ImpGetOutputOffset( ULONG nPara, TextLine* pLine, USHORT nIndex, USHORT nIndex2 )
+{
+    TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
+
+    USHORT nPortionStart;
+    USHORT nPortion = pPortion->GetTextPortions().FindPortion( nIndex, nPortionStart, TRUE );
+
+    TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nPortion );
+
+    long nX;
+
+    if ( ( nIndex == nPortionStart ) && ( nIndex == nIndex2 )  )
+    {
+        // Output of full portion, so we need portion x offset.
+        // Use ImpGetPortionXOffset, because GetXPos may deliver left or right position from portioon, depending on R2L, L2R
+        nX = ImpGetPortionXOffset( nPara, pLine, nPortion );
+        if ( IsRightToLeft() )
+        {
+            nX = -nX -pTextPortion->GetWidth();
+        }
+    }
+    else
+    {
+        nX = ImpGetXPos( nPara, pLine, nIndex, nIndex == nPortionStart );
+        if ( nIndex2 != nIndex )
+        {
+            long nX2 = ImpGetXPos( nPara, pLine, nIndex2, FALSE );
+            if ( ( !IsRightToLeft() && ( nX2 < nX ) ) ||
+                 ( IsRightToLeft() && ( nX2 > nX ) ) )
+            {
+                nX = nX2;
+            }
+        }
+        if ( IsRightToLeft() )
+        {
+            nX = -nX;
+        }
+    }
+
+    return nX;
 }

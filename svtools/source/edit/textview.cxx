@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-23 13:00:50 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 15:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,9 +420,9 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
         }
 
         Rectangle aTmpRec( Point( 0, 0 ), rRect.GetSize() );
-        Point aStartPos = GetDocPos( rRect.TopLeft() );
-        aStartPos.X() *= (-1);
-        aStartPos.Y() *= (-1);
+
+        Point aDocPos( maStartDocPos.X(), maStartDocPos.Y() + rRect.Top() );
+        Point aStartPos = ImpGetOutputStartPos( aDocPos );
 
         TextSelection *pTmpPtr = mbHighlightSelection ? NULL : &maSelection;
         ImpPaint( pVDev, aStartPos, &aTmpRec, NULL, pTmpPtr );
@@ -436,8 +436,7 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
     }
     else
     {
-        Point aStartPos( -maStartDocPos.X(), -maStartDocPos.Y() );
-
+        Point aStartPos = ImpGetOutputStartPos( maStartDocPos );
         TextSelection *pTmpPtr = mbHighlightSelection ? NULL : &maSelection;
         ImpPaint( mpWindow, aStartPos, &rRect, NULL, pTmpPtr );
 
@@ -532,64 +531,38 @@ void TextView::ImpHighlight( const TextSelection& rSel )
 
 void TextView::ShowSelection()
 {
-    if ( maSelection.HasRange() )
-    {
-        if ( mbHighlightSelection )
-            ImpHighlight( maSelection );
-        else
-        {
-            // Den Bereich neu zeichnen...
-            Rectangle aOutArea( Point( 0, 0 ), mpWindow->GetOutputSizePixel() );
-            Point aStartPos( -maStartDocPos.X(), -maStartDocPos.Y() );
-            TextSelection aRange( maSelection );
-            aRange.Justify();
-            BOOL bVisCursor = mpCursor->IsVisible();
-            mpCursor->Hide();
-            ImpPaint( mpWindow, aStartPos, &aOutArea, &aRange, &maSelection );
-            if ( bVisCursor )
-                mpCursor->Show();
-        }
-    }
+    ImpShowHideSelection( TRUE );
 }
 
 void TextView::HideSelection()
 {
-    if ( maSelection.HasRange() )
-    {
-        if ( mbHighlightSelection )
-            ImpHighlight( maSelection );
-        else
-        {
-            // Den Bereich neu zeichnen...
-            Rectangle aOutArea( Point( 0, 0 ), mpWindow->GetOutputSizePixel() );
-            Point aStartPos( -maStartDocPos.X(), -maStartDocPos.Y() );
-            TextSelection aRange( maSelection );
-            aRange.Justify();
-            BOOL bVisCursor = mpCursor->IsVisible();
-            mpCursor->Hide();
-            ImpPaint( mpWindow, aStartPos, &aOutArea, &aRange, NULL );
-            if ( bVisCursor )
-                mpCursor->Show();
-        }
-    }
+    ImpShowHideSelection( FALSE );
 }
 
 void TextView::ShowSelection( const TextSelection& rRange )
 {
-    if ( rRange.HasRange() )
+    ImpShowHideSelection( TRUE, &rRange );
+}
+
+void TextView::ImpShowHideSelection( BOOL bShow, const TextSelection* pRange )
+{
+    const TextSelection* pRangeOrSelection = pRange ? pRange : &maSelection;
+
+    if ( pRangeOrSelection->HasRange() )
     {
         if ( mbHighlightSelection )
-            ImpHighlight( rRange );
+        {
+            ImpHighlight( *pRangeOrSelection );
+        }
         else
         {
-            // Den Bereich neu zeichnen...
             Rectangle aOutArea( Point( 0, 0 ), mpWindow->GetOutputSizePixel() );
-            Point aStartPos( -maStartDocPos.X(), -maStartDocPos.Y() );
-            TextSelection aRange( rRange );
+            Point aStartPos( ImpGetOutputStartPos( maStartDocPos ) );
+            TextSelection aRange( *pRangeOrSelection );
             aRange.Justify();
             BOOL bVisCursor = mpCursor->IsVisible();
             mpCursor->Hide();
-            ImpPaint( mpWindow, aStartPos, &aOutArea, &aRange, &maSelection );
+            ImpPaint( mpWindow, aStartPos, &aOutArea, &aRange, bShow ? &maSelection : NULL );
             if ( bVisCursor )
                 mpCursor->Show();
         }
@@ -768,6 +741,13 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
             default:
             {
+                #if defined( DEBUG ) && !defined( PRODUCT )
+                    if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                    {
+                        mpTextEngine->SetRightToLeft( !mpTextEngine->IsRightToLeft() );
+                        mpTextEngine->SetTextAlign( mpTextEngine->IsRightToLeft() ? TXTALIGN_RIGHT : TXTALIGN_LEFT );
+                    }
+                #endif
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
@@ -1210,9 +1190,16 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     TextPaM aPaM( maSelection.GetEnd() );
     TextPaM aOldEnd( aPaM );
 
-    BOOL bCtrl = rKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
+    TextDirectionality eTextDirection = TextDirectionality_LeftToRight_TopToBottom;
+    if ( mpTextEngine->IsRightToLeft() )
+        eTextDirection = TextDirectionality_RightToLeft_TopToBottom;
 
-    switch ( rKeyEvent.GetKeyCode().GetCode() )
+    KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
+
+    BOOL bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
+    USHORT nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
+
+    switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM );
                             break;
@@ -1226,14 +1213,14 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM );
                             break;
-        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, rKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_LEFT:      aPaM = bCtrl ? CursorWordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
-        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, rKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+        case KEY_RIGHT:     aPaM = bCtrl ? CursorWordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? (USHORT)i18n::CharacterIteratorMode::SKIPCHARACTER : (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
                             break;
     }
 
     // Bewirkt evtl. ein CreateAnchor oder Deselection all
-    mpSelEngine->CursorPosChanging( rKeyEvent.GetKeyCode().IsShift(), rKeyEvent.GetKeyCode().IsMod1() );
+    mpSelEngine->CursorPosChanging( aTranslatedKeyEvent.GetKeyCode().IsShift(), aTranslatedKeyEvent.GetKeyCode().IsMod1() );
 
     if ( aOldEnd != aPaM )
     {
@@ -1242,7 +1229,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
 
         TextSelection aOldSelection( maSelection );
         maSelection.GetEnd() = aPaM;
-        if ( rKeyEvent.GetKeyCode().IsShift() )
+        if ( aTranslatedKeyEvent.GetKeyCode().IsShift() )
         {
             // Dann wird die Selektion erweitert...
             ShowSelection( TextSelection( aOldEnd, aPaM ) );
@@ -2059,6 +2046,59 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
         }
         rDTDE.Context->acceptDrag( rDTDE.DropAction );
     }
+}
+
+Point TextView::ImpGetOutputStartPos( const Point& rStartDocPos ) const
+{
+    Point aStartPos( -rStartDocPos.X(), -rStartDocPos.Y() );
+    if ( mpTextEngine->IsRightToLeft() )
+    {
+        Size aSz = mpWindow->GetOutputSizePixel();
+        aStartPos.X() = rStartDocPos.X() + aSz.Width() - 1; // -1: Start is 0
+    }
+    return aStartPos;
+}
+
+Point TextView::GetDocPos( const Point& rWindowPos ) const
+{
+    // Fensterposition => Dokumentposition
+
+    Point aPoint;
+
+    aPoint.Y() = rWindowPos.Y() + maStartDocPos.Y();
+
+    if ( !mpTextEngine->IsRightToLeft() )
+    {
+        aPoint.X() = rWindowPos.X() + maStartDocPos.X();
+    }
+    else
+    {
+        Size aSz = mpWindow->GetOutputSizePixel();
+        aPoint.X() = rWindowPos.X() - ( aSz.Width() - 1 ) + maStartDocPos.X();
+    }
+
+    return aPoint;
+}
+
+Point TextView::GetWindowPos( const Point& rDocPos ) const
+{
+    // Dokumentposition => Fensterposition
+
+    Point aPoint;
+
+    aPoint.Y() = rDocPos.Y() - maStartDocPos.Y();
+
+    if ( !mpTextEngine->IsRightToLeft() )
+    {
+        aPoint.X() = rDocPos.X() - maStartDocPos.X();
+    }
+    else
+    {
+        Size aSz = mpWindow->GetOutputSizePixel();
+        aPoint.X() = ( aSz.Width() - 1 ) - ( rDocPos.X() - maStartDocPos.X() );
+    }
+
+    return aPoint;
 }
 
 

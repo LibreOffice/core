@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdat2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 15:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,20 +101,22 @@ class TextView;
 #define LINE_SEP    0x0A
 
 
-class TextPortion
+class TETextPortion
 {
 private:
     USHORT      nLen;
     long        nWidth;
     BYTE        nKind;
+    BYTE        nRightToLeft;
 
-                TextPortion()               { nLen = 0; nKind = PORTIONKIND_TEXT; nWidth = -1;}
+                TETextPortion()             { nLen = 0; nKind = PORTIONKIND_TEXT; nWidth = -1; nRightToLeft = 0;}
 
 public:
-                TextPortion( USHORT nL )    {
+                TETextPortion( USHORT nL )  {
                                                 nLen = nL;
                                                 nKind = PORTIONKIND_TEXT;
                                                 nWidth= -1;
+                                                nRightToLeft = 0;
                                             }
 
     USHORT      GetLen() const              { return nLen; }
@@ -126,12 +128,16 @@ public:
     BYTE        GetKind() const             { return nKind; }
     BYTE&       GetKind()                   { return nKind; }
 
+    BYTE        GetRightToLeft() const      { return nRightToLeft; }
+    BYTE&       GetRightToLeft()            { return nRightToLeft; }
+    BOOL        IsRightToLeft() const       { return (nRightToLeft&1); }
+
     BOOL        HasValidSize() const        { return nWidth != (-1); }
 };
 
 
 
-typedef TextPortion* TextPortionPtr;
+typedef TETextPortion* TextPortionPtr;
 SV_DECL_PTRARR( TextPortionArray, TextPortionPtr, 0, 8 );
 
 class TETextPortionList : public TextPortionArray
@@ -141,11 +147,25 @@ public:
             ~TETextPortionList();
 
     void    Reset();
-    USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart );
+    USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart, BOOL bPreferStartingPortion = FALSE );
+    USHORT  GetPortionStartIndex( USHORT nPortion );
     void    DeleteFromPortion( USHORT nDelFrom );
 };
 
+struct TEWritingDirectionInfo
+{
+    BYTE    nType;
+    USHORT  nStartPos;
+    USHORT  nEndPos;
+    TEWritingDirectionInfo( BYTE _Type, USHORT _Start, USHORT _End )
+    {
+        nType = _Type;
+        nStartPos = _Start;
+        nEndPos = _End;
+    }
+};
 
+SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0, 4 );
 
 class TextLine
 {
@@ -226,10 +246,12 @@ inline BOOL TextLine::operator != ( const TextLine& rLine ) const
 class TEParaPortion
 {
 private:
-    TextNode*           mpNode;
+    TextNode*               mpNode;
 
-    TextLines           maLines;
+    TextLines               maLines;
     TETextPortionList       maTextPortions;
+    TEWritingDirectionInfos maWritingDirectionInfos;
+
 
     USHORT              mnInvalidPosStart;
     short               mnInvalidDiff;
@@ -259,6 +281,8 @@ public:
     TextNode*           GetNode() const             { return mpNode; }
     TextLines&          GetLines()                  { return maLines; }
     TETextPortionList&  GetTextPortions()           { return maTextPortions; }
+    TEWritingDirectionInfos& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
+
 
     USHORT              GetLineNumber( USHORT nIndex, BOOL bInclEnd );
     void                CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLine );
