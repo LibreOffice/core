@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 14:30:02 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 13:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #define SC_UNONAME_CCOLOR           "CharColor"
 #define SC_UNONAME_CHEIGHT          "CharHeight"
 #define SC_UNONAME_CUNDER           "CharUnderline"
+#define SC_UNONAME_CUNDLCOL         "CharUnderlineColor"
+#define SC_UNONAME_CUNDLHAS         "CharUnderlineHasColor"
 #define SC_UNONAME_CWEIGHT          "CharWeight"
 #define SC_UNONAME_CPOST            "CharPosture"
 #define SC_UNONAME_CCROSS           "CharCrossedOut"
