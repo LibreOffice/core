@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-16 12:16:07 $
+ *  last change: $Author: ssa $ $Date: 2002-08-22 07:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnOptions                   = rData.mnOptions;
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
-}
+    mnLayoutRTL                 = rData.mnLayoutRTL;
+    }
 
 // -----------------------------------------------------------------------
 
@@ -646,6 +647,7 @@ void ImplStyleData::SetStandardStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnLayoutRTL                 = ImplInitLayoutRTL();
 }
 
 // -----------------------------------------------------------------------
@@ -745,6 +747,7 @@ void ImplStyleData::SetStandardOS2Styles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnLayoutRTL                 = ImplInitLayoutRTL();
 }
 
 // -----------------------------------------------------------------------
@@ -828,6 +831,7 @@ void ImplStyleData::SetStandardMacStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnLayoutRTL                 = ImplInitLayoutRTL();
 }
 
 // -----------------------------------------------------------------------
@@ -859,6 +863,17 @@ void ImplStyleData::SetStandardUnixStyles()
     mnBorderSize                = 3;
 }
 
+// -----------------------------------------------------------------------
+
+USHORT ImplStyleData::ImplInitLayoutRTL()
+{
+    // TODO: read window layout from configuration
+    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+    if( pEnv )
+        return 1;
+    else
+        return 0;
+}
 // -----------------------------------------------------------------------
 
 StyleSettings::StyleSettings()
@@ -958,6 +973,7 @@ void StyleSettings::SetStandardUnixStyles()
     mpData->SetStandardUnixStyles();
 }
 
+
 // -----------------------------------------------------------------------
 
 const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
@@ -1024,6 +1040,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
+         (mpData->mnLayoutRTL               == rSet.mpData->mnLayoutRTL)                &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
