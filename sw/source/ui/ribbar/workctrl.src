@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:06:24 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ chinese_traditional ] = "¤ι΄Α";
             Text[ arabic ] = "ΚΗΡνΞ";
             Text[ greek ] = "Ημερομηνία";
-            Text[ korean ] = "µ¥ΐΜΕΝ";
+            Text[ korean ] = "³―Β¥";
             Text[ turkish ] = "Tarih";
             Text[ language_user1 ] = " ";
         };
@@ -1200,7 +1200,7 @@ String STR_IMGBTN_GRF_DOWN
     Text[ chinese_traditional ] = "¤U¤@­ΣΉΟ¤ω";
     Text[ arabic ] = "ΗαΥζΡΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενο γραφικό";
-    Text[ korean ] = "΄Ωΐ½ ±ΧΈ²";
+    Text[ korean ] = "΄Ωΐ½ ±Χ·΅ΗΘ";
     Text[ turkish ] = "Sonraki grafik";
     Text[ language_user1 ] = " ";
 };
@@ -1222,7 +1222,7 @@ String STR_IMGBTN_OLE_DOWN
     Text[ chinese_simplified ] = "ΟΒÒ»Έφ OLE-¶ΤΟσ";
     Text[ russian ] = "Ρλεδσώωθι ξαϊεκς OLE";
     Text[ polish ] = "Nastκpny obiekt OLE";
-    Text[ japanese ] = "‚ΜOLE-µΜήΌήªΈΔ";
+    Text[ japanese ] = "‚ΜOLEµΜήΌήªΈΔ";
     Text[ chinese_traditional ] = "¤U¤@­Σ OLE-ª«¥σ";
     Text[ arabic ] = "ΗαΚΗαν OLE ΗαίΗΖδ";
     Text[ greek ] = "Επόμενο αντικείμενο OLE";
@@ -1620,7 +1620,7 @@ String STR_IMGBTN_OLE_UP
     Text[ chinese_simplified ] = "ΙΟÒ»Έφ OLE-¶ΤΟσ";
     Text[ russian ] = "Οπεδϋδσωθι ξαϊεκς OLE";
     Text[ polish ] = "Poprzedni obiekt OLE";
-    Text[ japanese ] = "‘O‚ΜOLE-µΜήΌήªΈΔ";
+    Text[ japanese ] = "‘O‚ΜOLEµΜήΌήªΈΔ";
     Text[ chinese_traditional ] = "¤W¤@­Σ OLE-ª«¥σ";
     Text[ arabic ] = "ΗαΣΗΘή OLE ΗαίΗΖδ";
     Text[ greek ] = "Προηγούμενο αντικείμενο OLE";
