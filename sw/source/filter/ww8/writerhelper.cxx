@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:05:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ namespace
     public:
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
-            return pB->GetOutlineLevel() < pB->GetOutlineLevel();
+            return pA->GetOutlineLevel() < pB->GetOutlineLevel();
         }
     };
 
@@ -431,12 +431,16 @@ namespace sw
             return pDbgOut;
         }
 
-        void DumpStream(const SvStream &rSrc, SvStream &rDest)
+        void DumpStream(const SvStream &rSrc, SvStream &rDest, sal_uInt32 nLen)
         {
             SvStream &rSource = const_cast<SvStream&>(rSrc);
             ULONG nOrigPos = rSource.Tell();
-            rSource.Seek(STREAM_SEEK_TO_END);
-            if (ULONG nLen = rSource.Tell())
+            if (nLen == STREAM_SEEK_TO_END)
+            {
+                rSource.Seek(STREAM_SEEK_TO_END);
+                nLen = rSource.Tell();
+            }
+            if (nLen - nOrigPos)
             {
                 rSource.Seek(nOrigPos);
                 sal_Char* pDat = new sal_Char[nLen];
@@ -464,6 +468,16 @@ namespace sw
 
     namespace util
     {
+
+        SwTwips MakeSafePositioningValue(SwTwips nIn)
+        {
+            if (nIn > SHRT_MAX)
+                nIn = SHRT_MAX;
+            else if (nIn < SHRT_MIN)
+                nIn = SHRT_MIN;
+            return nIn;
+        }
+
         void SetLayer::SendObjectToHell(SdrObject &rObject) const
         {
             SetObjectLayer(rObject, eHell);
@@ -629,6 +643,53 @@ namespace sw
 
             return 0;
         }
+
+        const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
+        {
+            if (const SwNumRule *pRule = GetNormalNumRuleFromTxtNode(rTxtNode))
+                return pRule;
+            return GetOutlineNumRuleFromTxtNode(rTxtNode);
+        }
+
+        const SwNumRule* GetOutlineNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
+        {
+            const SwNumRule *pRet = 0;
+            const SwNumRule *pRule = 0;
+            const SwNodeNum* pNum;
+
+            ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
+            if (!rTxtNode.GetDoc())
+                return 0;
+
+            if (
+                (pNum = rTxtNode.GetOutlineNum()) &&
+                (MAXLEVEL > pNum->GetLevel()) &&
+                (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
+               )
+            {
+                return pRule;
+            }
+
+            return 0;
+        }
+
+        const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
+        {
+            const SwNumRule *pRet = 0;
+            const SwNumRule *pRule = 0;
+            const SwNodeNum* pNum;
+
+            if (
+                (pNum = rTxtNode.GetNum()) &&
+                (MAXLEVEL > pNum->GetLevel()) &&
+                (pRule = rTxtNode.GetNumRule())
+               )
+            {
+                return pRule;
+            }
+            return 0;
+        }
+
 
         SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt)
         {
