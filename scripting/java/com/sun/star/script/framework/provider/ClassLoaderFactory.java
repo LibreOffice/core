@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ClassLoaderFactory.java,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-09-10 10:44:26 $
+*  last change: $Author: rt $ $Date: 2004-01-05 12:53:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -66,10 +66,11 @@ import java.util.Vector;
 import java.io.File;
 import java.io.IOException;
 import java.net.*;
-
+import com.sun.star.frame.XModel;
 import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.browse.ScriptMetaData;
 
 /**
  *  Class Loader Factory
@@ -81,12 +82,19 @@ public class ClassLoaderFactory
 {
     private ClassLoaderFactory() {}
 
-    public static ClassLoader getClassLoader(XComponentContext ctxt,
-        ClassLoader parent, Vector classpath)
+    public static ClassLoader getURLClassLoader( ScriptMetaData scriptData )
+        throws NoSuitableClassLoaderException, MalformedURLException
+    {
+        ClassLoader parent = scriptData.getClass().getClassLoader();
+        URL[] classPath = (URL[])scriptData.getClassPath().toArray( new URL[0] );
+
+        return getURLClassLoader( parent, classPath );
+    }
+    public static ClassLoader getURLClassLoader( ClassLoader parent, URL[] classpath)
         throws NoSuitableClassLoaderException
     {
         ClassLoader loader =
-            getURLClassLoader(ctxt, parent, classpath);
+            new URLClassLoader( classpath, parent);
 
         if (loader != null)
         {
@@ -99,29 +107,4 @@ public class ClassLoaderFactory
         }
     }
 
-    private static ClassLoader getURLClassLoader(XComponentContext ctxt,
-        ClassLoader parent, Vector classpath)
-    {
-        LogUtils.DEBUG("ClassLoaderFactory creating classloader with classpath list vector length " + classpath.size() );
-        URLStreamHandler handler = new UCBStreamHandler(ctxt);
-
-        int len = classpath.size();
-        ArrayList urls = new ArrayList(len);
-
-        for (int i = 0; i < len; i++) {
-            try {
-                URL url = PathUtils.createScriptURL( ( String )classpath.elementAt( i ), ctxt );
-                urls.add(url);
-            }
-            catch (MalformedURLException mue) {
-                System.err.println("Got a malformed URL: " + mue.getMessage());
-                mue.printStackTrace();
-            }
-        }
-
-        if (urls.size() == 0)
-            return null;
-
-        return new URLClassLoader((URL[])urls.toArray(new URL[0]), parent);
-    }
 }
