@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:11:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,9 @@ BOOL SwDocShell::Save()
     if(pView)
         pView->GetEditWin().StopQuickHelp();
     SwWait aWait( *this, TRUE );
+
+    CalcLayoutForOLEObjects();  // format for OLE objets
+
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxInPlaceObject::Save() )
     {
@@ -655,6 +658,8 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
             }
         }
     }
+
+    CalcLayoutForOLEObjects();  // format for OLE objets
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxInPlaceObject::SaveAs( pStor ) )
@@ -817,6 +822,8 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
         UpdateDocInfoForSave();
     }
+
+    CalcLayoutForOLEObjects();  // format for OLE objets
 
     if( xWriter->IsStgWriter() &&
         ( xWriter->IsSw3Writer() ||
@@ -1511,6 +1518,31 @@ void SwDocShell::RemoveOLEObjects()
                 xOLEChildList->Move( &aRef, aRef->GetStorageName(), TRUE );
                 pPersist->Remove( &aRef );
             }
+        }
+    }
+}
+
+// When a document is loaded, SwDoc::PrtOLENotify is called to update
+// the sizes of math objects. However, for objects that do not have a
+// SwFrm at this time, only a flag is set (bIsOLESizeInvalid) and the
+// size change takes place later, while calculating the layout in the
+// idle handler. If this document is saved now, it is saved with invalid
+// sizes. For this reason, the layout has to be calculated before a document is
+// saved, but of course only id there are OLE objects with bOLESizeInvalid set.
+void SwDocShell::CalcLayoutForOLEObjects()
+{
+    if( !pWrtShell )
+        return;
+
+    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
+            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    {
+        SwOLENode* pOLENd = pNd->GetOLENode();
+        if( pOLENd && pOLENd->IsOLESizeInvalid() )
+        {
+            pWrtShell->CalcLayout();
+            break;
         }
     }
 }
