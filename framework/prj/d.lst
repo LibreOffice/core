@@ -10,6 +10,7 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
 ..\dtd\statusbar.dtd %_DEST%\bin%_EXT%\statusbar.dtd
 ..\dtd\event.dtd %_DEST%\bin%_EXT%\event.dtd
+..\dtd\accelerator.dtd %_DEST%\bin%_EXT%\accelerator.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
