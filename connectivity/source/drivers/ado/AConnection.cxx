@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,8 +502,8 @@ void OConnection::buildTypeInfo() throw( SQLException)
                 sal_Int32 nPos = 1;
                 OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo();
                 aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->eType                        = ADOS::getField(pRecordset,nPos++).get_Value();
-                aInfo->aSimpleType.nType            = ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
+                DataTypeEnum eType                  = static_cast<DataTypeEnum>((sal_Int32)ADOS::getField(pRecordset,nPos++).get_Value());
+                aInfo->aSimpleType.nType            = ADOS::MapADOType2Jdbc(eType);
                 aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value();
                 aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value();
@@ -522,7 +522,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
                 // in the Hashtable if we don't already have an
                 // entry for this SQL type.
 
-                m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo->aSimpleType.nType,aInfo));
+                m_aTypeInfo.insert(OTypeInfoMap::value_type(eType,aInfo));
             }
             while ( SUCCEEDED(pRecordset->MoveNext()) );
         }
@@ -584,11 +584,10 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
 }
 // -----------------------------------------------------------------------------
 const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
-                           sal_Int32 _nType,
+                           DataTypeEnum _nType,
                            const ::rtl::OUString& _sTypeName,
                            sal_Int32 _nPrecision,
                            sal_Int32 _nScale,
-                           sal_Int32 _nAdoType,
                            sal_Bool& _brForceToType)
 {
     const OExtendedTypeInfo* pTypeInfo = NULL;
@@ -605,7 +604,6 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
             ::rtl::OUString sDBTypeName = aIter->second->aSimpleType.aTypeName;
             sal_Int32       nDBTypePrecision = aIter->second->aSimpleType.nPrecision;
             sal_Int32       nDBTypeScale = aIter->second->aSimpleType.nMaximumScale;
-            sal_Int32       nAdoType = aIter->second->eType;
     #endif
             if  (   (   !_sTypeName.getLength()
                     ||  (aIter->second->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
@@ -646,20 +644,13 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
             // type id (nType)
 
             // we can not assert here because we could be in d&d
-/*
-            OSL_ENSURE(sal_False,
-                (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-                +=  ::rtl::OString(" (expected type name: ")
-                +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
-*/
             pTypeInfo = aPair.first->second;
             _brForceToType = sal_True;
         }
         else
             pTypeInfo = aIter->second;
     }
-    else
+    else if ( _sTypeName.getLength() )
     {
         ::comphelper::TStringMixEqualFunctor aCase(sal_False);
         // search for typeinfo where the typename is equal _sTypeName
@@ -681,7 +672,6 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-
 
 
 
