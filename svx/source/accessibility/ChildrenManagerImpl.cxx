@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: af $ $Date: 2002-05-30 15:54:10 $
+ *  last change: $Author: af $ $Date: 2002-05-30 17:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,10 +473,17 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
                 uno::Any(),
                 aShape);
 
-            // Dispose the object.
-            Reference<lang::XComponent> xComponent (I->mxAccessibleShape, uno::UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose ();
+            // Dispose the object if there is a cooresponding UNO shape.
+            // Otherwise it will be disposed below.
+            if (I->mxShape.is())
+            {
+                Reference<lang::XComponent> xComponent (
+                    I->mxAccessibleShape, uno::UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->dispose ();
+            }
+            // Reset the reference to the accessible object in any case.  If
+            // it has not been disposed above it will be soon.
             I->mxAccessibleShape = NULL;
         }
     maVisibleChildren.clear ();
@@ -498,7 +505,6 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
                 xComponent->dispose ();
         }
     maAccessibleShapes.clear ();
-
 }
 
 
