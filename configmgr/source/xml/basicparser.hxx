@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:19 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,12 @@
 #ifndef CONFIGMGR_XML_ELEMENTPARSER_HXX
 #include "elementparser.hxx"
 #endif
+
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
+#endif
+#ifndef CONFIGMGR_STACK_HXX_
+#include "stack.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
@@ -75,11 +79,6 @@
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-
-#ifndef INCLUDED_STACK
-#include <stack>
-#define INCLUDED_STACK
 #endif
 
 namespace configmgr
@@ -106,7 +105,7 @@ namespace configmgr
             uno::Reference< uno::XInterface > m_xTypeConverter;
             uno::Reference< sax::XLocator > m_xLocator;
             ElementParser                   m_aDataParser;
-            std::stack< ElementInfo >       m_aNodes;
+            Stack< ElementInfo >            m_aNodes;
             uno::Type                       m_aValueType;
             ValueData *                     m_pValueData;
             sal_uInt16                      m_nSkipLevels;

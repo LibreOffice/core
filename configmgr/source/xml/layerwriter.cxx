@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:24 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ void LayerWriter::raiseIllegalTypeException(sal_Char const * pMsg)
 
 bool LayerWriter::isInElement() const
 {
-    return m_aTagStack.empty();
+    return !m_aTagStack.empty();
 }
 // -----------------------------------------------------------------------------
 
@@ -334,6 +334,7 @@ void LayerWriter::startNode()
 {
     OUString sTag = m_aFormatter.getElementTag();
     getWriteHandler()->startElement(sTag,m_aFormatter.getElementAttributes());
+    getWriteHandler()->ignorableWhitespace(OUString());
     m_aTagStack.push(sTag);
 }
 // -----------------------------------------------------------------------------

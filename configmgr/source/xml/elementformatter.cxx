@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:20 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
     switch (_eOp)
     {
     case Operation::none:       break;
-    case Operation::modify:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_MODIFY));  break;
+    case Operation::modify:     break ; //addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_MODIFY));  break;
     case Operation::replace:    addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REPLACE)); break;
     case Operation::remove:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REMOVE));  break;
 

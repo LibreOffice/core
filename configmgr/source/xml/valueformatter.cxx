@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueformatter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,11 +495,11 @@ OUString ValueFormatter::getContent(TypeConverter const & _xTCV) const
     {
         if (this->isList())
         {
-            aResult = formatSimpleValue(m_aValue, _xTCV);
+            aResult = formatSequenceValue(m_aValue, m_sSeparator, _xTCV);
         }
         else
         {
-            aResult = formatSequenceValue(m_aValue, m_sSeparator, _xTCV);
+            aResult = formatSimpleValue(m_aValue, _xTCV);
         }
     }
     catch (script::CannotConvertException& cce)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:07:25 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,11 @@
 #include "elementformatter.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
-
-#ifndef INCLUDED_STACK
-#include <stack>
-#define INCLUDED_STACK
+#ifndef CONFIGMGR_STACK_HXX_
+#include "stack.hxx"
 #endif
+
+#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
 
 namespace configmgr
 {
@@ -172,7 +171,7 @@ namespace configmgr
             void raiseMalformedDataException(sal_Char const * pMsg);
             void raiseIllegalTypeException(sal_Char const * pMsg);
         private:
-            typedef std::stack< OUString > TagStack;
+            typedef Stack< OUString > TagStack;
             uno::Reference< uno::XInterface > m_xTCV;
             TagStack            m_aTagStack;
             ElementFormatter    m_aFormatter;
