@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:22:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabDialog RID_SCDLG_ATTR
     Text [ italian ] = "Attributi cella" ;
     Text [ portuguese_brazilian ] = "Atributos da Célula" ;
     Text [ portuguese ] = "Atributos de célula" ;
-    Text [ finnish ] = "Solumääritteet" ;
+    Text [ finnish ] = "Solun määritteet" ;
     Text [ danish ] = "Celleattributter" ;
     Text [ french ] = "Attributs de cellule" ;
     Text [ swedish ] = "Cellattribut" ;
@@ -102,7 +102,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Numeri" ;
                 Text [ portuguese_brazilian ] = "Número" ;
                 Text [ portuguese ] = "Números" ;
-                Text [ finnish ] = "Numero" ;
+                Text [ finnish ] = "Luvut" ;
                 Text [ danish ] = "Tal" ;
                 Text [ french ] = "Nombres" ;
                 Text [ swedish ] = "Tal" ;
@@ -131,7 +131,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Carattere" ;
                 Text [ portuguese_brazilian ] = "Caractere" ;
                 Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Merkki" ;
+                Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
                 Text [ french ] = "Police" ;
                 Text [ swedish ] = "Teckensnitt" ;
@@ -175,6 +175,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ catalan ] = "Efectos de fuente";
+                Text[ finnish ] = "Fonttitehosteet";
             };
             PageItem
             {
@@ -230,6 +231,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -241,7 +243,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -299,7 +301,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Protezione" ;
                 Text [ portuguese_brazilian ] = "Proteção" ;
                 Text [ portuguese ] = "Protecção de célula" ;
-                Text [ finnish ] = "Suojaus" ;
+                Text [ finnish ] = "Solun suojaus" ;
                 Text [ danish ] = "Cellebeskyttelse" ;
                 Text [ french ] = "Protection" ;
                 Text [ swedish ] = "Cellskydd" ;
@@ -383,7 +385,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Nascondi ~formule" ;
         Text [ portuguese_brazilian ] = "Ocultar ~Fórmulas" ;
         Text [ portuguese ] = "Ocultar ~fórmulas" ;
-        Text [ finnish ] = "Piilota ~kaavat" ;
+        Text [ finnish ] = "~Piilota kaava" ;
         Text [ danish ] = "Skjul ~formel" ;
         Text [ french ] = "Masquer les ~formules" ;
         Text [ swedish ] = "Dölj ~formel" ;
@@ -413,7 +415,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Nascondi ~tutto" ;
         Text [ portuguese_brazilian ] = "Orecortar ~Tudo" ;
         Text [ portuguese ] = "Ocultar ~tudo" ;
-        Text [ finnish ] = "Piilota k~aikki" ;
+        Text [ finnish ] = "~Piilota kaikki" ;
         Text [ danish ] = "Skjul alt" ;
         Text [ french ] = "Masquer ~tout" ;
         Text [ swedish ] = "Dölj ~allt" ;
@@ -450,8 +452,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliete 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
         Text [ portuguese_brazilian ] = "Para ativar a proteção da célula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
         Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
-        Text [ finnish ] =
-        "Suojaa aktiivinen taulukko, jotta voit valita solujen suojauksen.\n\nValitse sitten Muut-valikosta Suojaa asiakirja ja Taulukko." ;
+        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun käsiteltävänä oleva lomake on suojattu. \n\nValitse Työkalut-valikosta Suojaa asiakirja ja määritä sitten Lomake." ;
         Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
         Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille active.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
         Text [ swedish ] = "Cellskyddet är endast verksamt om den aktiva tabellen är skyddad.\n\nVälj kommandot 'Skydda dokument' i menyn 'Verktyg' och därefter kommandot 'Tabell' för att skydda tabellen." ;
@@ -509,7 +510,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Non ~stampare" ;
         Text [ portuguese_brazilian ] = "Ocultar para ~Impressão" ;
         Text [ portuguese ] = "Ocultar para ~impressão" ;
-        Text [ finnish ] = "Piilota ~tulostusta varten" ;
+        Text [ finnish ] = "~Piilota tulostettaessa" ;
         Text [ danish ] = "Skjul ved udskrivning" ;
         Text [ french ] = "Masquer pour l'~impression" ;
         Text [ swedish ] = "Dölj vid ~utskrift" ;
@@ -540,7 +541,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Le celle della selezione corrente\nnon verranno stampate." ;
         Text [ portuguese_brazilian ] = "As células na seleção atual serão omitidas na impressão." ;
         Text [ portuguese ] = "As células da selecção actual serão omitidas na impressão." ;
-        Text [ finnish ] = "Estää valittujen solujen tulostamisen." ;
+        Text [ finnish ] = "Valitut solut ohitetaan tulostettaessa." ;
         Text [ danish ] = "De markerede celler udskrives ikke." ;
         Text [ french ] = "Les cellules sélectionnées ne seront pas imprimées." ;
         Text [ swedish ] = "De markerade cellerna kommer inte att skrivas ut." ;
@@ -569,7 +570,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Stampa" ;
         Text [ portuguese_brazilian ] = "Impressão" ;
         Text [ portuguese ] = "Impressão" ;
-        Text [ finnish ] = "Tulostus" ;
+        Text [ finnish ] = "Tulosta" ;
         Text [ danish ] = "Udskrivning" ;
         Text [ french ] = "Impression" ;
         Text [ swedish ] = "Utskrift" ;
