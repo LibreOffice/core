@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-28 10:31:36 $
+ *  last change: $Author: ab $ $Date: 2001-11-28 15:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1265,6 +1265,7 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
         pOldBasicPassword = mpImpl->mpInfo->mpOldBasicPassword;
     if( pOldBasicPassword )
     {
+        Reference< XLibraryContainer > xScriptCont = mpImpl->mpInfo->mxScriptCont;
         for( USHORT nL = 0; nL < nLibs; nL++ )
         {
             BasicLibInfo* pInfo = pLibs->GetObject( nL );
@@ -1275,6 +1276,9 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
             String aPassword = pOldBasicPassword->getLibraryPassword( aLibName );
             if( pInfo->GetPassword() != aPassword )
                 bModified = sal_True;
+
+            if( xScriptCont.is() && xScriptCont->hasByName( aLibName ) )
+                xScriptCont->loadLibrary( aLibName );
 
             if( bPassword && aPassword.Len() == 0 )
             {
@@ -1289,8 +1293,6 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
                 Reference< XLibraryContainer > xScriptCont = mpImpl->mpInfo->mxScriptCont;
                 if( xScriptCont.is() && xScriptCont->hasByName( aLibName ) )
                 {
-                    xScriptCont->loadLibrary( aLibName );
-
                     // Now the library isn't password protected any more
                     // but the modules don't contain any source
                     pOldBasicPassword->clearLibraryPassword( aLibName );
