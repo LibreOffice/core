@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:09:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 16:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 
 #ifndef _SV_CONFIG_HXX //autogen
 #include <vcl/config.hxx>
-#endif
-#ifndef _INET_CONFIG_HXX //autogen
-#include <inet/inetcfg.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX
 #include <svtools/sbxmeth.hxx>
