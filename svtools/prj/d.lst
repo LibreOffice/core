@@ -267,6 +267,7 @@ hedabu: ..\inc\urihelper.hxx %_DEST%\inc%_EXT%\svtools\urihelper.hxx
 hedabu: ..\inc\reginfo.hxx %_DEST%\inc%_EXT%\svtools\reginfo.hxx
 hedabu: ..\inc\cacheoptions.hxx %_DEST%\inc%_EXT%\svtools\cacheoptions.hxx
 hedabu: ..\inc\cjkoptions.hxx %_DEST%\inc%_EXT%\svtools\cjkoptions.hxx
+hedabu: ..\inc\accelcfg.hxx %_DEST%\inc%_EXT%\svtools\accelcfg.hxx
 hedabu: ..\inc\pathoptions.hxx %_DEST%\inc%_EXT%\svtools\pathoptions.hxx
 hedabu: ..\inc\useroptions.hxx %_DEST%\inc%_EXT%\svtools\useroptions.hxx
 hedabu: ..\inc\fstathelper.hxx %_DEST%\inc%_EXT%\svtools\fstathelper.hxx

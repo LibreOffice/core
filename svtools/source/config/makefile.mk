@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ka $ $Date: 2001-05-03 08:01:09 $
+#   last change: $Author: mba $ $Date: 2001-05-10 07:56:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ TARGET=config
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
+    $(SLO)$/accelcfg.obj				\
+    $(SLO)$/xmlaccelcfg.obj				\
     $(SLO)$/cjkoptions.obj				\
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
@@ -96,9 +98,12 @@ SLOFILES = \
     $(SLO)$/miscopt.obj					\
     $(SLO)$/defaultoptions.obj			\
     $(SLO)$/searchopt.obj				\
-    $(SLO)$/cacheoptions.obj			\
-    $(SLO)$/printwarningoptions.obj		\
-    $(SLO)$/printoptions.obj			
+        $(SLO)$/cacheoptions.obj
+
+EXCEPTIONSFILES = \
+    $(SLO)$/accelcfg.obj				\
+    $(SLO)$/xmlaccelcfg.obj
+
 
 # --- Targets ------------------------------------------------------
 
