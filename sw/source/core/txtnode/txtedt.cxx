@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:41:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,12 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
         {
             xub_StrLen nTemp = GetWrong()->NextWrong( nBegin );
             if(nTemp > nEnd)
+            {
+                // reset original text
+                if ( bRestoreString )
+                    aText = aOldTxt;
                 return 0;
+            }
             if(nTemp > nBegin)
                 nBegin = nTemp;
 
