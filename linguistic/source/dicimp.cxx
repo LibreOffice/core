@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 09:27:36 $
+ *  last change: $Author: tl $ $Date: 2000-12-11 17:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
                             Reference< ::com::sun::star::ucb::XCommandEnvironment >());
             bExists = aTestContent.isDocument();
         }
-        catch(...)
+        catch( ::com::sun::star::uno::Exception )
         {
             bExists = FALSE;
         }
