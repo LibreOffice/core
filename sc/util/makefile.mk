@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nn $ $Date: 2000-12-05 16:46:19 $
+#   last change: $Author: mh $ $Date: 2000-12-07 10:09:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,7 +167,6 @@ LIB3FILES=	\
     $(SLB)$/attrdlg.lib \
     $(SLB)$/namedlg.lib \
     $(SLB)$/styleui.lib \
-    $(SLB)$/scsbx.lib \
     $(SLB)$/miscdlgs.lib \
     $(SLB)$/formdlgs.lib \
     $(SLB)$/cctrl.lib \
