@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:43:08 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ arabic ] = "ΝΟΛ ΞΨΓ ΫνΡ ήΗΘα ααΕΥαΗΝ.\n\nΚγ ΝέΩ ίΗέΙ ΗαγαέΗΚ ΗαΚν Κγ ΚΪΟναεΗ΅ \nΘΝνΛ νγίδ ΗΣΚΪΗΟΚεΗ ΪδΟ ΕΪΗΟΙ\n ΚΤΫνα ΗαΘΡδΗγΜ.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
     Message[ chinese_simplified ] = "ΥζΚΗ·Η³£±§ΗΈ£¬ΔϊµΔ²ΩΧχÒύ·ΆΑΛÒ»ΈφΞή·¨ΕΕ³ύµΔ΄νΞσ΅£\nΔϊΈΥ²ΕΠήΈΔΉύµΔΞΔΌώÒΡΎ­±»±£΄ζ΅£\nΤΪΟΒÒ»΄ΞΖτ¶―³ΜΠςΚ±ΊάΏΙΔάΦΨΠΒ»ΦΈ΄ΥβΠ©ΞΔΌώ΅£";
-    Message[ greek ] = "Παρουσιάστηκε ανεπανόρθωτο σφάλμα.\n\nΌλα τα τροποποιημένα αρχεία αποθηκεύτηκαν ώστε \nνα είναι πιθανώς δυνατή η επαναφορά τους με την επόμενη \nεκκίνηση του προγράμματος.";
+    Message[ greek ] = "Παρουσιάστηκε κάποιο ανεπανόρθωτο σφάλμα.\n\nΌλα τα τροποποιημένα αρχεία αποθηκεύτηκαν\nώστε να είναι δυνατή (πιθανότατα) η επαναφορά τους\nμε την επόμενη εκκίνηση του προγράμματος.";
     Message[ korean ] = "Α¦°ΕΗÒ Όφ Ύψ΄Β Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.\n\n ΗΟΑφΈΈ Ί―°ζµΘ  Έπµη ΖΔΐΟΐΊ \nΐϊΐεµΗΎϊΐΈΉΗ·Ξ,  ΄Ωΐ½ \nΗΑ·Ξ±Χ·¥ ½ΓΐΫ½ΓΏ΅΄Β ΊΉΏψµΙ Όφ ΐΦΐ» °ΝΐΤ΄Ο΄Ω.";
     Message[ turkish ] = "Dόzeltilemeyen bir hata oluώtu.\n\nDeπiώtirilen tόm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden baώlatύldύπύnda\nkurtarύlabilecek.";
     Message[ language_user1 ] = " ";
@@ -1533,7 +1533,7 @@ String STR_NOMODUL
     Text[ arabic ] = "αΗ νγίδ ΘΟΑ ζΝΟΗΚ ΗαΚΨΘνήΗΚ ΗαδγΨνΙ ίΚΨΘνήΗΚ΅\nΕΠΗ ίΗδ %PRODUCTNAME Desktop δΤΨΗπ.";
     Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
     Text[ chinese_simplified ] = "ΘηΉϋ%PRODUCTNAME Desktop΄¦ΣΪΌ¤»ξΧ΄Μ¬\n£¬Σ¦ΣΓ³ΜΠςµΔΔ£Ώι²»ΔάΉ»µ±ΧχΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠ΅£";
-    Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστούν οι λειτουργικές μονάδες εφαρμογών\nόταν είναι ενεργοποιημένο το %PRODUCTNAME Desktop.";
+    Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστούν οι λειτουργικές μονάδες εφαρμογών\nόταν είναι ενεργοποιημένο το StarDesktop.";
     Text[ korean ] = "%PRODUCTNAME ΉΩΕΑΘ­ΈιΐΜ Θ°ΌΊΘ­µΗΎξ ΐΦΐΈΈι.\n ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΊ ΐΐΏλΗΑ·Ξ±Χ·¥ \n·ΞΌ­ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Uygulama modόlleri, %PRODUCTNAME masaόstό etkinken uygulama olarak\nηalύώtύrύlamaz.";
     Text[ language_user1 ] = " ";
@@ -3286,7 +3286,7 @@ String RID_PLUGIN
     Text [ dutch ] = "PlugIn-activering" ;
     Text[ chinese_simplified ] = "Ό¤»ξ Plug-In";
     Text[ russian ] = "ΐκςθβθπξβΰςό Plug-In";
-    Text[ polish ] = "W³Ήcz PlugIn";
+    Text[ polish ] = "W³Ήcz wtyczkκ Plug-In";
     Text[ japanese ] = "ΜίΧΈή²έ‚π±ΈΓ¨Μή‚Ι‚·‚ι";
     Text[ chinese_traditional ] = "ΏE¬΅ Plug-In";
     Text[ arabic ] = "ΚδΤνΨ Plug-In";
@@ -3497,7 +3497,7 @@ String STR_KEY_BITMAP_PATH
     Text [ dutch ] = "Pictogrammen" ;
     Text [ swedish ] = "Symboler" ;
     Text [ danish ] = "Symboler" ;
-    Text [ portuguese ] = "Sνmbolos" ;
+    Text [ portuguese ] = "Νcones" ;
     Text [ portuguese_brazilian ] = "Symbole" ;
     Text[ chinese_simplified ] = "ΝΌ±κ";
     Text[ russian ] = "Ρθμβξλϋ";
@@ -3770,7 +3770,7 @@ String STR_KEY_NEW_DIR
     Text [ italian ] = "Modelli standard" ;
     Text [ spanish ] = "Plantillas predeterminadas" ;
     Text [ french ] = "Modθles par dιfaut" ;
-    Text [ portuguese ] = "Modelos-padrγo" ;
+    Text [ portuguese ] = "Modelos padrγo" ;
     Text [ portuguese_brazilian ] = "Standardvorlagen" ;
     Text[ chinese_simplified ] = "±κΧΌΡωΚ½";
     Text[ russian ] = "Ρςΰνδΰπςνϋε ψΰαλξνϋ";
@@ -3876,7 +3876,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ italian ] = "Cartella plugin";
     Text[ danish ] = "PlugIn-bibliotek";
     Text[ swedish ] = "Plugins-katalog";
-    Text[ polish ] = "Katalog dodatkσw Plugin";
+    Text[ polish ] = "Katalog wtyczek Plug-In";
     Text[ portuguese_brazilian ] = "Plugins directory";
     Text[ japanese ] = "ΜίΧΈή²έΓή¨ΪΈΔΨ";
     Text[ chinese_simplified ] = "Plug-In ΔΏΒΌ";
@@ -3941,7 +3941,7 @@ String STR_KEY_ADDINS_PATH
     Text = "AddIns" ;
     Text [ English ] = "AddIns" ;
     Text[ english_us ] = "Add-Ins";
-    Text[ portuguese ] = "AddIns";
+    Text[ portuguese ] = "Add-Ins";
     Text[ greek ] = "AddIns";
     Text[ dutch ] = "AddIns";
     Text[ french ] = "Add-Ins";
@@ -4048,8 +4048,8 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ portuguese_brazilian ] = "Linguistic";
     Text[ japanese ] = "Ύκ";
     Text[ korean ] = "ΎπΎξ";
-    Text[ chinese_simplified ] = "ΣοΡΤ";
-    Text[ chinese_traditional ] = "»y¨¥";
+    Text[ chinese_simplified ] = "ΣοΡΤΉζΤς";
+    Text[ chinese_traditional ] = "»y¨¥³W«h";
     Text[ arabic ] = "ΗααΫΙ";
     Text[ turkish ] = "Dil";
 };
