@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:41:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,10 @@ class SwView: public SfxViewShell
     USHORT          nDrawSfxId;
     USHORT          nFormSfxId;
     USHORT          nLastPasteDestination;
+
+    // save the border distance status from SwView::StateTabWin to re-use it in SwView::ExecTabWin()
+    USHORT          nLeftBorderDistance;
+    USHORT          nRightBorderDistance;
 
     BOOL            bCenterCrsr : 1,
                     bTopCrsr : 1,
