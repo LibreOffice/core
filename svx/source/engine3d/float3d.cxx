@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-03 09:01:44 $
+ *  last change: $Author: aw $ $Date: 2002-07-04 16:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,11 +243,16 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aLbLight6           ( this, SVX_RES( LB_LIGHT_6 ) ),
         aLbLight7           ( this, SVX_RES( LB_LIGHT_7 ) ),
         aLbLight8           ( this, SVX_RES( LB_LIGHT_8 ) ),
+
         aBtnLightColor      ( this, SVX_RES( BTN_LIGHT_COLOR ) ),
         aFTLightsource     ( this, SVX_RES( FT_LIGHTSOURCE ) ),
-        aLbAmbientlight     ( this, SVX_RES( LB_AMBIENTLIGHT ) ),
-        aBtnAmbientColor    ( this, SVX_RES( BTN_AMBIENT_COLOR ) ),
-        aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),
+
+        // #99694# Keyboard shortcuts activate the next control, so the
+        // order needed to be changed here
+        aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),    // Text label
+        aLbAmbientlight     ( this, SVX_RES( LB_AMBIENTLIGHT ) ),   // ListBox
+        aBtnAmbientColor    ( this, SVX_RES( BTN_AMBIENT_COLOR ) ), // color button
+
         aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
 
         // Texturen
