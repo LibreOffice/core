@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyStroke.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:06:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ struct KeyStroke
 {
     //-------------------------------------------------------------------------
 
-    /** contains the modifier keys which were pressed while event occurred.
+    /** contains the modifier keys which were pressed while the event occurred.
 
         <p>Zero or more constants from the group
         <type scope="com::sun::star::awt">KeyModifier</type>.</p>
