@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: oj $ $Date: 2001-09-28 07:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,20 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
         }
         catch(SQLException& e)
         {
-            UNUSED(e);
-            DBG_ERROR("ODBTable::ODBTable : could not collect the privileges !");
+            static ::rtl::OUString sNotSupportedState = ::rtl::OUString::createFromAscii("IM001");
+            // some drivers don't support any privileges so we assume that we are allowed to do all we want :-)
+            if(e.SQLState == sNotSupportedState)
+                const_cast<ODBTable*>(this)->m_nPrivileges |=   Privilege::DROP         |
+                                                                Privilege::REFERENCE    |
+                                                                Privilege::ALTER        |
+                                                                Privilege::CREATE       |
+                                                                Privilege::READ         |
+                                                                Privilege::DELETE       |
+                                                                Privilege::UPDATE       |
+                                                                Privilege::INSERT       |
+                                                                Privilege::SELECT;
+            else
+                DBG_ERROR("ODBTable::ODBTable : could not collect the privileges !");
         }
     }
 
