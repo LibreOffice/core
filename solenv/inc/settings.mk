@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-02 15:53:54 $
+#   last change: $Author: jsc $ $Date: 2001-05-03 11:09:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
 %udkversion.mk :
-    @$(COPY) $(PRJ)$/inc$/udkversion.mk $@
+    @+$(COPY) $(PRJ)$/inc$/udkversion.mk $@
 
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/udkversion.mk
 
