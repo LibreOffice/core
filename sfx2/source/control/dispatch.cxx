@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:49:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1393,6 +1393,18 @@ const SfxPoolItem* SfxDispatcher::Execute
 */
 
 {
+    return Execute( nSlot, eCall, 0, rArgs );
+}
+
+//--------------------------------------------------------------------
+const SfxPoolItem*  SfxDispatcher::Execute
+(
+    USHORT nSlot,
+    SfxCallMode eCall,
+    USHORT nModi,
+    const SfxItemSet &rArgs
+)
+{
     if ( IsLocked(nSlot) )
         return 0;
 
@@ -1408,6 +1420,7 @@ const SfxPoolItem* SfxDispatcher::Execute
               pArg = aIter.NextItem() )
             MappedPut_Impl( aSet, *pArg );
         SfxRequest aReq( nSlot, eCall, aSet );
+        aReq.SetModifier( nModi );
         _Execute( *pShell, *pSlot, aReq, eCall );
         return aReq.GetReturnValue();
     }
