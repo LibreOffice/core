@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-25 12:49:35 $
+ *  last change: $Author: mib $ $Date: 2002-05-23 14:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@
 #endif
 #ifndef _FTNBOSS_HXX
 #include <ftnboss.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
 #endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>                // fuer SwFmtChg in ChgTxtColl
@@ -533,7 +536,18 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
 
         UnlockModify(); // Benachrichtigungen wieder freischalten
 
-        if( nTxtLen != nSplitPos )
+        const SwRootFrm *pRootFrm;
+        // If there is an accessible layout we must call modify even
+        // with length zero, because we have to notify about the changed
+        // text node.
+        if( nTxtLen != nSplitPos
+#ifdef ACCESSIBLE_LAYOUT
+                ||
+            ( (pRootFrm = pNode->GetDoc()->GetRootFrm()) != 0 &&
+               pRootFrm->IsAnyShellAccessible() )
+#endif
+              )
+
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
             if( 1 == nTxtLen - nSplitPos )
