@@ -34,7 +34,7 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/ToDo	\
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean	\
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean/SimpleBean	\
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean/FontWizard	\
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean/OfficeWriterBean	\
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
@@ -213,10 +213,10 @@ JAVA_OFFICEBEAN_SIMPLEBEAN= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBean.java \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/Makefile
 
-JAVA_OFFICEBEAN_FONTWIZARD= \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/FontWizard$/Wizard.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/FontWizard$/WizardDialog.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/FontWizard$/Makefile
+JAVA_OFFICEBEAN_OFFICEWRITERBEAN= \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBean.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBeanInfo.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Makefile
 
 BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
@@ -273,7 +273,7 @@ EXAMPLESLIST= \
     $(JAVA_TODO)                   \
     $(JAVA_WRITERSELECTOR)         \
     $(JAVA_OFFICEBEAN_SIMPLEBEAN)  \
-    $(JAVA_OFFICEBEAN_FONTWIZARD)  \
+    $(JAVA_OFFICEBEAN_OFFICEWRITERBEAN)  \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
     $(OLE_EXAMPLES_DELPHI)                \
