@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 17:08:08 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 17:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+
+#include <algorithm>
 
 #define THROW_SQL(x) \
     OTools::ThrowException(x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
