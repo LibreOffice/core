@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:40:08 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
 #endif
@@ -161,6 +164,7 @@ namespace xmloff
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -270,7 +274,17 @@ namespace xmloff
         m_aAttributeMetaData.addInt16Property(
             OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN), PROPERTY_BOUNDCOLUMN, 0);
 
+        // the int32 attributes
+        m_aAttributeMetaData.addInt32Property(
+            OAttributeMetaData::getSpecialAttributeName( SCA_PAGE_STEP_SIZE ), PROPERTY_BLOCK_INCREMENT, 10 );
+        m_aAttributeMetaData.addInt32Property(
+            OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY ), PROPERTY_REPEAT_DELAY, 50 );
+
         // the enum attributes
+        m_aAttributeMetaData.addEnumProperty(
+            OAttributeMetaData::getCommonControlAttributeName( CCA_ORIENTATION ), PROPERTY_ORIENTATION,
+            ScrollBarOrientation::HORIZONTAL, OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
+            &::getCppuType( static_cast< sal_Int32* >( NULL ) ) );
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_BUTTON_TYPE), PROPERTY_BUTTONTYPE,
             FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
@@ -291,13 +305,6 @@ namespace xmloff
             OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
             FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
             &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
-#if SUPD<628
-        // for compatibility:
-        m_aAttributeMetaData.addEnumProperty(
-            "enc-type", PROPERTY_SUBMIT_ENCODING,
-            FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
-            &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
-#endif
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
             FormSubmitMethod_GET, OEnumMapper::getEnumMap(OEnumMapper::epSubmitMethod),
