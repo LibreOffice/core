@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:44:54 $
+ *  last change: $Author: pb $ $Date: 2001-06-29 08:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,40 +808,6 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         SFX_REQUEST_ARG(rReq, pFlags, SfxStringItem, SID_OPTIONS, FALSE);
         if ( pFlags )
             xDoc->GetMedium()->GetItemSet()->Put( *pFlags );
-
-        SfxStringItem aPath( SID_TARGETPATH, String() );
-        SFX_REQUEST_ARG(rReq, pReferer, SfxStringItem, SID_REFERER, FALSE);
-        SFX_REQUEST_ARG(rReq, pPath, SfxStringItem, SID_TARGETPATH, FALSE);
-        if ( pReferer )
-        {
-            // Wenn eine Factory-URL aus einem Bookmark stammt, wird kein Targetpath gesetzt;
-            // stammt sie aus dem Neu - oder Startmenue, k"onnte der Request von einem Contextmenu
-            // kommen. Daher wird der "ubergebene Targetpath "ubernommen.
-            // Ist dieser allerdings selbst wieder Start - oder Neumen"u, wird das beim Speichern
-            // "ubergangen ( ->objstor.cxx )
-            xDoc->GetMedium()->GetItemSet()->Put( *pReferer, SID_REFERER );
-            INetURLObject aURLObj( pReferer->GetValue() );
-            BOOL bBookmark=TRUE;
-            SvtPathOptions aPathCFG;
-            sal_Int32 nPathLevel = aURLObj.getSegmentCount();
-            INetURLObject aNewPathObj = INetURLObject( aPathCFG.GetNewMenuPath() );
-            sal_Int32 nNewLevel = aNewPathObj.getSegmentCount();
-            sal_Int32 nOffset = nPathLevel;
-            nOffset -= nNewLevel;
-            if ( nOffset >= 0 )
-            {
-                INetURLObject aTempObj = aURLObj;
-                for ( ; nOffset > 0; nOffset-- )
-                    aTempObj.removeSegment();
-                if ( aTempObj == aNewPathObj )
-                    bBookmark = FALSE;
-            }
-
-            if ( !bBookmark && pPath )
-                aPath.SetValue( pPath->GetValue() );
-        }
-
-        xDoc->GetMedium()->GetItemSet()->Put( aPath, SID_TARGETPATH );
     }
 
     // View erzeugen
