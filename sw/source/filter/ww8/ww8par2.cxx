@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:23:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1900,8 +1900,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
             short firstDxaCenter = *pCenter;
             for( int i = 0; i < pNewBand->nWwCols; i++, ++pCenter )
             {
-                // #i30298 Use sprmTDxaLeft to adjust the left indent
-                *pCenter += (nTabeDxaNew - firstDxaCenter);
+                // #i30298# Use sprmTDxaLeft to adjust the left indent
+                // #i40461# Use dxaGapHalf during calculation
+                *pCenter +=
+                    (nTabeDxaNew - (firstDxaCenter + pNewBand->nGapHalf));
             }
         }
 
