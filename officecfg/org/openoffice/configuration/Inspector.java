@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inspector.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-19 16:43:08 $
+ *  last change: $Author: dg $ $Date: 2001-07-05 08:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ public class Inspector extends HandlerBase
 {
     public java.lang.String     componentName;
     public java.lang.String     packageName;
+    public java.lang.String     categoryName;
     public java.lang.String     transformationFile;
 
     public Inspector()
@@ -116,6 +117,10 @@ public class Inspector extends HandlerBase
         {
             componentName = attributes.getValue("cfg:name");
             packageName = attributes.getValue("cfg:package");
+            categoryName = attributes.getValue("schema:category");
+
+            if (categoryName == null)
+                categoryName = new String("PrivateApplProfile");
         }
     }
 

@@ -24,8 +24,7 @@ class Trim
             boolean hadLine = false;
             while ((line = reader.readLine()) != null)
             {
-                line = line.trim();
-                if (line.length() > 0)
+                if (line.trim().length() > 0)
                 {
                     hadLine = true;
                     out.write(line);

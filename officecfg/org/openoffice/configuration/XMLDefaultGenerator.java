@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDefaultGenerator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-19 16:43:22 $
+ *  last change: $Author: dg $ $Date: 2001-07-05 08:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ public class XMLDefaultGenerator {
 
     protected String packageName = null;
     protected String componentName = null;
+    protected String categoryName = null;
     protected String transformationFile = null;
 
     /**
@@ -96,6 +97,7 @@ public class XMLDefaultGenerator {
 
     public String getComponentName() {return componentName;}
     public String getPackageName() {return packageName;}
+    public String getCategoryName() {return categoryName;}
 
     /**
      * construct the generator by validation of the source file
@@ -115,6 +117,7 @@ public class XMLDefaultGenerator {
             // get the necessary information for generation
             packageName = inspector.packageName;
             componentName = inspector.componentName;
+            categoryName = inspector.categoryName;
             transformationFile = inspector.transformationFile;
         }
         catch (SAXParseException spe) {
@@ -239,7 +242,7 @@ public class XMLDefaultGenerator {
 
         try
         {
-            XMLDefaultGenerator XMLDefaultGenerator = new XMLDefaultGenerator(argv [0]);
+            XMLDefaultGenerator generator = new XMLDefaultGenerator(argv [0]);
 
             String[] args = new String[argv.length + 1];
             for (int i = 0; i < argv.length; i++)
@@ -250,10 +253,10 @@ public class XMLDefaultGenerator {
             args[argv.length] = "templateURL=" + url;
 
             // create the instance file
-            XMLDefaultGenerator.generateInstanceFile((String[])args.clone());
+            generator.generateInstanceFile((String[])args.clone());
 
             // create the template file
-            XMLDefaultGenerator.generateTemplateFile((String[])args.clone());
+            generator.generateTemplateFile((String[])args.clone());
         }
         catch (Exception pce) {
             // Parser with specified options can't be built
