@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:42:12 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ CheckBox CB_READ_ONLY
     Text [ swedish ] = "Sk~rivskyddad" ;
     Text [ dutch ] = "~Alleen lezen" ;
     Text [ spanish ] = "~Solo lectura" ;
-    Text [ english_us ] = "~Read only" ;
+    Text [ english_us ] = "~Read-only" ;
     Text[ chinese_simplified ] = "Ц»¶Б(~R)";
     Text[ russian ] = "Только для чтения";
     Text[ polish ] = "Tylko do odczytu";
