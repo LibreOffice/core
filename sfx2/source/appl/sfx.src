@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:27:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String STR_NONAME
     Text [ italian ] = "Senza nome" ;
     Text [ portuguese_brazilian ] = "Sem nome" ;
     Text [ portuguese ] = "Sem nome" ;
-    Text [ finnish ] = "nimetˆn" ;
+    Text [ finnish ] = "Nimetˆn" ;
     Text [ danish ] = "ikke-navngivet" ;
     Text [ french ] = "Sans nom" ;
     Text [ swedish ] = "namnlˆs" ;
@@ -96,7 +96,7 @@ String STR_NONE
     Text [ italian ] = "- Senza -" ;
     Text [ portuguese_brazilian ] = "- Nenhum -" ;
     Text [ portuguese ] = "- Nenhum -" ;
-    Text [ finnish ] = "- Ei ole -" ;
+    Text [ finnish ] = "- Ei mit‰‰n -" ;
     Text [ danish ] = "- Ingen -" ;
     Text [ french ] = "- Aucun(e) -" ;
     Text [ swedish ] = "- Inga -" ;
@@ -206,7 +206,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT [ italian ] = "Modelli utente" ;
     TEXT [ portuguese_brazilian ] = "Estilos do usu·rio" ;
     TEXT [ portuguese ] = "Estilos do utilizador" ;
-    TEXT [ finnish ] = "K‰ytt‰j‰n tyylit" ;
+    TEXT [ finnish ] = "Mukautetut tyylit" ;
     TEXT [ danish ] = "Brugertypografier" ;
     TEXT [ french ] = "Styles personnalisÈs" ;
     TEXT [ swedish ] = "Anv‰ndardefinierade formatmallar" ;
@@ -267,7 +267,7 @@ String STR_STANDARD
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
     Text[ polish ] = "Domyúlnie";
-    Text[ portuguese_brazilian ] = "Standard";
+    Text[ portuguese_brazilian ] = "Padr„o";
     Text[ japanese ] = "ïWèÄ";
     Text[ korean ] = "«•¡ÿ";
     Text[ chinese_simplified ] = "±Í◊º";
@@ -275,6 +275,7 @@ String STR_STANDARD
     Text[ arabic ] = "ﬁÌ«”Ì";
     Text[ turkish ] = "Standart";
     Text[ catalan ] = "Predeterminado";
+    Text[ finnish ] = "Vakio";
 };
 
 String STR_FILTERNAME_ALL
@@ -285,7 +286,7 @@ String STR_FILTERNAME_ALL
     TEXT [ italian ] = "<tutto>" ;
     TEXT [ portuguese_brazilian ] = "<Tudo>" ;
     TEXT [ portuguese ] = "<Todos>" ;
-    TEXT [ finnish ] = "<All>" ;
+    TEXT [ finnish ] = "<Kaikki>" ;
     TEXT [ danish ] = "<Alle>" ;
     TEXT [ french ] = "<Tout>" ;
     TEXT [ swedish ] = "<Alla>" ;
@@ -332,6 +333,7 @@ String STR_BYTES
     Text[ korean ] = "πŸ¿Ã∆Æ";
     Text[ turkish ] = "Byte";
     Text[ catalan ] = "Bytes";
+    Text[ finnish ] = "Tavuja";
 };
 
 String STR_KB
@@ -357,6 +359,7 @@ String STR_KB
     Text[ korean ] = "KB";
     Text[ turkish ] = "KB";
     Text[ catalan ] = "KB";
+    Text[ finnish ] = "Kt";
 };
 
 String STR_MB
@@ -382,6 +385,7 @@ String STR_MB
     Text[ korean ] = "MB";
     Text[ turkish ] = "MB";
     Text[ catalan ] = "MB";
+    Text[ finnish ] = "Mt";
 };
 
 
@@ -408,6 +412,7 @@ String STR_GB
     Text[ korean ] = "GB";
     Text[ turkish ] = "GB";
     Text[ catalan ] = "GB";
+    Text[ finnish ] = "Gt";
 };
 
 String STR_UNDO
@@ -419,7 +424,7 @@ String STR_UNDO
     Text [ italian ] = "Annulla " ;
     Text [ portuguese_brazilian ] = "Desfazer " ;
     Text [ portuguese ] = "Anular: " ;
-    Text [ finnish ] = "Kumoa " ;
+    Text [ finnish ] = "Peruuta: " ;
     Text [ danish ] = "Fortryd: " ;
     Text [ french ] = "Annuler : " ;
     Text [ swedish ] = "≈ngra:  " ;
@@ -461,6 +466,7 @@ String STR_REDO
     Text[ korean ] = "¥ŸΩ√ Ω««‡(~D):";
     Text[ turkish ] = "~Yinele: ";
     Text[ catalan ] = "Restaurar: ";
+    Text[ finnish ] = "Tois~ta: ";
 };
 
 String STR_REPEAT
@@ -486,6 +492,7 @@ String STR_REPEAT
     Text[ korean ] = "∏∂¡ˆ∏∑°°∏Ì∑…(~R):";
     Text[ turkish ] = "Son ~komutu yinele: ";
     Text[ catalan ] = "~⁄ltimo comando: ";
+    Text[ finnish ] = "~Toisto: ";
 };
 
 String RID_STR_NEW_TASK
@@ -511,6 +518,7 @@ String RID_STR_NEW_TASK
     Text[ korean ] = "ªı∑ŒøÓ ¿€æ˜";
     Text[ turkish ] = "Yeni gˆrev";
     Text[ catalan ] = "Nueva tarea";
+    Text[ finnish ] = "Uusi teht‰v‰";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -523,7 +531,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message [ italian ] = "Volete annullare tutte le modifiche?" ;
     Message [ portuguese_brazilian ] = "Cancelar todas as modificaÁıes?" ;
     Message [ portuguese ] = "Cancelar todas as modificaÁıes?" ;
-    Message [ finnish ] = "Kumotaanko kaikki muutokset?" ;
+    Message [ finnish ] = "Peruutetaanko kaikki muutokset?" ;
     Message [ danish ] = "Vil du annullere alle Êndringer?" ;
     Message [ french ] = "Annuler toutes les modifications ?" ;
     Message [ swedish ] = "≈ngra alla ‰ndringar?" ;
