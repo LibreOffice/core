@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:50:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "ÆíÁý(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Editar...";
     };
     MultiListBox LB_BOOK
     {
@@ -149,6 +150,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "»çÀü";
         Text[ turkish ] = "Sözlükler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Diccionarios";
     };
     CheckBox BTN_CAPS
     {
@@ -180,6 +182,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "´ë¹®ÀÚ·Î ¾²ÀÎ ´Ü¾î(~C)";
         Text[ turkish ] = "Büyük harfli sözcükler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Palabras en mayúscula";
     };
     CheckBox BTN_NUMS
     {
@@ -211,6 +214,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "¼ýÀÚ°¡ ÀÖ´Â ´Ü¾î (~W)";
         Text[ turkish ] = "Rakamlý sözcükler ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "P~alabras con números  ";
     };
     CheckBox BTN_UPLOW
     {
@@ -242,6 +246,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "´ë¹®ÀÚ¿Í ¼Ò¹®ÀÚ (~C)";
         Text[ turkish ] = "Büyük/küçük yazým ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mayúsculas y minúsculas  ";
     };
     FixedLine GB_AUDIT
     {
@@ -272,6 +277,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "°Ë»ç";
         Text[ turkish ] = "Denetim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Revisar";
     };
     Text[ chinese_simplified ] = "Æ´Ð´¼ì²é";
     Text[ russian ] = "Ïðàâîïèñàíèå";
@@ -283,5 +289,6 @@ TabPage RID_SFXPAGE_SPELL
     Text[ korean ] = "¸ÂÃã¹ý °Ë»ç";
     Text[ turkish ] = "Yazým kýlavuzu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ortografía";
 };
  // ********************************************************************** EOF
