@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:25:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ spanish ] = "Imp~resora";
         Text[ italian ] = "~Stampante";
         Text[ danish ] = "~Printer";
-        Text[ swedish ] = "S~krivare";
+        Text[ swedish ] = "~Skrivare";
         Text[ polish ] = "drukarki";
         Text[ portuguese_brazilian ] = "~Printer";
         Text[ japanese ] = "ÌßØÝÀ(~P)";
@@ -326,9 +326,9 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ russian ] = "Ãðàäèåíòíûå ïîëîñû";
         Text[ greek ] = "Gradient ~stripes";
         Text[ dutch ] = "~Strepen in kleurverloop";
-        Text[ french ] = "Bandes de dégradé~s";
+        Text[ french ] = "Bandes de dégradés";
         Text[ spanish ] = "Tiras de gra~dientes";
-        Text[ italian ] = "Bande sfumate";
+        Text[ italian ] = "~Bande sfumate";
         Text[ danish ] = "Gradient ~stripes";
         Text[ swedish ] = "Färggra~dientränder";
         Text[ polish ] = "Paski gradientu";
@@ -616,8 +616,8 @@ TabPage TP_COMMONPRINTOPTIONS
     {
             < "72 DPI"; 0; > ;
         < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 dpi (förinställning)"; 0; > ;
+        < "150 DPI (fax)"; 0; > ;
+        < "200 DPI (förinställning)"; 0; > ;
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
     };
@@ -874,7 +874,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ spanish ] = "~Transparencia";
         Text[ italian ] = "~Trasparenza";
         Text[ danish ] = "~Transparency";
-        Text[ swedish ] = "~Transparens";
+        Text[ swedish ] = "Trans~parens";
         Text[ polish ] = "Przezroczystoœæ";
         Text[ portuguese_brazilian ] = "~Transparency";
         Text[ japanese ] = "“§–¾(~T)";
@@ -1066,6 +1066,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
 
 
 
