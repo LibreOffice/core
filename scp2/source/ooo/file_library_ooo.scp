@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: hr $ $Date: 2004-03-09 10:13:12 $
+*  last change: $Author: hr $ $Date: 2004-03-09 12:08:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1600,7 +1600,16 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucphier1,ucphier1)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
-STD_LIB_FILE( gid_File_Lib_Ulingu , ulingu)
+File gid_File_Lib_Myspell
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = "libmyspell.so";
+  #else
+    Name = "myspell.dll";
+  #endif
+    Styles = (PACKED);
+End
 
 #ifdef WNT
 
