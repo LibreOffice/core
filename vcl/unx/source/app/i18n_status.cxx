@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:40:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,8 @@ public:
 XIMStatusWindow::XIMStatusWindow() :
         StatusWindow( WB_BORDER | WB_SYSTEMFLOATWIN | WB_TOOLTIPWIN ),
         m_aStatusText( this, 0 ),
-        m_bAnchoredAtRight( false ),
         m_pLastParent( NULL ),
+        m_bAnchoredAtRight( false ),
         m_bDelayedShow( false ),
         m_eDelayedReason( I18NStatus::contextmap ),
         m_nDelayedEvent( 0 )
@@ -236,9 +236,7 @@ Point XIMStatusWindow::updatePosition()
     Point aRet;
     if( checkLastParent() )
     {
-        const SystemEnvData* pEnvData = GetSystemData();
         const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
-        SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
 
         SalExtTextInputPosEvent aPosEvent;
         m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
@@ -401,7 +399,6 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     if( pParent )
     {
         const SystemEnvData* pEnvData = GetSystemData();
-        const SystemEnvData* pParentEnvData = pParent->GetSystemData();
 
         const SalFrameGeometry& rGeom( pParent->GetUnmirroredGeometry() );
         int nDistance = rGeom.nTopDecoration;
