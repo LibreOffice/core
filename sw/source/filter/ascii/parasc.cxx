@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-24 12:40:01 $
+ *  last change: $Author: cmc $ $Date: 2002-08-13 14:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,20 +749,45 @@ ULONG SwASCIIParser::ReadChars()
     sal_Unicode *pStt = 0, *pEnd = 0, *pLastStt = 0;
     long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
+    bool bSwapUnicode;
 
-    BOOL bSwapUnicode;
+    const SwAsciiOptions *pUseMe=&rOpt;
+    SwAsciiOptions aEmpty;
+    if (nFileSize >= 2 &&
+        aEmpty.GetFontName() == rOpt.GetFontName() &&
+        aEmpty.GetCharSet() == rOpt.GetCharSet() &&
+        aEmpty.GetLanguage() == rOpt.GetLanguage() &&
+        aEmpty.GetParaFlags() == rOpt.GetParaFlags())
+    {
+        ULONG nLen, nOrig;
+        nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
+        CharSet eCharSet;
+        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet,
+            &bSwapUnicode);
+        ASSERT(bRet, "Autodetect of text import without nag dialog must "
+            "have failed");
+        if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
+        {
+            aEmpty.SetCharSet(eCharSet);
+            rInput.SeekRel(-(long(nLen)));
+        }
+        else
+            rInput.SeekRel(-(long(nOrig)));
+        pUseMe=&aEmpty;
+    }
+
     rtl_TextToUnicodeConverter hConverter;
     rtl_TextToUnicodeContext hContext;
-    if( RTL_TEXTENCODING_UCS2 != rOpt.GetCharSet() )
+    if (RTL_TEXTENCODING_UCS2 != pUseMe->GetCharSet())
     {
-        hConverter = rtl_createTextToUnicodeConverter( rOpt.GetCharSet() );
+        hConverter = rtl_createTextToUnicodeConverter( pUseMe->GetCharSet() );
         ASSERT( hConverter, "no string convert avaiable" );
-        if( !hConverter )
+        if (!hConverter)
             return ERR_W4W_DLL_ERROR | ERROR_SW_READ_BASE;
-        bSwapUnicode = FALSE;
+        bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
     }
-    else
+    else if (pUseMe != &aEmpty)  //Already successfully figured out type
     {
         hConverter = 0;
         rInput.StartReadingUnicodeText();
@@ -861,7 +886,7 @@ ULONG SwASCIIParser::ReadChars()
 //                  bIns = FALSE;
 //                  break;
 
-        case 0x0a:  if( LINEEND_LF == rOpt.GetParaFlags() )
+        case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
                         bIns = FALSE;
                         *pStt = 0;
@@ -873,14 +898,14 @@ ULONG SwASCIIParser::ReadChars()
                     }
                     break;
 
-        case 0x0d:  if( LINEEND_LF != rOpt.GetParaFlags() )
+        case 0x0d:  if( LINEEND_LF != pUseMe->GetParaFlags() )
                     {
                         bIns = FALSE;
                         *pStt = 0;
                         ++pStt;
 
                         BOOL bChkSplit = FALSE;
-                        if( LINEEND_CRLF == rOpt.GetParaFlags() )
+                        if( LINEEND_CRLF == pUseMe->GetParaFlags() )
                         {
                             if( pStt == pEnd )
                                 cLastCR = 0x0d;

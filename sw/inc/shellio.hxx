@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-24 12:51:56 $
+ *  last change: $Author: cmc $ $Date: 2002-08-13 14:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,10 @@ public:
 
     static FASTBOOL IsValidStgFilter( SvStorage& , const SfxFilter& );
 
-    static const SfxFilter* GetTextFilter( const sal_Char* pBuf, ULONG nLen );
+    static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
+        CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
+
+    static const SfxFilter* GetTextFilter(const sal_Char* pBuf, ULONG nLen);
 
     // gebe einen bestimmten Reader zurueck
     static Reader* GetReader( const String& rFltName );

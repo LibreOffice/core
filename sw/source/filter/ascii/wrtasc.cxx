@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtasc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:00:34 $
+ *  last change: $Author: cmc $ $Date: 2002-08-13 14:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,8 @@ ULONG SwASCWriter::WriteStream()
     SwPaM* pPam = pOrigPam;
 
     BOOL bWriteSttTag = bUCS2_WithStartChar &&
-                    RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet();
+        (RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet() ||
+        RTL_TEXTENCODING_UTF8 == GetAsciiOptions().GetCharSet());
 
     rtl_TextEncoding eOld = Strm().GetStreamCharSet();
     Strm().SetStreamCharSet( GetAsciiOptions().GetCharSet() );
@@ -232,9 +233,25 @@ ULONG SwASCWriter::WriteStream()
                 }
                 else
                 {
-                    if( bWriteSttTag )
+                    if (bWriteSttTag)
                     {
-                        Strm().StartWritingUnicodeText();
+                        switch(GetAsciiOptions().GetCharSet())
+                        {
+                            case RTL_TEXTENCODING_UTF8:
+                                Strm() << BYTE(0xEF) << BYTE(0xBB) <<
+                                    BYTE(0xBF);
+                                break;
+                            case RTL_TEXTENCODING_UCS2:
+                                //Strm().StartWritingUnicodeText();
+                                Strm().SetEndianSwap(FALSE);
+#ifdef __LITTLEENDIAN
+                                Strm() << BYTE(0xFF) << BYTE(0xFE);
+#else
+                                Strm() << BYTE(0xFE) << BYTE(0xFF);
+#endif
+                                break;
+
+                        }
                         bWriteSttTag = FALSE;
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
