@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsogs.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:18:19 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,14 +92,14 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe
-
+PICSWITCH:=-fPIC
 #STDOBJVCL=$(L)$/salmain.o
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=-fPIC
-CFLAGSSLOCUIMT=-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
+CFLAGSSLOCUIMT=$(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
