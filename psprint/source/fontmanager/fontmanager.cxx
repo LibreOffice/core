@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-21 15:05:15 $
+ *  last change: $Author: pl $ $Date: 2002-10-21 15:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2888,6 +2888,7 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
             aLines.pop_front();
         }
         getFontAttributesFromXLFD( pFont, aXLFD );
+        m_pFontCache->updateFontCacheEntry( pFont, true );
     }
     return bSuccess;
 }
