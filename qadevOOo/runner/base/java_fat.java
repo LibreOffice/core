@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-11-18 16:12:39 $
+ *  last change:$Date: 2003-12-11 11:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,9 +326,7 @@ public class java_fat implements TestBase {
 
                 sumIt.summarizeUp(entry.SubEntries[j]);
 
-                LogWriter sumIfc = (LogWriter) dcl.getInstance(
-                                           (String) param.get("OutProducer"));
-
+                LogWriter sumIfc = OutProducerFactory.createOutProducer(param);
                 entry.SubEntries[j].UserDefinedParams = param;
                 sumIfc.initialize(entry.SubEntries[j], true);
                 sumIfc.summary(entry.SubEntries[j]);
