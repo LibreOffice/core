@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-27 09:05:20 $
+ *  last change: $Author: pb $ $Date: 2000-11-27 15:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONT );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         pFontItem = (const SvxFontItem*)&( rSet.Get( nWhich ) );
         aFontBox.SetText( pFontItem->GetFamilyName() );
@@ -579,7 +579,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_POSTURE );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         const SvxPostureItem& rItem = (SvxPostureItem&)rSet.Get( nWhich );
         eItalic = (FontItalic)rItem.GetValue();
@@ -589,7 +589,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_WEIGHT );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         SvxWeightItem& rItem = (SvxWeightItem&)rSet.Get( nWhich );
         eWeight = (FontWeight)rItem.GetValue();
@@ -648,7 +648,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
             aSizeBox.SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
         }
     }
-    else if ( eState >= SFX_ITEM_AVAILABLE )
+    else if ( eState >= SFX_ITEM_DEFAULT )
     {
         SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         const SvxFontHeightItem& rItem =
@@ -853,7 +853,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         const SvxEscapementItem& rItem =
             (SvxEscapementItem&)rSet.Get( nWhich );
@@ -864,7 +864,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_PROPSIZE );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         const SvxPropSizeItem& rItem = (SvxPropSizeItem&)rSet.Get( nWhich );
         nProp = (BYTE)rItem.GetValue();
@@ -874,7 +874,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
         eCaseMap = (SvxCaseMap)rItem.GetValue();
@@ -884,7 +884,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         MapUnit eUnit = (MapUnit)rSet.GetPool()->GetMetric( nWhich );
         const SvxKerningItem& rItem = (SvxKerningItem&)rSet.Get( nWhich );
@@ -971,7 +971,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
     eState = rSet.GetItemState( nWhich );
 
-    if ( eState >= SFX_ITEM_AVAILABLE )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         const SvxWordLineModeItem& rItem =
             (SvxWordLineModeItem&)rSet.Get( nWhich );
@@ -1941,7 +1941,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
     // WordLineMode
     nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxWordLineModeItem& rItem =
             (SvxWordLineModeItem&)rSet.Get( nWhich );
@@ -1961,7 +1961,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
     // HochTief-Stellung
     nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxEscapementItem& rItem = (SvxEscapementItem&)rSet.Get( nWhich );
         nEsc = rItem.GetEsc();
@@ -2029,7 +2029,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
     SvxCaseMap eCaseMap = SVX_CASEMAP_END;  // dont care
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
         eCaseMap = (SvxCaseMap)rItem.GetValue();
@@ -2040,7 +2040,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
     //
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxKerningItem& rItem = (SvxKerningItem&)rSet.Get( nWhich );
         SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
@@ -2088,7 +2088,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxAutoKernItem& rItem = (SvxAutoKernItem&)rSet.Get( nWhich );
         aAutoKernBtn.Check( rItem.GetValue() );
@@ -2187,7 +2187,7 @@ void SvxCharExtPage::Reset( const SfxItemSet& rSet )
 
     //blinken
     nWhich = GetWhich( SID_ATTR_FLASH );
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get(nWhich);
         aFlashBox.Check(rItem.GetValue());
@@ -2389,7 +2389,7 @@ USHORT* SvxCharExtPage::GetRanges()
 
 void SvxCharExtPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxItemState eState = bInReset ? SFX_ITEM_AVAILABLE : SFX_ITEM_SET;
+    SfxItemState eState = bInReset ? SFX_ITEM_DEFAULT : SFX_ITEM_SET;
     SvxFont& rFont = aExampleWin.GetFont();
     const SvxFontItem* pFontItem = 0;
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONT );
@@ -2961,17 +2961,27 @@ IMPL_LINK( SvxCharExtPage, AutoPosHdl_Impl, CheckBox*, pBox)
 struct SvxCharNamePage_Impl
 {
     Timer           m_aUpdateTimer;
+    String          m_aNoStyleText;
+    String          m_aTransparentText;
     const FontList* m_pFontList;
-    sal_Bool        m_MustDelete;
+    USHORT          m_nExtraEntryPos;
+    BOOL            m_bMustDelete;
+    BOOL            m_bInSearchMode;
 
-    SvxCharNamePage_Impl() : m_pFontList( NULL ), m_MustDelete( sal_False )
+    SvxCharNamePage_Impl() :
+
+        m_pFontList     ( NULL ),
+        m_nExtraEntryPos( LISTBOX_ENTRY_NOTFOUND ),
+        m_bMustDelete   ( FALSE ),
+        m_bInSearchMode ( FALSE )
+
     {
         m_aUpdateTimer.SetTimeout( 350 );
     }
 
     ~SvxCharNamePage_Impl()
     {
-        if ( m_MustDelete )
+        if ( m_bMustDelete )
             delete m_pFontList;
     }
 };
@@ -3014,6 +3024,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pImpl                 ( new SvxCharNamePage_Impl )
 
 {
+    m_pImpl->m_aNoStyleText = String( ResId( STR_CHARNAME_NOSTYLE ) );
+    m_pImpl->m_aTransparentText = String( ResId( STR_CHARNAME_TRANSPARENT ) );
+
     FreeResource();
     Initialize();
 }
@@ -3022,7 +3035,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
 SvxCharNamePage::~SvxCharNamePage()
 {
-    if ( m_pImpl->m_MustDelete )
+    if ( m_pImpl->m_bMustDelete )
         delete m_pImpl->m_pFontList;
     delete m_pImpl;
 }
@@ -3081,7 +3094,7 @@ const FontList* SvxCharNamePage::GetFontList() const
         else
         {
             m_pImpl->m_pFontList = new FontList( Application::GetDefaultDevice() );
-            m_pImpl->m_MustDelete = TRUE;
+            m_pImpl->m_bMustDelete = TRUE;
         }
     }
 
@@ -3110,20 +3123,20 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pBox )
         DBG_ERRORFILE( "invalid font name box" );
     }
 
-/*!!!
-    if ( bInSearchMode )
+    if ( m_pImpl->m_bInSearchMode )
     {
         // Bei der Suche zus"atzliche Eintr"age:
         // "Nicht Fett" und "Nicht Kursiv"
-        String aEntry = aNoStyleStr;
+        String aEntry = m_pImpl->m_aNoStyleText;
         const sal_Char sS[] = "%s";
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetBoldStr() );
-        nExtraEntryPos = aStyleBox.InsertEntry( aEntry );
-        aEntry = aNoStyleStr;
+        m_pImpl->m_nExtraEntryPos = ( &m_aWestFontNameLB == pBox )
+            ? m_aWestFontStyleLB.InsertEntry( aEntry ) : m_aEastFontStyleLB.InsertEntry( aEntry );
+        aEntry = m_pImpl->m_aNoStyleText;
         aEntry.SearchAndReplaceAscii( sS, pFontList->GetItalicStr() );
-        aStyleBox.InsertEntry( aEntry );
+        ( &m_aWestFontNameLB == pBox ) ? m_aWestFontStyleLB.InsertEntry( aEntry )
+                                       : m_aEastFontStyleLB.InsertEntry( aEntry );
     }
-*/
 }
 
 // -----------------------------------------------------------------------
@@ -3143,6 +3156,452 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pBox )
     {
         DBG_ERRORFILE( "invalid font name box" );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
+{
+    FontNameBox* pNameBox = bWest ? &m_aWestFontNameLB : &m_aEastFontNameLB;
+    FontStyleBox* pStyleBox = bWest ? &m_aWestFontStyleLB : &m_aEastFontStyleLB;
+    FontSizeBox* pSizeBox = bWest ? &m_aWestFontSizeLB : &m_aEastFontSizeLB;
+    FixedText* pLangFT = bWest ? &m_aWestFontLanguageFT : &m_aEastFontLanguageFT;
+    SvxLanguageBox* pLangBox = bWest ? &m_aWestFontLanguageLB : &m_aEastFontLanguageLB;
+
+    // die FontListBox fuellen
+    const FontList* pFontList = GetFontList();
+    pNameBox->Fill( pFontList );
+
+    // Font ermitteln
+    const SvxFontItem* pFontItem = NULL;
+    USHORT nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONT : SID_ATTR_CHAR_CJK_FONT );
+    SfxItemState eState = rSet.GetItemState( nWhich );
+
+    if ( eState >= SFX_ITEM_DEFAULT )
+    {
+        pFontItem = (const SvxFontItem*)&( rSet.Get( nWhich ) );
+        pNameBox->SetText( pFontItem->GetFamilyName() );
+    }
+    else
+        pNameBox->SetText( String() );
+
+    FillStyleBox_Impl( pNameBox );
+
+    FASTBOOL bStyle = FALSE;
+    FontItalic eItalic = ITALIC_NONE;
+    FontWeight eWeight = WEIGHT_NORMAL;
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
+    eState = rSet.GetItemState( nWhich );
+
+    if ( eState >= SFX_ITEM_DEFAULT )
+    {
+        const SvxPostureItem& rItem = (SvxPostureItem&)rSet.Get( nWhich );
+        eItalic = (FontItalic)rItem.GetValue();
+        bStyle = TRUE;
+    }
+
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
+    eState = rSet.GetItemState( nWhich );
+
+    if ( eState >= SFX_ITEM_DEFAULT )
+    {
+        SvxWeightItem& rItem = (SvxWeightItem&)rSet.Get( nWhich );
+        eWeight = (FontWeight)rItem.GetValue();
+    }
+    else if ( bStyle )
+        bStyle = FALSE;
+
+    // Aktuell eingestellter Font
+    if ( bStyle && pFontItem )
+    {
+        FontInfo aInfo = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
+        pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
+    }
+    else if ( !m_pImpl->m_bInSearchMode || !bStyle )
+        pStyleBox->SetText( String() );
+    else if ( bStyle )
+    {
+        FontInfo aInfo = pFontList->Get( String(), eWeight, eItalic );
+        pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
+    }
+
+    // SizeBox fuellen
+    FillSizeBox_Impl( pNameBox );
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONTHEIGHT : SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    eState = rSet.GetItemState( nWhich );
+
+    if ( pSizeBox->IsRelativeMode() )
+    {
+        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( nWhich );
+
+        if( rItem.GetProp() != 100 || SFX_MAPUNIT_RELATIVE != rItem.GetPropUnit() )
+        {
+            BOOL bPtRel = SFX_MAPUNIT_POINT == rItem.GetPropUnit();
+            pSizeBox->SetPtRelative( bPtRel );
+            pSizeBox->SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
+        }
+        else
+        {
+            pSizeBox->SetRelative();
+            pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
+        }
+    }
+    else if ( eState >= SFX_ITEM_DEFAULT )
+    {
+        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( nWhich );
+        pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
+    }
+    else
+        pSizeBox->SetText( String() );
+
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
+    pLangBox->SetNoSelection();
+    eState = rSet.GetItemState( nWhich );
+
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            pLangFT->Hide();
+            pLangBox->Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            pLangFT->Disable();
+            pLangBox->Disable();
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxLanguageItem& rItem = (SvxLanguageItem&)rSet.Get( nWhich );
+            DBG_ASSERT( (LanguageType)rItem.GetValue() != LANGUAGE_SYSTEM, "LANGUAGE_SYSTEM not allowed" );
+            if ( (LanguageType)rItem.GetValue() != LANGUAGE_DONTKNOW )
+            {
+                USHORT nLang = SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
+                for ( USHORT i = 0; i < pLangBox->GetEntryCount(); ++i )
+                {
+                    if ( (USHORT)(ULONG)pLangBox->GetEntryData(i) == nLang )
+                    {
+                        pLangBox->SelectEntryPos(i);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
+{
+    BOOL bModified = FALSE;
+
+    FontNameBox* pNameBox = bWest ? &m_aWestFontNameLB : &m_aEastFontNameLB;
+    FontStyleBox* pStyleBox = bWest ? &m_aWestFontStyleLB : &m_aEastFontStyleLB;
+    FontSizeBox* pSizeBox = bWest ? &m_aWestFontSizeLB : &m_aEastFontSizeLB;
+    SvxLanguageBox* pLangBox = bWest ? &m_aWestFontLanguageLB : &m_aEastFontLanguageLB;
+
+    const SfxPoolItem* pItem = NULL;
+    const SfxItemSet& rOldSet = GetItemSet();
+    const SfxPoolItem* pOld = NULL;
+
+    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
+
+    FASTBOOL bChanged = TRUE;
+    USHORT nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONT : SID_ATTR_CHAR_CJK_FONT );
+    const String& rFontName  = pNameBox->GetText();
+    const FontList* pFontList = GetFontList();
+    String aStyleBoxText =pStyleBox->GetText();
+    USHORT nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
+    if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
+        aStyleBoxText.Erase();
+    FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
+    SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
+                           aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
+    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_FONT : SID_ATTR_CHAR_CJK_FONT );
+
+    if ( pOld )
+    {
+        const SvxFontItem& rItem = *( (const SvxFontItem*)pOld );
+
+        if ( rItem.GetFamilyName() == aFontItem.GetFamilyName() )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged )
+        bChanged = !pNameBox->GetSavedValue().Len();
+
+    if ( !bChanged && pExampleSet &&
+         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         ( (SvxFontItem*)pItem )->GetFamilyName() != aFontItem.GetFamilyName() )
+        bChanged = TRUE;
+
+    if ( bChanged && rFontName.Len() )
+    {
+        rSet.Put( aFontItem );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    bChanged = TRUE;
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
+    FontWeight eWeight = aInfo.GetWeight();
+    if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
+        eWeight = WEIGHT_NORMAL;
+    SvxWeightItem aWeightItem( eWeight, nWhich );
+    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_WEIGHT : SID_ATTR_CHAR_CJK_WEIGHT );
+
+    if ( pOld )
+    {
+        const SvxWeightItem& rItem = *( (const SvxWeightItem*)pOld );
+
+        if ( rItem.GetValue() == aWeightItem.GetValue() )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged )
+    {
+        bChanged = !pStyleBox->GetSavedValue().Len();
+
+        if ( m_pImpl->m_bInSearchMode && bChanged &&
+             aInfo.GetWeight() == WEIGHT_NORMAL && aInfo.GetItalic() != ITALIC_NONE )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged && pExampleSet &&
+         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         ( (SvxWeightItem*)pItem )->GetValue() != aWeightItem.GetValue() )
+        bChanged = TRUE;
+
+    if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
+        bChanged = ( nEntryPos == m_pImpl->m_nExtraEntryPos );
+
+    String aText( pStyleBox->GetText() ); // Tristate, dann Text leer
+
+    if ( bChanged && aText.Len() )
+    {
+        rSet.Put( aWeightItem );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    bChanged = TRUE;
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
+    FontItalic eItalic = aInfo.GetItalic();
+    if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
+        eItalic = ITALIC_NONE;
+    SvxPostureItem aPostureItem( eItalic, nWhich );
+    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_POSTURE : SID_ATTR_CHAR_CJK_POSTURE );
+
+    if ( pOld )
+    {
+        const SvxPostureItem& rItem = *( (const SvxPostureItem*)pOld );
+
+        if ( rItem.GetValue() == aPostureItem.GetValue() )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged )
+    {
+        bChanged = !pStyleBox->GetSavedValue().Len();
+
+        if ( m_pImpl->m_bInSearchMode && bChanged &&
+             aInfo.GetItalic() == ITALIC_NONE && aInfo.GetWeight() != WEIGHT_NORMAL )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged && pExampleSet &&
+         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         ( (SvxPostureItem*)pItem )->GetValue() != aPostureItem.GetValue() )
+        bChanged = TRUE;
+
+    if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
+        bChanged = ( nEntryPos == ( m_pImpl->m_nExtraEntryPos + 1 ) );
+
+    if ( bChanged && aText.Len() )
+    {
+        rSet.Put( aPostureItem );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    // FontSize
+    long nSize = pSizeBox->GetValue();
+
+    if ( !pSizeBox->GetText().Len() )   // GetValue() gibt dann Min-Wert zurueck
+        nSize = 0;
+    long nSavedSize = pSizeBox->GetSavedValue().ToInt32();
+    FASTBOOL bRel = TRUE;
+
+    if ( !pSizeBox->IsRelative() )
+    {
+        nSavedSize *= 10;
+        bRel = FALSE;
+    }
+
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_FONTHEIGHT : SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    const SvxFontHeightItem* pOldHeight = (const SvxFontHeightItem*)
+        GetOldItem( rSet, bWest ? SID_ATTR_CHAR_FONTHEIGHT : SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    bChanged = ( nSize != nSavedSize );
+
+    if ( !bChanged && pExampleSet &&
+         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET )
+    {
+        float fSize = (float)nSize / 10;
+        long nVal = CalcToUnit( fSize, rSet.GetPool()->GetMetric( nWhich ) );
+        if ( ( (SvxFontHeightItem*)pItem )->GetHeight() != (UINT32)nVal )
+            bChanged = TRUE;
+    }
+
+    if ( bChanged || !pOldHeight ||
+         bRel != ( SFX_MAPUNIT_RELATIVE != pOldHeight->GetPropUnit() || 100 != pOldHeight->GetProp() ) )
+    {
+        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        if ( pSizeBox->IsRelative() )
+        {
+            DBG_ASSERT( GetItemSet().GetParent(), "No parent set" );
+            const SvxFontHeightItem& rOldItem =
+                (const SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
+
+            SvxFontHeightItem aHeight( 240, 100, nWhich );
+            if ( pSizeBox->IsPtRelative() )
+                aHeight.SetHeight( rOldItem.GetHeight(), (USHORT)( nSize / 10 ), SFX_MAPUNIT_POINT, eUnit );
+            else
+                aHeight.SetHeight( rOldItem.GetHeight(), (USHORT)nSize, SFX_MAPUNIT_RELATIVE );
+            rSet.Put( aHeight );
+        }
+        else
+        {
+            float fSize = (float)nSize / 10;
+            rSet.Put( SvxFontHeightItem( CalcToUnit( fSize, eUnit ), 100, nWhich ) );
+        }
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
+    pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
+    USHORT nLangPos = pLangBox->GetSelectEntryPos();
+    USHORT nLang = (USHORT)(ULONG)pLangBox->GetEntryData( nLangPos );
+    util::Language nLanguage = SvxGetSelectableLanguages().getConstArray()[ nLang ];
+
+    if ( pOld )
+    {
+        const SvxLanguageItem& rItem = *( (const SvxLanguageItem*)pOld );
+
+        if ( nLangPos == LISTBOX_ENTRY_NOTFOUND || rItem.GetValue() == nLanguage )
+            bChanged = FALSE;
+    }
+
+    if ( !bChanged )
+        bChanged = ( pLangBox->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
+
+    if ( bChanged && nLangPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        rSet.Put( SvxLanguageItem( (LanguageType)nLanguage, nWhich ) );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    return bModified;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
+{
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    SfxItemState eState = rSet.GetItemState( nWhich );
+
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            m_aColorLB.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aColorLB.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aColorLB.SetNoSelection();
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
+            Color aColor = rItem.GetValue();
+            USHORT nSelPos = m_aColorLB.GetEntryPos( aColor );
+            if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
+                nSelPos = m_aColorLB.GetEntryPos( m_pImpl->m_aTransparentText );
+
+            if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+                m_aColorLB.SelectEntryPos( nSelPos );
+            else
+            {
+                nSelPos = m_aColorLB.GetEntryPos( aColor );
+                if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+                    m_aColorLB.SelectEntryPos( nSelPos );
+                else
+                    m_aColorLB.SelectEntryPos(
+                        m_aColorLB.InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+            }
+            break;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvxCharNamePage::FillItemSetColor_Impl( SfxItemSet& rSet )
+{
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    const SvxColorItem* pOld = (const SvxColorItem*)GetOldItem( rSet, SID_ATTR_CHAR_COLOR );
+    const SvxColorItem* pItem = NULL;
+    BOOL bChanged = TRUE;
+    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
+    const SfxItemSet& rOldSet = GetItemSet();
+
+    Color aSelectedColor;
+    if ( m_aColorLB.GetSelectEntry() == m_pImpl->m_aTransparentText )
+        aSelectedColor = Color( COL_TRANSPARENT );
+    else
+        aSelectedColor = m_aColorLB.GetSelectEntryColor();
+
+    if ( pOld && pOld->GetValue() == aSelectedColor )
+        bChanged = FALSE;
+
+    if ( !bChanged )
+        bChanged = ( m_aColorLB.GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
+
+    if ( !bChanged && pExampleSet &&
+         pExampleSet->GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pItem ) == SFX_ITEM_SET &&
+         ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
+        bChanged = TRUE;
+
+    BOOL bModified = FALSE;
+
+    if ( bChanged && m_aColorLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    {
+        rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
+        bModified = TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    return bModified;
 }
 
 // -----------------------------------------------------------------------
@@ -3173,15 +3632,10 @@ IMPL_LINK( SvxCharNamePage, ColorBoxSelectHdl_Impl, ColorListBox*, pBox )
 {
     SvxFont& rFont = m_aPreviewWin.GetFont();
     Color aSelectedColor;
-/*  if ( pBox->GetSelectEntry() == aStrTransparent )
+    if ( pBox->GetSelectEntry() == m_pImpl->m_aTransparentText )
         aSelectedColor = Color( COL_TRANSPARENT );
-    else */
-        aSelectedColor = pBox->GetSelectEntryColor();
-
-/*  if( pBox == &aColorBox )
-        rFont.SetColor( aSelectedColor );
     else
-        rFont.SetFillColor( aSelectedColor ); */
+        aSelectedColor = pBox->GetSelectEntryColor();
     rFont.SetColor( aSelectedColor );
     m_aPreviewWin.Invalidate();
     return 0;
@@ -3220,111 +3674,29 @@ USHORT* SvxCharNamePage::GetRanges()
 
 void SvxCharNamePage::Reset( const SfxItemSet& rSet )
 {
-    // die FontListBox fuellen
-    const FontList* pFontList = GetFontList();
-    m_aWestFontNameLB.Fill( pFontList );
-    m_aEastFontNameLB.Fill( pFontList );
-
-    // Font ermitteln
-    const SvxFontItem* pFontItem = NULL;
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONT );
-    SfxItemState eState = rSet.GetItemState( nWhich );
-
-    if ( eState >= SFX_ITEM_AVAILABLE )
-    {
-        pFontItem = (const SvxFontItem*)&( rSet.Get( nWhich ) );
-        m_aWestFontNameLB.SetText( pFontItem->GetFamilyName() );
-    }
-    else
-        m_aWestFontNameLB.SetText( String() );
-
-    FillStyleBox_Impl( &m_aWestFontNameLB );
-
-    FASTBOOL bStyle = FALSE;
-    FontItalic eItalic = ITALIC_NONE;
-    FontWeight eWeight = WEIGHT_NORMAL;
-    nWhich = GetWhich( SID_ATTR_CHAR_POSTURE );
-    eState = rSet.GetItemState( nWhich );
-
-    if ( eState >= SFX_ITEM_AVAILABLE )
-    {
-        const SvxPostureItem& rItem = (SvxPostureItem&)rSet.Get( nWhich );
-        eItalic = (FontItalic)rItem.GetValue();
-        bStyle = TRUE;
-    }
-
-    nWhich = GetWhich( SID_ATTR_CHAR_WEIGHT );
-    eState = rSet.GetItemState( nWhich );
-
-    if ( eState >= SFX_ITEM_AVAILABLE )
-    {
-        SvxWeightItem& rItem = (SvxWeightItem&)rSet.Get( nWhich );
-        eWeight = (FontWeight)rItem.GetValue();
-    }
-    else if ( bStyle )
-        bStyle = FALSE;
-
-    // Aktuell eingestellter Font
-    if ( bStyle && pFontItem )
-    {
-        FontInfo aInfo = pFontList->Get( pFontItem->GetFamilyName(), eWeight, eItalic );
-        m_aWestFontStyleLB.SetText( pFontList->GetStyleName( aInfo ) );
-    }
-    else if ( /*!!! !bInSearchMode ||*/ !bStyle )
-        m_aWestFontStyleLB.SetText( String() );
-    else if ( bStyle )
-    {
-        FontInfo aInfo = pFontList->Get( String(), eWeight, eItalic );
-        m_aWestFontStyleLB.SetText( pFontList->GetStyleName( aInfo ) );
-    }
-
-    // SizeBox fuellen
-    FillSizeBox_Impl( &m_aWestFontNameLB );
-    nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
-    eState = rSet.GetItemState( nWhich );
-
-    if ( m_aWestFontSizeLB.IsRelativeMode() )
-    {
-        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
-        const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( nWhich );
-
-        if( rItem.GetProp() != 100 || SFX_MAPUNIT_RELATIVE != rItem.GetPropUnit() )
-        {
-            BOOL bPtRel = SFX_MAPUNIT_POINT == rItem.GetPropUnit();
-            m_aWestFontSizeLB.SetPtRelative( bPtRel );
-            m_aWestFontSizeLB.SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
-        }
-        else
-        {
-            m_aWestFontSizeLB.SetRelative();
-            m_aWestFontSizeLB.SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
-        }
-    }
-    else if ( eState >= SFX_ITEM_AVAILABLE )
-    {
-        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
-        const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( nWhich );
-        m_aWestFontSizeLB.SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
-    }
-    else
-        m_aWestFontSizeLB.SetText( String() );
+    ResetWestOrEast_Impl( rSet, TRUE );
+    ResetWestOrEast_Impl( rSet, FALSE );
+    ResetColor_Impl( rSet );
 }
 
 // -----------------------------------------------------------------------
 
 BOOL SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
 {
-    return FALSE;
+    BOOL bModified = FillItemSetWestOrEast_Impl( rSet, TRUE );
+    bModified |= FillItemSetWestOrEast_Impl( rSet, FALSE );
+    bModified |= FillItemSetColor_Impl( rSet );
+    return bModified;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
 {
-    if ( m_pImpl->m_MustDelete )
+    if ( m_pImpl->m_bMustDelete )
     {
         delete m_pImpl->m_pFontList;
-        m_pImpl->m_MustDelete = FALSE;
+        m_pImpl->m_bMustDelete = FALSE;
     }
     m_pImpl->m_pFontList = rItem.GetFontList();
 }
@@ -3337,22 +3709,27 @@ void SvxCharNamePage::EnableRelativeMode()
     m_aWestFontSizeLB.EnableRelativeMode( 0, 999 ); // min 0%, max 999%, step 5
 
     USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
-    const SvxFontHeightItem& rItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
+    const SvxFontHeightItem& rWestItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
     SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
-    short nCurHeight = CalcToPoint( rItem.GetHeight(), eUnit, 1 ) * 10;
+    short nCurHeight = CalcToPoint( rWestItem.GetHeight(), eUnit, 1 ) * 10;
 
     // ausgehend von der akt. Hoehe:
     //      - negativ bis minimal 2 pt
     //      - positiv bis maximal 999 pt
     m_aWestFontSizeLB.EnablePtRelativeMode( -(nCurHeight - 20), (9999 - nCurHeight), 10 );
 
-    // don't forget the EAST!!!
+    nWhich = GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    const SvxFontHeightItem& rEastItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
+    eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
+    nCurHeight = CalcToPoint( rEastItem.GetHeight(), eUnit, 1 ) * 10;
+    m_aEastFontSizeLB.EnablePtRelativeMode( -(nCurHeight - 20), (9999 - nCurHeight), 10 );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxCharNamePage::EnableSearchMode()
 {
+    m_pImpl->m_bInSearchMode = TRUE;
 }
 
 // class SvxCharEffectsPage ----------------------------------------------
