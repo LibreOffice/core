@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,10 +670,10 @@ private:
     UINT32                      nIcvTextSer;
 
     BOOL                        bHasLine;
-    XclExpXFBorder              maBorder;
+    XclExpCellBorder            maBorder;
 
     BOOL                        bHasPattern;
-    XclExpXFArea                maArea;
+    XclExpCellArea              maArea;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
@@ -719,14 +719,14 @@ public:
 
 struct XclExpMergedCell
 {
+    sal_uInt32              mnXFId;
     UINT16                  nCol1;
     UINT16                  nCol2;
     UINT16                  nRow1;
     UINT16                  nRow2;
-    UINT16                  nXF;
 
-    inline                  XclExpMergedCell( UINT16 nC1, UINT16 nC2, UINT16 nR1, UINT16 nR2, UINT16 _nXF ) :
-                                nCol1( nC1 ), nCol2( nC2 ), nRow1( nR1 ), nRow2( nR2 ), nXF( _nXF ) {}
+    inline                  XclExpMergedCell( UINT16 nC1, UINT16 nC2, UINT16 nR1, UINT16 nR2, sal_uInt32 nXFId ) :
+                                nCol1( nC1 ), nCol2( nC2 ), nRow1( nR1 ), nRow2( nR2 ), mnXFId( nXFId ) {}
 };
 
 inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpMergedCell& rCell )
@@ -749,18 +749,18 @@ private:
                                     { aCellList.Insert( pNewCell, LIST_APPEND ); }
 
 public:
-    void                        Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, UINT16 nXF );
+    void                        Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, sal_uInt32 nXFId );
     BOOL                        FindNextMerge( const ScAddress& rPos, UINT16& rnCol );
-    BOOL                        FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF, UINT16& rnColCount );
-    inline BOOL                 FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF );
+    BOOL                        FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId, UINT16& rnColCount );
+    inline BOOL                 FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId );
 
     virtual void                Save( XclExpStream& rStrm );
 };
 
-inline BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF )
+inline BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId )
 {
     UINT16 nCols;
-    return FindMergeBaseXF( rPos, rnXF, nCols );
+    return FindMergeBaseXF( rPos, rnXFId, nCols );
 }
 
 
