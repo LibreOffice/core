@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 16:57:04 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 
 #ifndef __com_sun_star_drawing_TextHorizontalAdjust_idl__
 #include <com/sun/star/drawing/TextHorizontalAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_text_WritingMode_idl__
+#include <com/sun/star/text/WritingMode.idl>
 #endif
 
 //=============================================================================
@@ -331,6 +335,10 @@ service Text
      */
     [property] boolean TextAnimationStopInside;
 
+    /** If this value selects the writing mode for the text.
+     */
+    [property] ::com::sun::star::text::WritingMode TextWritingMode;
+
 };
 
 //=============================================================================
@@ -340,6 +348,9 @@ service Text
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/15 16:57:04  cl
+    #79743# replaced TextAdjust with TextHorizontalAdjust and TextVerticalAdjust
+
     Revision 1.3  2000/11/08 12:42:42  mi
     moved from api
 

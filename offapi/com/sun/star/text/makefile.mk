@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2000-11-29 09:12:17 $
+#   last change: $Author: cl $ $Date: 2000-12-07 19:42:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/text
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    WritingMode.idl\
     AdvancedTextDocument.idl\
     AutoTextContainer.idl\
     AutoTextEntry.idl\
