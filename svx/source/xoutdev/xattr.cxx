@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 10:00:12 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3068,7 +3068,62 @@ sal_Bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     return sal_True;
 }
 
+// -----------------------------
+// class XSecondaryFillColorItem
+// -----------------------------
+TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
 
+XSecondaryFillColorItem::XSecondaryFillColorItem(long nIndex, const Color& rTheColor) :
+    XColorItem(XATTR_SECONDARYFILLCOLOR, nIndex, rTheColor)
+{
+}
+
+XSecondaryFillColorItem::XSecondaryFillColorItem(const XubString& rName, const Color& rTheColor) :
+    XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)
+{
+}
+
+XSecondaryFillColorItem::XSecondaryFillColorItem( SvStream& rIn ) :
+    XColorItem(XATTR_SECONDARYFILLCOLOR, rIn)
+{
+}
+
+SfxPoolItem* XSecondaryFillColorItem::Clone(SfxItemPool* pPool) const
+{
+    return new XSecondaryFillColorItem(*this);
+}
+
+SfxPoolItem* XSecondaryFillColorItem::Create( SvStream& rIn, USHORT nVer ) const
+{
+    if ( nVer >= 2 )
+        return new XSecondaryFillColorItem( rIn );
+    else
+        return new XSecondaryFillColorItem( String(), Color(0,184,255) );
+}
+USHORT XSecondaryFillColorItem::GetVersion( USHORT nFileFormatVersion ) const
+{
+    return 2;
+}
+SfxItemPresentation XSecondaryFillColorItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    XubString&          rText, const IntlWrapper *
+)   const
+{
+    switch ( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            return ePres;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            rText = GetName();
+            return ePres;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
 
 // ----------------
 // class XGradient
