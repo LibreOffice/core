@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:54:00 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:20:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 # mk file for unxlngs
 ASM=$(CC)
-AFLAGS=-Wa,-Av8plus,-K,PIC -c $(CDEFS)
+AFLAGS=-Wa,-K,PIC -c $(CDEFS)
 
 SOLAR_JAVA*=TRUE
 JAVAFLAGSDEBUG=-g
@@ -101,7 +101,7 @@ CFLAGSENABLESYMBOLS=-g
 # flags for the C++ Compiler
 CFLAGSCC= -pipe 
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions 
+CFLAGSEXCEPTIONS=-fexceptions
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
