@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-22 06:44:04 $
+ *  last change: $Author: hdu $ $Date: 2001-07-19 17:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -45,6 +45,7 @@
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
@@ -83,8 +84,10 @@
 #include <ctrltool.hxx>
 
 #define IMGTEXTSPACE    2
-#define SYMBOLFONTTEXT  "AbCdEfGhIj"
 #define EXTRAFONTSIZE   5
+
+static sal_Unicode aImplSymbolFontText[] = {0xF021,0xF032,0xF043,0xF054,0xF065,0xF076,0xF0B7,0xF0C8,0};
+static sal_Unicode aImplStarSymbolText[] = {0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
 
 // ========================================================================
 // ColorListBox
@@ -170,7 +173,7 @@ USHORT ColorListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 // -----------------------------------------------------------------------
 
 USHORT ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr,
-                                  USHORT nPos )
+                                USHORT nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
@@ -293,7 +296,7 @@ DECLARE_LIST( ImpLineList, ImpLineListData* );
 // -----------------------------------------------------------------------
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
-                              Bitmap& rBmp, XubString& rStr )
+                            Bitmap& rBmp, XubString& rStr )
 {
     Size aSize = GetOutputSizePixel();
     aSize.Width() -= 20;
@@ -437,7 +440,7 @@ USHORT LineListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 // -----------------------------------------------------------------------
 
 USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
-                                 USHORT nPos )
+                                USHORT nPos )
 {
     XubString   aStr;
     Bitmap      aBmp;
@@ -445,7 +448,7 @@ USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
     nPos = ListBox::InsertEntry( aStr, aBmp, nPos );
     if ( nPos != LISTBOX_ERROR )
     {
-        ImpLineListData* pData  = new ImpLineListData;
+        ImpLineListData* pData = new ImpLineListData;
         pData->nLine1    = nLine1;
         pData->nLine2    = nLine2;
         pData->nDistance = nDistance;
@@ -486,7 +489,7 @@ void LineListBox::Clear()
 // -----------------------------------------------------------------------
 
 USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
-                                 long nDistance ) const
+                                long nDistance ) const
 {
     ULONG n = 0;
     ULONG nCount = pLineList->Count();
@@ -496,9 +499,9 @@ USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
         if ( pData )
         {
             if ( (pData->nLine1    == nLine1) &&
-                 (pData->nLine2    == nLine2) &&
-                 (pData->nDistance == nDistance) )
-                return (USHORT)n;
+                (pData->nLine2    == nLine2) &&
+                (pData->nDistance == nDistance) )
+            return (USHORT)n;
         }
 
         n++;
@@ -544,7 +547,7 @@ long LineListBox::GetEntryDistance( USHORT nPos ) const
 
 void LineListBox::SetColor( const Color& rColor )
 {
-    // Farben austauschen
+    // exchange colours
     aColor = rColor;
 
     // Variablen anlegen
@@ -564,7 +567,7 @@ void LineListBox::SetColor( const Color& rColor )
         ImpLineListData* pData = pLineList->GetObject( n );
         if ( pData )
         {
-            // ListBox-Daten austauschen
+            // exchange listbox data
             ListBox::RemoveEntry( (USHORT)n );
             ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance,
                         aBmp, aStr );
@@ -591,7 +594,7 @@ struct ImplFontNameListData
     USHORT      mnType;
 
                 ImplFontNameListData( const FontInfo& rInfo,
-                                      USHORT nType ) :
+                                    USHORT nType ) :
                     maInfo( rInfo ),
                     mnType( nType )
                 {}
@@ -652,15 +655,15 @@ void FontNameBox::ImplDestroyFontList()
 
 void FontNameBox::Fill( const FontList* pList )
 {
-    // Vorherigen Namen merken und Box loeschen
+    // store old text and clear box
     XubString aOldText = GetText();
     Clear();
 
     ImplDestroyFontList();
     mpFontList = new ImplFontList;
 
-    // Fonts eintragen
-    USHORT   nFontCount = pList->GetFontNameCount();
+    // insert fonts
+    USHORT nFontCount = pList->GetFontNameCount();
     for ( USHORT i = 0; i < nFontCount; i++ )
     {
         const FontInfo& rFontInfo = pList->GetFontName( i );
@@ -675,7 +678,7 @@ void FontNameBox::Fill( const FontList* pList )
 
     ImplCalcUserItemSize();
 
-    // Text wieder setzen
+    // restore text
     if ( aOldText.Len() )
         SetText( aOldText );
 }
@@ -713,6 +716,7 @@ void FontNameBox::ImplCalcUserItemSize()
     {
         USHORT nMaxLen = 0;
         BOOL bSymbolFont = FALSE;
+        BOOL bStarSymbol = FALSE;
         for ( USHORT n = GetEntryCount(); n; )
         {
             ImplFontNameListData* pData = mpFontList->GetObject( --n );
@@ -721,17 +725,27 @@ void FontNameBox::ImplCalcUserItemSize()
                 nMaxLen = aFontName.Len();
             if ( pData->maInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
                 bSymbolFont = TRUE;
+            // starsymbol is a unicode font, but gets WYSIWIG symbols
+            if( aFontName.EqualsIgnoreCaseAscii( "starsymbol" )
+            ||  aFontName.EqualsIgnoreCaseAscii( "opensymbol" ) )
+                bSymbolFont = bStarSymbol = TRUE;
         }
 
-        // Maximale Breite schaetzen
+        // guess maximimum width
         Size aOneCharSz( GetTextWidth( XubString( 'X' ) ), GetTextHeight() );
         Size aSz( aOneCharSz );
         aSz.Width() *= nMaxLen;
-        // Nur XX% der Breite, weil die ListBox die normalen Breiten berechnet...
+        // only XX% of width, because ListBox calculates the normal width...
         aSz.Width() *= 1;
         aSz.Width() /= 10;
         if ( bSymbolFont )
-            aSz.Width() += (sizeof( SYMBOLFONTTEXT )-1) * aOneCharSz.Width();
+        {
+            int nLength = sizeof(aImplSymbolFontText)/sizeof(aImplSymbolFontText[0]) - 1;
+            int nLength2 = sizeof(aImplStarSymbolText)/sizeof(aImplStarSymbolText[0]) - 1;
+            if( bStarSymbol && (nLength < nLength2) )
+                nLength = nLength2;
+            aSz.Width() += aOneCharSz.Width() * nLength;
+        }
         aSz.Height() *= 14;
         aSz.Height() /= 10;
         aUserItemSz = aSz;
@@ -781,10 +795,16 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     if ( mbWYSIWYG && mpFontList )
     {
         nX += IMGTEXTSPACE;
-        BOOL bSymbolFont = rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL;
+
+        BOOL bSymbolFont = (rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL);
+        // starsymbol is a unicode font, but cannot display its own name
+        if( rInfo.GetName().EqualsIgnoreCaseAscii( "starsymbol" )
+         || rInfo.GetName().EqualsIgnoreCaseAscii( "opensymbol" ) )
+            bSymbolFont = TRUE;
+
         if ( bSymbolFont )
         {
-            XubString aText( rInfo.GetName() );
+            String aText( rInfo.GetName() );
             aText.AppendAscii( "  " );
             Point aPos( nX, aTopLeft.Y() + (nH-rUDEvt.GetDevice()->GetTextHeight())/2 );
             rUDEvt.GetDevice()->DrawText( aPos, aText );
@@ -793,20 +813,32 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
         Color aTextColor = rUDEvt.GetDevice()->GetTextColor();
         Font aOldFont( rUDEvt.GetDevice()->GetFont() );
-        Size aSz( aOldFont.GetSize() );
-        aSz.Height() += EXTRAFONTSIZE;
+        Size aSize( aOldFont.GetSize() );
+        aSize.Height() += EXTRAFONTSIZE;
         Font aFont( rInfo );
-        aFont.SetSize( aSz );
+        aFont.SetSize( aSize );
         rUDEvt.GetDevice()->SetFont( aFont );
         rUDEvt.GetDevice()->SetTextColor( aTextColor );
         long nTextHeight = rUDEvt.GetDevice()->GetTextHeight();
         Point aPos( nX, aTopLeft.Y() + (nH-nTextHeight)/2 );
+
+        // was it only remapped to starsymbol?
+        BOOL bStarSymbol = FALSE;
+        String aDisplayName( rUDEvt.GetDevice()->GetFontMetric().GetName() );
+        if( aDisplayName.EqualsIgnoreCaseAscii( "starsymbol" )
+         || aDisplayName.EqualsIgnoreCaseAscii( "opensymbol" ) )
+            bStarSymbol = TRUE;
+
         if ( bSymbolFont )
-            rUDEvt.GetDevice()->DrawText( aPos, XubString( RTL_CONSTASCII_USTRINGPARAM( SYMBOLFONTTEXT ) ) );
+        {
+            String aString( bStarSymbol ? aImplStarSymbolText : aImplSymbolFontText );
+            rUDEvt.GetDevice()->DrawText( aPos, aString );
+        }
         else
             rUDEvt.GetDevice()->DrawText( aPos, rInfo.GetName() );
+
         rUDEvt.GetDevice()->SetFont( aOldFont );
-        DrawEntry( rUDEvt, FALSE, FALSE);   // Separator
+        DrawEntry( rUDEvt, FALSE, FALSE);   // draw seperator
     }
     else
     {
@@ -841,7 +873,7 @@ FontStyleBox::~FontStyleBox()
 
 void FontStyleBox::Select()
 {
-    // Damit Text nach einem Fill erhalten bleibt
+    // keep text over fill operation
     aLastStyle = GetText();
     ComboBox::Select();
 }
@@ -850,7 +882,7 @@ void FontStyleBox::Select()
 
 void FontStyleBox::LoseFocus()
 {
-    // Damit Text nach einem Fill erhalten bleibt
+    // keep text over fill operation
     aLastStyle = GetText();
     ComboBox::LoseFocus();
 }
@@ -860,7 +892,7 @@ void FontStyleBox::LoseFocus()
 void FontStyleBox::Modify()
 {
     CharClass   aChrCls( ::comphelper::getProcessServiceFactory(),
-                         GetSettings().GetLocale() );
+                        GetSettings().GetLocale() );
     XubString   aStr = GetText();
     USHORT      nEntryCount = GetEntryCount();
 
@@ -887,14 +919,14 @@ void FontStyleBox::Modify()
 
 void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
 {
-    // Achtung: In dieser Methode muss ComboBox::SetText() aufgerufen werden,
-    // da sonst aLastStyle ueberschrieben wird
-    // Vorherige Position merken und Box loeschen
+    // note: this method must call ComboBox::SetText(),
+    //   else aLastStyle will overwritten
+    // store prior selection position and clear box
     XubString aOldText = GetText();
     USHORT nPos = GetEntryPos( aOldText );
     Clear();
 
-    // Existiert ein Font mit diesem Namen
+    // does a font with this name already exist?
     sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
     if ( hFontInfo )
     {
@@ -1077,7 +1109,7 @@ void FontSizeBox::Reformat()
     {
         FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
         long nNewValue = aFontSizeNames.Name2Size( GetText() );
-        if ( nNewValue)
+            if ( nNewValue)
         {
             mnLastValue = nNewValue;
             return;
@@ -1268,6 +1300,7 @@ void FontSizeBox::SetRelative( BOOL bNewRelative )
                 SetUnit( FUNIT_POINT );
 
                 Clear();
+
                 short i = nPtRelMin, n = 0;
                 // JP 30.06.98: more than 100 values are not useful
                 while ( i <= nPtRelMax && n++ < 100 )
@@ -1357,7 +1390,7 @@ long FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
         if ( nComboVal < 0 )     // marked as special?
         {
             return MetricField::ConvertValue( (long)-nComboVal, mnBaseValue, GetDecimalDigits(),
-                                              meUnit, eOutUnit );
+                                                meUnit, eOutUnit );
         }
     }
 
@@ -1385,7 +1418,7 @@ long FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 
 long FontSizeBox::GetValue() const
 {
-    // Implementation not inline, because it is a virtual Function
+    // implementation not inline, because it is a virtual function
     return GetValue( FUNIT_NONE );
 }
 
