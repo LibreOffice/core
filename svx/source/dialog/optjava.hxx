@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:50:24 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ private:
 
     DECL_LINK(              EnableHdl_Impl, CheckBox * );
     DECL_LINK(              CheckHdl_Impl, SvxSimpleTable * );
+    DECL_LINK(              SelectHdl_Impl, SvxSimpleTable * );
     DECL_LINK(              AddHdl_Impl, PushButton * );
     DECL_LINK(              ParameterHdl_Impl, PushButton * );
     DECL_LINK(              ClassPathHdl_Impl, PushButton * );
@@ -204,23 +205,13 @@ public:
     void SetParameters( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rParams );
 };
 
-// class SvxClassPathListBox ---------------------------------------------
-
-class SvxClassPathListBox : public ListBox
-{
-public:
-    SvxClassPathListBox( Window* pParent, const ResId& rResId ) : ListBox( pParent, rResId ) {}
-
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-};
-
 // class SvxJavaClassPathDlg ---------------------------------------------
 
 class SvxJavaClassPathDlg : public ModalDialog
 {
 private:
     FixedText               m_aPathLabel;
-    SvxClassPathListBox     m_aPathList;
+    ListBox                 m_aPathList;
     PushButton              m_aAddArchiveBtn;
     PushButton              m_aAddPathBtn;
     PushButton              m_aRemoveBtn;
@@ -237,13 +228,13 @@ private:
     DECL_LINK(              RemoveHdl_Impl, PushButton * );
 
     bool                    IsPathDuplicate( const String& _rPath );
-    String                  GetAbbreviatedPath( const String& _rPath, sal_Unicode _cDelim );
 
 public:
     SvxJavaClassPathDlg( Window* pParent );
     ~SvxJavaClassPathDlg();
 
     inline const String&    GetOldPath() const { return m_sOldPath; }
+    inline void             SetFocus() { m_aPathList.GrabFocus(); }
 
     String                  GetClassPath() const;
     void                    SetClassPath( const String& _rPath );
