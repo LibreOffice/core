@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:26:07 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     ListBox LB_FORMAT
     {
@@ -158,6 +159,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Formát čísla";
         Text[ hebrew ] = "‮תבנית מספר‬";
         Text[ hindi ] = "~संख्या की रचना";
+        Text[ slovak ] = "~Formát čísla";
     };
     CheckBox BTN_BORDER
     {
@@ -193,6 +195,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Okraje";
         Text[ hebrew ] = "‮מסגרות‬";
         Text[ hindi ] = "किना~रें";
+        Text[ slovak ] = "~Okraje";
     };
     CheckBox BTN_FONT
     {
@@ -228,6 +231,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Písmo";
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "अ~क्षर ";
+        Text[ slovak ] = "Pí~smo";
     };
     CheckBox BTN_PATTERN
     {
@@ -263,6 +267,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Vzorek";
         Text[ hebrew ] = "~Muster";
         Text[ hindi ] = "~नमूना";
+        Text[ slovak ] = "~Vzor";
     };
     CheckBox BTN_ALIGNMENT
     {
@@ -298,6 +303,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Zarovnání";
         Text[ hebrew ] = "~Ausrichtung";
         Text[ hindi ] = "पंक्तिकर~ण";
+        Text[ slovak ] = "Zarov~nanie";
     };
     FixedLine FL_FORMATS
     {
@@ -332,6 +338,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Formátování";
         Text[ hebrew ] = "Formatierung";
         Text[ hindi ] = "रचना करना";
+        Text[ slovak ] = "Formátovanie";
     };
     OKButton BTN_OK
     {
@@ -381,6 +388,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Více";
         Text[ hebrew ] = "~Zusätze";
         Text[ hindi ] = "~अधिक";
+        Text[ slovak ] = "~Viac";
     };
     PushButton BTN_ADD
     {
@@ -415,6 +423,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "~Pridať";
     };
     PushButton BTN_REMOVE
     {
@@ -449,6 +458,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "Z~mazať";
     };
     PushButton BTN_RENAME
     {
@@ -482,6 +492,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Přejmenovat";
         Text[ hebrew ] = "Um~benennen";
         Text[ hindi ] = "~पुनः नाम दो";
+        Text[ slovak ] = "P~remenovať";
     };
     HelpButton BTN_HELP
     {
@@ -519,6 +530,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Přidat automatický formát";
         Text[ hebrew ] = "Autoformat hinzufügen";
         Text[ hindi ] = "स्वचालित रचना जोड़ो";
+        Text[ slovak ] = "Pridať automatický formát";
     };
     String STR_ADD_LABEL
     {
@@ -550,6 +562,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम";
+        Text[ slovak ] = "Názov";
     };
     String STR_DEL_TITLE
     {
@@ -581,6 +594,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Odstranit automatický formát";
         Text[ hebrew ] = "Autoformat löschen";
         Text[ hindi ] = "स्वचालित रचना मिटाओ";
+        Text[ slovak ] = "Odstrániť automatický formát";
     };
     String STR_DEL_MSG
     {
@@ -612,6 +626,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Následující automatický formát bude odstraněn:";
         Text[ hebrew ] = "Folgendes Autoformat wird gelöscht:";
         Text[ hindi ] = "निम्नलिखित स्वचालित रचना प्रविष्टि को मिटाया जायेगा:";
+        Text[ slovak ] = "Nasledujúci automatický formát bude odstránený:";
     };
     String STR_RENAME_TITLE
     {
@@ -642,6 +657,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Přejmenovat automatický formát";
         Text[ hebrew ] = "Autoformat umbenennen";
         Text[ hindi ] = "स्वचालित रचना को पुनः नाम दो";
+        Text[ slovak ] = "Premenovať automatický formát";
     };
     String STR_BTN_CLOSE
     {
@@ -673,6 +689,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     String STR_JAN
     {
@@ -704,6 +721,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Led";
         Text[ hebrew ] = "Jan";
         Text[ hindi ] = "जनवरी";
+        Text[ slovak ] = "01.";
     };
     String STR_FEB
     {
@@ -735,6 +753,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Úno";
         Text[ hebrew ] = "Feb";
         Text[ hindi ] = "फरवरी";
+        Text[ slovak ] = "02";
     };
     String STR_MAR
     {
@@ -766,6 +785,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Bře";
         Text[ hebrew ] = "Mär";
         Text[ hindi ] = "मार्च";
+        Text[ slovak ] = "Marec";
     };
     String STR_NORTH
     {
@@ -797,6 +817,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Sever";
         Text[ hebrew ] = "Nord";
         Text[ hindi ] = "उत्तर ";
+        Text[ slovak ] = "Sever";
     };
     String STR_MID
     {
@@ -828,6 +849,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Střed";
         Text[ hebrew ] = "Mitte";
         Text[ hindi ] = "मध्य";
+        Text[ slovak ] = "Stred";
     };
     String STR_SOUTH
     {
@@ -859,6 +881,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Jih";
         Text[ hebrew ] = "Süd";
         Text[ hindi ] = "दक्षिण";
+        Text[ slovak ] = "Juh";
     };
     String STR_SUM
     {
@@ -890,6 +913,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Součet";
         Text[ hebrew ] = "‮סכום‬";
         Text[ hindi ] = "जोड़";
+        Text[ slovak ] = "Celkom";
     };
     String STR_INVALID_AFNAME
     {
@@ -923,6 +947,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ czech ] = "Zadali jste neplatný název.\nNelze vytvořit požadovaný automatický formát.\nZkuste znovu s jiným názvem.";
         Text[ hebrew ] = "Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen.";
         Text[ hindi ] = "आपका प्रविष्ट की हुयी नाम अमान्य है ।\nउद्देशित स्वचालित रचना को उत्पन्न नहीं कर सकते है ।\nअन्य नाम के साथ फिर से प्रयत्न कीजिए ।";
+        Text[ slovak ] = "Zadali ste neplatný názov.\nPožadovaný automatický formát nemožno vytvoriť. \nSkúste znovu s iným názvom.";
     };
     Text[ chinese_simplified ] = "自动格式";
     Text[ russian ] = "����������";
@@ -939,6 +964,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text[ czech ] = "Automatický formát";
     Text[ hebrew ] = "‮עיצוב אוטומטי‬";
     Text[ hindi ] = "स्वचालित रचना ";
+    Text[ slovak ] = "Automatický formát";
 };
 ModalDialog DLG_SWDLG_STRINPUT
 {
@@ -975,6 +1001,8 @@ ModalDialog DLG_SWDLG_STRINPUT
         TabStop = TRUE ;
     };
 };
+
+
 
 
 
