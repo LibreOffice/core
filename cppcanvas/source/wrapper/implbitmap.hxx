@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #endif
 
 #include <cppcanvas/bitmap.hxx>
-#include "canvasgraphichelper.hxx"
+#include <canvasgraphichelper.hxx>
 
 
 /*Definition of ImplBitmap */
@@ -96,6 +96,7 @@ namespace cppcanvas
 
             // CanvasGraphic implementation (that was not already implemented by CanvasGraphicHelper)
             virtual bool draw() const;
+            virtual bool drawAlphaModulated( double nAlphaModulation ) const;
 
             virtual BitmapCanvasSharedPtr                       getBitmapCanvas() const;
 
