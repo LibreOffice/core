@@ -1461,14 +1461,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # The following addition of Custom Actions has to be done by scp as soon as old setup is removed
 
-            # adding the new custom action for the configuration into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteConfigimport", "82", "configimport.exe", "--spool", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable,"configimport.exe", "ExecuteConfigimport", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the removal of the configuration into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ConfigimportCleanup", "82", "configimport.exe", "--cleanup", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable,"configimport.exe", "ConfigimportCleanup", "REMOVE=\"ALL\"", "RemoveExistingProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
             # adding the custom action for the quickstarter into the product (CustomAc.idt and InstallE.idt)
             # $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteQuickstart", "82", "install_quickstart.exe", "", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             # if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "install_quickstart.exe", "ExecuteQuickstart", "\&FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
@@ -1545,10 +1537,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # finding the installed Office (at deinstallation)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "FindingOfficeUninstall", "65", "lngpckinsthlp.dll", "SetProductInstallationPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "lngpckinsthlp.dll", "FindingOfficeUninstall", "REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-            # starting configimport after installation
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "StartConfigimport", "65", "lngpckinsthlp.dll", "RegisterLanguagePack", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "lngpckinsthlp.dll", "StartConfigimport", "", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
             installer::files::save_file($customactionidttablename, $customactionidttable);
             installer::files::save_file($installexecutetablename, $installexecutetable);
             installer::files::save_file($installuitablename, $installuitable);
