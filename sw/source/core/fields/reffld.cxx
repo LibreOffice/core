@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,9 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
-
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -326,6 +328,11 @@ SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
     : SwField( pFldType, nFmt ), sSetRefName( rSetRef ),
     nSubType( nSubTyp ), nSeqNo( nSeqenceNo )
 {
+}
+
+String SwGetRefField::GetDescription() const
+{
+    return SW_RES(STR_REFERENCE);
 }
 
 USHORT SwGetRefField::GetSubType() const
