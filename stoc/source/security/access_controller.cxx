@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-19 15:16:45 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ class AccessController
         SAL_THROW( (RuntimeException) );
 
     // mode
-    enum { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
+    enum mode { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
 
     PermissionCollection m_defaultPermissions;
     // for single-user mode
