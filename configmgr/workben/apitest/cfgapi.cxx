@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-12-06 16:27:11 $
+ *  last change: $Author: jb $ $Date: 2001-12-20 13:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 using namespace std;
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 
@@ -72,6 +73,7 @@ using namespace std;
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -205,6 +207,7 @@ void commit()
 // -----------------------------------------------------------------------------
 static sal_Bool             s_bInitialized  =   sal_False;
 
+static const sal_Char*      s_pProviderService  =   "com.sun.star.configuration.ConfigurationProvider";
 static const sal_Char*      s_pSourcePath   =   "../share/config/registry";
 static const sal_Char*      s_pUpdatePath   =   "../user/config/registry";
 static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.Common";
@@ -428,6 +431,8 @@ int _cdecl main( int argc, char * argv[] )
         OUString sServerType = enterValue("servertype: ", s_pServerType, false);
         cout << endl;
 
+        OUString sProviderService = enterValue("provider-service: ", s_pProviderService, false);
+        cout << endl;
 
         rtl::OUString sUser;
 
@@ -484,11 +489,7 @@ int _cdecl main( int argc, char * argv[] )
         aCPArgs.realloc(aCPArgs.getLength() + 1);
         aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), sServerType);
 
-        Reference< XMultiServiceFactory > xCfgProvider(
-            xORB->createInstanceWithArguments(
-                ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"),
-                aCPArgs),
-            UNO_QUERY);
+        Reference< XMultiServiceFactory > xCfgProvider( xORB->createInstanceWithArguments(sProviderService,aCPArgs), UNO_QUERY);
         if (!xCfgProvider.is())
         {
             cout.flush();
@@ -624,6 +625,8 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
 {
     cout << "\n[ S ] -> <SetValue> ";
     cout << "\n[ D ] -> <SetToDefault> ";
+    cout << "\n[ I ] -> <InsertElement> ";
+    cout << "\n[ R ] -> <RemoveElement> ";
     cout << "\n[ N ] -> <New Access>";
     cout << "\n[ Q ] -> <Quit>";
     cout << endl;
@@ -632,13 +635,15 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
     char buf[200] = {0};
     try
     {
-        bool bHandled = false;
-        bool bInserted = false;
-        bool bDefaulted = false;
+
+        enum { nop, move, insert, replace, remove, reset };
+
+        int eToDo = nop;
+        bool bValue = false;
 
         if (cin.getline(buf,sizeof buf))
         {
-            Reference< XInterface > xNext;
+            Reference< XInterface > xNext = xIface;
             if ((buf[0] == 'q' || buf[0] == 'Q') && (0 == buf[1]))
             {
                 rbQuit = true;
@@ -661,10 +666,11 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                 if (xAccess.is())
                 {
                     cout << "Select a Value" << endl;
-                    bInserted = !!(cin.getline(buf,sizeof buf));
+                    if (cin.getline(buf,sizeof buf))
+                        eToDo = replace;
+
+                    bValue = true;
                 }
-                else
-                    bHandled = true;
             }
             else if( (buf[0] == 'd' || buf[0] == 'D') && (0 == buf[1]))
             {
@@ -674,31 +680,62 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                 if (xAccess.is())
                 {
                     cout << "Select a Value" << endl;
-                    bDefaulted = !!(cin.getline(buf,sizeof buf));
+                    if (cin.getline(buf,sizeof buf))
+                        eToDo = reset;
                 }
-                else
-                    bHandled = true;
             }
+            else if( (buf[0] == 'r' || buf[0] == 'R') && (0 == buf[1]))
+            {
+                // Insert an Element
+                Reference< XNameContainer > xAccess(xIface, UNO_QUERY);
 
+                if (xAccess.is())
+                {
+                    cout << "Select an Element" << endl;
+                    if (cin.getline(buf,sizeof buf))
+                        eToDo = remove;
+                }
+            }
+            else if( (buf[0] == 'i' || buf[0] == 'I') && (0 == buf[1]))
+            {
+                // Insert an Element
+                Reference< XNameContainer > xAccess(xIface, UNO_QUERY);
+
+                if (xAccess.is())
+                {
+                    cout << "Enter a New Element-Name" << endl;
+                    if (cin.getline(buf,sizeof buf))
+                        eToDo = insert;
+
+                    bValue = ! Reference< XSingleServiceFactory >::query(xAccess).is();
+                }
+            }
             else if ((buf[0] == 'p' || buf[0] == 'P') && (0 == buf[1]))
             {
                 Reference< XChild > xChild(xIface, UNO_QUERY);
                 if (xChild.is())
                     xNext = xChild->getParent();
-                bHandled = true;
+                eToDo = nop;
             }
+            else
+                eToDo = move;
 
-            if (bHandled == false)
+            if (nop != eToDo)
             {
                 Reference< XNameAccess > xAccess(xIface, UNO_QUERY);
                 Reference< XHierarchicalNameAccess > xDeepAccess(xIface, UNO_QUERY);
-                Reference< XExactName > xExactName(xIface, UNO_QUERY);
 
-                if (xAccess.is() || xDeepAccess.is())
+                OUString aName;
+                OUString aInput = OUString::createFromAscii(buf);
+                bool bNested = false;
+
+                if (insert == eToDo)
                 {
-                    OUString aName;
-                    OUString aInput = OUString::createFromAscii(buf);
-
+                    aName = aInput;
+                }
+                else if (xAccess.is() || xDeepAccess.is())
+                {
+                    Reference< XExactName > xExactName(xIface, UNO_QUERY);
                     if (xExactName.is())
                     {
                         ::rtl::OUString sTemp = xExactName->getExactName(aInput);
@@ -713,6 +750,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                     else if (xDeepAccess.is() && xDeepAccess->hasByHierarchicalName(aInput))
                     {
                         aName = aInput;
+                        bNested = true;
                     }
                     else if ('0' <= buf[0] && buf[0] <= '9' && xAccess.is())
                     {
@@ -721,25 +759,24 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                         if (0 <= n && n < aNames.getLength())
                             aName = aNames[n];
                     }
+                }
+                if (aName.getLength())
+                {
+                    bool bValueOk = true;
 
-                    if (aName.getLength())
+                    Any aElement;
+                    if (insert != eToDo)
                     {
-                        bool bNest = aInput.indexOf(sal_Unicode('/')) >= 0;
-
-                        Any aElement = bNest    ? ( xDeepAccess.is() ? xDeepAccess->getByHierarchicalName(aName) : Any())
-                                                : ( xAccess.    is() ? xAccess->    getByName(aName)             : Any() );
-
-                        while (aElement.getValueTypeClass() == TypeClass_ANY)
-                        {
-                            Any aWrap(aElement);
-                            aWrap >>= aElement;
-                        }
-                        sal_Bool bValue = true;
-                        sal_Bool bValueOk = false;
+                        aElement =  bNested      ? xDeepAccess->getByHierarchicalName(aName) :
+                                    xAccess.is() ? xAccess->    getByName(aName)             : Any();
 
                         switch (aElement.getValueTypeClass() )
                         {
-                        case TypeClass_INTERFACE: bValue = false; break;
+                        case TypeClass_INTERFACE:
+                            bValue = false;
+                            cout << "ELEMENT '" << aName << "' is an INNER NODE " << endl;
+                            break;
+
                         case TypeClass_BOOLEAN:
                             {
                                 sal_Bool* pVal = (sal_Bool*)aElement.getValue();
@@ -760,7 +797,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             {
                                 sal_Int16 aValue;
                                 cout << "VALUE '" << aName << "' is a SHORT (16 bit) = ";
-                                if (bValueOk = (aElement >>= aValue))
+                                if (bValueOk = !!(aElement >>= aValue))
                                     cout << aValue;
                                 else
                                     cout << "ERROR RETRIEVING VALUE";
@@ -772,7 +809,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
 
                                 sal_Int32 aValue;
                                 cout << "VALUE '" << aName << "' is a INT (32 bit) = ";
-                                if (bValueOk = (aElement >>= aValue))
+                                if (bValueOk = !!(aElement >>= aValue))
                                     cout << aValue;
                                 else
                                     cout << "ERROR RETRIEVING VALUE";
@@ -783,7 +820,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             {
                                 sal_Int64 aValue;
                                 cout << "VALUE '" << aName << "' is a LONG (64 bit) = ";
-                                if (bValueOk = (aElement >>= aValue))
+                                if (bValueOk = !!(aElement >>= aValue))
                                     cout << double(aValue);
                                 else
                                     cout << "ERROR RETRIEVING VALUE";
@@ -794,7 +831,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             {
                                 double aValue;
                                 cout << "VALUE '" << aName << "' is a DOUBLE = ";
-                                if (bValueOk = (aElement >>= aValue))
+                                if (bValueOk = !!(aElement >>= aValue))
                                     cout << aValue;
                                 else
                                     cout << "ERROR RETRIEVING VALUE";
@@ -805,7 +842,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             {
                                 OUString aValue;
                                 cout << "VALUE '" << aName << "' is a STRING = ";
-                                if (bValueOk = (aElement >>= aValue))
+                                if (bValueOk = !!(aElement >>= aValue))
                                     cout << "\"" << aValue << "\"";
                                 else
                                     cout << "ERROR RETRIEVING VALUE";
@@ -827,81 +864,113 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             bValueOk = true;
                             break;
                         default:
-                                cout << "Error: ELEMENT '" << aName << "' is of unknown or unrecognized type" << endl;
+                            bValueOk = false;
+                            cout << "Error: ELEMENT '" << aName << "' is of unknown or unrecognized type" << endl;
                             break;
                         }
-                        if (bDefaulted)
+                    }
+                    else
+                        bValueOk = true;
+
+                    Any aValue;
+                    if (bValue)
+                    {
+                        if (aElement.getValueTypeClass() == TypeClass_BOOLEAN )
                         {
-                            Reference< XPropertyState > xReset(xAccess, UNO_QUERY);
+                            cout << "Set Value (boolean) to :";
+                            cout.flush();
+                            cin.getline(buf,sizeof buf);
+                            OUString aInput = OUString::createFromAscii(buf);
+
+                            sal_Bool bBoolValue = false;
+                            if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
+                                bBoolValue = true;
+
+                            aValue <<= bBoolValue;
+                        }
+                        else
+                        {
+                            if ( aElement.getValueTypeClass() == TypeClass_VOID )
+                                cout << "Warning: Cannot determine value type" << endl;
+
+                            else if ( aElement.getValueTypeClass() != TypeClass_STRING)
+                                cout << "Warning: No explict support for value type found" << endl;
+
+                            cout << "Set value to : ";
+                            cout.flush();
+                            cin.getline(buf,sizeof buf);
+
+                            aValue <<= buf;
+                        }
+                    }
+                    else if (insert == eToDo || replace == eToDo)
+                    {
+                        Reference<XSingleServiceFactory> xFactory(xIface, UNO_QUERY);
+
+                        OSL_ASSERT(xFactory.is());
+                        if (xFactory.is())
+                        {
+                            xNext = xFactory->createInstance();
+                            aValue <<= xNext;
+                        }
+                    }
+
+                    switch (eToDo)
+                    {
+                    case replace:
+                        {
+                            Reference< XNameReplace > xNameReplace(xIface, UNO_QUERY);
+                            if (xNameReplace.is())
+                                xNameReplace->replaceByName(aName, aValue);
+                        } break;
+
+                    case reset:
+                        {
+                            Reference< XPropertyState > xReset(xIface, UNO_QUERY);
+                            OSL_ASSERT(xReset.is());
                             if (xReset.is())
                             {
                                 xReset->setPropertyToDefault(aName);
-                                commit();
                             }
-                        }
-                        else if (bValue && bInserted)
+                        } break;
+
+                    case insert:
                         {
-                            if (aElement.getValueTypeClass() == TypeClass_BOOLEAN ||
-                                aElement.getValueTypeClass() == TypeClass_VOID)
+                            Reference< XNameContainer> xNameContainer(xIface, UNO_QUERY);
+                            OSL_ASSERT(xNameContainer.is());
+                            if (xNameContainer.is())
                             {
-                                cout << "Set Value (Type=BOOL) to :";
-                                cout.flush();
-                                cin.getline(buf,sizeof buf);
-                                OUString aInput = OUString::createFromAscii(buf);
-                                sal_Bool bValue = false;
-                                if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
-                                    bValue = true;
-
-                                OUString aStr = ASCII("false");
-                                Any aValueAny;
-                                aValueAny <<= bValue;
-
-                                Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
-                                if (xNameReplace.is())
-                                {
-                                    xNameReplace->replaceByName(aName, aValueAny);
-                                    commit();
-                                }
-                                bInserted = false;
+                                xNameContainer->insertByName(aName, aValue);
+                                aElement = aValue;
                             }
-                            else if (aElement.getValueTypeClass() == TypeClass_STRING)
-                            {
-                                cout << "set value (type = string) to : ";
-                                cout.flush();
-                                cin.getline(buf,sizeof buf);
-                                Any aValue;
-                                aValue <<= buf;
+                        } break;
 
-                                Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
-                                if (xNameReplace.is())
-                                {
-                                    xNameReplace->replaceByName(aName, aValue);
-                                    commit();
-                                }
-                                bInserted = false;
-                            }
-                            else
-                            {
-                                cout << "Sorry, only BOOLEAN Values can changed today." << endl;
-                            }
-                        }
-
-                        if (bValue)
+                    case remove:
                         {
-                            prompt_and_wait();
-                            return bValueOk ? true : false;
-                        }
-                        else
+                            Reference< XNameContainer> xNameContainer(xIface, UNO_QUERY);
+                            OSL_ASSERT(xNameContainer.is());
+                            if (xNameContainer.is())
+                            {
+                                xNameContainer->removeByName(aName);
+                                aElement = aValue;
+                            }
+                        } break;
+
+                    case move:
                         {
                             if (aElement >>= xNext)
                                 cout << "Got an Interface for '" << aName << "'" << endl;
                             else
                                 cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
-                        }
+                        } break;
                     }
-                    else
+                    if (move != eToDo)
+                        commit();
+
+                    if (bValue)
                     {
-                        cout << "Error: No element \"" << aInput << "\" found." <<endl;
+                        prompt_and_wait();
+                        return bValueOk;
                     }
                 }
 
@@ -916,7 +985,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
         else
         {
             cout << "Input Error " << endl;
-            return true;
+            return false;
         }
     }
     catch (Exception& e)
