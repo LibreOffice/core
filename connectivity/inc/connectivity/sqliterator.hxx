@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:45:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ namespace connectivity
         SQL_STATEMENT_UPDATE,
         SQL_STATEMENT_DELETE,
         SQL_STATEMENT_ODBC_CALL,
-        SQL_STATEMENT_SELECT_COUNT
+        SQL_STATEMENT_SELECT_COUNT,
+        SQL_STATEMENT_CREATE_TABLE
     };
 
     //==================================================================
@@ -144,6 +145,7 @@ namespace connectivity
         ::vos::ORef<OSQLColumns>            m_aParameters;      // all parameters
         ::vos::ORef<OSQLColumns>            m_aGroupColumns;    // the group by columns
         ::vos::ORef<OSQLColumns>            m_aOrderColumns;    // the order by columns
+        ::vos::ORef<OSQLColumns>            m_aCreateColumns;   // the columns for Create table clause
         ::comphelper::UStringMixEqual       m_aCaseEqual;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;
@@ -151,7 +153,7 @@ namespace connectivity
 
         void appendWarning(const ::rtl::OUString& _sErrMsg); // append warnings if m_pParser is set
         // F"ugt eine Tabelle in die Map ein
-        void                traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange);
+        void                traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange, const sal_Bool bIsCreateTable);
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
         void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
@@ -270,14 +272,16 @@ namespace connectivity
         // des Parse Tree abgebrochen. Ansonsten liefert "Status().IsSuccessful() == TRUE".
 
         void traverseTableNames();
-        virtual void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rDBName, const ::rtl::OUString& rOwner,
-                                  const ::rtl::OUString & rTableRange);
+        virtual void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rCatalogName, const ::rtl::OUString& rSchemaName,
+                              const ::rtl::OUString & rTableRange);
         // [TableName enthaelt immer einen Namen, TableRange ist, falls angegeben, die "Range"-
         // Variable (eine Art Alias-Name fuer den TableName), falls nicht angegeben, identisch
         // zum TableName. SchemaName ist leer, wenn nicht angegeben.]
 
         void traverseSelectColumnNames(const OSQLParseNode* pSelectNode);
         // [TableRange kann leer sein, wenn nicht angegeben]
+
+        void traverseCreateColumns(const OSQLParseNode* pSelectNode); //traverse columns for "create table" statement
 
         void traverseOrderByColumnNames(const OSQLParseNode* pSelectNode);
         virtual void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
@@ -339,6 +343,7 @@ namespace connectivity
         ::vos::ORef<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
         ::vos::ORef<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
         ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }
+        ::vos::ORef<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
 
         /** return the columname and the table range
             @param  _pColumnRef
