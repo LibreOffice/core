@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:50:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,7 +1747,7 @@ void DeleteHashTable( SwHash **ppHashTable, USHORT nCount )
 {
     for ( USHORT i = 0; i < nCount; ++i )
         delete *(ppHashTable+i);
-    __DELETE(nCount) ppHashTable;
+    delete [] ppHashTable;
 }
 
 SwCalcExp::SwCalcExp( const String& rStr, const SwSbxValue& rVal,
