@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:23:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     if(aDlg.Execute() == RET_YES)
     {
         OJoinTableView::RemoveTabWin( pTabWin );
-        m_pView->getController()->InvalidateFeature(ID_RELATION_ADD_RELATION);
+        m_pView->getController()->InvalidateFeature(SID_RELATION_ADD_RELATION);
     }
 }
 // -----------------------------------------------------------------------------
