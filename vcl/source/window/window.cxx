@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
+ *  last change: $Author: ssa $ $Date: 2002-05-23 15:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7764,7 +7764,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     if( !highlight )
     {
         if( bDark )
-            aSelectionFillCol = COL_WHITE;
+            aSelectionFillCol = COL_BLACK;
         else
             nPercent = 95;              // just checked (light)
 
