@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-07 19:46:34 $
+ *  last change: $Author: bm $ $Date: 2000-12-15 17:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,8 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
     if( eValueType == SCH_CELL_TYPE_FLOAT )
     {
         double fData;
-        sal_Bool bResult = SvXMLUnitConverter::convertNumber( fData, aCellContent );
-        DBG_ASSERT( bResult, "Error converting string to double" );
+        // the result may be false if a NaN is read, but that's ok
+        SvXMLUnitConverter::convertNumber( fData, aCellContent );
 
         aCell.fValue = fData;
         // dont read following <text:p> element
@@ -665,6 +665,7 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
 
     sal_Int32 nSeqPos = 0;
     uno::Sequence< double >* pSeqArray = aSequence.getArray();
+    double fValue;
 
     // same column
     if( rAddress.nCol1 == rAddress.nCol2 )
@@ -674,7 +675,9 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             for( sal_Int32 nRow = rAddress.nRow1; nRow <= rAddress.nRow2; nRow++, nSeqPos++ )
             {
                 DBG_ASSERT( rTable.aData[ nRow ][ rAddress.nCol1 ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                pSeqArray[ nSeqPos ][ nSeriesIndex ] = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
+                fValue = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
+                if( ! SolarMath::IsNAN( fValue ))
+                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
         else    // reverse
@@ -682,7 +685,9 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             for( sal_Int32 nRow = rAddress.nRow1; nRow >= rAddress.nRow2; nRow--, nSeqPos++ )
             {
                 DBG_ASSERT( rTable.aData[ nRow ][ rAddress.nCol1 ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                pSeqArray[ nSeqPos ][ nSeriesIndex ] = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
+                fValue = rTable.aData[ nRow ][ rAddress.nCol1 ].fValue;
+                if( ! SolarMath::IsNAN( fValue ))
+                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
     }
@@ -695,7 +700,9 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             for( sal_Int32 nCol = rAddress.nCol1; nCol <= rAddress.nCol2; nCol++, nSeqPos++ )
             {
                 DBG_ASSERT( rTable.aData[ rAddress.nRow1 ][ nCol ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                pSeqArray[ nSeqPos ][ nSeriesIndex ] = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
+                fValue = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
+                if( ! SolarMath::IsNAN( fValue ))
+                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
         else    // reverse
@@ -703,7 +710,9 @@ void SchXMLTableHelper::PutTableContentIntoSequence(
             for( sal_Int32 nCol = rAddress.nCol1; nCol >= rAddress.nCol2; nCol--, nSeqPos++ )
             {
                 DBG_ASSERT( rTable.aData[ rAddress.nRow1 ][ nCol ].eType != SCH_CELL_TYPE_UNKNOWN, "trying to refer to unknown cell" );
-                pSeqArray[ nSeqPos ][ nSeriesIndex ] = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
+                fValue = rTable.aData[ rAddress.nRow1 ][ nCol ].fValue;
+                if( ! SolarMath::IsNAN( fValue ))
+                    pSeqArray[ nSeqPos ][ nSeriesIndex ] = fValue;
             }
         }
     }
