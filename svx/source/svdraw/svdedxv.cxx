@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:17:19 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,6 +695,15 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             aHdl.SetMoveOutside(TRUE);
             RefreshAllIAOManagers();
 
+            // #i33755#
+            // If !IsMarkHdlWhenTextEdit(), it is necessary to
+            // again reset the handles since they evtl. need to
+            // be hidden
+            if(!IsMarkHdlWhenTextEdit())
+            {
+                AdjustMarkHdl(sal_True);
+            }
+
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
 
             // check if this view is already inserted
@@ -763,6 +772,7 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             }
 
             pTextEditOutliner->ClearPaintInfoRec();
+
             return TRUE; // Gut gelaufen, TextEdit laeuft nun
         } else {
             bBrk=TRUE;
@@ -895,6 +905,15 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
             if(pTEObj->ISA(SdrTextObj))
             {
                 ((SdrTextObj*)pTEObj)->SetTextAnimationAllowed(sal_True);
+            }
+
+            // #i33755#
+            // If !IsMarkHdlWhenTextEdit(), it is necessary to
+            // again reset the handles since they evtl. need to
+            // be shown again
+            if(!IsMarkHdlWhenTextEdit())
+            {
+                AdjustMarkHdl(sal_True);
             }
         }
         // alle OutlinerViews loeschen
