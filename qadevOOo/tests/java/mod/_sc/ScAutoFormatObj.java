@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAutoFormatObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:41 $
+ *  last change:$Date: 2003-01-31 14:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -119,8 +121,9 @@ public class ScAutoFormatObj extends TestCase {
                     ("com.sun.star.sheet.TableAutoFormats");
             XIndexAccess formatsIndex = (XIndexAccess)
                     UnoRuntime.queryInterface(XIndexAccess.class, formats);
-            oObj = (XInterface) formatsIndex.getByIndex
-                (formatsIndex.getCount() - 1);
+            oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),formatsIndex.getByIndex
+                                            (formatsIndex.getCount() - 1));
 
             XNamed objNamed = (XNamed)
                 UnoRuntime.queryInterface(XNamed.class, oObj) ;
