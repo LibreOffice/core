@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:52:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,63 +1262,99 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         const SwTwips nOldHeight = (Prt().*fnRect->fnGetHeight)();
         const SwTwips nMax = (aFrm.*fnRect->fnGetWidth)();
 
-        SwTwips nLeft  = pAttrs->CalcLeftLine();
-        SwTwips nRight = pAttrs->CalcRightLine();
+        // OD 14.03.2003 #i9040# - adjust variable names.
+        const SwTwips nLeftLine  = pAttrs->CalcLeftLine();
+        const SwTwips nRightLine = pAttrs->CalcRightLine();
 
         //Die Breite ist evtl. eine Prozentangabe. Wenn die Tabelle irgendwo
         //'drinsteckt bezieht sie sich auf die Umgebung. Ist es der Body, so
         //bezieht sie sich in der BrowseView auf die Bildschirmbreite.
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
-        const SwTwips nWish = CalcRel( rSz, TRUE );
+        // OD 14.03.2003 #i9040# - adjust variable name.
+        const SwTwips nWishedTableWidth = CalcRel( rSz, TRUE );
 
         BOOL bCheckBrowseWidth = FALSE;
 
+        // OD 14.03.2003 #i9040# - insert new variables for left/right spacing.
+        SwTwips nLeftSpacing  = 0;
+        SwTwips nRightSpacing = 0;
         switch ( GetFmt()->GetHoriOrient().GetHoriOrient() )
         {
             case HORI_LEFT:
                 {
-                    const SwTwips nTmp = nMax-nLeftOffset-nRightOffset -
-                                         (nWish + nLeft);
-                    nLeft  += nLeftOffset;
-                    nRight += nRightOffset;
-                    nRight -= nLeftOffset;
-                    if ( nTmp > nRight )
-                        nRight = nTmp;
-                    nRight = Max( nRight, 0L );
+                    // left indent:
+                    nLeftSpacing = nLeftLine + nLeftOffset;
+                    // OD 06.03.2003 #i9040# - correct calculation of right indent:
+                    // - Consider right indent given by right line attributes.
+                    // - Consider negative right indent.
+                    // wished right indent determined by wished table width and
+                    // left offset given by surround fly frames on the left:
+                    const SwTwips nWishRight = nMax - nWishedTableWidth - nLeftOffset;
+                    if ( nRightOffset > 0 )
+                    {
+                        // surrounding fly frames on the right
+                        // -> right indent is maximun of given right offset
+                        //    and wished right offset.
+                        nRightSpacing = nRightLine + Max( nRightOffset, nWishRight );
+                    }
+                    else
+                    {
+                        // no surrounding fly frames on the right
+                        // If intrinsic right indent (intrinsic means not considering
+                        // determined left indent) is negative,
+                        //      then hold this intrinsic indent,
+                        //      otherwise non negative wished right indent is hold.
+                        nRightSpacing = nRightLine +
+                                        ( ( (nWishRight+nLeftOffset) < 0 ) ?
+                                            (nWishRight+nLeftOffset) :
+                                            Max( 0L, nWishRight ) );
+                    }
                 }
                 break;
             case HORI_RIGHT:
                 {
-                    const SwTwips nTmp = nMax-nLeftOffset-nRightOffset -
-                                         (nWish + nRight);
-                    nRight += nRightOffset;
-                    nLeft  += nLeftOffset;
-                    nLeft  -= nRightOffset;
-                    if ( nTmp > nLeft )
-                        nLeft = nTmp;
-                    nLeft = Max( nLeft, 0L );
+                    // right indent:
+                    nRightSpacing = nRightLine + nRightOffset;
+                    // OD 06.03.2003 #i9040# - correct calculation of left indent:
+                    // - Consider left indent given by left line attributes.
+                    // - Consider negative left indent.
+                    // wished left indent determined by wished table width and
+                    // right offset given by surrounding fyl frames on the right:
+                    const SwTwips nWishLeft = nMax - nWishedTableWidth - nRightOffset;
+                    if ( nLeftOffset > 0 )
+                    {
+                        // surrounding fly frames on the left
+                        // -> right indent is maximun of given left offset
+                        //    and wished left offset.
+                        nLeftSpacing = nLeftLine + Max( nLeftOffset, nWishLeft );
+                    }
+                    else
+                    {
+                        // no surrounding fly frames on the left
+                        // If intrinsic left indent (intrinsic = not considering
+                        // determined right indent) is negative,
+                        //      then hold this intrinsic indent,
+                        //      otherwise non negative wished left indent is hold.
+                        nLeftSpacing = nLeftLine +
+                                       ( ( (nWishLeft+nRightOffset) < 0 ) ?
+                                           (nWishLeft+nRightOffset) :
+                                           Max( 0L, nWishLeft ) );
+                    }
                 }
                 break;
             case HORI_CENTER:
                 {
-                    if( nLeftOffset || nRightOffset )
-                    {
-                        const SwTwips nTmp = ( nMax - nLeftOffset - nRightOffset
-                                               - nWish) / 2;
-                        nLeft += nLeftOffset;
-                        nRight+= nRightOffset;
-                        if( nTmp > nLeft )
-                            nLeft = nTmp;
-                        if ( nTmp > nRight )
-                            nRight = nTmp;
-                        nRight= Max( nRight, 0L );
-                        nLeft = Max( nLeft, 0L );
-                    }
-                    else
-                    {
-                        nLeft = ( nMax - nWish ) / 2;
-                        nRight = nLeft;
-                    }
+                    // OD 07.03.2003 #i9040# - consider left/right line attribute.
+                    // OD 10.03.2003 #i9040# -
+                    const SwTwips nCenterSpacing = ( nMax - nWishedTableWidth ) / 2;
+                    nLeftSpacing = nLeftLine +
+                                   ( (nLeftOffset > 0) ?
+                                     Max( nCenterSpacing, nLeftOffset ) :
+                                     nCenterSpacing );
+                    nRightSpacing = nRightLine +
+                                    ( (nRightOffset > 0) ?
+                                      Max( nCenterSpacing, nRightOffset ) :
+                                      nCenterSpacing );
                 }
                 break;
             case HORI_FULL:
@@ -1327,51 +1363,69 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                     //werden beruecksichtigt.
                     //Die Attributwerte von LRSpace werden bewusst missachtet!
                     bCheckBrowseWidth = TRUE;
-                    nLeft  += nLeftOffset;
-                    nRight += nRightOffset;
+                    nLeftSpacing  = nLeftLine + nLeftOffset;
+                    nRightSpacing = nRightLine + nRightOffset;
                 break;
             case HORI_NONE:
                 {
                     //Die Raender werden vom Randattribut bestimmt.
-                    nLeft = pAttrs->CalcLeft( this );
+                    nLeftSpacing = pAttrs->CalcLeft( this );
                     if( nLeftOffset )
                     {
-                        if( nLeft < 0 )
-                            nLeft = 0;
-                        nLeft += nLeftOffset;
+                        // OD 07.03.2003 #i9040# - surround fly frames only, if
+                        // they overlap with the table.
+                        // Thus, take maximun of left spacing and left offset.
+                        // OD 10.03.2003 #i9040# - consider left line attribute.
+                        nLeftSpacing = Max( nLeftSpacing, ( nLeftOffset + nLeftLine ) );
                     }
                     // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
-                    nRight = pAttrs->CalcRight( this );
+                    nRightSpacing = pAttrs->CalcRight( this );
                     if( nRightOffset )
                     {
-                        if( nRight < 0 )
-                            nRight = 0;
-                        nRight += nRightOffset;
+                        // OD 07.03.2003 #i9040# - surround fly frames only, if
+                        // they overlap with the table.
+                        // Thus, take maximun of right spacing and right offset.
+                        // OD 10.03.2003 #i9040# - consider right line attribute.
+                        nRightSpacing = Max( nRightSpacing, ( nRightOffset + nRightLine ) );
                     }
+                    // OD 10.03.2003 #i9040# - do not hold wished table width.
+                    /*
                     if ( !pAttrs->GetLRSpace().GetRight() )
                         nRight = Max( nRight, nMax - (nWish + nLeft + nRight));
+                    */
                 }
                 break;
             case HORI_LEFT_AND_WIDTH:
+                {
                     //Linker Rand und die Breite zaehlen (Word-Spezialitaet)
-                    bCheckBrowseWidth = TRUE;
-                    nLeft = pAttrs->CalcLeft( this );
+                    // OD 10.03.2003 #i9040# - no width alignment in online mode.
+                    //bCheckBrowseWidth = TRUE;
+                    nLeftSpacing = pAttrs->CalcLeft( this );
                     if( nLeftOffset )
                     {
-                        if( nLeft < 0 )
-                            nLeft = 0;
-                        nLeft += nLeftOffset;
+                        // OD 10.03.2003 #i9040# - surround fly frames only, if
+                        // they overlap with the table.
+                        // Thus, take maximun of right spacing and right offset.
+                        // OD 10.03.2003 #i9040# - consider left line attribute.
+                        nLeftSpacing = Max( nLeftSpacing, ( pAttrs->CalcLeftLine() + nLeftOffset ) );
                     }
-                    nRight = Max( nMax - nLeft - nWish, nTmpRight );
+                    // OD 10.03.2003 #i9040# - consider right and left line attribute.
+                    const SwTwips nWishRight =
+                            nMax - (nLeftSpacing-pAttrs->CalcLeftLine()) - nWishedTableWidth;
+                    nRightSpacing = nRightLine +
+                                    ( (nRightOffset > 0) ?
+                                      Max( nWishRight, nRightOffset ) :
+                                      nWishRight );
+                }
                 break;
             default:
                 ASSERT( FALSE, "Ungueltige orientation fuer Table." );
         }
         (this->*fnRect->fnSetYMargins)( nUpper, nLower );
-        if( (nMax - MINLAY) < (nLeft + nRight) )
+        if( (nMax - MINLAY) < (nLeftSpacing + nRightSpacing) )
             (this->*fnRect->fnSetXMargins)( 0, 0 );
         else
-            (this->*fnRect->fnSetXMargins)( nLeft, nRight );
+            (this->*fnRect->fnSetXMargins)( nLeftSpacing, nRightSpacing );
 
         ViewShell *pSh;
         if ( bCheckBrowseWidth && GetFmt()->GetDoc()->IsBrowseMode() &&
