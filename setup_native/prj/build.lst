@@ -1,7 +1,8 @@
-pk	setup_native	:	soltools NULL
-pk	setup_native										usr1	-	all	sn_mkout NULL
-pk	setup_native\source\win32\customactions\regactivex	nmake   -	w	sn_regactivex NULL
-pk  setup_native\source\win32\customactions\reg4msdoc   nmake   -   w   sn_reg4msdoc NULL
-pk  setup_native\source\win32\customactions\regpython   nmake   -   w   sn_regpython NULL
-pk  setup_native\source\win32\customactions\javafilter  nmake   -   w   sn_javafilter NULL
-pk  setup_native\source\win32\customactions\netframework  nmake   -   w   sn_netframework NULL
+pk	setup_native	:	sfx2 NULL
+pk  setup_native                                          usr1    - all  sn_mkout NULL
+pk  setup_native\source\win32\customactions\regactivex    nmake   -  w   sn_regactivex NULL
+pk  setup_native\source\win32\customactions\reg4msdoc     nmake   -  w   sn_reg4msdoc NULL
+pk  setup_native\source\win32\customactions\regpython     nmake   -  w   sn_regpython NULL
+pk  setup_native\source\win32\customactions\javafilter    nmake   -  w   sn_javafilter NULL
+pk  setup_native\source\win32\customactions\netframework  nmake   -  w   sn_netframework NULL
+pk  setup_native\source\win32\customactions\quickstarter  nmake   -  w   sn_quickstarter NULL
