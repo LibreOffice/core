@@ -49,6 +49,7 @@ UDK_3.1 {
         typereg_reader_getDocumentation;
         typereg_reader_getFileName;
         typereg_reader_getTypeClass;
+        typereg_reader_isPublished;
         typereg_reader_getTypeName;
         typereg_reader_getSuperTypeCount;
         typereg_reader_getSuperTypeName;
