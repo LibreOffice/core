@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2001-05-28 13:29:57 $
+ *  last change: $Author: os $ $Date: 2001-06-06 13:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,6 +1465,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         aAnchor.SetAnchor(&aPos);
                         aSet.Put(aAnchor);
                     }
+                }
+                else if(aAnchor.GetAnchorId() != FLY_PAGE && !aAnchor.GetCntntAnchor())
+                {
+                    SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
+                    SwPaM aPam(rNode);
+                    aPam.Move( fnMoveBackward, fnGoDoc );
+                    aAnchor.SetAnchor( aPam.Start() );
+                    aSet.Put(aAnchor);
                 }
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
