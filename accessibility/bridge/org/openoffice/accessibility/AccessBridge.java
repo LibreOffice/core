@@ -68,11 +68,10 @@ import com.sun.star.registry.*;
 import com.sun.star.uno.*;
 import com.sun.star.comp.loader.FactoryHelper;
 
-import org.openoffice.accessibility.internal.*;
 import org.openoffice.java.accessibility.*;
 
 import com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.bridge.XAccessibleTopWindowMap;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XExtendedToolkit;
 
 import javax.accessibility.Accessible;
@@ -83,16 +82,44 @@ import java.lang.reflect.InvocationTargetException;
 public class AccessBridge {
 
     //
-    static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
+    protected static java.util.Hashtable topWindowMap = new java.util.Hashtable();
+
+    protected static java.awt.Window getTopWindow(XAccessible xAccessible) {
+        if (xAccessible != null) {
+            // Toolkit reports the VCL peer windows as toplevels. These have an accessible parent
+            // which represents the native frame window
+            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
+            if ((xAccessibleContext != null) && (xAccessibleContext.getAccessibleIndexInParent() != -1)) {
+                return getTopWindow(xAccessibleContext.getAccessibleParent());
+            }
+
+            // Because it can not garantied that WindowsAccessBridgeAdapter.registerTopWindow()
+            // is called before windowOpened(), we have to make this operation atomic.
+            synchronized (topWindowMap) {
+                String oid = UnoRuntime.generateOid(xAccessible);
+                java.awt.Window w = (java.awt.Window) topWindowMap.get(oid);
+                if (w == null) {
+                    w = AccessibleObjectFactory.getTopWindow(xAccessible);
+                    if (w != null) {
+                        topWindowMap.put(oid, w);
+                    }
+                }
+                return w;
+            }
+        }
+        return null;
+    }
+
+    static public class _AccessBridge implements XTopWindowListener, XInitialization {
         static final String _serviceName = "com.sun.star.accessibility.AccessBridge";
 
-        XMultiServiceFactory serviceManager;
-        java.util.Hashtable frameMap;
+        public _AccessBridge(XComponentContext xComponentContext) {
 
-
-        public _AccessBridge(XMultiServiceFactory xMultiServiceFactory) {
-            serviceManager = xMultiServiceFactory;
-            frameMap = new java.util.Hashtable();
+            // Try to initialize the WindowsAccessBridgeAdapter
+            String os = (String) System.getProperty("os.name");
+            if(os.startsWith("Windows")) {
+                WindowsAccessBridgeAdapter.attach(xComponentContext);
+            }
         }
 
         /*
@@ -101,12 +128,14 @@ public class AccessBridge {
 
         public void initialize(java.lang.Object[] arguments) {
             try {
-                // Currently there is no way to determine if key event forwarding is needed or not,
+                // FIXME: Currently there is no way to determine if key event forwarding is needed or not,
                 // so we have to do it always ..
                 XExtendedToolkit unoToolkit = (XExtendedToolkit)
                     AnyConverter.toObject(new Type(XExtendedToolkit.class), arguments[0]);
 
                 if(unoToolkit != null) {
+                    // FIXME this should be done in VCL
+                    unoToolkit.addTopWindowListener(this);
                     unoToolkit.addKeyHandler(new KeyHandler());
                 } else if( Build.DEBUG) {
                     System.err.println("argument 0 is not of type XExtendedToolkit.");
@@ -117,205 +146,42 @@ public class AccessBridge {
         }
 
         /*
-        * XAccessibleNativeFrameMap
+        * XTopWindowListener
         */
 
-        public void registerAccessibleNativeFrame(Object any, XAccessible xAccessible, XTopWindow xTopWindow ){
-            try {
-                // The office sometimes registers frames more than once, so check here if already done
-                Integer handle = new Integer(AnyConverter.toInt(any));
-                if (! frameMap.containsKey(handle)) {
-                    if( Build.DEBUG ) {
-                        System.out.println("register native frame: " + handle);
-                    }
-
-                    java.awt.Window w = AccessibleObjectFactory.getTopWindow(xAccessible);
-                    if (w != null) {
-                        frameMap.put(handle, w);
-                    }
-                }
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                System.err.println("IllegalArgumentException caught: " + e.getMessage());
-            } catch (java.lang.Exception e) {
-                System.err.println("Exception caught: " + e.getMessage());
-            }
+        public void windowOpened(com.sun.star.lang.EventObject event){
+            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(XAccessible.class, event.Source);
+            java.awt.Window w = getTopWindow(xAccessible);
         }
 
-        public void revokeAccessibleNativeFrame(Object any) {
-            try {
-                Integer handle = new Integer(AnyConverter.toInt(any));
-
-                // Remember the accessible object associated to this frame
-                java.awt.Window w = (java.awt.Window) frameMap.remove(handle);
-
-                if (w != null) {
-                    if (Build.DEBUG) {
-                        System.out.println("revoke native frame: " + handle);
-                    }
-
-                    w.dispose();
-                }
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                System.err.println("IllegalArgumentException caught: " + e.getMessage());
-            }
-        }
-    }
-
-    static public class _WinAccessBridge extends _AccessBridge {
-        Method registerVirtualFrame;
-        Method revokeVirtualFrame;
-
-        public _WinAccessBridge(XMultiServiceFactory xMultiServiceFactory) {
-            super(xMultiServiceFactory);
-
-//          java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
-//          tk.addAWTEventListener(new WindowsAccessBridgeAdapter(), java.awt.AWTEvent.WINDOW_EVENT_MASK);
-
-            // On Windows all native frames must be registered to the access bridge. Therefor
-            // the bridge exports two methods that we try to find here.
-            try {
-                Class bridge = Class.forName("com.sun.java.accessibility.AccessBridge");
-                Class[] parameterTypes = { javax.accessibility.Accessible.class, Integer.class };
-
-                if(bridge != null) {
-                    registerVirtualFrame = bridge.getMethod("registerVirtualFrame", parameterTypes);
-                    revokeVirtualFrame = bridge.getMethod("revokeVirtualFrame", parameterTypes);
-                }
-
-            }
-
-            catch(NoSuchMethodException e) {
-                System.err.println("ERROR: incompatible AccessBridge found: " + e.getMessage());
-
-                // Forward this exception to UNO to indicate that the service will not work correctly.
-                throw new com.sun.star.uno.RuntimeException("incompatible AccessBridge class: " + e.getMessage());
-            }
-
-            catch(java.lang.SecurityException e) {
-                System.err.println("ERROR: no access to AccessBridge: " + e.getMessage());
-
-                // Forward this exception to UNO to indicate that the service will not work correctly.
-                throw new com.sun.star.uno.RuntimeException("Security exception caught: " + e.getMessage());
-            }
-
-            catch(ClassNotFoundException e) {
-                // Forward this exception to UNO to indicate that the service will not work correctly.
-                throw new com.sun.star.uno.RuntimeException("ClassNotFound exception caught: " + e.getMessage());
-            }
+        public void windowActivated(com.sun.star.lang.EventObject event){
         }
 
-        // Registers the native frame at the Windows access bridge
-        protected void registerAccessibleNativeFrameImpl(Integer handle, Accessible a) {
-            // register this frame to the access bridge
-            Object[] args = { a, handle };
-
-            try {
-                registerVirtualFrame.invoke(null, args);
-            }
-
-            catch(IllegalAccessException e) {
-                System.err.println("IllegalAccessException caught: " + e.getMessage());
-            }
-
-            catch(IllegalArgumentException e) {
-                System.err.println("IllegalArgumentException caught: " + e.getMessage());
-            }
-
-            catch(InvocationTargetException e) {
-                System.err.println("InvokationTargetException caught: " + e.getMessage());
-            }
+        public void windowDeactivated(com.sun.star.lang.EventObject event){
         }
 
-        // Revokes the native frame from the Windows access bridge
-        protected void revokeAccessibleNativeFrameImpl(Integer handle, Accessible a) {
-            Object[] args = { a, handle };
-
-            try {
-                revokeVirtualFrame.invoke(null, args);
-            }
-
-            catch(IllegalAccessException e) {
-                System.err.println("IllegalAccessException caught: " + e.getMessage());
-            }
-
-            catch(IllegalArgumentException e) {
-                System.err.println("IllegalArgumentException caught: " + e.getMessage());
-            }
-
-            catch(InvocationTargetException e) {
-                System.err.println("InvokationTargetException caught: " + e.getMessage());
-            }
+        public void windowMinimized(com.sun.star.lang.EventObject event){
         }
 
-        /*
-        * XAccessibleNativeFrameMap
-        */
+        public void windowNormalized(com.sun.star.lang.EventObject event){
+        }
 
-        public void registerAccessibleNativeFrame(Object any, XAccessible xAccessible, XTopWindow xTopWindow ){
-            try {
-                // The office sometimes registers frames more than once, so check here if already done
-                Integer handle = new Integer(AnyConverter.toInt(any));
-                if (! frameMap.containsKey(handle)) {
-                    java.awt.Window w = AccessibleObjectFactory.getTopWindow(xAccessible);
+        public void windowClosing(com.sun.star.lang.EventObject event){
+        }
 
-                    if (Build.DEBUG) {
-                        System.out.println("register native frame: " + handle);
-                    }
+        public void windowClosed(com.sun.star.lang.EventObject event){
+            java.awt.Window w = (java.awt.Window)
+                topWindowMap.remove(UnoRuntime.generateOid(event.Source));
 
-                    if (w != null) {
-                        // Add the window proxy object to the frame list
-                        frameMap.put(handle, w);
-
-                        // Also register the frame with the access bridge object
-                        registerAccessibleNativeFrameImpl(handle,w);
-                    }
+            if (w != null) {
+                w.dispose();
+                if (Build.DEBUG) {
+                    System.err.println("TopWindow closed");
                 }
             }
-
-            catch(com.sun.star.lang.IllegalArgumentException exception) {
-                System.err.println("IllegalArgumentException caught: " + exception.getMessage());
-            }
         }
 
-        public void revokeAccessibleNativeFrame(Object any) {
-            try {
-                Integer handle = new Integer(AnyConverter.toInt(any));
-
-                // Remember the accessible object associated to this frame
-                java.awt.Window w = (java.awt.Window) frameMap.remove(handle);
-
-                if (w != null)  {
-                    // Revoke the frame with the access bridge object
-                    revokeAccessibleNativeFrameImpl(handle, w);
-
-                    if (Build.DEBUG) {
-                        System.out.println("revoke native frame: " + handle);
-                    }
-
-                    // It seems that we have to do this synchronously, because otherwise on exit
-                    // the main thread of the office terminates before AWT has shut down and the
-                    // process will hang ..
-                    w.dispose();
-
-/*
-                    class DisposeAction implements Runnable {
-                        java.awt.Window window;
-                        DisposeAction(java.awt.Window w) {
-                            window = w;
-                        }
-                        public void run() {
-                            window.dispose();
-                        }
-                    }
-
-                    java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().invokeLater(new DisposeAction(w));
-*/
-                }
-            }
-
-            catch(com.sun.star.lang.IllegalArgumentException exception) {
-                System.err.println("IllegalArgumentException caught: " + exception.getMessage());
-            }
+        public void disposing(com.sun.star.lang.EventObject event) {
         }
     }
 
@@ -326,16 +192,8 @@ public class AccessBridge {
             // Initialize toolkit to register at Java <-> Windows access bridge
             java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
 
-            Class serviceClass;
-            String os = (String) System.getProperty("os.name");
-            if(os.startsWith("Windows")) {
-                serviceClass = _WinAccessBridge.class;
-            } else {
-                serviceClass = _AccessBridge.class;
-            }
-
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                serviceClass,
+                _AccessBridge.class,
                 _AccessBridge._serviceName,
                 multiFactory,
                 regKey
