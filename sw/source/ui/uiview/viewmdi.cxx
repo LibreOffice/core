@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 18:26:41 $
+ *  last change: $Author: os $ $Date: 2001-12-13 16:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,9 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         {
             pUsrPref->SetZoom    ( USHORT(nFac) );
             pUsrPref->SetZoomType( BYTE( eZoomType ) );
-            SW_MOD()->ApplyUsrPref( *pUsrPref, 0 );
+            SW_MOD()->ApplyUsrPref( *pUsrPref,
+                    bViewOnly ? this: 0,
+                    bViewOnly ? VIEWOPT_DEST_VIEW_ONLY : 0 );
             pUsrPref->SetModified();
         }
         if ( pOpt->GetZoom() != (USHORT) nFac )
@@ -769,6 +771,9 @@ void SwView::SetImageButtonColor(Color& rColor)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/10/10 18:26:41  jp
+    Bug #91228#: _SetZoom - don't move the cursor into the visible area
+
     Revision 1.4  2001/04/27 10:49:32  os
     new zoom type for preview added
 

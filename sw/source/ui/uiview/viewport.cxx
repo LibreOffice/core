@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-22 18:49:33 $
+ *  last change: $Author: os $ $Date: 2001-12-13 16:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,7 +1200,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
                             pDocSh->SfxInPlaceObject::GetVisArea() );
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
              !pWrtShell->IsBrowseMode() )
-            _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType() );
+            _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, TRUE );
         pWrtShell->EndAction();
 
         bRepeat = bScroll1 != (pVScrollbar ? pVScrollbar->IsVisible() : FALSE);
