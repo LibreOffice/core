@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-20 15:14:58 $
+ *  last change: $Author: dbo $ $Date: 2001-03-21 12:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ inline sal_Bool BaseReference::operator == ( XInterface * pInterface ) const SAL
     // only the query to XInterface must return the same pointer if they belong to same objects
     Reference< XInterface > x1( _pInterface, UNO_QUERY );
     Reference< XInterface > x2( pInterface, UNO_QUERY );
-    return (x1.get() == x2.get());
+    return (x1._pInterface == x2._pInterface);
 }
 //__________________________________________________________________________________________________
 inline sal_Bool BaseReference::operator != ( XInterface * pInterface ) const SAL_THROW( () )
@@ -102,12 +102,12 @@ inline sal_Bool BaseReference::operator != ( XInterface * pInterface ) const SAL
 //__________________________________________________________________________________________________
 inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const SAL_THROW( () )
 {
-    return operator == ( rRef.get() );
+    return operator == ( rRef._pInterface );
 }
 //__________________________________________________________________________________________________
 inline sal_Bool BaseReference::operator != ( const BaseReference & rRef ) const SAL_THROW( () )
 {
-    return (! operator == ( rRef.get() ));
+    return (! operator == ( rRef._pInterface ));
 }
 
 //##################################################################################################
@@ -200,14 +200,11 @@ template< class interface_type >
 inline sal_Bool Reference< interface_type >::set(
     interface_type * pInterface ) SAL_THROW( () )
 {
-    if (pInterface != _pInterface)
-    {
-        if (pInterface)
-            pInterface->acquire();
-        if (_pInterface)
-            _pInterface->release();
-        _pInterface = pInterface;
-    }
+    if (pInterface)
+        pInterface->acquire();
+    if (_pInterface)
+        _pInterface->release();
+    _pInterface = pInterface;
     return (pInterface != 0);
 }
 //__________________________________________________________________________________________________
@@ -233,7 +230,7 @@ template< class interface_type >
 inline sal_Bool Reference< interface_type >::set(
     const Reference< interface_type > & rRef ) SAL_THROW( () )
 {
-    return set( rRef.get() );
+    return set( static_cast< interface_type * >( rRef._pInterface ) );
 }
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -263,7 +260,7 @@ template< class interface_type >
 inline Reference< interface_type > & Reference< interface_type >::operator = (
     const Reference< interface_type > & rRef ) SAL_THROW( () )
 {
-    set( rRef.get() );
+    set( static_cast< interface_type * >( rRef._pInterface ) );
     return *this;
 }
 
