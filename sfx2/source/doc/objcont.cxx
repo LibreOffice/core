@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:35:00 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,7 @@ void SfxObjectShell::DocInfoDlg_Impl( SfxDocumentInfo &rDocInfo )
             aURL += String::CreateFromAscii( GetFactory().GetShortName() );
             aURL += DEFINE_CONST_UNICODE( "]" );
             INetURLObject aURLObj( pImp->aNewName );
-            aURL += aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+            aURL += String(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI ));
             // aTitle = aURLObj.GetBase();
         }
         aTitle = GetTitle();
