@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-10 08:28:07 $
+ *  last change: $Author: mib $ $Date: 2002-11-05 08:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -98,6 +101,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -305,6 +309,27 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                     GetPrefix(), GetLocalName() ) );
         xHandler->endDocument();
 
+
+        // Save the object. That's required because the object should not be
+        // modified (it has been loaded just now). Setting it to unmodified
+        // only does not work, because it is then assumed that it has been
+        // stored.
+        Reference < XStorable > xStorable( xComp, UNO_QUERY );
+        if( xStorable.is() )
+        {
+            try
+            {
+                xStorable->store();
+            }
+            catch( ::com::sun::star::beans::PropertyVetoException& e )
+            {
+                Sequence<OUString> aSeq( 0 );
+                GetImport().SetError( XMLERROR_FLAG_WARNING |
+                                  XMLERROR_API,
+                                  aSeq );
+            }
+        }
+#if 0
         // reset modifies state for the object since it has been imported
         // completly and therfor hasn't been modified.
         Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
@@ -322,6 +347,7 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                   aSeq );
             }
         }
+#endif
 
     }
 }
