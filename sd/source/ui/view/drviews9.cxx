@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:56:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
+#endif
+
+#ifndef _SFX_DISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
 #endif
 
 #ifndef _SFXINTITEM_HXX //autogen
@@ -303,11 +307,11 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 if( pGrafObj && pGal->IsLinkage() )
                     pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
             }
-            // Sound als OLE-Objekt einfuegen
+            // insert sound
             else if( nFormats & SGA_FORMAT_SOUND )
             {
-                String aURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                InsertURLButton( aURL, aURL, String(), NULL );
+                const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+                   GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
             }
 
             GetDocSh()->SetWaitCursor( FALSE );
