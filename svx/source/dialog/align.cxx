@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-05 11:56:54 $
+ *  last change: $Author: gt $ $Date: 2002-06-06 07:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,8 +220,7 @@ void SvxAlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        ResId TmpRes = SVX_RES( RID_SVXPAGE_ALIGNMENT );
-        svt::OLocalResourceAccess   aLocalResAcc( TmpRes, RSC_TABPAGE );
+        svt::OLocalResourceAccess   aLocalResAcc( SVX_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
         aWinOrient.GetVSLockMode().Clear();
         FillForLockMode();
 
