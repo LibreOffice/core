@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:20:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,13 @@ private:
 
     /// This flag indicates whether the selection rectangle is visible.
     bool mbDragSelection;
-    Point                       aDragSelRectAnchor;  //
-                                                     // fester Punkt des Selektionsrechtecks
-    /// The rectangle of the mouse drag selection.
-    Rectangle maDragSelectionRectangle;
 
     /// Box of the insert marker in model coordinates.
     Rectangle maInsertionMarkerBox;
     Sound* mpSound;
     class ShowingEffectInfo;
     ShowingEffectInfo* mpShowingEffectInfo;
+
 
     /** Show the effect of the specified page.
     */
