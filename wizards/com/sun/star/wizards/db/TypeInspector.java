@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TypeInspector.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:54:43 $
+*  last change: $Author: kz $ $Date: 2005-03-21 18:04:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -62,7 +62,10 @@ package com.sun.star.wizards.db;
 
 import java.util.Vector;
 
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.sdbc.ColumnSearch;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
@@ -78,6 +81,7 @@ public class TypeInspector{
     private int[] nDataTypeInfos;
     private int[] nPrecisionInfos;
     private int[] nNullableInfos;
+    private int[] nSearchables;
     private boolean[] bisAutoIncrementableInfos;
     private int[] nMinScaleInfos;
     private int[] nMaxScaleInfos;
@@ -107,6 +111,7 @@ public class TypeInspector{
         Vector aPrecisionVector = new Vector();
         Vector aMinScaleVector = new Vector();
         Vector aMaxScaleVector = new Vector();
+        Vector aSearchableVector = new Vector();
         Integer[] aIntegerDataTypes = null;
 //      XResultSet xResultSet = xDBMetaDagetTypeInfo();
         XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
@@ -115,14 +120,17 @@ public class TypeInspector{
             aTypeVector.addElement(new Integer(xRow.getShort(2)));
             aPrecisionVector.addElement(new Integer(xRow.getInt(3)));
             aNullableVector.addElement(new Integer(xRow.getShort(7)));
+            aSearchableVector.addElement(new Integer(xRow.getShort(9)));
             aAutoIncrementVector.addElement(new Boolean(xRow.getBoolean(12)));
             aMinScaleVector.addElement(new Integer(xRow.getShort(14)));
             aMaxScaleVector.addElement(new Integer(xRow.getShort(15)));
+
         }
         sDataTypeNames = new String[aTypeNameVector.size()];
         aTypeNameVector.toArray(sDataTypeNames);
         nDataTypeInfos = JavaTools.IntegerTointList(aTypeVector);
         nNullableInfos = JavaTools.IntegerTointList(aNullableVector);
+        nSearchables = JavaTools.IntegerTointList(aSearchableVector);
         bisAutoIncrementableInfos = JavaTools.BooleanTobooleanList(aAutoIncrementVector);
         nPrecisionInfos = JavaTools.IntegerTointList(aPrecisionVector);
         nMinScaleInfos = JavaTools.IntegerTointList(aMinScaleVector);
@@ -160,6 +168,7 @@ public class TypeInspector{
         return nNullable;
     }
 
+
     public int getNullability(XPropertySet _xColPropertySet){
         try {
             int i = getDataTypeIndex(_xColPropertySet, false);
@@ -174,6 +183,16 @@ public class TypeInspector{
         }
         return ColumnValue.NO_NULLS;
     }
+
+
+    public boolean isColumnOrderable(XPropertySet _xColPropertySet){
+        int i = getDataTypeIndex(_xColPropertySet, false);
+        if (i > -1)
+            return (nSearchables[i] != ColumnSearch.NONE);
+        else
+            return false;
+    }
+
 
     public int isNullable(XPropertySet _xColPropertySet){
         int i = getDataTypeIndex(_xColPropertySet, false);
@@ -221,15 +240,6 @@ public class TypeInspector{
     }
 
 
-    public boolean isAutoIncrementable(XPropertySet _xColPropertySet){
-        int i = getDataTypeIndex(_xColPropertySet, true);
-        if (i > -1)
-            return (bisAutoIncrementableInfos[i]);
-        else
-            return false;
-    }
-
-
     public boolean supportsDataType(int _curDataType){
         return (JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType)> -1);
     }
@@ -245,25 +255,24 @@ public class TypeInspector{
 
     /**
      * an empty string is returned when no appropriate Typename can be found
-     * finds the first TypeName of the passed datatype that supports Autoincrementation.
+     * finds the first TypeName of the passed datatype.
      * @param _curDataType
      * @return
      */
     public String getDefaultTypeName(int _curDataType){
-        String sdefaultdatatypename = "";
-        boolean bleaveloop = false;
-        int startindex = 0;
-        while (!bleaveloop){
-            int i = JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType, startindex);
-            startindex = i+1;
-            bleaveloop = (i == -1);
-            if (!bleaveloop){
-                sdefaultdatatypename = sDataTypeNames[i];
-                if (bisAutoIncrementableInfos[i])
-                    return sdefaultdatatypename;
-            }
-        }
-        return sdefaultdatatypename;
+        int i = JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType, 0);
+        if (i > -1)
+            return sDataTypeNames[i];;
+        return "";
+    }
+
+
+    public int getDataType(String _sTypeName){
+        int i = JavaTools.FieldInList(sDataTypeNames, _sTypeName);
+        if (i > -1)
+            return nDataTypeInfos[i];
+        else
+            return getLastConversionFallbackDataType();
     }
 
 
@@ -317,9 +326,37 @@ public class TypeInspector{
         return retDataType;
     }
 
+    public int getAutoIncrementIndex(XPropertySet _xColPropertySet){
+    try {
+        boolean bleaveloop = false;
+        int startindex = 0;
+        int curDataType = ((Integer) _xColPropertySet.getPropertyValue("Type")).intValue();
+        while (!bleaveloop){
+            int i = JavaTools.FieldInIntTable(nDataTypeInfos, curDataType, startindex);
+            startindex = i+1;
+            bleaveloop = (i == -1);
+            if (!bleaveloop){
+                if (bisAutoIncrementableInfos[i]){
+                    return nDataTypeInfos[i];
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+    return INVALID;
+
+    }
+
+
+    public boolean isAutoIncrementable(XPropertySet _xColPropertySet){
+        return (getAutoIncrementIndex(_xColPropertySet) != INVALID);
+    }
+
+
 
     /** finds the first available DataType that can be used as a primary key in a table.
-     * @return The first datatype that also supports Autoincrmentation is taken according to thefollowing list:
+     * @return The first datatype that also supports Autoincrmentation is taken according to the following list:
      *1) INTEGER
      *2) FLOAT
      *3) REAL
@@ -329,7 +366,8 @@ public class TypeInspector{
      * If no appropriate datatype is found ther first available numeric type after DataType.INTEGER
      * according to the 'convertDataType' method is returned
      */
-    /**TODO the fallback order is the same as implemented in the method 'convertDataType'. It's not very elegant to have the same intelligence
+    /**TODO the fallback order is the same as implemented in the method 'convertDataType'.
+     * It's not very elegant to have the same intelligence
      * on several spots in the class!!
      *
      */

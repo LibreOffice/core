@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ColumnPropertySet.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:52:32 $
+*  last change: $Author: kz $ $Date: 2005-03-21 18:04:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -58,6 +58,7 @@
 *
 */
 package com.sun.star.wizards.db;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
@@ -86,7 +87,6 @@ public class ColumnPropertySet {
     public void assignPropertyValues(PropertyValue[] _aNewColPropertyValues, boolean _bsetDefaultProperties){
         try {
             nType = ((Integer) Properties.getPropertyValue(_aNewColPropertyValues, "Type")).intValue();
-            xPropertySet.setPropertyValue("Type",new Integer(nType));
             if (Properties.hasPropertyValue(_aNewColPropertyValues, "TypeName"))
                 sTypeName = (String) Properties.getPropertyValue(_aNewColPropertyValues, "TypeName");
             setType(nType, sTypeName);
@@ -130,7 +130,7 @@ public class ColumnPropertySet {
             sTypeName = oTypeInspector.getDefaultTypeName(nType);
         else
             sTypeName = _sTypeName;
-        nType = oTypeInspector.convertDataType(nType);
+        nType = oTypeInspector.getDataType(sTypeName);
         assignPropertyValue("Type", new Integer(nType));
         assignPropertyValue("TypeName", sTypeName);
     }
