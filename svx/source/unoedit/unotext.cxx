@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 16:45:45 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 13:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,8 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
 
     case EE_PARA_NUMBULLET:
         {
-            if( !aValue.hasValue() )
+            uno::Reference< container::XIndexReplace > xRule;
+            if( !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is()) )
             {
                     rNewSet.ClearItem(EE_PARA_NUMBULLET);
                     return sal_True;
