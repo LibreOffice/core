@@ -15,6 +15,7 @@
 <LC_FORMAT ref="hi_IN" replaceTo="[$ਰੁ.-446]"/>
 <LC_COLLATION ref="hi_IN"/>
 <LC_SEARCH ref="hi_IN"/>
+<LC_INDEX ref="en_US"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
