@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:38:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2242,7 +2242,8 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
         default:
             {
                 xub_StrLen nCount = m_aFunctionStrings.GetTokenCount();
-                for (xub_StrLen i = 0; i < nCount-1; i++) // Gruppierung wird nicht mit gez"ahlt
+                xub_StrLen i;
+                for ( i = 0; i < nCount-1; i++) // Gruppierung wird nicht mit gez"ahlt
                 {
                     if(rFkt.EqualsIgnoreCaseAscii(m_aFunctionStrings.GetToken(i)))
                     {
