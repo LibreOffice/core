@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-15 13:22:17 $
+#   last change: $Author: tra $ $Date: 2001-05-16 16:13:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 
-.IF "$(GUI)"=="WIN"
+.IF "$(GUI)"=="WNT"
 
 # --- ftransl dll ---
 
@@ -111,7 +111,6 @@ SHL2STDLIBS= \
         ole32.lib\
         gdi32.lib
 
-SHL2TARGET=$(TARGET2)
 SHL2IMPLIB=i$(SHL2TARGET) 
 
 SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
@@ -138,7 +137,6 @@ SHL3STDLIBS= \
         oleaut32.lib\
         gdi32.lib
         
-SHL3TARGET=$(TARGET3)
 SHL3IMPLIB=i$(SHL3TARGET) 
 
 SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
@@ -148,8 +146,13 @@ DEF3EXPORTFILE=	exports.dxp
 
 # --- dnd dll ---
 
-
 SHL4TARGET=$(TARGET4)
+
+SHL4LIBS=	\
+            $(SLB)$/dnd.lib\
+            $(SLB)$/dtobjfact.lib\
+            $(SLB)$/dtutils.lib\
+            $(SOLARLIBDIR)$/user9x.lib
 
 SHL4STDLIBS= \
         $(SALLIB)	\
@@ -163,13 +166,6 @@ SHL4STDLIBS= \
 SHL4DEPN=
 SHL4IMPLIB=i$(SHL4TARGET) 
 
-SHL4LIBS=	\
-            $(SLB)$/dnd.lib\
-            $(SLB)$/dtobjfact.lib\
-            $(SLB)$/dtutils.lib\
-            $(SOLARLIBDIR)$/user9x.lib
-
-SHL4OBJS=		$(SLOFILES)
 SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
 
 DEF4NAME=		$(SHL4TARGET)
