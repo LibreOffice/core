@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 11:59:24 $
+ *  last change: $Author: cl $ $Date: 2001-03-30 13:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,7 @@ comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
         SHADOW_PROPERTIES
         LINE_PROPERTIES_DEFAULTS
         FILL_PROPERTIES_BMP
+        FILL_PROPERTIES_DEFAULTS
         EDGERADIUS_PROPERTIES
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
