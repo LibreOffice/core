@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     Text [ spanish ] = "~Secci�n" ; \
     Text [ french ] = "~Section" ; \
     Text [ swedish ] = "~Omr�de" ; \
-    Text [ danish ] = "Omr�de" ; \
+    Text [ danish ] = "~Sektion" ; \
     Text [ portuguese_brazilian ] = "~Se��o" ; \
     Text [ portuguese ] = "Sec��o" ; \
     Text[ chinese_simplified ] = "区域(~S)";  \
@@ -96,7 +96,9 @@
     Text[ czech ] = "Oblast";   \
     Text[ hebrew ] = "‮מיקטע‬";    \
     Text[ hindi ] = "~विभाग"; \
-    Text[ slovak ] = "Obla~sť";
+    Text[ slovak ] = "Obla~sť"; \
+    Text[ hungarian ] = "S~zakasz"; \
+    Text[ slovenian ] = "~Odsek";
 
 #define CB_HIDE_TEXT \
     Text = "Aus~blenden" ; \
@@ -106,7 +108,7 @@
     Text [ portuguese_brazilian ] = "~Ocultar" ; \
     Text [ portuguese ] = "~Ocultar" ; \
     Text [ finnish ] = "Piilotettu" ; \
-    Text [ danish ] = "Skjul" ; \
+    Text [ danish ] = "Sk~jul" ; \
     Text [ french ] = "~Masquer" ; \
     Text [ swedish ] = "~D�lj" ; \
     Text [ dutch ] = "~Verbergen" ; \
@@ -126,7 +128,9 @@
     Text[ czech ] = "Skrýt";   \
     Text[ hebrew ] = "Aus~blenden"; \
     Text[ hindi ] = "छि~पाओ"; \
-    Text[ slovak ] = "S~kryť";
+    Text[ slovak ] = "S~kryť"; \
+    Text[ hungarian ] = "~Elrejtés"; \
+    Text[ slovenian ] = "S~krij";
 
 #define FL_HIDE_TEXT \
     Text = "Ausblenden" ; \
@@ -156,7 +160,9 @@
     Text[ czech ] = "Skrýt";   \
     Text[ hebrew ] = "Ausblenden";  \
     Text[ hindi ] = "छिपाओ";  \
-    Text[ slovak ] = "Skryť";
+    Text[ slovak ] = "Skryť"; \
+    Text[ hungarian ] = "Elrejtés"; \
+    Text[ slovenian ] = "Skrij";
 
 #define CB_CONDITION_TEXT  \
     Text = "Mi~t Bedingung" ; \
@@ -167,7 +173,7 @@
     Text [ french ] = "Sous ~condition" ; \
     Text [ dutch ] = "~Met conditie" ; \
     Text [ swedish ] = "Med v~illkor" ; \
-    Text [ danish ] = "Med betingelse" ; \
+    Text [ danish ] = "~Med betingelse" ; \
     Text [ portuguese ] = "~Com condi��o" ; \
     Text [ portuguese_brazilian ] = "~Com condi��o" ; \
     Text[ chinese_simplified ] = "附加条件(~W)";    \
@@ -185,7 +191,9 @@
     Text[ czech ] = "S podmínkou"; \
     Text[ hebrew ] = "Mi~t Bedingung";  \
     Text[ hindi ] = "~शर्त के सहित";    \
-    Text[ slovak ] = "S ~podmienkou";
+    Text[ slovak ] = "S ~podmienkou"; \
+    Text[ hungarian ] = "El~rejtés feltétele:"; \
+    Text[ slovenian ] = "S ~pogojem";
 
 #define FL_FILE_TEXT \
     Text = "Verkn�pfung" ; \
@@ -214,7 +222,9 @@
     Text[ czech ] = "Odkaz";    \
     Text[ hebrew ] = "Verknüpfung";    \
     Text[ hindi ] = "लिंक"; \
-    Text[ slovak ] = "Odkaz";
+    Text[ slovak ] = "Odkaz"; \
+    Text[ hungarian ] = "Hivatkozás"; \
+    Text[ slovenian ] = "Povezava";
 
 #define CB_FILE_TEXT\
         Text = "~Verkn�pfen" ; \
@@ -243,7 +253,9 @@
     Text[ czech ] = "Odkaz";    \
     Text[ hebrew ] = "~Verknüpfen";    \
     Text[ hindi ] = "~की संख्या";   \
-    Text[ slovak ] = "O~dkaz";
+    Text[ slovak ] = "O~dkaz"; \
+    Text[ hungarian ] = "~Csatolás"; \
+    Text[ slovenian ] = "~Povezava";
 
 #define CB_DDE_TEXT \
     Text = "~DDE" ; \
@@ -272,7 +284,9 @@
     Text[ czech ] = "DDE";  \
     Text[ hebrew ] = "~DDE";    \
     Text[ hindi ] = "DD~E"; \
-    Text[ slovak ] = "DD~E";
+    Text[ slovak ] = "DD~E"; \
+    Text[ hungarian ] = "~DDE"; \
+    Text[ slovenian ] = "DD~E";
 
 #define FT_DDE_TEXT \
     Text = "DDE~-Befehl" ; \
@@ -301,7 +315,9 @@
     Text[ czech ] = "DDE příkaz"; \
     Text[ hebrew ] = "DDE~-Befehl"; \
     Text[ hindi ] = "DDE ~आज्ञा"; \
-    Text[ slovak ] = "DDE ~príkaz";
+    Text[ slovak ] = "DDE ~príkaz"; \
+    Text[ hungarian ] = "DDE-~parancs"; \
+    Text[ slovenian ] = "DDE ~ukaz";
 
 #define FT_FILE_TEXT \
     Text = "Dateina~me" ; \
@@ -312,7 +328,7 @@
     Text [ french ] = "Nom de ~fichier" ; \
     Text [ dutch ] = "~Bestandsnaam" ; \
     Text [ swedish ] = "~Filnamn" ; \
-    Text [ danish ] = "Filnavn" ; \
+    Text [ danish ] = "~Filnavn" ; \
     Text [ portuguese_brazilian ] = "~Nome do arquivo" ; \
     Text [ portuguese ] = "~Nome do ficheiro" ; \
     Text[ chinese_simplified ] = "文件名(~F)";   \
@@ -330,7 +346,9 @@
     Text[ czech ] = "Jméno souboru";   \
     Text[ hebrew ] = "‮שם קובץ‬"; \
     Text[ hindi ] = "~फाइल नाम";  \
-    Text[ slovak ] = "~Meno súboru";
+    Text[ slovak ] = "~Meno súboru"; \
+    Text[ hungarian ] = "~Fájlnév"; \
+    Text[ slovenian ] = "Ime ~datoteke";
 
 
 #define GB_HIDE_TEXT \
@@ -345,7 +363,7 @@
     Text[ spanish ] = "Ocultar"; \
     Text[ finnish ] = "Piilota"; \
     Text[ italian ] = "Nascondi"; \
-    Text[ danish ] = "Skjult"; \
+    Text[ danish ] = "Skjul"; \
     Text[ swedish ] = "D�lj"; \
     Text[ polish ] = "Ukryj"; \
     Text[ portuguese_brazilian ] = "Ocultar"; \
@@ -360,7 +378,9 @@
     Text[ czech ] = "Skrýt";   \
     Text[ hebrew ] = "Verstecken";  \
     Text[ hindi ] = "छिपाओ";  \
-    Text[ slovak ] = "Skryť";
+    Text[ slovak ] = "Skryť"; \
+    Text[ hungarian ] = "Elrejtés"; \
+    Text[ slovenian ] = "Skrij";
 
 #define GB_OPTIONS_TEXT \
     Text = "Optionen" ; \
@@ -390,7 +410,9 @@
     Text[ czech ] = "Volby";    \
     Text[ hebrew ] = "‮אפשרויות‬";  \
     Text[ hindi ] = "विकल्प ";  \
-    Text[ slovak ] = "Nastavenia";
+    Text[ slovak ] = "Nastavenia"; \
+    Text[ hungarian ] = "Beállítások"; \
+    Text[ slovenian ] = "Možnosti";
 
 #define FL_PROTECT_TEXT \
         Text = "Schreibschutz" ;\
@@ -404,7 +426,7 @@
     Text[ spanish ] = "Protecci�n contra modificaciones";   \
     Text[ finnish ] = "Kirjoitussuojaus";   \
     Text[ italian ] = "Protetto";   \
-    Text[ danish ] = "Skrivebeskyttet"; \
+    Text[ danish ] = "Skrivebeskyttelse";   \
     Text[ swedish ] = "Skrivskydd"; \
     Text[ polish ] = "Zabezpieczenie przed zapisem";    \
     Text[ portuguese_brazilian ] = "Prote��o contra grava��o";  \
@@ -419,7 +441,9 @@
     Text[ czech ] = "Ochrana proti zápisu";    \
     Text[ hebrew ] = "Schreibschutz";   \
     Text[ hindi ] = "लिखने से सुरक्षित";  \
-    Text[ slovak ] = "Ochrana proti zápisu";
+    Text[ slovak ] = "Ochrana proti zápisu"; \
+    Text[ hungarian ] = "Írásvédelem"; \
+    Text[ slovenian ] = "Zaščita pred pisanjem";
 
 #define CB_PASSWD_TEXT\
         Text = "Mit Kenn~wort" ;\
@@ -448,7 +472,9 @@
     Text[ czech ] = "S heslem"; \
     Text[ hebrew ] = "Mit Kenn~wort";   \
     Text[ hindi ] = "कूटशब्द ~सहित";  \
-    Text[ slovak ] = "S ~heslom";
+    Text[ slovak ] = "S ~heslom"; \
+    Text[ hungarian ] = "~Jelszóva"; \
+    Text[ slovenian ] = "~Z geslom";
 
 /*************************************************************************
 
@@ -468,7 +494,7 @@ ModalDialog MD_EDIT_REGION
     Text [ portuguese_brazilian ] = "Editar Se��es" ;
     Text [ portuguese ] = "Editar sec��es" ;
     Text [ finnish ] = "Muokkaa osia" ;
-    Text [ danish ] = "Rediger omr�der" ;
+    Text [ danish ] = "Rediger sektioner" ;
     Text [ french ] = "�dition des sections" ;
     Text [ swedish ] = "Redigera omr�den" ;
     Text [ dutch ] = "Bereiken bewerken" ;
@@ -477,7 +503,7 @@ ModalDialog MD_EDIT_REGION
     Text [ czech ] = "Upravit sekce";
     Text [ hebrew ] = "Bereiche bearbeiten";
     Text [ hindi ] = "विभागों का संपादन";
-    Text [ slovak ] = "Upraviť sekcie";
+    Text [ slovak ] = "Edit Sections";
     Moveable = TRUE ;
     FixedLine FL_NAME
     {
@@ -491,7 +517,7 @@ ModalDialog MD_EDIT_REGION
         Text [ portuguese_brazilian ] = "Se��o" ;
         Text [ portuguese ] = "Sec��o" ;
         Text [ finnish ] = "Osa" ;
-        Text [ danish ] = "Omr�de" ;
+        Text [ danish ] = "Sektion" ;
         Text [ french ] = "Section" ;
         Text [ swedish ] = "Omr�de" ;
         Text [ dutch ] = "Bereik" ;
@@ -513,6 +539,8 @@ ModalDialog MD_EDIT_REGION
         Text[ hebrew ] = "‮מיקטע‬";
         Text[ hindi ] = "विभाग";
         Text[ slovak ] = "Sekcia";
+        Text[ hungarian ] = "Szakasz";
+        Text[ slovenian ] = "Odsek";
     };
     Edit ED_RANAME
     {
@@ -617,7 +645,7 @@ ModalDialog MD_EDIT_REGION
         Text [ portuguese_brazilian ] = "Pro~tegido" ;
         Text [ portuguese ] = "~Proteger" ;
         Text [ finnish ] = "~Suojattu" ;
-        Text [ danish ] = "Beskyttet" ;
+        Text [ danish ] = "~Beskyttet" ;
         Text [ french ] = "~Prot�g�" ;
         Text [ swedish ] = "Skyddat" ;
         Text [ dutch ] = "~Beveiligd" ;
@@ -638,6 +666,8 @@ ModalDialog MD_EDIT_REGION
         Text[ hebrew ] = "~Geschützt";
         Text[ hindi ] = "~सुरक्षित";
         Text[ slovak ] = "~Zamknuté";
+        Text[ hungarian ] = "~Védett";
+        Text[ slovenian ] = "~Zaščiteno";
     };
     CheckBox CB_PASSWD
     {
@@ -713,7 +743,7 @@ ModalDialog MD_EDIT_REGION
         Text[ french ] = "Options...";
         Text[ spanish ] = "~Opciones...";
         Text[ italian ] = "~Opzioni...";
-        Text[ danish ] = "Indstillinger...";
+        Text[ danish ] = "~Indstillinger...";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "~Opcje...";
         Text[ portuguese_brazilian ] = "~Op��es...";
@@ -730,6 +760,8 @@ ModalDialog MD_EDIT_REGION
         Text[ hebrew ] = "‮אפשרויות...‬";
         Text[ hindi ] = "~विकल्प...";
         Text[ slovak ] = "V~oľby...";
+        Text[ hungarian ] = "~Beállítások...";
+        Text[ slovenian ] = "~Možnosti...";
     };
     PushButton CB_DISMISS
     {
@@ -765,6 +797,8 @@ ModalDialog MD_EDIT_REGION
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~अनावृत्ति";
         Text[ slovak ] = "~Späť";
+        Text[ hungarian ] = "Eltávolítás";
+        Text[ slovenian ] = "Odstrani";
     };
     HelpButton PB_HELP
     {
@@ -793,6 +827,8 @@ ModalDialog MD_EDIT_REGION
             BMP_PROT_NO_HIDE   /*4*/ ;\
         };                              \
         IdCount = { 4 ; };
+    Text[ hungarian ] = "Szakasz szerkesztése";
+    Text[ slovenian ] = "Uredi izbore";
 
     ImageList IL_BITMAPS
     {
@@ -816,7 +852,7 @@ String STR_REG_DUPLICATE
     Text [ portuguese_brazilian ] = "Nome da se��o alterado:" ;
     Text [ portuguese ] = "Nome da sec��o mudou:" ;
     Text [ finnish ] = "Osan nimi muutettu:" ;
-    Text [ danish ] = "Omr�denavn �ndret:" ;
+    Text [ danish ] = "Sektionsnavn �ndret:" ;
     Text [ french ] = "Nom de section modifi� :" ;
     Text [ swedish ] = "Omr�desnamn �ndrat:" ;
     Text [ dutch ] = "Bereiknaam gewijzigd:" ;
@@ -837,6 +873,8 @@ String STR_REG_DUPLICATE
     Text[ hebrew ] = "Bereichsname geändert:";
     Text[ hindi ] = "विभाग नाम बदला:";
     Text[ slovak ] = "Názov oblasti zmenený:";
+    Text[ hungarian ] = "Szakasz neve megváltozott:";
+    Text[ slovenian ] = "Spremenjeno ime odseka:";
 };
 String STR_INFO_DUPLICATE
 {
@@ -847,7 +885,7 @@ String STR_INFO_DUPLICATE
     Text [ portuguese_brazilian ] = "Nome de se��o duplicado" ;
     Text [ portuguese ] = "Nome de sec��o duplo" ;
     Text [ finnish ] = "Kopioi osan nimi" ;
-    Text [ danish ] = "Dobbelt omr�denavn" ;
+    Text [ danish ] = "Enslydende sektionsnavn" ;
     Text [ french ] = "Dupliquer le nom de la section" ;
     Text [ swedish ] = "Dubbelt omr�desnamn" ;
     Text [ dutch ] = "Dubbele bereiknaam" ;
@@ -868,6 +906,8 @@ String STR_INFO_DUPLICATE
     Text[ hebrew ] = "Doppelter Bereichsname";
     Text[ hindi ] = "नकली विभाग नाम";
     Text[ slovak ] = "Duplikovať názov sekcie";
+    Text[ hungarian ] = "Szakasznév megkettőzése";
+    Text[ slovenian ] = "Dvojno ime odseka";
 };
 QueryBox QB_CONNECT
 {
@@ -881,7 +921,7 @@ QueryBox QB_CONNECT
     Message [ spanish ] = "Una conexi�n de archivos borrar� el contenido de la secci�n actual. �Conectar de todos modos?" ;
     Message [ french ] = "Une connexion supprime le contenu de la section courante. Connecter quand m�me?" ;
     Message [ swedish ] = "En filf�rbindelse raderar det aktuella inneh�llet i omr�det. F�rbinda �nd�?" ;
-    Message [ danish ] = "En filforbindelse sletter omr�dets aktuelle indhold. Vil du forbinde alligevel?" ;
+    Message [ danish ] = "En filforbindelse sletter sektionens nuv�rende indhold. Vil du forbinde alligevel?" ;
     Message [ portuguese ] = "Uma liga��o de ficheiros elimina o conte�do da actual sec��o. Mesmo assim, ligar?" ;
     Message [ portuguese_brazilian ] = "Uma conex�o de arquivo excluir� o conte�do da se��o atual. Conectar assim mesmo?" ;
     Message[ chinese_simplified ] = "使用文件连接会删除当前区域内的内容。您还是要执行连接命令？";
@@ -900,6 +940,8 @@ QueryBox QB_CONNECT
     Message[ hebrew ] = "Eine Dateiverbindung löscht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?";
     Message[ hindi ] = "फाइल कनेक्शन करने से वर्तमान विभाग विषय मिट सकता है । किसी तरह कनेक्ट करना है?";
     Message[ slovak ] = "Pripojenie súboru vymaže obsah aktuálnej sekcie. Naozaj pripojiť?";
+    Message[ hungarian ] = "Egy fájlkapcsolat ki fogja törölni az aktuális szakasz tartalmát. Csatlakozni akar így is?";
+    Message[ slovenian ] = "Povezava z datoteko bo izbrisala vsebino trenutnega odseka. Ali se želite vseeno povezati?";
 };
 InfoBox REG_WRONG_PASSWORD
 {
@@ -932,6 +974,8 @@ InfoBox REG_WRONG_PASSWORD
     Message[ hebrew ] = "Es wurde ein falsches Kennwort eingegeben.";
     Message[ hindi ] = "प्रविष्ट की हुयी कूटशब्द अमान्य है ।";
     Message[ slovak ] = "Uvedené heslo je neplatné.";
+    Message[ hungarian ] = "A megadott jelszó érvénytelen.";
+    Message[ slovenian ] = "Vnešeno geslo je napačno.";
 };
 InfoBox REG_WRONG_PASSWD_REPEAT
 {
@@ -943,7 +987,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message [ english_us ] = "The password has not been set." ;
     Message [ portuguese_brazilian ] = "A senha n�o foi definida." ;
     Message [ swedish ] = "L�senordet har inte angivits." ;
-    Message [ danish ] = "Adgangskode er ikke defineret." ;
+    Message [ danish ] = "Adgangskode er ikke angivet." ;
     Message [ italian ] = "La password non � stata impostata." ;
     Message [ spanish ] = "No se ha definido la contrase�a." ;
     Message [ french ] = "Vous n'avez pas saisi de mot de passe !" ;
@@ -964,6 +1008,8 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message[ hebrew ] = "Das Kennwort wurde nicht gesetzt.";
     Message[ hindi ] = "कूटशब्द को सेट्ट नहीं किया ।";
     Message[ slovak ] = "Heslo nebolo nastavené.";
+    Message[ hungarian ] = "Nincs jelszó megadva.";
+    Message[ slovenian ] = "Geslo ni bilo nastavljeno.";
 };
 
 TabDialog DLG_INSERT_SECTION
@@ -976,7 +1022,7 @@ TabDialog DLG_INSERT_SECTION
     Text [ portuguese_brazilian ] = "Inserir Se��o" ;
     Text [ portuguese ] = "Inserir sec��o" ;
     Text [ finnish ] = "Lis�� osa" ;
-    Text [ danish ] = "Inds�t omr�de" ;
+    Text [ danish ] = "Inds�t sektion" ;
     Text [ french ] = "Insertion d'une section" ;
     Text [ swedish ] = "Infoga omr�de" ;
     Text [ dutch ] = "Bereik invoegen" ;
@@ -1004,7 +1050,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ french ] = "Section";
                 Text[ spanish ] = "Secci�n";
                 Text[ italian ] = "Sezione";
-                Text[ danish ] = "Omr�de";
+                Text[ danish ] = "Sektion";
                 Text[ swedish ] = "Omr�de";
                 Text[ polish ] = "Sekcja";
                 Text[ portuguese_brazilian ] = "Se��o";
@@ -1021,6 +1067,8 @@ TabDialog DLG_INSERT_SECTION
                 Text[ hebrew ] = "‮מיקטע‬";
                 Text[ hindi ] = "विभाग";
                 Text[ slovak ] = "Sekcia";
+                Text[ hungarian ] = "Szakasz";
+                Text[ slovenian ] = "Odsek";
             };
             PageItem
             {
@@ -1054,6 +1102,8 @@ TabDialog DLG_INSERT_SECTION
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभ";
                 Text[ slovak ] = "Stĺpce";
+                Text[ hungarian ] = "Hasábok";
+                Text[ slovenian ] = "Stolpci";
             };
             PageItem
             {
@@ -1064,7 +1114,7 @@ TabDialog DLG_INSERT_SECTION
                 Text[ portuguese ] = "Avan�os";
                 Text[ russian ] = "�������";
                 Text[ greek ] = "������";
-                Text[ dutch ] = "Inspringingen";
+                Text[ dutch ] = "Indents";
                 Text[ french ] = "Retraits";
                 Text[ spanish ] = "Sangr�as";
                 Text[ finnish ] = "Sisennykset";
@@ -1085,6 +1135,8 @@ TabDialog DLG_INSERT_SECTION
                 Text[ catalan ] = "Sagnats";
                 Text[ thai ] = "ระยะเยื้อง";
                 Text[ hindi ] = "इन्डेन्ट्स";
+                Text[ hungarian ] = "Behúzások";
+                Text[ slovenian ] = "Odmiki";
             };
             PageItem
             {
@@ -1118,6 +1170,8 @@ TabDialog DLG_INSERT_SECTION
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -1150,6 +1204,8 @@ TabDialog DLG_INSERT_SECTION
                 Text[ hebrew ] = "Fuß-/Endnoten";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका/अंतिम टीका";
                 Text[ slovak ] = "Poznámky pod čiarou/vysvetlivky";
+                Text[ hungarian ] = "Lábjegyzetek és végjegyzetek";
+                Text[ slovenian ] = "Sprotne/končne opombe";
             };
         };
     };
@@ -1183,6 +1239,8 @@ TabDialog DLG_INSERT_SECTION
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
         Text[ slovak ] = "Vložiť";
+        Text[ hungarian ] = "Beszúrás";
+        Text[ slovenian ] = "Vstavi";
     };
     Text[ russian ] = "�������� ������";
     Text[ greek ] = "�������� ��������";
@@ -1199,6 +1257,8 @@ TabDialog DLG_INSERT_SECTION
     Text[ hebrew ] = "‮הוספת קטע‬";
     Text[ hindi ] = "विभाग जोड़ो";
     Text[ slovak ] = "Vložiť oblasť";
+    Text[ hungarian ] = "Szakasz beszúrása";
+    Text[ slovenian ] = "Vstavi odsek";
 };
 
 TabPage TP_INSERT_SECTION
@@ -1221,7 +1281,7 @@ TabPage TP_INSERT_SECTION
         Text [ french ] = "Nouvelle section" ;
         Text [ dutch ] = "Nieuw bereik" ;
         Text [ swedish ] = "Nytt omr�de" ;
-        Text [ danish ] = "Nyt omr�de" ;
+        Text [ danish ] = "Ny sektion" ;
         Text [ portuguese_brazilian ] = "Nova se��o" ;
         Text [ portuguese ] = "Nova sec��o" ;
         Text[ chinese_simplified ] = "新区域";
@@ -1240,6 +1300,8 @@ TabPage TP_INSERT_SECTION
         Text[ hebrew ] = "Neuer Bereich";
         Text[ hindi ] = "नया विभाग";
         Text[ slovak ] = "Nová oblasť";
+        Text[ hungarian ] = "Új szakasz";
+        Text[ slovenian ] = "Nov odsek";
     };
     ComboBox ED_RNAME
     {
@@ -1356,6 +1418,8 @@ TabPage TP_INSERT_SECTION
         Text[ hebrew ] = "~Schützen";
         Text[ hindi ] = "~रक्षा करो";
         Text[ slovak ] = "~Zamknúť";
+        Text[ hungarian ] = "~Védelem";
+        Text[ slovenian ] = "~Zaščiti";
     };
     CheckBox CB_PASSWD
     {
@@ -1446,6 +1510,8 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभें";
                 Text[ slovak ] = "Stĺpce";
+                Text[ hungarian ] = "Hasábok";
+                Text[ slovenian ] = "Stolpci";
             };
             PageItem
             {
@@ -1456,7 +1522,7 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ portuguese ] = "Avan�os";
                 Text[ russian ] = "�������";
                 Text[ greek ] = "������";
-                Text[ dutch ] = "Inspringingen";
+                Text[ dutch ] = "Indents";
                 Text[ french ] = "Retraits";
                 Text[ spanish ] = "Sangr�as";
                 Text[ finnish ] = "Sisennykset";
@@ -1477,6 +1543,8 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ catalan ] = "Sagnats";
                 Text[ thai ] = "ระยะเยื้อง";
                 Text[ hindi ] = "इन्डेन्ट्स";
+                Text[ hungarian ] = "Behúzások";
+                Text[ slovenian ] = "Odmiki";
             };
             PageItem
             {
@@ -1510,6 +1578,8 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -1542,6 +1612,8 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ hebrew ] = "Fuß-/Endnoten";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका/अंतिम टीका";
                 Text[ slovak ] = "Poznámky pod čiarou/vysvetlivky";
+                Text[ hungarian ] = "Lábjegyzetek/végjegyzetek";
+                Text[ slovenian ] = "Sprotne/končne opombe";
             };
         };
     };
@@ -1570,6 +1642,8 @@ TabDialog DLG_SECTION_PROPERTIES
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
     Text[ slovak ] = "Nastavenia";
+    Text[ hungarian ] = "Beállítások";
+    Text[ slovenian ] = "Možnosti";
 };
 
 
@@ -1612,6 +1686,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "‮הערות שוליים‬";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका";
         Text[ slovak ] = "Poznámky pod čiarou";
+        Text[ hungarian ] = "Lábjegyzetek";
+        Text[ slovenian ] = "Sprotne opombe";
     };
     CheckBox CB_FTN_AT_TXTEND
     {
@@ -1646,6 +1722,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "am ~Textende sammeln";
         Text[ hindi ] = "~टेक्स्ट् के अंत में संग्रह करो";
         Text[ slovak ] = "Z~hromaždiť na konci textu";
+        Text[ hungarian ] = "~Gyűjtés a szöveg végén";
+        Text[ slovenian ] = "~Zberi na koncu besedila";
     };
     CheckBox CB_FTN_NUM
     {
@@ -1662,7 +1740,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ french ] = "Nouvelle num�rotation";
         Text[ spanish ] = "~Reiniciar numeraci�n";
         Text[ italian ] = "Avvia nuovo ~numero";
-        Text[ danish ] = "Uafh�ngig nummerering forfra";
+        Text[ danish ] = "~Start nummerering forfra";
         Text[ swedish ] = "Starta ~numrering p� nytt";
         Text[ polish ] = "~Numeruj od nowa";
         Text[ portuguese_brazilian ] = "~Reiniciar a numera��o";
@@ -1679,6 +1757,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "‮מיספור-ספירה חדשה‬";
         Text[ hindi ] = "~संख्या देना पुनः प्रारंभ करो";
         Text[ slovak ] = "~Reštartovať číslovanie";
+        Text[ hungarian ] = "S~zámozás újrakezdése";
+        Text[ slovenian ] = "~Ponovno začni oštev.";
     };
     FixedText FT_FTN_OFFSET
     {
@@ -1693,7 +1773,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "~B�rja med" ;
-        Text [ danish ] = "Begynd med" ;
+        Text [ danish ] = "B~egynd med" ;
         Text [ portuguese_brazilian ] = "~Iniciar em" ;
         Text [ portuguese ] = "~Come�ar em" ;
         Text[ chinese_simplified ] = "开始从(~S)";
@@ -1712,6 +1792,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "~Beginn bei";
         Text[ hindi ] = "~से प्रारंभ करो";
         Text[ slovak ] = "~Začať od";
+        Text[ hungarian ] = "~Kezdet";
+        Text[ slovenian ] = "Z~ačni z";
     };
     NumericField FLD_FTN_OFFSET
     {
@@ -1740,7 +1822,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ french ] = "Format personnalis�";
         Text[ spanish ] = "~Formato personalizado";
         Text[ italian ] = "Formato proprio";
-        Text[ danish ] = "eget format";
+        Text[ danish ] = "~Brugerdefineret format";
         Text[ swedish ] = "Eget ~format";
         Text[ polish ] = "~Format niestandardowy";
         Text[ portuguese_brazilian ] = "~Formato personalizado";
@@ -1757,6 +1839,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "eigenes ~Format";
         Text[ hindi ] = "~रचना व्यवस्था करो";
         Text[ slovak ] = "Vlastný ~formát";
+        Text[ hungarian ] = "Egyedi ~formátum";
+        Text[ slovenian ] = "O~blika po meri";
     };
     FixedText FT_FTN_PREFIX
     {
@@ -1769,7 +1853,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ portuguese_brazilian ] = "An~tes" ;
         Text [ portuguese ] = "An~tes" ;
         Text [ finnish ] = "En~nen" ;
-        Text [ danish ] = "F�r" ;
+        Text [ danish ] = "F~�r" ;
         Text [ french ] = "Avant" ;
         Text [ swedish ] = "~F�re" ;
         Text [ dutch ] = "~Ervoor" ;
@@ -1791,6 +1875,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "~Davor";
         Text[ hindi ] = "से ~पहिले";
         Text[ slovak ] = "P~red";
+        Text[ hungarian ] = "~Előtte";
+        Text[ slovenian ] = "P~red";
     };
     Edit ED_FTN_PREFIX
     {
@@ -1843,6 +1929,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "Dah~inter";
         Text[ hindi ] = "~के पश्चात्";
         Text[ slovak ] = "~Za";
+        Text[ hungarian ] = "~Utána";
+        Text[ slovenian ] = "Z~a";
     };
     Edit ED_FTN_SUFFIX
     {
@@ -1887,6 +1975,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "Endnoten";
         Text[ hindi ] = "अंतिम टीका";
         Text[ slovak ] = "Vysvetlivky";
+        Text[ hungarian ] = "Végjegyzetek";
+        Text[ slovenian ] = "Končne opombe";
     };
     CheckBox CB_END_AT_TXTEND
     {
@@ -1903,7 +1993,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ french ] = "Regrouper en fin de ~section";
         Text[ spanish ] = "~Reunir al final de la secci�n";
         Text[ italian ] = "Raccogli a fine sezione";
-        Text[ danish ] = "saml ved omr�dets slutning";
+        Text[ danish ] = "Saml ved sektionens slutning";
         Text[ swedish ] = "S~amla vid omr�dets slut";
         Text[ polish ] = "Zb~ierz na ko�cu sekcji";
         Text[ portuguese_brazilian ] = "Reunir no ~fim da se��o";
@@ -1920,6 +2010,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "~am Bereichsende sammeln";
         Text[ hindi ] = "वि~भाग के अंत में संग्रह करो";
         Text[ slovak ] = "Zhr~omaždiť na konci oblasti";
+        Text[ hungarian ] = "Gyűjtés a szakasz ~végén";
+        Text[ slovenian ] = "Zberi na ~koncu odseka";
     };
     CheckBox CB_END_NUM
     {
@@ -1936,7 +2028,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ french ] = "Nouvelle num�rotation";
         Text[ spanish ] = "Rei~niciar numeraci�n";
         Text[ italian ] = "Avvia nuovo numero";
-        Text[ danish ] = "Uafh�ngig nummerering forfra";
+        Text[ danish ] = "~Start nummerering forfra";
         Text[ swedish ] = "Starta n~umrering p� nytt";
         Text[ polish ] = "N~umeruj od nowa";
         Text[ portuguese_brazilian ] = "~Reiniciar a numera��o";
@@ -1953,6 +2045,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "‮מיספור-ספירה חדשה‬";
         Text[ hindi ] = "~संख्या देना पुनः प्रारंभ करो";
         Text[ slovak ] = "~Reštartovať číslovanie";
+        Text[ hungarian ] = "Szá~mozás újrakezdése";
+        Text[ slovenian ] = "~Ponovno začni oštev.";
     };
     FixedText FT_END_OFFSET
     {
@@ -1967,7 +2061,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "B�rj~a med" ;
-        Text [ danish ] = "Begynd med" ;
+        Text [ danish ] = "B~egynd med" ;
         Text [ portuguese_brazilian ] = "~Iniciar em" ;
         Text [ portuguese ] = "~Iniciar em" ;
         Text[ chinese_simplified ] = "开始从(~S)";
@@ -1986,6 +2080,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "Be~ginn bei";
         Text[ hindi ] = "~से प्रारंभ करो";
         Text[ slovak ] = "~Začať od";
+        Text[ hungarian ] = "~Kezdet";
+        Text[ slovenian ] = "Z~ačni z";
     };
     NumericField FLD_END_OFFSET
     {
@@ -2014,7 +2110,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ french ] = "Format personnalis�";
         Text[ spanish ] = "~Formato personalizado";
         Text[ italian ] = "Formato proprio";
-        Text[ danish ] = "e~get format";
+        Text[ danish ] = "Brugerdefineret format";
         Text[ swedish ] = "Eget format";
         Text[ polish ] = "Forma~t niestandardowy";
         Text[ portuguese_brazilian ] = "Formato personalizado";
@@ -2031,6 +2127,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "~eigenes Format";
         Text[ hindi ] = "रचना व्यवस्था करो";
         Text[ slovak ] = "Užívateľský formát";
+        Text[ hungarian ] = "Egyedi formátum";
+        Text[ slovenian ] = "Oblika po meri";
     };
 
     FixedText FT_END_PREFIX
@@ -2066,6 +2164,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "Da~vor";
         Text[ hindi ] = "से ~पहिले";
         Text[ slovak ] = "P~red";
+        Text[ hungarian ] = "E~lőtte";
+        Text[ slovenian ] = "P~red";
     };
     Edit ED_END_PREFIX
     {
@@ -2107,7 +2207,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ portuguese_brazilian ] = "A~p�s" ;
         Text [ portuguese ] = "A~tr�s" ;
         Text [ finnish ] = "J�l~keen" ;
-        Text [ danish ] = "~Efter" ;
+        Text [ danish ] = "E~fter" ;
         Text [ french ] = "Apr�s" ;
         Text [ swedish ] = "Efte~r" ;
         Text [ dutch ] = "E~rachter" ;
@@ -2129,6 +2229,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ hebrew ] = "Dahinte~r";
         Text[ hindi ] = "~के पश्चात्";
         Text[ slovak ] = "Z~a";
+        Text[ hungarian ] = "U~tána";
+        Text[ slovenian ] = "Z~a";
     };
     Edit ED_END_SUFFIX
     {
@@ -2178,6 +2280,8 @@ TabPage TP_SECTION_INDENTS
         Text[ catalan ] = "Sagnat";
         Text[ thai ] = "ระยะเยื้อง";
         Text[ hindi ] = "इन्डेन्ट";
+        Text[ hungarian ] = "Behúzás";
+        Text[ slovenian ] = "Odmik";
     };
     FixedText FT_BEFORE
     {
@@ -2189,14 +2293,14 @@ TabPage TP_SECTION_INDENTS
         Text[ portuguese ] = "~Before section";
         Text[ russian ] = "~Before section";
         Text[ greek ] = "~Before section";
-        Text[ dutch ] = "~Before section";
+        Text[ dutch ] = "~Voor sectie";
         Text[ french ] = "Avant la section";
         Text[ spanish ] = "~Antes de la secci�n";
         Text[ finnish ] = "~Before section";
         Text[ italian ] = "~Prima della sezione";
         Text[ czech ] = "Před sekcí";
         Text[ slovak ] = "Pred o~blasť";
-        Text[ danish ] = "~Before section";
+        Text[ danish ] = "~F�r sektion";
         Text[ swedish ] = "~F�re omr�de";
         Text[ polish ] = "~Before section";
         Text[ portuguese_brazilian ] = "~Before section";
@@ -2210,6 +2314,8 @@ TabPage TP_SECTION_INDENTS
         Text[ catalan ] = "~Before section";
         Text[ thai ] = "~Before section";
         Text[ hindi ] = "~Before section";
+        Text[ hungarian ] = "~Bal szélen";
+        Text[ slovenian ] = "Pred odsekom";
     };
     MetricField MF_BEFORE
     {
@@ -2237,14 +2343,14 @@ TabPage TP_SECTION_INDENTS
         Text[ portuguese ] = "~After section";
         Text[ russian ] = "~After section";
         Text[ greek ] = "~After section";
-        Text[ dutch ] = "~After section";
+        Text[ dutch ] = "~Na sectie";
         Text[ french ] = "Apr�s la section";
         Text[ spanish ] = "~Despu�s de la secci�n";
         Text[ finnish ] = "~After section";
         Text[ italian ] = "~Dopo la sezione";
         Text[ czech ] = "Po sekci";
         Text[ slovak ] = "Z~a oblasť";
-        Text[ danish ] = "~After section";
+        Text[ danish ] = "~Efter sektion";
         Text[ swedish ] = "~Efter omr�de";
         Text[ polish ] = "~After section";
         Text[ portuguese_brazilian ] = "~After section";
@@ -2258,6 +2364,8 @@ TabPage TP_SECTION_INDENTS
         Text[ catalan ] = "~After section";
         Text[ thai ] = "~After section";
         Text[ hindi ] = "~After section";
+        Text[ hungarian ] = "~Jobb szélen";
+        Text[ slovenian ] = "Za odsekom";
     };
     MetricField MF_AFTER
     {
@@ -2282,17 +2390,3 @@ TabPage TP_SECTION_INDENTS
         Size = MAP_APPFONT ( 68 , 112 ) ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
