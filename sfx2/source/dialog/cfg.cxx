@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-31 05:55:22 $
+ *  last change: $Author: cd $ $Date: 2002-06-19 11:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,20 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
 
 SfxConfigGroupListBox_Impl::~SfxConfigGroupListBox_Impl()
 {
+    ClearAll();
+}
+
+void SfxConfigGroupListBox_Impl::ClearAll()
+{
+    USHORT nCount = aArr.Count();
+    for ( USHORT i=0; i<nCount; i++ )
+    {
+        SfxGroupInfo_Impl *pData = aArr[i];
+        delete pData;
+    }
+
+    aArr.Remove( 0, nCount );
+    Clear();
 }
 
 void SfxConfigGroupListBox_Impl::SetScriptType( const String& rScriptType )
@@ -430,6 +444,8 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
 */
 {
     SetUpdateMode(FALSE);
+
+    ClearAll(); // Remove all old entries from treelist box
     SfxApplication *pSfxApp = SFX_APP();
 
     // Verwendet wird der aktuelle Slotpool

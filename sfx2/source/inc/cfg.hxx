@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-31 05:59:08 $
+ *  last change: $Author: cd $ $Date: 2002-06-19 11:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ public:
                                     SfxConfigGroupListBox_Impl ( Window* pParent,
                                         const ResId&, ULONG nConfigMode = 0 );
                                     ~SfxConfigGroupListBox_Impl();
+    void                            ClearAll();
 
     void                            Init( SvStringsDtor *pArr = 0, SfxSlotPool* pSlotPool = 0 );
     void                            SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
