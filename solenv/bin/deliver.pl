@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-27 11:37:08 $
+#   last change: $Author: rt $ $Date: 2002-11-08 10:59:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.32 $ ';
+$id_str = ' $Revision: 1.33 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -111,11 +111,13 @@ $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 $umask              = 22;           # default file/directory creation mask
 $dest               = 0;            # optional destination path
+$common_dest        = 0;            # common tree on solver
 
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
 @hedabu_list        = ();           # files which have to be filtered through hedabu
 @zip_list           = ();           # files which have to be zipped
+@common_zip_list    = ();           # common files which have to be zipped
 
 $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
@@ -167,10 +169,13 @@ sub do_copy
     glob_and_copy($from, $to, $touch);
 
     $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
-    $common = expand_macros($line);
-    ($from, $to) = split(' ', $common);
-    print "copy common: from: $from, to: $to\n" if $is_debug;
-    glob_and_copy($from, $to, $touch);
+    if ( $line =~ /%COMMON_OUTDIR%/ ) {
+        $line =~ s/%_DEST%/%COMMON_DEST%/ig;
+        $common = expand_macros($line);
+        ($from, $to) = split(' ', $common);
+        print "copy common: from: $from, to: $to\n" if $is_debug;
+        glob_and_copy($from, $to, $touch);
+    }
 }
 
 sub do_dos
@@ -429,6 +434,7 @@ sub init_globals
         }
     }
 
+    $common_dest = "$solarversion/$common_outdir" if ( !$dest );
     $dest = "$solarversion/$inpath" if ( !$dest );
 
     # the following macros are obsolete, will be flagged as error
@@ -445,6 +451,7 @@ sub init_globals
                 [ '%_DEST%',            $dest           ],
                 [ '%_EXT%',             $ext            ],
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
+                [ '%COMMON_DEST%',      $common_dest    ],
                 [ '%DLLSUFFIX%',        $dllsuffix      ],
                 [ '%GUI%',              $gui            ],
                 [ '%OUTPATH%',          $outpath        ],
@@ -761,10 +768,18 @@ sub push_default_actions
                     'xml',
                 );
     push(@subdirs, 'zip') if $opt_zip;
+    my @common_subdirs = (
+                    'bin',
+                    'pck',
+                );
+    push(@common_subdirs, 'zip') if $opt_zip;
 
     # create all the subdirectories on solver
     foreach $subdir (@subdirs) {
         push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
+    }
+    foreach $subdir (@common_subdirs) {
+        push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir"]);
     }
 
     # deliver build.lst to $dest/inc/$module
@@ -860,14 +875,24 @@ sub push_on_ziplist
     my $file = shift;
     # strip $dest from path since we don't want to record it in zip file
     $dest =~ s#\\#/#g;
-    $file =~ s#^$dest/##o;
-    if ( $opt_minor ){
-        # strip minor from path
-        my $ext = "%_EXT%";
-        $ext = expand_macros($ext);
-        $file =~ s#^$ext##o;
+    $common_dest =~ s#\\#/#g;
+    if ( $file =~ s#^$dest/##o ) {
+        if ( $opt_minor ){
+            # strip minor from path
+            my $ext = "%_EXT%";
+            $ext = expand_macros($ext);
+            $file =~ s#^$ext##o;
+        }
+        push(@zip_list, $file);
+    } elsif ( $file =~ s#^$common_dest/##o ) {
+        if ( $opt_minor ){
+            # strip minor from path
+            my $ext = "%_EXT%";
+            $ext = expand_macros($ext);
+            $file =~ s#^$ext##o;
+        }
+        push(@common_zip_list, $file);
     }
-    push(@zip_list, $file);
 }
 
 sub zip_files
@@ -878,6 +903,8 @@ sub zip_files
 
     my $zip_file = "%_DEST%/zip%_EXT%/$module.zip";
     $zip_file = expand_macros($zip_file);
+    my $common_zip_file = "%COMMON_DEST%/zip%_EXT%/$module.zip";
+    $common_zip_file = expand_macros($common_zip_file);
 
     print "ZIP: updating $zip_file\n";
     # zip content has to be relative to $dest
@@ -887,7 +914,21 @@ sub zip_files
         print "ZIP: adding $file to $zip_file\n" if $is_debug;
         print ZIP "$file\n";
     }
-    close(ZIP)
+    close(ZIP);
+
+    print "ZIP: updating $common_zip_file\n";
+    # zip content has to be relative to $dest
+    chdir($common_dest);
+    open(ZIP, "| $zipexe -q -o -u -@ $common_zip_file");
+# rt 100519
+# so wird ein separates zipfile in common/zip angelegt. Andere Moeglichkeit:
+# open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
+# das wuerde die common-Sachen an die Platform-zips angehängen.
+    foreach $file (@common_zip_list) {
+        print "ZIP: adding $file to $common_zip_file\n";# if $is_debug;
+        print ZIP "$file\n";
+    }
+    close(ZIP);
 }
 
 sub print_error
