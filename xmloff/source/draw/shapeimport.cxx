@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 10:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           sXML_control,       XML_TOK_GROUP_CONTROL       },
     { XML_NAMESPACE_DRAW,           sXML_connector,     XML_TOK_GROUP_CONNECTOR     },
     { XML_NAMESPACE_DRAW,           sXML_measure,       XML_TOK_GROUP_MEASURE       },
-    { XML_NAMESPACE_DRAW,           sXML_page,          XML_TOK_GROUP_PAGE          },
+    { XML_NAMESPACE_DRAW,           sXML_page_thumbnail,XML_TOK_GROUP_PAGE          },
     { XML_NAMESPACE_DRAW,           sXML_caption,       XML_TOK_GROUP_CAPTION       },
 
     { XML_NAMESPACE_CHART,          sXML_chart,         XML_TOK_GROUP_CHART         },

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 10:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2410,7 +2410,7 @@ void SdXMLExport::ImpExportPageShape(SvXMLExport& rExp,
     }
 
     // write Page shape
-    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_page, sal_True, sal_True);
+    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_page_thumbnail, sal_True, sal_True);
 }
 
 //////////////////////////////////////////////////////////////////////////////
