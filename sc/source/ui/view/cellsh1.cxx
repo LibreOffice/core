@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-01-31 19:37:51 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@
 #include "reffact.hxx"
 #include "namepast.hxx"
 #include "inputhdl.hxx"
+#include "transobj.hxx"
+#include "drwtrans.hxx"
 
 #include "globstr.hrc"
 
@@ -1071,118 +1073,121 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 BOOL bOtherDoc = !pDoc->IsClipboardSource();
-
-                if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
+                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+                if ( pOwnClip )
                 {
-                    const   SfxPoolItem* pItem;
-                    String  aFlags = 'A';
-
-                    if( IS_AVAILABLE( FID_INS_CELL_CONTENTS, &pItem ) )
-                        aFlags = ((const SfxStringItem*)pItem)->GetValue();
-
-                    aFlags.ToUpperAscii();
-                    BOOL    bCont = TRUE;
-
-                    for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
+                    if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
-                        switch( aFlags.GetChar(i) )
+                        const   SfxPoolItem* pItem;
+                        String  aFlags = 'A';
+
+                        if( IS_AVAILABLE( FID_INS_CELL_CONTENTS, &pItem ) )
+                            aFlags = ((const SfxStringItem*)pItem)->GetValue();
+
+                        aFlags.ToUpperAscii();
+                        BOOL    bCont = TRUE;
+
+                        for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
                         {
-                            case 'A': // Alle
-                            nFlags |= IDF_ALL;
-                            bCont = FALSE; // nicht mehr weitermachen!
-                            break;
-                            case 'S': nFlags |= IDF_STRING; break;
-                            case 'V': nFlags |= IDF_VALUE; break;
-                            case 'D': nFlags |= IDF_DATETIME; break;
-                            case 'F': nFlags |= IDF_FORMULA; break;
-                            case 'N': nFlags |= IDF_NOTE; break;
-                            case 'T': nFlags |= IDF_ATTRIB; break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (pTabViewShell->SelectionEditable())
-                    {
-                        ScInsertContentsDlg* pDlg = new ScInsertContentsDlg(    pTabViewShell->GetDialogParent() );
-                        pDlg->SetOtherDoc( bOtherDoc );
-                        // #53661# bei ChangeTrack MoveMode disablen
-                        pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
-                        // #72930# cut/move references may disable shift
-                        // directions if source and destination ranges intersect
-                        if ( !bOtherDoc )
-                        {
-                            ScDocument* pClipDoc = ScGlobal::GetClipDoc();
-                            if ( pClipDoc->IsCutMode() )
+                            switch( aFlags.GetChar(i) )
                             {
-                                ScViewData* pViewData = GetViewData();
-                                if ( pViewData->GetMarkData().GetTableSelect(
-                                        pViewData->GetTabNo() ) )
-                                {
-                                    USHORT nPosX = pViewData->GetCurX();
-                                    USHORT nPosY = pViewData->GetCurY();
-                                    USHORT nClipStartX, nClipStartY, nClipSizeX, nClipSizeY;
-                                    pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-                                    pClipDoc->GetClipArea( nClipSizeX, nClipSizeY );
-                                    int nDisableShift = 0;
-                                    if ( nClipStartX <= nPosX + nClipSizeX &&
-                                            nPosX <= nClipStartX + nClipSizeX )
-                                        nDisableShift |= SC_CELL_SHIFT_DISABLE_DOWN;
-                                    if ( nClipStartY <= nPosY + nClipSizeY &&
-                                            nPosY <= nClipStartY + nClipSizeY )
-                                        nDisableShift |= SC_CELL_SHIFT_DISABLE_RIGHT;
-                                    if ( nDisableShift )
-                                        pDlg->SetCellShiftDisabled( nDisableShift );
-                                }
+                                case 'A': // Alle
+                                nFlags |= IDF_ALL;
+                                bCont = FALSE; // nicht mehr weitermachen!
+                                break;
+                                case 'S': nFlags |= IDF_STRING; break;
+                                case 'V': nFlags |= IDF_VALUE; break;
+                                case 'D': nFlags |= IDF_DATETIME; break;
+                                case 'F': nFlags |= IDF_FORMULA; break;
+                                case 'N': nFlags |= IDF_NOTE; break;
+                                case 'T': nFlags |= IDF_ATTRIB; break;
                             }
                         }
-                        if (pDlg->Execute() == RET_OK)
-                        {
-                            nFlags     = pDlg->GetInsContentsCmdBits();
-                            nFunction  = pDlg->GetFormulaCmdBits();
-                            bSkipEmpty = pDlg->IsSkipEmptyCells();
-                            bTranspose = pDlg->IsTranspose();
-                            bAsLink    = pDlg->IsLink();
-                            eMoveMode  = pDlg->GetMoveMode();
-                        }
-                        delete pDlg;
                     }
                     else
-                        pTabViewShell->ErrorMessage(STR_PROTECTIONERR);
-                }
-
-                if( nFlags != IDF_NONE )
-                {
                     {
-                        WaitObject aWait( GetViewData()->GetDialogParent() );
-                        if ( bAsLink && bOtherDoc )
-                            pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE einfuegen
+                        if (pTabViewShell->SelectionEditable())
+                        {
+                            ScInsertContentsDlg* pDlg = new ScInsertContentsDlg(    pTabViewShell->GetDialogParent() );
+                            pDlg->SetOtherDoc( bOtherDoc );
+                            // #53661# bei ChangeTrack MoveMode disablen
+                            pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
+                            // #72930# cut/move references may disable shift
+                            // directions if source and destination ranges intersect
+                            if ( !bOtherDoc )
+                            {
+                                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+                                if ( pOwnClip && pOwnClip->GetDocument()->IsCutMode() )
+                                {
+                                    ScViewData* pViewData = GetViewData();
+                                    if ( pViewData->GetMarkData().GetTableSelect(
+                                            pViewData->GetTabNo() ) )
+                                    {
+                                        USHORT nPosX = pViewData->GetCurX();
+                                        USHORT nPosY = pViewData->GetCurY();
+                                        USHORT nClipStartX, nClipStartY, nClipSizeX, nClipSizeY;
+                                        pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
+                                        pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY );
+                                        int nDisableShift = 0;
+                                        if ( nClipStartX <= nPosX + nClipSizeX &&
+                                                nPosX <= nClipStartX + nClipSizeX )
+                                            nDisableShift |= SC_CELL_SHIFT_DISABLE_DOWN;
+                                        if ( nClipStartY <= nPosY + nClipSizeY &&
+                                                nPosY <= nClipStartY + nClipSizeY )
+                                            nDisableShift |= SC_CELL_SHIFT_DISABLE_RIGHT;
+                                        if ( nDisableShift )
+                                            pDlg->SetCellShiftDisabled( nDisableShift );
+                                    }
+                                }
+                            }
+                            if (pDlg->Execute() == RET_OK)
+                            {
+                                nFlags     = pDlg->GetInsContentsCmdBits();
+                                nFunction  = pDlg->GetFormulaCmdBits();
+                                bSkipEmpty = pDlg->IsSkipEmptyCells();
+                                bTranspose = pDlg->IsTranspose();
+                                bAsLink    = pDlg->IsLink();
+                                eMoveMode  = pDlg->GetMoveMode();
+                            }
+                            delete pDlg;
+                        }
                         else
-                            pTabViewShell->PasteFromClip( nFlags, NULL,
-                                nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                eMoveMode );
+                            pTabViewShell->ErrorMessage(STR_PROTECTIONERR);
                     }
 
-                    if( ! rReq.IsAPI() )
+                    if( nFlags != IDF_NONE )
                     {
-                        String  aFlags;
-
-                        if( nFlags == IDF_ALL )
                         {
-                            aFlags += 'A';
-                        }
-                        else
-                        {
-                            if( nFlags & IDF_STRING ) aFlags += 'S';
-                            if( nFlags & IDF_VALUE ) aFlags += 'V';
-                            if( nFlags & IDF_DATETIME ) aFlags += 'D';
-                            if( nFlags & IDF_FORMULA ) aFlags += 'F';
-                            if( nFlags & IDF_NOTE ) aFlags += 'N';
-                            if( nFlags & IDF_ATTRIB ) aFlags += 'T';
+                            WaitObject aWait( GetViewData()->GetDialogParent() );
+                            if ( bAsLink && bOtherDoc )
+                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE einfuegen
+                            else
+                                pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
+                                    nFunction, bSkipEmpty, bTranspose, bAsLink,
+                                    eMoveMode );
                         }
 
-                        rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
-                        rReq.Done();
+                        if( ! rReq.IsAPI() )
+                        {
+                            String  aFlags;
+
+                            if( nFlags == IDF_ALL )
+                            {
+                                aFlags += 'A';
+                            }
+                            else
+                            {
+                                if( nFlags & IDF_STRING ) aFlags += 'S';
+                                if( nFlags & IDF_VALUE ) aFlags += 'V';
+                                if( nFlags & IDF_DATETIME ) aFlags += 'D';
+                                if( nFlags & IDF_FORMULA ) aFlags += 'F';
+                                if( nFlags & IDF_NOTE ) aFlags += 'N';
+                                if( nFlags & IDF_ATTRIB ) aFlags += 'T';
+                            }
+
+                            rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
+                            rReq.Done();
+                        }
                     }
                 }
             }
@@ -1208,7 +1213,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     rReq.SetReturnValue(SfxInt16Item(nSlot, bRet)); // 1 = Erfolg, 0 = Fehler
                     rReq.Done();
                 }
-                else if ( ScGlobal::IsClipCaptured() )  // eigene Tabellen-Daten
+                else if ( ScTransferObj::GetOwnClipboard() )    // own cell data
                 {
                     rReq.SetSlot( FID_INS_CELL_CONTENTS );
                     ExecuteSlot( rReq, GetInterface() );
@@ -1216,7 +1221,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else                                    // Zeichenobjekte oder fremde Daten
                 {
-                    BOOL bDraw = ScGlobal::IsClipDraw();
+                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
 
                     SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
                     if (pClipObj.Is())

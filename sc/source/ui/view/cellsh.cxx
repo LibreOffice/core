@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-06 16:24:43 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #include "cell.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
+#include "transobj.hxx"
+#include "drwtrans.hxx"
 
 //------------------------------------------------------------------
 
@@ -306,7 +308,7 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 // SID_PASTE
 // FID_PASTE_CONTENTS
 
-    if ( ScGlobal::IsClipCaptured() || ScGlobal::IsClipDraw() )
+    if ( ScTransferObj::GetOwnClipboard() || ScDrawTransferObj::GetOwnClipboard() )
         bDisable = FALSE;
     else
     {
