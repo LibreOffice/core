@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:59:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,9 @@
 #define STR_AUTOCORRECT         (UNDO_BASE      +37)
 #define STR_MERGE_TABLE         (UNDO_BASE      +38)
 #define STR_TRANSLITERATE       (UNDO_BASE      +39)
+#define STR_PASTE_CLIPBOARD_UNDO    (UNDO_BASE      +40)
+#define STR_TYPING_UNDO             (UNDO_BASE      +41)
 
-#define STR_REPEAT_DUMMY_4      (UNDO_BASE      +40)
-#define STR_REPEAT_DUMMY_5      (UNDO_BASE      +41)
 #define STR_REPEAT_DUMMY_6      (UNDO_BASE      +42)
 #define STR_REPEAT_DUMMY_7      (UNDO_BASE      +43)
 #define STR_REPEAT_DUMMY_8      (UNDO_BASE      +44)
@@ -160,32 +160,30 @@
 #define STR_UNDO_TMPAUTOCORR        (CORE_REPEAT_END      +41)
 
 #define STR_TOXCHANGE               (CORE_REPEAT_END      +42)
-#define STR_PASTE_CLIPBOARD_UNDO    (CORE_REPEAT_END      +43)
-#define STR_TYPING_UNDO             (CORE_REPEAT_END      +44)
-#define STR_UNDO_PAGEDESC_CREATE    (CORE_REPEAT_END      +45)
-#define STR_UNDO_PAGEDESC           (CORE_REPEAT_END      +46)
-#define STR_UNDO_PAGEDESC_DELETE    (CORE_REPEAT_END      +47)
-#define STR_UNDO_HEADER_FOOTER      (CORE_REPEAT_END      +48) // #i7983#
-#define STR_UNDO_FIELD              (CORE_REPEAT_END      +49) // #111840#
-#define STR_UNDO_TXTFMTCOL_CREATE           (CORE_REPEAT_END      +50)
-#define STR_UNDO_TXTFMTCOL_DELETE           (CORE_REPEAT_END      +51)
-#define STR_UNDO_TXTFMTCOL_RENAME           (CORE_REPEAT_END      +52)
-#define STR_UNDO_CHARFMT_CREATE             (CORE_REPEAT_END      +53)
-#define STR_UNDO_CHARFMT_DELETE             (CORE_REPEAT_END      +54)
-#define STR_UNDO_CHARFMT_RENAME             (CORE_REPEAT_END      +55)
-#define STR_UNDO_FRMFMT_CREATE              (CORE_REPEAT_END      +56)
-#define STR_UNDO_FRMFMT_DELETE              (CORE_REPEAT_END      +57)
-#define STR_UNDO_FRMFMT_RENAME              (CORE_REPEAT_END      +58)
-#define STR_UNDO_NUMRULE_CREATE             (CORE_REPEAT_END      +59)
-#define STR_UNDO_NUMRULE_DELETE             (CORE_REPEAT_END      +60)
-#define STR_UNDO_NUMRULE_RENAME             (CORE_REPEAT_END      +61)
-#define STR_UNDO_BOOKMARK_RENAME            (CORE_REPEAT_END      +62)
-#define STR_UNDO_INDEX_ENTRY_INSERT         (CORE_REPEAT_END      +63)
-#define STR_UNDO_INDEX_ENTRY_DELETE         (CORE_REPEAT_END      +64)
-#define STR_UNDO_COL_DELETE                 (CORE_REPEAT_END      +65)
-#define STR_UNDO_ROW_DELETE                 (CORE_REPEAT_END      +66)
-#define STR_UNDO_PAGEDESC_RENAME            (CORE_REPEAT_END      +67)
-#define STR_NUMDOWN                         (CORE_REPEAT_END      +68)
+#define STR_UNDO_PAGEDESC_CREATE    (CORE_REPEAT_END      +43)
+#define STR_UNDO_PAGEDESC           (CORE_REPEAT_END      +44)
+#define STR_UNDO_PAGEDESC_DELETE    (CORE_REPEAT_END      +45)
+#define STR_UNDO_HEADER_FOOTER      (CORE_REPEAT_END      +46) // #i7983#
+#define STR_UNDO_FIELD              (CORE_REPEAT_END      +47) // #111840#
+#define STR_UNDO_TXTFMTCOL_CREATE           (CORE_REPEAT_END      +48)
+#define STR_UNDO_TXTFMTCOL_DELETE           (CORE_REPEAT_END      +49)
+#define STR_UNDO_TXTFMTCOL_RENAME           (CORE_REPEAT_END      +50)
+#define STR_UNDO_CHARFMT_CREATE             (CORE_REPEAT_END      +51)
+#define STR_UNDO_CHARFMT_DELETE             (CORE_REPEAT_END      +52)
+#define STR_UNDO_CHARFMT_RENAME             (CORE_REPEAT_END      +53)
+#define STR_UNDO_FRMFMT_CREATE              (CORE_REPEAT_END      +54)
+#define STR_UNDO_FRMFMT_DELETE              (CORE_REPEAT_END      +55)
+#define STR_UNDO_FRMFMT_RENAME              (CORE_REPEAT_END      +56)
+#define STR_UNDO_NUMRULE_CREATE             (CORE_REPEAT_END      +57)
+#define STR_UNDO_NUMRULE_DELETE             (CORE_REPEAT_END      +58)
+#define STR_UNDO_NUMRULE_RENAME             (CORE_REPEAT_END      +59)
+#define STR_UNDO_BOOKMARK_RENAME            (CORE_REPEAT_END      +60)
+#define STR_UNDO_INDEX_ENTRY_INSERT         (CORE_REPEAT_END      +61)
+#define STR_UNDO_INDEX_ENTRY_DELETE         (CORE_REPEAT_END      +62)
+#define STR_UNDO_COL_DELETE                 (CORE_REPEAT_END      +63)
+#define STR_UNDO_ROW_DELETE                 (CORE_REPEAT_END      +64)
+#define STR_UNDO_PAGEDESC_RENAME            (CORE_REPEAT_END      +65)
+#define STR_NUMDOWN                         (CORE_REPEAT_END      +66)
 
 // !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
 #define CORE_UNDO_END           STR_NUMDOWN// !!!! umsetzen !!!
