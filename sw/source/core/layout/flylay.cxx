@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-04 11:01:33 $
+ *  last change: $Author: ama $ $Date: 2001-08-24 14:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,13 +354,18 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 
                 //Breite angepasst? - Hoehe dann proportional verkleinern
                 if( aFrmRect.Width() != aOldSize.Width() )
+                {
                     aFrmRect.Height( aFrmRect.Width() * aOldSize.Height() /
                                      aOldSize.Width() );
-
+                    bHeightClipped = TRUE;
+                }
                 //Hoehe angepasst? - Breite dann proportional verkleinern
-                if( aFrmRect.Height() != aOldSize.Height() )
+                else if( aFrmRect.Height() != aOldSize.Height() )
+                {
                     aFrmRect.Width( aFrmRect.Height() * aOldSize.Width() /
                                     aOldSize.Height() );
+                    bWidthClipped = TRUE;
+                }
             }
 
             //Jetzt die Einstellungen am Frm vornehmen, bei Spalten werden
