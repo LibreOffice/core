@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:16:51 $
+ *  last change: $Author: sab $ $Date: 2000-12-01 17:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,11 @@
 using namespace ::com::sun::star;
 
 const sal_Int32 nProgressBarRange = 1000000;
+const sal_Int16 nProgressStep = 2;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel>& rModel,
                                     const ::rtl::OUString& rText)
+    : nOldPercent(0)
 {
     if (rModel.is())
     {
@@ -113,8 +115,13 @@ void ProgressBarHelper::SetValue(sal_Int32 nValue)
     if (xStatusIndicator.is())
     {
         double fValue(nValue);
-        double fNewValue = (fValue * nProgressBarRange) / nReference;
-        xStatusIndicator->setValue((sal_Int32)fNewValue);
+        double fNewValue ((fValue * nProgressBarRange) / nReference);
+        double fPercent ((fNewValue * 100) / nProgressBarRange);
+        if ((sal_Int16)fPercent >= (nOldPercent + nProgressStep))
+        {
+            xStatusIndicator->setValue((sal_Int32)fNewValue);
+            nOldPercent = (sal_Int16)fPercent;
+        }
     }
 }
 
