@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 09:48:00 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 13:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,12 @@ SvxFieldData* SdFieldPopup::GetField()
             pNewField = new SvxDateField( *pDateField );
             ( (SvxDateField*) pNewField )->SetType( eType );
             ( (SvxDateField*) pNewField )->SetFormat( eFormat );
+
+            if( (pDateField->GetType() == SVXDATETYPE_VAR) && (eType == SVXDATETYPE_FIX) )
+            {
+                Date aDate;
+                ( (SvxDateField*) pNewField )->SetFixDate( aDate );
+            }
         }
     }
     else if( pField->ISA( SvxExtTimeField ) )
@@ -289,6 +295,13 @@ SvxFieldData* SdFieldPopup::GetField()
             pNewField = new SvxExtTimeField( *pTimeField );
             ( (SvxExtTimeField*) pNewField )->SetType( eType );
             ( (SvxExtTimeField*) pNewField )->SetFormat( eFormat );
+
+            if( (pTimeField->GetType() == SVXTIMETYPE_VAR) && (eType == SVXTIMETYPE_FIX) )
+            {
+                Time aTime;
+                ( (SvxExtTimeField*) pNewField )->SetFixTime( aTime );
+            }
+
         }
     }
     else if( pField->ISA( SvxExtFileField ) )
