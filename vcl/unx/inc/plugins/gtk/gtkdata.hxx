@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:57:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ public:
     virtual ~GtkData();
 
     virtual void Init();
+
+    virtual void initNWF();
+    virtual void deInitNWF();
 };
 
 class GtkSalFrame;
@@ -88,9 +91,8 @@ class GtkSalFrame;
 class GtkSalDisplay : public SalDisplay
 {
     GdkDisplay*                     m_pGdkDisplay;
-    std::list< GtkSalFrame* >       m_aFrames;
     GdkCursor                      *m_aCursors[ POINTER_COUNT ];
-    GdkCursor *getFromXPM( const char *pBitmap, const char *pMask,
+    GdkCursor* getFromXPM( const char *pBitmap, const char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
 public:
              GtkSalDisplay( GdkDisplay* pDisplay, Visual* pVis, Colormap aCol );
@@ -98,14 +100,17 @@ public:
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
 
-    void registerFrame( GtkSalFrame* pFrame );
-    void deregisterFrame( GtkSalFrame* pFrame );
+    virtual void deregisterFrame( SalFrame* pFrame );
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
+    virtual long Dispatch( XEvent *pEvent );
 
     static GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                            GdkEvent* event,
                                            gpointer data );
+    inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
+    inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
+    inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
 };
 
 
