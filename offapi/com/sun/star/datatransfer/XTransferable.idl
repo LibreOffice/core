@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferable.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-21 07:09:33 $
+ *  last change: $Author: arellano $ $Date: 2001-04-02 20:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ interface XTransferable: com::sun::star::uno::XInterface
 
         @returns
         the list of supported data flavors.
+
+    <!-- Dennis: Is this redundant? -->
     */
     sequence < DataFlavor > getTransferDataFlavors();
 
@@ -124,7 +126,7 @@ interface XTransferable: com::sun::star::uno::XInterface
 
         @remarks
         This method is only for analogy with the JAVA Clipboard interface. To
-        avoid many calls the caller should rather use getTransferDataFlavors.
+        avoid many calls, the caller should instead use getTransferDataFlavors.
 
         @see com::sun::star::datatransfer::XTransferable::getTransferDataFlavors
     */
