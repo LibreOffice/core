@@ -1,8 +1,11 @@
+package embeddedobj.test;
+
 import java.awt.*;
 import java.applet.*;
 import java.awt.event.*;
 import java.net.*;
 import java.io.*;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -35,11 +38,46 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XTruncate;
 
+import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XBitmap;
+
 import com.sun.star.task.XJob;
 
 import com.sun.star.embed.*;
 
-public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClient, ActionListener, XJob
+
+class ActionObject
+{
+    public byte m_nID;
+    public String m_sParam;
+
+    public ActionObject()
+    {
+        m_nID = 0;
+        m_sParam = null;
+    }
+
+    public ActionObject( byte nID )
+    {
+        m_nID = nID;
+        m_sParam = null;
+    }
+
+    public ActionObject( byte nID, String sParam )
+    {
+        m_nID = nID;
+        m_sParam = sParam;
+    }
+
+    public ActionObject( ActionObject aObject )
+    {
+        m_nID = aObject.m_nID;
+        m_sParam = aObject.m_sParam;
+    }
+};
+
+public class EmbedContApp extends Applet
+    implements MouseListener, XEmbeddedClient, ActionListener, XJob, XInplaceClient, XWindowSupplier
 {
     private XMultiServiceFactory m_xServiceFactory;
 
@@ -50,6 +88,10 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
     private XEmbeddedObject m_xEmbedObj;
     private XStorage m_xStorage;
+    private float    m_nXScaling;
+    private float    m_nYScaling;
+    private float    m_nXPixelSize;
+    private float    m_nYPixelSize;
 
     private Frame m_aFrame;
     private Menu m_aFileMenu;
@@ -65,8 +107,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     private String m_aLinkURI;
 
     private Object m_oActionsNumberLock;
-    private int m_nActionsNumber;
-    private byte[] m_pActionsList;
+    private Vector m_aActionsList;
 
     private Timer m_aTimer;
     private boolean m_bDestroyed = false;
@@ -76,9 +117,15 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
     private XURLTransformer m_xTransformer;
 
+    private NativeView m_aNativeView;
+    private XWindow m_xVCLWindow;
+
+    private XBitmap m_xBitmap;
+    private BitmapPainter m_aBitmapPainter;
+
 // Constants
     private final byte DESTROY                  =  1;
-    private final byte MOUSE_CLICKED            =  2;
+    private final byte ACTIVATE_OUTPLACE        =  2;
     private final byte NEW_DOCUMENT             =  3;
     private final byte SAVE_AS                  =  4;
     private final byte OPEN_FILE                =  5;
@@ -87,6 +134,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     private final byte OBJECT_FROM_FILE         =  8;
     private final byte LINK_FROM_FILE           =  9;
     private final byte CONVERT_LINK_TO_OBJECT   = 10;
+    private final byte ACTIVATE_INPLACE         = 11;
+    private final byte DEACTIVATE               = 12;
 
 // Methods
     public EmbedContApp( Frame aFrame, XMultiServiceFactory xServiceFactory )
@@ -97,7 +146,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
     public void init()
     {
-        resize( 640, 480 );
+        resize( 800, 600 );
         setBackground( Color.gray );
 
         m_aToolkit = Toolkit.getDefaultToolkit();
@@ -107,9 +156,8 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             m_xTransformer = (XURLTransformer)UnoRuntime.queryInterface( XURLTransformer.class, oTransformer );
         } catch( Exception e ) { System.exit( 0 ); }
 
-        m_pActionsList = new byte[200];
-        m_nActionsNumber = 0;
         m_oActionsNumberLock = new Object();
+        m_aActionsList = new Vector();
 
         m_oInHandlerLock = new Object();
         m_oImageLock = new Object();
@@ -124,6 +172,11 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
             System.out.println( "Can't create MainThreadExecutor! The application is unusable!" );
             System.exit( 0 );
         }
+
+        m_nXScaling = 1;
+        m_nYScaling = 1;
+        m_nXPixelSize = 1;
+        m_nYPixelSize = 1;
 
         m_pValuesForExecutor = new NamedValue[1];
         m_pValuesForExecutor[0] = new NamedValue( "JobToExecute", (Object)this );
@@ -173,9 +226,25 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         aItem = new ConvertLinkToEmbedMenuItem();
         m_aObjectMenu.add( aItem );
 
+        // Activation menu
+        m_aObjectMenu = new Menu( "Activation", true );
+        aMenuBar.add( m_aObjectMenu );
+
+        aItem = new ActivateOutplaceMenuItem();
+        m_aObjectMenu.add( aItem );
+
+        aItem = new ActivateInplaceMenuItem();
+        m_aObjectMenu.add( aItem );
+
+        aItem = new DeactivateMenuItem();
+        m_aObjectMenu.add( aItem );
+
+        m_aNativeView = new NativeView();
+        m_aNativeView.resize( 800, 600 );
+        this.add( m_aNativeView );
+
         // Handle mouse clicks in our window.
-//      addMouseListener( new MouseWatcher() );
-        addMouseListener( this );
+//      addMouseListener( this );
     }
 
     public void actionPerformed( ActionEvent evt )
@@ -189,7 +258,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         synchronized( m_oActionsNumberLock )
         {
-            if ( m_nActionsNumber > 0 )
+            if ( m_aActionsList.size() > 0 )
             {
                 try {
                     m_xMainThreadExecutor.execute( m_pValuesForExecutor );
@@ -209,511 +278,11 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         }
     }
 
-    public Object execute( NamedValue[] pValues )
+    // XWindowSupplier
+    public XWindow getWindow()
     {
-        {
-            for( int nInd = 0; nInd < m_nActionsNumber; nInd++ )
-            {
-                // TODO: execute m_pActionsList[ nInd ] operation
-                if ( m_pActionsList[ nInd ] == DESTROY )
-                {
-                    // free all resources
-                    clearObjectAndStorage();
-                    m_bDestroyed = true;
-                }
-                else if ( m_pActionsList[ nInd ] == MOUSE_CLICKED )
-                {
-                    // activate object if exists and not active
-                    if ( m_xEmbedObj != null )
-                    {
-                        try {
-                            m_xEmbedObj.changeState( EmbedStates.EMBED_ACTIVE );
-                        }
-                        catch( Exception ex )
-                        {
-                            JOptionPane.showMessageDialog( m_aFrame, ex, "Exception on mouse click", JOptionPane.ERROR_MESSAGE );
-                        }
-                    }
-                }
-                else if ( m_pActionsList[ nInd ] == NEW_DOCUMENT )
-                {
-                    // clear everything
-                    clearObjectAndStorage();
-
-                    repaint();
-                }
-                else if ( m_pActionsList[ nInd ] == SAVE_AS )
-                {
-                    // open SaveAs dialog and store
-
-                    if ( m_xStorage != null && m_xEmbedObj != null )
-                    {
-                        FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
-                        aFileDialog.show();
-                        if ( aFileDialog.getFile() != null )
-                        {
-                            String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                            File aFile = new File( aFileName );
-                            if ( aFile != null )
-                            {
-                                // create object from specified file
-                                String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
-                                try {
-                                /*
-                                    if ( m_bLinkObj )
-                                        storeLinkAsFileURI( aFileURI );
-                                    else
-                                */
-                                        saveObjectAsFileURI( aFileURI );
-                                }
-                                catch( Exception ex )
-                                {
-                                    JOptionPane.showMessageDialog( m_aFrame,
-                                                                    ex,
-                                                                    "Exception in SaveAsMenuItem:",
-                                                                    JOptionPane.ERROR_MESSAGE );
-                                }
-                            }
-                        }
-                    }
-                    else
-                        JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
-                }
-                else if ( m_pActionsList[ nInd ] == OPEN_FILE )
-                {
-                    // clear everything
-                    clearObjectAndStorage();
-
-                    // open OpenFile dialog and load doc
-                    FileDialog aFileDialog = new FileDialog( m_aFrame, "Open" );
-                    aFileDialog.show();
-                    if ( aFileDialog.getFile() != null )
-                    {
-                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                        File aFile = new File( aFileName );
-                        if ( aFile != null )
-                        {
-                            // create object from specified file
-                            String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
-
-                            // load from specified file
-                            loadFileURI( aFileURI );
-
-                            if ( m_xEmbedObj != null )
-                            {
-                                try {
-                                    m_xEmbedObj.setClientSite( this );
-                                }
-                                catch( Exception ex )
-                                {
-                                    JOptionPane.showMessageDialog( m_aFrame,
-                                                                    ex,
-                                                                    "Exception in OpenFileMenuItem:",
-                                                                    JOptionPane.ERROR_MESSAGE );
-                                }
-                            }
-                        }
-                    }
-
-                    generateNewImage();
-                    repaint();
-                }
-                else if ( m_pActionsList[ nInd ] == SAVE )
-                {
-                    // if has persistance store there
-                    // if not open SaveAs dialog and store
-                    if ( m_xStorage != null && m_xEmbedObj != null )
-                    {
-                        if ( m_bOwnFile )
-                        {
-                            if ( m_xStorage == null )
-                            {
-                                JOptionPane.showMessageDialog( m_aFrame,
-                                                                "No storage for oned file!",
-                                                                "Error:",
-                                                                JOptionPane.ERROR_MESSAGE );
-
-                                synchronized( m_oInHandlerLock )
-                                {
-                                    m_bInHandler = false;
-                                }
-
-                                return Any.VOID;
-                            }
-
-                            try {
-                                saveObject();
-
-                                if ( m_bLinkObj )
-                                    storeLinkToStorage();
-
-                                XTransactedObject xTransact = (XTransactedObject)UnoRuntime.queryInterface( XTransactedObject.class,
-                                                                                                            m_xStorage );
-                                if ( xTransact != null )
-                                    xTransact.commit();
-                            }
-                            catch( Exception ex )
-                            {
-                                JOptionPane.showMessageDialog( m_aFrame,
-                                                                ex,
-                                                                "Exception during save operation in SaveMenuItem:",
-                                                                JOptionPane.ERROR_MESSAGE );
-                            }
-                        }
-                        else
-                        {
-                            FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
-                            aFileDialog.show();
-                            if ( aFileDialog.getFile() != null )
-                            {
-                                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                                File aFile = new File( aFileName );
-                                if ( aFile != null )
-                                {
-                                    // create object from specified file
-                                    String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
-                                    try {
-                                    /*
-                                        if ( m_bLinkObj )
-                                            storeLinkAsFileURI( aFileURI );
-                                        else
-                                    */
-                                            saveObjectAsFileURI( aFileURI );
-                                    }
-                                    catch( Exception ex )
-                                    {
-                                        JOptionPane.showMessageDialog( m_aFrame,
-                                                                        ex,
-                                                                        "Exception during 'save as' operation in SaveMenuItem:",
-                                                                        JOptionPane.ERROR_MESSAGE );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                        JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
-                }
-                else if ( m_pActionsList[ nInd ] == NEW_OBJECT )
-                {
-                    // remove current object an init a new one
-                    clearObjectAndStorage();
-
-                    Object[] possibleValues = { "com.sun.star.comp.Writer.TextDocument",
-                                                "com.sun.star.comp.Writer.GlobalDocument",
-                                                "com.sun.star.comp.Writer.WebDocument",
-                                                "com.sun.star.comp.Calc.SpreadsheetDocument",
-                                                "com.sun.star.comp.Draw.PresentationDocument",
-                                                "com.sun.star.comp.Draw.DrawingDocument",
-                                                "com.sun.star.comp.Math.FormulaDocument",
-                                                "BitmapImage" };
-
-                    String selectedValue = (String)JOptionPane.showInputDialog( null, "DocumentType", "Select",
-                                                                                JOptionPane.INFORMATION_MESSAGE, null,
-                                                                                possibleValues, possibleValues[0] );
-
-                    if ( selectedValue != null )
-                    {
-                        m_xStorage = createTempStorage();
-
-                        if ( m_xStorage != null )
-                            m_xEmbedObj = createEmbedObject( selectedValue );
-                        else
-                            JOptionPane.showMessageDialog( m_aFrame,
-                                                            "Can't create temporary storage!",
-                                                            "Error:",
-                                                            JOptionPane.ERROR_MESSAGE );
-
-
-                        if ( m_xEmbedObj != null )
-                        {
-                            try {
-                                m_xEmbedObj.setClientSite( this );
-                            }
-                            catch( Exception ex )
-                            {
-                                JOptionPane.showMessageDialog( m_aFrame,
-                                                                ex,
-                                                                "Exception in NewObjectMenuItem:",
-                                                                JOptionPane.ERROR_MESSAGE );
-                            }
-                        }
-                    }
-
-                    generateNewImage();
-                    repaint();
-                }
-                else if ( m_pActionsList[ nInd ] == OBJECT_FROM_FILE )
-                {
-                    // first remove current object
-                    clearObjectAndStorage();
-
-                    // open OpenFile dialog and load doc
-                    FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
-                    aFileDialog.show();
-                    if ( aFileDialog.getFile() != null )
-                    {
-                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                        File aFile = new File( aFileName );
-                        if ( aFile != null )
-                        {
-                            // create object from specified file
-                            String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
-                            m_xStorage = createTempStorage();
-
-                            if ( m_xStorage != null )
-                                m_xEmbedObj = loadEmbedObject( aFileURI );
-
-                            if ( m_xEmbedObj != null )
-                            {
-                                try {
-                                    m_xEmbedObj.setClientSite( this );
-                                }
-                                catch( Exception ex )
-                                {
-                                    JOptionPane.showMessageDialog( m_aFrame,
-                                                                    ex,
-                                                                    "Exception in LoadObjectMenuItem:",
-                                                                    JOptionPane.ERROR_MESSAGE );
-                                }
-                            }
-                        }
-                    }
-
-                    generateNewImage();
-                    repaint();
-                }
-                else if ( m_pActionsList[ nInd ] == LINK_FROM_FILE )
-                {
-                    // first remove current object
-                    clearObjectAndStorage();
-
-                    // open OpenFile dialog and load doc
-                    FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
-                    aFileDialog.show();
-                    if ( aFileDialog.getFile() != null )
-                    {
-                        m_xStorage = createTempStorage();
-
-                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                        File aFile = new File( aFileName );
-                        if ( aFile != null )
-                        {
-                            // create object from specified file
-                            String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
-
-                            m_xEmbedObj = createLinkObject( aFileURI );
-
-                            if ( m_xEmbedObj != null )
-                            {
-                                m_aLinkURI = aFileURI;
-                                m_bLinkObj = true;
-
-                                try {
-                                    m_xEmbedObj.setClientSite( this );
-                                }
-                                catch( Exception ex )
-                                {
-                                    JOptionPane.showMessageDialog( m_aFrame,
-                                                                    ex,
-                                                                    "Exception in LinkObjectMenuItem:",
-                                                                    JOptionPane.ERROR_MESSAGE );
-                                }
-                            }
-                        }
-                    }
-
-                    generateNewImage();
-                    repaint();
-                }
-                else if ( m_pActionsList[ nInd ] == CONVERT_LINK_TO_OBJECT )
-                {
-                    if ( !m_bLinkObj )
-                    {
-                        JOptionPane.showMessageDialog( m_aFrame, "The object is not a link!", "Error:", JOptionPane.ERROR_MESSAGE );
-                        synchronized( m_oInHandlerLock )
-                        {
-                            m_bInHandler = false;
-                        }
-
-                        return Any.VOID;
-                    }
-
-                    if ( m_xEmbedObj != null )
-                    {
-                        if ( m_xStorage != null )
-                        {
-                            try {
-                                XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
-                                                                                                m_xStorage );
-                                if ( xNameAccess != null && xNameAccess.hasByName( "LinkName" ) )
-                                    m_xStorage.removeElement( "LinkName" );
-
-                                XLinkageSupport xLinkage = (XLinkageSupport)UnoRuntime.queryInterface( XLinkageSupport.class,
-                                                                                                        m_xEmbedObj );
-                                if ( xLinkage != null )
-                                {
-                                    xLinkage.breakLink( m_xStorage, "EmbedSub" );
-                                    m_bLinkObj = false;
-                                    m_aLinkURI = null;
-                                }
-                                else
-                                    JOptionPane.showMessageDialog( m_aFrame,
-                                                                    "No XLinkageSupport in ConvertLink... !",
-                                                                    "Error:",
-                                                                    JOptionPane.ERROR_MESSAGE );
-                            }
-                            catch( Exception e1 )
-                            {
-                                JOptionPane.showMessageDialog( m_aFrame,
-                                                                e1,
-                                                                "Exception in ConvertLinkToEmbed:try 1 :",
-                                                                JOptionPane.ERROR_MESSAGE );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    System.out.println( "Unknoun action is requested: " + m_pActionsList[nInd] + "\n" );
-                }
-            }
-
-            m_nActionsNumber = 0;
-        }
-
-        synchronized( m_oInHandlerLock )
-        {
-            m_bInHandler = false;
-        }
-
-        return Any.VOID;
+        return m_xVCLWindow;
     }
-
-    public void actionRegister( byte nActionID )
-    {
-        synchronized( m_oActionsNumberLock )
-        {
-            if ( m_nActionsNumber < 199
-              && ( m_nActionsNumber == 0 || m_pActionsList[ m_nActionsNumber - 1 ] != DESTROY ) )
-            {
-                m_pActionsList[ m_nActionsNumber++ ] = nActionID;
-            }
-        }
-    }
-
-    public void destroy()
-    {
-        // redirect the call through the timer and call super.destroy();
-        actionRegister( DESTROY );
-
-        for ( int i = 0; i < 3 && !m_bDestroyed; i++ )
-        {
-            try {
-                Thread.sleep( 200 );
-            } catch ( Exception e )
-            {}
-        }
-
-        if ( !m_bDestroyed )
-            System.out.println( "The object application can not exit correctly!" );
-
-        m_aTimer.stop();
-
-        super.destroy();
-    }
-
-    public void update( Graphics g )
-    {
-        paint( g );
-    }
-
-    public void paint( Graphics g )
-    {
-        super.paint( g );
-
-        if ( m_xEmbedObj != null )
-        {
-            synchronized( m_oImageLock )
-            {
-                if ( m_aImage != null )
-                    g.drawImage( m_aImage, 0, 0, this );
-            }
-        }
-    }
-
-    public void generateNewImage()
-    {
-        if ( m_xEmbedObj != null )
-        {
-            try {
-                int nOldState = m_xEmbedObj.getCurrentState();
-                int nState = nOldState;
-                if ( nOldState == EmbedStates.EMBED_LOADED )
-                {
-                    m_xEmbedObj.changeState( EmbedStates.EMBED_RUNNING );
-                    nState = EmbedStates.EMBED_RUNNING;
-                }
-
-                if ( nState == EmbedStates.EMBED_ACTIVE || nState == EmbedStates.EMBED_RUNNING )
-                {
-                    XComponentSupplier xCompProv = (XComponentSupplier)UnoRuntime.queryInterface(
-                                                                                    XComponentSupplier.class,
-                                                                                    m_xEmbedObj );
-                    if ( xCompProv != null )
-                    {
-                        XCloseable xCloseable = xCompProv.getComponent();
-                        XTransferable xTransfer = (XTransferable)UnoRuntime.queryInterface(
-                                                                                    XTransferable.class,
-                                                                                    xCloseable );
-                        if ( xTransfer != null )
-                        {
-                            DataFlavor aFlavor = new DataFlavor();
-                            aFlavor.MimeType = "image/png";
-                            aFlavor.HumanPresentableName = "Portable Network Graphics";
-                            aFlavor.DataType = new Type( byte[].class );
-
-                            Object aAny = xTransfer.getTransferData( aFlavor );
-                            if ( aAny != null && AnyConverter.isArray( aAny ) )
-                            {
-                                byte[] aPNGData = (byte[])AnyConverter.toArray( aAny );
-                                if ( aPNGData != null && aPNGData.length != 0 )
-                                {
-                                    synchronized( m_oImageLock )
-                                    {
-                                        m_aImage = m_aToolkit.createImage( aPNGData );
-                                        // m_aImage = m_aToolkit.createImage( "file:///d:/test1.png" );
-                                    }
-                                }
-                            }
-                        }
-                        else
-                            System.out.println( "paint() : can not get XTransferable for the component!\n" );
-                    }
-                    else
-                        System.out.println( "paint() : XComponentSupplier is not implemented!\n" );
-                }
-            }
-            catch( com.sun.star.uno.Exception e )
-            {
-                // dialogs should not be used in paint()
-                System.out.println( "Exception in paint(): " + e );
-            }
-        }
-    }
-
-    public void mouseClicked( MouseEvent e )
-    {
-        if( e.getModifiers() == InputEvent.BUTTON1_MASK )
-        {
-            actionRegister( MOUSE_CLICKED );
-        }
-    }
-
-    public void mousePressed( MouseEvent e ){};
-    public void mouseEntered( MouseEvent e ){};
-    public void mouseExited( MouseEvent e ){};
-    public void mouseReleased( MouseEvent e ){};
 
     // XEmbeddedClient
     public void saveObject()
@@ -746,6 +315,649 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         // for now nothing to do
     }
 
+    // XInplaceClient
+    public boolean canInplaceActivate()
+    {
+        return true;
+    }
+
+    public void onInplaceActivate()
+    {
+        // TODO
+        // prepare for inplace activation
+
+        // REMOVE
+        // workaround for CLIPCHILDREN problem
+        if ( m_aBitmapPainter != null )
+            m_aBitmapPainter.stopPainting();
+    }
+
+    public void onUIActivate()
+    {
+        // TODO
+        // prepare for UI activate
+    }
+
+    public void onInplaceDeactivate()
+    {
+        // TODO
+        // inplace deactivation is done
+
+        // REMOVE
+        // workaround for CLIPCHILDREN problem
+        if ( m_aBitmapPainter != null )
+            m_aBitmapPainter.startPainting();
+    }
+
+    public void onUIDeactivate()
+    {
+        // TODO
+        // prepare for UI deactivate
+    }
+
+    public XIPMainContainerWindow getTopmostWindow()
+    {
+        // TODO
+        // return an implementation of XIPMainContainerWindow
+        // mainly required for ui activation
+        // dummy implementation is enough for inplace activation
+
+        return null;
+    }
+
+    public XInplaceUIWindow getDocumentWindow()
+    {
+        // TODO
+        // return implementation of XInplaceUIWindow
+        // mainly required for ui activation
+        // dummy implementation is enough for inplace activation
+
+        return null;
+    }
+
+    public com.sun.star.awt.Rectangle getPosRect()
+    {
+        // provide position rectangle to the object
+        try {
+            // here object bitmap and scaling factor hold the size
+            com.sun.star.awt.Size aBitmapSize = m_xBitmap.getSize();
+            com.sun.star.awt.Size aVisSize = new com.sun.star.awt.Size(
+                                            (int)( aBitmapSize.Width * m_nXScaling ),
+                                            (int)( aBitmapSize.Height * m_nYScaling ) );
+            return new com.sun.star.awt.Rectangle( 10, 10, aVisSize.Width, aVisSize.Height );
+        }
+        catch( Exception e )
+        {
+            System.out.println( "Position rectangle generation failed!" );
+        }
+
+        return new com.sun.star.awt.Rectangle( 10, 10, 110, 110 );
+    }
+
+    public com.sun.star.awt.Rectangle getClipRect()
+    {
+        // provide clip rectangle to the object
+        // in this application position and clip rectangles are the same
+
+        try {
+            // here object bitmap and scaling factor hold the size
+            com.sun.star.awt.Size aBitmapSize = m_xBitmap.getSize();
+            com.sun.star.awt.Size aVisSize = new com.sun.star.awt.Size(
+                                            (int)( aBitmapSize.Width * m_nXScaling ),
+                                            (int)( aBitmapSize.Height * m_nYScaling ) );
+            return new com.sun.star.awt.Rectangle( 10, 10, aVisSize.Width, aVisSize.Height );
+        }
+        catch( Exception e )
+        {
+            System.out.println( "Clip rectangle generation failed!" );
+        }
+
+        return new com.sun.star.awt.Rectangle( 10, 10, 110, 110 );
+    }
+
+    public void translateAccelerators( com.sun.star.awt.KeyEvent[] aKeys )
+    {
+        // TODO
+        // an accelerator table for object
+        // ui activation related
+    }
+
+    public void scrollObj( com.sun.star.awt.Size aOffset )
+    {
+        // TODO
+        // scrolls the object to a specified offset
+        // not mandatory for the testing application :)
+    }
+
+    public void onPosRectChange( com.sun.star.awt.Rectangle aPosRect )
+    {
+        // object asks to change the position
+        if ( m_xEmbedObj != null )
+        {
+            try {
+                int nState = m_xEmbedObj.getCurrentState();
+                // such a position change make sence only when object is
+                // either inplace or ui active
+                if ( nState == EmbedStates.EMBED_INPLACE_ACTIVE
+                  || nState == EmbedStates.EMBED_UI_ACTIVE )
+                 {
+                    XInplaceObject xInplObj = (XInplaceObject)UnoRuntime.queryInterface( XInplaceObject.class, m_xEmbedObj );
+                     if ( xInplObj != null )
+                    {
+                        xInplObj.setObjectRects( aPosRect, aPosRect ); // show the whole object
+                        if ( m_aBitmapPainter != null )
+                            m_aBitmapPainter.setRect( aPosRect );
+                    }
+                    else
+                         System.out.println( "Why object that does not support inplace activation behave like inplace object?!" );
+                 }
+                 else
+                     System.out.println( "The object is not active but asks to change visual area!" );
+            } catch( Exception e )
+            {
+                 System.out.println( "Exception is thrown in onPosRectChange: " + e );
+            }
+        }
+        else
+             System.out.println( "Who asks to change visual area?!!" );
+    }
+
+    // XJob
+    public Object execute( NamedValue[] pValues )
+    {
+        for( int nInd = 0; nInd < m_aActionsList.size(); nInd++ )
+        {
+            ActionObject aAction = ( ActionObject ) m_aActionsList.get( nInd );
+            if ( aAction != null )
+            {
+                if ( aAction.m_nID == DESTROY )
+                {
+                    // free all resources
+                    clearObjectAndStorage();
+                    m_bDestroyed = true;
+                }
+                else if ( aAction.m_nID == ACTIVATE_OUTPLACE )
+                {
+                    // activate object if exists and not active
+                    if ( m_xEmbedObj != null )
+                    {
+                        try {
+                            m_xEmbedObj.changeState( EmbedStates.EMBED_ACTIVE );
+                        }
+                        catch( Exception ex )
+                        {
+                            System.out.println( "Exception on mouse click" + ex );
+                        }
+                    }
+                }
+                else if ( aAction.m_nID == NEW_DOCUMENT )
+                {
+                    // clear everything
+                    clearObjectAndStorage();
+
+                    repaint();
+                }
+                else if ( aAction.m_nID == SAVE_AS )
+                {
+                    // open SaveAs dialog and store
+
+                    if ( m_xStorage != null && m_xEmbedObj != null )
+                    {
+                        try {
+                            /*
+                                if ( m_bLinkObj )
+                                    storeLinkAsFileURI( aFileURI );
+                                else
+                            */
+                            saveObjectAsFileURI( aAction.m_sParam );
+                        }
+                        catch( Exception ex )
+                        {
+                            System.out.println( "Exception in SaveAsMenuItem: " + ex );
+                        }
+                    }
+                }
+                else if ( aAction.m_nID == OPEN_FILE )
+                {
+                    // clear everything
+                    clearObjectAndStorage();
+
+                    // load from specified file
+                    loadFileURI( aAction.m_sParam );
+
+                    if ( m_xEmbedObj != null )
+                    {
+                        try {
+                            m_xEmbedObj.setClientSite( this );
+                        }
+                        catch( Exception ex )
+                        {
+                            System.out.println( "Exception in OpenFileMenuItem: " + ex );
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( aAction.m_nID == SAVE )
+                {
+                    if ( m_xStorage != null && m_xEmbedObj != null )
+                    {
+                        // if has persistance store there
+                        // if not it is and error, SaveAs had to be used
+
+                        if ( m_bOwnFile )
+                        {
+                            if ( m_xStorage != null )
+                            {
+                                try {
+                                    saveObject();
+
+                                    if ( m_bLinkObj )
+                                        storeLinkToStorage();
+
+                                    XTransactedObject xTransact = (XTransactedObject)UnoRuntime.queryInterface( XTransactedObject.class,
+                                                                                                                m_xStorage );
+                                    if ( xTransact != null )
+                                        xTransact.commit();
+                                }
+                                catch( Exception ex )
+                                {
+                                    System.out.println( "Exception during save operation in SaveMenuItem:" + ex );
+                                }
+                            }
+                            else
+                            {
+                                System.out.println( "No storage for owned file!" );
+                            }
+                        }
+                        else
+                        {
+                            System.out.println( "No owned file!" );
+                        }
+                    }
+                }
+                else if ( aAction.m_nID == NEW_OBJECT )
+                {
+                    // remove current object an init a new one
+                    clearObjectAndStorage();
+
+                    if ( aAction.m_sParam != null )
+                    {
+                        m_xStorage = createTempStorage();
+
+                        if ( m_xStorage != null )
+                            m_xEmbedObj = createEmbedObject( aAction.m_sParam );
+                        else
+                            System.out.println( "Can't create temporary storage!" );
+
+                        if ( m_xEmbedObj != null )
+                        {
+                            try {
+                                m_xEmbedObj.setClientSite( this );
+                            }
+                            catch( Exception ex )
+                            {
+                                System.out.println( "Exception in NewObjectMenuItem:" + ex );
+                            }
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( aAction.m_nID == OBJECT_FROM_FILE )
+                {
+                    // first remove current object
+                    clearObjectAndStorage();
+
+                    // create object from specified file
+                    m_xStorage = createTempStorage();
+
+                    if ( m_xStorage != null )
+                        m_xEmbedObj = loadEmbedObject( aAction.m_sParam );
+
+                    if ( m_xEmbedObj != null )
+                    {
+                        try {
+                            m_xEmbedObj.setClientSite( this );
+                        }
+                        catch( Exception ex )
+                        {
+                            System.out.println( "Exception in LoadObjectMenuItem: " + ex );
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( aAction.m_nID == LINK_FROM_FILE )
+                {
+                    // first remove current object
+                    clearObjectAndStorage();
+
+                    m_xStorage = createTempStorage();
+
+                    // create object from specified file
+                    m_xEmbedObj = createLinkObject( aAction.m_sParam );
+
+                    if ( m_xEmbedObj != null )
+                    {
+                        m_aLinkURI = aAction.m_sParam;
+                        m_bLinkObj = true;
+
+                        try {
+                            m_xEmbedObj.setClientSite( this );
+                        }
+                        catch( Exception ex )
+                        {
+                            System.out.println( "Exception in LinkObjectMenuItem:" + ex );
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( aAction.m_nID == CONVERT_LINK_TO_OBJECT )
+                {
+                    if ( !m_bLinkObj )
+                    {
+                        System.out.println( "The object is not a link!" );
+                        continue;
+                    }
+
+                    if ( m_xEmbedObj != null )
+                    {
+                        if ( m_xStorage != null )
+                        {
+                            try {
+                                XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+                                                                                                m_xStorage );
+                                if ( xNameAccess != null && xNameAccess.hasByName( "LinkName" ) )
+                                    m_xStorage.removeElement( "LinkName" );
+
+                                XLinkageSupport xLinkage = (XLinkageSupport)UnoRuntime.queryInterface( XLinkageSupport.class,
+                                                                                                        m_xEmbedObj );
+                                if ( xLinkage != null )
+                                {
+                                    xLinkage.breakLink( m_xStorage, "EmbedSub" );
+                                    m_bLinkObj = false;
+                                    m_aLinkURI = null;
+                                }
+                                else
+                                    System.out.println( "No XLinkageSupport in ConvertLink... !" );
+                            }
+                            catch( Exception e1 )
+                            {
+                                System.out.println( "Exception in ConvertLinkToEmbed:try 1 :" + e1 );
+                            }
+                        }
+                    }
+                }
+                else if ( aAction.m_nID == ACTIVATE_INPLACE )
+                {
+                    // activate object
+                    if ( m_xEmbedObj != null )
+                    {
+                        // in general it is better to check acceptable states
+                        try {
+                            m_xEmbedObj.changeState( EmbedStates.EMBED_INPLACE_ACTIVE );
+                        }
+                        catch( Exception ex )
+                        {
+                            System.out.println( "Exception on inplace activation " + ex );
+                        }
+                    }
+                }
+                else if ( aAction.m_nID == DEACTIVATE )
+                {
+                    // activate object
+
+                    if ( m_xEmbedObj != null )
+                    {
+                        int nOldState = -1;
+                        try {
+                            nOldState = m_xEmbedObj.getCurrentState();
+                        } catch( Exception e )
+                        {}
+
+                        if ( nOldState == EmbedStates.EMBED_ACTIVE
+                          || nOldState == EmbedStates.EMBED_INPLACE_ACTIVE
+                          || nOldState == EmbedStates.EMBED_UI_ACTIVE )
+                        {
+                            try {
+                                m_xEmbedObj.changeState( EmbedStates.EMBED_RUNNING );
+                            }
+                            catch( Exception ex )
+                            {
+                                System.out.println( "Exception on inplace activation " + ex );
+                            }
+                        }
+                        else
+                        {
+                            System.out.println( "Deactivation of nonactive object!" );
+                        }
+                    }
+                }
+                else
+                {
+                    System.out.println( "Unknoun action is requested: " + aAction.m_nID + "\n" );
+                }
+            }
+        }
+
+        m_aActionsList.clear();
+
+        synchronized( m_oInHandlerLock )
+        {
+            m_bInHandler = false;
+        }
+
+        return Any.VOID;
+    }
+
+    public void actionRegister( byte nActionID, String sParam )
+    {
+        synchronized( m_oActionsNumberLock )
+        {
+            int nSize = m_aActionsList.size();
+            if ( nSize < 199 )
+            {
+                if ( nSize == 0 )
+                    m_aActionsList.add( new ActionObject( nActionID, sParam ) );
+                else
+                {
+                    ActionObject aAction = ( ActionObject ) m_aActionsList.get( nSize - 1 );
+                    if ( aAction != null && aAction.m_nID != DESTROY )
+                        m_aActionsList.add( new ActionObject( nActionID, sParam ) );
+                }
+            }
+        }
+    }
+
+    public void SaveAsOperation()
+    {
+        if ( m_xStorage != null && m_xEmbedObj != null )
+        {
+            FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
+            aFileDialog.show();
+            if ( aFileDialog.getFile() != null )
+            {
+                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                File aFile = new File( aFileName );
+                if ( aFile != null )
+                {
+                    // create object from specified file
+                    String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
+                    actionRegister( SAVE_AS, aFileURI );
+                }
+            }
+        }
+        else
+            JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
+
+    }
+
+    public void destroy()
+    {
+        // redirect the call through the timer and call super.destroy();
+        actionRegister( DESTROY, null );
+
+        for ( int i = 0; i < 3 && !m_bDestroyed; i++ )
+        {
+            try {
+                Thread.sleep( 200 );
+            } catch ( Exception e )
+            {}
+        }
+
+        if ( !m_bDestroyed )
+            System.out.println( "The object application can not exit correctly!" );
+
+        m_aTimer.stop();
+
+        super.destroy();
+    }
+
+    public void update( Graphics g )
+    {
+        paint( g );
+    }
+
+    public void paint( Graphics g )
+    {
+        super.paint( g );
+
+        // m_aNativeView.paint( g );
+
+        createVclWindow();
+    }
+
+    public void createVclWindow()
+    {
+        synchronized( m_oImageLock )
+        {
+            if ( m_xVCLWindow == null && m_xServiceFactory != null && m_xEmbedObj != null && m_xBitmap != null )
+            {
+                java.awt.Rectangle aBounds = getBounds();
+                m_xVCLWindow = WindowHelper.createWindow( m_xServiceFactory, m_aNativeView, aBounds );
+                m_xVCLWindow.setVisible( true );
+
+                com.sun.star.awt.Size aBitmapSize = new com.sun.star.awt.Size( 200, 100 );
+
+                XVisualObject xVisObj = (XVisualObject)UnoRuntime.queryInterface( XVisualObject.class, m_xEmbedObj );
+                try {
+                    com.sun.star.awt.Size aVisSize = xVisObj.getVisAreaSize( Aspects.MSASPECT_CONTENT );
+                    m_nXPixelSize = aVisSize.Width / aBitmapSize.Width;
+                    m_nYPixelSize = aVisSize.Height / aBitmapSize.Height;
+                }
+                catch( Exception e )
+                {
+                }
+
+                if ( m_xBitmap != null )
+                     aBitmapSize = m_xBitmap.getSize();
+
+                System.out.println( "The visual area is Width = " + aBitmapSize.Width + "; Height = " + aBitmapSize.Height );
+
+                com.sun.star.awt.Rectangle aRect = new com.sun.star.awt.Rectangle(
+                                                        10,
+                                                        10,
+                                                        Math.min( (int)aBounds.getWidth() - 20, aBitmapSize.Width ),
+                                                        Math.min( (int)aBounds.getHeight() - 20, aBitmapSize.Height ) );
+
+                m_aBitmapPainter = new BitmapPainter( m_xMainThreadExecutor, m_xVCLWindow, m_xBitmap, aRect );
+            }
+        }
+    }
+
+    public void generateNewImage()
+    {
+        if ( m_xEmbedObj != null )
+        {
+            try {
+                int nOldState = m_xEmbedObj.getCurrentState();
+                int nState = nOldState;
+                if ( nOldState == EmbedStates.EMBED_LOADED )
+                {
+                    m_xEmbedObj.changeState( EmbedStates.EMBED_RUNNING );
+                    nState = EmbedStates.EMBED_RUNNING;
+                }
+
+                if ( nState == EmbedStates.EMBED_UI_ACTIVE || nState == EmbedStates.EMBED_INPLACE_ACTIVE
+                  || nState == EmbedStates.EMBED_ACTIVE || nState == EmbedStates.EMBED_RUNNING )
+                {
+                    XComponentSupplier xCompProv = (XComponentSupplier)UnoRuntime.queryInterface(
+                                                                                    XComponentSupplier.class,
+                                                                                    m_xEmbedObj );
+                    if ( xCompProv != null )
+                    {
+                        XCloseable xCloseable = xCompProv.getComponent();
+                        XTransferable xTransfer = (XTransferable)UnoRuntime.queryInterface(
+                                                                                    XTransferable.class,
+                                                                                    xCloseable );
+                        if ( xTransfer != null )
+                        {
+                            DataFlavor aFlavor = new DataFlavor();
+                            aFlavor.MimeType = "application/x-openoffice;windows_formatname=\"Bitmap\"";
+                            aFlavor.HumanPresentableName = "Bitmap";
+                            aFlavor.DataType = new Type( byte[].class );
+
+                            Object aAny = xTransfer.getTransferData( aFlavor );
+                            if ( aAny != null && AnyConverter.isArray( aAny ) )
+                            {
+                                synchronized( m_oImageLock )
+                                {
+                                    m_xBitmap = WindowHelper.getVCLBitmapFromBytes( m_xServiceFactory, aAny );
+                                    if ( m_aBitmapPainter != null )
+                                    {
+                                        m_aBitmapPainter.setBitmap( m_xBitmap );
+
+                                        if ( m_xBitmap != null )
+                                        {
+                                            try {
+                                                com.sun.star.awt.Size aBitmapSize = m_xBitmap.getSize();
+                                                com.sun.star.awt.Size aVisSize = new com.sun.star.awt.Size(
+                                                                                (int)( aBitmapSize.Width * m_nXScaling ),
+                                                                                (int)( aBitmapSize.Height * m_nYScaling ) );
+                                                m_aBitmapPainter.setSize( aVisSize );
+                                            }
+                                            catch( Exception e )
+                                            {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                            System.out.println( "paint() : can not get XTransferable for the component!\n" );
+                    }
+                    else
+                        System.out.println( "paint() : XComponentSupplier is not implemented!\n" );
+                }
+            }
+            catch( com.sun.star.uno.Exception e )
+            {
+                // dialogs should not be used in paint()
+                System.out.println( "Exception in paint(): " + e );
+            }
+        }
+    }
+
+    public void mouseClicked( MouseEvent e )
+    {
+        if( e.getModifiers() == InputEvent.BUTTON1_MASK )
+        {
+            actionRegister( ACTIVATE_OUTPLACE, null );
+        }
+    }
+
+    public void mousePressed( MouseEvent e ){};
+    public void mouseEntered( MouseEvent e ){};
+    public void mouseExited( MouseEvent e ){};
+    public void mouseReleased( MouseEvent e ){};
+
     // classes
     class NewMenuItem extends MenuItem implements ActionListener // Menu New
     {
@@ -757,7 +969,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( NEW_DOCUMENT );
+            actionRegister( NEW_DOCUMENT, null );
         }
     }
 
@@ -771,7 +983,9 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( SAVE_AS );
+            // open SaveAs dialog and store
+
+            SaveAsOperation();
         }
     }
 
@@ -785,7 +999,20 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( OPEN_FILE );
+            // open OpenFile dialog and load doc
+            FileDialog aFileDialog = new FileDialog( m_aFrame, "Open" );
+            aFileDialog.show();
+            if ( aFileDialog.getFile() != null )
+            {
+                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                File aFile = new File( aFileName );
+                if ( aFile != null )
+                {
+                    // create object from specified file
+                    String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
+                    actionRegister( OPEN_FILE, aFileURI );
+                }
+            }
         }
     }
 
@@ -799,7 +1026,31 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( SAVE );
+            // if has persistance store there
+            // if not open SaveAs dialog and store
+            if ( m_xStorage != null && m_xEmbedObj != null )
+            {
+                if ( m_bOwnFile )
+                {
+                    if ( m_xStorage == null )
+                    {
+                        JOptionPane.showMessageDialog( m_aFrame,
+                                                        "No storage for oned file!",
+                                                        "Error:",
+                                                        JOptionPane.ERROR_MESSAGE );
+
+                        return;
+                    }
+
+                    actionRegister( SAVE, null );
+                }
+                else
+                {
+                    SaveAsOperation();
+                }
+            }
+            else
+                JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
         }
     }
 
@@ -813,7 +1064,20 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( NEW_OBJECT );
+            Object[] possibleValues = { "com.sun.star.comp.Writer.TextDocument",
+                                        "com.sun.star.comp.Writer.GlobalDocument",
+                                        "com.sun.star.comp.Writer.WebDocument",
+                                        "com.sun.star.comp.Calc.SpreadsheetDocument",
+                                        "com.sun.star.comp.Draw.PresentationDocument",
+                                        "com.sun.star.comp.Draw.DrawingDocument",
+                                        "com.sun.star.comp.Math.FormulaDocument",
+                                        "BitmapImage" };
+
+            String selectedValue = (String)JOptionPane.showInputDialog( null, "DocumentType", "Select",
+                                                                           JOptionPane.INFORMATION_MESSAGE, null,
+                                                                           possibleValues, possibleValues[0] );
+
+            actionRegister( NEW_OBJECT, selectedValue );
         }
     }
 
@@ -827,7 +1091,20 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( OBJECT_FROM_FILE );
+            // open OpenFile dialog and load doc
+            FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
+            aFileDialog.show();
+            if ( aFileDialog.getFile() != null )
+            {
+                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                File aFile = new File( aFileName );
+                if ( aFile != null )
+                {
+                    // create object from specified file
+                    String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
+                    actionRegister( OBJECT_FROM_FILE, aFileURI );
+                }
+            }
         }
     }
 
@@ -841,7 +1118,20 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( LINK_FROM_FILE );
+            // open OpenFile dialog and load doc
+            FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
+            aFileDialog.show();
+            if ( aFileDialog.getFile() != null )
+            {
+                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                File aFile = new File( aFileName );
+                if ( aFile != null )
+                {
+                    // create object from specified file
+                    String aFileURI = getValidURL( aFile.toURI().toASCIIString() );
+                    actionRegister( LINK_FROM_FILE, aFileURI );
+                }
+            }
         }
     }
 
@@ -855,7 +1145,49 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            actionRegister( CONVERT_LINK_TO_OBJECT );
+            actionRegister( CONVERT_LINK_TO_OBJECT, null );
+        }
+    }
+
+    class ActivateOutplaceMenuItem extends MenuItem implements ActionListener // Menu ActiveteOutplace
+    {
+        public ActivateOutplaceMenuItem()
+        {
+            super( "Activate outplace", new MenuShortcut( KeyEvent.VK_A ));
+            addActionListener( this );
+        }
+
+        public void actionPerformed( ActionEvent e )
+        {
+            actionRegister( ACTIVATE_OUTPLACE, null );
+        }
+    }
+
+    class ActivateInplaceMenuItem extends MenuItem implements ActionListener // Menu ActivateInplace
+    {
+        public ActivateInplaceMenuItem()
+        {
+            super( "Activate inplace", new MenuShortcut( KeyEvent.VK_I ));
+            addActionListener( this );
+        }
+
+        public void actionPerformed( ActionEvent e )
+        {
+            actionRegister( ACTIVATE_INPLACE, null );
+        }
+    }
+
+    class DeactivateMenuItem extends MenuItem implements ActionListener // Menu Deactivate
+    {
+        public DeactivateMenuItem()
+        {
+            super( "Deactivate", new MenuShortcut( KeyEvent.VK_D ));
+            addActionListener( this );
+        }
+
+        public void actionPerformed( ActionEvent e )
+        {
+            actionRegister( DEACTIVATE, null );
         }
     }
 
@@ -1032,6 +1364,11 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         {
             m_aImage = null;
         }
+
+        m_nXScaling = 1;
+        m_nYScaling = 1;
+        m_nXPixelSize = 1;
+        m_nYPixelSize = 1;
 
         m_bOwnFile = false;
 
@@ -1329,6 +1666,22 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         }
 
         return aURLs[0].Complete;
+    }
+
+    public void disposeObject()
+    {
+        // TODO:
+        // usage of object, storage and bitmap painter should be locked
+        // but since possibility of rasecondition is very low
+        // it is not really required for testing application
+
+        clearObjectAndStorage();
+
+        if ( m_aBitmapPainter != null )
+        {
+            m_aBitmapPainter.disconnectListener();
+            m_aBitmapPainter = null;
+        }
     }
 }
 
