@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:48:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,11 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         a = xPropSet->getPropertyValue( DECLARE_ASCII( "LayoutManager" ));
         a >>= xLayoutManager;
         if ( xLayoutManager.is() )
+        {
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar" ));
+            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+            xLayoutManager->showElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+        }
     }
 
 /*
