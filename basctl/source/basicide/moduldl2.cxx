@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:14:46 $
+ *  last change: $Author: tbe $ $Date: 2001-09-26 09:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void LibPage::CheckButtons()
     if ( pCur )
     {
         aPasswordButton.Disable();
-        aInsertLibButton.Disable();     // TODO: enable aInsertLibButton
+        //aInsertLibButton.Disable();     // TODO: enable aInsertLibButton
     }
 }
 
