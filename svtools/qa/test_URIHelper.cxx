@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_URIHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 11:56:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,23 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cstddef>
+
 #include "com/sun/star/lang/Locale.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.h"
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uri/XUriReference.hpp"
 #include "cppuhelper/bootstrap.hxx"
-#include "rtl/string.h"
-// #include "rtl/tres.h"
+#include "cppunit/simpleheader.hxx"
 #include "rtl/strbuf.hxx"
+#include "rtl/string.h"
+#include "rtl/string.hxx"
+#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -76,212 +84,240 @@
 
 #include "urihelper.hxx"
 
-#include <cppunit/simpleheader.hxx>
+// This test needs a UNO component context that supports various services (the
+// UCB, an UriReferenceFactory, ...), so it is best executed within an OOo
+// installation.
 
-namespace test_URIHelper
-{
+namespace {
 
-    class test : public CppUnit::TestFixture
-    {
+namespace css = com::sun::star;
 
-    public:
-        // initialise your test code values here.
-        void setUp()
-            {
-            }
+class Test: public CppUnit::TestFixture {
+public:
+    virtual void setUp();
 
-        void tearDown()
-            {
-            }
+    void finish();
 
+    void testNormalizedMakeRelative();
 
-//extern "C" sal_Bool SAL_CALL test_URIHelper_FindFirstURLInText(
-//    rtl_TestResult * pTestResult)
+    void testFindFirstURLInText();
 
-void FindFirstURLInText()
-{
-    // This test needs an XMultiServiceFactory, so it needs an adequate
-    // environment to be able to create one...
+    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testNormalizedMakeRelative);
+    CPPUNIT_TEST(testFindFirstURLInText);
+    CPPUNIT_TEST(finish);
+    CPPUNIT_TEST_SUITE_END();
 
-    printf("XMultiServiceFactory\n");
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > xFactory;
-    try
-    {
-        xFactory = com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >(
-                cppu::defaultBootstrap_InitialComponentContext()->
-                getServiceManager(),
-                com::sun::star::uno::UNO_QUERY);
+private:
+    static css::uno::Reference< css::uno::XComponentContext > m_context;
+};
+
+void Test::setUp() {
+    // For whatever reason, on W32 it does not work to create/destroy a fresh
+    // component context for each test in Test::setUp/tearDown; therefore, a
+    // single component context is used for all tests and destroyed in the last
+    // pseudo-test "finish":
+    if (!m_context.is()) {
+        m_context = cppu::defaultBootstrap_InitialComponentContext();
     }
-    catch (com::sun::star::uno::Exception &)
-    {
-        CPPUNIT_ASSERT_MESSAGE("Can't get XMultiServiceFactory", false);
-        // pTestResult->pFuncs->state_(pTestResult, false,
-        //                             "test_URIHelper_FindFirstURLInText",
-        //                             "create XMultiServiceFactory", false);
-        return;
-    }
-
-    printf("CharClass\n");
-    CharClass aClass(xFactory,
-                     com::sun::star::lang::Locale(
-                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
-                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
-                         rtl::OUString()));
-
-    struct Test
-    {
-        char const * sInput;
-        char const * sResult;
-        xub_StrLen nBegin;
-        xub_StrLen nEnd;
-    };
-    static Test const aTests[]
-        = {{ "...ftp://bla.bla.bla/blubber/...",
-             "ftp://bla.bla.bla/blubber/", 3, 29 },
-           { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
-           { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
-             "file://bla.bla.bla/blubber%2F", 7, 29 },
-           { "http://sun.com", "http://sun.com/", 0, 14 },
-           { "http://sun.com/", "http://sun.com/", 0, 15 },
-           { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 0, 0 },
-           { "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm",
-             "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 50 },
-           { "Version.1.2.3", 0, 0, 0 },
-           { "Version:1.2.3", 0, 0, 0 },
-           { "a.b.c", 0, 0, 0 },
-           { "file:///a|...", "file:///a:", 0, 10 },
-           { "file:///a||...", "file:///a%7C%7C", 0, 11 },
-           { "file:///a|/bc#...", "file:///a:/bc", 0, 13 },
-           { "file:///a|/bc#de...", "file:///a:/bc#de", 0, 16 },
-           { "abc.def.ghi,ftp.xxx.yyy/zzz...",
-             "ftp://ftp.xxx.yyy/zzz", 12, 27 },
-           { "abc.def.ghi,Ftp.xxx.yyy/zzz...",
-             "ftp://Ftp.xxx.yyy/zzz", 12, 27 },
-           { "abc.def.ghi,www.xxx.yyy...", "http://www.xxx.yyy/", 12, 23 },
-           { "abc.def.ghi,wwww.xxx.yyy...", 0, 0, 0 },
-           { "abc.def.ghi,wWW.xxx.yyy...", "http://wWW.xxx.yyy/", 12, 23 },
-           { "Bla {mailto.me@abc.def.g.h.i}...",
-             "mailto:%7Bmailto.me@abc.def.g.h.i", 4, 28 },
-           { "abc@def@ghi", 0, 0, 0 },
-           { "lala@sun.com", "mailto:lala@sun.com", 0, 12 },
-           { "1lala@sun.com", "mailto:1lala@sun.com", 0, 13 },
-           { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
-           { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
-           { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
-           { "a:/", "file:///a:/", 0, 3 },
-           { ".component:", 0, 0, 0 },
-           { ".uno:", 0, 0, 0 },
-           { "cid:", 0, 0, 0 },
-           { "data:", 0, 0, 0 },
-           { "db:", 0, 0, 0 },
-           { "file:", 0, 0, 0 },
-           { "ftp:", 0, 0, 0 },
-           { "http:", 0, 0, 0 },
-           { "https:", 0, 0, 0 },
-           { "imap:", 0, 0, 0 },
-           { "javascript:", 0, 0, 0 },
-           { "ldap:", 0, 0, 0 },
-           { "macro:", 0, 0, 0 },
-           { "mailto:", 0, 0, 0 },
-           { "news:", 0, 0, 0 },
-           { "out:", 0, 0, 0 },
-           { "pop3:", 0, 0, 0 },
-           { "private:", 0, 0, 0 },
-           { "slot:", 0, 0, 0 },
-           { "staroffice.component:", 0, 0, 0 },
-           { "staroffice.db:", 0, 0, 0 },
-           { "staroffice.factory:", 0, 0, 0 },
-           { "staroffice.helpid:", 0, 0, 0 },
-           { "staroffice.java:", 0, 0, 0 },
-           { "staroffice.macro:", 0, 0, 0 },
-           { "staroffice.out:", 0, 0, 0 },
-           { "staroffice.pop3:", 0, 0, 0 },
-           { "staroffice.private:", 0, 0, 0 },
-           { "staroffice.searchfolder:", 0, 0, 0 },
-           { "staroffice.slot:", 0, 0, 0 },
-           { "staroffice.trashcan:", 0, 0, 0 },
-           { "staroffice.uno:", 0, 0, 0 },
-           { "staroffice.vim:", 0, 0, 0 },
-           { "staroffice:", 0, 0, 0 },
-           { "vim:", 0, 0, 0 },
-           { "vnd.sun.star.cmd:", 0, 0, 0 },
-           { "vnd.sun.star.help:", 0, 0, 0 },
-           { "vnd.sun.star.hier:", 0, 0, 0 },
-           { "vnd.sun.star.odma:", 0, 0, 0 },
-           { "vnd.sun.star.pkg:", 0, 0, 0 },
-           { "vnd.sun.star.script:", 0, 0, 0 },
-           { "vnd.sun.star.webdav:", 0, 0, 0 },
-           { "vnd.sun.star.wfs:", 0, 0, 0 },
-           { "generic:path", 0, 0, 0 },
-           { "wfs:", 0, 0, 0 } };
-
-    printf("start tests.\n");
-    bool bReturn = true;
-    for (int i = 0; i < sizeof aTests / sizeof (Test); ++i)
-    {
-        rtl::OUString aInput(rtl::OUString::createFromAscii(aTests[i].sInput));
-        xub_StrLen nBegin = 0;
-        xub_StrLen nEnd = static_cast< xub_StrLen >(aInput.getLength());
-        rtl::OUString aResult(URIHelper::FindFirstURLInText(aInput, nBegin,
-                                                            nEnd, aClass));
-        bool bSuccess = aTests[i].sResult == 0
-            ? (aResult.getLength() == 0
-               && nBegin == aInput.getLength() && nEnd == aInput.getLength())
-            : (aResult.equalsAscii(aTests[i].sResult)
-               && nBegin == aTests[i].nBegin && nEnd == aTests[i].nEnd);
-        rtl::OStringBuffer aBuffer;
-        aBuffer.append('"');
-        aBuffer.append(aTests[i].sInput);
-        aBuffer.append(RTL_CONSTASCII_STRINGPARAM("\" -> "));
-        aBuffer.append(aTests[i].sResult == 0 ? "none" : aTests[i].sResult);
-        aBuffer.append(RTL_CONSTASCII_STRINGPARAM(" ("));
-        aBuffer.append(static_cast< sal_Int32 >(aTests[i].nBegin));
-        aBuffer.append(RTL_CONSTASCII_STRINGPARAM(", "));
-        aBuffer.append(static_cast< sal_Int32 >(aTests[i].nEnd));
-        aBuffer.append(')');
-        if (!bSuccess)
-        {
-            aBuffer.append(RTL_CONSTASCII_STRINGPARAM(" != "));
-            aBuffer.append(rtl::OUStringToOString(aResult,
-                                                  RTL_TEXTENCODING_UTF8));
-            aBuffer.append(RTL_CONSTASCII_STRINGPARAM(" ("));
-            aBuffer.append(static_cast< sal_Int32 >(nBegin));
-            aBuffer.append(RTL_CONSTASCII_STRINGPARAM(", "));
-            aBuffer.append(static_cast< sal_Int32 >(nEnd));
-            aBuffer.append(')');
-        }
-        // pTestResult->pFuncs->state_(
-        //     pTestResult, bSuccess, "test_URIHelper_FindFirstURLInText",
-        //     aBuffer.getStr(), false);
-
-        printf("str: %s\n", aBuffer.getStr());
-
-        rtl::OString sError = aBuffer.getStr();
-        CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bSuccess);
-        // bReturn = bReturn && bSuccess;
-    }
-    // return bReturn;
 }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+void Test::finish() {
+    css::uno::Reference< css::lang::XComponent >(
+        m_context, css::uno::UNO_QUERY_THROW)->dispose();
+}
 
-    CPPUNIT_TEST_SUITE(test);
-    CPPUNIT_TEST(FindFirstURLInText);
-    CPPUNIT_TEST_SUITE_END();
-}; // class
+void Test::testNormalizedMakeRelative() {
+    struct Test {
+        char const * base;
+        char const * absolute;
+        char const * relative;
+    };
+    static Test const tests[] = {
+        { "hierarchical:/", "mailto:def@a.b.c.", "mailto:def@a.b.c." },
+        { "hierarchical:/", "a/b/c", "a/b/c" },
+        { "hierarchical:/a", "hierarchical:/a/b/c?d#e", "/a/b/c?d#e" },
+        { "hierarchical:/a/", "hierarchical:/a/b/c?d#e", "b/c?d#e" },
+        { "file:///usr/bin/nonex1/nonex2",
+          "file:///usr/bin/nonex1/nonex3/nonex4", "nonex3/nonex4" },
+        { "file:///usr/bin/nonex1/nonex2#fragmentA",
+          "file:///usr/bin/nonex1/nonex3/nonex4#fragmentB",
+          "nonex3/nonex4#fragmentB" },
+#if defined WNT
+        { "file:///c:/nonex1/nonex2", "file:///C:/nonex1/nonex3/nonex4",
+          "nonex3/nonex4" }
+#endif
+    };
+    for (std::size_t i = 0; i < sizeof tests / sizeof tests[0]; ++i) {
+        css::uno::Reference< css::uri::XUriReference > ref(
+            URIHelper::normalizedMakeRelative(
+                m_context, rtl::OUString::createFromAscii(tests[i].base),
+                rtl::OUString::createFromAscii(tests[i].absolute)));
+        bool ok = tests[i].relative == 0
+            ? !ref.is()
+            : ref.is() && ref->getUriReference().equalsAscii(tests[i].relative);
+        rtl::OString msg;
+        if (!ok) {
+            rtl::OStringBuffer buf;
+            buf.append('<');
+            buf.append(tests[i].base);
+            buf.append(RTL_CONSTASCII_STRINGPARAM(">, <"));
+            buf.append(tests[i].absolute);
+            buf.append(RTL_CONSTASCII_STRINGPARAM(">: "));
+            if (ref.is()) {
+                buf.append('<');
+                buf.append(
+                    rtl::OUStringToOString(
+                        ref->getUriReference(), RTL_TEXTENCODING_UTF8));
+                buf.append('>');
+            } else {
+                buf.append(RTL_CONSTASCII_STRINGPARAM("none"));
+            }
+            buf.append(RTL_CONSTASCII_STRINGPARAM(" instead of "));
+            if (tests[i].relative == 0) {
+                buf.append(RTL_CONSTASCII_STRINGPARAM("none"));
+            } else {
+                buf.append('<');
+                buf.append(tests[i].relative);
+                buf.append('>');
+            }
+            msg = buf.makeStringAndClear();
+        }
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
+    }
+}
 
-} // namespace test_URIHelper
+void Test::testFindFirstURLInText() {
+    struct Test {
+        char const * input;
+        char const * result;
+        xub_StrLen begin;
+        xub_StrLen end;
+    };
+    static Test const tests[] = {
+        { "...ftp://bla.bla.bla/blubber/...",
+          "ftp://bla.bla.bla/blubber/", 3, 29 },
+        { "..\\ftp://bla.bla.bla/blubber/...", 0, 0, 0 },
+        { "..\\ftp:\\\\bla.bla.bla\\blubber/...",
+          "file://bla.bla.bla/blubber%2F", 7, 29 },
+        { "http://sun.com", "http://sun.com/", 0, 14 },
+        { "http://sun.com/", "http://sun.com/", 0, 15 },
+        { "http://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 0, 0 },
+        { "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm",
+          "ftp://www.xerox.com@www.pcworld.com/go/3990332.htm", 0, 50 },
+        { "Version.1.2.3", 0, 0, 0 },
+        { "Version:1.2.3", 0, 0, 0 },
+        { "a.b.c", 0, 0, 0 },
+        { "file:///a|...", "file:///a:", 0, 10 },
+        { "file:///a||...", "file:///a%7C%7C", 0, 11 },
+        { "file:///a|/bc#...", "file:///a:/bc", 0, 13 },
+        { "file:///a|/bc#de...", "file:///a:/bc#de", 0, 16 },
+        { "abc.def.ghi,ftp.xxx.yyy/zzz...", "ftp://ftp.xxx.yyy/zzz", 12, 27 },
+        { "abc.def.ghi,Ftp.xxx.yyy/zzz...", "ftp://Ftp.xxx.yyy/zzz", 12, 27 },
+        { "abc.def.ghi,www.xxx.yyy...", "http://www.xxx.yyy/", 12, 23 },
+        { "abc.def.ghi,wwww.xxx.yyy...", 0, 0, 0 },
+        { "abc.def.ghi,wWW.xxx.yyy...", "http://wWW.xxx.yyy/", 12, 23 },
+        { "Bla {mailto.me@abc.def.g.h.i}...",
+          "mailto:%7Bmailto.me@abc.def.g.h.i", 4, 28 },
+        { "abc@def@ghi", 0, 0, 0 },
+        { "lala@sun.com", "mailto:lala@sun.com", 0, 12 },
+        { "1lala@sun.com", "mailto:1lala@sun.com", 0, 13 },
+        { "aaa_bbb@xxx.yy", "mailto:aaa_bbb@xxx.yy", 0, 14 },
+        { "{a:\\bla/bla/bla...}", "file:///a:/bla/bla/bla", 1, 15 },
+        { "#b:/c/d#e#f#", "file:///b:/c/d", 1, 7 },
+        { "a:/", "file:///a:/", 0, 3 },
+        { ".component:", 0, 0, 0 },
+        { ".uno:", 0, 0, 0 },
+        { "cid:", 0, 0, 0 },
+        { "data:", 0, 0, 0 },
+        { "db:", 0, 0, 0 },
+        { "file:", 0, 0, 0 },
+        { "ftp:", 0, 0, 0 },
+        { "http:", 0, 0, 0 },
+        { "https:", 0, 0, 0 },
+        { "imap:", 0, 0, 0 },
+        { "javascript:", 0, 0, 0 },
+        { "ldap:", 0, 0, 0 },
+        { "macro:", 0, 0, 0 },
+        { "mailto:", 0, 0, 0 },
+        { "news:", 0, 0, 0 },
+        { "out:", 0, 0, 0 },
+        { "pop3:", 0, 0, 0 },
+        { "private:", 0, 0, 0 },
+        { "slot:", 0, 0, 0 },
+        { "staroffice.component:", 0, 0, 0 },
+        { "staroffice.db:", 0, 0, 0 },
+        { "staroffice.factory:", 0, 0, 0 },
+        { "staroffice.helpid:", 0, 0, 0 },
+        { "staroffice.java:", 0, 0, 0 },
+        { "staroffice.macro:", 0, 0, 0 },
+        { "staroffice.out:", 0, 0, 0 },
+        { "staroffice.pop3:", 0, 0, 0 },
+        { "staroffice.private:", 0, 0, 0 },
+        { "staroffice.searchfolder:", 0, 0, 0 },
+        { "staroffice.slot:", 0, 0, 0 },
+        { "staroffice.trashcan:", 0, 0, 0 },
+        { "staroffice.uno:", 0, 0, 0 },
+        { "staroffice.vim:", 0, 0, 0 },
+        { "staroffice:", 0, 0, 0 },
+        { "vim:", 0, 0, 0 },
+        { "vnd.sun.star.cmd:", 0, 0, 0 },
+        { "vnd.sun.star.help:", 0, 0, 0 },
+        { "vnd.sun.star.hier:", 0, 0, 0 },
+        { "vnd.sun.star.odma:", 0, 0, 0 },
+        { "vnd.sun.star.pkg:", 0, 0, 0 },
+        { "vnd.sun.star.script:", 0, 0, 0 },
+        { "vnd.sun.star.webdav:", 0, 0, 0 },
+        { "vnd.sun.star.wfs:", 0, 0, 0 },
+        { "generic:path", 0, 0, 0 },
+        { "wfs:", 0, 0, 0 }
+    };
+    CharClass charClass(
+        css::uno::Reference< css::lang::XMultiServiceFactory >(
+            m_context->getServiceManager(), css::uno::UNO_QUERY_THROW),
+        com::sun::star::lang::Locale(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")), rtl::OUString()));
+    for (std::size_t i = 0; i < sizeof tests / sizeof tests[0]; ++i) {
+        rtl::OUString input(rtl::OUString::createFromAscii(tests[i].input));
+        xub_StrLen begin = 0;
+        xub_StrLen end = static_cast< xub_StrLen >(input.getLength());
+        rtl::OUString result(
+            URIHelper::FindFirstURLInText(input, begin, end, charClass));
+        bool ok = tests[i].result == 0
+            ? (result.getLength() == 0 && begin == input.getLength()
+               && end == input.getLength())
+            : (result.equalsAscii(tests[i].result) && begin == tests[i].begin
+               && end == tests[i].end);
+        rtl::OString msg;
+        if (!ok) {
+            rtl::OStringBuffer buf;
+            buf.append('"');
+            buf.append(tests[i].input);
+            buf.append(RTL_CONSTASCII_STRINGPARAM("\" -> "));
+            buf.append(tests[i].result == 0 ? "none" : tests[i].result);
+            buf.append(RTL_CONSTASCII_STRINGPARAM(" ("));
+            buf.append(static_cast< sal_Int32 >(tests[i].begin));
+            buf.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            buf.append(static_cast< sal_Int32 >(tests[i].end));
+            buf.append(')');
+            buf.append(RTL_CONSTASCII_STRINGPARAM(" != "));
+            buf.append(rtl::OUStringToOString(result, RTL_TEXTENCODING_UTF8));
+            buf.append(RTL_CONSTASCII_STRINGPARAM(" ("));
+            buf.append(static_cast< sal_Int32 >(begin));
+            buf.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            buf.append(static_cast< sal_Int32 >(end));
+            buf.append(')');
+            msg = buf.makeStringAndClear();
+        }
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), ok);
+    }
+}
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_URIHelper::test, "test_URIHelper");
+css::uno::Reference< css::uno::XComponentContext > Test::m_context;
 
-// -----------------------------------------------------------------------------
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+}
+
 NOADDITIONAL;
-
