@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:22:06 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,9 @@ private:
 
     Timer               aTrackTimer;
 
-    LanguageType        eLanguage;                      // Default-Sprache
+    LanguageType        eLanguage;                      // default language
+    LanguageType        eCjkLanguage;                   // default language for asian text
+    LanguageType        eCtlLanguage;                   // default language for complex text
     CharSet             eSrcSet;                        // Einlesen: Quell-Zeichensatz
 
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
@@ -469,8 +471,8 @@ public:
     ScExtDocOptions*        GetExtDocOptions()  { return pExtDocOptions; }
     void                    SetExtDocOptions( ScExtDocOptions* pNewOptions );
 
-    LanguageType            GetLanguage() const;
-    void                    SetLanguage( LanguageType eNewLang );
+    void                    GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
+    void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
 
     void                        SetConsolidateDlgData( const ScConsolidateParam* pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }

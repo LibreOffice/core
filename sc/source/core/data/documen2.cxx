@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-11-21 10:24:41 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     xColNameRanges = new ScRangePairList;
     xRowNameRanges = new ScRangePairList;
     ImplCreateOptions();
-    SetLanguage( ScGlobal::eLnge );
+    // languages for a visible document are set by docshell later (from options)
+    SetLanguage( ScGlobal::eLnge, ScGlobal::eLnge, ScGlobal::eLnge );
 
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackTimer.SetTimeout( 100 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1574,16 +1574,24 @@ void ScDocument::SetViewOptions( const ScViewOptions& rOpt )
     *pViewOptions = rOpt;
 }
 
-LanguageType ScDocument::GetLanguage() const
+void ScDocument::GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const
 {
-    return eLanguage;
+    rLatin = eLanguage;
+    rCjk = eCjkLanguage;
+    rCtl = eCtlLanguage;
 }
 
-void ScDocument::SetLanguage( LanguageType eNewLang )
+void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl )
 {
-    eLanguage = eNewLang;
+    eLanguage = eLatin;
+    eCjkLanguage = eCjk;
+    eCtlLanguage = eCtl;
     if ( pDocPool )
+    {
         pDocPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
+        pDocPool->SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
+        pDocPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
+    }
 }
 
 Rectangle ScDocument::GetMMRect( USHORT nStartCol, USHORT nStartRow,
