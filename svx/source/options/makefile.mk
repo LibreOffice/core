@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:28:02 $
+#   last change: $Author: obo $ $Date: 2004-04-29 16:27:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ SRC1FILES=\
     optgrid.src		\
     optinet2.src		\
     multipat.src		\
-    optextbr.src		\
     optctl.src
 
 #EXCEPTIONSFILES=\
@@ -121,16 +120,11 @@ EXCEPTIONSFILES=\
 
 SLOFILES=\
     $(EXCEPTIONSFILES)	\
-    $(SLO)$/asiancfg.obj	\
-    $(SLO)$/htmlcfg.obj	\
-    $(SLO)$/optitems.obj	\
-    $(SLO)$/adritem.obj	\
-    $(SLO)$/optgrid.obj	\
+    $(SLO)$/asiancfg.obj    \
+    $(SLO)$/htmlcfg.obj \
+    $(SLO)$/optitems.obj    \
+    $(SLO)$/optgrid.obj \
     $(SLO)$/srchcfg.obj
-
-SVXLIGHTOBJFILES=\
-    $(OBJ)$/adritem.obj
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
