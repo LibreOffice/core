@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:23:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ Menu MN_ANCHOR_POPUP
             Text[ czech ] = "Stránka";
             Text[ hebrew ] = "‮דף‬";
             Text[ hindi ] = "पृष्ठ";
+            Text[ slovak ] = "Stránka";
         };
         MenuItem
         {
@@ -130,6 +131,7 @@ Menu MN_ANCHOR_POPUP
             Text[ czech ] = "Odstavec";
             Text[ hebrew ] = "‮פסקאות‬";
             Text[ hindi ] = "परिच्छेद";
+            Text[ slovak ] = "Odstavec";
         };
         MenuItem
         {
@@ -163,6 +165,7 @@ Menu MN_ANCHOR_POPUP
             Text[ czech ] = "Na znak";
             Text[ hebrew ] = "Am Zeichen";
             Text[ hindi ] = "अक्षर में";
+            Text[ slovak ] = "Na znak";
         };
         MenuItem
         {
@@ -196,6 +199,7 @@ Menu MN_ANCHOR_POPUP
             Text[ czech ] = "Jako znak";
             Text[ hebrew ] = "Als Zeichen";
             Text[ hindi ] = "अक्षर जैसे";
+            Text[ slovak ] = "Ako znak";
         };
         MenuItem
         {
@@ -229,9 +233,12 @@ Menu MN_ANCHOR_POPUP
             Text[ czech ] = "Rámec";
             Text[ hebrew ] = "‮מסגרת‬";
             Text[ hindi ] = "फ्रेम ";
+            Text[ slovak ] = "Rámček";
         };
     };
 };
+
+
 
 
 
