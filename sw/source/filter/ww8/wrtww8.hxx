@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-24 08:20:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ public:
     void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox );
     BYTE TransCol( const Color& rCol );
     BOOL TransBrush( const Color& rCol, WW8_SHD& rShd );
-    UINT32 TranslateBorderLine( const SvxBorderLine& pLine,
+    WW8_BRC TranslateBorderLine( const SvxBorderLine& pLine,
                                        USHORT nDist, BOOL bShadow );
 
     static long GetDTTM( const DateTime& rDT );

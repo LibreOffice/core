@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,13 +791,23 @@ friend class WW8FormulaControl;
     BOOL JoinNode( SwPaM* pPam, BOOL bStealAttr = FALSE );
 
     BOOL IsBorder( const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE );
-    BOOL SetBorder( SvxBoxItem& pBox, const WW8_BRC* pbrc,
-        BYTE nSetBorders=0xFF, BOOL bChkBtwn=FALSE );
-    void GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist );
-    BOOL SetShadow( SvxShadowItem& rShadow, const SvxBoxItem& rBox, const WW8_BRC pbrc[4] );
 
-    void SetFlyBordersShadow( SfxItemSet& rFlySet,
-                              const WW8_BRC pbrc[4], USHORT nInnerMgn );
+    //Set closest writer border equivalent into rBox from pbrc, optionally
+    //recording true winword dimensions in pSizeArray. nSetBorders to mark a
+    //border which has been previously set to a value and for which becoming
+    //empty is valid. Set bCheBtwn to work with paragraphs that have a special
+    //between paragraphs border
+    BOOL SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
+        BYTE nSetBorders=0xFF, BOOL bChkBtwn=FALSE );
+
+    void GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist );
+
+    BOOL SetShadow( SvxShadowItem& rShadow, const SvxBoxItem& rBox,
+        const WW8_BRC pbrc[4] );
+
+    //returns true is a shadow was set
+    BOOL SetFlyBordersShadow( SfxItemSet& rFlySet, const WW8_BRC pbrc[4],
+        USHORT nInnerMgn, short *SizeArray=0 );
 
     BOOL MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
                                     MSO_LineStyle eLineStyle,
@@ -1134,8 +1144,8 @@ public:     // eigentlich private, geht aber leider nur public
     const SwFmt* GetStyleWithOrgWWName( String& rName    ) const ;
 
     static BOOL GetPictGrafFromStream( Graphic& rGraphic, SvStream& rSrc,
-                                    ULONG nLen = ULONG_MAX );
-
+        ULONG nLen = ULONG_MAX );
+    static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, BOOL bVer67);
 
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
                      SvStream* pSt, SwDoc& rD, BOOL bNewDoc );
@@ -1154,11 +1164,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.31 2001-08-28 15:24:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.32 2001-09-05 10:16:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.31  2001/08/28 15:24:29  cmc
+      #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
+
       Revision 1.30  2001/08/28 10:23:48  cmc
       #91214# Illustration index has less pattern possibilities than toc
 

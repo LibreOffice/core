@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-08 11:05:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,245 @@ wdy     short   :3  E0000000    weekday(Sunday=0
         aDateTime = DateTime(Date(lDay, lMon, lYear), Time(lHour, lMin));
     }
     return aDateTime;
+}
+
+void WW8_BRC::clear()
+{
+    *(USHORT *)aBits1=0;
+    *(USHORT *)aBits2=0;
+}
+
+short WW8_BRC::DetermineBorderProperties( BOOL bVer67, short *pSpace,
+    BYTE *pCol, short *pIdx ) const
+{
+    /*
+        Word does not factor the width of the border into the width/height
+        stored in the information for graphic/table/object widths, so we need
+        to figure out this extra width here and utilize the returned size in
+        our calculations
+    */
+
+    // Match-Table: Transforms word 6/7 types in version 8+
+    static USHORT __READONLY_DATA nTabBorderCode67ToCode8[] =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 2, 2, 3, 0, 0, 0, 1, 2, 3,
+        4, 4, 1, 1,
+        WW8_DECL_LINETAB_OFS_DOUBLE +0,
+        WW8_DECL_LINETAB_OFS_DOUBLE +0,
+        WW8_DECL_LINETAB_OFS_DOUBLE +1,
+        WW8_DECL_LINETAB_OFS_DOUBLE +2,
+        WW8_DECL_LINETAB_OFS_DOUBLE +2,
+        WW8_DECL_LINETAB_OFS_DOUBLE +3,
+        WW8_DECL_LINETAB_OFS_DOUBLE +0,
+        WW8_DECL_LINETAB_OFS_DOUBLE +0
+    };
+
+    short nMSTotalWidth;
+    BYTE nCol;
+    short nIdx,nSpace;
+    if( bVer67 )
+    {
+        UINT16 aBrc1 = SVBT16ToShort( aBits1 );
+        nIdx = nTabBorderCode67ToCode8[ aBrc1 & 0x1f ];
+        nCol = ( (aBrc1 >> 6) & 0x1f ); // aBor.ico
+        nSpace = (aBrc1 & 0xF800) >> 11;
+
+        nMSTotalWidth = aBrc1 & 0x07;
+        short nScaling = (aBrc1 & 0x18) >> 3;
+        if (nMSTotalWidth > 5)
+        {
+            nMSTotalWidth=1;
+            nScaling=1;
+        }
+        nMSTotalWidth *= nScaling;
+        nMSTotalWidth *= 15;
+    }
+    else
+    {
+        nIdx = aBits1[1];
+        nCol = aBits2[0];   // aBor.ico
+        nSpace = aBits2[1] & 0x1F; //space between line and object
+
+        //Specification in 8ths of a point, 1 Point = 20 Twips, so by 2.5
+        nMSTotalWidth  = aBits1[ 0 ] * 20 / 8;
+
+        //Figure out the real size of the border according to word
+        switch (nIdx)
+        {
+            //Note that codes over 25 are undocumented, and I can't create
+            //these 4 here in the wild.
+            default:
+            case 2:
+            case 4:
+            case 5:
+            case 22:
+                DBG_WARNING("Can't create these from the menus, please report");
+            case 1:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 23:    //Only 3pt in the menus, but honours the size setting.
+                break;
+            case 3:
+                /*
+                double line is three times the width of an ordinary line,
+                except for the smallest 1/4 point size which appears to have
+                exactly the same total border width as a 1/2 point size
+                ordinary line, i.e. twice the nominal line width
+                */
+                nMSTotalWidth = (nMSTotalWidth == 5) ?
+                    nMSTotalWidth*2 : nMSTotalWidth*3;
+                break;
+            case 10:
+                /*
+                triple line is five times the width of an ordinary line,
+                except that the smallest 1/4 point size appears to have
+                exactly the same total border width as a 3/4 point size
+                ordinary line, i.e. three times the nominal line width.  The
+                second smallest 1/2 point size appears to have exactly the
+                total border width as a 2 1/4 border, i.e 4.5 times the size.
+                */
+                if (nMSTotalWidth == 5)
+                    nMSTotalWidth*=3;
+                else if (nMSTotalWidth == 10)
+                    nMSTotalWidth = nMSTotalWidth*9/2;
+                else
+                    nMSTotalWidth*=5;
+                break;
+            case 11:
+            case 12:
+                /*
+                small gap thin thick and thick thin appears to have a 3/4
+                point line, a 3/4 point gap and a thick line of the specified
+                width
+                */
+                nMSTotalWidth = nMSTotalWidth + 15*2;
+                break;
+            case 13:
+                /*
+                thin thick thin appears to have two outside 3/4 point lines,
+                two 3/4 point gaps and a thick line of the specified width
+                */
+                nMSTotalWidth = nMSTotalWidth + 15*4;
+                break;
+            case 14:
+            case 15:
+                /*
+                medium gap thin thick and thick thin appears to have a line
+                50% of the thick line, and an equal sized gap and then the
+                thick line of the specified width. But it appears to only
+                use one of the existing predefined widths for the thin line,
+                so the closest smallest existing border to the halved thick
+                line is used.
+                */
+                switch (nMSTotalWidth)
+                {
+                    case 45:    //2 1/4, closest to half is 1
+                        nMSTotalWidth += 20 + (nMSTotalWidth-1)/2;
+                        break;
+                    case 5:
+                    case 10:
+                        nMSTotalWidth += 5;
+                        break;
+                    case 15:    //3/4, closest to half is 1/4
+                        nMSTotalWidth += 5 + (nMSTotalWidth-1)/2;
+                        break;
+                    default:
+                        nMSTotalWidth*=2;
+                        break;
+                }
+                break;
+            case 16:
+                /*
+                medium gap thin thick thin appears to have a line
+                50% of the thick line, and an equal sized gap and then the
+                thick line of the specified width. But it appears to only
+                use one of the existing predefined widths for the thin
+                line, so the closest smallest existing border to the halved
+                thick line is used. Though some fudging at smaller sizes is
+                still required.
+                */
+                switch (nMSTotalWidth)
+                {
+                    case 45:    //2 1/4, closest to half is 1
+                        nMSTotalWidth += nMSTotalWidth + 20 * 2;
+                        break;
+                    case 20:
+                    case 15:
+                        nMSTotalWidth += nMSTotalWidth + 7 * 2;
+                        break;
+                    case 10:
+                    case 5:
+                        nMSTotalWidth += 5 + 4;
+                        break;
+                    default:
+                        nMSTotalWidth*=3;
+                        break;
+                }
+                break;
+            case 17:
+            case 18:
+                /*
+                large gap thin thick and thick thin appears to have a thick
+                line of 1 1/2 pt and a narrow of 3/4 point, with a distance
+                between the two of the explicitly set line width
+                */
+                nMSTotalWidth+=15+30;
+                break;
+            case 19:
+                /*
+                large gap thin thick thin appears to have a thick line of 1
+                1/2 pt and two narrows of 3/4 point, with a distance between
+                the two of the explicitly set line width, though the narrowest
+                line appears to behave as if it was even smaller
+                */
+                if (nMSTotalWidth == 5)
+                    nMSTotalWidth = 3;
+                nMSTotalWidth = nMSTotalWidth*2 + 15*2 + 30;
+                break;
+            case 20:
+                /*
+                wave, the dimensions appear to be created by the drawing of
+                the wave, so we have only two possibilites in the menus, 3/4
+                point is equal to solid 3 point. This calculation seems to
+                match well to results.
+                */
+                nMSTotalWidth +=45;
+                break;
+            case 21:
+                /*
+                double wave, the dimensions appear to be created by the
+                drawing of the wave, so we have only one possibilites in the
+                menus, that of 3/4 point is equal to solid 3 point. This
+                calculation seems to match well to results.
+                */
+                nMSTotalWidth += 45*2;
+                break;
+            case 24:
+            case 25:
+                /*
+                emboss and engrave consist of a three lines, the central is of
+                the explicit point width, the other two (of equal size to each
+                other are the shadows and are either 3/4 pt of 1 1/2 depending
+                on if the central line is greater of less than 2 1/4 pt
+                */
+                if (nMSTotalWidth <= 45)
+                    nMSTotalWidth += 2*15;
+                else
+                    nMSTotalWidth += 2*30;
+                break;
+        }
+    }
+
+    if (pIdx)
+        *pIdx = nIdx;
+    if (pSpace)
+        *pSpace = nSpace*20;
+    if (pCol)
+        *pCol = nCol;
+    return nMSTotalWidth;
 }
 
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
@@ -6186,9 +6425,10 @@ static SprmInfo aWwSprmTab[] = {
     0x4874, 2, L_FIX, // undocumented
     0x6463, 4, L_FIX, // undocumented
     0x6870, 4, L_FIX, // undocumented
-    0x2461, 1, L_FIX, // undocumented
-    0x845E, 2, L_FIX, // undocumented
-    0x8460, 2, L_FIX, // undocumented
+    0x2461, 1, L_FIX, // undoc, must be asian version of "sprmPJc"
+    0x845D, 2, L_FIX, // undoc, must be asian version of "sprmPDxaRight"
+    0x845E, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft"
+    0x8460, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft1"
     0x3615, 1, L_FIX  // undocumented
 };
 

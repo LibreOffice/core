@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:27:07 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _TOOLS_SOLMATH_H
+#include <tools/solmath.hxx>
+#endif
 #ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
@@ -101,7 +104,12 @@
 #ifndef _MSOLEEXP_HXX
 #include <svx/msoleexp.hxx>
 #endif
-
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx> // SvxLRSpaceItem
+#endif
+#ifndef _SVX_ULSPITEM_HXX
+#include <svx/ulspitem.hxx>
+#endif
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
@@ -360,12 +368,12 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
         == pAttrSet->GetItemState( RES_GRFATR_CROPGRF, FALSE, &pItem ) ) )
     {
         const SwCropGrf& rCr = *(SwCropGrf*)pItem;
-        nCropL = rCr.GetLeft();
-        nCropR = rCr.GetRight();
-        nCropT = rCr.GetTop();
-        nCropB = rCr.GetBottom();
-        nXSizeAdd -= (INT16)( rCr.GetLeft() - rCr.GetRight() );
-        nYSizeAdd -= (INT16)( rCr.GetTop() - rCr.GetBottom() );
+        nCropL = (INT16)rCr.GetLeft();
+        nCropR = (INT16)rCr.GetRight();
+        nCropT = (INT16)rCr.GetTop();
+        nCropB = (INT16)rCr.GetBottom();
+        nXSizeAdd -= (INT16)( rCr.GetLeft() + rCr.GetRight() );
+        nYSizeAdd -= (INT16)( rCr.GetTop() + rCr.GetBottom() );
     }
 
     Size aGrTwipSz( pNd->GetTwipSize() );
@@ -380,40 +388,17 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
         aGrTwipSz = pNd->GetTwipSize();
     }
 
+    const SvxLRSpaceItem &rLR = (SvxLRSpaceItem &)pFly->GetAttr(RES_LR_SPACE);
+    const SvxULSpaceItem &rUL = (SvxULSpaceItem &)pFly->GetAttr(RES_UL_SPACE);
+    nWidth += (INT16)(rLR.GetLeft() + rLR.GetRight());
+    nHeight += rUL.GetUpper() + rUL.GetLower();
 
     BOOL bWrtWW8 = rWrt.bWrtWW8;
     UINT16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
 
-    BYTE aArr[ sizeof( WW8_PIC_SHADOW ) ];
-    memset( aArr, 0, nHdrLen );
+    BYTE aArr[ 0x44 ] = { 0 };
 
-    BYTE* pArr = aArr + 4;                          //skip lcb
-    Set_UInt16( pArr, nHdrLen );                    // set cbHeader
-
-    Set_UInt16( pArr, mm );                         // set mm
-    Set_UInt16( pArr, aGrTwipSz.Width() * 254L / 144 );     // set xExt
-    Set_UInt16( pArr, aGrTwipSz.Height() * 254L / 144 );    // set yExt
-    pArr += 16;                                     // skip hMF & rcWinMF
-    Set_UInt16( pArr, (UINT16)aGrTwipSz.Width() );  // set dxaGoal
-    Set_UInt16( pArr, (UINT16)aGrTwipSz.Height() ); // set dyaGoal
-
-    if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
-        Set_UInt16( pArr, ( nWidth * 1000L /
-                            ( aGrTwipSz.Width() + nXSizeAdd ) ) );
-    else
-        pArr += 2;
-    if( aGrTwipSz.Height() + nYSizeAdd )            // set my
-        Set_UInt16( pArr, ( nHeight * 1000L /
-                            ( aGrTwipSz.Height() + nYSizeAdd ) ) );
-    else
-        pArr += 2;
-
-    Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
-    Set_UInt16( pArr, nCropT );                     // set dyaCropTop
-    Set_UInt16( pArr, nCropR );                     // set dxaCropRight
-    Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
-    pArr += 2;                                      // skip Flags
-
+    BYTE* pArr = aArr + 0x2E;  //Do borders first
     if( pFly )
     {
         const SwAttrSet& rAttrSet = pFly->GetAttrSet();
@@ -437,20 +422,79 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
                 for( BYTE i = 0; i < 4; ++i )
                 {
                     const SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
-                    UINT32 nBrd = pLn
-                                    ? rWrt.TranslateBorderLine( *pLn,
-                                        pBox->GetDistance( aLnArr[ i ] ),
-                                        bShadow )
-                                    : 0;
+                    WW8_BRC aBrc;
+                    if (pLn)
+                    {
+                        aBrc = rWrt.TranslateBorderLine( *pLn,
+                            pBox->GetDistance( aLnArr[ i ] ), bShadow );
+                    }
+                    else
+                        aBrc.clear();
+
+                    //use importer logic to determine how large the exported
+                    //border will really be in word and adjust accordingly
+                    short nSpacing;
+                    short nThick = aBrc.DetermineBorderProperties(!bWrtWW8,
+                        &nSpacing);
+                    switch (aLnArr[ i ])
+                    {
+                        case BOX_LINE_TOP:
+                        case BOX_LINE_BOTTOM:
+                            nHeight -= bShadow ? nThick*2 : nThick;
+                            nHeight -= nSpacing;
+                            break;
+                        case BOX_LINE_LEFT:
+                        case BOX_LINE_RIGHT:
+                        default:
+                            nWidth -= bShadow ? nThick*2 : nThick;
+                            nWidth -= nSpacing;
+                            break;
+                    }
+                    memcpy( pArr, &aBrc.aBits1, 2);
+                    pArr+=2;
 
                     if( bWrtWW8 )
-                        Set_UInt32( pArr, nBrd );
-                    else
-                        Set_UInt16( pArr, (USHORT)nBrd );
+                    {
+                        memcpy( pArr, &aBrc.aBits2, 2);
+                        pArr+=2;
+                    }
                 }
             }
         }
     }
+
+    pArr = aArr + 4;                                //skip lcb
+    Set_UInt16( pArr, nHdrLen );                    // set cbHeader
+
+    Set_UInt16( pArr, mm );                         // set mm
+
+    Set_UInt16( pArr, aGrTwipSz.Width() * 254L / 144 );     // set xExt
+    Set_UInt16( pArr, aGrTwipSz.Height() * 254L / 144 );    // set yExt
+    pArr += 16;                                     // skip hMF & rcWinMF
+    Set_UInt16( pArr, (UINT16)aGrTwipSz.Width() );  // set dxaGoal
+    Set_UInt16( pArr, (UINT16)aGrTwipSz.Height() ); // set dyaGoal
+
+    if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
+    {
+        double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
+        Set_UInt16( pArr, (USHORT)SolarMath::Round(fVal) );
+    }
+    else
+        pArr += 2;
+
+    if( aGrTwipSz.Height() + nYSizeAdd )            // set my
+    {
+        double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
+        Set_UInt16( pArr, (USHORT)SolarMath::Round(fVal) );
+    }
+    else
+        pArr += 2;
+
+    Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
+    Set_UInt16( pArr, nCropT );                     // set dyaCropTop
+    Set_UInt16( pArr, nCropR );                     // set dxaCropRight
+    Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
+
     rStrm.Write( aArr, nHdrLen );
 }
 
@@ -653,11 +697,14 @@ void SwWW8WrGrf::Write()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.6 2001-08-16 09:27:07 fme Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.7 2001-09-05 10:16:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/08/16 09:27:07  fme
+      Fix #90760#: Removed VCL defines
+
       Revision 1.5  2001/05/21 15:45:50  cmc
       ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
 

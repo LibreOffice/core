@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,30 +358,6 @@ WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
     nHeight = nAddHeight * rPic.my / 1000;
 }
 
-/*
-WW8PicDesc::WW8PicDesc( const WW8_FSPA& rFSPA )
-{
-    //long nOriWidth  = (long)rPic.dxaGoal;     // Groesse in 1/100 mm ?
-    //long nOriHeight = (long)rPic.dyaGoal;
-
-    nCL = rFSPA.nXaLeft;
-    nCR = rFSPA.nXaRight;
-    nCT = rFSPA.nYaTop;
-    nCB = rFSPA.nYaBottom;
-
-    //long nAddWidth  = nOriWidth  + nCL + nCR;     // Groesse nach Crop
-    //long nAddHeight = nOriHeight + nCT + nCB;
-
-    //nCL = (short)((long)nCL * nOriWidth / nAddWidth );// Crop absolut
-    //nCR = (short)((long)nCR * nOriWidth / nAddWidth );// -> skaliert
-    //nCT = (short)((long)nCT * nOriWidth / nAddWidth );// auf Original-ImageSize
-    //nCB = (short)((long)nCB * nOriWidth / nAddWidth );
-
-    nWidth  = nCR - nCL;
-    nHeight = nCB - nCT;
-}   */
-
-
 // MakeGrafByFlyFmt setzt eine nicht-Zeichengebundene Grafik
 SwFrmFmt* SwWW8ImplReader::MakeGrafByFlyFmt( SdrTextObj* pReplaceTextObj,
                                         const SwFrmFmt& rOldFmt, const WW8PicDesc& rPD,
@@ -615,80 +591,22 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1( WW8_PIC& rPic, SvStream* pSt,
     return pRet;
 }
 
-
-#if 0
-int SwWW8ImplReader::WW8QuickHackForMSDFF_DirectBLIPImport(SvStream& rSt,
-    WW8PicDesc* pPD, Graphic& rData, String& rGraphName)
+void SwWW8ImplReader::PicRead( SvStream *pDataStream, WW8_PIC *pPic,
+    BOOL bVer67)
 {
-    int nOk = FALSE;
-    ULONG nFilePos = 0;
-    ULONG nBLIPLen = 0;
-    ULONG nLength;
-    ULONG nCode;
-
-    rSt.SeekRel(-4);
-    Rectangle aRect( 0,0, pPD->nWidth, pPD->nHeight);
-    SvxMSDffImportData aData( aRect );
-
-    DffRecordHeader aObjHd;
-    DffPropSet *pProps=0;
-    rSt >> aObjHd;
-    if (pMSDffManager->SeekToRec(*pDataStream, DFF_msofbtOPT,
-        aObjHd.nRecLen+aObjHd.nFilePos))
-    {
-        pProps = new DffPropSet(TRUE);
-        *pDataStream >> *pProps;
-    }
-
-    rSt.Seek(aObjHd.nRecLen+aObjHd.nFilePos+8);
-    rSt >> nCode;
-    if(0xF0070000 == (nCode & 0xFFFF0000))
-    {
-        ULONG nLenFBSE;
-        rSt >> nLength;
-
-        const ULONG nSkipBLIPLen = 20;//bis zu nBLIPLen zu ueberspringende Bytes
-        const ULONG nSkipShapePos = 4;//dahinter bis zu nShapePos zu skippen
-        const ULONG nSkipBLIP = 4;    // dahinter schliesst dann das BLIP an
-
-        nLenFBSE = nLength;
-
-        // ist FBSE gross genug fuer unsere Daten
-        BOOL bOk2 = ( nSkipBLIPLen + 4 + nSkipShapePos + 4 <= nLenFBSE );
-        if( bOk2 )
-        {
-            rSt.SeekRel( nSkipBLIPLen );
-            rSt >> nBLIPLen;
-            rSt.SeekRel( nSkipShapePos );
-            rSt >> nFilePos;                        // FilePos des Shape!
-            rSt.SeekRel( nSkipBLIP );
-            bOk2 = (0 == rSt.GetError());
-            nLength -= nSkipBLIPLen+ 4 + nSkipShapePos + 4;
-            if( 0 > nLength )
-                nLength = 0;
-        }
-        if( bOk2 )
-        {
-            // das BLIP Atom steht im Daten Stream unmittelbar hinter dem FBSE
-            //
-            nOk = pMSDffManager->GetBLIPDirect( rSt, rData );
-
-            //Let preexisting cropping values dominate if they exist
-            if ((pProps) && !(pPD->nCL || pPD->nCR || pPD->nCT || pPD->nCB))
-            {
-
-                pPD->nCT = pProps->GetPropertyValue( DFF_Prop_cropFromTop,0);
-                pPD->nCB = pProps->GetPropertyValue( DFF_Prop_cropFromBottom,0);
-                pPD->nCL = pProps->GetPropertyValue( DFF_Prop_cropFromLeft,0);
-                pPD->nCR = pProps->GetPropertyValue( DFF_Prop_cropFromRight,0);
-                nOk++;
-            }
-        }
-    }
-    delete pProps;
-    return nOk;
+    //Only the first 0x2e bytes are the same between version 6/7 and 8+
+#ifdef __WW8_NEEDS_COPY
+    WW8_PIC_SHADOW aPicS;
+    pDataStream->Read( &aPicS, sizeof( aPicS );
+    WW8PicShadowToReal( &aPicS, pPic );
+#else
+    pDataStream->Read( pPic, 0x2E);
+#endif // defined __WW8_NEEDS_COPY
+    for (int i=0;i<4;i++)
+        pDataStream->Read( &pPic->rgbrc[i], bVer67 ? 2 : 4);
+    *pDataStream >> pPic->dxaOrigin;
+    *pDataStream >> pPic->dyaOrigin;
 }
-#endif
 
 BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
 {
@@ -727,13 +645,8 @@ BOOL SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
     long nOldPos = pDataStream->Tell();
     WW8_PIC aPic;
     pDataStream->Seek( nOffset);
-#ifdef __WW8_NEEDS_COPY
-    WW8_PIC_SHADOW aPicS;
-    pDataStream->Read( &aPicS, sizeof( aPicS ) );
-    WW8PicShadowToReal( &aPicS, &aPic );
-#else
-    pDataStream->Read( &aPic, sizeof( aPic ) );
-#endif
+    PicRead( pDataStream, &aPic, bVer67);
+
     if((aPic.lcb > 0x44) && !pDataStream->GetError() )
     {
 #ifdef DEBUG
@@ -848,13 +761,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
     long nOldPos = pDataStream->Tell();
     WW8_PIC aPic;
     pDataStream->Seek( nPicLocFc );
-#ifdef __WW8_NEEDS_COPY
-    WW8_PIC_SHADOW aPicS;
-    pDataStream->Read( &aPicS, sizeof( aPicS ) );
-    WW8PicShadowToReal( &aPicS, &aPic );
-#else
-    pDataStream->Read( &aPic, sizeof( aPic ) );
-#endif // defined __WW8_NEEDS_COPY
+    PicRead( pDataStream, &aPic, bVer67);
 
         // Plausibilitaetstest ist noetig, da z.B. bei CheckBoxen im
         // Feld-Result ein WMF-aehnliches Struct vorkommt.
@@ -937,23 +844,30 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
 
                 if( pRecord )
                 {
-                    //A graphic of this type in this location is always inline
+                    //A graphic of this type in this location is always
+                    //inline, and uses the pic in the same mould as ww6
+                    //graphics.
                     if (0x64 == aPic.MFP.mm)
                     {
-                        SwFmtAnchor aAnchor(FLY_IN_CNTNT);
-                        aAnchor.SetAnchor(pPaM->GetPoint());
-                        aAttrSet.Put(aAnchor);
+                        WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
+                            aPD.nHeight );
+                        aAttrSet.Put(aFlySet);
                     }
                     else
+                    {
                         ProcessEscherAlign(pRecord,0,aAttrSet,TRUE);
 
-                    Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                        pRecord->nDyTextTop, pRecord->nDxTextRight,
-                        pRecord->nDyTextBottom  );
+                        Rectangle aInnerDist(   pRecord->nDxTextLeft,
+                            pRecord->nDyTextTop, pRecord->nDxTextRight,
+                            pRecord->nDyTextBottom  );
 
-                    MatchSdrItemsIntoFlySet( pObject, aAttrSet,
-                        pRecord->eLineStyle, aInnerDist,
-                        !pRecord->bLastBoxInChain );
+                        MatchSdrItemsIntoFlySet( pObject, aAttrSet,
+                            pRecord->eLineStyle, aInnerDist,
+                            !pRecord->bLastBoxInChain );
+
+                        //Groesse aus der WinWord PIC-Struktur als Grafik-Groesse nehmen
+                        aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPD.nWidth, aPD.nHeight ) );
+                    }
                 }
 
                 // for the Grafik
@@ -968,10 +882,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
 
                 SwFrmFmt* pNewFlyFmt = 0;
                 BOOL bTextObjWasGrouped = FALSE;
-
-                //Groesse aus der WinWord PIC-Struktur als Grafik-Groesse nehmen
-                aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE,
-                    aPD.nWidth, aPD.nHeight ) );
 
                 // ggfs. altes AttrSet uebernehmen und
                 // horiz. Positionierungs-Relation korrigieren
@@ -1144,12 +1054,6 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
     pPic->fDrawHatch = (pPicS->aBits1[0] & 0x40) >> 6;
     pPic->fError = (pPicS->aBits1[0] & 0x80) >> 7;
     pPic->bpp = pPicS->aBits2[0];
-    for( USHORT j = 0; j < 4; j++ ){
-        pPic->rgbrc[j].aBits1[0] = pPicS->rgbrc[j].aBits1[0];
-        pPic->rgbrc[j].aBits1[1] = pPicS->rgbrc[j].aBits1[1];
-    }
-    pPic->dxaOrigin = SVBT16ToShort( pPicS->dxaOrigin );
-    pPic->dyaOrigin = SVBT16ToShort( pPicS->dyaOrigin );
 }
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
@@ -1194,11 +1098,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.10 2001-08-28 15:24:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.11 2001-09-05 10:16:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/08/28 15:24:29  cmc
+      #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
+
       Revision 1.9  2001/05/18 12:28:06  jp
       Bug #83396#: load also OLE-Object without any representation in the object
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:13 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
             nTblOffset);
 
         static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
-        USHORT nWWColMax = 1;
+        BYTE nWWColMax = 1;
 
         if( bWrtWW8 )
             SwWW8Writer::InsUInt16( aAt, 0x3404 );
@@ -2454,11 +2454,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.17 2001-06-02 16:06:13 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.18 2001-09-05 10:16:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/06/02 16:06:13  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.16  2001/05/21 15:45:50  cmc
       ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
 

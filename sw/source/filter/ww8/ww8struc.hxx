@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:53:15 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@ struct WW8_BRC : public WW8_BRCVer6 // Border Code
 //  UINT16 ico : 5;         // 07C0 color code (see chp.ico)
 //  UINT16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
+    short DetermineBorderProperties ( BOOL bVer67, short *pSpace=0,
+        BYTE *pCol=0, short *pIdx=0 ) const;
+    void clear();
 };
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
@@ -450,13 +453,13 @@ struct WW8_PIC_SHADOW
     SVBT16 dyaCropBottom;// 0x2a    the amount the picture has been cropped on the bottom in twips.
     SVBT8 aBits1; //0x2c
     SVBT8 aBits2;
-    WW8_BRC rgbrc[4];
+//  WW8_BRC rgbrc[4];
 //  BRC brcTop;         // 0x2e specification for border above picture
 //  BRC brcLeft;        // 0x30 specification for border to the left
 //  BRC brcBottom;      // 0x32 specification for border below picture
 //  BRC brcRight;       // 0x34 specification for border to the right
-    SVBT16 dxaOrigin;   // 0x36 horizontal offset of hand annotation origin
-    SVBT16 dyaOrigin;   // 0x38 vertical offset of hand annotation origin
+//  SVBT16 dxaOrigin;   // 0x36 horizontal offset of hand annotation origin
+//  SVBT16 dyaOrigin;   // 0x38 vertical offset of hand annotation origin
 //  SVBT8 rgb[];            // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
 };
 
@@ -856,11 +859,14 @@ struct WW67_ATRD                // fuer die 6/7-Version
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.4 2001-04-20 14:53:15 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.5 2001-09-05 10:16:20 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/04/20 14:53:15  cmc
+      clean type conversion warning
+
       Revision 1.3  2001/02/16 10:08:12  cmc
       Normalize japanese doptypography variable names
 

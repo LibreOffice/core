@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-24 08:20:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2660,22 +2660,44 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     {                                          // normale Absaetze
         // sprmPDxaLeft
         if( rWW8Wrt.bWrtWW8 )
+        {
             rWW8Wrt.InsUInt16( 0x840F );
+            rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
+            rWW8Wrt.InsUInt16( 0x845E );        //asian version ?
+            rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
+
+        }
         else
+        {
             rWW8Wrt.pO->Insert( 17, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
+            rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
+        }
         // sprmPDxaRight
         if( rWW8Wrt.bWrtWW8 )
+        {
             rWW8Wrt.InsUInt16( 0x840E );
+            rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
+            rWW8Wrt.InsUInt16( 0x845D );        //asian version ?
+            rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
+        }
         else
+        {
             rWW8Wrt.pO->Insert( 16, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
+            rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
+        }
         // sprmPDxaLeft1
         if( rWW8Wrt.bWrtWW8 )
+        {
             rWW8Wrt.InsUInt16( 0x8411 );
+            rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
+            rWW8Wrt.InsUInt16( 0x8460 );        //asian version ?
+            rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
+        }
         else
+        {
             rWW8Wrt.pO->Insert( 19, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
+            rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
+        }
     }
     return rWrt;
 }
@@ -2956,14 +2978,11 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 
-// TranslateBorderLine() liefert eine UINT32 zurueck, der noch in einen
-// SVBT32 uebersetzt werden muss.
-// bei Export als WW6 sind nur die unteren 16 Bit von Interesse
-// bShadow darf bei Tabellenzellen *nicht* gesetzt sein !
-UINT32 SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
-                                        USHORT nDist, BOOL bShadow )
+WW8_BRC SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
+    USHORT nDist, BOOL bShadow )
 {
-    UINT32 nBrd = 0;
+    WW8_BRC aBrc;
+    aBrc.clear();
     UINT16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth(), brcType = 0;
     UINT32 nColCode = 0;
     if( nWidth )                                // Linie ?
@@ -3012,25 +3031,27 @@ UINT32 SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
 
     if( bWrtWW8 )
     {
-        nBrd = nWidth + ( brcType << 8 );
-        nBrd |= nColCode << 16;
-        nBrd |= nLDist << 24;
+        aBrc.aBits1[0] = nWidth;
+        aBrc.aBits1[1] = brcType;
+        aBrc.aBits2[0] = nColCode;
+        aBrc.aBits2[1] = nLDist;
 
         // fShadow, keine weiteren Einstellungen im WW moeglich
         if( bShadow )
-            nBrd |= (0x2000L << 16);
+            aBrc.aBits2[1] |= 0x20;
     }
     else
     {
-        nBrd = nWidth + ( brcType << 3 );
-        nBrd |= (nColCode & 0x1f) << 6;
-        nBrd |= nLDist << 11;
+        USHORT aBits = nWidth + ( brcType << 3 );
+        aBits |= (nColCode & 0x1f) << 6;
+        aBits |= nLDist << 11;
         // fShadow, keine weiteren Einstellungen im WW moeglich
         if( bShadow )
-            nBrd |= 0x20;
+            aBits |= 0x20;
+        ShortToSVBT16( aBits, aBrc.aBits1);
     }
 
-    return nBrd;
+    return aBrc;
 }
 
 // MakeBorderLine() bekommt einen WW8Bytes* uebergeben, um die Funktion
@@ -3045,9 +3066,13 @@ void SwWW8Writer::Out_BorderLine( WW8Bytes& rO, const SvxBorderLine* pLine,
             ((0x702b - 0x6424) <= nOffset && nOffset <= (0x702e - 0x6424)),
                 "SprmOffset ausserhalb des Bereichs" );
 
+    WW8_BRC aBrc;
 
-    UINT32 nBrdCd = pLine ? TranslateBorderLine( *pLine, nDist, bShadow )
-                          : 0;
+    if (pLine)
+        aBrc = TranslateBorderLine( *pLine, nDist, bShadow );
+    else
+        aBrc.clear();
+
     if( bWrtWW8 )
     {
 // WW97-SprmIds
@@ -3058,7 +3083,8 @@ void SwWW8Writer::Out_BorderLine( WW8Bytes& rO, const SvxBorderLine* pLine,
         if( USHRT_MAX != nOffset )                      // mit OpCode-Ausgabe ?
             SwWW8Writer::InsUInt16( rO, 0x6424 + nOffset );
 
-        SwWW8Writer::InsUInt32( rO, nBrdCd );
+        rO.Insert( aBrc.aBits1, 2, rO.Count() );
+        rO.Insert( aBrc.aBits2, 2, rO.Count() );
     }
     else
     {
@@ -3069,7 +3095,7 @@ void SwWW8Writer::Out_BorderLine( WW8Bytes& rO, const SvxBorderLine* pLine,
 //     41, sprmPBrcRight
         if( USHRT_MAX != nOffset )                      // mit OpCode-Ausgabe ?
             rO.Insert( (BYTE)( 38 + nOffset ), rO.Count() );
-        SwWW8Writer::InsUInt16( rO, (UINT16)nBrdCd );
+        rO.Insert( aBrc.aBits1, 2, rO.Count() );
     }
 }
 
@@ -3356,10 +3382,17 @@ static Writer& OutWW8_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     {
         SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
         if( rWrtWW8.bWrtWW8 )
+        {
             rWrtWW8.InsUInt16( 0x2403 );
+            rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
+            rWrtWW8.InsUInt16( 0x2461 ); //asian version ?
+            rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
+        }
         else
+        {
             rWrtWW8.pO->Insert( 5, rWrtWW8.pO->Count() );
-        rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
+            rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
+        }
     }
     return rWrt;
 }
@@ -3768,6 +3801,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/08/24 08:20:29  cmc
+      #90804# Improve fly in fly export for ww6
+
       Revision 1.15  2001/06/02 16:06:14  cmc
       #68662# ##989## parent frame of a fly in fly exported as a table
 

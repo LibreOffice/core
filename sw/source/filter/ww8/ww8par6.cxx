@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,10 +1715,7 @@ static BOOL _SetWW8_BRC( BOOL bVer67, WW8_BRC& rVar, const BYTE* pS )
         else
             rVar = *((WW8_BRC*)pS);
     else
-    {
-        *(USHORT*)rVar.aBits1 = 0;
-        *(USHORT*)rVar.aBits2 = 0;
-    }
+        rVar.clear();
 
     return 0 != pS;
 }
@@ -1783,200 +1780,186 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
     return nBorder;
 }
 
-
-
-static SvxBorderLine& Set1Border( BOOL bVer67, SvxBorderLine& rLine,
-                                    const WW8_BRC& rBor )
+void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
+    USHORT nOOIndex, USHORT nWWIndex, short *pSize=0 )
 {
-    // Deklarationen gemaess BOXITEM.HXX
+    // Declaration in accordance with svx/boxitem.hxx
     WW8_DECL_LINETAB_ARRAY
 
-    // Match-Tabelle: verwandelt Ver67 Border Codes in Ver8-Typen
-    static USHORT __READONLY_DATA nTabBorderCode67ToCode8[] = // Aussenlinie
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0,
-        1, 1,   2, 2, 3, 0, 0, 0, 1, 2, 3, 4, 4, 1, 1,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0,
-        WW8_DECL_LINETAB_OFS_DOUBLE +1,
-        WW8_DECL_LINETAB_OFS_DOUBLE +1,
-        WW8_DECL_LINETAB_OFS_DOUBLE +2,
-        WW8_DECL_LINETAB_OFS_DOUBLE +2,
-        WW8_DECL_LINETAB_OFS_DOUBLE +3,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0,
-        WW8_DECL_LINETAB_OFS_DOUBLE +0
-    };
-
-
-        // Vor Aufruf muss sichergestellt werden, dass aBor & 0x1f != 0 ist,
-        // d.h. ueberhaupt eine Linie vorhanden ist
-
-//  short nIdx = ( aBrc1 & 0x7 )        // aBor.dxpLineWidth ( Liniendicke )
-//          + 8 * ( aBrc1 >> 3 & 0x3 ); // brcType, 0 = none / dotted / dashed
-                                        // 1 = single width, 2 = double width
-                                        // 3 = doppelte Linie ( = 3-fache Dicke )
-
     BYTE nCol;
-    short nIdx;
+    short nIdx,nSpace;
+    short nLineThickness = rBor.DetermineBorderProperties(bVer67,&nSpace,&nCol,
+        &nIdx);
 
-    if( bVer67 )
+    //Word mirrors some indexes inside outside depending on its position, we
+    //don't do that, so flip them here
+    if (nWWIndex == WW8_TOP || nWWIndex == WW8_LEFT)
     {
-        UINT16 aBrc1 = SVBT16ToShort( rBor.aBits1 );
-        nIdx = nTabBorderCode67ToCode8[ aBrc1 & 0x1f ];
-        nCol = ( (aBrc1 >> 6) & 0x1f ); // aBor.ico
-    }
-    else
-    {
-        // Sicherheitsmassnahme (Kodes ueber 25 sind undokumentiert)
-        nIdx = rBor.aBits1[1];
-        if( 25 < nIdx )
-            nIdx = 1;
-
-        // Angabe in 8tel Punkten, also mal 2.5, da 1 Punkt = 20 Twips
-        short nMSLineWidth  = rBor.aBits1[ 0 ] * 20 / 8;
-        short nMSTotalWidth = nMSLineWidth;
-
-        // erst die Gesamt-Randbreite errechnen, zur weiteren Entscheidungsgrundlage
-        switch( nIdx )
+        switch (nIdx)
         {
-            /*
-            // Einzel-Linien sind Wurst
-            case  1:
-            case  2:
-            case  5:
-            case  6:
-            case 22:
-            case  7:
-            case  8:
-            case  9:
-            // Schraffurbalken dito
-            case 23:
-            */
-            // Mehrfach- und Spezial-Linien, die wir wie besonders behandeln
-            // (in der Reihenfolge, in der sie im Winword-97-Dialog erscheinen)
-            case  3: nMSTotalWidth = 3*nMSLineWidth;break;
-            case 10: nMSTotalWidth = 5*nMSLineWidth;break;
-            case 18:
-            case 17: nMSTotalWidth = 7*nMSLineWidth;break;
-            case 16:
-            case 19: nMSTotalWidth =12*nMSLineWidth;break;
-            case 20: nMSTotalWidth = 4*nMSLineWidth;break;
-            case 12:
             case 11:
-            case 21: nMSTotalWidth = 6*nMSLineWidth;break;
-            case 13:
-            case 15:
+            case 12:
+                nIdx = (nIdx == 11) ? 12 : 11;
+                break;
             case 14:
-            //case 24: ##158## setting relief to this multiple of its width
-            //is overkill, lets leave it at its original width.
-            case 25: nMSTotalWidth = 8*nMSLineWidth;break;
-        }
-
-        // dann auf unsere Randtypen mappen
-        switch( nIdx )
-        {
-            // zuerst die Einzel-Linien
-            case  1:
-            case  2:
-            case  5:
-            case  6:
-            case 22:
-            case  7:
-            case  8:
-            case  9:
-            // UND die Sonderfaelle, die wir durch eine Einzel-Linie
-            case 13:                // bzw. notfalls durch eine Doppel-Linie darstellen
-            case 16:
-            case 19:
+            case 15:
+                nIdx = (nIdx == 14) ? 15 : 14;
+                break;
+            case 17:
+            case 18:
+                nIdx = (nIdx == 17) ? 18 : 17;
+                break;
             case 24:
-            case 25:         if( nMSTotalWidth < 11) nIdx =            0;//   1 Twip bei uns
-                            else if( nMSTotalWidth < 46) nIdx =            1;//  20 Twips
-                            else if( nMSTotalWidth < 66) nIdx =            2;//  50
-                            else if( nMSTotalWidth < 91) nIdx =            3;//  80
-                            else if( nMSTotalWidth <126) nIdx =            4;// 100
-                            // Pfusch: fuer die ganz dicken Linien muessen
-                            //         wir doppelte Linien malen, weil unsere
-                            //               Einfach-Linie nicht dicker als 5 Punkt wird
-                            else if( nMSTotalWidth <166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
-                            else                         nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
-                            break;
-            // dann den Schraffurbalken, den wir durch eine doppelte Linie darstellen
-            case 23:    nIdx =  6;
-                                break;
-            // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
-            case  3:
-            case 10:         if( nMSTotalWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nMSTotalWidth < 106) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
-                            break;
-            case 12:         if( nMSTotalWidth <  87) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71 Twips bei uns
-                            else if( nMSTotalWidth < 117) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
-                            else if( nMSTotalWidth < 166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
-                            break;
-            case 11:         if( nMSTotalWidth < 137) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90 Twips bei uns
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
-                            break;
-            case 15:         if( nMSTotalWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nMSTotalWidth < 106) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-                            else if( nMSTotalWidth < 166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
-                            break;
-            case 14:         if( nMSTotalWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nMSTotalWidth <  76) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-                            else if( nMSTotalWidth < 121) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90
-                            else if( nMSTotalWidth < 166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
-                            break;
-            case 18:         if( nMSTotalWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nMSTotalWidth <  62) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;//  52
-                            else if( nMSTotalWidth <  87) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71
-                            else if( nMSTotalWidth < 117) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
-                            else if( nMSTotalWidth < 156) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
-                            break;
-            case 17:         if( nMSTotalWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nMSTotalWidth <  72) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;//  52
-                            else if( nMSTotalWidth < 137) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
-                            break;
-            case 20:         if( nMSTotalWidth <  46) nIdx =             1;//  20 Twips bei uns
-                            else                          nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-                            break;
-            case 21:                                  nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60 Twips bei uns
-                            break;
-
-            default: nIdx = 0;
+            case 25:
+                nIdx = (nIdx == 24) ? 25 : 24;
+                break;
         }
+    }
 
-        nCol  = rBor.aBits2[0]; // aBor.ico
+    // Map to our border types.
+    switch( nIdx )
+    {
+        // First the single lines
+        case  1:
+        case  2:
+        case  5:
+        // and the unsupported special cases which we map to a single line
+        case  6:
+        case  7:
+        case  8:
+        case  9:
+        case 22:
+        // or if in necessary by a double line
+        case 24:
+        case 25:
+            if( nLineThickness < 11)
+                nIdx = 0;//   1 Twip for us
+            else if( nLineThickness < 46)
+                nIdx = 1;//  20 Twips
+            else if( nLineThickness < 66)
+                nIdx = 2;//  50
+            else if( nLineThickness < 91)
+                nIdx = 3;//  80
+            else if( nLineThickness < 126)
+                nIdx = 4;// 100
+            // Hack: for the quite thick lines we must paint double lines,
+            // because our singles lines don't come thicker than 5 points.
+            else if( nLineThickness < 166)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
+        break;
+        // then the shading beams which we represent by a double line
+        case 23:
+            nIdx =  6;
+        break;
+        // then the double lines, for which we have good matches
+        case  3:
+        case 10: //Don't have tripple so use double
+            if( nLineThickness <  60)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;// 22 Twips for us
+            else if( nLineThickness < 135)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;// some more space
+            else if( nLineThickness < 180)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;// 60
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+            break;
+        case 11:
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90 Twips for us
+            break;
+        case 12:
+        case 13: //Don't have thin thick thin, so use thick thin
+            if( nLineThickness <  87)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71 Twips for us
+            else if( nLineThickness < 117)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
+            else if( nLineThickness < 166)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+            break;
+        case 14:
+            if( nLineThickness <  46)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
+            else if( nLineThickness <  76)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+            else if( nLineThickness < 121)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90
+            else if( nLineThickness < 166)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
+            break;
+        case 15:
+        case 16: //Don't have thin thick thin, so use thick thin
+            if( nLineThickness <  46)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
+            else if( nLineThickness <  76)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+            else if( nLineThickness < 121)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 3;//  90
+            else if( nLineThickness < 166)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+            break;
+        case 17:
+            if( nLineThickness <  46)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
+            else if( nLineThickness <  72)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;//  52
+            else if( nLineThickness < 137)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
+        break;
+        case 18:
+        case 19: //Don't have thin thick thin, so use thick thin
+            if( nLineThickness <  46)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips for us
+            else if( nLineThickness <  62)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 7;//  52
+            else if( nLineThickness <  87)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71
+            else if( nLineThickness < 117)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
+            else if( nLineThickness < 156)
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+            break;
+        case 20:
+            if( nLineThickness <  46)
+                nIdx = 1; //  20 Twips for us
+            else
+                nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+            break;
+        case 21:
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60 Twips for us
+            break;
+        default:
+            nIdx = 0;
+            break;
     }
 
     const WW8_BordersSO& rBorders = nLineTabVer8[ nIdx ];
-    rLine.SetOutWidth( rBorders.Out  );
-    rLine.SetInWidth ( rBorders.In   );
-    rLine.SetDistance( rBorders.Dist );
+    SvxBorderLine aLine;
+    aLine.SetOutWidth( rBorders.Out  );
+    aLine.SetInWidth ( rBorders.In   );
+    aLine.SetDistance( rBorders.Dist );
 
-    //NO auto for borders as yet, so if AUTO, use BLACK
+    //No AUTO for borders as yet, so if AUTO, use BLACK
     if (nCol == 0)
         nCol = 1;
 
-    rLine.SetColor( eSwWW8ColA[ nCol ] );
+    aLine.SetColor( eSwWW8ColA[ nCol ] );
 
-    /*
-        Achtung:  noch zu tun!!!
-        ========
-        eigentlich sollten wir uns jetzt die kumulierte Randbreite merken
-        ( als da waere:  rBorders.Out + rBorders.In + rBorders.Dist )
-        und sie nach draussen melden, damit die aufrufenden Methoden ggfs.
-        die Objekt-Breiten entsprechend vergroessern!
+    if (pSize)
+        pSize[nWWIndex] = nLineThickness+nSpace;
 
-        Warum?
-        ======
-        Weil Winword die Raender  a u s s e n  drauf malt, wir hingegen sie
-        innen rein zeichnen, was bei uns zu einem kleineren Innenraum fuehrt!
-    */
-
-    return rLine;
+    rBox.SetLine( &aLine, nOOIndex );
+    rBox.SetDistance( nSpace, nOOIndex );
 }
 
 
@@ -1987,9 +1970,16 @@ BOOL lcl_IsBorder( BOOL bVer67, const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE )
                ( pbrc[WW8_LEFT ].aBits1[0] & 0x18 ) ||
                ( pbrc[WW8_BOT  ].aBits1[0] & 0x18 ) ||
                ( pbrc[WW8_RIGHT].aBits1[0] & 0x18 ) ||
-               ( bChkBtwn && ( pbrc[WW8_BETW ].aBits1[0] & 0x18 ));
-                    // Abfrage auf 0x1f statt 0x18 ist noetig, da zumindest einige
-                    // WW-Versionen ( 6.0 US ) bei dotted brcType auf 0 setzen
+               ( bChkBtwn && ( pbrc[WW8_BETW ].aBits1[0] )) ||
+               //can have dotted and dashed with a brcType of 0
+               ( (pbrc[WW8_TOP  ].aBits1[0] & 0x07)+1 > 6) ||
+               ( (pbrc[WW8_LEFT ].aBits1[0] & 0x07)+1 > 6) ||
+               ( (pbrc[WW8_BOT  ].aBits1[0] & 0x07)+1 > 6) ||
+               ( (pbrc[WW8_RIGHT].aBits1[0] & 0x07)+1 > 6) ||
+               ( bChkBtwn && ( (pbrc[WW8_BETW ].aBits1[0] & 0x07)+1 > 6))
+               ;
+                // Abfrage auf 0x1f statt 0x18 ist noetig, da zumindest einige
+                // WW-Versionen ( 6.0 US ) bei dotted brcType auf 0 setzen
     else
         return pbrc[WW8_TOP  ].aBits1[1] ||         // brcType  != 0
                pbrc[WW8_LEFT ].aBits1[1] ||
@@ -2004,9 +1994,8 @@ BOOL SwWW8ImplReader::IsBorder( const WW8_BRC* pbrc, BOOL bChkBtwn )
 }
 
 BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
-    BYTE nSetBorders, BOOL bChkBtwn )
+    short *pSizeArray, BYTE nSetBorders, BOOL bChkBtwn )
 {
-    SvxBorderLine aLine;
     BOOL bChange = FALSE;
     static USHORT __READONLY_DATA aIdArr[ 10 ] = {
             WW8_TOP,    BOX_LINE_TOP,
@@ -2025,7 +2014,7 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
                         ? ( rB.aBits1[0] & 0x001f )     // Version 6/7
                         : rB.aBits1[1] ) ))             // Version 8
         {
-            rBox.SetLine( &Set1Border( bVer67, aLine, rB ), aIdArr[ i+1 ] );
+            Set1Border(bVer67, rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray);
             bChange = TRUE;
         }
         else if ( nSetBorders & (1 << aIdArr[i]) )
@@ -2050,8 +2039,8 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
 }
 
 
-BOOL SwWW8ImplReader::SetShadow( SvxShadowItem& rShadow,
-                                const SvxBoxItem& rBox, const WW8_BRC pbrc[4] )
+BOOL SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
+    const WW8_BRC pbrc[4] )
 {
     BOOL bRet = ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
                          : (pbrc[WW8_RIGHT].aBits2[ 1 ] & 0x20 ) ) &&
@@ -2088,14 +2077,14 @@ void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
 }
 
 
-void SwWW8ImplReader::SetFlyBordersShadow(  SfxItemSet& rFlySet,
-                                            const WW8_BRC pbrc[4],
-                                            USHORT nInnerMgn )
+BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
+    const WW8_BRC pbrc[4], USHORT nInnerMgn, short *pSizeArray )
 {
+    BOOL bShadowed=FALSE;
     if( IsBorder( pbrc ) )
     {
         SvxBoxItem aBox;
-        SetBorder( aBox, pbrc );
+        SetBorder( aBox, pbrc, pSizeArray );
 
         if( nInnerMgn )
             aBox.SetDistance( nInnerMgn );          // Rand innen
@@ -2104,8 +2093,12 @@ void SwWW8ImplReader::SetFlyBordersShadow(  SfxItemSet& rFlySet,
         // fShadow
         SvxShadowItem aShadow;
         if( SetShadow( aShadow, aBox, pbrc ))
+        {
+            bShadowed=TRUE;
             rFlySet.Put( aShadow );
+        }
     }
+    return bShadowed;
 }
 
 
@@ -2117,7 +2110,7 @@ void SwWW8ImplReader::SetFlyBordersShadow(  SfxItemSet& rFlySet,
 #define MAX_BORDER_SIZE 210         // so breit ist max. der Border
 #define MAX_EMPTY_BORDER 10         // fuer +-1-Fehler, mindestens 1
 
-
+#if 0
 static short GetLineWidth( BOOL bVer67, const WW8_BRC& rBor )
 {
 /*
@@ -2144,6 +2137,7 @@ JP 19.11.98: wenn dann muss es so richtig sein, die Version MUSS beachtet werden
     ::Set1Border( bVer67, aLine, rBor );
     return aLine.GetOutWidth() + aLine.GetInWidth() + aLine.GetDistance();
 }
+#endif
 
 static void FlySecur1( short& rSize, const short nMgn1, const short nMgn2,
                        const BOOL bBorder )
@@ -2553,9 +2547,13 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
 
         nLeLMgn += 20 * nLeft;          // dxpSpace
         nRiLMgn += 20 * nRight;         // dxpSpace
-
+#if 1
+        nLeLMgn += rBrc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67);
+        nRiLMgn += rBrc[WW8_RIGHT].DetermineBorderProperties(rWW.bVer67);
+#else
         nLeLMgn += GetLineWidth( rWW.bVer67, rBrc[WW8_LEFT] );
         nRiLMgn += GetLineWidth( rWW.bVer67, rBrc[WW8_RIGHT] );
+#endif
 
         nInnerMgn += nLeft + nRight;
         nInnerMgn *= 5;     // Mittelwert in Twips (20 * 4 Kanten)
@@ -2623,9 +2621,10 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, /*const*/ WW8FlyPara* pFW,
 {
     if( !rReader.bNew )
         Reader::ResetFrmFmtAttrs( *this );  // Abstand/Umrandung raus
-
                                             // Position
-    Put( SwFmtHoriOrient( pFS->nXPos, pFS->eHAlign, pFS->eHRel, pFS->bToggelPos ));
+
+    Put( SwFmtHoriOrient( pFS->nXPos, pFS->eHAlign, pFS->eHRel,
+                pFS->bToggelPos ));
     Put( SwFmtVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
     if( pFS->nLeMgn || pFS->nRiMgn )        // Raender setzen
@@ -2643,7 +2642,6 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, /*const*/ WW8FlyPara* pFW,
         Put( aUL );
     }
 
-
     SwFmtSurround aSur( pFS->eSurround );   // Umfluss
 
 //  GoldCut umfliesst inzwischen nur dann auf beiden Seiten, wenn der Fly
@@ -2653,14 +2651,18 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, /*const*/ WW8FlyPara* pFW,
 
     Put( aSur );
 
-    rReader.SetFlyBordersShadow( *this, (WW8_BRC*)pFW->brc,
-                                          pFS->nInnerMgn );
+    short aSizeArray[5]={0};
+    rReader.SetFlyBordersShadow( *this, (WW8_BRC*)pFW->brc, pFS->nInnerMgn,
+        &aSizeArray[0] );
             // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
-    if( !bGraf ){           // Textrahmen->Anker und Groesse einstellen
+    if( !bGraf )
+    {           // Textrahmen->Anker und Groesse einstellen
         Put( SwFmtAnchor( pFS->eAnchor, 1 ) );
                                             // Groesse einstellen
-        Put( SwFmtFrmSize( pFS->eHeightFix, pFS->nWidth, pFS->nHeight ));
+        Put( SwFmtFrmSize( pFS->eHeightFix,
+            pFS->nWidth+aSizeArray[WW8_LEFT]+aSizeArray[WW8_RIGHT],
+            pFS->nHeight+aSizeArray[WW8_TOP]+aSizeArray[WW8_BOT] ));
     }
 }
 
@@ -2675,13 +2677,30 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     SwFmtAnchor aAnchor( FLY_IN_CNTNT );
     aAnchor.SetAnchor( pPaM->GetPoint() );
     Put( aAnchor );
-    Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
-//  Put( SwFmtHoriOrient( 0, HORI_NONE, REL_CHAR, FALSE ));
-//  Put( SwFmtVertOrient( 0, VERT_NONE, REL_CHAR ) );
     Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
 
-    rReader.SetFlyBordersShadow( *this, rPic.rgbrc, 0 );
+    short aSizeArray[5]={0};
+    /*
+    If we have set borders then in word the graphic is displaced from the left
+    and top the width of the borders of those sides, and then the shadow
+    itself is drawn to the bottom and right of the displaced graphic.  In word
+    the total size is that of the graphic plus the borders, plus the total
+    shadow around all edges, for this translation the top and left shadow
+    region is translated spacing around the graphic to those sides, and the
+    bottom and right shadow size is added to the graphic size.
+    */
+    if (rReader.SetFlyBordersShadow( *this, rPic.rgbrc, 0, &aSizeArray[0]))
+    {
+        Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0 ) );
+        Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0 ));
+        aSizeArray[WW8_RIGHT]*=2;
+        aSizeArray[WW8_BOT]*=2;
+    }
+
+    Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth+aSizeArray[WW8_LEFT]+
+        aSizeArray[WW8_RIGHT], nHeight+aSizeArray[WW8_TOP]+
+        aSizeArray[WW8_BOT] ) );
 }
 
 WW8DupProperties::WW8DupProperties(SwDoc &rDoc,
@@ -4394,7 +4413,7 @@ void SwWW8ImplReader::Read_Border( USHORT nId, const BYTE* pData, short nLen )
                 SvxBoxItem aBox;
                 if( pBox )
                     aBox = *pBox;
-                SetBorder( aBox, aBrcs, nBorder, TRUE );
+                SetBorder( aBox, aBrcs, 0, nBorder, TRUE );
 
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
@@ -5111,9 +5130,10 @@ SprmReadInfo aSprmReadTab[] = {
     0x4874, (FNReadRecord)0, //undocumented
     0x6463, (FNReadRecord)0, //undocumented
     0x6870, (FNReadRecord)0, //undocumented
-    0x2461, (FNReadRecord)0, //undocumented
-    0x845E, (FNReadRecord)0, //undocumented
-    0x8460, (FNReadRecord)0, //undocumented
+    0x2461, (FNReadRecord)0, //undoc, must be asian version of "sprmPJc"
+    0x845E, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft"
+    0x8460, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft1"
+    0x845D, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaRight"
     0x3615, (FNReadRecord)0 //undocumented
 };
 
@@ -5216,12 +5236,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.34 2001-08-28 15:24:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.35 2001-09-05 10:16:19 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.34  2001/08/28 15:24:29  cmc
+      #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
+
       Revision 1.33  2001/07/30 09:18:10  cmc
       #i1353# Import Vertical Cell Alignment
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-26 19:23:34 $
+ *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,10 +256,6 @@
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
 #endif
-
-#ifdef __WW8_NEEDS_COPY
-void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
-#endif // defined __WW8_NEEDS_COPY
 
 using namespace ::com::sun::star;
 
@@ -1737,13 +1733,7 @@ BOOL SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     long nOldPos = pDataStream->Tell();
     WW8_PIC aPic;
     pDataStream->Seek( nOffset);
-#ifdef __WW8_NEEDS_COPY
-    WW8_PIC_SHADOW aPicS;
-    pDataStream->Read( &aPicS, sizeof( aPicS ) );
-    WW8PicShadowToReal( &aPicS, &aPic );
-#else
-    pDataStream->Read( &aPic, sizeof( aPic ) );
-#endif
+    PicRead( pDataStream, &aPic, bVer67);
 
     if((aPic.lcb > 0x3A) && !pDataStream->GetError() )
     {
@@ -2136,12 +2126,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.9 2001-07-26 19:23:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.10 2001-09-05 10:16:19 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/07/26 19:23:34  jp
+      Bug #88107#: use correct StarSymbol characters
+
       Revision 1.8  2001/07/18 12:34:22  cmc
       #89743# non explictly numbered paragraph needs to have numbering reset if following explicitly numbered para, regardless of 2nd para being in a numbering style
 
