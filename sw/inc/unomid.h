@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 12:30:40 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,5 +149,6 @@
 #define MID_RUBY_TEXT           0
 #define MID_RUBY_ADJUST         1
 #define MID_RUBY_CHARSTYLE      2
+#define MID_RUBY_ABOVE          3
 
 #endif

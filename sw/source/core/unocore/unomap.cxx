@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:01:02 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_RUBY_TEXT           ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID,          MID_RUBY_TEXT },  \
         { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },  \
         { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID,          MID_RUBY_CHARSTYLE },  \
+        { SW_PROP_NAME(UNO_NAME_RUBY_IS_ABOVE         ),        RES_TXTATR_CJK_RUBY,    &::getBooleanCppuType(),  PropertyAttribute::MAYBEVOID,         MID_RUBY_ABOVE },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,      MID_RELIEF },  \
 
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))

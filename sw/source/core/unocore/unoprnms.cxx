@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:52:42 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_BASE_TEXT                      (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_TEXT                           (MAP_CHAR_LEN("RubyText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_ADJUST                         (MAP_CHAR_LEN("RubyAdjust"));
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_CHAR_STYLE_NAME                (MAP_CHAR_LEN("RubyCharStyleName"));
+const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_IS_ABOVE                       (MAP_CHAR_LEN("RubyIsAbove"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_HEIGHT                     (MAP_CHAR_LEN("FootnoteHeight"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_WEIGHT                (MAP_CHAR_LEN("FootnoteLineWeight"));

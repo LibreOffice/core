@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:47:21 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,12 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RUBY_CHARSTYLE:
                 rVal <<= (OUString)SwXStyleFamilies::GetProgrammaticName(sCharFmtName, SFX_STYLE_FAMILY_CHAR );
         break;
+        case MID_RUBY_ABOVE:
+        {
+            sal_Bool bAbove = !nPosition;
+            rVal.setValue(&bAbove, ::getBooleanCppuType());
+        }
+        break;
         default:
             bRet = FALSE;
     }
@@ -541,6 +547,16 @@ BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
                 nAdjustment = nSet;
             else
                 bRet = sal_False;
+        }
+        break;
+        case MID_RUBY_ABOVE:
+        {
+            const uno::Type& rType = ::getBooleanCppuType();
+            if(rVal.hasValue() && rVal.getValueType() == rType)
+            {
+                sal_Bool bAbove = *(sal_Bool*)rVal.getValue();
+                nPosition = bAbove ? 0 : 1;
+            }
         }
         break;
         case MID_RUBY_CHARSTYLE:
