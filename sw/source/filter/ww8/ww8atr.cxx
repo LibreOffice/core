@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,9 @@
 #endif
 #ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
+#endif
+#ifndef _FLDDROPDOWN_HXX
+#include <flddropdown.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2411,6 +2414,16 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         sStr.APPEND_CONST_ASC("))");
         rWW8Wrt.OutField( pFld, 49, sStr);
         }
+        break;
+    case RES_DROPDOWN:
+        if (rWW8Wrt.bWrtWW8)
+        {
+            const SwDropDownField& rFld = *(SwDropDownField*)pFld;
+            com::sun::star::uno::Sequence<rtl::OUString> aItems = rFld.GetItemSequence();
+            rWW8Wrt.DoComboBox(rFld.GetName(), rFld.GetSelectedItem(), aItems);
+        }
+        else
+            bWriteExpand = true;
         break;
     default:
         bWriteExpand = true;
