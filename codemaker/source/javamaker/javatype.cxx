@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:08:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,9 +875,11 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
 
     o << "public interface " << m_name;
 
-    OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
-        o << " extends " << scopedName(m_typeName, superType);
+    sal_uInt16 superTypeCount = m_reader.getMISuperTypeCount();
+    for (sal_uInt16 i = 0; i < superTypeCount; ++i) {
+        OString superType(m_reader.getMISuperTypeName(i));
+        o << (i == 0 ? " extends " : ", ") << scopedName(m_typeName, superType);
+    }
 
     o << "\n{\n";
     inc();
