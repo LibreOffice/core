@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:55:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ Menu RID_POPUP_CHANGES
             Text[ dutch ] = "Commentaar bewerken...";
             Text[ chinese_simplified ] = "±à¼­×¢½â...";
             Text[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ...";
-            Text[ korean ] = "ÆíÁı ÁÖ...";
+            Text[ korean ] = "ÁÖ¼® ÆíÁı...";
             Text[ turkish ] = "Açıklamayı düzenle...";
             Text[ language_user1 ] = " ";
         };
@@ -749,7 +749,7 @@ Menu RID_POPUP_CHANGES
                         Text[ dutch ] = "Auteur";
                         Text[ chinese_simplified ] = "×÷Õß";
                         Text[ greek ] = "ÓõíôÜêôçò";
-                        Text[ korean ] = "ÀúÀÚ";
+                        Text[ korean ] = "ÀÛ¼ºÀÚ";
                         Text[ turkish ] = "Yazan";
                         Text[ language_user1 ] = " ";
                     };
