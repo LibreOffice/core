@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 15:35:33 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 09:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ namespace connectivity
                     // destroy the object if xHoldAlive decrement the refcount to 0
                     return;
                 }
+                else
+                    delete m_pDerivedImplementation;
             }
         }
     };
