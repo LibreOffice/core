@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:50:41 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1914,12 +1914,19 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
                 pFrm = pFrm->GetNext();
             }
             SwCntntFrm *pCnt = ((SwLayoutFrm*)this)->ContainsCntnt();
-            pCnt->InvalidatePage();
-            do
-            {   pCnt->Prepare( PREP_ADJUST_FRM );
-                pCnt->_InvalidateSize();
-                pCnt = pCnt->GetNextCntntFrm();
-            } while ( ((SwLayoutFrm*)this)->IsAnLower( pCnt ) );
+            // --> OD 2004-12-20 #i36991# - be save.
+            // E.g., a row can contain *no* content.
+            if ( pCnt )
+            {
+                pCnt->InvalidatePage();
+                do
+                {
+                    pCnt->Prepare( PREP_ADJUST_FRM );
+                    pCnt->_InvalidateSize();
+                    pCnt = pCnt->GetNextCntntFrm();
+                } while ( ((SwLayoutFrm*)this)->IsAnLower( pCnt ) );
+            }
+            // <--
         }
     }
     else if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
