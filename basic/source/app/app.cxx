@@ -2,9 +2,17 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.55 $
+<<<<<<< app.cxx
+ *  $Revision: 1.56 $
+=======
+ *  $Revision: 1.56 $
+>>>>>>> 1.53.36.2
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:23:29 $
+<<<<<<< app.cxx
+ *  last change: $Author: obo $ $Date: 2004-07-07 10:08:42 $
+=======
+ *  last change: $Author: obo $ $Date: 2004-07-07 10:08:42 $
+>>>>>>> 1.53.36.2
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,81 +202,6 @@ void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
         TestToolDebugMessageFilter( pString );
 }
 #endif
-
-TTUniqueId::TTUniqueId()
-: nUId( 0 )
-, aUIdType( UID_UNKNOWN )
-{}
-
-TTUniqueId::TTUniqueId( const String& aUId, UIdType aType )
-: nUId( 0 )
-, aUStrId( aUId )
-, aUIdType( aType )
-{
-    DBG_ASSERT( aUIdType == UID_UNO || aUIdType == UID_MOZILLA || aUIdType == UID_UNKNOWN_STRING, "StringID set with NonString type" )
-};
-
-TTUniqueId::TTUniqueId( ULONG nUId )
-: nUId( nUId )
-, aUIdType( UID_VCL )
-{};
-
-BOOL TTUniqueId::operator == ( const TTUniqueId& rRight ) const
-{
-    if ( IsStrId() && rRight.IsStrId() )
-        return aUStrId == rRight.aUStrId;
-    else if ( !IsStrId() && !rRight.IsStrId() )
-        return nUId == rRight.nUId;
-    else
-        return FALSE;
-}
-
-BOOL TTUniqueId::operator <  ( const TTUniqueId& rRight ) const
-{
-    if ( IsStrId() && rRight.IsStrId() )
-        return aUStrId < rRight.aUStrId;
-    else if ( !IsStrId() && !rRight.IsStrId() )
-        return nUId < rRight.nUId;
-    else
-        return IsStrId();    // Sort strings to the top
-}
-
-String TTUniqueId::GetString() const
-{
-    if ( IsStrId() )
-        return aUStrId;
-    else
-        return String::CreateFromInt64( nUId );
-}
-
-ULONG TTUniqueId::GetULONG() const
-{
-    DBG_ASSERT( aUIdType == UID_VCL, "GetULONG on StringID" )
-    return nUId;
-};
-
-BOOL TTUniqueId::IsStrId( UIdType aUIdType )
-{
-    switch ( aUIdType )
-    {
-        case UID_UNO:
-        case UID_MOZILLA:
-        case UID_UNKNOWN_STRING:
-            return TRUE;
-        case UID_VCL:
-            return FALSE;
-        case UID_UNKNOWN:
-        default:
-            DBG_ERROR( "UNKNOWN UIdType")
-            return FALSE;
-    }
-}
-
-BOOL TTUniqueId::IsStrId() const
-{
-    return IsStrId( aUIdType );
-}
-
 
 // #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
