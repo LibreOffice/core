@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:24 $
+ *  last change: $Author: bm $ $Date: 2002-11-13 16:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <com/sun/star/chart/ChartDataRowSource.idl>
 #endif
 
+#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+#endif
 
 //=============================================================================
 
@@ -92,6 +95,13 @@
  */
 service Diagram
 {
+
+    /** If a <type>Diagram</type> may be stored as XML file, this
+        service should be supported in order to preserve unparsed XML
+        attributes.
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
     interface com::sun::star::chart::XDiagram;
 
     interface com::sun::star::beans::XPropertySet;
@@ -123,6 +133,9 @@ service Diagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/03 13:02:24  mi
+    #94968# IDL reviews merged
+
     Revision 1.4.20.2  2002/01/29 14:23:17  bm
     #96984# IDL Review -- second check
 
