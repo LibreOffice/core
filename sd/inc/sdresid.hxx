@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdresid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:19:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,19 @@
 #ifndef SD_RESID_HXX
 #define SD_RESID_HXX
 
-
 #ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
 #endif
 
-class SdResId : public ResId
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
+class SD_DLLPUBLIC SdResId : public ResId
 {
 public:
     SdResId(USHORT nId);
     SdResId(USHORT nId, ResMgr* pMgr);   // kann entfallen
 };
 
-
-
-#endif      // _SD_SDRESID_HXX
-
+#endif /* _SD_SDRESID_HXX */
