@@ -420,6 +420,14 @@ $(SHL1TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL1OBJS) `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)) $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -845,6 +853,14 @@ $(SHL2TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL2OBJS) `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)) $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -1270,6 +1286,14 @@ $(SHL3TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL3OBJS) `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)) $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -1695,6 +1719,14 @@ $(SHL4TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL4OBJS) `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)) $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -2120,6 +2152,14 @@ $(SHL5TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL5OBJS) `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)) $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -2545,6 +2585,14 @@ $(SHL6TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL6OBJS) `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)) $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -2970,6 +3018,14 @@ $(SHL7TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL7OBJS) `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)) $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -3395,6 +3451,14 @@ $(SHL8TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL8OBJS) `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)) $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -3820,6 +3884,14 @@ $(SHL9TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL9OBJS) `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)) $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
 # Anweisungen fuer das Linken
@@ -4245,6 +4317,14 @@ $(SHL10TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL10TARGETN)"!=""
 
 # Anweisungen fuer das Linken

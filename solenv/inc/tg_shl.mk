@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 14:12:09 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 14:45:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -520,6 +520,14 @@ $(SHL$(TNR)TARGETN) : \
     @+-$(RM) $@ $@.xSYM
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL$(TNR)OBJS) `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)) $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
+.IF "$(TARGETTHREAD)"!="MT"
+    @+echo ----------------------------------------------------------
+    @+echo -
+    @+echo - THREAD WARNING! - this library was linked single threaded 
+    @+echo - and must not be used in any office installation!
+    @+echo -
+    @+echo ----------------------------------------------------------
+.ENDIF			# "$(TARGETTHREAD)"!="MT"
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 
 # Anweisungen fuer das Linken
