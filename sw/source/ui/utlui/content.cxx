@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-06-27 11:07:59 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,9 +979,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
 {
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
-    Bitmap aRootClosed      (SW_RES(BMP_ROOT_CLOSED));
-    Bitmap aRootOpened      (SW_RES(BMP_ROOT_OPENED));
-    SetNodeBitmaps( aRootClosed, aRootOpened );
+    SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
     for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)

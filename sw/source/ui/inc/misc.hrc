@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:11:18 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 #define STR_QUERY_DELETE_GROUP1     (RC_MISC_BEGIN + 32)
 #define STR_QUERY_DELETE_GROUP2     (RC_MISC_BEGIN + 33)
 #define MSG_NO_GLOSSARIES           (RC_MISC_BEGIN + 34)
-
-#define BMP_ROOT_CLOSED             (RC_MISC_BEGIN + 35)
-#define BMP_ROOT_OPENED             (RC_MISC_BEGIN + 36)
 
 #define MSG_BLOCK_CREATE_ERR        (RC_MISC_BEGIN + 40)
 #define MSG_BLOCK_DELETE_ERR        (RC_MISC_BEGIN + 41)
