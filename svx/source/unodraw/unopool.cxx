@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 11:39:12 $
+ *  last change: $Author: cl $ $Date: 2002-11-15 15:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,25 @@ using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
 
+SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel, sal_Int32 nServiceId ) throw()
+: PropertySetHelper( SvxPropertySetInfoPool::getOrCreate( nServiceId ) ), mpModel( pModel )
+{
+    init();
+}
+
+/* deprecated */
 SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel ) throw()
 : PropertySetHelper( SvxPropertySetInfoPool::getOrCreate( SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS ) ), mpModel( pModel )
+{
+    init();
+}
+
+SvxUnoDrawPool::~SvxUnoDrawPool() throw()
+{
+    delete mpDefaultsPool;
+}
+
+void SvxUnoDrawPool::init()
 {
     mpDefaultsPool = new SdrItemPool(SDRATTR_START, SDRATTR_END );
     SfxItemPool* pOutlPool=EditEngine::CreatePool();
@@ -134,11 +151,6 @@ SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel ) throw()
     SdrModel::SetTextDefaults( mpDefaultsPool, SdrEngineDefaults::GetFontHeight() );
     mpDefaultsPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
     mpDefaultsPool->FreezeIdRanges();
-}
-
-SvxUnoDrawPool::~SvxUnoDrawPool() throw()
-{
-    delete mpDefaultsPool;
 }
 
 SfxItemPool* SvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()

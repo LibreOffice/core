@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 17:14:12 $
+ *  last change: $Author: cl $ $Date: 2002-11-15 15:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ class SvxUnoDrawPool :  public ::cppu::OWeakAggObject,
                         public comphelper::PropertySetHelper
 {
 public:
+    SvxUnoDrawPool( SdrModel* pModel, sal_Int32 nServiceId ) throw();
+
+    /** deprecated */
     SvxUnoDrawPool( SdrModel* pModel ) throw();
     virtual ~SvxUnoDrawPool() throw();
 
@@ -121,6 +124,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
+    void init();
+
     virtual void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException);
     virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException);
 

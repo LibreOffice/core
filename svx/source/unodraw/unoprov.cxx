@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-01 13:57:31 $
+ *  last change: $Author: cl $ $Date: 2002-11-15 15:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1299,6 +1299,10 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
         {
         case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS:
             mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+            break;
+        case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER:
+            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->remove( OUString( RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION ) ) );
             break;
 
         default:
