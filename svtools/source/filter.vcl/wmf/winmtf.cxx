@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:27:14 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,12 +1659,29 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                     if ( nObjectsOfSameSize == 2 )
                     {
                         BSaveStruct* pSave2 = (BSaveStruct*)rSaveList.GetObject( i + 1 );
-                        if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) )
+                        if ( ( pSave->aBmp.GetPrefSize() == pSave2->aBmp.GetPrefSize() ) &&
+                             ( pSave->aBmp.GetPrefMapMode() == pSave2->aBmp.GetPrefMapMode() ) )
                         {
-                            if ( ( pSave->aBmp.GetPrefSize() == pSave2->aBmp.GetPrefSize() ) &&
-                                    ( pSave->aBmp.GetPrefMapMode() == pSave2->aBmp.GetPrefMapMode() ) )
+                            // TODO: Strictly speaking, we should
+                            // check whether mask is monochrome, and
+                            // whether image is black (upper branch)
+                            // or white (lower branch). Otherwise, the
+                            // effect is not the same as a masked
+                            // bitmap.
+                            if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) )
                             {
                                 Bitmap aMask( pSave->aBmp ); aMask.Invert();
+                                BitmapEx aBmpEx( pSave2->aBmp, aMask );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
+                                bDrawn = sal_True;
+                                i++;
+                            }
+                            // #i20085# This is just the other way
+                            // around as above. Only difference: mask
+                            // is inverted
+                            else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) )
+                            {
+                                Bitmap aMask( pSave->aBmp );
                                 BitmapEx aBmpEx( pSave2->aBmp, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 bDrawn = sal_True;
