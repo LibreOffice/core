@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:14:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,7 +1365,9 @@ void SaneDlg::SaveState()
                     ByteString aString( "NUMERIC=" );
                     double fValue;
                     char buf[256];
-                    for( int n = 0; n < mrSane.GetOptionElements( nOption ); n++ )
+                    int n;
+
+                    for( n = 0; n < mrSane.GetOptionElements( nOption ); n++ )
                     {
                         if( ! mrSane.GetOptionValue( nOption, fValue, n ) )
                             break;
