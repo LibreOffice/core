@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:12:54 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,7 +1318,15 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron
 void ScInputHandler::UpdateActiveView()
 {
     ImplCreateEditEngine();
-    Window* pShellWin = pActiveViewSh ? pActiveViewSh->GetActiveWin() : NULL;
+
+    // #i20588# Don't rely on focus to find the active edit view. Instead, the
+    // active pane at the start of editing is now stored (GetEditActivePart).
+    // GetActiveWin (the currently active pane) fails for ref input across the
+    // panes of a split view.
+
+    Window* pShellWin = pActiveViewSh ?
+                pActiveViewSh->GetWindowByPos( pActiveViewSh->GetViewData()->GetEditActivePart() ) :
+                NULL;
 
     USHORT nCount = pEngine->GetViewCount();
     if (nCount > 0)
@@ -1328,7 +1336,7 @@ void ScInputHandler::UpdateActiveView()
         {
             EditView* pThis = pEngine->GetView(i);
             Window* pWin = pThis->GetWindow();
-            if ( pWin==pShellWin || pWin->HasFocus() )
+            if ( pWin==pShellWin )
                 pTableView = pThis;
         }
     }
@@ -2220,7 +2228,10 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
         ShowRefFrame();
 
         if (pExecuteSh)
+        {
             pExecuteSh->SetTabNo(aCursorPos.Tab());
+            pExecuteSh->ActiveGrabFocus();
+        }
 
         bFormulaMode = FALSE;
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
@@ -2338,7 +2349,10 @@ void ScInputHandler::CancelHandler()
     {
         ShowRefFrame();
         if (pExecuteSh)
+        {
             pExecuteSh->SetTabNo(aCursorPos.Tab());
+            pExecuteSh->ActiveGrabFocus();
+        }
         bFormulaMode = FALSE;
         SFX_APP()->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
         SC_MOD()->SetRefInputHdl(NULL);
