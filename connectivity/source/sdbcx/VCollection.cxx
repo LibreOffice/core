@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:55:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 13:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;
@@ -121,10 +124,7 @@ void OCollection::disposing(void)
     {
         if((*aIter).second.is())
         {
-            Reference< XComponent > xComp2((*aIter).second, UNO_QUERY);
-            if(xComp2.is())
-                xComp2->dispose();
-
+            ::comphelper::disposeComponent(aIter->second);
             (*aIter).second = Reference< XNamed >();
         }
     }
@@ -188,10 +188,7 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
     {
         if((*aIter).second.is())
         {
-            Reference< XComponent > xComp2((*aIter).second, UNO_QUERY);
-            if(xComp2.is())
-                xComp2->dispose();
-
+            ::comphelper::disposeComponent(aIter->second);
             (*aIter).second = Reference< XNamed >();
         }
     }
@@ -251,6 +248,8 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
     {
         if(m_aElements[i] == aIter)
         {
+            ::comphelper::disposeComponent(aIter->second);
+
             m_aElements.erase(m_aElements.begin()+i);
             m_aNameMap.erase(aIter);
             break; // no duplicates possible
@@ -270,6 +269,7 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
     if(index <0 || index > getCount())
         throw IndexOutOfBoundsException(::rtl::OUString(),*this);
 
+    ::comphelper::disposeComponent(m_aElements[index]->second);
     ::rtl::OUString elementName = m_aElements[index]->first;
     m_aNameMap.erase(m_aElements[index]);
     m_aElements.erase(m_aElements.begin()+index);
