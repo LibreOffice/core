@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
     @see com::sun::star::sdbcx::Column
     @see com::sun::star::sdbcx::Table
  */
-service ColumnDescriptor
+published service ColumnDescriptor
 {
     // DocMerge: empty anyway
     service com::sun::star::sdbcx::Descriptor;
