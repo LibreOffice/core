@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2004-07-16 13:14:42 $
+#   last change: $Author: rt $ $Date: 2004-07-23 10:24:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ TRANSEX*=transex3
 ULFEX*=ulfex
 XMLEX*=xmlex
 XRMEX*=xrmex
+CFGEX*=cfgex
 .ENDIF  "$(USE_SHELL)"!="4nt"
 MKDIRHIER=$(MKDIR) 
 SCP_CHECK_TOOL=checkscp.exe
@@ -146,6 +147,7 @@ TRANSEX*=transex3
 ULFEX*=ulfex
 XMLEX*=xmlex
 XRMEX*=xrmex
+CFGEX*=cfgex
 .ENDIF			# "$(GUI)"=="UNX"
 
 MAKEDEPEND*=$(WRAPCMD) makedepend
