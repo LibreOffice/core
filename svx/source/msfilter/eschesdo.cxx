@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-11 12:17:30 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2517,7 +2517,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
         {
             // why not declare a const parameter if the object will
             // not be modified?
-            mXShape = pSvxDrawPage->_CreateShape( (SdrObject*) &rObj );
+            mXShape = uno::Reference< drawing::XShape >::query( ((SdrObject*)&rObj)->getUnoShape() );;
             Init( rEx );
         }
     }

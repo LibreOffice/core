@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-21 14:20:34 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@
 #ifndef _OUTLOBJ_HXX
 #include <outlobj.hxx>
 #endif
+
+using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2487,6 +2489,32 @@ void SdrModel::PostSave()
 //-/        while(aIter.IsMore())
 //-/            aIter.Next()->PreSave();
     }
+}
+
+uno::Reference< uno::XInterface > SdrModel::getUnoModel()
+{
+    // try weak reference first
+    uno::Reference< uno::XInterface > xModel( mxUnoModel );
+
+#ifndef SVX_LIGHT
+    if( !xModel.is() )
+    {
+        // create one
+        xModel = createUnoModel();
+
+        mxUnoModel = xModel;
+    }
+#endif
+
+    return xModel;
+
+}
+
+uno::Reference< uno::XInterface > SdrModel::createUnoModel()
+{
+    DBG_ERROR( "SdrModel::createUnoModel() - base implementation should not be called!" );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
+    return xInt;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

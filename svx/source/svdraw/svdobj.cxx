@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-09 09:42:57 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include "xlntrit.hxx"
 #include "xfltrit.hxx"
 #include "xlinjoit.hxx"
+#include "unopage.hxx"
 
 #ifndef _SVDPOOL_HXX
 #include "svdpool.hxx"
@@ -117,6 +118,8 @@
 #ifndef _MyEDITENG_HXX
 #include "editeng.hxx"
 #endif
+
+using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -4231,6 +4234,31 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
 void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
 {
     // Hier passiert erst was in SdrAttrObj und in SdrObjGroup
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SdrObject::getUnoShape()
+{
+    // try weak reference first
+    uno::Reference< uno::XInterface > xShape( mxUnoShape );
+
+#ifndef SVX_LIGHT
+    if( !xShape.is() && pPage )
+    {
+        uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
+        if( xPage.is() )
+        {
+            SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation(xPage);
+            if( pDrawPage )
+            {
+                // create one
+                xShape = pDrawPage->_CreateShape( this );
+                mxUnoShape = xShape;
+            }
+        }
+    }
+#endif
+
+    return xShape;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

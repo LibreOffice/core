@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #include "fmglob.hxx"
 
 #define CONVERT_STARIMAGE_OLE_OBJECT_TO_GRAPHIC 1
+
+using namespace ::com::sun::star;
 
 DBG_NAME(SdrObjList);
 
@@ -1739,6 +1741,31 @@ void SdrPage::SetBackgroundObj( SdrObject* pObj )
         pObj->SetLayer( 1 );        // Nothing known about the backgroundlayer...
     }
     delete pBackgroundObj, pBackgroundObj = pObj;
+}
+
+uno::Reference< uno::XInterface > SdrPage::getUnoPage()
+{
+    // try weak reference first
+    uno::Reference< uno::XInterface > xPage( mxUnoPage );
+
+#ifndef SVX_LIGHT
+    if( !xPage.is() )
+    {
+        // create one
+        xPage = createUnoPage();
+
+        mxUnoPage = xPage;
+    }
+#endif
+
+    return xPage;
+}
+
+uno::Reference< uno::XInterface > SdrPage::createUnoPage()
+{
+    DBG_ERROR( "SdrModel::createUnoPage() - base implementation should not be called!" );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
+    return xInt;
 }
 
 #ifdef GCC
