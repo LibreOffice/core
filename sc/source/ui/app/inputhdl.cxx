@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:36:44 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 14:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include <svx/algitem.hxx>
 #include <svx/adjitem.hxx>
+#include <svx/brshitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
@@ -1481,6 +1482,11 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped )               // TRUE = ne
                     pEngine->SetDefaults( *pEditDefaults );
                     pLastPattern = pPattern;
                     bLastIsSymbol = pPattern->IsSymbolFont();
+
+                    //  Background color must be known for automatic font color
+
+                    pEngine->SetBackgroundColor( ((const SvxBrushItem&)
+                                    pPattern->GetItem( ATTR_BACKGROUND )).GetColor() );
 
                     //  Ausrichtung
 
