@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:54:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ String STR_TEMPLNAMEFLD
     TEXT[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
     TEXT[ arabic ] = "ŞÇáÈ ãÓÊäÏ";
     TEXT[ greek ] = "Ğñüôõğï åããñÜöïõ";
-    TEXT[ korean ] = "¹®¼­ ÅÛÇÃ¸®Æ®";
+    TEXT[ korean ] = "¹®¼­ ÅÛÇÃ¸´";
     TEXT[ turkish ] = "Belge şablonu";
     TEXT[ language_user1 ] = " ";
 };
@@ -614,7 +614,7 @@ String STR_SEQFLD
     TEXT[ japanese ] = "˜A”Ô";
     TEXT[ chinese_traditional ] = "½s¸¹¶¶§Ç";
     TEXT[ arabic ] = "ÊÑŞíã ãÊÓáÓá";
-    TEXT[ greek ] = "Êıêëïò áñéèìşí";
+    TEXT[ greek ] = "Åğßğåäá áñßèìçóçò";
     TEXT[ korean ] = "¼ıÀÚ ¹üÀ§";
     TEXT[ turkish ] = "Numara aralığı";
     TEXT[ language_user1 ] = " ";
@@ -1742,7 +1742,7 @@ String FLD_EU_TELPRIV
     TEXT[ chinese_traditional ] = "¹q¸Ü(¨p¤H)";
     TEXT[ arabic ] = "ÇáåÇÊİ (ãäÒá)";
     TEXT[ greek ] = "Ôçë. (Ïéêßá)";
-    TEXT[ korean ] = "ÀüÈ­¹øÈ£ (Áı)";
+    TEXT[ korean ] = "ÀüÈ­¹øÈ£ (ÀÚÅÃ)";
     TEXT[ turkish ] = "Tlf. (Ev)";
     TEXT[ language_user1 ] = " ";
 };
@@ -1768,7 +1768,7 @@ String FLD_EU_TELFIRMA
     TEXT[ chinese_traditional ] = "¹q¸Ü(¿ì¤½«Ç)";
     TEXT[ arabic ] = "ÇáåÇÊİ (Úãá)";
     TEXT[ greek ] = "Ôçë. (Åñãáóßá)";
-    TEXT[ korean ] = "ÀüÈ­¹øÈ£. (Á÷Àå)";
+    TEXT[ korean ] = "ÀüÈ­¹øÈ£ (Á÷Àå)";
     TEXT[ turkish ] = "Tlf. (İş)";
     TEXT[ language_user1 ] = " ";
 };
@@ -1997,7 +1997,7 @@ String FMT_FF_UI_NAME
     Text[ chinese_traditional ] = "¼Ë¦¡";
     Text[ arabic ] = "ŞÇáÈ";
     Text[ greek ] = "Ğñüôõğï";
-    Text[ korean ] = "ÅÛÇÃ¸®Æ®";
+    Text[ korean ] = "¼­½Ä";
     Text[ turkish ] = "Şablon";
     Text[ language_user1 ] = " ";
 };
