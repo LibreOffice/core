@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:24:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #include "FrameView.hxx"
 #include "ObjectBarManager.hxx"
 #include "Window.hxx"
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #include "PaneDockingWindow.hxx"
 #include "sdmod.hxx"
 #include "app.hrc"
