@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+ *  last change: $Author: sab $ $Date: 2001-12-11 14:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,14 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
         ((SvXMLStylesContext_Impl *)this)->pIndices =
             new SvXMLStyleIndices_Impl( aStyles.Count(), 5 );
         for( sal_uInt32 i=0; i < aStyles.Count(); i++ )
-            pIndices->Insert( new SvXMLStyleIndex_Impl( aStyles.GetObject(i)) );
+        {
+            SvXMLStyleIndex_Impl* pStyleIndex = new SvXMLStyleIndex_Impl( aStyles.GetObject(i));
+            if (!pIndices->Insert( pStyleIndex ))
+            {
+//              DBG_ERROR("Here is a double Style");
+                delete pStyleIndex;
+            }
+        }
 #ifndef PRODUCT
         ((SvXMLStylesContext_Impl *)this)->nIndexCreated++;
 #endif
