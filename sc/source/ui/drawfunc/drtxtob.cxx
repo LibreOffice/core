@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:53:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 #include "drtxtob.hxx"
+#include "fudraw.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "drawview.hxx"
@@ -346,10 +347,19 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-            pView->ScEndTextEdit();                 // end text edit before switching direction
-            ExecuteGlobal( rReq );
-            // restore consistent state between shells and functions:
-            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            if (IsNoteEdit())
+            {
+                pView->CaptionTextDirection( rReq.GetSlot());     // process Notes before we end the text edit.
+                ExecuteGlobal( rReq );
+                pViewData->GetDispatcher().Execute(pViewData->GetView()->GetDrawFuncPtr()->GetSlotID(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            }
+            else
+            {
+                pView->ScEndTextEdit(); // end text edit before switching direction
+                ExecuteGlobal( rReq );
+                // restore consistent state between shells and functions:
+                pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            }
             break;
 
 #if 0
