@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-27 08:00:26 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 12:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
 
 using namespace connectivity;
@@ -765,7 +768,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
                     sal_Int32  nDay    = aStr.Copy( 6, 2 ).ToInt32();
 
                     ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
-                    (*_rRow)[i] = DateConversion::toDouble(aDate);
+                    (*_rRow)[i] = aDate;
                 }
                 break;
                 case DataType::DECIMAL:
@@ -1749,7 +1752,11 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             {
                 case DataType::DATE:
                 {
-                    ::com::sun::star::util::Date aDate = DateConversion::toDate(rRow[nPos]);
+                    ::com::sun::star::util::Date aDate;
+                    if(rRow[nPos].getTypeKind() == DataType::DOUBLE)
+                        aDate = ::dbtools::DBTypeConversion::toDate(rRow[nPos].getDouble());
+                    else
+                        aDate = rRow[nPos];
                     char s[9];
                     sprintf(s,"%04d%02d%02d",
                         (int)aDate.Year,

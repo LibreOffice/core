@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-27 07:58:50 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 12:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
 
 using namespace connectivity;
@@ -868,13 +871,13 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,s
                     switch(nType)
                     {
                         case DataType::DATE:
-                            (*_rRow)[i] = DateConversion::toDouble(DateConversion::toDate(nRes,aDate));
+                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toDate(nRes,aDate));
                             break;
                         case DataType::TIMESTAMP:
-                            (*_rRow)[i] = DateConversion::toDouble(DateConversion::toDateTime(nRes,aDate));
+                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toDateTime(nRes,aDate));
                             break;
                         default:
-                            (*_rRow)[i] = DateConversion::toDouble(DateConversion::toTime(nRes));
+                            (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(DateConversion::toTime(nRes));
                     }
                 }
                 catch(...)
