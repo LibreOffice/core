@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:23:23 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,23 @@ RTLFUNC(RmDir) // JSM
             {
                 try
                 {
+                    SbiInstance* pInst = pINST;
+                    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+                    if( bCompatibility )
+                    {
+                        sal_Int32 nCount = 1;
+                        if( xSFI->isFolder( aPath ) )
+                        {
+                            Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
+                            nCount = aContent.getLength();
+                        }
+                        if( nCount > 0 )
+                        {
+                            StarBASIC::Error( SbERR_ACCESS_ERROR );
+                            return;
+                        }
+                    }
+
                     xSFI->kill( getFullPath( aPath ) );
                 }
                 catch( Exception & )
@@ -2027,7 +2044,7 @@ RTLFUNC(IsNull)
         if( !bNull && pArg->GetType() == SbxOBJECT )
         {
             SbxBase* pObj = pArg->GetObject();
-            if( !pObj )
+            if( !pObj || pObj->ISA(TypeHolderObject) )
                 bNull = TRUE;
         }
         rPar.Get( 0 )->PutBool( bNull );
@@ -2368,7 +2385,10 @@ RTLFUNC(Dir)
 
                 if( pRTLData->aDirSeq.getLength() > 0 )
                 {
-                    sal_Bool bOnlyFolders = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+                    sal_Bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+
+                    SbiInstance* pInst = pINST;
+                    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                     for( ;; )
                     {
                         if( pRTLData->nCurDirPos < 0 )
@@ -2393,12 +2413,24 @@ RTLFUNC(Dir)
                         {
                             OUString aFile = pRTLData->aDirSeq.getConstArray()[pRTLData->nCurDirPos++];
 
-                            // Only directories?
-                            if( bOnlyFolders )
+                            if( bCompatibility )
                             {
-                                sal_Bool bFolder = xSFI->isFolder( aFile );
-                                if( !bFolder )
-                                    continue;
+                                if( !bFolderFlag )
+                                {
+                                    sal_Bool bFolder = xSFI->isFolder( aFile );
+                                    if( bFolder )
+                                        continue;
+                                }
+                            }
+                            else
+                            {
+                                // Only directories
+                                if( bFolderFlag )
+                                {
+                                    sal_Bool bFolder = xSFI->isFolder( aFile );
+                                    if( !bFolder )
+                                        continue;
+                                }
                             }
 
                             INetURLObject aURL( aFile );
@@ -2549,7 +2581,7 @@ RTLFUNC(Dir)
 
             if( pRTLData->pDir )
             {
-                sal_Bool bOnlyFolders = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
+                sal_Bool bFolderFlag = ((pRTLData->nDirFlags & Sb_ATTR_DIRECTORY) != 0);
                 for( ;; )
                 {
                     if( pRTLData->nCurDirPos < 0 )
@@ -2581,7 +2613,7 @@ RTLFUNC(Dir)
                         nRet = aItem.getFileStatus( aFileStatus );
 
                         // Only directories?
-                        if( bOnlyFolders )
+                        if( bFolderFlag )
                         {
                             FileStatus::Type aType = aFileStatus.getFileType();
                             sal_Bool bFolder = isFolder( aType );
@@ -3246,6 +3278,7 @@ RTLFUNC(TypeName)
         "WChar",            // SbxWCHAR
         "Int64",            // SbxSALINT64
         "UInt64",           // SbxSALUINT64
+        "Decimal",          // SbxDECIMAL
     };
 
     if ( rPar.Count() != 2 )
