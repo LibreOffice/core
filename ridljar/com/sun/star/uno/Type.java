@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:44:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,15 +321,107 @@ public class Type {
     /**
      * Gets the Java class.
      *
-     * <p>Returns <code>null</code> if this type has not been constructed by
-     * <code>Class</code>.</p>
+     * <p>The implementation of
+     * <code>com.sun.star.lib.uno.typedesc.TypeDescription</code> (for example,
+     * <code>getTypeDescription(Type)</code>) seems to require that the mapping
+     * from UNO types to Java classes is an injection.  Therefore, for example,
+     * the UNO type <code>SHORT</code> maps to the Java class
+     * <code>short.class</code>, but the UNO type <code>UNSIGNED SHORT</code>
+     * maps to <code>null</code>.
      *
-     * @return the type name; may be <code>null</code>
+     * @return the type name; may be <code>null</code> in extreme situations
+     *     (inconsistent <code>TypeClass</code>, error loading a class), or when
+     *     there is no distinct Java class to represent a UNO type (so that the
+     *     mapping from UNO types to Java classes is an injection)
      *
      * @since UDK1.0
      */
     public Class getZClass() {
-        return _class;
+        if (_class != null) {
+            return _class;
+        } else switch (_typeClass.getValue()) {
+        case TypeClass.VOID_value:
+            return void.class;
+        case TypeClass.BOOLEAN_value:
+            return boolean.class;
+        case TypeClass.BYTE_value:
+            return byte.class;
+        case TypeClass.SHORT_value:
+            return short.class;
+        case TypeClass.LONG_value:
+            return int.class;
+        case TypeClass.HYPER_value:
+            return long.class;
+        case TypeClass.FLOAT_value:
+            return float.class;
+        case TypeClass.DOUBLE_value:
+            return double.class;
+        case TypeClass.CHAR_value:
+            return char.class;
+        case TypeClass.STRING_value:
+            return String.class;
+        case TypeClass.TYPE_value:
+            return Type.class;
+        case TypeClass.ANY_value:
+            return Object.class;
+        case TypeClass.SEQUENCE_value:
+            StringBuffer buf = new StringBuffer();
+            int offset = 0;
+            for (; _typeName.startsWith("[]", offset); offset += "[]".length())
+            {
+                buf.append('[');
+            }
+            String base = _typeName.substring(offset);
+            if (base.equals("void")) {
+                buf.append('V');
+            } else if (base.equals("boolean")) {
+                buf.append('Z');
+            } else if (base.equals("byte")) {
+                buf.append('B');
+            } else if (base.equals("short")) {
+                buf.append('S');
+            } else if (base.equals("long")) {
+                buf.append('I');
+            } else if (base.equals("hyper")) {
+                buf.append('J');
+            } else if (base.equals("float")) {
+                buf.append('F');
+            } else if (base.equals("double")) {
+                buf.append('D');
+            } else if (base.equals("char")) {
+                buf.append('C');
+            } else if (base.equals("string")) {
+                buf.append("Ljava.lang.String;");
+            } else if (base.equals("type")) {
+                buf.append("Lcom.sun.star.uno.Type;");
+            } else if (base.equals("any")) {
+                buf.append("Ljava.lang.Object;");
+            } else if (base.equals("unsigned short")
+                       || base.equals("unsigned long")
+                       || base.equals("unsigned hyper")) {
+                return null;
+            } else {
+                buf.append('L');
+                buf.append(base);
+                buf.append(';');
+            }
+            try {
+                return Class.forName(buf.toString());
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
+        case TypeClass.ENUM_value:
+        case TypeClass.STRUCT_value:
+        case TypeClass.EXCEPTION_value:
+        case TypeClass.INTERFACE_value:
+            try {
+                return Class.forName(_typeName);
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
+        default:
+            return null;
+        }
     }
 
     /**
