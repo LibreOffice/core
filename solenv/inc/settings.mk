@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.167 $
+#   $Revision: 1.168 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:56:20 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:13:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1046,23 +1046,10 @@ MKDEPLOCAL=-I$(INCCOM)
 BISON=bison
 YACCFLAGS*=-d 
 
-.IF "$(GUI)"=="UNX"
-SVIDL=svidl
-.ELSE
-.IF "$(USE_SHELL)"!="4nt"
-SVIDL=guw.pl svidl.exe
-.ELSE
-SVIDL=svidl.exe
-.ENDIF
-.ENDIF
+SVIDL=$(WRAPCMD) svidl
 
-.IF "$(USE_SHELL)"!="4nt"
-LDUMP=guw.pl ldump4
-LDUMP2=guw.pl ldump4
-.ELSE
-LDUMP=ldump4
-LDUMP2=ldump4
-.ENDIF
+LDUMP=$(WRAPCMD) ldump4
+LDUMP2=$(WRAPCMD) ldump4
 
 .IF "$(MKDEPENDALL)"!=""
 MKDEPFLAGS+=$(MKDEPALLINC)
@@ -1096,20 +1083,10 @@ SCPLINKFLAGS+=-v $(SCPLINKVERSION)
 .ENDIF			# "$(SCPLINKVERSION)"!=""
 
 .IF "$(make_srs_deps)"!=""
-RSC=rscdep
-.IF "$(GUI)"=="WNT"
-.IF "$(USE_SHELL)"!="4nt"
-RSC=guw.pl rscdep
-.ENDIF
-.ENDIF
-.ELSE
-RSC=rsc
-.IF "$(GUI)"=="WNT"
-.IF "$(USE_SHELL)"!="4nt"
-RSC=guw.pl rsc
-.ENDIF
-.ENDIF
-.ENDIF
+RSC=$(WRAPCMD) rscdep
+.ELSE # "$(make_srs_deps)"!=""
+RSC=$(WRAPCMD) rsc
+.ENDIF # "$(make_srs_deps)"!=""
 
 #new
 RSCUPDVER=$(RSCREVISION)
