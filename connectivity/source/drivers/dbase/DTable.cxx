@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:24:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,12 +244,15 @@ void ODbaseTable::fillColumns()
 
     // Anzahl Felder:
     sal_Int32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
+    OSL_ENSURE(nFieldCount,"No columns in table!");
+
     m_aColumns->reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    String aStrFieldName;aStrFieldName.AssignAscii("Column");
+    String aStrFieldName;
+    aStrFieldName.AssignAscii("Column");
     sal_Int32 nFieldCnt = 0;
     ::rtl::OUString aTypeName;
     static const ::rtl::OUString sVARCHAR   = ::rtl::OUString::createFromAscii("VARCHAR");
@@ -315,7 +318,11 @@ void ODbaseTable::fillColumns()
 //
 //      }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aColumnName,
+        m_aTypes.push_back(eType);
+        m_aPrecisions.push_back(nPrecision);
+        m_aScales.push_back(aDBFColumn.db_dez);
+
+        Reference< XPropertySet> xCol = new sdbcx::OColumn(aColumnName,
                                                     aTypeName,
                                                     ::rtl::OUString(),
                                                     ColumnValue::NULLABLE,
@@ -326,11 +333,7 @@ void ODbaseTable::fillColumns()
                                                     sal_False,
                                                     sal_False,
                                                     bCase);
-        Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
-        m_aTypes.push_back(eType);
-        m_aPrecisions.push_back(nPrecision);
-        m_aScales.push_back(aDBFColumn.db_dez);
     }
 }
 // -------------------------------------------------------------------------
@@ -1278,7 +1281,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
     else
         m_nFilePos = nTempPos;
 
-    return bInsertRow;;
+    return bInsertRow;
 }
 
 //------------------------------------------------------------------
@@ -1372,7 +1375,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
     {
         Reference<XPropertySet> xCol;
         m_pColumns->getByIndex(_nColumnPos) >>= xCol;
-        OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+        OSL_ENSURE(xCol.is(),"ODbaseTable::isUniqueByColumnName column is null!");
         ::rtl::OUString sColName;
         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColName;
 
@@ -1475,14 +1478,32 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
     for (i = 0; i < nColumnCount; ++i)
     {
         // Laengen je nach Datentyp:
-        sal_Int32 nLen  = m_aPrecisions[i];
-        sal_Int32 nType = m_aTypes[i];
+        OSL_ENSURE(i < m_aPrecisions.size(),"Illegal index!");
+        sal_Int32 nLen = 0;
+        sal_Int32 nType = 0;
+        sal_Int32 nScale = 0;
+        if ( i < m_aPrecisions.size() )
+        {
+            nLen    = m_aPrecisions[i];
+            nType   = m_aTypes[i];
+            nScale  = m_aScales[i];
+        }
+        else
+        {
+            m_pColumns->getByIndex(i) >>= xCol;
+            if ( xCol.is() )
+            {
+                xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nLen;
+                xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))      >>= nType;
+                xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))     >>= nScale;
+            }
+        }
 
         switch (nType)
         {
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
-                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[i]);
+                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,nScale);
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT:         nLen = 1; break;
             case DataType::LONGVARCHAR: nLen = 10; break;
@@ -1573,11 +1594,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
                     double n = rRow[nPos]->getValue();
 
-                    m_pColumns->getByIndex(i) >>= xCol;
-                    OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
-                    xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                    int nPrecision      = (int)m_aPrecisions[i];
-                    int nScale          = (int)getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste
 
@@ -1592,11 +1608,15 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     }
                     if (!bValidLength)
                     {
+                        m_pColumns->getByIndex(i) >>= xCol;
+                        OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+                        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+
                         String sError;
                         sError.AppendAscii("The ");
                         sError += aColName.getStr();
                         sError.AppendAscii(" column has been defined as a \"Decimal\" type, the max. length is ");
-                        sError += String::CreateFromInt32(nPrecision);
+                        sError += String::CreateFromInt32(nLen);
                         sError.AppendAscii(" characters (with ");
                         sError += String::CreateFromInt32(nScale);
                         sError.AppendAscii(" decimal places).\n\nThe specified value is longer than the number of digits allowed.");
