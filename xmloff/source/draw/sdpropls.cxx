@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:07:08 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,9 +1365,9 @@ void XMLShapeExportPropertyMapper::handleSpecialItem(
 }
 
 void XMLShapeExportPropertyMapper::handleElementItem(
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+    SvXMLExport& rExport,
+    const XMLPropertyState& rProperty,
+    sal_uInt16 nFlags,
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx) const
 {
@@ -1386,7 +1386,7 @@ void XMLShapeExportPropertyMapper::handleElementItem(
             }
             break;
         default:
-            SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+            SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty, nFlags, pProperties, nIdx );
             break;
     }
 }
@@ -1499,9 +1499,9 @@ void XMLPageExportPropertyMapper::ContextFilter(
 }
 
 void XMLPageExportPropertyMapper::handleElementItem(
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+    SvXMLExport& rExport,
+    const XMLPropertyState& rProperty,
+    sal_uInt16 nFlags,
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx) const
 {
@@ -1521,7 +1521,7 @@ void XMLPageExportPropertyMapper::handleElementItem(
             }
             break;
         default:
-            SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+            SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty, nFlags, pProperties, nIdx );
             break;
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _XMLOFF_XMLEXPPR_HXX
 #include "xmlexppr.hxx"
 #endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
 #endif
@@ -106,13 +109,10 @@ using namespace ::xmloff::token;
 // ctor/dtor class SvXMLAutoStylePool_Impl
 //
 
-SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl()
-:   msCDATA( GetXMLToken(XML_CDATA) ),
-    msWS( GetXMLToken(XML_WS) ),
-    maFamilyList( 5, 5 )
+SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
+    :   rExport( rExp ),
+        maFamilyList( 5, 5 )
 {
-    mpAttrList = new SvXMLAttributeList();
-    mxAttrList = mpAttrList;
 }
 
 SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
@@ -324,9 +324,11 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
            sal_Int32 nFamily,
+#if SUPD < 650
         const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
+#endif
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     sal_uInt32 nCount = 0;
@@ -398,34 +400,46 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
             if( aExpStyles[i].mpProperties )
             {
-                OUString sName( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME) ) );
-                mpAttrList->AddAttribute( sName, msCDATA, aExpStyles[i].mpProperties->GetName() );
+                GetExport().AddAttribute(
+                    XML_NAMESPACE_STYLE, XML_NAME,
+                    aExpStyles[i].mpProperties->GetName() );
 
                 if( pFamily->bAsFamily )
                 {
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_FAMILY) );
-                    mpAttrList->AddAttribute( sName, msCDATA, aStrFamilyName );
+                    GetExport().AddAttribute(
+                        XML_NAMESPACE_STYLE, XML_FAMILY, aStrFamilyName );
                 }
 
                 if( aExpStyles[i].mpParent->getLength() )
                 {
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_PARENT_STYLE_NAME) );
-                    mpAttrList->AddAttribute( sName, msCDATA, *aExpStyles[i].mpParent );
+                    GetExport().AddAttribute(
+                        XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
+                        *aExpStyles[i].mpParent );
                 }
 
+                OUString sName;
                 if( pFamily->bAsFamily )
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_STYLE) );
+                    sName = GetXMLToken(XML_STYLE);
                 else
-                    sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, pFamily->maStrFamilyName );
+                    sName = pFamily->maStrFamilyName;
 
-                pAntiImpl->exportStyleAttributes( *mpAttrList, nFamily,
-                        aExpStyles[i].mpProperties->GetProperties(),
-                        *pFamily->mxMapper.get(),
-                        rUnitConverter, rNamespaceMap );
+                pAntiImpl->exportStyleAttributes(
+#if SUPD < 650
+                    GetExport().GetAttrList(),
+#endif
+                    nFamily,
+                    aExpStyles[i].mpProperties->GetProperties(),
+                    *pFamily->mxMapper.get()
+#if SUPD < 650
+                        , GetExport().GetMM100UnitConverter(),
+                        GetExport().GetNamespaceMap()
+#endif
+                    );
 
-                rHandler->ignorableWhitespace( msWS );
-                rHandler->startElement( sName, mxAttrList );
-                mpAttrList->Clear();
+                SvXMLElementExport aElem( GetExport(),
+                                          XML_NAMESPACE_STYLE, sName,
+                                          sal_True, sal_True );
+
                 sal_Int32 nStart(-1);
                 sal_Int32 nEnd(-1);
                 if (nFamily == XML_STYLE_FAMILY_PAGE_MASTER)
@@ -446,15 +460,23 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                         nEnd = nIndex;
                 }
 
-                pFamily->mxMapper->exportXML( rHandler, aExpStyles[i].mpProperties->GetProperties(), rUnitConverter,
-                                    rNamespaceMap, nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
+                pFamily->mxMapper->exportXML(
+                    GetExport(),
+                    aExpStyles[i].mpProperties->GetProperties(),
+                    nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
 
-                pAntiImpl->exportStyleContent( rHandler, nFamily,
-                        aExpStyles[i].mpProperties->GetProperties(),
-                        *pFamily->mxMapper.get(), rUnitConverter, rNamespaceMap );
-
-                rHandler->ignorableWhitespace( msWS );
-                rHandler->endElement( sName );
+                pAntiImpl->exportStyleContent(
+#if SUPD < 650
+                    GetExport().GetDocHandler(),
+#endif
+                    nFamily,
+                    aExpStyles[i].mpProperties->GetProperties(),
+                    *pFamily->mxMapper.get()
+#if SUPD < 650
+                    , GetExport().GetMM100UnitConverter(),
+                    GetExport().GetNamespaceMap()
+#endif
+                    );
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-14 15:44:16 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
@@ -857,48 +861,34 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
 }
 
 void SvXMLExportPropertyMapper::exportXML(
-           const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags ) const
 {
-    exportXML( rHandler, rProperties, rUnitConverter, rNamespaceMap,
-               -1, -1,  nFlags );
+    exportXML( rExport, rProperties, -1, -1,  nFlags );
 }
 
 void SvXMLExportPropertyMapper::exportXML(
-           const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
         sal_uInt16 nFlags ) const
 {
-    SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
-    uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
-
     SvUShorts aIndexArray;
 
-    _exportXML( *pAttrList, rProperties, rUnitConverter, rNamespaceMap,
+    _exportXML( rExport.GetAttrList(), rProperties,
+                rExport.GetMM100UnitConverter(), rExport.GetNamespaceMap(),
                 nFlags, &aIndexArray, nPropMapStartIdx, nPropMapEndIdx );
 
-    if( pAttrList->getLength() > 0L || (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
+    if( rExport.GetAttrList().getLength() > 0L ||
+        (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
         aIndexArray.Count() != 0 )
     {
-        if( (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0 )
-        {
-            rHandler->ignorableWhitespace( GetXMLToken(XML_WS) );
-        }
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_PROPERTIES,
+                                  (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0,
+                                  sal_False );
 
-        OUString sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE,
-                                                 GetXMLToken(XML_PROPERTIES) );
-        rHandler->startElement( sName, xAttrList );
-
-        exportElementItems( rHandler, rUnitConverter, rNamespaceMap,
-                            rProperties, nFlags, aIndexArray );
-
-        rHandler->endElement( sName );
+        exportElementItems( rExport, rProperties, nFlags, aIndexArray );
     }
 }
 
@@ -921,19 +911,16 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
 /** this method is called for every item that has the
     MID_FLAG_ELEMENT_EXPORT flag set */
 void SvXMLExportPropertyMapper::handleElementItem(
-        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        SvXMLExport& rExport,
         const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     OSL_ENSURE( mxNextMapper.is(), "element item not handled in xml export" );
     if( mxNextMapper.is() )
-        mxNextMapper->handleElementItem( rHandler, rProperty, rUnitConverter,
-                                           rNamespaceMap, nFlags, pProperties,
-                                        nIdx );
+        mxNextMapper->handleElementItem( rExport, rProperty, nFlags,
+                                         pProperties, nIdx );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1083,9 +1070,7 @@ void SvXMLExportPropertyMapper::_exportXML(
 }
 
 void SvXMLExportPropertyMapper::exportElementItems(
-        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
+        SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
         sal_uInt16 nFlags,
         const SvUShorts& rIndexArray ) const
@@ -1102,12 +1087,12 @@ void SvXMLExportPropertyMapper::exportElementItems(
                 rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT),
                 "wrong mid flag!" );
 
-        rHandler->ignorableWhitespace( sWS );
-        handleElementItem( rHandler, rProperties[nElement], rUnitConverter,
-                           rNamespaceMap, nFlags, &rProperties, nElement );
+        rExport.IgnorableWhitespace();
+        handleElementItem( rExport, rProperties[nElement],
+                           nFlags, &rProperties, nElement );
         bItemsExported = sal_True;
     }
 
     if( bItemsExported )
-        rHandler->ignorableWhitespace( sWS );
+        rExport.IgnorableWhitespace();
 }

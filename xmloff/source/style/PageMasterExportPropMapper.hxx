@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,8 @@ public:
     virtual             ~XMLPageMasterExportPropMapper();
 
     virtual void        handleElementItem(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                            SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
-                            const SvXMLUnitConverter& rUnitConverter,
-                            const SvXMLNamespaceMap& rNamespaceMap,
                             sal_uInt16 nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0

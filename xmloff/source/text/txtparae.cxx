@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2911,6 +2911,7 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
+#if SUPD < 650
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
@@ -2935,6 +2936,14 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                   GetExport().GetDocHandler(),
                                   GetExport().GetMM100UnitConverter(),
                                   GetExport().GetNamespaceMap() );
+#else
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_FRAME );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_RUBY );
+#endif
+
     pListAutoPool->exportXML();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:38:59 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,17 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#if SUPD < 650
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#endif
 #endif
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
@@ -96,6 +99,7 @@ class SvXMLAutoStylePoolParentsP_Impl;
 class SvXMLAutoStylePoolNamesP_Impl;
 class SvXMLAttributeList;
 class SvXMLExportPropertyMapper;
+class SvXMLExport;
 
 #define MAX_CACHE_SIZE 65536
 
@@ -217,17 +221,16 @@ DECLARE_CONTAINER_SORT_DEL( SvXMLAutoStylePoolParentsP_Impl,
 
 class SvXMLAutoStylePoolP_Impl
 {
-    const ::rtl::OUString       msCDATA;
-    const ::rtl::OUString       msWS;
-    SvXMLAttributeList*         mpAttrList;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  mxAttrList;
+    SvXMLExport& rExport;
 
     XMLFamilyDataList_Impl      maFamilyList;
 
 public:
 
-    SvXMLAutoStylePoolP_Impl();
+    SvXMLAutoStylePoolP_Impl( SvXMLExport& rExport );
     ~SvXMLAutoStylePoolP_Impl();
+
+    SvXMLExport& GetExport() const { return rExport; }
 
     void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
@@ -249,9 +252,11 @@ public:
     ::rtl::OUString FindAndRemoveCached( sal_Int32 nFamily ) const;
 
     void exportXML( sal_Int32 nFamily,
+#if SUPD < 650
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
+#endif
         const SvXMLAutoStylePoolP *pAntiImpl) const;
 
     void ClearEntries();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::awt;
 
 void XMLTextExportPropertySetMapper::handleElementItem(
-        const Reference< xml::sax::XDocumentHandler > & rHandler,
+        SvXMLExport& rExport,
         const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
@@ -179,7 +177,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         break;
 
     default:
-        SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+        SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty, nFlags, pProperties, nIdx );
         break;
     }
 }

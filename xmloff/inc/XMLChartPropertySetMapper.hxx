@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartPropertySetMapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,8 @@ protected:
 private:
     /// this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set
     virtual void handleElementItem(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+        SvXMLExport& rExport,
+        const XMLPropertyState& rProperty, sal_uInt16 nFlags,
         const ::std::vector< XMLPropertyState > *pProperties = 0,
         sal_uInt32 nIdx = 0  ) const;
 

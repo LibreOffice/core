@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ XMLShapeExport* SvXMLExport::CreateShapeExport()
 
 SvXMLAutoStylePoolP* SvXMLExport::CreateAutoStylePool()
 {
-    return new SvXMLAutoStylePoolP();
+    return new SvXMLAutoStylePoolP(*this);
 }
 
 XMLPageExport* SvXMLExport::CreatePageExport()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-25 15:09:47 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,10 +260,13 @@ void SchXMLExportHelper::exportAutoStyles()
 
         // export chart auto styles
         mrAutoStylePool.exportXML(
-            XML_STYLE_FAMILY_SCH_CHART_ID,
-            mrExport.GetDocHandler(),
+            XML_STYLE_FAMILY_SCH_CHART_ID
+#if SUPD < 650
+            , mrExport.GetDocHandler(),
             mrExport.GetMM100UnitConverter(),
-            mrExport.GetNamespaceMap());
+            mrExport.GetNamespaceMap()
+#endif
+            );
 
         // export auto styles for additional shapes
         mrExport.GetShapeExport()->exportAutoStyles();

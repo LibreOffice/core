@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,10 @@ void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
 
 void XMLPageExport::exportAutoStyles()
 {
-    rExport.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER,
-        rExport.GetDocHandler(), rExport.GetMM100UnitConverter(),
-        rExport.GetNamespaceMap());
+    rExport.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER
+#if SUPD < 650
+        , rExport.GetDocHandler(), rExport.GetMM100UnitConverter(),
+        rExport.GetNamespaceMap()
+#endif
+        );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:11:40 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,17 @@ protected:
     SchXMLExport& mrSchXMLExport;
 
     virtual void exportStyleAttributes(
+#if SUPD < 650
         SvXMLAttributeList& rAttrList,
+#endif
         sal_Int32 nFamily,
         const ::std::vector< XMLPropertyState >& rProperties,
-        const SvXMLExportPropertyMapper& rPropExp,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const;
+        const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+        , const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap
+#endif
+        ) const;
 
 public:
     SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport );

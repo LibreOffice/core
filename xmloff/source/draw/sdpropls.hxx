@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:07:08 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,10 +277,8 @@ public:
     virtual ~XMLShapeExportPropertyMapper();
 
     virtual void        handleElementItem(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                            SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
-                            const SvXMLUnitConverter& rUnitConverter,
-                            const SvXMLNamespaceMap& rNamespaceMap,
                             sal_uInt16 nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
@@ -323,10 +321,8 @@ public:
     virtual ~XMLPageExportPropertyMapper();
 
     virtual void        handleElementItem(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                            SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
-                            const SvXMLUnitConverter& rUnitConverter,
-                            const SvXMLNamespaceMap& rNamespaceMap,
                             sal_uInt16 nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ using ::xmloff::token::GetXMLToken;
 using ::xmloff::token::XML_CDATA;
 
 SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :
+        SvXMLAutoStylePoolP( rSchXMLExport ),
         mrSchXMLExport( rSchXMLExport )
 {}
 
@@ -88,16 +89,26 @@ SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP()
 {}
 
 void SchXMLAutoStylePoolP::exportStyleAttributes(
+#if SUPD < 650
     SvXMLAttributeList& rAttrList,
+#endif
     sal_Int32 nFamily,
     const ::std::vector< XMLPropertyState >& rProperties,
-    const SvXMLExportPropertyMapper& rPropExp,
-    const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap ) const
+    const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+    , const SvXMLUnitConverter& rUnitConverter,
+    const SvXMLNamespaceMap& rNamespaceMap
+#endif
+    ) const
 {
     const rtl::OUString sCDATA( GetXMLToken( XML_CDATA ));
+#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties,
                                                 rPropExp, rUnitConverter, rNamespaceMap );
+#else
+    SvXMLAutoStylePoolP::exportStyleAttributes( nFamily,
+                                                rProperties, rPropExp );
+#endif
 
     if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
     {
@@ -115,10 +126,10 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
                     rtl::OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
                     if( sAttrValue.getLength() )
                     {
-                        rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
+                        mrSchXMLExport.AddAttribute(
                             aPropMapper->GetEntryNameSpace( iter->mnIndex ),
-                            aPropMapper->GetEntryXMLName( iter->mnIndex ) ));
-                        rAttrList.AddAttribute( sAttrName, sCDATA, sAttrValue );
+                            aPropMapper->GetEntryXMLName( iter->mnIndex ),
+                            sAttrValue );
                     }
                 }
             }

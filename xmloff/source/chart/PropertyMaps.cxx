@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:06:06 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,9 +297,8 @@ void XMLChartExportPropertyMapper::ContextFilter(
 }
 
 void XMLChartExportPropertyMapper::handleElementItem(
-    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-    const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+    SvXMLExport& rExport,
+    const XMLPropertyState& rProperty, sal_uInt16 nFlags,
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {
@@ -340,8 +339,8 @@ void XMLChartExportPropertyMapper::handleElementItem(
 
         default:
             // call parent
-            SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty,
-                                                          rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+            SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty,
+                                                          nFlags, pProperties, nIdx );
             break;
     }
 }

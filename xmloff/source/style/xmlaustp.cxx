@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-13 14:07:03 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,17 +72,14 @@
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
 #endif
-#ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
-#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
 #endif
 
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
@@ -95,9 +92,6 @@
 #include "XMLBackgroundImageExport.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
 
 using namespace ::std;
 using namespace ::rtl;
@@ -106,12 +100,17 @@ using namespace ::xmloff::token;
 
 
 void SvXMLAutoStylePoolP::exportStyleAttributes(
+#if SUPD < 650
         SvXMLAttributeList& rAttrList,
+#endif
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
-        const SvXMLExportPropertyMapper& rPropExp,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
+        const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+        , const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap
+#endif
+        ) const
 {
     if (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily)
     {   // it's a graphics style
@@ -145,8 +144,10 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                     DBG_ASSERT(sControlDataStyleName.getLength(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property value for the data style name!");
 
                     // add the attribute
-                    rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey( aPropertyMapper->GetEntryNameSpace(pProp->mnIndex), aPropertyMapper->GetEntryXMLName(pProp->mnIndex) ) );
-                    rAttrList.AddAttribute(sAttrName, ::xmloff::token::GetXMLToken(::xmloff::token::XML_CDATA), sControlDataStyleName);
+                    GetExport().AddAttribute(
+                        aPropertyMapper->GetEntryNameSpace(pProp->mnIndex),
+                        aPropertyMapper->GetEntryXMLName(pProp->mnIndex),
+                        sControlDataStyleName );
 
 #ifdef DBG_UTIL
                     // in a non-pro version, check if there is another property with the special context id we're handling here
@@ -174,13 +175,15 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                 {
                     case CTF_PM_PAGEUSAGE:
                     {
-                        OUString sAttrName( rNamespaceMap.GetQNameByKey(
-                            aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
                         OUString sValue;
                         const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
-                        if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
+                        if( pPropHdl &&
+                            pPropHdl->exportXML( sValue, pProp->maValue,
+                                                 GetExport().GetMM100UnitConverter() ) &&
                             ( ! IsXMLToken( sValue, XML_ALL ) ) )
-                            rAttrList.AddAttribute( sAttrName, GetXMLToken(XML_CDATA), sValue );
+                        {
+                            GetExport().AddAttribute( aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ), sValue );
+                        }
                     }
                     break;
                 }
@@ -190,12 +193,17 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void SvXMLAutoStylePoolP::exportStyleContent(
+#if SUPD < 650
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+#endif
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
-        const SvXMLExportPropertyMapper& rPropExp,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
+        const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+        , const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap
+#endif
+        ) const
 {
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
@@ -253,34 +261,51 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         if (!bFooterEndIndex)
             nFooterEndIndex = nIndex;
 
-        uno::Reference< xml::sax::XAttributeList > xEmptyList = new SvXMLAttributeList();
+        // export header style element
+        {
+            SvXMLElementExport aElem(
+                GetExport(), XML_NAMESPACE_STYLE, XML_HEADER_STYLE,
+                sal_True, sal_True );
 
-        OUString sNameHeader( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_HEADER_STYLE) ) );
+            rPropExp.exportXML(
+                GetExport(), rProperties,
+                nHeaderStartIndex, nHeaderEndIndex, XML_EXPORT_FLAG_IGN_WS);
+        }
 
-        rHandler->ignorableWhitespace( sWS );
-        rHandler->startElement( sNameHeader, xEmptyList );
-        rPropExp.exportXML(rHandler, rProperties, rUnitConverter, rNamespaceMap, nHeaderStartIndex, nHeaderEndIndex, XML_EXPORT_FLAG_IGN_WS);
-        rHandler->ignorableWhitespace( sWS );
-        rHandler->endElement( sNameHeader );
+        // export footer style
+        {
+            SvXMLElementExport aElem(
+                GetExport(), XML_NAMESPACE_STYLE, XML_FOOTER_STYLE,
+                sal_True, sal_True );
 
-        OUString sNameFooter( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_FOOTER_STYLE) ) );
-
-        rHandler->ignorableWhitespace( sWS );
-        rHandler->startElement( sNameFooter, xEmptyList );
-        rPropExp.exportXML(rHandler, rProperties, rUnitConverter, rNamespaceMap, nFooterStartIndex, nFooterEndIndex, XML_EXPORT_FLAG_IGN_WS);
-        rHandler->ignorableWhitespace( sWS );
-        rHandler->endElement( sNameFooter );
+            rPropExp.exportXML(
+                GetExport(), rProperties,
+                nFooterStartIndex, nFooterEndIndex, XML_EXPORT_FLAG_IGN_WS);
+        }
     }
 }
 
+#if SUPD < 650
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP()
 {
-    pImpl = new SvXMLAutoStylePoolP_Impl;
+    DBG_ERROR("This constuctor is obsoleted and should not be used!");
+    pImpl = NULL;
+}
+#endif
+
+SvXMLAutoStylePoolP::SvXMLAutoStylePoolP( SvXMLExport& rExport )
+{
+    pImpl = new SvXMLAutoStylePoolP_Impl( rExport );
 }
 
 SvXMLAutoStylePoolP::~SvXMLAutoStylePoolP()
 {
     delete pImpl;
+}
+
+SvXMLExport& SvXMLAutoStylePoolP::GetExport() const
+{
+    return pImpl->GetExport();
 }
 
 // TODO: romove this
@@ -384,13 +409,22 @@ OUString SvXMLAutoStylePoolP::FindAndRemoveCached( sal_Int32 nFamily ) const
 }
 
 
-void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
-    const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily
+
+#if SUPD < 650
+    , const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
     const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap) const
+    const SvXMLNamespaceMap& rNamespaceMap
+#endif
+    ) const
 {
-    pImpl->exportXML( nFamily, rHandler, rUnitConverter,
-                      rNamespaceMap, this);
+    pImpl->exportXML( nFamily,
+#if SUPD < 650
+                      GetExport().GetDocHandler(),
+                      GetExport().GetMM100UnitConverter(),
+                      GetExport().GetNamespaceMap(),
+#endif
+                      this);
 }
 
 void SvXMLAutoStylePoolP::ClearEntries()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,10 +281,8 @@ sal_Bool XMLStyleExport::exportStyle(
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->Filter( xPropSet );
-        rPropMapper->exportXML( GetExport().GetDocHandler(), xPropStates,
-                                  GetExport().GetMM100UnitConverter(),
-                                     GetExport().GetNamespaceMap(),
-                                     XML_EXPORT_FLAG_IGN_WS );
+        rPropMapper->exportXML( GetExport(), xPropStates,
+                                XML_EXPORT_FLAG_IGN_WS );
         exportStyleContent( rStyle );
 
         // <script:events>, if they are supported by this style
@@ -321,9 +319,7 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
         //  rPropMapper->FilterDefaults( xPropSet );
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
-        rPropMapper->exportXML( GetExport().GetDocHandler(), xPropStates,
-                                  GetExport().GetMM100UnitConverter(),
-                                     GetExport().GetNamespaceMap(),
+        rPropMapper->exportXML( GetExport(), xPropStates,
                                      XML_EXPORT_FLAG_IGN_WS );
 //      exportStyleContent( rStyle );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-01 11:44:14 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,20 +774,26 @@ void XMLShapeExport::exportAutoStyles()
 //  if(IsFamilyGraphicUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-            GetExport().GetDocHandler(),
+            XML_STYLE_FAMILY_SD_GRAPHICS_ID
+#if SUPD < 650
+            , GetExport().GetDocHandler(),
             GetExport().GetMM100UnitConverter(),
-            GetExport().GetNamespaceMap());
+            GetExport().GetNamespaceMap()
+#endif
+            );
     }
 
     // ...for presentation
 //  if(IsFamilyPresentationUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_SD_PRESENTATION_ID,
-            GetExport().GetDocHandler(),
+            XML_STYLE_FAMILY_SD_PRESENTATION_ID
+#if SUPD < 650
+            , GetExport().GetDocHandler(),
             GetExport().GetMM100UnitConverter(),
-            GetExport().GetNamespaceMap());
+            GetExport().GetNamespaceMap()
+#endif
+            );
     }
 }
 
