@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-07 09:14:37 $
+ *  last change: $Author: dl $ $Date: 2001-03-05 12:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,23 +224,23 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( ITEMID_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
-                    long nUpper = pNewItem->GetUpper();
+                    USHORT nUpper = pNewItem->GetUpper();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nUpper += 100;
                     else
                     {
                         nUpper -= 100;
-                        nUpper = Max( nUpper, 0L );
+                        nUpper = (USHORT) Max( (long) nUpper, 0L );
                     }
                     pNewItem->SetUpper( nUpper );
 
-                    long nLower = pNewItem->GetLower();
+                    USHORT nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nLower += 100;
                     else
                     {
                         nLower -= 100;
-                        nLower = Max( nLower, 0L );
+                        nLower = (USHORT) Max( (long) nLower, 0L );
                     }
                     pNewItem->SetLower( nLower );
 
@@ -263,24 +263,24 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( ITEMID_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
-                    long nUpper = pNewItem->GetUpper();
+                    USHORT nUpper = pNewItem->GetUpper();
 
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nUpper += 100;
                     else
                     {
                         nUpper -= 100;
-                        nUpper = Max( nUpper, 0L );
+                        nUpper = (USHORT) Max( (long) nUpper, 0L );
                     }
                     pNewItem->SetUpper( nUpper );
 
-                    long nLower = pNewItem->GetLower();
+                    USHORT nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nLower += 100;
                     else
                     {
                         nLower -= 100;
-                        nLower = Max( nLower, 0L );
+                        nLower = (USHORT) Max( (long) nLower, 0L );
                     }
                     pNewItem->SetLower( nLower );
 
@@ -357,36 +357,13 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                 }
             }
 
-            const SdrMarkList& rMark = pView->GetMarkList();
-            SdrObject* pObj = NULL;
-            OutlinerParaObject* pOPO = 0;
-            for( ULONG i = 0; i < rMark.GetMarkCount(); i++ )
-            {
-                pObj = rMark.GetMark( i )->GetObj();
-                pOPO = pObj->GetOutlinerParaObject();
-                if( pOPO )
-                {
-                    SdrOutliner* pOutl = pView->GetTextEditOutliner();
-                    if( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
-                    {
-                        if( pOPO && pOPO->IsVertical() )
-                        {
-                            pOPO->SetVertical( FALSE );
-                            pObj->SendRepaintBroadcast();
-                        }
-                    }
-                    else
-                    {
-                        if( pOPO && !pOPO->IsVertical() )
-                        {
-                            pOPO->SetVertical( TRUE );
-                            pObj->SendRepaintBroadcast();
-                        }
-                    }
-                }
-            }
+            SfxItemSet aAttr( pView->GetDoc()->GetPool(), SID_TEXTDIRECTION_LEFT_TO_RIGHT, SID_TEXTDIRECTION_TOP_TO_BOTTOM, 0 );
+            aAttr.Put( SfxBoolItem( nSlot, TRUE ) );
+            rReq.Done( aAttr );
+            pView->SetAttributes( aAttr );
 
-            rReq.Done();
+            Invalidate();
+            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
         break;
 
