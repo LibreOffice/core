@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:28:54 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,8 +387,9 @@
 #define HID_XMLSECDLG_MACROWARN                     (HID_SFX_START + 317)
 #define HID_XMLSEC_INFO_WRONGDOCFORMAT              (HID_SFX_START + 318)
 #define HID_WARNING_MACROSDISABLED                  (HID_SFX_START + 319)
+#define HID_WARNING_ALIENFORMAT                     (HID_SFX_START + 320)
 
-#define ACT_SFX_HID_END HID_XMLSEC_INFO_WRONGDOCFORMAT
+#define ACT_SFX_HID_END HID_WARNING_ALIENFORMAT
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
