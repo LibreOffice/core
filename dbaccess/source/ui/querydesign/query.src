@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 10:20:11 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,18 +87,48 @@
 #define MN_WIN 30
 #define MN_HELP 31
 
+Menu RID_MENU_JOINVIEW_CONNECTION
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+        MenuItem
+        {
+            MID_DBUI_QUERY_EDIT_JOINCONNECTION
+        };
+    };
+};
+
+Menu RID_MENU_JOINVIEW_TABLE
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+     };
+};
+
 Menu RID_QUERYCOLPOPUPMENU
 {
     ItemList =
     {
-    MenuItem
-    {
-        ITEM_EDIT_DELETE
-    };
-    MenuItem
-    {
-        MID_DBUI_QUERY_EDIT_JOINCONNECTION
-    };
+        MenuItem
+        {
+            MID_COLUMN_WIDTH
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
     };
 };
 ImageList IMG_JOINS

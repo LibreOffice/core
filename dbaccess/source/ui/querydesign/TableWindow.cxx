@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 10:38:07 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,9 +707,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                         ptWhere = m_aTitle.GetPosPixel();
                 }
 
-                PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
-                aContextMenu.EnableItem(ID_QUERY_EDIT_JOINCONNECTION,FALSE);
-                aContextMenu.RemoveDisabledEntries();
+                PopupMenu aContextMenu(ModuleRes(RID_MENU_JOINVIEW_TABLE));
                 switch (aContextMenu.Execute(this, ptWhere))
                 {
                     case SID_DELETE:

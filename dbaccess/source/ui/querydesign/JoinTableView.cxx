@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 06:58:45 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,7 +1293,7 @@ BOOL OJoinTableView::IsAddAllowed()
 // -----------------------------------------------------------------------------
 void OJoinTableView::executePopup(const Point& _aPos,OTableConnection* _pSelConnection)
 {
-    PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
+    PopupMenu aContextMenu( ModuleRes( RID_MENU_JOINVIEW_CONNECTION ) );
     switch (aContextMenu.Execute(this, _aPos))
     {
         case SID_DELETE:
