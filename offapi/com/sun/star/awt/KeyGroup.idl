@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyGroup.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,52 +68,46 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::KeyGroup
 /** These values are used to specify functional groups of keys.
 
-        @deprecated
+    @deprecated
  */
 constants KeyGroup
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyGroup::NUM
     /** specifies a numeric key.
      */
     const short NUM = 256;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyGroup::ALPHA
     /** specifies an alphabetic key.
      */
     const short ALPHA = 512;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyGroup::FKEYS
     /** specifies a function key.
      */
     const short FKEYS = 768;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyGroup::CURSOR
     /** specifies a cursor key.
      */
     const short CURSOR = 1024;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyGroup::MISC
     /** specifies other keys.
      */
     const short MISC = 1280;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR constants::3840
 
-    // DocMerge: empty anyway
+    /** specifies the group mask.
+     */
     const short TYPE = 3840;
 
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyModifier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,24 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::KeyModifier
 /** These values are used to specify which modifier keys are pressed.
  */
 constants KeyModifier
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyModifier::SHIFT
     /** refers to both shift keys.
      */
     const short SHIFT = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyModifier::MOD1
     /** refers in the most cases to the 'Ctrl' key.
      */
     const short MOD1 = 2;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::KeyModifier::MOD2
     /** refers in the most cases to the 'Alt' key.
      */
     const short MOD2 = 4;
