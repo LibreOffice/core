@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+ *  last change: $Author: pl $ $Date: 2002-01-22 18:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ Mediator::~Mediator()
 {
     if( m_pListener )
     {
+        ::vos::OGuard aGuard( m_pListener->m_aMutex );
         m_pListener->m_pMediator = NULL;
         m_pListener = NULL;
         if( m_bValid )
@@ -208,6 +209,7 @@ void MediatorListener::run()
             char* pBuffer = new char[ nHeader[ 1 ] ];
             if( m_pMediator && read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
+                ::vos::OGuard aMyGuard( m_aMutex );
                 {
                     NAMESPACE_VOS(OGuard)
                         aGuard( m_pMediator->m_aQueueMutex );

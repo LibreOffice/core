@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+ *  last change: $Author: pl $ $Date: 2002-01-22 18:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ class MediatorListener : public NAMESPACE_VOS( OThread )
     friend class Mediator;
   private:
     Mediator*       m_pMediator;
+    ::vos::OMutex   m_aMutex;
 
     MediatorListener( Mediator* );
     ~MediatorListener();
