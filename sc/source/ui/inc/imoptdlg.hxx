@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:03:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,46 +92,46 @@
 
 //===================================================================
 
-class ScImportOptions;
-class ScDelimiterTable;
+//CHINA001 class ScImportOptions;
+//CHINA001 class ScDelimiterTable;
 
-class ScImportOptionsDlg : public ModalDialog
-{
-public:
-                ScImportOptionsDlg( Window*                 pParent,
-                                    BOOL                    bAscii = TRUE,
-                                    const ScImportOptions*  pOptions = NULL,
-                                    const String*           pStrTitle = NULL,
-                                    BOOL                    bMultiByte = FALSE,
-                                    BOOL                    bOnlyDbtoolsEncodings = FALSE,
-                                    BOOL                    bImport = TRUE );
-
-                ~ScImportOptionsDlg();
-
-    void GetImportOptions( ScImportOptions& rOptions ) const;
-
-private:
-    FixedLine           aFlFieldOpt;
-    FixedText           aFtFont;
-    SvxTextEncodingBox  aLbFont;
-    FixedText           aFtFieldSep;
-    ComboBox            aEdFieldSep;
-    FixedText           aFtTextSep;
-    ComboBox            aEdTextSep;
-    CheckBox            aCbFixed;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-
-    ScDelimiterTable*   pFieldSepTab;
-    ScDelimiterTable*   pTextSepTab;
-
-private:
-    USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
-
-    DECL_LINK( FixedWidthHdl, CheckBox* );
-    DECL_LINK( DoubleClickHdl, ListBox* );
-};
+//CHINA001 class ScImportOptionsDlg : public ModalDialog
+//CHINA001 {
+//CHINA001 public:
+//CHINA001 ScImportOptionsDlg( Window*              pParent,
+//CHINA001 BOOL                    bAscii = TRUE,
+//CHINA001 const ScImportOptions*   pOptions = NULL,
+//CHINA001 const String*            pStrTitle = NULL,
+//CHINA001 BOOL                    bMultiByte = FALSE,
+//CHINA001 BOOL                    bOnlyDbtoolsEncodings = FALSE,
+//CHINA001 BOOL                    bImport = TRUE );
+//CHINA001
+//CHINA001 ~ScImportOptionsDlg();
+//CHINA001
+//CHINA001 void GetImportOptions( ScImportOptions& rOptions ) const;
+//CHINA001
+//CHINA001 private:
+//CHINA001 FixedLine           aFlFieldOpt;
+//CHINA001 FixedText            aFtFont;
+//CHINA001 SvxTextEncodingBox   aLbFont;
+//CHINA001 FixedText            aFtFieldSep;
+//CHINA001 ComboBox         aEdFieldSep;
+//CHINA001 FixedText            aFtTextSep;
+//CHINA001 ComboBox         aEdTextSep;
+//CHINA001 CheckBox            aCbFixed;
+//CHINA001 OKButton         aBtnOk;
+//CHINA001 CancelButton     aBtnCancel;
+//CHINA001 HelpButton           aBtnHelp;
+//CHINA001
+//CHINA001 ScDelimiterTable*    pFieldSepTab;
+//CHINA001 ScDelimiterTable*    pTextSepTab;
+//CHINA001
+//CHINA001 private:
+//CHINA001 USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
+//CHINA001
+//CHINA001 DECL_LINK( FixedWidthHdl, CheckBox* );
+//CHINA001 DECL_LINK( DoubleClickHdl, ListBox* );
+//CHINA001 };
 
 //------------------------------------------------------------------------
 
