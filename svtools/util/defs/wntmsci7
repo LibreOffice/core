@@ -9529,3 +9529,16 @@ _real@8@3ffeccccccccccccd000
 ?ImportJPEG@@YAEAAVSvStream@@AAVGraphic@@PAXJ@Z
 ?GetCurrentTempURL@SvtInternalOptions@@QBE?AVOUString@rtl@@XZ
 ?SetCurrentTempURL@SvtInternalOptions@@QAEXABVOUString@rtl@@@Z
+??0OUString@rtl@@QAE@XZ
+?ClassifyFactoryByName@SvtModuleOptions@@SAEABVOUString@rtl@@AAW4EFactory@1@@Z
+?GetFactoryEmptyDocumentURL@SvtModuleOptions@@QBE?AVOUString@rtl@@W4EFactory@1@@Z
+?GetFactoryIcon@SvtModuleOptions@@QBEJW4EFactory@1@@Z
+?GetFactoryName@SvtModuleOptions@@QBE?AVOUString@rtl@@W4EFactory@1@@Z
+?GetFactoryShortName@SvtModuleOptions@@QBE?AVOUString@rtl@@W4EFactory@1@@Z
+?GetFactoryStandardTemplate@SvtModuleOptions@@QBE?AVOUString@rtl@@W4EFactory@1@@Z
+?GetFactoryWindowAttributes@SvtModuleOptions@@QBE?AVOUString@rtl@@W4EFactory@1@@Z
+?IsModuleInstalled@SvtModuleOptions@@QBEEW4EModule@1@@Z
+?SetFactoryStandardTemplate@SvtModuleOptions@@QAEXW4EFactory@1@ABVOUString@rtl@@@Z
+?SetFactoryWindowAttributes@SvtModuleOptions@@QAEXW4EFactory@1@ABVOUString@rtl@@@Z
+?free@FactoryInfo@@QAEXXZ
+?impl_GetOwnStaticMutex@SvtModuleOptions@@CAAAVMutex@osl@@XZ
