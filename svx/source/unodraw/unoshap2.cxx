@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 14:09:23 $
+ *  last change: $Author: aw $ $Date: 2001-05-28 10:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,14 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
             pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
         pObj->GetSubList()->NbcInsertObject( pSdrShape );
-        pSdrShape->SetLayer(pObj->GetLayer());
+
+        // #85922# It makes no sense to set the layer asked
+        // from the group object since these is an iteration
+        // over the contained objects. In consequence, this
+        // statement erases all layer information from the draw
+        // objects. Layers need to be set at draw objects directly
+        // and have nothing to do with grouping at all.
+        // pSdrShape->SetLayer(pObj->GetLayer());
 
         if(pShape)
             pShape->Create( pSdrShape, pPage );
