@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-23 14:04:10 $
+ *  last change: $Author: os $ $Date: 2000-11-24 11:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -155,11 +158,16 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     if(!xConfigurationProvider.is())
     {
         Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
-        if(xMSF.is())
-            xConfigurationProvider = Reference< XMultiServiceFactory >
-                (xMSF->createInstance(
-                        C2U("com.sun.star.configuration.ConfigurationProvider")),
-                            UNO_QUERY);
+        Sequence <Any> aArgs(1);
+        Any* pValues = aArgs.getArray();
+        PropertyValue aPValue;
+        aPValue.Name  = C2U("servertype");
+        aPValue.Value <<= C2U("plugin");
+        pValues[0] <<= aPValue;
+        xConfigurationProvider = Reference< XMultiServiceFactory >
+            (xMSF->createInstanceWithArguments(
+                    C2U("com.sun.star.configuration.ConfigurationProvider"), aArgs),
+                        UNO_QUERY);
     }
     return xConfigurationProvider;
 }
@@ -318,7 +326,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         {
             aRet = xHierarchyAccess->getByHierarchicalName(sProperty);
         }
-        catch(Exception&) {}
+        catch(Exception&)
+        {
+        }
     }
     return aRet;
 }
