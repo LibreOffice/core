@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-19 13:09:33 $
+ *  last change: $Author: pl $ $Date: 2002-06-27 19:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@ void* CreateNewShell( void** pShellReturn )
         XtVaAppCreateShell( "SOPluginApp", "SOPluginApp",
                             applicationShellWidgetClass,
                             pAppDisplay,
+                            XtNwidth, 10,
+                            XtNheight, 10,
+                            XtNoverrideRedirect, True,
                             NULL );
     char pText[1024];
     sprintf( pText, "starting plugin %s ...", pAppArguments[2] );
@@ -224,6 +227,7 @@ main( int argc, char **argv)
         NULL, 0,            /* command line option list */
         &argc, argv,        /* command line args */
         NULL,               /* for missing app-defaults file */
+        XtNoverrideRedirect, True,
         NULL);              /* terminate varargs list */
     pAppDisplay = XtDisplay( topLevel );
     XtAddRawEventHandler( topLevel, 0, True, ThreadEventHandler, NULL );

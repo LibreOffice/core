@@ -2,12 +2,15 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.1 2001-10-23 17:31:20 pl Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.2 2002-06-27 19:44:13 pl Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1  2001/10/23 17:31:20  pl
+      #92403# move plugins into own executable like SO5.2
+
       Revision 1.5  2000/02/17 09:41:24  pl
       #73121# use mozilla header instead of netscape header
 
@@ -234,28 +237,18 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                               XtWindow( (Widget)pInst->pWidget ),
                               (XLIB_Window)pWindow->window );
                     XReparentWindow( pAppDisplay,
-                                     XtWindow( (Widget)pInst->pWidget ),
+                                     XtWindow( (Widget)pInst->pShell ),
                                      (XLIB_Window)pWindow->window,
                                      0, 0 );
-                    XEvent aEvent;
-                    while( ! XCheckTypedWindowEvent(
-                        pAppDisplay,
-                        XtWindow( (Widget)pInst->pShell ),
-                        ReparentNotify,
-                        &aEvent ) );
-
+                    XSync( pAppDisplay, False );
 
                     XtRealizeWidget( (Widget)pInst->pWidget );
                     XtResizeWidget( (Widget)pInst->pShell,
                                     pWindow->width, pWindow->height, 0 );
-                    XWithdrawWindow( pAppDisplay,
-                                     XtWindow( (Widget)pInst->pShell ),
-                                     DefaultScreen( pAppDisplay )
-                                     );
-                    XWithdrawWindow( pAppDisplay,
-                                     XtWindow( topLevel ),
-                                     DefaultScreen( pAppDisplay )
-                                     );
+                     XWithdrawWindow( pAppDisplay,
+                                      XtWindow( topLevel ),
+                                      DefaultScreen( pAppDisplay )
+                                      );
                     XtMapWidget( (Widget)pInst->pWidget );
                     XRaiseWindow( pAppDisplay, XtWindow((Widget)pInst->pWidget) );
                     XSync( pAppDisplay, False );

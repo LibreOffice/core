@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-22 18:48:00 $
+ *  last change: $Author: pl $ $Date: 2002-06-27 19:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,10 @@ Mediator::~Mediator()
 {
     if( m_pListener )
     {
-        ::vos::OGuard aGuard( m_pListener->m_aMutex );
-        m_pListener->m_pMediator = NULL;
+        {
+            ::vos::OGuard aGuard( m_pListener->m_aMutex );
+            m_pListener->m_pMediator = NULL;
+        }
         m_pListener = NULL;
         if( m_bValid )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-01 13:56:09 $
+ *  last change: $Author: pl $ $Date: 2002-06-27 19:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,29 +90,30 @@ static PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescripti
         while( fgets( buf, sizeof( buf ), pResult ) )
             aMIME += buf;
         pclose( pResult );
-        if( aMIME.GetChar( aMIME.Len()-1 ) == '\n' )
-            aMIME.Erase( aMIME.Len()-1 );
-
-
-        char cTok = ';';
-        if( aMIME.GetTokenCount( ';' ) > 2 )
-            cTok = ';';
-        if( aMIME.GetTokenCount( ':' ) > 2 )
-            cTok = ':';
-        ByteString aExtension = aMIME.GetToken( 1, cTok );
-        int nExtensions = aExtension.GetTokenCount( ',' );
-        pRet = new PluginDescription*[ nExtensions ];
-        for( int i = 0; i < nExtensions; i++ )
+        if( aMIME.Len() > 0 )
         {
-            pRet[i] = new PluginDescription;
-            pRet[i]->PluginName = String( rPath, aEncoding );
-            pRet[i]->Mimetype   = String( aMIME.GetToken( 0, cTok ), aEncoding );
-            ByteString aExt( "*." );
-            aExt += aExtension.GetToken( i, ',' ).EraseLeadingChars().EraseTrailingChars();
-            pRet[i]->Extension  = String( aExt, aEncoding );
-            pRet[i]->Description= String( aMIME.GetToken( 2, cTok ), aEncoding );
+            if( aMIME.GetChar( aMIME.Len()-1 ) == '\n' )
+                aMIME.Erase( aMIME.Len()-1 );
+            char cTok = ';';
+            if( aMIME.GetTokenCount( ';' ) > 2 )
+                cTok = ';';
+            if( aMIME.GetTokenCount( ':' ) > 2 )
+                cTok = ':';
+            ByteString aExtension = aMIME.GetToken( 1, cTok );
+            int nExtensions = aExtension.GetTokenCount( ',' );
+            pRet = new PluginDescription*[ nExtensions ];
+            for( int i = 0; i < nExtensions; i++ )
+            {
+                pRet[i] = new PluginDescription;
+                pRet[i]->PluginName = String( rPath, aEncoding );
+                pRet[i]->Mimetype   = String( aMIME.GetToken( 0, cTok ), aEncoding );
+                ByteString aExt( "*." );
+                aExt += aExtension.GetToken( i, ',' ).EraseLeadingChars().EraseTrailingChars();
+                pRet[i]->Extension  = String( aExt, aEncoding );
+                pRet[i]->Description= String( aMIME.GetToken( 2, cTok ), aEncoding );
+            }
+            rDescriptions = nExtensions;
         }
-        rDescriptions = nExtensions;
     }
     return pRet;
 }
@@ -172,6 +173,8 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
                     if( ! stat( aFileName.GetBuffer(), &aStat )
                         && S_ISREG( aStat.st_mode )
                         && strncmp( ((struct dirent*)aBuffer)->d_name, "libnullplugin", 13 )
+                        // cannot use flash since it needs a java runtime
+                        && strncmp( ((struct dirent*)aBuffer)->d_name, "libflashplayer.so", 17 )
                         )
                     {
 #if defined DEBUG
