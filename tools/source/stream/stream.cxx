@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:25:55 $
+ *  last change: $Author: er $ $Date: 2001-02-26 21:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,7 @@ BOOL SvStream::ReadLine( ByteString& rStr )
     BOOL        bEnd        = FALSE;
     ULONG       nOldFilePos = Tell();
     sal_Char    c           = 0;
+    ULONG       nTotalLen   = 0;
 
     rStr.Erase();
     while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
@@ -765,23 +766,35 @@ BOOL SvStream::ReadLine( ByteString& rStr )
                 break;
         }
 
-        for( USHORT n = 0; n < nLen ; n++ )
+        USHORT j, n;
+        for( j = n = 0; j < nLen ; ++j )
         {
-            c = buf[n];
-            if ( c != '\n' && c != '\r' )
-                rStr += c;
-            else
+            c = buf[j];
+            if ( c == '\n' || c == '\r' )
             {
                 bEnd = TRUE;
                 break;
             }
+            // erAck 26.02.01: Old behavior was no special treatment of '\0'
+            // character here, but a following rStr+=c did ignore it. Is this
+            // really intended? Or should a '\0' better terminate a line?
+            // The nOldFilePos stuff wasn't correct then anyways.
+            if ( c )
+            {
+                if ( n < j )
+                    buf[n] = c;
+                ++n;
+            }
         }
+        if ( n )
+            rStr.Append( buf, n );
+        nTotalLen += j;
     }
 
     if ( !bEnd && !GetError() && rStr.Len() )
         bEnd = TRUE;
 
-    nOldFilePos += rStr.Len();
+    nOldFilePos += nTotalLen;
     if( Tell() > nOldFilePos )
         nOldFilePos++;
     Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
@@ -805,6 +818,7 @@ BOOL SvStream::ReadUniStringLine( String& rStr )
     BOOL        bEnd        = FALSE;
     ULONG       nOldFilePos = Tell();
     sal_Unicode c           = 0;
+    ULONG       nTotalLen   = 0;
 
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(USHORT), "ReadUniStringLine: swapping sizeof(sal_Unicode) not implemented" );
 
@@ -827,25 +841,37 @@ BOOL SvStream::ReadUniStringLine( String& rStr )
                 break;
         }
 
-        for( USHORT n = 0; n < nLen ; n++ )
+        USHORT j, n;
+        for( j = n = 0; j < nLen ; ++j )
         {
             if ( bSwap )
                 SwapUShort( buf[n] );
-            c = buf[n];
-            if ( c != '\n' && c != '\r' )
-                rStr += c;
-            else
+            c = buf[j];
+            if ( c == '\n' || c == '\r' )
             {
                 bEnd = TRUE;
                 break;
             }
+            // erAck 26.02.01: Old behavior was no special treatment of '\0'
+            // character here, but a following rStr+=c did ignore it. Is this
+            // really intended? Or should a '\0' better terminate a line?
+            // The nOldFilePos stuff wasn't correct then anyways.
+            if ( c )
+            {
+                if ( n < j )
+                    buf[n] = c;
+                ++n;
+            }
         }
+        if ( n )
+            rStr.Append( buf, n );
+        nTotalLen += j;
     }
 
     if ( !bEnd && !GetError() && rStr.Len() )
         bEnd = TRUE;
 
-    nOldFilePos += rStr.Len() * sizeof(sal_Unicode);
+    nOldFilePos += nTotalLen * sizeof(sal_Unicode);
     if( Tell() > nOldFilePos )
         nOldFilePos += sizeof(sal_Unicode);
     Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
