@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:55:59 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <string.h>
 
 #ifndef _SV_SVSYS_HXX
@@ -273,7 +272,7 @@ Window* ImplGetDefaultWindow()
         if ( !pSVData->mpDefaultWin )
         {
             DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
-            pSVData->mpDefaultWin = new WorkWindow( 0, 0 );
+            pSVData->mpDefaultWin = new WorkWindow( 0, WB_DEFAULTWIN );
         }
         Application::GetSolarMutex().release();
     }
