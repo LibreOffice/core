@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 15:58:43 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 15:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "~Nazwa:";
         Text[ portuguese_brazilian ] = "~Name:";
         Text[ japanese ] = "–¼‘O(~N):";
-        Text[ korean ] = "~ÀÌ¸§:";
+        Text[ korean ] = "ÀÌ¸§:";
         Text[ chinese_simplified ] = "Ãû³Æ(~N)£º";
         Text[ chinese_traditional ] = "¦WºÙ(~N)¡G";
         Text[ turkish ] = "~Name:";
@@ -482,7 +482,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "ród³o danych URL";
         Text[ portuguese_brazilian ] = "~Data source URL:";
         Text[ japanese ] = "ÃŞ°À¿°½ URL(~D):";
-        Text[ korean ] = "~µ¥ÀÌÅÍ ¼Ò½º URL:";
+        Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º URL:";
         Text[ chinese_simplified ] = "Êı¾İÔ´ URL(~D)£º";
         Text[ chinese_traditional ] = "¸ê®Æ·½ URL(~D)¡G";
         Text[ turkish ] = "~Data source URL:";
@@ -1338,11 +1338,11 @@ TabPage PAGE_TEXT
         Text [ danish ] = "Filtypenavn" ;
         Text [ portuguese_brazilian ] = "Erweiterung" ;
         Text [ portuguese ] = "~Extensão" ;
-        Text[ chinese_simplified ] = "À©Õ¹";
+        Text[ chinese_simplified ] = "À©Õ¹Ãû";
         Text[ russian ] = "Ğàñøèğåíèå";
         Text[ polish ] = "Rozszerzenie";
         Text[ japanese ] = "Šg’£q";
-        Text[ chinese_traditional ] = "ÂX®i";
+        Text[ chinese_traditional ] = "°ÆÀÉ¦W";
         Text[ arabic ] = "ÇãÊÏÇÏ ÇáÇÓã";
         Text[ greek ] = "Åğİêôáóç";
         Text[ korean ] = "È®ÀåÀÚ";
@@ -1562,7 +1562,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "~Wszystkie";
         Text[ portuguese_brazilian ] = "~All";
         Text[ japanese ] = "‚·‚×‚Ä";
-        Text[ korean ] = "~¸ğµÎl";
+        Text[ korean ] = "¸ğµÎ";
         Text[ chinese_simplified ] = "È«²¿(~A)";
         Text[ chinese_traditional ] = "¥ş³¡(~A)";
         Text[ turkish ] = "~All";
@@ -1588,7 +1588,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "~Brak";
         Text[ portuguese_brazilian ] = "~None";
         Text[ japanese ] = "‚È‚µ";
-        Text[ korean ] = "~¾øÀ½";
+        Text[ korean ] = "¾øÀ½";
         Text[ chinese_simplified ] = "ÎŞ(~N)";
         Text[ chinese_traditional ] = "µL(~N)";
         Text[ turkish ] = "~None";
@@ -1614,7 +1614,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "~Wybór";
         Text[ portuguese_brazilian ] = "~Selection";
         Text[ japanese ] = "‘I‘ğ";
-        Text[ korean ] = "~¼±ÅÃ";
+        Text[ korean ] = "¼±ÅÃ";
         Text[ chinese_simplified ] = "Ñ¡Ôñ(~S)";
         Text[ chinese_traditional ] = "¿ï¨ú(~S)";
         Text[ turkish ] = "~Selection";
@@ -1701,7 +1701,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ polish ] = "Nazwa usuniêtego Ÿród³a danych przypisana zosta³a innemu plikowi! Nale¿y zmieniæ jego nazwê, aby móc odtworzyæ aktualne Ÿród³o danych.";
     Message[ portuguese_brazilian ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ japanese ] = "‚·‚Å‚Éíœ‚µ‚½ÃŞ°À‚Ì–¼‘O‚ª•Ê‚ÌÃŞ°À¿°½‚É“ü—Í‚³‚ê‚Ü‚µ‚½BŒ»İ‚Ì‚à‚Ì‚ğ•œŒ³‚·‚é‚É‚ÍA‚Ü‚¸‹ŒÃŞ°À‚Ì–¼‘O‚ğ•ÏX‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B";
-    Message[ korean ] = "»ç¿ëÀÚ´Â »èÁ¦µÈ µ¥ÀÌÅÍ ¼Ò½ºÀÇ ÀÌ¸§À» ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ ¼Ò½º¿¡ ºÎ¿©ÇÏ¿´½À´Ï´Ù. ÇöÀç °ÍÀ» º¹¿øÇÏ±â À§ÇØ¼­´Â ¸ÕÀú °ÍÀÇ ÀÌ¸§À» º¯°æÇØ¾ß ÇÕ´Ï´Ù.";
+    Message[ korean ] = "»ç¿ëÀÚ´Â »èÁ¦µÈ µ¥ÀÌÅÍ ¼Ò½ºÀÇ ÀÌ¸§À» ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ ¼Ò½º¿¡ ºÎ¿©ÇÏ¿´½À´Ï´Ù. ÀüÀÚ¸¦ º¹¿øÇÏ±â À§ÇØ¼­´Â ÈÄÀÚ ÀÌ¸§À» º¯°æÇØ¾ß ÇÕ´Ï´Ù.";
     Message[ chinese_simplified ] = "ÄúÒÑ¾­ÓÃÒ»¸ö±»É¾³ıµÄÊı¾İÔ´Ãû³ÆÃüÃûÁËÒ»¸öÆäËûµÄÊı¾İÔ´£¡Äú±ØĞëÖØÃüÃûÄÇÒ»¸öÊı¾İÔ´£¬È»ºó²ÅÄÜ»Ö¸´µ±Ç°µÄÊı¾İÔ´¡£";
     Message[ chinese_traditional ] = "±z¤w¸g¬°¥t¤@­Ó¸ê®Æ·½«ü©w¤F³o­Ó¦WºÙ¡I±z¥²¶·¥ı°õ¦æ­«·s©R¦W©R¥O¡AµM¦Z¤~¯à°÷«ìÎ`·í«eªº¸ê®Æ·½¡C";
     Message[ turkish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
@@ -1863,6 +1863,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2000/12/05 15:58:43  fs
+ *  #79820# HID_DSADMIN_DIALOG
+ *
  *  Revision 1.18  2000/12/05 12:48:48  fs
  *  #80539# removed two obsolete ids
  *
