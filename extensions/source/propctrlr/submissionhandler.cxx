@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submissionhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:13:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SubmissionPropertyHandler::updateDependentProperties( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater )
+    void SAL_CALL SubmissionPropertyHandler::actuatingPropertyChanged( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool )
     {
-        OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::updateDependentProperties: we have no ActuatingProperties!" );
+        OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::actuatingPropertyChanged: we have no ActuatingProperties!" );
         if ( !m_pHelper.get() )
             return;
 
@@ -347,7 +347,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::updateDependentProperties: cannot handle this id!" );
+            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 
