@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:59:25 $
+ *  last change: $Author: ka $ $Date: 2002-07-04 15:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,8 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Ignore();
-                InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
+// KA 04.07.2002
+//              InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
             }
         }
         break;
