@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BinaryOnlyFilter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:08 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 package org.openoffice.idesupport.filter;
 
 public class BinaryOnlyFilter implements FileFilter {
-    private static final String[] EXTENSIONS = {".class", ".jar"};
-    private static final String DESCRIPTION = "Binaries Only";
+    private static final String[] EXTENSIONS = {".class", ".jar", ".bsh"};
+    private static final String DESCRIPTION = "Executable Files Only";
     private static final BinaryOnlyFilter filter = new BinaryOnlyFilter();
 
     private BinaryOnlyFilter() {
@@ -80,12 +80,13 @@ public class BinaryOnlyFilter implements FileFilter {
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer(DESCRIPTION + ": ");
+        /* StringBuffer buf = new StringBuffer(DESCRIPTION + ": ");
 
         for (int i = 0; i < EXTENSIONS.length - 1; i++)
             buf.append("<" + EXTENSIONS[i] + "> ");
         buf.append("<" + EXTENSIONS[EXTENSIONS.length - 1] + ">");
 
-        return buf.toString();
+        return buf.toString(); */
+        return DESCRIPTION;
     }
 }

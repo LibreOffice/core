@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurePanel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:11 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,29 @@ public class ConfigurePanel extends JPanel {
     private ScriptPanel scriptPanel;
     private ParcelDescriptor descriptor = ParcelDescriptor.getParcelDescriptor();
 
-    public ConfigurePanel(String basedir, Vector classpath, Document doc) {
+    public static final String DIALOG_TITLE = "Choose What to Export as Scripts";
+
+    public ConfigurePanel(String basedir, Vector classpath, Document doc,
+        String language) {
+
         this.basedir = new File(basedir);
         this.classpath = classpath;
-        initUI(doc);
+        initUI(doc, language);
+    }
+
+    public void reload(String basedir, Vector classpath, Document doc,
+        String language) {
+
+        if (basedir != null)
+            this.basedir = new File(basedir);
+
+        if (classpath != null)
+            this.classpath = classpath;
+
+        methodPanel.reload(this.basedir, this.classpath, language);
+
+        if (doc != null)
+            scriptPanel.reload(descriptor.parse(doc));
     }
 
     public Document getConfiguration() throws Exception {
@@ -104,10 +123,10 @@ public class ConfigurePanel extends JPanel {
         return descriptor.generate(scripts);
     }
 
-    private void initUI(Document doc) {
+    private void initUI(Document doc, String language) {
         JPanel leftPanel = new JPanel();
         JPanel methodButtons = initMethodButtons();
-        methodPanel = new MethodPanel(basedir, classpath);
+        methodPanel = new MethodPanel(basedir, classpath, language);
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(methodPanel, BorderLayout.CENTER);
 

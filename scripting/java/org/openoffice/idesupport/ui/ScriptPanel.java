@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptPanel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:11 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,18 +84,31 @@ import org.openoffice.idesupport.ScriptEntry;
 public class ScriptPanel extends JPanel {
     private ScriptTableModel model;
     private JTable table;
-    private File descriptor;
 
     public ScriptPanel(ScriptEntry[] scripts) {
         model = new ScriptTableModel(scripts);
         initUI();
     }
 
+    public void reload(ScriptEntry[] entries) {
+        model.removeAll();
+        addScriptEntries(entries);
+    }
+
     public void addScriptEntries(ScriptEntry[] entries) {
         for (int i = 0; i < entries.length; i++) {
-            ScriptEntry entry = new ScriptEntry(entries[i].getLanguageName(),
-                                                entries[i].getLocation());
-            entry.setLogicalName(entries[i].getLanguageName());
+            ScriptEntry entry;
+
+            try {
+                entry = (ScriptEntry) entries[i].clone();
+            }
+            catch (CloneNotSupportedException cnse) {
+                entry = new ScriptEntry(entries[i].getLanguage(),
+                                        entries[i].getLanguageName(),
+                                        entries[i].getLogicalName(),
+                                        entries[i].getLocation());
+            }
+
             model.add(entry);
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodPanel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:11 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 17:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ import java.lang.reflect.Modifier;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 
@@ -82,16 +84,30 @@ public class MethodPanel extends JPanel {
 
     private File basedir;
     private Vector classpath;
-    private final static String FIRST_PARAM = "drafts.com.sun.star.script.framework.XScriptContext";
+    private final static String FIRST_PARAM =
+        "drafts.com.sun.star.script.framework.XScriptContext";
 
+    // private JTable table;
+    // private MethodTableModel model;
     private JList list;
     private Vector values = new Vector(11);
 
-    public MethodPanel(File basedir, Vector classpath) {
-    this.basedir = basedir;
+    public MethodPanel(File basedir, Vector classpath, String language) {
+        this.basedir = basedir;
         this.classpath = classpath;
-        initValues();
+
+        initValues(language);
         initUI();
+    }
+
+    public void reload(File basedir, Vector classpath, String language) {
+        this.basedir = basedir;
+        this.classpath = classpath;
+
+    values.removeAllElements();
+        initValues(language);
+
+        list.setListData(values);
     }
 
     public ScriptEntry[] getSelectedEntries() {
@@ -107,7 +123,9 @@ public class MethodPanel extends JPanel {
 
     private void initUI() {
         JLabel label = new JLabel("Available Methods:");
+        // table = new JTable(model);
         list = new JList(values);
+
         JScrollPane pane = new JScrollPane(list);
         label.setLabelFor(pane);
 
@@ -119,58 +137,81 @@ public class MethodPanel extends JPanel {
         add(pane, BorderLayout.CENTER);
     }
 
-    private void initValues() {
-        String[] classNames;
+    private void initValues(String language) {
         String parcelName;
 
         if (basedir == null || basedir.exists() == false ||
             basedir.isDirectory() == false)
             return;
 
-        classNames = findClassNames();
-        if (classNames == null || classNames.length == 0)
-            return;
-
         parcelName = basedir.getName();
         if (parcelName.equals(ParcelZipper.CONTENTS_DIRNAME))
             parcelName = basedir.getParentFile().getName();
 
-        DefaultScriptClassLoader classloader =
-            new DefaultScriptClassLoader(classpath);
+        if (language == null)
+            initJavaValues(parcelName);
+        else if (language.toLowerCase().equals("beanshell"))
+            initBeanShellValues(parcelName);
+        else
+            initJavaValues(parcelName);
+    }
 
-        for (int i = 0; i < classNames.length; i++)
-        {
-            try
+    private void initJavaValues(String parcelName) {
+        String[] classNames;
+
+        classNames = findClassNames();
+        if (classNames != null && classNames.length != 0) {
+
+            DefaultScriptClassLoader classloader =
+                new DefaultScriptClassLoader(classpath);
+
+            for (int i = 0; i < classNames.length; i++)
             {
-                Class clazz = classloader.loadClass(classNames[i]);
-                Method[] methods = clazz.getDeclaredMethods();
-                for (int k = 0; k < methods.length; k++)
+                try
                 {
-                    if (Modifier.isPublic(methods[k].getModifiers()))
+                    Class clazz = classloader.loadClass(classNames[i]);
+                    Method[] methods = clazz.getDeclaredMethods();
+                    for (int k = 0; k < methods.length; k++)
                     {
-                        Class[] params = methods[k].getParameterTypes();
-                        if(params.length > 0)
+                        if (Modifier.isPublic(methods[k].getModifiers()))
                         {
-                            if(params[0].getName().equals(FIRST_PARAM))
+                            Class[] params = methods[k].getParameterTypes();
+                            if(params.length > 0)
                             {
-                                ScriptEntry entry =
-                                new ScriptEntry(classNames[i] + "." + methods[k].getName(),
-                                                parcelName);
-                                values.addElement(entry);
+                                if(params[0].getName().equals(FIRST_PARAM))
+                                {
+                                    ScriptEntry entry =
+                                        new ScriptEntry(classNames[i] + "." +
+                                            methods[k].getName(), parcelName);
+                                    values.addElement(entry);
+                                }
                             }
                         }
                     }
                 }
+                catch (ClassNotFoundException e)
+                {
+                    System.err.println("Class Not Found Exception...");
+                    continue;
+                }
+                catch (NoClassDefFoundError nc)
+                {
+                    System.err.println("No Class Definition Found...");
+                    continue;
+                }
             }
-            catch (ClassNotFoundException e)
-            {
-                System.err.println("Class Not Found Exception...");
-                continue;
-            }
-            catch (NoClassDefFoundError nc)
-            {
-                System.err.println("No Class Definition Found...");
-                continue;
+        }
+    }
+
+    private void initBeanShellValues(String parcelName) {
+
+        ArrayList bshFiles = findFiles(basedir, ".bsh");
+
+        if (bshFiles != null) {
+            for (int i = 0; i < bshFiles.size(); i++) {
+                File f = (File)bshFiles.get(i);
+                values.addElement(new ScriptEntry("BeanShell", f.getName(),
+                    f.getName(), parcelName));
             }
         }
     }
@@ -229,4 +270,70 @@ public class MethodPanel extends JPanel {
         }
         return (String[])result.toArray(new String[0]);
     }
+
+    /*
+    private class MethodTableModel extends AbstractTableModel {
+        final String[] columnNames = {"Method",
+                                      "Language"};
+
+        private Vector methods;
+        private int nextRow;
+
+        public MethodTableModel() {
+            methods = new Vector(11);
+        }
+
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        public int getRowCount() {
+            return methods.size();
+        }
+
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
+
+        public void add(ScriptEntry entry) {
+            methods.addElement(entry);
+            fireTableRowsInserted(nextRow, nextRow);
+            nextRow++;
+        }
+
+        public void remove(int row) {
+            methods.removeElementAt(row);
+            fireTableRowsDeleted(row, row);
+            nextRow--;
+        }
+
+        public void removeAll() {
+            methods.removeAllElements();
+            fireTableRowsDeleted(0, nextRow);
+            nextRow = 0;
+        }
+
+        public Object getValueAt(int row) {
+            return methods.elementAt(row);
+        }
+
+        public Object getValueAt(int row, int col) {
+            String result = "";
+            ScriptEntry entry;
+
+            entry = (ScriptEntry)methods.elementAt(row);
+
+            if (col == 0)
+                result = entry.getLanguageName();
+            else if (col == 1)
+                result = entry.getLanguage();
+
+            return result;
+        }
+
+        public boolean isCellEditable(int row, int col) {
+            return false;
+        }
+    }
+    */
 }
