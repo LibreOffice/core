@@ -73,6 +73,7 @@ OSEP=^<
 CSEP=^>
 QUOTE=
 QM=
+SQM=
 
 DEL=del
 DELRECURSIVE=rd /S /Q
@@ -154,6 +155,7 @@ OSEP=\<
 CSEP=\>
 QUOTE=$(subst S,\,S)
 QM=\"
+SQM='
 
 DEL=rm -f
 DELRECURSIVE=rm -rf
@@ -242,6 +244,7 @@ OSEP=\<
 CSEP=\>
 QUOTE=$(subst S,\,S)
 QM=\"
+SQM='
     
 DEL=rm -f
 DELRECURSIVE=rm -rf
@@ -329,6 +332,7 @@ OSEP=\<
 CSEP=\>
 QUOTE=$(subst S,\,S)
 QM=\"
+SQM='
     
 DEL=rm -f
 DELRECURSIVE=rm -rf
