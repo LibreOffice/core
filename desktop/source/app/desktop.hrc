@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:34:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,18 +114,9 @@
 #define STR_SETUP_ERR_CANNOT_START          (RID_DESKTOP_STRING_START+160)
 #define STR_INTERNAL_ERRMSG                 (RID_DESKTOP_STRING_START+161)
 
-#define STR_SSO_REQUEST                     (RID_DESKTOP_STRING_START+170)
-#define STR_SSO_RELOGIN                     (RID_DESKTOP_STRING_START+171)
-
-#define STR_TITLE_CONFIG_MSGBOX             (RID_DESKTOP_STRING_START+175)
-
-#define STR_CONFIG_WARN_LOCAL_FALLBACK      (RID_DESKTOP_STRING_START+180)
-#define STR_CONFIG_WARN_OFFLINE             (RID_DESKTOP_STRING_START+181)
 #define STR_CONFIG_ERR_SETTINGS_INCOMPLETE  (RID_DESKTOP_STRING_START+182)
 #define STR_CONFIG_ERR_CANNOT_CONNECT       (RID_DESKTOP_STRING_START+183)
 #define STR_CONFIG_ERR_RIGHTS_MISSING       (RID_DESKTOP_STRING_START+184)
-#define STR_CONFIG_ERR_LOGIN_FAILED         (RID_DESKTOP_STRING_START+185)
-#define STR_CONFIG_ERR_MECHANISM_INVALID    (RID_DESKTOP_STRING_START+186)
 #define STR_CONFIG_ERR_ACCESS_GENERAL       (RID_DESKTOP_STRING_START+187)
 #define STR_CONFIG_ERR_NO_WRITE_ACCESS      (RID_DESKTOP_STRING_START+188)
 
