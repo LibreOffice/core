@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Process.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:08:32 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ import com.sun.star.wizards.web.export.Exporter;
  * the user is given the option to "OK" or to "Cancel" and depending
  * on that interaction I cary on.
  */
-public class Process implements Runnable, WebWizardConst, ProcessErrors {
+public class Process implements WebWizardConst, ProcessErrors {
 
     private static final int TASKS_PER_DOC = 5;
     private static final int TASKS_PER_XSL = 2;
@@ -211,13 +211,9 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
     /**
      * does the job
      */
-    public void run() {
-
-
+    public void runProcess() {
         myTask.start();
-
         try {
-
             try {
                 /*
                  * I use here '&&' so if one of the
