@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:38:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include "scresid.hxx"
