@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:44:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,7 +946,7 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
     ReplyType aReplyType;
     {
         salhelper::ConditionWaiter aWait(m_aRep);
-        m_aReplyType = NOREPLY;
+        aReplyType = m_aReplyType;
         m_aReplyType = NOREPLY;
     }
     if(aReplyType == EXIT)
