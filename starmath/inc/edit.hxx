@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:29:02 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@
 #include <svtools/colorcfg.hxx>
 #endif
 
-#ifndef _ACCESSIBILITY_HXX_
-#include "accessibility.hxx"
-#endif
+//#ifndef _ACCESSIBILITY_HXX_
+//#include "accessibility.hxx"
+//#endif
 
 class SmDocShell;
 class SmViewShell;
@@ -91,6 +91,7 @@ class ScrollBarBox;
 class DataChangedEvent;
 class Menu;
 class SmCmdBoxWindow;
+class SmEditAccessible;
 
 /**************************************************************************/
 
