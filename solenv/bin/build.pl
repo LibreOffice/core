@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.134 $
+#   $Revision: 1.135 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-01 17:32:34 $
+#   last change: $Author: vg $ $Date: 2005-03-24 12:50:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.134 $ ';
+    $id_str = ' $Revision: 1.135 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -879,6 +879,7 @@ sub check_deps_hash {
 #
 sub FindIndepPrj {
     my ($Prj, @Prjs, $Dependencies, $i);
+    my @candidates = ();
     my $children = &children_number;
     return '' if ($children && ($children >= $QuantityToBuild));
     $Dependencies = shift;
@@ -887,7 +888,12 @@ sub FindIndepPrj {
         foreach $Prj (@Prjs) {
             next if (&IsHashNative($Prj));
             my $PrjDeps = $$Dependencies{$Prj};
-            return $Prj if (!scalar keys %$PrjDeps);
+            push(@candidates, $Prj) if (!scalar keys %$PrjDeps);
+            #return $Prj if (!scalar keys %$PrjDeps);
+        };
+        if (scalar @candidates) {
+            my @sorted_candidates = sort(@candidates);
+            return $sorted_candidates[0];
         };
         return '';
     } else {
@@ -1843,7 +1849,7 @@ sub prepare_incompatible_build {
         };
     };
     if (scalar @missing_modules) {
-        my $warning_string = 'Following modules are inconsistent/missing: ' . "@missing_modules" . '. If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!';
+        my $warning_string = 'Following modules are inconsistent/missing: ' . "@missing_modules";
         push(@warnings, $warning_string);
     };
     if ($build_from_opt) {
@@ -1851,18 +1857,20 @@ sub prepare_incompatible_build {
         $build_from_opt = '';
     };
     if ($old_output_tree) {
-        my $warning_string = 'Some module(s) contain old output tree(s)! If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!';
-        push(@warnings, $warning_string);
+        push(@warnings, 'Some module(s) contain old output tree(s)!');
     };
     if (scalar @warnings) {
-        print "\n\nWARNINGS:\n";
+        print "WARNING(S):\n";
         print STDERR "$_\n" foreach (@warnings);
+        print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n";
         sleep(10);
     };
+    if ($prepare) {
     print "\nPreparation finished";
-    if (scalar @warnings) {
-        print " with WARNINGS!!\n\n";
-    } else {print " successfully\n\n";}
+        if (scalar @warnings) {
+            print " with WARNINGS!!\n\n";
+        } else {print " successfully\n\n";}
+    }
     do_exit(0) if ($prepare);
 };
 
