@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:14:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
