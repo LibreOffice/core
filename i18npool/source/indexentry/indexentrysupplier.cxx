@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 15:25:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 10:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <rtl/ustrbuf.hxx>
 #include <indexentrysupplier.hxx>
 #include <localedata.hxx>
@@ -203,35 +202,38 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
             return xIES;
         else if (xMSF.is()) {
             aLocale = rLocale;
-            aSortAlgorithm = rSortAlgorithm;
+            if (rSortAlgorithm.getLength() == 0)
+                aSortAlgorithm = LocaleData().getDefaultIndexAlgorithm( rLocale );
+            else
+                aSortAlgorithm = rSortAlgorithm;
 
             sal_Int32 l = rLocale.Language.getLength();
             sal_Int32 c = rLocale.Country.getLength();
             sal_Int32 v = rLocale.Variant.getLength();
-            sal_Int32 a = rSortAlgorithm.getLength();
+            sal_Int32 a = aSortAlgorithm.getLength();
             OUStringBuffer aBuf(l+c+v+a+4);
 
             if ((l > 0 && c > 0 && v > 0 && a > 0 &&
                         // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
                         createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
                                     rLocale.Country).append(under).append(rLocale.Variant).append(under).append(
-                                    rSortAlgorithm).makeStringAndClear())) ||
+                                    aSortAlgorithm).makeStringAndClear())) ||
                 (l > 0 && c > 0 && a > 0 &&
                         // load service with name <base>_<lang>_<country>_<algorithm>
                         createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                                    rLocale.Country).append(under).append(rSortAlgorithm).makeStringAndClear())) ||
+                                    rLocale.Country).append(under).append(aSortAlgorithm).makeStringAndClear())) ||
                 (l > 0 && c > 0 && a > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
                                             (rLocale.Country.compareToAscii("HK") == 0 ||
                                             rLocale.Country.compareToAscii("MO") == 0) &&
                         // if the country code is HK or MO, one more step to try TW.
                         createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).appendAscii(
-                                    "TW").append(under).append(rSortAlgorithm).makeStringAndClear())) ||
+                                    "TW").append(under).append(aSortAlgorithm).makeStringAndClear())) ||
                 (l > 0 && a > 0 &&
                         // load service with name <base>_<lang>_<algorithm>
                         createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                                    rSortAlgorithm).makeStringAndClear())) ||
+                                    aSortAlgorithm).makeStringAndClear())) ||
                         // load service with name <base>_<algorithm>
-                (a > 0 && createLocaleSpecificIndexEntrySupplier(rSortAlgorithm)) ||
+                (a > 0 && createLocaleSpecificIndexEntrySupplier(aSortAlgorithm)) ||
                         // load default service with name <base>_Unicode
                         createLocaleSpecificIndexEntrySupplier(OUString::createFromAscii("Unicode"))) {
                 return xIES;
