@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 16:12:36 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ namespace dlgprov
             sal_Int32 nIndex = sScriptCode.indexOf( ':' );
             if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
             {
-                sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script://" );
+                sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
                 sScriptURL += sScriptCode.copy( nIndex + 1 );
                 sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
                 sScriptURL += sScriptCode.copy( 0, nIndex );
