@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ TabPage RID_SUBTBASE
         Text[ polish ] = "Oblicz sumy poœrednie dla";
         Text[ japanese ] = "¬Œv‚ğo‚·€–Ú(~C)";
         Text[ chinese_traditional ] = "¤p­p¥Î©ó(~C)";
-        Text[ arabic ] = "ÍÓÇÈ ÇáäÊÇÆÌ ÇáÌÒÆíÉ áÜ";
+        Text[ arabic ] = "ÍÓÇÈ ÇáãÌÇãíÚ ÇáİÑÚíÉ áÜ";
         Text[ greek ] = "Õğïëïãéóìüò ìåñéêşí áèñïéóìÜ~ôùí ãéá";
         Text[ korean ] = "¿¡ ´ëÇÑ ¼Ò°è °è»ê(~C)";
         Text[ turkish ] = "~Ara toplamları hesaplanacak sütun(lar)";
@@ -942,7 +942,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ polish ] = "Sumy poœrednie";
     Text[ japanese ] = "¬Œv";
     Text[ chinese_traditional ] = "¤p­p";
-    Text[ arabic ] = "ÇáãÌÇãíÚ ÇáÌÒÆíÉ";
+    Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
     Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
     Text[ korean ] = "¼Ò°è";
     Text[ turkish ] = "Ara toplamlar";
