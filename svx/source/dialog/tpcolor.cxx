@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 09:58:35 $
+ *  last change: $Author: hr $ $Date: 2002-05-28 15:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,7 +859,8 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
             else
             {
                 //aIStream.Close();
-                ErrorBox( DLGWIN, WinBits( WB_OK ),
+                Window* pPtr = DLGWIN;
+                ErrorBox( pPtr, WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, pMgr ) ) ).Execute();
             }
         }
@@ -940,7 +941,8 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
         }
         else
         {
-            ErrorBox( DLGWIN, WinBits( WB_OK ),
+            Window* pPtr = DLGWIN;
+            ErrorBox( pPtr, WinBits( WB_OK ),
                 String( SVX_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
