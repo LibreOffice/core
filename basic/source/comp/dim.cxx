@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:41:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,11 +814,19 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
           for(;;) {
             BOOL bByVal = FALSE;
             BOOL bOptional = FALSE;
+            BOOL bParamArray = FALSE;
             while( Peek() == BYVAL || Peek() == BYREF || Peek() == _OPTIONAL_ )
             {
                 if      ( Peek() == BYVAL )     Next(), bByVal = TRUE;
                 else if ( Peek() == BYREF )     Next(), bByVal = FALSE;
                 else if ( Peek() == _OPTIONAL_ )    Next(), bOptional = TRUE;
+            }
+            if( bCompatible && Peek() == PARAMARRAY )
+            {
+                if( bByVal || bByVal || bOptional )
+                    Error( SbERR_UNEXPECTED, PARAMARRAY );
+                Next();
+                bParamArray = TRUE;
             }
             SbiSymDef* pPar = VarDecl( NULL, FALSE, FALSE );
             if( !pPar )
@@ -827,6 +835,8 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
                 pPar->SetByVal();
             if( bOptional )
                 pPar->SetOptional();
+            if( bParamArray )
+                pPar->SetParamArray();
             pDef->GetParams().Add( pPar );
             SbiToken eTok = Next();
             if( eTok != COMMA && eTok != RPAREN )
