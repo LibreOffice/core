@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:56:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,8 @@ namespace configmgr
         private:
             static node::Attributes getComponentRootAttributes();
             static node::Attributes getTemplateBaseAttributes();
-            node::Attributes makePropertyAttributes(sal_Int16 aSchemaAttributes);
+            node::Attributes getNodeAttributes() const;
+            node::Attributes makePropertyAttributes(sal_Int16 aSchemaAttributes) const;
 
             bool isExtensible(sal_Int16 aSchemaAttributes);
 
