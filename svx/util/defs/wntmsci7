@@ -22394,3 +22394,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ??0SvxBmpNumValueSet@@QAE@PAVWindow@@ABVResId@@@Z
 ?GetTxtStackedClickHdl@SvxWinOrientation@@QBEABVLink@@XZ
 ?SetTxtStackedClickHdl@SvxWinOrientation@@QAEXABVLink@@@Z
+?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx2595919191@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
