@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:46:27 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@
 #define RID_STR_VISIBLESIZE                 ( RID_FORMBROWSER_START + 178 )
 #define RID_STR_ORIENTATION                 ( RID_FORMBROWSER_START + 179 )
 #define RID_STR_ENUM_ORIENTATION            ( RID_FORMBROWSER_START + 180 )
-#define RID_STR_ENUM_SIDE_ALIGN             ( RID_FORMBROWSER_START + 181 )
+    // FREE
 #define RID_STR_EVT_ADJUSTMENTVALUECHANGED  ( RID_FORMBROWSER_START + 182 )
 #define RID_STR_DATE                        ( RID_FORMBROWSER_START + 183 )
 #define RID_STR_STATE                       ( RID_FORMBROWSER_START + 184 )
@@ -259,7 +259,7 @@
 #define RID_STR_REPEAT_DELAY                ( RID_FORMBROWSER_START + 197 )
 #define RID_STR_SYMBOLCOLOR                 ( RID_FORMBROWSER_START + 198 )
 #define RID_STR_REPEAT                      ( RID_FORMBROWSER_START + 199 )
-#define RID_STR_IMAGE_ALIGN                 ( RID_FORMBROWSER_START + 200 )
+#define RID_STR_IMAGEPOSITION               ( RID_FORMBROWSER_START + 200 )
 #define RID_STR_DEFAULTTEXT                 ( RID_FORMBROWSER_START + 201 )
 #define RID_STR_DEFAULTDATE                 ( RID_FORMBROWSER_START + 202 )
 #define RID_STR_DEFAULTTIME                 ( RID_FORMBROWSER_START + 203 )
@@ -275,6 +275,11 @@
 #define RID_STR_TEXTTYPE                    ( RID_FORMBROWSER_START + 213 )
 #define RID_STR_AUTOLINEBREAK               ( RID_FORMBROWSER_START + 214 )
 #define RID_STR_LINEEND_FORMAT              ( RID_FORMBROWSER_START + 215 )
+#define RID_STR_TOGGLE                      ( RID_FORMBROWSER_START + 216 )
+#define RID_STR_FOCUSONCLICK                ( RID_FORMBROWSER_START + 217 )
+#define RID_STR_HIDEINACTIVESELECTION       ( RID_FORMBROWSER_START + 218 )
+#define RID_STR_VISUALEFFECT                ( RID_FORMBROWSER_START + 219 )
+#define RID_STR_BORDERCOLOR                 ( RID_FORMBROWSER_START + 220 )
 
 // -----------------------------------------------------------------------
 // - dialogs
@@ -302,6 +307,8 @@
 #define RID_RSC_ENUM_COMMAND_TYPE           ( RID_PROPCONTROLLER_START +  1 )
 #define RID_RSC_ENUM_LINEEND_FORMAT         ( RID_PROPCONTROLLER_START +  2 )
 #define RID_RSC_ENUM_TEXTTYPE               ( RID_PROPCONTROLLER_START +  3 )
+#define RID_RSC_ENUM_VISUALEFFECT           ( RID_PROPCONTROLLER_START +  4 )
+#define RID_RSC_ENUM_IMAGE_POSITION         ( RID_PROPCONTROLLER_START +  5 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
