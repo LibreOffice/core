@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.37 $
+*   $Revision: 1.38 $
 *
-*   last change: $Author: vg $ $Date: 2005-02-16 17:50:50 $
+*   last change: $Author: vg $ $Date: 2005-02-17 10:42:10 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -252,16 +252,7 @@ namespace frm
     //==================================================================
     //= ItemEvent
     //==================================================================
-    class ItemEventDescription : public EventDescription
-    {
-    private:
-        ItemEvent   m_aEvent;
-
-    public:
-        ItemEventDescription( const ItemEvent& _rUnoEvent ) : m_aEvent( _rUnoEvent ) { }
-
-        const ItemEvent& getEvent() const { return m_aEvent; }
-    };
+    typedef ::comphelper::EventObjectHolder< ItemEvent >    ItemEventDescription;
 
     //==================================================================
     //= OListBoxModel
@@ -1712,11 +1703,11 @@ namespace frm
             {
                 if ( !m_pItemBroadcaster )
                 {
-                    m_pItemBroadcaster = new AsyncEventNotifier( this );
+                    m_pItemBroadcaster = new ::comphelper::AsyncEventNotifier( this );
                     m_pItemBroadcaster->acquire();
                     m_pItemBroadcaster->create();
                 }
-                m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent ) );
+                m_pItemBroadcaster->addEvent( new ItemEventDescription( _rEvent, 0 ) );
             }
         }
 
@@ -1810,16 +1801,16 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void OListBoxControl::processEvent( const EventReference& _rEvent )
+    void OListBoxControl::processEvent( const EventDescription& _rEvent )
     {
-        const ItemEventDescription* pItemEvent = static_cast< const ItemEventDescription* >( _rEvent.get() );
-        m_pItemListeners->itemStateChanged( pItemEvent->getEvent() );
+        const ItemEventDescription& rItemEvent = static_cast< const ItemEventDescription& >( _rEvent );
+        m_pItemListeners->itemStateChanged( rItemEvent.getEventObject() );
     }
 
     //------------------------------------------------------------------------------
-    XComponentRef OListBoxControl::getComponent()
+    Reference< XComponent > OListBoxControl::getComponent()
     {
-        return XComponentRef( queryInterface( XComponent::static_type() ), UNO_QUERY );
+        return Reference< XComponent >( queryInterface( XComponent::static_type() ), UNO_QUERY );
     }
 
     //------------------------------------------------------------------------------
