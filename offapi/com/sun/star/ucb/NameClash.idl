@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NameClash.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-30 09:41:09 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 09:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,13 @@ constants NameClash
     */
     const long KEEP = 3;
 
+    //-------------------------------------------------------------------------
+    /** Means to use a <type>NameClashResolveRequest</type> in order to solve
+        the name clash.
+
+        @see com::sun::star::task::XInteractionHandler
+    */
+    const long ASK = 4;
 };
 
 //=============================================================================
