@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Events.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:55:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,16 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Events" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>dfoster</author>
-		<desc xml:lang="en-US">Contains the global event bindings.</desc>
+		<desc>Contains the global event bindings.</desc>
 	</info>
 	<templates>
 		<group oor:name="BindingType">
 			<info>
-				<desc xml:lang="en-US">Describes the binding.</desc>
+				<desc>Describes the binding.</desc>
 			</info>
 			<prop oor:name="BindingURL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The Macro URL to which the event is bound.</desc>
+					<desc>The Macro URL to which the event is bound.</desc>
 				</info>
 			</prop>
 		</group>
@@ -79,11 +79,11 @@
 	<component>
 		<group oor:name="ApplicationEvents">
 			<info>
-				<desc xml:lang="en-US">Contains information about the global events.</desc>
+				<desc>Contains information about the global events.</desc>
 			</info>
 			<set oor:name="Bindings" oor:node-type="BindingType">
 				<info>
-					<desc xml:lang="en-US">Contains event bindings.</desc>
+					<desc>Contains event bindings.</desc>
 				</info>
 			</set>
 		</group>
