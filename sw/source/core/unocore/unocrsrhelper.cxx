@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 14:56:23 $
+ *  last change: $Author: os $ $Date: 2001-10-22 14:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,14 +522,12 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
  * --------------------------------------------------*/
 void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 {
-    if(rValue.getValueType() == ::getCppuType((const Reference<XIndexReplace>*)0))
+    Reference<XIndexReplace> xIndexReplace;
+    if(rValue >>= xIndexReplace)
     {
-        Reference< XIndexReplace > * pxNum = (Reference< XIndexReplace > *)rValue.getValue();
-        if(!(*pxNum).is())
-            return;
         SwXNumberingRules* pSwNum = 0;
 
-        Reference<XUnoTunnel> xNumTunnel((*pxNum), UNO_QUERY);
+        Reference<XUnoTunnel> xNumTunnel(xIndexReplace, UNO_QUERY);
         if(xNumTunnel.is())
         {
             pSwNum = (SwXNumberingRules*)
@@ -614,6 +612,10 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 pDoc->SetNumRule( rPam, *pRule );
             }
         }
+    }
+    else if(rValue.getValueType() == ::getVoidCppuType())
+    {
+        rPam.GetDoc()->DelNumRules(rPam);
     }
 }
 

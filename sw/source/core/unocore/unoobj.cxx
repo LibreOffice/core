@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 11:56:11 $
+ *  last change: $Author: os $ $Date: 2001-10-22 14:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,8 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                                 const uno::Any& aValue ) throw (lang::IllegalArgumentException)
 {
     sal_Bool bRet = sal_True;
-    if(aValue.getValueType() == ::getCppuVoidType())
+    if(0 ==(pMap->nFlags&PropertyAttribute::MAYBEVOID) &&
+        aValue.getValueType() == ::getCppuVoidType())
         bRet = sal_False;
     else
     {
