@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:56:56 $
+ *  last change: $Author: khong $ $Date: 2002-05-02 18:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ static UErrorCode status; // status is shared in all calls to Calendar, it has t
 Calendar_gregorian::Calendar_gregorian()
 {
     body = icu::Calendar::createInstance(status = U_ZERO_ERROR);
-    if (!body) throw ERROR;
+    if (!body || !U_SUCCESS(status)) throw ERROR;
 
     cCalendar = "com.sun.star.i18n.Calendar_gregorian";
     eraArray = NULL;
@@ -156,7 +156,8 @@ static icu::Calendar::EDateFields fieldNameConverter(sal_Int16 fieldIndex) throw
         case CalendarFieldIndex::DAY_OF_MONTH:  f = icu::Calendar::DAY_OF_MONTH; break;
         case CalendarFieldIndex::DAY_OF_WEEK:   f = icu::Calendar::DAY_OF_WEEK; break;
         case CalendarFieldIndex::DAY_OF_YEAR:   f = icu::Calendar::DAY_OF_YEAR; break;
-        case CalendarFieldIndex::DST_OFFSET:    f = icu::Calendar::ZONE_OFFSET; break;
+        case CalendarFieldIndex::DST_OFFSET:    f = icu::Calendar::DST_OFFSET; break;
+        case CalendarFieldIndex::ZONE_OFFSET:   f = icu::Calendar::ZONE_OFFSET; break;
         case CalendarFieldIndex::HOUR:      f = icu::Calendar::HOUR_OF_DAY; break;
         case CalendarFieldIndex::MINUTE:    f = icu::Calendar::MINUTE; break;
         case CalendarFieldIndex::SECOND:    f = icu::Calendar::SECOND; break;
@@ -177,7 +178,12 @@ Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value ) throw(Runt
     fieldGet = 0;
     fieldSet |= 1 << fieldIndex;
     fieldSetValue[fieldIndex] = value; // save the value for isValid() checking
-    body->set(fieldNameConverter(fieldIndex), value);
+
+    // convert minutes to millisecond for ZONE and DST.
+    if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
+        body->set(fieldNameConverter(fieldIndex), (sal_Int32) value * 60000);
+    else
+        body->set(fieldNameConverter(fieldIndex), value);
 }
 
 // convert field value from gregorian calendar to other calendar, it can be overwritten by derived class.
@@ -221,10 +227,14 @@ Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
     if (fieldGet & (1 << fieldIndex)) return fieldGetValue[fieldIndex];
 
     if (! convertValue(fieldIndex)) {
-        fieldGetValue[fieldIndex] =
-            (sal_Int16)body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
+        sal_Int32 value = body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
 
+        // convert millisecond to minute for ZONE and DST.
+        if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
+        value /= 60000;
+
+        fieldGetValue[fieldIndex] = (sal_Int16) value;
         fieldGet |= (1 << fieldIndex);
 
         // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
@@ -236,29 +246,13 @@ Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
 }
 
 void SAL_CALL
-Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 amount ) throw(RuntimeException)
+Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value ) throw(RuntimeException)
 {
+    // since ZONE and DST could not be add, we don't need to convert value here
+
     fieldGet = 0;
-    switch (fieldIndex) {
-        case CalendarFieldIndex::DAY_OF_MONTH:
-        case CalendarFieldIndex::DST_OFFSET:
-        case CalendarFieldIndex::HOUR:
-        case CalendarFieldIndex::MINUTE:
-        case CalendarFieldIndex::SECOND:
-        case CalendarFieldIndex::MILLISECOND:
-        case CalendarFieldIndex::YEAR:
-        case CalendarFieldIndex::MONTH:
-        case CalendarFieldIndex::ERA:
-        body->add(fieldNameConverter(fieldIndex), amount, status = U_ZERO_ERROR);
-        if ( !U_SUCCESS(status) ) throw ERROR;
-        break;
-        case CalendarFieldIndex::AM_PM:
-        case CalendarFieldIndex::DAY_OF_WEEK:
-        case CalendarFieldIndex::DAY_OF_YEAR:
-        case CalendarFieldIndex::WEEK_OF_MONTH:
-        case CalendarFieldIndex::WEEK_OF_YEAR:
-        default:        throw ERROR;
-    }
+    body->add(fieldNameConverter(fieldIndex), value, status = U_ZERO_ERROR);
+    if ( !U_SUCCESS(status) ) throw ERROR;
 }
 
 sal_Bool SAL_CALL
