@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:02:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
-#include <offmgr/sbasltid.hrc>
 #include <sot/formats.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
