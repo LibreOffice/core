@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-18 17:07:21 $
+ *  last change: $Author: mt $ $Date: 2001-07-25 13:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,6 @@
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <virdev.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_CLIP_HXX
-#include <clip.hxx>
-#endif
-#ifndef _SV_DRAG_HXX
-#include <drag.hxx>
-#endif
-#ifndef _SV_TRANSFER_HXX
-#include <transfer.hxx>
-#endif
 #endif
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
