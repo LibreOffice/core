@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:54:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,14 +136,15 @@ using namespace rtl;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
-HashString*     pHS          = NULL;
 ByteString*     pStdParType  = NULL;
 ByteString*     pStdPar1     = NULL;
 ByteString*     pStdPar2     = NULL;
 ByteString*     pWinParType  = NULL;
 ByteString*     pWinPar1     = NULL;
 ByteString*     pWinPar2     = NULL;
-USHORT          nRefDeep     = 10;
+sal_uInt32      nRefDeep     = 10;
+AtomContainer*  pHS          = NULL;
+
 
 /*************** R s c C m d L i n e ************************************/
 /*************************************************************************
@@ -189,13 +190,13 @@ RscCmdLine::RscCmdLine()
 |*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
-RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
+RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 {
     char *          pStr;
     char **         ppStr;
     RscPtrPtr       aCmdLine;       // Kommandozeile
     ByteString      aString;
-    USHORT          i;
+    sal_uInt32      i;
     BOOL            bOutputSrsIsSet = FALSE;
 
     Init(); // Defaults setzen
@@ -208,7 +209,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
     ppStr  = (char **)aCmdLine.GetBlock();
     ppStr++;
     i = 1;
-    while( ppStr && i < (USHORT)(aCmdLine.GetCount() -1) )
+    while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "CmdLineArg: \"%s\"\n", *ppStr );
@@ -226,7 +227,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "RefDeep", 7 ) )
             { // maximale Aufloesungtiefe fuer Referenzen
-                nRefDeep = (short)(ByteString( (*ppStr) +1 + strlen( "RefDeep" ) ).ToInt32());
+                nRefDeep = ByteString( (*ppStr) +1 + strlen( "RefDeep" ) ).ToInt32();
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "p" ) )
             { // kein Preprozessor
@@ -1215,7 +1216,6 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     FILE* pSysListFile )
 {
     ::std::list< ByteString >                   aFileNames;
-    ByteString*                                 pPath;
     bool                                        bFound = false;
 
     ByteString  aFileName( rBaseFileName );
