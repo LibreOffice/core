@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:59:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,12 +316,13 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
 
             for (unsigned int j=0; j<aMasterPages.size(); j++)
             {
-                MasterPageContainer::Instance().PutMasterPage (
-                    aMasterPages[j].first,
-                    aMasterPages[j].second,
-                    NULL,
-                    Image());
-                AddMasterPage (aMasterPages[j].second, false);
+                MasterPageContainer::Token aToken (
+                    MasterPageContainer::Instance().PutMasterPage(
+                        aMasterPages[j].first,
+                        aMasterPages[j].second,
+                        NULL,
+                        Image()));
+                AddMasterPage(aToken, false);
             }
         }
         while (false);
@@ -509,7 +510,9 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
     {
         case MasterPageObserverEvent::ET_MASTER_PAGE_ADDED:
         case MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS:
-            AddMasterPage (pEvent->mrMasterPageName);
+            AddMasterPage(
+                MasterPageContainer::Instance().GetTokenForPageName(
+                    pEvent->mrMasterPageName));
             break;
 
         case MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED:
@@ -527,11 +530,9 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
 
 
 void RecentlyUsedMasterPages::AddMasterPage (
-    const String& rsName,
+    MasterPageContainer::Token aToken,
     bool bMakePersistent)
 {
-    MasterPageContainer::Token aToken (
-        MasterPageContainer::Instance().GetTokenForPageName(rsName));
     // For the page to be inserted the token has to be valid and the page
     // has to have a valid URL.  This excludes master pages that do not come
     // from template files.
