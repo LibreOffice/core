@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:14:02 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ english_us ] = "Find & Replace" ;
     Text[ chinese_simplified ] = "ËÑÑ°ºÍ¸üÌæ";
     Text[ russian ] = "Íàéòè è çàìåíèòü";
-    Text[ polish ] = "ZnajdŸ & Zamieñ";
+    Text[ polish ] = "ZnajdŸ i zamieñ";
     Text[ japanese ] = "ŒŸõ‚Æ’uŠ·";
     Text[ chinese_traditional ] = "´M§ä©M´À¥N";
     Text[ arabic ] = "ÈÍË æÇÓÊÈÏÇá";
@@ -194,7 +194,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ swedish ] = "S~ök efter" ;
         Text [ dutch ] = "Zoeken ~naar" ;
         Text [ spanish ] = "B~uscar" ;
-        Text [ english_us ] = "Searc~h for" ;
+        Text [ english_us ] = "~Search for" ;
         Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ(~H)";
         Text[ russian ] = "Íàéòè";
         Text[ polish ] = "Szukaj";
@@ -382,7 +382,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ swedish ] = "Ba~klänges" ;
         Text [ dutch ] = "Ac~hterwaarts" ;
         Text [ spanish ] = "Retroce~der" ;
-        Text [ english_us ] = "Bac~kward" ;
+        Text [ english_us ] = "Bac~kwards" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ïòºó(~K)";
         Text[ russian ] = "Îáğàòíûé ïîèñê";
@@ -473,7 +473,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ËÑÑ°ÑùÊ½(~Y)";
         Text[ russian ] = "Ïîèñê ñòèëåé";
-        Text[ polish ] = "Szu~kaj szablonów";
+        Text[ polish ] = "Szu~kaj stylów";
         Text[ japanese ] = "½À²Ù‚ÌŒŸõ(~Y)";
         Text[ chinese_traditional ] = "´M§ä¼Ë¦¡(~Y)";
         Text[ arabic ] = "ÇáÈÍË Úä ÃäãÇØ";
