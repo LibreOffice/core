@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-05-27 13:49:06 $ $Revision: 1.5 $
+    $Author: mba $ $Date: 2002-05-28 14:16:53 $ $Revision: 1.6 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -43,8 +43,8 @@ TypeLibFile( "sfxslots.tlb" )
 
     struct Rectangle
     {
-        INT32   Left    MID_LEFT;
-        INT32   Top     MID_TOP;
+        INT32   Left    MID_RECT_LEFT;
+        INT32   Top     MID_RECT_TOP;
         INT32   Width   MID_WIDTH;
         INT32   Height  MID_HEIGHT;
     };
