@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     xub_StrLen nOldPos = nPos;
     nMaxPos += nPos;
 
+    // #107816#
+    // Look if the length of the original text and the ToUpper-converted
+    // text is different. If yes, do special handling.
+    sal_Bool bCaseMapLengthDiffers(aTxt.Len() != rOldText.Len());
+    XubString aNewText;
+
     SwFntObj *pOldLast = pLastFont;
     SwFntAccess *pBigFontAccess = NULL;
     SwFntObj *pBigFont;
@@ -611,8 +617,26 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             SV_STAT( nGetTextSize );
             pLastFont = pSmallFont;
             pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
-            rDo.GetInf().SetIdx( nOldPos );
-            rDo.GetInf().SetLen( nPos - nOldPos );
+
+            // #107816#
+            if(bCaseMapLengthDiffers)
+            {
+                // Build an own 'changed' string for the given part of the
+                // source string and use it. That new string may differ in length
+                // from the source string.
+                const XubString aSnippet(rOldText, nOldPos, nPos - nOldPos);
+                aNewText = CalcCaseMap(aSnippet);
+
+                rDo.GetInf().SetText( aNewText );
+                rDo.GetInf().SetIdx( 0 );
+                rDo.GetInf().SetLen( aNewText.Len() );
+            }
+            else
+            {
+                rDo.GetInf().SetIdx( nOldPos );
+                rDo.GetInf().SetLen( nPos - nOldPos );
+            }
+
             rDo.GetInf().SetUpper( FALSE );
             rDo.GetInf().SetOut( *pOutSize );
             aPartSize = pSmallFont->GetTextSize( rDo.GetInf() );
@@ -655,8 +679,26 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         pLastFont = pBigFont;
                         pLastFont->SetDevFont( rDo.GetInf().GetShell(),
                                                rDo.GetOut() );
-                        rDo.GetInf().SetIdx( nOldPos );
-                        rDo.GetInf().SetLen( nTmp - nOldPos );
+
+                        // #107816#
+                        if(bCaseMapLengthDiffers)
+                        {
+                            // Build an own 'changed' string for the given part of the
+                            // source string and use it. That new string may differ in length
+                            // from the source string.
+                            const XubString aSnippet(rOldText, nOldPos, nTmp - nOldPos);
+                            aNewText = CalcCaseMap(aSnippet);
+
+                            rDo.GetInf().SetText( aNewText );
+                            rDo.GetInf().SetIdx( 0 );
+                            rDo.GetInf().SetLen( aNewText.Len() );
+                        }
+                        else
+                        {
+                            rDo.GetInf().SetIdx( nOldPos );
+                            rDo.GetInf().SetLen( nTmp - nOldPos );
+                        }
+
                         rDo.GetInf().SetOut( *pOutSize );
                         aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
                         nKana += rDo.GetInf().GetKanaDiff();
@@ -677,8 +719,25 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     nTmp = nPos;
                 if( nTmp > nOldPos )
                 {
-                    rDo.GetInf().SetIdx( nOldPos );
-                    rDo.GetInf().SetLen( nTmp - nOldPos );
+                    // #107816#
+                    if(bCaseMapLengthDiffers)
+                    {
+                        // Build an own 'changed' string for the given part of the
+                        // source string and use it. That new string may differ in length
+                        // from the source string.
+                        const XubString aSnippet(rOldText, nOldPos, nTmp - nOldPos);
+                        aNewText = CalcCaseMap(aSnippet);
+
+                        rDo.GetInf().SetText( aNewText );
+                        rDo.GetInf().SetIdx( 0 );
+                        rDo.GetInf().SetLen( aNewText.Len() );
+                    }
+                    else
+                    {
+                        rDo.GetInf().SetIdx( nOldPos );
+                        rDo.GetInf().SetLen( nTmp - nOldPos );
+                    }
+
                     rDo.GetInf().SetOut( *pOutSize );
                     aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
                     nKana += rDo.GetInf().GetKanaDiff();
