@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:37:47 $
+ *  last change: $Author: ama $ $Date: 2001-05-02 14:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,8 +344,19 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         if( !pFrm->HasPara() )
             return sal_False;
         SwTxtSizeInfo aInf( pFrm );
-        SwTxtCursor  aLine( pFrm, &aInf );
-        return aLine.GetCharRect( &rOrig, nOffset, NULL, nMaxY );
+        SwTxtCursor aLine( pFrm, &aInf );
+        SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
+        aTmpState.bRealHeight = TRUE;
+        if( aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY ) )
+        {
+            if( aTmpState.aRealHeight.X() >= 0 )
+            {
+                rOrig.Pos().Y() += aTmpState.aRealHeight.X();
+                rOrig.Height( aTmpState.aRealHeight.Y() );
+            }
+            return TRUE;
+        }
+        return FALSE;
     }
 }
 
@@ -493,7 +504,7 @@ sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
                  MV_TBLSEL == pCMS->eState )
             nChgFrm = 1;
     }
-    return _GetCrsrOfst( pPos, rPoint, nChgFrm, pCMS );
+    return _GetCrsrOfst( pPos, rPoint, nChgFrm != 0, pCMS );
 }
 
 /*************************************************************************
@@ -677,7 +688,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
 #ifndef PRODUCT
-                const xub_StrLen nOldNode = pPam->pPoint->nNode.GetIndex();
+                const ULONG nOldNode = pPam->pPoint->nNode.GetIndex();
 #endif
                 // Der Node soll nicht gewechselt werden
                 xub_StrLen nOfst = aLine.GetCrsrOfst( pPam->pPoint,
@@ -786,7 +797,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.SSize().Width() /= 2;
 #ifndef PRODUCT
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
-                const xub_StrLen nOldNode = pPam->pPoint->nNode.GetIndex();
+                const ULONG nOldNode = pPam->pPoint->nNode.GetIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
@@ -996,7 +1007,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             nFirst = 0;
         }
         else if( nDist < nFirst )
-            nFirst -= nDist;
+            nFirst -= (USHORT)nDist;
         else
             nFirst = 0;
         nDist = Max( nDist, long( GetLineSpace() ) );
