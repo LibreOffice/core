@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:40:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,13 @@
 #ifndef _GLOSDOC_HXX
 #define _GLOSDOC_HXX
 
-
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-
-
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #endif
@@ -90,7 +88,14 @@ SV_DECL_REF( SwDocShell )
 #include <cppuhelper/weakref.hxx>
 #endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XAutoTextGroup > AutoTextGroupRef;
 typedef ::std::vector< AutoTextGroupRef > UnoAutoTextGroups;
@@ -101,7 +106,7 @@ typedef ::std::vector< AutoTextEntryRef > UnoAutoTextEntries;
 #define GLOS_DELIM (sal_Unicode)'*'
 
 // CLASS -----------------------------------------------------------------
-class SwGlossaries
+class SW_DLLPUBLIC SwGlossaries
 {
     UnoAutoTextGroups       aGlossaryGroups;
     UnoAutoTextEntries      aGlossaryEntries;
@@ -112,11 +117,12 @@ class SwGlossaries
     SvStrings               *pGlosArr;
     BOOL                    bError;
 
-    SwTextBlocks*   GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
-    SvStrings       *GetNameList();
+    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
+    SW_DLLPRIVATE SvStrings     *GetNameList();
+
     // implementation in unoatxt.cxx
-    void RemoveFileFromList( const String& rGroup );
-    void InvalidateUNOOjects();
+    SW_DLLPRIVATE void RemoveFileFromList( const String& rGroup );
+    SW_DLLPRIVATE void InvalidateUNOOjects();
 
 public:
     SwGlossaries();
