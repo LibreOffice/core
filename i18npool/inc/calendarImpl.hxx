@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-12 17:29:35 $
+ *  last change: $Author: khong $ $Date: 2002-11-07 17:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,13 +123,9 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence < rtl::OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException);
 
-protected:
-    com::sun::star::lang::Locale aLocale;
-    Calendar aCalendar;
-
 private:
     struct lookupTableItem {
-    lookupTableItem(rtl::OUString& _uniqueID, com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
+    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
         uniqueID(_uniqueID), xCalendar(_xCalendar) {}
     rtl::OUString uniqueID;
     com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar > xCalendar;
@@ -137,8 +133,6 @@ private:
     List lookupTable;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
     com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar > xCalendar;
-    sal_Int16 aStartOfWeek;
-    virtual void SAL_CALL loadCachedCalendar(rtl::OUString& uniqueID) throw (com::sun::star::uno::RuntimeException);
 };
 
 } } } }

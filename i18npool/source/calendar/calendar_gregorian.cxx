@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-22 03:44:25 $
+ *  last change: $Author: khong $ $Date: 2002-11-07 17:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,21 @@ Calendar_hanja_yoil::Calendar_hanja_yoil()
     cCalendar = "com.sun.star.i18n.Calendar_hanja_yoil";
 }
 
+OUString SAL_CALL
+Calendar_hanja_yoil::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
+{
+    if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
+        // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
+        com::sun::star::lang::Locale jaLocale =
+        com::sun::star::lang::Locale(OUString::createFromAscii("ja"), OUString(), OUString());
+        if (idx == 0) return LocaleData().getLocaleItem(jaLocale).timeAM;
+        else if (idx == 1) return LocaleData().getLocaleItem(jaLocale).timePM;
+        else throw ERROR;
+    }
+    else
+        return Calendar_gregorian::getDisplayName( displayIndex, idx, nameType );
+}
+
 static Era gengou_eraArray[] = {
     {1868,  1,  1},
     {1912,  7, 30},
@@ -147,11 +162,29 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
     aLocale = rLocale;
     Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
-        if ( (uniqueID.getLength() != 0) ? (uniqueID == xC[i].Name) : (xC[i].Default == sal_True) ) {
+        if (uniqueID == xC[i].Name) {
         aCalendar = xC[i];
-        break;
+        // setup first day of week
+        for (aStartOfWeek = aCalendar.Days.getLength()-1; aStartOfWeek>=0; aStartOfWeek-- )
+            if (aCalendar.StartOfWeek == aCalendar.Days[aStartOfWeek].ID)
+            return;
         }
     }
+    // Calendar is not for the locale
+    throw ERROR;
+}
+
+
+com::sun::star::i18n::Calendar SAL_CALL
+Calendar_gregorian::getLoadedCalendar() throw(RuntimeException)
+{
+    return aCalendar;
+}
+
+OUString SAL_CALL
+Calendar_gregorian::getUniqueID() throw(RuntimeException)
+{
+    return aCalendar.Name;
 }
 
 void SAL_CALL
@@ -335,10 +368,10 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 // NatNum4                                                              NatNum9/9/11/11
 
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
-        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
+        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
-    sal_Bool isShort = (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
-        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100 ||
+    sal_Bool isShort = nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
+        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
     sal_Bool isChinese = aLocale.Language.equalsAscii("zh");
@@ -397,6 +430,95 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
     }
 }
 
+sal_Int16 SAL_CALL
+Calendar_gregorian::getFirstDayOfWeek() throw(RuntimeException)
+{
+    return aStartOfWeek;
+}
+
+void SAL_CALL
+Calendar_gregorian::setFirstDayOfWeek( sal_Int16 day )
+throw(RuntimeException)
+{
+    aStartOfWeek = day;
+}
+
+void SAL_CALL
+Calendar_gregorian::setMinimumNumberOfDaysForFirstWeek( sal_Int16 days ) throw(RuntimeException)
+{
+    aCalendar.MinimumNumberOfDaysForFirstWeek = days;
+}
+
+sal_Int16 SAL_CALL
+Calendar_gregorian::getMinimumNumberOfDaysForFirstWeek() throw(RuntimeException)
+{
+    return aCalendar.MinimumNumberOfDaysForFirstWeek;
+}
+
+sal_Int16 SAL_CALL
+Calendar_gregorian::getNumberOfMonthsInYear() throw(RuntimeException)
+{
+    return (sal_Int16) aCalendar.Months.getLength();
+}
+
+
+sal_Int16 SAL_CALL
+Calendar_gregorian::getNumberOfDaysInWeek() throw(RuntimeException)
+{
+    return (sal_Int16) aCalendar.Days.getLength();
+}
+
+
+Sequence< CalendarItem > SAL_CALL
+Calendar_gregorian::getMonths() throw(RuntimeException)
+{
+    return aCalendar.Months;
+}
+
+
+Sequence< CalendarItem > SAL_CALL
+Calendar_gregorian::getDays() throw(RuntimeException)
+{
+    return aCalendar.Days;
+}
+
+OUString SAL_CALL
+Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16 nameType ) throw(RuntimeException)
+{
+    OUString aStr;
+
+    switch( displayIndex ) {
+        case CalendarDisplayIndex::AM_PM:/* ==0 */
+        if (idx == 0) aStr = LocaleData().getLocaleItem(aLocale).timeAM;
+        else if (idx == 1) aStr = LocaleData().getLocaleItem(aLocale).timePM;
+        else throw ERROR;
+        break;
+        case CalendarDisplayIndex::DAY:
+        if( idx >= aCalendar.Days.getLength() ) throw ERROR;
+        if (nameType == 0) aStr = aCalendar.Days[idx].AbbrevName;
+        else if (nameType == 1) aStr = aCalendar.Days[idx].FullName;
+        else throw ERROR;
+        break;
+        case CalendarDisplayIndex::MONTH:
+        if( idx >= aCalendar.Months.getLength() ) throw ERROR;
+        if (nameType == 0) aStr = aCalendar.Months[idx].AbbrevName;
+        else if (nameType == 1) aStr = aCalendar.Months[idx].FullName;
+        else throw ERROR;
+        break;
+        case CalendarDisplayIndex::ERA:
+        if( idx >= aCalendar.Eras.getLength() ) throw ERROR;
+        if (nameType == 0) aStr = aCalendar.Eras[idx].AbbrevName;
+        else if (nameType == 1) aStr = aCalendar.Eras[idx].FullName;
+        else throw ERROR;
+        break;
+        case CalendarDisplayIndex::YEAR:
+        break;
+        default:
+        throw ERROR;
+    }
+    return aStr;
+}
+
 // Methods in XExtendedCalendar
 OUString SAL_CALL
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
@@ -424,24 +546,20 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         sal_Char aStr[10];
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
-                // month is zero based
-                sprintf(aStr, "%d", value + 1);
-                break;
-            case CalendarDisplayCode::LONG_MONTH:
-                // month is zero based
-                sprintf(aStr, "%02d", value + 1);
-                break;
-            case CalendarDisplayCode::SHORT_YEAR:
-        if (value >= 100)
-            // take last 2 digits
-            sprintf(aStr, "%02d", value % 100);
-        else
-            sprintf(aStr, "%d", value);
-                break;
+                value += 1;     // month is zero based
+                // fall thru
             case CalendarDisplayCode::SHORT_DAY:
+            case CalendarDisplayCode::LONG_YEAR:
                 sprintf(aStr, "%d", value);
                 break;
-            case CalendarDisplayCode::LONG_YEAR:
+            case CalendarDisplayCode::LONG_MONTH:
+                value += 1;     // month is zero based
+                sprintf(aStr, "%02d", value);
+                break;
+            case CalendarDisplayCode::SHORT_YEAR:
+                // take last 2 digits
+                value %= 100;
+                // fall through
             case CalendarDisplayCode::LONG_DAY:
                 sprintf(aStr, "%02d", value);
                 break;
@@ -473,7 +591,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         aOUStr = OUString::createFromAscii(aStr);
     }
     if (nNativeNumberMode > 0) {
-        sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode, value);
+        sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode);
         if (nNatNum > 0)
             return aNatNum.getNativeNumberString(aOUStr, aLocale, nNatNum);
     }
