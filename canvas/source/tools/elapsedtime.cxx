@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ *  $RCSfile: elapsedtime.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: thb $ $Date: 2004-03-18 10:38:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
+
+#include <canvas/elapsedtime.hxx>
+
+#ifdef WIN
+
+// TEMP!!!
+// Awaiting corresponding functionality in OSL
+//
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <winbase.h>
+#include <mmsystem.h>
+#endif
+
+
+namespace canvas
+{
+    namespace tools
+    {
+        namespace
+        {
+#ifdef WIN
+            static double fTimeFactor;
+#endif
+
+            double getTimeFactor()
+            {
+#ifndef WIN
+                // value is in nanoseconds
+                return 1.0/10e9;
+#else
+                // value is hardware-dependent
+                return fTimeFactor;
+#endif
+            }
+
+            sal_uInt64 getCurrentTime()
+            {
+#ifndef WIN
+                TimeValue aTimeVal;
+                sal_uInt64 bRet( 0 );
+
+                if( osl_getSystemTime( &aTimeVal ) )
+                {
+                    // combine to seconds + fraction of second
+                    bRet = ((sal_uInt64)aTimeVal.Seconds) * (sal_uInt64)1000000000 + (sal_uInt64)aTimeVal.Nanosec;
+                }
+#else
+                sal_uInt64 bRet( 0 );
+
+                // TEMP!!!
+                // Awaiting corresponding functionality in OSL
+                //
+
+                // is there a performance counter available?
+                static bool bTimeSetupDone( false );
+                static bool bPerfTimerAvailable;
+
+                if( !bTimeSetupDone )
+                {
+                    LONGLONG nPerfCount;
+                    if( QueryPerformanceFrequency((LARGE_INTEGER *) &nPerfCount) )
+                    {
+                        // yes, timer choice flag
+                        bPerfTimerAvailable = true;
+
+                        // set scaling factor
+                        fTimeFactor = 1.0/nPerfCount;
+                    }
+                    else
+                    {
+                        // no performance counter, read in using timeGetTime
+                        bPerfTimerAvailable = false;
+
+                        // set timer scaling factor
+                        fTimeFactor = 0.001;
+                    }
+
+                    bTimeSetupDone = true;
+                }
+
+                if( bPerfTimerAvailable )
+                {
+                    LONGLONG nCurrTime;
+
+                    // read initial time
+                    QueryPerformanceCounter((LARGE_INTEGER *) &nCurrTime);
+
+                    bRet = nCurrTime;
+                }
+                else
+                {
+                    bRet = timeGetTime();
+                }
+#endif
+
+                return bRet; // TODO: is 0 okay for the failure case here?
+            }
+        }
+
+        ElapsedTime::ElapsedTime() :
+            mnStartTime( getCurrentTime() ),
+            mfTimeFactor( getTimeFactor() )
+        {
+        }
+
+        void ElapsedTime::reset()
+        {
+            mnStartTime = getCurrentTime();
+        }
+
+        double ElapsedTime::getElapsedTime()
+        {
+            sal_uInt64 nCurrTime( getCurrentTime() );
+
+            return mfTimeFactor * (nCurrTime - mnStartTime);
+        }
+
+    }
+}

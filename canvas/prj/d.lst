@@ -1,0 +1,12 @@
+..\%__SRC%\bin\canvastools*.dll %_DEST%\bin%_EXT%\canvastools*.dll
+..\%__SRC%\bin\vclcanvas*.dll %_DEST%\bin%_EXT%\vclcanvas*.dll
+..\%__SRC%\bin\directxcanvas*.dll %_DEST%\bin%_EXT%\directxcanvas*.dll
+..\%__SRC%\lib\icanvastools.lib %_DEST%\lib%_EXT%\icanvastools.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\class\javacanvas*.jar %_DEST%\bin%_EXT%\javacanvas*.jar
+
+mkdir: %_DEST%\inc%_EXT%\canvas
+hedabu: ..\inc\canvas\canvastools.hxx %_DEST%\inc%_EXT%\canvas\canvastools.hxx
+hedabu: ..\inc\canvas\elapsedtime.hxx %_DEST%\inc%_EXT%\canvas\elapsedtime.hxx
+hedabu: ..\inc\canvas\vclwrapper.hxx %_DEST%\inc%_EXT%\canvas\vclwrapper.hxx
+hedabu: ..\inc\canvas\verbosetrace.hxx %_DEST%\inc%_EXT%\canvas\verbosetrace.hxx

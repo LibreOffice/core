@@ -1,0 +1,197 @@
+/*************************************************************************
+ *
+ *  $RCSfile: vclwrapper.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: thb $ $Date: 2004-03-18 10:38:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _CANVAS_VCLWRAPPER_HXX
+#define _CANVAS_VCLWRAPPER_HXX
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+
+namespace canvas
+{
+    namespace vcltools
+    {
+        /** This helper template wraps VCL objects, and protects
+            object deletion with the Solar mutex. All other operations
+            are unprotected, this must be handled by client code.
+
+            The reason for this template is the fact that VCL objects
+            hold by value in uno::Reference-handled classes are
+            deleted without having the chance to get inbetween and
+            lock the solar mutex.
+
+            This template handles that problem transparently, the only
+            inconvenience is the fact that object member access now
+            has to be performed via operator->, since . is not
+            overloadable.
+
+            Otherwise, the template preserves the value semantics of
+            the wrapped object, that is, copy operations are performed
+            not by copying pointers, but by copying the underlying
+            object. This includes constness, i.e. on a const
+            VCLObject, only const methods of the wrapped object can be
+            called. Simply imagine this to be a value object of type
+            "template argument", with the only peculiarity that
+            member/method access is performed by operator-> instead of
+            the non-existing "operator.".
+         */
+        template< class _Wrappee > class VCLObject
+        {
+        public:
+            typedef _Wrappee Wrappee;
+
+            VCLObject() :
+                mpWrappee( new Wrappee() )
+            {
+            }
+
+            // no explicit here. VCLObjects should be freely
+            // constructible with Wrappees, and AFAIK there is no other
+            // implicit conversion path that could cause harm here
+            VCLObject( Wrappee* pWrappee ) :
+                mpWrappee( pWrappee )
+            {
+            }
+
+            // This object has value semantics, thus, forward copy
+            // to wrappee
+            VCLObject( const VCLObject& rOrig )
+            {
+                if( rOrig.mpWrappee )
+                    mpWrappee = new Wrappee( *rOrig.mpWrappee );
+                else
+                    mpWrappee = NULL;
+            }
+
+            // This object has value semantics, thus, forward copy
+            // to wrappee
+            VCLObject( const Wrappee& rOrig ) :
+                mpWrappee( new Wrappee( rOrig ) )
+            {
+            }
+
+            // This object has value semantics, thus, forward
+            // assignment to wrappee
+            VCLObject& operator=( const VCLObject& rhs )
+            {
+                if( mpWrappee )
+                {
+                    if( rhs.mpWrappee )
+                        *mpWrappee = *rhs.mpWrappee;
+                }
+                else
+                {
+                    if( rhs.mpWrappee )
+                        mpWrappee = new Wrappee( *rhs.mpWrappee );
+                }
+
+                return *this;
+            }
+
+            ~VCLObject()
+            {
+                // This here is the whole purpose of the template:
+                // protecting object deletion with the solar mutex
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+                if( mpWrappee )
+                    delete mpWrappee;
+            }
+
+            Wrappee*        operator->() { return mpWrappee; }
+            const Wrappee*  operator->() const { return mpWrappee; }
+
+            Wrappee&        operator*() { return *mpWrappee; }
+            const Wrappee&  operator*() const { return *mpWrappee; }
+
+            bool            operator==( const Wrappee& rhs ) const
+            {
+                if( mpWrappee )
+                    return *const_cast<const Wrappee*>(mpWrappee) == rhs; // force operator==() const call on wrappee
+                else
+                    return mpWrappee == rhs.mpWrappee; // handle both-sides-null correctly
+            }
+
+            bool            operator==( const Wrappee& rhs )
+            {
+                if( mpWrappee )
+                    return *mpWrappee == rhs;
+                else
+                    return mpWrappee == rhs.mpWrappee; // handle both-sides-null correctly
+            }
+
+        private:
+
+            Wrappee* mpWrappee;
+        };
+
+    }
+}
+
+#endif /* _CANVAS_VCLWRAPPER_HXX */
