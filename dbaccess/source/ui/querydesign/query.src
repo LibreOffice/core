@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:19:30 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 07:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2420,7 +2420,7 @@ String STR_DATASOURCE_DELETED
     Text[ finnish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ italian ] = "La sorgente dati � stata eliminata. Impossibile salvare i dati corrispondenti.";
     Text[ danish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ swedish ] = "Den tillh�rande datak�llan har raderats. Det g�r inte spara n�gra data som refererar till datak�llan.";
+    Text[ swedish ] = "Den tillh�rande datak�llan har raderats. Det g�r inte att spara n�gra data som refererar till den.";
     Text[ polish ] = "Przynale�ne �r�d�o danych zosta�o usuni�te. Zapisanie dotycz�cych go danych nie jest mo�liwe.";
     Text[ portuguese_brazilian ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ japanese ] = "従属するﾃﾞｰﾀｿｰｽが削除されています。これに関連するﾃﾞｰﾀは保存できません。";
@@ -2431,6 +2431,7 @@ String STR_DATASOURCE_DELETED
     Text[ arabic ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ catalan ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
 };
+
 
 
 
