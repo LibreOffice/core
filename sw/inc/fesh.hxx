@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-01 12:30:22 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 14:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,8 @@ class SwFEShell : public SwEditShell
 
     // Methoden fuers kopieren von DrawObjecten
     BOOL CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
-                                const Point& rInsPt, BOOL bIsMove );
+                                const Point& rInsPt, BOOL bIsMove,
+                                BOOL bSelectInsert );
 
 public:
     TYPEINFO();
@@ -226,7 +227,7 @@ public:
     BOOL Paste( SwDoc* pClpDoc );
     // Copy-Methode fuer Drag&Drop
     BOOL Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
-                BOOL bIsMove = FALSE );
+                BOOL bIsMove = FALSE, BOOL bSelectInsert = TRUE );
 
     void SelectFlyFrm( SwFlyFrm& rFrm, BOOL bNew = FALSE );
 

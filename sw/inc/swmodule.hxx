@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:42:09 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 14:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,8 @@ protected:
     void                InsertLab(SfxRequest&, sal_Bool bLabel);
 
 public:
-    // public Data - used for internal Clipboard / Drag & Drop
-    SwTransferable  *pClipboard, *pDragDrop;
+    // public Data - used for internal Clipboard / Drag & Drop / XSelection
+    SwTransferable  *pClipboard, *pDragDrop, *pXSelection;
 
 
     TYPEINFO();

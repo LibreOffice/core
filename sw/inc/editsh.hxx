@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-08-03 14:22:57 $
+ *  last change: $Author: jp $ $Date: 2001-09-11 14:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ class SwEditShell: public SwCrsrShell
 
 public:
     // Editieren (immer auf allen selektierten Bereichen)
-    void Insert( sal_Unicode );
+    void Insert( sal_Unicode, BOOL bOnlyCurrCrsr = FALSE );
     void Insert( const String &);
     void Overwrite( const String & );
 
