@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-08 10:38:25 $
+ *  last change: $Author: rt $ $Date: 2001-08-10 20:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: nf $ $Date: 2001-08-08 10:38:25 $ $Revision: 1.22 $
+// $Author: rt $ $Date: 2001-08-10 20:08:40 $ $Revision: 1.23 $
 //============================================================================
 
 #define __RSC
@@ -200,7 +200,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Operacja wykonywana na $(ARG1) zosta�a przerwana";
         Text[ portuguese_brazilian ] = "The operation executed on $(ARG1) was aborted";
         Text[ japanese ] = "$(ARG1) で実行したｱｸｼｮﾝは中止されました。";
-        Text[ korean ] = "The operation executed on $(ARG1) was aborted";
+        Text[ korean ] = "$(ARG1)에 대한 작업이 중지되었습니다.";
         Text[ chinese_simplified ] = "已经取消执行 $(ARG1) 的操作。";
         Text[ chinese_traditional ] = "已經取消執行動作 $(ARG1) 。";
         Text[ turkish ] = "The operation executed on $(ARG1) was aborted";
@@ -226,7 +226,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Brak dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "The access to $(ARG1) was denied";
         Text[ japanese ] = "$(ARG1) へのｱｸｾｽは拒否されました。";
-        Text[ korean ] = "The access to $(ARG1) was denied";
+        Text[ korean ] = "$(ARG1)의 액세스가 거부되었습니다.";
         Text[ chinese_simplified ] = "已经拒绝读取 $(ARG1) 。";
         Text[ chinese_traditional ] = "拒絕存取 $(ARG1)。";
         Text[ turkish ] = "The access to $(ARG1) was denied";
@@ -252,7 +252,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) ju� istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) does already exist";
         Text[ japanese ] = "$(ARG1) はすでにあります。";
-        Text[ korean ] = "$(ARG1) does already exist";
+        Text[ korean ] = "$(ARG1)이(가) 이미 존재합니다.";
         Text[ chinese_simplified ] = "$(ARG1) 已经存在。";
         Text[ chinese_traditional ] = "$(ARG1) 已經存在。";
         Text[ turkish ] = "$(ARG1) does already exist";
@@ -278,7 +278,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Dane $(ARG1) maj� nieprawid�ow� sum� kontroln�";
         Text[ portuguese_brazilian ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ japanese ] = "$(ARG1) のﾃﾞｰﾀはﾁｪｯｸｻﾑが正しくありません。";
-        Text[ korean ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ korean ] = "$(ARG1) 데이터의 체크섬이 올바르지 않습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 数据的检验数目不正确。";
         Text[ chinese_traditional ] = "資料 $(ARG1) 的檢驗數目不正確。";
         Text[ turkish ] = "The data of $(ARG1) have an incorrect checksum";
@@ -305,7 +305,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Utworzenie obiektu $(ARG1) w katalogu $(ARG2) nie jest mo�liwe";
         Text[ portuguese_brazilian ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄ $(ARG1) はﾌｫﾙﾀﾞ $(ARG2) に格納できません。";
-        Text[ korean ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ korean ] = "디렉토리 $(ARG2)에 개체 $(ARG1)을(를) 만들지 못했습니다.";
         Text[ chinese_simplified ] = "无法在目录 $(ARG2) 内新建对象 $(ARG1) 。";
         Text[ chinese_traditional ] = "無法在目錄 $(ARG2) 之下建立物件 $(ARG1)";
         Text[ turkish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
@@ -331,7 +331,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Odczytanie $(ARG1) nie powiod�o si�";
         Text[ portuguese_brazilian ] = "Data of $(ARG1) could not be read";
         Text[ japanese ] = "$(ARG1) のﾃﾞｰﾀは読み取れませんでした。";
-        Text[ korean ] = "Data of $(ARG1) could not be read";
+        Text[ korean ] = "$(ARG1)의 데이터를 읽지 못했습니다.";
         Text[ chinese_simplified ] = "无法读取数据 $(ARG1) 。";
         Text[ chinese_traditional ] = "無法存取資料 $(ARG1) 。";
         Text[ turkish ] = "Data of $(ARG1) could not be read";
@@ -357,7 +357,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Wykonanie operacji wyszukiwanie (seek) na $(ARG1) nie powiod�o si�";
         Text[ portuguese_brazilian ] = "The seek operation on $(ARG1) could not be completed";
         Text[ japanese ] = "$(ARG1) への seek 操作は実行できませんでした。";
-        Text[ korean ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ korean ] = "$(ARG1)에 대해 찾기 작업을 완료하지 못했습니다.";
         Text[ chinese_simplified ] = "无法完成执行 $(ARG1) 的 seek 命令。";
         Text[ chinese_traditional ] = "無法完成 $(ARG1) 的 seek 操作。";
         Text[ turkish ] = "The seek operation on $(ARG1) could not be completed";
@@ -383,7 +383,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Wykonanie operacji tell na $(ARG1) nie powiod�o si�";
         Text[ portuguese_brazilian ] = "The tell operation on $(ARG1) could not be completed";
         Text[ japanese ] = "$(ARG1) への tell 操作は実行できませんでした。";
-        Text[ korean ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ korean ] = "$(ARG1)에 대해 알림 작업을 완료하지 못했습니다.";
         Text[ chinese_simplified ] = "无法完成执行 $(ARG1) 的 tell 命令。";
         Text[ chinese_traditional ] = "無法完成 $(ARG1) 的 tell 操作。";
         Text[ turkish ] = "The tell operation on $(ARG1) could not be completed";
@@ -409,7 +409,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Napisanie danych dla $(ARG1) nie powiod�o si�";
         Text[ portuguese_brazilian ] = "Data for $(ARG1) could not be written";
         Text[ japanese ] = "$(ARG1) のﾃﾞｰﾀは書き込みできませんでした。";
-        Text[ korean ] = "Data for $(ARG1) could not be written";
+        Text[ korean ] = "$(ARG1)의 데이터를 쓰지 못했습니다.";
         Text[ chinese_simplified ] = "无法改写 $(ARG1) 的数据。";
         Text[ chinese_traditional ] = "無法寫入資料 $(ARG1) 。";
         Text[ turkish ] = "Data for $(ARG1) could not be written";
@@ -435,7 +435,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Niedozwolona operacja: $(ARG1) jest bie��cym katalogiem";
         Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ japanese ] = "ｱｸｼｮﾝできません: $(ARG1) は現在のﾃﾞｨﾚｸﾄﾘです。";
-        Text[ korean ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ korean ] = "허용되지 않는 작업입니다: $(ARG1)은(는) 현재의 디렉토리입니다.";
         Text[ chinese_simplified ] = "无法执行：$(ARG1) 是当前的目录。";
         Text[ chinese_traditional ] = "無法執行動作：$(ARG1) 是當前的目錄。";
         Text[ turkish ] = "Action not allowed: $(ARG1) is the current directory";
@@ -461,7 +461,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Urz�dzenie (nap�d) $(ARG1) nie jest gotowe";
         Text[ portuguese_brazilian ] = "The Device (drive) $(ARG1) is not ready";
         Text[ japanese ] = "ﾃﾞﾊﾞｲｽ(ﾄﾞﾗｲﾌﾞ) $(ARG1) の準備ができていません。";
-        Text[ korean ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ korean ] = "장치(드라이브) $(ARG1)이(가) 준비되지 않았습니다.";
         Text[ chinese_simplified ] = "硬盘 $(ARG1) 尚未准备就绪。";
         Text[ chinese_traditional ] = "設備(磁碟)$(ARG1)尚未就緒。";
         Text[ turkish ] = "The Device (drive) $(ARG1) is not ready";
@@ -487,7 +487,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Niedozwolona operacja: $(ARG1) i $(ARG2) s� r�nymi urz�dzeniami (nap�dami)";
         Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ japanese ] = "ｱｸｼｮﾝできません: $(ARG1) と $(ARG2) は異なったﾃﾞﾊﾞｲｽ(ﾄﾞﾗｲﾌﾞ)です。";
-        Text[ korean ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ korean ] = "허용되지 않는 작업입니다: $(ARG1)와(과) $(ARG2)은(는) 서로 다른 장치(드라이브)입니다.";
         Text[ chinese_simplified ] = "无法执行操作：$(ARG1) 和 $(ARG2) 是不同的硬盘。";
         Text[ chinese_traditional ] = "無法執行動作：$(ARG1) 和 $(ARG2) 是不同的設備(磁碟)";
         Text[ turkish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
@@ -513,7 +513,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "General input/output error while accessing $(ARG1)";
         Text[ portuguese_brazilian ] = "General input/output error while accessing $(ARG1)";
         Text[ japanese ] = "$(ARG1) へｱｸｾｽする際の一般的な入力/出力のｴﾗｰ。";
-        Text[ korean ] = "General input/output error while accessing $(ARG1)";
+        Text[ korean ] = "$(ARG1)를 액세스하는 동안 일반 입/출력 오류가 발생했습니다.";
         Text[ chinese_simplified ] = "在读取 $(ARG1) 时发生一般的输入/输出错误";
         Text[ chinese_traditional ] = "讀取 $(ARG1) 時發生一個一般的輸入/輸出錯誤。";
         Text[ turkish ] = "General input/output error while accessing $(ARG1)";
@@ -526,7 +526,7 @@ Resource RID_UUI_ERRHDL
         Text = "Es wurde versucht, in ung�ltiger Weise auf $(ARG1) zuzugreifen" ;
         Text [ ENGLISH ] = "An invalid attempt was made to access $(ARG1)" ;
         Text[ english_us ] = "An attempt was made to access $(ARG1) in an invalid way";
-        Text[ portuguese ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ portuguese ] = "Tentativa de acesso a $(ARG1) n�o v�lida.";
         Text[ russian ] = "������������ ������ � $(ARG1)";
         Text[ greek ] = "An invalid attempt was made to access $(ARG1)";
         Text[ dutch ] = "Er werd getracht, op ongeldige toegang te verkrijgen tot $(ARG1)";
@@ -539,7 +539,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nieprawid�owa pr�ba dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "An invalid attempt was made to access $(ARG1)";
         Text[ japanese ] = "$(ARG1) への無効なｱｸｾｽが試みられました。";
-        Text[ korean ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ korean ] = "$(ARG1)을 액세스하려는  잘못된 시도가 있었습니다.";
         Text[ chinese_simplified ] = "尝试用无效的方式读取 $(ARG1) 。";
         Text[ chinese_traditional ] = "試圖採用一個無效的方式存取 $(ARG1)";
         Text[ turkish ] = "An invalid attempt was made to access $(ARG1)";
@@ -552,7 +552,7 @@ Resource RID_UUI_ERRHDL
         Text = "$(ARG1) enth�lt unzul�ssige Zeichen" ;
         Text [ ENGLISH ] = "$(ARG1) contains invalid characters" ;
         Text[ english_us ] = "$(ARG1) contains invalid characters";
-        Text[ portuguese ] = "$(ARG1) contains invalid characters";
+        Text[ portuguese ] = "$(ARG1) cont�m caracteres interditos.";
         Text[ russian ] = "$(ARG1) �������� ������������ �����";
         Text[ greek ] = "$(ARG1) contains invalid characters";
         Text[ dutch ] = "$(ARG1) bevat ongeldige tekens";
@@ -565,7 +565,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) zawiera niedozwolone znaki";
         Text[ portuguese_brazilian ] = "$(ARG1) contains invalid characters";
         Text[ japanese ] = "$(ARG1) に無効な文字が含まれています。";
-        Text[ korean ] = "$(ARG1) contains invalid characters";
+        Text[ korean ] = "$(ARG1)에 사용할 수 없는 문자가 들어 있습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 含有无效的字符。";
         Text[ chinese_traditional ] = "$(ARG1) 含有無效的字元。";
         Text[ turkish ] = "$(ARG1) contains invalid characters";
@@ -578,7 +578,7 @@ Resource RID_UUI_ERRHDL
         Text = "Das Ger�t (Laufwerk) $(ARG1) ist ung�ltig" ;
         Text [ ENGLISH ] = "The device (drive) $(ARG1) is invalid" ;
         Text[ english_us ] = "The device (drive) $(ARG1) is invalid";
-        Text[ portuguese ] = "The device (drive) $(ARG1) is invalid";
+        Text[ portuguese ] = "O dispositivo (unidade) $(ARG1) n�o � v�lido.";
         Text[ russian ] = "���������� (����) $(ARG1) ����������";
         Text[ greek ] = "The device (drive) $(ARG1) is invalid";
         Text[ dutch ] = "Apparaat (station) $(ARG1) is ongeldig";
@@ -591,7 +591,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nieprawid�owe urz�dzenie (nap�d) $(ARG1)";
         Text[ portuguese_brazilian ] = "The device (drive) $(ARG1) is invalid";
         Text[ japanese ] = "ﾃﾞﾊﾞｲｽ(ﾄﾞﾗｲﾌﾞ) $(ARG1) は無効です。";
-        Text[ korean ] = "The device (drive) $(ARG1) is invalid";
+        Text[ korean ] = "장치(드라이브) $(ARG1)이(가) 유효하지 않습니다.";
         Text[ chinese_simplified ] = "这个硬盘 $(ARG1) 无效。";
         Text[ chinese_traditional ] = "設備(磁碟) $(ARG1) 無效。";
         Text[ turkish ] = "The device (drive) $(ARG1) is invalid";
@@ -604,7 +604,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die Daten von $(ARG1) haben eine ung�ltige L�nge" ;
         Text [ english ] = "The data of $(ARG1) have an invalid length" ;
         Text[ english_us ] = "The data from $(ARG1) has an invalid length";
-        Text[ portuguese ] = "The data of $(ARG1) have an invalid length";
+        Text[ portuguese ] = "Os dados de $(ARG1) t�m um comprimento n�o v�lido.";
         Text[ russian ] = "� ������ $(ARG1) ������������ �����";
         Text[ greek ] = "The data of $(ARG1) have an invalid length";
         Text[ dutch ] = "De gegevens van $(ARG1) hebben een ongeldige lengte";
@@ -617,7 +617,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Dane $(ARG1) s� nieprawid�owej d�ugo�ci";
         Text[ portuguese_brazilian ] = "The data of $(ARG1) have an invalid length";
         Text[ japanese ] = "$(ARG1) のﾃﾞｰﾀの文字列の長さが無効です。";
-        Text[ korean ] = "The data of $(ARG1) have an invalid length";
+        Text[ korean ] = "$(ARG1) 데이터의 길이가 유효하지 않습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 数据的长度无效。";
         Text[ chinese_traditional ] = "資料 $(ARG1) 的長度無效。";
         Text[ turkish ] = "The data of $(ARG1) have an invalid length";
@@ -630,7 +630,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die Operation auf $(ARG1) wurde mit einem ung�ltigen Parameter gestartet" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) was started with an invalid parameter" ;
         Text[ english_us ] = "The operation on $(ARG1) was started with an invalid parameter";
-        Text[ portuguese ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ portuguese ] = "A opera��o em $(ARG1) foi iniciada com um par�metro n�o v�lido.";
         Text[ russian ] = "�������� �� $(ARG1) �������� ��� ������ ������������� ���������";
         Text[ greek ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ dutch ] = "De activiteit op $(ARG1) werd gestart met een ongeldige parameter";
@@ -643,7 +643,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Operacj� na $(ARG1) rozpocz�to za pomoc� nieprawid�owego parametra";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ japanese ] = "$(ARG1) への操作実行が無効なﾊﾟﾗﾒｰﾀで開始されました。";
-        Text[ korean ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ korean ] = "$(ARG1)에 대한 작업이 유효하지 않은 매개변수로 시작되었습니다.";
         Text[ chinese_simplified ] = "执行 $(ARG1) 命令时使用了一个无效的参数。";
         Text[ chinese_traditional ] = "執行 $(ARG1) 動作時使用了一個無效的參數。";
         Text[ turkish ] = "The operation on $(ARG1) was started with an invalid parameter";
@@ -656,7 +656,7 @@ Resource RID_UUI_ERRHDL
         Text = "Die Operation kann nicht ausgef�hrt werden, weil $(ARG1) Wildcards enth�lt";
         Text [ ENGLISH ] = "The operation cannot be run, because $(ARG1) contains wildcards" ;
         Text[ english_us ] = "The operation cannot be run because $(ARG1) contains wildcards";
-        Text[ portuguese ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ portuguese ] = "Imposs�vel executar a opera��o, porque $(ARG1) cont�m wildcards.";
         Text[ russian ] = "��-�� ������������ � $(ARG1) �������������� ������ ��������� �������� ����������";
         Text[ greek ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd, daar $(ARG1) wildcards bevat";
@@ -669,7 +669,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Wykonanie operacji nie jest mo�liwe, poniewa� $(ARG1) zawiera symbole wieloznaczne";
         Text[ portuguese_brazilian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ japanese ] = "$(ARG1) にﾜｲﾙﾄﾞｶｰﾄﾞが含まれているため、操作実行はできません。";
-        Text[ korean ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ korean ] = "$(ARG1)에 와일드카드를 포함되어 있어 작업을 실행할 수 없습니다.";
         Text[ chinese_simplified ] = "无法执行这个命令，因为 $(ARG1) 含有通配符。";
         Text[ chinese_traditional ] = "無法執行這個操作，因爲 $(ARG1) 含有通配符。";
         Text[ turkish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
@@ -695,7 +695,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "B��d wsp�lnego dost�pu do $(ARG1)";
         Text[ portuguese_brazilian ] = "Sharing violation while accessing $(ARG1)";
         Text[ japanese ] = "$(ARG1) への共有ｱｸｾｽの際のｴﾗｰ。";
-        Text[ korean ] = "Sharing violation while accessing $(ARG1)";
+        Text[ korean ] = "$(ARG1)을 액세스하는 동안 공유 위배 문제가 발생했습니다.";
         Text[ chinese_simplified ] = "共享 $(ARG1) 时发生读取错误。";
         Text[ chinese_traditional ] = "在同時存取 $(ARG1) 時發生錯誤";
         Text[ turkish ] = "Sharing violation while accessing $(ARG1)";
@@ -721,7 +721,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) zawiera znaki w niedozwolonym miejscu";
         Text[ portuguese_brazilian ] = "$(ARG1) contains misplaced characters";
         Text[ japanese ] = "$(ARG1) には間違った位置に文字が含まれています。";
-        Text[ korean ] = "$(ARG1) contains misplaced characters";
+        Text[ korean ] = "$(ARG1)에는 잘못 배치된 문자가 들어 있습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 含有一些位置无效的字符。";
         Text[ chinese_traditional ] = "$(ARG1) 含有一些位置無效的字元。";
         Text[ turkish ] = "$(ARG1) contains misplaced characters";
@@ -747,7 +747,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nazwa $(ARG1) zawiera za du�o znak�w";
         Text[ portuguese_brazilian ] = "The name $(ARG1) contains to many characters";
         Text[ japanese ] = "名前 $(ARG1) に含まれている文字が多すぎます。";
-        Text[ korean ] = "The name $(ARG1) contains to many characters";
+        Text[ korean ] = "이름 $(ARG1)의 길이가 너무 깁니다.";
         Text[ chinese_simplified ] = "名称 $(ARG1) 含有太多的字符。";
         Text[ chinese_traditional ] = "名稱 $(ARG1) 含有太多的字元。";
         Text[ turkish ] = "The name $(ARG1) contains to many characters";
@@ -773,7 +773,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) does not exist";
         Text[ japanese ] = "$(ARG1) はありません。";
-        Text[ korean ] = "$(ARG1) does not exist";
+        Text[ korean ] = "$(ARG1)이(가) 존재하지 않습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 不存在。";
         Text[ chinese_traditional ] = "$(ARG1) 不存在。";
         Text[ turkish ] = "$(ARG1) does not exist";
@@ -799,7 +799,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "�cie�ka $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "The path $(ARG1) does not exist";
         Text[ japanese ] = "ﾊﾟｽ $(ARG1) はありません。";
-        Text[ korean ] = "The path $(ARG1) does not exist";
+        Text[ korean ] = "경로 $(ARG1)이(가) 존재하지 않습니다.";
         Text[ chinese_simplified ] = "路径 $(ARG1) 不存在。";
         Text[ chinese_traditional ] = "路徑 $(ARG1) 不存在。";
         Text[ turkish ] = "The path $(ARG1) does not exist";
@@ -825,7 +825,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Operacja $(ARG1) nie jest obs�ugiwana przez dany system operacyjny";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ japanese ] = "$(ARG1) への操作はこのｵﾍﾟﾚｰﾃｨﾝｸﾞｼｽﾃﾑでは支援されません。";
-        Text[ korean ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ korean ] = "이 운영 체제에서는 $(ARG1)에 대한 작업이 지원되지 않습니다.";
         Text[ chinese_simplified ] = "这个操作系统不支持用于 $(ARG1) 的命令 。";
         Text[ chinese_traditional ] = "這個操作系統不支援用於 $(ARG1) 的操作。";
         Text[ turkish ] = "The operation on $(ARG1) is not supported on this operating system";
@@ -851,7 +851,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) nie jest katalogiem";
         Text[ portuguese_brazilian ] = "$(ARG1) is not a directory";
         Text[ japanese ] = "$(ARG1) はﾃﾞｨﾚｸﾄﾘではありません。";
-        Text[ korean ] = "$(ARG1) is not a directory";
+        Text[ korean ] = "$(ARG1)은(는) 디렉토리가 아닙니다.";
         Text[ chinese_simplified ] = "$(ARG1) 不是一个目录。";
         Text[ chinese_traditional ] = "$(ARG1) 不是目錄。";
         Text[ turkish ] = "$(ARG1) is not a directory";
@@ -877,7 +877,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) nie jest plikiem";
         Text[ portuguese_brazilian ] = "$(ARG1) is not a file";
         Text[ japanese ] = "$(ARG1) はﾌｧｲﾙではありません。";
-        Text[ korean ] = "$(ARG1) is not a file";
+        Text[ korean ] = "$(ARG1)은(는) 파일이 아닙니다.";
         Text[ chinese_simplified ] = "$(ARG1) 不是一个文件。";
         Text[ chinese_traditional ] = "$(ARG1)不是檔案";
         Text[ turkish ] = "$(ARG1) is not a file";
@@ -903,7 +903,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nie ma ju� miejsca na urz�dzeniu $(ARG1)";
         Text[ portuguese_brazilian ] = "There was no space left on device $(ARG1)";
         Text[ japanese ] = "ﾃﾞﾊﾞｲｽ $(ARG1) には空き容量がありません。";
-        Text[ korean ] = "There was no space left on device $(ARG1)";
+        Text[ korean ] = "장치 $(ARG1)에 대해 남아 있는 공간이 없습니다.";
         Text[ chinese_simplified ] = "硬盘 $(ARG1) 已没有可用空间了。";
         Text[ chinese_traditional ] = "設備 $(ARG1) 已經沒有可用空間了。";
         Text[ turkish ] = "There was no space left on device $(ARG1)";
@@ -929,7 +929,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo�liwe, poniewa� otwarto za du�o plik�w";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ japanese ] = "すでに多くのﾌｧｲﾙが開かれているため、$(ARG1) への操作は実行できません。";
-        Text[ korean ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ korean ] = "열려있는 파일들이 너무 많아 $(ARG1)에 대한 작업을 완료할 수 없습니다.";
         Text[ chinese_simplified ] = "因为已经打开了太多的文件，无法执行用于 $(ARG1) 的命令 。";
         Text[ chinese_traditional ] = "因爲已經開啓了太多的檔案，而無法執行這個操作 $(ARG1) 。";
         Text[ turkish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
@@ -955,7 +955,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo�liwe z powodu braku pami�ci";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ japanese ] = "ﾒﾓﾘ空き容量がないために、$(ARG1) への操作は実行できません。";
-        Text[ korean ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ korean ] = "사용할 수 있는 메모리가 부족하여 $(ARG1)에 대한 작업을 완료할 수 없습니다.";
         Text[ chinese_simplified ] = "因为内存用尽，而无法执行用于 $(ARG1) 的命令。";
         Text[ chinese_traditional ] = "因爲記憶體用完，無法執行操作 $(ARG1) 。";
         Text[ turkish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
@@ -981,7 +981,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Kontynuacja operacji na $(ARG1) wymaga wprowadzenia dalszych danych";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ japanese ] = "保留ﾃﾞｰﾀがあるために、$(ARG1) への操作は続行できません。";
-        Text[ korean ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ korean ] = "데이터가 보류 중이므로 $(ARG1)에 대한 작업을 계속할 수 없습니다.";
         Text[ chinese_simplified ] = "因为在等待其他的数据，而无法执行命令 $(ARG1) 。";
         Text[ chinese_traditional ] = "因爲在等待其他的資料，而無法執行操作 $(ARG1) 。";
         Text[ turkish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
@@ -1007,7 +1007,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) nie mo�na skopiowa� w sobie samym";
         Text[ portuguese_brazilian ] = "$(ARG1) cannot be copied into itself";
         Text[ japanese ] = "$(ARG1) をそれ自体にｺﾋﾟｰすることはできません。";
-        Text[ korean ] = "$(ARG1) cannot be copied into itself";
+        Text[ korean ] = "$(ARG1)을(를) $(ARG1) 자체로 복사할 수 없습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 无法自身复制。";
         Text[ chinese_traditional ] = "$(ARG1) 不可以自身複製。";
         Text[ turkish ] = "$(ARG1) cannot be copied into itself";
@@ -1033,7 +1033,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ portuguese_brazilian ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ japanese ] = "$(ARG1) へｱｸｾｽする際の不明な入力/出力のｴﾗｰ。";
-        Text[ korean ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ korean ] = "$(ARG1)을(를) 액세스하는 동안 알 수 없는 입/출력 오류가 발생했습니다.";
         Text[ chinese_simplified ] = "读取 $(ARG1) 时发生一个不明的输入/输出错误。";
         Text[ chinese_traditional ] = "存取 $(ARG1) 時發生一個不明的輸入/輸出錯誤。";
         Text[ turkish ] = "Unknown input/output error while accessing $(ARG1)";
@@ -1059,7 +1059,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) jest tylko do odczytu";
         Text[ portuguese_brazilian ] = "$(ARG1) is write protected";
         Text[ japanese ] = "$(ARG1) は書き込み禁止です。";
-        Text[ korean ] = "$(ARG1) is write protected";
+        Text[ korean ] = "$(ARG1)에 쓰기 보호가 설정되어 있습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 是防改写的。";
         Text[ chinese_traditional ] = "$(ARG1) 是唯讀的。";
         Text[ turkish ] = "$(ARG1) is write protected";
@@ -1085,7 +1085,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) ma nieprawid�owy format";
         Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect format";
         Text[ japanese ] = "$(ARG1) の書式が正しくありません。";
-        Text[ korean ] = "$(ARG1) has an incorrect format";
+        Text[ korean ] = "$(ARG1)의 형식이 올바르지 않습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 格式有误。";
         Text[ chinese_traditional ] = "$(ARG1) 的格式錯誤。";
         Text[ turkish ] = "$(ARG1) has an incorrect format";
@@ -1111,7 +1111,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Wersja $(ARG1) jest nieprawid�owa";
         Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect version";
         Text[ japanese ] = "$(ARG1) のﾊﾞｰｼﾞｮﾝが正しくありません。";
-        Text[ korean ] = "$(ARG1) has an incorrect version";
+        Text[ korean ] = "$(ARG1)의 버전이 올바르지 않습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 的版本错误。";
         Text[ chinese_traditional ] = "$(ARG1) 的版本無效";
         Text[ turkish ] = "$(ARG1) has an incorrect version";
@@ -1123,12 +1123,53 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Laufwerk $(ARG1) existiert nicht" ;
         Text [ ENGLISH ] = "Volume $(ARG1) does not exist" ;
+        Text[ english_us ] = "Volume $(ARG1) does not exist";
+        Text[ portuguese ] = "A unidade $(ARG1)n�o existe.";
+        Text[ russian ] = "Volume $(ARG1) does not exist";
+        Text[ greek ] = "Volume $(ARG1) does not exist";
+        Text[ dutch ] = "Volume $(ARG1) does not exist";
+        Text[ french ] = "Volume $(ARG1) does not exist";
+        Text[ spanish ] = "Volume $(ARG1) does not exist";
+        Text[ finnish ] = "Volume $(ARG1) does not exist";
+        Text[ italian ] = "Volume $(ARG1) does not exist";
+        Text[ danish ] = "Volume $(ARG1) does not exist";
+        Text[ swedish ] = "Volume $(ARG1) does not exist";
+        Text[ polish ] = "Volume $(ARG1) does not exist";
+        Text[ portuguese_brazilian ] = "Volume $(ARG1) does not exist";
+        Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) はありません。";
+        Text[ korean ] = "Volume $(ARG1) does not exist";
+        Text[ chinese_simplified ] = "Volume $(ARG1) does not exist";
+        Text[ chinese_traditional ] = "Volume $(ARG1) does not exist";
+        Text[ turkish ] = "Volume $(ARG1) does not exist";
+        Text[ arabic ] = "Volume $(ARG1) does not exist";
+        Text[ catalan ] = "Volume $(ARG1) does not exist";
     };
     // IOErrorCode_NOT_EXISTING_FOLDER = 37,
     String ( ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK )
     {
         Text = "Ordner $(ARG1) existiert nicht" ;
         Text [ ENGLISH ] = "Folder $(ARG1) does not exist" ;
+        Text[ english_us ] = "Folder $(ARG1) does not exist";
+        Text[ portuguese ] = "A pasta $(ARG1) n�o existe.";
+        Text[ russian ] = "Folder $(ARG1) does not exist";
+        Text[ greek ] = "Folder $(ARG1) does not exist";
+        Text[ dutch ] = "Folder $(ARG1) does not exist";
+        Text[ french ] = "Folder $(ARG1) does not exist";
+        Text[ spanish ] = "Folder $(ARG1) does not exist";
+        Text[ finnish ] = "Folder $(ARG1) does not exist";
+        Text[ italian ] = "Folder $(ARG1) does not exist";
+        Text[ danish ] = "Folder $(ARG1) does not exist";
+        Text[ swedish ] = "Folder $(ARG1) does not exist";
+        Text[ polish ] = "Folder $(ARG1) does not exist";
+        Text[ portuguese_brazilian ] = "Folder $(ARG1) does not exist";
+        Text[ japanese ] = "ﾌｫﾙﾀﾞ $(ARG1) はありません。";
+        Text[ korean ] = "Folder $(ARG1) does not exist";
+        Text[ chinese_simplified ] = "Folder $(ARG1) does not exist";
+        Text[ chinese_traditional ] = "Folder $(ARG1) does not exist";
+        Text[ turkish ] = "Folder $(ARG1) does not exist";
+        Text[ arabic ] = "Folder $(ARG1) does not exist";
+        Text[ catalan ] = "Folder $(ARG1) does not exist";
     };
 };
+
 
