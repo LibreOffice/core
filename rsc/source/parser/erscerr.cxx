@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:51:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 13:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,8 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-fh<filename>  Header file.\n" );
             StdLstOut( "-fc<filename>  Code file.\n" );
             StdLstOut( "-ft<filename>  Touch a file when done in rsc2 (for dependencies)\n" );
+            StdLstOut( "-oil<dir>      Output directory for image list files\n" );
+            StdLstOut( "-r<ENV>=<path> replace <path> by <ENV> in image list files\n" );
             StdLstOut( "-CHARSET_...  Convert to this character set.\n" );
             StdLstOut( "-BIGENDIAN    Format of number values.\n" );
             StdLstOut( "-LITTLEENDIAN Format of number values.\n" );
@@ -392,6 +394,12 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 
         case ERR_NOTYPE:
             StdLstErr( "type expected." );
+            break;
+
+        case ERR_NOIMAGE:
+            StdLstErr( "The image(s) <" );
+            StdLstErr( pMessage );
+            StdLstErr( "> could not be found." );
             break;
 
 /****************** W A R N I N G S **************************************/
