@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvolum.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,12 @@
 |*
 \************************************************************************/
 
+namespace binfilter {class Vol3DPointIterator;}
+
 class B3dVolume
 {
+ friend class binfilter::Vol3DPointIterator; //STRIP008
  friend class Vol3DPointIterator;
-
  protected:
     Vector3D aMinVec;
     Vector3D aMaxVec;
