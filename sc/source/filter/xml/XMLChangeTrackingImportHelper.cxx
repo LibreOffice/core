@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-12 12:25:35 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 13:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
          pCell = pAction->pCellInfo->CreateCell(pDoc);
 
     DateTime aDateTime;
-    sal_uInt16 nPos;
+    sal_uInt16 nPos(0);
     ConvertInfo(pAction->aInfo, nPos, aDateTime);
 
     StrData* pUser = (StrData*) aUsers.At( nPos );
