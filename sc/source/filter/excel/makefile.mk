@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:43:26 $
+#   last change: $Author: hr $ $Date: 2004-02-03 12:23:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES =	\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xlpage.obj					\
         $(SLO)$/xlformula.obj				\
+        $(SLO)$/xlescher.obj				\
         $(SLO)$/xlocx.obj					\
         $(SLO)$/xltracer.obj				\
         $(SLO)$/xistream.obj				\
