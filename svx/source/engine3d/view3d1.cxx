@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 16:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,10 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL bOnly3DAttr) const
 
         // ... aber keine Linien fuer 3D
         aSet.Put(XLineStyleItem (XLINE_NONE));
+
+        // #84061# new defaults for distance and focal length
+        aSet.Put(Svx3DDistanceItem(100));
+        aSet.Put(Svx3DFocalLengthItem(10000));
     }
 
     // ItemSet zurueckgeben
