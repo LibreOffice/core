@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:23 $
+ *  last change: $Author: mtg $ $Date: 2001-10-24 17:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,6 +690,7 @@ enum SwPropNameIds
 /* 0610 */  UNO_NAME_PARA_STYLELEVEL9,
 /* 0611 */  UNO_NAME_PARA_STYLESEPARATOR,
 /* 0612 */  UNO_NAME_MACRO_LIBRARY,
+/* 0613 */  UNO_NAME_CELL_NAME,
 
 /* 0613 */  SW_PROPNAME_END
 };
