@@ -25,11 +25,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="helpid:10977" />
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:text="Insert Graphics" toolbar:helpid="10241"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
- <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="5960"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="10366"/>
