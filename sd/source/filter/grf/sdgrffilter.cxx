@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:08:24 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ sal_Bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
     const String    aName( mrMedium.GetFilter()->GetName() );
-    const String    aFileName( mrMedium.GetURLObject().GetMainURL() );
+    const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     GraphicFilter*  pGraphicFilter = GetGrfFilter();
     const USHORT    nFilter = pGraphicFilter->GetImportFormatNumber( aName );
     sal_Bool        bRet = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:41:38 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
         INetURLObject aURLObj(::URIHelper::SmartRelToAbs( aSoundFileRel, FALSE,
                                                           INetURLObject::WAS_ENCODED,
                                                           INetURLObject::DECODE_UNAMBIGUOUS ));
-        aSoundFile = aURLObj.GetMainURL();
+        aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     // ab hier werden Daten der Versionen > 1 eingelesen
@@ -363,7 +363,7 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
             INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aBookmarkRel, FALSE,
                                                              INetURLObject::WAS_ENCODED,
                                                              INetURLObject::DECODE_UNAMBIGUOUS));
-            aBookmark = aURLObj.GetMainURL();
+            aBookmark = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
         }
         else
             rIn.ReadByteString( aBookmark, eTextEnc );
@@ -373,7 +373,7 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
         INetURLObject aURLObjSound(::URIHelper::SmartRelToAbs(aSecondSoundFileRel, FALSE,
                                                               INetURLObject::WAS_ENCODED,
                                                               INetURLObject::DECODE_UNAMBIGUOUS));
-        aSecondSoundFile = aURLObjSound.GetMainURL();
+        aSecondSoundFile = aURLObjSound.GetMainURL( INetURLObject::NO_DECODE );
 
         rIn >> nTemp; bInvisibleInPresentation = (BOOL)nTemp;
         rIn >> nTemp; nVerb = (USHORT)nTemp;

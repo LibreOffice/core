@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
         INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aSoundFileRel, FALSE,
                                                          INetURLObject::WAS_ENCODED,
                                                          INetURLObject::DECODE_UNAMBIGUOUS));
-        aSoundFile = aURLObj.GetMainURL();
+        aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     // ab hier werden Daten der Versionen >=4 eingelesen
@@ -553,7 +553,7 @@ void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
         INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aFileNameRel, FALSE,
                                                          INetURLObject::WAS_ENCODED,
                                                          INetURLObject::DECODE_UNAMBIGUOUS));
-        aFileName = aURLObj.GetMainURL();
+        aFileName = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
         rIn.ReadByteString( aBookmarkName );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdcgmfilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:07:34 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ sal_Bool SdCGMFilter::Import()
     if( pLibrary && mxModel.is() )
     {
         ImportCGM       FncImportCGM = ( ImportCGM ) pLibrary->getSymbol( ::rtl::OUString::createFromAscii( "ImportCGM" ) );
-        ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL() );
+        ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         UINT32          nRetValue;
 
         if( mrDocument.GetPageCount() == 0L )

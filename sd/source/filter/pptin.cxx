@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-28 14:58:59 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1631,7 +1631,7 @@ String SdPPTImport::ReadSound(UINT32 nSoundRef) const
                             UINT8* pBuf = new UINT8[ nSoundLen ];
 
                             rStCtrl.Read( pBuf, nSoundLen );
-                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
 
                             if( pOStm )
                             {
@@ -1639,8 +1639,8 @@ String SdPPTImport::ReadSound(UINT32 nSoundRef) const
 
                                 if( pOStm->GetError() == ERRCODE_NONE )
                                 {
-                                    GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL() );
-                                    aRetval = aGalleryUserSound.GetMainURL();
+                                    GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ) );
+                                    aRetval = aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE );
                                 }
 
                                 delete pOStm;

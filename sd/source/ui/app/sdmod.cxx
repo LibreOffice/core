@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:04:53 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
 
             aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "drawing.cfg" ) ) );
 
-            SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READWRITE );
+            SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
             if( pStm )
                 xOptionStorage = new SvStorage( pStm, TRUE );
