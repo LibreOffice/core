@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 10:19:12 $
+ *  last change: $Author: os $ $Date: 2001-02-12 12:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,24 @@ namespace utl{
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
 
     };
+/* -----------------------------12.02.01 11:38--------------------------------
+
+ ---------------------------------------------------------------------------*/
+struct ConfigItem_Impl
+{
+    utl::ConfigManager*         pManager;
+       sal_Int16                    nMode;
+    sal_Bool                    bIsModified;
+    sal_Bool                    bHasChangedProperties;
+
+    sal_Int16                   nInValueChange;
+    ConfigItem_Impl() :
+        pManager(0),
+        nMode(0),
+        nInValueChange(0),
+        bIsModified(sal_False),
+        bHasChangedProperties(sal_False){}
+};
 }
 /* -----------------------------04.12.00 10:25--------------------------------
 
@@ -227,37 +245,32 @@ void ConfigChangeListener_Impl::disposing( const EventObject& Source ) throw(Run
 
  ---------------------------------------------------------------------------*/
 ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
-    pManager(ConfigManager::GetConfigManager()),
-    sSubTree(rSubTree),
-    bIsModified(sal_False),
-    bHasChangedProperties(sal_False),
-    nInValueChange(0),
-    nMode(nSetMode)
+    pImpl(new ConfigItem_Impl),
+    sSubTree(rSubTree)
 {
-    xHierarchyAccess = pManager->AddConfigItem(*this);
+    pImpl->pManager = ConfigManager::GetConfigManager();
+    pImpl->nMode = nSetMode;
+    xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
 /* -----------------------------17.11.00 13:53--------------------------------
 
  ---------------------------------------------------------------------------*/
 ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree) :
-    pManager(&rManager),
-    sSubTree(rSubTree),
-    bIsModified(sal_False),
-    nInValueChange(0),
-    bHasChangedProperties(sal_False),
-    nMode(0)
+    pImpl(new ConfigItem_Impl),
+    sSubTree(rSubTree)
 {
-    xHierarchyAccess = pManager->AddConfigItem(*this);
+    pImpl->pManager = &rManager;
+    pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE;
+    xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
-
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
 ConfigItem::~ConfigItem()
 {
-    if(pManager)
+    if(pImpl->pManager)
     {
-        if(bHasChangedProperties && xHierarchyAccess.is())
+        if(pImpl->bHasChangedProperties && xHierarchyAccess.is())
         {
             try
             {
@@ -272,8 +285,9 @@ ConfigItem::~ConfigItem()
             }
         }
         RemoveListener();
-        pManager->RemoveConfigItem(*this);
+        pImpl->pManager->RemoveConfigItem(*this);
     }
+    delete pImpl;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -287,7 +301,7 @@ void    ConfigItem::Commit()
  ---------------------------------------------------------------------------*/
 void    ConfigItem::ReleaseConfigMgr()
 {
-    if(bHasChangedProperties && xHierarchyAccess.is())
+    if(pImpl->bHasChangedProperties && xHierarchyAccess.is())
     {
         try
         {
@@ -300,11 +314,11 @@ void    ConfigItem::ReleaseConfigMgr()
     lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
 #endif
         }
-        bHasChangedProperties = sal_False;
+        pImpl->bHasChangedProperties = sal_False;
     }
     RemoveListener();
-    OSL_ENSURE(pManager, "ConfigManager already released");
-    pManager = 0;
+    OSL_ENSURE(pImpl->pManager, "ConfigManager already released");
+    pImpl->pManager = 0;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -314,7 +328,7 @@ void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPro
     if(!IsInValueChange())
         Notify(rPropertyNames);
     else
-        bHasChangedProperties = sal_True;
+        pImpl->bHasChangedProperties = sal_True;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -372,12 +386,12 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
         {
             try
             {
-                if(pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
+                if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
                 {
                     OUString sProperty(sSubTree);
                     sProperty += C2U("/");
                     sProperty += pNames[i];
-                    pRet[i] = pManager->GetLocalProperty(sProperty);
+                    pRet[i] = pImpl->pManager->GetLocalProperty(sProperty);
                 }
                 else
                     pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
@@ -415,7 +429,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
-    ValueCounter_Impl aCounter(nInValueChange);
+    ValueCounter_Impl aCounter(pImpl->nInValueChange);
     Reference<XNameReplace> xTopNodeReplace(xHierarchyAccess, UNO_QUERY);
     sal_Bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
     if(bRet)
@@ -424,12 +438,12 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         const Any* pValues = rValues.getConstArray();
         for(int i = 0; i < rNames.getLength(); i++)
         {
-            if(pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
+            if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
             {
                 OUString sProperty(sSubTree);
                 sProperty += C2U("/");
                 sProperty += pNames[i];
-                pManager->PutLocalProperty(sProperty, pValues[i]);
+                pImpl->pManager->PutLocalProperty(sProperty, pValues[i]);
             }
             else
             {
@@ -564,7 +578,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
-    ValueCounter_Impl aCounter(nInValueChange);
+    ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -614,7 +628,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
 {
-    ValueCounter_Impl aCounter(nInValueChange);
+    ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -663,7 +677,7 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
 sal_Bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
-    ValueCounter_Impl aCounter(nInValueChange);
+    ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -780,7 +794,7 @@ sal_Bool ConfigItem::SetSetProperties(
 sal_Bool ConfigItem::ReplaceSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
-    ValueCounter_Impl aCounter(nInValueChange);
+    ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -936,7 +950,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode)
 {
-    ValueCounter_Impl aCounter(nInValueChange);
+    ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
     if(xHierarchyAccess.is())
     {
@@ -1002,5 +1016,32 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
     }
     return bRet;
 }
+/* -----------------------------12.02.01 11:38--------------------------------
 
+ ---------------------------------------------------------------------------*/
+sal_Int16   ConfigItem::GetMode() const
+{
+    return pImpl->nMode;
+}
+/* -----------------------------12.02.01 13:31--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    ConfigItem::SetModified()
+{
+    pImpl->bIsModified = sal_True;
+}
+/* -----------------------------12.02.01 13:31--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool ConfigItem::IsModified() const
+{
+    return pImpl->bIsModified;
+}
+/* -----------------------------12.02.01 13:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool ConfigItem::IsInValueChange() const
+{
+    return pImpl->nInValueChange > 0;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 10:19:12 $
+ *  last change: $Author: os $ $Date: 2001-02-12 12:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ namespace utl
 
     class ConfigChangeListener_Impl;
     class ConfigManager;
+    struct ConfigItem_Impl;
+
     class ConfigItem
     {
             friend class ConfigChangeListener_Impl;
@@ -106,12 +108,8 @@ namespace utl
                                         xHierarchyAccess;
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
                                         xChangeLstnr;
-            utl::ConfigManager*         pManager;
-            sal_Bool                    bIsModified             : 1; //
-            sal_Bool                    bHasChangedProperties   : 1; //call XChangesBatch::Commit() if any changes were notified
+            ConfigItem_Impl*            pImpl;
 
-            sal_Int16                   nInValueChange;
-            sal_Int16                   nMode;
             ConfigItem();//
             void                    RemoveListener();
             void                    CallNotify(
@@ -121,7 +119,7 @@ namespace utl
             ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
-            void                    SetModified() {bIsModified = sal_True;}
+            void                    SetModified();
 
             com::sun::star::uno::Sequence< com::sun::star::uno::Any>
                                     GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
@@ -159,14 +157,14 @@ namespace utl
 
             const rtl::OUString&    GetSubTreeName() const {return sSubTree;}
 
-            sal_Bool                IsModified() const {return bIsModified;}
+            sal_Bool                IsModified() const;
 
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
             virtual void            Commit();
 
-            sal_Bool                IsInValueChange() const {return nInValueChange > 0;}
+            sal_Bool                IsInValueChange() const;
 
-            sal_Int16               GetMode() const {return nMode;}
+            sal_Int16               GetMode() const;
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_
