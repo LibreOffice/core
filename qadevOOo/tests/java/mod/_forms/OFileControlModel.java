@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFileControlModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:42:11 $
+ *  last change:$Date: 2003-09-08 11:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,17 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
+
+import java.io.PrintWriter;
+
+import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DrawTools;
+import util.SOfficeFactory;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
@@ -70,14 +79,8 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.Status;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DrawTools;
-import util.SOfficeFactory;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -125,33 +128,40 @@ import util.SOfficeFactory;
 * @see ifc.form.component._FileControl
 */
 public class OFileControlModel extends TestCase {
-
     XComponent xDrawDoc;
 
     /**
     * Creates Draw document where controls are placed.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
         try {
-            log.println( "creating a draw document" );
+            log.println("creating a draw document");
             xDrawDoc = SOF.createDrawDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't create a document :" );
+            log.println("Can't create a document :");
             e.printStackTrace(log);
-            throw new StatusException(Status.failed("Can't create a document")) ;
+            throw new StatusException(Status.failed("Can't create a document"));
         }
     }
 
     /**
     * Disposes Draw document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
-        xDrawDoc.dispose();
-    }
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
 
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xDrawDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
+    }
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
@@ -163,50 +173,48 @@ public class OFileControlModel extends TestCase {
     *    represented by this object. </li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
         //get FileControlModel
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         String objName = "FileControl";
 
-        XControlShape aShape = null ;
+        XControlShape aShape = null;
 
         Size size = new Size();
         Point position = new Point();
         XControlModel aControl = null;
 
         //get MSF
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, xDrawDoc );
+        XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+                                               XMultiServiceFactory.class,
+                                               xDrawDoc);
 
-        try{
-            Object oInt = oDocMSF.createInstance
-                ("com.sun.star.drawing.ControlShape");
-            Object aCon = oDocMSF.createInstance
-                ("com.sun.star.form.component." + objName);
-            aControl = (XControlModel) UnoRuntime.queryInterface
-                ( XControlModel.class, aCon );
-            aShape = (XControlShape) UnoRuntime.queryInterface
-                ( XControlShape.class, oInt );
-            size.Height = 1500 ;
-            size.Width = 3000 ;
+        try {
+            Object oInt = oDocMSF.createInstance(
+                                  "com.sun.star.drawing.ControlShape");
+            Object aCon = oDocMSF.createInstance(
+                                  "com.sun.star.form.component." + objName);
+            aControl = (XControlModel) UnoRuntime.queryInterface(
+                               XControlModel.class, aCon);
+            aShape = (XControlShape) UnoRuntime.queryInterface(
+                             XControlShape.class, oInt);
+            size.Height = 1500;
+            size.Width = 3000;
             position.X = 1000;
             position.Y = 1000;
             aShape.setSize(size);
             aShape.setPosition(position);
-
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            log.println( "Couldn't create a component "+ e );
-            throw new StatusException(Status.failed("Can't create component")) ;
+            log.println("Couldn't create a component " + e);
+            throw new StatusException(Status.failed("Can't create component"));
         }
 
         aShape.setControl(aControl);
@@ -214,13 +222,13 @@ public class OFileControlModel extends TestCase {
         DrawTools.getDrawPage(xDrawDoc, 0).add((XShape) aShape);
         oObj = aShape.getControl();
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for drawpage object");
 
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
+                            objName);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OFileControlModel
-
+} // finish class OFileControlModel
