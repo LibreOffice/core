@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:22:31 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 08:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,24 +108,29 @@ using namespace ::com::sun::star::xml::crypto ;
 int SAL_CALL main( int argc, char **argv )
 {
     CERTCertDBHandle*   certHandle ;
-    PK11SlotInfo*       slot = NULL ;
-    xmlDocPtr           doc = NULL ;
+    PK11SlotInfo*       slot ;
+    xmlDocPtr           doc ;
     xmlNodePtr          tplNode ;
     xmlNodePtr          tarNode ;
     xmlAttrPtr          idAttr ;
     xmlChar*            idValue ;
     xmlAttrPtr          uriAttr ;
     xmlChar*            uriValue ;
-    OUString*           uri = NULL ;
+    OUString*           uri ;
     Reference< XUriBinding >    xUriBinding ;
-    FILE*               dstFile = NULL ;
+    FILE*               dstFile ;
 
     if( argc != 5 ) {
         fprintf( stderr, "Usage: %s < CertDir > <file_url of template> <file_url of result> <rdb file>\n\n" , argv[0] ) ;
         return 1 ;
     }
 
-    for( int hhh = 0 ; hhh < 2 ; hhh ++ ) {
+    for( int hhh = 0 ; hhh < 10 ; hhh ++ ) {
+        slot = NULL ;
+        doc = NULL ;
+        uri = NULL ;
+        dstFile = NULL ;
+
 
     //Init libxml and libxslt libraries
     xmlInitParser();
@@ -148,6 +153,14 @@ int SAL_CALL main( int argc, char **argv )
 
     certHandle = CERT_GetDefaultCertDB() ;
     slot = PK11_GetInternalKeySlot() ;
+
+    if( PK11_NeedLogin( slot ) ) {
+        SECStatus nRet = PK11_Authenticate( slot, PR_TRUE, NULL );
+        if( nRet != SECSuccess ) {
+            fprintf( stderr , "### cannot authehticate the crypto token!\n" ) ;
+            goto done ;
+        }
+    }
 
     //Load XML document
     doc = xmlParseFile( argv[2] ) ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certmngr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 11:37:11 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 08:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ extern OUString bigIntegerToNumericString( Sequence< sal_Int8 > serial ) ;
 int SAL_CALL main( int argc, char **argv )
 {
     CERTCertDBHandle*   certHandle ;
-    PK11SlotInfo*       slot = NULL ;
+    PK11SlotInfo*       slot ;
 
     if( argc != 3 ) {
         fprintf( stderr, "Usage: %s < CertDir > <rdb file>\n\n" , argv[0] ) ;
@@ -109,6 +109,7 @@ int SAL_CALL main( int argc, char **argv )
     }
 
     for( ; getchar() != 'q' ; ) {
+        slot = NULL ;
 
     //Initialize NSPR and NSS
     PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
@@ -120,6 +121,15 @@ int SAL_CALL main( int argc, char **argv )
 
     certHandle = CERT_GetDefaultCertDB() ;
     slot = PK11_GetInternalKeySlot() ;
+
+    if( PK11_NeedLogin( slot ) ) {
+        SECStatus nRet = PK11_Authenticate( slot, PR_TRUE, NULL );
+        if( nRet != SECSuccess ) {
+            fprintf( stderr , "### cannot authehticate the crypto token!\n" ) ;
+            goto done ;
+        }
+    }
+
 
     try {
         Reference< XMultiComponentFactory > xManager = NULL ;
