@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 12:58:09 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: kz $
- //     $Date: 2000-11-29 12:58:09 $
- // $Revision: 1.3 $
+ //     $Date: 2000-12-08 18:30:02 $
+ // $Revision: 1.4 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -341,7 +341,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Γ»ΣΠΚδΘλΉ«Κ½£΅";
         Text[ russian ] = "Νε βνερενΰ τξπμσλΰ!";
         Text[ polish ] = "Nie wpisano formu³y!";
-        Text[ japanese ] = "”®‚Ν‹L“ό‚µ‚Δ‚Ν‚Ά‚―‚ά‚Ή‚ρB";
+        Text[ japanese ] = "”®‚ª‹L“ό‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¨S¦³«ό©w¤½¦΅΅I";
         Text[ arabic ] = "αγ νΚγ ΚΝΟνΟ ΓνΙ ΗαΥνΫΙ!";
         Text[ greek ] = "Δεν ορίστηκαν τύποι!";
@@ -367,7 +367,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_simplified ] = "Γ»ΣΠΦΈ¶¨ΠΠΊΝΑΠ£΅";
         Text[ russian ] = "Νθ ρςπξκθ, νθ ρςξλαφϋ νε ηΰδΰνϋ!";
         Text[ polish ] = "Nie wpisano ani wiersza ani kolumny!";
-        Text[ japanese ] = "s‚Ζ—ρ‚Ζ‚ΰ‚Ι‹L“ό‚µ‚Δ‚Ν‚Ά‚―‚ά‚Ή‚ρB";
+        Text[ japanese ] = "s—ρ‚Ζ‚ΰ‚Ι‹L“ό‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
         Text[ chinese_traditional ] = "¨S¦³«ό©wΔζ©M¦C΅I";
         Text[ arabic ] = "αγ νΚγ ΚΝΟνΟ ΗαΥέ ζαΗ ΗαΪγζΟ!";
         Text[ greek ] = "Δεν ορίστηκε ούτε γραμμή, ούτε στήλη!";
