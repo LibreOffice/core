@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-16 13:42:23 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2752,7 +2752,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
                                              : pTableNode->EndOfSectionNode();
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
-        SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+        SwTxtFmtColl *pColl =
+            pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
         if( !pPrevSttNd )
