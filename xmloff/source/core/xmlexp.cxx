@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:54:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 06:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,9 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
         // meta information
         ImplExportMeta();
 
+        // view settings
+        _ExportViewSettings();
+
         // scripts
         _ExportScripts();
 
@@ -619,6 +622,10 @@ void SvXMLExport::_ExportMeta()
 {
     SfxXMLMetaExport aMeta( GetDocHandler(), xModel );
     aMeta.Export( GetNamespaceMap() );
+}
+
+void SvXMLExport::_ExportViewSettings()
+{
 }
 
 void SvXMLExport::_ExportScripts()

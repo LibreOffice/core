@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 17:52:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 06:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,6 +1675,7 @@ XML_CONSTASCII_ACTION( sXML_vertical_rel, "vertical-rel" );
 XML_CONSTASCII_ACTION( sXML_vertical_segments, "vertical-segments" );
 XML_CONSTASCII_ACTION( sXML_vertical_stripes, "vertical-stripes" );
 XML_CONSTASCII_ACTION( sXML_viewBox, "viewBox" );
+XML_CONSTASCII_ACTION( sXML_view_settings, "view-settings" );
 XML_CONSTASCII_ACTION( sXML_visibility, "visibility" );
 XML_CONSTASCII_ACTION( sXML_visible, "visible" );
 XML_CONSTASCII_ACTION( sXML_visited_style_name, "visited-style-name" );
