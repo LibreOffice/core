@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2004-09-28 15:48:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,8 +1336,7 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
                     SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                     pSetRule->UnLinkGraphics();
                     //SwNumRule aSetRule(rDoc.GetUniqueNumRuleName());
-
-                    SwNumRule aSetRule(pNumRule->GetName());
+                    SwNumRule aSetRule(*pNumRule);
                     aSetRule.SetSvxRule(*pSetRule, &rDoc);
                     rDoc.ChgNumRuleFmts( aSetRule );
                 }
