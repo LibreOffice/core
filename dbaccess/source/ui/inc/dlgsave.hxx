@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:39:23 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 14:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,16 +101,19 @@ namespace dbaui
         String          m_sTblLabel;
         String          m_aName;
         String          m_aExists;
+        String          m_aExistsOverwrite;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xNames;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
         sal_Int32       m_nType;
+        sal_Bool        m_bOverWrite;
 
 
     public:
         OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMetaData,
-                    const String& rDefault);
+                    const String& rDefault,
+                    sal_Bool _bOverWrite = sal_False);
 
         String getName() const      { return m_aName; }
         String getCatalog() const   { return m_aCatalog.IsVisible() ? m_aCatalog.GetText() : String(); }
