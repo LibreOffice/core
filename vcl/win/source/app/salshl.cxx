@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salshl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 14:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,16 +174,21 @@ BOOL ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 
     // Try at first to load the icons from the application exe file
     SalData* pSalData = GetSalData();
-    rIcon = LoadIcon( pSalData->mhInst, MAKEINTRESOURCE( nId ) );
+    rIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
+                                           IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
+                                           LR_DEFAULTCOLOR | LR_SHARED );
     if ( !rIcon )
     {
         // If the application don't provide these icons, then we try
         // to load the icon from the VCL resource
-        rIcon = LoadIcon( aSalShlData.mhInst, MAKEINTRESOURCE( nId ) );
+        rIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
+                                           IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
+                                           LR_DEFAULTCOLOR | LR_SHARED );
         if ( rIcon )
         {
             rSmallIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
-                                           IMAGE_ICON, 16, 16, 0 );
+                                           IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
+                                           LR_DEFAULTCOLOR | LR_SHARED );
         }
         else
             rSmallIcon = 0;
@@ -191,7 +196,8 @@ BOOL ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
     else
     {
         rSmallIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
-                                       IMAGE_ICON, 16, 16, 0 );
+                                       IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
+                                       LR_DEFAULTCOLOR | LR_SHARED );
     }
 
     return (rSmallIcon != 0);
