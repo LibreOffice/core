@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:22:45 $
+ *  last change: $Author: er $ $Date: 2000-11-21 10:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1408,6 +1408,10 @@ public:
     void    KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
 
     ScChangeTrack*      GetChangeTrack() const { return pChangeTrack; }
+
+    //! only for import filter, deletes any existing ChangeTrack via
+    //! EndChangeTracking() and takes ownership of new ChangeTrack pTrack
+    void            SetChangeTrack( ScChangeTrack* pTrack );
 
     void            StartChangeTracking();
     void            EndChangeTracking();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
+ *  last change: $Author: er $ $Date: 2000-11-21 10:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,16 @@ void ScDocument::EndChangeTracking()
     delete pChangeTrack;
     pChangeTrack = NULL;
 }
+
+void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
+{
+    DBG_ASSERT( pTrack->GetDocument() == this, "SetChangeTrack: different documents" );
+    if ( !pTrack || pTrack == pChangeTrack || pTrack->GetDocument() != this )
+        return ;
+    EndChangeTracking();
+    pChangeTrack = pTrack;
+}
+
 
 IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, pTimer )
 {
