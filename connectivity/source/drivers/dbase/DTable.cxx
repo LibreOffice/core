@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:21:00 $
+ *  last change: $Author: oj $ $Date: 2001-10-15 13:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1683,10 +1683,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
             if(xColumn.is())
                 xCpy = xColumn->createDataDescriptor();
             else
-            {
                 xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-                ::comphelper::copyProperties(xProp,xCpy);
-            }
+            ::comphelper::copyProperties(xProp,xCpy);
             xAppend->appendByDescriptor(xCpy);
         }
         ++i; // now insert our new column
@@ -1701,10 +1699,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
             if(xColumn.is())
                 xCpy = xColumn->createDataDescriptor();
             else
-            {
                 xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-                ::comphelper::copyProperties(xProp,xCpy);
-            }
+            ::comphelper::copyProperties(xProp,xCpy);
             xAppend->appendByDescriptor(xCpy);
         }
 
@@ -1761,6 +1757,12 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
 
 
     renameImpl(newName);
+
+    ODbaseTable_BASE::rename(newName);
+
+    construct();
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
@@ -1805,14 +1807,6 @@ void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::
     {
         throw ElementExistException(newName,*this);
     }
-
-    ODbaseTable_BASE::rename(newName);
-
-    construct();
-    if(m_pColumns)
-        m_pColumns->refresh();
-
-
 }
 // -----------------------------------------------------------------------------
 void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
@@ -1970,7 +1964,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark clumn as well
     OValueRow aRow = new OValueVector(m_pColumns->getCount());
     OValueRow aInsertRow;
-    if(nPos)
+    if(_nPos)
     {
         aInsertRow = new OValueVector(_pNewTable->m_pColumns->getCount());
         ::std::for_each(aInsertRow->begin(),aInsertRow->end(),TSetBound(sal_True));
@@ -1980,7 +1974,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 
     // we only have to bind the values which we need to copy into the new table
     ::std::for_each(aRow->begin(),aRow->end(),TSetBound(sal_True));
-    if(nPos && (nPos < (sal_Int32)aRow->size()))
+    if(_nPos && (_nPos < (sal_Int32)aRow->size()))
         (*aRow)[nPos].setBound(sal_False);
 
 
@@ -1994,7 +1988,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
             if(bOk = fetchRow(aRow,m_aColumns.getBody(),sal_True,sal_True))
             {
                 // special handling when pos == 0 then we don't have to distinguish between the two rows
-                if(nPos)
+                if(_nPos)
                 {
                     aIter = aRow->begin()+1;
                     sal_Int32 nCount = 1;
