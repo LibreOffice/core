@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:51:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,27 +122,27 @@ ScColBar::~ScColBar()
 {
 }
 
-USHORT ScColBar::GetPos()
+SCCOLROW ScColBar::GetPos()
 {
     return pViewData->GetPosX(eWhich);
 }
 
-USHORT ScColBar::GetEntrySize( USHORT nEntryNo )
+USHORT ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
-    if ( pDoc->GetColFlags( nEntryNo, nTab ) & CR_HIDDEN )
+    SCTAB nTab = pViewData->GetTabNo();
+    if ( pDoc->GetColFlags( static_cast<SCCOL>(nEntryNo), nTab ) & CR_HIDDEN )
         return 0;
     else
-        return (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( nEntryNo, nTab ), pViewData->GetPPTX() );
+        return (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
 }
 
-String ScColBar::GetEntryText( USHORT nEntryNo )
+String ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
-    return ColToAlpha( nEntryNo );
+    return ColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
-void ScColBar::SetEntrySize( USHORT nPos, USHORT nNewSize )
+void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
 {
     USHORT nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
@@ -157,26 +157,26 @@ void ScColBar::SetEntrySize( USHORT nPos, USHORT nNewSize )
         nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTX() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  USHORT nTab = pViewData->GetTabNo();
+//  SCTAB nTab = pViewData->GetTabNo();
 
-    USHORT* pRanges = new USHORT[MAXCOL+1];
-    USHORT nRangeCnt = 0;
-    if ( rMark.IsColumnMarked( nPos ) )
+    SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
+    SCCOL nRangeCnt = 0;
+    if ( rMark.IsColumnMarked( static_cast<SCCOL>(nPos) ) )
     {
-        USHORT nStart = 0;
+        SCCOL nStart = 0;
         while (nStart<=MAXCOL)
         {
             while (nStart<MAXCOL && !rMark.IsColumnMarked(nStart))
                 ++nStart;
             if (rMark.IsColumnMarked(nStart))
             {
-                USHORT nEnd = nStart;
+                SCCOL nEnd = nStart;
                 while (nEnd<MAXCOL && rMark.IsColumnMarked(nEnd))
                     ++nEnd;
                 if (!rMark.IsColumnMarked(nEnd))
                     --nEnd;
-                pRanges[2*nRangeCnt  ] = nStart;
-                pRanges[2*nRangeCnt+1] = nEnd;
+                pRanges[static_cast<size_t>(2*nRangeCnt)  ] = nStart;
+                pRanges[static_cast<size_t>(2*nRangeCnt+1)] = nEnd;
                 ++nRangeCnt;
                 nStart = nEnd+1;
             }
@@ -195,9 +195,9 @@ void ScColBar::SetEntrySize( USHORT nPos, USHORT nNewSize )
     delete[] pRanges;
 }
 
-void ScColBar::HideEntries( USHORT nStart, USHORT nEnd )
+void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
 {
-    USHORT nRange[2];
+    SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
     pViewData->GetView()->SetWidthOrHeight( TRUE, 1, nRange, SC_SIZE_DIRECT, 0 );
@@ -287,27 +287,27 @@ ScRowBar::~ScRowBar()
 {
 }
 
-USHORT ScRowBar::GetPos()
+SCCOLROW ScRowBar::GetPos()
 {
     return pViewData->GetPosY(eWhich);
 }
 
-USHORT ScRowBar::GetEntrySize( USHORT nEntryNo )
+USHORT ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
     if ( pDoc->GetRowFlags( nEntryNo, nTab ) & CR_HIDDEN )
         return 0;
     else
         return (USHORT) ScViewData::ToPixel( pDoc->GetRowHeight( nEntryNo, nTab ), pViewData->GetPPTY() );
 }
 
-String ScRowBar::GetEntryText( USHORT nEntryNo )
+String ScRowBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return String::CreateFromInt32( nEntryNo + 1 );
 }
 
-void ScRowBar::SetEntrySize( USHORT nPos, USHORT nNewSize )
+void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
 {
     USHORT nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
@@ -322,26 +322,26 @@ void ScRowBar::SetEntrySize( USHORT nPos, USHORT nNewSize )
         nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTY() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  USHORT nTab = pViewData->GetTabNo();
+//  SCTAB nTab = pViewData->GetTabNo();
 
-    USHORT* pRanges = new USHORT[MAXROW+1];
-    USHORT nRangeCnt = 0;
+    SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
+    SCROW nRangeCnt = 0;
     if ( rMark.IsRowMarked( nPos ) )
     {
-        USHORT nStart = 0;
+        SCROW nStart = 0;
         while (nStart<=MAXROW)
         {
             while (nStart<MAXROW && !rMark.IsRowMarked(nStart))
                 ++nStart;
             if (rMark.IsRowMarked(nStart))
             {
-                USHORT nEnd = nStart;
+                SCROW nEnd = nStart;
                 while (nEnd<MAXROW && rMark.IsRowMarked(nEnd))
                     ++nEnd;
                 if (!rMark.IsRowMarked(nEnd))
                     --nEnd;
-                pRanges[2*nRangeCnt  ] = nStart;
-                pRanges[2*nRangeCnt+1] = nEnd;
+                pRanges[static_cast<size_t>(2*nRangeCnt)  ] = nStart;
+                pRanges[static_cast<size_t>(2*nRangeCnt+1)] = nEnd;
                 ++nRangeCnt;
                 nStart = nEnd+1;
             }
@@ -360,9 +360,9 @@ void ScRowBar::SetEntrySize( USHORT nPos, USHORT nNewSize )
     delete[] pRanges;
 }
 
-void ScRowBar::HideEntries( USHORT nStart, USHORT nEnd )
+void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
 {
-    USHORT nRange[2];
+    SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
     pViewData->GetView()->SetWidthOrHeight( FALSE, 1, nRange, SC_SIZE_DIRECT, 0 );
@@ -432,10 +432,10 @@ String ScRowBar::GetDragHelp( long nVal )
 
 //  GetHiddenCount ist nur fuer Zeilen ueberladen
 
-USHORT ScRowBar::GetHiddenCount( USHORT nEntryNo )
+SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
