@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-06 12:56:16 $
+ *  last change: $Author: sj $ $Date: 2001-09-13 16:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2366,6 +2366,10 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         delete pRet;
         pRet = pScene;
 
+        aSet.Put( Svx3DPercentDiagonalItem( 1 ) );
+        aSet.Put( Svx3DShadeModeItem( 0 ) );
+        pScene->SetItemSet(aSet);
+
         // Kameraeinstellungen, Perspektive ...
         sal_Int32 nVal;
         Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
@@ -2398,33 +2402,12 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         // always set perspective mode because otherwise the camera positioning that reflects
         // the skewangle will not work properly
         rCamera.SetProjection( PR_PERSPECTIVE );
-
         pScene->SetCamera( rCamera );
-        pScene->SetItemSet(aSet);
 
         pScene->SetRectsDirty();
         pScene->InitTransformationSet();
 
         // Merker fuer Kameraaenderungen
-
-        INT32 nLightKeyX = GetPropertyValue( DFF_Prop_c3DKeyX, 0 );
-        INT32 nLightKeyY = GetPropertyValue( DFF_Prop_c3DKeyY, 0 );
-        INT32 nLightKeyZ = GetPropertyValue( DFF_Prop_c3DKeyZ, 0 );
-        if ( nLightKeyX )
-            ScaleEmu( nLightKeyX );
-        else
-            nLightKeyX = 139;
-        if ( nLightKeyY )
-            ScaleEmu( nLightKeyY );
-        if ( nLightKeyZ )
-            ScaleEmu( nLightKeyZ );
-        else
-            nLightKeyZ = 1;
-        Vector3D aLightKey( (double)nLightKeyX, (double)nLightKeyY, (double)nLightKeyZ );
-
-        UINT32 nAmbient = GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 16000 ) / 1000;
-        UINT32 nSpecular = GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 );
-        UINT32 nDiffuse = GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 );
 
         if ( IsProperty( DFF_Prop_c3DRenderMode ) )
         {
@@ -2501,39 +2484,22 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             // Ausgleichsrotation fuer plane Flaechen
             pScene->NbcRotateX( 0.5 * nPi180 );
         }
-
-        // Licht
-        aLightKey.Normalize();
-
-        // Beleuchtung umdrehen bei AutoText-Objekten
-        if ( bIsAutoText )
-            aLightKey = -aLightKey;
-
-        pScene->GetLightGroup().SetDirection( aLightKey );
-        nAmbient = ( nAmbient - 4 ) << 3;
-        Color aAmbientCol( (UINT8)nAmbient, (UINT8)nAmbient, (UINT8)nAmbient );
-
-        // #91047# do NOT set aAmbientCol at activated light source, but only
-        // as global ambient light (see below)
-        // pScene->GetLightGroup().SetIntensity( aAmbientCol, Base3DMaterialAmbient );
-
-        pScene->GetLightGroup().SetGlobalAmbientLight( aAmbientCol );
+/*
+        sal_uInt32 nSpecular = GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 );
         if ( nSpecular )
-        {   // 80% statt 100% (?)
+        {
             Color aSpecularCol( 204, 204, 204 );
-            pScene->GetLightGroup().SetIntensity( aSpecularCol, Base3DMaterialSpecular );
+            aSet.Put( Svx3DMaterialSpecularItem( aSpecularCol ) );
+            aSet.Put( Svx3DMaterialSpecularIntensityItem( 15 ) );
         }
+        sal_uInt32 nDiffuse = GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 );
         if ( nDiffuse )
-        {   // 43% von 80% (?)
+        {
             Color aDiffuseCol( 45, 45, 45 );
-            pScene->GetLightGroup().SetIntensity( aDiffuseCol, Base3DMaterialDiffuse );
+            aSet.Put( Svx3DMaterialSpecularItem( aDiffuseCol ) );
+            aSet.Put( Svx3DMaterialSpecularIntensityItem( 50 ) );
         }
-
-        aSet.Put( Svx3DPercentDiagonalItem( 0 ) );
-        // UpperLeft uebertragen
-        pScene->SetModel( pSdrModel );
-        pScene->SetItemSet(aSet);
-
+*/
         sal_Int32 nXRotate = GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 );
         sal_Int32 nYRotate = GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 );
         if ( nXRotate || nYRotate )
@@ -2552,6 +2518,84 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             Apply3dSkewSettings( rCamera, pScene, nSkewAmount,
                 ((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, 225 << 16 ) ) >> 16, fDepth);
         }
+
+
+        ///////////
+        // light //
+        ///////////
+        sal_Int32 nLightKeyX = GetPropertyValue( DFF_Prop_c3DKeyX, 50000 );
+        sal_Int32 nLightKeyY = - ((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
+        sal_Int32 nLightKeyZ = GetPropertyValue( DFF_Prop_c3DKeyZ, 0 );
+        if ( nLightKeyX )
+            ScaleEmu( nLightKeyX );
+        if ( nLightKeyY )
+            ScaleEmu( nLightKeyY );
+        if ( nLightKeyZ )
+            ScaleEmu( nLightKeyZ );
+        else
+            nLightKeyZ = 1;
+        Vector3D aLightKey( (double)nLightKeyX, (double)nLightKeyY, (double)nLightKeyZ );
+        aLightKey.Normalize();
+        if ( bIsAutoText )
+            aLightKey = -aLightKey;
+
+        sal_uInt8 nAmbValGlobal = 102;
+        sal_uInt8 nAmbValSpot   = 204;
+        sal_uInt8 nAmbValCamera = 153;
+
+        Vector3D aSpotDirection = aLightKey;
+        Vector3D aCameraDirection(  0, 0, 1 );
+        Vector3D aPos = rCamera.GetPosition();
+        if ( aPos.X() > 0 )
+            aCameraDirection.X() = 1.0;
+        else if ( aPos.X() < 0 )
+            aCameraDirection.X() = -1.0;
+        if ( aPos.Y() > 0 )
+            aCameraDirection.Y() = 0.5;
+        else if ( aPos.Y() < 0 )
+            aCameraDirection.Y() = -0.5;
+
+        // aware, the ambient value does only matter for solid fill styles
+        if ( (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) == mso_fillSolid )
+        {
+            sal_uInt32 nAmbient = GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 16000 );  // 16000->bright, 10000->normal, 4000->dim
+            if ( nAmbient < 7000 )          // dim
+            {
+                nAmbValGlobal = 51;
+                nAmbValSpot = 102;
+                nAmbValCamera = 153;
+            }
+            else if ( nAmbient < 13000 )    // normal
+            {
+                nAmbValGlobal = 76;
+                nAmbValSpot = 153;
+                nAmbValCamera = 153;
+            }
+            if ( ( nAmbValSpot > 102 ) && ( aSpotDirection.X() * aCameraDirection.X() >= 0 ) )
+                nAmbValSpot -= 50;
+            if ( ( nAmbValSpot > 102 ) && ( aSpotDirection.Y() * aCameraDirection.Y() >= 0 ) )
+                nAmbValSpot -= 50;
+        }
+        Color aGlobalAmbientColor( nAmbValGlobal, nAmbValGlobal, nAmbValGlobal );
+        aSet.Put( Svx3DAmbientcolorItem( aGlobalAmbientColor ) );
+
+        aSet.Put( Svx3DLightOnOff1Item( sal_True ) );
+        Color aAmbientSpotColor( nAmbValSpot, nAmbValSpot, nAmbValSpot );
+        aSet.Put( Svx3DLightcolor1Item( aAmbientSpotColor ) );
+        aSet.Put( Svx3DLightDirection1Item( aSpotDirection ) );
+
+        aSet.Put( Svx3DLightOnOff2Item( sal_True ) );
+        Color aAmbientCameraColor( nAmbValCamera, nAmbValCamera, nAmbValCamera );
+        aSet.Put( Svx3DLightcolor2Item( aAmbientCameraColor ) );
+        aSet.Put( Svx3DLightDirection2Item( aCameraDirection ) );
+
+
+        Color aSpecularCol( 51, 51, 51 );
+        aSet.Put( Svx3DMaterialSpecularItem( aSpecularCol ) );
+        aSet.Put( Svx3DMaterialSpecularIntensityItem( 85 ) );
+
+        pScene->SetModel( pSdrModel );
+        pScene->SetItemSet( aSet );
     }
     else
         delete pScene;  // Aufraeumen
