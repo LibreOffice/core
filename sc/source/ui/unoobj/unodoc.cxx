@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,13 @@
 
 #include "scmod.hxx"
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL ScDocument_getImplementationName() throw()
@@ -88,6 +95,8 @@ uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() th
 uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     // to create the service the SW_MOD should be already initialized
     DBG_ASSERT( SC_MOD(), "No StarCalc module!" );
 
