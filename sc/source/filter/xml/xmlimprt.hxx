@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 11:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #endif
 
 class ScRangeList;
+class XMLNumberFormatAttributesExportHelper;
 
 using namespace rtl;
 
@@ -756,10 +757,12 @@ class ScXMLImport: public SvXMLImport
     ScMyImpDetectiveOpArray aDetectiveOpArray;
 
     rtl::OUString           sFirstTableStyle;
+    XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
     sal_Bool                bRemoveLastChar : 1;
+    sal_Bool                bNullDateSetted : 1;
 
 
 protected:
@@ -924,12 +927,13 @@ public:
     void SetFirstTableStyle(const rtl::OUString& rValue) { sFirstTableStyle = rValue; }
     rtl::OUString GetFirstTableStyle() { return sFirstTableStyle; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
-    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
     void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties, const sal_Int16 nCellType,
         const rtl::OUString& rCurrency);
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
         const sal_Int16 nCellType, const rtl::OUString& rCurrency);
+    sal_Bool SetNullDateOnUnitConverter();
+    XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
 };
 
 #endif
