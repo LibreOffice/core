@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:07:16 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 15:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2541,7 +2541,7 @@ BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
     {
         OUString uTmp;
         rAny >>= uTmp;
-        sCharacters = String( uTmp );
+        sCharacters = String( uTmp ).Copy( 0, MAX_COMBINED_CHARACTERS );
     }
 #ifdef DBG_UTIL
     else
