@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 12:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,28 +296,8 @@ static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
             // Mac-Pict steht im 03PICT-StorageStream
             // allerdings ohne die ersten 512 Bytes, die
             // bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
-    String sExt(WW8_ASCII2STR( "pct" ));
-    TempFile aTempFile(aEmptyStr, &sExt);
-    aTempFile.EnableKillingFile();
-    {
-        SvFileStream aOut( aTempFile.GetName(),
-                            STREAM_READ|STREAM_WRITE|STREAM_TRUNC );
 
-
-        BYTE* pBuf = new BYTE[512];
-        memset( pBuf, 0, 512 );
-        aOut.Write( pBuf, 512 );        // Anfang Pict: 512 Byte Muell
-        delete( pBuf );
-        aOut << *pStp;                  // Storage-Stream rausschreiben
-    }
-
-    GraphicFilter& rGF = *::GetGrfFilter(); // lese ueber Filter ein
-#if SUPD<591
-    BOOL bOk = 0 == rGF.ImportGraphic( rGraph, DirEntry(aTempFile.GetName()), GRFILTER_FORMAT_DONTKNOW );
-#else
-    BOOL bOk = 0 == rGF.ImportGraphic( rGraph, INetURLObject(aTempFile.GetName()), GRFILTER_FORMAT_DONTKNOW );
-#endif
-    return bOk;
+    return SwWW8ImplReader::GetPictGrafFromStream( rGraph, *pStp );
 }
 
 
@@ -668,11 +648,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.3 2000-11-01 12:12:16 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/10 16:54:06  cmc
+      MSOffice 97/2000 Controls {Im|Ex}port
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

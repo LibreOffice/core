@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-16 10:54:58 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 12:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,6 +1095,8 @@ public:     // eigentlich private, geht aber leider nur public
     const USHORT StyleUsingLFO(      USHORT nLFOIndex ) const ;
     const SwFmt* GetStyleWithOrgWWName( String& rName    ) const ;
 
+    static BOOL GetPictGrafFromStream( Graphic& rGraphic, SvStream& rSrc,
+                                    ULONG nLen = ULONG_MAX );
 
 
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
@@ -1114,11 +1116,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.3 2000-10-16 10:54:58 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.4 2000-11-01 12:12:16 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/16 10:54:58  khz
+      read extended WW9-Frame-Alignment (stored in Escher record 0xF122)
+
       Revision 1.2  2000/10/10 16:54:06  cmc
       MSOffice 97/2000 Controls {Im|Ex}port
 

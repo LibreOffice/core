@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 12:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,32 +178,6 @@ extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 //-----------------------------------------
 
 
-#ifdef USE_WMF_GRAF_FILE    // Definieren fuer Import WMF ueber File
-                            // ( alte Version, kann kein MAC-PICT )
-struct WmfFileHd
-{                     // Vorsicht: Struktur ist nicht aligned
-    SVBT16 nTyp;            // 0 = Mem, 1 = File
-    SVBT16 nHdSiz;          // 0x009
-    SVBT16 nVersion;        // 0x300
-    SVBT32 nSize;           // filesize in bytes
-    SVBT16 nNoObj;          // Number of Objects that exist at same time
-    SVBT32 nMaxRecLen;      // largest record
-    SVBT16 nNoParas;        // not used
-};
-#define WMF_FILE_HD_SIZ 18    // Groesse der Struktur WmfFileHd
-
-ULONG SwWW8ImplReader::ReadWmfHeader( WmfFileHd* pHd, long nPos )
-{
-    pStrm->Seek( nPos );
-    pStrm->Read( pHd, sizeof( *pHd ) );
-    return SVBT32ToLong( pHd->nSize ) * 2;       // FileSize in Bytes
-}
-
-#endif // USE_WMF_GRAF_FILE
-
-
-
-
 struct METAFILEHEADER       // ist aligned, deshalb gehts fuer alle Platformen
 {
     UINT32  key;
@@ -253,29 +227,50 @@ static void WriteWmfPreHd( long nWidth, long nHeight, SvStream& rOStream )
 
 #define WWBUFSIZ 4096           //  512 <= WWBUFSIZE <= UINT16_MAX !!!
 
-static void _CopyFilePiece( SvStream* pDst, SvStream* pSrc, ULONG nRead,
-                              void* pBuf, UINT16 nBufSize )
+BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
+                                         SvStream& rSrc, ULONG nLen )
 {
-    UINT16 nRead1;
-    do{
-        nRead1 = ( nRead > nBufSize ) ? nBufSize : (UINT16)nRead;
-        pSrc->Read( pBuf, nRead1 );
-        pDst->Write( pBuf, nRead1 );
-        nRead -= nRead1;
-    }while( nRead );
+    String sExt(WW8_ASCII2STR(".pct"));
+    TempFile aTempFile( aEmptyStr, &sExt );
+    aTempFile.EnableKillingFile();
+    {
+        SvFileStream aOut( aTempFile.GetName(),
+                            STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+        BYTE* pBuf = new BYTE[ ULONG_MAX != nLen ? 4096 : 512 ];
+        memset( pBuf, 0, 512 );
+        aOut.Write( pBuf, 512 );        // Anfang Pict: 512 Byte Muell
+        if( ULONG_MAX != nLen )
+        {
+            UINT16 nToRead = 4096;
+            do {
+                if( nToRead > nLen )
+                    nToRead = (UINT16)nLen;
+                rSrc.Read( pBuf, nToRead );
+                aOut.Write( pBuf, nToRead );
+                nLen -= nToRead;
+            } while( nLen );
+        }
+        else
+            aOut << rSrc;
+
+        delete( pBuf );
+    }
+
+    return 0 == ::GetGrfFilter()->ImportGraphic( rGraphic,
+                            INetURLObject( aTempFile.GetName() ),
+                            GRFILTER_FORMAT_DONTKNOW );
 }
+
 
 BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
     const WW8_PIC& rPic,    SvStream* pSt, ULONG nFilePos, BOOL* pbInDoc )
 {                                                  // Grafik in File schreiben
-    ASSERT( WWBUFSIZ >= 512,
-             "Au weia, Puffergroesse < 512, keine Mac-Picts moeglich" );
-
     *pbInDoc = TRUE;                               // default
 
     ULONG nPosFc = nFilePos + rPic.cbHeader;
 
-    switch( rPic.MFP.mm ){
+    switch( rPic.MFP.mm )
+    {
     case 94:                        // BMP-File ( nicht embeddet ) oder GIF
     case 99:
         {   // TIFF-File ( nicht embeddet )
@@ -286,105 +281,49 @@ BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
             return rFileName.Len() != 0;        // Einlesen OK
         }
     }
-#ifndef USE_WMF_GRAF_FILE
-                            // Neu:WMF - Variante ohne File
-    {
-        GDIMetaFile aWMF;
-        pSt->Seek( nPosFc );
-        BOOL bOk = ReadWindowMetafile( *pSt, aWMF );
-                    // *pSt >> aWMF; geht nicht ohne placable header
-        if( !bOk || pSt->GetError() || !aWMF.GetActionCount() ){
+
+    GDIMetaFile aWMF;
+    pSt->Seek( nPosFc );
+    BOOL bOk = ReadWindowMetafile( *pSt, aWMF );
+                // *pSt >> aWMF; geht nicht ohne placable header
+    if( !bOk || pSt->GetError() || !aWMF.GetActionCount() ){
 //          ASSERT( bOk, "ReadWindowMetafile ging schief" );
 //          ASSERT( !pSt->GetError(), "WMF einlesen ging schief ( Stream-Error )" );
 //          ASSERT( aWMF.GetActionCount(), "WMF einlesen ging schief ( No Meta-Action )" );
-            return FALSE;
-        }
-        if( pWwFib->envr != 1 ){            // !MAC als Creator
-
-            aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-            // MetaFile auf neue Groesse skalieren und
-            // neue Groesse am MetaFile setzen
-            Size        aOldSiz( aWMF.GetPrefSize() );
-            Size        aNewSiz( rPic.MFP.xExt, rPic.MFP.yExt );
-            Fraction    aFracX( aNewSiz.Width(), aOldSiz.Width() );
-            Fraction    aFracY( aNewSiz.Height(), aOldSiz.Height() );
-
-            aWMF.Scale( aFracX, aFracY );
-            aWMF.SetPrefSize( aNewSiz );
-
-            rpGraphic = new Graphic( aWMF );
-            return TRUE;
-        }
-        // MAC - Word als Creator
-        // im WMF steht nur "Benutzen sie Word 6.0c"
-        // Mac-Pict steht dahinter
-        // allerdings ohne die ersten 512 Bytes,
-        // bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
-
-        long nCopy = rPic.lcb - ( pSt->Tell() - nPosFc );
-        if( nCopy <= 0 || WWBUFSIZ < 512 )
-            return FALSE;
-
-        BYTE* pBuf = new BYTE[WWBUFSIZ];
-        String sExt(WW8_ASCII2STR("pct"));
-        TempFile aTempFile(aEmptyStr, &sExt);
-        aTempFile.EnableKillingFile();
-        {
-            SvFileStream aOut(aTempFile.GetName(), STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
-            memset( pBuf, 0, 512 );
-            aOut.Write( pBuf, 512 );        // Anfang Pict: 512 Byte Muell
-            _CopyFilePiece( &aOut, pSt, nCopy, pBuf, WWBUFSIZ );    // Pict-Inhalt
-            delete( pBuf );
-        }
-
-        GraphicFilter& rGF = *::GetGrfFilter(); // lese ueber Filter ein
-        rpGraphic = new Graphic();
-#if SUPD<591
-        bOk = ( rGF.ImportGraphic( *rpGraphic, DirEntry(aTempFile.GetName()), GRFILTER_FORMAT_DONTKNOW )
-                == 0 );
-#else
-        bOk = ( rGF.ImportGraphic( *rpGraphic, INetURLObject(aTempFile.GetName()), GRFILTER_FORMAT_DONTKNOW )
-                == 0 );
-#endif
-        if( !bOk )
-            DELETEZ( rpGraphic );
-
-        return bOk;                 // Grafik drin
+        return FALSE;
     }
-#else   // ! USE_WMF_GRAF_FILE
-                    // alt: ueber File mit selbstgebasteltem Header
-    ULONG nMaxSize = rPic.lcb - rPic.cbHeader;
-    WmfFileHd aHd;                              // lies Header
-    ULONG nSiz = ReadWmfHeader( &aHd, nPosFc ); // FileSize in Bytes
+    if( pWwFib->envr != 1 ){            // !MAC als Creator
 
-    if( nSiz > nMaxSize )
-        return FALSE;                           // irgendwas ist schiefgegangen
+        aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+        // MetaFile auf neue Groesse skalieren und
+        // neue Groesse am MetaFile setzen
+        Size        aOldSiz( aWMF.GetPrefSize() );
+        Size        aNewSiz( rPic.MFP.xExt, rPic.MFP.yExt );
+        Fraction    aFracX( aNewSiz.Width(), aOldSiz.Width() );
+        Fraction    aFracY( aNewSiz.Height(), aOldSiz.Height() );
 
-    DirEntry aFN = GetTmpFileName();
-    aFN.SetExtension( String( "wmf" ) );
-    aFN.ToAbs();
-    rFileName = aFN.GetFull();
+        aWMF.Scale( aFracX, aFracY );
+        aWMF.SetPrefSize( aNewSiz );
 
-    SvFileStream aOut( rFileName, STREAM_WRITE );
+        rpGraphic = new Graphic( aWMF );
+        return TRUE;
+    }
+    // MAC - Word als Creator
+    // im WMF steht nur "Benutzen sie Word 6.0c"
+    // Mac-Pict steht dahinter
+    // allerdings ohne die ersten 512 Bytes,
+    // bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
 
-
-    WriteWmfPreHd( rPic.dxaGoal, rPic.dyaGoal, aOut );  // Placeable WMF-Header
-
-    ULONG nRead = nSiz;
-    UINT16 nRead1;
-    BYTE* pBuf = new BYTE[WWBUFSIZ];
-    pSt->Seek( nPosFc );
-    do{
-        nRead1 = ( nRead > WWBUFSIZ ) ? WWBUFSIZ : (UINT16)nRead;
-        pSt->Read( pBuf, nRead1 );
-        aOut.Write( pBuf, nRead1 );
-        nRead -= nRead1;
-    }while( nRead );
-
-    delete( pBuf );
-
-    return TRUE;
-#endif  // ! USE_WMF_GRAF_FILE
+    bOk = FALSE;
+    long nCopy = rPic.lcb - ( pSt->Tell() - nPosFc );
+    if( 0 < nCopy  )
+    {
+        rpGraphic = new Graphic();
+        if( 0 == ( bOk = SwWW8ImplReader::GetPictGrafFromStream(
+                                                *rpGraphic, *pSt, nCopy )))
+            DELETEZ( rpGraphic );
+    }
+    return bOk;                 // Grafik drin
 }
 
 struct WW8PicDesc
@@ -1230,11 +1169,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.2 2000-11-01 12:12:16 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.39  2000/09/18 16:04:59  willem.vandorp
       OpenOffice header added.
 
