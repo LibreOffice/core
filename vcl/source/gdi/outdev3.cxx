@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-11 16:50:32 $
+ *  last change: $Author: hdu $ $Date: 2002-09-12 07:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6797,18 +6797,11 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
         int nWidthFactor = pSalLayout->GetUnitsPerPixel();
         Point aPos = pSalLayout->GetDrawPosition();
 
-        // TODO: avoid use of outline for bounding rect calculation
-        PolyPolyVector aVector;
-        bRet = pSalLayout->GetOutline( *mpGraphics, aVector );
-        pSalLayout->Release();
+        Rectangle aPixelRect;
+        bRet = pSalLayout->GetBoundRect( *mpGraphics, aPixelRect );
 
         if( bRet )
         {
-            Rectangle aPixelRect;
-            for (PolyPolyVector::iterator aIt(aVector.begin());
-                 aIt != aVector.end(); ++aIt)
-                aPixelRect.Union(aIt->GetBoundRect());
-
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
@@ -6824,9 +6817,10 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
             }
 
             aPixelRect += Point( mnTextOffX + nXOffset, mnTextOffY );
-            aPixelRect += aPos;
             rRect = ImplDevicePixelToLogic( aPixelRect );
         }
+
+        pSalLayout->Release();
     }
 
     if( bRet || (OUTDEV_PRINTER == meOutDevType) )
@@ -6995,25 +6989,27 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     if( pSalLayout )
     {
         int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-        // Point aPos = pSalLayout->GetDrawPosition();
         bRet = pSalLayout->GetOutline( *mpGraphics, rVector );
         pSalLayout->Release();
 
         if( bRet )
         {
+            PolyPolyVector::iterator aIt;
+
+            if( nXOffset | mnTextOffX | mnTextOffY )
+            {
+                Point aOffset( mnTextOffX*nWidthFactor + nXOffset,
+                               mnTextOffY*nWidthFactor );
+                for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
+                    aIt->Move( aOffset.X(), aOffset.Y() );
+            }
+
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
-                for (PolyPolyVector::iterator aIt(rVector.begin());
-                     aIt != rVector.end(); ++aIt)
+                for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
                     aIt->Scale( fFactor, fFactor );
-                nXOffset /= nWidthFactor;
             }
-
-            Size aOffset = PixelToLogic( Size( mnTextOffX, mnTextOffY ) );
-            for (PolyPolyVector::iterator aIt(rVector.begin());
-                 aIt != rVector.end(); ++aIt)
-                aIt->Move( aOffset.Width() + nXOffset, aOffset.Height() );
         }
     }
 
