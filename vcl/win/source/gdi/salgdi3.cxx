@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hdu $ $Date: 2004-07-20 09:48:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get device specific font attributes
-    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) != 0;
+    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
     aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
     aDFA.mnQuality      = (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) ? 250 : 0;
 
@@ -403,7 +403,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get device specific font attributes
-    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) != 0;
+    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
     aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
     aDFA.mnQuality      = (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) ? 250 : 0;
 
@@ -609,7 +609,7 @@ bool ImplWinFontData::HasGSUBstitutions( HDC hDC ) const
 
 bool ImplWinFontData::IsGSUBstituted( sal_Unicode cChar ) const
 {
-    return( maGsubTable.find( cChar ) == maGsubTable.end() );
+    return( maGsubTable.find( cChar ) != maGsubTable.end() );
 }
 
 // -----------------------------------------------------------------------
@@ -925,8 +925,8 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         rLogFont.lfCharSet = pSysData->GetCharSet();
     }
 
-    rLogFont.lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
-    rLogFont.lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
+    rLogFont.lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch )
+                               | ImplFamilyToWin( pFont->meFamily );
     rLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
     rLogFont.lfHeight          = (int)-pFont->mnHeight;
     rLogFont.lfWidth           = (int)pFont->mnWidth;
@@ -996,8 +996,8 @@ static void ImplGetLogFontFromFontSelect( HDC hDC,
         rLogFont.lfCharSet = pSysData->GetCharSet();
     }
 
-    rLogFont.lfPitchAndFamily   = ImplPitchToWin( pFont->mePitch );
-    rLogFont.lfPitchAndFamily  |= ImplFamilyToWin( pFont->meFamily );
+    rLogFont.lfPitchAndFamily   = ImplPitchToWin( pFont->mePitch )
+                                | ImplFamilyToWin( pFont->meFamily );
     rLogFont.lfWeight           = ImplWeightToWin( pFont->meWeight );
     rLogFont.lfHeight           = (int)-pFont->mnHeight;
     rLogFont.lfWidth            = (int)pFont->mnWidth;
@@ -1005,7 +1005,7 @@ static void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfStrikeOut        = 0;
     rLogFont.lfItalic           = (pFont->meItalic) != ITALIC_NONE;
     rLogFont.lfEscapement       = pFont->mnOrientation;
-    rLogFont.lfOrientation      = 0;
+    rLogFont.lfOrientation      = rLogFont.lfEscapement; // ignored by W98
     rLogFont.lfClipPrecision    = CLIP_DEFAULT_PRECIS;
     rLogFont.lfQuality          = DEFAULT_QUALITY;
     rLogFont.lfOutPrecision     = OUT_TT_PRECIS;
@@ -1204,17 +1204,20 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     pMetric->mbScalableFont = (aWinMetric.tmPitchAndFamily & (TMPF_VECTOR|TMPF_TRUETYPE)) != 0;
     if( pMetric->mbScalableFont )
     {
+        // check if there are kern pairs
+        // TODO: does this work with GPOS kerning?
         DWORD nKernPairs = ::GetKerningPairsA( mhDC, 0, NULL );
         pMetric->mbKernableFont = (nKernPairs > 0);
     }
     else
     {
+        // bitmap fonts cannot be rotated directly
+        pMetric->mnOrientation  = 0;
         // bitmap fonts have no kerning
         pMetric->mbKernableFont = false;
     }
 
     // transformation dependend font metrics
-    pMetric->mnOrientation  = 0;
     pMetric->mnWidth        = aWinMetric.tmAveCharWidth;
     pMetric->mnIntLeading   = aWinMetric.tmInternalLeading;
     pMetric->mnExtLeading   = aWinMetric.tmExternalLeading;
@@ -2211,7 +2214,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
     // use height=1000 for easier debugging (to match psprint's font units)
-    ImplFontSelectData aIFSD( *pFont, 1000, 0, 0, false );
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
