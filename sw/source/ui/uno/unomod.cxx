@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-09-20 12:49:29 $
+ *  last change: $Author: mtg $ $Date: 2001-09-20 14:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,20 @@
 #ifndef _COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX_
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::comphelper;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 enum SwViewSettingsPropertyHandles
 {
@@ -166,7 +173,8 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_SOLID_MARK_HANDLES,
     HANDLE_VIEWSET_ZOOM_TYPE,
     HANDLE_VIEWSET_ZOOM,
-    HANDLE_VIEWSET_PREVENT_TIPS
+    HANDLE_VIEWSET_PREVENT_TIPS,
+    HANDLE_VIEWSET_HELP_URL
 };
 enum SwPrintSettingsPropertyHandles
 {
@@ -190,6 +198,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
 {
     static PropertyInfo aViewSettingsMap_Impl[] =
     {
+        { RTL_CONSTASCII_STRINGPARAM ( "HelpURL" ),             HANDLE_VIEWSET_HELP_URL             , CPPUTYPE_OUSTRING,    PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PreventHelpTips" ),     HANDLE_VIEWSET_PREVENT_TIPS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
@@ -660,6 +669,9 @@ SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 , mpViewOption ( NULL )
 , mpConstViewOption ( NULL )
 {
+    // This property only exists if we have a view (ie, not at the module )
+    if ( !pView )
+        mpInfo->remove ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "HelpURL" ) ) );
 
 }
 /*-- 18.12.98 11:01:10---------------------------------------------------
@@ -791,6 +803,26 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
         }
         break;
+        case HANDLE_VIEWSET_HELP_URL :
+        {
+            if ( pView )
+            {
+                OUString sHelpURL;
+                if ( ! ( rValue >>= sHelpURL ) )
+                    throw IllegalArgumentException();
+                SwEditWin &rEditWin = pView->GetEditWin();
+                OUString sPrefix = sHelpURL.copy ( 0, 4 );
+                // Make sure we have a valid string...should be in the format HID:12345
+                if ( ! sPrefix.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "HID:" ) ) )
+                    throw IllegalArgumentException ();
+                OUString sNumber = sHelpURL.copy ( 4 );
+                sal_uInt32 nHelpId = sNumber.toInt32();
+                rEditWin.SetHelpId ( nHelpId );
+            }
+            else
+                throw UnknownPropertyException();
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -884,9 +916,24 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, :
             if(pView)
                 bBoolVal = pView->GetWrtShell().GetDoc()->IsBrowseMode();
         break;
+        case HANDLE_VIEWSET_HELP_URL :
+        {
+            if ( pView )
+            {
+                bBool = sal_False;
+                OUStringBuffer sHelpURL;
+                sHelpURL.appendAscii ( "HID:" );
+                SwEditWin &rEditWin = pView->GetEditWin();
+                sHelpURL.append ( static_cast < sal_Int32 > ( rEditWin.GetHelpId() ) );
+                rValue <<= sHelpURL.makeStringAndClear();
+            }
+            else
+                throw UnknownPropertyException();
+        }
+        break;
         default: DBG_ERROR("Diese Id gibt's nicht!");
     }
-    if(bBool)
+    if( bBool )
         rValue.setValue(&bBoolVal, ::getBooleanCppuType());
 }
 void SwXViewSettings::_postGetValues ()
