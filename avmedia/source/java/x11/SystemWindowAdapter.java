@@ -72,17 +72,6 @@ public class SystemWindowAdapter
         // now, we're getting slightly system dependent here.
         String os = (String) System.getProperty( "os.name" );
 
-        // create the embedded frame
-        if( os.startsWith( "Linux" ) )
-        {
-            // create a java frame from that
-            aFrame = new sun.awt.motif.MEmbeddedFrame( windowHandle );
-        }
-        else
-        {
-            throw new com.sun.star.uno.RuntimeException();
-        }
-
-        return aFrame;
+        return new sun.awt.motif.MEmbeddedFrame( windowHandle );
     }
 }
