@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 15:04:08 $
+#   last change: $Author: obo $ $Date: 2005-01-03 17:37:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ CFLAGS+=-I$(NAS_INCLUDES)
 SLOFILES=	$(SLO)$/dbggui.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/idlemgr.obj 	\
-            $(SLO)$/resmgr.obj		\
             $(SLO)$/settings.obj	\
             $(SLO)$/sound.obj		\
             $(SLO)$/stdtext.obj 	\
