@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:53:14 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage TP_ENV_PRT
         Text[ english_us ] = "Envelope orientation";
         Text[ portuguese ] = "Orientaηγo do envelope";
         Text[ russian ] = "Ξπθενςΰφθÿ κξνβεπςΰ";
-        Text[ greek ] = "Envelope orientation";
+        Text[ greek ] = "Προσανατολισμός φακέλου";
         Text[ dutch ] = "Envelopinvoer";
         Text[ french ] = "Orientation de l'enveloppe";
         Text[ spanish ] = "Orientaciσn del sobre";
@@ -323,7 +323,7 @@ TabPage TP_ENV_PRT
         Text[ english_us ] = "Current printer";
         Text[ portuguese ] = "Impressora activa";
         Text[ russian ] = "Òεκσωθι οπθνςεπ";
-        Text[ greek ] = "Current printer";
+        Text[ greek ] = "Τρέχων εκτυπωτής";
         Text[ dutch ] = "Huidige printer";
         Text[ french ] = "Imprimante active";
         Text[ spanish ] = "Impresora actual";
@@ -514,6 +514,7 @@ Bitmap BMP_VER_RGHT_UPPER_H
 {
     File = "envvr_u_h.bmp" ;
 };
+
 
 
 
