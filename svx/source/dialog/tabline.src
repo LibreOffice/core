@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:26:01 $
+ *  last change: $Author: dr $ $Date: 2001-06-21 11:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text = "Linien Eigenschaften" ;
-        Text [ ENGLISH ] = "Line Properties" ;
+        Text = "Linieneigenschaften" ;
+        Text [ ENGLISH ] = "Line properties" ;
         Text [ norwegian ] = "Linjer" ;
         Text [ italian ] = "Proprietà linee" ;
         Text [ portuguese_brazilian ] = "Line properties" ;
@@ -525,7 +525,6 @@ TabPage RID_SVXPAGE_LINE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 135  ) ;
         Size = MAP_APPFONT ( 248 , 40 ) ;
-        TabStop = TRUE ;
     };
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
@@ -914,7 +913,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 34  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "~Typ" ;
         Text [ ENGLISH ] = "~Type" ;
         Text [ norwegian ] = "~Type" ;
@@ -943,7 +942,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     ListBox LB_TYPE_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 32  ) ;
+        Pos = MAP_APPFONT ( 66 , 32  ) ;
         Size = MAP_APPFONT ( 43 , 49 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1062,16 +1061,16 @@ TabPage RID_SVXPAGE_LINE_DEF
                 < " " ; Default ; > ;
             < " " ; Default ; > ;
         };
-    StringList [ catalan ] =
-    {
+        StringList [ catalan ] =
+        {
             < "Punto" ; Default ; > ;
-        < "Trazo" ; Default ; > ;
-    };
+            < "Trazo" ; Default ; > ;
+        };
     };
     ListBox LB_TYPE_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 32  ) ;
+        Pos = MAP_APPFONT ( 113 , 32  ) ;
         Size = MAP_APPFONT ( 43 , 49 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1190,16 +1189,16 @@ TabPage RID_SVXPAGE_LINE_DEF
                 < " " ; Default ; > ;
             < " " ; Default ; > ;
         };
-    StringList [ catalan ] =
-    {
+        StringList [ catalan ] =
+        {
             < "Punto" ; Default ; > ;
-        < "Trazo" ; Default ; > ;
-    };
+            < "Trazo" ; Default ; > ;
+        };
     };
     FixedText FT_NUMBER
     {
         Pos = MAP_APPFONT ( 12 , 50  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "~Anzahl" ;
         Text [ ENGLISH ] = "~Number" ;
         Text [ norwegian ] = "~Number" ;
@@ -1228,7 +1227,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     NumericField NUM_FLD_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 48  ) ;
+        Pos = MAP_APPFONT ( 66 , 48  ) ;
         Size = MAP_APPFONT ( 43 , 12 ) ;
         TabStop = TRUE ;
         Right = TRUE ;
@@ -1242,7 +1241,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     NumericField NUM_FLD_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 48  ) ;
+        Pos = MAP_APPFONT ( 113 , 48  ) ;
         Size = MAP_APPFONT ( 43 , 12 ) ;
         TabStop = TRUE ;
         Right = TRUE ;
@@ -1256,7 +1255,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     FixedText FT_LENGTH
     {
         Pos = MAP_APPFONT ( 12 , 66  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "Län~ge" ;
         Text [ ENGLISH ] = "Len~gth" ;
         Text [ norwegian ] = "Len~gde" ;
@@ -1285,7 +1284,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     MetricField MTR_FLD_LENGTH_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 64  ) ;
+        Pos = MAP_APPFONT ( 66 , 64  ) ;
         Size = MAP_APPFONT ( 43 , 12 ) ;
         TabStop = TRUE ;
         Right = TRUE ;
@@ -1305,7 +1304,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     MetricField MTR_FLD_LENGTH_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 103 , 64  ) ;
+        Pos = MAP_APPFONT ( 113 , 64  ) ;
         Size = MAP_APPFONT ( 43 , 12 ) ;
         TabStop = TRUE ;
         Right = TRUE ;
@@ -1325,7 +1324,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     FixedText FT_DISTANCE
     {
         Pos = MAP_APPFONT ( 12 , 81  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
         Text = "A~bstand" ;
         Text [ ENGLISH ] = "D~istance" ;
         Text [ norwegian ] = "A~vstand" ;
@@ -1354,7 +1353,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     MetricField MTR_FLD_DISTANCE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 79  ) ;
+        Pos = MAP_APPFONT ( 66 , 79  ) ;
         Size = MAP_APPFONT ( 43 , 12 ) ;
         TabStop = TRUE ;
         Right = TRUE ;
@@ -1372,7 +1371,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     CheckBox CBX_SYNCHRONIZE
     {
         Pos = MAP_APPFONT ( 12 , 95  ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 174 , 10 ) ;
         Text = "A~n Linienbreite anpassen" ;
         Text [ ENGLISH ] = "~Synchronize line width" ;
         Text [ norwegian ] = "~Synkroniser linjebredde" ;
@@ -1405,9 +1404,9 @@ TabPage RID_SVXPAGE_LINE_DEF
     FixedText FT_LINESTYLE
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Linienstil" ;
-        Text [ ENGLISH ] = "Linestyle" ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text = "Linien~stil" ;
+        Text [ ENGLISH ] = "~Line style" ;
         Text [ norwegian ] = "Linjestiler" ;
         Text [ italian ] = "Stile linea" ;
         Text [ portuguese_brazilian ] = "Estilos de linha" ;
@@ -1418,7 +1417,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ swedish ] = "Linjestil" ;
         Text [ dutch ] = "Lijntypen" ;
         Text [ spanish ] = "Estilo de línea" ;
-        Text [ english_us ] = "Line style" ;
+        Text [ english_us ] = "~Line style" ;
         Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù";
         Text[ russian ] = "Ñòèëü ëèíèè";
         Text[ polish ] = "Styl linii";
@@ -1434,8 +1433,8 @@ TabPage RID_SVXPAGE_LINE_DEF
     ListBox LB_LINESTYLES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14  ) ;
-        Size = MAP_APPFONT ( 110 , 80 ) ;
+        Pos = MAP_APPFONT ( 66 , 14  ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -1623,7 +1622,6 @@ TabPage RID_SVXPAGE_LINE_DEF
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 135  ) ;
         Size = MAP_APPFONT ( 248 , 40 ) ;
-        TabStop = TRUE ;
     };
 
     Text[ chinese_simplified ] = "¶¨ÒåÏßÌõÊ½Ñù";
@@ -1692,9 +1690,9 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     FixedText FI_TIP
     {
         Pos = MAP_APPFONT ( 6 , 123  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Neue Linienenden erhalten Sie durch Hinzufügen eines selektierten Objektes" ;
-        Text [ ENGLISH ] = "You get new line ends by adding a selected object" ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Neue Linienenden erhalten Sie durch Hinzufügen eines selektierten Objektes." ;
+        Text [ ENGLISH ] = "You get new line ends by adding a selected object." ;
         Text [ norwegian ] = "You get new line ends by adding a selected object" ;
         Text [ italian ] = "Nuovi fine linea si ottengono aggiungendo un oggetto selezionato" ;
         Text [ portuguese_brazilian ] = "You get new line ends by adding a selected object" ;
@@ -1705,8 +1703,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ danish ] = "Nye piltyper fås ved at tilføje et markeret objekt" ;
         Text [ swedish ] = "Nya linjeslut får Du genom att lägga till ett markerat objekt" ;
         Text [ finnish ] = "Luo uusia nuolityylejä lisäämällä valittu objekti" ;
-        Text [ english_us ] = "Add a selected object to create new arrow styles" ;
-        TabStop = TRUE ;
+        Text [ english_us ] = "Add a selected object to create new arrow styles." ;
         WordBreak = TRUE ;
         Text[ chinese_simplified ] = "ÄúÄÜ¹»Í¨¹ýÐÂÔöÑ¡ÔñÒ»¸ö¶ÔÏóÀ´Éú³ÉÐÂµÄÏß¶Ë¡£";
         Text[ russian ] = "Íîâûå êîíöû ëèíèè Âû ïîëó÷èòå ïóòåì äîáàâëåíèÿ âûäåëåííîãî îáúåêòà";
@@ -1723,10 +1720,10 @@ TabPage RID_SVXPAGE_LINEEND_DEF
 
     FixedText FT_LINE_END_STYLE
     {
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Linienendenstil" ;
-        Text [ ENGLISH ] = "Line end style" ;
+        Pos = MAP_APPFONT ( 12 , 32  ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Text = "Linien~endenstil" ;
+        Text [ ENGLISH ] = "~Arrow style" ;
         Text [ norwegian ] = "Line end" ;
         Text [ italian ] = "Stile estremità linea" ;
         Text [ portuguese_brazilian ] = "Fim de linha" ;
@@ -1737,7 +1734,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text [ swedish ] = "Linjeslutstil" ;
         Text [ dutch ] = "Lijnuiteinde" ;
         Text [ spanish ] = "Estilo del fin de línea" ;
-        Text [ english_us ] = "Arrow style" ;
+        Text [ english_us ] = "~Arrow style" ;
         Text[ chinese_simplified ] = "ÏßÌõ¼ýÍ·Ê½Ñù";
         Text[ russian ] = "Ñòèëü êîíöîâ ëèíèé";
         Text[ polish ] = "Styl koñcówek linii";
@@ -1753,16 +1750,16 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Edit EDT_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14  ) ;
-        Size = MAP_APPFONT ( 91 , 12 ) ;
+        Pos = MAP_APPFONT ( 98 , 14  ) ;
+        Size = MAP_APPFONT ( 87 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 12 , 32  ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Titel" ;
-        Text [ ENGLISH ] = "Title" ;
+        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Text = "~Titel" ;
+        Text [ ENGLISH ] = "~Title" ;
         Text [ norwegian ] = "Title" ;
         Text [ italian ] = "Titolo" ;
         Text [ portuguese_brazilian ] = "Fim de linha" ;
@@ -1789,8 +1786,8 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     ListBox LB_LINEENDS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 30  ) ;
-        Size = MAP_APPFONT ( 91 , 80 ) ;
+        Pos = MAP_APPFONT ( 98 , 30  ) ;
+        Size = MAP_APPFONT ( 87 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -1979,7 +1976,6 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 135  ) ;
         Size = MAP_APPFONT ( 248 , 40 ) ;
-        TabStop = TRUE ;
     };
 
     Text[ chinese_simplified ] = "¶¨ÒåÏß¶Ë";
