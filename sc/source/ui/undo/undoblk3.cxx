@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:20:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -1431,14 +1430,14 @@ ScUndoConversion::ScUndoConversion(
         ScDocShell* pNewDocShell, const ScMarkData& rMark,
         SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScDocument* pNewUndoDoc,
         SCCOL nNewX, SCROW nNewY, SCTAB nNewZ, ScDocument* pNewRedoDoc,
-        ScConversionType eConvType ) :
+        const ScConversionParam& rConvParam ) :
     ScSimpleUndo( pNewDocShell ),
-    meConvType( eConvType ),
     aMarkData( rMark ),
     aCursorPos( nCurX, nCurY, nCurZ ),
     aNewCursorPos( nNewX, nNewY, nNewZ ),
     pUndoDoc( pNewUndoDoc ),
-    pRedoDoc( pNewRedoDoc )
+    pRedoDoc( pNewRedoDoc ),
+    maConvParam( rConvParam )
 {
     SetChangeTrack();
 }
@@ -1479,11 +1478,11 @@ void ScUndoConversion::SetChangeTrack()
 String ScUndoConversion::GetComment() const
 {
     String aText;
-    switch( meConvType )
+    switch( maConvParam.GetType() )
     {
-        case SC_CONVERSION_SPELLCHECK:  aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
-        case SC_CONVERSION_HANGULHANJA: aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
-        case SC_CONVERSION_CHINESE_TRANSLATION: aText = ScGlobal::GetRscString( STR_UNDO_CHINESE_TRANSLATION ); break;
+        case SC_CONVERSION_SPELLCHECK:      aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
+        case SC_CONVERSION_HANGULHANJA:     aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
+        case SC_CONVERSION_CHINESE_TRANSL:  aText = ScGlobal::GetRscString( STR_UNDO_CHINESE_TRANSLATION ); break;
         default: DBG_ERRORFILE( "ScUndoConversion::GetComment - unknown conversion type" );
     }
     return aText;
@@ -1552,7 +1551,7 @@ void ScUndoConversion::Redo()
 void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
     if( rTarget.ISA( ScTabViewTarget ) )
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( meConvType, TRUE );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( maConvParam, TRUE );
 }
 
 
