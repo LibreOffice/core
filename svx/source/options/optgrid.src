@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:43:13 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text = "An ~Fanglinien" ;
+        Text = "An Fan~glinien" ;
         Text [ ENGLISH ] = "An Fanglinien" ;
         Text [ NORWEGIAN ] = "An Fanglinien" ;
         Text [ DANISH ] = "Til fanglinjer" ;
@@ -482,7 +482,7 @@ TabPage RID_SVXPAGE_GRID
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 125  ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
-        Text = "An den ~Seitenrändern" ;
+        Text = "An den Se~itenrändern" ;
         Text [ ENGLISH ] = "An den Seitenrändern" ;
         Text [ english_us ] = "~Page margins" ;
         Text [ italian ] = "Ai margini delle pagine" ;
@@ -512,7 +512,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text = "Am ~Objektrahmen" ;
+        Text = "Am Obje~ktrahmen" ;
         Text [ ENGLISH ] = "Am Objektrahmen" ;
         Text [ NORWEGIAN ] = "Am Objektrahmen" ;
         Text [ DANISH ] = "På objektrammen" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-05-28 10:26:15 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1677,7 +1677,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 24 ) ;
         Size = MAP_APPFONT ( 159 , 10 ) ;
-        Text = "S~icherheitsüberprüfungen";
+        Text = "Sicherheits~überprüfungen";
         Text [ English ] = "Enable ~security checks";
         Text [ english_us ] = "Enable ~security checks";
             Text[ italian ] = "Controlli di s~icurezza";
@@ -1703,7 +1703,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 39 ) ;
         Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "~Netzzugriff" ;
+        Text = "Netzz~ugriff" ;
         Text [ English ] = "~Netaccess" ;
         Text [ english_us ] = "Net ~access" ;
         Text [ italian ] = "Accesso rete" ;
@@ -1933,7 +1933,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 11 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "PlugIns" ;
+        Text = "~PlugIns" ;
         Text [ English ] = "PlugIns" ;
         Text [ english_us ] = "Plug-ins" ;
         Text [ portuguese_brazilian ] = "Ausführen" ;
@@ -1961,7 +1961,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 24 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "Applets" ;
+        Text = "~Applets" ;
         Text [ English ] = "Applets" ;
     };
     Text[ chinese_simplified ] = "½Å±¾";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-23 11:50:41 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Groß-/Kleinschreibung" ;
+        Text = "~Groß-/Kleinschreibung" ;
         Text [ ENGLISH ] = "Match case" ;
         Text[ english_us ] = "uppercase/lowercase";
         Text[ portuguese ] = "Maiúsculas/minúsculas";
@@ -133,7 +133,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 28 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Normale/halbbreite Formen" ;
+        Text = "~Normale/halbbreite Formen" ;
         Text [ ENGLISH ] = "Match full/half width form" ;
         Text[ english_us ] = "full-width/half-width forms";
         Text[ portuguese ] = "Formas de meia-largura e largura normal";
@@ -161,7 +161,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 42 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Hiragana/Katakana" ;
+        Text = "~Hiragana/Katakana" ;
         Text [ ENGLISH ] = "Match hiragana/katakana" ;
         Text[ english_us ] = "hiragana/katakana";
         Text[ portuguese ] = "Hiragana/Katakana";
@@ -189,7 +189,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Kontraktionen (yo-on, sokuon)" ;
+        Text = "~Kontraktionen (yo-on, sokuon)" ;
         Text [ ENGLISH ] = "Match contractions (yo-on, sokuon)" ;
         Text[ english_us ] = "contractions (yo-on, sokuon)";
         Text[ portuguese ] = "Contracções(yo-on, sokuon)";
@@ -217,7 +217,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 70 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Minus/Bindestrich/cho-on" ;
+        Text = "~Minus/Bindestrich/cho-on" ;
         Text [ ENGLISH ] = "Match minus/dash/cho-on" ;
         Text[ english_us ] = "minus/dash/cho-on";
         Text[ portuguese ] = "Menos/traço/cho-on";
@@ -245,7 +245,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 84 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Wiederholungszeichen" ;
+        Text = "~Wiederholungszeichen" ;
         Text [ ENGLISH ] = "Match 'repeat character' marks" ;
         Text[ english_us ] = "'repeat character' marks";
         Text[ portuguese ] = "Caracteres de repetição";
@@ -273,7 +273,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 98 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Kanji Variante (itaiji)" ;
+        Text = "K~anji Variante (itaiji)" ;
         Text [ ENGLISH ] = "Match variant-form kanji (itaiji)" ;
         Text[ english_us ] = "variant-form kanji (itaiji)";
         Text[ portuguese ] = "Variantes kanji (itaiji)";
@@ -301,7 +301,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 112) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Alte Kana-Formen" ;
+        Text = "A~lte Kana-Formen" ;
         Text [ ENGLISH ] = "Match old kana forms" ;
         Text[ english_us ] = "old Kana forms";
         Text[ portuguese ] = "Antigas formas kana";
@@ -329,7 +329,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Di/zi, du/zu" ;
+        Text = "~Di/zi, du/zu" ;
         Text [ ENGLISH ] = "Match di/zi, du/zu" ;
         Text[ english_us ] = "di/zi, du/zu";
         Text[ portuguese ] = "Di/zi, du/zu";
@@ -357,7 +357,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 28 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Ba/va, ha/fa" ;
+        Text = "~Ba/va, ha/fa" ;
         Text [ ENGLISH ] = "Match ba/va, ha/fa" ;
         Text[ english_us ] = "ba/va, ha/fa";
         Text[ portuguese ] = "Ba/va, ha/fa";
@@ -385,7 +385,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 42 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Tsi/thi/chi, dhi/zi" ;
+        Text = "~Tsi/thi/chi, dhi/zi" ;
         Text [ ENGLISH ] = "Match tsi/thi/chi, dhi/zi" ;
         Text[ english_us ] = "tsi/thi/chi, dhi/zi";
         Text[ portuguese ] = "Tsi/thi/chi, dhi/zi";
@@ -413,7 +413,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Hyu/fyu, byu/vyu" ;
+        Text = "H~yu/fyu, byu/vyu" ;
         Text [ ENGLISH ] = "Match hyu/fyu, byu/vyu" ;
         Text[ english_us ] = "hyu/fyu, byu/vyu";
         Text[ portuguese ] = "Hyu/fyu, byu/vyu";
@@ -441,7 +441,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 70 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Se/she, ze/je" ;
+        Text = "~Se/she, ze/je" ;
         Text [ ENGLISH ] = "Match se/she, ze/je" ;
         Text[ english_us ] = "se/she, ze/je";
         Text[ portuguese ] = "Se/she, ze/je";
@@ -469,7 +469,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 84 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Ia/iya (piano/piyano)" ;
+        Text = "Ia/iya (~piano/piyano)" ;
         Text [ ENGLISH ] = "Match ia/iya (piano/piyano)" ;
         Text[ english_us ] = "ia/iya (piano/piyano)";
         Text[ portuguese ] = "Ia/iya (piano/piyano)";
@@ -497,7 +497,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 98 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Ki/ku (tekisuto/tekusuto)" ;
+        Text = "Ki/k~u (tekisuto/tekusuto)" ;
         Text [ ENGLISH ] = "Match ki/ku (tekisuto/tekusuto)" ;
         Text[ english_us ] = "ki/ku (tekisuto/tekusuto)";
         Text[ portuguese ] = "Ki/ku (tekisuto/tekusuto)";
@@ -552,7 +552,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 136 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Interpunktionszeichen" ;
+        Text = "Int~erpunktionszeichen" ;
         Text [ ENGLISH ] = "Punctuation characters" ;
         Text[ english_us ] = "Punctuation characters";
         Text[ portuguese ] = "Caracteres de pontuação";
@@ -579,7 +579,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 136 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Leerraumzeichen" ;
+        Text = "Leerraumzei~chen" ;
         Text [ ENGLISH ] = "Whitespace characters" ;
         Text[ english_us ] = "Whitespace characters";
         Text[ portuguese ] = "Espaços";
@@ -606,7 +606,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 150 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Verlängerte Vokale (cho-on)" ;
+        Text = "Verl~ängerte Vokale (cho-on)" ;
         Text [ ENGLISH ] = "Prolonged soundmarks (cho-on)" ;
         Text[ english_us ] = "Prolonged vowels (cho-on)";
         Text[ portuguese ] = "Vogais longas(cho-on)";
@@ -633,7 +633,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 150 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "Mittiger Punkt" ;
+        Text = "Mittige~r Punkt" ;
         Text [ ENGLISH ] = "Middle dots" ;
         Text[ english_us ] = "Middle dots";
         Text[ portuguese ] = "Pontos centrais";

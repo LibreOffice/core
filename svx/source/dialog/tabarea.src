@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3266,7 +3266,7 @@ TabPage RID_SVXPAGE_COLOR
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Name" ;
         Text [ ENGLISH ] = "~Name" ;
         Text [ norwegian ] = "~Navn" ;
@@ -3302,7 +3302,7 @@ TabPage RID_SVXPAGE_COLOR
     FixedText FT_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 23 , 8 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         Text [ norwegian ] = "~Color" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:38:56 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,8 +395,8 @@ TabPage RID_SFXPAGE_SAVE
     FixedText FT_APP
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Dokumenttyp" ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "~Dokumenttyp" ;
         Text [ English ] = "Document type" ;
         Text[ english_us ] = "Document type";
         Text[ portuguese ] = "Tipo de documento";
@@ -422,8 +422,8 @@ TabPage RID_SFXPAGE_SAVE
     FixedText FT_FILTER
     {
         Pos = MAP_APPFONT ( 136 , 110 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Immer speichern als" ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Immer spei~chern als" ;
         Text [ English ] = "Always save as" ;
         Text[ english_us ] = "Always save as";
         Text[ portuguese ] = "Guardar sempre como";
