@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.21 $
+  *  $Revision: 1.22 $
   *
-  *  last change: $Author: kz $ $Date: 2003-08-25 13:59:45 $
+  *  last change: $Author: vg $ $Date: 2003-12-17 20:23:08 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -77,7 +77,7 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #endif
 #include <math.h>
