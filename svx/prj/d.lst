@@ -307,6 +307,7 @@ hedabu: ..\inc\svdoedge.hxx %_DEST%\inc%_EXT%\svx\svdoedge.hxx
 hedabu: ..\inc\svdograf.hxx %_DEST%\inc%_EXT%\svx\svdograf.hxx
 hedabu: ..\inc\svdogrp.hxx %_DEST%\inc%_EXT%\svx\svdogrp.hxx
 hedabu: ..\inc\svdomeas.hxx %_DEST%\inc%_EXT%\svx\svdomeas.hxx
+hedabu: ..\inc\svdomedia.hxx %_DEST%\inc%_EXT%\svx\svdomedia.hxx
 hedabu: ..\inc\svdoole2.hxx %_DEST%\inc%_EXT%\svx\svdoole2.hxx
 hedabu: ..\inc\svdopage.hxx %_DEST%\inc%_EXT%\svx\svdopage.hxx
 hedabu: ..\inc\svdopath.hxx %_DEST%\inc%_EXT%\svx\svdopath.hxx
@@ -666,6 +667,8 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 ..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
 ..\inc\svx\sdr\contact\objectcontactofpageview.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofpageview.hxx
 ..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
+..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
+..\inc\svx\sdr\contact\viewcontactofsdrmediaobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrmediaobj.hxx
 ..\inc\svx\sdr\contact\viewcontactofe3dscene.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofe3dscene.hxx
 ..\inc\svx\sdr\contact\viewcontactofgraphic.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgraphic.hxx
 ..\inc\svx\sdr\contact\viewcontactofgroup.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgroup.hxx
