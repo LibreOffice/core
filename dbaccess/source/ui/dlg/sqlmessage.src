@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:55:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     };
     Text[ portuguese ] = "%PRODUCTNAME Base";
     Text[ russian ] = "%PRODUCTNAME Base";
-    Text[ greek ] = "%PRODUCTNAME Base";
+    Text[ greek ] = "%PRODUCTNAME - ВЬуз";
     Text[ dutch ] = "%PRODUCTNAME Base";
     Text[ french ] = "%PRODUCTNAME Base";
     Text[ spanish ] = "%PRODUCTNAME Base";
@@ -449,6 +449,13 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38.8.1  2003/07/03 14:44:16  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.38  2003/06/13 12:55:13  hr
+ *  INTEGRATION: CWS rcmerge (1.37.24); FILE MERGED
+ *  2003/06/12 10:57:56 gh 1.37.24.1: final Merge RC
+ *
  *  Revision 1.37.24.1  2003/06/12 10:57:56  gh
  *  final Merge RC
  *
@@ -591,6 +598,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
 
 
 
