@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:04:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,22 +1628,31 @@ OUString SwXTextTableCursor::getRangeName(void) throw( uno::RuntimeException )
     {
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         pTblCrsr->MakeBoxSels();
-        const SwStartNode* pStart = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+        const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
-        const SwTableBox* pBox = pTable->GetTblBox( pStart->GetIndex());
-        String sRet = pBox->GetName();
+        const SwTableBox* pEndBox = pTable->GetTblBox( pNode->GetIndex());
+        String aTmp( pEndBox->GetName() );
 
         if(pTblCrsr->HasMark())
         {
-            pStart = pTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
-            const SwTableBox* pEBox = pTable->GetTblBox( pStart->GetIndex());
-            if(pEBox != pBox)
+            pNode = pTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+            const SwTableBox* pStartBox = pTable->GetTblBox( pNode->GetIndex());
+            if(pEndBox != pStartBox)
             {
-                sRet += ':';
-                sRet += pEBox->GetName();
+                // need to switch start and end?
+                if (*pTblCrsr->GetPoint() < *pTblCrsr->GetMark())
+                {
+                    const SwTableBox* pTmpBox = pStartBox;
+                    pStartBox = pEndBox;
+                    pEndBox = pTmpBox;
+                }
+
+                aTmp  = pStartBox->GetName();
+                aTmp += ':';
+                aTmp += pEndBox->GetName();
             }
         }
-        aRet = sRet;
+        aRet = aTmp;
     }
     return aRet;
 }
