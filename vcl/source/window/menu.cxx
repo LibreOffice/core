@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-05 11:22:03 $
+ *  last change: $Author: ssa $ $Date: 2002-02-04 12:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2686,7 +2686,7 @@ void MenuFloatingWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( !IsVisible() || rMEvt.IsSynthetic() )
+    if ( !IsVisible() || rMEvt.IsSynthetic() || rMEvt.IsEnterWindow() )
         return;
 
     if ( rMEvt.IsLeaveWindow() )
