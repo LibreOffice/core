@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 08:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,7 +1209,12 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_SD_OLE_VIS_AREA_WIDTH:         pOLEVisAreaWidth = property;    break;
             case CTF_SD_OLE_VIS_AREA_HEIGHT:        pOLEVisAreaHeight = property;   break;
             case CTF_SD_OLE_ISINTERNAL:             pOLEIsInternal = property;      break;
-
+            case CTF_FRAME_DISPLAY_SCROLLBAR:
+                {
+                    if( !property->maValue.hasValue() )
+                        property->mnIndex = -1;
+                }
+                break;
             case CTF_SD_MOVE_PROTECT:
                 {
                     sal_Bool bProtected;

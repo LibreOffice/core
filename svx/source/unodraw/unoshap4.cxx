@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 12:28:07 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 08:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,13 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                 case OWN_ATTR_FRAME_ISAUTOSCROLL:
                     {
                         sal_Bool bScroll;
-                        if( aValue >>= bScroll )
+                        if( !aValue.hasValue() )
+                        {
+                            pDescriptor->SetScrollingMode( ScrollingAuto );
+                            xFrame->SetFrameDescriptor( pDescriptor );
+                            return;
+                        }
+                        else if( aValue >>= bScroll )
                         {
                             pDescriptor->SetScrollingMode( bScroll ? ScrollingYes : ScrollingNo );
                             xFrame->SetFrameDescriptor( pDescriptor );
@@ -771,7 +777,15 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
                 case OWN_ATTR_FRAME_NAME:
                     return makeAny( OUString( pDescriptor->GetName() ) );
                 case OWN_ATTR_FRAME_ISAUTOSCROLL:
-                    return makeAny( (sal_Bool)(pDescriptor->GetScrollingMode() == ScrollingYes) );
+                    if( pDescriptor->GetScrollingMode() == ScrollingAuto )
+                    {
+                        Any aAny;
+                        return aAny;
+                    }
+                    else
+                    {
+                        return makeAny( (sal_Bool)(pDescriptor->GetScrollingMode() == ScrollingYes) );
+                    }
                 case OWN_ATTR_FRAME_ISBORDER:
                     return makeAny( (sal_Bool)pDescriptor->IsFrameBorderOn() );
                 case OWN_ATTR_FRAME_MARGIN_WIDTH:
