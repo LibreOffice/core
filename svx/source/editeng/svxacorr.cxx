@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-14 13:36:50 $
+ *  last change: $Author: fs $ $Date: 2002-08-19 08:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,8 +1096,8 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     return bRet;
 }
-
-sal_Unicode SvxAutoCorrect::_GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
+//The method below is renamed from _GetQuote to GetQuote by BerryJia for Bug95846 Time:2002-8-13 15:50
+sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
                                         LanguageType eLang ) const
 {
     sal_Unicode cRet = bSttQuote ? ( '\"' == cInsChar
@@ -1132,7 +1132,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
                                     BOOL bIns )
 {
     LanguageType eLang = rDoc.GetLanguage( nInsPos, FALSE );
-    sal_Unicode cRet = _GetQuote( cInsChar, bSttQuote, eLang );
+    sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     //JP 13.02.99: damit beim Undo das "einfuegte" Zeichen wieder erscheint,
     //              wird es erstmal eingefuegt und dann ueberschrieben
@@ -1179,7 +1179,7 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
                                 sal_Unicode cInsChar, BOOL bSttQuote )
 {
     LanguageType eLang = rDoc.GetLanguage( nInsPos, FALSE );
-    sal_Unicode cRet = _GetQuote( cInsChar, bSttQuote, eLang );
+    sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     String sRet( cRet );
     //JP 13.08.97: Bug 42477 - bei doppelten Anfuehrungszeichen muss bei
