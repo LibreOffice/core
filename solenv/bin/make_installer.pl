@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:09:08 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:09:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -439,6 +439,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     $loggingdir = $loggingdir . $$languagestringref . $installer::globals::separator;
     installer::systemactions::create_directory($loggingdir);
+    $installer::globals::exitlog = $loggingdir;
 
     ##############################################################
     # Determining the ship location, if this is an update pack
@@ -1435,7 +1436,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 # validating the database   # ToDo
 
-                my $languagefile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . "SIS.lng");
+                my $languagefile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . "SIS.ulf");
 
                 installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile);
 
