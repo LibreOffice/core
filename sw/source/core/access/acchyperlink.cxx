@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acchyperlink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:06:58 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 SwAccessibleHyperlink::SwAccessibleHyperlink( sal_uInt16 nHPos,
-                                          SwAccessibleParagraph *p,
-                                          sal_Int32 nStt, sal_Int32 nEnd ) :
-    xPara( p ),
+    SwAccessibleParagraph *p, sal_Int32 nStt, sal_Int32 nEnd ) :
     nHintPos( nHPos ),
+    xPara( p ),
     nStartIdx( nStt ),
     nEndIdx( nEnd )
 {
