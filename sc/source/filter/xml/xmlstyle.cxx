@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:49:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,13 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "CellStyle", XML_NAMESPACE_STYLE, XML_STYLE, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING, CTF_SC_CELLSTYLE ),
     MAP( "ConditionalFormat", XML_NAMESPACE_STYLE, XML_MAP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_IMPORT_MAP ),
     MAP( "ConditionalFormatXML", XML_NAMESPACE_STYLE, XML_MAP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP ),
+    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALBLTR ),
+    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTH ),
+    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALTLBR ),
+    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTH ),
     MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_TEXT_ALIGN_SOURCE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYREPEAT|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "IsTextWrapped", XML_NAMESPACE_FO, XML_WRAP_OPTION, XML_TYPE_PROP_TABLE_CELL|XML_SC_ISTEXTWRAPPED, 0 ),
     MAP( "LeftBorder", XML_NAMESPACE_FO, XML_BORDER, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_ALLBORDER ),
@@ -166,6 +171,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "RotateAngle", XML_NAMESPACE_STYLE, XML_ROTATION_ANGLE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_ROTATEANGLE, 0 ),
     MAP( "RotateReference", XML_NAMESPACE_STYLE, XML_ROTATION_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_ROTATEREFERENCE, 0),
     MAP( "ShadowFormat", XML_NAMESPACE_STYLE, XML_SHADOW, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_TEXT_SHADOW, 0 ),
+    MAP( "ShrinkToFit", XML_NAMESPACE_STYLE, XML_SHRINK_TO_FIT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BOOL, 0 ),
     MAP( "StandardDecimals", XML_NAMESPACE_STYLE, XML_DECIMAL_PLACES, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_NUMBER16, 0 ),
     MAP( "TopBorder", XML_NAMESPACE_FO, XML_BORDER_TOP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_TOPBORDER ),
     MAP( "TopBorder", XML_NAMESPACE_STYLE, XML_BORDER_LINE_WIDTH_TOP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_TOPBORDERWIDTH ),
@@ -226,12 +232,16 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pBorder_Left = NULL;
     XMLPropertyState* pBorder_Right = NULL;
     XMLPropertyState* pBorder_Top = NULL;
+    XMLPropertyState* pDiagonalTLBR = NULL;
+    XMLPropertyState* pDiagonalBLTR = NULL;
 
     XMLPropertyState* pAllBorderWidthState = NULL;
     XMLPropertyState* pLeftBorderWidthState = NULL;
     XMLPropertyState* pRightBorderWidthState = NULL;
     XMLPropertyState* pTopBorderWidthState = NULL;
     XMLPropertyState* pBottomBorderWidthState = NULL;
+    XMLPropertyState* pDiagonalTLBRWidthState = NULL;
+    XMLPropertyState* pDiagonalBLTRWidthState = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
          propertie != rProperties.end();
@@ -256,6 +266,10 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertie; break;
                 case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertie; break;
                 case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertie; break;
+                case CTF_SC_DIAGONALTLBR:       pDiagonalTLBR = propertie; break;
+                case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertie; break;
+                case CTF_SC_DIAGONALBLTR:       pDiagonalBLTR = propertie; break;
+                case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
             }
         }
     }
@@ -749,6 +763,11 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XmlScPropHdl_HoriJustifySource;
             }
             break;
+            case XML_SC_TYPE_HORIJUSTIFYREPEAT :
+            {
+                pHdl = new XmlScPropHdl_HoriJustifyRepeat;
+            }
+            break;
             case XML_SC_TYPE_ORIENTATION :
             {
                 pHdl = new XmlScPropHdl_Orientation;
@@ -1155,6 +1174,67 @@ sal_Bool XmlScPropHdl_HoriJustifySource::exportXML(
         else
         {
             rStrExpValue = GetXMLToken(XML_FIX);
+            bRetval = sal_True;
+        }
+    }
+
+    return bRetval;
+}
+
+XmlScPropHdl_HoriJustifyRepeat::~XmlScPropHdl_HoriJustifyRepeat()
+{
+}
+
+sal_Bool XmlScPropHdl_HoriJustifyRepeat::equals(
+    const ::com::sun::star::uno::Any& r1,
+    const ::com::sun::star::uno::Any& r2 ) const
+{
+    table::CellHoriJustify aHoriJustify1, aHoriJustify2;
+
+    if((r1 >>= aHoriJustify1) && (r2 >>= aHoriJustify2))
+        return (aHoriJustify1 == aHoriJustify2);
+    return sal_False;
+}
+
+sal_Bool XmlScPropHdl_HoriJustifyRepeat::importXML(
+    const ::rtl::OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRetval(sal_False);
+
+    if (IsXMLToken(rStrImpValue, XML_NONE))
+    {
+        bRetval = sal_True;
+    }
+    else if (IsXMLToken(rStrImpValue, XML_FILL))
+    {
+        table::CellHoriJustify nValue = table::CellHoriJustify_REPEAT;
+        rValue <<= nValue;
+        bRetval = sal_True;
+    }
+
+    return bRetval;
+}
+
+sal_Bool XmlScPropHdl_HoriJustifyRepeat::exportXML(
+    ::rtl::OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    table::CellHoriJustify nVal;
+    sal_Bool bRetval(sal_False);
+
+    if(rValue >>= nVal)
+    {
+        if (nVal == table::CellHoriJustify_REPEAT)
+        {
+            rStrExpValue = GetXMLToken(XML_FILL);
+            bRetval = sal_True;
+        }
+        else
+        {
+            rStrExpValue = GetXMLToken(XML_NONE);
             bRetval = sal_True;
         }
     }
