@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:06:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1692,6 +1692,9 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
         else
             bRet = pFrm->WouldFit( nSpace, bSplit );
 
+        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
+        const SwBorderAttrs &rAttrs = *aAccess.Get();
+
         //Bitter aber wahr: Der Abstand muss auch noch mit einkalkuliert werden.
         //Bei TestFormatierung ist dies bereits geschehen.
         if ( bRet && !bTstMove )
@@ -1700,8 +1703,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
             if ( pPrev )
             {
                 nUpper = CalcUpperSpace( NULL, pPrev );
-                SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
-                const SwBorderAttrs &rAttrs = *aAccess.Get();
+
                 // in balanced columned section frames we do not want the
                 // common border
                 sal_Bool bCommonBorder = sal_True;
@@ -1726,7 +1728,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                 bRet = FALSE;
         }
 
-        if ( bRet && !bSplit && pFrm->GetAttrSet()->GetKeep().GetValue() )
+        if ( bRet && !bSplit && pFrm->IsKeep( rAttrs ) )
         {
             if( bTstMove )
             {
