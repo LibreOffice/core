@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-13 07:35:20 $
+ *  last change: $Author: ssa $ $Date: 2002-12-13 09:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
         if( bAutoHCMode )
         {
-            if( rSettings.GetStyleSettings().GetFaceColor().GetLuminance() < 8 )
+            if( rSettings.GetStyleSettings().GetFaceColor().GetLuminance() < 8 ||
+                rSettings.GetStyleSettings().GetWindowColor().GetLuminance() < 8 )
             {
                 StyleSettings aStyleSettings = rSettings.GetStyleSettings();
                 aStyleSettings.SetHighContrastMode( TRUE );
