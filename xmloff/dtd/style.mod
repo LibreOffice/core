@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.51 2002-04-05 06:31:50 sab Exp $
+	$Id: style.mod,v 1.52 2002-04-10 17:49:05 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -319,6 +319,9 @@
 
 <!ATTLIST style:properties style:decimal-places %nonNegativeInteger; #IMPLIED>
 <!ATTLIST style:properties style:tab-stop-distance %nonNegativeLength; #IMPLIED>
+
+<!-- section properties -->
+<!ATTLIST style:properties text:dont-balance-text-columns %boolean; #IMPLIED>
 
 <!-- ruby properties -->
 <!ATTLIST style:properties style:ruby-align (left|center|right|distribute-letter|distribute-space) #IMPLIED>
