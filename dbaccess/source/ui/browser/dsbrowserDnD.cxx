@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:28:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace dbaui
             ::osl::MutexGuard aGuard(m_aEntryMutex);
 
             ::rtl::OUString aName = GetEntryText( _pApplyTo );
-            ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+            ::rtl::OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
             ODataClipboard* pData = NULL;
             Reference<XConnection> xConnection;  // supports the service sdb::connection
