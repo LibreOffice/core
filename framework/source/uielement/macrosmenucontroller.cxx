@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosmenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:05:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 12:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sfx2/sfxsids.hrc>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
