@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-30 09:22:27 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 10:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,8 +606,8 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
         {
             // If the stream does not contain a streamed graphic object,
             // the graphic has to be stored again.
-            ASSERT( !bGraphic || aSrcStrmName.Len(),
-                    "graphic stream but no stream name" );
+            ASSERT( pRoot != pDocStg || aSrcStrmName.Len(),
+                    "raw image data stream but no stream name" );
             // Neuer Storage. Wenn die Grafik im DocStg drin ist,
             // kann sie bequem per CopyTo() kopiert werden.
             if( aSrcStrmName.Len() )
