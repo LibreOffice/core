@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:52:35 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 09:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,10 @@
 // #107253#
 #ifndef _SWLINGUCONFIG_HXX
 #include <swlinguconfig.hxx>
+#endif
+
+#ifndef _SWFORMATCLIPBOARD_HXX
+#include "formatclipboard.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -892,6 +896,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pGlosHdl(0),
     pDrawActual(0),
     pLastTableFormat(0),
+    pFormatClipboard(new SwFormatClipboard()),
     nDrawSfxId( USHRT_MAX ),
     nFormSfxId( USHRT_MAX ),
     nSelectionType( INT_MAX ),
@@ -1222,6 +1227,7 @@ SwView::~SwView()
     delete pGlosHdl;
     delete pViewImpl;
     delete pEditWin;
+    delete pFormatClipboard;
 }
 
 /*--------------------------------------------------------------------
