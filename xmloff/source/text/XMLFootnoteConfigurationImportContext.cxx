@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,12 +210,10 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList,
-    sal_Bool bEnd) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, bEnd ?
-               XML_STYLE_FAMILY_TEXT_ENDNOTECONFIG :
-               XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG),
-        bIsEndnote(bEnd),
+    const Reference<XAttributeList> & xAttrList) :
+        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList,
+                             XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG),
+        bIsEndnote(sal_False),
         pAttrTokenMap(NULL),
         sCitationStyle(),
         sAnchorStyle(),
@@ -247,6 +245,26 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
         sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
         sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
 {
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                              &sLocalName );
+        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
+                                                        XML_NOTE_CLASS ) )
+        {
+            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
+            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+            {
+                bIsEndnote = sal_True;
+                SetFamily( XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG );
+            }
+            break;
+        }
+    }
+
 }
 XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
 {
@@ -451,25 +469,29 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
 
     if (sCitationStyle.getLength() > 0)
     {
-        aAny <<= sCitationStyle;
+        aAny <<= GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_TEXT_TEXT, sCitationStyle );
         rConfig->setPropertyValue(sPropertyCharStyleName, aAny);
     }
 
     if (sAnchorStyle.getLength() > 0)
     {
-        aAny <<= sAnchorStyle;
+        aAny <<= GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_TEXT_TEXT, sAnchorStyle );
         rConfig->setPropertyValue(sPropertyAnchorCharStyleName, aAny);
     }
 
     if (sPageStyle.getLength() > 0)
     {
-        aAny <<= sPageStyle;
+        aAny <<= GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle );
         rConfig->setPropertyValue(sPropertyPageStyleName, aAny);
     }
 
     if (sDefaultStyle.getLength() > 0)
     {
-        aAny <<= sDefaultStyle;
+        aAny <<= GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_TEXT_PARAGRAPH, sDefaultStyle );
         rConfig->setPropertyValue(sPropertyParagraphStyleName, aAny);
     }
 
