@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 15:17:42 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,11 +1232,11 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
 
-        OUString sFileName(C2U( UNO_NAME_FILE_NAME  ));
-        OUString sCopyCount(C2U(UNO_NAME_COPY_COUNT ));
-        OUString sCollate(C2U(  UNO_NAME_COLLATE    ));
-        OUString sSort(C2U(     UNO_NAME_SORT       ));
-        OUString sPages(C2U(    UNO_NAME_PAGES      ));
+        OUString sFileName( C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_NAME)));
+        OUString sCopyCount(C2U(SW_PROP_NAME_STR(UNO_NAME_COPY_COUNT)));
+        OUString sCollate(C2U(SW_PROP_NAME_STR(UNO_NAME_COLLATE)));
+        OUString sSort(C2U(SW_PROP_NAME_STR(UNO_NAME_SORT)));
+        OUString sPages(C2U(SW_PROP_NAME_STR(UNO_NAME_PAGES)));
 
         for ( int n = 0; n < xOptions.getLength(); ++n )
         {
@@ -2768,11 +2768,11 @@ Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
-    if(rPropertyName == C2U(UNO_LINK_DISPLAY_NAME))
+    if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
     {
         aRet <<= OUString(sLinkDisplayName);
     }
-    else if(C2U(UNO_LINK_DISPLAY_BITMAP) == rPropertyName)
+    else if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_BITMAP)))
     {
         aRet = lcl_GetDisplayBitmap(sLinkSuffix);
     }
@@ -2882,7 +2882,7 @@ Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     Any aRet;
-    if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_LINK_DISPLAY_NAME))
+    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
         aRet <<= OUString(sOutlineText);
     else
         throw UnknownPropertyException();
