@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 15:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ public:
 
     void            TextGrabFocus();
     void            TextInvalidate();
+    void            SwitchToTextWin();
 
     void            PosGrabFocus();
 

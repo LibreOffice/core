@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-06-25 15:33:14 $ $Revision: 1.7 $
+ // $Author: nn $ $Date: 2002-04-10 15:38:05 $ $Revision: 1.8 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -126,6 +126,7 @@ interface CellSelection : Selection
     FID_FILL_AUTO       [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_MARKDATAAREA    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_SETINPUTMODE    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_FOCUS_INPUTLINE [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_CUT             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_COPY            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_PASTE           [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
@@ -379,6 +380,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/06/25 15:33:14  nn
+    #82371# handle database beamer with SID_VIEW_DATA_SOURCE_BROWSER
+
     Revision 1.6  2001/05/21 11:01:09  nn
     #44993# Tools/Hyphenation
 

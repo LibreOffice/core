@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 15:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include "tabvwsh.hxx"
 #include "global.hxx"
 #include "scmod.hxx"
+#include "inputhdl.hxx"
+#include "inputwin.hxx"
 #include "sc.hrc"
 
 
@@ -276,6 +278,18 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
 
         case SID_SETINPUTMODE:
             SC_MOD()->SetInputMode( SC_INPUT_TABLE );
+            break;
+
+        case SID_FOCUS_INPUTLINE:
+            {
+                ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
+                if (pHdl)
+                {
+                    ScInputWindow* pWin = pHdl->GetInputWindow();
+                    if (pWin)
+                        pWin->SwitchToTextWin();
+                }
+            }
             break;
 
         case SID_CURSORTOPOFSCREEN:

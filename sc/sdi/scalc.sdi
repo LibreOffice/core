@@ -7282,3 +7282,28 @@ SfxVoidItem ZoomOut SID_PREVIEW_ZOOMOUT
     GroupId = GID_VIEW;
 ]
 
+//--------------------------------------------------------------------------
+SfxVoidItem FocusInputLine SID_FOCUS_INPUTLINE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_APPLICATION;
+]
+

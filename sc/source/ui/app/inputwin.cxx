@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:36:44 $
+ *  last change: $Author: nn $ $Date: 2002-04-10 15:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,24 @@ void ScInputWindow::TextGrabFocus()
 void ScInputWindow::TextInvalidate()
 {
     aTextWindow.Invalidate();
+}
+
+void ScInputWindow::SwitchToTextWin()
+{
+    // used for shift-ctrl-F2
+
+    aTextWindow.StartEditEngine();
+    if ( SC_MOD()->IsEditMode() )
+    {
+        aTextWindow.GrabFocus();
+        EditView* pView = aTextWindow.GetEditView();
+        if (pView)
+        {
+            xub_StrLen nLen = pView->GetEditEngine()->GetTextLen(0);
+            ESelection aSel( 0, nLen, 0, nLen );
+            pView->SetSelection( aSel );                // set cursor to end of text
+        }
+    }
 }
 
 void ScInputWindow::PosGrabFocus()
