@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 08:58:19 $
+ *  last change: $Author: mib $ $Date: 2001-04-30 09:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,16 @@ using namespace ::com::sun::star::uno;
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
 {
+    // RES_LR_SPACE
     M_E( "ParaLeftMargin",          FO, margin_left,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
     M_E( "ParaLeftMarginRelative",  FO, margin_left,        XML_TYPE_PERCENT, CTF_PARALEFTMARGIN_REL ),
     M_E( "ParaRightMargin",         FO, margin_right,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN ),
     M_E( "ParaRightMarginRelative", FO, margin_right,       XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL ),
+    // RES_UL_SPACE
+    M_E( "ParaTopMargin",           FO, margin_top,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN ),
+    M_E( "ParaTopMarginRelative",   FO, margin_top,         XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL ),
+    M_E( "ParaBottomMargin",        FO, margin_bottom,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
+    M_E( "ParaBottomMarginRelative",FO, margin_bottom,      XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL ),
     // RES_CHRATR_CASEMAP
     M_E( "CharCaseMap",     FO,     font_variant,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     M_E( "CharCaseMap",     FO,     text_transform,     XML_TYPE_TEXT_CASEMAP,  0 ),
@@ -259,11 +265,6 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "ParaFirstLineIndent",     FO, text_indent,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE ),
     M_E( "ParaFirstLineIndentRelative", FO, text_indent,    XML_TYPE_PERCENT, CTF_PARAFIRSTLINE_REL ),
     M_E( "ParaLastLineAdjust",  STYLE, auto_text_indent,    XML_TYPE_BOOL, 0 ),
-    // RES_UL_SPACE
-    M_E( "ParaTopMargin",           FO, margin_top,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN ),
-    M_E( "ParaTopMarginRelative",   FO, margin_top,         XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL ),
-    M_E( "ParaBottomMargin",        FO, margin_bottom,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
-    M_E( "ParaBottomMarginRelative",FO, margin_bottom,      XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL ),
     // RES_PAGEDESC
     M_E( "PageDescName",            STYLE,  master_page_name,           MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_PAGEDESCNAME ),
     M_E( "PageNumberOffset",        STYLE,  page_number,            XML_TYPE_NUMBER16, 0 ),
@@ -753,7 +754,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         pMap = aXMLRubyPropMap;
         break;
     case TEXT_PROP_MAP_SHAPE_PARA:
-        pMap = &aXMLParaPropMap[4];
+        pMap = &aXMLParaPropMap[8];
         DBG_ASSERT( pMap->msXMLName == sXML_font_variant,
                     "paragraph map changed" );
         break;
