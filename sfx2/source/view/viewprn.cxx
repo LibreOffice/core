@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-26 11:47:43 $
+ *  last change: $Author: mba $ $Date: 2001-12-04 16:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,7 +809,6 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter *pPrinter,
     {
         // Printer konnte nicht gestartet werden
         delete pProgress;
-        return ERRCODE_IO_ABORT;
     }
 
     return pPrinter->GetError();
