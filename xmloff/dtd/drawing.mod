@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.29 2001-01-30 08:01:45 mib Exp $
+	$Id: drawing.mod,v 1.30 2001-01-30 13:55:21 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -69,6 +69,7 @@
 <!ENTITY % rectanglePoint "(top-left|top|top-right|left|center|right|bottom-left|bottom|bottom-right)">
 <!ENTITY % vector3D "CDATA">
 <!ENTITY % text-anchor "text:anchor-type %anchorType; #IMPLIED text:anchor-page-number %positiveInteger; #IMPLIED">
+<!ENTITY % layerName "CDATA">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -90,6 +91,7 @@
 <!ATTLIST draw:rect %zindex;>
 <!ATTLIST draw:rect draw:id %shapeId;>
 <!ATTLIST draw:rect %text-anchor;>
+<!ATTLIST draw:rect draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:line %draw-text;>
 <!ATTLIST draw:line svg:x1 %length; #REQUIRED>
@@ -102,6 +104,7 @@
 <!ATTLIST draw:line %draw-end-position; >
 <!ATTLIST draw:line draw:id %shapeId;>
 <!ATTLIST draw:line %text-anchor;>
+<!ATTLIST draw:line draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:polyline %draw-text; >
 <!ATTLIST draw:polyline %draw-position; >
@@ -114,6 +117,7 @@
 <!ATTLIST draw:polyline %draw-end-position; >
 <!ATTLIST draw:polyline draw:id %shapeId;>
 <!ATTLIST draw:polyline %text-anchor;>
+<!ATTLIST draw:polyline draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:polygon %draw-text; >
 <!ATTLIST draw:polygon %draw-position; >
@@ -126,6 +130,7 @@
 <!ATTLIST draw:polygon %zindex;>
 <!ATTLIST draw:polygon draw:id %shapeId;>
 <!ATTLIST draw:polygon %text-anchor;>
+<!ATTLIST draw:polygon draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:path %draw-text; >
 <!ATTLIST draw:path %draw-position;>
@@ -138,6 +143,7 @@
 <!ATTLIST draw:path %zindex;>
 <!ATTLIST draw:path draw:id %shapeId;>
 <!ATTLIST draw:path %text-anchor;>
+<!ATTLIST draw:path draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:circle %draw-text; >
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
@@ -152,6 +158,7 @@
 <!ATTLIST draw:circle draw:start-angle %nonNegativeInteger; #IMPLIED>
 <!ATTLIST draw:circle draw:end-angle %nonNegativeInteger; #IMPLIED>
 <!ATTLIST draw:circle %text-anchor;>
+<!ATTLIST draw:circle draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:ellipse %draw-text; >
 <!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
@@ -167,6 +174,7 @@
 <!ATTLIST draw:ellipse draw:start-angle %nonNegativeInteger; #IMPLIED>
 <!ATTLIST draw:ellipse draw:end-angle %nonNegativeInteger; #IMPLIED>
 <!ATTLIST draw:ellipse  %text-anchor;>
+<!ATTLIST draw:ellipse draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:connector %draw-text;>
 <!ATTLIST draw:connector draw:type (standard|lines|line|curve) "standard">
@@ -184,6 +192,7 @@
 <!ATTLIST draw:connector %draw-end-position; >
 <!ATTLIST draw:connector draw:id %shapeId;>
 <!ATTLIST draw:connector %text-anchor;>
+<!ATTLIST draw:connector draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:control EMPTY>
 <!ATTLIST draw:control %draw-style-name;>
@@ -194,6 +203,7 @@
 <!ATTLIST draw:control %draw-end-position; >
 <!ATTLIST draw:control draw:id %shapeId;>
 <!ATTLIST draw:control %text-anchor;>
+<!ATTLIST draw:control draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
@@ -201,6 +211,7 @@
 <!ATTLIST draw:g %draw-end-position; >
 <!ATTLIST draw:g draw:id %shapeId;>
 <!ATTLIST draw:g %text-anchor;>
+<!ATTLIST draw:g draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:page-thumbnail EMPTY>
 <!ATTLIST draw:page-thumbnail %draw-position; >
@@ -211,6 +222,7 @@
 <!ATTLIST draw:page-thumbnail %draw-end-position; >
 <!ATTLIST draw:page-thumbnail draw:id %shapeId;>
 <!ATTLIST draw:page-thumbnail %text-anchor;>
+<!ATTLIST draw:page-thumbnail draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:caption %draw-text;>
 <!ATTLIST draw:caption %draw-position; >
@@ -223,6 +235,7 @@
 <!ATTLIST draw:caption %zindex;>
 <!ATTLIST draw:caption draw:id %shapeId;>
 <!ATTLIST draw:caption  %text-anchor;>
+<!ATTLIST draw:caption draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:measure %draw-text;>
 <!ATTLIST draw:measure svg:x1 %coordinate; #REQUIRED>
@@ -235,6 +248,7 @@
 <!ATTLIST draw:measure %zindex;>
 <!ATTLIST draw:measure draw:id %shapeId;>
 <!ATTLIST draw:measure %text-anchor;>
+<!ATTLIST draw:measure draw:layer %layerName; #IMPLIED>
 
 <!-- graphic style elements -->
 <!ELEMENT draw:gradient EMPTY >
@@ -450,6 +464,7 @@
 <!ATTLIST draw:text-box %presentation-class; >
 <!ATTLIST draw:text-box %draw-transform; >
 <!ATTLIST draw:text-box draw:id %shapeId;>
+<!ATTLIST draw:text-box draw:layer %layerName; #IMPLIED>
 
 <!-- image -->
 <!ELEMENT draw:image (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
@@ -614,4 +629,12 @@
 <!ATTLIST dr3d:scene %zindex;>
 <!ATTLIST dr3d:scene draw:id %shapeId;>
 <!ATTLIST dr3d:scene %draw-end-position; >
+
+<!ELEMENT draw:layer-set (draw:layer*)>
+
+<!ELEMENT draw:layer EMPTY>
+<!ATTLIST draw:layer draw:name %layerName; #REQUIRED>
+<!ATTLIST draw:layer draw:locked %boolean; #IMPLIED>
+<!ATTLIST draw:layer draw:printable %boolean; #IMPLIED>
+<!ATTLIST draw:layer draw:visible %boolean; #IMPLIED>
 

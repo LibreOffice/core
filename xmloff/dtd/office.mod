@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.26 2001-01-25 14:05:35 dvo Exp $
+	$Id: office.mod,v 1.27 2001-01-30 13:55:21 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -132,7 +132,7 @@
 
 <!ELEMENT office:automatic-styles (%styles;|style:page-master)*>
 
-<!ELEMENT office:master-styles (style:master-page)* >
+<!ELEMENT office:master-styles (draw:layer-set?,style:master-page*) >
 
 <!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
 					   text:user-field-decls?, text:dde-connection-decls?" >
