@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMailMerge.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-26 14:55:01 $
+ *  last change:$Date: 2003-05-27 13:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import java.io.PrintWriter;
 import lib.StatusException;
@@ -110,7 +111,7 @@ public class SwXMailMerge extends TestCase {
         XJob Job = null;
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.text.MailMerge");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
@@ -119,7 +120,7 @@ public class SwXMailMerge extends TestCase {
         // <set some variables>
         String cTestDoc = utils.getFullTestURL("MailMerge.sxw");
         //cMailMerge_DocumentURL = cTestDoc
-        String cOutputURL = utils.getOfficeTemp(Param.getMSF());
+        String cOutputURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF());
         String cDataSourceName  = "Bibliography";
         String cDataCommand = "biblio";
         Object[] sel = new Object[2];
@@ -129,7 +130,7 @@ public class SwXMailMerge extends TestCase {
 
         // <create XResultSet>
         try {
-            oRowSet = (XInterface) Param.getMSF().createInstance
+            oRowSet = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sdb.RowSet");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
