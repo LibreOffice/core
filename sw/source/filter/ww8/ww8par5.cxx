@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,18 @@ static SvxExtNumType GetNumberPara(String& rStr, bool bAllowPageDesc = false)
     return aType;
 }
 
+inline bool IsNotAM(String& rParams, xub_StrLen nPos)
+{
+    return (
+             (nPos == rParams.Len() - 1) ||
+             (
+               (rParams.GetChar(nPos+1) != 'M') &&
+               (rParams.GetChar(nPos+1) != 'm')
+             )
+           );
+}
+
+
 static ULONG MSDateTimeFormatToSwFormat(String& rParams,
     SvNumberFormatter *pFormatter, USHORT nLang, bool &rbForceJapanese)
 {
@@ -641,11 +653,11 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
 
     rParams.EraseAllChars('\'');
 
-    //#102782# & #102815# have to work at the same time :-)
+    //#102782#, #102815# & #108341# have to work at the same time :-)
     bool bForceNatNum(false);
     static const char aJapaneseNatNum[] =
     {
-        'O', 'A', 'o'
+        'O', 'o'
     };
 
     for (size_t i = 0; i < sizeof(aJapaneseNatNum); ++i)
@@ -657,6 +669,21 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
         }
     }
 
+    xub_StrLen nPos = 0;
+    while(1)
+    {
+        nPos = rParams.Search('A', nPos);
+        if (nPos == STRING_NOTFOUND)
+            break;
+        if (IsNotAM(rParams, nPos))
+        {
+            rParams.SetChar(nPos, 'D');
+            bForceNatNum = true;
+        }
+        ++nPos;
+
+    }
+
     if (bForceNatNum)
         rbForceJapanese = true;
     else
@@ -664,7 +691,7 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
         rbForceJapanese = false;
         static const char aJapaneseLang[] =
         {
-            'E', 'e', 'g', 'G', 'a'
+            'E', 'e', 'g', 'G'
         };
 
         for (size_t i = 0; i < sizeof(aJapaneseLang); ++i)
@@ -675,12 +702,27 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
                 break;
             }
         }
+
+        if (!rbForceJapanese)
+        {
+            xub_StrLen nPos = 0;
+            while(1)
+            {
+                nPos = rParams.Search('a', nPos);
+                if (nPos == STRING_NOTFOUND)
+                    break;
+                if (IsNotAM(rParams, nPos))
+                    rbForceJapanese = true;
+                ++nPos;
+            }
+        }
     }
 
     rParams.SearchAndReplaceAll(CREATE_CONST_ASC("EE"),
         CREATE_CONST_ASC("YYYY"));
+
     rParams.SearchAndReplaceAll('O', 'M');
-    rParams.SearchAndReplaceAll('A', 'D');
+
     rParams.SearchAndReplaceAll(CREATE_CONST_ASC("ee"),
         CREATE_CONST_ASC("yyyy"));
     rParams.SearchAndReplaceAll('o', 'm');
