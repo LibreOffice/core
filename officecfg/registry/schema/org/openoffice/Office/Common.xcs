@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-07-02 13:48:46 $
+ *  last change: $Author: ama $ $Date: 2002-07-03 10:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
                     <desc xml:lang="en-US">Width of the dialog  [UNIT=pixel]</desc>
                 </info>
             </prop>
-        </group>        
+        </group>
         <group oor:name="Font">
             <prop oor:name="Name" oor:type="xs:string">
                 <value xsi:nil="true"/>
@@ -575,7 +575,7 @@
                     <maxInclusive oor:value="99999"/>
                 </constraints>
             </prop>
-        </group>                
+        </group>
         <group oor:name="ObjectNames">
             <prop oor:name="Name" oor:type="xs:string" oor:localized="true"/>
             <prop oor:name="Key" oor:type="xs:string"/>
@@ -725,7 +725,7 @@
             <prop oor:name="UseReplacementTable" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement table -->
                 <value>true</value>
                 <info>
@@ -736,7 +736,7 @@
             <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo INitial Capitals -->
                 <value>true</value>
                 <info>
@@ -747,7 +747,7 @@
             <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first letter of every sentence -->
                 <value>true</value>
                 <info>
@@ -758,7 +758,7 @@
             <prop oor:name="ChangeUnderlineWeight" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold* and _underline_ -->
                 <value>true</value>
                 <info>
@@ -769,7 +769,7 @@
             <prop oor:name="SetInetAttribute" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL regocnition -->
                 <value>true</value>
                 <info>
@@ -780,7 +780,7 @@
             <prop oor:name="ChangeOrdinalNumber" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
                 <value>true</value>
                 <info>
@@ -791,7 +791,7 @@
             <prop oor:name="ChangeFraction" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace 1/2... -->
                 <value>true</value>
                 <info>
@@ -802,7 +802,7 @@
             <prop oor:name="ChangeDash" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
                 <value>true</value>
                 <info>
@@ -813,7 +813,7 @@
             <prop oor:name="RemoveDoubleSpaces" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Ignore Double Spaces -->
                 <value>false</value>
                 <info>
@@ -824,7 +824,7 @@
             <prop oor:name="ReplaceSingleQuote" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single quotes -->
                 <value>false</value>
                 <info>
@@ -835,7 +835,7 @@
             <prop oor:name="SingleQuoteAtStart" oor:type="xs:int">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single quotes -->
                 <info>
                     <desc xml:lang="en-US">Specifies the start single quote</desc>
@@ -845,7 +845,7 @@
             <prop oor:name="SingleQuoteAtEnd" oor:type="xs:int">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single quotes -->
                 <info>
                     <desc xml:lang="en-US">Specifies the end single quote</desc>
@@ -855,7 +855,7 @@
             <prop oor:name="ReplaceDoubleQuote" oor:type="xs:boolean">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double quotes -->
                 <value>true</value>
                 <info>
@@ -866,7 +866,7 @@
             <prop oor:name="DoubleQuoteAtStart" oor:type="xs:int">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double quotes -->
                 <info>
                     <desc xml:lang="en-US">Specifies the start quote</desc>
@@ -876,7 +876,7 @@
             <prop oor:name="DoubleQuoteAtEnd" oor:type="xs:int">
                 <!-- OldPath: AutoCorrect/Options/All -->
                 <!-- OldLocation: Soffice.cfg -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double quotes -->
                 <info>
                     <desc xml:lang="en-US">Specifies the end quote</desc>
@@ -887,7 +887,7 @@
                 <prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean">
                     <!-- OldPath: AutoCorrect/Options/All -->
                     <!-- OldLocation: Soffice.cfg -->
-                    <!-- Responsible: JP -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions - Words with 2 initial capitals -->
                     <value>true</value>
                     <info>
@@ -898,7 +898,7 @@
                 <prop oor:name="CapitalAtStartSentence" oor:type="xs:boolean">
                     <!-- OldPath: AutoCorrect/Options/All -->
                     <!-- OldLocation: Soffice.cfg -->
-                    <!-- Responsible: JP -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions - Abbrevation -->
                     <value>true</value>
                     <info>
@@ -985,14 +985,14 @@
                     </info>
                 </prop>
                 <prop oor:name="AutoCorrect" oor:type="oor:string-list">
-                    <!-- Responsible: JP -->
+                    <!-- Responsible: OS -->
                     <value oor:separator=":">$(insturl)/share/autocorr:$(userurl)/autocorr</value>
                     <info>
                         <desc xml:lang="en-US">The settings of the AutoCorrect dialog will be saved here.</desc>
                     </info>
                 </prop>
                 <prop oor:name="AutoText" oor:type="oor:string-list">
-                    <!-- Responsible: JP -->
+                    <!-- Responsible: OS -->
                     <value oor:separator=":">$(insturl)/share/autotext/$(vlang):$(userurl)/autotext</value>
                     <info>
                         <desc xml:lang="en-US">The directory which contains the AutoText modules.</desc>
@@ -2425,7 +2425,7 @@
             <prop oor:name="Writer" oor:type="xs:boolean">
                 <!-- OldPath: AddXMLToStorage_Writer -->
                 <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
                     <desc xml:lang="en-US">Defines if a XML package is added to the Writer binary files</desc>
@@ -2434,7 +2434,7 @@
             <prop oor:name="Calc" oor:type="xs:boolean">
                 <!-- OldPath: AddXMLToStorage_Calc -->
                 <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
                     <desc xml:lang="en-US">Defines if a XML package is added to the Calc binary files</desc>
@@ -2443,7 +2443,7 @@
             <prop oor:name="Impress" oor:type="xs:boolean">
                 <!-- OldPath: AddXMLToStorage_Impress -->
                 <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
                     <desc xml:lang="en-US">Defines if a XML package is added to the Impress binary files</desc>
@@ -2452,7 +2452,7 @@
             <prop oor:name="Draw" oor:type="xs:boolean">
                 <!-- OldPath: AddXMLToStorage_Draw -->
                 <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: JP -->
+                <!-- Responsible: OS -->
                 <!-- UIHints: no -->
                 <info>
                     <desc xml:lang="en-US">Defines if a XML package is added to the Draw binary files</desc>
@@ -3602,7 +3602,7 @@
                     <prop oor:name="UnknownTag" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Import -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
                         <value>false</value>
                         <info>
@@ -3613,7 +3613,7 @@
                     <prop oor:name="FontSetting" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Import -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
                         <value>false</value>
                         <info>
@@ -3625,7 +3625,7 @@
                         <prop oor:name="Size_1" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>7</value>
                             <info>
@@ -3636,7 +3636,7 @@
                         <prop oor:name="Size_2" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>10</value>
                             <info>
@@ -3647,7 +3647,7 @@
                         <prop oor:name="Size_3" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>12</value>
                             <info>
@@ -3658,7 +3658,7 @@
                         <prop oor:name="Size_4" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>14</value>
                             <info>
@@ -3669,7 +3669,7 @@
                         <prop oor:name="Size_5" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>18</value>
                             <info>
@@ -3680,7 +3680,7 @@
                         <prop oor:name="Size_6" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>24</value>
                             <info>
@@ -3691,7 +3691,7 @@
                         <prop oor:name="Size_7" oor:type="xs:int">
                             <!-- OldPath: Browser/HTML/Font_Sizes -->
                             <!-- OldLocation: soffice.cfg -->
-                            <!-- Responsible: JP -->
+                            <!-- Responsible: OS -->
                             <!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
                             <value>36</value>
                             <info>
@@ -3705,7 +3705,7 @@
                     <prop oor:name="Browser" oor:type="xs:int">
                         <!-- OldPath: Browser/HTML/Export -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
                         <value>4</value>
                         <info>
@@ -3743,7 +3743,7 @@
                     <prop oor:name="Basic" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Export -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
                         <value>false</value>
                         <info>
@@ -3765,7 +3765,7 @@
                     <prop oor:name="LocalGraphic" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Export -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
                         <value>true</value>
                         <info>
@@ -3776,7 +3776,7 @@
                     <prop oor:name="Warning" oor:type="xs:boolean">
                         <!-- OldPath: Browser/HTML/Export -->
                         <!-- OldLocation: soffice.cfg -->
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
                         <value>true</value>
                         <info>
@@ -3785,7 +3785,7 @@
                         </info>
                     </prop>
                     <prop oor:name="Encoding" oor:type="xs:int">
-                        <!-- Responsible: JP -->
+                        <!-- Responsible: OS -->
                         <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
                         <info>
                             <desc xml:lang="en-US">Specifies the mimetype for the text encoding</desc>
@@ -4160,7 +4160,7 @@
                 <value>true</value>
                 <info>
                     <desc xml:lang="en-US">Indicates whether to use high contrast mode, when
-                    activated, in Draw and Impress.</desc> 
+                    activated, in Draw and Impress.</desc>
                     <label xml:lang="en-US">Use high contrast for drawings and presentations</label>
                 </info>
             </prop>
@@ -4207,7 +4207,7 @@
                     <desc xml:lang="en-US">Indicates whether to allow the graphical
                     animation in all SO/OO applications (i.e. animated GIFs and objects in Impress
                     during presentation, animated graphical previews (Gallery, Insert-Graphics-From
-                    File, Animation Tool in Impress.)</desc> 
+                    File, Animation Tool in Impress.)</desc>
                     <label xml:lang="en-US">Allow animated graphics</label>
                 </info>
             </prop>

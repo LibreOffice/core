@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: ama $ $Date: 2002-07-03 10:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,7 +1064,7 @@
           <prop oor:name="Load" oor:type="xs:boolean">
             <!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
             <!-- OldLocation: soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
             <value>true</value>
             <info>
@@ -1075,7 +1075,7 @@
           <prop oor:name="Save" oor:type="xs:boolean">
             <!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
             <!-- OldLocation: soffice.cfg -->
-            <!-- Responsible: JP -->
+            <!-- Responsible: OS -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
             <value>true</value>
             <info>

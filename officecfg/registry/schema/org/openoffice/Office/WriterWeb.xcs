@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: ama $ $Date: 2002-07-03 10:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
         <prop oor:name="GraphicObject" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -79,7 +79,7 @@
         <prop oor:name="Table" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -90,7 +90,7 @@
         <prop oor:name="DrawingControl" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -101,7 +101,7 @@
         <prop oor:name="FieldCode" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>false</value>
           <info>
@@ -112,7 +112,7 @@
         <prop oor:name="Note" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
@@ -132,7 +132,7 @@
       </group>
       <group oor:name="NonprintingCharacter">
         <prop oor:name="MetaCharacters" oor:type="xs:boolean">
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: View - Nonprinting Characters -->
           <value>false</value>
           <info>
@@ -143,7 +143,7 @@
         <prop oor:name="ParagraphEnd" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>false</value>
           <info>
@@ -154,7 +154,7 @@
         <prop oor:name="OptionalHyphen" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>true</value>
           <info>
@@ -165,7 +165,7 @@
         <prop oor:name="Space" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>false</value>
           <info>
@@ -176,7 +176,7 @@
         <prop oor:name="ProtectedSpace" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>true</value>
           <info>
@@ -187,7 +187,7 @@
         <prop oor:name="Break" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>false</value>
           <info>
@@ -200,7 +200,7 @@
         <prop oor:name="Field" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Highlighting -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
           <value>true</value>
           <info>
@@ -215,7 +215,7 @@
         <prop oor:name="Guide" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
@@ -226,7 +226,7 @@
         <prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
@@ -237,7 +237,7 @@
         <prop oor:name="LargeControlPoint" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
@@ -250,7 +250,7 @@
         <prop oor:name="HorizontalScroll" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>true</value>
           <info>
@@ -261,7 +261,7 @@
         <prop oor:name="VerticalScroll" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>true</value>
           <info>
@@ -272,7 +272,7 @@
         <prop oor:name="HorizontalRuler" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>true</value>
           <info>
@@ -282,7 +282,7 @@
         </prop>
         <prop oor:name="HorizontalRulerUnit" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
             <desc xml:lang="en-US">Specifies the measurement unit of the horizontal ruler units</desc>
@@ -339,7 +339,7 @@
         <prop oor:name="VerticalRuler" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>false</value>
           <info>
@@ -349,7 +349,7 @@
         </prop>
         <prop oor:name="VerticalRulerUnit" oor:type="xs:int">
           <!-- OldPath: Writer/Layout -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
             <desc xml:lang="en-US">Specifies the measurement unit of the Vertical ruler units</desc>
@@ -406,7 +406,7 @@
         <prop oor:name="SmoothScroll" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>false</value>
           <info>
@@ -419,7 +419,7 @@
         <prop oor:name="MeasureUnit" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Meas. Unit -->
           <value>2</value>
           <info>
@@ -518,7 +518,7 @@
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Grid/Option -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
           <value>false</value>
           <info>
@@ -529,7 +529,7 @@
         <prop oor:name="VisibleGrid" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Grid/Option -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
           <value>false</value>
           <info>
@@ -540,7 +540,7 @@
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Grid/Option -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
           <value>false</value>
           <info>
@@ -553,7 +553,7 @@
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1000</value>
           <info>
@@ -564,7 +564,7 @@
         <prop oor:name="YAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1000</value>
           <info>
@@ -577,7 +577,7 @@
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1</value>
           <info>
@@ -588,7 +588,7 @@
         <prop oor:name="YAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1</value>
           <info>
@@ -603,7 +603,7 @@
         <prop oor:name="Graphic" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -614,7 +614,7 @@
         <prop oor:name="Table" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -625,7 +625,7 @@
         <prop oor:name="Control" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -636,7 +636,7 @@
         <prop oor:name="Background" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
@@ -647,7 +647,7 @@
         <prop oor:name="PrintBlack" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>false</value>
           <info>
@@ -658,7 +658,7 @@
         <prop oor:name="Note" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
           <value>0</value>
           <info>
@@ -692,7 +692,7 @@
         <prop oor:name="Reversed" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
           <value>false</value>
           <info>
@@ -703,7 +703,7 @@
         <prop oor:name="Brochure" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
           <value>false</value>
           <info>
@@ -716,7 +716,7 @@
         <prop oor:name="SinglePrintJob" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Output -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
           <value>false</value>
           <info>
@@ -727,7 +727,7 @@
         <prop oor:name="Fax" oor:type="xs:string">
           <!-- OldPath: HTML_Editor/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
           <info>
             <desc xml:lang="en-US">For specifying the fax machine to be used to fax directly from the document</desc>
@@ -739,7 +739,7 @@
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Papertray -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Paper tray -->
           <value>false</value>
           <info>
@@ -754,7 +754,7 @@
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Shift -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
           <!--Notice: NonMetric default: 635 1/100 mm-->
           <value>500</value>
@@ -766,7 +766,7 @@
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Shift -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
           <!-- Notice: NonMetric default: 635 1/100 mm-->
           <value>500</value>
@@ -780,7 +780,7 @@
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Insert -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
           <!-- Notice: NonMetric default: 635 1/100 mm -->
           <value>500</value>
@@ -792,7 +792,7 @@
         <prop oor:name="Column" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Insert -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
           <!-- Notice: The NonMetric Default 2540 1/100 mm-->
           <value>2500</value>
@@ -806,7 +806,7 @@
         <prop oor:name="Effect" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document - Table  [Section] Effect -->
           <value>2</value>
           <info>
@@ -835,7 +835,7 @@
         <prop oor:name="NumberRecognition" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
@@ -846,7 +846,7 @@
         <prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
@@ -857,7 +857,7 @@
         <prop oor:name="Alignment" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
@@ -872,7 +872,7 @@
         <prop oor:name="Header" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/Tables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <value>true</value>
           <info>
@@ -883,7 +883,7 @@
         <prop oor:name="RepeatHeader" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/Tables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <value>true</value>
           <info>
@@ -894,7 +894,7 @@
         <prop oor:name="Border" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/Tables -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <value>true</value>
           <info>
@@ -907,7 +907,7 @@
     <group oor:name="ObjectBar">
       <group oor:name="Selection">
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP/OS-->
+        <!-- Responsible: OS/OS-->
         <!-- UIHints: Right mouse click to the toolbar with object selection-->
         <prop oor:name="Graphic" oor:type="xs:int">
           <value>-1</value>
@@ -946,7 +946,7 @@
         <prop oor:name="Name" oor:type="xs:string">
           <!-- OldPath: HTML_Editor/SourceText/Font -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: - -->
           <value>Courier New</value>
           <info>
@@ -957,7 +957,7 @@
         <prop oor:name="Height" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/SourceText/Font -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: JP -->
+          <!-- Responsible: OS -->
           <!-- UIHints: - Notice:Old Twip Value = 200 -->
           <value>353</value>
           <info>
@@ -971,7 +971,7 @@
       <prop oor:name="Color" oor:type="xs:int">
         <!-- OldPath: HTML_Editor/Background -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: JP -->
+        <!-- Responsible: OS -->
         <!-- UIHints: Tools - Option - HTML-Document  Background - [Section] Background color -->
         <info>
           <desc xml:lang="en-US">Determines the background color</desc>
