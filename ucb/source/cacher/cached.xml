@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>
+    cached
+    </module-name>
+
+    <component-description>
+        <supported-service>
+            com.sun.star.ucb.CachedContentResultSetFactory
+        </supported-service>
+        <description>
+        This component implements a factory for locally cached resultsets.
+        </description>
+        <author>
+        Ingrid Halama
+        </author>
+        <name>
+            CachedContentResultSetFactory
+        </name>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+    </component-description>
+    <component-description>
+        <supported-service>
+            com.sun.star.ucb.CachedContentResultSetStubFactory
+        </supported-service>
+        <description>
+        This component implements a factory for stubs for locally cached
+            resultsets.
+        </description>
+        <author>
+        Ingrid Halama
+        </author>
+        <name>
+            CachedContentResultSetStubFactory
+        </name>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+    </component-description>
+    <component-description>
+        <supported-service>
+            com.sun.star.ucb.CachedDynamicResultSetFactory
+        </supported-service>
+        <description>
+        This component implements a factory for locally cached dynamic
+            resultsets.
+        </description>
+        <author>
+        Ingrid Halama
+        </author>
+        <name>
+            CachedDynamicResultSetFactory
+        </name>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+    </component-description>
+    <component-description>
+        <supported-service>
+            com.sun.star.ucb.CachedDynamicResultSetStubFactory
+        </supported-service>
+        <description>
+        This component implements a factory for stubs for locally cached
+            dynamic resultsets.
+        </description>
+        <author>
+        Ingrid Halama
+        </author>
+        <name>
+            CachedDynamicResultSetStubFactory
+        </name>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+
+        <service-dependency>
+            com.sun.star.ucb.SortedDynamicResultSetFactory
+        </service-dependency>
+    </component-description>
+
+    <project-build-dependency> sal                </project-build-dependency>
+    <project-build-dependency> cppu               </project-build-dependency>
+    <project-build-dependency> cppuhelper         </project-build-dependency>
+
+    <runtime-module-dependency> sal2          </runtime-module-dependency>
+    <runtime-module-dependency> cppu2         </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM) </runtime-module-dependency>
+
+    <type> com.sun.star.beans.PropertyAttribute                </type>
+    <type> com.sun.star.beans.XPropertySet                     </type>
+    <type> com.sun.star.lang.DisposedException                 </type>
+    <type> com.sun.star.lang.XComponent                        </type>
+    <type> com.sun.star.lang.XMultiServiceFactory              </type>
+    <type> com.sun.star.lang.XServiceInfo                      </type>
+    <type> com.sun.star.lang.XSingleServiceFactory             </type>
+    <type> com.sun.star.lang.XTypeProvider                     </type>
+    <type> com.sun.star.registry.XRegistryKey                  </type>
+    <type> com.sun.star.sdbc.FetchDirection                    </type>
+    <type> com.sun.star.sdbc.ResultSetType                     </type>
+    <type> com.sun.star.sdbc.XCloseable                        </type>
+    <type> com.sun.star.sdbc.XResultSet                        </type>
+    <type> com.sun.star.sdbc.XResultSetMetaDataSupplier        </type>
+    <type> com.sun.star.sdbc.XRow                              </type>
+    <type> com.sun.star.ucb.ContentResultSetCapability         </type>
+    <type> com.sun.star.ucb.FetchError                         </type>
+    <type> com.sun.star.ucb.ListActionType                     </type>
+    <type> com.sun.star.ucb.ResultSetException                 </type>
+    <type> com.sun.star.ucb.WelcomeDynamicResultSetStruct      </type>
+    <type> com.sun.star.ucb.XContentAccess                     </type>
+    <type> com.sun.star.ucb.XCachedContentResultSetFactory     </type>
+    <type> com.sun.star.ucb.XCachedContentResultSetStubFactory </type>
+    <type> com.sun.star.ucb.XCachedDynamicResultSetFactory     </type>
+    <type> com.sun.star.ucb.XCachedDynamicResultSetStubFactory </type>
+    <type> com.sun.star.ucb.XContentIdentifierMapping          </type>
+    <type> com.sun.star.ucb.XDynamicResultSet                  </type>
+    <type> com.sun.star.ucb.XFetchProvider                     </type>
+    <type> com.sun.star.ucb.XFetchProviderForContentAccess     </type>
+    <type> com.sun.star.ucb.XSortedDynamicResultSetFactory     </type>
+    <type> com.sun.star.ucb.XSourceInitialization              </type>
+    <type> com.sun.star.uno.XWeak                              </type>
+</module-description>

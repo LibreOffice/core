@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>
+    ucpdav
+    </module-name>
+
+    <component-description>
+        <supported-service>
+            com.sun.star.ucb.WebDAVContentProvider
+        </supported-service>
+        <description>
+        This component implements a Content Provider for the Universal
+            Content Broker. It provides access to contents stored on an HTTP/WebDAV
+            server.
+        </description>
+        <author>
+            Kai Sommerfeld
+        </author>
+        <name>
+            WebDAVContentProvider
+        </name>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+
+        <service-dependency>
+            com.sun.star.configuration.ConfigurationAccess
+        </service-dependency>
+        <service-dependency>
+            com.sun.star.configuration.ConfigurationProvider
+        </service-dependency>
+    </component-description>
+
+    <project-build-dependency> external           </project-build-dependency>
+    <project-build-dependency> sal                </project-build-dependency>
+    <project-build-dependency> cppu               </project-build-dependency>
+    <project-build-dependency> cppuhelper         </project-build-dependency>
+    <project-build-dependency> vos                </project-build-dependency>
+    <project-build-dependency> ucbhelper          </project-build-dependency>
+
+    <runtime-module-dependency> sal2          </runtime-module-dependency>
+    <runtime-module-dependency> cppu2         </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> vos2$(COM)        </runtime-module-dependency>
+    <runtime-module-dependency> ucbhelper1$(COM)  </runtime-module-dependency>
+
+    <type> com.sun.star.beans.PropertyAttribute                </type>
+    <type> com.sun.star.beans.PropertyValue                    </type>
+    <type> com.sun.star.beans.XPropertiesChangeNotifier        </type>
+    <type> com.sun.star.beans.XPropertyAccess                  </type>
+    <type> com.sun.star.beans.XPropertyContainer               </type>
+    <type> com.sun.star.beans.XPropertySetInfoChangeNotifier   </type>
+    <type> com.sun.star.container.XChild                       </type>
+    <type> com.sun.star.container.XHierarchicalNameAccess      </type>
+    <type> com.sun.star.io.XActiveDataSink                     </type>
+    <type> com.sun.star.io.XInputStream                        </type>
+    <type> com.sun.star.io.XOutputStream                       </type>
+    <type> com.sun.star.io.XSeekable                           </type>
+    <type> com.sun.star.lang.XComponent                        </type>
+    <type> com.sun.star.lang.XMultiServiceFactory              </type>
+    <type> com.sun.star.lang.XServiceInfo                      </type>
+    <type> com.sun.star.lang.XSingleServiceFactory             </type>
+    <type> com.sun.star.lang.XTypeProvider                     </type>
+    <type> com.sun.star.registry.XRegistryKey                  </type>
+    <type> com.sun.star.sdbc.XCloseable                        </type>
+    <type> com.sun.star.sdbc.XColumnLocate                     </type>
+    <type> com.sun.star.sdbc.XResultSetMetaDataSupplier        </type>
+    <type> com.sun.star.sdbc.XRow                              </type>
+    <type> com.sun.star.task.InteractionClassification         </type>
+    <type> com.sun.star.task.XInteractionAbort                 </type>
+    <type> com.sun.star.task.XInteractionReply                 </type>
+    <type> com.sun.star.ucb.AuthenticationRequest              </type>
+    <type> com.sun.star.ucb.ContentCreationException           </type>
+    <type> com.sun.star.ucb.ContentInfoAttribute               </type>
+    <type> com.sun.star.ucb.InsertCommandArgument              </type>
+    <type> com.sun.star.ucb.InteractiveBadTransferURLException </type>
+    <type> com.sun.star.ucb.NameClash                          </type>
+    <type> com.sun.star.ucb.OpenCommandArgument2               </type>
+    <type> com.sun.star.ucb.OpenMode                           </type>
+    <type> com.sun.star.ucb.RememberAuthentication             </type>
+    <type> com.sun.star.ucb.ResultSetException                 </type>
+    <type> com.sun.star.ucb.TransferInfo                       </type>
+    <type> com.sun.star.ucb.XCommandEnvironment                </type>
+    <type> com.sun.star.ucb.XCommandInfo                       </type>
+    <type> com.sun.star.ucb.XCommandInfoChangeNotifier         </type>
+    <type> com.sun.star.ucb.XCommandProcessor                  </type>
+    <type> com.sun.star.ucb.XContentAccess                     </type>
+    <type> com.sun.star.ucb.XContentCreator                    </type>
+    <type> com.sun.star.ucb.XContentProvider                   </type>
+    <type> com.sun.star.ucb.XDynamicResultSet                  </type>
+    <type> com.sun.star.ucb.XInteractionSupplyAuthentication   </type>
+    <type> com.sun.star.ucb.XPersistentPropertySet             </type>
+    <type> com.sun.star.uno.XAggregation                       </type>
+    <type> com.sun.star.util.DateTime                          </type>
+    <type> com.sun.star.util.XChangesListener                  </type>
+    <type> com.sun.star.util.XChangesNotifier                  </type>
+</module-description>
