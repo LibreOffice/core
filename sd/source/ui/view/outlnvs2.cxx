@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:23:24 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 14:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,23 +435,16 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             if (pReqArgs)
             {
-                const SvxFieldItem* pFieldItem = pOutlinerView->GetFieldAtSelection();
-
-                if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
-                {
-                    // Feld selektieren, so dass es beim Insert geloescht wird
-                    ESelection aSel = pOutlinerView->GetSelection();
-                    aSel.nEndPos++;
-                    pOutlinerView->SetSelection(aSel);
-                }
-
                 SvxHyperlinkItem* pHLItem =
                 (SvxHyperlinkItem*) &pReqArgs->Get(ITEMID_HYPERLINK);
 
                 SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
                                                   pHLItem->GetName(),
                                                   SVXURLFORMAT_REPR));
+                ESelection aSel( pOutlinerView->GetSelection() );
                 pOutlinerView->InsertField(aURLItem);
+                aSel.nEndPos = aSel.nStartPos + 1;
+                pOutlinerView->SetSelection( aSel );
             }
 
             Cancel();
