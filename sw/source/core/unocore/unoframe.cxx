@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:40:41 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1945,10 +1945,16 @@ void SwXFrame::dispose(void) throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
+    if ( pFmt )
     {
         SdrObject* pObj = pFmt->FindSdrObject();
-        if( pObj && pObj->IsInserted() )
+        // OD 11.09.2003 #112039# - add condition to perform delete of
+        // format/anchor sign, not only if the object is inserted, but also
+        // if a contact object is registered, which isn't in the destruction.
+        if ( pObj &&
+             ( pObj->IsInserted() ||
+               ( pObj->GetUserCall() &&
+                 !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
         {
             if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
             {
