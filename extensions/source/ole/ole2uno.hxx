@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:49:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,13 +173,10 @@ using namespace std;
 
 namespace ole_adapter
 {
-Reference<XRegistryKey>     o2u_getRegistryKey();
+
 const VARTYPE getVarType( const Any& val);
 Type getType( BSTR type);
-
-
-Uik                 o2u_uikFromGUID(GUID* pGuid);
-void                o2u_attachCurrentThread();
+void o2u_attachCurrentThread();
 
 struct equalOUString_Impl
 {
@@ -198,55 +195,18 @@ struct hashOUString_Impl
 };
 
 
-
-
-// ask the object for XBridgeSupplier2 and on success bridges
-// the uno object to IDispatch.
-template < class T >
-sal_Bool convertSelfToIDispatch( T& unoInterface, IDispatch** ppDisp)
+class BridgeRuntimeError
 {
-    OSL_ASSERT( ppDisp);
-    *ppDisp= NULL;
-
-    Reference< XInterface > xInt( unoInterface, UNO_QUERY);
-    if( xInt.is())
+public:
+    BridgeRuntimeError(const OUString& sMessage)
     {
-        Reference< XBridgeSupplier2 > xSupplier( xInt, UNO_QUERY);
-        if( xSupplier.is())
-        {
-            sal_Int8 arId[16];
-            rtl_getGlobalProcessId( (sal_uInt8*)arId);
-            Sequence<sal_Int8> seqId( arId, 16);
-            Any anySource;
-            anySource <<= xInt;
-            Any anyDisp=    xSupplier->createBridge( anySource, seqId, UNO, OLE);
-            if( anyDisp.getValueTypeClass() == TypeClass_UNSIGNED_LONG)
-            {
-                VARIANT* pvar= *(VARIANT**)anyDisp.getValue();
-                if( pvar->vt == VT_DISPATCH)
-                {
-                    *ppDisp= pvar->pdispVal;
-                    (*ppDisp)->AddRef();
-                }
-                VariantClear( pvar);
-                CoTaskMemFree( pvar);
-            }
-        }
+        message = sMessage;
     }
-    return *ppDisp ? sal_True : sal_False;
-}
+    OUString message;
+};
 
 
 Mutex* getBridgeMutex();
-
-
-inline sal_Bool operator == (const Uik & uik1, const Uik & uik2)
-{
-    if( ! memcmp( &uik1, &uik2, sizeof( Uik)))
-        return sal_True;
-    else
-        return sal_False;
-}
 
 } // end namespace
 
