@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 13:08:44 $
+ *  last change: $Author: cp $ $Date: 2001-12-07 11:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,22 @@ sal_GetServerVendor( Display *p_display )
     return vendor_unknown;
 }
 
+static sal_Bool sal_IsTrustedSolaris (Display *p_display)
+{
+    int      n_numextensions = 0;
+    char   **p_extensions    = XListExtensions (p_display, &n_numextensions);
+    sal_Bool b_is            = sal_False;
+
+    if (p_extensions != NULL)
+    {
+        for (int i = 0; !b_is && i < n_numextensions; i++)
+            b_is = (strcmp (p_extensions[i], "SUN_TSOL") == 0);
+        XFreeExtensionList (p_extensions);
+    }
+
+    return b_is;
+}
+
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL SalDisplay::BestVisual( Display     *pDisplay,
@@ -986,6 +1002,11 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             {
                 // nicht alle! (bekannt: nur Sparc II CG3, CG6?)
                 nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
+
+                // trusted solaris doesn't allow to change properties on the
+                // wm decoration window
+                if (sal_IsTrustedSolaris (pDisp_))
+                    nProperties_ |= PROPERTY_FEATURE_TrustedSolaris;
 
                 // Fehler im Sun-Solaris X86 Server !
                 if (ImageByteOrder(GetDisplay()) == LSBFirst)

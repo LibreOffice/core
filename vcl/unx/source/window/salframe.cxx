@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-06 19:17:53 $
+ *  last change: $Author: cp $ $Date: 2001-12-07 11:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2707,6 +2707,9 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     unsigned int    nChildren, n;
     BOOL            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
+    BOOL            bAccessParentWindow = ! (pDisplay_->GetProperties()
+                            & PROPERTY_FEATURE_TrustedSolaris);
+
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
     /*
@@ -2728,7 +2731,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
         if( hDummy != hRoot )
         {
             hWM_Parent = hDummy;
-            if( bNone )
+            if( bAccessParentWindow && bNone )
                 XSetWindowBackgroundPixmap( pDisplay, hWM_Parent, None );
         }
         if( Children )
@@ -2738,7 +2741,8 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     if( GetStackingWindow() == None && ( ! pDisableStackingCheck || ! *pDisableStackingCheck ) )
     {
         mhStackingWindow = hWM_Parent;
-        XSelectInput( pDisplay, GetStackingWindow(), StructureNotifyMask );
+        if (bAccessParentWindow)
+            XSelectInput( pDisplay, GetStackingWindow(), StructureNotifyMask );
     }
 
     if(     hWM_Parent == pDisplay_->GetRootWindow()

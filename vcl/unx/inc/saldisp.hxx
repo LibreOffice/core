@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 13:08:44 $
+ *  last change: $Author: cp $ $Date: 2001-12-07 11:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ DECLARE_LIST( SalBitmapList,SalBitmap*)
 
 #define PROPERTY_FEATURE_Maximize               0x01000000
 #define PROPERTY_FEATURE_SharedMemory           0x02000000
+#define PROPERTY_FEATURE_TrustedSolaris         0x04000000
 
 #define PROPERTY_DEFAULT                        0x00000FCB
 
