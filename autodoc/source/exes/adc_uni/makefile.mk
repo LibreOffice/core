@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 15:36:20 $
+#   last change: $Author: obo $ $Date: 2005-01-27 11:20:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ OBJFILES= \
     $(OBJ)$/adc_cl.obj	        \
     $(OBJ)$/adc_cmd_parse.obj	\
     $(OBJ)$/adc_cmds.obj        \
+    $(OBJ)$/adc_msg.obj	        \
     $(OBJ)$/cmd_run.obj         \
     $(OBJ)$/cmd_sincedata.obj
 
