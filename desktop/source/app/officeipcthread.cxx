@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
+ *  last change: $Author: lla $ $Date: 2001-09-18 13:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@ using namespace ::com::sun::star::frame;
 
 #define TERMINATION_SEQUENCE "InternalIPC::TerminateThread"
 #define TERMINATION_LENGTH 28
+// #90717# if you change here anything, you must this also do in setup2/other/sihelp
+#define LOOKUP_SEQUENCE "InternalIPC::Lookup"
+#define LOOKUP_LENGTH 19
 
 namespace desktop
 {
@@ -350,6 +353,11 @@ void SAL_CALL OfficeIPCThread::run()
                     aArguments += pBuf;
                 } while( ! maStreamPipe.isEof() || nBytes > 0 );
                 maStreamPipe.close();
+
+                // #90717#
+                // is this a lookup message ? if so, ignore
+                if(( aArguments.CompareTo( LOOKUP_SEQUENCE, LOOKUP_LENGTH ) == COMPARE_EQUAL ))
+                    continue;
 
                 // is this a termination message ? if so, terminate
                 if(( aArguments.CompareTo( TERMINATION_SEQUENCE,
