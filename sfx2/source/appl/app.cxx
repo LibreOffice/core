@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2000-12-18 14:18:57 $
+ *  last change: $Author: mba $ $Date: 2001-01-23 15:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1691,7 +1691,9 @@ SvVerbList* SfxApplication::GetVerbList_Impl() const
         // globale Verb-List anlegen
         pAppData_Impl->pVerbs = new SvVerbList;
         pAppData_Impl->pVerbs->Append( SvVerb( 0, String( SfxResId( STR_EDITOBJECT ) ) ) );
+#if SUPD>614
         pAppData_Impl->pVerbs->Append( SvVerb( 1, String( SfxResId( STR_OPENOBJECT ) ) ) );
+#endif
         pAppData_Impl->pVerbs->Append( SvVerb( 2, DEFINE_CONST_UNICODE(STARAPP_VERB), sal_True, sal_False ) );
     }
 
