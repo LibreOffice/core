@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:19:17 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XESTYLE_HXX
 #define SC_XESTYLE_HXX
 
@@ -111,6 +110,8 @@ enum XclColorType
 
 // ----------------------------------------------------------------------------
 
+class XclExpPaletteImpl;
+
 /** Stores all used colors in the document.
 
     Supports color reduction to the maximum count of the current BIFF version.
@@ -125,7 +126,7 @@ enum XclColorType
     GetMixedColors() return the real Excel palette index for all color
     identifiers.
  */
-class XclExpPalette : public XclExpRecord, public XclDefaultPalette, protected XclExpRoot
+class XclExpPalette : public XclExpRecordBase
 {
 public:
     explicit            XclExpPalette( const XclExpRoot& rRoot );
@@ -166,117 +167,9 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    class XclListColor;
-
-    /** Returns the Excel index of a 0-based color index. */
-    inline sal_uInt16   GetXclIndex( sal_uInt32 nIndex ) const;
-
-    /** Returns the original inserted color represented by the color ID nColorId. */
-    const Color&        GetOriginalColor( sal_uInt32 nColorId ) const;
-
-    /** Returns the ordered insertion index for rColor in rnIndex.
-        @param rbIsEqual  Returns true, if the color already exists. */
-    void                SearchListEntry(
-                            sal_uInt32& rnIndex, bool& rbIsEqual,
-                            const Color& rColor ) const;
-    /** Creates and inserts a new color list entry at the specified list position. */
-    XclListColor*       CreateListEntry( const Color& rColor, sal_uInt32 nIndex );
-    /** Merges two colors and removes the color specified by nRemove. */
-    void                MergeListColors( sal_uInt32 nKeep, sal_uInt32 nRemove );
-
-    /** Finds the least used color and returns its current list index. */
-    sal_uInt32          GetLeastUsedListColor() const;
-    /** Returns the list index of the color nearest to rColor.
-        @param nIgnore  List index of a color which will be ignored.
-        @return  The list index of the found color. */
-    sal_uInt32          GetNearestListColor( const Color& rColor, sal_uInt32 nIgnore ) const;
-    /** Returns the list index of the color nearest to the color with list index nIndex. */
-    sal_uInt32          GetNearestListColor( sal_uInt32 nIndex ) const;
-
-    /** Returns in rnIndex the palette index of the color nearest to rColor.
-        @param bDefaultOnly  true = Searches for default colors only (colors never replaced).
-        @return  The distance from passed color to found color. */
-    sal_Int32           GetNearestPaletteColor(
-                            sal_uInt32& rnIndex,
-                            const Color& rColor, bool bDefaultOnly ) const;
-    /** Returns in rnFirst and rnSecond the palette indexes of the two colors nearest to rColor.
-        @return  The minimum distance from passed color to found colors. */
-    sal_Int32           GetNearPaletteColors(
-                            sal_uInt32& rnFirst, sal_uInt32& rnSecond,
-                            const Color& rColor ) const;
-
-    /** Writes the contents of the PALETTE record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
-
-private:
-    /** Represents an entry in a color list.
-        @descr  the color stores a weighting value, which increases the more the color
-        is used in the document. Heavy-weighted colors will change less than others on
-        color reduction. */
-    class XclListColor
-    {
-        DECL_FIXEDMEMPOOL_NEWDEL( XclListColor )
-
-    private:
-        Color               maColor;    /// The color value of this palette entry.
-        sal_uInt32          mnColorId;  /// Unique color ID for color reduction.
-        sal_uInt32          mnWeight;   /// Weighting for color reduction.
-
-    public:
-        explicit            XclListColor( const Color& rColor, sal_uInt32 nColorId );
-
-        /** Returns the RGB color value of the color. */
-        inline const Color& GetColor() const { return maColor; }
-        /** Returns the unique ID of the color. */
-        inline sal_uInt32   GetColorId() const { return mnColorId; }
-        /** Returns the current weighting of the color. */
-        inline sal_uInt32   GetWeighting() const { return mnWeight; }
-        /** Returns true, if this color value is greater than rColor (simple arithmetic comparison). */
-        inline bool         IsGreater( const Color& rColor ) const { return maColor.GetColor() > rColor.GetColor(); }
-        /** Returns true, if this color is equal to rColor. */
-        inline bool         IsEqual( const Color& rColor ) const { return maColor.GetColor() == rColor.GetColor(); }
-
-        /** Updates the weighting of this color dependent from nColorType. */
-        void                UpdateWeighting( XclColorType eType );
-        /** Adds the weighting of rColor to this color. */
-        inline void         AddWeighting( const XclListColor& rColor ) { mnWeight += rColor.mnWeight; }
-        /** Merges this color with rColor, regarding weighting settings. */
-        void                Merge( const XclListColor& rColor );
-    };
-
-    /** Data for each inserted original color, represented by a color ID. */
-    struct XclColorIdData
-    {
-        Color               maColor;    /// The original inserted color.
-        sal_uInt32          mnIndex;    /// Maps current color ID to color list or export color vector.
-        /** Sets the contents of this struct. */
-        inline void         Set( const Color& rColor, sal_uInt32 nIndex ) { maColor = rColor; mnIndex = nIndex; }
-    };
-
-    /** A color that will be written to the Excel file. */
-    struct XclPaletteColor
-    {
-        Color               maColor;    /// Resulting color to export.
-        bool                mbUsed;     /// true = Entry is used in the document.
-
-        inline explicit     XclPaletteColor( const Color& rColor ) : maColor( rColor ), mbUsed( false ) {}
-        inline void         SetColor( const Color& rColor ) { maColor = rColor; mbUsed = true; }
-    };
-
-    typedef ScfDelList< XclListColor >          XclListColorList;
-    typedef ::std::vector< XclColorIdData >     XclColorIdDataVec;
-    typedef ::std::vector< XclPaletteColor >    XclPaletteColorVec;
-
-    XclListColorList    maColorList;        /// Working color list.
-    XclColorIdDataVec   maColorIdDataVec;   /// Data of all CIDs.
-    XclPaletteColorVec  maPalette;          /// Contains resulting colors to export.
-    sal_uInt32          mnLastIx;           /// Last insertion index for search opt.
+    typedef ScfRef< XclExpPaletteImpl > XclExpPaletteImplRef;
+    XclExpPaletteImplRef mxImpl;
 };
-
-inline sal_uInt16 XclExpPalette::GetXclIndex( sal_uInt32 nIndex ) const
-{
-    return static_cast< sal_uInt16 >( nIndex + EXC_COLOR_USEROFFSET );
-}
 
 // FONT record - font information =============================================
 
