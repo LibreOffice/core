@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
+ *  last change: $Author: as $ $Date: 2000-11-02 09:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,15 @@ using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Start"  ))
 #define DEFAULT_SHOWINTRO               sal_True
+#define DEFAULT_CONNECTIONURL           OUString()
 
 #define PROPERTYNAME_SHOWINTRO          OUString(RTL_CONSTASCII_USTRINGPARAM("ShowIntro"            ))
+#define PROPERTYNAME_CONNECTIONURL      OUString(RTL_CONSTASCII_USTRINGPARAM("Connection"           ))
 
 #define PROPERTYHANDLE_SHOWINTRO        0
+#define PROPERTYHANDLE_CONNECTIONURL    1
 
-#define PROPERTYCOUNT                   1
+#define PROPERTYCOUNT                   2
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -190,7 +193,9 @@ class SvtStartOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool IsIntroEnabled() const;
+        sal_Bool    IsIntroEnabled  (                       ) const ;
+        OUString    GetConnectionURL(                       ) const ;
+        void        SetConnectionURL( const OUString& sURL  )       ;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -220,7 +225,8 @@ class SvtStartOptions_Impl : public ConfigItem
 
     private:
 
-        sal_Bool    m_bShowIntro    ;   /// cache "ShowIntro" of Start section
+        sal_Bool    m_bShowIntro        ;   /// cache "ShowIntro" of Start section
+        OUString    m_sConnectionURL    ;   /// cache "Connection" of Start section
 };
 
 //_________________________________________________________________________________________________________________
@@ -255,11 +261,17 @@ SvtStartOptions_Impl::SvtStartOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nInvalid property value for property detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_SHOWINTRO   :   {
-                                                     DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nWho has changed the value type of \"Office.Common\\Start\\ShowIntro\"?" );
-                                                    seqValues[nProperty] >>= m_bShowIntro;
-                                                }
-                                                break;
+            case PROPERTYHANDLE_SHOWINTRO       :   {
+                                                            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nWho has changed the value type of \"Office.Common\\Start\\ShowIntro\"?" );
+                                                        seqValues[nProperty] >>= m_bShowIntro;
+                                                    }
+                                                    break;
+
+            case PROPERTYHANDLE_CONNECTIONURL   :   {
+                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_STRING), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nWho has changed the value type of \"Office.Common\\Start\\Connection\"?" );
+                                                        seqValues[nProperty] >>= m_sConnectionURL;
+                                                    }
+                                                    break;
         }
     }
 
@@ -283,6 +295,23 @@ sal_Bool SvtStartOptions_Impl::IsIntroEnabled() const
 }
 
 //*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+OUString SvtStartOptions_Impl::GetConnectionURL() const
+{
+    return m_sConnectionURL;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtStartOptions_Impl::SetConnectionURL( const OUString& sURL )
+{
+    m_sConnectionURL = sURL;
+    SetModified();
+}
+
+//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtStartOptions_Impl::impl_GetPropertyNames()
@@ -290,7 +319,8 @@ Sequence< OUString > SvtStartOptions_Impl::impl_GetPropertyNames()
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_SHOWINTRO  ,
+        PROPERTYNAME_SHOWINTRO      ,
+        PROPERTYNAME_CONNECTIONURL  ,
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -347,6 +377,24 @@ sal_Bool SvtStartOptions::IsIntroEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsIntroEnabled();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+OUString SvtStartOptions::GetConnectionURL() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetConnectionURL();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtStartOptions::SetConnectionURL( const OUString& sURL )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetConnectionURL( sURL );
 }
 
 //*****************************************************************************************************************
