@@ -81,11 +81,9 @@ Dim SelList(0) as Integer
 	End If
 	oDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	FormPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
-	WebWizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/web&quot;)
-	WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
-	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
-	WorkPath = GetPathSettings(&quot;Work&quot;)
+	If GetFormWizardPaths() = False Then
+		Exit Sub
+	End If
 	oDocument.GetCurrentController().Frame.ComponentWindow.Enable = False
 	oProgressBar.Value = 5
 	GetDatabaseNames()
