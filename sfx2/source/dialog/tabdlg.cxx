@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-05-02 12:09:53 $
+ *  last change: $Author: gt $ $Date: 2002-07-17 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,6 +1118,8 @@ BOOL SfxTabDialog::PrepareLeaveCurrentPage()
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
+            else
+                nRet = pPage->DeactivatePage( NULL );
 
             if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE
                  && aTmp.Count() )
@@ -1166,6 +1168,8 @@ IMPL_LINK( SfxTabDialog, UserHdl, Button *, EMPTYARG )
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
+            else
+                nRet = pPage->DeactivatePage( NULL );
 
             if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE
                  && aTmp.Count() )
@@ -1413,6 +1417,8 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
         if ( pPage->HasExchangeSupport() )
             nRet = pPage->DeactivatePage( &aTmp );
+        else
+            nRet = pPage->DeactivatePage( NULL );
 //!     else
 //!         pPage->FillItemSet( aTmp );
 
