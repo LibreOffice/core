@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2001-06-27 12:30:14 $ $Revision: 1.6 $
+    $Author: pb $ $Date: 2001-09-06 09:58:12 $ $Revision: 1.7 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -99,13 +99,6 @@ interface Window : Object
     ]
      //---------------------------------------------------------------------
     SID_SEARCH_DLG // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_HELP_PI // ole(no) api(final/play/rec)
     [
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
@@ -465,6 +458,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/06/27 12:30:14  mba
+    #86347#: SID_NEWDOCDIRECT depends on document type
+
     Revision 1.5  2001/06/21 13:56:03  mba
     #88527#: SID_TOGGLE_MENUBAR
 
