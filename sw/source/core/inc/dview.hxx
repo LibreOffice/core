@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:20:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,6 @@ public:
 
     virtual void DeleteMarked();
 
-    // temp. Fix fuer Bug 57153 - nach Undo kann in der MarkListe nicht
-    //  immer ein Writer-Draw-Object stehen ( SdrObject ohne User-Call)
-    // Dann muss die Markliste aktualisiert werden.
-    // JP 02.10.98: hat aber Nebenwirkungen,wie Bug 57475
-    //const SdrMarkList& GetMarkList() const;
     //JP 06.10.98: 2. Versuch
     inline void ValidateMarkList() { FlushComeBackTimer(); }
 
