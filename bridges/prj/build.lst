@@ -5,14 +5,14 @@ br	bridges\source\remote\static			nmake	-	all	br_rem_static br_unotypes NULL
 br	bridges\source\remote\urp				nmake	-	all	br_rem_urp br_rem_static NULL
 br	bridges\source\remote\iiop				nmake	-	all	br_iiop br_rem_static NULL
 br	bridges\source\remote\context			nmake	-	all	br_rcon br_unotypes NULL
-br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_unotypes NULL
-br	bridges\source\cpp_uno\gcc3_linux_intel	nmake	-	u	br_gcc3li br_unotypes NULL
+br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_cppuno_share dbr_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_linux_intel	nmake	-	u	br_gcc3li br_cppuno_shared br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_freebsd_intel	nmake	-	u	br_gcc3fi br_unotypes NULL
-br	bridges\source\cpp_uno\gcc3_linux_powerpc	nmake	-	u	br_gcclp3 br_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_linux_powerpc	nmake	-	u	br_gcclp3 br_cppuno_shared br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gccl33 br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_linux_sparc		nmake	-	u	br_gccl3s br_unotypes NULL
-br	bridges\source\cpp_uno\gcc3_macosx_powerpc			nmake	-	u	br_gcc3macoxp br_unotypes NULL
-br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes br_cppuno_shared NULL
+br	bridges\source\cpp_uno\gcc3_macosx_powerpc			nmake	-	u	br_gcc3macoxp br_cppuno_shared br_unotypes NULL
+br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes br_cppuno_shared br_cppuno_shared NULL
 br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_netbsd_intel	nmake	-	u	br_gccni br_unotypes NULL
 br  bridges\source\cpp_uno\shared           nmake   -   all br_cppuno_shared br_unotypes NULL
