@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-19 15:47:15 $
+ *  last change: $Author: ssa $ $Date: 2002-09-17 09:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,11 @@ void __EXPORT ScTabView::Init()
     InitScrollBar( aHScrollRight,   MAXCOL+1 );
     InitScrollBar( aVScrollTop,     MAXROW+1 );
     InitScrollBar( aVScrollBottom,  MAXROW+1 );
+
+    // SSA: --- RTL --- no mirroring for horizontal scrollbars, otherwise
+    // scroll direction will be wrong
+    aHScrollLeft.EnableRTL ( FALSE );
+    aHScrollRight.EnableRTL ( FALSE );
 
     //  Hier noch nichts anzeigen (Show), weil noch falsch angeordnet ist
     //  Show kommt dann aus UpdateShow beim ersten Resize
