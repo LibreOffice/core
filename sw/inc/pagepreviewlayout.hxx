@@ -534,21 +534,6 @@ public:
     */
     SwTwips GetWinPagesScrollAmount( const sal_Int16 _nWinPagesToScroll ) const;
 
-    /** determine window preview page the page with the given number is on.
-
-        OD 17.01.2003 #103492#
-
-        @author OD
-
-        @param _nPageNum
-        input parameter - physical page number of page, for which the preview
-        window page number has to be calculated.
-
-        @return number of preview window page the page with the given physical
-        page number is on
-    */
-    sal_uInt16 GetWinPageNumOfPage( sal_uInt16 _nPageNum ) const;
-
     /** determine row the page with the given number is in
 
         OD 17.01.2003 #103492#
