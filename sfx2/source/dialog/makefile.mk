@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 16:55:57 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:24:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,13 +80,13 @@ EXCEPTIONSFILES=\
         $(SLO)$/menucfg.obj         \
         $(SLO)$/templdlg.obj        \
         $(SLO)$/itemconnect.obj     \
+        $(SLO)$/acccfg.obj			\
         $(SLO)$/recfloat.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
         $(SLO)$/sfxdlg.obj            \
         $(SLO)$/about.obj			\
-        $(SLO)$/acccfg.obj			\
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
