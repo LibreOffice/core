@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:21:08 $
+ *  last change: $Author: dr $ $Date: 2002-09-19 10:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,9 @@ public:
     static String   GetVisibleName( SdrObject* pObj );
 
     SdrObject*      GetNamedObject( const String& rName, USHORT nId, USHORT& rFoundTab ) const;
-    String          GetNewGraphicName() const;
+                    // if pnCounter != NULL, the search for a name starts with this index + 1,
+                    // and the index really used is returned.
+    String          GetNewGraphicName( long* pnCounter = NULL ) const;
     void            EnsureGraphicNames();
 
     // Verankerung setzen und ermitteln

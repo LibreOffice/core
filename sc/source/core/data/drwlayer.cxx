@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:23:40 $
+ *  last change: $Author: dr $ $Date: 2002-09-19 10:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1646,7 +1646,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const String& rName, USHORT nId, USHORT&
     return NULL;
 }
 
-String ScDrawLayer::GetNewGraphicName() const
+String ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
 {
     String aBase = ScGlobal::GetRscString(STR_GRAPHICNAME);
     aBase += ' ';
@@ -1654,7 +1654,7 @@ String ScDrawLayer::GetNewGraphicName() const
     BOOL bThere = TRUE;
     String aName;
     USHORT nDummy;
-    long nId = 0;
+    long nId = pnCounter ? *pnCounter : 0;
     while (bThere)
     {
         ++nId;
@@ -1662,6 +1662,9 @@ String ScDrawLayer::GetNewGraphicName() const
         aName += String::CreateFromInt32( nId );
         bThere = ( GetNamedObject( aName, 0, nDummy ) != NULL );
     }
+
+    if ( pnCounter )
+        *pnCounter = nId;
 
     return aName;
 }
@@ -1679,10 +1682,16 @@ void ScDrawLayer::EnsureGraphicNames()
         {
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
             SdrObject* pObject = aIter.Next();
+
+            /* #101799# The index passed to GetNewGraphicName() will be set to
+                the used index in each call. This prevents the repeated search
+                for all names from 1 to current index. */
+            long nCounter = 0;
+
             while (pObject)
             {
                 if ( pObject->GetObjIdentifier() == OBJ_GRAF && pObject->GetName().Len() == 0 )
-                    pObject->SetName( GetNewGraphicName() );
+                    pObject->SetName( GetNewGraphicName( &nCounter ) );
 
                 pObject = aIter.Next();
             }
