@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeSupplier2.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 10:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,31 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::bridge::XBridgeSupplier2
 /** defines the interface for creating bridges to other object models.
+    <p />
+    <p>
+    The created bridges are transparent to the user. That is, if one maps
+    an interface into the target model, then the resulting target interface
+    is a bridge implementation, that is not being noticed by an user. During
+    a call on that interface, the bridge is invoked to convert the arguments
+    and carry out a call according to the rules of the source model.
+    Return values are automatically mapped to the types of the target model.
+    </p>
+    <p>
+    Simple types are mapped to simple target types. That is, there is no additional
+    bridging code involved when those types are being used.
+    </p>
 
-    <p>Because bridges sometimes can not be generated in an address space,
-    the implementation needs to check the address space of the caller by
-    comparing the process ID against its own. That ID is
-    provided by the UNO runtime.  </p>
-
+    <p>Sometimes a bridge cannot be created, depending on whether a programm uses
+    the XBridgeSupplier2 interface remotely. Assuming one wants to bridge an
+    OLE Automation object to UNO by calling createBridge on a proxy, then the UNO remote
+    bridge would not recognise that the Any argument contains an IDispatch interface.
+    Therefore it cannot marshal it as COM requires it and the bridgeing would fail.
+    To prevent this, implementations of this interface should be aware of this scenario and
+    if necessary take the appropriate steps. The process ID argument to the createBridge
+    function represents the calling process and may be used by the implementation to determine
+    if it is being accessed remotely.
+    </p>
     <p>All objects, whether they are part of the UNO object model or not,
     are carried in an <atom>any</atom>.  The representation of this object
     is heavily model-dependent and has to be specified in the following list: </p>
@@ -122,9 +139,6 @@
  */
 interface XBridgeSupplier2: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::bridge::XBridgeSupplier2::createBridge
     /** creates a bridge to provide an object of one object model with another.
      */
     any createBridge( [in] any aModelDepObject,
@@ -142,6 +156,9 @@ interface XBridgeSupplier2: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/16 15:10:33  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.6  2000/12/12 10:18:48  jbu
     reconstructed some method references, that have gone lost during merges
 
