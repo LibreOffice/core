@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevtlstnr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:33:54 $
+ *  last change: $Author: mtg $ $Date: 2001-06-26 11:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener
 SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4, 4);
 class SwEventListenerContainer
 {
-    SwEvtLstnrArray*                            pListenerArr;
-     ::com::sun::star::uno::XInterface*         pxParent;
     protected:
-        SwEvtLstnrArray*                    GetListenerArray() {return pListenerArr;}
-         ::com::sun::star::uno::XInterface* GetParent() {return     pxParent;}
+        SwEvtLstnrArray*                            pListenerArr;
+        ::com::sun::star::uno::XInterface*          pxParent;
     public:
         SwEventListenerContainer( ::com::sun::star::uno::XInterface* pxParent);
         ~SwEventListenerContainer();
