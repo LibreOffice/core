@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenernotification.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:46:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
