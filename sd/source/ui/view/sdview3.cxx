@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-29 12:29:15 $
+ *  last change: $Author: ka $ $Date: 2001-09-05 08:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,11 +646,11 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
     {
-        String aString;
+        ::rtl::OUString aOUString;
 
-        if( aDataHelper.GetString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, aString ) )
+        if( aDataHelper.GetString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, aOUString ) )
         {
-            SdrObject* pObj = CreateFieldControl( aString );
+            SdrObject* pObj = CreateFieldControl( aOUString );
 
             if( pObj )
             {
@@ -1017,19 +1017,19 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
               !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
               !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) ) )
         {
-            String aStr;
+            ::rtl::OUString aOUString;
 
-            if( aDataHelper.GetString( FORMAT_STRING, aStr ) )
+            if( aDataHelper.GetString( FORMAT_STRING, aOUString ) )
             {
                 OutlinerView* pOLV = GetTextEditOutlinerView();
 
                 if( pOLV )
                 {
-                    pOLV->InsertText( aStr );
+                    pOLV->InsertText( aOUString );
                     bReturn = TRUE;
                 }
                 else
-                    bReturn = SdrView::Paste( aStr, aDropPos, pPage, nPasteOptions );
+                    bReturn = SdrView::Paste( aOUString, aDropPos, pPage, nPasteOptions );
             }
         }
     }
