@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: cp $ $Date: 2001-12-07 11:45:09 $
+ *  last change: $Author: pl $ $Date: 2001-12-07 16:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2641,15 +2641,23 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         XFree (pHints);
     }
 
-    maResizeBuffer = Rectangle( Point( pEvent->x, pEvent->y ), Size( pEvent->width, pEvent->height ) );
-
     if( nWidth_ != pEvent->width || nHeight_ != pEvent->height )
     {
         nWidth_     = pEvent->width;
         nHeight_    = pEvent->height;
 
+        if( maResizeBuffer.IsEmpty() )
+            maResizeBuffer = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
+                                        Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
+
         maResizeTimer.Start();
     }
+
+    pFrame_->maGeometry.nX      = pEvent->x;
+    pFrame_->maGeometry.nY      = pEvent->y;
+    pFrame_->maGeometry.nWidth  = pEvent->width;
+    pFrame_->maGeometry.nHeight = pEvent->height;
+
     return 1;
 }
 
@@ -2671,10 +2679,8 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
         maResizeBuffer.GetHeight() != pFrame_->maGeometry.nHeight )
         bSized = true;
 
-    pFrame_->maGeometry.nX      = maResizeBuffer.Left();
-    pFrame_->maGeometry.nY      = maResizeBuffer.Top();
-    pFrame_->maGeometry.nWidth  = maResizeBuffer.GetWidth();
-    pFrame_->maGeometry.nHeight = maResizeBuffer.GetHeight();
+    maResizeBuffer = Rectangle();
+
     // update children's position
     RepositionChildren();
 
