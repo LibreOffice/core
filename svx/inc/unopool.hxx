@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 22:44:18 $
+ *  last change: $Author: rt $ $Date: 2001-03-06 08:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
