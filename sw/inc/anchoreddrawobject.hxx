@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:29:02 $
+ *  last change: $Author: od $ $Date: 2004-08-03 05:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,6 @@
 #ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
 #endif
-#ifndef _GEN_HXX
-#include <tools/gen.hxx>
-#endif
-
-enum tLayoutDir
-{
-    HORI_L2R,
-    HORI_R2L,
-    VERT_R2L,
-    VERT_L2R    // not supported yet
-};
 
 /** class for the positioning of drawing objects
 
@@ -88,9 +77,6 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         // boolean, indicating that the object position has been invalidated
         // and that a positioning has to be performed.
         bool mbValidPos;
-
-        // boolean, indicating that the object positioning algorithm is in progress.
-        bool mbPositioningInProgress;
 
         // rectangle, keeping the last object rectangle after the postioning
         Rectangle maLastObjRect;
@@ -127,6 +113,14 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         */
         void _SetDrawObjAnchor( const Point _aOffsetToFrmAnchorPos );
 
+        /** method to invalidate the given page frame
+
+            OD 2004-07-02 #i28701#
+
+            @author OD
+        */
+        void _InvalidatePage( SwPageFrm* _pPageFrm );
+
     protected:
 
         /** method to indicate, that anchored drawing object is attached to
@@ -135,6 +129,15 @@ class SwAnchoredDrawObject : public SwAnchoredObject
             @author OD
         */
         virtual void ObjectAttachedToAnchorFrame();
+
+        /** method to assure that anchored object is registered at the correct
+            page frame
+
+            OD 2004-07-02 #i28701#
+
+            @author OD
+        */
+        virtual void RegisterAtCorrectPage();
 
     public:
         TYPEINFO();
@@ -145,8 +148,6 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         // declaration of pure virtual methods of base class <SwAnchoredObject>
         virtual void MakeObjPos();
         virtual void InvalidateObjPos();
-        virtual void SetPositioningInProgress( const bool _bPosInProgress );
-        virtual bool IsPositioningInProgress() const;
 
         // accessors to the format
         virtual SwFrmFmt& GetFrmFmt();
@@ -184,6 +185,16 @@ class SwAnchoredDrawObject : public SwAnchoredObject
                 _SetPositioningAttr();
             }
         }
+
+        /** method to notify background of drawing object
+
+            OD 2004-06-30 #i28701#
+
+            @author OD
+        */
+        virtual void NotifyBackground( SwPageFrm* _pPageFrm,
+                                       const SwRect& _rRect,
+                                       PrepareHint _eHint );
 };
 
 #endif
