@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:04:53 $
+ *  last change: $Author: thb $ $Date: 2001-09-25 12:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,26 +448,21 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     pRet->Put( SdOptionsSnapItem( ATTR_OPTIONS_SNAP, pOptions, pFrameView ) );
 
     // TP_SCALE:
-    UINT32 nW = 0L;
-    UINT32 nH = 0L;
+    UINT32 nW = 10L;
+    UINT32 nH = 10L;
     INT32  nX;
     INT32  nY;
     if( pDocSh )
     {
-        Fraction aFract( pDoc->GetUIScale() );
-        nX = aFract.GetNumerator();
-        nY = aFract.GetDenominator();
-
         SdrPage* pPage = (SdrPage*) pDoc->GetSdPage(0, PK_STANDARD);
         Size aSize(pPage->GetSize());
         nW = aSize.Width();
         nH = aSize.Height();
     }
-    else
-    {
-        // Optionen aus Configdatei holen
-        pOptions->GetScale( nX, nY );
-    }
+
+    // Optionen aus Configdatei holen
+    pOptions->GetScale( nX, nY );
+
     pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
     pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
     pRet->Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_WIDTH, nW ) );
@@ -561,7 +556,8 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             INT32 nY = ( (SfxInt32Item*) pItem )->GetValue();
             pOptions->SetScale( nX, nY );
 
-            if( pDocSh )
+            // #92067# Apply to document only if doc type match
+            if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
             {
                 pDoc->SetUIScale( Fraction( nX, nY ) );
                 if( pViewShell )
