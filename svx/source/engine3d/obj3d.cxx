@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-11 08:23:05 $
+ *  last change: $Author: aw $ $Date: 2001-07-11 08:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4090,7 +4090,7 @@ void E3dCompoundObject::CreateSegment(
                 GrowPoly(aLocalFront, aGrowDirection, fDiagLen);
 
                 // Inneres Polygon nach innen verschieben
-                GrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
+                //GrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
 
                 // Neue Groesse inneres Polygon feststellen
                 Volume3D aNewSize(aLocalFront.GetPolySize());
@@ -4199,7 +4199,7 @@ void E3dCompoundObject::CreateSegment(
                 GrowPoly(aLocalBack, aGrowDirection, fDiagLen);
 
                 // Inneres Polygon nach innen verschieben
-                GrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
+                //GrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
 
                 // Neue Groesse inneres Polygon feststellen
                 Volume3D aNewSize(aLocalBack.GetPolySize());
