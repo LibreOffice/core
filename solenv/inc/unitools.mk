@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-21 16:45:47 $
+#   last change: $Author: hjs $ $Date: 2001-11-07 13:23:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,8 +126,10 @@ COPY=cp -f
 COPYRECURSE=-r
 .IF "$(OS)"=="SOLARIS"
 GNUCOPY=gnucp
+GNUPATCH=gnupatch
 .ELSE			# "$(OS)"=="SOLARIS"
 GNUCOPY=cp
+GNUPATCH=patch
 .ENDIF			# "$(OS)"=="SOLARIS"
 .IF "$(OS)"=="LINUX"
 GNUMAKE=make
