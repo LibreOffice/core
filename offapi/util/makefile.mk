@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:43:57 $
+#   last change: $Author: kz $ $Date: 2004-08-31 12:02:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ TARGET=offapi_db
 #UNOIDLDBREGS= \
 #	$(SOLARBINDIR)$/udkapi.rdb
 
+#i20156 - add xmlsecurity module related
 UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
@@ -159,7 +160,13 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssfstatus.db \
     $(UCR)$/dcssgeometry.db \
     $(UCR)$/dcssrendering.db \
-    $(UCR)$/dcssdrawing.db
+    $(UCR)$/dcssdrawing.db \
+    $(UCR)$/xsec-security.db \
+    $(UCR)$/xsec-crypto.db \
+    $(UCR)$/xsec-csax.db \
+    $(UCR)$/xsec-sax.db \
+    $(UCR)$/xsec-wrapper.db
+#i20156 - end
 
 REFERENCE_RDB=$(PRJ)$/type_reference$/OO_20$/types.rdb
 REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_20$/types_doc.rdb
