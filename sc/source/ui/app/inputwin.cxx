@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:23:18 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParent,
                                             SfxChildWinInfo* pInfo )
     :   SfxChildWindow( pParent, nId )
 {
-    ScInputWindow* pWin=new ScInputWindow( pParent );
+    ScInputWindow* pWin=new ScInputWindow( pParent, pBindings );
     pWindow = pWin;
 
     pWin->Show();
@@ -149,7 +149,7 @@ SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
 //  class ScInputWindow
 //==================================================================
 
-ScInputWindow::ScInputWindow( Window* pParent ) :
+ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 #ifdef OS2
 // #37192# ohne WB_CLIPCHILDREN wg. os/2 Paintproblem
         ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK) ),
@@ -163,10 +163,11 @@ ScInputWindow::ScInputWindow( Window* pParent ) :
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
+        pBindings       ( pBind ),
         bIsOkCancelMode ( FALSE ),
         pInputHdl       ( NULL )
 {
-    SfxImageManager* pImgMgr = SFX_IMAGEMANAGER();
+    SfxImageManager* pImgMgr = pBindings->GetImageManager();
     ScTabViewShell*  pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     ScModule*        pScMod  = SC_MOD();
 
@@ -249,7 +250,7 @@ __EXPORT ScInputWindow::~ScInputWindow()
         }
     }
 
-    SFX_IMAGEMANAGER()->ReleaseToolBox( this );
+    pBindings->GetImageManager()->ReleaseToolBox( this );
 }
 
 void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
@@ -460,7 +461,7 @@ void ScInputWindow::SetOkCancelMode()
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
     ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = SFX_IMAGEMANAGER();
+    SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if (!bIsOkCancelMode)
     {
         RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
@@ -482,7 +483,7 @@ void ScInputWindow::SetSumAssignMode()
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
     ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = SFX_IMAGEMANAGER();
+    SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if (bIsOkCancelMode)
     {
         // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:44:04 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ private:
 class ScInputWindow : public ToolBox                        // Parent-Toolbox
 {
 public:
-                    ScInputWindow( Window* pParent );
+                    ScInputWindow( Window* pParent, SfxBindings* pBind );
     virtual         ~ScInputWindow();
 
     virtual void    Resize();
@@ -231,6 +231,7 @@ private:
     ScPosWnd        aWndPos;
     ScTextWnd       aTextWindow;
     ScInputHandler* pInputHdl;
+    SfxBindings*    pBindings;
     String          aTextOk;
     String          aTextCancel;
     String          aTextSum;
