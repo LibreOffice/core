@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:32:31 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -20840,6 +20840,7 @@ Bitmap SIP_SA_ACCESSIBILITY_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
