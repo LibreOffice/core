@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:57:43 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class GtkSalObject : public SalObject
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
+    static void         signalDestroy( GtkObject*, gpointer );
 public:
     GtkSalObject( GtkSalFrame* pParent );
     virtual ~GtkSalObject();
