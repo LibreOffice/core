@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2001-11-28 18:18:45 $
+#   last change: $Author: hr $ $Date: 2001-12-04 11:07:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.16 $ ';
+$id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -313,7 +313,7 @@ sub init_globals {
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
     # special security check for release engineers
-    if ( $updater = 'TRUE' && !defined($build_sosl) && !$opt_force) {
+    if ( $updater eq 'TRUE' && !defined($build_sosl) && !$opt_force) {
         my $path = cwd();
         if ( $path !~ /$work_stamp/o ) {
             print_error("can't deliver from local directory to SOLARVERSION");
