@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:04:35 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 14:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,14 +263,14 @@ Resource RID_SVXERRCODE
         Text [ portuguese ] = "O dicionαrio de sinσnimos nγo se encontra disponνvel para a lνngua especificada.\nConfira a sua instalaηγo e, se necessαrio, instale a lνngua desejada." ;
         Text [ portuguese_brazilian ] = "Ein Thesaurus f? die eingestellte Sprache ist nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache" ;
         Text[ chinese_simplified ] = "ΔϊΛωΙθ¶¨µΔΣοΡΤΓ»ΣΠΟΰΣ¦µΔ΄Κµδ΅£\nΗλΔϊΌμ²ι°²Χ°£¬ΘηΣΠ±ΨÒª£¬ΗλΔϊ°²Χ°ΛωÒªΚΉΣΓµΔΣοΡΤ°ζ±Ύ΅£";
-        Text[ russian ] = "Δλÿ σρςΰνξβλεννξγξ ÿηϋκΰ ςεηΰσπσρ νεδξρςσοεν.\nΟπξβεπόςε, οξζΰλσιρςΰ. Βΰψσ θνρςΰλλÿφθώ θ, β ρλσχΰε νεξαυξδθμξρςθ, θνρςΰλλθπσιςε ςπεασεμϋ";
+        Text[ russian ] = "Δλÿ σρςΰνξβλεννξγξ ÿηϋκΰ ςεηΰσπσρ νεδξρςσοεν.\nΟπξβεπόςε, οξζΰλσιρςΰ. Βΰψσ θνρςΰλλÿφθώ θ, β ρλσχΰε νεξαυξδθμξρςθ, θνρςΰλλθπσιςε ςπεασεμϋι ";
         Text[ polish ] = "Tezaurus jest niedostκpny dla wybranego jκzyka.\nProszκ sprawdziζ instalacjκ i zainstalowaζ potrzebny jκzyk.";
         Text[ japanese ] = "έ’θ‚µ‚½Ύκ‚Ε—ήκ«“T‚Νg—p‚Ε‚«‚ά‚Ή‚ρB\nΜίΫΈήΧΡ‚Μ²έ½Δ°Ω‚πΑª―Έ‚µ‚ΔA•K—v‚Θ‚η‚Ξσ–]‚ΜΎκ‚π²έ½Δ°Ω‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "±z©Ò³]©wªΊ»y¨¥¨S¦³¬Ϋΐ³ªΊµό¨ε΅C\n½Π±zΐΛ¬d¦wΈΛ΅M­Y¦³¥²­n΅M½Π¦wΈΛ©Ò­n¨Ο¥ΞªΊ»y¨¥ª©¥»΅C";
         Text[ arabic ] = "αΗ νζΜΟ ήΗγζΣ γΡΗΟέΗΚ ααΫΙ ΗαΚν Κγ ΚΝΟνΟεΗ.\nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ Λγ ΗαήνΗγ ΘΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
         Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "ΔϊΛωΙθ¶¨µΔΣοΡΤΓ»ΣΠΟΰΣ¦µΔ΄Κµδ΅£\nΗλΔϊΌμ²ι°²Χ°£¬ΘηΣΠ±ΨÒª£¬ΗλΔϊ°²Χ°ΛωÒªΚΉΣΓµΔΣοΡΤ°ζ±Ύ΅£";
-        Text[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, εκτελέστε την εγκα";
+        Text[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, εκτελέστε την εγκατ ";
         Text[ korean ] = "Ό³Α¤µΘ ΎπΎξΏ΅ ΄λΗΡ µΏΐΗΎξ »ηΐόΐ» ΐΜΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.\nΌ³Δ΅ »σΕΒΈ¦ °Λ»ηΗΡ ΄Ωΐ½ ΗΚΏδΗΟ΄ΩΈι ΏψΗΟ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ";
         Text[ turkish ] = "Ayarlanan dile iliώkin eώanlamlύlar mevcut deπil.\nLόtfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
@@ -300,7 +300,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "$(ARG1) ΫνΡ γΚζέΡΙ ααΚΟήνή ΗαΕγαΗΖν.\nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζήγ ΘΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ.";
         Text[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "$(ARG1)²»΄ζΤΪ΅£\nΗλΔϊΌμ²ι°²Χ°£¬ΘηΣΠ±ΨÒªΗλ°²Χ°ΛωΠθµΔΣοΡΤ°ζ±Ύ΅£";
-        Text[ greek ] = "$(ARG1) δεν είναι διαθέσιμο για τον ορθογραφικό έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και εγκαταστήστε αν χρειαστεί την γλώσσα που επιθυ";
+        Text[ greek ] = "$(ARG1) δεν είναι διαθέσιμο για τον ορθογραφικό έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και εγκαταστήστε αν χρειαστεί την γλώσσα που επιθυμ? ";
         Text[ korean ] = "$(ARG1)ΐ»(Έ¦) ΈΒΓγΉύ °Λ»ηΏ΅ ΐΜΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.\n »ηΏλΐΪΐΗ Ό³Δ΅Έ¦ Α΅°ΛΗΡ ΄Ωΐ½, ΗΚΏδ½Γ Ώδ±ΈµΗ΄Β  ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "$(ARG1) yazύm denetiminde kullanύlamύyor.\nLόtfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
@@ -687,6 +687,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
