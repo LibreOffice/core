@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-11-14 18:00:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #define ITEMID_COLOR            ATTR_ANIMATION_COLOR
 #ifndef _XTABLE_HXX
@@ -115,22 +117,33 @@
 #include "app.hrc"
 #include "strings.hrc"
 
-#include "drviewsh.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "efctchld.hxx"
-#include "effect.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_EFFECT_CHILD_WINDOW_HXX
+#include "EffectChildWindow.hxx"
+#endif
+#ifndef SD_EFFECT_HXX
+#include "EffectWindow.hxx"
+#endif
 #include "anminfo.hxx"
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
-#include "preview.hxx"
-#include "prevchld.hxx"
-//#include "3dchld.hxx"
-//#include "3dfloat.hxx"
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 
 using namespace ::com::sun::star;
+
+namespace sd {
 
 #define ATTR_MISSING    0       // Attribut nicht verfuegbar
 #define ATTR_MIXED      1       // Attribut uneindeutig (bei Mehrfachselektion)
@@ -144,7 +157,7 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecEffectWin( SfxRequest& rReq )
+void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 {
     CheckLineTo (rReq);
 
@@ -154,13 +167,14 @@ void SdDrawViewShell::ExecEffectWin( SfxRequest& rReq )
     {
         case SID_EFFECT_INIT:
         {
-            USHORT nId = SdEffectChildWindow::GetChildWindowId();
+            USHORT nId = EffectChildWindow::GetChildWindowId();
             SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
             if( pWindow )
             {
-                SdEffectWin* pEffectWin = (SdEffectWin*)( pWindow->GetWindow() );
+                EffectWindow* pEffectWin = static_cast<EffectWindow*>(
+                    pWindow->GetWindow());
                 if( pEffectWin )
-                    pEffectWin->InitColorLB( pDoc );
+                    pEffectWin->InitColorLB( GetDoc() );
             }
         }
         break;
@@ -198,7 +212,7 @@ void SdDrawViewShell::ExecEffectWin( SfxRequest& rReq )
             {
                 Svx3DWin* p3DWin = (Svx3DWin*)( pWindow->GetWindow() );
                 if( p3DWin )
-                    p3DWin->InitColorLB( pDoc );
+                    p3DWin->InitColorLB( GetDoc() );
             }
         }
         break;
@@ -224,7 +238,7 @@ void SdDrawViewShell::ExecEffectWin( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetEffectWinState( SfxItemSet& rSet )
+void DrawViewShell::GetEffectWinState( SfxItemSet& rSet )
 {
     UINT32 nState = EFFECT_STATE_NONE;
 
@@ -242,8 +256,8 @@ void SdDrawViewShell::GetEffectWinState( SfxItemSet& rSet )
             SdrObject* pObject2 = rMarkList.GetMark(1)->GetObj();
             SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
             SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
-            //SdAnimationInfo* pInfo1 = pDoc->GetAnimationInfo(pObject1);
-            //SdAnimationInfo* pInfo2 = pDoc->GetAnimationInfo(pObject2);
+            //SdAnimationInfo* pInfo1 = GetDoc()->GetAnimationInfo(pObject1);
+            //SdAnimationInfo* pInfo2 = GetDoc()->GetAnimationInfo(pObject2);
             //SdAnimationInfo* pInfo  = NULL;
 
             if( ( ( pObject1->GetObjInventor() == SdrInventor &&
@@ -265,13 +279,14 @@ void SdDrawViewShell::GetEffectWinState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::UpdateEffectWindow()
+void DrawViewShell::UpdateEffectWindow()
 {
-    USHORT nId = SdEffectChildWindow::GetChildWindowId();
+    USHORT nId = EffectChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SdEffectWin* pEffectWin = (SdEffectWin*) pWindow->GetWindow();
+        EffectWindow* pEffectWin = static_cast<EffectWindow*>(
+            pWindow->GetWindow());
         const SdrMarkList& rMarkList = pDrView->GetMarkList();
         ULONG nCount = rMarkList.GetMarkCount();
 
@@ -337,7 +352,7 @@ void SdDrawViewShell::UpdateEffectWindow()
                 if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() && !((SdrTextObj*)pObject)->IsFontwork() )
                     bHasText = bHasText || TRUE;
 
-                pInfo = pDoc->GetAnimationInfo(pObject);
+                pInfo = GetDoc()->GetAnimationInfo(pObject);
                 if( pInfo )
                 {
                     bActive             = pInfo->bActive;
@@ -398,7 +413,7 @@ void SdDrawViewShell::UpdateEffectWindow()
                     if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() && !((SdrTextObj*)pObject)->IsFontwork() )
                         bHasText = bHasText || TRUE;
 
-                    pInfo = pDoc->GetAnimationInfo(pObject);
+                    pInfo = GetDoc()->GetAnimationInfo(pObject);
                     if( pInfo )
                     {
                         if( bActive != pInfo->bActive )
@@ -509,8 +524,8 @@ void SdDrawViewShell::UpdateEffectWindow()
                     SdrObject* pObject2 = rMarkList.GetMark(1)->GetObj();
                     SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
                     SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
-                    SdAnimationInfo* pInfo1 = pDoc->GetAnimationInfo(pObject1);
-                    SdAnimationInfo* pInfo2 = pDoc->GetAnimationInfo(pObject2);
+                    SdAnimationInfo* pInfo1 = GetDoc()->GetAnimationInfo(pObject1);
+                    SdAnimationInfo* pInfo2 = GetDoc()->GetAnimationInfo(pObject2);
                     SdAnimationInfo* pInfo  = NULL;
 
                     if (pObject1->GetObjInventor() == SdrInventor &&
@@ -553,7 +568,7 @@ void SdDrawViewShell::UpdateEffectWindow()
                 }
 
                 // ItemSet fuer Dialog fuellen
-                SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END, 0);
+                SfxItemSet aSet(GetDoc()->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END, 0);
 
                 // das Set besetzen
                 if (nAnimationSet == ATTR_SET)
@@ -670,7 +685,7 @@ void SdDrawViewShell::UpdateEffectWindow()
             }
             else
             {
-                SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_EFFECT, ATTR_ANIMATION_TEXTEFFECT, 0);
+                SfxItemSet aSet(GetDoc()->GetPool(), ATTR_ANIMATION_EFFECT, ATTR_ANIMATION_TEXTEFFECT, 0);
                 aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
                 aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
                 pEffectWin->Update( aSet );
@@ -685,17 +700,18 @@ void SdDrawViewShell::UpdateEffectWindow()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::AssignFromEffectWindow()
+void DrawViewShell::AssignFromEffectWindow()
 {
     bInEffectAssignment = TRUE;
 
-    USHORT nId = SdEffectChildWindow::GetChildWindowId();
+    USHORT nId = EffectChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
         GetViewFrame()->GetBindings().InvalidateAll( TRUE );
 
-        SdEffectWin* pEffectWin = (SdEffectWin*) pWindow->GetWindow();
+        EffectWindow* pEffectWin = static_cast<EffectWindow*>(
+            pWindow->GetWindow());
         const SdrMarkList& rMarkList = pDrView->GetMarkList();
         ULONG nCount = rMarkList.GetMarkCount();
         if( pEffectWin && nCount > 0 )
@@ -747,7 +763,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
 
             SdAnimationInfo* pInfo = NULL;
 
-            SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END, 0);
+            SfxItemSet aSet(GetDoc()->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END, 0);
             pEffectWin->GetAttr( aSet );
 
             // Auswertung des ItemSets
@@ -912,7 +928,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
                 pUndoMgr->EnterListAction(aComment, aComment);
 
                 // Undo Gruppe erzeugen
-                SdUndoGroup* pUndoGroup = new SdUndoGroup(pDoc);
+                SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
                 pUndoGroup->SetComment(aComment);
 
 
@@ -978,12 +994,12 @@ void SdDrawViewShell::AssignFromEffectWindow()
                 {
                     SdrObject* pObject = rMarkList.GetMark(nObject)->GetObj();
 
-                    pInfo = pDoc->GetAnimationInfo(pObject);
+                    pInfo = GetDoc()->GetAnimationInfo(pObject);
 
                     BOOL bCreated = FALSE;
                     if( !pInfo )
                     {
-                        pInfo = new SdAnimationInfo(pDoc);
+                        pInfo = new SdAnimationInfo(GetDoc());
                         pObject->InsertUserData( pInfo );
                         bCreated = TRUE;
                     }
@@ -992,7 +1008,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
                     if (eEffect == presentation::AnimationEffect_PATH && pObject == pPath)
                     {
                         SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                                        (pDoc, pObject, bCreated);
+                                                        (GetDoc(), pObject, bCreated);
                         pAction->SetActive(pInfo->bActive, pInfo->bActive);
                         pAction->SetEffect(pInfo->eEffect, pInfo->eEffect);
                         pAction->SetTextEffect(pInfo->eTextEffect, pInfo->eTextEffect);
@@ -1022,7 +1038,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
 
                         // Undo-Action mit alten und neuen Groessen erzeugen
                         SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
-                                                        (pDoc, pObject, bCreated);
+                                                        (GetDoc(), pObject, bCreated);
                         pAction->SetActive(pInfo->bActive, bActive);
                         pAction->SetEffect(pInfo->eEffect, eEffect);
                         pAction->SetTextEffect(pInfo->eTextEffect, eTextEffect);
@@ -1112,18 +1128,21 @@ void SdDrawViewShell::AssignFromEffectWindow()
                 pUndoMgr->LeaveListAction();
 
                 // Model geaendert
-                pDoc->SetChanged();
+                GetDoc()->SetChanged();
 
                 /*******************************************************
                 |* ggfs. in Preview anzeigen
                 \******************************************************/
-                SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+                SfxChildWindow* pPreviewChildWindow =
+                    GetViewFrame()->GetChildWindow(
+                        PreviewChildWindow::GetChildWindowId());
 
                 if( pPreviewChildWindow && ePageKind != PK_HANDOUT )
                 {
-                    SdPreviewWin* pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow();
+                    PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+                        pPreviewChildWindow->GetWindow());
 
-                    if( pPreviewWin && pPreviewWin->GetDoc() == pDoc )
+                    if( pPreviewWin && pPreviewWin->GetDoc() == GetDoc() )
                     {
                         for( nObject = 0; nObject < nCount; nObject++ )
                         {
@@ -1133,7 +1152,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
 
                                 if( pObject )
                                 {
-                                    pInfo = pDoc->GetAnimationInfo( pObject );
+                                    pInfo = GetDoc()->GetAnimationInfo( pObject );
 
                                     if( pInfo && !( eEffect == presentation::AnimationEffect_PATH && pObject == pPath ) )
                                         pPreviewWin->HideAndAnimateObject( pObject );
@@ -1155,7 +1174,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
 |* 3D - Assign / Update
 |*
 \************************************************************************/
-void SdDrawViewShell::Update3DWindow()
+void DrawViewShell::Update3DWindow()
 {
     USHORT nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
@@ -1174,7 +1193,7 @@ void SdDrawViewShell::Update3DWindow()
 
 #pragma optimize ( "", off )
 
-void SdDrawViewShell::AssignFrom3DWindow()
+void DrawViewShell::AssignFrom3DWindow()
 {
     USHORT nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWin = GetViewFrame()->GetChildWindow( nId );
@@ -1185,7 +1204,7 @@ void SdDrawViewShell::AssignFrom3DWindow()
         {
             if(!pView->IsPresObjSelected())
             {
-                SfxItemSet aSet( pDoc->GetPool(),
+                SfxItemSet aSet( GetDoc()->GetPool(),
                     SDRATTR_START,  SDRATTR_END,
                     0, 0);
                 p3DWin->GetAttr( aSet );
@@ -1196,7 +1215,7 @@ void SdDrawViewShell::AssignFrom3DWindow()
                 if(pView->IsConvertTo3DObjPossible())
                 {
                     // Nur TextAttribute zuweisen
-                    SfxItemSet aTextSet( pDoc->GetPool(),
+                    SfxItemSet aTextSet( GetDoc()->GetPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
                     aTextSet.Put( aSet, FALSE );
                     pView->SetAttributes( aTextSet );
@@ -1240,4 +1259,4 @@ void SdDrawViewShell::AssignFrom3DWindow()
 
 #pragma optimize ( "", on )
 
-
+}
