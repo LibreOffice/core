@@ -30,7 +30,10 @@ int fstat(int fildes, struct stat *buf)
             dlsym (RTLD_NEXT, "fstat");
     ret = (*p_fstat)(fildes, buf);
     if (buf != NULL)
-        buf->st_uid = 0;
+    {
+        buf->st_uid = 0; /* root */
+        buf->st_gid = 1; /* other */
+    }
 
     return ret;
 }
