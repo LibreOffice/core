@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:40:54 $
+#   last change: $Author: rt $ $Date: 2003-04-17 09:59:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,9 +115,6 @@ MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 
 CONVERTTAGSCRIPT=$(SOLARENV)$/bin$/converttags.pl
-
-# used in pack/gendocu and unzip_udk
-DIR_CREATE_FLAG=$(MISC)$/docu_directories_created.txt
 
 # used in pack/copying and unzip_udk
 DEVGUIDE_DOCU_FLAG=$(MISC)$/devguide_docu_unzipped.txt
