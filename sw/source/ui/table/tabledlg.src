@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 11:01:30 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,7 +1333,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "±a­¶­±¼Ë¦¡(~Y)";
         Text[ arabic ] = "ÈäãØ ÕİÍÉ";
         Text[ greek ] = "ìå ğñüôõğï óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö À¯Çü°ú ÇÔ²²(~Y)";
+        Text[ korean ] = "ÆäÀÌÁö À¯Çü°ú ÇÔ²²";
         Text[ turkish ] = "Sayfa düzeni ile";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
@@ -1367,7 +1367,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "­¶¼Æ(~N)";
         Text[ arabic ] = "ÑŞã ÇáÕİÍÉ";
         Text[ greek ] = "Áñéèìüò óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö ¹øÈ£(~N)";
+        Text[ korean ] = "ÆäÀÌÁö ¹øÈ£";
         Text[ turkish ] = "Sayfa ~numaraları";
         Text[ language_user1 ] = " ";
     };
