@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropTargetDragEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-interface XDropTargetDragContext;
+ published interface XDropTargetDragContext;
 
 //=============================================================================
 /** The <type>DropTargetDragEvent</type> is delivered from the drop target
@@ -83,7 +83,7 @@ interface XDropTargetDragContext;
     @see com::sun::star::datatransfer::dnd::XDropTargetListener
 */
 
-struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
+published struct DropTargetDragEvent: com::sun::star::datatransfer::dnd::DropTargetEvent
 {
     //-------------------------------------------------------------------------
     /** The drop target context of the current drag operation.
