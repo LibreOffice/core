@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:35:24 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:08:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,15 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		insp
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = introspection.uno
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = insp
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
