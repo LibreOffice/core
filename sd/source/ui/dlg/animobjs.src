@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:22:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,9 +1143,9 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ portuguese_brazilian ] = "Transparenzfarbe" ;
         Text[ chinese_simplified ] = "Í¸Ã÷É«";
         Text[ russian ] = "Ïğîçğà÷íûé";
-        Text[ polish ] = "Kolor przezroczysty";
+        Text[ polish ] = "PrzeŸroczysty";
         Text[ japanese ] = "“§–¾F";
-        Text[ chinese_traditional ] = "³z©úªºÃC¦â";
+        Text[ chinese_traditional ] = "³z©ú¦â";
         Text[ arabic ] = "áæä ÔİÇİ";
         Text[ greek ] = "Äéáöáíİò ÷ñşìá";
         Text[ korean ] = "Åõ¸í»ö";
@@ -1562,5 +1562,6 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animación";
 };
+
 
 
