@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:04:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ struct XclExpChTrData
 {
     XclExpString*               pString;
     XclExpTokenArrayRef         mxTokArr;
-    XclExpRefLogVec             aRefLog;
+    XclExpRefLog                maRefLog;
     double                      fValue;
     sal_Int32                   nRKValue;
     sal_uInt16                  nType;
