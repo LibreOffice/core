@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:28:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
             nType = 0;
     }
 
-    if ( nType & pPre->nType || ( ! nType && pPre->nType & INPUT_OTHER ) )
+    if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & INPUT_OTHER) ) )
         pPre->bRet = TRUE;
 
     return False;
