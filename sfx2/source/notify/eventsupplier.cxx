@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:16:11 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
                 DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
             }
         }
-        else if ( !aScript.getLength() && aMacroName.getLength() && aLibrary.getLength() )
+        else if ( !aScript.getLength() && aMacroName.getLength() )
         {
             aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
             if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0
