@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-18 22:45:02 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 13:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ struct tm *gmtime_r(const time_t *timep, struct tm *buffer)
     return res;
 }
 
-#endif
+#endif  /* defined NETBSD || defined MACOSX */
 
 #ifdef SCO
 #include <pwd.h>
@@ -260,7 +260,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
 
       return res;
 }
-#endif
+#endif /* defined SCO */
 
 extern int h_errno;
 
@@ -361,6 +361,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
    thread subprocess and not of the main process. So we save the main
    pid at startup
 */
+
 static pid_t pid = -1;
 
 static void savePid(void) __attribute__((constructor));
@@ -378,11 +379,7 @@ pid_t getpid(void)
 
     return (pid);
 }
-#endif
-
-#ifdef PTHREAD_NONE_INIT
-pthread_t _pthread_none_ = PTHREAD_NONE_INIT;
-#endif
+#endif /*  (defined (LINUX) && (GLIBC >= 2)) */
 
 #ifdef NO_PTHREAD_SEMAPHORES
 int sem_init(sem_t* sem, int pshared, unsigned int value)
