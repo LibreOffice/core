@@ -27,6 +27,7 @@ The service provides reflection and access to all uno types
         <type>  com.sun.star.lang.XMultiComponentFactory                        </type>
         <type>  com.sun.star.lang.XSingleServiceFactory         </type>
         <type>  com.sun.star.lang.XMultiServiceFactory          </type>
+        <type>  com.sun.star.lang.WrappedTargetRuntimeException </type>
         <type>  com.sun.star.registry.XRegistryKey              </type>
         <type>  com.sun.star.uno.XComponentContext              </type>
         <type>  com.sun.star.uno.XAggregation                   </type>
