@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 13:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,10 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         {
             sal_Int32 nPos;
             *pBegin >>= nPos;
+            if(m_aKeyIter == m_aKeyMap.find(nPos) && m_aKeyIter != m_aKeyMap.end())
+                ++m_aKeyIter;
             m_aKeyMap.erase(nPos);
+            m_bDeleted = sal_True;
         }
     }
     return aRet;
@@ -595,8 +598,10 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     if(m_bDeleted)
     {
         sal_Int32 nPos = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
+        if(m_aKeyIter == m_aKeyMap.find(nPos) && m_aKeyIter != m_aKeyMap.end())
+            ++m_aKeyIter;
         m_aKeyMap.erase(nPos);
-        m_aKeyIter = m_aKeyMap.end();
+        m_bDeleted = sal_True;
     }
 }
 // -------------------------------------------------------------------------
@@ -883,6 +888,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool OKeySet::fetchRow()
 {
+    // fetch the next row and append on the keyset
     sal_Bool bRet;
     if(!m_bRowCountFinal && (bRet = m_xDriverSet->next()))
     {
@@ -961,6 +967,142 @@ void OKeySet::fillAllRows()
             ;
     }
 }
+// XRow
+sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException)
+{
+    return m_xRow->wasNull();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getString(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getBoolean(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getByte(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getShort(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getInt(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getLong(columnIndex);
+}
+// -------------------------------------------------------------------------
+float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getFloat(columnIndex);
+}
+// -------------------------------------------------------------------------
+double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getDouble(columnIndex);
+}
+// -------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getBytes(columnIndex);
+}
+// -------------------------------------------------------------------------
+::com::sun::star::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getDate(columnIndex);
+}
+// -------------------------------------------------------------------------
+::com::sun::star::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getTime(columnIndex);
+}
+// -------------------------------------------------------------------------
+::com::sun::star::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getTimestamp(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getBinaryStream(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getCharacterStream(columnIndex);
+}
+// -------------------------------------------------------------------------
+Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getObject(columnIndex,typeMap);
+}
+// -------------------------------------------------------------------------
+Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getRef(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getBlob(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getClob(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+    return m_xRow->getArray(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::rowUpdated(  ) throw(SQLException, RuntimeException)
+{
+    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 2;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::rowInserted(  ) throw(SQLException, RuntimeException)
+{
+    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 1;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
+{
+    sal_Bool bDeleted = m_bDeleted;
+    m_bDeleted = sal_False;
+    return bDeleted;
+}
 // -----------------------------------------------------------------------------
 namespace dbaccess
 {
@@ -1007,6 +1149,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.17  2001/05/22 13:08:22  oj
+    #87199# check column names
+
     Revision 1.16  2001/05/18 11:48:25  oj
     #86528# size changes
 
