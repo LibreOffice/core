@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 10:46:00 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,25 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Moveable        = TRUE ;
     Closeable       = TRUE ;
     Hide            = TRUE;
+    Text[ portuguese ] = "Autopilot Address Book Data Source";
+    Text[ russian ] = "Autopilot Address Book Data Source";
+    Text[ greek ] = "Autopilot Address Book Data Source";
+    Text[ dutch ] = "Autopilot Address Book Data Source";
+    Text[ french ] = "Autopilot Address Book Data Source";
+    Text[ spanish ] = "Autopilot Address Book Data Source";
+    Text[ finnish ] = "Autopilot Address Book Data Source";
+    Text[ italian ] = "Autopilot Address Book Data Source";
+    Text[ danish ] = "Autopilot Address Book Data Source";
+    Text[ swedish ] = "Autopilot Address Book Data Source";
+    Text[ polish ] = "Autopilot Address Book Data Source";
+    Text[ portuguese_brazilian ] = "Autopilot Address Book Data Source";
+    Text[ japanese ] = "Autopilot Address Book Data Source";
+    Text[ korean ] = "Autopilot Address Book Data Source";
+    Text[ chinese_simplified ] = "Autopilot Address Book Data Source";
+    Text[ chinese_traditional ] = "Autopilot Address Book Data Source";
+    Text[ turkish ] = "Autopilot Address Book Data Source";
+    Text[ arabic ] = "Autopilot Address Book Data Source";
+    Text[ catalan ] = "Autopilot Address Book Data Source";
 };
 
 //........................................................................
@@ -99,9 +118,26 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
             "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
             "This auto pilot will assist you in the creation of this data source.";
-        Text [ english_us ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
-            "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
-            "This auto pilot will assist you in the creation of this data source.";
+        Text [ english_us ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ portuguese ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ russian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ greek ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ dutch ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ french ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ spanish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ finnish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ italian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ danish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ swedish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ polish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ portuguese_brazilian ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ japanese ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ korean ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ chinese_simplified ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ chinese_traditional ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ turkish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ arabic ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ catalan ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
     };
 
     FixedLine FL_TYPE
@@ -112,6 +148,25 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "Bitte w‰hlen sie den Typ Ihres externen Adressbuches:";
         Text [ english ] = "Please choose the type of your external address book:";
         Text [ english_us ] = "Please choose the type of your external address book:";
+        Text[ portuguese ] = "Please choose the type of your external address book:";
+        Text[ russian ] = "Please choose the type of your external address book:";
+        Text[ greek ] = "Please choose the type of your external address book:";
+        Text[ dutch ] = "Please choose the type of your external address book:";
+        Text[ french ] = "Please choose the type of your external address book:";
+        Text[ spanish ] = "Please choose the type of your external address book:";
+        Text[ finnish ] = "Please choose the type of your external address book:";
+        Text[ italian ] = "Please choose the type of your external address book:";
+        Text[ danish ] = "Please choose the type of your external address book:";
+        Text[ swedish ] = "Please choose the type of your external address book:";
+        Text[ polish ] = "Please choose the type of your external address book:";
+        Text[ portuguese_brazilian ] = "Please choose the type of your external address book:";
+        Text[ japanese ] = "Please choose the type of your external address book:";
+        Text[ korean ] = "Please choose the type of your external address book:";
+        Text[ chinese_simplified ] = "Please choose the type of your external address book:";
+        Text[ chinese_traditional ] = "Please choose the type of your external address book:";
+        Text[ turkish ] = "Please choose the type of your external address book:";
+        Text[ arabic ] = "Please choose the type of your external address book:";
+        Text[ catalan ] = "Please choose the type of your external address book:";
     };
 
     RadioButton RB_MORK
@@ -123,6 +178,25 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english ] = "Mozilla / Netscape 6.x";
         Text [ english_us ] = "Mozilla / Netscape 6.x";
         Group = TRUE;
+        Text[ portuguese ] = "Mozilla / Netscape 6.x";
+        Text[ russian ] = "Mozilla / Netscape 6.x";
+        Text[ greek ] = "Mozilla / Netscape 6.x";
+        Text[ dutch ] = "Mozilla / Netscape 6.x";
+        Text[ french ] = "Mozilla / Netscape 6.x";
+        Text[ spanish ] = "Mozilla / Netscape 6.x";
+        Text[ finnish ] = "Mozilla / Netscape 6.x";
+        Text[ italian ] = "Mozilla / Netscape 6.x";
+        Text[ danish ] = "Mozilla / Netscape 6.x";
+        Text[ swedish ] = "Mozilla / Netscape 6.x";
+        Text[ polish ] = "Mozilla / Netscape 6.x";
+        Text[ portuguese_brazilian ] = "Mozilla / Netscape 6.x";
+        Text[ japanese ] = "Mozilla / Netscape 6.x";
+        Text[ korean ] = "Mozilla / Netscape 6.x";
+        Text[ chinese_simplified ] = "Mozilla / Netscape 6.x";
+        Text[ chinese_traditional ] = "Mozilla / Netscape 6.x";
+        Text[ turkish ] = "Mozilla / Netscape 6.x";
+        Text[ arabic ] = "Mozilla / Netscape 6.x";
+        Text[ catalan ] = "Mozilla / Netscape 6.x";
     };
     RadioButton RB_LDAP
     {
@@ -132,6 +206,25 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "LDAP Adress-Bestand";
         Text [ english ] = "LDAP address data";
         Text [ english_us ] = "LDAP address data";
+        Text[ portuguese ] = "LDAP address data";
+        Text[ russian ] = "LDAP address data";
+        Text[ greek ] = "LDAP address data";
+        Text[ dutch ] = "LDAP address data";
+        Text[ french ] = "LDAP address data";
+        Text[ spanish ] = "LDAP address data";
+        Text[ finnish ] = "LDAP address data";
+        Text[ italian ] = "LDAP address data";
+        Text[ danish ] = "LDAP address data";
+        Text[ swedish ] = "LDAP address data";
+        Text[ polish ] = "LDAP address data";
+        Text[ portuguese_brazilian ] = "LDAP address data";
+        Text[ japanese ] = "LDAP address data";
+        Text[ korean ] = "LDAP address data";
+        Text[ chinese_simplified ] = "LDAP address data";
+        Text[ chinese_traditional ] = "LDAP address data";
+        Text[ turkish ] = "LDAP address data";
+        Text[ arabic ] = "LDAP address data";
+        Text[ catalan ] = "LDAP address data";
     };
     RadioButton RB_OUTLOOK
     {
@@ -141,6 +234,25 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "Outlook Adressbuch";
         Text [ english ] = "Outlook address book";
         Text [ english_us ] = "Outlook address book";
+        Text[ portuguese ] = "Outlook address book";
+        Text[ russian ] = "Outlook address book";
+        Text[ greek ] = "Outlook address book";
+        Text[ dutch ] = "Outlook address book";
+        Text[ french ] = "Outlook address book";
+        Text[ spanish ] = "Outlook address book";
+        Text[ finnish ] = "Outlook address book";
+        Text[ italian ] = "Outlook address book";
+        Text[ danish ] = "Outlook address book";
+        Text[ swedish ] = "Outlook address book";
+        Text[ polish ] = "Outlook address book";
+        Text[ portuguese_brazilian ] = "Outlook address book";
+        Text[ japanese ] = "Outlook address book";
+        Text[ korean ] = "Outlook address book";
+        Text[ chinese_simplified ] = "Outlook address book";
+        Text[ chinese_traditional ] = "Outlook address book";
+        Text[ turkish ] = "Outlook address book";
+        Text[ arabic ] = "Outlook address book";
+        Text[ catalan ] = "Outlook address book";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
@@ -150,6 +262,25 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "Windows System-Adressbuch";
         Text [ english ] = "Windows system address book";
         Text [ english_us ] = "Windows system address book";
+        Text[ portuguese ] = "Windows system address book";
+        Text[ russian ] = "Windows system address book";
+        Text[ greek ] = "Windows system address book";
+        Text[ dutch ] = "Windows system address book";
+        Text[ french ] = "Windows system address book";
+        Text[ spanish ] = "Windows system address book";
+        Text[ finnish ] = "Windows system address book";
+        Text[ italian ] = "Windows system address book";
+        Text[ danish ] = "Windows system address book";
+        Text[ swedish ] = "Windows system address book";
+        Text[ polish ] = "Windows system address book";
+        Text[ portuguese_brazilian ] = "Windows system address book";
+        Text[ japanese ] = "Windows system address book";
+        Text[ korean ] = "Windows system address book";
+        Text[ chinese_simplified ] = "Windows system address book";
+        Text[ chinese_traditional ] = "Windows system address book";
+        Text[ turkish ] = "Windows system address book";
+        Text[ arabic ] = "Windows system address book";
+        Text[ catalan ] = "Windows system address book";
     };
     RadioButton RB_OTHER
     {
@@ -159,7 +290,45 @@ TabPage RID_PAGE_SELECTABTYPE
         Text = "andere externe Datenquelle";
         Text [ english ] = "other external data source";
         Text [ english_us ] = "other external data source";
+        Text[ portuguese ] = "other external data source";
+        Text[ russian ] = "other external data source";
+        Text[ greek ] = "other external data source";
+        Text[ dutch ] = "other external data source";
+        Text[ french ] = "other external data source";
+        Text[ spanish ] = "other external data source";
+        Text[ finnish ] = "other external data source";
+        Text[ italian ] = "other external data source";
+        Text[ danish ] = "other external data source";
+        Text[ swedish ] = "other external data source";
+        Text[ polish ] = "other external data source";
+        Text[ portuguese_brazilian ] = "other external data source";
+        Text[ japanese ] = "other external data source";
+        Text[ korean ] = "other external data source";
+        Text[ chinese_simplified ] = "other external data source";
+        Text[ chinese_traditional ] = "other external data source";
+        Text[ turkish ] = "other external data source";
+        Text[ arabic ] = "other external data source";
+        Text[ catalan ] = "other external data source";
     };
+    Text[ portuguese ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ russian ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ greek ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ dutch ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ french ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ spanish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ finnish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ italian ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ danish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ swedish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ polish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ portuguese_brazilian ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ japanese ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ korean ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ chinese_simplified ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ chinese_traditional ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ turkish ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ arabic ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ catalan ] = "Welcome to the Address Data Source AutoPilot";
 };
 
 //........................................................................
@@ -178,15 +347,32 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
+        Text = "Um die neue Datenquelle einzurichten, sind noch Weiter gehende Angaben notwendig.\n\n"
             "Daf¸r wird, sobald die auf den unten befindlichen Button dr¸cken, ein weiterer Dialog geˆffnet. "
             "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
         Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
             "For this, another dialog will be opened, as soon as you press the button below. "
             "There, please specify all missing settings.";
-        Text [ english_us ] = "To set up the new data source, some additional information is needed.\n\n"
-            "For this, another dialog will be opened, as soon as you press the button below. "
-            "There, please specify all missing settings.";
+        Text [ english_us ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ portuguese ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ russian ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ greek ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ dutch ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ french ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ spanish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ finnish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ italian ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ danish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ swedish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ polish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ portuguese_brazilian ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ japanese ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ korean ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ chinese_simplified ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ chinese_traditional ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ turkish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ arabic ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ catalan ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
     };
 
     PushButton PB_INVOKE_ADMIN_DIALOG
@@ -197,6 +383,25 @@ TabPage RID_PAGE_ADMININVOKATION
         Text = "Einstellungen";
         Text [ english ] = "Settings";
         Text [ english_us ] = "Settings";
+        Text[ portuguese ] = "Settings";
+        Text[ russian ] = "Settings";
+        Text[ greek ] = "Settings";
+        Text[ dutch ] = "Settings";
+        Text[ french ] = "Settings";
+        Text[ spanish ] = "Settings";
+        Text[ finnish ] = "Settings";
+        Text[ italian ] = "Settings";
+        Text[ danish ] = "Settings";
+        Text[ swedish ] = "Settings";
+        Text[ polish ] = "Settings";
+        Text[ portuguese_brazilian ] = "Settings";
+        Text[ japanese ] = "Settings";
+        Text[ korean ] = "Settings";
+        Text[ chinese_simplified ] = "Settings";
+        Text[ chinese_traditional ] = "Settings";
+        Text[ turkish ] = "Settings";
+        Text[ arabic ] = "Settings";
+        Text[ catalan ] = "Settings";
     };
 
     FixedText FT_ERROR
@@ -211,9 +416,46 @@ TabPage RID_PAGE_ADMININVOKATION
             "Seite) einen anderen Typ f¸r Ihre  Adress-Datenquelle.";
         Text [ english ] = "The connection to the data source could not be established.\n"
             "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
-        Text [ english_us ] = "The connection to the data source could not be established.\n"
-            "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text [ english_us ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ portuguese ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ russian ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ greek ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ dutch ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ french ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ spanish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ finnish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ italian ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ danish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ swedish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ polish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ portuguese_brazilian ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ japanese ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ korean ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ chinese_simplified ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ chinese_traditional ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ turkish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ arabic ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ catalan ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
     };
+    Text[ portuguese ] = "Additional Settings";
+    Text[ russian ] = "Additional Settings";
+    Text[ greek ] = "Additional Settings";
+    Text[ dutch ] = "Additional Settings";
+    Text[ french ] = "Additional Settings";
+    Text[ spanish ] = "Additional Settings";
+    Text[ finnish ] = "Additional Settings";
+    Text[ italian ] = "Additional Settings";
+    Text[ danish ] = "Additional Settings";
+    Text[ swedish ] = "Additional Settings";
+    Text[ polish ] = "Additional Settings";
+    Text[ portuguese_brazilian ] = "Additional Settings";
+    Text[ japanese ] = "Additional Settings";
+    Text[ korean ] = "Additional Settings";
+    Text[ chinese_simplified ] = "Additional Settings";
+    Text[ chinese_traditional ] = "Additional Settings";
+    Text[ turkish ] = "Additional Settings";
+    Text[ arabic ] = "Additional Settings";
+    Text[ catalan ] = "Additional Settings";
 };
 
 //........................................................................
@@ -236,8 +478,26 @@ TabPage RID_PAGE_TABLESELECTION
             "Bitte w‰hlen Sie denjenigen aus, mit dem Sie haupts‰chlich arbeiten wollen:";
         Text [ english ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\n"
             "Please choose the one you primarily want to work with:";
-        Text [ english_us ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\n"
-            "Please choose the one you primarily want to work with:";
+        Text [ english_us ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ portuguese ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ russian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ greek ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ dutch ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ french ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ spanish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ finnish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ italian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ danish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ swedish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ polish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ portuguese_brazilian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ japanese ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ korean ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ chinese_simplified ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ chinese_traditional ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ turkish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ arabic ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ catalan ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
     };
 
     ListBox LB_TABLELIST
@@ -250,6 +510,25 @@ TabPage RID_PAGE_TABLESELECTION
         AutoHScroll = TRUE;
         Border = TRUE;
     };
+    Text[ portuguese ] = "Select Table";
+    Text[ russian ] = "Select Table";
+    Text[ greek ] = "Select Table";
+    Text[ dutch ] = "Select Table";
+    Text[ french ] = "Select Table";
+    Text[ spanish ] = "Select Table";
+    Text[ finnish ] = "Select Table";
+    Text[ italian ] = "Select Table";
+    Text[ danish ] = "Select Table";
+    Text[ swedish ] = "Select Table";
+    Text[ polish ] = "Select Table";
+    Text[ portuguese_brazilian ] = "Select Table";
+    Text[ japanese ] = "Select Table";
+    Text[ korean ] = "Select Table";
+    Text[ chinese_simplified ] = "Select Table";
+    Text[ chinese_traditional ] = "Select Table";
+    Text[ turkish ] = "Select Table";
+    Text[ arabic ] = "Select Table";
+    Text[ catalan ] = "Select Table";
 };
 
 //........................................................................
@@ -268,9 +547,9 @@ TabPage RID_PAGE_FIELDMAPPING
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 72 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu kˆnnen, muﬂ %PRODUCTNAME wissen, welche Felder welche "
+        Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu kˆnnen, muss %PRODUCTNAME wissen, welche Felder welche "
             "konkreten Daten enthalten.\n\n"
-            "Zum Beispiel kˆnnten Sie die E-Mail-Adressen in einem Feld namens \"EMail\" oder \"E-Mail\" oder \"EM\" - oder unter vˆllig anderem Namen - gespeichert haben.\n\n"
+            "Zum Beispiel kˆnnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"E-Mail\" oder \"EM\" - oder unter vˆllig anderem Namen - gespeichert haben.\n\n"
             "Sobald sie den unten stehenden Button dr¸cken, wird ein weiterer Dialog geˆffnet, in dem sie diese Einstellungen "
             "f¸r Ihre Datenquelle vornehmen kˆnnen.";
         Text [ english ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
@@ -278,11 +557,26 @@ TabPage RID_PAGE_FIELDMAPPING
             "For instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\n"
             "When you press the button below, another dialog will be opened, where you can do this field assignment for your "
             "data source.";
-        Text [ english_us ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
-            "do contain which concrete data.\n\n"
-            "For instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\n"
-            "When you press the button below, another dialog will be opened, where you can do this field assignment for your "
-            "data source.";
+        Text [ english_us ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ portuguese ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ russian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ greek ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ dutch ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ french ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ spanish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ finnish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ italian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ danish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ swedish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ polish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ portuguese_brazilian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ japanese ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ korean ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ chinese_simplified ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ chinese_traditional ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ turkish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ arabic ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ catalan ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
     };
 
     PushButton PB_INVOKE_FIELDS_DIALOG
@@ -293,6 +587,25 @@ TabPage RID_PAGE_FIELDMAPPING
         Text = "Feld-Zuordnung";
         Text [ english ] = "Field assignment";
         Text [ english_us ] = "Field assignment";
+        Text[ portuguese ] = "Field assignment";
+        Text[ russian ] = "Field assignment";
+        Text[ greek ] = "Field assignment";
+        Text[ dutch ] = "Field assignment";
+        Text[ french ] = "Field assignment";
+        Text[ spanish ] = "Field assignment";
+        Text[ finnish ] = "Field assignment";
+        Text[ italian ] = "Field assignment";
+        Text[ danish ] = "Field assignment";
+        Text[ swedish ] = "Field assignment";
+        Text[ polish ] = "Field assignment";
+        Text[ portuguese_brazilian ] = "Field assignment";
+        Text[ japanese ] = "Field assignment";
+        Text[ korean ] = "Field assignment";
+        Text[ chinese_simplified ] = "Field assignment";
+        Text[ chinese_traditional ] = "Field assignment";
+        Text[ turkish ] = "Field assignment";
+        Text[ arabic ] = "Field assignment";
+        Text[ catalan ] = "Field assignment";
     };
 
     FixedText FT_ASSIGNEDFIELDS
@@ -300,6 +613,25 @@ TabPage RID_PAGE_FIELDMAPPING
         Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 32 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
     };
+    Text[ portuguese ] = "Field Assignment";
+    Text[ russian ] = "Field Assignment";
+    Text[ greek ] = "Field Assignment";
+    Text[ dutch ] = "Field Assignment";
+    Text[ french ] = "Field Assignment";
+    Text[ spanish ] = "Field Assignment";
+    Text[ finnish ] = "Field Assignment";
+    Text[ italian ] = "Field Assignment";
+    Text[ danish ] = "Field Assignment";
+    Text[ swedish ] = "Field Assignment";
+    Text[ polish ] = "Field Assignment";
+    Text[ portuguese_brazilian ] = "Field Assignment";
+    Text[ japanese ] = "Field Assignment";
+    Text[ korean ] = "Field Assignment";
+    Text[ chinese_simplified ] = "Field Assignment";
+    Text[ chinese_traditional ] = "Field Assignment";
+    Text[ turkish ] = "Field Assignment";
+    Text[ arabic ] = "Field Assignment";
+    Text[ catalan ] = "Field Assignment";
 };
 
 //........................................................................
@@ -322,8 +654,26 @@ TabPage RID_PAGE_FINAL
             "Geben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
         Text [ english ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\n"
             "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
-        Text [ english_us ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\n"
-            "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text [ english_us ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ portuguese ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ russian ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ greek ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ dutch ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ french ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ spanish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ finnish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ italian ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ danish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ swedish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ polish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ portuguese_brazilian ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ japanese ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ korean ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ chinese_simplified ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ chinese_traditional ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ turkish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ arabic ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ catalan ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
     };
 
     FixedText FT_NAME_EXPL
@@ -335,6 +685,25 @@ TabPage RID_PAGE_FINAL
         Text [ english ] = "Title";
         Text [ english_us ] = "Title";
         Group = TRUE;
+        Text[ portuguese ] = "Title";
+        Text[ russian ] = "Title";
+        Text[ greek ] = "Title";
+        Text[ dutch ] = "Title";
+        Text[ french ] = "Title";
+        Text[ spanish ] = "Title";
+        Text[ finnish ] = "Title";
+        Text[ italian ] = "Title";
+        Text[ danish ] = "Title";
+        Text[ swedish ] = "Title";
+        Text[ polish ] = "Title";
+        Text[ portuguese_brazilian ] = "Title";
+        Text[ japanese ] = "Title";
+        Text[ korean ] = "Title";
+        Text[ chinese_simplified ] = "Title";
+        Text[ chinese_traditional ] = "Title";
+        Text[ turkish ] = "Title";
+        Text[ arabic ] = "Title";
+        Text[ catalan ] = "Title";
     };
 
     Edit ET_DATASOURCENAME
@@ -358,7 +727,7 @@ TabPage RID_PAGE_FINAL
         Text [ english_us ] = "Another data source already has this name. As data sources have globally unique names, you have to choose another one.";
         Text [ portuguese ] = "J· existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser ˙nicos, por esta raz„o È recomend·vel seleccionar outro nome.";
         Text [ russian ] = "œÓ‰ Ú‡ÍËÏ ËÏÂÌÂÏ ÛÊÂ ÒÛ˘ÂÒÚ‚ÛÂÚ Ó‰ËÌ ËÒÚÓ˜ÌËÍ ‰‡ÌÌ˚ı. œÓÒÍÓÎ¸ÍÛ ËÏÂÌ‡ ËÒÚÓ˜ÌËÍÓ‚ ‰‡ÌÌ˚ı ‰ÓÎÊÌ˚ ·˚Ú¸ ÛÌËÍ‡Î¸Ì˚ÏË, ÌÂÓ·ıÓ‰ËÏÓ ÔËÒ‚ÓËÚ¸ ‰Û„ÓÂ ËÏˇ.";
-        Text [ greek ] = "’‹Ò˜ÂÈ ﬁ‰Á ÏÈ· ÒÔ›ÎÂıÛÁ ‰Â‰ÔÏ›Ì˘Ì ÏÂ ·ıÙ¸ ÙÔ ¸ÌÔÏ·.  ‹ËÂ ¸ÌÔÏ· Ù˘Ì ÒÔÂÎÂ˝ÛÂ˘Ì Ù˘Ì ‰Â‰ÔÏ›Ì˘Ì ÂÈÙÒ›ÂÙ·È Ì· ı‹Ò˜ÂÈ Ï¸ÌÔ ÏÈ· ˆÔÒ‹. –·Ò·Í· ";
+        Text [ greek ] = "’‹Ò˜ÂÈ ﬁ‰Á ÏÈ· ÒÔ›ÎÂıÛÁ ‰Â‰ÔÏ›Ì˘Ì ÏÂ ·ıÙ¸ ÙÔ ¸ÌÔÏ·.  ‹ËÂ ¸ÌÔÏ· Ù˘Ì ÒÔÂÎÂ˝ÛÂ˘Ì Ù˘Ì ‰Â‰ÔÏ›Ì˘Ì ÂÈÙÒ›ÂÙ·È Ì· ı‹Ò˜ÂÈ Ï¸ÌÔ ÏÈ· ˆÔÒ‹. –·Ò·Í·";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a dÈj‡ ÈtÈ attribuÈ ‡ une autre source de donnÈes. …tant donnÈ que les sources de donnÈes doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
         Text [ spanish ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente ˙nico.";
@@ -367,15 +736,34 @@ TabPage RID_PAGE_FINAL
         Text [ swedish ] = "Det finns redan en datak‰lla med det h‰r namnet. Eftersom namn pÂ datak‰llor mÂste vara globalt unika bˆr Du v‰lja ett annat namn.";
         Text [ polish ] = "Istnieje inne ürÛd≥o danych o tej samej nazwie. Poniewaø nazwy ürode≥ danych muszπ byÊ globalnie jednoznaczne, naleøy wybraÊ innπ nazwÍ.";
         Text [ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
-        Text [ japanese ] = "Ç±ÇÃñºëOÇÃïtÇ¢ÇΩï ÇÃ√ﬁ∞¿ø∞ΩÇ™Ç∑Ç≈Ç…Ç†ÇËÇ‹Ç∑ÅB√ﬁ∞¿ø∞ΩñºÇÇÕÇ¡Ç´ÇËÇ∆ãÊï Ç∑ÇÈÇΩÇﬂÇ…ÇÕÅAÇŸÇ©ÇÃñºëOÇëIëÇ∑ÇÈïKóvÇ™Ç†ÇËÇ‹Ç∑ÅB";
-        Text [ korean ] = "¿ÃπÃ ¿Ã ¿Ã∏ß¿ª ∞°¡¯ ¥Ÿ∏• µ•¿Ã≈Õ º“Ω∫∞° ¿÷Ω¿¥œ¥Ÿ. µ•¿Ã≈Õº“Ω∫ ¿Ã∏ß¿∫ ¿¸ø™ø°º≠ ¿Ø¿œ«ÿæﬂ «œπ«∑Œ, ¥Ÿ∏• ¿Ã∏ß¿ª º±≈√«ÿæﬂ «’¥œ¥Ÿ.";
-        Text [ chinese_simplified ] = "“—æ≠¥Ê‘⁄“ª∏ˆÕ¨√˚µƒ ˝æ›‘¥°£“ÚŒ™ ˝æ›‘¥√˚≥∆±ÿ–Î «“ª∏ˆÕ®”√µƒ”––ß√˚≥∆£¨Ω®“Èƒ˙≤…”√¡Ì“ª∏ˆ√˚≥∆°£";
-        Text [ chinese_traditional ] = "§w∏g¶s¶b§@≠”¶P¶W™∫∏ÍÆ∆∑Ω°C¶]¨∞§@≠”∏ÍÆ∆∑Ω™∫¶W∫Ÿ•≤∂∑≥q•Œ©˙ΩT°AΩ–±z±ƒ•Œ•t•~§@≠”¶≥Æƒ™∫¶W∫Ÿ°C";
+        Text [ japanese ] = "„Åì„ÅÆÂêçÂâç„ÅÆ‰ªò„ÅÑ„ÅüÂà•„ÅÆÔæÉÔæûÔΩ∞ÔæÄÔΩøÔΩ∞ÔΩΩ„Åå„Åô„Åß„Å´„ÅÇ„Çä„Åæ„Åô„ÄÇÔæÉÔæûÔΩ∞ÔæÄÔΩøÔΩ∞ÔΩΩÂêç„Çí„ÅØ„Å£„Åç„Çä„Å®Âå∫Âà•„Åô„Çã„Åü„ÇÅ„Å´„ÅØ„ÄÅ„Åª„Åã„ÅÆÂêçÂâç„ÇíÈÅ∏Êäû„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çä„Åæ„Åô„ÄÇ";
+        Text [ korean ] = "Ïù¥ÎØ∏ Ïù¥ Ïù¥Î¶ÑÏùÑ Í∞ÄÏßÑ Îã§Î•∏ Îç∞Ïù¥ÌÑ∞ ÏÜåÏä§Í∞Ä ÏûàÏäµÎãàÎã§. Îç∞Ïù¥ÌÑ∞ÏÜåÏä§ Ïù¥Î¶ÑÏùÄ Ï†ÑÏó≠ÏóêÏÑú Ïú†ÏùºÌï¥Ïïº ÌïòÎØÄÎ°ú, Îã§Î•∏ Ïù¥Î¶ÑÏùÑ ÏÑ†ÌÉùÌï¥Ïïº Ìï©ÎãàÎã§.";
+        Text [ chinese_simplified ] = "Â∑≤ÁªèÂ≠òÂú®‰∏Ä‰∏™ÂêåÂêçÁöÑÊï∞ÊçÆÊ∫ê„ÄÇÂõ†‰∏∫Êï∞ÊçÆÊ∫êÂêçÁß∞ÂøÖÈ°ªÊòØ‰∏Ä‰∏™ÈÄöÁî®ÁöÑÊúâÊïàÂêçÁß∞ÔºåÂª∫ËÆÆÊÇ®ÈááÁî®Âè¶‰∏Ä‰∏™ÂêçÁß∞„ÄÇ";
+        Text [ chinese_traditional ] = "Â∑≤Á∂ìÂ≠òÂú®‰∏ÄÂÄãÂêåÂêçÁöÑË≥áÊñôÊ∫ê„ÄÇÂõ†ÁÇ∫‰∏ÄÂÄãË≥áÊñôÊ∫êÁöÑÂêçÁ®±ÂøÖÈ†àÈÄöÁî®ÊòéÁ¢∫ÔºåË´ãÊÇ®Êé°Áî®Âè¶Â§ñ‰∏ÄÂÄãÊúâÊïàÁöÑÂêçÁ®±„ÄÇ";
         Text [ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text [ arabic ] = "ÌÊÃœ »«·›⁄· „’œ— »Ì«‰«  ¬Œ— ·Â Â–« «·«”„. ‰Ÿ—« ·√‰ √”„«¡ „’«œ— «·»Ì«‰«  ÌÃ» ⁄„Ê„« √‰  ﬂÊ‰ ›—Ìœ…° «·—Ã«¡ «Œ Ì«— «”„ ¬Œ—.";
         Text[ finnish ] = "Toisella tietol‰hteell‰ on jo sama nimi. Tietol‰hteill‰ on oltava yksilˆlliset nimet, valitse toinen nimi.";
         Text[ catalan ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente ˙nico.";
     };
+    Text[ portuguese ] = "Data Source Title";
+    Text[ russian ] = "Data Source Title";
+    Text[ greek ] = "Data Source Title";
+    Text[ dutch ] = "Data Source Title";
+    Text[ french ] = "Data Source Title";
+    Text[ spanish ] = "Data Source Title";
+    Text[ finnish ] = "Data Source Title";
+    Text[ italian ] = "Data Source Title";
+    Text[ danish ] = "Data Source Title";
+    Text[ swedish ] = "Data Source Title";
+    Text[ polish ] = "Data Source Title";
+    Text[ portuguese_brazilian ] = "Data Source Title";
+    Text[ japanese ] = "Data Source Title";
+    Text[ korean ] = "Data Source Title";
+    Text[ chinese_simplified ] = "Data Source Title";
+    Text[ chinese_traditional ] = "Data Source Title";
+    Text[ turkish ] = "Data Source Title";
+    Text[ arabic ] = "Data Source Title";
+    Text[ catalan ] = "Data Source Title";
 };
 
 //........................................................................
@@ -385,7 +773,26 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
 
     Message = "Bitte w‰hlen sie einen Adressbuch-Typ aus!";
     Message [ english ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus!";
-    Message [ english_us ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus!";
+    Message [ english_us ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ portuguese ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ russian ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ greek ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ dutch ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ french ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ spanish ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ finnish ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ italian ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ danish ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ swedish ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ polish ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ portuguese_brazilian ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ japanese ] = "Bitte wËáßlen sie einen Adressbuch-Typ aus";
+    Message[ korean ] = "Bitte wÔøΩlen sie einen Adressbuch-Typ aus";
+    Message[ chinese_simplified ] = "Bitte wÈãílen sie einen Adressbuch-Typ aus";
+    Message[ chinese_traditional ] = "Bitte wÈÑ£len sie einen Adressbuch-Typ aus";
+    Message[ turkish ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ arabic ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
+    Message[ catalan ] = "Bitte w‰hlen sie einen Adressbuch-Typ aus";
 };
 
 //........................................................................
@@ -398,8 +805,26 @@ QueryBox RID_QRY_NOTABLES
         "Wollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
     Message [ english ] = "The data source does not contain any tables.\n"
         "Do you want to install it as address data source, anyway?";
-    Message [ english_us ] = "The data source does not contain any tables.\n"
-        "Do you want to install it as address data source, anyway?";
+    Message [ english_us ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ portuguese ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ russian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ greek ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ dutch ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ french ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ spanish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ finnish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ italian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ danish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ swedish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ polish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ portuguese_brazilian ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ japanese ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ korean ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ chinese_simplified ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ chinese_traditional ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ turkish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ arabic ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ catalan ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
 };
 
 //........................................................................
@@ -408,6 +833,25 @@ String RID_STR_DEFAULT_NAME
     Text = "Adressen";
     Text [ english ] = "Addresses";
     Text [ english_us ] = "Addresses";
+    Text[ portuguese ] = "Addresses";
+    Text[ russian ] = "Addresses";
+    Text[ greek ] = "Addresses";
+    Text[ dutch ] = "Addresses";
+    Text[ french ] = "Addresses";
+    Text[ spanish ] = "Addresses";
+    Text[ finnish ] = "Addresses";
+    Text[ italian ] = "Addresses";
+    Text[ danish ] = "Addresses";
+    Text[ swedish ] = "Addresses";
+    Text[ polish ] = "Addresses";
+    Text[ portuguese_brazilian ] = "Addresses";
+    Text[ japanese ] = "Addresses";
+    Text[ korean ] = "Addresses";
+    Text[ chinese_simplified ] = "Addresses";
+    Text[ chinese_traditional ] = "Addresses";
+    Text[ turkish ] = "Addresses";
+    Text[ arabic ] = "Addresses";
+    Text[ catalan ] = "Addresses";
 };
 
 String RID_STR_ADMINDIALOGTITLE
@@ -415,6 +859,25 @@ String RID_STR_ADMINDIALOGTITLE
     Text = "Adress Datenquelle anlegen";
     Text [ english ] = "Create Address Data Source";
     Text [ english_us ] = "Create Address Data Source";
+    Text[ portuguese ] = "Create Address Data Source";
+    Text[ russian ] = "Create Address Data Source";
+    Text[ greek ] = "Create Address Data Source";
+    Text[ dutch ] = "Create Address Data Source";
+    Text[ french ] = "Create Address Data Source";
+    Text[ spanish ] = "Create Address Data Source";
+    Text[ finnish ] = "Create Address Data Source";
+    Text[ italian ] = "Create Address Data Source";
+    Text[ danish ] = "Create Address Data Source";
+    Text[ swedish ] = "Create Address Data Source";
+    Text[ polish ] = "Create Address Data Source";
+    Text[ portuguese_brazilian ] = "Create Address Data Source";
+    Text[ japanese ] = "Create Address Data Source";
+    Text[ korean ] = "Create Address Data Source";
+    Text[ chinese_simplified ] = "Create Address Data Source";
+    Text[ chinese_traditional ] = "Create Address Data Source";
+    Text[ turkish ] = "Create Address Data Source";
+    Text[ arabic ] = "Create Address Data Source";
+    Text[ catalan ] = "Create Address Data Source";
 };
 
 String RID_STR_NOCONNECTION
@@ -422,6 +885,25 @@ String RID_STR_NOCONNECTION
     Text = "Die Verbindung konnte nicht hergestellt werden.";
     Text [ english ] = "The connection could not be established.";
     Text [ english_us ] = "The connection could not be established.";
+    Text[ portuguese ] = "The connection could not be established.";
+    Text[ russian ] = "The connection could not be established.";
+    Text[ greek ] = "The connection could not be established.";
+    Text[ dutch ] = "The connection could not be established.";
+    Text[ french ] = "The connection could not be established.";
+    Text[ spanish ] = "The connection could not be established.";
+    Text[ finnish ] = "The connection could not be established.";
+    Text[ italian ] = "The connection could not be established.";
+    Text[ danish ] = "The connection could not be established.";
+    Text[ swedish ] = "The connection could not be established.";
+    Text[ polish ] = "The connection could not be established.";
+    Text[ portuguese_brazilian ] = "The connection could not be established.";
+    Text[ japanese ] = "The connection could not be established.";
+    Text[ korean ] = "The connection could not be established.";
+    Text[ chinese_simplified ] = "The connection could not be established.";
+    Text[ chinese_traditional ] = "The connection could not be established.";
+    Text[ turkish ] = "The connection could not be established.";
+    Text[ arabic ] = "The connection could not be established.";
+    Text[ catalan ] = "The connection could not be established.";
 };
 
 String RID_STR_PLEASECHECKSETTINGS
@@ -429,6 +911,25 @@ String RID_STR_PLEASECHECKSETTINGS
     Text = "Bitte ¸berpr¸fen Sie die Einstellungen f¸r die Datenquelle.";
     Text [ english ] = "Please check the settings made for the data source.";
     Text [ english_us ] = "Please check the settings made for the data source.";
+    Text[ portuguese ] = "Please check the settings made for the data source.";
+    Text[ russian ] = "Please check the settings made for the data source.";
+    Text[ greek ] = "Please check the settings made for the data source.";
+    Text[ dutch ] = "Please check the settings made for the data source.";
+    Text[ french ] = "Please check the settings made for the data source.";
+    Text[ spanish ] = "Please check the settings made for the data source.";
+    Text[ finnish ] = "Please check the settings made for the data source.";
+    Text[ italian ] = "Please check the settings made for the data source.";
+    Text[ danish ] = "Please check the settings made for the data source.";
+    Text[ swedish ] = "Please check the settings made for the data source.";
+    Text[ polish ] = "Please check the settings made for the data source.";
+    Text[ portuguese_brazilian ] = "Please check the settings made for the data source.";
+    Text[ japanese ] = "Please check the settings made for the data source.";
+    Text[ korean ] = "Please check the settings made for the data source.";
+    Text[ chinese_simplified ] = "Please check the settings made for the data source.";
+    Text[ chinese_traditional ] = "Please check the settings made for the data source.";
+    Text[ turkish ] = "Please check the settings made for the data source.";
+    Text[ arabic ] = "Please check the settings made for the data source.";
+    Text[ catalan ] = "Please check the settings made for the data source.";
 };
 
 String RID_STR_FIELDDIALOGTITLE
@@ -436,6 +937,25 @@ String RID_STR_FIELDDIALOGTITLE
     Text = "Adress Daten - Feldzuordnung";
     Text [ english ] = "Address data - field assignment";
     Text [ english_us ] = "Address data - field assignment";
+    Text[ portuguese ] = "Address data - field assignment";
+    Text[ russian ] = "Address data - field assignment";
+    Text[ greek ] = "Address data - field assignment";
+    Text[ dutch ] = "Address data - field assignment";
+    Text[ french ] = "Address data - field assignment";
+    Text[ spanish ] = "Address data - field assignment";
+    Text[ finnish ] = "Address data - field assignment";
+    Text[ italian ] = "Address data - field assignment";
+    Text[ danish ] = "Address data - field assignment";
+    Text[ swedish ] = "Address data - field assignment";
+    Text[ polish ] = "Address data - field assignment";
+    Text[ portuguese_brazilian ] = "Address data - field assignment";
+    Text[ japanese ] = "Address data - field assignment";
+    Text[ korean ] = "Address data - field assignment";
+    Text[ chinese_simplified ] = "Address data - field assignment";
+    Text[ chinese_traditional ] = "Address data - field assignment";
+    Text[ turkish ] = "Address data - field assignment";
+    Text[ arabic ] = "Address data - field assignment";
+    Text[ catalan ] = "Address data - field assignment";
 };
 
 String RID_STR_NOFIELDSASSIGNED
@@ -446,11 +966,27 @@ String RID_STR_NOFIELDSASSIGNED
     Text [ english ] = "Currently, there are no fields assigned.\n"
         "If you don't want to do this assignment at the moment, you can make this up at any time later on:\n"
         "Menu \"File - Template - Address Book Source ...\"";
-    Text [ english_us ] = "Currently, there are no fields assigned.\n"
-        "If you don't want to do this assignment at the moment, you can make this up at any time later on:\n"
-        "Menu \"File - Template - Address Book Source ...\"";
-    Text [ language_user1 ] = "The last line of this text refers to a menu entry. Please use the same "
-        "translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
+    Text [ english_us ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text [ language_user1 ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
+    Text[ portuguese ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ russian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ greek ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ dutch ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ french ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ spanish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ finnish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ italian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ danish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ swedish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ polish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ portuguese_brazilian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ japanese ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ korean ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ chinese_simplified ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ chinese_traditional ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ turkish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ arabic ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ catalan ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
 };
 
 //........................................................................
@@ -462,10 +998,14 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/02 10:46:00  fs
+ *  #88530# layout changes
+ *
  *  Revision 1.1  2001/08/01 11:06:48  fs
  *  initial checkin - address book auto pilot - the dialog itself
  *
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/
+
 
