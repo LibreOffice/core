@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-10 20:10:22 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,14 +372,14 @@ ModalDialog DLG_UUI_LOGIN
         Text [ swedish ] = "pε " ;
         Text [ danish ] = "pε " ;
         Text [ italian ] = "su " ;
-        Text [ spanish ] = "en  " ;
-        Text [ french ] = "sur " ;
+        Text [ spanish ] = "Especifique su nombre de usuario y su contraseρa para \"%2\" en %1." ;
+        Text [ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour \"%2\" sur %1." ;
         Text [ dutch ] = "op    " ;
         Text[ chinese_simplified ] = "ε¨ ";
         Text[ russian ] = "νΰ ";
         Text[ polish ] = "na ";
         Text[ japanese ] = "γ“γ“γ« %1 γ® \"%2\" γ«εΏ…θ¦γªοΎ•ο½°ο½»οΎο½°εγ¨οΎοΎο½½οΎο½°οΎ„οΎγ‚’ε…¥ε›γ—γ¦γγ γ•γ„γ€‚";
-        Text[ chinese_traditional ] = "ε¨ ";
+        Text[ chinese_traditional ] = "θ«‹ε¨ι€™θ£΅η‚Ί %1 θΌΈε…¥ \"%2\" η„δ½Ώη”¨θ€…εη¨±ε’ε―†ηΆΌγ€‚";
         Text[ greek ] = "στο ";
         Text[ korean ] = "..μ— ";
         Text[ arabic ] = "Ϊαμ ";
@@ -400,7 +400,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ russian ] = "Νεξαυξδθμϋ θμÿ οξλόηξβΰςελÿ θ οΰπξλό";
     Text[ polish ] = "NaleΏy podaζ nazwκ uΏytkownika i has³o.";
     Text[ japanese ] = "οΎ•ο½°ο½»οΎο½°εγ¨οΎοΎο½½οΎο½°οΎ„οΎγεΏ…θ¦";
-    Text[ chinese_traditional ] = "θ«‹θΌΈε…¥δ½Ώη”¨εη¨±ε’ε―†ηΆΌ";
+    Text[ chinese_traditional ] = "εΏ…ι θΌΈε…¥δ½Ώη”¨εη¨±ε’ε―†ηΆΌ";
     Text[ greek ] = "Απαιτείται το όνομα του χρήστη και ο κωδικός πρόσβασης";
     Text[ korean ] = "μ‚¬μ©μ μ΄λ¦„κ³Ό ν¨μ¤μ›λ“κ°€ ν•„μ”ν•©λ‹λ‹¤.";
     Text[ arabic ] = "γΨαζΘ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ";
@@ -408,6 +408,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseρa";
     Text[ finnish ] = "Kδyttδjδtunnus ja salasana pakolliset";
 };
+
 
 
 
