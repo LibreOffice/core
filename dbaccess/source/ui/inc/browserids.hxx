@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
+ *  last change: $Author: fs $ $Date: 2001-05-03 14:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #define ID_OPEN_DOCUMENT                    17
 #define ID_EDIT_DOCUMENT                    18
 #define ID_NEW_LINK                         19
-#define ID_EDIT_LINK                        10
+#define ID_EDIT_LINK                        20
 #define ID_DROP_LINK                        21
 #define ID_CREATE_NEW_DOC                   22
 #define ID_FORM_NEW_TEXT                    23
