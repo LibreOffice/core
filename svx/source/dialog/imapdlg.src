@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:56:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "Àû¿ë";
                 Text[ turkish ] = "Uygula";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Asignar";
             };
             ToolBoxItem
             {
@@ -147,6 +148,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "¿­±â...";
                 Text[ turkish ] = "Aç...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Abrir...";
             };
             ToolBoxItem
             {
@@ -180,6 +182,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "ÀúÀå...";
                 Text[ turkish ] = "Kaydet...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Guardar...";
             };
             ToolBoxItem
             {
@@ -218,6 +221,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "¼±ÅÃ";
                 Text[ turkish ] = "Seçim";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Selección";
             };
             ToolBoxItem
             {
@@ -251,6 +255,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "»ç°¢Çü";
                 Text[ turkish ] = "Dikdörtgen";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Rectángulo";
             };
             ToolBoxItem
             {
@@ -284,6 +289,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "Å¸¿ø";
                 Text[ turkish ] = "Elips";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Elipse";
             };
             ToolBoxItem
             {
@@ -317,6 +323,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "´Ù°¢Çü";
                 Text[ turkish ] = "Çokgen";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Polígono";
             };
             ToolBoxItem
             {
@@ -350,6 +357,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "ÀÚÀ¯ ´Ù°¢Çü";
                 Text[ turkish ] = "Serbest çokgen";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Polígono a mano alzada";
             };
             ToolBoxItem
             {
@@ -387,6 +395,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "Ç×¸ñ ÆíÁý";
                 Text[ turkish ] = "Noktalarý düzenle";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Modificar puntos";
             };
             ToolBoxItem
             {
@@ -422,6 +431,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "Á¡ ÀÌµ¿";
                 Text[ turkish ] = "Noktalarý taþý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Desplazar puntos";
             };
             ToolBoxItem
             {
@@ -460,6 +470,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "Á¡ »ðÀÔ";
                 Text[ turkish ] = "Nokta ekle";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Insertar puntos";
             };
             ToolBoxItem
             {
@@ -496,6 +507,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "Á¡ »èÁ¦";
                 Text[ turkish ] = "Noktalarý sil";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Eliminar puntos";
             };
             ToolBoxItem
             {
@@ -535,6 +547,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "½ÇÇà Ãë¼Ò ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Deshacer  ";
             };
             ToolBoxItem
             {
@@ -568,6 +581,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "µÇµ¹¸®±â ";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Restaurar  ";
             };
             ToolBoxItem
             {
@@ -603,6 +617,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "È°¼º";
                 Text[ turkish ] = "Etkin";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Activo";
             };
             ToolBoxItem
             {
@@ -634,6 +649,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "¸ÅÅ©·Î...";
                 Text[ turkish ] = "Makro...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Macro...";
             };
             ToolBoxItem
             {
@@ -665,6 +681,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ korean ] = "µî·ÏÁ¤º¸...";
                 Text[ turkish ] = "Özellikler...";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Propiedades...";
             };
         };
         Text[ english_us ] = "Image Map Editor";
@@ -706,6 +723,7 @@ FloatingWindow RID_SVXDLG_IMAP
         Text[ korean ] = "ÁÖ¼Ò:";
         Text[ turkish ] = "Adres:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dirección:";
     };
     ComboBox CBB_URL
     {
@@ -738,6 +756,7 @@ FloatingWindow RID_SVXDLG_IMAP
         Text[ korean ] = "ÅØ½ºÆ®:";
         Text[ turkish ] = "Metin:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Texto:";
     };
     Edit EDT_TEXT
     {
@@ -767,6 +786,7 @@ FloatingWindow RID_SVXDLG_IMAP
     Text[ korean ] = "ÀÌ¹ÌÁö ¸Ê ¿¡µðÅÍ";
     Text[ turkish ] = "Resim eþlem editörü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editor ImageMap";
 };
 Control RID_SVXCTL_IMAP
 {
@@ -822,6 +842,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "¼³¸í...";
             Text[ turkish ] = "Açýklama...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Descripción...";
         };
         MenuItem
         {
@@ -847,6 +868,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "¸ÅÅ©·Î(~M)...";
             Text[ turkish ] = "Makro...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ma~cro...";
         };
         MenuItem
         {
@@ -872,6 +894,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "È°¼º";
             Text[ turkish ] = "Etkin";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Activo";
         };
         MenuItem
         {
@@ -923,6 +946,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "¸Ç ¾ÕÀ¸·Î";
                         Text[ turkish ] = "En öne getir";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Traer al ~frente";
                     };
                     MenuItem
                     {
@@ -950,6 +974,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "°è¼ÓÇØ¼­¡¡¾ÕÀ¸·Î(~F)";
                         Text[ turkish ] = "Bir öne getir";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Traer ~más adelante";
                     };
                     MenuItem
                     {
@@ -977,6 +1002,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "°è¼ÓÇØ¼­¡¡µÚ·Î(~W)";
                         Text[ turkish ] = "Bir alta gönder";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Enviar hacia a~trás";
                     };
                     MenuItem
                     {
@@ -1004,6 +1030,7 @@ Menu RID_SVXMN_IMAP
                         Text[ korean ] = "¸Ç µÚ·Î(~S)";
                         Text[ turkish ] = "En alta gönder";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Enviar al ~fondo";
                     };
                 };
             };
@@ -1017,6 +1044,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "¹è¿­";
             Text[ turkish ] = "Sýralama";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Posición";
         };
         MenuItem
         {
@@ -1050,6 +1078,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "ÀüÃ¼ ¼±ÅÃ(~A)";
             Text[ turkish ] = "Tümünü seç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Seleccionar todo";
         };
         MenuItem
         {
@@ -1080,6 +1109,7 @@ Menu RID_SVXMN_IMAP
             Text[ korean ] = "»èÁ¦(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar";
         };
     };
 };
@@ -1127,6 +1157,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ greek ] = "Åíáëëáêôéêü êåßìåíï:";
         Text[ korean ] = "´ëÃ¼ ÅØ½ºÆ®:";
         Text[ turkish ] = "Alternatif metin:";
+        Text[ catalan ] = "Texto alternativo:";
     };
     Edit EDT_URLDESCRIPTION
     {
@@ -1163,6 +1194,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "URL ÅØ½ºÆ®:";
         Text[ turkish ] = "URL:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL:";
     };
     Edit EDT_URL
     {
@@ -1212,6 +1244,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
         Text[ turkish ] = "Hyperlink";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hiperenlace";
     };
     FixedText FT_TARGET
     {
@@ -1238,6 +1271,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "ÇÁ·¹ÀÓ:";
         Text[ turkish ] = "Frame:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Frame:";
     };
     ComboBox CBB_TARGETS
     {
@@ -1274,6 +1308,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "ÀÌ¸§:";
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre:";
     };
     Edit EDT_NAME
     {
@@ -1295,6 +1330,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     Text[ korean ] = "¼³¸í";
     Text[ turkish ] = "Açýklama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Descripción";
 };
 /******************************************************************************/
 String STR_IMAPDLG_SAVE
@@ -1323,6 +1359,7 @@ String STR_IMAPDLG_SAVE
     Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Resim eþlem deðiþtirildi.\nDeðiþiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Se ha modificado el ImageMap.\n¿Desea guardar los cambios?";
 };
 String STR_IMAPDLG_MODIFY
 {
@@ -1349,5 +1386,6 @@ String STR_IMAPDLG_MODIFY
     Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ¼ö¶ôÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Resim eþlem deðiþtirildi.\nDeðiþiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?";
 };
 /******************************************************************************/
