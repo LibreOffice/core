@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:37:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2610,7 +2610,7 @@ ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, BOOL bChkPtr )
         pDoc->GetEditShell( &pVSh );
         ASSERT( !pVSh || !pOldVSh || pOldVSh == pVSh,
                 "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( pOldVSh && !pVSh )
             pVSh = 0;
 #endif
@@ -2636,7 +2636,7 @@ ViewShell *SwHTMLParser::CallEndAction( BOOL bChkAction, BOOL bChkPtr )
         pDoc->GetEditShell( &pVSh );
         ASSERT( !pVSh || pActionViewShell == pVSh,
                 "CallEndAction: Wer hat die ViewShell ausgetauscht?" );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( pActionViewShell && !pVSh )
             pVSh = 0;
 #endif
@@ -2702,7 +2702,7 @@ ViewShell *SwHTMLParser::CheckActionViewShell()
     pDoc->GetEditShell( &pVSh );
     ASSERT( !pVSh || pActionViewShell == pVSh,
             "CheckActionViewShell: Wer hat die ViewShell ausgetauscht?" );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( pActionViewShell && !pVSh )
         pVSh = 0;
 #endif
