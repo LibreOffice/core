@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:06:19 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,8 @@ ModalDialog DLG_PDFEXPORT
         Text[ swedish ] = "Tr~yckoptimerad";
         Text[ polish ] = "Pr~ess optimized";
         Text[ portuguese_brazilian ] = "Pr~ess optimized";
-        Text[ japanese ] = "Pr~ess optimized";
-        Text[ korean ] = "인쇄 최적화";
+        Text[ japanese ] = "印刷準備用に最適化する";
+        Text[ korean ] = "인쇄용 최적화";
         Text[ chinese_simplified ] = "优化新闻印刷";
         Text[ chinese_traditional ] = "優化新聞印刷";
         Text[ turkish ] = "Pr~ess optimized";
