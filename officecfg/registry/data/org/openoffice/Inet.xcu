@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 17:39:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-data oor:name="Inet" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Settings">
     <prop oor:name="ooInetProxyType">
-      <value>0</value>
+      <value>1</value>
     </prop>
   </node>
   <node oor:name="SearchEngines">
