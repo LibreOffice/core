@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 11:46:13 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _SVX_TBCONTRL_HXX //autogen
 #include <svx/tbcontrl.hxx>
+#endif
+#ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
+#include <svx/verttexttbxctrl.hxx>
 #endif
 #ifndef _CONTDLG_HXX_ //autogen
 #include <svx/contdlg.hxx>
@@ -584,8 +587,10 @@ void SwDLL::RegisterControls()
     SvxGrafGammaToolBoxControl::RegisterControl( SID_ATTR_GRAF_GAMMA, pMod );
     SvxGrafTransparenceToolBoxControl::RegisterControl( SID_ATTR_GRAF_TRANSPARENCE, pMod );
     SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
-
     SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
+    SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_TOP_TO_BOTTOM, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_CAPTION_VERTICAL, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_TEXT_VERTICAL, pMod);
 
     GalleryChildWindow::RegisterChildWindow(0, pMod);
 }
