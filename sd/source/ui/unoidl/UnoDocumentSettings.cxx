@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-13 12:56:03 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 15:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
-    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT
 };
 
 #define MID_PRINTER 1
@@ -282,6 +282,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("PageNumberFormat"),      HANDLE_PAGENUMFMT,          &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("CharacterCompressionType"),HANDLE_CHARCOMPRESS,      &::getCppuType((sal_Int16*)0),          0,  0 },
+            { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -771,6 +772,31 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 break;
 
             }
+            case HANDLE_ASIANPUNCT:
+            {
+                sal_Bool bAsianPunct;
+                if( *pValues >>= bAsianPunct )
+                {
+                    bOk = sal_True;
+
+                    pDoc->SetKernAsianPunctuation( bAsianPunct );
+                    SdDrawDocument* pDocument = pDocSh->GetDoc();
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                    rOutl.SetKernAsianPunctuation( bAsianPunct );
+                    SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+                    if( pOutl )
+                    {
+                        pOutl->SetKernAsianPunctuation( bAsianPunct );
+                    }
+                    pOutl = pDocument->GetInternalOutliner( FALSE );
+                    if( pOutl )
+                    {
+                        pOutl->SetKernAsianPunctuation( bAsianPunct );
+                    }
+                }
+                break;
+
+            }
             default:
                 throw UnknownPropertyException();
 
@@ -1000,6 +1026,12 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             case HANDLE_CHARCOMPRESS:
             {
                 *pValue <<= (sal_Int16)pDoc->GetCharCompressType();
+                break;
+            }
+
+            case HANDLE_ASIANPUNCT:
+            {
+                *pValue <<= (sal_Bool)pDoc->IsKernAsianPunctuation();
                 break;
             }
 
