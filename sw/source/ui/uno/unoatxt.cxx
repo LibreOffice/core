@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-09 11:56:55 $
+ *  last change: $Author: tl $ $Date: 2002-02-04 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,11 @@ SwXAutoTextEntry::~SwXAutoTextEntry()
         if ( xDocSh->GetDoc()->IsModified () )
             xDocSh->Save();
         xDocSh->DoClose();
+
+        //! Bug #96559
+        // DocShell must be cleared before mutex is lost.
+        // Needs to be done explicitly since xDocSh is a class member.
+        xDocSh.Clear();
     }
 }
 
