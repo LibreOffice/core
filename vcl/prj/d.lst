@@ -27,7 +27,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl\unx
 ..\%__SRC%\slo\svdll.obj %_DEST%\lib%_EXT%\xsvdll.obj
 
 hedabu: ..\inc\accel.hxx %_DEST%\inc%_EXT%\vcl\accel.hxx
-hedabu: ..\inc\accmgr.hxx %_DEST%\inc%_EXT%\vcl\accmgr.hxx
 hedabu: ..\inc\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
 hedabu: ..\inc\animate.hxx %_DEST%\inc%_EXT%\vcl\animate.hxx
 hedabu: ..\inc\apptypes.hxx %_DEST%\inc%_EXT%\vcl\apptypes.hxx
@@ -50,6 +49,7 @@ hedabu: ..\inc\decoview.hxx %_DEST%\inc%_EXT%\vcl\decoview.hxx
 hedabu: ..\inc\dialog.hxx %_DEST%\inc%_EXT%\vcl\dialog.hxx
 hedabu: ..\inc\dockingarea.hxx %_DEST%\inc%_EXT%\vcl\dockingarea.hxx
 hedabu: ..\inc\dockwin.hxx %_DEST%\inc%_EXT%\vcl\dockwin.hxx
+hedabu: ..\inc\dllapi.h %_DEST%\inc%_EXT%\vcl\dllapi.h
 hedabu: ..\inc\edit.hxx %_DEST%\inc%_EXT%\vcl\edit.hxx
 hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\vcl\event.hxx
 hedabu: ..\inc\field.hxx %_DEST%\inc%_EXT%\vcl\field.hxx
