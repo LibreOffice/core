@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSelectionBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:53:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <comphelper/accessibleselectionhelper.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace accessibility
 {
 /** @descr
@@ -79,7 +83,7 @@ namespace accessibility
         <method>implIsSelected</method>,
         <method>implSelect</method>,
 */
-    class AccessibleSelectionBase : public ::comphelper::OCommonAccessibleSelection,
+    class SVX_DLLPUBLIC AccessibleSelectionBase : public ::comphelper::OCommonAccessibleSelection,
                                     public ::com::sun::star::accessibility::XAccessibleSelection
     {
     protected:
