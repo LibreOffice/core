@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 20:16:26 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ Resource RID_SVXERRCTX
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå ãğàôèêè.";
         Text[ polish ] = "$(ERR) przy ³adowaniu grafiki.";
         Text[ japanese ] = "$(ERR) ¸Ş×Ì¨¯¸‚ğÛ°ÄŞ’†‚É”­¶B";
-        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¸ü¤J¤@­Ó¹Ï¤ù®É¡C";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¸ü¤J¤@­Ó¹Ï§Î®É¡C";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáÑÓã.";
         Text[ dutch ] = "$(ERR) bij het laden van een afbeelding";
         Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÈëÒ»¸öÍ¼ĞÎÊ±¡£";
@@ -420,7 +420,7 @@ Resource RID_SVXERRCODE
         Text[ russian ] = "Íàéòè ãğàôèêó $(ARG1) íå óäàåòñÿ.";
         Text[ polish ] = "Grafiki $(ARG1) nie znaleziono.";
         Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì$(ARG1)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-        Text[ chinese_traditional ] = "µLªk§ä¨ì¹Ï¤ù $(ARG1)¡C";
+        Text[ chinese_traditional ] = "µLªk§ä¨ì¹Ï§Î $(ARG1)¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÑÓã $(ARG1).";
         Text[ dutch ] = "Afbeelding $(ARG1) niet gevonden.";
         Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½Í¼ĞÎ $(ARG1)¡£";
@@ -587,7 +587,7 @@ Resource RID_SVXERRCODE
         Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚ŞÛ‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "±Û¸Ó¸®±âÈ£¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®±âÈ£¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÈëÈ«²¿Í¼±ê·ûºÅ¡£";
-        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø²Å¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
+        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø½s¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚĞÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
         Text[ turkish ] = "Madde işaretleri okunurken hata oluştu. Bu nedenle tüm madde işaretleri yüklenemedi.";
     };
