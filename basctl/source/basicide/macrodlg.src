@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 22:11:59 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_MACROCHOOSER
     Text [ italian ] = "Macro" ;
     Text [ portuguese_brazilian ] = "Macro" ;
     Text [ portuguese ] = "Macro" ;
-    Text [ finnish ] = "Macro" ;
+    Text [ finnish ] = "Makro" ;
     Text [ danish ] = "Makro" ;
     Text [ french ] = "Macro" ;
     Text [ swedish ] = "Makro" ;
@@ -403,7 +403,7 @@ String RID_STR_STDMACRONAME
     Text [ italian ] = "Macro" ;
     Text [ portuguese_brazilian ] = "Macro" ;
     Text [ portuguese ] = "Macro" ;
-    Text [ finnish ] = "Macro" ;
+    Text [ finnish ] = "Makro" ;
     Text [ danish ] = "Makro" ;
     Text [ french ] = "Macro" ;
     Text [ swedish ] = "Makro" ;
@@ -559,6 +559,7 @@ String RID_STR_RUN
     Text[ turkish ] = "Yürüt";
     Text[ catalan ] = "Executar";
 };
+
 
 
 
