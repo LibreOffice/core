@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 11:04:20 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 22:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_style, XML_TOK_GRADIENT_STYLE },
     { XML_NAMESPACE_DRAW, sXML_cx, XML_TOK_GRADIENT_CX },
     { XML_NAMESPACE_DRAW, sXML_cy, XML_TOK_GRADIENT_CY },
-    { XML_NAMESPACE_DRAW, sXML_start_transparency, XML_TOK_GRADIENT_START },
-    { XML_NAMESPACE_DRAW, sXML_end_transparency, XML_TOK_GRADIENT_END },
+    { XML_NAMESPACE_DRAW, sXML_start, XML_TOK_GRADIENT_START },
+    { XML_NAMESPACE_DRAW, sXML_end, XML_TOK_GRADIENT_END },
     { XML_NAMESPACE_DRAW, sXML_gradient_angle, XML_TOK_GRADIENT_ANGLE },
     { XML_NAMESPACE_DRAW, sXML_gradient_border, XML_TOK_GRADIENT_BORDER },
     XML_TOKEN_MAP_END
@@ -221,14 +221,14 @@ sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Refer
             sal_Int32 aStartValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
             rUnitConverter.convertPercent( aOut, aStartValue );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_start_transparency, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, sXML_start, aStrValue );
 
             // Transparency end
             aColor.SetColor( aGradient.EndColor );
             sal_Int32 aEndValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
             rUnitConverter.convertPercent( aOut, aEndValue );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_end_transparency, aStrValue );
+            AddAttribute( XML_NAMESPACE_DRAW, sXML_end, aStrValue );
 
             // Angle
             if( aGradient.Style != awt::GradientStyle_RADIAL )
