@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:04:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "Distribuzione";
         TEXT[ portuguese_brazilian ] = "Distribui��o";
         TEXT[ portuguese ] = "Distribui��o";
-        TEXT[ danish ] = "Opdeling";
+        TEXT[ danish ] = "Fordeling";
         TEXT[ french ] = "R�partition";
         TEXT[ swedish ] = "Uppdelning";
         TEXT[ dutch ] = "Verdeling";
@@ -107,6 +107,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "Aufteilung";
         TEXT[ hindi ] = "वितरण";
         TEXT[ slovak ] = "Distribúcia";
+        TEXT[ hungarian ] = "Eloszlás";
+        TEXT[ slovenian ] = "Distribucija";
     };
     FixedText FT_ROWS
     {
@@ -118,7 +120,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "Righe";
         TEXT[ portuguese_brazilian ] = "~Linhas";
         TEXT[ portuguese ] = "~Linhas";
-        TEXT[ danish ] = "R�kker";
+        TEXT[ danish ] = "~R�kker";
         TEXT[ french ] = "Lignes";
         TEXT[ swedish ] = "R~ader";
         TEXT[ dutch ] = "~Rijen";
@@ -143,6 +145,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "~Zeilen";
         TEXT[ hindi ] = "पं~क्तियाँ";
         TEXT[ slovak ] = "~Riadky";
+        TEXT[ hungarian ] = "~Sorok";
+        TEXT[ slovenian ] = "V~rstice";
     };
     NumericField NF_ROWS
     {
@@ -169,7 +173,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "~Colonne";
         TEXT[ portuguese_brazilian ] = "~Colunas";
         TEXT[ portuguese ] = "~Colunas";
-        TEXT[ danish ] = "Kolonner";
+        TEXT[ danish ] = "~Kolonner";
         TEXT[ french ] = "C~olonnes";
         TEXT[ swedish ] = "Kolumner";
         TEXT[ dutch ] = "~Kolommen";
@@ -194,6 +198,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "‮טורים‬";
         TEXT[ hindi ] = "~स्तंभें ";
         TEXT[ slovak ] = "~Stĺpce";
+        TEXT[ hungarian ] = "~Oszlopok";
+        TEXT[ slovenian ] = "~Stolpci";
     };
     NumericField NF_COLS
     {
@@ -245,6 +251,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "Ränder";
         TEXT[ hindi ] = "पृष्ठ-प्रान्त";
         TEXT[ slovak ] = "Okraje";
+        TEXT[ hungarian ] = "Margók";
+        TEXT[ slovenian ] = "Robovi";
     };
     FixedText FT_LMARGIN
     {
@@ -256,7 +264,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "A ~sinistra";
         TEXT[ portuguese_brazilian ] = "~Esquerda";
         TEXT[ portuguese ] = "~Esquerda";
-        TEXT[ danish ] = "Venstre";
+        TEXT[ danish ] = "~Venstre";
         TEXT[ french ] = "� gauche";
         TEXT[ swedish ] = "V~�nster";
         TEXT[ dutch ] = "~Links";
@@ -281,6 +289,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "~Links";
         TEXT[ hindi ] = "बा~याँ";
         TEXT[ slovak ] = "Vľa~vo";
+        TEXT[ hungarian ] = "~Bal";
+        TEXT[ slovenian ] = "L~evo";
     };
     MetricField MF_LMARGIN
     {
@@ -308,7 +318,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "A ~destra";
         TEXT[ portuguese_brazilian ] = "~Direita";
         TEXT[ portuguese ] = "~Direita";
-        TEXT[ danish ] = "H�jre";
+        TEXT[ danish ] = "~H�jre";
         TEXT[ french ] = "� droite";
         TEXT[ swedish ] = "H�ge~r";
         TEXT[ dutch ] = "R~echts";
@@ -333,6 +343,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "~Rechts";
         TEXT[ hindi ] = "~दाहिना";
         TEXT[ slovak ] = "Vp~ravo";
+        TEXT[ hungarian ] = "~Jobb";
+        TEXT[ slovenian ] = "~Desno";
     };
     MetricField MF_RMARGIN
     {
@@ -360,7 +372,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "~In alto";
         TEXT[ portuguese_brazilian ] = "Em ~Cima";
         TEXT[ portuguese ] = "~Topo";
-        TEXT[ danish ] = "Foroven";
+        TEXT[ danish ] = "~Top";
         TEXT[ french ] = "~Sup.";
         TEXT[ swedish ] = "~Uppe";
         TEXT[ dutch ] = "~Boven";
@@ -385,6 +397,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "~Oben";
         TEXT[ hindi ] = "~ऊपर";
         TEXT[ slovak ] = "~Hore";
+        TEXT[ hungarian ] = "Fe~lső";
+        TEXT[ slovenian ] = "~Zgoraj";
     };
     MetricField MF_TMARGIN
     {
@@ -412,7 +426,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "~In basso";
         TEXT[ portuguese_brazilian ] = "Em ~Baixo";
         TEXT[ portuguese ] = "~Inferior";
-        TEXT[ danish ] = "Forneden";
+        TEXT[ danish ] = "~Bund";
         TEXT[ french ] = "~Inf.";
         TEXT[ swedish ] = "~Nere";
         TEXT[ dutch ] = "~Onder";
@@ -437,6 +451,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "~Unten";
         TEXT[ hindi ] = "~नीचे";
         TEXT[ slovak ] = "~Dole";
+        TEXT[ hungarian ] = "~Alsó";
+        TEXT[ slovenian ] = "~Spodaj";
     };
     MetricField MF_BMARGIN
     {
@@ -489,6 +505,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "‮ריווח‬";
         TEXT[ hindi ] = "अंतर देना";
         TEXT[ slovak ] = "Vzdialenosť";
+        TEXT[ hungarian ] = "Térköz";
+        TEXT[ slovenian ] = "Razmik";
     };
     FixedText FT_HMARGIN
     {
@@ -500,7 +518,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "~Orizzontale";
         TEXT[ portuguese_brazilian ] = "~Horizontal";
         TEXT[ portuguese ] = "Espa�amento ~horizontal";
-        TEXT[ danish ] = "Vandret";
+        TEXT[ danish ] = "~Vandret";
         TEXT[ french ] = "~Horizontal";
         TEXT[ swedish ] = "H~orisontellt";
         TEXT[ dutch ] = "~Horizontaal";
@@ -525,6 +543,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "H~orizontal";
         TEXT[ hindi ] = "सम~तल";
         TEXT[ slovak ] = "Vodo~rovne";
+        TEXT[ hungarian ] = "~Vízszintes";
+        TEXT[ slovenian ] = "Vodo~ravno";
     };
 
     MetricField MF_HMARGIN
@@ -553,7 +573,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "Verticale";
         TEXT[ portuguese_brazilian ] = "~Verticalmente";
         TEXT[ portuguese ] = "~Vertical";
-        TEXT[ danish ] = "Lodret";
+        TEXT[ danish ] = "~Lodret";
         TEXT[ french ] = "� la verticale";
         TEXT[ swedish ] = "~Vertikalt";
         TEXT[ dutch ] = "~Verticaal";
@@ -578,6 +598,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "~Vertikal";
         TEXT[ hindi ] = "~लंबरूप प्रकार से";
         TEXT[ slovak ] = "~Zvisle";
+        TEXT[ hungarian ] = "~Függőleges";
+        TEXT[ slovenian ] = "~Navpično";
     };
 
     MetricField MF_VMARGIN
@@ -630,6 +652,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "‮עיצוב‬";
         TEXT[ hindi ] = "रचना";
         TEXT[ slovak ] = "Formát";
+        TEXT[ hungarian ] = "Formátum";
+        TEXT[ slovenian ] = "Oblika";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -642,7 +666,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "Orizzontale";
         TEXT[ portuguese_brazilian ] = "~Paisagem";
         TEXT[ portuguese ] = "~Horizontal";
-        TEXT[ danish ] = "Liggende";
+        TEXT[ danish ] = "~Liggende";
         TEXT[ french ] = "Paysage";
         TEXT[ swedish ] = "~Liggande";
         TEXT[ dutch ] = "~Liggend";
@@ -667,6 +691,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "‮לרוחב הדף‬";
         TEXT[ hindi ] = "लान्डस्के~प्";
         TEXT[ slovak ] = "~Na šírku";
+        TEXT[ hungarian ] = "~Fekvő";
+        TEXT[ slovenian ] = "~Ležeče";
     };
     RadioButton RB_PORTRAIT
     {
@@ -677,7 +703,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
             TEXT[ italian ] = "Verticale";
         TEXT[ portuguese_brazilian ] = "~Retrato";
         TEXT[ portuguese ] = "~Vertical";
-        TEXT[ danish ] = "St�ende";
+        TEXT[ danish ] = "~St�ende";
         TEXT[ french ] = "Portrait";
         TEXT[ swedish ] = "S~t�ende";
         TEXT[ dutch ] = "~Staand";
@@ -702,6 +728,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "‮לאורך הדף‬";
         TEXT[ hindi ] = "पो~र्टरैट्";
         TEXT[ slovak ] = "Na ~výšku";
+        TEXT[ hungarian ] = "~Álló";
+        TEXT[ slovenian ] = "Po~končno";
     };
     Window WIN_PREVIEW
     {
@@ -763,6 +791,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ hebrew ] = "‮ברירת מחדל‬";
         TEXT[ hindi ] = "~अनुपस्थिति";
         TEXT[ slovak ] = "Výcho~dzie";
+        TEXT[ hungarian ] = "~Alapértelmezett";
+        TEXT[ slovenian ] = "~Privzeto";
     };
     TEXT[ italian ] = "Opzioni di stampa";
     TEXT[ portuguese_brazilian ] = "Op��es de Impress�o";
@@ -792,6 +822,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ hebrew ] = "Druckoptionen";
     TEXT[ hindi ] = "छपाई विकल्प";
     TEXT[ slovak ] = "Nastavenia tlače";
+    TEXT[ hungarian ] = "Nyomtatási beállítások";
+    TEXT[ slovenian ] = "Možnosti tiskanja";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -813,7 +845,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ portuguese_brazilian ] = "~Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
         Text [ finnish ] = "Pal~stat" ;
-        Text [ danish ] = "Kolonner" ;
+        Text [ danish ] = "~Kolonner" ;
         Text [ french ] = "~Colonnes" ;
         Text [ swedish ] = "~Kolumner" ;
         Text [ dutch ] = "~Kolommen" ;
@@ -838,6 +870,8 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "~स्तंभें";
         Text[ slovak ] = "~Stĺpce";
+        Text[ hungarian ] = "~Oszlopok";
+        Text[ slovenian ] = "~Stolpci";
     };
     FixedText FT_ROW
     {
@@ -850,7 +884,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "R�kker" ;
+        Text [ danish ] = "~R�kker" ;
         Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
@@ -875,6 +909,8 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ hebrew ] = "~Zeilen";
         Text[ hindi ] = "~पंक्तियाँ";
         Text[ slovak ] = "~Riadky";
+        Text[ hungarian ] = "~Sorok";
+        Text[ slovenian ] = "V~rstice";
     };
     NumericField ED_COL
     {
@@ -931,7 +967,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ japanese ] = "複数ページ";
     Text[ chinese_traditional ] = "四頁";
     Text[ arabic ] = "����� ������";
-    Text[ dutch ] = "Maatstaf";
+    Text[ dutch ] = "Meerdere Pagina's";
     Text[ chinese_simplified ] = "多页";
     Text[ greek ] = "�������";
     Text[ korean ] = "다중 페이지";
@@ -944,13 +980,15 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ spanish ] = "Varias p�ginas";
     Text[ finnish ] = "Zoomaus";
     Text[ italian ] = "Pi� pagine";
-    Text[ danish ] = "M�lestok";
+    Text[ danish ] = "Flere sider";
     Text[ swedish ] = "Flera sidor";
     Text[ czech ] = "Lupa";
     Text[ hebrew ] = "‮זום‬";
     Text[ portuguese_brazilian ] = "Zoom";
     Text[ hindi ] = "झूम";
     Text[ slovak ] = "Lupa";
+    Text[ hungarian ] = "Több oldal";
+    Text[ slovenian ] = "Več strani";
 };
 String RID_PVIEW_TOOLBOX
 {
@@ -984,6 +1022,8 @@ String RID_PVIEW_TOOLBOX
     Text[ hebrew ] = "‮מבט כללי‬";
     Text[ hindi ] = "पृष्ठ का पूर्वदृश्य";
     Text[ slovak ] = "Náhľad stránky";
+    Text[ hungarian ] = "Nyomtatási kép";
+    Text[ slovenian ] = "Predogled strani";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
@@ -1073,6 +1113,9 @@ ToolBox RID_PVIEW_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
+
+
 
 
 
