@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-30 15:39:25 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 18:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,16 +472,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
             Orientation eOri = (((view::PaperOrientation)nEnum) == view::PaperOrientation_PORTRAIT)?ORIENTATION_PORTRAIT:ORIENTATION_LANDSCAPE;
             if( eOri != mpPage->GetOrientation() )
-            {
                 mpPage->SetOrientation( eOri );
-
-                // switch width and height
-                Size aSize( mpPage->GetSize() );
-                long nTemp = aSize.Width();
-                aSize.Width() = aSize.Height();
-                aSize.Height() = nTemp;
-                mpPage->SetSize(aSize);
-            }
             break;
         }
         case WID_PAGE_EFFECT:
@@ -1215,6 +1206,12 @@ void SAL_CALL SdDrawPage::setMasterPage( const uno::Reference< drawing::XDrawPag
             SdPage* pSdPage = (SdPage*) pMasterPage->GetSdrPage();
             sal_uInt16 nPos = pSdPage->GetPageNum();
             mpPage->InsertMasterPage(nPos);
+
+            mpPage->SetBorder(pSdPage->GetLftBorder(),pSdPage->GetUppBorder(),
+                              pSdPage->GetRgtBorder(),pSdPage->GetLwrBorder() );
+
+            mpPage->SetSize( pSdPage->GetSize() );
+            mpPage->SetOrientation( pSdPage->GetOrientation() );
 
             mpModel->SetModified();
         }
