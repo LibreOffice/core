@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:29:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "³Ì°ª¤£¶W¹L­¶°ª(~N)";
         Text[ arabic ] = "áíÓ ÃßÈÑ ãä äØÇŞ ÇáÕİÍÉ";
         Text[ greek ] = "¼÷é ìåãáëıôåñï ıøïò áğü ôçí ğåñéï÷Ş óåëßäáò";
-        Text[ korean ] = "ÃÖ´ë¡¡³ôÀÌ£¬ÂÊ³ôÀÌ¿Í¡¡°°°Ô(N)";
+        Text[ korean ] = "ÃÖ´ë¡¡³ôÀÌ£¬ÂÊ³ôÀÌ¿Í¡¡°°°Ô(~N)";
         Text[ turkish ] = "En fazla sayfa yüksekliğinde";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura má~xima como página";
@@ -122,7 +122,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "µù¸}ªº³Ì°ª(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Ìİãéóôï ıøïò õğïóçìåßùóçò";
-        Text[ korean ] = "°¢ÁÖ ÃÖ´ë ³ôÀÌ";
+        Text[ korean ] = "°¢ÁÖ ÃÖ´ë ³ôÀÌ(~H)";
         Text[ turkish ] = "Azami dipnot yüksekliği";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura máx. de ~nota al pie";
@@ -245,7 +245,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "¦ì¸m(~P)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición";
@@ -352,7 +352,7 @@ TabPage TP_FOOTNOTE_PAGE
         StringList [ polish ] =
         {
             < "Z lewej" ; Default ; > ;
-            < "Wyœrodkowany" ; Default ; > ;
+            < "Do œrodka" ; Default ; > ;
             < "Z prawej" ; Default ; > ;
         };
         StringList [ japanese ] =
@@ -428,7 +428,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "½u±ø²Ê²Ó(~W)";
         Text[ arabic ] = "Óõãúß ÇáÎØ";
         Text[ greek ] = "ĞÜ÷ïò ãñáììŞò";
-        Text[ korean ] = "µÎ²²(W)";
+        Text[ korean ] = "µÎ²²(~W)";
         Text[ turkish ] = "Çizgi kal.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Grosor";
@@ -467,7 +467,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "ªø«×(~L)";
         Text[ arabic ] = "ÇáØæá";
         Text[ greek ] = "ÌŞêïò";
-        Text[ korean ] = "±æÀÌ";
+        Text[ korean ] = "±æÀÌ(~L)";
         Text[ turkish ] = "Uzunluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Longitud";
@@ -566,6 +566,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ catalan ] = "Línea de separación";
     };
 };
+
 
 
 
