@@ -1,64 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Andreas Bregas </Author>
-
-<Name>  com.sun.star.comp.ucb.SimpleFileAccess </Name>
-
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   fileacc </module-name>
+    <component-description>
+        <author> Andreas Bregas </author>
+        <name>  com.sun.star.comp.ucb.SimpleFileAccess </name>
+        <description>
     This component provides a simple set of methods
     to access a file system.
-</Description>
-
-<ModuleName>    fileacc </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="beta"/>
-
-<SupportedService>  com.sun.star.ucb.SimpleFileAccess   </SupportedService>
-
-<!-- Because of ucbhelper -->
-<ServiceDependency>     com.sun.star.ucb.UniversalContentBroker             </ServiceDependency>
-<ServiceDependency>     com.sun.star.script.Converter                       </ServiceDependency>
-<ServiceDependency>     com.sun.star.ucb.Store                              </ServiceDependency>
-<ServiceDependency>     com.sun.star.ucb.ContentProviderProxyFactory        </ServiceDependency>
-<ServiceDependency>     com.sun.star.ucb.CachedDynamicResultSetStubFactory  </ServiceDependency>
-<ServiceDependency>     com.sun.star.ucb.PropertiesManager                  </ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    ucbhelper   </ProjectBuildDependency>
-<ProjectBuildDependency>    tools       </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    vos         </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
-<RuntimeModuleDependency>   ucbhelper1MSC </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   vos2        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   tools       </RuntimeModuleDependency>
-
-
-<Type>   com.sun.star.io.XActiveDataSink            </Type>
-<Type>   com.sun.star.io.XActiveDataSource          </Type>
-<Type>   com.sun.star.io.XActiveDataStreamer        </Type>
-<Type>   com.sun.star.ucb.XSimpleFileAccess         </Type>
-<Type>   com.sun.star.ucb.XContentAccess            </Type>
-<Type>   com.sun.star.ucb.TransferInfo              </Type>
-<Type>   com.sun.star.ucb.NameClash                 </Type>
-<Type>   com.sun.star.ucb.OpenCommandArgument2      </Type>
-<Type>   com.sun.star.ucb.InsertCommandArgument     </Type>
-<Type>   com.sun.star.ucb.XCommandEnvironment       </Type>
-<Type>   com.sun.star.ucb.OpenMode                  </Type>
-<Type>   com.sun.star.sdbc.XResultSet               </Type>
-<Type>   com.sun.star.beans.Property                </Type>
-
-</COMPONENTDESCRIPTION>
-
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="beta"/>
+        <supported-service> com.sun.star.ucb.SimpleFileAccess   </supported-service>
+        <service-dependency>        com.sun.star.ucb.UniversalContentBroker             </service-dependency>
+        <service-dependency>        com.sun.star.script.Converter                       </service-dependency>
+        <service-dependency>        com.sun.star.ucb.Store                              </service-dependency>
+        <service-dependency>        com.sun.star.ucb.ContentProviderProxyFactory        </service-dependency>
+        <service-dependency>        com.sun.star.ucb.CachedDynamicResultSetStubFactory  </service-dependency>
+        <service-dependency>        com.sun.star.ucb.PropertiesManager                  </service-dependency>
+        <type>   com.sun.star.io.XActiveDataSink            </type>
+        <type>   com.sun.star.io.XActiveDataSource          </type>
+        <type>   com.sun.star.io.XActiveDataStreamer        </type>
+        <type>   com.sun.star.ucb.XSimpleFileAccess         </type>
+        <type>   com.sun.star.ucb.XContentAccess            </type>
+        <type>   com.sun.star.ucb.TransferInfo              </type>
+        <type>   com.sun.star.ucb.NameClash                 </type>
+        <type>   com.sun.star.ucb.OpenCommandArgument2      </type>
+        <type>   com.sun.star.ucb.InsertCommandArgument     </type>
+        <type>   com.sun.star.ucb.XCommandEnvironment       </type>
+        <type>   com.sun.star.ucb.OpenMode                  </type>
+        <type>   com.sun.star.sdbc.XResultSet               </type>
+        <type>   com.sun.star.beans.Property                </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  ucbhelper   </project-build-dependency>
+    <project-build-dependency>  tools       </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2 </runtime-module-dependency>
+    <runtime-module-dependency> ucbhelper1MSC </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> vos2        </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> tools       </runtime-module-dependency>
+</module-description>
