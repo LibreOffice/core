@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 11:02:59 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 09:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,25 +134,25 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
               = Environment->getInteractionHandler();
         if ( xIH.is() )
         {
-            vos::ORef< ucbhelper::SimpleAuthenticationRequest > xRequest
+            rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
                 = new ucbhelper::SimpleAuthenticationRequest(
                                                 inHostName,
                                                 inRealm,
                                                 rtl::OUString( inUserName ),
                                                 rtl::OUString( inPassWord ) );
-              xIH->handle( xRequest.getBodyPtr() );
+            xIH->handle( xRequest.get() );
 
-            vos::ORef< ucbhelper::InteractionContinuation > xSelection
+            rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();
 
-            if ( xSelection.isValid() )
+            if ( xSelection.is() )
             {
                 // Handler handled the request.
                 uno::Reference< task::XInteractionAbort > xAbort(
-                                    xSelection.getBodyPtr(), uno::UNO_QUERY );
+                                    xSelection.get(), uno::UNO_QUERY );
                 if ( !xAbort.is() )
                 {
-                    const vos::ORef<
+                    const rtl::Reference<
                         ucbhelper::InteractionSupplyAuthentication > & xSupp
                             = xRequest->getAuthenticationSupplier();
 
