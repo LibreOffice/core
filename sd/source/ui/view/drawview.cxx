@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:09:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,26 +129,44 @@
 #include "glob.hrc"
 #include "strings.hrc"
 
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdattr.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "sdpage.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "pres.hxx"
 #include "sdresid.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "unchss.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
 #include "anminfo.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
-#include "preview.hxx"
-#include "prevchld.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
-TYPEINIT1( SdDrawView, SdView );
+namespace sd {
+
+TYPEINIT1(DrawView, View);
 
 /*************************************************************************
 |*
@@ -158,19 +176,21 @@ TYPEINIT1( SdDrawView, SdView );
 |*
 \************************************************************************/
 
-SdDrawView::SdDrawView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
-                       SdDrawViewShell* pShell) :
-                       SdView(pDocSh->GetDoc(), pOutDev, pShell),
-                       pDrawViewShell(pShell),
-                       pDocShell(pDocSh),
-                       nPOCHSmph(0),
-                       nPresPaintSmph(0),
-                       pVDev(NULL),
-                       bPixelMode(FALSE),
-                       pSlideShow(NULL),
-                       nMagic(SDDRAWVIEW_MAGIC),
-                       bInAnimation(FALSE),
-                       bActionMode(TRUE)
+DrawView::DrawView (
+    DrawDocShell* pDocSh,
+    OutputDevice* pOutDev,
+    DrawViewShell* pShell)
+    : ::sd::View(pDocSh->GetDoc(), pOutDev, pShell),
+      pDrawViewShell(pShell),
+      pDocShell(pDocSh),
+      nPOCHSmph(0),
+      nPresPaintSmph(0),
+      pVDev(NULL),
+      bPixelMode(FALSE),
+      pSlideShow(NULL),
+      nMagic(SDDRAWVIEW_MAGIC),
+      bInAnimation(FALSE),
+      bActionMode(TRUE)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
 }
@@ -181,7 +201,7 @@ SdDrawView::SdDrawView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
 |*
 \************************************************************************/
 
-SdDrawView::~SdDrawView()
+DrawView::~DrawView()
 {
     nMagic = 0;
     delete pVDev;
@@ -196,9 +216,9 @@ SdDrawView::~SdDrawView()
 |*
 \************************************************************************/
 
-void SdDrawView::MarkListHasChanged()
+void DrawView::MarkListHasChanged()
 {
-    SdView::MarkListHasChanged();
+    ::sd::View::MarkListHasChanged();
 
     if (pDrawViewShell)
         pDrawViewShell->SelectionHasChanged();
@@ -210,9 +230,9 @@ void SdDrawView::MarkListHasChanged()
 |*
 \************************************************************************/
 
-void SdDrawView::ModelHasChanged()
+void DrawView::ModelHasChanged()
 {
-    SdView::ModelHasChanged();
+    ::sd::View::ModelHasChanged();
 
     // den Gestalter zur Neudarstellung zwingen
     SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
@@ -263,7 +283,7 @@ void SdDrawView::ModelHasChanged()
 |*
 \************************************************************************/
 
-BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
+BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                                             BOOL bReplaceAll)
 {
     BOOL bOk = FALSE;
@@ -311,7 +331,7 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                 {
                     // Presentation object outline
                     OutlinerView* pOV   = GetTextEditOutlinerView();
-                    Outliner* pOutliner = pOV->GetOutliner();
+                    ::Outliner* pOutliner = pOV->GetOutliner();
                     List*         pList = (List*)pOV->CreateSelectionList();
                     aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
 
@@ -383,7 +403,7 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                 }
                 else
                 {
-                    bOk = SdView::SetAttributes(rSet, bReplaceAll);
+                    bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
                 }
             }
         }
@@ -485,12 +505,12 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
             }
 
             if(!bOk)
-                bOk = SdView::SetAttributes(rSet, bReplaceAll);
+                bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
         }
     }
     else    // nicht auf der Masterpage
     {
-        bOk = SdView::SetAttributes(rSet, bReplaceAll);
+        bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
     }
 
     return (bOk);
@@ -502,7 +522,7 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
 |*
 \************************************************************************/
 
-void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
+void DrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                                  const SfxHint& rHint, const TypeId& rHintType)
 {
     if ( pDrawViewShell && rHint.ISA(SdrHint) )
@@ -534,7 +554,7 @@ void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
         }
     }
 
-    SdView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    ::sd::View::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
 }
 
 /*************************************************************************
@@ -543,7 +563,7 @@ void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 |*
 \************************************************************************/
 
-void SdDrawView::BlockPageOrderChangedHint(BOOL bBlock)
+void DrawView::BlockPageOrderChangedHint(BOOL bBlock)
 {
     if (bBlock)
         nPOCHSmph++;
@@ -561,7 +581,7 @@ void SdDrawView::BlockPageOrderChangedHint(BOOL bBlock)
 |*
 \************************************************************************/
 
-BOOL SdDrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
+BOOL DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
     BOOL bResult = TRUE;
 
@@ -577,12 +597,12 @@ BOOL SdDrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardA
         }
         else
         {
-            bResult = SdView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
+            bResult = ::sd::View::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
         }
     }
     else
     {
-        bResult = SdView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
+        bResult = ::sd::View::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
     }
     return bResult;
 }
@@ -593,13 +613,13 @@ BOOL SdDrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardA
 |*
 \************************************************************************/
 
-void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void DrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
 
     BOOL bMPCache = FALSE;
 
 // #110094#-7
-//  if (pViewSh && pViewSh == (SdViewShell*) SfxViewShell::Current() &&
+//  if (pViewSh && pViewSh == (ViewShell*) SfxViewShell::Current() &&
 //      pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
 //      pOutDev->GetOutDevType() != OUTDEV_PRINTER)
 //  {
@@ -686,11 +706,11 @@ void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
         {
             SfxViewFrame*   pViewFrm = pDrawViewShell ? pDrawViewShell->GetViewFrame() : NULL;
             SfxChildWindow* pPreviewChildWindow = pViewFrm ?
-                pViewFrm->GetChildWindow(SdPreviewChildWindow::GetChildWindowId()) : NULL;
+                pViewFrm->GetChildWindow(PreviewChildWindow::GetChildWindowId()) : NULL;
             if (pPreviewChildWindow)
             {
-                SdPreviewWin* pPreviewWin =
-                    (SdPreviewWin*)pPreviewChildWindow->GetWindow();
+                PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+                    pPreviewChildWindow->GetWindow());
                 if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
                     pFuSlideShow = pPreviewWin->GetSlideShow();
             }
@@ -713,7 +733,7 @@ void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
     {
         if (!bPixelMode)
         {
-            SdView::InitRedraw(pOutDev, rReg);
+            ::sd::View::InitRedraw(pOutDev, rReg);
         }
         else
         {
@@ -721,7 +741,7 @@ void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
             * Pixelmodus
             ******************************************************************/
             // Objekte ins VDev zeichnen
-            SdView::InitRedraw(pVDev, rReg);
+            ::sd::View::InitRedraw(pVDev, rReg);
 
             // VDev auf Window ausgeben
             pOutDev->DrawOutDev(Point(), pVDev->GetOutputSize(),
@@ -743,7 +763,7 @@ void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 |*
 \************************************************************************/
 
-void  SdDrawView::AllowPresPaint(BOOL bAllowed)
+void  DrawView::AllowPresPaint(BOOL bAllowed)
 {
     if (bAllowed)
     {
@@ -763,7 +783,7 @@ void  SdDrawView::AllowPresPaint(BOOL bAllowed)
 |*
 \************************************************************************/
 
-void SdDrawView::PresPaint(const Region& rRegion)
+void DrawView::PresPaint(const Region& rRegion)
 {
     if (nPresPaintSmph == 0)
     {
@@ -779,17 +799,18 @@ void SdDrawView::PresPaint(const Region& rRegion)
         {
             SfxViewFrame*   pViewFrm = pDrawViewShell ? pDrawViewShell->GetViewFrame() : NULL;
             SfxChildWindow* pPreviewChildWindow = pViewFrm ?
-                pViewFrm->GetChildWindow(SdPreviewChildWindow::GetChildWindowId()) : NULL;
+                pViewFrm->GetChildWindow(
+                    PreviewChildWindow::GetChildWindowId()) : NULL;
             if (pPreviewChildWindow)
             {
-                SdPreviewWin* pPreviewWin =
-                    (SdPreviewWin*)pPreviewChildWindow->GetWindow();
+                PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+                        pPreviewChildWindow->GetWindow());
                 if (pPreviewWin && pPreviewWin->GetDoc() == pDoc )
                     pFuSlideShow = pPreviewWin->GetSlideShow();
             }
         }
 
-        SdWindow* pWindow = (SdWindow*)GetWin(0);
+        ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
 
         BOOL bLivePresentation = FALSE;
 
@@ -856,7 +877,7 @@ void SdDrawView::PresPaint(const Region& rRegion)
                 SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
                 rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor(pPageView) );
 
-                const Link aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
+                const Link aPaintProcLink( LINK( this, DrawView, PaintProc ) );
 
                 pWindow->Push( PUSH_CLIPREGION );
                 pWindow->IntersectClipRegion( pPageView->GetPageRect() );
@@ -883,10 +904,10 @@ void SdDrawView::PresPaint(const Region& rRegion)
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
+IMPL_LINK( DrawView, PaintProc, SdrPaintProcRec *, pRecord )
 {
     SdAnimationInfo*    pInfo = pDoc->GetAnimationInfo(pRecord->pObj);
-    const ULONG         nOldAntialiasing = pRecord->rOut.GetOutDev()->GetAntialiasing();
+    const USHORT nOldAntialiasing = pRecord->rOut.GetOutDev()->GetAntialiasing();
 
     if( !pRecord->pObj->IsEmptyPresObj() )
     {
@@ -900,11 +921,12 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
             // Paint-Event fuer das Preview-Fenster?
             SfxViewFrame*   pViewFrm = pDrawViewShell ? pDrawViewShell->GetViewFrame() : NULL;
             SfxChildWindow* pPreviewChildWindow = pViewFrm ?
-                pViewFrm->GetChildWindow(SdPreviewChildWindow::GetChildWindowId()) : NULL;
+                pViewFrm->GetChildWindow(
+                    PreviewChildWindow::GetChildWindowId()) : NULL;
             if (pPreviewChildWindow)
             {
-                SdPreviewWin* pPreviewWin =
-                    (SdPreviewWin*)pPreviewChildWindow->GetWindow();
+                PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+                    pPreviewChildWindow->GetWindow());
                 if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
                     pFuSlideShow = pPreviewWin->GetSlideShow();
             }
@@ -1134,7 +1156,7 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
 |* erschienene Animationsobjekte in der Diashow)
 \************************************************************************/
 
-BOOL SdDrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
+BOOL DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 {
     // erstmal die DrawingEngine pruefen lassen (gesperrter oder unsichtbarer
     // Layer usw.)
@@ -1178,7 +1200,7 @@ BOOL SdDrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 |*
 \************************************************************************/
 
-void SdDrawView::SetPixelMode(BOOL bOn)
+void DrawView::SetPixelMode(BOOL bOn)
 {
     if (bPixelMode != bOn)
     {
@@ -1259,7 +1281,7 @@ void SdDrawView::SetPixelMode(BOOL bOn)
 |*
 \************************************************************************/
 
-void SdDrawView::MakeVisible(const Rectangle& rRect, Window& rWin)
+void DrawView::MakeVisible(const Rectangle& rRect, Window& rWin)
 {
     if (!rRect.IsEmpty())
     {
@@ -1274,7 +1296,7 @@ void SdDrawView::MakeVisible(const Rectangle& rRect, Window& rWin)
 |*
 \************************************************************************/
 
-void SdDrawView::SetAnimationMode(BOOL bStart)
+void DrawView::SetAnimationMode(BOOL bStart)
 {
     if (!pSlideShow || !bStart || pDrawViewShell->GetEditMode() != EM_MASTERPAGE)
     {
@@ -1282,7 +1304,7 @@ void SdDrawView::SetAnimationMode(BOOL bStart)
 
         if( pSlideShow )
         {
-            SdWindow*       pWindow = (SdWindow*) GetWin( 0 );
+            ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
             const MapMode   aMapMode( pWindow->GetMapMode() );
 
             pSlideShow->Destroy();
@@ -1354,9 +1376,10 @@ void SdDrawView::SetAnimationMode(BOOL bStart)
             pSlideShow = new FuSlideShow(NULL, NULL, this, pDoc, aReq);
 
             // SlideShow starten und aktuellen MapMode setzen
-            SdWindow* pWindow = (SdWindow*) GetWin(0);
+            ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
             MapMode aMapMode = pWindow->GetMapMode();
-            pSlideShow->SetAnimationMode(ANIMATIONMODE_VIEW, (SdShowWindow*) pWindow);  // CAST IST FALSCH!
+            pSlideShow->SetAnimationMode(ANIMATIONMODE_VIEW,
+                static_cast<ShowWindow*>(pWindow));  // CAST IST FALSCH!
             pSlideShow->StartShow();
             pSlideShow->Resize( pWindow->GetOutputSizePixel() );
             pWindow->SetMapMode(aMapMode);
@@ -1367,7 +1390,7 @@ void SdDrawView::SetAnimationMode(BOOL bStart)
             pViewSh->ReadFrameViewData(pViewSh->GetFrameView());
         }
 
-        SdWindow* pWindow = (SdWindow*) GetWin(0);
+        ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
         pWindow->Invalidate();
         pWindow->Update();
     }
@@ -1380,7 +1403,7 @@ void SdDrawView::SetAnimationMode(BOOL bStart)
 |*
 \************************************************************************/
 
-void SdDrawView::HideAndAnimateObject(SdrObject* pObj)
+void DrawView::HideAndAnimateObject(SdrObject* pObj)
 {
     if (pSlideShow && !bInAnimation)
     {
@@ -1407,7 +1430,7 @@ void SdDrawView::HideAndAnimateObject(SdrObject* pObj)
 |*
 \************************************************************************/
 
-void SdDrawView::AnimatePage()
+void DrawView::AnimatePage()
 {
     if (pSlideShow && !bInAnimation)
     {
@@ -1433,17 +1456,17 @@ void SdDrawView::AnimatePage()
 |*
 \************************************************************************/
 
-void SdDrawView::HidePage(SdrPageView* pPV)
+void DrawView::HidePage(SdrPageView* pPV)
 {
     if (pDrawViewShell)
     {
         pDrawViewShell->HidePage(pPV);
     }
 
-    SdView::HidePage(pPV);
+    ::sd::View::HidePage(pPV);
 }
 
-SdrObject* SdDrawView::GetMaxToBtmObj(SdrObject* pObj) const
+SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
 {
     if( pObj )
     {
@@ -1454,4 +1477,4 @@ SdrObject* SdDrawView::GetMaxToBtmObj(SdrObject* pObj) const
     return NULL;
 }
 
-
+} // end of namespace sd
