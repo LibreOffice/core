@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userdat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,25 +680,34 @@ void ScDrawObjData::ReadData( SvStream& r )
 {
     SdrObjUserData::ReadData( r );
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     USHORT n;
-    r >> aStt.nCol >> aStt.nRow >> aStt.nTab
-      >> aEnd.nCol >> aEnd.nRow >> aEnd.nTab
+    UINT16 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    r >> nCol1 >> nRow1 >> nTab1
+      >> nCol2 >> nRow2 >> nTab2
       >> n;
-    bValidEnd = BOOL( n & 0x0001 );
-    bValidStart = !BOOL( n & 0x0002 );  // Default (0) = bValidStart fuer alte Dokumente
+    aStt.Set( nCol1, nRow1, nTab1);
+    aEnd.Set( nCol2, nRow2, nTab2);
+    bValidEnd = ((n & 0x0001) != 0);
+    bValidStart = ((n & 0x0002) == 0);  // Default (0) = bValidStart fuer alte Dokumente
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScDrawObjData::WriteData( SvStream& r )
 {
     SdrObjUserData::WriteData( r );
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     USHORT n = 0x0000;
     if (bValidEnd)    n |= 0x0001;
     if (!bValidStart) n |= 0x0002;      // Default (0) = bValidStart fuer alte Dokumente
 
-    r << (UINT16) aStt.nCol << (UINT16) aStt.nRow << (UINT16) aStt.nTab
-      << (UINT16) aEnd.nCol << (UINT16) aEnd.nRow << (UINT16) aEnd.nTab
+    r << (UINT16) aStt.Col() << (UINT16) aStt.Row() << (UINT16) aStt.Tab()
+      << (UINT16) aEnd.Col() << (UINT16) aEnd.Row() << (UINT16) aEnd.Tab()
       << n;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 //------------------------------------------------------------------------
