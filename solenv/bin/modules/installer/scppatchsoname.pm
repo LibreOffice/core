@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scppatchsoname.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:16:46 $
+#   last change: $Author: rt $ $Date: 2004-10-25 13:44:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,7 @@ sub replace_productname_in_file
     my $replacestring = "";
     for ( my $i = 1; $i <= 80; $i++ ) { $replacestring .= $onestring; }
 
-    my $productname = $variableshashref->{'PRODUCTNAME'};
+    my $productname = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTVERSION'};
     my $unicode_productname = convert_to_unicode($productname);
 
     change_length_of_string(\$unicode_productname, $replacestring);
