@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-09 15:15:33 $
+ *  last change: $Author: os $ $Date: 2001-04-19 11:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,15 @@
 #ifndef _SVX_PAGEITEM_HXX //autogen
 #include <svx/pageitem.hxx>
 #endif
-
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx>
+#endif
+#ifndef _SV_BITMAP_HXX
+#include <vcl/bitmap.hxx>
+#endif
+#ifndef _SV_GRAPH_HXX
+#include <vcl/graph.hxx>
+#endif
 #include "colex.hxx"
 #include "colmgr.hxx"
 
@@ -178,6 +186,18 @@ void SwColExample::UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr )
             SetHdLeft( rLR.GetLeft() );
             SetHdRight( rLR.GetRight() );
             SetHeader( TRUE );
+            if ( rHeaderSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
+            {
+                const SvxBrushItem& rItem =
+                    (const SvxBrushItem&)rHeaderSet.Get( RES_BACKGROUND );
+                SetHdColor( rItem.GetColor() );
+            }
+            if ( rHeaderSet.GetItemState( RES_BOX ) == SFX_ITEM_SET )
+            {
+                const SvxBoxItem& rItem =
+                    (const SvxBoxItem&)rHeaderSet.Get( RES_BOX );
+                SetHdBorder( rItem );
+            }
         }
         else
             SetHeader( FALSE );
@@ -205,9 +225,35 @@ void SwColExample::UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr )
             SetFtLeft( rLR.GetLeft() );
             SetFtRight( rLR.GetRight() );
             SetFooter( TRUE );
+            if( rFooterSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
+            {
+                const SvxBrushItem& rItem =
+                    (const SvxBrushItem&)rFooterSet.Get( RES_BACKGROUND );
+                SetFtColor( rItem.GetColor() );
+            }
+            if( rFooterSet.GetItemState( RES_BOX ) == SFX_ITEM_SET )
+            {
+                const SvxBoxItem& rItem =
+                    (const SvxBoxItem&)rFooterSet.Get( RES_BOX );
+                SetFtBorder( rItem );
+            }
         }
         else
             SetFooter( FALSE );
+    }
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND,
+            FALSE, &pItem ) )
+    {
+        SetColor( ( (const SvxBrushItem*)pItem )->GetColor() );
+        const Graphic* pGrf = ( (const SvxBrushItem*)pItem )->GetGraphic();
+
+        if ( pGrf )
+        {
+            Bitmap aBitmap = pGrf->GetBitmap();
+            SetBitmap( &aBitmap );
+        }
+        else
+            SetBitmap( NULL );
     }
 
     Invalidate();
@@ -224,8 +270,6 @@ void SwColExample::DrawPage( const Point& rOrg,
     SvxPageWindow::DrawPage( rOrg, bSecond, bEnabled );
     if( pColMgr && pColMgr->GetCount() >1 )
     {
-//      SetPen( Pen( PEN_DOT ) );
-
         long nL = GetLeft();
         long nR = GetRight();
 
@@ -246,7 +290,7 @@ void SwColExample::DrawPage( const Point& rOrg,
                         - GetFtHeight() - GetFtDist();
         DrawRect(aRect);
 
-        SetFillColor( Color( COL_WHITE ) );
+        SetFillColor( GetColor() );
         USHORT nColumnCount = pColMgr->GetCount();
         for(USHORT i = 0; i < nColumnCount; i++)
         {
@@ -328,7 +372,6 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 
 void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 {
-//      Pen aSolidPen(PEN_SOLID);
         long nWidth = aFrmSize.Width();
         long nHeight = aFrmSize.Height();
         Fraction aXScale( aWinSize.Width(), std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
@@ -384,7 +427,6 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 
         const SwColumns& rCols = aCols.GetColumns();
         USHORT nColCount = rCols.Count();
-//      SetPen(Pen(PEN_DOT));
         if( !nColCount)
             DrawRect(aRect);
         else
@@ -399,7 +441,6 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
                 aFrmRect.Right()   = nSum - pCol->GetRight();
                 DrawRect(aFrmRect);
             }
-//          SetPen( aSolidPen );
             if(bLines )
             {
                 nSum = aTL.X();
@@ -425,97 +466,4 @@ void SwColumnOnlyExample::SetFrameSize(const Size& rS, long nDist)
     nDistance = 2 * nDist;
     ::FitToActualSize(aCols, (USHORT)aFrmSize.Width());
 }
-
-/*-----------------25.02.94 21:22-------------------
-   $Log: not supported by cvs2svn $
-   Revision 1.2  2000/11/07 12:08:55  hjs
-   use min/max from stl
-
-   Revision 1.1.1.1  2000/09/18 17:14:37  hr
-   initial import
-
-   Revision 1.26  2000/09/18 16:05:32  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.25  2000/03/03 15:17:01  os
-   StarView remainders removed
-
-   Revision 1.24  1998/04/28 09:28:32  OS
-   Abstand nur fuer existierende Spalten erfragen
-
-
-      Rev 1.23   28 Apr 1998 11:28:32   OS
-   Abstand nur fuer existierende Spalten erfragen
-
-      Rev 1.22   16 Apr 1998 13:09:28   OS
-   Spaltenabstand fuer Seitenbeispiel richtig #49516#
-
-      Rev 1.21   28 Nov 1997 19:40:38   MA
-   includes
-
-      Rev 1.20   24 Nov 1997 17:40:12   MA
-   include
-
-      Rev 1.19   03 Nov 1997 13:19:44   MA
-   precomp entfernt
-
-      Rev 1.18   15 Aug 1997 12:15:24   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.17   12 Aug 1997 15:58:08   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.16   07 Aug 1997 14:59:08   OM
-   Headerfile-Umstellung
-
-      Rev 1.15   23 Apr 1997 11:08:48   OS
-   ResId const
-
-      Rev 1.14   21 Nov 1996 11:53:34   OS
-   Umrandungsabstand mit anzeigen
-
-      Rev 1.13   08 Nov 1996 14:07:54   OS
-   ohne Spalten mit richtigem Hintergrund painten
-
-      Rev 1.12   25 Oct 1996 14:56:56   OS
-   neues Spaltenbeispiel ohne Seite
-
-      Rev 1.11   28 Aug 1996 11:52:54   OS
-   includes
-
-      Rev 1.10   27 Mar 1996 16:02:56   OS
-   Hoehe Kopf-/Fusszeilen richtig einstellen
-
-      Rev 1.9   22 Mar 1996 14:20:58   MH
-   add: include pageitem.hxx
-
-      Rev 1.8   24 Nov 1995 16:58:10   OM
-   PCH->PRECOMPILED
-
-      Rev 1.7   21 Nov 1995 08:16:04   OS
-   +pragma
-
-      Rev 1.6   21 Nov 1995 08:00:48   OS
-   Itemsate auf _SET pruefen, Seitengroesse init.
-
-      Rev 1.5   17 Oct 1995 15:00:08   MA
-   fix: SEXPORT'iert
-
-      Rev 1.4   22 Aug 1995 09:10:02   MA
-   svxitems-header entfernt
-
-      Rev 1.3   07 Aug 1995 18:51:24   OS
-   Trennlinien mit einzeichnen
-
-      Rev 1.2   02 Aug 1995 17:47:50   OS
-   Seitenspaltenbeispiel implementiert
-
-      Rev 1.1   11 Jul 1995 15:42:06   OS
-   Beispielfenster jetzt vom SvxPageWindow abgeleitet
-
-      Rev 1.0   20 Apr 1995 17:38:02   OS
-   Initial revision.
-
---------------------------------------------------*/
-
 
