@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:18:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,17 +77,16 @@ ModelessDialog RID_DLG_SEARCH
     Closeable = TRUE;
     Hide = TRUE;
     Size = MAP_APPFONT( 218, 84 );
-    Text[ language_user1 ] = "em: The preposition 'in' used by Mozilla is incorrect because the conceptual model of a 'page' is a flat surface (not a container of HTML code, which must be where the 'in' originated)";
-    Text = "Auf dieser Seite suchen";
-    Text [ english_us ] = "Find on this Page";
+    Text[ x-comment ] = "em: The preposition 'in' used by Mozilla is incorrect because the conceptual model of a 'page' is a flat surface (not a container of HTML code, which must be where the 'in' originated)";
+    Text [ de ]= "Auf dieser Seite suchen";
+    Text [ en-US ] = "Find on this Page";
     FixedText FT_SEARCH
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 150, 8 );
         Text[ language_user1 ] = "em: This is the same text used in SO search dialog under Edit � Find & Replace";
-        Text = "S~uchen nach";
-        Text [ english_us ] = "~Search for";
-        Text[ chinese_simplified ] = "搜寻内容";
+        Text [ de ] = "S~uchen nach";
+        Text [ en-US ] = "~Search for";
     };
     ComboBox ED_SEARCH
     {
@@ -102,70 +101,62 @@ ModelessDialog RID_DLG_SEARCH
         Pos = MAP_APPFONT( 6, 29 );
         Size = MAP_APPFONT( 150, 10 );
         Text[ language_user1 ] = "";
-        Text = "Nur ganze ~W�rter" ;
-        Text [ english_us ] = "~Whole words only" ;
+        Text [ de ]= "Nur ganze ~W�rter" ;
+        Text [ en-US ] = "~Whole words only" ;
         TabStop = TRUE;
-        Text[ chinese_simplified ] = "全字匹配";
     };
     CheckBox CB_MATCHCASE
     {
         Pos = MAP_APPFONT( 6, 42 );
         Size = MAP_APPFONT( 150, 10 );
-        Text[ language_user1 ] = "";
-        Text = "E~xakte Suche" ;
-        Text[ english_us ] = "~Match case";
+        Text[ x-comment ] = "";
+        Text [ de ]= "E~xakte Suche" ;
+        Text[ en-US ] = "~Match case";
         TabStop = TRUE;
-        Text[ chinese_simplified ] = "匹配项";
     };
     CheckBox CB_WRAPAROUND
     {
         Pos = MAP_APPFONT( 6, 55 );
         Size = MAP_APPFONT( 150, 10 );
         Text[ language_user1 ] = "em: use the translation used in your language in Mozilla browser Search dialog only if it means both directions like 'wrap' in English. Otherwise, translate this string to mean 'Continue search at the start of the document'";
-        Text = "Suche am ~Dokumentanfang fortsetzen" ;
-        Text [ english_us ] = "Wrap ~around" ;
+        Text [ de ]= "Suche am ~Dokumentanfang fortsetzen" ;
+        Text [ en-US ] = "Wrap ~around" ;
         TabStop = TRUE;
-        Text[ chinese_simplified ] = "环绕";
     };
     CheckBox CB_BACKWARDS
     {
         Pos = MAP_APPFONT( 6, 68 );
         Size = MAP_APPFONT( 150, 10 );
-        Text[ language_user1 ] = "";
-        Text = "~R�ckw�rts" ;
-        Text [ english_us ] = "~Backwards" ;
+        Text[ x-comment ] = "";
+        Text [ de ]= "~R�ckw�rts" ;
+        Text [ en-US ] = "~Backwards" ;
         TabStop = TRUE;
-        Text[ chinese_simplified ] = "向后";
     };
     PushButton PB_FIND
     {
         Pos = MAP_APPFONT( 162, 6 );
         Size = MAP_APPFONT( 50, 14 );
         Text[ language_user1 ] = "";
-        Text = "~Suchen" ;
-        Text [ english_us ] = "~Find" ;
+        Text [ de ] = "~Suchen" ;
+        Text [ en-US ] = "~Find" ;
         TabStop = TRUE;
         DefButton = TRUE ;
-        Text[ chinese_simplified ] = "搜寻";
     };
     CancelButton PB_CANCELFIND
     {
         Pos = MAP_APPFONT( 162, 23 );
         Size = MAP_APPFONT( 50, 14 );
-        Text[ language_user1 ] = "";
-        Text = "S~chlie�en" ;
-        Text [ english_us ] = "~Close" ;
+        Text[ x-comment ] = "";
+        Text [ de ]= "S~chlie�en" ;
+        Text [ en-US ] = "~Close" ;
         TabStop = TRUE;
-        Text[ chinese_simplified ] = "关闭";
     };
 
     String STR_TOGGLE
     {
         Text[ language_user1 ] = "em: use the translation used in your language in Mozilla browser Search dialog only if it means both directions like 'wrap' in English. Otherwise, translate this string to mean 'Continue search at the end of the document'";
-        Text = "Suche am ~Dokumentende fortsetzen" ;
-        Text [ english_us ] = "Wrap ~around" ;
-        Text[ chinese_simplified ] = "环绕";
+        Text [ de ]= "Suche am ~Dokumentende fortsetzen" ;
+        Text [ en-US ] = "Wrap ~around" ;
     };
-    Text[ chinese_simplified ] = "在此页搜寻";
 };
 
