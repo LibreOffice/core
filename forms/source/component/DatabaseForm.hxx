@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:01:11 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ public:
     inline void submitNBC( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt );
 
 protected:
-    virtual void implInserted(const InterfaceRef& _rxObject);
+    virtual void implInserted( const ElementDescription* _pElement );
     virtual void implRemoved(const InterfaceRef& _rxObject);
 
     // OPropertyChangeListener

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 16:19:02 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,18 @@ namespace frm
 {
 //.........................................................................
 
+class OGridColumn;
+
+//==================================================================
+// ColumnDescription
+//==================================================================
+
+    struct ColumnDescription : public ElementDescription
+    {
+    public:
+        OGridColumn*                pColumn;        // not owned by this instance! only to prevent duplicate XUnoTunnel usage
+    };
+
 //==================================================================
 // OGridControlModel
 //==================================================================
@@ -107,7 +119,6 @@ typedef ::cppu::ImplHelper6 <   ::com::sun::star::awt::XControlModel
                             ,   ::com::sun::star::sdb::XSQLErrorListener
                             >   OGridControlModel_BASE;
 
-class OGridColumn;
 class OGridControlModel :public OControlModel
                         ,public OInterfaceContainer
                         ,public OErrorBroadcaster
@@ -228,16 +239,21 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
-    virtual InterfaceRef approveNewElement( const InterfaceRef& _rxObject );
+    virtual void approveNewElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
+            ElementDescription* _pElement
+        );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  createColumn(sal_Int32 nTypeId) const;
 
     OGridColumn* getColumnImplementation(const InterfaceRef& _rxIFace) const;
 
+    virtual ElementDescription* createElementMetaData( );
+
 protected:
     virtual void implRemoved(const InterfaceRef& _rxObject);
-    virtual void implInserted(const InterfaceRef& _rxObject);
-    virtual void implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject);
+    virtual void implInserted( const ElementDescription* _pElement );
+    virtual void implReplaced( const InterfaceRef& _rxReplacedObject, const ElementDescription* _pElement );
 
     void gotColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
     void lostColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 16:18:23 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
@@ -146,15 +149,30 @@ namespace frm
 //.........................................................................
 
 
+//==================================================================
+    struct ElementDescription
+    {
+    public:
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       xInterface;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   xPropertySet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >     xChild;
+        ::com::sun::star::uno::Any                                                  aElementTypeInterface;
+
+    public:
+        ElementDescription( );
+        virtual ~ElementDescription();
+
+    private:
+        ElementDescription( const ElementDescription& );            // never implemented
+        ElementDescription& operator=( const ElementDescription& ); // never implemented
+    };
+
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
 typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
 
 //==================================================================
-// FmForms
-// Implementiert den UNO-Container fuer Formulare
-// enthaelt alle zugeordneten Forms
-// dieses Container kann selbst den Context fuer Formulare darstellen
-// oder auﬂen einen Context uebergeben bekommen
+// OInterfaceContainer
+// implements a container for form components
 //==================================================================
 typedef ::cppu::ImplHelper7<    ::com::sun::star::container::XNameContainer,
                                 ::com::sun::star::container::XIndexContainer,
@@ -250,23 +268,44 @@ protected:
     virtual void SAL_CALL disposing();
     virtual void removeElementsNoEvents(sal_Int32 nIndex);
 
-    /// to be overridden if elements which are to be inserted into the container shall be checked
-    virtual InterfaceRef approveNewElement( const ::com::sun::star::uno::Any& _rObject );
-    virtual InterfaceRef approveNewElement( const InterfaceRef& _rxObject );
+    /** to be overridden if elements which are to be inserted into the container shall be checked
+
+        <p>the ElementDescription given can be used to cache information about the object - it will be passed
+        later on to implInserted/implReplaced.</p>
+    */
+    virtual void approveNewElement(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
+                    ElementDescription* _pElement
+                );
+
+    virtual ElementDescription* createElementMetaData( );
+
+    /** inserts an object into our internal structures
+
+        @param _nIndex
+            the index at which position it should be inserted
+        @param _bEvents
+            if <TRUE/>, event knittings will be done
+        @param _pApprovalResult
+            must contain the result of an approveNewElement call. Can be <NULL/>, in this case, the approval
+            is done within implInsert.
+        @param _bFire
+            if <TRUE/>, a notification about the insertion will be fired
+    */
             void implInsert(
                 sal_Int32 _nIndex,
-                const InterfaceRef& _rxObject,
-                sal_Bool _bEvents = sal_True,
-                sal_Bool _bApprove = sal_True,
-                sal_Bool _bFire = sal_True
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
+                sal_Bool _bEvents /* = sal_True */,
+                ElementDescription* _pApprovalResult /* = NULL */ ,
+                sal_Bool _bFire /* = sal_True */
             ) throw(::com::sun::star::lang::IllegalArgumentException);
 
     // called after the object is inserted, but before the "real listeners" are notified
-    virtual void implInserted(const InterfaceRef& _rxObject) { }
+    virtual void implInserted( const ElementDescription* _pElement ) { }
     // called after the object is removed, but before the "real listeners" are notified
     virtual void implRemoved(const InterfaceRef& _rxObject) { }
     // called after an object was replaced, but before the "real listeners" are notified
-    virtual void implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject) { }
+    virtual void implReplaced( const InterfaceRef& _rxReplacedObject, const ElementDescription* _pElement ) { }
 
     void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);

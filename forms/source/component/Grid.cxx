@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:24:52 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,8 +984,8 @@ void SAL_CALL OGridControlModel::reloaded(const EventObject& rEvent) throw(Runti
 OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxIFace) const
 {
     OGridColumn* pImplementation = NULL;
-    Reference<XUnoTunnel> xUnoTunnel(_rxIFace, UNO_QUERY);
-    if (xUnoTunnel.is())
+    Reference< XUnoTunnel > xUnoTunnel( _rxIFace, UNO_QUERY );
+    if ( xUnoTunnel.is() )
         pImplementation = reinterpret_cast<OGridColumn*>(xUnoTunnel->getSomething(OGridColumn::getUnoTunnelImplementationId()));
 
     return pImplementation;
@@ -1032,33 +1032,43 @@ void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::implInserted(const InterfaceRef& _rxObject)
+void OGridControlModel::implInserted( const ElementDescription* _pElement )
 {
-    OInterfaceContainer::implInserted(_rxObject);
+    OInterfaceContainer::implInserted( _pElement );
 
-    Reference< XSQLErrorBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
+    Reference< XSQLErrorBroadcaster > xBroadcaster( _pElement->xInterface, UNO_QUERY );
     if ( xBroadcaster.is() )
         xBroadcaster->addSQLErrorListener( this );
 
-    gotColumn(_rxObject);
+    gotColumn( _pElement->xInterface );
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject)
+void OGridControlModel::implReplaced( const InterfaceRef& _rxReplacedObject, const ElementDescription* _pElement )
 {
-    OInterfaceContainer::implReplaced(_rxReplacedObject, _rxNewObject);
-    lostColumn(_rxReplacedObject);
-    gotColumn(_rxNewObject);
+    OInterfaceContainer::implReplaced( _rxReplacedObject, _pElement );
+    lostColumn( _rxReplacedObject );
+    gotColumn( _pElement->xInterface );
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef OGridControlModel::approveNewElement( const InterfaceRef& _rxObject )
+ElementDescription* OGridControlModel::createElementMetaData( )
+{
+    return new ColumnDescription;
+}
+
+//------------------------------------------------------------------------------
+void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxObject, ElementDescription* _pElement )
 {
     OGridColumn* pCol = getColumnImplementation( _rxObject );
     if ( !pCol )
         throw IllegalArgumentException();
 
-    return OInterfaceContainer::approveNewElement( _rxObject );
+    OInterfaceContainer::approveNewElement( _rxObject, _pElement );
+
+    // if we're here, the object passed all tests
+    if ( _pElement )
+        static_cast< ColumnDescription* >( _pElement )->pColumn = pCol;
 }
 
 // XPersistObject
@@ -1222,7 +1232,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
             }
 
             if ( xCol.is() )
-                implInsert( i, xCol, sal_False, sal_False, sal_False );
+                implInsert( i, xCol, sal_False, NULL, sal_False );
         }
     }
 
