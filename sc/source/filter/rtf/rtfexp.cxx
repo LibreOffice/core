@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:05:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -100,7 +99,6 @@
 
 #include "rtfexp.hxx"
 #include "filter.hxx"
-#include "flttools.hxx"
 #include "document.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
