@@ -17,3 +17,14 @@ component_getDescriptionFunc
     local:
         *;
 };
+
+UDK_3.1 {
+    global:
+        ??0Condition@salhelper@@QAE@AAVMutex@osl@@@Z
+        ??1Condition@salhelper@@UAE@XZ
+        ??1ConditionModifier@salhelper@@QAE@XZ
+        ??0ConditionModifier@salhelper@@QAE@AAVCondition@1@@Z
+        ??1ConditionWaiter@salhelper@@QAE@XZ
+        ??0ConditionWaiter@salhelper@@QAE@AAVCondition@1@@Z
+        ??0ConditionWaiter@salhelper@@QAE@AAVCondition@1@K@Z
+} UDK_3_0_0;
