@@ -159,7 +159,7 @@ sub get_module_name_description
         if ( $onemodule->{'gid'} eq $gid )
         {
             my $typestring = $type . " " . "(" . $onelanguage . ")";
-            $newstring = $onemodule->{$typestring };
+            if ( $onemodule->{$typestring} ) { $newstring = $onemodule->{$typestring}; }
             $found = 1;
         }
 
@@ -179,7 +179,7 @@ sub get_module_name_description
             if ( $onemodule->{'gid'} eq $gid )
             {
                 my $typestring = $type . " " . "(" . $defaultlanguage . ")";
-                $newstring = $onemodule->{$typestring};
+                if ( $onemodule->{$typestring} ) { $newstring = $onemodule->{$typestring}; }
                 $found = 1;
             }
 
@@ -454,7 +454,7 @@ sub add_license_file_into_javafile
 
 sub make_systemcall
 {
-    my ( $systemcall ) = @_;
+    my ( $systemcall, $logreturn ) = @_;
 
     my @returns = ();
 
@@ -469,7 +469,10 @@ sub make_systemcall
     my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    for ( my $j = 0; $j <= $#returns; $j++ ) { push( @installer::globals::logfileinfo, "$returns[$j]"); }
+    if ( $logreturn )
+    {
+        for ( my $j = 0; $j <= $#returns; $j++ ) { push( @installer::globals::logfileinfo, "$returns[$j]"); }
+    }
 
     if ($returnvalue)
     {
@@ -482,6 +485,8 @@ sub make_systemcall
         $infoline = "SUCCESS: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
+
+    return \@returns;
 }
 
 #######################################################
@@ -1164,7 +1169,14 @@ sub replace_component_names
             my $gid = $componentname;
             my $type = "Name";
 
-            my $modulename = get_module_name_description($modulesarrayref, $onelanguage, $gid, $type);
+            my $modulename = "";
+            $modulename = get_module_name_description($modulesarrayref, $onelanguage, $gid, $type);
+
+            if ( $modulename eq "" )
+            {
+                $infoline = "Info: Modulename for $gid not defined in modules collector. Looking in Java ulf file.\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
 
             if ( $modulename eq "" ) # the modulename can also be set in the Java ulf file
             {
@@ -1191,17 +1203,156 @@ sub replace_component_names
     }
 }
 
+#############################################################################
+# Collecting all packages or rpms located in the installation directory
+#############################################################################
+
+sub get_all_packages_in_installdir
+{
+    my ($installdir, $subdir) = @_;
+
+    my $infoline = "";
+
+    my @allrpms = ();   # not needed for Solaris at the moment
+    my $allrpms = \@allrpms;
+
+    $installdir =~ s/\Q$installer::globals::separator\E\s*$//;
+    my $directory = $installdir . $installer::globals::separator . $subdir;
+    $directory =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( $installer::globals::islinuxrpmbuild )
+    {
+        $allrpms = installer::systemactions::find_file_with_file_extension("rpm", $directory);
+
+        # collecting rpms with the complete path
+
+        for ( my $i = 0; $i <= $#{$allrpms}; $i++ )
+        {
+            ${$allrpms}[$i] = $directory . $installer::globals::separator . ${$allrpms}[$i];
+            $infoline = "Found RPM: ${$allrpms}[$i]\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+
+    return $allrpms;
+}
+
+#######################################################
+# Adding the values of the array
+#######################################################
+
+sub do_sum
+{
+    my ( $allnumbers ) = @_;
+
+    my $sum = 0;
+
+    for ( my $i = 0; $i <= $#{$allnumbers}; $i++ )
+    {
+        $sum = $sum + ${$allnumbers}[$i];
+    }
+
+    return $sum;
+}
+
+#######################################################
+# Setting the filesize for the RPMs in the xml file
+#######################################################
+
+sub set_filesize_in_xmlfile
+{
+    my ($filesize, $rpmname, $xmlfile) = @_;
+
+    my $infoline = "";
+    my $foundrpm = 0;
+    my $filesizeset = 0;
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        my $line = ${$xmlfile}[$i];
+
+        # searching for "rpmPath="RPMS/${UNIXPRODUCTNAME}-core01-${PACKAGEVERSION}-${PACKAGEREVISION}.i586.rpm""
+
+        if (( $line =~ /rpmPath\s*=/ ) && ( $line =~ /\Q$rpmname\E\"\s*$/ ))
+        {
+            $foundrpm = 1;
+
+            my $number = $i;
+            $number++;
+
+            while ( ! ( ${$xmlfile}[$number] =~ /\/\>\s*$/ ))
+            {
+                if ( ${$xmlfile}[$number] =~ /FILESIZEPLACEHOLDER/ )
+                {
+                    ${$xmlfile}[$number] =~ s/FILESIZEPLACEHOLDER/$filesize/;
+                    $filesizeset = 1;
+                    $infoline = "Setting filesize for $rpmname : $filesize\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    last;
+                }
+
+                $number++;
+            }
+
+            last;
+        }
+    }
+
+    if ( ! $foundrpm )
+    {
+        $infoline = "ERROR: Did not find $rpmname in xml file !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    if ( ! $filesizeset )
+    {
+        $infoline = "ERROR: Did not set filesize for $rpmname in xml file !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+#######################################################
+# Including the file size of the rpms into the
+# xml file
+#######################################################
+
+sub put_filesize_into_xmlfile
+{
+    my ($xmlfile, $listofpackages) = @_;
+
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#{$listofpackages}; $i++ )
+    {
+        my $completerpmname = ${$listofpackages}[$i];
+        my $rpmname = $completerpmname;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$rpmname);
+
+        my $systemcall = "$installer::globals::rpmcommand -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $completerpmname 2\>\&1 |";
+        my $rpmout = make_systemcall($systemcall, 0);
+        my $filesize = do_sum($rpmout);
+
+        $infoline = "Filesize $rpmname : $filesize\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        set_filesize_in_xmlfile($filesize, $rpmname, $xmlfile);
+    }
+}
+
 #######################################################
 # Creating the java installer class file dynamically
 #######################################################
 
 sub create_java_installer
 {
-    my ( $installdir, $languagestringref, $languagesarrayref, $filesarrayref, $allvariableshashref, $includepatharrayref, $modulesarrayref ) = @_;
+    my ( $installdir, $newdir, $languagestringref, $languagesarrayref, $filesarrayref, $allvariableshashref, $includepatharrayref, $modulesarrayref ) = @_;
 
     installer::logger::include_header_into_logfile("Creating Java installer:");
 
     my $infoline = "";
+
+    # collecting all packages or rpms located in the installation directory
+    my $listofpackages = get_all_packages_in_installdir($installdir, $newdir);
 
     # creating the directory
     my $javadir = installer::systemactions::create_directories("javainstaller", $languagestringref);
@@ -1357,6 +1508,7 @@ sub create_java_installer
     if ( $installer::globals::issolarisx86build ) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
+    if ( $installer::globals::islinuxrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
     installer::files::save_file($xmlfilename, $xmlfile);
     $infoline = "Saving xml file: $xmlfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -1375,10 +1527,10 @@ sub create_java_installer
     if ( $jdkpath ) { $javac = $jdkpath . $installer::globals::separator . $javac; }
 
     my $systemcall = "$javac locale\/resources\/\*\.java 2\>\&1 |";
-    make_systemcall($systemcall);
+    make_systemcall($systemcall, 1);
 
     $systemcall = "$javac com\/sun\/staroffice\/install\/\*\.java 2\>\&1 |";
-    make_systemcall($systemcall);
+    make_systemcall($systemcall, 1);
 
     # making subdirectory creating empty packages
     create_empty_packages($xmlfile);
@@ -1394,7 +1546,7 @@ sub create_java_installer
     if ( $jdkpath ) { $java = $jdkpath . $installer::globals::separator . $java; }
 
     $systemcall = "$java com.sun.setup.builder.InstallBuilder $xmlfilename -novalidate 2\>\&1 |";
-    make_systemcall($systemcall);
+    make_systemcall($systemcall, 1);
 
     # copying the newly created classfile into the installation set
 
