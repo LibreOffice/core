@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:10:12 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 07:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ public:
 
 #ifdef ACCESSIBLE_LAYOUT
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    void InvalidateAccessibleFocus();
 #endif
 
     //apply Accessiblity options

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-14 13:24:10 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 07:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3663,6 +3663,9 @@ BOOL SwEditWin::IsDrawSelMode()
 
 void SwEditWin::GetFocus()
 {
+#ifdef ACCESSIBLE_LAYOUT
+    rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
     rView.GotFocus();
     Window::GetFocus();
 }
@@ -3679,6 +3682,9 @@ void SwEditWin::LoseFocus()
     if( pQuickHlpData->bClear )
         pQuickHlpData->Stop( rView.GetWrtShell() );
     rView.LostFocus();
+#ifdef ACCESSIBLE_LAYOUT
+    rView.GetWrtShell().InvalidateAccessibleFocus();
+#endif
 }
 
 /******************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:22:47 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 07:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>& rAcc );
     void DoInvalidateShapeSelection();
+    void DoInvalidateShapeFocus();
     void InvalidateShapeSelection();
 
     void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
@@ -185,6 +186,7 @@ public:
     void InvalidateContent( const SwFrm *pFrm );
 
     void InvalidateCursorPosition( const SwFrm *pFrm );
+    void InvalidateFocus();
 
     void SetCursorContext(
         const ::vos::ORef < SwAccessibleContext >& rCursorContext );
