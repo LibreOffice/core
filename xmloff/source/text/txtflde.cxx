@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:34 $
+ *  last change: $Author: dvo $ $Date: 2002-06-28 10:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,8 +1369,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ProcessCommandType(
-                      GetInt16Property(sPropertyDataCommandType, rPropSet));
+        ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
         ExportElement(XML_DATABASE_NAME, sPresentation);
         break;
 
@@ -1379,8 +1378,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ProcessCommandType(
-                      GetInt16Property(sPropertyDataCommandType, rPropSet));
+        ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
         ProcessNumberingType(
             GetInt16Property(sPropertyNumberingType,rPropSet));
         ProcessInteger(XML_VALUE,
@@ -1393,8 +1391,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ProcessCommandType(
-                      GetInt16Property(sPropertyDataCommandType, rPropSet));
+        ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
         ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
@@ -1407,8 +1404,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyDataBaseName, rPropSet));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
-        ProcessCommandType(
-                      GetInt16Property(sPropertyDataCommandType, rPropSet));
+        ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
         ProcessString(XML_CONDITION,
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessInteger(XML_ROW_NUMBER,
@@ -1426,8 +1422,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyDataBaseName, xMaster));
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, xMaster));
-        ProcessCommandType(
-                      GetInt16Property(sPropertyDataCommandType, xMaster));
+        ProcessCommandType(GetIntProperty(sPropertyDataCommandType, xMaster));
         ProcessString(XML_COLUMN_NAME,
                       GetStringProperty(sPropertyDataColumnName, xMaster));
         // export number format if available (happens only for numbers!)
@@ -2584,7 +2579,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
 
 /// export CommandTypeAttribute
 void XMLTextFieldExport::ProcessCommandType(
-    sal_Int16 nCommandType)
+    sal_Int32 nCommandType)
 {
     enum XMLTokenEnum eToken = XML_TOKEN_INVALID;
     switch( nCommandType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 12:23:54 $
+ *  last change: $Author: dvo $ $Date: 2002-06-28 10:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ protected:
 
     /// export CommandTypeAttribute
     void ProcessCommandType(
-        sal_Int16 nCommandType);        /// com::sun::star::sdb::CommandType
+        sal_Int32 nCommandType);        /// com::sun::star::sdb::CommandType
 
     /// for XDependentTextFields, get PropertySet of FieldMaster
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >

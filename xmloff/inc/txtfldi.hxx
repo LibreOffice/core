@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:34 $
+ *  last change: $Author: dvo $ $Date: 2002-06-28 10:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
     ::rtl::OUString sDatabaseName;
     ::rtl::OUString sTableName;
 
-    sal_Int16 nCommandType;
+    sal_Int32 nCommandType;
     sal_Bool bCommandTypeOK;
 
 protected:
