@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-07 13:54:41 $
+ *  last change: $Author: ka $ $Date: 2001-08-28 12:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,12 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
 
         if( pFrame )
             pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+
+#ifndef SVX_LIGHT
+        // throw away old streams
+        if( pDoc )
+            pDoc->HandsOff();
+#endif
     }
     return bRet;
 }
@@ -789,7 +795,7 @@ void SdDrawDocShell::HandsOff()
     SfxInPlaceObject::HandsOff();
 
 #ifndef SVX_LIGHT
-    // forward to document
+    // throw away old streams
     if( pDoc )
         pDoc->HandsOff();
 #endif
