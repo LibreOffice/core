@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 18:22:42 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:03:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,8 +98,6 @@ SRC1FILES =\
     dlgass.src\
     navigatr.src\
     sdpreslt.src\
-    effect.src\
-    slidechg.src\
     morphdlg.src\
     printdlg.src\
     dlgfield.src\
@@ -141,13 +139,7 @@ SLOFILES =  \
         $(SLO)$/assclass.obj \
         $(SLO)$/graphpro.obj \
         $(SLO)$/navigatr.obj \
-        $(SLO)$/effect.obj   \
-        $(SLO)$/effcthdl.obj   \
-        $(SLO)$/effcthlp.obj   \
         $(SLO)$/tlborder.obj   \
-        $(SLO)$/slidechg.obj   \
-        $(SLO)$/slchghdl.obj   \
-        $(SLO)$/slchghlp.obj   \
         $(SLO)$/sdpreslt.obj \
         $(SLO)$/morphdlg.obj	\
         $(SLO)$/printdlg.obj	\
@@ -158,14 +150,12 @@ SLOFILES =  \
         $(SLO)$/docprev.obj     \
         $(SLO)$/SpellDialogChildWindow.obj \
         $(SLO)$/AnimationChildWindow.obj	\
-        $(SLO)$/EffectChildWindow.obj		\
         $(SLO)$/LayerDialogChildWindow.obj	\
         $(SLO)$/LayerDialogContent.obj		\
         $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
         $(SLO)$/PreviewWindow.obj			\
         $(SLO)$/PreviewChildWindow.obj		\
-        $(SLO)$/SlideChangeChildWindow.obj	\
         $(SLO)$/TemplateScanner.obj \
                 $(SLO)$/sduiexp.obj \
         $(SLO)$/sddlgfact.obj \
@@ -194,27 +184,19 @@ LIB1OBJFILES= \
         $(SLO)$/assclass.obj \
         $(SLO)$/graphpro.obj \
         $(SLO)$/navigatr.obj \
-        $(SLO)$/effect.obj   \
-        $(SLO)$/effcthdl.obj   \
-        $(SLO)$/effcthlp.obj   \
         $(SLO)$/tlborder.obj   \
-        $(SLO)$/slidechg.obj   \
-        $(SLO)$/slchghdl.obj   \
-        $(SLO)$/slchghlp.obj   \
         $(SLO)$/docprev.obj     \
         $(SLO)$/ins_paste.obj \
         $(SLO)$/AnimationChildWindow.obj	\
-        $(SLO)$/EffectChildWindow.obj		\
         $(SLO)$/LayerDialogChildWindow.obj	\
         $(SLO)$/LayerDialogContent.obj		\
         $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
         $(SLO)$/PreviewWindow.obj			\
         $(SLO)$/PreviewChildWindow.obj		\
-        $(SLO)$/SlideChangeChildWindow.obj	\
         $(SLO)$/SpellDialogChildWindow.obj \
         $(SLO)$/TemplateScanner.obj \
-                $(SLO)$/sdabstdlg.obj \
+        $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj		\
         $(SLO)$/PaneDockingWindow.obj
 
