@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 09:43:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_FORMATTEDFIELD,  "com.sun.star.form.component.FormattedField"    );
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_SCROLLBAR,       "com.sun.star.form.component.ScrollBar"         );
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_SPINBUTTON,      "com.sun.star.form.component.SpinButton"        );
+    FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_RICHTEXTCONTROL, "com.sun.star.form.component.RichTextControl"   );
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_NAVTOOLBAR,      "com.sun.star.form.component.NavigationToolBar" );
 
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_IMAGECONTROL, "com.sun.star.form.component.DatabaseImageControl" );
@@ -223,6 +224,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_PATTERNFIELD, "com.sun.star.form.control.PatternField" );
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_IMAGECONTROL, "com.sun.star.form.control.ImageControl" );
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.control.FormattedField" );
+    FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_RICHTEXTCONTROL,"com.sun.star.form.control.RichTextControl" );
 
     FORMS_CONSTASCII_STRING( FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms" );
 
