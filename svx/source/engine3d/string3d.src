@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 20:22:11 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@ String RID_SVX_3D_CREATE_LATHE
     Text [ danish ] = "Opret 3D-rotationslegeme" ;
     Text [ portuguese_brazilian ] = "Erstelle 3D-Rotationsobjekt" ;
     Text [ portuguese ] = "Criar objectos de rotação 3D" ;
-    Text[ chinese_simplified ] = "½¨Á¢3Î¬Ğı×ªÌå";
+    Text[ chinese_simplified ] = "å»ºç«‹3ç»´æ—‹è½¬ä½“";
     Text[ russian ] = "Ñîçäàòü îáúåêò âğàùåíèÿ";
     Text[ polish ] = "Utwórz 3-W obiekt obrotowy";
-    Text[ japanese ] = "3D ‰ñ“]‘ÌµÌŞ¼Şª¸Ä‚Ìì¬";
-    Text[ chinese_traditional ] = "«Ø¥ß 3D ±ÛÂàÅé";
+    Text[ japanese ] = "3D å›è»¢ä½“ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®ä½œæˆ";
+    Text[ chinese_traditional ] = "å»ºç«‹ 3D æ—‹è½‰é«”";
     Text[ arabic ] = "ÅäÔÇÁ ßÇÆä ÇÓÊÏÇÑÉ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ greek ] = "Äçìéïõñãßá ğåñéóôñåöüìåíïõ áíôéêåéìİíïõ 3Ä";
-    Text[ korean ] = "3D È¸Àü°³Ã¼ ¸¸µé±â";
+    Text[ korean ] = "3D íšŒì „ê°œì²´ ë§Œë“¤ê¸°";
     Text[ turkish ] = "3B döner nesne oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear objeto de rotación 3D";
@@ -106,14 +106,14 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text [ dutch ] = "Object(en) invoegen" ;
     Text [ spanish ] = "Insertar objeto(s)" ;
     Text [ english_us ] = "Insert object(s)" ;
-    Text[ chinese_simplified ] = "²åÈë¶ÔÏó";
+    Text[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü îáúåêò(û)";
     Text[ polish ] = "Wstaw obiekt (y)";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤Jª«¥ó";
+    Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥ç‰©ä»¶";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä/ßÇÆäÇÊ";
     Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíïõ/-ùí";
-    Text[ korean ] = "°³Ã¼ »ğÀÔ";
+    Text[ korean ] = "ê°œì²´ ì‚½ì…";
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar objeto(s)";
@@ -131,14 +131,14 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text [ danish ] = "Antal segmenter" ;
     Text [ portuguese ] = "Número de segmentos" ;
     Text [ portuguese_brazilian ] = "Anzahl Segmente" ;
-    Text[ chinese_simplified ] = "·Ö¶ÎÊıÄ¿";
+    Text[ chinese_simplified ] = "åˆ†æ®µæ•°ç›®";
     Text[ russian ] = "Êîëè÷åñòâî ñåãìåíòîâ";
     Text[ polish ] = "Liczba segmentów";
-    Text[ japanese ] = "Ø•Ğ‚Ì”";
-    Text[ chinese_traditional ] = "¤À¬q¼Æ¥Ø";
+    Text[ japanese ] = "åˆ‡ç‰‡ã®æ•°";
+    Text[ chinese_traditional ] = "åˆ†æ®µæ•¸ç›®";
     Text[ arabic ] = "ÚÏÏ ÇáŞØÚ";
     Text[ greek ] = "Áñéèìüò ôìçìÜôùí";
-    Text[ korean ] = "¼¼±×¸ÕÆ® ¼ö";
+    Text[ korean ] = "ì„¸ê·¸ë¨¼íŠ¸ ìˆ˜";
     Text[ turkish ] = "Parça sayısı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número de segmentos";
@@ -157,14 +157,14 @@ String RID_SVX_3D_UNDO_DEEPTH
     Text [ danish ] = "Objektdybde" ;
     Text [ portuguese ] = "Profundidade do objecto" ;
     Text [ portuguese_brazilian ] = "Objekttiefe" ;
-    Text[ chinese_simplified ] = "¶ÔÏóÉî¶È";
+    Text[ chinese_simplified ] = "å¯¹è±¡æ·±åº¦";
     Text[ russian ] = "Ãëóáèíà îáúåêòà";
     Text[ polish ] = "G³êbia obiektu";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì‰œs‚«";
-    Text[ chinese_traditional ] = "ª«¥ó²`«×";
+    Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®å¥¥è¡Œã";
+    Text[ chinese_traditional ] = "ç‰©ä»¶æ·±åº¦";
     Text[ arabic ] = "ÚãŞ ÇáßÇÆä";
     Text[ greek ] = "ÂÜèïò áíôéêåéìİíïõ";
-    Text[ korean ] = "°³Ã¼ ±íÀÌ";
+    Text[ korean ] = "ê°œì²´ ê¹Šì´";
     Text[ turkish ] = "Nesne derinliği";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Profundidad del objeto";
@@ -183,14 +183,14 @@ String RID_SVX_3D_UNDO_FOCAL
     Text [ danish ] = "Kamerabrændvidde" ;
     Text [ portuguese ] = "Distância focal" ;
     Text [ portuguese_brazilian ] = "Kamerabrennweite" ;
-    Text[ chinese_simplified ] = "ÕÕÏà»ú½¹¾à";
+    Text[ chinese_simplified ] = "ç…§ç›¸æœºç„¦è·";
     Text[ russian ] = "Ôîêóñíîå ğàññòîÿíèå ôîòîàïïàğàòà";
     Text[ polish ] = "Ogniskowa kamery";
-    Text[ japanese ] = "¶Ò×‚ÌÅ“_‹——£";
-    Text[ chinese_traditional ] = "·Ó¬Û¾÷µJ¶Z";
+    Text[ japanese ] = "ï½¶ï¾’ï¾—ã®ç„¦ç‚¹è·é›¢";
+    Text[ chinese_traditional ] = "ç…§ç›¸æ©Ÿç„¦è·";
     Text[ arabic ] = "ÇáØæá ÇáÈÄÑí ááßÇãíÑÇ";
     Text[ greek ] = "ÅóôéáêŞ áğüóôáóç êÜìåñáò";
-    Text[ korean ] = "Ä«¸Ş¶ó ÃÊÁ¡ °Å¸®";
+    Text[ korean ] = "ì¹´ë©”ë¼ ì´ˆì  ê±°ë¦¬";
     Text[ turkish ] = "Kamera odak uzaklığı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia focal";
@@ -209,14 +209,14 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text [ danish ] = "Kameraposition" ;
     Text [ portuguese ] = "Posição da câmara" ;
     Text [ portuguese_brazilian ] = "Kameraposition" ;
-    Text[ chinese_simplified ] = "ÕÕÏà»úÎ»ÖÃ";
+    Text[ chinese_simplified ] = "ç…§ç›¸æœºä½ç½®";
     Text[ russian ] = "Ïîçèöèÿ ôîòîàïïàğàòà";
     Text[ polish ] = "Pozycja kamery";
-    Text[ japanese ] = "¶Ò×ˆÊ’u";
-    Text[ chinese_traditional ] = "·Ó¬Û¾÷¦ì¸m";
+    Text[ japanese ] = "ï½¶ï¾’ï¾—ä½ç½®";
+    Text[ chinese_traditional ] = "ç…§ç›¸æ©Ÿä½ç½®";
     Text[ arabic ] = "ãæÖÚ ÇáßÇãíÑÇ";
     Text[ greek ] = "Èİóç ğáñáôçñçôŞ";
-    Text[ korean ] = "Ä«¸Ş¶ó À§Ä¡";
+    Text[ korean ] = "ì¹´ë©”ë¼ ìœ„ì¹˜";
     Text[ turkish ] = "Kamera konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición de la cámara";
@@ -235,14 +235,14 @@ String RID_SVX_3D_UNDO_ROTATE
     Text [ danish ] = "Roter 3D-objekt" ;
     Text [ portuguese ] = "Rodar objecto 3D" ;
     Text [ portuguese_brazilian ] = "3D-Objekt rotieren" ;
-    Text[ chinese_simplified ] = "Ğı×ª 3 Î¬¶ÔÏó";
+    Text[ chinese_simplified ] = "æ—‹è½¬ 3 ç»´å¯¹è±¡";
     Text[ russian ] = "Âğàùàòü îáúåêò";
     Text[ polish ] = "Obróæ obiekt 3-W";
-    Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚Ì‰ñ“]";
-    Text[ chinese_traditional ] = "±ÛÂà 3D ª«¥ó";
+    Text[ japanese ] = "3D ä½“ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®å›è»¢";
+    Text[ chinese_traditional ] = "æ—‹è½‰ 3D ç‰©ä»¶";
     Text[ arabic ] = "ÇÓÊÏÇÑÉ ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ greek ] = "ĞåñéóôñïöŞ áíôéêåéìİíïõ 3Ä";
-    Text[ korean ] = "3D °³Ã¼ È¸Àü";
+    Text[ korean ] = "3D ê°œì²´ íšŒì „";
     Text[ turkish ] = "3B nesneyi döndür";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rodar un objeto 3D";
@@ -261,14 +261,14 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text [ danish ] = "Opret ekstruderingsobjekt" ;
     Text [ portuguese ] = "Criar objecto de extrusão" ;
     Text [ portuguese_brazilian ] = "Extrusionsobjekt erstellen" ;
-    Text[ chinese_simplified ] = "Éú³ÉÄ£Ñ¹Ê½¶ÔÏó";
+    Text[ chinese_simplified ] = "ç”Ÿæˆæ¨¡å‹å¼å¯¹è±¡";
     Text[ russian ] = "Ñîçäàòü îáúåêò ıêñòğóçèè";
     Text[ polish ] = "Utwórz obiekt wyt³aczany";
-    Text[ japanese ] = "•‚‚«o‚µµÌŞ¼Şª¸Ä‚Ìì¬";
-    Text[ chinese_traditional ] = "²£¥Í¼ÒÀ£¦¡ª«¥ó";
+    Text[ japanese ] = "æµ®ãå‡ºã—ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®ä½œæˆ";
+    Text[ chinese_traditional ] = "ç”¢ç”Ÿæ¨¡å£“å¼ç‰©ä»¶";
     Text[ arabic ] = "ÅäÔÇÁ ßÇÆä ŞĞİ";
     Text[ greek ] = "Äçìéïõñãßá áíôéêåéìİíïõ åîşèçóçò";
-    Text[ korean ] = "ÀÔÃ¼¸é °³Ã¼ ÀÛ¼º";
+    Text[ korean ] = "ì…ì²´ë©´ ê°œì²´ ì‘ì„±";
     Text[ turkish ] = "Kalıp nesne oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear un objeto de extrusión";
@@ -289,14 +289,14 @@ String RID_SVX_3D_UNDO_LATHE
     Text [ danish ] = "Opret rotationslegeme" ;
     Text [ portuguese ] = "Criar objecto de rotação" ;
     Text [ portuguese_brazilian ] = "Rotationsk?per erstellen" ;
-    Text[ chinese_simplified ] = "ÖÆ×÷Ğı×ªÌå";
+    Text[ chinese_simplified ] = "åˆ¶ä½œæ—‹è½¬ä½“";
     Text[ russian ] = "Ñîçäàòü òåëî âğàùåíèÿ";
     Text[ polish ] = "Utwórz obiekt obrotowy";
-    Text[ japanese ] = "‰ñ“]µÌŞk¼Şª¸Ä‚Ìì¬";
-    Text[ chinese_traditional ] = "»s§@±ÛÂàÅé";
+    Text[ japanese ] = "å›è»¢ï½µï¾Œï¾kï½¼ï¾ï½ªï½¸ï¾„ã®ä½œæˆ";
+    Text[ chinese_traditional ] = "è£½ä½œæ—‹è½‰é«”";
     Text[ arabic ] = "ÅäÔÇÁ ÌÓã ÇÓÊÏÇÑÉ";
     Text[ greek ] = "Äçìéïõñãßá ğåñéóôñåöüìåíïõ áíôéêåéìİíïõ";
-    Text[ korean ] = "È¸Àü°³Ã¼ ¸¸µé±â";
+    Text[ korean ] = "íšŒì „ê°œì²´ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Döner nesne oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear cuerpo de rotación";
@@ -317,14 +317,14 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text [ spanish ] = "Quebrar objeto 3D" ;
     Text [ french ] = "Fractionner l'objet 3D" ;
     Text [ dutch ] = "3D-object opsplitsen" ;
-    Text[ chinese_simplified ] = "·Ö¿ª3Î¬¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ†å¼€3ç»´å¯¹è±¡";
     Text[ russian ] = "Ğàçáèòü îáúåêò 3-Ì";
     Text[ polish ] = "Rozdziel obiekt 3-W";
-    Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚ğØ‚è—£‚·";
-    Text[ chinese_traditional ] = "¤À¶} 3D ª«¥ó";
+    Text[ japanese ] = "3D ä½“ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã‚’åˆ‡ã‚Šé›¢ã™";
+    Text[ chinese_traditional ] = "åˆ†é–‹ 3D ç‰©ä»¶";
     Text[ arabic ] = "ÊŞÓíã ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ greek ] = "ÄéÜóğáóç áíôéêåéìİíïõ 3Ä";
-    Text[ korean ] = "3D °³Ã¼ ºĞÇÒ";
+    Text[ korean ] = "3D ê°œì²´ ë¶„í• ";
     Text[ turkish ] = "3B nesneyi ayır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quebrar objeto 3D";
@@ -343,20 +343,21 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text [ spanish ] = "Atributos en 3D" ;
     Text [ french ] = "Attributs 3D" ;
     Text [ dutch ] = "3D-attributen" ;
-    Text[ chinese_simplified ] = "3Î¬ÊôĞÔ";
+    Text[ chinese_simplified ] = "3ç»´å±æ€§";
     Text[ russian ] = "Àòğèáóòû 3-Ì";
     Text[ polish ] = "Atrybuty 3-W";
-    Text[ japanese ] = "3D ‘Ì‚Ì‘®«";
-    Text[ chinese_traditional ] = "3D Äİ©Ê";
+    Text[ japanese ] = "3D ä½“ã®å±æ€§";
+    Text[ chinese_traditional ] = "3D å±¬æ€§";
     Text[ arabic ] = "ÓãÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ greek ] = "Éäéüôçôåò 3Ä";
-    Text[ korean ] = "3D ¼Ó¼º";
+    Text[ korean ] = "3D ì†ì„±";
     Text[ turkish ] = "3B öznitelikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos en 3D";
     Text[ finnish ] = "3D-määritteet";
 };
  // ********************************************************************** EOF
+
 
 
 
