@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-01 13:31:52 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@ namespace configmgr
 
             /// checks, if this represents an real tree
             bool isEmpty() const;
+
+            // releases the data this tree operates on
+            void disposeData();
 
             /// retrieves the number of immediately contained nodes
             NodeOffset getContainedNodeCount() const;

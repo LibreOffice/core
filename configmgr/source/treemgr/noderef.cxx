@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-03 11:50:41 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,10 +372,21 @@ Tree::~Tree()
 }
 //-----------------------------------------------------------------------------
 
+void Tree::disposeData()
+{
+    TreeImpl* pImpl = m_pImpl;
+    m_pImpl = 0;
+    if (pImpl)
+    {
+        pImpl->disposeData();
+        pImpl->release();
+    }
+}
+//-----------------------------------------------------------------------------
+
 bool Tree::isEmpty() const
 {
-    OSL_ASSERT( m_pImpl == 0 || m_pImpl->nodeCount() > 0 );
-    return m_pImpl == 0 /*|| m_pImpl->nodeCount() == 0*/ ;
+    return m_pImpl == 0 || m_pImpl->nodeCount() == 0;
 }
 //-----------------------------------------------------------------------------
 

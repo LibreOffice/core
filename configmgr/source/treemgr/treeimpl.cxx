@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,12 @@ TreeImpl::TreeImpl( TreeImpl& rParentTree, NodeOffset nParentNode )
 
 TreeImpl::~TreeImpl()
 {
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::disposeData()
+{
+    m_aNodes.clear();
 }
 //-----------------------------------------------------------------------------
 
@@ -944,6 +950,14 @@ ElementTreeImpl::ElementTreeImpl(   std::auto_ptr<INode>& pNewNode,
 ElementTreeImpl::~ElementTreeImpl()
 {
     delete m_pOwnedNode;
+}
+//-----------------------------------------------------------------------------
+
+void ElementTreeImpl::disposeData()
+{
+    TreeImpl::disposeData();
+    delete m_pOwnedNode;
+    m_pOwnedNode = 0;
 }
 //-----------------------------------------------------------------------------
 

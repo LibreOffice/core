@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,9 @@ namespace configmgr
             /// destroys a TreeImpl
             virtual ~TreeImpl();
 
+            // realeses the data this refers to
+            virtual void disposeData();
+
         // Context Access
             /// gets the path to the parent node of this tree
             AbsolutePath    getContextPath() const;
@@ -433,6 +436,9 @@ namespace configmgr
                             TemplateProvider const& aTemplateProvider );
 
             ~ElementTreeImpl();
+
+        // realeses the data this refers to
+            virtual void disposeData();
 
         // Tree information
             /// checks whether this is an instance of a known template
