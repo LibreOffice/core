@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xename.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:03:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
         SetHidden();
 
     // special case for BIFF5/7 filter source range - name appears as plain text without built-in flag
-    if( (GetBiff() <= xlBiff7) && (cBuiltIn == EXC_BUILTIN_FILTERDATABASE) )
+    if( (GetBiff() <= EXC_BIFF5) && (cBuiltIn == EXC_BUILTIN_FILTERDATABASE) )
     {
         String aName( XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE ) );
         mxName = XclExpStringHelper::CreateString( rRoot, aName, EXC_STR_8BITLENGTH );
@@ -285,11 +285,10 @@ void XclExpName::SetLocalTab( SCTAB nScTab )
         // special handling for NAME record
         switch( GetBiff() )
         {
-            case xlBiff5:
-            case xlBiff7:   // EXTERNSHEET index is positive in NAME record
+            case EXC_BIFF5: // EXTERNSHEET index is positive in NAME record
                 mnExtSheet = ~mnExtSheet + 1;
             break;
-            case xlBiff8:   // EXTERNSHEET index not used, but must be created in link table
+            case EXC_BIFF8: // EXTERNSHEET index not used, but must be created in link table
                 mnExtSheet = 0;
             break;
             default:    DBG_ERROR_BIFF();
@@ -588,7 +587,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                     aRange.aEnd.SetTab( nScTab );
                     aRangeList.Append( aRange );
                 }
-                CheckCellRangeList( aRangeList );
+                GetAddressConverter().ValidateRangeList( aRangeList, true );
                 GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTAREA, aRangeList );
             }
 
@@ -599,19 +598,19 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
             if( const ScRange* pColRange = rDoc.GetRepeatColRange( nScTab ) )
                 aTitleList.Append( ScRange(
                     pColRange->aStart.Col(), 0, nScTab,
-                    pColRange->aEnd.Col(), GetMaxPos().Row(), nScTab ) );
+                    pColRange->aEnd.Col(), GetXclMaxPos().Row(), nScTab ) );
             // repeated rows
             if( const ScRange* pRowRange = rDoc.GetRepeatRowRange( nScTab ) )
                 aTitleList.Append( ScRange(
                     0, pRowRange->aStart.Row(), nScTab,
-                    GetMaxPos().Col(), pRowRange->aEnd.Row(), nScTab ) );
+                    GetXclMaxPos().Col(), pRowRange->aEnd.Row(), nScTab ) );
             // create the NAME record
-            CheckCellRangeList( aTitleList );
+            GetAddressConverter().ValidateRangeList( aTitleList, true );
             GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTTITLES, aTitleList );
 
             // *** 3) filter ranges *** ---------------------------------------
 
-            if( GetBiff() >= xlBiff8 )
+            if( GetBiff() == EXC_BIFF8 )
                 GetFilterManager().InitTabFilter( nScTab );
         }
     }
