@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 08:41:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2967,13 +2967,9 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(BOOL bBezier) const
 
 void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr )
 {
+    // #i40944#
+    InvalidateRenderGeometry();
     SdrObject::NbcSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
-    if ( mXRenderedCustomShape.is() )
-    {
-        SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
-        if ( pRenderedCustomShape )
-            pRenderedCustomShape->SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
-    }
 }
 
 void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
@@ -3257,7 +3253,21 @@ bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
 // #i37011# centralize throw-away of render geometry
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
-    mXRenderedCustomShape = 0L;
+    if ( mXRenderedCustomShape.is() )
+    {
+        // #i40944#
+        // The XShape will not delete the display graphic of the CustomShape, this
+        // needs to be done here. This was not only a memory leak but also dangerous.
+        const SdrObject* pObj = GetSdrObjectFromCustomShape();
+
+        if(pObj)
+        {
+            delete pObj;
+        }
+
+        mXRenderedCustomShape = 0L;
+    }
+
     delete mpLastShadowGeometry;
     mpLastShadowGeometry = 0L;
 }
