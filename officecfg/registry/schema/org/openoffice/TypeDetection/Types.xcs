@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Types.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:22:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,55 +63,55 @@
 <oor:component-schema oor:name="Types" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
         <author>AS</author>
-        <desc xml:lang="en-US">Contains common content types for Office. See package TypeDetection and TypeDetection_Filters for other parts of type/filter configuration too.</desc>
+        <desc >Contains common content types for Office. See package TypeDetection and TypeDetection_Filters for other parts of type/filter configuration too.</desc>
     </info>
     <templates>
 		<group oor:name="Type">
-            <info><desc xml:lang="en-US">Lists the types that represent common content formats in Office.</desc></info>
+            <info><desc>Lists the types that represent common content formats in Office.</desc></info>
 			<prop oor:name="UIOrder" oor:type="xs:int">
-                <info><desc xml:lang="en-US">Used to sort types inside dialogs. Only values &gt;0 are recognized. Types with an order value &lt;1 will be sorted alphabeticly.</desc></info>
+                <info><desc>Used to sort types inside dialogs. Only values &gt;0 are recognized. Types with an order value &lt;1 will be sorted alphabeticly.</desc></info>
 				<value>0</value>
 			</prop>
             <prop oor:name="URLPattern" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">List of URL pattern (with simple wildcards */?) which match to this type.</desc></info>
+                <info><desc>List of URL pattern (with simple wildcards */?) which match to this type.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="Extensions" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">List of file extensions, which match to this type.</desc></info>
+                <info><desc>List of file extensions, which match to this type.</desc></info>
 				<value/>
             </prop>
 			<prop oor:name="DocumentIconID" oor:type="xs:int">
-                <info><desc xml:lang="en-US">Global ID of an icon, which represent this tye at the UI.</desc></info>
+                <info><desc>Global ID of an icon, which represent this tye at the UI.</desc></info>
 				<value>0</value>
 			</prop>
             <prop oor:name="MediaType" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Corresponding mime type.</desc></info>
+                <info><desc>Corresponding mime type.</desc></info>
 				<value/>
             </prop>
 			<prop oor:name="Preferred" oor:type="xs:boolean">
-                <info><desc xml:lang="en-US">In case of ambigoues registrations (e.g. for extensions doc/txt) it specify the prefererred type.</desc></info>
+                <info><desc>In case of ambigoues registrations (e.g. for extensions doc/txt) it specify the prefererred type.</desc></info>
 				<value>false</value>
 			</prop>
             <prop oor:name="PreferredFilter" oor:type="xs:string">
-                <info><desc xml:lang="en-US">An optimization! Points directly to the preferred filter for this type. No search across all filters is neccessary ...</desc></info>
+                <info><desc>An optimization! Points directly to the preferred filter for this type. No search across all filters is neccessary ...</desc></info>
 				<value/>
             </prop>
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Localized name of this type for showing it at the UI.</desc></info>
+                <info><desc>Localized name of this type for showing it at the UI.</desc></info>
             </prop>
             <prop oor:name="ClipboardFormat" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Unique identifier, which can be searched inside the stream to detect this format.</desc></info>
+                <info><desc>Unique identifier, which can be searched inside the stream to detect this format.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="DetectService" oor:type="xs:string">
-                <info><desc xml:lang="en-US">An optimization! Points directly to the deep detection service, which can verify a flat detection.</desc></info>
+                <info><desc>An optimization! Points directly to the deep detection service, which can verify a flat detection.</desc></info>
 				<value/>
             </prop>
 		</group>
 	</templates>
 	<component>
         <set oor:name="Types" oor:node-type="Type">
-            <info><desc xml:lang="en-US">Lists the registered content types.</desc></info>
+            <info><desc>Lists the registered content types.</desc></info>
         </set>
 	</component>
 </oor:component-schema>

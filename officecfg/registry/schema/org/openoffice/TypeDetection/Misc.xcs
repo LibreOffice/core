@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Misc.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:21:49 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,39 +63,39 @@
 <oor:component-schema oor:name="Misc" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
         <author>AS</author>
-        <desc xml:lang="en-US">Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
+        <desc >Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
     </info>
     <templates>
         <group oor:name="FrameLoader">
-            <info><desc xml:lang="en-US">Can load a type as visible component into a com.sun.star.frame.Frame.</desc></info>
+            <info><desc>Can load a type as visible component into a com.sun.star.frame.Frame.</desc></info>
             <prop oor:name="Types" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">List of internal type names, which can be interpreted by this loader implementation.</desc></info>
+                <info><desc>List of internal type names, which can be interpreted by this loader implementation.</desc></info>
 				<value/>
             </prop>
 		</group>
         <group oor:name="ContentHandler">
-            <info><desc xml:lang="en-US">Can load a type as non visible component, e.g. sounds.</desc></info>
+            <info><desc>Can load a type as non visible component, e.g. sounds.</desc></info>
             <prop oor:name="Types" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">List of internal type names, which can be interpreted by this handler implementation.</desc></info>
+                <info><desc>List of internal type names, which can be interpreted by this handler implementation.</desc></info>
 				<value/>
             </prop>
         </group>
 	</templates>
 	<component>
         <set oor:name="FrameLoaders" oor:node-type="FrameLoader">
-            <info><desc xml:lang="en-US">Lists the registered frame loader services.</desc></info>
+            <info><desc>Lists the registered frame loader services.</desc></info>
         </set>
         <set oor:name="ContentHandlers" oor:node-type="ContentHandler">
-            <info><desc xml:lang="en-US">Lists the registered content handler services.</desc></info>
+            <info><desc>Lists the registered content handler services.</desc></info>
         </set>
 		<group oor:name="Defaults">
-            <info><desc xml:lang="en-US">Contains default objects that are used if no specialized service was registered or values which specify special behaviour of type/filter environment.</desc></info>
+            <info><desc>Contains default objects that are used if no specialized service was registered or values which specify special behaviour of type/filter environment.</desc></info>
 			<prop oor:name="DefaultFrameLoader" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Specify a generic frame loader, which can use filter services for loading documents into frames.</desc></info>
+                <info><desc>Specify a generic frame loader, which can use filter services for loading documents into frames.</desc></info>
 				<value>com.sun.star.comp.office.FrameLoader</value>
 			</prop>
             <prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean">
-                <info><author>OS</author><desc xml:lang="en-US">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc></info>
+                <info><author>OS</author><desc>Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc></info>
                 <value>true</value>
             </prop>
 		</group>
