@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RenderDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 12:08:41 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 07:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,10 @@ service RenderDescriptor
 {
     //-------------------------------------------------------------------------
 
-    /** specifies the page size for all pages to be rendered. The unit of this page
+    /** specifies the page size for the current renderer. The unit of this page
     size is 1/100th mm.
      */
     [property] com::sun::star::awt::Size PageSize;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies if this page has currently a selected state.
-     */
-    [property] boolean Selected;
 };
 
 //=============================================================================
@@ -96,6 +90,9 @@ service RenderDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/08/22 12:08:41  ka
+    #102510#: changed XRenderable interface
+
     Revision 1.2  2002/08/19 15:02:17  ka
     #101571#: added PageSelectionRange
 
