@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-17 12:51:05 $
+ *  last change: $Author: pl $ $Date: 2002-01-15 10:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ main( int argc, char **argv)
 
     XInitThreads();
 
-    pPluginLib = dlopen( argv[2], RTLD_NOW );
+    pPluginLib = dlopen( argv[2], RTLD_LAZY );
     if( ! pPluginLib )
     {
         medDebug( 1, "dlopen on %s failed because of:\n\t%s\n",
