@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:03:37 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,8 @@ void ScDPObject::CreateOutput()
     CreateObjects();
     if (!pOutput)
     {
-        pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, IsSheetData() );
+        BOOL bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
+        pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton );
 
         long nOldRows = nHeaderRows;
         nHeaderRows = pOutput->GetHeaderRows();
@@ -643,6 +644,56 @@ String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
     return aRet;
 }
 
+BOOL ScDPObject::IsDuplicated( long nDim )
+{
+    BOOL bDuplicated = FALSE;
+    if ( xSource.is() )
+    {
+        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+        uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
+        long nDimCount = xDims->getCount();
+        if ( nDim < nDimCount )
+        {
+            uno::Reference<uno::XInterface> xIntDim =
+                ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+            uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
+            if ( xDimProp.is() )
+            {
+                try
+                {
+                    uno::Any aOrigAny = xDimProp->getPropertyValue(
+                                rtl::OUString::createFromAscii(DP_PROP_ORIGINAL) );
+                    uno::Reference<uno::XInterface> xIntOrig;
+                    if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
+                        bDuplicated = TRUE;
+                }
+                catch(uno::Exception&)
+                {
+                }
+            }
+        }
+    }
+    return bDuplicated;
+}
+
+long ScDPObject::GetDimCount()
+{
+    long nRet = 0;
+    if ( xSource.is() )
+    {
+        try
+        {
+            uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+            if ( xDimsName.is() )
+                nRet = xDimsName->getElementNames().getLength();
+        }
+        catch(uno::Exception&)
+        {
+        }
+    }
+    return nRet;
+}
+
 void ScDPObject::FillPageList( TypedStrCollection& rStrings, long nField )
 {
     //! merge members access with ToggleDetails?
@@ -755,6 +806,13 @@ BOOL ScDPObject::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
     CreateOutput();             // create xSource and pOutput if not already done
 
     return pOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
+}
+
+void ScDPObject::GetMemberResultNames( StrCollection& rNames, long nDimension )
+{
+    CreateOutput();             // create xSource and pOutput if not already done
+
+    pOutput->GetMemberResultNames( rNames, nDimension );    // used only with table data -> level not needed
 }
 
 void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestObj )
