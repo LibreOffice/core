@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:18:20 $
+ *  last change: $Author: os $ $Date: 2001-04-05 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@
 #include <shellio.hxx>
 #endif
 
-#ifndef _SWERROR_H
+#ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
 #ifndef _GLOBALS_HRC
@@ -908,6 +908,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/12/21 12:18:20  os
+    catch(...) -> catch(Exception&)
+
     Revision 1.7  2000/11/15 14:43:07  hr
     #65293#: SFX_SEARCHPATH_DELIMITER -> SVT_SEARCHPATH_DELIMITER
 
