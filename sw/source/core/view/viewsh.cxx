@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:10:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,7 +1538,9 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 // PaintDesktop gesplittet, dieser Teil wird auch von PreViewPage benutzt
 void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
-    GetOut()->Push( PUSH_FILLCOLOR );
+    // OD 2004-04-23 #116347#
+    GetOut()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+    GetOut()->SetLineColor();
     // OD 14.02.2003 #107424# - no longer needed, because color configuration
     // is loaded in constructor of <SwModule>.
     /*
@@ -1793,8 +1795,10 @@ void ViewShell::Paint(const Rectangle &rRect)
         else if ( SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) &&
                   GetOut() == GetWin() )
         {
-            pOut->Push( PUSH_FILLCOLOR );
+            // OD 2004-04-23 #116347#
+            pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pOut->SetFillColor( Imp()->GetRetoucheColor() );
+            pOut->SetLineColor();
             pOut->DrawRect( rRect );
             pOut->Pop();
         }
