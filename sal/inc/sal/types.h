@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 12:04:44 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 15:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ typedef struct _sal_Sequence
 #endif /* __cplusplus */
 
 #ifdef __cplusplus
-#define SAL_THROW throw
+#define SAL_THROW() throw ()
 #else
 #define SAL_THROW()
 #endif
