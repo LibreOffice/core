@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:22:45 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ french ] = "Aperçu!";
         QuickHelpText[ spanish ] = "Previsualización!";
         QuickHelpText[ finnish ] = "Preview";
-        QuickHelpText[ italian ] = "Preview";
+        QuickHelpText[ italian ] = "Anteprima!";
         QuickHelpText[ danish ] = "Preview";
         QuickHelpText[ swedish ] = "Förhandsvisning!";
         QuickHelpText[ polish ] = "Podgl¹d!";
@@ -527,5 +527,6 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ finnish ] = "Liitin";
 };
  // ******************************************************************* EOF
+
 
 
