@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:56:22 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,8 +849,9 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
 {
     //Namen der Vorlagen und Metric setzen
-    String sNumCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
-    String sBulletCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
+    String sNumCharFmt, sBulletCharFmt;
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
 
     switch ( nPageId )
     {
@@ -908,6 +909,9 @@ IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/07/19 16:56:22  mtg
+      #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
+
       Revision 1.3  2001/06/01 11:04:53  fme
       Fix #86988#: Redesign of dialogs
 

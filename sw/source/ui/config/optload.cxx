@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 11:10:39 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,10 +499,10 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     pMgr            (new SwFldMgr()),
     bHTMLMode(FALSE)
 {
-    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_ABB, sIllustration );
-    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_TABLE, sTable );
-    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_FRAME, sText );
-    SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_DRAWING, sDrawing );
+    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_ABB, sIllustration );
+    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_TABLE, sTable );
+    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_FRAME, sText );
+    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_DRAWING, sDrawing );
 
     USHORT i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();

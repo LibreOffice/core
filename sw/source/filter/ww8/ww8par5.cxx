@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:32:14 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2363,7 +2363,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         {
             String aNm;
             //Take this as the base name
-            SwStyleNameMapper::GetUIName(RES_POOLCHR_RUBYTEXT,aNm);
+            SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
             aNm+=String::CreateFromInt32(aRubyCharFmts.Count()+1);
             pCharFmt = rDoc.MakeCharFmt(aNm,( SwCharFmt*)rDoc.GetDfltCharFmt());
             SvxFontHeightItem aHeightItem(nFontSize*10);
@@ -3161,12 +3161,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.22 2001-07-20 10:32:14 mtg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.23 2001-07-31 15:57:48 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/07/20 10:32:14  mtg
+      #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
+
       Revision 1.21  2001/07/10 09:31:26  cmc
       #89439# calculate style's even-byte offset relative to style start, not absolute
 

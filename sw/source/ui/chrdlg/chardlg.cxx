@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:18:50 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,11 +346,11 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
         aNameED.SetText(pINetFmt->GetName());
         String sEntry = pINetFmt->GetVisitedFmt();
         if( !sEntry.Len() )
-            SwStyleNameMapper::GetUIName( RES_POOLCHR_INET_VISIT, sEntry );
+            SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_VISIT, sEntry );
         aVisitedLB.SelectEntry(sEntry);
         sEntry = pINetFmt->GetINetFmt();
         if(!sEntry.Len())
-            SwStyleNameMapper::GetUIName( RES_POOLCHR_INET_NORMAL, sEntry );
+            SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_NORMAL, sEntry );
         aNotVisitedLB.SelectEntry(sEntry);
 
         aTargetFrmLB.SetText(pINetFmt->GetTargetFrame());

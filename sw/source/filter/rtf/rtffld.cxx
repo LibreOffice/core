@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:10:48 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,7 +815,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     {
                         String sNm;
                         //Take this as the base name
-                        SwStyleNameMapper::GetUIName( RES_POOLCHR_RUBYTEXT, sNm );
+                        SwStyleNameMapper::FillUIName( RES_POOLCHR_RUBYTEXT, sNm );
                         sNm += String::CreateFromInt32( aRubyCharFmts.Count() + 1 );
                         pCharFmt = pDoc->MakeCharFmt( sNm,
                                             ( SwCharFmt*)pDoc->GetDfltCharFmt() );
@@ -1078,11 +1078,14 @@ INSINGLECHAR:
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.5 2001-07-20 10:10:48 mtg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.6 2001-07-31 15:57:05 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/07/20 10:10:48  mtg
+      #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
+
       Revision 1.4  2001/07/09 15:29:39  jp
       Bug #88104#: RelToAbs -> SmartRelToAbs
 

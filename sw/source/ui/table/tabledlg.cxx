@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:58:30 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1816,12 +1816,11 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
             aPageCollLB.InsertEntry(rPageDesc.GetName());
         }
 
+        String aFmtName;
         for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
-        {
-            String aFmtName; SwStyleNameMapper::GetUIName( i, aFmtName );
-            if( LISTBOX_ENTRY_NOTFOUND == aPageCollLB.GetEntryPos( aFmtName ))
+            if( LISTBOX_ENTRY_NOTFOUND == aPageCollLB.GetEntryPos(
+                    aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
                 aPageCollLB.InsertEntry( aFmtName );
-        }
 
         if(SFX_ITEM_SET == rSet.GetItemState( RES_KEEP, FALSE, &pItem ))
         {

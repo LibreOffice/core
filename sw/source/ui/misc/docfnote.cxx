@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:55:14 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
     String sStr;
-    SwStyleNameMapper::GetUIName( bEndNote ? RES_POOLCOLL_ENDNOTE
+    SwStyleNameMapper::FillUIName( bEndNote ? RES_POOLCOLL_ENDNOTE
                            : RES_POOLCOLL_FOOTNOTE, sStr );
     if(LISTBOX_ENTRY_NOTFOUND == aParaTemplBox.GetEntryPos( sStr ) )
         aParaTemplBox.InsertEntry( sStr );
@@ -327,7 +327,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // Seite
     for( USHORT i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_ENDNOTE; ++i )
-        aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, sStr ));
+        aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
     USHORT nCount = pSh->GetPageDescCnt();
     for(i = 0; i < nCount; ++i)
@@ -541,6 +541,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/07/19 16:55:14  mtg
+    #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
+
     Revision 1.6  2001/07/02 11:52:55  os
     #85609# dont allow counting by chapter an positon at end of document
 

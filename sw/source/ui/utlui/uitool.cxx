@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 17:06:33 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,7 +809,8 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
     pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
-    String sStandard; SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sStandard );
+    String sStandard;
+    SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
     while(pBase)
     {
         if(pBase->GetName() !=  sStandard)

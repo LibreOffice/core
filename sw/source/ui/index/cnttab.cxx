@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-07-31 10:49:45 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2075,7 +2075,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aSortAlgorithmFT.Show(bEnableSortLanguage);
     aSortAlgorithmLB.Show(bEnableSortLanguage);
 
-    String sStr;
     if(nType & TO_CONTENT)
     {
          Point aPos(aAddStylesPB.GetPosPixel());
@@ -2083,9 +2082,11 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         aAddStylesPB.SetPosPixel(aPos);
     }
     else if( nType & TO_ILLUSTRATION )
-        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_ABB, sStr ));
+        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
+                                    RES_POOLCOLL_LABEL_ABB, aEmptyStr ));
     else if( nType & TO_TABLE )
-        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName( RES_POOLCOLL_LABEL_TABLE, sStr ));
+        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
+                                    RES_POOLCOLL_LABEL_TABLE, aEmptyStr ));
     else if( nType & TO_USER )
     {
         aAddStylesCB.SetText(sAddStyleUser);
@@ -2262,9 +2263,9 @@ IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,   PushButton*, pButton)
             {
                 //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
                 if(i < 5)
-                    SwStyleNameMapper::GetUIName( RES_POOLCOLL_TOX_CNTNT1 + i, sStr );
+                    SwStyleNameMapper::FillUIName( RES_POOLCOLL_TOX_CNTNT1 + i, sStr );
                 else
-                    SwStyleNameMapper::GetUIName( RES_POOLCOLL_TOX_CNTNT6 + i - 5, sStr );
+                    SwStyleNameMapper::FillUIName( RES_POOLCOLL_TOX_CNTNT6 + i - 5, sStr );
                 pForm->SetTemplate( i + 1, sStr );
             }
         }
@@ -3465,8 +3466,8 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         aMainEntryStyleLB.InsertEntry( aCharStyleLB.GetEntry(i) );
         aMainEntryStyleLB.SetEntryData(i, aCharStyleLB.GetEntryData(i));
     }
-    String sTmp; SwStyleNameMapper::GetUIName( RES_POOLCHR_IDX_MAIN_ENTRY, sTmp );
-    aMainEntryStyleLB.SelectEntry(sTmp);
+    aMainEntryStyleLB.SelectEntry( SwStyleNameMapper::GetUIName(
+                                RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));
 }
 /* -----------------------------23.12.99 14:23--------------------------------
 
@@ -3477,7 +3478,7 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if( TOX_INDEX == aCurType.eType )
-        SwStyleNameMapper::GetUIName( 1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
+        SwStyleNameMapper::FillUIName( 1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
                                   : RES_POOLCOLL_TOX_IDX1 + nLevel-2, sRet );
 
     else if( TOX_AUTHORITIES == aCurType.eType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-24 11:39:48 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ const String&  SwDocStyleSheet::GetParent() const
             USHORT i = SwStyleNameMapper::GetPoolIdFromUIName( aName, eGetType );
             i = ::GetPoolParent( i );
             if( i && USHRT_MAX != i )
-                SwStyleNameMapper::GetUIName( i, sTmp );
+                SwStyleNameMapper::FillUIName( i, sTmp );
         }
         else
         {
@@ -2551,7 +2551,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 while( *pPoolIds )
                 {
                     if( !bSearchUsed || rDoc.IsPoolTxtCollUsed( *pPoolIds ) )
-                        aLst.Append( cPARA, SwStyleNameMapper::GetUIName( *pPoolIds, s ));
+                        aLst.Append( cPARA,
+                            s = SwStyleNameMapper::GetUIName( *pPoolIds, s ));
                     ++pPoolIds;
                 }
             }

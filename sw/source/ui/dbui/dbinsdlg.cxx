@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:53:08 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,7 +1911,7 @@ void SwInsertDBColAutoPilot::Commit()
         bVal = pColumn->bIsDBFmt;
         pSubValues[3].Value.setValue(&bVal, rBoolType);
 
-        SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sTmp );
+        SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sTmp );
         const SvNumberformat* pNF = rNFmtr.GetEntry( pColumn->nUsrNumFmt );
         LanguageType eLang;
         if( pNF )

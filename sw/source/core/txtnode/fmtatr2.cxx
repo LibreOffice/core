@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:31:24 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,14 +357,14 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_URL_VISITED_FMT:
             sVal = aVisitedFmt;
             if( !sVal.Len() && nVisitedId != 0 )
-                SwStyleNameMapper::GetUIName( nVisitedId, sVal );
+                SwStyleNameMapper::FillUIName( nVisitedId, sVal );
             if( sVal.Len() )
                 sVal = SwStyleNameMapper::GetProgName( sVal, GET_POOLID_CHRFMT );
         break;
         case MID_URL_UNVISITED_FMT:
             sVal = aINetFmt;
             if( !sVal.Len() && nINetId != 0 )
-                SwStyleNameMapper::GetUIName( nINetId, sVal );
+                SwStyleNameMapper::FillUIName( nINetId, sVal );
             if( sVal.Len() )
                 SwStyleNameMapper::GetProgName( sVal, GET_POOLID_CHRFMT );
         break;

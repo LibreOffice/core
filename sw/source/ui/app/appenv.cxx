@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 12:49:53 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,8 @@ static USHORT nTitleNo = 0;
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-        String sJacket; SwStyleNameMapper::GetUIName( RES_POOLPAGE_JAKET, sJacket );
+        String sJacket;
+        SwStyleNameMapper::FillUIName( RES_POOLPAGE_JAKET, sJacket );
         bEnvChange = rCurPageDesc.GetName() == sJacket;
         if(pOldSh->GetPrt(FALSE))
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:19:50 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,9 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     //Namen der Vorlagen und Metric setzen
-    String sNumCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
-    String sBulletCharFmt; SwStyleNameMapper::GetUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
+    String sNumCharFmt, sBulletCharFmt;
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
 
     switch( nId )
     {
@@ -573,7 +574,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             {
                 List aList;
                 String* pNew = new String;
-                SwStyleNameMapper::GetUIName( RES_POOLCOLL_TEXT, *pNew );
+                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, *pNew );
                 aList.Insert( pNew, (ULONG)0 );
                 if( pWrtShell )
                 {

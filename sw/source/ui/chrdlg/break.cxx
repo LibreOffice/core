@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:52:13 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 15:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
     String aFmtName;
     for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
-        if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos(
+        if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, aPageCollBox, TRUE );
 

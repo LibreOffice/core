@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:54:00 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,10 +281,8 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         if( pString && pString->Len())
             aCategoryBox.SetText( *pString );
         else
-        {
-            String sTmp;
-            aCategoryBox.SetText( SwStyleNameMapper::GetUIName( nPoolId, sTmp ));
-        }
+            aCategoryBox.SetText(
+                    SwStyleNameMapper::GetUIName( nPoolId, aEmptyStr ));
     }
 
     //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:34:54 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 16:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     for(USHORT i = 0; i < MAXLEVEL; ++i )
     {
         // wurde die Vorlage noch nicht angelegt, dann ist sie noch an dieserPosition
-        if( !rWrtSh.GetParaStyle( SwStyleNameMapper::GetUIName( RES_POOLCOLL_HEADLINE1 + i,
+        if( !rWrtSh.GetParaStyle( sHeadline =
+            SwStyleNameMapper::GetUIName( RES_POOLCOLL_HEADLINE1 + i,
                                                     sHeadline )) )
             aCollNames[i] = sHeadline;
     }
@@ -494,7 +495,7 @@ short SwOutlineTabDialog::Ok()
     for( i = 0; i < MAXLEVEL; ++i )
     {
         String sHeadline;
-        ::SwStyleNameMapper::GetUIName( RES_POOLCOLL_HEADLINE1 + i, sHeadline );
+        ::SwStyleNameMapper::FillUIName( RES_POOLCOLL_HEADLINE1 + i, sHeadline );
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {
@@ -922,7 +923,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     USHORT i;
     for( i = 0; i < MAXLEVEL; ++i )
     {
-        aCollBox.InsertEntry( SwStyleNameMapper::GetUIName( RES_POOLCOLL_HEADLINE1 + i, sStr ));
+        aCollBox.InsertEntry( SwStyleNameMapper::GetUIName(
+                                    RES_POOLCOLL_HEADLINE1 + i, aEmptyStr ));
         aLevelLB.InsertEntry( String::CreateFromInt32(i + 1) );
     }
     sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "1 - " ));
