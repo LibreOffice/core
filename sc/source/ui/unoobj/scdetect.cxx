@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:21:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         String aFilterName;
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -748,13 +748,10 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         // file extension) it takes precedence over HTML and RTF and dBase
                         // detection. Otherwise something like, for example, "lala <SUP> gugu"
                         // would trigger HTML to be recognized.
+                        if ( !pFilter->GetFilterName().EqualsAscii(pFilterAscii) || !lcl_MayBeAscii( rStr ) )
+                        {
+                            pFilter = 0;
 
-                        if ( aPreselectedFilterName.EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
-                        {
-                            pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
-                        }
-                        else
-                        {
                             // get file header
                             rStr.Seek( 0 );
                             const int nTrySize = 80;
