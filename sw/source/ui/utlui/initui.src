@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:56:32 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "§@ªÌ";
         TEXT[ arabic ] = "ÇáãÄáİ";
         TEXT[ greek ] = "ÓõíôÜêôçò";
-        TEXT[ korean ] = "ÀÛ¼ºÀÎ";
+        TEXT[ korean ] = "ÀÛ¼ºÀÚ";
         TEXT[ turkish ] = "Yazan";
         TEXT[ language_user1 ] = " ";
     };
@@ -1113,7 +1113,7 @@ String STR_AUTH_TYPE_CONFERENCE
     Text[ polish ] = "Sprawozdanie z konferencji";
     Text[ portuguese_brazilian ] = "Conference report";
     Text[ japanese ] = "‰ï‹c•ñ";
-    Text[ korean ] = "È¸ÀÇ ÀıÂ÷";
+    Text[ korean ] = "È¸ÀÇ º¸°í¼­";
     Text[ chinese_simplified ] = "ÌÖÂÛ»á±¨¸æ";
     Text[ chinese_traditional ] = "·|½Í³ø§i";
     Text[ arabic ] = "ÊŞÑíÑ Úä ãÄÊãÑ";
@@ -1185,7 +1185,7 @@ String STR_AUTH_TYPE_INPROCEEDINGS
     Text[ polish ] = "Sprawozdanie z obrady";
     Text[ portuguese_brazilian ] = "Proceedings report";
     Text[ japanese ] = "‰ï•ñ";
-    Text[ korean ] = "È¸ÀÇ ÀıÂ÷";
+    Text[ korean ] = "ÇĞÈ¸ º¸°í¼­";
     Text[ chinese_simplified ] = "»áÒé±¨¸æ";
     Text[ chinese_traditional ] = "·|Ä³³ø§i";
     Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
@@ -1329,7 +1329,7 @@ String STR_AUTH_TYPE_PROCEEDINGS
     Text[ polish ] = "Sprawozdanie z obrady";
     Text[ portuguese_brazilian ] = "Proceedings";
     Text[ japanese ] = "‰ï•ñ";
-    Text[ korean ] = "È¸ÀÇ ÀıÂ÷";
+    Text[ korean ] = "ÇĞÈ¸ º¸°í¼­";
     Text[ chinese_simplified ] = "»áÒé±¨¸æ";
     Text[ chinese_traditional ] = "·|Ä³³ø§i";
     Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
@@ -1665,7 +1665,7 @@ String STR_AUTH_FIELD_AUTHOR
     Text[ polish ] = "Autor(zy)";
     Text[ portuguese_brazilian ] = "Author(s)";
     Text[ japanese ] = "’˜Ò";
-    Text[ korean ] = "ÀÛ¼ºÀÎ(µé)";
+    Text[ korean ] = "ÀÛ¼ºÀÚ(µé)";
     Text[ chinese_simplified ] = "×÷Õß";
     Text[ chinese_traditional ] = "§@ªÌ";
     Text[ arabic ] = "ÇáãÄáİ (ÇáãÄáİæä)";
