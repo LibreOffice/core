@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:14:35 $
+ *  last change: $Author: nn $ $Date: 2002-08-28 17:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 #include "unonames.hxx"
 #include "shapeuno.hxx"
 #include "printfun.hxx"
+#include "pfuncache.hxx"
 
 using namespace com::sun::star;
 
@@ -250,7 +251,8 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
 ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     SfxBaseModel( pDocSh ),
     aPropSet( lcl_GetDocOptPropertyMap() ),
-    pDocShell( pDocSh )
+    pDocShell( pDocSh ),
+    pPrintFuncCache( NULL )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( pDocShell )
@@ -287,6 +289,8 @@ ScModelObj::~ScModelObj()
 
     if (xNumberAgg.is())
         xNumberAgg->setDelegator(uno::Reference<uno::XInterface>());
+
+    delete pPrintFuncCache;
 }
 
 ScDocument* ScModelObj::GetDocument() const
@@ -427,19 +431,31 @@ uno::Sequence<sal_Int8> SAL_CALL ScModelObj::getImplementationId()
 
 void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  Not interested in reference update hints here
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( rHint.ISA( SfxSimpleHint ) )
     {
-        pDocShell = NULL;       // ungueltig geworden
-        if (xNumberAgg.is())
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
         {
-            SvNumberFormatsSupplierObj* pNumFmt =
-                SvNumberFormatsSupplierObj::getImplementation(
-                    uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
-            if ( pNumFmt )
-                pNumFmt->SetNumberFormatter( NULL );
+            pDocShell = NULL;       // has become invalid
+            if (xNumberAgg.is())
+            {
+                SvNumberFormatsSupplierObj* pNumFmt =
+                    SvNumberFormatsSupplierObj::getImplementation(
+                        uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
+                if ( pNumFmt )
+                    pNumFmt->SetNumberFormatter( NULL );
+            }
+
+            DELETEZ( pPrintFuncCache );     // must be deleted because it has a pointer to the DocShell
+        }
+        else if ( nId == SFX_HINT_DATACHANGED )
+        {
+            //  cached data for rendering become invalid when contents change
+            //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
+
+            DELETEZ( pPrintFuncCache );
         }
     }
     else if ( rHint.ISA( ScPointerChangedHint ) )
@@ -486,104 +502,6 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getStyleFamilies()
 
 // XRenderable
 
-
-class ScPrintFuncCache
-{
-    ScDocShell*     pDocSh;
-    long            nTotalPages;
-    long            nPages[MAXTAB+1];
-    long            nFirstAttr[MAXTAB+1];
-
-public:
-            ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark );
-            ~ScPrintFuncCache();
-
-    long    GetPageCount() const                { return nTotalPages; }
-    long    GetFirstAttr( USHORT nTab ) const   { return nFirstAttr[nTab]; }
-    USHORT  GetTabForPage( long nPage ) const;
-    long    GetTabStart( USHORT nTab ) const;
-    long    GetDisplayStart( USHORT nTab ) const;
-};
-
-
-ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark ) :
-    pDocSh( pD ),
-    nTotalPages( 0 )
-{
-    //  page count uses the stored cell widths for the printer anyway,
-    //  so ScPrintFunc with the document's printer can be used to count
-
-    SfxPrinter* pPrinter = pDocSh->GetPrinter();
-
-    ScRange aRange;
-    const ScRange* pSelRange = NULL;
-    if ( rMark.IsMarked() )
-    {
-        rMark.GetMarkArea( aRange );
-        pSelRange = &aRange;
-    }
-
-    ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTab;
-    for ( nTab=0; nTab<nTabCount; nTab++ )
-    {
-        long nAttrPage = nTab ? nFirstAttr[nTab-1] : 1;
-
-        long nThisTab = 0;
-        if ( rMark.GetTableSelect( nTab ) )
-        {
-            ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange );
-            nThisTab = aFunc.GetTotalPages();
-            nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
-        }
-        else
-            nFirstAttr[nTab] = nAttrPage;
-
-        nPages[nTab] = nThisTab;
-        nTotalPages += nThisTab;
-    }
-}
-
-USHORT ScPrintFuncCache::GetTabForPage( long nPage ) const
-{
-    ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTab = 0;
-    while ( nTab < nTabCount && nPage >= nPages[nTab] )
-        nPage -= nPages[nTab++];
-    return nTab;
-}
-
-long ScPrintFuncCache::GetTabStart( USHORT nTab ) const
-{
-    long nRet = 0;
-    for ( USHORT i=0; i<nTab; i++ )
-        nRet += nPages[i];
-    return nRet;
-}
-
-long ScPrintFuncCache::GetDisplayStart( USHORT nTab ) const
-{
-    //! merge with lcl_GetDisplayStart in preview?
-
-    long nDisplayStart = 0;
-    ScDocument* pDoc = pDocSh->GetDocument();
-    for (USHORT i=0; i<nTab; i++)
-    {
-        if ( pDoc->NeedPageResetAfterTab(i) )
-            nDisplayStart = 0;
-        else
-            nDisplayStart += nPages[i];
-    }
-    return nDisplayStart;
-}
-
-ScPrintFuncCache::~ScPrintFuncCache()
-{
-}
-
-
 OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rOptions )
 {
     OutputDevice* pRet = NULL;
@@ -608,8 +526,8 @@ OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rO
     return pRet;
 }
 
-
-BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMark ) const
+BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMark,
+                                     ScPrintSelectionStatus& rStatus ) const
 {
     DBG_ASSERT( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     DBG_ASSERT( pDocShell, "FillRenderMarkData: DocShell must be set" );
@@ -631,7 +549,14 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
             if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
             {
                 if ( bCursor )              // nothing selected -> use whole tables
+                {
                     rMark.ResetMark();      // doesn't change table selection
+                    rStatus.SetMode( SC_PRINTSEL_CURSOR );
+                }
+                else
+                    rStatus.SetMode( SC_PRINTSEL_RANGE );
+
+                rStatus.SetRanges( rRanges );
                 bDone = TRUE;
             }
             // multi selection isn't supported
@@ -644,6 +569,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
             USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
             for (USHORT nTab = 0; nTab < nTabCount; nTab++)
                 rMark.SelectTable( nTab, TRUE );
+            rStatus.SetMode( SC_PRINTSEL_DOCUMENT );
             bDone = TRUE;
         }
         // other selection types aren't supported
@@ -662,11 +588,20 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
         throw uno::RuntimeException();
 
     ScMarkData aMark;
-    if ( !FillRenderMarkData( aSelection, aMark ) )
+    ScPrintSelectionStatus aStatus;
+    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
         return 0;
 
-    ScPrintFuncCache aCache( pDocShell, aMark );
-    return aCache.GetPageCount();
+    //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
+    //  the same selection is used (aStatus) and the document isn't changed
+    //  (pPrintFuncCache is cleared in Notify handler)
+
+    if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
+    {
+        delete pPrintFuncCache;
+        pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+    }
+    return pPrintFuncCache->GetPageCount();
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nRenderer,
@@ -678,14 +613,19 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         throw uno::RuntimeException();
 
     ScMarkData aMark;
-    if ( !FillRenderMarkData( aSelection, aMark ) )
+    ScPrintSelectionStatus aStatus;
+    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
         throw lang::IllegalArgumentException();
 
-    ScPrintFuncCache aCache( pDocShell, aMark );
-    if ( nRenderer >= aCache.GetPageCount() )
+    if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
+    {
+        delete pPrintFuncCache;
+        pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+    }
+    if ( nRenderer >= pPrintFuncCache->GetPageCount() )
         throw lang::IllegalArgumentException();
 
-    USHORT nTab = aCache.GetTabForPage( nRenderer );
+    USHORT nTab = pPrintFuncCache->GetTabForPage( nRenderer );
     ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab );      // just for page size
     Size aTwips = aFunc.GetPageSize();
     awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
@@ -706,11 +646,16 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         throw uno::RuntimeException();
 
     ScMarkData aMark;
-    if ( !FillRenderMarkData( aSelection, aMark ) )
+    ScPrintSelectionStatus aStatus;
+    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
         throw lang::IllegalArgumentException();
 
-    ScPrintFuncCache aCache( pDocShell, aMark );
-    long nTotalPages = aCache.GetPageCount();
+    if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
+    {
+        delete pPrintFuncCache;
+        pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+    }
+    long nTotalPages = pPrintFuncCache->GetPageCount();
     if ( nRenderer >= nTotalPages )
         throw lang::IllegalArgumentException();
 
@@ -718,7 +663,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     if ( !pDev )
         throw lang::IllegalArgumentException();
 
-    USHORT nTab = aCache.GetTabForPage( nRenderer );
+    USHORT nTab = pPrintFuncCache->GetTabForPage( nRenderer );
     ScDocument* pDoc = pDocShell->GetDocument();
 
     FmFormView* pDrawView = NULL;
@@ -739,17 +684,20 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         pSelRange = &aRange;
     }
 
-    ScPrintFunc aFunc( pDev, pDocShell, nTab, aCache.GetFirstAttr(nTab), nTotalPages, pSelRange );
+    //  to increase performance, ScPrintState might be used here for subsequent
+    //  pages of the same sheet
+
+    ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
     aFunc.SetDrawView( pDrawView );
-//  aFunc.SetRenderFlag( TRUE );
+    aFunc.SetRenderFlag( TRUE );
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
     MultiSelection aPage( aPageRange );
     aPage.SetTotalRange( Range(0,RANGE_MAX) );
     aPage.Select( aPageRange );
 
-    long nDisplayStart = aCache.GetDisplayStart( nTab );
-    long nTabStart = aCache.GetTabStart( nTab );
+    long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
+    long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
     long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
 

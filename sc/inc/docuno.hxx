@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:13:38 $
+ *  last change: $Author: nn $ $Date: 2002-08-28 17:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@
 class ScDocShell;
 class ScAnnotationObj;
 class ScMarkData;
+class ScPrintFuncCache;
+class ScPrintSelectionStatus;
 class ScTableColumnObj;
 class ScTableRowObj;
 class ScTableSheetObj;
@@ -186,6 +188,7 @@ class ScModelObj : public SfxBaseModel,
 private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
+    ScPrintFuncCache*       pPrintFuncCache;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> xNumberAgg;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawGradTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawHatchTab;
@@ -195,7 +198,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
 
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
-                                                ScMarkData& rMark ) const;
+                                                ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
 
 public:
                             ScModelObj(ScDocShell* pDocSh);

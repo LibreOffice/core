@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2002-07-29 12:26:02 $
+#   last change: $Author: nn $ $Date: 2002-08-28 17:57:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,6 +115,7 @@ SLOFILES =  \
     $(SLO)$/tabvwshg.obj \
         $(SLO)$/tabvwshh.obj \
         $(SLO)$/printfun.obj \
+        $(SLO)$/pfuncache.obj \
         $(SLO)$/preview.obj \
         $(SLO)$/prevwsh.obj \
         $(SLO)$/prevwsh2.obj \
