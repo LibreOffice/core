@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 09:58:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
-#include "new_foil.hxx"
+//CHINA001 #include "new_foil.hxx"
 #include "sdmod.hxx"
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
