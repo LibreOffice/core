@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 11:24:03 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text = "~Druckbereich" ;
         Text [ ENGLISH ] = "~Print area" ;
         Text [ NORWEGIAN ] = "Print area" ;
-        Text [ DANISH ] = "UdskriftsomrÂde" ;
+        Text [ DANISH ] = "~UdskriftsomrÂde" ;
         Text [ ENGLISH_US ] = "Print range" ;
         Text [ SPANISH ] = "¡rea de impresiÛn" ;
         Text [ FINNISH ] = "Tulostusalue" ;
@@ -320,7 +320,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text = "Wiederholungs~zeile" ;
         Text [ ENGLISH ] = "~Row to repeat at top" ;
         Text [ NORWEGIAN ] = "Row to repeat at top" ;
-        Text [ DANISH ] = "GentagelsesrÊkke" ;
+        Text [ DANISH ] = "Gentagelses~rÊkke" ;
         Text [ ENGLISH_US ] = "Rows to repeat" ;
         Text [ SPANISH ] = "Fila ~a repetir" ;
         Text [ FINNISH ] = "Toistettavat rivit" ;
@@ -516,7 +516,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text = "Wiederholungs~spalte" ;
         Text [ ENGLISH ] = "~Columns to repeat at left" ;
         Text [ NORWEGIAN ] = "Columns to repeat at left" ;
-        Text [ DANISH ] = "Gentagelseskolonne" ;
+        Text [ DANISH ] = "Gentagelses~kolonne" ;
         Text [ ENGLISH_US ] = "Columns to repeat" ;
         Text [ SPANISH ] = "~Columna a repetir" ;
         Text [ FINNISH ] = "Toista sarake" ;
@@ -996,7 +996,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ greek ] = "≈ÍÙ˝˘ÛÁ";
         Text[ korean ] = "Ïù∏ÏáÑ";
         Text[ turkish ] = "Yazd˝r";
-        Text[ catalan ] = "Imprimir";
+        Text[ catalan ] = "Imprimeix";
         Text[ thai ] = "‡∏û‡∏¥‡∏°‡∏û‡πå";
     };
     RadioButton BTN_TOPDOWN
@@ -1010,7 +1010,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~De cima para baixo" ;
         Text [ portuguese ] = "De ~cima para baixo, depois ‡ direita" ;
         Text [ finnish ] = "~Ylh‰‰lt‰ alas, sitten oikealle" ;
-        Text [ danish ] = "Fra ¯verst til nederst" ;
+        Text [ danish ] = "Oppefra og ned, derefter til h¯jre" ;
         Text [ french ] = "~De haut en bas, puis vers la droite" ;
         Text [ swedish ] = "~UppifrÂn och ned, sedan till hˆger" ;
         Text [ dutch ] = "Van ~boven naar beneden, dan naar rechts" ;
@@ -1040,7 +1040,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "Da esquerda para a di~reita" ;
         Text [ portuguese ] = "Da esquerda para a di~reita, depois para baixo" ;
         Text [ finnish ] = "~Vasemmalta oikealle, sitten alas" ;
-        Text [ danish ] = "Fra venstre til h¯jre" ;
+        Text [ danish ] = "Fra ~venstre mod h¯jre, derefter nedad" ;
         Text [ french ] = "De gauche ‡ dro~ite, puis vers le bas" ;
         Text [ swedish ] = "FrÂn v‰nster till hˆg~er, sedan nedÂt" ;
         Text [ dutch ] = "Van ~links naar rechts, dan naar beneden" ;
@@ -1172,7 +1172,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ spanish ] = "Aumentar/disminuir impresiÛn [%]";
         Text[ finnish ] = "Pienenn‰/suurenna tulostetta";
         Text[ italian ] = "Riduci/ingrandisci ~stampa";
-        Text[ danish ] = "Alt til [%]";
+        Text[ danish ] = "Formindsk/Forst¯r udskrift";
         Text[ swedish ] = "Fˆr~minska/fˆrstora utskrift";
         Text[ polish ] = "Pomniejsz/powiÍksz wydruk";
         Text[ portuguese_brazilian ] = "~Todas as p?ginas para [%]";
@@ -1201,7 +1201,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ spanish ] = "Ajustar impresiÛn a n˙mero de p·ginas";
         Text[ finnish ] = "~S‰‰d‰ tuloste sivum‰‰r‰n mukaan";
         Text[ italian ] = "~Adatta la stampa al numero di pagine";
-        Text[ danish ] = "Maks. antal sider";
+        Text[ danish ] = "Til~pas udskrift til sidetal";
         Text[ swedish ] = "An~passa utskrift till antal sidor";
         Text[ polish ] = "Dopasuj wydruk do liczby stron";
         Text[ portuguese_brazilian ] = "Para ~se ajustar nas p?ginas";
@@ -1253,7 +1253,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ spanish ] = "Escala" ;
         Text [ french ] = "…chelle" ;
         Text [ swedish ] = "Skala" ;
-        Text [ danish ] = "Skalering" ;
+        Text [ danish ] = "Skaler" ;
         Text [ portuguese ] = "Escala" ;
         Text [ portuguese_brazilian ] = "Skalierung" ;
         Text[ chinese_simplified ] = "ÊòæÁ§∫ÊØî‰æã";
