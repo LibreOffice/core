@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 15:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,7 @@
  *
  ************************************************************************/
 
-#if SUPD >= 380
 #include <svtools/communi.hxx>
-#else
-#include <communi.hxx>
-#endif
 #include <tools/link.hxx>
 #include <svtools/svarray.hxx>
 
