@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:14:46 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 15:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,16 +107,16 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
         aEditButton(        this,   IDEResId( RID_PB_EDIT ) ),
         aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
         aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
-        aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
-        aDescrTxt(          this,   IDEResId( RID_TXT_DESCRIPTION ) ),
-        aDescrEdit(         this,   IDEResId( RID_ML_DESCRIPTION ) )
+        aHelpButton(        this,   IDEResId( RID_PB_HELP ) )
+        //aDescrTxt(            this,   IDEResId( RID_TXT_DESCRIPTION ) ),
+        //aDescrEdit(           this,   IDEResId( RID_ML_DESCRIPTION ) )
 {
     FreeResource();
 
     nMode = MACROCHOOSER_ALL;
     bNewDelIsDel = TRUE;
     bCancelCloseIsCancel = TRUE;
-    bAcceptDescription = TRUE;
+    //bAcceptDescription = TRUE;
 
     // Der Sfx fragt den BasicManager nicht, ob modified
     // => Speichern anschmeissen, wenn Aenderung, aber kein Sprung in
@@ -143,11 +143,11 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
     aBasicBox.SetMode( BROWSEMODE_MODULES /* | BROWSEMODE_SUBS */ );
     aBasicBox.SetWindowBits( WB_HASLINES );
 
-    aDescrEdit.SetGetFocusHdl( LINK( this, MacroChooser, EditGotFocusHdl ) );
-    aDescrEdit.SetLoseFocusHdl( LINK( this, MacroChooser, EditLoseFocusHdl ) );
-    aDescrEdit.SetModifyHdl( LINK( this, MacroChooser, DescriptionModifyHdl ) );
-    aDescrEdit.SetAccHdl( LINK( this, MacroChooser, EditAccHdl ) );
-    aDescrEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_ESCAPE ) );
+    //aDescrEdit.SetGetFocusHdl( LINK( this, MacroChooser, EditGotFocusHdl ) );
+    //aDescrEdit.SetLoseFocusHdl( LINK( this, MacroChooser, EditLoseFocusHdl ) );
+    //aDescrEdit.SetModifyHdl( LINK( this, MacroChooser, DescriptionModifyHdl ) );
+    //aDescrEdit.SetAccHdl( LINK( this, MacroChooser, EditAccHdl ) );
+    //aDescrEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_ESCAPE ) );
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
@@ -211,47 +211,51 @@ void MacroChooser::RestoreMacroDescription()
     }
 }
 
+/*
 IMPL_LINK_INLINE_START( MacroChooser, EditGotFocusHdl, MultiLineEdit *, pEdit )
 {
     bAcceptDescription = TRUE;
     return 0;
 }
 IMPL_LINK_INLINE_END( MacroChooser, EditGotFocusHdl, MultiLineEdit *, pEdit )
+*/
 
+/*
 IMPL_LINK( MacroChooser, EditLoseFocusHdl, MultiLineEdit *, pEdit )
 {
     if ( bAcceptDescription )
     {
         SbxVariable* pVar = GetMacro();
-/*
-        if ( !pVar )
-        {
-            SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
-            BYTE nType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : 0;
-            if ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) ||
-                 ( nType == OBJTYPE_METHOD ) || ( nType == OBJTYPE_LIB ) ||
-                 ( nType == OBJTYPE_SUBOBJ ) )
-            {
-                pVar = aBasicBox.FindVariable( pCurEntry );
-            }
 
-        }
-*/
+        //if ( !pVar )
+        //{
+        //  SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+        //  BYTE nType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : 0;
+        //  if ( ( nType == OBJTYPE_OBJECT ) || ( nType == OBJTYPE_MODULE ) ||
+        //       ( nType == OBJTYPE_METHOD ) || ( nType == OBJTYPE_LIB ) ||
+        //       ( nType == OBJTYPE_SUBOBJ ) )
+        //  {
+        //      pVar = aBasicBox.FindVariable( pCurEntry );
+        //  }
+        //}
+
         if ( pVar )
             SetInfo( pVar );
     }
     return 0;
 }
+*/
 
+/*
 IMPL_LINK_INLINE_START( MacroChooser, DescriptionModifyHdl, MultiLineEdit *, pEdit )
 {
     CheckCancelClose();
     return 0;
 }
 IMPL_LINK_INLINE_END( MacroChooser, DescriptionModifyHdl, MultiLineEdit *, pEdit )
+*/
 
-
-
+/*
 IMPL_LINK( MacroChooser, EditAccHdl, Accelerator *, pAcc )
 {
     if ( pAcc->GetCurKeyCode().GetCode() == KEY_ESCAPE )
@@ -263,6 +267,7 @@ IMPL_LINK( MacroChooser, EditAccHdl, Accelerator *, pAcc )
 
     return 0;
 }
+*/
 
 short __EXPORT MacroChooser::Execute()
 {
@@ -745,7 +750,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 SbMethod* pMethod = CreateMacro();
                 if ( pMethod )
                 {
-                    SetInfo( pMethod );
+                    //SetInfo( pMethod );
                     aInfoItem.SetMethod( pMethod->GetName() );
                     aInfoItem.SetModule( pMethod->GetModule()->GetName() );
                     aInfoItem.SetLib( pMethod->GetModule()->GetParent()->GetName() );
@@ -831,7 +836,7 @@ void MacroChooser::UpdateFields()
     if ( pMacroEntry )
         aMacroNameEdit.SetText( aMacroBox.GetEntryText( pMacroEntry ) );
 
-    aDescrEdit.SetText( aEmptyStr );
+    //aDescrEdit.SetText( aEmptyStr );
     // DescrEdit immer enablen:
     // Entweder Text fuer aktuelles Macro oder fuer Aufzuzeichnendes
 //  aDescrEdit.Disable();
@@ -841,7 +846,7 @@ void MacroChooser::UpdateFields()
     if ( pVar )
     {
 //      aDescrEdit.Enable();
-        aDescrEdit.SetText( GetInfo( pVar ) );
+        //aDescrEdit.SetText( GetInfo( pVar ) );
     }
 }
 
@@ -853,18 +858,19 @@ void MacroChooser::SetMode( USHORT nM )
         aRunButton.SetText( String( IDEResId( RID_STR_RUN ) ) );
         EnableButton( aNewDelButton, TRUE );
         EnableButton( aOrganizeButton, TRUE );
-        aDescrEdit.Enable();
+        //aDescrEdit.Enable();
     }
     else if ( nMode == MACROCHOOSER_CHOOSEONLY )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_CHOOSE ) ) );
         EnableButton( aNewDelButton, FALSE );
         EnableButton( aOrganizeButton, FALSE );
-        aDescrEdit.Disable();
+        //aDescrEdit.Disable();
     }
     CheckButtons();
 }
 
+/*
 void MacroChooser::SetInfo( SbxVariable* pVar )
 {
     SbxInfoRef xInfo = pVar->GetInfo();
@@ -873,7 +879,7 @@ void MacroChooser::SetInfo( SbxVariable* pVar )
         xInfo = new SbxInfo;
         pVar->SetInfo( xInfo );
     }
-    xInfo->SetComment( aDescrEdit.GetText() );
+    //xInfo->SetComment( aDescrEdit.GetText() );
     pVar->SetModified( TRUE );
     // Eine Method macht kein Modify auf den Parent
     StarBASIC* pBasic = BasicIDE::FindBasic( pVar );
@@ -883,6 +889,7 @@ void MacroChooser::SetInfo( SbxVariable* pVar )
         BasicIDE::MarkDocShellModified( pBasic );
     }
 }
+*/
 
 String MacroChooser::GetInfo( SbxVariable* pVar )
 {

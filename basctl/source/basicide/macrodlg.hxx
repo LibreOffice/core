@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 15:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,12 +111,12 @@ private:
     PushButton              aOrganizeButton;
     HelpButton              aHelpButton;
 
-    FixedText               aDescrTxt;
-    ExtendedMultiLineEdit   aDescrEdit;
+    //FixedText             aDescrTxt;
+    //ExtendedMultiLineEdit aDescrEdit;
 
     BOOL                bNewDelIsDel;
     BOOL                bCancelCloseIsCancel;
-    BOOL                bAcceptDescription;
+    //BOOL              bAcceptDescription;
     BOOL                bForceStoreBasic;
 
     USHORT              nMode;
@@ -125,7 +125,7 @@ private:
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
     DECL_LINK( BasicSelectHdl, SvTreeListBox * );
     DECL_LINK( EditModifyHdl, Edit * );
-    DECL_LINK( DescriptionModifyHdl, MultiLineEdit * );
+    //DECL_LINK( DescriptionModifyHdl, MultiLineEdit * );
     DECL_LINK( ButtonHdl, Button * );
 
     void                CheckButtons();
@@ -135,12 +135,12 @@ private:
     void                EnableButton( Button& rButton, BOOL bEnable );
     void                DeleteMacro();
     SbMethod*           CreateMacro();
-    DECL_LINK( EditGotFocusHdl, MultiLineEdit * );
-    DECL_LINK( EditLoseFocusHdl, MultiLineEdit * );
-    DECL_LINK( EditAccHdl, Accelerator * );
+    //DECL_LINK( EditGotFocusHdl, MultiLineEdit * );
+    //DECL_LINK( EditLoseFocusHdl, MultiLineEdit * );
+    //DECL_LINK( EditAccHdl, Accelerator * );
     void                CheckCancelClose();
 
-    void                SetInfo( SbxVariable* pVar );
+    //void              SetInfo( SbxVariable* pVar );
     String              GetInfo( SbxVariable* pVar );
 
     void                StoreMacroDescription();

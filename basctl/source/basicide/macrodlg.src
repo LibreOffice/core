@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 00:10:30 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 15:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@ ModalDialog RID_MACROCHOOSER
         HelpID = HID_BASICIDE_MACROS ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 31 ) ;
-        Size = MAP_APPFONT ( 100 , 80 ) ;
+        //Size = MAP_APPFONT ( 100 , 80 ) ;
+        Size = MAP_APPFONT ( 100 , 128 ) ;
         TabStop = TRUE ;
     };
     Control RID_CTRL_LIB
@@ -97,7 +98,8 @@ ModalDialog RID_MACROCHOOSER
         HelpID = HID_BASICIDE_LIBS ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 112 , 16 ) ;
-        Size = MAP_APPFONT ( 110 , 95 ) ;
+        //Size = MAP_APPFONT ( 110 , 95 ) ;
+        Size = MAP_APPFONT ( 110 , 143 ) ;
         TabStop = TRUE ;
     };
     FixedText RID_TXT_MACRONAME
