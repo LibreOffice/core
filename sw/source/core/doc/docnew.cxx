@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 11:18:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -331,7 +334,7 @@ SwDoc::SwDoc() :
     pUnoCallBack(new SwUnoCallBack(0)),
     nAutoFmtRedlnCommentNo( 0 ),
     eChrCmprType( CHARCOMPRESS_NONE ),
-    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0 ), n8Dummy2( 0 ),
+    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING )
 {
@@ -378,6 +381,12 @@ SwDoc::SwDoc() :
                                 TRUE;
 
     pMacroTable = new SvxMacroTableDtor;
+
+    /*
+     * Builds and sets the virtual device
+     */
+    pVirDev = new VirtualDevice( 1 );
+    pVirDev->SetReferenceDevice();
 
     /*
      * Defaultformate und DefaultFormatsammlungen (FmtColl)
@@ -650,6 +659,7 @@ SwDoc::~SwDoc()
     delete pDfltCharFmt;
     delete pDfltFrmFmt;
     delete pLayoutCache;
+    delete pVirDev;
 }
 
 
@@ -693,7 +703,7 @@ void SwDoc::SetJobsetup( const JobSetup &rJobSetup )
             bDataChanged = TRUE;
         }
     }
-    if ( bDataChanged )
+    if ( !IsUseVirtualDevice() && bDataChanged )
         PrtDataChanged();
 }
 
@@ -708,9 +718,43 @@ const JobSetup* SwDoc::GetJobsetup() const
 
 //---------------------------------------------------
 
-SfxPrinter* SwDoc::_GetPrt() const
+OutputDevice& SwDoc::GetRefDev() const
 {
-    ASSERT( !pPrt, "Don't use _GetPrt(), use GetPrt()!" );
+    if ( ! IsUseVirtualDevice() )
+    {
+        SfxPrinter& rPrt = *GetPrt( sal_True );
+        if ( rPrt.IsValid() )
+            return rPrt;
+    }
+
+    return *GetVirDev( sal_True );
+}
+
+//---------------------------------------------------
+
+OutputDevice* SwDoc::_GetRefDev() const
+{
+    if ( IsUseVirtualDevice() )
+        return pVirDev;
+    return pPrt;
+}
+
+//---------------------------------------------------
+
+VirtualDevice& SwDoc::_GetVirDev() const
+{
+    VirtualDevice* pNewVir = new VirtualDevice( 1 );
+    pNewVir->SetReferenceDevice();
+    ((SwDoc*)this)->SetVirDev( pNewVir, sal_True );
+    return *pVirDev;
+}
+
+//---------------------------------------------------
+
+SfxPrinter& SwDoc::_GetPrt() const
+{
+    ASSERT( ! pPrt, "Do not call _GetPrt(), call GetPrt() instead" )
+
     // wir erzeugen einen default SfxPrinter.
     // Das ItemSet wird vom Sfx geloescht!
     SfxItemSet *pSet = new SfxItemSet( ((SwDoc*)this)->GetAttrPool(),
@@ -719,9 +763,9 @@ SfxPrinter* SwDoc::_GetPrt() const
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
-    SfxPrinter *pNewPrt = new SfxPrinter( pSet );
-    ((SwDoc*)this)->SetPrt( pNewPrt );
-    return pPrt;
+    SfxPrinter* pNewPrt = new SfxPrinter( pSet );
+    ((SwDoc*)this)->SetPrt( pNewPrt, sal_True );
+    return *pPrt;
 }
 //---------------------------------------------------
 
