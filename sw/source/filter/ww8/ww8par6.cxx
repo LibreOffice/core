@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-12 11:25:52 $
+ *  last change: $Author: cmc $ $Date: 2002-11-27 12:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdlib.h>
 
@@ -4390,6 +4393,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             aLR.SetTxtLeft( nPara );
             if( pAktColl )
             {
+                pCollA[nAktColl].bListReleventIndentSet = true;
                 pCollA[nAktColl].nLeftParaMgn      = nPara; // fuer Tabs merken
                 pCollA[nAktColl].nTxtFirstLineOfst = aLR.GetTxtFirstLineOfst();
             }
@@ -4428,7 +4432,10 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 
             aLR.SetTxtFirstLineOfst( nPara );
             if( pAktColl )
+            {
+                pCollA[nAktColl].bListReleventIndentSet = true;
                 pCollA[nAktColl].nTxtFirstLineOfst = nPara; // fuer Tabs merken
+            }
             else
                 nTxtFirstLineOfst = nPara; // fuer Tabs merken
             break;

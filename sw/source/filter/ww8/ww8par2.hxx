@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:18 $
+ *  last change: $Author: cmc $ $Date: 2002-11-27 12:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR2_HXX
 #define _WW8PAR2_HXX
@@ -179,12 +182,17 @@ public:
     BYTE        nOutlineLevel;      // falls Gliederungs-Style
     BYTE        n81Flags;           // Fuer Bold, Italic, ...
     BYTE        n81BiDiFlags;       // Fuer Bold, Italic, ...
-    BYTE bValid         :1; // leer oder Valid
-    BYTE bImported      :1; // fuers rekursive Importieren
-    BYTE bColl          :1; // true-> pFmt ist SwTxtFmtColl
-    BYTE bImportSkipped :1; // nur true bei !bNewDoc && vorh. Style
-    BYTE bHasStyNumRule     :1; // true-> Benannter NumRule in Style
-    BYTE bHasBrokenWW6List :1;   //true-> WW8+ style has a WW7- list
+    bool bValid;            // leer oder Valid
+    bool bImported;         // fuers rekursive Importieren
+    bool bColl;             // true-> pFmt ist SwTxtFmtColl
+    bool bImportSkipped;    // nur true bei !bNewDoc && vorh. Style
+    bool bHasStyNumRule;    // true-> Benannter NumRule in Style
+    bool bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
+    bool bListReleventIndentSet; //true if this style's indent has
+                                 //been explicitly set, it's set to the value
+                                 //of pFmt->GetItemState(RES_LR_SPACE, false)
+                                 //if it was possible to get the ItemState
+                                 //for L of the LR space independantly
 
     SwWW8StyInf() :
         sWWStyleName( aEmptyStr ),
@@ -208,7 +216,8 @@ public:
         bColl(false),
         bImportSkipped(false),
         bHasStyNumRule(false),
-        bHasBrokenWW6List(false)
+        bHasBrokenWW6List(false),
+        bListReleventIndentSet(false)
     {}
 
     ~SwWW8StyInf()

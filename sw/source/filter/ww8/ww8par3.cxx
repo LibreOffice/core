@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-08 12:43:05 $
+ *  last change: $Author: cmc $ $Date: 2002-11-27 12:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -523,7 +526,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     if( aBits1 & 0x20 ) aLVL.bV6PrSp    = true;
     if( aBits1 & 0x40 ) aLVL.bV6        = true;
     bool bLVLOkB = true;
-    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; nLevelB++)
+    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
         rSt >> aLVL.aOfsNumsXCH[ nLevelB ];
         if( 0 != rSt.GetError() )
@@ -794,7 +797,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     {
         nIdenticalItemSetLevel = nMaxLevel;
         SfxItemIter aIter( *pThisLevelItemSet );
-        for( sal_uInt8 nLowerLevel = 0; nLowerLevel < nLevel; nLowerLevel++)
+        for (sal_uInt8 nLowerLevel = 0; nLowerLevel < nLevel; ++nLowerLevel)
         {
             pLowerLevelItemSet = rListItemSet[ nLowerLevel ];
             if(     pLowerLevelItemSet
@@ -888,7 +891,7 @@ bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
         const SwNumRule& rLSTRule = *pLSTInfo->pNumRule;
         const SwNumRule& rLFORule = *rLFOInfo.pNumRule;
         bRes = true;
-        for(sal_uInt16 nLevel = 0; bRes && (nLevel < rLFOInfo.nLfoLvl);++nLevel)
+        for (sal_uInt16 nLevel = 0; bRes && (nLevel < rLFOInfo.nLfoLvl); ++nLevel)
         {
             const SwNumFmt& rLSTNumFmt = rLSTRule.Get( nLevel );
             const SwNumFmt& rLFONumFmt = rLFORule.Get( nLevel );
@@ -975,7 +978,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             //
             rSt >> aLST.nIdLst;
             rSt >> aLST.nTplC;
-            for(nLevel = 0; nLevel < nMaxLevel; nLevel++)
+            for (nLevel = 0; nLevel < nMaxLevel; ++nLevel)
                 rSt >> aLST.aIdSty[ nLevel ];
 
 
@@ -1023,7 +1026,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         sal_uInt8 nLevel;
         sal_uInt16 nLSTInfos = maLSTInfos.size();
-        for(sal_uInt16 nList = 0; nList < nLSTInfos; nList++)
+        for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
         {
             bOk = false;
             WW8LSTInfo* pListInfo = maLSTInfos[nList];
@@ -1033,7 +1036,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             // 1.2.1 betreffende(n) LVL(s) fuer diese aLST einlesen
             //
             sal_uInt16 nLvlCount=pListInfo->bSimpleList ? nMinLevel : nMaxLevel;
-            for(nLevel = 0; nLevel < nLvlCount; nLevel++)
+            for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
             {
                 SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
                 // LVLF einlesen
@@ -1051,13 +1054,15 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             //       Level miteinander vergleichen und ggfs. Style(s) erzeugen
             //
             bool bDummy;
-            for(nLevel = 0; nLevel < nLvlCount; nLevel++)
+            for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
+            {
                 AdjustLVL( nLevel, rMyNumRule, pListInfo->aItemSet,
                                                pListInfo->aCharFmt, bDummy );
+            }
             //
             // 1.2.3 ItemPools leeren und loeschen
             //
-            for(nLevel = 0; nLevel < nLvlCount; nLevel++)
+            for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
                 delete pListInfo->aItemSet[ nLevel ];
             bOk = true;
         }
@@ -1087,7 +1092,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 2.1 alle LFO einlesen
         //
-        for(sal_uInt16 nLfo = 0; nLfo < nLfoCount; nLfo++)
+        for (sal_uInt16 nLfo = 0; nLfo < nLfoCount; ++nLfo)
         {
             bOk = false;
             memset(&aLFO, 0, sizeof( aLFO ));
@@ -1121,7 +1126,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         WW8LFOLVL aLFOLVL;
         sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
-        for(sal_uInt16 nLfo = 0; nLfo < nLFOInfos; nLfo++)
+        for (sal_uInt16 nLfo = 0; nLfo < nLFOInfos; ++nLfo)
         {
             bOk = false;
             WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLfo );
@@ -1173,7 +1178,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 memset(&aItemSet, 0,  sizeof( aItemSet ));
                 memset(&aCharFmt, 0,  sizeof( aCharFmt ));
 
-                for(sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; nLevel++)
+                for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     bLVLOk = false;
                     memset(&aLFOLVL, 0, sizeof( aLFOLVL ));
@@ -1247,7 +1252,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 sal_uInt16 aFlagsNewCharFmt = 0;
                 bool bNewCharFmtCreated = false;
-                for(nLevel = 0; nLevel < pLFOInfo->nLfoLvl; nLevel++)
+                for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     AdjustLVL( nLevel, *pLFOInfo->pNumRule, aItemSet, aCharFmt,
                         bNewCharFmtCreated, sPrefix );
@@ -1257,7 +1262,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 // 2.2.4 ItemPools leeren und loeschen
                 //
-                for(nLevel = 0; nLevel < pLFOInfo->nLfoLvl; nLevel++)
+                for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                     delete aItemSet[ nLevel ];
                 //
                 // 2.2.5 falls diese NumRule identische Einstellungen und
@@ -1269,12 +1274,14 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     // 2.2.5.1 ggfs die an den einzelnen Leveln haengenden
                     //         Char-Formate freigeben und loeschen
                     //
-                    for(nLevel = 0; nLevel < pLFOInfo->nLfoLvl; nLevel++)
+                    for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                    {
                         if( aFlagsNewCharFmt & (1 << nLevel) )
                         {
                             rDoc.DelCharFmt(
                                 pLFOInfo->pNumRule->Get(nLevel ).GetCharFmt());
                         }
+                    }
                     //
                     // 2.2.5.2 jetzt die NumRule freigeben und die alte nehmen
                     //
@@ -1431,18 +1438,25 @@ SwNumRule* SwWW8ImplReader::SyncStyleIndentWithList( SwWW8StyInf &rStyle,
     a outline list formatting and it happens to be based on a style that has
     indentation, then that inherited indentation is stripped from the style.
     */
-    const SfxPoolItem *pItem;
-    if (SFX_ITEM_SET == rStyle.pFmt->GetItemState(RES_LR_SPACE, false, &pItem))
+
+    /*
+    #105652#, only the left and first line offset indent are relevent for
+    list indentation, the right is not, and can be retained after list
+    indentation is accounted for, and must not be considered when set as
+    a flag that the list indentation is our of sync
+    */
+    const SvxLRSpaceItem &rLR =
+        (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE);
+    if (rStyle.bListReleventIndentSet)
     {
-        const SvxLRSpaceItem *pLR = (const SvxLRSpaceItem *)pItem;
         const SwNumFmt& rRule = pRule->Get( nLevel );
 
         bool bRequired = false;
-        if ( rRule.GetAbsLSpace() != pLR->GetTxtLeft() )
+        if ( rRule.GetAbsLSpace() != rLR.GetTxtLeft() )
             bRequired = true;
-        else if(pLR->GetTxtFirstLineOfst() && (pLR->GetTxtFirstLineOfst() != 0))
+        else if(rLR.GetTxtFirstLineOfst() && (rLR.GetTxtFirstLineOfst() != 0))
         {
-            if (rRule.GetFirstLineOffset() != pLR->GetTxtFirstLineOfst())
+            if (rRule.GetFirstLineOffset() != rLR.GetTxtFirstLineOfst())
                 bRequired = true;
         }
 
@@ -1452,22 +1466,24 @@ SwNumRule* SwWW8ImplReader::SyncStyleIndentWithList( SwWW8StyInf &rStyle,
             SwNumRule *pNewRule = pLstManager->CreateNextRule(
                 pRule->IsContinusNum() ? true : false);
 
-            for (int i=0;i<MAXLEVEL;i++)
+            for (int i=0; i<MAXLEVEL; ++i)
             {
                 const SwNumFmt& rSubRule = pRule->Get(i);
                 pNewRule->Set( i, rSubRule );
             }
 
             SwNumFmt aRule = pRule->Get(nLevel);
-            aRule.SetAbsLSpace( pLR->GetTxtLeft() );
-            if (pLR->GetTxtFirstLineOfst() != 1)
-                aRule.SetFirstLineOffset( pLR->GetTxtFirstLineOfst() );
+            aRule.SetAbsLSpace(rLR.GetTxtLeft());
+            if (rLR.GetTxtFirstLineOfst() != 1)
+                aRule.SetFirstLineOffset(rLR.GetTxtFirstLineOfst());
             pNewRule->Set( nLevel, aRule );
             pRule = pNewRule;
         }
     }
-    SvxLRSpaceItem aLR;
-    rStyle.pFmt->SetAttr( aLR );
+    SvxLRSpaceItem aLR(rLR);
+    aLR.SetLeft(0);
+    aLR.SetTxtFirstLineOfst(0);
+    rStyle.pFmt->SetAttr(aLR);
     return pRule;
 }
 
