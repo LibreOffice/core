@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:02:26 $
+ *  last change: $Author: thb $ $Date: 2002-11-21 12:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,9 +371,13 @@ BOOL SdDrawDocument::InsertBookmark(
 class SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
 {
 public:
-    virtual ~InsertBookmarkAsPage_PageFunctorBase() = 0 {};
+    virtual ~InsertBookmarkAsPage_PageFunctorBase() = 0;
     virtual void operator()( SdDrawDocument&, SdPage* ) = 0;
 };
+
+SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase::~InsertBookmarkAsPage_PageFunctorBase()
+{
+}
 
 void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList, USHORT nBMSdPageCount,
                                            SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase& rPageIterator )
