@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 17:49:39 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 13:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,6 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
 sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 {
     sal_uInt16 nStartNode, nEndNode;
-    EditSelection   aTmpSel;
-
     sal_Bool bRange = aSel.HasRange();
     if ( bRange )
     {
@@ -374,8 +372,6 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         FormatDoc();
 
     sal_uInt16 nStartNode, nEndNode;
-    EditSelection   aTmpSel;
-
     aSel.Adjust( aEditDoc );
 
     nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
@@ -1960,43 +1956,60 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
     return nFound;
 }
 
+BOOL ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditView )
+{
+    EditSelection aSel( pEditView->pImpEditView->GetEditSelection() );
+
+    aSel.Adjust( aEditDoc );
+    EditPaM aStartPaM( aSel.Max() );
+    if ( rSearchItem.GetSelection() && !rSearchItem.GetBackward() )
+        aStartPaM = aSel.Min();
+
+    EditSelection aFoundSel;
+    BOOL bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
+    if ( bFound && ( aFoundSel == aSel ) )  // Bei Rueckwaetssuche
+    {
+        aStartPaM = aSel.Min();
+        bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
+    }
+
+    pEditView->pImpEditView->DrawSelection();
+    if ( bFound )
+    {
+        // Erstmal das Min einstellen, damit das ganze Wort in den sichtbaren Bereich kommt.
+        pEditView->pImpEditView->SetEditSelection( aFoundSel.Min() );
+        pEditView->ShowCursor( TRUE, FALSE );
+        pEditView->pImpEditView->SetEditSelection( aFoundSel );
+    }
+    else
+        pEditView->pImpEditView->SetEditSelection( aSel.Max() );
+
+    pEditView->pImpEditView->DrawSelection();
+    pEditView->ShowCursor( TRUE, FALSE );
+    return bFound;
+}
+
 sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel )
 {
 #ifndef SVX_LIGHT
-    sal_uInt16 nStartNode, nEndNode;
-
-    EditSelection   aTmpSel;
-    utl::SearchParam    aSearchParam( rSearchItem.GetSearchString(),
-                        utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
-                        rSearchItem.GetWordOnly(), rSearchItem.GetSelection() );
-
-    if ( rSearchItem.GetRegExp() )
-        aSearchParam.SetSrchType( utl::SearchParam::SRCH_REGEXP );
-    else if ( rSearchItem.IsLevenshtein() )
-    {
-        aSearchParam.SetSrchType( utl::SearchParam::SRCH_LEVDIST );
-        aSearchParam.SetSrchRelaxed( rSearchItem.IsLEVRelaxed() ? sal_True : sal_False );
-        aSearchParam.SetLEVOther( rSearchItem.GetLEVOther() );
-        aSearchParam.SetLEVShorter( rSearchItem.GetLEVShorter() );
-        aSearchParam.SetLEVLonger( rSearchItem.GetLEVLonger() );
-    }
+    util::SearchOptions aSearchOptions( rSearchItem.GetSearchOptions() );
+    aSearchOptions.Locale = GetLocale( rStartPos );
 
     sal_Bool bBack = rSearchItem.GetBackward();
-    if ( aSearchParam.IsSrchInSelection() )
+    sal_Bool bSearchInSelection = rSearchItem.GetSelection();
+    sal_uInt16 nStartNode = aEditDoc.GetPos( rStartPos.GetNode() );
+    sal_uInt16 nEndNode;
+    if ( bSearchInSelection )
     {
-        nEndNode = bBack
-                    ? aEditDoc.GetPos( rSearchSelection.Min().GetNode() )
-                    : aEditDoc.GetPos( rSearchSelection.Max().GetNode() );
-        aSearchParam.SetSrchInSelection( sal_True );
+        nEndNode = aEditDoc.GetPos( bBack ? rSearchSelection.Min().GetNode() : rSearchSelection.Max().GetNode() );
     }
     else
     {
         nEndNode = bBack ? 0 : aEditDoc.Count()-1;
     }
 
-    nStartNode = aEditDoc.GetPos( rStartPos.GetNode() );
-    utl::TextSearch aSearcher( aSearchParam, Application::GetAppInternational().GetLanguage() );
+    utl::TextSearch aSearcher( aSearchOptions );
 
     // ueber die Absaetze iterieren...
     for ( sal_uInt16 nNode = nStartNode;
@@ -2007,8 +2020,7 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         if ( nNode >= 0xFFFF )
             return sal_False;
 
-        ContentNode* pNode = aEditDoc.SaveGetObject( nNode );
-        DBG_ASSERT( pNode, "Node nicht gefunden !" );
+        ContentNode* pNode = aEditDoc.GetObject( nNode );
 
         sal_uInt16 nStartPos = 0;
         sal_uInt16 nEndPos = pNode->Len();
@@ -2019,7 +2031,7 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
             else
                 nStartPos = rStartPos.GetIndex();
         }
-        if ( ( nNode == nEndNode ) && aSearchParam.IsSrchInSelection() )
+        if ( ( nNode == nEndNode ) && bSearchInSelection )
         {
             if ( bBack )
                 nStartPos = rSearchSelection.Min().GetIndex();

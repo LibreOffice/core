@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 13:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,9 +735,7 @@ public:
     ULONG           GetTextLen() const;
 
     XubString       GetParaAsString( USHORT nNode ) const;
-    XubString       GetParaAsString( ContentNode* pNode ) const;
-    XubString       GetParaAsString( USHORT nNode, USHORT nStartPos, USHORT nEndPos ) const;
-    XubString       GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos ) const;
+    XubString       GetParaAsString( ContentNode* pNode, USHORT nStartPos = 0, USHORT nEndPos = 0xFFFF, BOOL bResolveFields = TRUE ) const;
 
     inline EditPaM  GetStartPaM() const;
     inline EditPaM  GetEndPaM() const;

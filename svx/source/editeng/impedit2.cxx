@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-08 09:27:41 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 13:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 
 #pragma hdrstop
 
-#include <srchitem.hxx>
-#ifndef _SFXSTRITEM_HXX //autogen
-#include <svtools/stritem.hxx>
-#endif
 #include <lspcitem.hxx>
 #include <flditem.hxx>
 #include <impedit.hxx>
@@ -763,39 +759,6 @@ EditPaM ImpEditEngine::InsertText( EditSelection aSel, const XubString& rStr )
 {
     EditPaM aPaM = ImpInsertText( aSel, rStr );
     return aPaM;
-}
-
-BOOL ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditView )
-{
-    EditSelection aSel( pEditView->pImpEditView->GetEditSelection() );
-
-    aSel.Adjust( aEditDoc );
-    EditPaM aStartPaM( aSel.Max() );
-    if ( rSearchItem.GetSelection() && !rSearchItem.GetBackward() )
-        aStartPaM = aSel.Min();
-
-    EditSelection aFoundSel;
-    BOOL bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
-    if ( bFound && ( aFoundSel == aSel ) )  // Bei Rueckwaetssuche
-    {
-        aStartPaM = aSel.Min();
-        bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
-    }
-
-    pEditView->pImpEditView->DrawSelection();
-    if ( bFound )
-    {
-        // Erstmal das Min einstellen, damit das ganze Wort in den sichtbaren Bereich kommt.
-        pEditView->pImpEditView->SetEditSelection( aFoundSel.Min() );
-        pEditView->ShowCursor( TRUE, FALSE );
-        pEditView->pImpEditView->SetEditSelection( aFoundSel );
-    }
-    else
-        pEditView->pImpEditView->SetEditSelection( aSel.Max() );
-
-    pEditView->pImpEditView->DrawSelection();
-    pEditView->ShowCursor( TRUE, FALSE );
-    return bFound;
 }
 
 EditPaM ImpEditEngine::Clear()
