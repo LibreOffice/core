@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:11:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 07:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ polish ] = "Wybierz Ÿród³o danych:";
         Text[ portuguese_brazilian ] = "Choose a data source:";
         Text[ japanese ] = "ÃŞ°À¿°½‚ğ‘I‘ğ‚µ‚Ü‚·:";
-        Text[ korean ] = "Choose a data source:";
+        Text[ korean ] = "µ¥ÀÌÅÍ¼Ò½º¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À:";
         Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÊı¾İÔ´£º";
         Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½¡G";
         Text[ turkish ] = "Choose a data source:";
@@ -176,7 +176,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "ºŞ²z...";
         Text[ arabic ] = "ÅÏÇÑÉ...";
         Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "±¸¼º...";
+        Text[ korean ] = "Æí¼º...";
         Text[ turkish ] = "Yönet...";
         Text[ language_user1 ] = " ";
     };
@@ -222,7 +222,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
         Text[ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·BODBC ÃŞ°À¿°½‚Ìİ’è‚Í‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ korean ] = "ÇÁ·Î±×·¥ ¶óÀÌºê·¯¸® #lib#¸¦ ·ÎµåÇÒ ¼ö ¾ø¾ú°Å³ª ¶Ç´Â °íÀåÀÔ´Ï´Ù.  ODBCµ¥ÀÌÅÍ ¼Ò½º ÄÁÇÇ±Ô·¹ÀÌ¼ÇÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò¿â #lib# »òÒÑ¾­Ëğ»µ¡£ÎŞ·¨ÅäÖÃ ODBC Êı¾İÔ´¡£";
         Text[ chinese_traditional ] = "µLªk¸Ë¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ·½¡C";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/11/15 21:11:14  kz
+ *  Merge SRC613: 11/15/00 - 22:10:44 (NoBranch)
+ *
  *  Revision 1.4  2000/11/09 12:31:21  kz
  *  Merge SRC612: 09.11.00 - 13:30:55 (NoBranch)
  *
