@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-18 13:48:21 $
+ *  last change: $Author: pb $ $Date: 2002-10-23 07:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _FILEDLGHELPER_HXX
+#include "filedlghelper.hxx"
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -115,10 +118,6 @@
 #include <comphelper/types.hxx>
 #endif
 
-#ifndef _FILEDLGHELPER_HXX
-#include "filedlghelper.hxx"
-#endif
-
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -145,9 +144,11 @@
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
 #endif
-
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -190,16 +191,12 @@
 #ifndef _SFX_OBJFAC_HXX
 #include "docfac.hxx"
 #endif
-#ifndef _SFX_FCONTNR_HXX
-//#include "fcontnr.hxx"
-#endif
 #ifndef _SFX_OPENFLAG_HXX
 #include "openflag.hxx"
 #endif
 #ifndef _SFX_PASSWD_HXX
-#include <passwd.hxx>
+#include "passwd.hxx"
 #endif
-
 #ifndef _SFX_SFXRESID_HXX
 #include "sfxresid.hxx"
 #endif
@@ -397,6 +394,9 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
             updateFilterOptionsBox();
             enablePasswordBox( sal_False );
             updateSelectionBox();
+            // only use it for export and with our own dialog
+            if ( mbExport && !mbSystemPicker )
+                updateExportButton();
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
@@ -552,6 +552,45 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
         ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
         CheckFilterOptionsCapability( getCurentSfxFilter() )
     );
+}
+
+// ------------------------------------------------------------------------
+
+void FileDialogHelper_Impl::updateExportButton()
+{
+    Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    if ( xCtrlAccess.is() )
+    {
+        OUString sEllipses( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+        OUString sOldLabel( xCtrlAccess->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
+
+        // initialize button label; we need the label with the mnemonic char
+        if ( !maButtonLabel.getLength() || maButtonLabel.indexOf( MNEMONIC_CHAR ) == -1 )
+        {
+            // cut the ellipses, if necessary
+            sal_Int32 nIndex = sOldLabel.indexOf( sEllipses );
+            if ( -1 == nIndex )
+                nIndex = sOldLabel.getLength();
+            maButtonLabel = sOldLabel.copy( 0, nIndex );
+        }
+
+        OUString sLabel = maButtonLabel;
+        // filter with options -> append ellipses on export button label
+        if ( CheckFilterOptionsCapability( getCurentSfxFilter() ) )
+            sLabel += OUString( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+
+        if ( sOldLabel != sLabel )
+        {
+            try
+            {
+                xCtrlAccess->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK, sLabel );
+            }
+            catch( const IllegalArgumentException& )
+            {
+                DBG_ERRORFILE( "FileDialogHelper_Impl::updateExportButton: caught an exception!" );
+            }
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1000,6 +1039,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
         mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
+        if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
+        {
+            mxFilterCFG = Reference< XNameAccess >(
+                xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
+                UNO_QUERY );
+        }
         break;
     case FILESAVE_AUTOEXTENSION_TEMPLATE:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
@@ -1058,7 +1103,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
     if ( mbInsert )
     {
         mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_INSERT ) ) ) );
-
         Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
         if ( xExtDlg.is() )
         {
@@ -2295,3 +2339,4 @@ String DecodeSpaces_Impl( const String& rSource )
 // ------------------------------------------------------------------------
 
 }   // end of namespace sfx2
+
