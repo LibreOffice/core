@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-07 10:15:43 $
+ *  last change: $Author: cp $ $Date: 2002-05-16 10:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #endif
 
 #include <unohelp.hxx>
-
+#include <vos/mutex.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1778,6 +1778,18 @@ void DbgPrintMsgBox( const char* pLine )
 #endif
     }
 
+#ifndef REMOTE_APPSERVER
+#ifdef UNX
+    sal_Bool bAcquire = Application::GetSolarMutex().tryToAcquire();
+    if (!bAcquire)
+    {
+        Sound::Beep (SOUND_ERROR);
+        DbgPrintShell (pLine);
+        return;
+    }
+#endif
+#endif
+
     strcpy( aDbgOutBuf, pLine );
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
 
@@ -1847,6 +1859,15 @@ void DbgPrintMsgBox( const char* pLine )
     aBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output (Server)") ) );
     Application::SetSystemWindowMode( nOldMode );
     short nRet = aBox.Execute();
+#endif
+
+#ifndef REMOTE_APPSERVER
+#ifdef UNX
+    if (bAcquire)
+    {
+        Application::GetSolarMutex().release();
+    }
+#endif
 #endif
 
     if ( nRet == RET_YES )
