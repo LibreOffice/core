@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-01 15:10:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COM_SUN_STAR_VIEW_DOCUMENTZOOMTYPE_HPP_
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #endif
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
 
 using namespace com::sun::star;
 
@@ -155,6 +158,8 @@ SV_IMPL_PTRARR( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr );
 SV_IMPL_PTRARR( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr );
 SV_IMPL_PTRARR( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr );
 SV_IMPL_PTRARR( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr );
+SV_IMPL_PTRARR( XMouseClickHandlerArr_Impl, XMouseClickHandlerPtr );
+SV_IMPL_PTRARR( XActivationEventListenerArr_Impl, XActivationEventListenerPtr );
 
 #define SCTABVIEWOBJ_SERVICE        "com.sun.star.sheet.SpreadsheetView"
 #define SCVIEWSETTINGS_SERVICE      "com.sun.star.sheet.SpreadsheetViewSettings"
@@ -460,7 +465,9 @@ ScTabViewObj::ScTabViewObj() :
     SfxBaseController( NULL ),
     ScViewPaneBase( NULL, SC_VIEWPANE_ACTIVE ),
     aPropSet( lcl_GetViewOptPropertyMap() ),
-    bDrawSelModeSet(sal_False)
+    bDrawSelModeSet(sal_False),
+    aMouseClickHandlers( 0 ),
+    aActivationListeners( 0 )
 {
 }
 
@@ -468,7 +475,9 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     SfxBaseController( pViewSh ),
     ScViewPaneBase( pViewSh, SC_VIEWPANE_ACTIVE ),
     aPropSet( lcl_GetViewOptPropertyMap() ),
-    bDrawSelModeSet(sal_False)
+    bDrawSelModeSet(sal_False),
+    aMouseClickHandlers( 0 ),
+    aActivationListeners( 0 )
 {
     //! Listening oder so
 }
@@ -476,12 +485,24 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
 ScTabViewObj::~ScTabViewObj()
 {
     //! Listening oder so
+    if (aMouseClickHandlers.Count())
+    {
+        acquire();
+        EndMouseListening();
+    }
+    if (aActivationListeners.Count())
+    {
+        acquire();
+        EndActivationListening();
+    }
 }
 
 uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( sheet::XSpreadsheetView )
+    SC_QUERYINTERFACE( sheet::XEnhancedMouseClickBroadcaster )
+    SC_QUERYINTERFACE( sheet::XActivationBroadcaster )
     SC_QUERYINTERFACE( container::XEnumerationAccess )
     SC_QUERYINTERFACE( container::XIndexAccess )
     SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
@@ -508,6 +529,35 @@ void SAL_CALL ScTabViewObj::release() throw()
     SfxBaseController::release();
 }
 
+void ScTabViewObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) &&
+            ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_TABLECHANGED )
+    {
+        if (aActivationListeners.Count() > 0)
+        {
+            sheet::ActivationEvent aEvent;
+            uno::Reference< sheet::XSpreadsheetView > xView(this);
+            uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
+            aEvent.Source = xSource;
+            aEvent.ActiveSheet = new ScTableSheetObj(GetViewShell()->GetViewData()->GetDocShell(), GetViewShell()->GetViewData()->GetTabNo());
+            for ( USHORT n=0; n<aActivationListeners.Count(); n++ )
+            {
+                try
+                {
+                    (*aActivationListeners[n])->activeSpreadsheetChanged( aEvent );
+                }
+                catch( uno::Exception e )
+                {
+                    aActivationListeners.DeleteAndDestroy( n );
+                    --n; // because it will be increased again in the loop
+                }
+            }
+        }
+    }
+    ScViewPaneBase::Notify(rBC, rHint);
+}
+
 uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeException)
 {
     static uno::Sequence<uno::Type> aTypes;
@@ -523,7 +573,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
 
         long nParentLen = nViewPaneLen + nControllerLen;
 
-        aTypes.realloc( nParentLen + 9 );
+        aTypes.realloc( nParentLen + 11 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetView>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
@@ -534,6 +584,8 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
         pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XViewFreezable>*)0);
         pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XRangeSelection>*)0);
         pPtr[nParentLen + 8] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XEnhancedMouseClickBroadcaster>*)0);
+        pPtr[nParentLen + 10] = getCppuType((const uno::Reference<sheet::XActivationBroadcaster>*)0);
 
         long i;
         for (i=0; i<nViewPaneLen; i++)
@@ -1071,6 +1123,246 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
             }
         }
     }
+}
+
+uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rPoint) const
+{
+    uno::Reference< uno::XInterface > xTarget;
+    if (GetViewShell())
+    {
+        sal_Int16 nX, nY;
+        ScViewData* pData = GetViewShell()->GetViewData();
+        ScSplitPos eSplitMode = pData->GetActivePart();
+        sal_Int16 nTab(pData->GetTabNo());
+        pData->GetPosFromPixel( rPoint.X(), rPoint.Y(), eSplitMode, nX, nY);
+
+        ScAddress aCellPos (nX, nY, nTab);
+        ScCellObj* pCellObj = new ScCellObj(pData->GetDocShell(), aCellPos);
+
+        xTarget.set(uno::Reference<table::XCell>(pCellObj), uno::UNO_QUERY);
+
+        ScDocument* pDoc = pData->GetDocument();
+        if (pDoc && pDoc->GetDrawLayer())
+        {
+            SdrPage* pDrawPage = NULL;
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
+                pDrawPage = pDrawLayer->GetPage(nTab);
+
+            if (pDrawPage)
+            {
+                Point aPos = pData->GetActiveWin()->PixelToLogic(rPoint);
+
+                sal_uInt32 nCount(pDrawPage->GetObjCount());
+                sal_Bool bFound(sal_False);
+                sal_uInt32 i(0);
+                while (i < nCount && !bFound)
+                {
+                    SdrObject* pObj = pDrawPage->GetObj(i);
+                    if (pObj && pObj->IsHit(aPos, -2))
+                    {
+                        xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
+                        bFound = sal_True;
+                    }
+                    ++i;
+                }
+            }
+        }
+    }
+    return xTarget;
+}
+
+sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
+                                    throw (::uno::RuntimeException)
+{
+    sal_Bool bReturn(sal_False);
+
+    if (aMouseClickHandlers.Count())
+    {
+        uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
+
+        if (xTarget.is())
+        {
+            awt::EnhancedMouseEvent aMouseEvent;
+
+            aMouseEvent.Buttons = e.Buttons;
+            aMouseEvent.X = e.X;
+            aMouseEvent.Y = e.Y;
+            aMouseEvent.ClickCount = e.ClickCount;
+            aMouseEvent.PopupTrigger = e.PopupTrigger;
+            aMouseEvent.Target = xTarget;
+
+            for ( USHORT n=0; n<aMouseClickHandlers.Count(); n++ )
+            {
+                try
+                {
+                    if (!(*aMouseClickHandlers[n])->mousePressed( aMouseEvent ))
+                        bReturn = sal_True;
+                }
+                catch ( uno::Exception e )
+                {
+                    aMouseClickHandlers.DeleteAndDestroy(n);
+                    --n; // because it will be increased again in the loop
+                }
+            }
+        }
+    }
+    return bReturn;
+}
+
+sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
+                                    throw (uno::RuntimeException)
+{
+    sal_Bool bReturn(sal_False);
+
+    if (aMouseClickHandlers.Count())
+    {
+        uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
+
+        if (xTarget.is())
+        {
+            awt::EnhancedMouseEvent aMouseEvent;
+
+            aMouseEvent.Buttons = e.Buttons;
+            aMouseEvent.X = e.X;
+            aMouseEvent.Y = e.Y;
+            aMouseEvent.ClickCount = e.ClickCount;
+            aMouseEvent.PopupTrigger = e.PopupTrigger;
+            aMouseEvent.Target = xTarget;
+
+            for ( USHORT n=0; n<aMouseClickHandlers.Count(); n++ )
+            {
+                try
+                {
+                    if (!(*aMouseClickHandlers[n])->mouseReleased( aMouseEvent ))
+                        bReturn = sal_True;
+                }
+                catch ( uno::Exception e )
+                {
+                    aMouseClickHandlers.DeleteAndDestroy(n);
+                    --n; // because it will be increased again in the loop
+                }
+            }
+        }
+    }
+    return bReturn;
+}
+
+// XEnhancedMouseClickBroadcaster
+
+void ScTabViewObj::StartMouseListening()
+{
+}
+
+void ScTabViewObj::EndMouseListening()
+{
+    USHORT nCount(aMouseClickHandlers.Count());
+    lang::EventObject aEvent;
+    aEvent.Source = (cppu::OWeakObject*)this;
+    for ( USHORT n=0; n<nCount; n++ )
+    {
+        try
+        {
+            (*aMouseClickHandlers[n])->disposing(aEvent);
+        }
+        catch ( uno::Exception e )
+        {
+        }
+    }
+    aMouseClickHandlers.DeleteAndDestroy(0, nCount);
+}
+
+void ScTabViewObj::StartActivationListening()
+{
+    if (GetViewShell() && GetViewShell()->GetViewData()->GetDocument())
+        GetViewShell()->GetViewData()->GetDocument()->AddUnoObject(*this);
+}
+
+void ScTabViewObj::EndActivationListening()
+{
+    USHORT nCount = aActivationListeners.Count();
+    lang::EventObject aEvent;
+    aEvent.Source = (cppu::OWeakObject*)this;
+    for ( USHORT n=0; n<nCount; n++ )
+    {
+        try
+        {
+            (*aActivationListeners[n])->disposing(aEvent);
+        }
+        catch ( uno::Exception e )
+        {
+        }
+    }
+    aActivationListeners.DeleteAndDestroy(0, nCount);
+
+    if (GetViewShell() && GetViewShell()->GetViewData()->GetDocument())
+        GetViewShell()->GetViewData()->GetDocument()->RemoveUnoObject(*this);
+}
+
+void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< awt::XEnhancedMouseClickHandler >& aListener )
+                                    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if (aListener.is())
+    {
+        USHORT nCount = aMouseClickHandlers.Count();
+        uno::Reference<awt::XEnhancedMouseClickHandler> *pObj =
+                new uno::Reference<awt::XEnhancedMouseClickHandler>( aListener );
+        aMouseClickHandlers.Insert( pObj, nCount );
+
+        if (aMouseClickHandlers.Count() == 1 && nCount == 0) // only if a listener added
+            StartMouseListening();
+    }
+}
+
+void SAL_CALL ScTabViewObj::removeEnhancedMouseClickHandler( const uno::Reference< awt::XEnhancedMouseClickHandler >& aListener )
+                                    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nCount = aMouseClickHandlers.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<awt::XEnhancedMouseClickHandler> *pObj = aMouseClickHandlers[n];
+        if ( *pObj == aListener )
+            aMouseClickHandlers.DeleteAndDestroy( n );
+    }
+    if ((aMouseClickHandlers.Count() == 0) && (nCount > 0)) // only if last listener removed
+        EndMouseListening();
+}
+
+// XActivationBroadcaster
+
+void SAL_CALL ScTabViewObj::addActivationEventListener( const uno::Reference< sheet::XActivationEventListener >& aListener )
+                                    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if (aListener.is())
+    {
+        USHORT nCount = aActivationListeners.Count();
+        uno::Reference<sheet::XActivationEventListener> *pObj =
+                new uno::Reference<sheet::XActivationEventListener>( aListener );
+        aActivationListeners.Insert( pObj, nCount );
+
+        if (aActivationListeners.Count() == 1 && nCount == 0) // only if a listener added
+            StartActivationListening();
+    }
+}
+
+void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference< sheet::XActivationEventListener >& aListener )
+                                    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nCount = aActivationListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<sheet::XActivationEventListener> *pObj = aActivationListeners[n];
+        if ( *pObj == aListener )
+            aActivationListeners.DeleteAndDestroy( n );
+    }
+    if ((aActivationListeners.Count() == 0) && (nCount > 0)) // only if last listener removed
+        EndActivationListening();
 }
 
 //  PageBreakMode / Zoom sind Properties
