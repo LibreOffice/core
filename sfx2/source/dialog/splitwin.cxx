@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:41:08 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
 {
     if ( bWithButtons )
     {
-        ShowAutoHideButton( TRUE );
+        ShowAutoHideButton( FALSE );    // no autohide button (pin) anymore
         ShowFadeOutButton( TRUE );
     }
 
@@ -287,7 +287,8 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
             pEmptyWin->nState = (USHORT) aWinData.GetToken( 1, ',' ).ToInt32();
             if ( pEmptyWin->nState & 2 )
                 pEmptyWin->bFadeIn = TRUE;
-            bPinned = !( pEmptyWin->nState & 1 );
+            //bPinned = !( pEmptyWin->nState & 1 );
+            bPinned = TRUE; // always assume pinned - floating mode not used anymore
 
             USHORT i=2;
             USHORT nCount = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
