@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:29:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1979,8 +1979,10 @@ namespace /* private */
 
         *pDest++ = 0;
 
-        if ( bValidEncoded )
+        if ( bValidEncoded ) {
             rtl_string2UString( pstrDecodedURL, pBuffer, rtl_str_getLength(pBuffer), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
+            OSL_ASSERT(*pstrDecodedURL != 0);
+        }
 
         rtl_freeMemory( pBuffer );
 
@@ -2207,6 +2209,7 @@ namespace /* private */
             /* Provide URL via unicode string */
 
             rtl_string2UString( pstrURL, rtl_string_getStr(strEncodedURL), rtl_string_getLength(strEncodedURL), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
+            OSL_ASSERT(*pstrURL != 0);
             rtl_string_release( strEncodedURL );
         }
 
