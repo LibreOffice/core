@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:28:20 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 07:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include "rvp.hxx"
 #include <vos/mutex.hxx>
 #include <comphelper/processfactory.hxx>
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 
