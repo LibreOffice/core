@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 13:51:34 $
+#   last change: $Author: rt $ $Date: 2005-03-30 08:08:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,16 +70,9 @@ PRJINC=..$/..
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :      settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Common ----------------------------------------------------------
-
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
-.ENDIF
-
-.IF "$(debug)"!="" || "$(DEBUG)"!=""
-CDEFS+= -DBOOST_SP_ENABLE_DEBUG_HOOKS
-.ENDIF
 
 SLOFILES = \
         $(SLO)$/barwipepolypolygon.obj \
