@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:47:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,60 +680,63 @@ void SwRTFWriter::OutInfoDateTime( const DateTime& rDT, const char* pStr )
     OutLong( Strm(), rDT.GetMin() ) << '}';
 }
 
+bool CharsetSufficient(const String &rString, rtl_TextEncoding eChrSet)
+{
+    const sal_uInt32 nFlags =
+        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+        RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
+    rtl::OString sDummy;
+    rtl::OUString sStr(rString);
+    return sStr.convertToString(&sDummy, eChrSet, nFlags);
+}
+
+void SwRTFWriter::OutUnicodeSafeRecord(const sal_Char *pToken,
+    const String &rContent)
+{
+    if (rContent.Len())
+    {
+        bool bNeedUnicodeWrapper = !CharsetSufficient(rContent, DEF_ENCODING);
+
+        if (bNeedUnicodeWrapper)
+            Strm() << '{' << sRTF_UPR;
+
+        Strm() << '{' << pToken << ' ';
+        OutRTF_AsByteString(*this, rContent);
+        Strm() << '}';
+
+        if (bNeedUnicodeWrapper)
+        {
+            OutComment(*this, sRTF_UD);
+            Strm() << '{' << pToken << ' ';
+            RTFOutFuncs::Out_String(Strm(), rContent, DEF_ENCODING,
+                bWriteHelpFmt);
+            Strm() << '}}}';
+        }
+
+    }
+}
+
 void SwRTFWriter::OutDocInfoStat()
 {
     Strm() << '{' << sRTF_INFO;
 
-    const SfxDocumentInfo* pInfo = pDoc->GetpInfo();
-    if( pInfo )
+    if (const SfxDocumentInfo* pInfo = pDoc->GetpInfo())
     {
-        const String* pStr = &pInfo->GetTitle();
-        if( pStr->Len() )
-        {
-            Strm() << '{' << sRTF_TITLE << ' ';
-            RTFOutFuncs::Out_String( Strm(), *pStr, DEF_ENCODING,
-                                        bWriteHelpFmt ) << '}';
-        }
-        if( (pStr = &pInfo->GetTheme())->Len() )
-        {
-            Strm() << '{' << sRTF_SUBJECT << ' ';
-            RTFOutFuncs::Out_String( Strm(), *pStr, DEF_ENCODING,
-                                        bWriteHelpFmt ) << '}';
-        }
-        if( (pStr = &pInfo->GetKeywords())->Len() )
-        {
-            Strm() << '{' << sRTF_KEYWORDS << ' ';
-            RTFOutFuncs::Out_String( Strm(), *pStr, DEF_ENCODING,
-                                        bWriteHelpFmt ) << '}';
-        }
-        if( (pStr = &pInfo->GetComment())->Len() )
-        {
-            Strm() << '{' << sRTF_DOCCOMM << ' ';
-            RTFOutFuncs::Out_String( Strm(), *pStr, DEF_ENCODING,
-                                        bWriteHelpFmt ) << '}';
-        }
+        OutUnicodeSafeRecord(sRTF_TITLE, pInfo->GetTitle());
+        OutUnicodeSafeRecord(sRTF_SUBJECT, pInfo->GetTheme());
+        OutUnicodeSafeRecord(sRTF_KEYWORDS, pInfo->GetKeywords());
+        OutUnicodeSafeRecord(sRTF_DOCCOMM, pInfo->GetComment());
 
-        const SfxStamp* pStamp = &pInfo->GetCreated();
-        if( ( pStr = &pStamp->GetName())->Len() )
-        {
-            Strm() << '{' << sRTF_AUTHOR << ' ';
-            RTFOutFuncs::Out_String( Strm(), *pStr, DEF_ENCODING,
-                                        bWriteHelpFmt ) << '}';
-        }
-        OutInfoDateTime( pStamp->GetTime(), sRTF_CREATIM );
+        const SfxStamp &rCreateStamp = pInfo->GetCreated();
+        OutUnicodeSafeRecord(sRTF_AUTHOR, rCreateStamp.GetName());
+        OutInfoDateTime(rCreateStamp.GetTime(), sRTF_CREATIM);
 
-        pStamp = &pInfo->GetChanged();
-        if( ( pStr = &pStamp->GetName())->Len() )
-        {
-            Strm() << '{' << sRTF_OPERATOR << ' ';
-            RTFOutFuncs::Out_String( Strm(), *pStr, DEF_ENCODING,
-                                        bWriteHelpFmt ) << '}';
-        }
-        OutInfoDateTime( pStamp->GetTime(), sRTF_REVTIM );
+        const SfxStamp &rChangeStamp = pInfo->GetChanged();
+        OutUnicodeSafeRecord(sRTF_AUTHOR, rChangeStamp.GetName());
+        OutInfoDateTime(rChangeStamp.GetTime(), sRTF_REVTIM);
 
-        OutInfoDateTime( pInfo->GetPrinted().GetTime(), sRTF_PRINTIM );
+        OutInfoDateTime(pInfo->GetPrinted().GetTime(), sRTF_PRINTIM);
     }
-
 
     // fuer interne Zwecke - Versionsnummer rausschreiben
     Strm() << '{' << sRTF_COMMENT << " StarWriter}{" << sRTF_VERN;
@@ -741,7 +744,6 @@ void SwRTFWriter::OutDocInfoStat()
 
     Strm() << '}';
 }
-
 
 static void InsColor( RTFColorTbl& rTbl, const Color& rCol )
 {
@@ -767,7 +769,6 @@ static void InsColorLine( RTFColorTbl& rTbl, const SvxBoxItem& rBox )
     if( rBox.GetRight() && pLine != rBox.GetRight()  )
         InsColor( rTbl, rBox.GetRight()->GetColor() );
 }
-
 
 void SwRTFWriter::OutRTFColorTab()
 {
@@ -881,18 +882,9 @@ void SwRTFWriter::OutRTFColorTab()
 bool FontCharsetSufficient(const String &rFntNm, const String &rAltNm,
     rtl_TextEncoding eChrSet)
 {
-    bool bRet = true;
-    const sal_uInt32 nFlags =
-        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
-    RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
-    rtl::OString sDummy;
-    rtl::OUString sStr(rFntNm);
-    bRet = sStr.convertToString(&sDummy, eChrSet, nFlags);
+    bool bRet = CharsetSufficient(rFntNm, eChrSet);
     if (bRet)
-    {
-        rtl::OUString sOther(rFntNm);
-        bRet = sOther.convertToString(&sDummy, eChrSet, nFlags);
-    }
+        bRet = CharsetSufficient(rAltNm, eChrSet);
     return bRet;
 }
 
@@ -938,10 +930,7 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     }
     rWrt.OutULong(nVal);
 
-    String sFntNm(GetFontToken( rFont.GetFamilyName(), 0));
-    String sAltNm(GetSubsFontName( sFntNm, SUBSFONT_ONLYONE | SUBSFONT_MS));
-    if(!sAltNm.Len())   // or contains the name itself a list?
-        sAltNm = GetFontToken( rFont.GetFamilyName(), 1 );
+    sw::util::FontMapExport aRes(rFont.GetFamilyName());
 
     /*
      #i10538#
@@ -952,27 +941,27 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     rtl_TextEncoding eChrSet = rFont.GetCharSet();
     nChSet = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
     eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
-    if (!FontCharsetSufficient(sFntNm, sAltNm, eChrSet))
+    if (!FontCharsetSufficient(aRes.msPrimary, aRes.msSecondary, eChrSet))
     {
         eChrSet = RTL_TEXTENCODING_UNICODE;
         nChSet = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
-    eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
+        eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
     }
 
     rWrt.Strm() << sRTF_FCHARSET;
     rWrt.OutULong( nChSet );
     rWrt.Strm() << ' ';
-    if (sAltNm.Len() && sAltNm != sFntNm)
+    if (aRes.HasDistinctSecondary())
     {
-        RTFOutFuncs::Out_Fontname(rWrt.Strm(), sFntNm, eChrSet,
+        RTFOutFuncs::Out_Fontname(rWrt.Strm(), aRes.msPrimary, eChrSet,
             rWrt.bWriteHelpFmt);
         OutComment(rWrt, sRTF_FALT) << ' ';
-        RTFOutFuncs::Out_Fontname(rWrt.Strm(), sAltNm, eChrSet,
+        RTFOutFuncs::Out_Fontname(rWrt.Strm(), aRes.msSecondary, eChrSet,
             rWrt.bWriteHelpFmt) << '}';
     }
     else
     {
-        RTFOutFuncs::Out_Fontname(rWrt.Strm(), sFntNm, eChrSet,
+        RTFOutFuncs::Out_Fontname(rWrt.Strm(), aRes.msPrimary, eChrSet,
             rWrt.bWriteHelpFmt);
     }
     rWrt.Strm() << ";}";
@@ -982,23 +971,23 @@ void SwRTFWriter::OutRTFFontTab()
 {
     USHORT n = 0;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
-    const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT );
+    const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr(RES_CHRATR_FONT);
 
     Strm() << SwRTFWriter::sNewLine << '{' << sRTF_FONTTBL;
     _OutFont( *this, *pFont, n++ );
 
-    if( 0 != ( pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(
-                                                        RES_CHRATR_FONT )))
-        _OutFont( *this, *pFont, n++ );
+    if (pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT))
+        _OutFont(*this, *pFont, n++);
 
     PutNumFmtFontsInAttrPool();
     PutCJKandCTLFontsInAttrPool();
 
-    USHORT nMaxItem = rPool.GetItemCount( RES_CHRATR_FONT );
-    for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem(
-            RES_CHRATR_FONT, nGet )) )
-        _OutFont( *this, *pFont, n++ );
+    USHORT nMaxItem = rPool.GetItemCount(RES_CHRATR_FONT);
+    for (USHORT nGet = 0; nGet < nMaxItem; ++nGet)
+    {
+        if (pFont = (const SvxFontItem*)rPool.GetItem(RES_CHRATR_FONT, nGet))
+            _OutFont(*this, *pFont, n++);
+    }
 
     Strm() << '}';
 }
