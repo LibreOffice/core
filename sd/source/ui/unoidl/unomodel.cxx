@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:12:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 10:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,9 @@
 #ifndef _SVX_UNOFORBIDDENCHARSTABLE_HXX_
 #include <svx/UnoForbiddenCharsTable.hxx>
 #endif
-
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
+#endif
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
 #endif
@@ -1686,6 +1688,10 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 ::sd::ViewShell* pOldViewSh = pDocShell->GetViewShell();
                 ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
+
+                if  ( pOldSdView )
+                    pOldSdView->EndTextEdit();
+
                 ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
                     pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL );
 
@@ -1703,10 +1709,17 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xModel == pDocShell->GetModel() )
                 {
-                    pView->ShowPage( pDoc->GetSdPage(
-                        (USHORT)nPageNumber - 1, PK_STANDARD ), aOrigin );
+                    pView->ShowPage( pDoc->GetSdPage( (USHORT)nPageNumber - 1, PK_STANDARD ), aOrigin );
                     SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
-                    pPV->CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
+
+                    // background color for outliner :o
+                    SdPage* pPage = (SdPage*)pPV->GetPage();
+                    if( pPage )
+                    {
+                        SdrOutliner& rOutl = pDoc->GetDrawOutliner( NULL );
+                        rOutl.SetBackgroundColor( pPage->GetBackgroundColor( pPV ) );
+                    }
+                    pPV->InitRedraw( pOut, aRegion, 0, &aRenderPaintProc );
                 }
                 else
                 {
