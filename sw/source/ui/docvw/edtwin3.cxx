@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-10 11:46:46 $
+ *  last change: $Author: os $ $Date: 2002-06-12 08:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 
 #pragma hdrstop
 
+#include <hintids.hxx>
+#include "uiparam.hxx"
 #ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
 #endif
@@ -85,6 +87,13 @@
 #include "modcfg.hxx"
 #include "swtable.hxx"
 #include "docsh.hxx"
+#include "pagedesc.hxx"     // Aktuelles Seitenformat
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 
 
 /*--------------------------------------------------------------------
@@ -166,17 +175,13 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 /*--------------------------------------------------------------------
     Beschreibung:   Notify fuer Seitenzahl-Update
  --------------------------------------------------------------------*/
-
-
-
-BOOL SwEditWin::RulerClook( SwView& rView , const MouseEvent& rMEvt)
+BOOL SwEditWin::RulerColumnDrag( SwView& rView , const MouseEvent& rMEvt, BOOL bVerticalMode)
 {
-    return (!rView.GetHLineal().StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
-            !rView.GetHLineal().StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
-            !rView.GetHLineal().StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
+    SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
+    return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
+            !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
+            !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
 }
-
-
 
 Dialog* GetSearchDialog()
 {
