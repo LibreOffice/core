@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
-#   last change: $Author: rt $ $Date: 2004-11-04 08:40:06 $
+#   $Revision: 1.4 $
+#   last change: $Author: rt $ $Date: 2004-11-05 13:48:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ LIBTARGET=no
 NO_DEFAULT_STL=TRUE
 # --- Settings -----------------------------------------------------
 
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
 .INCLUDE :  libs.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
