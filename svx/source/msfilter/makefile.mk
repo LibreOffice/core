@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-23 17:26:23 $
+#   last change: $Author: rt $ $Date: 2003-04-24 13:26:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/escherex.obj	\
     $(SLO)$/msdffimp.obj	\
     $(SLO)$/msocximex.obj	\
+    $(SLO)$/msoleexp.obj	\
     $(SLO)$/msfiltertracer.obj
 
 .INCLUDE :  target.mk
