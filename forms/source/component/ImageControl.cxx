@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:53:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-22 09:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,7 +637,7 @@ Sequence<Type> OImageControlControl::_getTypes()
 //------------------------------------------------------------------------------
 OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
-    ,m_pImageIndicator( m_pImageIndicator.createUnambiguous( new OImageIndicator ) )
+    ,m_pImageIndicator( new OImageIndicator )
 {
     increment(m_refCount);
     {
