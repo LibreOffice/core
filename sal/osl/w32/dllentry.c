@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 11:21:19 $
+ *  last change: $Author: tra $ $Date: 2002-12-05 21:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ static sal_Bool showMessage(int MessageId)
 
     MessageBox( NULL,
                 pStr,
-                "Sun Microsystems - System Abstraction Layer",
+                "OpenOffice.org - System Abstraction Layer",
                 MB_OK | MB_ICONWARNING | MB_TASKMODAL );
 
     return ( sal_True );
