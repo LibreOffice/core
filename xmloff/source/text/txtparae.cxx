@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:34:16 $
+ *  last change: $Author: mib $ $Date: 2001-11-07 13:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ OUString XMLTextParagraphExport::Find(
         }
     }
     OSL_ENSURE( XML_STYLE_FAMILY_TEXT_TEXT != nFamily,
-                "Calling find for text styles is ineffeicent, use FindTextStyle" );
+                "Calling find for text styles is inefficent and might go wrong, use FindTextStyle" );
     if( XML_STYLE_FAMILY_TEXT_TEXT == nFamily )
     {
         // Get parent and remove hyperlinks (they aren't of interest)
@@ -658,7 +658,8 @@ OUString XMLTextParagraphExport::Find(
 
 OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
            const Reference < XPropertySet > & rPropSet,
-        sal_Bool& rHyperlink  ) const
+        sal_Bool& rHyperlink,
+        const XMLPropertyState** ppAddStates ) const
 {
     UniReference < SvXMLExportPropertyMapper > xPropMapper
         = GetTextPropMapper();
@@ -688,6 +689,14 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             i->mnIndex = -1;
             nIgnoreProps++;
             break;
+        }
+    }
+    if( ppAddStates )
+    {
+        while( *ppAddStates )
+        {
+            xPropStates.push_back( **ppAddStates );
+            ppAddStates++;
         }
     }
     if( (xPropStates.size() - nIgnoreProps) > 0L )
