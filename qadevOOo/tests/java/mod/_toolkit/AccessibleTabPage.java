@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabPage.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 20:39:58 $
+ *  last change:$Date: 2004-07-23 10:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,16 +296,15 @@ public class AccessibleTabPage extends TestCase {
 
         shortWait();
 
+        XInterface xEventInt = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Variables");
+        final XAccessibleComponent eventAccComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                               XAccessibleComponent.class,
+                                               xEventInt);
+
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                try {
-                    Robot rob = new Robot();
-                    rob.mouseMove(point.X + 20, point.Y + 70);
-                    rob.mousePress(InputEvent.BUTTON1_MASK);
-                } catch (java.awt.AWTException e) {
-                    System.out.println("couldn't fire event");
-                }
+               eventAccComp.grabFocus();
             }
         });
 
