@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 16:39:27 $
+ *  last change: $Author: dvo $ $Date: 2001-02-19 11:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ class XMLSectionFootnoteConfigExport
 {
 
 public:
-    static void export(
+    static void exportXML(
         const SvXMLExport& rExport,
         sal_Bool bEndnote,
         const ::std::vector<XMLPropertyState> * pProperties,
