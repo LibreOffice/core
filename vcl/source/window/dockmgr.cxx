@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:03:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1228,21 +1228,14 @@ BOOL ImplDockingWindowWrapper::Close()
 
 void ImplDockingWindowWrapper::ToggleFloatingMode()
 {
-    // notify listeners
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
-
     // notify dockingwindow/toolbox
-    // note: this should (was: must) be done before notifying the
+    // note: this must be done *before* notifying the
     //       listeners to have the toolbox in the proper state
-
-    // !!! putting this before the notification somehow leads to formatting errors
-    //  when undocking horizontal toolbars by double click, so better keep it here until
-    // fully understood
-    // as a result undocking vertical toolbars via double click changes the layout of
-    // the toolbar buttons, which is a minor problem...
     if( GetWindow()->ImplIsDockingWindow() )
         ((DockingWindow*) GetWindow())->ToggleFloatingMode();
 
+    // now notify listeners
+    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
     mbStartDockingEnabled = FALSE;
