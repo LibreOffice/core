@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:47:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2624,7 +2624,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     xFltMgr->appendFilter( sFilterAllData, C2U("*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv"));
 
     xFltMgr->appendFilter( sFilterSXB, C2U("*.odb") );
-    xFltMgr->appendFilter( sFilterSXC, C2U("*.sxc") );
+    xFltMgr->appendFilter( sFilterSXC, C2U("*.ods;*.sxc") );
     xFltMgr->appendFilter( sFilterDBF, C2U("*.dbf") );
     xFltMgr->appendFilter( sFilterXLS, C2U("*.xls") );
     xFltMgr->appendFilter( sFilterTXT, C2U("*.txt") );
