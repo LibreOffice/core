@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:08:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
+#endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -624,7 +627,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
         aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
     }
 
-    SetUnderline( pAttrSet->GetUnderline().GetUnderline() );
+    const FontUnderline eUnderline = pAttrSet->GetUnderline().GetUnderline();
+    if ( pAttrSet->GetCharHidden().GetValue() )
+        SetUnderline( UNDERLINE_DOTTED );
+    else
+        SetUnderline( eUnderline );
     SetUnderColor( pAttrSet->GetUnderline().GetColor() );
     SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
