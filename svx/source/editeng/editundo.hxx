@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editundo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:57:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,15 +182,8 @@ public:
                     TYPEINFO();
                     EditUndoRemoveChars( ImpEditEngine* pImpEE, const EPaM& rEPaM, const String& rStr );
 
-#if defined(MACOSX) && ( __GNUC__ < 3 )
-        // implementations moved to impedit2.cxx
-        // fixme revisit after gcc3
-    const EPaM&     GetEPaM();
-    String&         GetStr();
-#else
     const EPaM&     GetEPaM() { return aEPaM; }
     String&         GetStr() { return aText; }
-#endif
 
     virtual void    Undo();
     virtual void    Redo();
