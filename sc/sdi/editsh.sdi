@@ -20,6 +20,10 @@ interface TableText : Selection
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FID_INSERT_NAME     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
+    SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
+    SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
+    SID_REPEAT          [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
+
      // ---- Attribute:
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
