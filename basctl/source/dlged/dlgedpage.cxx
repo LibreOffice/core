@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:13:27 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,14 @@
 #include "dlgedpage.hxx"
 #endif
 
+#ifndef _BASCTL_DLGED_HXX
+#include "dlged.hxx"
+#endif
 #ifndef _BASCTL_DLGEDMOD_HXX
 #include "dlgedmod.hxx"
+#endif
+#ifndef _BASCTL_DLGEDOBJ_HXX
+#include "dlgedobj.hxx"
 #endif
 
 
@@ -73,15 +79,15 @@ TYPEINIT1( DlgEdPage, SdrPage );
 
 //----------------------------------------------------------------------------
 
-DlgEdPage::DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage ) :
-    SdrPage( rModel, bMasterPage )
+DlgEdPage::DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage )
+    :SdrPage( rModel, bMasterPage )
 {
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdPage::DlgEdPage( const DlgEdPage& rPage )
-    : SdrPage( rPage )
+    :SdrPage( rPage )
 {
     pDlgEdForm = rPage.pDlgEdForm;
 }
@@ -102,4 +108,19 @@ SdrPage* DlgEdPage::Clone() const
 
 //----------------------------------------------------------------------------
 
+SdrObject* DlgEdPage::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
+{
+    SdrObject* pObj = SdrPage::SetObjectOrdNum( nOldObjNum, nNewObjNum );
 
+    DlgEdHint aHint( DLGED_HINT_OBJORDERCHANGED );
+    if ( pDlgEdForm )
+    {
+        DlgEditor* pDlgEditor = pDlgEdForm->GetDlgEditor();
+        if ( pDlgEditor )
+            pDlgEditor->Broadcast( aHint );
+    }
+
+    return pObj;
+}
+
+//----------------------------------------------------------------------------
