@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 18:14:48 $
+ *  last change: $Author: dvo $ $Date: 2002-04-04 13:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,10 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     // RES_PARATR_VERTALIGN
     M_E( "ParaVertAlignment", STYLE, VERTICAL_ALIGN,    XML_TYPE_TEXT_VERTICAL_ALIGN, 0 ),
+
+    // RES_PARATR_SNAPTOGRID
+    M_E( "SnapToGrid", STYLE, SNAP_TO_LAYOUT_GRID, XML_TYPE_BOOL, 0 ),
+
     M_END()
 };
 

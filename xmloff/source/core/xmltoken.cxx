@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 12:38:11 $
+ *  last change: $Author: dvo $ $Date: 2002-04-04 13:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2101,6 +2101,8 @@ namespace xmloff { namespace token {
         TOKEN( "layout-grid-ruby-below" ),     // XML_LAYOUT_GRID_RUBY_BELOW
         TOKEN( "layout-grid-print" ),          // XML_LAYOUT_GRID_PRINT
         TOKEN( "layout-grid-display" ),        // XML_LAYOUT_GRID_DISPLAY
+
+        TOKEN( "snap-to-layout-grid" ),        // XML_SNAP_TO_LAYOUT_GRID
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
