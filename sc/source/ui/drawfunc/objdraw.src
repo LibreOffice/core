@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:28:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,6 +1438,60 @@ Menu RID_POPUP_GRAPHIC
          //------------------------------
         ITEM_GROUP_MENU
        };
+};
+
+ //
+ //     Media
+ //
+
+Menu RID_POPUP_MEDIA
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+        MN_RENAME_OBJECT
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+       };
+};
+
+ToolBox RID_MEDIA_OBJECTBAR
+{
+    //HelpId = HID_SC_TOOLBOX_MEDIA ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_AVMEDIA_TOOLBOX;
+            HelpID = SID_AVMEDIA_TOOLBOX;
+            DropDown = FALSE ;
+            Checkable = FALSE ;
+            RadioCheck = FALSE ;
+        };
+    };
 };
 
  //
