@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-14 11:13:38 $
+ *  last change: $Author: mt $ $Date: 2001-12-18 11:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,13 +656,13 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
 
         // ueber die Items iterieren...
 #ifdef EDITDEBUG
-        FILE* fp = fopen( "d:\\debug.log", "a" );
-        if ( fp )
-        {
-            fprintf( fp, "\n\n=> Zeichen-Attribute: Absatz %i, %i-%i\n", nNode, nStartPos, nEndPos );
-            DbgOutItemSet( fp, rSet, TRUE, FALSE );
-            fclose( fp );
-        }
+//      FILE* fp = fopen( "d:\\debug.log", "a" );
+//      if ( fp )
+//      {
+//          fprintf( fp, "\n\n=> Zeichen-Attribute: Absatz %i, %i-%i\n", nNode, nStartPos, nEndPos );
+//          DbgOutItemSet( fp, rSet, TRUE, FALSE );
+//          fclose( fp );
+//      }
 #endif
 
         for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
@@ -816,13 +816,13 @@ void ImpEditEngine::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
         return;
 
 #ifdef EDITDEBUG
-        FILE* fp = fopen( "d:\\debug.log", "a" );
-        if ( fp )
-        {
-            fprintf( fp, "\n\n=> Absatz-Attribute: Absatz %i\n", nPara );
-            DbgOutItemSet( fp, rSet, TRUE, FALSE );
-            fclose( fp );
-        }
+//      FILE* fp = fopen( "d:\\debug.log", "a" );
+//      if ( fp )
+//      {
+//          fprintf( fp, "\n\n=> Absatz-Attribute: Absatz %i\n", nPara );
+//          DbgOutItemSet( fp, rSet, TRUE, FALSE );
+//          fclose( fp );
+//      }
 #endif
 
     if ( !( pNode->GetContentAttribs().GetItems() == rSet ) )

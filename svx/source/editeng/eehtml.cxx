@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-27 11:56:54 $
+ *  last change: $Author: mt $ $Date: 2001-12-18 11:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,13 +100,6 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, SvKeyValueIterator* pHTTPHeaderAt
 
     if ( pHTTPHeaderAttrs )
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
-
-#ifdef EDITDEBUG
-    SvFileStream aStream( String( RTL_CONSTASCII_STRINGPARAM( "d:\\html.log" ) ), STREAM_WRITE|STREAM_TRUNC );
-    ULONG nP = rIn.Tell();
-    aStream << rIn;
-    rIn.Seek( nP );
-#endif
 }
 
 EditHTMLParser::~EditHTMLParser()
