@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:00:40 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3380,42 +3380,68 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
         }
         else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
         {
-            if( this == s_pSaveYourselfFrame && ! rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" ) )
-            {
-                ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
-                const char* argv[2];
-                argv[0] = "/bin/sh";
-                argv[1] = aExec.GetBuffer();
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
-#endif
-                XSetCommand( GetXDisplay(), GetShellWindow(), const_cast<char**>(argv), 2 );
-            }
-            else // can only happen in race between WM and window closing
-                XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
+            bool bSession = rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" );
 
-            if( rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" ) )
+            if( ! bSession )
+            {
+                if( this == s_pSaveYourselfFrame )
+                {
+                    ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+                    const char* argv[2];
+                    argv[0] = "/bin/sh";
+                    argv[1] = const_cast<char*>(aExec.GetBuffer());
+#if OSL_DEBUG_LEVEL > 1
+                    fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
+#endif
+                    XSetCommand( GetXDisplay(), GetShellWindow(), (char**)argv, 2 );
+                }
+                else
+                    // can only happen in race between WM and window closing
+                    XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
+            }
+            else
             {
                 // save open documents; would be good for non Dtwm, too,
                 // but there is no real Shutdown message in the ancient
                 // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
-                Application::EnableDialogCancel( TRUE );
-                ApplicationEvent aEvent( String( RTL_CONSTASCII_USTRINGPARAM( "SessionManager" ) ),
-                                         ApplicationAddress(),
-                                         ByteString( APPEVENT_SAVEDOCUMENTS_STRING ),
-                                         String( RTL_CONSTASCII_USTRINGPARAM( "All" ) ) );
-
-                if( GetpApp() )
-                    GetpApp()->AppEvent( aEvent );
-
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "sending ShutDown message\n" );
-#endif
-                ShutDown();
+                IceSalSession::handleOldX11SaveYourself( this );
             }
         }
     }
     return 0;
+}
+
+void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
+{
+    // session save was done, inform dtwm
+    if( s_pSaveYourselfFrame )
+    {
+        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        const char* argv[2];
+        argv[0] = "/bin/sh";
+        argv[1] = const_cast<char*>(aExec.GetBuffer());
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
+#endif
+        XSetCommand( s_pSaveYourselfFrame->GetXDisplay(),
+                     s_pSaveYourselfFrame->GetShellWindow(),
+                     (char**)argv, 2 );
+        if( pSaveFrame != s_pSaveYourselfFrame )
+        {
+            // check if it still exists
+            X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
+            while( pFrame && pFrame != pSaveFrame )
+                pFrame = pFrame->mpNextFrame;
+            if( pFrame )
+            {
+                const WMAdaptor& rWMAdaptor( *pFrame->pDisplay_->getWMAdaptor() );
+                XChangeProperty( pFrame->GetXDisplay(),
+                                 pFrame->GetShellWindow(),
+                                 rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
+            }
+        }
+        s_pSaveYourselfFrame->ShutDown();
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
