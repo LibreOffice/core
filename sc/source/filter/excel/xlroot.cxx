@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:40:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,10 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
-    maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
-    maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
+    maXclMaxPos( static_cast<SCCOL>(EXC_MAXCOL2),
+            static_cast<SCROW>(EXC_MAXROW2), static_cast<SCTAB>(EXC_MAXTAB2) ),
+    maMaxPos( static_cast<SCCOL>(EXC_MAXCOL2), static_cast<SCROW>(EXC_MAXROW2),
+            static_cast<SCTAB>(EXC_MAXTAB2) ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbTruncated( false ),
@@ -229,12 +231,32 @@ void XclRoot::SetMaxPos()
 {
     switch( GetBiff() )
     {
-        case xlBiff2:   mrData.maXclMaxPos.Set( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 );    break;
-        case xlBiff3:   mrData.maXclMaxPos.Set( EXC_MAXCOL3, EXC_MAXROW3, EXC_MAXTAB3 );    break;
-        case xlBiff4:   mrData.maXclMaxPos.Set( EXC_MAXCOL4, EXC_MAXROW4, EXC_MAXTAB4 );    break;
+        case xlBiff2:   mrData.maXclMaxPos.Set(
+                                static_cast<SCCOL>(EXC_MAXCOL2),
+                                static_cast<SCROW>(EXC_MAXROW2),
+                                static_cast<SCTAB>(EXC_MAXTAB2) );
+            break;
+        case xlBiff3:   mrData.maXclMaxPos.Set(
+                                static_cast<SCCOL>(EXC_MAXCOL3),
+                                static_cast<SCROW>(EXC_MAXROW3),
+                                static_cast<SCTAB>(EXC_MAXTAB3) );
+            break;
+        case xlBiff4:   mrData.maXclMaxPos.Set(
+                                static_cast<SCCOL>(EXC_MAXCOL4),
+                                static_cast<SCROW>(EXC_MAXROW4),
+                                static_cast<SCTAB>(EXC_MAXTAB4) );
+            break;
         case xlBiff5:
-        case xlBiff7:   mrData.maXclMaxPos.Set( EXC_MAXCOL5, EXC_MAXROW5, EXC_MAXTAB5 );    break;
-        case xlBiff8:   mrData.maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );    break;
+        case xlBiff7:   mrData.maXclMaxPos.Set(
+                                static_cast<SCCOL>(EXC_MAXCOL5),
+                                static_cast<SCROW>(EXC_MAXROW5),
+                                static_cast<SCTAB>(EXC_MAXTAB5) );
+            break;
+        case xlBiff8:   mrData.maXclMaxPos.Set(
+                                static_cast<SCCOL>(EXC_MAXCOL8),
+                                static_cast<SCROW>(EXC_MAXROW8),
+                                static_cast<SCTAB>(EXC_MAXTAB8) );
+            break;
         default:        DBG_ERROR_BIFF();
     }
     mrData.maMaxPos.SetCol( ::std::min( mrData.maScMaxPos.Col(), mrData.maXclMaxPos.Col() ) );
