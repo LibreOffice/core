@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:49:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,19 @@ protected:
 
     virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 
+    // native widget rendering methods that require mirroring
+    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           rtl::OUString aCaption );
+    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                               ControlState nState, const ImplControlValue& aValue,
+                                               SalControlHandle& rControlHandle, rtl::OUString aCaption );
+    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, rtl::OUString aCaption,
+                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+
 public:
     // public SalGraphics methods, the interface to teh independent vcl part
 
@@ -294,6 +307,9 @@ public:
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
+
+    // Query the platform layer for control support
+    virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
 };
 
 // Init/Deinit Graphics
