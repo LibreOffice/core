@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:17:09 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,24 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ slovak ] = "Prispôsobiť na ~krivku";
         Text[ hungarian ] = "~Igazítás a körvonalhoz";
         Text[ slovenian ] = "~Prilagodi obrisu";
+    };
+    TriStateBox TSB_WORDWRAP_TEXT
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT( 132, 14  ) ;
+        Size = MAP_APPFONT( 102 , 10 ) ;
+        Text = "~Text in Form umbrechen";
+        Text [ ENGLISH ] = "~Word wrap text in shape";
+        Text [ english_us ] = "~Word wrap text in shape";
+    };
+    TriStateBox TSB_AUTOGROW_SIZE
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT( 132, 28  );
+        Size = MAP_APPFONT( 102 , 10 );
+        Text = "~Gr��e der Form dem Text anpassen";
+        Text [ ENGLISH ] = "~Resize shape to fit text";
+        Text [ english_us ] = "~Resize shape to fit text";
     };
     FixedLine FL_DISTANCE
     {
