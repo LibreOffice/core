@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-31 08:19:43 $
+ *  last change: $Author: thb $ $Date: 2001-08-22 08:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
 BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
-    VCL_CUSTOM_ICON_FN *pCustomIcon;
+    VCL_CUSTOM_ICON_FN *pCustomIcon = 0;
 
     if( nIcon == 0 )    // 0 means default icon which is icon #1 actually
         nIcon = 1;
