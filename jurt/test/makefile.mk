@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 14:38:22 $
+#   last change: $Author: hr $ $Date: 2004-02-03 13:14:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@
 all .PHONY:
     cd com/sun/star/comp/bridgefactory && dmake
     cd com/sun/star/comp/connections && dmake
-#   cd com/sun/star/comp/typedescriptionmanager && dmake
     cd com/sun/star/lib/uno/bridges/java_remote && dmake
     cd com/sun/star/lib/uno/environments/java && dmake
     cd com/sun/star/lib/uno/environments/remote && dmake
