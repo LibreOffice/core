@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:34:45 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_simplified ] = "ΟΤΚΎΉ¤Χχ±νΔΪµΔΈόΈΔΔΪΘέ(~S)";
         Text[ russian ] = "Οξκΰηΰςό θημενενθÿ β λθρςε";
         Text[ polish ] = "PokaΏ zmiany w tabeli";
-        Text[ japanese ] = "•\\“ΰ‚Μ•ΟX‚π•\\¦(~S)";
+        Text[ japanese ] = "•\\“ΰ‚Μ•ΟX‰Σ‚π•\\¦(~S)";
         Text[ chinese_traditional ] = "Εγ¥ά¤u§@ªν¤ΊªΊΕά§σ(~S)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ έν ΗαΜΟζα";
         Text[ greek ] = "Εμφάνιση αλλαγών πίνακα";
@@ -123,7 +123,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_simplified ] = "ΟΤΚΎ½ΣΚάµΔΈόΈΔΔΪΘέ(~A)";
         Text[ russian ] = "Οξκΰηΰςό οπθνÿςϋε θημενενθÿ";
         Text[ polish ] = "PokaΏ zmiany zaakceptowane";
-        Text[ japanese ] = "”F‚ί‚½•ΟX‰Σ‚π•\\¦(~A)";
+        Text[ japanese ] = "³”F‚µ‚½•ΟX‰Σ‚π•\\¦(~A)";
         Text[ chinese_traditional ] = "Εγ¥ά±µ¨όªΊΕά§σ(~A)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγήΘζαΙ";
         Text[ greek ] = "Εμφάνιση αποδεχομένων αλλαγών";
@@ -150,7 +150,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_simplified ] = "ΟΤΚΎΎάΎψµΔΈόΈΔΔΪΘέ(~R)";
         Text[ russian ] = "Οξκΰηΰςό ξςκλξνεννϋε θημενενθÿ";
         Text[ polish ] = "PokaΏ zmiany odrzucone";
-        Text[ japanese ] = "”F‚ί‚Θ‚Ά•ΟX‰Σ‚π•\\¦(~R)";
+        Text[ japanese ] = "”jό‚µ‚½•ΟX‰Σ‚π•\\¦(~R)";
         Text[ chinese_traditional ] = "Εγ¥ά©Ϊµ΄ªΊΕά§σ(~R)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ ΗαγΡέζΦΙ";
         Text[ greek ] = "Εμφάνιση απορριπτέων αλλαγών";
