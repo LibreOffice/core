@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-08 11:13:38 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 09:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,15 +521,6 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
     if( ! pParentData && ! (nSalFrameStyle & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD)) )
     {
-        XSizeHints* pHints = XAllocSizeHints();
-        pHints->flags = PWinGravity | PPosition | PSize;
-        pHints->x               = x;
-        pHints->y               = y;
-        pHints->width           = w;
-        pHints->height          = h;
-        pHints->win_gravity     = NorthWestGravity;
-        XFree( pHints );
-
         XSetWMHints( GetXDisplay(), mhWindow, &Hints );
         // WM Protocols && internals
         Atom a[4];
