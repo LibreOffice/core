@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-29 17:02:16 $
+ *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3159,6 +3159,20 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( USHORT nWhich )
     else if (pAktItemSet)
     {
         const SfxPoolItem* pRet = pAktItemSet->GetItem(nWhich);
+        return pRet ? pRet : &pStandardFmtColl->GetAttr(nWhich);
+    }
+    else if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+    {
+        const SfxPoolItem* pRet = pCtrlStck->GetStackAttr(*pPaM->GetPoint(),
+            nWhich);
+        if (!pRet)
+        {
+            if (nAktColl < nColls && pCollA[nAktColl].pFmt &&
+                pCollA[nAktColl].bColl)
+            {
+                pRet = &(pCollA[nAktColl].pFmt->GetAttr(nWhich));
+            }
+        }
         return pRet ? pRet : &pStandardFmtColl->GetAttr(nWhich);
     }
     else

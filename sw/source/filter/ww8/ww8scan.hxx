@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:02 $
+ *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ private:
     long nLastWhereIdxCp;           // last result of WhereIdx()
     USHORT nPLCF;                   // so viele PLCFe werden verwaltet
     short nManType;
-    bool bDoingDrawTextBox;         //Normally we adjust the end of attributes
+    bool mbDoingDrawTextBox;        //Normally we adjust the end of attributes
                                     //so that the end of a paragraph occurs
                                     //before the para end mark, but for
                                     //drawboxes we want the true offsets
@@ -867,7 +867,8 @@ private:
     void AdvNoSprm(short nIdx, bool bStart);
     USHORT GetId(const WW8PLCFxDesc* p ) const;
 public:
-    WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp );
+    WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
+        bool bDoingDrawTextBox = false);
     ~WW8PLCFMan();
 
     /*
@@ -909,8 +910,7 @@ public:
     WW8PLCFspecial* GetTxbxBkd() const { return pTxbxBkd; }
     WW8PLCFspecial* GetMagicTables() const { return pMagicTables; }
     short GetManType() const { return nManType; }
-    bool GetDoingDrawTextBox() const { return bDoingDrawTextBox; }
-    void SetDoingDrawTextBox(bool bIn) { bDoingDrawTextBox = bIn; }
+    bool GetDoingDrawTextBox() const { return mbDoingDrawTextBox; }
 };
 
 struct WW8PLCFxSaveAll
@@ -928,7 +928,7 @@ friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
 
 #ifndef DUMP
-friend WW8PLCFMan::WW8PLCFMan( WW8ScannerBase*, short, long );
+friend WW8PLCFMan::WW8PLCFMan(WW8ScannerBase*, short, long, bool);
 friend class SwWw8ImplReader;
 friend class SwWW8FltControlStack;
 #endif

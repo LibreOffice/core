@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-31 13:55:18 $
+ *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,10 +698,17 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
         nStartCp -= pWwFib->ccpText + pWwFib->ccpFtn;
         nEndCp -= pWwFib->ccpText + pWwFib->ccpFtn;
     }
-    WW8ReaderSave aSave(this,nStartCp);
 
-    bool bOldAdjust = pPlcxMan->GetDoingDrawTextBox();
-    pPlcxMan->SetDoingDrawTextBox(true);
+    /*
+     Save and create new plcxman for this drawing object, of the type that
+     will include the para end mark inside a paragraph property range, as
+     drawing boxes have real paragraph marks as part of their text, while
+     normal writer has seperate nodes for each paragraph and so has no actual
+     paragraph mark as part of the paragraph text.
+    */
+    WW8ReaderSave aSave(this);
+    pPlcxMan = new WW8PLCFMan(pSBase, pPlcxMan->GetManType(), nStartCp, true);
+
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext,nEnd,nStartReplace;
 
@@ -821,7 +828,11 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     //unclosed
     for (USHORT nI = pCtrlStck->Count(); nI > nCurrentCount; nI--)
         pCtrlStck->DeleteAndDestroy(nI-1);
-    pPlcxMan->SetDoingDrawTextBox(bOldAdjust);
+
+    /*
+     Don't worry about the new pPlcxMan, the restorer removes it when
+     replacing the current one with the old one.
+    */
     aSave.Restore(this);
 }
 

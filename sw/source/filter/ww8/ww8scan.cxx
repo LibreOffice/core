@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-30 15:17:42 $
+ *  last change: $Author: cmc $ $Date: 2002-11-01 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4156,6 +4156,14 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     //cp instead of fc's as nature intended
     rDesc.nOrigEndPos = rDesc.nEndPos;
     rDesc.nOrigStartPos = rDesc.nStartPos;
+
+    /*
+     Normally given ^XXX{para end}^ we don't actually insert a para end
+     character into the document, so we clip the para end property one to the
+     left to make the para properties end when the paragraph text does. In a
+     drawing textbox we actually do insert a para end character, so we don't
+     clip it. Making the para end properties end after the para end char.
+    */
     if (GetDoingDrawTextBox())
         return;
 
@@ -4249,10 +4257,11 @@ USHORT WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
     return nId;
 }
 
-WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
-    : maSprmParser(pBase->pWw8Fib->nVersion)
+WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
+    bool bDoingDrawTextBox)
+    : maSprmParser(pBase->pWw8Fib->nVersion),
+    mbDoingDrawTextBox(bDoingDrawTextBox)
 {
-    bDoingDrawTextBox = false;
     pWwFib = pBase->pWw8Fib;
 
     nLastWhereIdxCp = 0;
