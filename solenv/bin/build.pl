@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-27 09:30:11 $
+#   last change: $Author: vg $ $Date: 2001-08-31 15:27:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.34 $ ';
+$id_str = ' $Revision: 1.35 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -95,7 +95,7 @@ $deliver = 0;
 %PlatformHash = ();
 %DeadDependencies = ();
 %AliveDependencies = ();
-%ParentDepsHash = ();
+%ParentDepsHash = (); # hash of dependencies of the current project
 @UnresolvedParents = ();
 @dmake_args = ();
 %DeadParents = ();
@@ -132,51 +132,45 @@ $ENV{mk_tmp} = "";
 # Get dependencies hash of the current and all parent projects
 #
 sub GetParentDeps {
-    my ($ParentsString, @DepsArray, $Prj, $Parent, @TotenEltern);
-    $ParentsString = GetParentsString(".");
-    @DepsArray = GetDependenciesArray($ParentsString);
+    my ($ParentsString, @DepsArray, $Prj, $parent);
+    my $prj_dir = shift;
+    my $deps_hash = shift;
+    $ParentsString = &GetParentsString($prj_dir);
+    @DepsArray = &GetDependenciesArray($ParentsString);
     @UnresolvedParents = @DepsArray;
-    $ParentDepsHash{$CurrentPrj} = [@DepsArray];
-    ResolveParentsLoop:
+    $$deps_hash{$CurrentPrj} = [@DepsArray];
     while ($Prj = pop(@UnresolvedParents)) {
         my (@DepsArray);
-        if (!($ParentsString = GetParentsString($StandDir.$Prj))) {
+        if (!($ParentsString = &GetParentsString($StandDir.$Prj))) {
             $DeadParents{$Prj} = 1;
-            $ParentDepsHash{$Prj} = [];
-            next ResolveParentsLoop;
+            $$deps_hash{$Prj} = [];
+            next;
         };
-        @DepsArray = GetDependenciesArray($ParentsString, $Prj);
-        $ParentDepsHash{$Prj} = [@DepsArray];
+        @DepsArray = &GetDependenciesArray($ParentsString, $Prj);
+        $$deps_hash{$Prj} = [@DepsArray];
         foreach $Parent (@DepsArray) {
-            if (!defined($ParentDepsHash{$Parent})) {
+            if (!defined($$deps_hash{$Parent})) {
                 push (@UnresolvedParents, $Parent);
             };
         };
     };
-    print "\n";
-    @TotenEltern = keys %DeadParents;
-    foreach $Parent (@TotenEltern) {
-        RemoveFromDependencies($Parent, %ParentDepsHash);
+    foreach $parent (keys %DeadParents) {
+        delete $ParentDepsHash{$parent};
+        &RemoveFromDependencies($parent, $deps_hash);
     };
 };
-
 
 #
 # Build everything that should be built
 #
 sub BuildAll {
     if ($BuildAllParents) {
-        my ($Prj, $PrjDir, $DeadPrj, @TotenEltern);
-        GetParentDeps();
-        @TotenEltern = keys %DeadParents;
-        foreach $DeadPrj (@TotenEltern) {
-            delete $ParentDepsHash{$DeadPrj};
-            RemoveFromDependencies($DeadPrj, \%ParentDepsHash);
-        };
+        my ($Prj, $PrjDir, $DeadPrj);
+        &GetParentDeps('.' ,\%ParentDepsHash);
         if ($build_from) {
             &remove_extra_prjs(\%ParentDepsHash);
         };
-        while ($Prj = PickPrjToBuild(\%ParentDepsHash)) {
+        while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
             print "\n=============\n";
             print "Building project $Prj\n";
             print   "=============\n";
@@ -194,7 +188,6 @@ sub BuildAll {
         BuildPrj(".");
     };
 };
-
 
 #
 # Start build given project
@@ -223,7 +216,7 @@ sub MakeDir {
             exit(1);
         };
     } else {
-        RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+        &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     };
 };
 
@@ -239,7 +232,7 @@ sub GetParentsString {
     };
     while (<PrjBuildFile>) {
         s/\r\n//;
-        if ($_ =~ /([\:]+)([\t | \s]+)/) {
+        if ($_ =~ /\:+\s+/) {
             close PrjBuildFile;
             return $';
         };
@@ -416,7 +409,6 @@ sub get_stand_dir {
     while (chdir '..');
 };
 
-
 #
 # Build the entire project according to queue of dependencies
 #
@@ -428,26 +420,19 @@ sub BuildDependent {
     };
 };
 
-
 #
 # Removes projects which it is not necessary to build
 #
 sub remove_extra_prjs {
-    my ($Prj, $DepsHash, @build_from_deps);
-    $DepsHash = shift;
-    if (!(defined ($$DepsHash{$build_from}))) {
-        print "No direct dependency to or no project $build_from found\n";
-        exit (1);
+    my ($prj, $deps_hash);
+    $deps_hash = shift;
+    my %from_deps_hash = ();   # hash of dependencies of the -from project
+    &GetParentDeps( $StandDir.$build_from,\%from_deps_hash);
+    foreach $prj (keys %from_deps_hash) {
+        delete $$deps_hash{$prj};
+        &RemoveFromDependencies($prj, $deps_hash);
     };
-    delete $$DepsHash{$build_from};
-    while ($Prj = FindIndepPrj($DepsHash)) {
-        RemoveFromDependencies($Prj, $DepsHash);
-        delete $$DepsHash{$Prj};
-    };
-    $$DepsHash{$build_from} = ();
-    $is_from_built = 1;
 };
-
 
 #
 # Picks project which can be build now from hash and deletes it from hash
