@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:46:39 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,14 @@
 #define SW_MS_MSFILTER_HXX
 
 #include <set>
+#include <map>
 #include <vector>
 
 #ifndef _SWTYPES_HXX
 #   include <swtypes.hxx>       //SwTwips
+#endif
+#ifndef _STRING_HXX
+#   include <tools/string.hxx>  //String
 #endif
 #ifndef WW_WWSTYLES_HXX
 #   include "wwstyles.hxx"      //ww::sti
@@ -84,8 +88,11 @@
 class SwDoc;
 class SwPaM;
 class String;
+class SwTableNode;
+class SwNodeIndex;
 class SwNoTxtNode;
 class SwTxtNode;
+
 namespace
 {
     template<class C> class StyleMapperImpl;
@@ -292,6 +299,56 @@ namespace sw
             StyleResult GetStyle(const String& rName, ww::sti eSti);
         };
 
+        /** Find suitable names for exporting this font
+
+            Given a fontname description find the best primary and secondary
+            fallback font to use from MSWord's persp font
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+
+            @see #i10242#/#i19164# for examples
+        */
+        class FontMapExport
+        {
+        public:
+            String msPrimary;
+            String msSecondary;
+            bool HasDistinctSecondary() const;
+            FontMapExport(const String &rFontDescription);
+        };
+
+        /** Handle requirements for table formatting in insert->file mode.
+
+            When inserting a table into a document which already has been
+            formatted and laid out (e.g using insert->file) then tables
+            must be handled in a special way, (or so previous comments and
+            code in the filters leads me to believe).
+
+            Before the document is finalized the new tables need to have
+            their layout frms deleted and recalculated. This TableManager
+            detects the necessity to do this, and all tables inserted into
+            a document should be registered with this manager with
+            InsertTable, and before finialization DelAndMakeTblFrms should
+            be called.
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+
+            @see #i25782# for examples
+        */
+        class InsertedTablesManager
+        {
+        public:
+            typedef std::map<SwTableNode *, SwNodeIndex *> TblMap;
+            typedef TblMap::iterator TblMapIter;
+            void DelAndMakeTblFrms();
+            void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
+            InsertedTablesManager(const SwDoc &rDoc);
+        private:
+            bool mbHasRoot;
+            TblMap maTables;
+        };
 
         /** Given a SwNoTxtNode (ole/graphic) get original size
 
