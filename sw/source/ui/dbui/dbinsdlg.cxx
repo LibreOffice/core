@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-08 14:30:09 $
+ *  last change: $Author: os $ $Date: 2001-02-12 12:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwInsDBData& rData )
     : SfxModalDialog( rView.GetWindow(), SW_RES( DLG_AP_INSERT_DB_SEL )),
-    ConfigItem(C2U("Office.Writer/InsertData/DataSet")),
+    ConfigItem(C2U("Office.Writer/InsertData/DataSet"), CONFIG_MODE_DELAYED_UPDATE),
     aFtInsertData( this, SW_RES( FT_INSERT_DATA )),
     aRbAsTable( this, SW_RES( RB_AS_TABLE )),
     aRbAsField( this, SW_RES( RB_AS_FIELD )),
