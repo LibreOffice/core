@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 13:40:45 $
+ *  last change: $Author: mt $ $Date: 2001-01-25 16:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,15 @@ void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyCha
             if ( ( rEvt.PropertyName == s1 ) || ( rEvt.PropertyName == s2 ) || ( rEvt.PropertyName == s3 ) || ( rEvt.PropertyName == s4 ) )
             {
                 uno::Reference< awt::XControlModel > xModel( rEvt.Source, uno::UNO_QUERY );
-                ImplSetPosSize( StdTabController::FindControl( getControls(), xModel ) );
+                if ( (awt::XControlModel*)xModel.get() == (awt::XControlModel*)getModel().get() )
+                {
+                    uno::Reference< awt::XControl > xThis( (uno::XAggregation*)(::cppu::OWeakAggObject*)this, uno::UNO_QUERY );
+                    ImplSetPosSize( xThis );
+                }
+                else
+                {
+                    ImplSetPosSize( StdTabController::FindControl( getControls(), xModel ) );
+                }
                 break;
             }
         }
