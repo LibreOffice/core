@@ -4,6 +4,6 @@ Encoding=UTF-8
 Terminal=false
 Icon=printeradmin.png
 Type=Application
-Categories=Application;Office;X-Red-Hat-Base;
+Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;
 Exec=openoffice-printeradmin
 Name=%PRODUCTNAME Printer Administration
