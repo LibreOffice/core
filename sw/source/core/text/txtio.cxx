@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:58:09 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
             for( MSHORT i=0; i < nCnt; ++i )
             {
                 SdrObject *pObj = (*pSorted)[ i ];
-                if( pObj->IsWriterFlyFrame() )
+                if( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     lcl_OutFrame( rStr, pFly, rSp, sal_False );
@@ -237,7 +237,7 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
             for( MSHORT i=0; i < nCnt; ++i )
             {
                 SdrObject *pObj = (*pFrm->GetDrawObjs())[ i ];
-                if( pObj->IsWriterFlyFrame() )
+                if( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     lcl_OutFrame( rStr, pFly, rSp, sal_False );
