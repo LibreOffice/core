@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 14:38:52 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 15:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,10 +638,12 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
 void CacheController::flushPendingUpdates()
 {
     OSL_ASSERT(m_bDisposing);
+    if (m_pCacheWriter)
+    {
+        osl::MutexGuard aShotGuard(m_pCacheWriter->getShotMutex());
 
-    osl::MutexGuard aShotGuard(m_pCacheWriter->getShotMutex());
-
-    m_pCacheWriter->stopAndWriteCache();
+        m_pCacheWriter->stopAndWriteCache();
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -719,10 +721,10 @@ void CacheController::saveDirectly(UpdateRequest const & _anUpdate) CFG_UNO_THRO
 
 void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequest const & _aComponent) CFG_UNO_THROW_ALL(  )
 {
+    CFG_TRACE_INFO("CacheController: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
+
     try
     {
-        CFG_TRACE_INFO_NI("cache manager: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
-
           std::auto_ptr<SubtreeChange> aChangeData = _aCache->releasePendingChanges(_aComponent.getComponentName());
 
         if (aChangeData.get())
@@ -740,8 +742,10 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
         else
             CFG_TRACE_WARNING_NI("- no changes found - cannot save");
     }
-    catch(uno::Exception& )
+    catch(uno::Exception& e)
     {
+        CFG_TRACE_ERROR_NI("CacheController: saving failed: %s", OUSTRING2ASCII(e.Message));
+
         this->invalidateComponent(_aComponent);
 
         throw;
