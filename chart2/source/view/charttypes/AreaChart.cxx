@@ -315,7 +315,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
 
     m_pPosHelper->getTransformedClipRect();
-    SplineMode eSplineMode(B_SPLINE);//@todo get from model
+    SplineMode eSplineMode(NO_SPLINE);//@todo get from model
     drawing::PolyPolygonShape3D aPoly;
     if(CUBIC_SPLINE==eSplineMode)
     {
@@ -324,7 +324,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, nGranularity );
         Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
     }
-    else if(B_SPLINE)
+    else if(B_SPLINE==eSplineMode)
     {
         sal_Int32 nGranularity = 20;//@todo get from model
         sal_Int32 nSplineDepth = 3;//@todo get from model
