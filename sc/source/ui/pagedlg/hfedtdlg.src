@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:53:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
     Text[ czech ] = "Záhlaví/Zápatí";   \
     Text[ hebrew ] = "Kopf-/Fußzeilen";    \
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका/पृष्ठ के अधोभाग की टीका";   \
-    Text[ slovak ] = "Záhlavia/Zápätia";
+    Text[ slovak ] = "Záhlavia/Zápätia"; \
+    Text[ hungarian ] = "Élőfej és élőláb"; \
+    Text[ slovenian ] = "Glave/noge";
 
 #define HEADER \
     Text = "Kopfzeile" ; \
@@ -125,7 +127,9 @@
     Text[ czech ] = "Záhlaví";    \
     Text[ hebrew ] = "‮כותרת עליונה‬";   \
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका"; \
-    Text[ slovak ] = "Záhlavie";
+    Text[ slovak ] = "Záhlavie"; \
+    Text[ hungarian ] = "Élőfej"; \
+    Text[ slovenian ] = "Glava";
 
 #define FOOTER \
     Text = "Fu�zeile" ; \
@@ -158,7 +162,9 @@
     Text[ czech ] = "Zápatí"; \
     Text[ hebrew ] = "‮כותרת תחתונה‬";   \
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";    \
-    Text[ slovak ] = "Zápätie";
+    Text[ slovak ] = "Zápätie"; \
+    Text[ hungarian ] = "Élőláb"; \
+    Text[ slovenian ] = "Noga";
 
 #define HEADER_RIGHT \
     Text = "Kopfzeile (rechts)" ; \
@@ -191,7 +197,9 @@
     Text[ czech ] = "Záhlaví (vpravo)";   \
     Text[ hebrew ] = "Kopfzeile (rechts)";  \
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका (दाहिना)";    \
-    Text[ slovak ] = "Záhlavie (napravo)";
+    Text[ slovak ] = "Záhlavie (napravo)"; \
+    Text[ hungarian ] = "Élőfej (páratlan)"; \
+    Text[ slovenian ] = "Glava (desno)";
 
 #define HEADER_LEFT \
     Text = "Kopfzeile (links)" ; \
@@ -224,7 +232,9 @@
     Text[ czech ] = "Záhlaví (vlevo)";    \
     Text[ hebrew ] = "Kopfzeile (links)";   \
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका (बायाँ)";   \
-    Text[ slovak ] = "Záhlavie (naľavo)";
+    Text[ slovak ] = "Záhlavie (naľavo)"; \
+    Text[ hungarian ] = "Élőláb (páros)"; \
+    Text[ slovenian ] = "Glava (levo)";
 
 #define FOOTER_RIGHT \
     Text = "Fu�zeile (rechts)" ; \
@@ -257,7 +267,9 @@
     Text[ czech ] = "Zápatí (vpravo)";    \
     Text[ hebrew ] = "Fußzeile (rechts)";  \
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका (दाहिना)";   \
-    Text[ slovak ] = "Zápätie (vpravo)";
+    Text[ slovak ] = "Zápätie (vpravo)"; \
+    Text[ hungarian ] = "Élőláb (páratlan)"; \
+    Text[ slovenian ] = "Noga (desno)";
 
 #define FOOTER_LEFT \
     Text = "Fu�zeile (links)" ; \
@@ -290,7 +302,9 @@
     Text[ czech ] = "Zápatí (vlevo)"; \
     Text[ hebrew ] = "Fußzeile (links)";   \
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका (बायाँ)";  \
-    Text[ slovak ] = "Zápätie (vľavo)";
+    Text[ slovak ] = "Zápätie (vľavo)"; \
+    Text[ hungarian ] = "Élőláb (páros)"; \
+    Text[ slovenian ] = "Noga (levo)";
 
  //------------------------------------------------------------------------
  // Bearbeiten vom Seitendialog aus aufgerufen
@@ -355,6 +369,8 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text[ hebrew ] = "Kopfzeilen";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
     Text[ slovak ] = "Záhlavia";
+    Text[ hungarian ] = "Élőfej";
+    Text[ slovenian ] = "Glave";
 };
 TabDialog RID_SCDLG_HFED_FOOTER
 {
@@ -416,6 +432,8 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text[ hebrew ] = "Fußzeilen";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
     Text[ slovak ] = "Zápätia";
+    Text[ hungarian ] = "Élőláb";
+    Text[ slovenian ] = "Noge";
 };
  //------------------------------------------------------------------------
  // Bearbeiten/Kopf-Fusszeile:
@@ -750,7 +768,7 @@ TabPage RID_HFBASE
         Text [ portuguese_brazilian ] = "�rea ~esquerda" ;
         Text [ portuguese ] = "~�rea esquerda" ;
         Text [ finnish ] = "~Vasen alue" ;
-        Text [ danish ] = "Venstre omr�de" ;
+        Text [ danish ] = "~Venstre omr�de" ;
         Text [ french ] = "~Plage gauche" ;
         Text [ swedish ] = "~V�nster omr�de" ;
         Text [ dutch ] = "~Linkerbereik" ;
@@ -774,6 +792,8 @@ TabPage RID_HFBASE
         Text[ hebrew ] = "~Linker Bereich";
         Text[ hindi ] = "~बायाँ विस्तीर्ण";
         Text[ slovak ] = "Ľavá ob~lasť";
+        Text[ hungarian ] = "~Bal oldalon";
+        Text[ slovenian ] = "~Levo področje";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_LEFT
@@ -795,7 +815,7 @@ TabPage RID_HFBASE
         Text [ portuguese_brazilian ] = "�rea ~central" ;
         Text [ portuguese ] = "~�rea central" ;
         Text [ finnish ] = "~Keskit� alue" ;
-        Text [ danish ] = "Midteromr�de" ;
+        Text [ danish ] = "~Midteromr�de" ;
         Text [ french ] = "Plage centrale" ;
         Text [ swedish ] = "~Mittomr�de" ;
         Text [ dutch ] = "~Middelste bereik" ;
@@ -819,6 +839,8 @@ TabPage RID_HFBASE
         Text[ hebrew ] = "~Mittlerer Bereich";
         Text[ hindi ] = "~मध्यभाग विस्तीर्ण";
         Text[ slovak ] = "Stredná o~blasť";
+        Text[ hungarian ] = "~Középen";
+        Text[ slovenian ] = "~Sredinsko področje";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_CENTER
@@ -864,6 +886,8 @@ TabPage RID_HFBASE
         Text[ hebrew ] = "~Rechter Bereich";
         Text[ hindi ] = "दा~हिना विस्तीर्ण";
         Text[ slovak ] = "Pra~vá oblasť";
+        Text[ hungarian ] = "~Jobb oldalon";
+        Text[ slovenian ] = "De~sno področje";
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
     Control WND_RIGHT
@@ -916,6 +940,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Textattribute";
         QuickHelpText[ hindi ] = "टेक्स्ट् ऐट्रिब्यूट्स";
         QuickHelpText[ slovak ] = "Atribúty textu";
+        QuickHelpText[ hungarian ] = "Szövegjellemzők";
+        QuickHelpText[ slovenian ] = "Lastnosti besedila";
     };
     Image IMG_TEXT_H
     {
@@ -964,6 +990,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Dateiname";
         QuickHelpText[ hindi ] = "फाइल का नाम";
         QuickHelpText[ slovak ] = "Názov súboru";
+        QuickHelpText[ hungarian ] = "Fájlnév";
+        QuickHelpText[ slovenian ] = "Ime datoteke";
     };
     Image IMG_FILE_H
     {
@@ -1009,6 +1037,8 @@ TabPage RID_HFBASE
                 Text[ hebrew ] = "‮כותרת‬";
                 Text[ hindi ] = "शीर्षक";
                 Text[ slovak ] = "Nadpis";
+                Text[ hungarian ] = "Cím";
+                Text[ slovenian ] = "Naslov";
             };
             MenuItem
             {
@@ -1045,6 +1075,8 @@ TabPage RID_HFBASE
                 Text[ hebrew ] = "Dateiname";
                 Text[ hindi ] = "फाइल का नाम";
                 Text[ slovak ] = "Názov súboru";
+                Text[ hungarian ] = "Fájlnév";
+                Text[ slovenian ] = "Ime datoteke";
             };
             MenuItem
             {
@@ -1081,6 +1113,8 @@ TabPage RID_HFBASE
                 Text[ hebrew ] = "Pfad/Dateiname";
                 Text[ hindi ] = "मार्ग/फाइल का नाम";
                 Text[ slovak ] = "Cesta/Názov súboru";
+                Text[ hungarian ] = "Útvonal és fájlnév";
+                Text[ slovenian ] = "Ime poti/datoteke";
             };
         };
     };
@@ -1127,6 +1161,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Tabellenname";
         QuickHelpText[ hindi ] = "शीट् का नाम";
         QuickHelpText[ slovak ] = "Názov listu";
+        QuickHelpText[ hungarian ] = "Munkalap neve";
+        QuickHelpText[ slovenian ] = "Ime lista";
     };
     Image IMG_TABLE_H
     {
@@ -1175,6 +1211,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Seite";
         QuickHelpText[ hindi ] = "पृष्ठ";
         QuickHelpText[ slovak ] = "Stránka";
+        QuickHelpText[ hungarian ] = "Oldalszám";
+        QuickHelpText[ slovenian ] = "Stran";
     };
     Image IMG_PAGE_H
     {
@@ -1223,6 +1261,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Seiten";
         QuickHelpText[ hindi ] = "पृष्ठ";
         QuickHelpText[ slovak ] = "Stránky";
+        QuickHelpText[ hungarian ] = "Oldalak száma";
+        QuickHelpText[ slovenian ] = "Strani";
     };
     Image IMG_PAGES_H
     {
@@ -1271,6 +1311,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Datum";
         QuickHelpText[ hindi ] = "दिनांक";
         QuickHelpText[ slovak ] = "Dátum";
+        QuickHelpText[ hungarian ] = "Dátum";
+        QuickHelpText[ slovenian ] = "Datum";
     };
     Image IMG_DATE_H
     {
@@ -1319,6 +1361,8 @@ TabPage RID_HFBASE
         QuickHelpText[ hebrew ] = "Uhrzeit";
         QuickHelpText[ hindi ] = "समय";
         QuickHelpText[ slovak ] = "Čas";
+        QuickHelpText[ hungarian ] = "Idő";
+        QuickHelpText[ slovenian ] = "Čas";
     };
     Image IMG_TIME_H
     {
@@ -1337,7 +1381,7 @@ TabPage RID_HFBASE
         Text [ portuguese_brazilian ] = "Use os bot�es para mudar a fonte do texto ou inserir comandos de campos tais como data, hora, etc." ;
         Text [ portuguese ] = "Use os bot�es para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
         Text [ finnish ] = "N�pp�imien avulla voit vaihtaa fonttia tai lis�t� kentt�komentoja, kuten p�iv�m��r�n tai kellonajan." ;
-        Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at inds�tte felter som dato, klokkesl�t etc." ;
+        Text [ danish ] = "Brug knapperne til at �ndre skrifttypen eller til at inds�tte feltkommandoer som dato, klokkesl�t etc." ;
         Text [ french ] = "Utilisez les boutons pour modifier la police ou pour ins�rer des champs tels que la date, l'heure, etc." ;
         Text [ swedish ] = "Anv�nd kommandoknapparna f�r att �ndra teckensnitt eller infoga f�ltkommandon som datum, klockslag etc." ;
         Text [ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen." ;
@@ -1361,6 +1405,8 @@ TabPage RID_HFBASE
         Text[ hebrew ] = "Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen.";
         Text[ hindi ] = "फ़ॉन्ट को बदलने केलिए अथवा क्षेत्र का आज्ञा जैसे दिनांक, समय, इत्यादि. जोडने केलिए बटनों का उपयोग कीजिए ।";
         Text[ slovak ] = "Použite tlačítka na zmenu fontu alebo zadajte príkazy do poľa ako dátum, čas, atď.";
+        Text[ hungarian ] = "A gombokkal megváltoztathatja a betűtípust és beilleszthet mezőket, pl. dátum, idő, stb.";
+        Text[ slovenian ] = "Uporabi gumbe za spreminjanje pisave ali vstavljanje ukazov polj kot so datum, čas, itd.";
     };
     FixedLine FL_INFO
     {
@@ -1373,7 +1419,7 @@ TabPage RID_HFBASE
         Text [ portuguese_brazilian ] = "Lembrete:" ;
         Text [ portuguese ] = "Observa��o" ;
         Text [ finnish ] = "Huomautus" ;
-        Text [ danish ] = "Bem�rk!" ;
+        Text [ danish ] = "Note" ;
         Text [ french ] = "Remarque" ;
         Text [ swedish ] = "Tips" ;
         Text [ dutch ] = "Tip" ;
@@ -1397,6 +1443,8 @@ TabPage RID_HFBASE
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "सूचना";
         Text[ slovak ] = "Poznámka";
+        Text[ hungarian ] = "Jegyzet";
+        Text[ slovenian ] = "Opomba";
     };
 };
  // Kombinationen: Header/Footer links/rechts
@@ -1517,6 +1565,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
