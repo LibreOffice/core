@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 11:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,9 @@ void OViews::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
+    if(m_bInDrop)
+        return;
+
     ObjectIter aIter = m_aElements[_nPos];
 
     if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
@@ -228,7 +231,9 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 // -----------------------------------------------------------------------------
 void OViews::dropByNameImpl(const ::rtl::OUString& elementName)
 {
+    m_bInDrop = sal_True;
     OCollection_TYPE::dropByName(elementName);
+    m_bInDrop = sal_False;
 }
 // -----------------------------------------------------------------------------
 void OViews::createView( const Reference< XPropertySet >& descriptor )

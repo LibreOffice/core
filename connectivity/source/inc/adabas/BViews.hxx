@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:59:33 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 11:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ namespace connectivity
         class OViews : public sdbcx::OCollection
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
+            sal_Bool m_bInDrop;
             //  OCatalog*                                           m_pParent;
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
@@ -88,6 +89,7 @@ namespace connectivity
             OViews(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
                 ,m_xMetaData(_rMetaData)
+                ,m_bInDrop(sal_False)
             {}
 
             // only the name is identical to ::cppu::OComponentHelper
