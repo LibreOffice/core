@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:03:41 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,10 +877,10 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     mpOldAnchorStck(pRdr->pAnchorStck), mpOldRedlines(pRdr->mpRedlineStack),
     mpOldPlcxMan(pRdr->pPlcxMan), mpWFlyPara(pRdr->pWFlyPara),
     mpSFlyPara(pRdr->pSFlyPara), mpTableDesc(pRdr->pTableDesc),
-    mnTable(pRdr->nTable), mnAktColl(pRdr->nAktColl), mcSymbol(pRdr->cSymbol),
-    mbIgnoreText(pRdr->bIgnoreText), mbDontCreateSep(pRdr->bDontCreateSep),
-    mbSymbol(pRdr->bSymbol), mbHdFtFtnEdn(pRdr->bHdFtFtnEdn), mbApo(pRdr->bApo),
-    mbTxbxFlySection(pRdr->bTxbxFlySection), mbTableInApo(pRdr->bTableInApo),
+    mnInTable(pRdr->nInTable), mnAktColl(pRdr->nAktColl),
+    mcSymbol(pRdr->cSymbol), mbIgnoreText(pRdr->bIgnoreText),
+    mbDontCreateSep(pRdr->bDontCreateSep), mbSymbol(pRdr->bSymbol),
+    mbHdFtFtnEdn(pRdr->bHdFtFtnEdn), mbTxbxFlySection(pRdr->bTxbxFlySection),
     mbAnl(pRdr->bAnl), mbInHyperlink(pRdr->bInHyperlink),
     mbPgSecBreak(pRdr->bPgSecBreak),
     //Honestly should inherit this from parent environment so don't reset this
@@ -888,9 +888,9 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder)
 {
     pRdr->bHdFtFtnEdn = true;
-    pRdr->bApo = pRdr->bTxbxFlySection = pRdr->bTableInApo = pRdr->bAnl =
-        pRdr->bPgSecBreak = pRdr->bWasParaEnd = pRdr->bHasBorder = false;
-    pRdr->nTable = 0;
+    pRdr->bTxbxFlySection = pRdr->bAnl = pRdr->bPgSecBreak = pRdr->bWasParaEnd
+        = pRdr->bHasBorder = false;
+    pRdr->nInTable = 0;
     pRdr->pWFlyPara = 0;
     pRdr->pSFlyPara = 0;
     pRdr->pTableDesc = 0;
@@ -925,10 +925,8 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bIgnoreText = mbIgnoreText;
     pRdr->bDontCreateSep = mbDontCreateSep;
     pRdr->bHdFtFtnEdn = mbHdFtFtnEdn;
-    pRdr->bApo = mbApo;
     pRdr->bTxbxFlySection = mbTxbxFlySection;
-    pRdr->nTable = mnTable;
-    pRdr->bTableInApo = mbTableInApo;
+    pRdr->nInTable = mnInTable;
     pRdr->bAnl = mbAnl;
     pRdr->bInHyperlink = mbInHyperlink;
     pRdr->bVerticalEnviron = mbVerticalEnviron;
@@ -1322,7 +1320,7 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc(SwPageDesc* pFirstPageDesc,
     else
     {
         // setze PgDesc-Attr ins Doc
-        if( bApo || bTxbxFlySection )
+        if (InAnyApo() || bTxbxFlySection)
         {
             // PageDesc *muss* ausserhalb des Apo stehen
             if( pSFlyPara && pSFlyPara->pMainTextPos )
@@ -1386,13 +1384,6 @@ void SwWW8ImplReader::UpdatePageDescs(USHORT nInPageDescOffset)
     }
 }
 
-USHORT SwWW8ImplReader::TabCellSprm(int nLevel) const
-{
-    if (bVer67)
-        return 24;
-    return nLevel ? 0x244B : 0x2416;
-}
-
 USHORT SwWW8ImplReader::TabRowSprm(int nLevel) const
 {
     if (bVer67)
@@ -1407,20 +1398,25 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
         return false;
 
     *pbReSync = false;
-    if( bAllEnd )
+    if (bAllEnd)
     {
         if( bAnl )
             StopAnl();                  // -> bAnl = false
-        if( nTable && !bFtnEdn )        // Tabelle in FtnEdn nicht erlaubt
+#if 1   //revisit
+        ASSERT(!nInTable, "unclosed table!");
+        ASSERT(maApos.size() == 1, "unclosed apo environments!");
+#else
+        if( nInTable && !bFtnEdn )      // Tabelle in FtnEdn nicht erlaubt
             StopTable();
         if( bApo )
             StopApo();
-        --nTable;
+        --nInTable;
         bApo = false;
+#endif
         return false;
     }
 
-    ASSERT(nTable >= 0,"nTable < 0!");
+    ASSERT(nInTable >= 0,"nInTable < 0!");
 
     // TabRowEnd
     bool bTableRowEnd = (pPlcxMan->HasParaSprm(bVer67 ? 25 : 0x2417) != 0 );
@@ -1490,20 +1486,20 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
 
     bool bStartApo, bStopApo;
     WW8FlyPara *pNowStyleApo=0;
-    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, pNowStyleApo, nTable,
-        bTableRowEnd && bTableInApo, pTabPos);
+    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, pNowStyleApo,
+        nCellLevel, bTableRowEnd , pTabPos);
 
     //look to see if we are in a Table, but Table in foot/end note not allowed
-    bool bStartTab = (nTable < nCellLevel) && !bFtnEdn;
+    bool bStartTab = (nInTable < nCellLevel) && !bFtnEdn;
 
-    bool bStopTab = bWasTabRowEnd && (nTable > nCellLevel) && !bFtnEdn;
+    bool bStopTab = bWasTabRowEnd && (nInTable > nCellLevel) && !bFtnEdn;
 
     bWasTabRowEnd = false;  // must be deactivated right here to prevent next
                             // WW8TabDesc::TableCellEnd() from making nonsense
 #if 0
     //we shouldn't need this anymore with table in table support.
 #endif
-    if (nTable && !bStopTab && (bStartApo || bStopApo))
+    if (nInTable && !bStopTab && (nInTable == nCellLevel && (bStartApo || bStopApo)))
         bStopTab = bStartTab = true;    // Required to stop and start table
 
 //  Dann auf Anl (Nummerierung) testen
@@ -1531,37 +1527,38 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
             StopAnl();                                  // Wirkliches Ende
         }
     }
-    if( bStopTab )
+    if (bStopTab)
     {
         StopTable();
-        --nTable;
+        maApos.pop_back();
+        --nInTable;
     }
-    if( bStopApo )
+    if (bStopApo)
     {
         StopApo();
-        bApo = false;
+        maApos[nInTable] = false;
     }
 
-    if( bStartApo && !( nIniFlags & WW8FL_NO_APO ) )
+    if (bStartApo)
     {
-        bApo = StartApo(pSprm29, pNowStyleApo, pTabPos);
-        *pbReSync = true;                   // nach StartApo ist ein ReSync
-                                            // noetig ( eigentlich nur, falls
-                                            // die Apo ueber eine FKP-Grenze
-                                            // geht
+        maApos[nInTable] = StartApo(pSprm29, pNowStyleApo, pTabPos);
+        // nach StartApo ist ein ReSync noetig ( eigentlich nur, falls die Apo
+        // ueber eine FKP-Grenze geht
+        *pbReSync = true;
     }
-    if( bStartTab && !( nIniFlags & WW8FL_NO_TABLE ) )
+    if (bStartTab)
     {
-        if( bAnl )                          // Nummerierung ueber Zellengrenzen
+        if (bAnl)                           // Nummerierung ueber Zellengrenzen
             StopAnl();                      // fuehrt zu Absturz -> keine Anls
                                             // in Tabellen
-        while (nTable < nCellLevel)
-            nTable += StartTable(nStartCp);
-        *pbReSync = true;                   // nach StartTable ist ein ReSync
-                                            // noetig ( eigentlich nur, falls
-                                            // die Tabelle ueber eine
-                                            // FKP-Grenze geht
-        bTableInApo = nTable && bApo;
+        while (nInTable < nCellLevel)
+        {
+            nInTable += StartTable(nStartCp);
+            maApos.push_back(false);
+        }
+        // nach StartTable ist ein ReSync noetig ( eigentlich nur, falls die
+        // Tabelle ueber eine FKP-Grenze geht
+        *pbReSync = true;
     }
     return bTableRowEnd;
 }
@@ -1815,7 +1812,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             they are inside tables. Appears impossible to create one from
             scratch with winword.
             */
-            if (!nTable)
+            if (!nInTable)
             {
                 SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
                 if ( pNd )
@@ -1864,7 +1861,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0xc:
             //#i1909# section/page breaks should not occur in tables, word
             //itself ignores them in this case.
-            if (!nTable)
+            if (!nInTable)
             {
                 bPgSecBreak = true;
                 pCtrlStck->KillUnlockedAttrs(*pPaM->GetPoint());
@@ -1942,7 +1939,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;
         case 0xd:
             bRet = true;
-            if (nTable > 1)
+            if (nInTable > 1)
             {
                 WW8PLCFspecial* pTest = pPlcxMan->GetMagicTables();
                 if (pTest && pTest->SeekPosExact(nPosCp+1+nCpOfs) &&
@@ -2320,13 +2317,14 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pFmtOfJustInsertedApo = 0;
     nColls = nAktColl = 0;
     nObjLocFc = nPicLocFc = 0;
-    nTable=0;
-    bReadNoTbl = bPgSecBreak = bSpec = bObj = bApo = bTxbxFlySection
+    nInTable=0;
+    bReadNoTbl = bPgSecBreak = bSpec = bObj = bTxbxFlySection
                = bHasBorder = bSymbol = bIgnoreText = bDontCreateSep
-               = bTableInApo = bWasTabRowEnd = false;
+               = bWasTabRowEnd = false;
     bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
                = bIsHeader = bIsFooter = bSectionHasATitlePage
                = bIsUnicode = bCpxStyle = bStyNormal = bWWBugNormal  = false;
+
     bNoAttrImport = bPgChpLevel = bEmbeddObj = false;
     bAktAND_fNumberAcross = false;
     bNoLnNumYet = true;
@@ -2365,6 +2363,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pPageDesc = 0;
 
     nNfcPgn = nPgChpDelim = nPgChpLevel = 0;
+
+    maApos.push_back(false);
 }
 
 void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
@@ -3302,4 +3302,24 @@ BOOL SwMSDffManager::ShapeHasText(ULONG, ULONG) const
     // entscheiden zu koennen, ob wir sie nicht doch als Textfeld benoetigen.
     // Also vorsichtshalber mal alle umwandeln:
     return true;
+}
+
+bool SwWW8ImplReader::InEqualOrHigherApo(int nLvl) const
+{
+    if (nLvl)
+        --nLvl;
+    mycApoIter aIter = std::find(maApos.begin() + nLvl, maApos.end(), true);
+    if (aIter != maApos.end())
+        return true;
+    else
+        return false;
+}
+
+bool SwWW8ImplReader::InEqualApo(int nLvl) const
+{
+    //If we are in a table, see if an apo was inserted at the level below
+    //the table.
+    if (nLvl)
+        --nLvl;
+    return maApos[nLvl];
 }

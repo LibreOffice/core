@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-29 10:22:37 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,16 +433,14 @@ private:
     WW8FlyPara* mpWFlyPara;
     WW8SwFlyPara* mpSFlyPara;
     WW8TabDesc* mpTableDesc;
-    int mnTable;
+    int mnInTable;
     USHORT mnAktColl;
     sal_Unicode mcSymbol;
     bool mbIgnoreText;
     bool mbDontCreateSep;
     bool mbSymbol;
     bool mbHdFtFtnEdn;
-    bool mbApo;
     bool mbTxbxFlySection;
-    bool mbTableInApo;
     bool mbAnl;
     bool mbInHyperlink;
     bool mbPgSecBreak;
@@ -687,6 +685,9 @@ friend class WW8FormulaControl;
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
     SwFrmFmt* pFmtOfJustInsertedApo;
 
+    //Keep track of APO environments
+    std::deque<bool> maApos;
+    typedef std::deque<bool>::const_iterator mycApoIter;
     /*
     Keep track of generated Ruby character formats we we can minimize the
     number of character formats created
@@ -820,15 +821,14 @@ friend class WW8FormulaControl;
     bool bPgSecBreak;       // Page- oder Sectionbreak ist noch einzufuegen
     bool bSpec;             // Special-Char im Text folgt
     bool bObj;              // Obj im Text
-    bool bApo;              // FlyFrame, der wegen Winword APO eingefuegt wurde
     bool bTxbxFlySection;   // FlyFrame, der als Ersatz fuer Winword Textbox eingefuegt wurde
     bool bHasBorder;        // fuer Buendelung der Border
     bool bSymbol;           // z.B. Symbol statt Times
     bool bIgnoreText;       // z.B. fuer FieldVanish
     bool bDontCreateSep;    // e.g. when skipping result of multi-column index-field
-     int  nTable;           // wird gerade eine Tabelle eingelesen
-    bool bTableInApo;       // Table is contained in Apo
+     int  nInTable;         // wird gerade eine Tabelle eingelesen
     bool bWasTabRowEnd;     // Tabelle : Row End Mark
+
     bool bShdTxtCol;        // Textfarbe indirekt gesetzt ( Hintergrund sw )
     bool bCharShdTxtCol;    // Textfarbe indirekt gesetzt ( Zeichenhintergrund sw )
     bool bAnl;              // Nummerierung in Bearbeitung
@@ -983,11 +983,10 @@ friend class WW8FormulaControl;
     bool TestSameApo(const BYTE* pSprm29, const WW8FlyPara *pNowStyleApo,
         WW8_TablePos *pTabPos);
     const BYTE* TestApo(bool& rbStartApo, bool& rbStopApo,
-        WW8FlyPara* &pbNowStyleApo, int nInTable, bool bTableRowEnd,
+        WW8FlyPara* &pbNowStyleApo, int nCellLevel, bool bTableRowEnd,
         WW8_TablePos *pTabPos);
 
     bool ProcessSpecial(bool bAllEnd, bool* pbReSync, WW8_CP nStartCp );
-    USHORT TabCellSprm(int nLevel) const;
     USHORT TabRowSprm(int nLevel) const;
 
     ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
@@ -1028,6 +1027,10 @@ friend class WW8FormulaControl;
     ULONG LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss);
 
     bool StartTable(WW8_CP nStartCp);
+    bool InEqualApo(int nLvl) const;
+    bool InLocalApo() const { return InEqualApo(nInTable); }
+    bool InEqualOrHigherApo(int nLvl) const;
+    bool InAnyApo() const { return InEqualOrHigherApo(0); }
     void TabCellEnd();
     void StopTable();
     short GetTableLeft();

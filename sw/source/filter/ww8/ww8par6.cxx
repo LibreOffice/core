@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 15:57:06 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,7 +1200,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     itself ignores them in this case. The bug is truly that this filter
     created such documents in the past!
     */
-    if (nTable)
+    if (nInTable)
         return;
 
     if (bTxbxFlySection || bDontCreateSep)
@@ -2703,7 +2703,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     {
         // hier duerfen neg. Werte bis minimal -nPgLeft entstehen
         nXPos -= nPgLeft;
-        if( rIo.nTable )
+        if( rIo.nInTable )
             nXPos -= rIo.GetTableLeft();
     }
 }
@@ -5013,7 +5013,8 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
         if( nBorder )                                   // Border
         {
             bool bIsB = IsBorder(aBrcs, true);
-            if( !bApo || !bIsB || ( pWFlyPara && !pWFlyPara->bBorderLines ))
+            if (!InLocalApo() || !bIsB ||
+                (pWFlyPara && !pWFlyPara->bBorderLines ))
             {
                 // in Apo keine Umrandungen *ein*-schalten, da ich
                 // sonst die Flyumrandungen doppelt bekomme

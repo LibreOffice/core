@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:08:01 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
 // Die Parameter rbStartApo, rbStopApo und rpNowStyleApo sind reine
 // Rueckgabeparameter
 const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
-    WW8FlyPara* &rpNowStyleApo, int nInTable, bool bTableRowEnd,
+    WW8FlyPara* &rpNowStyleApo, int nCellLevel, bool bTableRowEnd,
     WW8_TablePos *pTabPos)
 {
     const BYTE* pSprm37;
@@ -557,7 +557,8 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     to see if we are still in that frame.
     */
 
-    if( !bApo && nInTable && rpNowStyleApo && (!(pTableDesc && pTableDesc->GetAktCol())))
+    if (nInTable && InLocalApo() && rpNowStyleApo && (!(pTableDesc &&
+        pTableDesc->GetAktCol())))
     {
         pSprm37       = 0;
         pSprm29       = 0;
@@ -572,11 +573,21 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     // Is there some frame data here
     bool bNowApo = rpNowStyleApo || pSprm29 || pSprm37 || pTabPos;
 
-    bool bTestAllowed = (!bTxbxFlySection) && (!bTableRowEnd) &&
-        (!(nInTable && pTableDesc && pTableDesc->GetAktCol()));
+    bool bTestAllowed = !bTxbxFlySection && !bTableRowEnd;
+    if (bTestAllowed)
+    {
+        if (nCellLevel == nInTable)
+        {
+            bTestAllowed =
+                (!(nInTable && pTableDesc && pTableDesc->GetAktCol()));
+        }
+    }
 
-    rbStartApo = bNowApo && !bApo && bTestAllowed;  // normal APO-start
-    rbStopApo  = bApo && !bNowApo && bTestAllowed;  // normal APO-end
+    if (!bTestAllowed)
+        return pSprm29;
+
+    rbStartApo = bNowApo && !InEqualApo(nCellLevel); // APO-start
+    rbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
 
     //If it happens that we are in a table, then if its not the first cell
     //then any attributes that might otherwise cause the contents to jump
@@ -584,34 +595,13 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     //unit no matter what else happens. So if we are not in a table at
     //all, or if we are in the first cell then test that the last frame
     //data is the same as the current one
-    if( bApo && bNowApo && !bTableRowEnd)
+    if (bNowApo && !bTableRowEnd && nCellLevel == nInTable && InLocalApo())
     {
-        if (bTestAllowed)
-        {
-            // two bordering eachother
-            if (!TestSameApo( pSprm29, rpNowStyleApo, pTabPos))
-                rbStopApo = rbStartApo = true;
-        }
+        // two bordering eachother
+        if (!TestSameApo(pSprm29, rpNowStyleApo, pTabPos))
+            rbStopApo = rbStartApo = true;
     }
 
-#if 0
-    /*
-    ##777##
-    I'm very suspicious of this use of bApoContinuedInTabCell2ndParagraph, if
-    we are at the end of a table but another table is anchored after it with
-    completely different absolute positioning location so as to be in a
-    different place entirely then if we use this test the two tables are all
-    made into one single table. If there is something that this wants to fix
-    then this is the wrong place. The test to determine if they are the same
-    floating frame in TestSameApo should be sufficient.
-    */
-    if( bApo && bNowApo && !bTableRowEnd
-        && !bApoContinuedInTabCell2ndParagraph
-        && !TestSameApo( pSprm29, rpNowStyleApo ) )
-    {
-        rbStopApo = rbStartApo = true;              // aneinandergrenzende APOs
-    };
-#endif
     return pSprm29;
 }
 
@@ -1496,6 +1486,19 @@ void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
 #endif
 }
 
+const BYTE *HasTabCellSprm(WW8PLCFx_Cp_FKP* pPap, bool bVer67)
+{
+    const BYTE *pParams;
+    if (bVer67)
+        pParams = pPap->HasSprm(24);
+    else
+    {
+        if (!(pParams = pPap->HasSprm(0x244B)))
+            pParams = pPap->HasSprm(0x2416);
+    }
+    return pParams;
+}
+
 WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
     : pIo(pIoClass), pFirstBand(0), pActBand(0), pTmpPos(0), pTblNd(0),
     pTabLines(0), pTabLine(0), pTabBoxes(0), pTabBox(0), pMergeGroups(0),
@@ -1537,7 +1540,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         WW8_TablePos *pTabPos  = 0;
 
         // Suche Ende einer TabZeile
-        if(!(pIo->SearchRowEnd(pPap, nStartCp, pIo->nTable)))
+        if(!(pIo->SearchRowEnd(pPap, nStartCp, pIo->nInTable)))
         {
             bOk = false;
             break;
@@ -1743,15 +1746,18 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         }
 
         //Are we still in a table cell
-        pParams = pPap->HasSprm(pIo->TabCellSprm(pIo->nTable));
+        pParams = HasTabCellSprm(pPap, pIo->bVer67);
         const BYTE *pLevel = pPap->HasSprm(0x6649);
         // InTable
-        if (!pParams || (1 != *pParams) || (pLevel && (*pLevel <= pIo->nTable)))
+        if (!pParams || (1 != *pParams) ||
+            (pLevel && (*pLevel <= pIo->nInTable)))
+        {
             break;
+        }
 
         //Get the end of row new table positioning data
         WW8_CP nMyStartCp=nStartCp;
-        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
+        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nInTable))
             if (SwWW8ImplReader::ParseTabPos(&aTabPos, pPap))
                 pTabPos = &aTabPos;
 
@@ -1771,7 +1777,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         //considered part of the same table
         bool bStartApo, bStopApo;
         WW8FlyPara *rpNowStyleApo=0;
-        pIo->TestApo(bStartApo, bStopApo, rpNowStyleApo, true, false, pTabPos);
+        pIo->TestApo(bStartApo, bStopApo, rpNowStyleApo, pIo->nInTable, false,
+            pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
@@ -1839,7 +1846,7 @@ void WW8TabDesc::CalcDefaults()
     to around (in frame (bApo)) and the table splits into two very disjoint
     rows as the beginning point of each row are very different
     */
-    if ((!pIo->bApo) && (eOri == HORI_CENTER))
+    if ((!pIo->InLocalApo()) && (eOri == HORI_CENTER))
     {
         for (pR = pFirstBand; pR; pR = pR->pNextBand)
             for( short i = pR->nWwCols; i >= 0; --i)
@@ -2163,7 +2170,7 @@ void WW8TabDesc::CreateSwTable()
 
     if (HORI_LEFT_AND_WIDTH == eOri)
     {
-        if (pIo->bApo && pIo->nTable == 0 && pIo->pSFlyPara->pFlyFmt &&
+        if (!pIo->nInTable && pIo->InLocalApo() && pIo->pSFlyPara->pFlyFmt &&
             GetMinLeft())
         {
             //If we are inside a frame and we have a border, the frames
@@ -3013,7 +3020,14 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 
     if( pTableDesc->Ok() )
     {
-        if (!aTableStack.empty() && !(bApo && pSFlyPara->pFlyFmt))
+        int nNewInTable = nInTable + 1;
+        if (InEqualApo(nNewInTable))
+        {
+            ASSERT(pSFlyPara->pFlyFmt,
+                "how could we be in a local apo and have no apo");
+        }
+
+        if (!aTableStack.empty() && !InEqualApo(nNewInTable))
         {
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
@@ -3036,7 +3050,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableDesc->pFlyFmt->SetAttr(SwFmtSurround(SURROUND_NONE));
             pTableDesc->pFlyFmt->SetAttr(aHori);
         }
-        else if (bApo && pSFlyPara->pFlyFmt)
+        else if (InEqualApo(nNewInTable) && pSFlyPara->pFlyFmt)
         {
             pTableDesc->SetSizePosition(pSFlyPara->pFlyFmt);
             const SfxPoolItem *pItem;
@@ -3047,7 +3061,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 pSFlyPara->BoxUpWidth(pSize->GetWidth());
             }
         }
-        else if (!bApo)
+        else if (!InEqualApo(nNewInTable))
             pTableDesc->SetSizePosition(0);
         pTableDesc->UseSwTable();
     }
@@ -3059,7 +3073,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 
 void SwWW8ImplReader::TabCellEnd()
 {
-    if (nTable && pTableDesc)
+    if (nInTable && pTableDesc)
         pTableDesc->TableCellEnd();
 }
 

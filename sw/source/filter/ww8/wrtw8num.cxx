@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aidan $ $Date: 2002-11-29 12:05:40 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -526,7 +529,7 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
             wwFont aPseudoFont(sFontName, rFont.GetPitch(), rFont.GetFamily(),
                 eChrSet, bWrtWW8);
             nFontId = maFontHelper.GetId(aPseudoFont);
-            *rpCh = sNumStr.GetChar(0);
+            *rpCh = static_cast<sal_uInt8>(sNumStr.GetChar(0));
         }
         else
         {

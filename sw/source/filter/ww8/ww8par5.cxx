@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 17:59:29 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3093,10 +3093,14 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 
                     }
                     break;
-
+                case 't':
+                    nRet = aReadParam.SkipToNextToken();
+                    bOptions = true;
+                    if (-2 == nRet)
+                        sTarget = aReadParam.GetResult();
+                    break;
                 case 'h':
                 case 'm':
-                case 't':
                     ASSERT( !this, "Auswertung fehlt noch - Daten unbekannt" );
                 case 's':   //worthless fake anchor option
                     bOptions = true;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-21 17:06:01 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #pragma hdrstop
 
@@ -344,7 +347,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     {
         if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
             nDrawXOfs2 -= nPgLeft;
-        if( nTable )                            // Obj in Table
+        if( nInTable )                          // Obj in Table
             nDrawXOfs2 -= GetTableLeft();       // -> siehe Kommentar
                                                 // bei GetTableLeft()
     }
@@ -2348,7 +2351,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
          table, which at least puts it close, theres nothing we can do
          about the vertical either.
         */
-        if (nTable && eAnchor == FLY_PAGE)
+        if (nInTable && eAnchor == FLY_PAGE)
         {
             pFSPA->nXaLeft -= GetTableLeft();
             pFSPA->nXaRight -= GetTableLeft();

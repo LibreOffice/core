@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 16:52:06 $
+ *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ class sortswflys :
 public:
     bool operator()(const swFlyFrm &rOne, const swFlyFrm &rTwo) const
     {
-        return rOne.maPos < rTwo.maPos;
+        return (rOne.maPos < rTwo.maPos) ? true : false;
     }
 };
 
