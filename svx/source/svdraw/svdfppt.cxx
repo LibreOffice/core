@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-06 14:42:24 $
+ *  last change: $Author: mt $ $Date: 2001-07-24 15:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,6 @@
 #endif
 #ifndef _SYCHCONV_HXX
 #include <svtools/sychconv.hxx>
-#endif
-#ifndef _TEXTCONV_HXX
-#include <textconv.hxx>
 #endif
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
