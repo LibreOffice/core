@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtdmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:35:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
+#include "com/sun/star/reflection/XPublished.hpp"
 #include "com/sun/star/reflection/XStructTypeDescription.hpp"
+#include "com/sun/star/reflection/XTypeDescription.hpp"
 #include "com/sun/star/registry/InvalidRegistryException.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/uno/Exception.hpp"
@@ -244,6 +246,34 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
     assertEqual< bool >(false, method->getParameters()[0]->isOut());
     assertEqual< sal_Int32 >(0, method->getParameters()[0]->getPosition());
     assertEqual< sal_Int32 >(0, method->getExceptions().getLength());
+
+    assertFalse(
+        css::uno::Reference< css::reflection::XPublished >(
+            css::uno::Reference< css::reflection::XTypeDescription >(
+                manager->getByHierarchicalName(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]boolean"))),
+                css::uno::UNO_QUERY_THROW),
+            css::uno::UNO_QUERY).is());
+    assertFalse(
+        css::uno::Reference< css::reflection::XPublished >(
+            css::uno::Reference< css::reflection::XTypeDescription >(
+                manager->getByHierarchicalName(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.beans.XIntroTest::ObjectName"))),
+                css::uno::UNO_QUERY_THROW),
+            css::uno::UNO_QUERY).is());
+    assertFalse(
+        css::uno::Reference< css::reflection::XPublished >(
+            css::uno::Reference< css::reflection::XTypeDescription >(
+                manager->getByHierarchicalName(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.beans.XIntroTest::writeln"))),
+                css::uno::UNO_QUERY_THROW),
+            css::uno::UNO_QUERY).is());
+    //TODO: check that the reflection of a property of an accumulation-based
+    // service does not support XPublished
 
     return 0;
 }
