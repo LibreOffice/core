@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScaleAutomatism.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-11-26 12:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ ExplicitIncrementData getExplicitIncrementAndScaleForLogarithm(
             if( rExplicitScale.Minimum >= rExplicitScale.Maximum )
                 rExplicitScale.Minimum =  log(rExplicitScale.Maximum)/10.0;
         }
+        if( rExplicitScale.Maximum<= rExplicitScale.Minimum )
+            rExplicitScale.Maximum = rExplicitScale.Minimum + 10;
     }
 
     ExplicitIncrementData aRet;
@@ -242,6 +244,15 @@ ExplicitIncrementData getExplicitIncrementAndScaleForLinear(
     //minimum and maximum of the ExplicitScaleData may be changed
     //to suiteable values if allowed
     //but they will definitly be changed if they are out of allowed borders
+
+    if( nMaximumAutomaticMainIncrementCount <= 0 )
+        nMaximumAutomaticMainIncrementCount = 5;
+
+    //make sure that minimum and maximum have allowed values
+    {
+        if( rExplicitScale.Maximum<= rExplicitScale.Minimum )
+            rExplicitScale.Maximum = rExplicitScale.Minimum + 10;
+    }
 
     ExplicitIncrementData aRet;
     if(!(rSourceIncrement.PostEquidistant>>=aRet.PostEquidistant))
