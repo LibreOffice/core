@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 11:22:02 $
+ *  last change: $Author: sj $ $Date: 2000-11-20 14:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3678,107 +3678,470 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     }
     switch ( eAe )
     {
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_TOP :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LEFT :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_BOTTOM :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_RIGHT :
-            nFlyMethod = 0xa;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER :
-            nFlyMethod = 0xb;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT :
-            nFlyMethod = 0xc;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_LINES :
-        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRIPES :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_LINES :
-        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRIPES :
-            nFlyMethod = 8;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_CLOCKWISE :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_COUNTERCLOCKWISE :
-            nFlyMethod = 3;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_UPPERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERLEFT :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_UPPERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERRIGHT :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LOWERLEFT :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERLEFT :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LOWERRIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERRIGHT :
-            nFlyDirection += 4;
-            nFlyMethod = 9;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_CLOSE_VERTICAL :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_CLOSE_HORIZONTAL :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL :
-            nFlyMethod = 0xd;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_PATH :
-            nFlyDirection = 0x1c;
-            nFlyMethod = 0xc;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT :
-            nFlyDirection++;
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_RIGHT :
-            nFlyMethod = 0x3;
-        break;
-
-        case ::com::sun::star::presentation::AnimationEffect_DISSOLVE :
-            nFlyMethod = 5;
-        break;
-
         case ::com::sun::star::presentation::AnimationEffect_NONE :
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LEFT :
+        {
+            nFlyDirection = 2;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_TOP :
+        {
+            nFlyDirection = 3;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_RIGHT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_BOTTOM :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 11;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_CENTER :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 11;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT :
+        {
+            nFlyDirection = 2;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM :
+        {
+            nFlyDirection = 3;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRIPES :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 2;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRIPES :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 2;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_CLOCKWISE :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_COUNTERCLOCKWISE :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERLEFT :
+        {
+            nFlyDirection = 7;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_UPPERRIGHT :
+        {
+            nFlyDirection = 6;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERLEFT :
+        {
+            nFlyDirection = 5;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_FADE_FROM_LOWERRIGHT :
+        {
+            nFlyDirection = 4;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_CLOSE_VERTICAL :
+        {
+            nFlyDirection = 3;
+            nFlyMethod = 13;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_CLOSE_HORIZONTAL :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 13;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 13;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL :
+        {
+            nFlyDirection = 2;
+            nFlyMethod = 13;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_PATH :
+        {
+            nFlyDirection = 28;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LEFT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 1;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_TOP :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 1;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_RIGHT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 1;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_BOTTOM :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 1;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_LEFT :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_RIGHT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_RIGHT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_DISSOLVE :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 5;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_LEFT :
+        {
+            nFlyDirection = 2;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_TOP :
+        {
+            nFlyDirection = 3;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_RIGHT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_RANDOM :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 1;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_LINES :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 8;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_LINES :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 8;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LEFT :
+        {
+            nFlyDirection = 2;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_TOP :
+        {
+            nFlyDirection = 3;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_RIGHT :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_BOTTOM :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 10;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_UPPERLEFT :
+        {
+            nFlyDirection = 7;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_UPPERRIGHT :
+        {
+            nFlyDirection = 6;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LOWERLEFT :
+        {
+            nFlyDirection = 5;
+            nFlyMethod = 9;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_LASER_FROM_LOWERRIGHT :
+        {
+            nFlyDirection = 4;
+            nFlyMethod = 9;
+        }
+        break;
         case ::com::sun::star::presentation::AnimationEffect_APPEAR :
         break;
-
         case ::com::sun::star::presentation::AnimationEffect_HIDE :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LEFT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_TOP :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_RIGHT :
-        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_BOTTOM :
-        case ::com::sun::star::presentation::AnimationEffect_RANDOM :
+        {
+            nFlyDirection = 0;
             nFlyMethod = 1;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERLEFT :
+        {
+            nFlyDirection = 4;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT :
+        {
+            nFlyDirection = 5;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT :
+        {
+            nFlyDirection = 7;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERLEFT :
+        {
+            nFlyDirection = 6;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_UPPERLEFT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_UPPERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LOWERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_TO_LOWERLEFT :
+            nAfterEffect |= 2;
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT :
+        {
+            nFlyDirection = 8;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_TOP :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT :
+        {
+            nFlyDirection = 11;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT :
+        {
+            nFlyDirection = 10;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT :
+        {
+            nFlyDirection = 9;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_LEFT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_TOP :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM :
+        case ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT :
+            nAfterEffect |= 2;
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_CHECKERBOARD :
+        {
+            nFlyDirection = 1;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD :
+        {
+            nFlyDirection = 0;
+            nFlyMethod = 3;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_ROTATE :
+        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_ROTATE :
+        {
+            nFlyDirection = 27;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRETCH :
+        case ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRETCH :
+        {
+            nFlyDirection = 22;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LEFT :
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT :
+        {
+            nFlyDirection = 23;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_TOP :
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT :
+        {
+            nFlyDirection = 24;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_RIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT :
+        {
+            nFlyDirection = 25;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_BOTTOM :
+        case ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT :
+        {
+            nFlyDirection = 26;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN :
+        {
+            nFlyDirection = 16;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_SMALL :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_SPIRAL :
+        {
+            nFlyDirection = 17;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT :
+        {
+            nFlyDirection = 18;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_SMALL :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_SPIRAL :
+        {
+            nFlyDirection = 19;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_LEFT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_UPPERLEFT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_TOP :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_RIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_BOTTOM :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_LOWERLEFT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_IN_FROM_CENTER :
+        {
+            nFlyDirection = 16;
+            nFlyMethod = 12;
+        }
+        break;
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_LEFT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_TOP :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_RIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_BOTTOM :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT :
+        case ::com::sun::star::presentation::AnimationEffect_ZOOM_OUT_FROM_CENTER :
+            nAfterEffect |= 2;
         break;
     }
     if ( mnDiaMode >= 1 )
@@ -3805,7 +4168,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     sal_Bool bDimHide = FALSE;
     sal_Bool bDimPrevious = FALSE;
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DimHide" ) ) ) )
-    mAny >>= bDimHide;
+        mAny >>= bDimHide;
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" ) ) ) )
         mAny >>= bDimPrevious;
     if ( bDimPrevious )
@@ -4154,6 +4517,34 @@ sal_Bool PPTWriter::ImplIsAutoShape ( const ::com::sun::star::uno::Reference< ::
 
 //  -----------------------------------------------------------------------
 
+sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPropSet,
+                                ::com::sun::star::presentation::AnimationEffect& eEffect,
+                                ::com::sun::star::presentation::AnimationEffect& eTextEffect,
+                                sal_Bool& bIsSound )
+{
+    ::com::sun::star::uno::Any aAny;
+    if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
+        aAny >>= eEffect;
+    else
+        eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+
+    if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ) ) )
+        aAny >>= eTextEffect;
+    else
+        eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+    if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ) ) )
+        aAny >>= bIsSound;
+    else
+        bIsSound = FALSE;
+
+    sal_Bool bHasEffect = ( ( eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+                        || ( eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+                        || bIsSound );
+    return bHasEffect;
+};
+
+//  -----------------------------------------------------------------------
+
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \
     sal_uInt32 nId = mp_EscherEx->GetShapeID();                     \
@@ -4220,6 +4611,14 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
 
         if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE ) )
         {
+            sal_Bool bIsSound;
+            ::com::sun::star::presentation::AnimationEffect eAe;
+            ::com::sun::star::presentation::AnimationEffect eTe;
+
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" ) ) ) )
+                nEffectCount = *(sal_uInt16*)mAny.getValue();
+
+            sal_Bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
             sal_Bool bIsAutoShape = FALSE;
             sal_Bool bGroup = mType == "drawing.Group";
             sal_Bool bOpenBezier   = ( mType == "drawing.OpenBezier" ) || ( mType == "drawing.OpenFreeHand" )
@@ -4253,25 +4652,34 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             {
                 if ( bGroup )
                 {
+                    SvMemoryStream* pTmp = NULL;
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
                         aXIndexAccess( mXShape, ::com::sun::star::uno::UNO_QUERY );
                     EnterGroup( aXIndexAccess );
-                    mp_EscherEx->EnterGroup( &maRect );
-                    continue;
-                }
-                sal_Bool bIsFontwork = FALSE;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ) ) )
-                    mAny >>= bIsFontwork;
-                if ( bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
-                {
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "BoundRect" ) ) ) )
+                    if ( bEffect )
                     {
-                        ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)mAny.getValue() );
-                        maPosition = ImplMapPoint( ::com::sun::star::awt::Point( aRect.X, aRect.Y ) );
-                        maSize = ImplMapSize( ::com::sun::star::awt::Size( aRect.Width, aRect.Height ) );
-                        maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                        pTmp = new SvMemoryStream( 0x200, 0x200 );
+                        ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
                     }
-                    mType = "drawing.dontknow";
+                    mp_EscherEx->EnterGroup( &maRect, pTmp );
+                    delete pTmp;
+                }
+                else
+                {
+                    sal_Bool bIsFontwork = FALSE;
+                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ) ) )
+                        mAny >>= bIsFontwork;
+                    if ( bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
+                    {
+                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "BoundRect" ) ) ) )
+                        {
+                            ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)mAny.getValue() );
+                            maPosition = ImplMapPoint( ::com::sun::star::awt::Point( aRect.X, aRect.Y ) );
+                            maSize = ImplMapSize( ::com::sun::star::awt::Size( aRect.Width, aRect.Height ) );
+                            maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                        }
+                        mType = "drawing.dontknow";
+                    }
                 }
             }
 
@@ -4657,87 +5065,6 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             }
             else if ( mType == "drawing.Measure" )
             {
-/*
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureKind" ) ) ) )
-                {
-                    mp_EscherEx->EnterGroup( &maRect );
-                    mp_EscherEx->OpenContainer( _Escher_SpContainer );
-                    ImplWriteAny( ANY_FLAGS_LINE, FALSE );
-                    sal_uInt32 nFlags = 0xa00;                              // Flags: Connector | HasSpt
-                    if ( maRect.Top() > maRect.Bottom() )
-                        nFlags |= 0x80;                                     // Flags: VertMirror
-                    if ( maRect.Left() > maRect.Right() )
-                        nFlags |= 0x40;                                     // Flags: HorzMirror
-
-                    ADD_SHAPE( _Escher_ShpInst_Line, nFlags );
-                    mp_EscherEx->BeginCount();
-                    mp_EscherEx->AddOpt( _Escher_Prop_shapePath, _Escher_ShapeComplex );
-                    ImplWriteLineBundle( FALSE );
-                    mp_EscherEx->EndCount( _Escher_OPT, 3 );
-                    maRect.Justify();
-                    mp_EscherEx->AddClientAnchor( maRect );
-                    mp_EscherEx->CloseContainer();          // _Escher_SpContainer
-
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextHorizontalPosition" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextVerticalPosition" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureLineDistance" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureHelpLineOverhang" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureHelpLineDistance" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureHelpLine1Length" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureHelpLine2Length" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureBelowReferenceEdge" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextRotate90" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextUpsideDown" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureOverhang" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureScale" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureShowUnit" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureFormatString" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextAutoAngle" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextAutoAngleView" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextIsFixedAngle" ) ) ) )
-                    {
-                    }
-                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MeasureTextFixedAngle" ) ) ) )
-                    {
-                    }
-                    mp_EscherEx->LeaveGroup();
-                }
-*/
                 continue;
             }
             else if ( mType == "drawing.Line" )
@@ -5250,26 +5577,12 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             mp_EscherEx->EndCount( _Escher_OPT, 3 );
             mp_EscherEx->AddClientAnchor( maRect );
 
-            ::com::sun::star::presentation::AnimationEffect eAe( ::com::sun::star::presentation::AnimationEffect_NONE );
-            ::com::sun::star::presentation::AnimationEffect eTe( ::com::sun::star::presentation::AnimationEffect_NONE );
             ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
-                mAny >>= eAe;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ) ) )
-                mAny >>= eTe;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" ) ) ) )
-                nEffectCount = *(sal_uInt16*)mAny.getValue();
-
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ) ) )
                 mAny >>= eCa;
 
             sal_Int32 nPlacementID = -1;
 
-            sal_Bool bIsSound = FALSE;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ) ) )
-                mAny >>= bIsSound;
-            sal_Bool bEffect = ( ( eAe != ::com::sun::star::presentation::AnimationEffect_NONE )
-                              || ( eTe != ::com::sun::star::presentation::AnimationEffect_NONE ) || bIsSound );
             sal_Bool bClientData = ( bEffect || ( eCa != ::com::sun::star::presentation::ClickAction_NONE ) ||
                                         nPlaceHolderAtom || nOlePictureId );
             if ( bClientData )

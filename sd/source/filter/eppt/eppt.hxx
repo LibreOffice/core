@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 11:21:15 $
+ *  last change: $Author: sj $ $Date: 2000-11-20 14:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,6 +938,10 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          ImplGetMasterIndex( PageType ePageType );
         void                ImplFlipBoundingBox( const ::com::sun::star::awt::Point& rRefPoint );
         sal_Bool            ImplGetText();
+        sal_Bool            ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                                ::com::sun::star::presentation::AnimationEffect& eEffect,
+                                ::com::sun::star::presentation::AnimationEffect& eTextEffect,
+                                sal_Bool& bHasSound );
         void                ImplWriteObjectEffect( SvStream& rSt,
                                 ::com::sun::star::presentation::AnimationEffect eEffect,
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
