@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:38:28 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,26 +106,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-class BasicIDEModule : public BasicIDEModuleDummy
-{
-public:
-    BasicIDEModule( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
-       BasicIDEModuleDummy( pMgr, FALSE, (SfxObjectFactory*) pObjFact )
-       {}
-
-    virtual SfxModule *Load ();
-};
-
-SfxModule* BasicIDEModuleDummy::Load ()
-{
-    return 0;
-}
-
-SfxModule* BasicIDEModule::Load ()
-{
-    return this;
-}
-
 static BasicIDEDLL* pBasicIDEDLL = 0;
 
 BasicIDEDLL* BasicIDEDLL::GetDLL()
@@ -133,10 +113,8 @@ BasicIDEDLL* BasicIDEDLL::GetDLL()
     return pBasicIDEDLL;
 }
 
-SFX_IMPL_MODULE_DLL( BasicIDE )
-
 IDEResId::IDEResId( USHORT nId ):
-    ResId( nId, (*(BasicIDEModuleDummy**)GetAppData(SHL_IDE))->GetResMgr() )
+    ResId( nId, (*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
 {
 }
 
@@ -157,21 +135,22 @@ BasicIDEDLL::~BasicIDEDLL()
 
 void BasicIDEDLL::Init()
 {
-    BasicIDEModuleDummy** ppShlPtr = (BasicIDEModuleDummy**) GetAppData(SHL_IDE);
+    if ( pBasicIDEDLL )
+        return;
 
-    SfxObjectFactory* pFact = (*ppShlPtr)->pBasicDocShellFactory;
-    delete (*ppShlPtr);
+    SfxObjectFactory* pFact = &BasicDocShell::Factory();
 
     ByteString aResMgrName( "basctl" );
     aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
     ResMgr* pMgr = ResMgr::CreateResMgr(
         aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
 
-    (*ppShlPtr) = new BasicIDEModule( pMgr, pFact );
-    (*ppShlPtr)->pBasicDocShellFactory = pFact;
+    BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
+
+    BasicDocShell::RegisterFactory( SVX_INTERFACE_BASIDE_DOCSH );
 
     new BasicIDEDLL;
-    SfxModule* pMod = (*ppShlPtr );
+    SfxModule* pMod = BASIC_MOD();
     BasicDocShell::RegisterInterface( pMod );
     BasicIDEShell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
     BasicIDEShell::RegisterInterface( pMod );
@@ -187,10 +166,9 @@ void BasicIDEDLL::Init()
 void BasicIDEDLL::Exit()
 {
     // the BasicIDEModule must be destroyed
-    BasicIDEModuleDummy** ppShlPtr = (BasicIDEModuleDummy**) GetAppData(SHL_IDE);
+    BasicIDEModule** ppShlPtr = (BasicIDEModule**) GetAppData(SHL_IDE);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
-
     DELETEZ( pBasicIDEDLL );
 }
 
