@@ -1,0 +1,232 @@
+module com { module sun { module star {
+
+/// Java AWT-like user interface toolkit interface specifications for UNO.
+module awk {};
+
+/*
+/<TD width=30%><A HREF="beans\/index.html">beans<\/A><\/TD>/ { print
+    print "<TD width=70%>Java beans-like property access and introspection.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="bridge\/index.html">bridge<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces for building bridges to other component models.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="chart\/index.html">chart<\/A><\/TD>/ { print
+    print "<TD width=70%>Charting diagram interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="data\/index.html">data<\/A><\/TD>/ { print
+    print "<TD width=70%>Non-JDBC conform database interfaces <b>(deprecated)</d></TD>";
+getline; next }
+
+/<TD width=30%><A HREF="configuration\/index.html">configuration<\/A><\/TD>/ { print
+    print "<TD width=70%>Access to the tree of configuration data.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="connection\/index.html">connection<\/A><\/TD>/ { print
+    print "<TD width=70%>Data exchange interfaces for inter-process communication.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="container\/index.html">container<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces for collections and containers.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="corba\/index.html">corba<\/A><\/TD>/ { print
+    print "<TD width=70%>Modules for IOP, IIOP and GIOP.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="data\/index.html">data<\/A><\/TD>/ { print
+    print "<TD width=70%>deprecated (StarOffice 5.2 only)</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="datatransfer\/index.html">datatransfer<\/A><\/TD>/ { print
+    print "<TD width=70%>Clipboard and Drag&amp;Drop interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="document\/index.html">document<\/A><\/TD>/ { print
+    print "<TD width=70%>Office document related interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="drawing\/index.html">drawing<\/A><\/TD>/ { print
+    print "<TD width=70%>Drawing and shape specific interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="form\/index.html">form<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces for managing forms and controls.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="formula\/index.html">formula<\/A><\/TD>/ { print
+    print "<TD width=70%>nterfaces for mathematical formulas.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="frame\/index.html">frame<\/A><\/TD>/ { print
+    print "<TD width=70%>Desktop environment framework interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="i18n\/index.html">i18n<\/A><\/TD>/ { print
+    print "<TD width=70%>Interface for internationalization (deprecated draft).</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="installation\/index.html">installation<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces to control installations.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="io\/index.html">io<\/A><\/TD>/ { print
+    print "<TD width=70%>General input/output interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="java\/index.html">java<\/A><\/TD>/ { print
+    print "<TD width=70%>Java to UNO connectivity interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="lang\/index.html">lang<\/A><\/TD>/ { print
+    print "<TD width=70%>General UNO concepts like factories etc.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="linguistic2\/index.html">linguistic2<\/A><\/TD>/ { print
+    print "<TD width=70%>Spell checker, hyphenation and thesaurus interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="loader\/index.html">loader<\/A><\/TD>/ { print
+    print "<TD width=70%>Component implementation loader interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="mozilla\/index.html">mozilla<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces for Mozilla integration.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="package\/index.html">package<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces to access package file formats.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="pgp\/index.html">pgp<\/A><\/TD>/ { print
+    print "<TD width=70%>Pretty Good Privacy.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="plugin\/index.html">plugin<\/A><\/TD>/ { print
+    print "<TD width=70%>Netscape-like plugin interfaces.";
+getline; next }
+
+/<TD width=30%><A HREF="presentation\/index.html">presentation<\/A><\/TD>/ { print
+    print "<TD width=70%>Presentation specific interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="reflection\/index.html">reflection<\/A><\/TD>/ { print
+    print "<TD width=70%>Runtime object inspection / core reflection interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="registry\/index.html">registry<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces to access registration databases.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="resource\/index.html">resource<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces to access (UI) resource files.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="scanner\/index.html">scanner<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces for scanner control.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="script\/index.html">script<\/A><\/TD>/ { print
+    print "<TD width=70%>Scripting language bindings.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="sdb\/index.html">sdb<\/A><\/TD>/ { print
+    print "<TD width=70%>Basic interfaces for database access.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="sdbc\/index.html">sdbc<\/A><\/TD>/ { print
+    print "<TD width=70%>Database component interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="sdbcx\/index.html">sdbcx<\/A><\/TD>/ { print
+    print "<TD width=70%>High-level database component interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="security\/index.html">security<\/A><\/TD>/ { print
+    print "<TD width=70%>Interface for authorisation and authetification.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="setup\/index.html">setup<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces to control the setup process.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="sheet\/index.html">sheet<\/A><\/TD>/ { print
+    print "<TD width=70%>Spreadsheet specific interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="style\/index.html">style<\/A><\/TD>/ { print
+    print "<TD width=70%>Formatting and layout style and stylesheet interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="svg\/index.html">svg<\/A><\/TD>/ { print
+    print "<TD width=70%>Interfaces for import/export of Scaleable Vector Format.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="sync\/index.html">sync<\/A><\/TD>/ { print
+    print "<TD width=70%>Data synchronization interfaces (deprecated).</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="sync2\/index.html">sync2<\/A><\/TD>/ { print
+    print "<TD width=70%>Data synchronization interfaces (new).</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="table\/index.html">table<\/A><\/TD>/ { print
+    print "<TD width=70%>Table specific interfaces (for text and spreadsheet).</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="task\/index.html">task<\/A><\/TD>/ { print
+    print "<TD width=70%>Task management interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="test\/index.html">test<\/A><\/TD>/ { print
+    print "<TD width=70%>Test interfaces for core-reflection, intropection and marshalling.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="text\/index.html">text<\/A><\/TD>/ { print
+    print "<TD width=70%>Text specific interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="ucb\/index.html">ucb<\/A><\/TD>/ { print
+    print "<TD width=70%>Universal Content Broker interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="ui\/index.html">ui<\/A><\/TD>/ { print
+    print "<TD width=70%>Dialogs and other UI elements.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="uno\/index.html">uno<\/A><\/TD>/ { print
+    print "<TD width=70%>Basic UNO interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="util\/index.html">util<\/A><\/TD>/ { print
+    print "<TD width=70%>Miscellaneous interfaces for sorting, connecting objects etc.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="view\/index.html">view<\/A><\/TD>/ { print
+    print "<TD width=70%>Document view specfic interfaces (e.g. selection access and printing).</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="xml\/index.html">xml<\/A><\/TD>/ { print
+    print "<TD width=70%>XML related interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="system\/index.html">system<\/A><\/TD>/ { print
+    print "<TD width=70%>host operating system integration interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="packages\/index.html">packages<\/A><\/TD>/ { print
+    print "<TD width=70%>package file format interfaces.</TD>";
+getline; next }
+
+/<TD width=30%><A HREF="image\/index.html">image<\/A><\/TD>/ { print
+    print "<TD width=70%>image manupulation interfaces.</TD>";
+getline; next }
+
+{
+    print
+}
+*/
+
+}; }; };
