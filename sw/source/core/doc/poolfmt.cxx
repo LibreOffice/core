@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 18:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,7 +1328,9 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCHR_RUBYTEXT:
         {
-// ???          aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58 ) );
+            long nH = ((SvxFontHeightItem*)GetDfltAttr(
+                                RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
+            aSet.Put( SvxFontHeightItem( nH ));
         }
         break;
 
@@ -1581,8 +1583,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     aLR.SetLeft( GetMetricVal( CM_1 ) * 2 );
     aLR.SetRight( aLR.GetLeft() );
     SvxULSpaceItem aUL;
-    aUL.SetUpper( aLR.GetLeft() );
-    aUL.SetLower( aLR.GetLeft() );
+    aUL.SetUpper( (USHORT)aLR.GetLeft() );
+    aUL.SetLower( (USHORT)aLR.GetLeft() );
 
     SwAttrSet aSet( GetAttrPool(), aPgFrmFmtSetRange );
     BOOL bSetLeft = TRUE;
@@ -1655,8 +1657,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     case RES_POOLPAGE_HTML:             // HTML
         {
             aLR.SetRight( GetMetricVal( CM_1 ));
-            aUL.SetUpper( aLR.GetRight() );
-            aUL.SetLower( aLR.GetRight() );
+            aUL.SetUpper( (USHORT)aLR.GetRight() );
+            aUL.SetLower( (USHORT)aLR.GetRight() );
             Size aPSize( SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ) );
             aSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
             aSet.Put( aLR );
