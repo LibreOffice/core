@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-15 09:46:58 $
+ *  last change: $Author: dl $ $Date: 2001-02-12 12:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,11 +428,26 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                 aTempSet.ClearItem( EE_PARA_NUMBULLET );
                             }
 
+                            String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
+                            aStyleName.Append( sal_Unicode( ' ' ));
+
+                            for( USHORT n = 1; n < 10; n++ )
+                            {
+                                String aName( aStyleName );
+                                aName.Append( String::CreateFromInt32( (sal_Int32) n ));
+
+                                SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SFX_STYLE_FAMILY_PSEUDO);
+
+                                if(pSheet)
+                                {
+                                    SdStyleSheet* pRealSheet = ((SdStyleSheet*)pSheet)->GetRealStyleSheet();
+                                    pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                }
+                            }
+
                             pStyleSheet->GetItemSet().Put(aTempSet);
-                            SdStyleSheet* pRealSheet =
-                                ((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
-                            pRealSheet->
-                                Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                            SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
+                            pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
                         else
                         {
