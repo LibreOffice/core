@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@ public:
     virtual FASTBOOL End(FASTBOOL bCopy);
     virtual Pointer GetPointer() const;
     virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+
+    //SJ: added following method, otherwise the object won't be
+    //able to notice that dragging has been cancelled.
+    virtual void Brk();
 };
 
 //************************************************************
