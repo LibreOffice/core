@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:47:44 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm,
             if( rReloadURL.Len() )
             {
                 sContent.AppendAscii( ";URL=" );
-                sContent += INetURLObject::AbsToRel(rReloadURL);
+                sContent += String(INetURLObject::AbsToRel(rReloadURL));
             }
 
             OutMeta( rStrm, pIndent, sHTML_META_refresh, sContent, TRUE,
