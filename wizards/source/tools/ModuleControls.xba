@@ -165,7 +165,7 @@ Dim InitPath as String
 Dim RefControlName as String
 Dim oUcb as object
 	&apos;Note: The following services have to be called in the following order
-        &apos; because otherwise Basic does not remove the FolderDialog Service
+	&apos; because otherwise Basic does not remove the FileDialog Service
 	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	InitPath = ConvertToUrl(oRefModel.Text)
@@ -194,7 +194,7 @@ Dim RefControlName as String
 Dim oUcb as object
 &apos;Dim ListAny(0)
 	&apos;Note: The following services have to be called in the following order
-        &apos; because otherwise Basic does not remove the FileDialog Service
+	&apos; because otherwise Basic does not remove the FileDialog Service
 	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	&apos;ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILEOPEN_SIMPLE
@@ -217,7 +217,7 @@ Dim oUcb as object
 End Sub
 
 
-Function StoreDocument(oDocument as Object, FilterNames() as String, DefaultName as String, DisplayDirectory as String)
+Function StoreDocument(oDocument as Object, FilterNames() as String, DefaultName as String, DisplayDirectory as String) as String
 Dim NoArgs() as New com.sun.star.beans.PropertyValue
 Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
 Dim oStoreDialog as Object
@@ -246,14 +246,12 @@ Dim FilterIndex as Integer
 			oStoreProperties(0).Value = FilterName
 			oDocument.StoreAsUrl(sPath, oStoreProperties())
 		End If
-		StoreDocument() = True
-	Else
-		StoreDocument() = False
 	End If
+	StoreDocument() = sPath
 End Function
 
 
-Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)
+Sub AddFiltersToDialog(FilterNames() as String, oDialog as Object)	
 Dim i as Integer
 Dim MaxIndex as Integer
 	MaxIndex = Ubound(FilterNames(), 1)
