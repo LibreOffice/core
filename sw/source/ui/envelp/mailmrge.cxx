@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:15 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 16:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SDB_SDBHASH_HXX
-#include <sdb/sdbhash.hxx>
 #endif
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
