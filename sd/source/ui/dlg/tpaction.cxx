@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:49:34 $
+ *  last change: $Author: dl $ $Date: 2000-11-28 09:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,6 +707,7 @@ void SdTPAction::OpenFileDialog()
         {
             pFileDialog = new SfxFileDialog ( this, WB_OPEN | WB_3DLOOK | WB_STDMODAL );
             pBtnPreview = new PushButton( pFileDialog, SdResId( RID_PREVIEW_BUTTON ) );
+            pFileDialog->AddControl( pBtnPreview );
             pBtnPreview->SetClickHdl( LINK( this, SdTPAnimation, ClickPreviewHdl ) );
             pBtnPreview->Show();
 
@@ -744,9 +745,8 @@ void SdTPAction::OpenFileDialog()
             if( aSound.IsPlaying() )
                 aSound.Stop();
 
-            delete pBtnPreview;
-            pBtnPreview = NULL;
             delete pFileDialog;
+            pBtnPreview = NULL;
         }
         else if (bMacro)
         {
