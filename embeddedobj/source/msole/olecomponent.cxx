@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:43:06 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,45 @@ void OleComponent::LoadEmbeddedObject( const uno::Reference< io::XInputStream >&
 }
 
 //----------------------------------------------
+void OleComponent::CreateObjectFromClipboard()
+{
+    if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
+        throw io::IOException(); // TODO:the object is already initialized
+
+    CreateNewIStorage_Impl();
+    if ( !m_pNativeImpl->m_pIStorage )
+        throw uno::RuntimeException(); // TODO
+
+    IDataObject * pDO = NULL;
+    HRESULT hr = OleGetClipboard( &pDO );
+    if( SUCCEEDED( hr ) && pDO )
+    {
+        hr = OleQueryCreateFromData( pDO );
+        if( S_OK == GetScode( hr ) )
+        {
+            hr = OleCreateFromData( pDO,
+                                    IID_IUnknown,
+                                    OLERENDER_DRAW, // OLERENDER_FORMAT
+                                    NULL,           // &aFormat,
+                                    NULL,
+                                    m_pNativeImpl->m_pIStorage,
+                                    (void**)&m_pNativeImpl->m_pObj );
+        }
+        else
+        {
+            // Static objects are not supported
+            pDO->Release();
+        }
+    }
+
+    if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
+        throw uno::RuntimeException();
+
+    if ( !InitializeObject_Impl() )
+        throw uno::RuntimeException(); // TODO
+}
+
+//----------------------------------------------
 void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSeqCLSID )
 {
     CLSID aClsID;
@@ -1045,9 +1084,13 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
     {
         // TODO/LATER: is it correct?
         // if there is no appropriate cache for the aspect, OLE_E_BLANK error code is returned
-        if ( hr == OLE_E_BLANK )
-            throw lang::IllegalArgumentException();
-        else
+        // if ( hr == OLE_E_BLANK )
+        //  throw lang::IllegalArgumentException();
+        //else
+        //  throw io::IOException(); // TODO
+
+        hr = m_pNativeImpl->m_pOleObject->GetExtent( nMSAspect, &aSize );
+        if ( FAILED( hr ) )
             throw io::IOException(); // TODO
     }
 
