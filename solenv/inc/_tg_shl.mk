@@ -408,7 +408,9 @@ $(SHL1TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN)
+    +-$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+    +$(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -845,7 +847,9 @@ $(SHL2TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN)
+    +-$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+    +$(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -1282,7 +1286,9 @@ $(SHL3TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN)
+    +-$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+    +$(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -1719,7 +1725,9 @@ $(SHL4TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN)
+    +-$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+    +$(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -2156,7 +2164,9 @@ $(SHL5TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN)
+    +-$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+    +$(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -2593,7 +2603,9 @@ $(SHL6TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN)
+    +-$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+    +$(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -3030,7 +3042,9 @@ $(SHL7TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN)
+    +-$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+    +$(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -3467,7 +3481,9 @@ $(SHL8TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN)
+    +-$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+    +$(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -3904,7 +3920,9 @@ $(SHL9TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN)
+    +-$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+    +$(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
@@ -4341,7 +4359,9 @@ $(SHL10TARGETN) : \
 .ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN)
+    +-$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+    +$(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(UNIXVERSIONNAMES)"!=""
