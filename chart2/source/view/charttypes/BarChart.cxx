@@ -287,10 +287,17 @@ void BarChart::createShapes()
     //the text labels should be always on top of the other series shapes
     //therefore create an own group for the texts to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
+
+    //the regression curves should always be on top of the bars but beneath the text labels
+    //to achieve this the regression curve target is created after the series target and before the text target
+
     uno::Reference< drawing::XShapes > xSeriesTarget(
+        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+    uno::Reference< drawing::XShapes > xRegressionCurveTarget(
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
         createGroupShape( m_xLogicTarget,rtl::OUString() ));
+
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -471,6 +478,10 @@ void BarChart::createShapes()
                 //remove PointGroupShape if empty
 //                if(!xPointGroupShape_Shapes->getCount())
 //                    xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
+
+                //------------
+                if(nCatIndex==nStartCategoryIndex)//do not create a regression line for each point
+                    createRegressionCurvesShapes( **aSeriesIter, xRegressionCurveTarget );
 
             }//next series in x slot (next y slot)
         }//next x slot
