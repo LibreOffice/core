@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ssa $ $Date: 2001-06-08 08:11:25 $
+#   last change: $Author: sb $ $Date: 2001-06-20 07:57:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ SHL1STDLIBS+=\
         $(BASICLIB) \
         $(VOSLIB) \
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(CHANELLIB) \
         $(SO2LIB) \
         $(INETLIBSH) \
