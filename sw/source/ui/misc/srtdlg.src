@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 07:10:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,11 +259,11 @@ ModalDialog DLG_SORTING
         Text[ portuguese_brazilian ] = "numeric";
         Text[ japanese ] = "悢帤";
         Text[ korean ] = "numeric";
-        Text[ chinese_simplified ] = "numeric";
+        Text[ chinese_simplified ] = "数字";
         Text[ chinese_traditional ] = "计";
         Text[ turkish ] = "numeric";
         Text[ arabic ] = "numeric";
-        Text[ finnish ] = "numerisch";
+        Text[ finnish ] = "numeerinen";
         Text[ catalan ] = "numeric";
     };
     ListBox DLB_KEY1
@@ -578,7 +578,7 @@ ModalDialog DLG_SORTING
         Text [ italian ] = "Criteri" ;
         Text [ portuguese_brazilian ] = "Regra" ;
         Text [ portuguese ] = "Regra" ;
-        Text [ finnish ] = "Regel" ;
+        Text [ finnish ] = "Lajitteluperusteet" ;
         Text [ danish ] = "Kriterier" ;
         Text [ french ] = "R鑗le" ;
         Text [ swedish ] = "Regel" ;
@@ -668,7 +668,7 @@ ModalDialog DLG_SORTING
         Text [ italian ] = "Direzione" ;
         Text [ portuguese_brazilian ] = "Dire玢o" ;
         Text [ portuguese ] = "Direc玢o" ;
-        Text [ finnish ] = "Richtung" ;
+        Text [ finnish ] = "Suunta" ;
         Text [ danish ] = "Retning" ;
         Text [ french ] = "Direction" ;
         Text [ swedish ] = "Riktning" ;
@@ -766,7 +766,7 @@ ModalDialog DLG_SORTING
         Text [ italian ] = "Separatore" ;
         Text [ portuguese_brazilian ] = "Delimitador" ;
         Text [ portuguese ] = "Separador" ;
-        Text [ finnish ] = "Trenner" ;
+        Text [ finnish ] = "Erotin" ;
         Text [ danish ] = "Separator" ;
         Text [ french ] = "S閜arateur" ;
         Text [ swedish ] = "Avgr鋘sare" ;
@@ -866,11 +866,11 @@ ModalDialog DLG_SORTING
         Text[ portuguese_brazilian ] = "Language";
         Text[ japanese ] = "尵岅";
         Text[ korean ] = "Language";
-        Text[ chinese_simplified ] = "Language";
+        Text[ chinese_simplified ] = "语言";
         Text[ chinese_traditional ] = "粂ē";
         Text[ turkish ] = "Language";
         Text[ arabic ] = "Language";
-        Text[ finnish ] = "Sprache";
+        Text[ finnish ] = "Kieli";
         Text[ catalan ] = "Language";
     };
     ListBox LB_LANG
@@ -901,11 +901,11 @@ ModalDialog DLG_SORTING
         Text[ portuguese_brazilian ] = "Options";
         Text[ japanese ] = "徻嵶愝掕";
         Text[ korean ] = "Options";
-        Text[ chinese_simplified ] = "Options";
+        Text[ chinese_simplified ] = "设定";
         Text[ chinese_traditional ] = "砞﹚";
         Text[ turkish ] = "Options";
         Text[ arabic ] = "Options";
-        Text[ finnish ] = "Einstellung";
+        Text[ finnish ] = "Asetus";
         Text[ catalan ] = "Options";
     };
     CheckBox CB_CASE
@@ -929,7 +929,7 @@ ModalDialog DLG_SORTING
         Text[ portuguese_brazilian ] = "Case sensitive";
         Text[ japanese ] = "戝暥帤偲彫暥帤傪嬫暿偡傞";
         Text[ korean ] = "Case sensitive";
-        Text[ chinese_simplified ] = "Case sensitive";
+        Text[ chinese_simplified ] = "区分大小写";
         Text[ chinese_traditional ] = "跋だ糶";
         Text[ turkish ] = "Case sensitive";
         Text[ arabic ] = "Case sensitive";
