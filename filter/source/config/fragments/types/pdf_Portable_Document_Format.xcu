@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>writer_pdf_Export</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PDF - Portable Document Format</value>
+            <value>PDF - Portable Document Format</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

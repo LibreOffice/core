@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>PPM - Portable Pixelmap</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PPM - Portable Pixelmap</value>
+            <value>PPM - Portable Pixelmap</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

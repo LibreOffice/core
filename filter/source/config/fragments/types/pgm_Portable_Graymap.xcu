@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>draw_pgm_Export</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PGM - Portable Graymap</value>
+            <value>PGM - Portable Graymap</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
