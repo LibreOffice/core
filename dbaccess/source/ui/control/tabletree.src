@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:12:07 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text [ english ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text [ english_us ] = "Cannot connect to the SDBC driver manager (#servicename#).";
     Text[ portuguese ] = "Impossнvel estabelecer ligaзгo com o SDBC driver manager (#servicename#).";
-    Text[ russian ] = "—оздать соединение с менеджером драйвера SDBC (#servicename#) не удаетс€.";
+    Text[ russian ] = "Ќевозможно соединитьс€ с менеджером драйвера SDBC (#servicename#).";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з уэндеуз ме фп рсьгсбммб дйбчеясйузт фщн рспгсбмм№фщн пдёгзузт SDBC (#servicename#).";
-    Text[ dutch ] = "Kan de verbinding met de SDBC-driver manager (#servicename#) niet tot stand brengen.";
+    Text[ dutch ] = "Kan de verbinding met het SDBC-driverbeheer (#servicename#) niet tot stand brengen.";
     Text[ french ] = "Impossible d'йtablir une connexion au gestionnaire de pilotes SDBC (#servicename#) !";
     Text[ spanish ] = "No se pudo establecer ninguna conexiуn al administrador de controladores SDBC (#servicename#).";
     Text[ italian ] = "Non и possibile stabilire il collegamento al driver SDBC Manager (#servicename#).";
@@ -188,7 +188,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ arabic ] = " Џ–—  √”н” «б« ’«б »№ (#servicename#) SDBC Driver Manager .";
     Text[ catalan ] = "No es pot establir una connexiу amb el gestor del programa de control SDBC (#servicename#).";
-    Text[ finnish ] = "Yhteyden muodostaminen SDBC-ajurien hallintaan ei onnistu (#servicename#).";
+    Text[ finnish ] = "Yhteyden muodostaminen SDBC-ohjainten hallintaan ei onnistu (#servicename#).";
     Text[ thai ] = "аєДаЄ°аєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаєАаЄКаЄЈаєИаЄ≠аЄ°аЄХаєИаЄ≠аЄБаЄ±аЄЪаЄХаЄ±аЄІаЄИаЄ±аЄФаЄБаЄ≤аЄ£аєДаЄФаЄ£аєЙаЄЯаєАаЄІаЄ≠аЄ£аєМ SDBC  (#servicename#) аєДаЄФаєЙ";
 };
 
@@ -198,7 +198,7 @@ String STR_NOREGISTEREDDRIVER
     Text [ english ] = "There is no registered driver for the URL #connurl#";
     Text [ english_us ] = "A driver is not registered for the URL #connurl#.";
     Text[ portuguese ] = "Nгo existe nenhum controlador registado para o URL #connurl#.";
-    Text[ russian ] = "ƒрайвер дл€ URL #connurl# не зарегистрирован.";
+    Text[ russian ] = "ƒрайвер не зарегистрирован дл€ URL #connurl#.";
     Text[ greek ] = "ƒен хр№счей дзлщмЁнп рсьгсбммб пдёгзузт гйб фп URL #connurl#";
     Text[ dutch ] = "Geen driver voor URL #connurl# geregistreerd.";
     Text[ french ] = "Aucun pilote n'est inscrit pour l'URL #connurl# !";
@@ -215,7 +215,7 @@ String STR_NOREGISTEREDDRIVER
     Text[ turkish ] = "There is no registered driver for the URL #connurl#";
     Text[ arabic ] = "б« нжћѕ »—д«гћ  ‘џнб г”ћб бб№ URL #connurl#!";
     Text[ catalan ] = "Hi ha un programa de control que no estа registrat per a l'URL #connurl#.";
-    Text[ finnish ] = "Ajuria ei ole rekisterцity URL-osoitteelle #connurl#.";
+    Text[ finnish ] = "Ohjainta ei ole rekisterцity URL-osoitteelle #connurl#.";
     Text[ thai ] = "аєДаЄФаЄ£аєЙаЄЯаєАаЄІаЄ≠аЄ£аєМаєДаЄ°аєИаєДаЄФаєЙаЄ•аЄЗаЄЧаЄ∞аєАаЄЪаЄµаЄҐаЄЩ URL #connurl#";
 };
 
@@ -225,9 +225,9 @@ String STR_COULDNOTCONNECT
     Text [ english ] = "A connection could not be established for URL #connurl#.";
     Text [ english_us ] = "No connection could be established for the URL #connurl#.";
     Text[ portuguese ] = "Foi impossнvel estabelecer ligaзгo para o URL #connurl#.";
-    Text[ russian ] = "—оздать соединение с URL #connurl# не удаетс€.";
+    Text[ russian ] = "Ќевозможно соединитьс€ с URL #connurl#.";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з уэндеуз ме фп URL #connurl#.";
-    Text[ dutch ] = "Kon geen verbinding voor #connurl# opbouwen.";
+    Text[ dutch ] = "Er kan geen verbinding met de URL #connurl# tot stand worden gebracht.";
     Text[ french ] = "Impossible d'йtablir une connexion pour l'URL #connurl# !";
     Text[ spanish ] = "No se pudo realizar ninguna conexiуn para la URL #connurl#.";
     Text[ italian ] = "Non и possibile creare il collegamento all'URL #connurl#.";
@@ -251,9 +251,9 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text [ english ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text [ english_us ] = "Please check the current settings, for example user name and password.";
     Text[ portuguese ] = "Verifique as definiзхes actuais, por exemplo, nome de utilizador e senha.";
-    Text[ russian ] = "ѕроверьте, пожалуйста, ваши текущие настройки, относительно,  например, имени и парол€ пользовател€.";
+    Text[ russian ] = "ѕроверьте текущие настройки, например, им€ пользовател€ и пароль.";
     Text[ greek ] = "–бсбкблю елЁгофе фйт фсЁчпхует схимяуейт, р.ч учефйк№ ме фп ьнпмб чсёуфз кбй фпн кщдйкь рсьувбузт.";
-    Text[ dutch ] = "Controleer de actuele instellingen, bijv. wat betreft naam gebruiker en wachtwoord.";
+    Text[ dutch ] = "Controleer de huidige instellingen, zoals de gebruikersnaam en het wachtwoord.";
     Text[ french ] = "Vйrifiez les paramиtres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
     Text[ spanish ] = "Compruebe la configuraciуn actual, como el nombre de usuario y la contraseсa.";
     Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
@@ -268,7 +268,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ arabic ] = "«б—ћ«Ѕ ЁЌ’ «б≈Џѕ«ѕ«  «бЌ«бн…° гЋб «”г «бг” ќѕг жябг… «б”— Џбм ”»нб «бгЋ«б.";
     Text[ catalan ] = "Si us plau, comproveu els parаmetres actuals, com ara els referents al nom d'usuari i la contrasenya.";
-    Text[ finnish ] = "Tarkista, ettд nykyiset asetukset (esimerkiksi salasana- ja kдyttдjдtunnusasetukset) ovat oikeat.";
+    Text[ finnish ] = "Tarkista, ettд nykyiset asetukset, esimerkiksi salasana- ja kдyttдjдtunnusasetukset, ovat oikeat.";
     Text[ thai ] = "аЄБаЄ£аЄЄаЄУаЄ≤аЄХаЄ£аЄІаЄИаЄ™аЄ≠аЄЪаЄБаЄ≤аЄ£аЄХаЄ±аєЙаЄЗаЄДаєИаЄ≤аЄЫаЄ±аЄИаЄИаЄЄаЄЪаЄ±аЄЩ  аєАаЄКаєИаЄЩ  аЄКаЄЈаєИаЄ≠аЄЬаЄєаєЙаєГаЄКаєЙаєБаЄ•аЄ∞аЄ£аЄЂаЄ±аЄ™аЄЬаєИаЄ≤аЄЩ";
 };
 String STR_NOTABLEINFO
@@ -277,9 +277,9 @@ String STR_NOTABLEINFO
     Text [ english ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text [ english_us ] = "Successfully connected, but information about database tables is not available.";
     Text[ portuguese ] = "A ligaзгo foi estabelecida, mas foi impossнvel encontrar informaзхes sobre tabelas na base de dados.";
-    Text[ russian ] = "—оедиенение успешно создано, но информаци€ о таблицах в базе данных не доступна.";
+    Text[ russian ] = "—оединение установлено, но информаци€ о таблицах в базе данных недоступна.";
     Text[ greek ] = "« уэндеуз рЁфхче блл№ ден ёфбн дхнбфьн нб рспудйпсйуфпэн рлзспцпсяет учефйк№ ме рянбкет уфз в№уз дедпмЁнщн.";
-    Text[ dutch ] = "Verbinding werd tot stand gebracht, echter geen gegevens over tabellen in de database gevonden.";
+    Text[ dutch ] = "Verbinding is tot stand gebracht, er zijn echter geen gegevens over tabellen in de database gevonden.";
     Text[ french ] = "Connexion йtablie, mais aucune information concernant les tables et/ou vues n'a pu кtre dйtectйe.";
     Text[ spanish ] = "La conexiуn se ha realizado. Sin embargo no se ha conseguido ninguna informaciуn relativa a las tablas de las bases de datos.";
     Text[ italian ] = "Il collegamento и stato realizzato tuttavia non и stato possibile trasmettere le informazioni relative alle tabelle nel database.";
@@ -294,7 +294,7 @@ String STR_NOTABLEINFO
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ arabic ] = " г  √”н” «б« ’«б »дћ«Ќ° ≈б« √де  Џ–— «бЌ’жб Џбм гЏбжг«  »ќ’ж’ ћѕ«жб ё«Џѕ… «б»н«д« .";
     Text[ catalan ] = "S'ha pogut establir la connexiу perт la informaciу sobre les taules del banc de dades no estа disponible.";
-    Text[ finnish ] = "Yhteys on muodostettu, mutta tietokannan taulukkotiedot eivдt ole kдytettдvissд.";
+    Text[ finnish ] = "Yhteys on muodostettu, mutta tietokannan taulutiedot eivдt ole kдytettдvissд.";
     Text[ thai ] = "аєАаЄКаЄЈаєИаЄ≠аЄ°аЄХаєИаЄ≠аЄ™аЄ≥аєАаЄ£аєЗаЄИ  аєБаЄХаєИаЄВаєЙаЄ≠аЄ°аЄєаЄ•аєАаЄБаЄµаєИаЄҐаЄІаЄБаЄ±аЄЪаЄХаЄ≤аЄ£аЄ≤аЄЗаЄРаЄ≤аЄЩаЄВаєЙаЄ≠аЄ°аЄєаЄ•аєГаЄКаєЙаєДаЄ°аєИаєДаЄФаєЙ";
 };
 String STR_ALL_TABLES
@@ -320,7 +320,7 @@ String STR_ALL_TABLES
     Text[ turkish ] = "All tables";
     Text[ arabic ] = "яб «бћѕ«жб";
     Text[ catalan ] = "Totes les taules";
-    Text[ finnish ] = "Kaikki taulukot";
+    Text[ finnish ] = "Kaikki taulut";
     Text[ thai ] = "аЄХаЄ≤аЄ£аЄ≤аЄЗаЄЧаЄ±аєЙаЄЗаЄЂаЄ°аЄФ";
 };
 String STR_ALL_VIEWS
@@ -329,7 +329,7 @@ String STR_ALL_VIEWS
     Text [ english ] = "All views";
     Text [ english_us ] = "All views";
     Text[ portuguese ] = "Todas as vistas de tabelas";
-    Text[ russian ] = "¬се виды таблиц";
+    Text[ russian ] = "¬се представлени€ таблиц";
     Text[ greek ] = "Љлет пй рспвплЁт фщн рйн№кщн";
     Text[ dutch ] = "Alle tabelmodi";
     Text[ french ] = "Toutes les vues";
@@ -355,7 +355,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text [ english ] = "All tables and views";
     Text [ english_us ] = "All tables and views";
     Text[ portuguese ] = "Todas as tabelas e vistas";
-    Text[ russian ] = "¬се таблицы и их виды";
+    Text[ russian ] = "¬се таблицы и их представлени€";
     Text[ greek ] = "Љлпй пй рянбкет кбй ьлет пй рспвплЁт фпхт";
     Text[ dutch ] = "Alle tabellen en tabelmodi";
     Text[ french ] = "Toutes les tables et vues";
@@ -372,13 +372,16 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ turkish ] = "All tables and views";
     Text[ arabic ] = "я«Ё… «бћѕ«жб жЎ—ё Џ—÷е«";
     Text[ catalan ] = "Totes les taules i vistes";
-    Text[ finnish ] = "Kaikki taulukot ja nдkymдt";
+    Text[ finnish ] = "Kaikki taulut ja nдkymдt";
     Text[ thai ] = "аЄХаЄ≤аЄ£аЄ≤аЄЗаєБаЄ•аЄ∞аЄ°аЄЄаЄ°аЄ°аЄ≠аЄЗаЄЧаЄ±аєЙаЄЗаЄЂаЄ°аЄФ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2002/11/25 15:12:07  kz
+ *  Merge SRX644: 25.11.02 - 16:08:58
+ *
  *  Revision 1.30  2002/09/13 14:36:24  kz
  *  Merge SRX643: 13.09.02 - 16:32:34
  *
