@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:34:07 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_SHADOW, XML_ATACTION_INS2INCHS,
           NO_PARAMS },
+    { XML_NAMESPACE_FO, XML_CLIP, XML_ATACTION_INS2INCHS,
+          NO_PARAMS }, /* generated entry */
 //  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_REMOVE,
 //      NO_PARAMS }, /* generated entry */ // TODO
     { XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT, XML_ATACTION_IN2INCH,
@@ -498,6 +500,8 @@ XMLTransformerActionInit aTableCellPropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_PADDING_RIGHT, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_ATACTION_IN2INCH,
+          NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_DIRECTION, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_FO,
                                                  XML_DIRECTION), 0 },
@@ -537,6 +541,11 @@ XMLTransformerActionInit aChartPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_CHART, XML_INTERVAL_MAJOR, XML_OPTACTION_INTERVAL_MAJOR, NO_PARAMS },
     { XML_NAMESPACE_CHART, XML_INTERVAL_MINOR_DIVISOR, XML_OPTACTION_INTERVAL_MINOR_DIVISOR,
       NO_PARAMS },
+     { XML_NAMESPACE_CHART, XML_JAPANESE_CANDLE_STICK, XML_ATACTION_RENAME,
+      XMLTransformerActionInit::QNameParam( XML_NAMESPACE_CHART,
+                                            XML_STOCK_UPDOWN_BARS ), 0 },
+    { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_OPTACTION_SYMBOL_TYPE, NO_PARAMS },
+    { XML_NAMESPACE_CHART, XML_SYMBOL_NAME, XML_OPTACTION_SYMBOL_NAME, NO_PARAMS },
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
