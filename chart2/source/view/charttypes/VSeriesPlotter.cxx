@@ -310,6 +310,8 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                     , const awt::Point& rScreenPosition2D
                     , LabelAlignment eAlignment )
 {
+    if(m_nDimension!=2)
+        return;
     uno::Reference< drawing::XShapes > xTarget_( this->getLabelsGroupShape(rDataSeries, xTarget) );
 
     //check wether the label needs to be created and how:
