@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 10:34:35 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,5 +92,19 @@ public:
     virtual sal_Bool importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
+
+class SvXMLExport;
+class XMLDateTimeFormatHdl : public XMLPropertyHandler
+{
+private:
+    SvXMLExport* mpExport;
+
+public:
+    XMLDateTimeFormatHdl( SvXMLExport* pExport );
+    virtual ~XMLDateTimeFormatHdl();
+    virtual sal_Bool importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
 
 #endif  //  _PROPIMP0_HXX
