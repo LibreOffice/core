@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:45:13 $
+ *  last change: $Author: os $ $Date: 2001-03-28 14:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,21 +472,16 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-
     if( rSh.GetDrawView()->GetMarkList().GetMarkCount() )
     {
-        LanguageType nLang = ((const SvxLanguageItem&)rSh.GetDefault(
-                                   GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetScriptTypeOfLanguage( GetAppLanguage())) )
-                                ).GetLanguage();
         switch(rReq.GetSlot())
         {
         case FN_THESAURUS_DLG:
-            pOLV->StartThesaurus( nLang );
+            pOLV->StartThesaurus();
             break;
 
         case FN_SPELLING_DLG:
-            pOLV->StartSpeller( nLang );
+            pOLV->StartSpeller();
             break;
 
         default:
@@ -706,188 +701,6 @@ void SwDrawTextShell::InsertSymbol()
         }
     }
 }
-
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/03/09 12:01:33  jp
-      new: Transliteration for TextBoxes
-
-      Revision 1.2  2001/02/21 17:38:28  jp
-      use new function GetWhichOfScript/GetScriptTypeOfLanguage
-
-      Revision 1.1.1.1  2000/09/18 17:14:46  hr
-      initial import
-
-      Revision 1.113  2000/09/18 16:06:03  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.112  2000/09/08 08:12:51  os
-      Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-      Revision 1.111  2000/09/07 15:59:29  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.110  2000/05/26 07:21:32  os
-      old SW Basic API Slots removed
-
-      Revision 1.109  2000/05/10 11:53:01  os
-      Basic API removed
-
-      Revision 1.108  2000/04/18 14:58:23  os
-      UNICODE
-
-      Revision 1.107  1999/08/04 09:09:52  JP
-      have to change: Outliner -> SdrOutlines
-
-
-      Rev 1.106   04 Aug 1999 11:09:52   JP
-   have to change: Outliner -> SdrOutlines
-
-      Rev 1.105   21 Jun 1999 15:20:24   JP
-   Interface changes: SdrView::GetAttributes
-
-      Rev 1.104   10 Jun 1999 13:16:36   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.103   02 Feb 1999 13:17:36   JP
-   Bug #61335#: Schnistelle zu SwView geaendert/aufgeraeumt
-
-      Rev 1.102   12 Oct 1998 10:13:20   OM
-   #57790# Dialog nicht mehr AppModal
-
-      Rev 1.101   06 May 1998 16:20:42   OS
-   AttrChangedNotify nach Shellwechsel nicht ueber this aufrufen
-
-      Rev 1.100   29 Nov 1997 15:52:14   MA
-   includes
-
-      Rev 1.99   24 Nov 1997 09:47:00   MA
-   includes
-
-      Rev 1.98   03 Nov 1997 13:55:46   MA
-   precomp entfernt
-
-      Rev 1.97   30 Sep 1997 16:30:46   TJ
-   include
-
-      Rev 1.96   01 Sep 1997 13:23:56   OS
-   DLL-Umstellung
-
-      Rev 1.95   11 Aug 1997 08:34:16   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.94   06 Aug 1997 14:19:50   TRI
-   VCL: GetpApp() statt pApp
-
-      Rev 1.93   05 Aug 1997 13:29:54   MH
-   chg: header
-
-      Rev 1.92   25 Jun 1997 09:10:18   MA
-   #40965#, SubShell abmelden
-
-      Rev 1.91   19 Jun 1997 16:39:16   MA
-   fix: reste vom DrawText-Umbau
-
-      Rev 1.90   19 Jun 1997 16:05:42   HJS
-   includes
-
-      Rev 1.89   17 Jun 1997 15:54:12   MA
-   DrawTxtShell nicht von BaseShell ableiten + Opts
-
-      Rev 1.88   04 Jun 1997 11:30:26   TRI
-   svwin.h nur unter WIN oder WNT includen
-
-      Rev 1.87   04 Jun 1997 09:54:48   NF
-   Includes...
-
-      Rev 1.86   02 May 1997 20:15:40   NF
-   includes...
-
-      Rev 1.85   08 Apr 1997 10:52:22   OM
-   Fehlende Includes
-
-      Rev 1.84   02 Apr 1997 14:07:00   JP
-   Bug #38398#: StateUndo - Itemset weitergeben
-
-      Rev 1.83   19 Mar 1997 12:48:20   AMA
-   Fix #37035: Speller am Outliner setzen.
-
-      Rev 1.82   24 Feb 1997 16:53:08   OM
-   Silbentrennung in Draw-Objekten
-
-      Rev 1.81   16 Dec 1996 10:41:50   OM
-   Cursor nach Initialisierung anzeigen
-
-      Rev 1.80   11 Dec 1996 10:50:58   MA
-   Warnings
-
-      Rev 1.79   26 Nov 1996 16:53:06   OS
-   Erste Schritte fuer OnlineSpelling in  DrawTextObjekten
-
-      Rev 1.78   19 Nov 1996 16:02:30   NF
-   defines...
-
-      Rev 1.77   18 Nov 1996 16:05:50   OS
-   Set/GetControlWord an der OutlinerView benutzen
-
-      Rev 1.76   18 Nov 1996 15:46:40   OS
-   AutoKorrektur auch im DrawText
-
-      Rev 1.75   15 Nov 1996 13:34:02   OS
-   SvxTextTabDialog angebunden
-
-      Rev 1.74   13 Nov 1996 20:29:36   MA
-   #33141# nicht den Mode verlassen
-
-      Rev 1.73   07 Nov 1996 16:22:52   OM
-   Font nach Einfuegen:Sonderzeichen restaurieren
-
-      Rev 1.72   07 Nov 1996 15:28:18   OM
-   RefDevice am Outliner setzen
-
-      Rev 1.71   06 Nov 1996 16:41:26   OS
-   SID_SW_START statt RID_APP_START
-
-      Rev 1.70   26 Sep 1996 15:41:54   OM
-   Neues Parent fuer Sonderzeichen-Dlg
-
-      Rev 1.69   28 Aug 1996 15:55:00   OS
-   includes
-
-      Rev 1.68   15 Aug 1996 13:44:22   JP
-   svdraw.hxx entfernt
-
-      Rev 1.67   31 May 1996 11:09:30   NF
-   CLOOKS
-
-      Rev 1.66   28 May 1996 11:56:16   TRI
-   CLOOKS
-
-      Rev 1.65   21 May 1996 08:58:00   NF
-   CLOOKS
-
-      Rev 1.64   22 Mar 1996 15:17:00   TRI
-   sfxiiter.hxx included
-
-      Rev 1.63   29 Feb 1996 21:14:40   HJS
-   clooks
-
-      Rev 1.62   19 Feb 1996 18:30:58   MA
-   chg: EndTextEdit ueber die fesh
-
-      Rev 1.61   16 Feb 1996 09:14:48   SWG
-   CLOOK's
-
-      Rev 1.60   07 Feb 1996 08:07:22   OS
-   SvxTextAttrDialog hat jetzt endgueltig 3 Parameter
-
-      Rev 1.59   01 Feb 1996 08:07:18   SWG
-   TextAttrDialog wieder mal als nicht-Emergency-Version
-
-*************************************************************************/
 
 
 
