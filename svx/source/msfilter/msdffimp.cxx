@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:21:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3376,6 +3376,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     case 0x0390: pImpRec->nXRelTo = nUDData; break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
                     case 0x0392: pImpRec->nYRelTo = nUDData; break;
+                    case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
                 }
                 if ( rSt.GetError() != 0 )
                     break;
@@ -5358,6 +5359,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       nXRelTo( 2 ), //   relative to column
       nYAlign( 0 ), // position n cm below
       nYRelTo( 2 ), //   relative to paragraph
+      nLayoutInTableCell( 0 ), // element is laid out in table cell
       nTextRotationAngle( 0 ),
       nDxTextLeft( 144 ),
       nDyTextTop( 72 ),
@@ -5391,6 +5393,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
       nXRelTo( rCopy.nXRelTo ),
       nYAlign( rCopy.nYAlign ),
       nYRelTo( rCopy.nYRelTo ),
+      nLayoutInTableCell( rCopy.nLayoutInTableCell ),
       nTextRotationAngle( rCopy.nTextRotationAngle ),
       nDxTextLeft( rCopy.nDxTextLeft    ),
       nDyTextTop( rCopy.nDyTextTop ),
