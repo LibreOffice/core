@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:07:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,43 +87,43 @@
 
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
-::rtl::OUString SAL_CALL ClassName##::getImplementationName()                        \
+::rtl::OUString SAL_CALL ClassName::getImplementationName()                      \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
-    return ::rtl::OUString::createFromAscii(ClassNameAscii##);                       \
+    return ::rtl::OUString::createFromAscii(ClassNameAscii);                         \
 }                                                                                    \
-sal_Bool SAL_CALL ClassName##::supportsService( const ::rtl::OUString& ServiceName ) \
+sal_Bool SAL_CALL ClassName::supportsService( const ::rtl::OUString& ServiceName ) \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
     return !ServiceName.compareToAscii(ServiceAscii);                                \
 }                                                                                    \
 ::com::sun::star::uno::Sequence< ::rtl::OUString >                                   \
-    SAL_CALL ClassName##::getSupportedServiceNames(void)                             \
+    SAL_CALL ClassName::getSupportedServiceNames(void)                           \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);                      \
     ::rtl::OUString* pArray = aRet.getArray();                                       \
-    pArray[0] = ::rtl::OUString::createFromAscii(ServiceAscii##);                    \
+    pArray[0] = ::rtl::OUString::createFromAscii(ServiceAscii);                  \
     return aRet;                                                                     \
 }
 
 #define SC_IMPL_DUMMY_PROPERTY_LISTENER( ClassName )                                \
-    void SAL_CALL ClassName##::addPropertyChangeListener( const rtl::OUString&,     \
+    void SAL_CALL ClassName::addPropertyChangeListener( const rtl::OUString&,       \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
     { DBG_ERROR("not implemented"); }                                               \
-    void SAL_CALL ClassName##::removePropertyChangeListener( const rtl::OUString&,  \
+    void SAL_CALL ClassName::removePropertyChangeListener( const rtl::OUString&,    \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
     { DBG_ERROR("not implemented"); }                                               \
-    void SAL_CALL ClassName##::addVetoableChangeListener( const rtl::OUString&,     \
+    void SAL_CALL ClassName::addVetoableChangeListener( const rtl::OUString&,       \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
     { DBG_ERROR("not implemented"); }                                               \
-    void SAL_CALL ClassName##::removeVetoableChangeListener( const rtl::OUString&,  \
+    void SAL_CALL ClassName::removeVetoableChangeListener( const rtl::OUString&,    \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
