@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:10:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // #98255# activate OLE object on RETURN for selected object
                 // #98198# activate text edit on RETURN for selected object
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
@@ -784,7 +784,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                if (pView->HasMarkedObj() && !rKEvt.GetKeyCode().IsMod1() &&
+                if (pView->AreObjectsMarked() && !rKEvt.GetKeyCode().IsMod1() &&
                     !pDocSh->IsReadOnly())
                 {
                     // #97016# II
@@ -975,7 +975,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     {
         if(!pView->IsTextEdit() && pViewShell)
         {
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
             if(1 == rMarkList.GetMarkCount())
             {
