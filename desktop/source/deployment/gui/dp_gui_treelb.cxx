@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:21:31 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/ucb/ContentAction.hpp"
-#include "drafts/com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XModuleManager.hpp"
 #include <hash_set>
 
 
@@ -911,12 +911,11 @@ void DialogImpl::contentEvent( ContentEvent const & evt )
             if (ucbContent.getPropertyValue(
                     OUSTR("DocumentModel") ) >>= xDocumentModel)
             {
-                Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                Reference< ::com::sun::star::frame::XModuleManager >
                     xModuleManager(
                         m_xComponentContext->getServiceManager()
                         ->createInstanceWithContext(
-                            OUSTR("drafts." // xxx todo
-                                  "com.sun.star.frame.ModuleManager"),
+                            OUSTR("com.sun.star.frame.ModuleManager"),
                             m_xComponentContext ),
                         UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
