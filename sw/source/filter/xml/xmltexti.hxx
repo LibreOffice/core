@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:09:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,6 @@
 #include <xmloff/functional.hxx>
 #endif
 
-#ifndef _PLUGIN_HXX //autogen
-#include <so3/plugin.hxx>
-#endif
-
-#ifndef _FRAMEOBJ_HXX //autogen
-#include <sfx2/frameobj.hxx>
-#endif
-
 class XMLRedlineImportHelper;
 class SwApplet_Impl;
 class SvPlugInObjectRef;
@@ -108,6 +100,13 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
+                                      const ::rtl::OUString& rHRef,
+                                      const ::rtl::OUString& rStyleName,
+                                      const ::rtl::OUString& rTblName,
+                                         sal_Int32 nWidth, sal_Int32 nHeight );
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet>
+            createAndInsertOOoLink( SvXMLImport& rImport,
                                       const ::rtl::OUString& rHRef,
                                       const ::rtl::OUString& rStyleName,
                                       const ::rtl::OUString& rTblName,
