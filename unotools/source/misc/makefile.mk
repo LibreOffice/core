@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:48 $
+#   last change: $Author: fs $ $Date: 2001-04-19 16:14:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ UNOUCROUT=$(OUT)$/inc
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/atom.obj \
-            $(SLO)$/datetime.obj
+            $(SLO)$/datetime.obj \
+            $(SLO)$/eventlisteneradapter.obj
 
 # --- Targets ----------------------------------
 
