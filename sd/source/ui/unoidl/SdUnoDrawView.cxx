@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:10:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,51 @@ Any SAL_CALL SdUnoDrawView::getSelection()
     ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
+
+    Any aAny;
+
+    if( mrView.IsTextEdit() )
+        mrView.getTextSelection( aAny );
+
+
+    if( !aAny.hasValue() )
+    {
+        const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
+        sal_uInt32 nCount = rMarkList.GetMarkCount();
+        if( nCount )
+        {
+            Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
+            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+            {
+                SdrMark *pMark = rMarkList.GetMark(nNum);
+                if(pMark==NULL)
+                    continue;
+
+                SdrObject *pObj = pMark->GetObj();
+                if(pObj==NULL || pObj->GetPage() == NULL)
+                    continue;
+
+                Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+
+                if(!xPage.is())
+                    continue;
+
+                SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+
+                if(pDrawPage==NULL)
+                    continue;
+
+                Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
+
+                if(xShape.is())
+                    xShapes->add(xShape);
+            }
+            aAny <<= xShapes;
+        }
+    }
+
+    return aAny;
+/*
     SdXImpressDocument* pModel = GetModel();
 
     Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
@@ -590,6 +635,7 @@ Any SAL_CALL SdUnoDrawView::getSelection()
         aAny <<= xShapes;
 
     return aAny;
+*/
 }
 
 
