@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:41:34 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 19:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 
 #include <sot/storage.hxx>
 #include <so3/svstor.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vos/mutex.hxx>
 
 #include "transobj.hxx"
 #include "document.hxx"
@@ -202,6 +204,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
 ScTransferObj::~ScTransferObj()
 {
+    Application::GetSolarMutex().acquire();
+
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pCellClipboard == this )
     {
@@ -215,6 +219,10 @@ ScTransferObj::~ScTransferObj()
     }
 
     delete pDoc;        // ScTransferObj is owner of clipboard document
+
+    aDocShellRef.Clear();   // before releasing the mutex
+
+    Application::GetSolarMutex().release();
 }
 
 // static
@@ -405,7 +413,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
             {
                 SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*)pUserObject;
 
-                SvStorageRef xWorkStore( new SvStorage( *rxOStm ) );
+                SvStorageRef xWorkStore( new SvStorage( TRUE, *rxOStm ) );
                 rxOStm->SetBufferSize( 0xff00 );
 
                 // write document storage

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-03 17:41:34 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 19:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             {
                 SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*)pUserObject;
 
-                SvStorageRef xWorkStore( new SvStorage( *rxOStm ) );
+                SvStorageRef xWorkStore( new SvStorage( TRUE, *rxOStm ) );
                 rxOStm->SetBufferSize( 0xff00 );
 
                 // write document storage
