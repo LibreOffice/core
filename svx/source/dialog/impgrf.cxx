@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-23 16:52:36 $
+ *  last change: $Author: sj $ $Date: 2001-01-25 15:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #pragma hdrstop
 
@@ -226,9 +229,9 @@ USHORT FillFilter( GraphicFilter& rFilter )
     }
     rFilter.SetConfigPath( aFullConfigPath );
 
-    INetURLObject aFilterPathUrl( aPathOpt.GetFilterPath() );
-    if ( aFilterPathUrl.HasError() )
-        aFilterPathUrl = INetURLObject( aPathOpt.GetFilterPath(), INET_PROT_FILE );
+    String aURL;
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathOpt.GetFilterPath(), aURL );
+    INetURLObject aFilterPathUrl( aURL );
     rFilter.SetFilterPath( aFilterPathUrl );
 
     INetURLObject aUserConfigPathUrl( aPathOpt.GetUserConfigPath() );
