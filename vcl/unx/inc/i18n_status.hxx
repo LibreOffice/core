@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class I18NStatus
     SalFrame*               m_pParent;
     StatusWindow*           m_pStatusWindow;
     SalI18N_InputContext*   m_pInputContext;
+    String                  m_aCurrentIM;
 
     ::std::hash_map< ::rtl::OUString, void*, ::rtl::OUStringHash >
                             m_aChoices;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 15:21:36 $
+ *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,12 @@ void XIMStatusWindow::show( bool bShow )
     if( bShow && ! m_aStatusText.GetText().Len() )
         bShow = false;
     Show( bShow );
+    if( bShow )
+    {
+        const SystemEnvData* pData = GetSystemData();
+        XRaiseWindow( (Display*)pData->pDisplay,
+                      (XLIB_Window)pData->aShellWindow );
+    }
 }
 
 void XIMStatusWindow::setText( const String& rText )
@@ -227,6 +233,7 @@ class IIIMPStatusWindow : public StatusWindow
     PushButton              m_aButton;
     WorkWindow*             m_pStatusMenu;
     ListBox*                m_pStatusBox;
+    SalFrame*               m_pResetFocus;
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( ClickBtnHdl, PushButton* );
@@ -237,13 +244,20 @@ public:
 
     virtual void setText( const String & );
     virtual const String& getText() const;
+    virtual void show( bool bShow );
+
+    // overload Window focus handler
+    virtual void        GetFocus();
 };
 
 }
 
 IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
         StatusWindow( WB_MOVEABLE ),
-        m_aButton( this, WB_BORDER )
+        m_aButton( this, WB_BORDER ),
+        m_pStatusBox( NULL ),
+        m_pStatusMenu( NULL ),
+        m_pResetFocus( pParent )
 {
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "IME Status" ) ) );
 
@@ -268,6 +282,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
     SetOutputSizePixel( aSize );
 
     if( pParent )
+    {
         XMoveWindow( (Display*)pEnvData->pDisplay,
                      (XLIB_Window)pEnvData->aShellWindow,
                      pParent->maFrameData.getPosSize().Left(),
@@ -275,10 +290,19 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
                      + pParent->maFrameData.getPosSize().GetHeight()
                      + 20 // leave a little more space
                      );
+    }
 #ifdef DEBUG
     else
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
+}
+
+IIIMPStatusWindow::~IIIMPStatusWindow()
+{
+    if( m_pStatusBox )
+        delete m_pStatusBox;
+    if( m_pStatusMenu )
+        delete m_pStatusMenu;
 }
 
 void IIIMPStatusWindow::setText( const String& rText )
@@ -291,12 +315,34 @@ const String& IIIMPStatusWindow::getText() const
     return m_aButton.GetText();
 }
 
-IIIMPStatusWindow::~IIIMPStatusWindow()
+void IIIMPStatusWindow::show( bool bShow )
 {
-    if( m_pStatusBox )
-        delete m_pStatusBox;
-    if( m_pStatusMenu )
-        delete m_pStatusMenu;
+    // never hide the status window, only user can do that
+    if( bShow )
+        Show( TRUE );
+}
+
+void IIIMPStatusWindow::GetFocus()
+{
+    /*
+     *  this is here just to put the focus back to the application
+     *  window at startup on clickToFocus WMs
+     */
+    WorkWindow::GetFocus();
+    if( m_pResetFocus )
+    {
+        const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
+        BOOL bIgnore = m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->GetIgnoreXErrors();
+        m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+        XSetInputFocus( (Display*)pParentEnvData->pDisplay,
+                        (XLIB_Window)pParentEnvData->aShellWindow,
+                        RevertToNone,
+                        CurrentTime
+                        );
+        XSync( (Display*)pParentEnvData->pDisplay, False );
+        m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( FALSE );
+        m_pResetFocus = NULL;
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -336,7 +382,7 @@ IMPL_LINK( IIIMPStatusWindow, LoseFocusHdl, ListBox*, pBox )
 
 IMPL_LINK( IIIMPStatusWindow, ClickBtnHdl, PushButton*, pButton )
 {
-    if( pButton == &m_aButton )
+    if( pButton == &m_aButton && ! m_pStatusMenu )
     {
         const ::std::hash_map< OUString, void*, OUStringHash >& rChoices( I18NStatus::get().getChoices() );
 
@@ -432,6 +478,7 @@ SalI18N_InputContext* I18NStatus::getInputContext( bool& bDeleteAfterUse )
 
 void I18NStatus::setParent( SalFrame* pParent )
 {
+    m_pParent = pParent;
     if( ! m_pStatusWindow )
     {
         bool bIIIMPmode = m_aChoices.begin() != m_aChoices.end();
@@ -439,13 +486,9 @@ void I18NStatus::setParent( SalFrame* pParent )
             m_pStatusWindow = new IIIMPStatusWindow( pParent );
         else
             m_pStatusWindow = new XIMStatusWindow();
-
+        setStatusText( m_aCurrentIM );
     }
-    m_pParent = pParent;
-    if( m_pStatusWindow )
-        m_pStatusWindow->setPosition( m_pParent );
-//     if( m_pParent )
-//         toTop();
+    m_pStatusWindow->setPosition( m_pParent );
 }
 
 // --------------------------------------------------------------------------
@@ -475,6 +518,7 @@ void I18NStatus::setStatusText( const String& rText )
 
 void I18NStatus::changeIM( const String& rIM )
 {
+    m_aCurrentIM = rIM;
 }
 
 // --------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ SalI18N_InputMethod::SalI18N_InputMethod( ) : maMethod( (XIM)NULL ),
 
 SalI18N_InputMethod::~SalI18N_InputMethod()
 {
+    ::vcl::I18NStatus::free();
     if ( mpStyles != NULL )
         XFree( mpStyles );
     if ( maMethod != NULL )
@@ -498,8 +499,10 @@ SalI18N_InputMethod::AddConnectionWatch(Display *pDisplay, void *pConnectionHand
 
     // if we are not ml all the extended text input comes on the stock X queue,
     // so there is no need to monitor additional file descriptors.
-    if (!mbMultiLingual || !mbUseable)
-        return False;
+#ifndef SOLARIS
+     if (!mbMultiLingual || !mbUseable)
+         return False;
+#endif
 
     // pConnectionHandler must be really a pointer to a SalXLib
     Status nStatus = XAddConnectionWatch (pDisplay, InputMethod_ConnectionWatchProc,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,7 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
                             NULL )
             && pSubset )
         {
-            ::vcl::I18NStatus::get().changeIM( String( ByteString( pSubset->name ), RTL_TEXTENCODING_ISO_8859_1 ) );
+            ::vcl::I18NStatus::get().changeIM( String( ByteString( pSubset->name ), RTL_TEXTENCODING_UTF8 ) );
 #ifdef DEBUG
             fprintf( stderr, "got XNUnicodeCharacterSubset\n   %d\n   %d\n   %s\n   %d\n", pSubset->index, pSubset->subset_id, pSubset->name, pSubset->is_active );
 #endif
@@ -723,7 +723,7 @@ void
 SwitchIMCallback (XIC ic, XPointer client_data, XPointer call_data)
 {
     XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
-    ::vcl::I18NStatus::get().changeIM( String( ByteString( pCallData->to->name ), RTL_TEXTENCODING_ISO_8859_1 ) );
+    ::vcl::I18NStatus::get().changeIM( String( ByteString( pCallData->to->name ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 // ----------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,21 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                       XNDestroyCallback,      &maDestroyCallback,
                       NULL );
     }
+
+    if( mbMultiLingual )
+    {
+        // set initial IM status
+        XIMUnicodeCharacterSubset* pSubset = NULL;
+        if( ! XGetICValues( maContext,
+                            XNUnicodeCharacterSubset, & pSubset,
+                            NULL )
+            && pSubset )
+        {
+            String aCurrent( ByteString( pSubset->name ), RTL_TEXTENCODING_UTF8 );
+            ::vcl::I18NStatus::get().changeIM( aCurrent );
+            ::vcl::I18NStatus::get().setStatusText( aCurrent );
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -686,6 +701,7 @@ SalI18N_InputContext::UpdateSpotLocation()
 void
 SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
 {
+    I18NStatus::get().setParent( pFocusFrame );
     if ( mbUseable && (maContext != NULL) && pFocusFrame != mpFocusFrame )
     {
         if( mpFocusFrame )
@@ -702,21 +718,23 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
                       NULL );
 
         XSetICFocus( maContext );
-        I18NStatus::get().setParent( mpFocusFrame );
     }
 }
 
 void
 SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 {
+    I18NStatus& rStatus( I18NStatus::get() );
+    if( rStatus.getParent() == pFrame )
+        rStatus.setParent( NULL );
+
     if ( mbUseable && (maContext != NULL) )
     {
         if( pFrame == mpFocusFrame )
         {
             mpFocusFrame = maClientData.pFrame = NULL;
-            I18NStatus::get().setParent( mpFocusFrame );
+            XUnsetICFocus( maContext );
         }
-        XUnsetICFocus( maContext );
     }
 }
 

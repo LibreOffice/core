@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:36 $
+ *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,6 +614,9 @@ SalFrame::SalFrame() : maFrameData( this ) {}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline SalFrameData::~SalFrameData()
 {
+    if( mpInputContext )
+        mpInputContext->UnsetICFocus( pFrame_ );
+
     if( GetWindow() == hPresentationWindow )
         hPresentationWindow = None;
 
@@ -2188,8 +2191,12 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
     {
         if( FocusIn == pEvent->type )
             mpInputContext->SetICFocus( pFrame_ );
-        else
-            mpInputContext->UnsetICFocus( pFrame_ );
+        /*
+         *  do not unset the IC focuse here because would kill
+         *  a lookup choice windows that might have the focus now
+         *  else
+         *      mpInputContext->UnsetICFocus( pFrame_ );
+         */
     }
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed )
