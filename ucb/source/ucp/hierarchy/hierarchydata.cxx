@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 09:03:49 $
+ *  last change: $Author: kso $ $Date: 2000-11-28 11:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,9 +271,6 @@ sal_Bool HierarchyEntry::getData( Any& rTitle,
     catch ( NoSuchElementException& )
     {
         // getByHierarchicalName
-
-        VOS_ENSURE( sal_False,
-                    "HierarchyEntry::getData - caught NoSuchElementException!" );
     }
     catch ( Exception& )
     {
