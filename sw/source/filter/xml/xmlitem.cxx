@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitem.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:14:57 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
     SvXMLItemMapEntriesRef xMapEntries = rIMapper.getMapEntries();
     SvXMLItemMapEntry* pEntry = xMapEntries->getByName( nPrefix, rLocalName );
 
-    if( pEntry && 0 != (pEntry->nMemberId & MID_FLAG_ELEMENT_ITEM_IMPORT) )
+    if( pEntry && 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_IMPORT) )
     {
         return CreateChildContext( nPrefix, rLocalName, xAttrList,
                                    rItemSet, *pEntry, rUnitConv );
@@ -118,7 +118,7 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
 
 /** This method is called from this instance implementation of
     CreateChildContext if the element matches an entry in the
-    SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
+    SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT
 */
 SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
                                    const rtl::OUString& rLocalName,
