@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:21:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,10 @@ sal_Int32 PDFExtOutDevData::GetFormsFormat() const
 void PDFExtOutDevData::SetFormsFormat( const sal_Int32 nFormsFormat )
 {
     mnFormsFormat = nFormsFormat;
+}
+std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
+{
+    return maBookmarks;
 }
 void PDFExtOutDevData::ResetSyncData()
 {
