@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-18 17:04:10 $
+ *  last change: $Author: ssa $ $Date: 2002-11-18 17:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6253,10 +6253,10 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild )
         ImplGenerateMouseMove();
 
     // #104827# notify parent
-    if ( bNotify && GetParent() )
+    if ( bNotify )
     {
         NotifyEvent aNEvt( bEnable ? EVENT_INPUTENABLE : EVENT_INPUTDISABLE, this );
-        GetParent()->Notify( aNEvt );
+        Notify( aNEvt );
     }
 }
 
