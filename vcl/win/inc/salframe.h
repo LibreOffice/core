@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:48:36 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 class WinSalGraphics;
 
 // ----------------
-// - SalFrameData -
+// - WinSalFrame -
 // ----------------
 
 class WinSalFrame : public SalFrame
@@ -89,6 +89,8 @@ public:
     WinSalGraphics*         mpGraphics;             // current frame graphics
     WinSalGraphics*         mpGraphics2;            // current frame graphics for other threads
     WinSalFrame*            mpNextFrame;            // pointer to next frame
+    HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
+    HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened
     SystemEnvData           maSysData;              // system data
     SalFrameState           maState;                // frame state
     int                     mnShowState;            // show state
@@ -133,6 +135,8 @@ public:
     virtual BOOL                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
+    virtual void                                SetMenu( SalMenu* pSalMenu );
+    virtual void                                DrawMenuBar();
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
     virtual void                Enable( BOOL bEnable );
     virtual void              SetMinClientSize( long nWidth, long nHeight );
