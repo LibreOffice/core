@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 09:54:56 $
+ *  last change: $Author: os $ $Date: 2002-08-14 14:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,9 @@ public:
     void            SetCompany( const String& rNewToken )
                         { SetToken( &SvtUserOptions_Impl::m_aCompany, rNewToken ); }
     void            SetFirstName( const String& rNewToken )
-                        { SetToken( &SvtUserOptions_Impl::m_aFirstName, rNewToken ); }
+                        { SetToken( &SvtUserOptions_Impl::m_aFirstName, rNewToken ); InitFullName();}
     void            SetLastName( const String& rNewToken )
-                        { SetToken( &SvtUserOptions_Impl::m_aLastName, rNewToken ); }
+                        { SetToken( &SvtUserOptions_Impl::m_aLastName, rNewToken ); InitFullName();}
     void            SetID( const String& rNewToken )
                         { SetToken( &SvtUserOptions_Impl::m_aID, rNewToken ); }
     void            SetStreet( const String& rNewToken )
