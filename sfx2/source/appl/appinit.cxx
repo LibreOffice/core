@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 15:50:17 $
+ *  last change: $Author: mba $ $Date: 2001-03-19 09:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,40 +361,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       aEventNames.GetString( 12 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_ONERROR,         String(SfxResId(STR_EVENT_ONERROR)),        aEventNames.GetString( 13 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_NEWMESSAGE,      String(SfxResId(STR_EVENT_NEWMESSAGE)),     aEventNames.GetString( 14 ) );
-
-    SfxFilterMatcher& rMatcher = GetFilterMatcher();
-/*
-    // Filtercontainer fuer ::com::sun::star::sdbcx::User Overrides registrieren
-    SfxFilterContainer* pDefaults = new SfxFilterContainer( DEFINE_CONST_UNICODE(SFX_FCONTNR_REDIRECTS) );
-    rMatcher.AddContainer( pDefaults );
-    pDefaults->LoadFilters(
-        DEFINE_CONST_UNICODE(SFX_FCONTNR_REDIRECTS), sal_False,
-        SFX_FILTER_REDIRECT | SFX_FILTER_IMPORT | SFX_FILTER_ALIEN |
-        SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINCHOOSER );
-  */
-#if SUPD<613//MUSTINI
-    if( _nFeatures & SFX_FEATURE_SCALC &&
-        _nFeatures & SFX_FEATURE_SIMPRESS &&
-        _nFeatures & SFX_FEATURE_SDRAW &&
-        _nFeatures & SFX_FEATURE_SIMAGE &&
-        _nFeatures & SFX_FEATURE_SCHART &&
-        _nFeatures & SFX_FEATURE_SMATH &&
-        _nFeatures & SFX_FEATURE_SWRITER )
-#else
-    if( _nFeatures & FEATUREFLAG_CALC &&
-        _nFeatures & FEATUREFLAG_IMPRESS &&
-        _nFeatures & FEATUREFLAG_DRAW &&
-        _nFeatures & FEATUREFLAG_CHART &&
-        _nFeatures & FEATUREFLAG_MATH &&
-        _nFeatures & FEATUREFLAG_WRITER )
-#endif
-    {
-        // Office Filter registrieren
-        SfxFilterContainer* pContainer =
-            new SfxFilterContainer( DEFINE_CONST_UNICODE("soffice4") );
-        pContainer->AddFilter( new SfxOfficeFilter( pContainer ), 0 );
-        rMatcher.AddContainer( pContainer );
-    }
 
     // Subklasse initialisieren
     bDowning = sal_False;
