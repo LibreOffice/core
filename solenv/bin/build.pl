@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-07 14:03:10 $
+#   last change: $Author: vg $ $Date: 2001-08-10 10:25:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.30 $ ';
+$id_str = ' $Revision: 1.31 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -85,6 +85,9 @@ print "$script_name -- version: $script_rev\n";
 #                       #
 #########################
 $QuantityToBuild = 0;
+$BuildAllParents = 0;
+$show = 0;
+$deliver = 0;
 %LocalDepsHash = ();
 %DepsArchive = ();
 %BuildQueue = ();
@@ -94,13 +97,15 @@ $QuantityToBuild = 0;
 %AliveDependencies = ();
 %ParentDepsHash = ();
 @UnresolvedParents = ();
+@dmake_args = ();
 %DeadParents = ();
 $CurrentPrj = "";
 $StandDir = GetStandDir();
-$QuantityToBuild = GetQuantityToBuild();
 $build_from = "";
 $is_from_built = 0;
-$BuildAllParents = HowToBuild();
+#$BuildAllParents = HowToBuild();
+#$QuantityToBuild = GetQuantityToBuild();
+&get_options;
 $ENV{mk_tmp} = "1";
 %prj_platform = ();
 
@@ -178,8 +183,8 @@ sub BuildAll {
             print "Building project $Prj\n";
             print   "=============\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
-            BuildPrj($PrjDir);
-            system ("$ENV{DELIVER}");
+            BuildPrj($PrjDir) if (!$deliver);
+            system ("$ENV{DELIVER}") if (!$show);
             RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
@@ -205,13 +210,17 @@ sub MakeDir {
         exit (1);
     };
     cwd();
-    $error = system ("$dmake");
-    if (!$error) {
-        RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+    if (!$show) {
+        $error = system ("$dmake");
+        if (!$error) {
+            RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+        } else {
+            print STDERR "Error $error occurred while making $BuildDir\n";
+            $ENV{mk_tmp} = "";
+            exit(1);
+        };
     } else {
-        print STDERR "Error $error occurred while making $BuildDir\n";
-        $ENV{mk_tmp} = "";
-        exit(1);
+        RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     };
 };
 
@@ -235,24 +244,6 @@ sub GetParentsString {
     close PrjBuildFile;
     return "NULL";
 };
-
-#
-# Check if project should be built when all parent projects are built
-#
-sub HowToBuild {
-    my ($i);
-    foreach $i (0 .. $#ARGV) {
-        if ($ARGV[$i] =~ /^-all$/) {
-            splice(@ARGV, $i, 1);
-            return 1;
-        } elsif ($ARGV[$i] =~ /^-from$/) {
-            $build_from = $ARGV[$i + 1];
-            splice(@ARGV, $i, 2);
-            return 1;
-        };
-    };
-    return 0;
-}
 
 #
 # get folders' platform infos
@@ -377,27 +368,10 @@ sub GetDmakeCommando {
 
     # Setting alias for dmake
     $dmake = "dmake";
-    #if (defined $ENV{PROFULLSWITCH}) {
-    #   $dmake .= " ".$ENV{PROFULLSWITCH};
-    #};
-    while ($arg = pop(@ARGV)) {
+    while ($arg = pop(@dmake_args)) {
         $dmake .= " "."$arg";
     };
     return $dmake;
-};
-
-
-#
-# Procedure returns quantity of folders to be built syncronously
-#
-sub GetQuantityToBuild {
-    my ($i);
-    foreach $i (0 .. $#ARGV) {
-        if ($ARGV[$i] =~ /^-PP/) {
-            splice(@ARGV, $i, 1);
-            return $';
-        };
-    };
 };
 
 
@@ -524,7 +498,6 @@ sub RemoveFromDependencies {
     foreach $Prj (keys %$Dependencies) {
         PrjDepsLoop:
         foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-            #print $Prj, " $i ", ${$$Dependencies{$Prj}}[$i], "\n";
             if (${$$Dependencies{$Prj}}[$i] eq $ExclPrj) {
                 splice (@{$$Dependencies{$Prj}}, $i, 1);
                 $i = 0;
@@ -640,3 +613,41 @@ sub GetDirectoryList {
     return @DirectoryList;
 };
 
+#
+# Get all options passed
+#
+sub get_options {
+    my $arg;
+    #&usage() && exit(0) if ($#ARGV == -1);
+    #$QuantityToBuild
+    while ($arg = shift @ARGV) {
+        $arg =~ /^PP$/      and $QuantityToBuild = shift @ARGV  and next;
+        $arg =~ /^-all$/    and $BuildAllParents = 1            and next;
+        $arg =~ /^-show$/   and $show = 1                       and next;
+        $arg =~ /^-deliver$/and $deliver = 1                    and next;
+        $arg =~ /^-from$/   and $BuildAllParents = 1
+                            and $build_from = shift @ARGV       and next;
+        $arg =~ /^-help$/   and &usage                          and exit(0);
+        push (@dmake_args, $arg);
+    };
+    @ARGV = @dmake_args;
+};
+
+sub print_error {
+    my $message = shift;
+    print STDERR "\nERROR: $message\n";
+};
+
+sub usage {
+    print STDERR "\nbuild\n";
+    print STDERR "Syntax:   build [-help|-all|-from prj_name] \n";
+    print STDERR "Example:  build -from sfx2\n";
+    print STDERR "              - build all projects including current one from sfx2\n";
+    print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
+    print STDERR "      -from       - build all projects beginning from the specified till current one\n";
+    print STDERR "      -show       - show what is gonna be built\n";
+    print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
+    print STDERR "      -help       - print help info\n";
+    print STDERR "Default:          - build current project\n";
+    print STDERR "Keys that are not listed above would be passed to dmake\n";
+};
