@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:58:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,7 @@ DBG_NAME(DbFormattedField);
 //------------------------------------------------------------------------------
 DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     :DbCellControl(_rColumn)
-    ,OPropertyChangeListener(m_aDummy)
+    ,OPropertyChangeListener(m_aMutex)
     ,m_nKeyType(::com::sun::star::util::NumberFormat::UNDEFINED)
 {
     DBG_CTOR(DbFormattedField,NULL);
@@ -1697,7 +1697,7 @@ sal_Bool DbTimeField::Commit()
 //------------------------------------------------------------------------------
 DbComboBox::DbComboBox(DbGridColumn& _rColumn)
            :DbCellControl(_rColumn)
-           ,OPropertyChangeListener(m_aDummy)
+           ,OPropertyChangeListener(m_aMutex)
            ,m_nKeyType(::com::sun::star::util::NumberFormat::UNDEFINED)
 {
     m_bAlignedController = sal_False;
@@ -1801,7 +1801,7 @@ sal_Bool DbComboBox::Commit()
 //------------------------------------------------------------------------------
 DbListBox::DbListBox(DbGridColumn& _rColumn)
           :DbCellControl(_rColumn)
-          ,OPropertyChangeListener(m_aDummy)
+          ,OPropertyChangeListener(m_aMutex)
           ,m_bBound(sal_False)
 {
     m_bAlignedController = sal_False;

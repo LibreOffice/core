@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 13:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,15 @@
 class DbCellControl;
 class Edit;
 class FmXGridCell;
+
+//==================================================================
+// FmMutexHelper
+//==================================================================
+class FmMutexHelper
+{
+protected:
+    ::osl::Mutex    m_aMutex;
+};
 
 //==================================================================
 // DbGridColumn, Spaltenbeschreibung
@@ -299,15 +308,15 @@ protected:
 };
 
 //==================================================================
-class DbFormattedField : public DbCellControl, public ::comphelper::OPropertyChangeListener
+class DbFormattedField
+        :public DbCellControl
+        ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
+        ,public ::comphelper::OPropertyChangeListener
 {
 protected:
     ::comphelper::OPropertyChangeMultiplexer*       m_pFormatListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     sal_Int16                       m_nKeyType;
-
-    ::osl::Mutex    m_aDummy;
-        // only for the base class OPropertyChangeListener, in UNO3 we can't use the SolarMutex anymore
 
 public:
     DbFormattedField(DbGridColumn& _rColumn);
@@ -353,11 +362,10 @@ public:
 
 //==================================================================
 class DbComboBox    :public DbCellControl
+                    ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
                     ,public ::comphelper::OPropertyChangeListener
 {
     sal_Int16         m_nKeyType;
-    ::osl::Mutex    m_aDummy;
-        // only for the base class OPropertyChangeListener, in UNO3 we can't use the SolarMutex anymore
 
 public:
     DbComboBox(DbGridColumn& _rColumn);
@@ -375,13 +383,12 @@ public:
 };
 
 //==================================================================
-class DbListBox : public DbCellControl,
-                  public ::comphelper::OPropertyChangeListener
+class DbListBox     :public DbCellControl
+                    ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
+                    ,public ::comphelper::OPropertyChangeListener
 {
     sal_Bool              m_bBound  : 1;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
-    ::osl::Mutex    m_aDummy;
-        // only for the base class OPropertyChangeListener, in UNO3 we can't use the SolarMutex anymore
 
 public:
     DbListBox(DbGridColumn& _rColumn);
