@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:50:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ void ImportExcel::Formula25()
 
     nLastXF = nXF;
 
-    Formula( nCol, nRow, GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
+    Formula( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
 }
 
 
@@ -145,16 +145,16 @@ void ImportExcel::Formula4()
 
     nLastXF = nXF;
 
-    Formula( nCol, nRow, GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, FALSE );
+    Formula( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, FALSE );
 }
 
 
-void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
+void ImportExcel::Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
     UINT16 nXF, UINT16 nFormLen, double& rCurVal, BYTE nFlag, BOOL bShrFmla )
 {
     ConvErr eErr = ConvOK;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    if( ValidRow(nRow) && ValidCol(nCol) )
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
@@ -206,7 +206,7 @@ void ImportExcel::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
         else
             pLastFormCell = NULL;
 
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFIndexBuffer().SetXF( static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow), nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -581,7 +581,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
                 aIn >> nUINT16 >> nByte;
-                aSRD.nCol = nByte;
+                aSRD.nCol = static_cast<SCsCOL>(nByte);
                 aSRD.nRow = nUINT16 & 0x3FFF;
                 aSRD.nRelTab = 0;
                 aSRD.SetTabRel( TRUE );
@@ -815,8 +815,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 if( nExtSheet <= 0 )
                 {   // in aktuellem Workbook
-                    BOOL        b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
-                    aSRD.nTab = nTabFirst;
+                    BOOL        b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
+                    aSRD.nTab = static_cast<SCTAB>(nTabFirst);
                     aSRD.SetFlag3D( b3D );
                     aSRD.SetTabRel( FALSE );
 
@@ -831,7 +831,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                             aSRD.SetColDeleted( TRUE );
                             aSRD.SetRowDeleted( TRUE );
                     }
-                    if ( nTabFirst > MAXTAB )
+                    if ( !ValidTab(static_cast<SCTAB>(nTabFirst)) )
                         aSRD.SetTabDeleted( TRUE );
 
                     if( nTabLast != nTabFirst )
@@ -839,11 +839,11 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                         aCRD.Ref1 = aSRD;
                         aCRD.Ref2.nCol = aSRD.nCol;
                         aCRD.Ref2.nRow = aSRD.nRow;
-                        aCRD.Ref2.nTab = nTabLast;
-                        b3D = ( nTabLast != aEingPos.Tab() );
+                        aCRD.Ref2.nTab = static_cast<SCTAB>(nTabLast);
+                        b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
                         aCRD.Ref2.SetFlag3D( b3D );
                         aCRD.Ref2.SetTabRel( FALSE );
-                        aCRD.Ref2.SetTabDeleted( nTabLast > MAXTAB );
+                        aCRD.Ref2.SetTabDeleted( !ValidTab(static_cast<SCTAB>(nTabLast)) );
                         aStack << aPool.Store( aCRD );
                     }
                     else
@@ -890,11 +890,11 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                     SingleRefData&  rR1 = aCRD.Ref1;
                     SingleRefData&  rR2 = aCRD.Ref2;
 
-                    rR1.nTab = nTabFirst;
-                    rR2.nTab = nTabLast;
-                    rR1.SetFlag3D( ( nTabFirst != aEingPos.Tab() ) || bRangeName );
+                    rR1.nTab = static_cast<SCTAB>(nTabFirst);
+                    rR2.nTab = static_cast<SCTAB>(nTabLast);
+                    rR1.SetFlag3D( ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName );
                     rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( ( nTabLast != aEingPos.Tab() ) || bRangeName );
+                    rR2.SetFlag3D( ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() ) || bRangeName );
                     rR2.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
@@ -916,9 +916,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                             rR2.SetColDeleted( TRUE );
                             rR2.SetRowDeleted( TRUE );
                     }
-                    if ( nTabFirst > MAXTAB )
+                    if ( !ValidTab(static_cast<SCTAB>(nTabFirst)) )
                         rR1.SetTabDeleted( TRUE );
-                    if ( nTabLast > MAXTAB )
+                    if ( !ValidTab(static_cast<SCTAB>(nTabLast)) )
                         rR2.SetTabDeleted( TRUE );
 
                     aStack << aPool.Store( aCRD );
@@ -1141,7 +1141,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
                 aIn >> nUINT16 >> nByte;
-                aSRD.nCol = nByte;
+                aSRD.nCol = static_cast<SCsCOL>(nByte);
                 aSRD.nRow = nUINT16 & 0x3FFF;
                 aSRD.nRelTab = 0;
                 aSRD.SetTabRel( TRUE );
@@ -1306,8 +1306,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
 
                 if( nExtSheet <= 0 )
                 {// in aktuellem Workbook
-                    BOOL b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
-                    aSRD.nTab = nTabFirst;
+                    BOOL b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
+                    aSRD.nTab = static_cast<SCTAB>(nTabFirst);
                     aSRD.SetFlag3D( b3D );
                     aSRD.SetTabRel( FALSE );
 
@@ -1318,8 +1318,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                         aCRD.Ref1 = aSRD;
                         aCRD.Ref2.nCol = aSRD.nCol;
                         aCRD.Ref2.nRow = aSRD.nRow;
-                        aCRD.Ref2.nTab = nTabLast;
-                        b3D = ( nTabLast != aEingPos.Tab() );
+                        aCRD.Ref2.nTab = static_cast<SCTAB>(nTabLast);
+                        b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
                         aCRD.Ref2.SetFlag3D( b3D );
                         aCRD.Ref2.SetTabRel( FALSE );
                         rRangeList.Append( aCRD );
@@ -1365,11 +1365,11 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                     SingleRefData   &rR1 = aCRD.Ref1;
                     SingleRefData   &rR2 = aCRD.Ref2;
 
-                    rR1.nTab = nTabFirst;
-                    rR2.nTab = nTabLast;
-                    rR1.SetFlag3D( ( nTabFirst != aEingPos.Tab() ) || bRangeName );
+                    rR1.nTab = static_cast<SCTAB>(nTabFirst);
+                    rR2.nTab = static_cast<SCTAB>(nTabLast);
+                    rR1.SetFlag3D( ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName );
                     rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( ( nTabLast != aEingPos.Tab() ) || bRangeName );
+                    rR2.SetFlag3D( ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() ) || bRangeName );
                     rR2.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
@@ -2345,12 +2345,12 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
         if( nRow & 0x4000 )
         {//                                                         rel Col
             rSRD.SetColRel( TRUE );
-            rSRD.nRelCol = *( ( sal_Char * ) &nCol );
+            rSRD.nRelCol = static_cast<SCsCOL>(static_cast<INT8>(nCol));
         }
         else
         {//                                                         abs Col
             rSRD.SetColRel( FALSE );
-            rSRD.nCol = nCol;
+            rSRD.nCol = static_cast<SCCOL>(nCol);
         }
 
         // R O W
@@ -2359,15 +2359,15 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
             rSRD.SetRowRel( TRUE );
             if( nRow & 0x2000 ) // Bit 13 gesetzt?
                 //                                              -> Row negativ
-                rSRD.nRelRow = *( ( INT16 * ) &nRow ) | 0xC000;
+                rSRD.nRelRow = static_cast<SCsROW>(static_cast<INT16>(nRow | 0xC000));
             else
                 //                                              -> Row positiv
-                rSRD.nRelRow = nRow & nRowMask;
+                rSRD.nRelRow = static_cast<SCsROW>(nRow & nRowMask);
         }
         else
         {//                                                         abs Row
             rSRD.SetRowRel( FALSE );
-            rSRD.nRow = nRow & nRowMask;
+            rSRD.nRow = static_cast<SCROW>(nRow & nRowMask);
         }
 
         // T A B
@@ -2379,11 +2379,11 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
     {
         // C O L
         rSRD.SetColRel( ( nRow & 0x4000 ) > 0 );
-        rSRD.nCol = nCol;
+        rSRD.nCol = static_cast<SCsCOL>(nCol);
 
         // R O W
         rSRD.SetRowRel( ( nRow & 0x8000 ) > 0 );
-        rSRD.nRow = nRow & nRowMask;
+        rSRD.nRow = static_cast<SCsROW>(nRow & nRowMask);
 
         if ( rSRD.IsColRel() )
             rSRD.nRelCol = rSRD.nCol - aEingPos.Col();
@@ -2462,7 +2462,7 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen 
             aIn >> nRow >> nCol;
 
             aStack << aPool.Store( pExcRoot->pShrfmlaBuff->Find(
-                ScAddress( nCol, nRow, pExcRoot->pIR->GetCurrScTab() ) ) );
+                ScAddress( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), pExcRoot->pIR->GetCurrScTab() ) ) );
 
             bRet = TRUE;
         }
