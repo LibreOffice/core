@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 12:11:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,4 +821,5 @@ String TextField
     Text[ catalan ] = "¡El campo de datos de usuario no está definido!";
     Text[ finnish ] = "Benutzerdatenfeld ist nicht definiert!";
 };
+
 
