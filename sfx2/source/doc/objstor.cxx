@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:32:10 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@
 #include <ucbhelper/content.hxx>
 #include <sot/storinfo.hxx>
 #include <shell/systemshell.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -209,6 +210,7 @@
 #include "scriptcont.hxx"
 #include "event.hxx"
 #include "fltoptint.hxx"
+#include "graphhelp.hxx"
 
 
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
@@ -1014,7 +1016,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         // transfer password from the parameters to the storage
         String aPasswd;
-        if ( GetPasswd_Impl( rMedium.GetItemSet(), aPasswd ) )
+        sal_Bool bPasswdProvided = GetPasswd_Impl( rMedium.GetItemSet(), aPasswd );
+        if ( bPasswdProvided )
             aMedRef->SetKey( S2BS( aPasswd ) ); //!!! (pb) needs new implementation
 
         const SfxFilter* pFilter = rMedium.GetFilter();
@@ -1028,6 +1031,20 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         else
             // save to target
             bOk = SaveAsOwnFormat( rMedium );
+
+        if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        {
+            // store the thumbnail representation image
+            // TODO: handle the case when document is encrypted and/or signed
+            if ( !GenerateAndStoreThumbnail( bPasswdProvided,
+                                            sal_False,
+                                            pFilter->IsOwnTemplateFormat(),
+                                            SotStorageRef( aMedRef ) ) )
+            {
+                // TODO: error handling
+                OSL_ENSURE( sal_False, "Couldn't store thumbnail representation!" );
+            }
+        }
 
         // look for a "version" parameter
         const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
@@ -2333,7 +2350,6 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
                         xCfgStor->Commit();
                 }
             }
-
         }
 
         const SfxFilter* pFilter = rMedium.GetFilter();
@@ -2431,3 +2447,65 @@ void SfxObjectShell::AddXMLAsZipToTheStorage( SvStorage& rRoot )
         }
     }
 }
+
+sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
+                                                    sal_Bool bSigned,
+                                                    sal_Bool bIsTemplate,
+                                                    const SotStorageRef& xStor )
+{
+    sal_Bool bResult = sal_False;
+
+    SotStorageRef xThumbnailStor = xStor->OpenUCBStorage( ::rtl::OUString::createFromAscii( "Thumbnail" ) );
+    if ( xThumbnailStor.Is() && !xThumbnailStor->GetError() )
+    {
+        SotStorageStreamRef xStream = xThumbnailStor->OpenSotStream( ::rtl::OUString::createFromAscii( "thumbnail.png" ) );
+        if ( xStream.Is() && !xStream->GetError() && WriteThumbnail( bEncrypted, bSigned, bIsTemplate, xStream ) )
+            bResult = xThumbnailStor->Commit() && !xThumbnailStor->GetError();
+    }
+
+    return bResult;
+}
+
+sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
+                                         sal_Bool bSigned,
+                                         sal_Bool bIsTemplate,
+                                         const SotStorageStreamRef& xStream )
+{
+    sal_Bool bResult = sal_False;
+
+    if ( xStream.Is() && !xStream->GetError() )
+    {
+        if ( bEncrypted )
+        {
+            sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(
+                                    ::rtl::OUString::createFromAscii( GetFactory().GetShortName() ),
+                                    bIsTemplate );
+            if ( nResID )
+            {
+                if ( !bSigned )
+                {
+                    bResult = GraphicHelper::getThumbnailReplacement_Impl( nResID, xStream );
+                }
+                else
+                {
+                    // retrieve the bitmap and write a signature bitmap over it
+                    SfxResId aResId( nResID );
+                    BitmapEx aThumbBitmap( aResId );
+                    bResult = GraphicHelper::getSignedThumbnailFormatFromBitmap_Impl( aThumbBitmap, xStream );
+                }
+            }
+        }
+        else
+        {
+            GDIMetaFile* pMetaFile = GetPreviewMetaFile( sal_False );
+            if ( pMetaFile )
+            {
+                bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl( pMetaFile, bSigned, xStream );
+                delete pMetaFile;
+            }
+        }
+    }
+
+    return bResult;
+}
+
