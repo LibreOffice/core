@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:05:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text[ hebrew ] = "AutoText - Gruppe";
         Text[ hindi ] = "स्वचालित टेक्स्ट् - समूह";
         Text[ slovak ] = "Automatický text - skupina";
+        Text[ hungarian ] = "Szöveg-o-mata - csoport";
+        Text[ slovenian ] = "Samobesedilo - skupina";
     };
     OKButton PB_OK
     {
@@ -139,7 +141,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text [ english_us ] = "Select AutoText: " ;
     Text [ portuguese_brazilian ] = "Selecionar AutoTexto:" ;
     Text [ swedish ] = "V�lj ut textblock:  " ;
-    Text [ danish ] = "V�lg tekstelementer: " ;
+    Text [ danish ] = "V�lg AutoTekst: " ;
     Text [ italian ] = "Seleziona modulo di testo:  " ;
     Text [ spanish ] = "Seleccionar m�dulo de texto:  " ;
     Text [ french ] = "S�lection de l'AutoTexte : " ;
@@ -162,7 +164,10 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ hebrew ] = "Textbaustein auswählen:";
     Text[ hindi ] = "स्वचालित टेक्स्ट् चुनो: ";
     Text[ slovak ] = "Vybrať automatický text:";
+    Text[ hungarian ] = "Szöveg-o-mata elem kiválasztása: ";
+    Text[ slovenian ] = "Izberi samobesedilo:";
 };
+
 
 
 
