@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:57:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,6 +806,8 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
 {
     if ( mbUseable && (maContext != NULL) )
     {
+        SalFrame* pOldFocusFrame = mpFocusFrame;
+
         // restore conversion state after resetting XIC
         XIMPreeditState preedit_state = XIMPreeditUnKnown;
         XVaNestedList preedit_attr;
@@ -890,6 +892,11 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
         }
         if ( pPendingChars != NULL )
             XFree ( (void*)pPendingChars  );
+
+        /* #i41330# workaround XmbResetIC disabling the whole context
+        */
+        if( mpFocusFrame && mpFocusFrame == pOldFocusFrame )
+            SetICFocus( mpFocusFrame );
     }
 }
 
