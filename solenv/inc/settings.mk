@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.148 $
+#   $Revision: 1.149 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:20 $
+#   last change: $Author: rt $ $Date: 2004-07-12 12:59:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1131,6 +1131,10 @@ REGCOMPARE*=regcompare
 REGCOMP*=regcomp
 CPPUMAKER*=cppumaker
 JAVAMAKER*=javamaker
+.IF "$(GUI)" == "WNT"
+CLIMAKER*=climaker
+.ENDIF
+
 RDBMAKER*=rdbmaker
 .IF "$(JDK)"=="gcj"
 JAVA*=gij
