@@ -1,0 +1,21 @@
+UDK_3.1 {
+    global:
+        # jvmfwk/framework.h:
+    jfw_freeJavaInfo;
+    jfw_findAndSelectJava;
+    jfw_startJava;
+    jfw_isJavaRunning;
+    jfw_getJavaInfoByPath;
+    jfw_setSelectedJava;
+    jfw_getSelectedJava;
+    jfw_setEnabled;
+    jfw_getEnabled;
+    jfw_setVMParameters;
+    jfw_getVMParameters;
+    jfw_setUserClassPath;
+    jfw_getUserClassPath;
+    jfw_lock;
+    jfw_unlock;
+    local:
+        *;
+};
