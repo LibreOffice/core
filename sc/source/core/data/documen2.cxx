@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:54 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@
 #include "indexmap.hxx"
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
+#include "listenercalls.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -372,6 +373,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bInDtorClear( FALSE ),
         bExpandRefs( FALSE ),
         pUnoBroadcaster( NULL ),
+        pUnoListenerCalls( NULL ),
         pChangeTrack( NULL ),
         pChangeViewSettings( NULL ),
         pEditEngine( NULL ),
@@ -386,6 +388,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nInDdeLinkUpdate( 0 ),
         nXMLImportedFormulaCount( 0 ),
         bInUnoBroadcast( FALSE ),
+        bInUnoListenerCall( FALSE ),
         bStyleSheetUsageInvalid( TRUE )
 {
     eSrcSet = gsl_getSystemTextEncoding();
@@ -538,6 +541,8 @@ ScDocument::~ScDocument()
         delete pUnoBroadcaster;     // broadcasted nochmal SFX_HINT_DYING
         pUnoBroadcaster = NULL;
     }
+
+    delete pUnoListenerCalls;
 
     Clear();
 
