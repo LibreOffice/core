@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-20 11:15:31 $
+ *  last change: $Author: ka $ $Date: 2002-04-15 10:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,14 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
 
         rSet.Put( SfxBoolItem( SID_LAYERMODE, bLayerMode ) );
+    }
+
+    if( !aLayerBtn.IsChecked() )
+    {
+        rSet.DisableItem( SID_INSERTLAYER );
+        rSet.DisableItem( SID_MODIFYLAYER );
+        rSet.DisableItem( SID_DELETE_LAYER );
+        rSet.DisableItem( SID_RENAMELAYER );
     }
 
     if (eEditMode == EM_PAGE)
