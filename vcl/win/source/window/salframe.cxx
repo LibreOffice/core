@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:53:06 $
+ *  last change: $Author: th $ $Date: 2000-11-06 22:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,7 +1355,6 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
             maFrameData.mbHandleIME = FALSE;
 
         // Set the Font for IME Handling
-/*
         if ( pContext->mpFont )
         {
             HIMC hIMC = ImmGetContext( maFrameData.mhWnd );
@@ -1369,7 +1368,6 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
                 ImmReleaseContext( maFrameData.mhWnd, hIMC );
             }
         }
-*/
     }
     else
     {
