@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obr $ $Date: 2002-07-31 12:40:00 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 17:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,31 +63,39 @@
 <oor:component-schema oor:name="Common" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
 	<templates>
 		<group oor:name="Passwordstorage">
+			<!-- Responsible: MAV -->
+            <info>
+                <desc xml:lang="en-US">A container for passwords.</desc>
+            </info>
 			<prop oor:name="Password" oor:type="xs:string" oor:localized="false">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">A password encoded with the master password.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="HistoryType">
+			<!-- Responsible: AS -->
+            <info>
+                <desc xml:lang="en-US">Contains settings for a history entry in the history list.</desc>
+            </info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">URL</desc>
+					<desc xml:lang="en-US">Specifies the document URL.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Filtername</desc>
+					<desc xml:lang="en-US">Specifies the filtername that was chosen to load the document.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Title of the URL which is displayed at the user-interface</desc>
+					<desc xml:lang="en-US">Title of the URL which is displayed on the user-interface.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Password" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Encoded password</desc>
+					<desc xml:lang="en-US">An encoded password used to open the document.</desc>
 				</info>
 			</prop>
 		</group>
@@ -607,13 +615,25 @@
 			</info>
 		</group>
 		<group oor:name="RecoveryEntry">
-			<!-- Responsible: AS -->
-			<prop oor:name="URL" oor:type="xs:string"/>
-			<prop oor:name="Filter" oor:type="xs:string"/>
-			<prop oor:name="TempName" oor:type="xs:string"/>
-			<info>
-				<desc xml:lang="en-US">Specifies an entry of our recovery list which is used by our CrashGuard to save informations about last opened files to open it if office new start!</desc>
-			</info>
+            <!-- Responsible: AS -->
+            <info>
+                <desc xml:lang="en-US">Specifies an entry of our recovery list which is used by our CrashGuard to save informations about last opened files to open it if office new start!</desc>
+            </info>
+			<prop oor:name="URL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">Specifies an URL that should be recovered after next Office start.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Filter" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
+				</info>
+			</prop>
+			<prop oor:name="TempName" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">The name of the temporary file which represents the document.</desc>
+				</info>
+			</prop>
 		</group>
 		<group oor:name="StartEndCharacters">
 			<!-- Responsible: OS -->
@@ -632,8 +652,20 @@
 			</info>
 		</group>
 		<group oor:name="NameCounter">
-			<prop oor:name="Name" oor:type="xs:string"/>
-			<prop oor:name="Counter" oor:type="xs:int"/>
+            <!-- Responsible: MBA -->
+            <info>
+                <desc xml:lang="en-US">Stores an association between an numeric value and a name.</desc>
+            </info>
+			<prop oor:name="Name" oor:type="xs:string">
+                <info>
+                    <desc xml:lang="en-US">Specifies a name that is associated with a counter.</desc>
+                </info>
+			</prop>
+			<prop oor:name="Counter" oor:type="xs:int">
+                <info>
+                    <desc xml:lang="en-US">Specifies a number that is associated with a name.</desc>
+                </info>
+			</prop>
 		</group>
 		<group oor:name="MailCommandLineProfile">
 			<!-- Responsible: OBR -->
@@ -736,27 +768,31 @@
 	</templates>
 	<component>
 		<group oor:name="Passwords">
+			<!-- Responsible: MAV -->
+            <info>
+                <desc xml:lang="en-US">Description of the persistent password container.</desc>
+            </info>
 			<prop oor:name="UseStorage" oor:type="xs:boolean">
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US"/>
+                    <desc xml:lang="en-US">Specifies if passwords can be stored persistently.</desc>
 				</info>
 			</prop>
 			<prop oor:name="HasMaster" oor:type="xs:boolean">
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+                    <desc xml:lang="en-US">Specifies if there is a valid master password.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Master" oor:type="xs:string">
 				<value/>
 				<info>
-					<desc xml:lang="en-US"/>
+                    <desc xml:lang="en-US">The master password encrypted by itself.</desc>
 				</info>
 			</prop>
 			<set oor:name="Store" oor:node-type="Passwordstorage">
 				<info>
-					<desc xml:lang="en-US">Substitution of the requested font even if this font is available on the user's system.</desc>
+                    <desc xml:lang="en-US">A list of passwords encoded with the master password.</desc>
 				</info>
 			</set>
 		</group>
@@ -1057,7 +1093,15 @@
 			<!--OldLocation: soffice.ini -->
 			<!--OldPath: Directories and BackupDirectories -->
 			<!-- UIHints: Tools - Options - General - Paths -->
+			<!-- Responsible: MBA-->
+			<info>
+                <desc xml:lang="en-US">Contains the current and default path settings used by the Office.</desc>
+            </info>
 			<group oor:name="Current">
+				<!-- Responsible: MBA-->
+				<info>
+					<desc xml:lang="en-US">Global path settings, mainly those of the Options dialog</desc>
+				</info>
 				<prop oor:name="OfficeInstall" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
 					<!-- Responsible: MBA-->
@@ -1069,7 +1113,7 @@
 					<!-- OldLocation:NEW-->
 					<!-- Responsible: MBA-->
 					<info>
-						<desc xml:lang="en-US">The Office installation path in URL notation. Must match the UCB configuration</desc>
+                        <desc xml:lang="en-US">The Office installation path in URL notation. Must match the UCB configuration.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Addin" oor:type="xs:string">
@@ -1111,14 +1155,14 @@
 					<!-- Responsible: MBA -->
 					<value>$(insturl)/share/config/symbol</value>
 					<info>
-						<desc xml:lang="en-US">This directory contains the icons for the toolbars.</desc>
+                        <desc xml:lang="en-US">The bitmap files which can be used for menu and toolbar icons are stored here.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Config" oor:type="xs:string">
 					<!-- Responsible: MBA -->
 					<value>$(insturl)/share/config</value>
 					<info>
-						<desc xml:lang="en-US">The configuration files are located here. This entry cannot be changed by the user.</desc>
+                        <desc xml:lang="en-US">The configuration files are located here. This value cannot be changed through the user interface.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Dictionary" oor:type="xs:string">
@@ -1175,7 +1219,7 @@
 					<!-- Responsible: MBA -->
 					<value>$(progpath)</value>
 					<info>
-						<desc xml:lang="en-US">This is the path for the modules.</desc>
+                        <desc xml:lang="en-US">This directory contains the Office modules.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Palette" oor:type="xs:string">
@@ -1186,10 +1230,10 @@
 					</info>
 				</prop>
 				<prop oor:name="Plugin" oor:type="oor:string-list">
-					<!-- Responsible: ??? -->
+                    <!-- Responsible: MBA -->
 					<value oor:separator=":">$(userpath)/plugin</value>
 					<info>
-						<desc xml:lang="en-US">Plugins are saved in this directory.</desc>
+                        <desc xml:lang="en-US">Plugins are saved in this directory.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Storage" oor:type="xs:string">
@@ -1203,7 +1247,7 @@
 					<!-- Responsible: MBA -->
 					<value>$(userurl)/temp</value>
 					<info>
-						<desc xml:lang="en-US">The base url to the office temp-files</desc>
+                        <desc xml:lang="en-US">The base directory used by the Office to store temp files.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Template" oor:type="oor:string-list">
@@ -1217,7 +1261,7 @@
 					<!-- Responsible: MBA -->
 					<value oor:separator=":"/>
 					<info>
-						<desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Specifies additional folders containing a global user interface configuration. The final user interface configuration is merged from UserConfig and from these folders.</desc>
 					</info>
 				</prop>
 				<prop oor:name="UserConfig" oor:type="xs:string">
@@ -1238,86 +1282,153 @@
 					<!-- Responsible: MBA -->
 					<value>$(userurl)/work</value>
 					<info>
-						<desc xml:lang="en-US">The path of the Work Folder can be modified according to the user's needs. The path specified here can be seen in the Open or Save dialog.</desc>
+                        <desc xml:lang="en-US">The path of the work folder can be modified according to the user's needs. The path specified here can be seen in the Open or Save dialog.</desc>
 					</info>
 				</prop>
-				<info>
-					<desc xml:lang="en-US">Global path settings, mainly those of the Options dialog</desc>
-				</info>
 			</group>
 			<group oor:name="Default">
-				<prop oor:name="Addin" oor:type="xs:string">
-					<value>$(progpath)/addin</value>
-				</prop>
-				<prop oor:name="AutoCorrect" oor:type="oor:string-list">
-					<value oor:separator=":">$(insturl)/share/autocorr:$(userurl)/autocorr</value>
-				</prop>
-				<prop oor:name="AutoText" oor:type="oor:string-list">
-					<value oor:separator=":">$(insturl)/share/autotext/$(vlang):$(userurl)/autotext</value>
-				</prop>
-				<prop oor:name="Backup" oor:type="xs:string">
-					<value>$(userurl)/backup</value>
-				</prop>
-				<prop oor:name="Basic" oor:type="oor:string-list">
-					<value oor:separator=":">$(insturl)/share/basic:$(userurl)/basic</value>
-				</prop>
-				<prop oor:name="Bitmap" oor:type="xs:string">
-					<value>$(insturl)/share/config/symbol</value>
-				</prop>
-				<prop oor:name="Config" oor:type="xs:string">
-					<value>$(insturl)/share/config</value>
-				</prop>
-				<prop oor:name="Dictionary" oor:type="xs:string">
-					<value>$(insturl)/share/wordbook/$(vlang)</value>
-				</prop>
-				<prop oor:name="Favorite" oor:type="xs:string">
-					<value>$(userurl)/config/folders</value>
-				</prop>
-				<prop oor:name="Filter" oor:type="xs:string">
-					<value>$(progpath)/filter</value>
-				</prop>
-				<prop oor:name="Gallery" oor:type="oor:string-list">
-					<value oor:separator=":">$(insturl)/share/gallery:$(userurl)/gallery</value>
-				</prop>
-				<prop oor:name="Graphic" oor:type="xs:string">
-					<value>$(insturl)/share/gallery</value>
-				</prop>
-				<prop oor:name="Help" oor:type="xs:string">
-					<value>$(instpath)/help</value>
-				</prop>
-				<prop oor:name="Linguistic" oor:type="xs:string">
-					<value>$(insturl)/share/dict</value>
-				</prop>
-				<prop oor:name="Module" oor:type="xs:string">
-					<value>$(progpath)</value>
-				</prop>
-				<prop oor:name="Palette" oor:type="xs:string">
-					<value>$(userurl)/config</value>
-				</prop>
-				<prop oor:name="Plugin" oor:type="oor:string-list">
-					<value oor:separator=":">$(userpath)/plugin</value>
-				</prop>
-				<prop oor:name="Temp" oor:type="xs:string">
-					<value>$(userurl)/temp</value>
-				</prop>
-				<prop oor:name="Template" oor:type="oor:string-list">
-					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(userurl)/template</value>
-				</prop>
-				<prop oor:name="UIConfig" oor:type="oor:string-list">
-					<value oor:separator=":"/>
-				</prop>
-				<prop oor:name="UserConfig" oor:type="xs:string">
-					<value>$(userurl)/config</value>
-				</prop>
-				<prop oor:name="UserDictionary" oor:type="xs:string">
-					<value>$(userurl)/wordbook</value>
-				</prop>
-				<prop oor:name="Work" oor:type="xs:string">
-					<value>$(userurl)/work</value>
-				</prop>
+				<!-- Responsible: MBA -->
 				<info>
 					<desc xml:lang="en-US">All default values of the paths that can be changed by the user are saved here. They are used when pressing the Standard-button in the Options dialog.</desc>
 				</info>
+				<prop oor:name="Addin" oor:type="xs:string">
+					<value>$(progpath)/addin</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory that contains spreadsheet add-ins which use the old add-in API.</desc>
+					</info>
+				</prop>
+				<prop oor:name="AutoCorrect" oor:type="oor:string-list">
+					<value oor:separator=":">$(insturl)/share/autocorr:$(userurl)/autocorr</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory for the settings of the AutoCorrect dialog.</desc>
+					</info>
+				</prop>
+				<prop oor:name="AutoText" oor:type="oor:string-list">
+					<value oor:separator=":">$(insturl)/share/autotext/$(vlang):$(userurl)/autotext</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the AutoText modules are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Backup" oor:type="xs:string">
+					<value>$(userurl)/backup</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory for the automatic backup copies of documents.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Basic" oor:type="oor:string-list">
+					<value oor:separator=":">$(insturl)/share/basic:$(userurl)/basic</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the Basic files, used by the AutoPilots, are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Bitmap" oor:type="xs:string">
+					<value>$(insturl)/share/config/symbol</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the bitmap files, which can be used for the menu and toolbar icons, are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Config" oor:type="xs:string">
+					<value>$(insturl)/share/config</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the configuration files are stored.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Dictionary" oor:type="xs:string">
+					<value>$(insturl)/share/wordbook/$(vlang)</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the provided dictionaries are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Favorite" oor:type="xs:string">
+					<value>$(userurl)/config/folders</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where folder bookmarks are stored.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Filter" oor:type="xs:string">
+					<value>$(progpath)/filter</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where all the filters are stored.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Gallery" oor:type="oor:string-list">
+					<value oor:separator=":">$(insturl)/share/gallery:$(userurl)/gallery</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the Gallery database and multimedia files are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Graphic" oor:type="xs:string">
+					<value>$(insturl)/share/gallery</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory used by the dialog for opening a graphic or for saving a new graphic.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Help" oor:type="xs:string">
+					<value>$(instpath)/help</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where Office help files are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Linguistic" oor:type="xs:string">
+					<value>$(insturl)/share/dict</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the files that are necessary for the spellcheck are saved.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Module" oor:type="xs:string">
+					<value>$(progpath)</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory which contains the Office modules.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Palette" oor:type="xs:string">
+					<value>$(userurl)/config</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory for the palette files *.SOB to *.SOF containing user-defined colors and patterns.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Plugin" oor:type="oor:string-list">
+					<value oor:separator=":">$(userpath)/plugin</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where the Office plugins are located.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Temp" oor:type="xs:string">
+					<value>$(userurl)/temp</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory which is used as a base directory for all temporary Office files.</desc>
+					</info>
+				</prop>
+				<prop oor:name="Template" oor:type="oor:string-list">
+					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(userurl)/template</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory where all provided templates are located in folders and sub-folders.</desc>
+					</info>
+				</prop>
+				<prop oor:name="UIConfig" oor:type="oor:string-list">
+					<value oor:separator=":"/>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directories for the global user interface configuration. The final user interface configuration is merged from UserConfig and from these folders.</desc>
+                    </info>
+				</prop>
+				<prop oor:name="UserConfig" oor:type="xs:string">
+					<value>$(userurl)/config</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory which stores the user settings.</desc>
+                    </info>
+				</prop>
+				<prop oor:name="UserDictionary" oor:type="xs:string">
+					<value>$(userurl)/wordbook</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default directory which stores the custom dictionaries.</desc>
+                    </info>
+				</prop>
+				<prop oor:name="Work" oor:type="xs:string">
+					<value>$(userurl)/work</value>
+					<info>
+						<desc xml:lang="en-US">Specifies the default working directory where user stores documents.</desc>
+					</info>
+				</prop>
 			</group>
 		</group>
 		<group oor:name="Font">
@@ -1461,30 +1572,34 @@
 			</set>
 		</group>
 		<group oor:name="Internal">
+			<!-- Responsible: MBA -->
+			<info>
+				<desc xml:lang="en-US">Contains settings which are used during the Office startup to check for unfinished work.</desc>
+			</info>
 			<prop oor:name="SendCrashMail" oor:type="xs:boolean">
 				<!-- OldPath: Common/SendCrashMail -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- Responsible: MBA -->
 				<value>false</value>
-				<info>
-					<desc xml:lang="en-US">Crash-Mail-Feature to document program crashes. After a crash, an e-mail with information about the system used is generated automatically when starting the program.</desc>
-				</info>
+                <info>
+                    <desc xml:lang="en-US">deprecated</desc>
+                </info>
 			</prop>
 			<prop oor:name="UseMailUI" oor:type="xs:boolean">
 				<!-- Responsible: MBA -->
 				<value>false</value>
-				<info>
-					<desc xml:lang="en-US">Send mails with or without MailUI</desc>
-				</info>
+                <info>
+                    <desc xml:lang="en-US">depracted</desc>
+                </info>
 			</prop>
 			<prop oor:name="Slot" oor:type="xs:boolean">
 				<!-- OldPath: Common/Slots -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- Responsible: MBA -->
 				<value>false</value>
-				<info>
-					<desc xml:lang="en-US">If this option is set (true), the program is searching for the slot.cfg. If the slot.cfg cannot be found, the start is aborted. If this option is not set (false), the slot.cfg must not be available, otherwise the start is also aborted. True - Search for Slot.cfg, False - Slot.cfg should not exist</desc>
-				</info>
+                <info>
+                    <desc xml:lang="en-US">deprecated</desc>
+                </info>
 			</prop>
 			<prop oor:name="DevelopmentChart" oor:type="xs:boolean">
 				<!-- Responsible: BM -->
@@ -1507,6 +1622,10 @@
 			</set>
 		</group>
 		<group oor:name="Save">
+			<!-- Responsible: MBA -->
+            <info>
+                <desc xml:lang="en-US">Contains general settings about the saving process.</desc>
+            </info>
 			<prop oor:name="WorkingSet" oor:type="xs:boolean">
 				<!-- OldPath: General/Restore -->
 				<!-- OldLocation: soffice.cfg -->
@@ -1514,17 +1633,21 @@
 				<!-- UIHints: Tools  Options - General  Save - [Section] Restore editing view - Open documents-->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US">Specifies, if the all open windows and documents (WorkingSet) should be saved (true) or not (false). If WorkingSet = true, the URLs of all open documents and all view properties of all open views are saved when terminating the application.</desc>
+                    <desc xml:lang="en-US">Specifies, if the all open windows and documents should be saved or not. If set to true, the URLs of all open documents and all view properties of all open views are saved when terminating the application.</desc>
 					<label xml:lang="en-US">Open documents</label>
 				</info>
 			</prop>
 			<group oor:name="Document">
+				<!-- Responsible: MBA -->
+				<info>
+					<desc xml:lang="en-US">Contains settings which specify how documents are saved.</desc>
+				</info>
 				<prop oor:name="Unpacked" oor:type="xs:boolean">
 					<!-- Responsible: MBA -->
 					<!-- UIHints: File - Save/Save As -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Save OOo 6.0 XML file documents unpacked into a directory. So the document is represented by the directory content and not by a single file.</desc>
 						<label xml:lang="en-US">Save XML files unpacked</label>
 					</info>
 				</prop>
@@ -1545,7 +1668,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Automatically save all modified documents in a specified time intervall (True)</desc>
+                        <desc xml:lang="en-US">Specifies whether automatically all modified documents are saved in a time intervall or not.</desc>
 						<label xml:lang="en-US">AutoSave every</label>
 					</info>
 				</prop>
@@ -1556,7 +1679,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Create a backup copy when a modified document is saved (True)</desc>
+                        <desc xml:lang="en-US">Specifies whether to create a backup copy when a modified document is saved or not.</desc>
 						<label xml:lang="en-US">Always create backup copy</label>
 					</info>
 				</prop>
@@ -1567,7 +1690,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Open the document properties dialog for editing every time when a document is saved to a new filename (True)</desc>
+                        <desc xml:lang="en-US">Specifies if the document properties dialog will be opened for editing every time when a document is saved to a new filename or not.</desc>
 						<label xml:lang="en-US">Edit document properties before saving</label>
 					</info>
 				</prop>
@@ -1578,7 +1701,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Prompt when doing AutoSave even when the document already has a filename</desc>
+                        <desc xml:lang="en-US">Show a prompt when doing AutoSave even when the document already has a filename or not.</desc>
 						<label xml:lang="en-US">Prompt to save</label>
 					</info>
 				</prop>
@@ -1589,7 +1712,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save -->
 					<value>15</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the AutoSave time intervall  [UNIT=min]</desc>
+                        <desc xml:lang="en-US">Specifies the AutoSave time intervall in minutes.</desc>
 						<label xml:lang="en-US">Minutes</label>
 					</info>
 					<constraints>
@@ -1604,7 +1727,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Restore editing view - Document view-->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">On saving document save view properties of last active document view of this document (True)</desc>
+                        <desc xml:lang="en-US">Save view properties of last active document view when saving a document or not.</desc>
 						<label xml:lang="en-US">Document view</label>
 					</info>
 				</prop>
@@ -1615,7 +1738,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Restore editing view - Open windows-->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies, if all actually open windows of a document should be saved (true) or not (false). If true, the view properties for all open document views of that document are saved.</desc>
+                        <desc xml:lang="en-US">Specifies whether all actually open windows of a document should be saved or not. If true the view properties for all open document views of that document are saved.</desc>
 						<label xml:lang="en-US">Open windows</label>
 					</info>
 				</prop>
@@ -1625,12 +1748,16 @@
 					<!--the UI setting is inverse to this setting-->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies if files saved in the OOo 6.0 XML file formats should be pretty printing. The drawback of pretty printing is that saving and loading the document takes more time.</desc>
+                        <desc xml:lang="en-US">Specifies if files saved in the OOo 6.0 XML file formats should be pretty printing. The drawback of pretty printing is that saving and loading the document takes more time.</desc>
 						<label xml:lang="en-US">Open windows</label>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="Graphic">
+				<!-- Responsible: MBA -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings how graphics contained in a document should be saved.</desc>
+                </info>
 				<prop oor:name="Format" oor:type="xs:int">
 					<!-- OldPath: General/Save/Graphics -->
 					<!-- OldLocation: soffice.cfg -->
@@ -1662,6 +1789,10 @@
 				</prop>
 			</group>
 			<group oor:name="URL">
+				<!-- Responsible: MBA -->
+                <info>
+                    <desc xml:lang="en-US">Specifies how URLs in documents should be processed during save.</desc>
+                </info>
 				<prop oor:name="FileSystem" oor:type="xs:boolean">
 					<!-- OldPath: General/Save/URL -->
 					<!-- OldLocation: soffice.cfg -->
@@ -1669,7 +1800,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save URLs relative to -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies, if URLs in documents should be saved relatively to the file system (True)</desc>
+                        <desc xml:lang="en-US">Specifies whether URLs in documents should be saved relatively to the file system or not.</desc>
 						<label xml:lang="en-US">File system</label>
 					</info>
 				</prop>
@@ -1680,25 +1811,37 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save URLs relative to -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies, if URLs in documents should be saved relatively to the Internet (True)</desc>
+                        <desc xml:lang="en-US">Specifies if URLs in documents should be saved relatively to the Internet or not.</desc>
 						<label xml:lang="en-US">Internet</label>
 					</info>
 				</prop>
 			</group>
 		</group>
 		<group oor:name="Load">
+			<!-- Responsible: MBA -->
+            <info>
+                <desc xml:lang="en-US">Contains settings regarding the loading of documents.</desc>
+            </info>
 			<prop oor:name="UserDefinedSettings" oor:type="xs:boolean">
 				<!-- Responsible: MBA -->
 				<!-- UIHints: Tools  Options - General  Load/Save - General [Section] Load - Load user-defined with the document-->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether the user defined configuration settings are loaded together with the document.</desc>
+                    <desc xml:lang="en-US">Specifies whether the user defined configuration settings are loaded together with the document.</desc>
 					<label xml:lang="en-US">Load user-defined settings</label>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="Security">
+			<!-- Responsible: MBA -->
+            <info>
+                <desc xml:lang="en-US">Contains security specific Office settings.</desc>
+            </info>
 			<group oor:name="Scripting">
+				<!-- Responsible: MBA -->
+				<info>
+					<desc xml:lang="en-US">Contains security settings regarding Basic scripts.</desc>
+				</info>
 				<prop oor:name="SecureURL" oor:type="oor:string-list">
 					<!-- OldPath: Security/SecureURL -->
 					<!-- OldLocation: soffice.ini -->
@@ -1706,7 +1849,7 @@
 					<!-- UIHints: Tools - Options - Browser -->
 					<value>$(workdirurl) $(userurl) $(insturl) private:newmenu private:user</value>
 					<info>
-						<desc xml:lang="en-US">Displays the list of all trustworthy URLs: file:/ =&gt; All scripts from the local file system including a LAN; private:explorer =&gt; Scripts from the Explorer; private:help =&gt; Scripts in the help system; private:newmenu =&gt; Scripts that are executed by the commands File-New and AutoPilot; private:schedule =&gt; Scripts of the scheduler; private:searchfolder =&gt; Scripts of the searchfolder; private:user =&gt; Scripts that are entered in the URL field.</desc>
+                        <desc xml:lang="en-US">A list of all trustworthy URLs: file:/ =&gt; All scripts from the local file system including a LAN; private:explorer =&gt; Scripts from the Explorer; private:help =&gt; Scripts in the help system; private:newmenu =&gt; Scripts that are executed by the commands File-New and AutoPilot; private:schedule =&gt; Scripts of the scheduler; private:searchfolder =&gt; Scripts of the searchfolder; private:user =&gt; Scripts that are entered in the URL field.</desc>
 					</info>
 				</prop>
 				<prop oor:name="OfficeBasic" oor:type="xs:int">
@@ -1721,17 +1864,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Never execute</desc>
+                                <desc xml:lang="en-US">Basic scripts should never be executed.</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">From list</desc>
+                                <desc xml:lang="en-US">Basic scripts opened from a medium which belongs to the SecureURL list can be executed.</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Always execute</desc>
+                                <desc xml:lang="en-US">Basic scripts can always be executed.</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1740,21 +1883,21 @@
 					<!-- Responsible: MBA -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Setting for execution of plugins found inside a document.</desc>
+                        <desc xml:lang="en-US">Specifies whether execution of plugins found inside a document is allowed or not.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Warning" oor:type="xs:boolean">
 					<!-- Responsible: MBA -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Specifies whether a warning box should be displayed before executing a script or not.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Confirmation" oor:type="xs:boolean">
 					<!-- Responsible: MBA -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Specifies whether the user must confirm before a basic script can be executed.</desc>
 					</info>
 				</prop>
 			</group>
@@ -1809,14 +1952,18 @@
 				</constraints>
 			</prop>
 			<group oor:name="AppWindow">
+				<!-- Responsible: MBA -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings how application window should be displayed.</desc>
+                </info>
 				<prop oor:name="FullScreen" oor:type="xs:boolean">
 					<!-- OldPath: soffice-view/App-Window -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
 					<value>false</value>
-					<info>
-						<desc xml:lang="en-US">Determines, if the application window should be opened in Fullscreen mode or not.</desc>
-					</info>
+                    <info>
+                        <desc xml:lang="en-US">Specifies whether the application window should be opened in Fullscreen mode or not.</desc>
+                    </info>
 				</prop>
 				<prop oor:name="Preference" oor:type="xs:int">
 					<!-- OldPath: soffice-view/App-Window -->
@@ -1824,28 +1971,32 @@
 					<!-- Responsible: MBA -->
 					<value>0</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the preferred view of the application window</desc>
+                        <desc xml:lang="en-US">Specifies the preferred view of the application window.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Same setting as program exit</desc>
+                                <desc xml:lang="en-US">Use last setting before program exit.</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Only shown as task in the task bar with the same setting as 0</desc>
+                                <desc xml:lang="en-US">Only shown as task in the task bar with the same setting as 0.</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Application window will be opened in Fullscreen mode</desc>
+                                <desc xml:lang="en-US">Application window will be opened in Fullscreen mode.</desc>
 							</info>
 						</enumeration>
 					</constraints>
 				</prop>
 			</group>
 			<group oor:name="Dialog">
+				<!-- Responsible: MBA -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings which specify how dialogs and toolbars should be displayed.</desc>
+				</info>
 				<prop oor:name="ButtonLarge" oor:type="xs:boolean">
 					<!-- OldPath: General/View -->
 					<!-- OldLocation: soffice.cfg -->
@@ -1853,7 +2004,7 @@
 					<!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the view option for buttons (True=Large)</desc>
+                        <desc xml:lang="en-US">Specifies whether toolbar buttons should be drawn large or small. True mean large.</desc>
 						<label xml:lang="en-US">Large buttons</label>
 					</info>
 				</prop>
@@ -1864,7 +2015,7 @@
 					<!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the view option for buttons (True=Flat)</desc>
+                        <desc xml:lang="en-US">Specifies whether toolbox buttons should be drawn with a flat or 3D design. True means flat design.</desc>
 						<label xml:lang="en-US">Flat buttons</label>
 					</info>
 				</prop>
@@ -2001,6 +2152,10 @@
 				</prop>
 			</group>
 			<group oor:name="Window">
+				<!-- Responsible: MBA -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings for general windows used by the Office.</desc>
+                </info>
 				<prop oor:name="Drag" oor:type="xs:short">
 					<!-- OldPath: General/View -->
 					<!-- OldLocation: soffice.cfg -->
@@ -2096,28 +2251,35 @@
 				</prop>
 			</group>
 			<group oor:name="SplitWindow">
+				<!-- Responsible: MBA -->
+                <info>
+                    <desc xml:lang="en-US">deprecated</desc>
+                </info>
 				<prop oor:name="Key" oor:type="xs:string">
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
 					<!-- Notice: LM: Description is missing 0SplitWindow=V1,2,1,0,6308 -->
-					<info>
-						<desc xml:lang="en-US">Internal name of the window</desc>
-					</info>
+                    <info>
+                        <desc xml:lang="en-US">deprecated</desc>
+                    </info>
 				</prop>
 				<prop oor:name="Version" oor:type="xs:int">
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
 					<!-- Notice: LM: Description is missing -->
-					<info>
-						<desc xml:lang="en-US">internal version number</desc>
-					</info>
+                    <info>
+                        <desc xml:lang="en-US">deprecated</desc>
+                    </info>
 				</prop>
 				<prop oor:name="State" oor:type="xs:int">
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
+					<info>
+						<desc xml:lang="en-US">deprecated</desc>
+					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
@@ -2142,12 +2304,18 @@
 					</constraints>
 				</prop>
 				<prop oor:name="Count" oor:type="xs:int">
+					<info>
+						<desc xml:lang="en-US">deprecated</desc>
+					</info>
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
 					<!-- Notice: LM: Description is missing -->
 				</prop>
 				<prop oor:name="Sequence" oor:type="xs:int">
+					<info>
+						<desc xml:lang="en-US">deprecated</desc>
+					</info>
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
@@ -2174,6 +2342,10 @@
 			</group>
 		</group>
 		<group oor:name="Undo">
+			<!-- Responsible: MBA -->
+            <info>
+                <desc xml:lang="en-US">Contains the settings regarding the undo operation in the Office.</desc>
+            </info>
 			<prop oor:name="Steps" oor:type="xs:int">
 				<!-- OldPath: General/Undo -->
 				<!-- OldLocation: soffice.cfg -->
@@ -2181,12 +2353,20 @@
 				<!-- UIHints: Tools  Options - General  Save - [Section] Undo -->
 				<value>20</value>
 				<info>
-					<desc xml:lang="en-US">Setting for the maximal undo level</desc>
+                    <desc xml:lang="en-US">Specifies how many operations can be undone in a row.</desc>
 					<label xml:lang="en-US">Number of steps</label>
 				</info>
 				<constraints>
-					<minInclusive oor:value="1"/>
-					<maxInclusive oor:value="100"/>
+					<minInclusive oor:value="1">
+                        <info>
+                            <desc xml:lang="en-US">The lowest number of undo steps possible.</desc>
+                        </info>
+					</minInclusive>
+					<maxInclusive oor:value="100">
+                        <info>
+                            <desc xml:lang="en-US">The highest number of undo steps possible.</desc>
+                        </info>
+					</maxInclusive>
 				</constraints>
 			</prop>
 		</group>
@@ -2208,7 +2388,7 @@
 				<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US"/>
+                    <desc xml:lang="en-US">Specifies if printing a document can modify a document due to reformating.</desc>
 					<label xml:lang="en-US">(PrinterOptions) PrintingModifiesDocument</label>
 				</info>
 			</prop>
@@ -2476,14 +2656,18 @@
 			</group>
 		</group>
 		<group oor:name="WorkingSet">
+			<!-- Responsible: MBA -->
+			<info>
+				<desc xml:lang="en-US">deprecated</desc>
+			</info>
 			<prop oor:name="WindowList" oor:type="oor:string-list">
 				<!-- OldPath: SavedWorkingSet -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- Responsible: MBA -->
 				<!-- UIHints: Tools  Options - General  Save -->
-				<info>
-					<desc xml:lang="en-US">Defines the editing view for documents and windows, which have to be restored when restarting the program. The list gets filled, if Save/WorkingSet = true.</desc>
-				</info>
+                <info>
+                    <desc xml:lang="en-US">deprecated</desc>
+                </info>
 			</prop>
 		</group>
 		<group oor:name="AddXMLToStorage">
@@ -2573,27 +2757,27 @@
 				<prop oor:name="Enabled" oor:type="xs:boolean">
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">controls whether or not the HelpAgent is activate.</desc>
+                        <desc xml:lang="en-US">Specifies whether the HelpAgent is enabled or not.</desc>
 						<label xml:lang="en-US">enable HelpAgent</label>
 					</info>
 				</prop>
 				<prop oor:name="Timeout" oor:type="xs:int">
 					<value>30</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the timeout value (in seconds) after which the HelpAgent is closed automatically (if ignored by the user).</desc>
+                        <desc xml:lang="en-US">Specifies the timeout value in seconds after which the HelpAgent is closed automatically if ignored by the user.</desc>
 						<label xml:lang="en-US">HelpAgent timeout</label>
 					</info>
 				</prop>
 				<prop oor:name="RetryLimit" oor:type="xs:int">
 					<value>3</value>
 					<info>
-						<desc xml:lang="en-US">Specifies how often the user must ignore a given HelpAgent topic until it is disregarded in the future (any requests for this topic will be dropped silently).</desc>
+                        <desc xml:lang="en-US">Specifies how often the user must ignore a given HelpAgent topic until it is disregarded in the future (any requests for this topic will be dropped silently).</desc>
 						<label xml:lang="en-US">HelpAgent retry limit</label>
 					</info>
 				</prop>
 				<set oor:name="IgnoreList" oor:node-type="NameCounter">
 					<info>
-						<desc xml:lang="en-US">contains the help URLs which have been ignored at least once by the user, together with a counter how often they have been ignored.</desc>
+                        <desc xml:lang="en-US">Contains the help URLs which have been ignored at least once by the user, together with a counter how often they have been ignored.</desc>
 						<label xml:lang="en-US">HelpAgent ignore list</label>
 					</info>
 				</set>
@@ -3985,17 +4169,17 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Tools  Options General View -->
 				<value>0</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Specifies which symbol set is used for the toolbars.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Small(16x16)</desc>
+                            <desc xml:lang="en-US">Specifies that small icons with 16x16 pixel should be used for toolboxes.</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Big(32x32)</desc>
+                            <desc xml:lang="en-US">Specifies that big icons with 32x32 pixel should be used for toolboxes.</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -4005,17 +4189,17 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Tools  Options General View -->
 				<value>1</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Specifies which button style the toolbars should use.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">3D</desc>
+                            <desc xml:lang="en-US">A 3D style should be used for displaying the toolboxes.</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Flat</desc>
+                            <desc xml:lang="en-US">A flat style should be used for displaying the toolboxes.</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -4028,9 +4212,10 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="FirstRun" oor:type="xs:boolean">
+                <!-- Responsible: MBA-->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">if true, the office has never before been started.</desc>
+                    <desc xml:lang="en-US">Specifies if the office has never before been started.</desc>
 					<label xml:lang="en-US">FirstRun</label>
 				</info>
 			</prop>
