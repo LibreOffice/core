@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:37:44 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,23 +67,17 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPMODES_HPP_
+#include <com/sun/star/embed/EmbedMapModes.hpp>
+#endif
+
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
 
 
 using namespace ::com::sun::star;
 
-void SAL_CALL OleEmbeddedObject::setContainerName( const ::rtl::OUString& sName )
-        throw ( uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
-
-    m_aContainerName = sName;
-}
-
-void SAL_CALL OleEmbeddedObject::setVisAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -93,7 +87,7 @@ void SAL_CALL OleEmbeddedObject::setVisAreaSize( sal_Int64 nAspect, const awt::S
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 #ifdef WNT
@@ -107,7 +101,7 @@ void SAL_CALL OleEmbeddedObject::setVisAreaSize( sal_Int64 nAspect, const awt::S
 #endif
 }
 
-awt::Size SAL_CALL OleEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
+awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -117,7 +111,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 #ifdef WNT
@@ -131,6 +125,24 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
 #endif
 }
 
+sal_Int32 SAL_CALL OleEmbeddedObject::getMapMode( sal_Int64 nAspect )
+        throw ( uno::Exception,
+                uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    // OLE objects are always controlled in pixels,
+    // internally a workaround with scaling based on visual representation is used
+    return embed::EmbedMapModes::PIXEL;
+}
+
+#if 0
 // Probably will be removed!!!
 uno::Any SAL_CALL OleEmbeddedObject::getVisualCache( sal_Int64 nAspect )
         throw ( uno::Exception,
@@ -140,11 +152,11 @@ uno::Any SAL_CALL OleEmbeddedObject::getVisualCache( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return uno::makeAny( uno::Sequence< sal_Int8 >() );
 }
-
+#endif
 
