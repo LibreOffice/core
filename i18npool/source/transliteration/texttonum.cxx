@@ -55,144 +55,27 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL TextToNum::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset ) throw(RuntimeException)
-{
-    sal_Int32 strLen = inStr.getLength() - startPos;
-
-    if (nCount > strLen)
-        nCount = strLen;
-
-    if (nCount > 0) {
-        const sal_Unicode *str = inStr.getStr() + startPos;
-        rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * MultiplierExponent_CJK[0] + 1);
-        offset.realloc( nCount * MultiplierExponent_CJK[0] + 1 );
-        sal_Int32 i = 0, count = 0, index;
-
-        OUString numberChar, multiplierChar, decimalChar, minusChar;
-        if (number == 0) {
-        numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
-        multiplierChar = OUString((sal_Unicode*) MultiplierChar_CJK, ExponentCount_CJK*Multiplier_Count);
-        decimalChar = OUString(DecimalChar);
-        minusChar = OUString(MinusChar);
-        } else {
-        numberChar = OUString(NumberChar[number], 10);
-        multiplierChar = OUString(MultiplierChar_CJK[multiplier], ExponentCount_CJK);
-        decimalChar = OUString::valueOf(DecimalChar[number]);
-        minusChar = OUString::valueOf(MinusChar[number]);
-        }
-
-        while (i < nCount) {
-        if ((index = multiplierChar.indexOf(str[i])) >= 0) {
-            if (count == 0 || !isNumber(newStr->buffer[count-1])) { // add 1 in front of multiplier
-            newStr->buffer[count] = NUMBER_ONE;
-            offset[count++] = i;
-            }
-            index = MultiplierExponent_CJK[index % ExponentCount_CJK];
-            numberMaker(index, index, str, i, nCount, newStr->buffer, count, offset,
-                numberChar, multiplierChar);
-        } else {
-            if ((index = numberChar.indexOf(str[i])) >= 0)
-            newStr->buffer[count] = (index % 10) + NUMBER_ZERO;
-            else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
-                (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
-                        multiplierChar.indexOf(str[i+1]) >= 0)))
-            // Only when decimal point is followed by numbers,
-            // it will be convert to ASCII decimal point
-            newStr->buffer[count] = NUMBER_DECIMAL;
-            else if ((index = minusChar.indexOf(str[i])) >= 0 &&
-                (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
-                        multiplierChar.indexOf(str[i+1]) >= 0)))
-            // Only when minus is followed by numbers,
-            // it will be convert to ASCII minus sign
-            newStr->buffer[count] = NUMBER_MINUS;
-            else
-            newStr->buffer[count] = str[i];
-            offset[count++] = i++;
-        }
-        }
-
-        offset.realloc(count);
-        for (i = 0; i < count; i++)
-        offset[i] += startPos;
-        return OUString(newStr->buffer, count);
-    }
-    return OUString();
-}
-
-void SAL_CALL TextToNum::numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str, sal_Int32& i,
-    sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset,
-    OUString& numberChar, OUString& multiplierChar)
-{
-    sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
-    while (++i < nCount) {
-        if ((curr = numberChar.indexOf(str[i])) >= 0) {
-        if (num > 0)
-            break;
-        num = curr % 10;
-        } else if ((curr = multiplierChar.indexOf(str[i])) >= 0) {
-        curr = MultiplierExponent_CJK[curr % ExponentCount_CJK];
-        if (prev > curr && num == 0) num = 1; // One may be omitted in informal format
-        shift = end = 0;
-        if (curr >= max)
-            max = curr;
-        else if (curr > prev)
-            shift = max - curr;
-        else
-            end = curr;
-        while (end++ < prev) {
-            dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
-            offset[count++] = i;
-        }
-        if (shift) {
-            count -= max;
-            for (sal_Int16 j = 0; j < shift; j++, count++) {
-            dst[count] = dst[count + curr];
-            offset[count] = offset[count + curr];
-            }
-            max = curr;
-        }
-        numberMaker(max, curr, str, i, nCount, dst, count, offset, numberChar, multiplierChar);
-        return;
-        } else
-        break;
-    }
-    while (end++ < prev) {
-        dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
-        offset[count++] = i - 1;
-    }
-}
-
-TextToNum::TextToNum()
-{
-    number = multiplier = 0;
-    transliterationName = "TextToNum";
-    implementationName = "com.sun.star.i18n.Transliteration.TextToNum";
-}
-
-#define TRANSLITERATION_TEXTTONUM( name, _number ) \
+#define TRANSLITERATION_TEXTTONUM( name ) \
 TextToNum##name::TextToNum##name() \
 { \
-    number = NumberChar_##_number; \
-    multiplier = Multiplier_##_number; \
-    transliterationName = "TextToNum"#name; \
-    implementationName = "com.sun.star.i18n.Transliteration.TextToNum"#name; \
+        nNativeNumberMode = 0; \
+        tableSize = 0; \
+        transliterationName = "TextToNum"#name; \
+        implementationName = "com.sun.star.i18n.Transliteration.TextToNum"#name; \
 }
 
-TRANSLITERATION_TEXTTONUM( Lower_zh_CN, Lower_zh )
-TRANSLITERATION_TEXTTONUM( Upper_zh_CN, Upper_zh )
-TRANSLITERATION_TEXTTONUM( Lower_zh_TW, Lower_zh )
-TRANSLITERATION_TEXTTONUM( Upper_zh_TW, Upper_zh_TW )
-#define Multiplier_Lower_ko Multiplier_Upper_zh_TW
-#define Multiplier_Upper_ko Multiplier_Upper_zh_TW
-TRANSLITERATION_TEXTTONUM( FormalLower_ko, Lower_ko )
-TRANSLITERATION_TEXTTONUM( FormalUpper_ko, Upper_ko )
-TRANSLITERATION_TEXTTONUM( FormalHangul_ko, Hangul_ko )
-TRANSLITERATION_TEXTTONUM( InformalLower_ko, Lower_ko )
-TRANSLITERATION_TEXTTONUM( InformalUpper_ko, Upper_ko )
-TRANSLITERATION_TEXTTONUM( InformalHangul_ko, Hangul_ko )
-TRANSLITERATION_TEXTTONUM( KanjiLongTraditional_ja_JP, Traditional_ja )
-TRANSLITERATION_TEXTTONUM( KanjiLongModern_ja_JP, Modern_ja )
+TRANSLITERATION_TEXTTONUM( Lower_zh_CN)
+TRANSLITERATION_TEXTTONUM( Upper_zh_CN)
+TRANSLITERATION_TEXTTONUM( Lower_zh_TW)
+TRANSLITERATION_TEXTTONUM( Upper_zh_TW)
+TRANSLITERATION_TEXTTONUM( FormalLower_ko)
+TRANSLITERATION_TEXTTONUM( FormalUpper_ko)
+TRANSLITERATION_TEXTTONUM( FormalHangul_ko)
+TRANSLITERATION_TEXTTONUM( InformalLower_ko)
+TRANSLITERATION_TEXTTONUM( InformalUpper_ko)
+TRANSLITERATION_TEXTTONUM( InformalHangul_ko)
+TRANSLITERATION_TEXTTONUM( KanjiLongTraditional_ja_JP)
+TRANSLITERATION_TEXTTONUM( KanjiLongModern_ja_JP)
 #undef TRANSLITERATION_TEXTTONUM
 
 } } } }
