@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:52:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,17 +77,9 @@
 #include "frmdescr.hxx"
 #include "app.hxx"
 
-DBG_NAME(SfxFrameSetDescriptor);
 DBG_NAME(SfxFrameDescriptor);
 
 #define VERSION (USHORT) 3
-
-struct SfxFrameSetDescriptor_Impl
-{
-    Wallpaper*  pWallpaper;
-    Bitmap*     pBitmap;
-    BOOL        bNetscapeCompat;
-};
 
 struct SfxFrameDescriptor_Impl
 {
@@ -103,307 +95,7 @@ struct SfxFrameDescriptor_Impl
     }
 };
 
-SfxFrameSetDescriptor::SfxFrameSetDescriptor(SfxFrameDescriptor *pFrame) :
-    pParentFrame( pFrame ),
-    nFrameSpacing( SPACING_NOT_SET ),
-    nHasBorder( BORDER_YES ),
-    nMaxId( 0 ),
-    bIsRoot( pParentFrame ? (pParentFrame->pParentFrameSet == 0) : TRUE ),
-    bRowSet( FALSE )
-{
-    DBG_CTOR(SfxFrameSetDescriptor, 0);
-
-    pImp = new SfxFrameSetDescriptor_Impl;
-    pImp->pBitmap = NULL;
-    pImp->pWallpaper = NULL;
-    pImp->bNetscapeCompat = TRUE;
-    if ( pParentFrame )
-        pParentFrame->pFrameSet = this;
-    if ( bIsRoot )
-        nHasBorder |= BORDER_SET;
-}
-
-SfxFrameSetDescriptor::~SfxFrameSetDescriptor()
-{
-    DBG_DTOR(SfxFrameSetDescriptor, 0);
-
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-    {
-        SfxFrameDescriptor *pFrame = aFrames[n];
-        pFrame->pParentFrameSet = NULL;
-        delete pFrame;
-    }
-    if ( pParentFrame )
-        pParentFrame->pFrameSet = NULL;
-    delete pImp;
-}
-
-SfxFrameDescriptor* SfxFrameSetDescriptor::SearchFrame( USHORT nId )
-{
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-    {
-        SfxFrameDescriptor *pFrame = aFrames[n];
-        if ( pFrame->nItemId == nId )
-            return pFrame;
-        if ( pFrame->GetFrameSet() )
-        {
-            pFrame = pFrame->GetFrameSet()->SearchFrame( nId );
-            if ( pFrame )
-                return pFrame;
-        }
-    }
-
-    return NULL;
-}
-
-SfxFrameDescriptor* SfxFrameSetDescriptor::SearchFrame( const String& rName )
-{
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-    {
-        SfxFrameDescriptor *pFrame = aFrames[n];
-        if ( pFrame->aName == rName )
-            return pFrame;
-        if ( pFrame->GetFrameSet() )
-        {
-            pFrame = pFrame->GetFrameSet()->SearchFrame( rName );
-            if ( pFrame )
-                return pFrame;
-        }
-    }
-
-    return NULL;
-}
-
-void SfxFrameSetDescriptor::InsertFrame
-(
-    SfxFrameDescriptor* pFrame,
-    USHORT nPos
-)
-{
-    // complicated SvPtrArrs ...
-    if ( nPos == 0xFFFF )
-        nPos = aFrames.Count();
-
-    aFrames.Insert( pFrame, nPos );
-    pFrame->pParentFrameSet = this;
-}
-
-void SfxFrameSetDescriptor::RemoveFrame( SfxFrameDescriptor* pFrame )
-{
-    USHORT nPos = aFrames.GetPos( pFrame );
-    DBG_ASSERT( nPos != 0xFFFF, "Unbekannter Frame!" );
-    aFrames.Remove( nPos );
-    pFrame->pParentFrameSet = 0L;
-}
-
-BOOL SfxFrameSetDescriptor::HasFrameBorder() const
-{
-    if ( pImp->bNetscapeCompat && !GetFrameSpacing() )
-        return FALSE;
-
-    if ( ( nHasBorder & BORDER_SET ) || bIsRoot )
-        return (nHasBorder & BORDER_YES) != 0;
-    else
-        return pParentFrame->HasFrameBorder();
-}
-
-//------------------------------------------------------------------------
-
-void SfxFrameSetDescriptor::SetNetscapeCompatibility( BOOL bCompat )
-// Frame-Spacing Verhalten wenn kein Border
-{
-    pImp->bNetscapeCompat = bCompat;
-}
-
-//------------------------------------------------------------------------
-
-BOOL SfxFrameSetDescriptor::GetNetscapeCompatibility() const
-// Frame-Spacing Verhalten wenn kein Border
-{
-    return pImp->bNetscapeCompat;
-}
-
-//------------------------------------------------------------------------
-
-long SfxFrameSetDescriptor::GetFrameSpacing() const
-{
-    if ( nFrameSpacing == SPACING_NOT_SET && !bIsRoot &&
-            pParentFrame && pParentFrame->pParentFrameSet )
-    {
-        return pParentFrame->pParentFrameSet->GetFrameSpacing();
-    }
-    else
-        return nFrameSpacing;
-}
-
-BOOL SfxFrameSetDescriptor::Store( SvStream& rStream ) const
-{
-    // Die "0" ist wg. Kompatibilit"at zu alten Versionen n"otig. Diese
-    // glauben dann, ein leeres Frameset zu lesen und st"urzen dann
-    // wenigstens nicht ab.
-    long lLength = 20;
-    rStream << VERSION << lLength << (USHORT) 0 << (USHORT) 0;
-    rStream << nHasBorder
-            << nFrameSpacing
-            << (USHORT) bRowSet
-            << aFrames.Count();
-
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-    {
-        SfxFrameDescriptor* pFrame = aFrames[n];
-        pFrame->Store( rStream );
-    }
-    return TRUE;
-}
-
-BOOL SfxFrameSetDescriptor::Load( SvStream& rStream )
-{
-    long lPos = rStream.Tell();             // aktuelle Position merken
-    USHORT nCount=0, nHorizontal;
-    rStream >> nHasBorder
-            >> nFrameSpacing
-            >> nHorizontal
-            >> nCount;
-
-    if ( nCount == 0 )
-    {
-        // Das mu\s ein neues Format sein, da ein Frame normalerweise immer
-        // dabei ist
-        USHORT nVersion = nHasBorder;
-        rStream.Seek( lPos );
-        return Load( rStream, nVersion );
-    }
-
-    bRowSet = (BOOL) nHorizontal;
-    for ( USHORT n=0; n<nCount; n++ )
-    {
-        SfxFrameDescriptor *pFrame = new SfxFrameDescriptor( this );
-        pFrame->Load( rStream, 2 );
-    }
-    return TRUE;
-}
-
-BOOL SfxFrameSetDescriptor::Load( SvStream& rStream, USHORT nVersion )
-{
-    long lLength = 10;                      // in Version 2
-    long lPos = rStream.Tell();             // aktuelle Position merken
-
-    USHORT nCount=0, nHorizontal, nDummy1, nDummy2;
-    if ( nVersion > 2 )
-        // In der final Version
-        rStream >> nVersion >> lLength >> nDummy1 >> nDummy2;
-
-    rStream >> nHasBorder
-            >> nFrameSpacing
-            >> nHorizontal
-            >> nCount;
-
-    rStream.Seek( lPos + lLength );
-
-    bRowSet = (BOOL) nHorizontal;
-    for ( USHORT n=0; n<nCount; n++ )
-    {
-        SfxFrameDescriptor *pFrame = new SfxFrameDescriptor( this );
-        pFrame->Load( rStream, nVersion );
-    }
-    return TRUE;
-}
-
-void SfxFrameSetDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
-{
-    DELETEZ( pImp->pWallpaper );
-
-    if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
-        pImp->pWallpaper = new Wallpaper( rWallpaper );
-}
-
-const Wallpaper* SfxFrameSetDescriptor::GetWallpaper() const
-{
-    return pImp->pWallpaper;
-}
-
-SfxFrameSetDescriptor* SfxFrameSetDescriptor::Clone(
-    SfxFrameDescriptor *pFrame, BOOL bWithIds ) const
-{
-    SfxFrameSetDescriptor *pSet = new SfxFrameSetDescriptor( pFrame );
-
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-        aFrames[n]->Clone( pSet, bWithIds );
-
-    pSet->aDocumentTitle = aDocumentTitle;
-    pSet->nFrameSpacing = nFrameSpacing;
-    pSet->nHasBorder = nHasBorder;
-    pSet->nMaxId = nMaxId;
-    pSet->bIsRoot = bIsRoot;
-    pSet->bRowSet = bRowSet;
-    if ( pImp->pWallpaper )
-        pSet->pImp->pWallpaper = new Wallpaper( *pImp->pWallpaper );
-    pSet->pImp->bNetscapeCompat = pImp->bNetscapeCompat;
-
-    return pSet;
-}
-
-BOOL SfxFrameSetDescriptor::CheckContent() const
-{
-    BOOL bRet=FALSE;
-    for ( USHORT n=0; n<aFrames.Count(); n++ ) {
-        bRet = aFrames[n]->CheckContent();
-        if ( bRet )
-            break;
-    }
-    return bRet;
-}
-
-BOOL SfxFrameSetDescriptor::CompareOriginal(
-    SfxFrameSetDescriptor& rDescr ) const
-{
-    if( aFrames.Count() != rDescr.aFrames.Count() )
-        return FALSE;
-    else
-        for( USHORT nPos = aFrames.Count(); nPos--; )
-            if( !aFrames[ nPos ]->CompareOriginal(
-                *rDescr.aFrames[ nPos ] ) )
-                return FALSE;
-    return TRUE;
-}
-
-
-void SfxFrameSetDescriptor::UnifyContent( BOOL bTakeActual )
-{
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-        aFrames[n]->UnifyContent( bTakeActual );
-}
-
-void SfxFrameSetDescriptor::CutRootSet()
-{
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-    {
-        SfxFrameDescriptor* pFrame = aFrames[n];
-        SfxFrameSetDescriptor *pSet = pFrame->GetFrameSet();
-        if ( pSet )
-        {
-            if ( pSet->bIsRoot )
-            {
-                delete pSet;
-                pFrame->pFrameSet = NULL;
-            }
-            else
-                pSet->CutRootSet();
-        }
-    }
-}
-
-USHORT SfxFrameSetDescriptor::MakeItemId()
-{
-    if ( pParentFrame && pParentFrame->pParentFrameSet )
-        return pParentFrame->pParentFrameSet->MakeItemId();
-    else
-        return ++nMaxId;
-}
-
-SfxFrameDescriptor::SfxFrameDescriptor( SfxFrameSetDescriptor *pParSet ) :
-    pParentFrameSet( pParSet ),
-    pFrameSet( 0L ),
+SfxFrameDescriptor::SfxFrameDescriptor() :
     aMargin( -1, -1 ),
     nWidth( 0L ),
     eScroll( ScrollingAuto ),
@@ -418,18 +110,11 @@ SfxFrameDescriptor::SfxFrameDescriptor( SfxFrameSetDescriptor *pParSet ) :
     DBG_CTOR(SfxFrameDescriptor, 0);
 
     pImp = new SfxFrameDescriptor_Impl;
-    if ( pParentFrameSet )
-        pParentFrameSet->InsertFrame( this );
 }
 
 SfxFrameDescriptor::~SfxFrameDescriptor()
 {
     DBG_DTOR(SfxFrameDescriptor, 0);
-
-    if ( pFrameSet )
-        delete pFrameSet;
-    if ( pParentFrameSet )
-        pParentFrameSet->RemoveFrame( this );
     delete pImp;
 }
 
@@ -479,24 +164,12 @@ BOOL SfxFrameDescriptor::CompareOriginal( SfxFrameDescriptor& rDescr ) const
     if( aURL != rDescr.aURL )
         return FALSE;
     else
-        // Zwei Descriptoren sind kompatibel, wenn einer keinen SetDescriptor
-        // und der andere einen RootDescriptor hat,
-        // wenn beide SetDescriptoren haben
-        // und diese kompatibel sind oder wenn beide keine
-        // SetDescriptoren haben.
-        return
-            !pFrameSet &&
-            ( !rDescr.pFrameSet || rDescr.pFrameSet->IsRootFrameSet() ) ||
-            !rDescr.pFrameSet && pFrameSet->IsRootFrameSet() ||
-            pFrameSet && rDescr.pFrameSet && pFrameSet->CompareOriginal(
-                *rDescr.pFrameSet );
+        return TRUE;
 }
 
 BOOL SfxFrameDescriptor::CheckContent() const
 {
     BOOL bRet = !( aURL == aActualURL );
-    if ( !bRet && pFrameSet )
-        bRet = pFrameSet->CheckContent();
     return bRet;
 }
 
@@ -506,107 +179,11 @@ void SfxFrameDescriptor::UnifyContent( BOOL bTakeActual )
         aURL = aActualURL;
     else
         aActualURL = aURL;
-    if ( pFrameSet )
-        pFrameSet->UnifyContent( bTakeActual );
 }
 
-BOOL SfxFrameDescriptor::Store( SvStream& rStream ) const
+SfxFrameDescriptor* SfxFrameDescriptor::Clone( BOOL bWithIds ) const
 {
-    long lPos = rStream.Tell();
-    long lLength = 0L;
-    rStream << lLength << VERSION;
-
-    USHORT nFlags1 = 0;
-    USHORT nFlags2 = 0;
-    if ( bResizeHorizontal )
-        nFlags1 |= 0x01;
-    if ( bResizeVertical )
-        nFlags2 |= 0x01;
-    if ( !bHasUI )              // anders herum, damit kompatibel
-        nFlags1 |= 0x02;
-    if ( bReadOnly )
-        nFlags1 |= 0x04;
-
-    if ( aURL.GetMainURL(INetURLObject::DECODE_TO_IURI).getLength() )
-    {
-        rStream.WriteByteString( INetURLObject::AbsToRel( aURL.GetMainURL(
-                    INetURLObject::DECODE_TO_IURI ) ), RTL_TEXTENCODING_UTF8 );
-    }
-    else
-    {
-        rStream.WriteByteString( String(), RTL_TEXTENCODING_UTF8 );
-    }
-
-    rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
-    rStream << aMargin
-            << nWidth
-            << (USHORT) eSizeSelector
-            << (USHORT) eScroll
-            << (USHORT) nFlags1
-            << (USHORT) nFlags2
-            << (USHORT) (pFrameSet != 0)
-            << nHasBorder;
-
-    long lActPos = rStream.Tell();
-    lLength = lActPos - lPos;
-    rStream.Seek( lPos );
-    rStream << lLength;
-    rStream.Seek( lActPos );
-
-    if ( pFrameSet )
-        pFrameSet->Store(rStream);
-
-    return TRUE;
-}
-
-BOOL SfxFrameDescriptor::Load( SvStream& rStream, USHORT nVersion )
-{
-    String aURLName;
-    USHORT nFlags1, nFlags2, nScroll, nSet, nSelector;
-
-    long lLength = 0L;
-    long lPos = rStream.Tell();     // aktuelle Position merken
-
-    if ( nVersion > 2 )
-        rStream >> lLength >> nVersion;
-
-    rStream.ReadByteString( aURLName, RTL_TEXTENCODING_UTF8 );
-    rStream.ReadByteString( aName, RTL_TEXTENCODING_UTF8 );
-    rStream >> aMargin
-            >> nWidth
-            >> nSelector
-            >> nScroll
-            >> nFlags1
-            >> nFlags2
-            >> nSet
-            >> nHasBorder;
-
-    if ( nVersion > 2 )
-        rStream.Seek( lPos + lLength );
-
-    bResizeHorizontal = ( nFlags1 & 0x01 ) != 0;
-    bResizeVertical = ( nFlags2 & 0x01 ) != 0;
-    bHasUI = ( nFlags1 & 0x02 ) == 0;
-    bReadOnly = ( nFlags1 & 0x04 ) != 0;
-    eSizeSelector = (SizeSelector) nSelector;
-    aURL = INetURLObject::RelToAbs( aURLName );
-    eScroll = (ScrollingMode) nScroll;
-    aActualURL = aURL;
-
-    if ( nSet )
-    {
-        pFrameSet = new SfxFrameSetDescriptor( this );
-        pFrameSet->Load( rStream, nVersion );
-    }
-
-    return TRUE;
-}
-
-SfxFrameDescriptor* SfxFrameDescriptor::Clone(
-    SfxFrameSetDescriptor *pSet, BOOL bWithIds ) const
-{
-    SfxFrameDescriptor *pFrame =
-        new SfxFrameDescriptor( pSet );
+    SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
 
     pFrame->aURL = aURL;
     pFrame->aActualURL = aActualURL;
@@ -635,242 +212,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone(
     else
         pFrame->nItemId = 0;
 
-    if ( pFrameSet )
-        pFrame->pFrameSet = pFrameSet->Clone( pFrame, bWithIds );
-
     return pFrame;
-}
-
-
-SfxFrameDescriptor* SfxFrameDescriptor::Split( BOOL bHorizontal, BOOL bParent )
-{
-    DBG_ASSERT( pParentFrameSet, "Frames ohne Set koennen nicht gesplittet werden!" );
-
-    // Die Root holen, um neue Ids erzeugen zu k"onnen
-    SfxFrameSetDescriptor *pRoot = pParentFrameSet;
-    while ( pRoot->pParentFrame && pRoot->pParentFrame->pParentFrameSet )
-        pRoot = pRoot->pParentFrame->pParentFrameSet;
-
-    // Der Frame, hinter dem ein neuer eingef"ugt werden soll
-    SfxFrameDescriptor *pPrev = this;
-
-    // Dieser Descriptor soll gesplittet werden ...
-    SfxFrameDescriptor *pSplit = this;
-    SfxFrameSetDescriptor *pSplitSet = pParentFrameSet;
-
-    if ( bParent )
-    {
-        // Ein FrameSet suchen, das die gleiche Orientierung hat wie
-        // die "ubergebene
-        pSplit = pSplitSet->bIsRoot ? NULL : pSplitSet->pParentFrame;
-        while ( pSplit && pSplit->pParentFrameSet )
-        {
-            pSplitSet = pSplit->pParentFrameSet;
-            if ( pSplitSet->bRowSet == bHorizontal )
-                break;
-            pSplit = pSplitSet->pParentFrame;
-        }
-
-        // pSplit ist NULL oder TopLevel, wenn das Set das RootSet ist
-        pPrev = pSplit;
-    }
-    else
-    {
-        // Wenn das aktuelle FrameSet eine andere Orientierung hat, der
-        // zu splittende Frame aber der einzige ist, wird einfach die
-        // Orientierung des Sets umgedreht( k"urzt den Baum)
-        if ( pSplitSet->GetFrameCount() == 1 )
-            pSplitSet->bRowSet = bHorizontal;
-    }
-
-    if ( pSplitSet->bRowSet != bHorizontal )
-    {
-        BOOL bCreated = FALSE;
-        if ( !pSplit || !pSplit->pParentFrameSet )
-        {
-            // RootSet splitten: das Alignment wechselt
-            pSplitSet->bRowSet = bHorizontal;
-            bHorizontal = !bHorizontal;
-            pSplit = new SfxFrameDescriptor( pSplitSet );
-            bCreated = TRUE;
-        }
-
-        if ( bParent )
-        {
-            // "Unter pSplit wird ein FrameSet eingef"ugt
-            SfxFrameSetDescriptor *pSet = new SfxFrameSetDescriptor( NULL );
-            pSet->bIsRoot = FALSE;
-            pSet->bRowSet = bHorizontal;
-
-            // Die Frames unterhalb des alten Sets umh"angen
-            USHORT nCount = pSplitSet->aFrames.Count();
-            USHORT nPos = 0;
-            for ( USHORT n=0; n<nCount; n++ )
-            {
-                SfxFrameDescriptor *pCur = pSplitSet->aFrames[0];
-                if ( pCur != pSplit )
-                {
-                    pSplitSet->aFrames.Remove(nPos);
-                    pSet->InsertFrame( pCur );
-                    pCur->pParentFrameSet = pSet;
-                }
-                else
-                    nPos++;
-            }
-
-            pPrev = pSplit;
-
-            if ( bCreated )
-            {
-                USHORT nID = pRoot->MakeItemId();
-                pSplit->SetItemId( nID );
-
-                // Neuer Frame erh"alt ganzen Platz
-                pPrev->nWidth = 100;
-                pPrev->eSizeSelector = SIZE_PERCENT;
-
-                // Verkettung herstellen
-                pSplit->pFrameSet = pSet;
-                pSet->pParentFrame = pSplit;
-            }
-        }
-        else
-        {
-            // Den gesplitteten Frame kopieren und moven
-            USHORT nPos = pSplitSet->aFrames.GetPos( pPrev );
-            pSplit = pPrev->Clone( pSplitSet );
-            pSplitSet->RemoveFrame( pSplit );
-            pSplitSet->InsertFrame( pSplit, nPos );
-
-            // Unter dem neuen Frame wird ein FrameSet eingef"ugt, das den
-            // alten Frame enth"alt, der anschlie\send geteilt wird
-            SfxFrameSetDescriptor *pSet = new SfxFrameSetDescriptor( pSplit );
-            pSet->bIsRoot = FALSE;
-            pSet->bRowSet = bHorizontal;
-
-            // Attribute des neu eingef"ugten Frames zur"ucksetzen und eine
-            // Id erzeugen
-            pSplit->aName.Erase();
-            pSplit->aMargin = Size( -1, -1 );
-            pSplit->aURL.SetURL( "" );
-            pSplit->aActualURL.SetURL( "" );
-            pSplit->SetItemId( pRoot->MakeItemId() );
-            bCreated = TRUE;
-
-            // Alter Frame erh"alt ganzen Platz im neu eingef"ugten Frameset
-            pPrev->nWidth = 100;
-            pPrev->eSizeSelector = SIZE_PERCENT;
-
-            // Alten Frame umh"angen
-            pSplitSet->RemoveFrame( pPrev );
-            pSet->InsertFrame( pPrev );
-        }
-    }
-
-    if ( !pPrev || !pPrev->pParentFrameSet )
-        return NULL;
-
-    // Hinter pPrev einen neuen Frame einf"ugen
-    SfxFrameDescriptor *pFrame = new SfxFrameDescriptor( NULL );
-    pSplitSet = pPrev->pParentFrameSet;
-    pSplitSet->InsertFrame( pFrame, pSplitSet->aFrames.GetPos( pPrev ) + 1 );
-    pFrame->pParentFrameSet = pSplitSet;
-
-    // Size und ID setzen
-    USHORT n = pRoot->MakeItemId();
-    pFrame->SetItemId( n );
-
-    // Platz zwischen beiden Frames aufteilen
-    long nSize = pPrev->nWidth / 2L;
-    pPrev->nWidth = nSize ? nSize : 1L;
-    pFrame->nWidth = pPrev->nWidth;
-    pFrame->eSizeSelector = pPrev->eSizeSelector;
-
-    return pFrame;
-}
-
-BOOL SfxFrameDescriptor::CanSplit( BOOL bHorizontal, BOOL bParent ) const
-{
-    DBG_ASSERT( pParentFrameSet, "Frames ohne Set koennen nicht gesplittet werden!" );
-
-    // Die Root holen, um neue Ids erzeugen zu k"onnen
-    const SfxFrameSetDescriptor *pRoot = pParentFrameSet;
-    while ( pRoot->pParentFrame && pRoot->pParentFrame->pParentFrameSet )
-        pRoot = pRoot->pParentFrame->pParentFrameSet;
-
-    // Der Frame, hinter dem ein neuer eingef"ugt werden soll
-    const SfxFrameDescriptor *pPrev = this;
-
-    // Dieser Descriptor soll gesplittet werden ...
-    const SfxFrameDescriptor *pSplit = this;
-    const SfxFrameSetDescriptor *pSplitSet = pParentFrameSet;
-    BOOL bRowSet = pSplitSet->bRowSet;
-
-    if ( bParent )
-    {
-        // Ein FrameSet suchen, das die gleiche Orientierung hat wie
-        // die "ubergebene
-        pSplit = pSplitSet->bIsRoot ? NULL : pSplitSet->pParentFrame;
-        while ( pSplit && pSplit->pParentFrameSet )
-        {
-            pSplitSet = pSplit->pParentFrameSet;
-            if ( pSplitSet->bRowSet == bHorizontal )
-                break;
-            pSplit = pSplitSet->pParentFrame;
-        }
-
-        // pSplit ist jetzt NULL oder TopLevel, wenn das Set das RootSet ist
-        pPrev = pSplit;
-        bRowSet = pSplitSet->bRowSet;
-    }
-    else
-    {
-        // Wenn das aktuelle FrameSet eine andere Orientierung hat, der
-        // zu splittende Frame aber der einzige ist, wird einfach die
-        // Orientierung des Sets umgedreht( k"urzt den Baum)
-        if ( pSplitSet->GetFrameCount() == 1 )
-            bRowSet = bHorizontal;
-    }
-
-    if ( bRowSet == bHorizontal && ( !pPrev || !pPrev->pParentFrameSet ) )
-        return FALSE;
-    return TRUE;
-}
-
-SfxFrameDescriptor* SfxFrameDescriptor::Next() const
-{
-    if ( !pParentFrameSet )
-        return NULL;
-
-    USHORT nPos = pParentFrameSet->aFrames.GetPos( (SfxFrameDescriptor*) this );
-    if ( nPos < pParentFrameSet->aFrames.Count() - 1 )
-        return pParentFrameSet->aFrames[nPos+1];
-    else
-        return NULL;
-}
-
-SfxFrameDescriptor* SfxFrameDescriptor::Prev() const
-{
-    if ( !pParentFrameSet )
-        return NULL;
-
-    USHORT nPos = pParentFrameSet->aFrames.GetPos( (SfxFrameDescriptor*) this );
-    if ( nPos > 0 )
-        return pParentFrameSet->aFrames[nPos-1];
-    else
-        return NULL;
-}
-
-USHORT SfxFrameDescriptor::GetParentSetId() const
-{
-    if ( !pParentFrameSet )
-        return USHRT_MAX;
-
-    SfxFrameDescriptor *pFrame = pParentFrameSet->pParentFrame;
-    if ( pFrame )
-        return pFrame->nItemId;
-    else
-        return 0;
 }
 
 USHORT SfxFrameDescriptor::GetWinBits() const
@@ -882,8 +224,6 @@ USHORT SfxFrameDescriptor::GetWinBits() const
         nBits |= SWIB_PERCENTSIZE;
     if ( !IsResizable() )
         nBits |= SWIB_FIXED;
-    if ( pFrameSet && pFrameSet->IsColSet() )
-        nBits |= SWIB_COLSET;
     if ( !nWidth )
         nBits |= SWIB_INVISIBLE;
     return nBits;
@@ -891,17 +231,7 @@ USHORT SfxFrameDescriptor::GetWinBits() const
 
 BOOL SfxFrameDescriptor::HasFrameBorder() const
 {
-    if ( pParentFrameSet )
-    {
-        if ( pParentFrameSet->pImp->bNetscapeCompat && !pParentFrameSet->GetFrameSpacing() )
-            return FALSE;
-        else if ( ( nHasBorder & BORDER_SET ) )
-            return (nHasBorder & BORDER_YES) != 0;
-        else
-            return pParentFrameSet->HasFrameBorder();
-    }
-    else
-        return (nHasBorder & BORDER_YES) != 0;
+    return (nHasBorder & BORDER_YES) != 0;
 }
 
 long SfxFrameDescriptor::GetSize() const
@@ -922,18 +252,6 @@ void SfxFrameDescriptor::TakeProperties( const SfxFrameProperties& rProp )
     if ( rProp.bBorderSet )
         nHasBorder |= BORDER_SET;
     bResizeHorizontal = bResizeVertical = rProp.bResizable;
-    if ( pParentFrameSet )
-    {
-        SfxFrameDescriptor *pParent = pParentFrameSet->pParentFrame;
-        if ( pParent )
-        {
-            pParent->nWidth = rProp.lSetSize;
-            pParent->eSizeSelector = rProp.eSetSizeSelector;
-            pParent->bResizeHorizontal = pParent->bResizeVertical = rProp.bSetResizable;
-        }
-
-        pParentFrameSet->nFrameSpacing = rProp.lFrameSpacing;
-    }
 }
 
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
@@ -951,15 +269,6 @@ const Wallpaper* SfxFrameDescriptor::GetWallpaper() const
 
 USHORT SfxFrameDescriptor::GetItemPos() const
 {
-    if ( pParentFrameSet )
-    {
-        USHORT nRet = pParentFrameSet->aFrames.GetPos((SfxFrameDescriptor*)this);
-        for ( USHORT n=0; n<nRet; n++ )
-            if ( !pParentFrameSet->GetFrame(n)->nWidth )
-                nRet--;
-        return nRet;
-    }
-
     return USHRT_MAX;
 }
 
@@ -985,20 +294,7 @@ SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
     , bHasBorderInherited( FALSE )
     , pFrame( pD->Clone() )
 {
-    SfxFrameSetDescriptor *pSet = pD->GetParent();
-    if ( pSet )
-    {
-        bIsRootSet = ( pSet->IsRootFrameSet() );
-        lFrameSpacing = pSet->GetFrameSpacing();
-        lSetSize = bIsRootSet ? SIZE_NOT_SET : pSet->GetParentFrame()->GetWidth();
-        eSetSizeSelector = bIsRootSet ? SIZE_ABS : pSet->GetParentFrame()->GetSizeSelector();
-        bSetResizable = bIsRootSet ? FALSE : pSet->GetParentFrame()->IsResizable();
-        bIsInColSet = pSet->IsColSet();
-        bHasBorderInherited = pSet->HasFrameBorder();
-        lInheritedFrameSpacing = bIsRootSet ? SPACING_NOT_SET : pSet->GetParentFrame()->GetParent()->GetFrameSpacing();
-    }
-    else
-        bBorderSet = TRUE;
+    bBorderSet = TRUE;
 }
 
 SfxFrameProperties& SfxFrameProperties::operator =(
