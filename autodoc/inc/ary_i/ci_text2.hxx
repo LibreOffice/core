@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ci_text2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,9 @@ class DocuTex2
                                                 { aTokens.push_back(&let_drToken); }
     const TokenList &   Tokens() const          { return aTokens; }
     bool                IsEmpty() const;
+    const String &      TextOfFirstToken() const;
 
+    String &            Access_TextOfFirstToken();
 
   private:
     TokenList           aTokens;
