@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ void OPropertySetHelper::addPropertyChangeListener(
     {
         // only add listeners if you are not disposed
         // a listener with no name means all properties
-        if( rPropertyName.len() )
+        if( rPropertyName.getLength() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();
@@ -308,7 +308,7 @@ void OPropertySetHelper::removePropertyChangeListener(
     // all listeners are automaticly released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
-        if( rPropertyName.len() )
+        if( rPropertyName.getLength() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();
@@ -344,7 +344,7 @@ void OPropertySetHelper::addVetoableChangeListener(
     {
         // only add listeners if you are not disposed
         // a listener with no name means all properties
-        if( rPropertyName.len() )
+        if( rPropertyName.getLength() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();
@@ -388,7 +388,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
     // all listeners are automaticly released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
-        if( rPropertyName.len() )
+        if( rPropertyName.getLength() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();

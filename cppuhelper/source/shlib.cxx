@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:56:02 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,18 +117,17 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
                 static ::std::vector< OUString > s_v;
 
                 OString aEnv( pEnv );
-                sal_Int32 nToken = aEnv.getTokenCount( ';' );
-
-                for ( sal_Int32 i = 0; i < nToken; ++i )
+                sal_Int32 nIndex = 0;
+                do
                 {
                     OUString aStr( OStringToOUString(
-                        aEnv.getToken( i, ';' ), RTL_TEXTENCODING_ASCII_US ) );
+                        aEnv.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_ASCII_US ) );
                     OUString aUNC;
                     if (osl_File_E_None == ::osl_normalizePath( aStr.pData, &aUNC.pData ))
                     {
                         s_v.push_back( aUNC );
                     }
-                }
+                } while( nIndex != -1 );
 #ifdef DEBUG
                 out( "> cpld: acknowledged following access path(s): \"" );
                 ::std::vector< OUString >::const_iterator iPos( s_v.begin() );
@@ -230,7 +229,7 @@ static bool checkAccessPath( OUString * pComp ) throw ()
 static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd ) SAL_THROW( () )
 {
     if (rText.getLength() >= rEnd.getLength() &&
-        rEnd.equalsIgnoreCase( rText.copy( rText.getLength() - rEnd.getLength() ) ))
+        rEnd.equalsIgnoreAsciiCase( rText.copy( rText.getLength() - rEnd.getLength() ) ))
     {
         return rText.getLength() - rEnd.getLength();
     }

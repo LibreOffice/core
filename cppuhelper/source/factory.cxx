@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:32:28 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,8 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             aActivatorUrl = xActivatorKey->getAsciiValue();
 
             OUString tmpActivator(aActivatorUrl.getStr());
-            aActivatorName = tmpActivator.getToken(0, L':').getStr();
+            sal_Int32 nIndex = 0;
+            aActivatorName = tmpActivator.getToken(0, ':', nIndex );
 
             Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") ) );
@@ -661,7 +662,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
                 aLocation = xLocationKey->getAsciiValue();
 
                 // search protocol delemitter
-                sal_Int32 nPos = aLocation.search(
+                sal_Int32 nPos = aLocation.indexOf(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
                 if( nPos != -1 )
                 {
@@ -675,7 +676,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             }
         }
 
-        if( aActivatorName.len() != 0 )
+        if( aActivatorName.getLength() != 0 )
         {
             Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
             Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
@@ -719,7 +720,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames(void)
             if (xKey.is())
             {
                 // length of prefix. +1 for the '/' at the end
-                sal_Int32 nPrefixLen = xKey->getKeyName().len() + 1;
+                sal_Int32 nPrefixLen = xKey->getKeyName().getLength() + 1;
 
                 // Full qualified names like "IMPLEMENTATIONS/TEST/UNO/SERVICES/com.sun.star..."
                 Sequence<OUString> seqKeys = xKey->getKeyNames();
