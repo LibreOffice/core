@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:11:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #include "NeonTypes.hxx"
 #endif
 
+namespace ucbhelper { class ProxyDecider; }
+
 namespace webdav_ucp
 {
 
@@ -94,24 +96,27 @@ class NeonSession : public DAVSession
         sal_Int32         m_nProxyPort;
         HttpSession *     m_pHttpSession;
         void *            m_pRequestData;
+        const ucbhelper::InternetProxyDecider & m_rProxyDecider;
 
-        // @@@ This should really be per-request data. A NeonSession
-        // instance can handle multiple requests at a time!!! But Neon
-        // currently has no better interface!
+        // @@@ This should really be per-request data. But Neon currently
+        // (0.23.5) has no interface for passing per-request user data.
+        // Theoretically, a NeonSession instance could handle multiple requests
+        // at a time --currently it doesn't. Thus this is not an issue at the
+        // moment.
         DAVRequestEnvironment m_aEnv;
 
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *      mNeonLockSession;
 
-        static sal_Bool   m_bSockInited;
+        static bool       m_bSockInited;
 
     protected:
         virtual ~NeonSession();
 
     public:
-        NeonSession( rtl::Reference< DAVSessionFactory > const & rSessionFactory,
+        NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
                      const rtl::OUString& inUri,
-                     const ucbhelper::InternetProxyServer & rProxyCfg )
+                     const ucbhelper::InternetProxyDecider & rProxyDecider )
             throw ( DAVException );
 
         // DAVSession methods
@@ -276,6 +281,8 @@ class NeonSession : public DAVSession
 
         void HandleError( int nError )
             throw ( DAVException );
+
+        const ucbhelper::InternetProxyServer & getProxySettings() const;
 
         // Note: Uncomment the following if locking support is required
         // void         Lockit( const Lock & inLock, bool inLockit )
