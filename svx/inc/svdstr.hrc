@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-02 15:53:39 $
+ *  last change: $Author: aw $ $Date: 2002-08-15 11:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,10 +774,14 @@
 
 #define SIP_SA_MARKERS                      (SIP_Begin + 258)
 #define SIP_SA_FINE_MARKERS                 (SIP_Begin + 259)
+
 // #100499#
 #define BMP_OLEOBJ                          (SIP_Begin + 260)
 
-#define SIP_End                             (BMP_OLEOBJ)
+// #101928#
+#define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 261)
+
+#define SIP_End                             (SIP_SA_ACCESSIBILITY_MARKERS)
 
 #define SDR_ResourceEnd                     (SIP_End)
 
