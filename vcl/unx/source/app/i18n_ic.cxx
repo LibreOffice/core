@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:07:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,20 +456,16 @@ SalI18N_InputContext::Unmap( SalFrame* pFrame )
             rStatus.show( false, I18NStatus::contextmap );
 
         }
-        mpFocusFrame = NULL;
-        maClientData.pFrame = NULL;
+        if( mpFocusFrame )
+            mpFocusFrame->EndExtTextInput( SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE );
+        UnsetICFocus( pFrame );
+        mpFocusFrame = maClientData.pFrame = NULL;
     }
 }
 
 void
 SalI18N_InputContext::Map( SalFrame *pFrame )
 {
-    if( ! mpFocusFrame )
-    {
-        mpFocusFrame = pFrame;
-        maClientData.pFrame = pFrame;
-    }
-
     if( mbUseable )
     {
         I18NStatus& rStatus(I18NStatus::get() );
@@ -490,7 +486,6 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
                                   XNCommitStringCallback, &maCommitStringCallback,
                                   XNSwitchIMNotifyCallback, &maSwitchIMCallback,
                                   NULL );
-                SetICFocus( pFrame );
             }
         }
     }
@@ -711,7 +706,11 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
     if ( mbUseable && (maContext != NULL) && pFocusFrame != mpFocusFrame )
     {
         if( mpFocusFrame )
+        {
             mpFocusFrame->EndExtTextInput( SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE );
+            mpFocusFrame->maFrameData.getInputContext()->UnsetICFocus( mpFocusFrame );
+        }
+
         mpFocusFrame = pFocusFrame;
         maClientData.pFrame = pFocusFrame;
 
