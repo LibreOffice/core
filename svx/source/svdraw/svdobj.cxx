@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-07 12:54:45 $
+ *  last change: $Author: thb $ $Date: 2002-11-07 14:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,11 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
                     // setup XOutDev
                     ExtOutputDevice aXOut( &aVDev );
                     aXOut.SetFillAttr( rFillItemSet );
+
+                    // prepare ItemSet to avoid line drawing
+                    SfxItemSet aEmptySet( *rFillItemSet.GetPool() );
+                    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+                    aXOut.SetLineAttr( aEmptySet );
 
                     // render into VDev
                     aXOut.DrawRect( aPolyRect );
