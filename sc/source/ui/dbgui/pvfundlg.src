@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:05:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Žádný";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
+        Text[ slovak ] = "~Nič";
     };
     RadioButton BTN_AUTO
     {
@@ -143,6 +144,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~स्वचालित";
+        Text[ slovak ] = "~Automaticky";
     };
     RadioButton BTN_USER
     {
@@ -177,6 +179,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Uživatelem definované";
         Text[ hebrew ] = "~Benutzerdefiniert";
         Text[ hindi ] = "~उपभोक्ता से परिभाषा किया हुआ";
+        Text[ slovak ] = "~Užívateľom definované";
     };
     MultiListBox LB_FUNC
     {
@@ -581,6 +584,20 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Var (नमूना)" ; Default ; > ;
         < "VarP (जनसंख्या)" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Súčet" ; Default ; > ;
+        < "Počet" ; Default ; > ;
+        < "Priemer" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Počet (len čísla)" ; Default ; > ;
+        < "ŠtandOdch (vzorka)" ; Default ; > ;
+        < "ŠtandOdchP (Populácia)" ; Default ; > ;
+        < "Var (vzorka)" ; Default ; > ;
+        < "VarP (populácia)" ; Default ; > ;
+    };
     };
     FixedLine FL_FUNC
     {
@@ -619,6 +636,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Zobrazit prvky bez dat";
         Text[ hebrew ] = "~Elemente ohne Daten anzeigen";
         Text[ hindi ] = "ड़ॉटा के बिना ~ऐलिमेन्ट् को दिखाओ";
+        Text[ slovak ] = "Zobraz prvky b~ez dát";
     };
     FixedText FT_NAMELABEL
     {
@@ -652,6 +670,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Jméno:";
         Text[ hebrew ] = "Name:";
         Text[ hindi ] = "नाम:";
+        Text[ slovak ] = "Názov:";
     };
     FixedText FT_NAME
     {
@@ -707,6 +726,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Mezisoučty";
         Text[ hebrew ] = "Teilergebnisse";
         Text[ hindi ] = "आधा कुलजोड";
+        Text[ slovak ] = "Medzisúčty";
     };
     String STR_DATAFUNC
     {
@@ -738,6 +758,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ czech ] = "Funkce";
         Text[ hebrew ] = "Funktion";
         Text[ hindi ] = "फंक्शन्";
+        Text[ slovak ] = "Funkcia";
     };
     Text [ spanish ] = "Campo de datos" ;
     Text [ french ] = "Champ de donn�es" ;
@@ -760,7 +781,10 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ czech ] = "Datové pole";
     Text[ hebrew ] = "Datenfeld";
     Text[ hindi ] = "ड़ॉटा क्षेत्र";
+    Text[ slovak ] = "Dátové pole";
 };
+
+
 
 
 
