@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:35:10 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,14 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ french ] = "Type de champ" ;
         Text [ dutch ] = "Veldtype" ;
         Text [ portuguese ] = "Tipo de campo" ;
-        Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ";
+        Text[ chinese_simplified ] = "å­—æ®µç±»å‹";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚Ìí—Ş";
-        Text[ chinese_traditional ] = "Äæ¦ìÃş«¬";
+        Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®ç¨®é¡";
+        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇÊµå À¯Çü";
+        Text[ korean ] = "í•„ë“œ ìœ í˜•";
         Text[ turkish ] = "Alan tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo de campo";
@@ -113,14 +113,14 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ spanish ] = "~fijo" ;
         Text [ french ] = "~fixe" ;
         Text [ dutch ] = "~vast" ;
-        Text[ chinese_simplified ] = "¹Ì¶¨(~F)";
+        Text[ chinese_simplified ] = "å›ºå®š(~F)";
         Text[ russian ] = "~ôèêñ.";
         Text[ polish ] = "Sta³y";
-        Text[ japanese ] = "•ÏX•s‰Â”\\(~F)";
-        Text[ chinese_traditional ] = "©T©w(~F)";
+        Text[ japanese ] = "å¤‰æ›´ä¸å¯èƒ½(~F)";
+        Text[ chinese_traditional ] = "å›ºå®š(~F)";
         Text[ arabic ] = "ËÇÈÊ";
         Text[ greek ] = "ÓôáèåñÜ";
-        Text[ korean ] = "°íÁ¤(~F)";
+        Text[ korean ] = "ê³ ì •(~F)";
         Text[ turkish ] = "Sabit";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~fijo";
@@ -142,14 +142,14 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ spanish ] = "~variable" ;
         Text [ french ] = "~variable" ;
         Text [ dutch ] = "~variabel" ;
-        Text[ chinese_simplified ] = "¿É±ä(~V)";
+        Text[ chinese_simplified ] = "å¯å˜(~V)";
         Text[ russian ] = "~èçìåíÿåì.";
         Text[ polish ] = "Zmienny";
-        Text[ japanese ] = "•ÏX‰Â”\\(~V)";
-        Text[ chinese_traditional ] = "¥iÅÜ(~V)";
+        Text[ japanese ] = "å¤‰æ›´å¯èƒ½(~V)";
+        Text[ chinese_traditional ] = "å¯è®Š(~V)";
         Text[ arabic ] = "ãÊÛíÑ";
         Text[ greek ] = "ìåôáâëçôŞ";
-        Text[ korean ] = "À¯µ¿Àû(~V)";
+        Text[ korean ] = "ìœ ë™ì (~V)";
         Text[ turkish ] = "Değişken";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~variable";
@@ -177,14 +177,14 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ french ] = "F~ormat" ;
         Text [ dutch ] = "F~ormaat" ;
         Text [ portuguese ] = "Forma~to" ;
-        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡(~O)";
+        Text[ japanese ] = "æ›¸å¼(~O)";
+        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
         Text[ arabic ] = "ÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "Æ÷¸Ë(~O)";
+        Text[ korean ] = "í¬ë§·(~O)";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
@@ -218,19 +218,20 @@ ModalDialog DLG_FIELD_MODIFY
     Text [ french ] = "Édition de champ" ;
     Text [ dutch ] = "Veldopdracht bewerken" ;
     Text [ portuguese ] = "Editar campos" ;
-    Text[ chinese_simplified ] = "±à¼­×Ö¶ÎÖ¸Áî";
+    Text[ chinese_simplified ] = "ç¼–è¾‘å­—æ®µæŒ‡ä»¤";
     Text[ russian ] = "Ïğàâêà ïîëÿ";
     Text[ polish ] = "Edytuj pole";
-    Text[ japanese ] = "Ì¨°ÙÄŞºÏİÄŞ‚Ì•ÒW";
-    Text[ chinese_traditional ] = "½s¿èÄæ¦ì«ü¥O";
+    Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ï½ºï¾ï¾ï¾„ï¾ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯æ¬„ä½æŒ‡ä»¤";
     Text[ arabic ] = "ÊÍÑíÑ ÇáÍŞá";
     Text[ greek ] = "Åğåîåñãáóßá åíôïëŞò ğåäßïõ";
-    Text[ korean ] = "ÇÊµå¸í·É ÆíÁı";
+    Text[ korean ] = "í•„ë“œëª…ë ¹ í¸ì§‘";
     Text[ turkish ] = "Alan öğesini düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar campo";
     Text[ finnish ] = "Muokkaa kenttää";
 };
+
 
 
 
