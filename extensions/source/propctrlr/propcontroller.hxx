@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:42:29 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 06:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,8 @@ namespace pcr
         void SetListSource(sal_Bool _bInit = sal_False);
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
 
+        void recalcConnection();
+
         sal_uInt32 GetPropertyPos(const ::rtl::OUString& _rPropName);
         ::rtl::OUString GetPropertyValue(const ::rtl::OUString& _rPropName);
 
@@ -369,6 +371,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/21 15:42:29  fs
+ *  #82696# new helper methods for font handling
+ *
  *  Revision 1.4  2001/02/19 14:08:05  fs
  *  #83649# correctly eval the return value of getIntrospecteeProperty / #84041# infrastructure for activating pages from outside
  *
