@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-14 09:12:45 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,7 @@ ModelessDialog RID_SVXDLG_IMAP
     Text [ swedish ] = "Image map-redigerare" ;
     Text [ danish ] = "ImageMap-redigering" ;
     Text [ italian ] = "Editor ImageMap" ;
-    Text [ spanish ] = "Editor ImageMap" ;
+    Text [ spanish ] = "Editor de ImageMap" ;
     Text [ french ] = "Éditeur d'Image Map" ;
     Text [ dutch ] = "ImageMap-editor" ;
     Text [ portuguese ] = "Mapa de imagens Editor" ;
