@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:04:07 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:41:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,15 +61,13 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=config
 TARGET1=heavyconfig
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
