@@ -4,107 +4,169 @@
 	<Section id="Welcome">
 		<Paragraph id="A1" style="H1">
 			<Text id="a" xml:lang="en-US">Welcome</Text>
+			<Text id="a" xml:lang="cs">Vítejte</Text>
+			<Text id="a" xml:lang="sk">Vitajte</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated 2003 April 14</Text>
+			<Text id="a" xml:lang="en-US">Last updated 2003 June 23</Text>
+			<Text id="a" xml:lang="cs">Poslední změna: 23. června 2003</Text>
+			<Text id="a" xml:lang="sk">Posledná zmena: 23. júna 2003</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
-			<Text id="a" xml:lang="en-US">OpenOffice.org 1.1 Beta2 ReadMe</Text>
+			<Text id="a" xml:lang="en-US">OpenOffice.org 1.1 ReadMe</Text>
+			<Text id="a" xml:lang="cs">OpenOffice.org 1.1 README</Text>
+			<Text id="a" xml:lang="sk">OpenOffice.org 1.1 README</Text>
 		</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/readme.html</Text>
 			<Text id="empty" xml:lang="en-US"/>
+			<Text id="a" xml:lang="cs" url="ahead">Aktuální verzi tohoto souboru v češtině naleznete na </Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">cs.openoffice.org/README.html</Text>
+			<Text id="empty" xml:lang="cs"/>
+			<Text id="a" xml:lang="sk" url="ahead">Aktuálnu verziu tohto súboru v slovenčine nájdete na </Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">sk.openoffice.org/README.html</Text>
+			<Text id="empty" xml:lang="sk"/>
 		</Paragraph>
 		<Paragraph id="A5" style="H2">
 			<Text id="a" xml:lang="en-US">Dear User</Text>
+			<Text id="a" xml:lang="cs">Vážení uživatelé,</Text>
+			<Text id="a" xml:lang="sk">Vážení užívatelia,</Text>
 		</Paragraph>
 		<Paragraph id="A6">
 			<Text id="a" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
+			<Text id="a" xml:lang="cs">tento soubor obsahuje důležité informace o kancelářském balíku OpenOffice.org 1.1. Přečtěte si, prosím, tyto informace, než s ním začnete pracovat.</Text>
+			<Text id="a" xml:lang="sk">Tento súbor obsahuje dôležité informácie o kancelárskom balíku OpenOffice.org 1.0. Prečítajte si, prosím, tieto informácie skôr než začnete pracovať.</Text>
 		</Paragraph>
 		<Paragraph id="A7">
 			<Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Komunita OpenOffice.org, která je odpovědná za vývoj tohoto produktu, vás zve a vítá do svého středu. Jako nový uživatel se můžete podívat na české domovské stránky projektu na </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Komunita OpenOffice.org, ktorá je zodpovedná za vývoj tohto produktu, vás pozýva a víta do svojho stredu. Ako nový užívateľ sa môžete pozrieť na slovenské domovské stránky projektu na </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/about_us/introduction.html </Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">oo-cs.sf.net. </Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">oo-sk.linux.sk. </Text>
 			<Text id="c" xml:lang="en-US">Also read the sections below of getting involved the OpenOffice.org project. </Text>
+			<Text id="c" xml:lang="cs">Přečtěte si také, prosím, informace, jak se zapojit do projektu OpenOffice.org.</Text>
+			<Text id="c" xml:lang="sk">Prečítajte si tiež prosím informácie, ako sa zapojiť do projektu OpenOffice.org.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Error">
 		<Paragraph id="B1" style="H2" os="none">
 			<Text id="sdfsd432re342r" xml:lang="de">Fehlerbericht-Programm</Text>
 			<Text id="sdfsd432re342r" xml:lang="en-US">Error Report Tool</Text>
+			<Text id="sdfsd432re342r" xml:lang="cs">Nástroj pro oznamování chyb</Text>
+			<Text id="sdfsd432re342r" xml:lang="sk">Nástroj pre oznamovanie chýb</Text>
 		</Paragraph>
 		<Paragraph id="B2" os="none">
 			<Text id="ertert3434534" xml:lang="de">Das Fehlerbericht-Programm startet automatisch, sobald ein Programmabsturz auftritt. Sollte das Programm in eine Endlosschleife geraten und weder auf Mauseklicks noch auf Tastatureingaben reagieren, kann das Fehlerbericht-Programm auch manuell gestartet werden.</Text>
 			<Text id="ertert3434534" xml:lang="en-US">The Error Report Tool starts automatically when a program crash occurs. If the program enters into an endless loop, so that it does not respond to mouse-clicks or keypresses, you can also start the Error Report Tool manually.</Text>
+			<Text id="ertert3434534" xml:lang="cs">Při chybě programu se automaticky spustí Nástroj pro oznamování chyb. Pokud se program zacyklí a nereaguje na klávesy ani myš, můžete spustit Nástroj pro oznamování chyb ručně.</Text>
+			<Text id="ertert3434534" xml:lang="sk">Pri chybe programu sa automaticky spustí Nástroj pre oznamovanie chýb. V prípade, že sa program zacyklí a nereaguje na klávesnicu a ani myš, môžete spustiť Nástroj pre oznamovanie chýb tiež ručne.</Text>
 		</Paragraph>
 		<Paragraph id="B2b" os="none">
 			<Text id="ertert3434534" xml:lang="de">Das Fehlerbericht-Programm sammelt alle notwendigen Informationen, die den Softwareentwicklern helfen können Ihren Programmcode zu verbessern, so dass dieser Fehler in späteren Versionen vielleicht vermieden werden kann. Bitte helfen Sie uns unsere Software zu verbessern und senden Sie uns die generierten Fehlerberichte per E-Mail.</Text>
 			<Text id="ertert3434534" xml:lang="en-US">The Error Report Tool gathers all necessary information that can help the program developers to improve the code, so that in later versions this error can possibly be avoided. Please help us to improve the software and send the generated error report by e-mail.</Text>
+			<Text id="ertert3434534" xml:lang="cs">Nástroj pro oznamování chyb shromáždí všechny informace, které vývojářům pomohou opravit chybu, aby se v dalších verzích již nevyskytovala. Prosíme, pomožte nám vylepšovat software a pošlete vygenerovanou zprávu o chybě.</Text>
+			<Text id="ertert3434534" xml:lang="sk">Nástroj pre oznamovanie chýb zhromždí všetky informácie, ktoré pomôžu vývojárom odstrániť chybu, aby sa už v ďalších verziách nevyskytovala. Prosíme, pomôžte nám vylepšovať software a pošlite nám vygenerovanú správu o chybe.</Text>
 		</Paragraph>
 		<Paragraph id="B2c" os="none">
 			<Text id="ertert3434534" xml:lang="de">Sun Microsystems hat sich der Achtung Ihrer Online-Privatsphäre verschrieben und sichert Ihnen den sicheren Umgang mit jeglichen personenrelevanten Daten an, die Sie uns mitteilen. Bitte beachten Sie auch unser Statement unter: http://www.sun.com/privacy/ bezüglich der Vertraulichkeit Ihrer Onlinedaten bei Sun Microsystems.</Text>
 			<Text id="ertert3434534" xml:lang="en-US">Sun Microsystems is committed to respecting your online privacy and recognizes your need for appropriate protection and management of any personally identifiable information you share with us. See the statement at http://www.sun.com/privacy/ on your online data privacy at Sun Microsystems.</Text>
+			<Text id="ertert3434534" xml:lang="cs">Sun Microsystems se zavazuje dodržovat vaše soukromí a chápe vaši potřebu ochrany a správy jakýchkoliv osobních informací, které poskytujete. Přečtěte si prohlášení o ochraně vašich osobních údajů na adrese http://www.sun.com/privacy/.</Text>
+			<Text id="ertert3434534" xml:lang="sk">Sun Microsystems sa zaväzuje dodržiavať vaše súkromie a chápe vašu potrebu ochrany a spravovania akýchkoľvek osobných informácií, ktoré poskytujete. Prečítajte si prehlásenie o ochrane vašich osobných údajov na adrese http://www.sun.com/privacy/.</Text>
 		</Paragraph>
 		<Paragraph id="B3" style="H3" os="none">
-			<Text id="sdf3e3" xml:lang="de">Bekannte Einschränkungen des Fehlerbericht-Programms in OpenOffice.org Beta 1</Text>
-			<Text id="sdf3e3" xml:lang="en-US">Known Limitations of the Error Report Tool for OpenOffice.org Beta 1</Text>
+			<Text id="sdf3e3" xml:lang="de">Bekannte Einschränkungen des Fehlerbericht-Programms in OpenOffice.org </Text>
+			<Text id="sdf3e3" xml:lang="en-US">Known Limitations of the Error Report Tool for OpenOffice.org</Text>
+			<Text id="sdf3e3" xml:lang="cs">Známá omezení Nástroje pro oznamování chyb OpenOffice.org </Text>
+			<Text id="sdf3e3" xml:lang="sk">Známe obmedzenia Nástroja pre oznamovanie chýb OpenOffice.org </Text>
 		</Paragraph>
 		<Paragraph id="B4" os="none">
-			<Text id="sdf3sd2" xml:lang="de">Die folgenden Einschränkungen sind nur gültig für OpenOffice.org Beta 1. Bitte lesen die diese Informationen sehr genau durch.</Text>
-			<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for OpenOffice.org Beta 1. Please read this information very carefully.</Text>
+			<Text id="sdf3sd2" xml:lang="de">Die folgenden Einschränkungen sind nur gültig für OpenOffice.org. Bitte lesen die diese Informationen sehr genau durch.</Text>
+			<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for OpenOffice.org. Please read this information very carefully.</Text>
+			<Text id="sdf3sd2" xml:lang="cs">Následující omezení platí jen pro OpenOffice.org. Prosíme, pečlivě si informace pročtěte.</Text>
+			<Text id="sdf3sd2" xml:lang="sk">Následujúce obmedzenia platia len pre OpenOffice.org. Prosíme, dôkladne si tieto informácie prečítajte.</Text>
 		</Paragraph>
 		<Paragraph id="B5Win" os="none" gui="WNT">
 			<Text id="sdf3sd24" xml:lang="de">Microsoft Outlook Express oder Microsoft Outlook muss auf Ihrem System installiert und muss als Standard (MAPI) E-Mail Programm konfiguriert sein, um Fehlerberichte senden zu können. Mozilla 1.0, 1.2, 1.3 und Netscape 6.x können Fehlerberichte nicht senden und geben keine Fehlermeldung aus.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">You need Microsoft Outlook Express or Microsoft Outlook installed and configured as your default (MAPI) e-mail client to send these error messages. Mozilla 1.0, 1.2, 1.3 and Netscape 6.x do not send the created error message correctly and will not display any error message.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Abyste mohli odesílat hlášení o chybách, musíte mít nainstalován a nastaven jako standardní (MAPI) e-mailový klient Microsoft Outlook Express nebo Microsoft Outlook. Mozilla 1.0, 1.2, 1.3 a Netscape 6.x chybně odesílá vytvořenou zprávu a nezobrazí žádné hlášení o chybě.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Aby ste mohli odosielať hlásenia o chybách, musíte mať nainštalovaný a nastavený ako východzí (MAPI) e-mailový klient Microsoft Outlook Express alebo Microsoft Outlook. Mozilla 1.0, 1.2, 1.3 a Netscape 6.x nesprávne odosiela vytvorenú správu a nezobrazí hlásenie o chybe.</Text>
 		</Paragraph>
 		<Paragraph id="B5Unix" os="none" gui="UNX">
 			<Text id="sdf3sd24" xml:lang="de">Sie müssen das Programm SendMail auf Ihrem System installiert und konfiguriert haben.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">You need to have SendMail installed and configured on your system.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Musíte mít nainstalován a nastaven SendMail.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Musíte mať nainštalovaný a nastavený SendMail.</Text>
 		</Paragraph>
 		<Paragraph id="B6u" style="H3" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Starten des Fehlerbericht-Programms</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">Starting the Error Report Tool</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Spuštění Nástroje pro oznamování chyb</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Spúšťanie Nástroja pre oznamovanie chýb</Text>
 		</Paragraph>
 		<Paragraph id="B6" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Bei den meisten Programmabstürzen wird das Fehlerbericht-Programm automatisch gestartet. Sollte das Programm hängen bleiben und das Fehlerbericht-Programm nicht automatisch starten, dann können Sie das Fehlerbericht-Programm auch manuell starten. Wechseln Sie in das OpenOffice.org-Programmverzeichnis und starten Sie die Datei 'crashrep.exe'.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">With most program crashes, the Error Report Tool will start automatically. However, if the program seems to be stuck and the tool does not start automatically, you can start the tool manually:
 Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Při většině chyb programu se Nástroj pro oznamování chyb spustí automaticky. Avšak pokud program nereaguje a nástroj se automaticky nespustí, musíte jej spustit ručne:
+V adresáři OpenOffice.org spusťte soubor 'crashrep.exe'.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Pri väčšine chýb sa Nástroj pre oznamovanie chýb spustí automaticky. Ale keď program nereaguje a nástroj sa automaticky nespustí, musíte ho spustiť ručne:
+V adresári OpenOffice.org spustite súbor 'crashrep.exe'.</Text>
 		</Paragraph>
 		<Paragraph id="B7u" style="H3" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Vervollständigen des Berichtes</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">Completing the Report</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Doplnění zprávy</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Doplnenie správy</Text>
 		</Paragraph>
 		<Paragraph id="B7" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Im Hauptdialog des Fehlerbericht-Programms können Sie detaillierte Informationen eingeben, die unseren Softwareentwicklern bei der Eingrenzung des Problems vielleicht hilfreich sein können. Bitte geben Sie solche Informationen an, wenn der Fehler z.B. nur nach einer Änderung Ihrer Hard- oder Softwareumgebung auftritt, oder wenn Sie beispielsweise auf einer Schaltfläche geklickt haben.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">On the main Error Report Tool dialog, you can enter some additional information that may help our developers to localize the error. For example, if the error only appears after a change in your hardware or software environment, or if you clicked on a button, please include that information.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">V hlavním okně Nástroje pro oznamování chyb můžete zadat doplňující informace, které vývojářům pomohou odhalit chybu. Například, pokud chyba nastala po změně v hardwaru či softwaru, nebo po kliknutí na tlačítko, uveďte prosím tyto informace.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">V hlavnom okne Nástroja pre oznamovanie chýb môžete zadať doplňujúce informácie, ktoré pomôžu vývojárom odhaliť chybu. Napríklad, to že chyba nastala pri výmene hardwaru alebo softwaru, resp. po kliknutí na tlačítko, uveďte prosím tieto informácie.</Text>
 		</Paragraph>
 		<Paragraph id="B8u" style="H3" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Senden des Fehlerberichts per E-Mail</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">Sending the Error Report by E-mail</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Odeslání zprávy o chybě e-mailem</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Odosielanie správy o chybe e-mailom</Text>
 		</Paragraph>
 		<Paragraph id="B8" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Das Fehlerbericht-Programm benutzt Ihren System E-Mail-Programm, um Fehlerberichte zu senden. Optional können Sie einen Text eingeben der uns hilft den Kontext, in dem das Problem aufgetreten ist, nachzuvollziehen. </Text>
 			<Text id="sdf3sd24" xml:lang="en-US">The Error Report Tool uses your system's e-mail application to send the report data. You may optionally enter some descriptive text that will help us to identify the context of the program crash. Then click the Send button.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Nástroj pro oznamování chyb používá k odesílání zpráv aplikaci vašeho systému. Můžete také zadat vysvětlující text, který pomůže v odhalování chyby programu. Poté klikněte na tlačítko Odeslat.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Nástroj pre oznamovanie chýb používa pre odosielanie správ aplikáciu vášho systému. Môžete tiež zadať vysvetľujúci text, ktorý pomôže pri odhaľovaní chyby v programe. Potom kliknite na tlačítko Odoslať.</Text>
 		</Paragraph>
 		<Paragraph id="B8b" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Sie können sich entscheiden, ob Sie auf Fragen antworten möchten, die unsere Softwareentwickler vielleicht zu dem von Ihnen gemeldeten Problem haben. Markieren Sie das Feld, um uns zu erlauben, mit Ihnen Kontakt aufzunehmen, sollten weitere Informationen benötigt werden. Der Standard für dieses Feld ist nicht markiert, so dass Sie keine E-Mail von uns erhalten werden.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">You may choose to respond to questions that our developers may have about the reported error. Mark the check box if you will allow us to contact you by e-mail, should additional information be required. By default this box is not marked, so you will not get any e-mail from us. </Text>
+			<Text id="sdf3sd24" xml:lang="cs">Pokud budete chtít, můžete vývojářům zodpovědět případné dotazy ohledně chyby. Dovolíte-li nám kontaktovat vás e-mailem v případě potřeby doplňujících informací, zaškrtněte prosím políčko. Standardně tato volba není zaškrtnuta, takže od nás nedostanete žádný e-mail.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">V prípade že budete mať záujem odpovedať vývojárom na prípadné otázky ohľadne danej chyby, môžete dovoliť im kontaktovať vás e-mailom v prípade že budú potrebné doplňujúce informácie. Štandardne je táto možnosť vypnutá, takže od nás nedostanete žiadny email.</Text>
 		</Paragraph>
 		<Paragraph id="B8c" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Hinweis: Sie erhalten keine Antwort auf einen Fehlerreport. Wenn Sie Support benötigen, wenden Sie sich bitte an unser Supportportal im Internet.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">Please note: You will not get an answer to your error report. If you need support, please visit our Support Portal on the Internet.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Poznámka: Na své oznámení chyby neodržíte odpověď. Pokud potřebujete pomoc, navštivte prosím naši Podporu na Internetu.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Poznámka: Na takéto oznámenie nedostanete odpoveď. V prípade, že potrebujete pomoc, navštívte našu podporu na Internete.</Text>
 		</Paragraph>
 		<Paragraph id="B9u" style="H3" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Welche Daten werden gesendet?</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">What Data is Sent?</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Jaká data se odesílají?</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Aké dáta sú odosielané?</Text>
 		</Paragraph>
 		<Paragraph id="B9" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Der Fehlerbericht besteht aus mehreren Dateien. Die Hauptdatei ist eine XML Datei, mit Informationen über die Fehlerart, Betriebssystemname und Version, Speicherverbrauch und die Beschreibung die Sie eingegeben haben. Sie können sich den Inhalt dieser Datei in Ihrem E-Mail-Programm vor dem Versenden der E-Mail ansehen. Weiterhin können Sie auf die „Bericht anzeigen“ Schaltfläche im Hauptdialog des Fehlerbericht-Programms klicken, um sich den Inhalt anzeigen zu lassen.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">The error report consists of several files. The main file is an XML file with information about the error type, operating system name and version, memory usage, and the description that you entered. You can view the contents of this file in your e-mail client before you send the e-mail, and you can click the Show Report button on the main dialog of the Error Report Tool.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Oznámení o chybě se skládá z několika souborů. Hlavním souborem je XML soubor s informacemi o druhu chyby, názvu a verzi operačního systému, využití paměti a popisem, který vyplníte. Ve svém e-mailovém klientu si můžete před odesláním tento soubor prohlédnout kliknutím na tlačítko Zobrazit zprávu v hlavním okně Nástroje pro oznamování chyb.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Oznámenie o chybe sa skladá z niekoľkých súborov. Hlavným súborom je XML súbor s informáciami o druhu chyby, názvu a verzii operačného systému, využití pamäti a popisom, ktorý ste zadali. Vo svojom e-mailovom klientovi si môžete pred odoslaním tento súbor prezrieť kliknutím na tlačítko Zobraziť správu v hlavnom okne nástroja pre oznamovanie chýb.</Text>
 		</Paragraph>
 		<Paragraph id="B9b" os="none">
 			<Text id="sdf3sd24" xml:lang="de">Zusätzlich werden relevante Speicherauszüge und Stacktraces durch systemeigene Tools ('dbhhelp.dll' auf Windows-Systemen, 'pstack' auf UNIX-Systemen) gesammelt. Die resultierende binäre Datei wird an die E-Mail angehängt. Sie können sich den Inhalt z.B. mit einem Hexadezimal-Editor ansehen.</Text>
 			<Text id="sdf3sd24" xml:lang="en-US">In addition, relevant memory contents and stack traces are gathered by some system standard tools ('dbhhelp.dll' on Windows systems, 'pstack' on UNIX systems). The resulting binary file is attached to the e-mail. You can view the contents with a hexadecimal editor, for example.</Text>
+			<Text id="sdf3sd24" xml:lang="cs">Navíc se připojí odpovídající výpis paměti a zásobníku získaný pomocí standardních systémových nástrojů ('dbhhelp.dll' ve Windows, 'pstack' v UNIXu). K e-mailu se připojí výsledný binární soubor. Obsah tohoto souboru si můžete prohlédnout například hexadecimálním editorem.</Text>
+			<Text id="sdf3sd24" xml:lang="sk">Naviac je pripojený zodpovedajúci výpis pamäti a zásobníka získaný pomocou štandardných systémových nástrojov.('dbhhelp.dll' vo Windows, 'pstack' v UNIXe). K e-mailu sa pripojí výsledný binárny súbor. Obsah tohto súboru si môžete prezrieť napríklad hexadecimálnym editorom.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Installation">
@@ -130,6 +192,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="rr3fgf42r" xml:lang="tr">Installationshinweise</Text>
 			<Text id="rr3fgf42r" xml:lang="ar">Installationshinweise</Text>
 			<Text id="rr3fgf42r" xml:lang="ca">Installationshinweise</Text>
+			<Text id="rr3fgf42r" xml:lang="cs">Poznámky k instalaci</Text>
+			<Text id="rr3fgf42r" xml:lang="sk">Poznámky k inštalácii</Text>
 		</Paragraph>
 		<Paragraph id="All">
 			<Text id="sdfsdfgf42r" xml:lang="de">Systemanforderungen:</Text>
@@ -153,6 +217,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdfsdfgf42r" xml:lang="tr">Systemanforderungen:</Text>
 			<Text id="sdfsdfgf42r" xml:lang="ar">Systemanforderungen:</Text>
 			<Text id="sdfsdfgf42r" xml:lang="ca">Systemanforderungen:</Text>
+			<Text id="sdfsdfgf42r" xml:lang="cs">Systémové požadavky:</Text>
+			<Text id="sdfsdfgf42r" xml:lang="sk">Systémové požiadavky:</Text>
 		</Paragraph>
 		<Paragraph id="WNT2" os="WNT">
 			<List>
@@ -169,6 +235,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="a" xml:lang="ko">Microsoft Windows 98, ME, NT(Service Pack 6 이상), 2000, XP.</Text>
 				<Text id="a" xml:lang="zh-CN">Microsoft Windows 98, ME, NT(Service Pack 6 之上), 2000 及 XP</Text>
 				<Text id="a" xml:lang="zh-TW">Microsoft Windows 98, ME, NT(Service Pack 6 以上), 2000 及 XP</Text>
+				<Text id="a" xml:lang="cs">Microsoft Windows 98, ME, NT (Service Pack 6 nebo novější), 2000 nebo XP</Text>
+				<Text id="a" xml:lang="sk">Microsoft Windows 98, ME, NT (Service Pack 6 alebo novší), 2000 alebo XP</Text>
 				<Text id="utzu6" xml:lang="de">Pentium kompatibler PC</Text>
 				<Text id="utzu6" xml:lang="en-US">Pentium compatible PC</Text>
 				<Text id="utzu6" xml:lang="pt">Pentium kompatibler PC</Text>
@@ -190,6 +258,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="utzu6" xml:lang="tr">Pentium kompatibler PC</Text>
 				<Text id="utzu6" xml:lang="ar">Pentium kompatibler PC</Text>
 				<Text id="utzu6" xml:lang="ca">Pentium kompatibler PC</Text>
+				<Text id="utzu6" xml:lang="cs">Pentium kompatibilní PC</Text>
+				<Text id="utzu6" xml:lang="sk">Pentium kompatibilné PC</Text>
 				<Text id="ghuj67" xml:lang="de">64 MB RAM</Text>
 				<Text id="ghuj67" xml:lang="en-US">64 MB RAM</Text>
 				<Text id="ghuj67" xml:lang="pt">64 MB RAM</Text>
@@ -211,8 +281,12 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="ghuj67" xml:lang="tr">64 MB RAM</Text>
 				<Text id="ghuj67" xml:lang="ar">64 MB RAM</Text>
 				<Text id="ghuj67" xml:lang="ca">64 MB RAM</Text>
+				<Text id="ghuj67" xml:lang="cs">64 MB RAM</Text>
+				<Text id="ghuj67" xml:lang="sk">64 MB RAM</Text>
 				<Text id="jzjtzu6" xml:lang="de">250 MB (CJK-Version: 300 MB) verfügbarer Festplattenplatz</Text>
 				<Text id="jzjtzu6" xml:lang="en-US">250 MB (CJK version: 300 MB) available hard disk space</Text>
+				<Text id="jzjtzu6" xml:lang="cs">250 MB (verze CJK: 300 MB) volného místa na disku</Text>
+				<Text id="jzjtzu6" xml:lang="sk">250 MB (verzia CJK: 300 MB) voľného miesta na disku</Text>
 				<Text id="jtzu56" xml:lang="de">800x600 Punkte Bildschirmauflösung oder höher, mindestens 256 Farben</Text>
 				<Text id="jtzu56" xml:lang="en-US">800x600 resolution or higher, at least 256 colors</Text>
 				<Text id="jtzu56" xml:lang="pt">800x600 Punkte Bildschirmauflösung oder höher, mindestens 256 Farben</Text>
@@ -230,6 +304,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="jtzu56" xml:lang="ko">800x600 포인트 이상의 화면 해상도, 최소 256 색</Text>
 				<Text id="jtzu56" xml:lang="zh-CN">800x600 像素或以上，至少 256 色</Text>
 				<Text id="jtzu56" xml:lang="zh-TW">800x600 像素或以上，至少 256 色</Text>
+				<Text id="jtzu56" xml:lang="cs">Rozlišení 800x600 nebo vyšší, alespoň 256 barev</Text>
+				<Text id="jtzu56" xml:lang="sk">Rozlíšenie 800x600 alebo vyššie, minimálne 256 farieb</Text>
 			</List>
 		</Paragraph>
 		<Paragraph id="Sols2" os="SOLARIS" cpuname="SPARC">
@@ -252,6 +328,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s2335" xml:lang="ko">Solaris 7 운영 체제 (SPARC 플랫폼) 이상(Solaris 9 권장)</Text>
 				<Text id="s2335" xml:lang="zh-CN">Solaris 7 操作系统(SPARC 平台)或以上(建议使用 Solaris 9)</Text>
 				<Text id="s2335" xml:lang="zh-TW">Solaris 7 作業系統(SPARC 平台)或以上(建議使用 Solaris 9)</Text>
+				<Text id="s2335" xml:lang="cs">Operační systém Solaris 7 (platforma SPARC) nebo vyšší (doporučeno Solaris 9)</Text>
+				<Text id="s2335" xml:lang="sk">Operačný systém Solaris 7 (platforma SPARC) alebo vyšší (doporučujeme Solaris 9)</Text>
 				<Text id="s253" xml:lang="de">128 MB RAM</Text>
 				<Text id="s253" xml:lang="en-US">128 MB RAM</Text>
 				<Text id="s253" xml:lang="pt">128 MB RAM</Text>
@@ -273,8 +351,12 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s253" xml:lang="tr">128 MB RAM</Text>
 				<Text id="s253" xml:lang="ar">128 MB RAM</Text>
 				<Text id="s253" xml:lang="ca">128 MB RAM</Text>
+				<Text id="s253" xml:lang="cs">128 MB RAM</Text>
+				<Text id="s253" xml:lang="sk">128 MB RAM</Text>
 				<Text id="s23seg" xml:lang="de">300 MB (CJK-Version: 450 MB) verfügbarer Festplattenplatz</Text>
 				<Text id="s23seg" xml:lang="en-US">300 MB (CJK version: 450 MB) available hard disk space</Text>
+				<Text id="s23seg" xml:lang="cs">300 MB (verze CJK: 450 MB) volného místa na disku</Text>
+				<Text id="s23seg" xml:lang="sk">300 MB (verzia CJK: 450 MB) voľného miesta na disku</Text>
 				<Text id="s2s43gfe" xml:lang="de">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="s2s43gfe" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
 				<Text id="s2s43gfe" xml:lang="pt">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
@@ -296,8 +378,12 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s2s43gfe" xml:lang="tr">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="s2s43gfe" xml:lang="ar">X Server mit einer Bildschirmauflِsung von 800x600 Punkten oder hِher, mindestens 256 Farben</Text>
 				<Text id="s2s43gfe" xml:lang="ca">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
+				<Text id="s2s43gfe" xml:lang="cs">X Server s rozlišením 800x600 nebo vyšším, alespoň 256 barev</Text>
+				<Text id="s2s43gfe" xml:lang="sk">X Server s rozlíšením 800x600 alebo vyšším, minimálne 256 farieb</Text>
 				<Text id="wd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über die Java-Accessibility-Unterstützung</Text>
 				<Text id="wd2dff" xml:lang="en-US">Gnome 2.0 or higher required for support of assistive technology tools (AT tools) via Java accessibility support</Text>
+				<Text id="wd2dff" xml:lang="cs">Pro podporu technologií zpřístupnění je vyžadováno Gnome 2.0 s podporou Java</Text>
+				<Text id="wd2dff" xml:lang="sk">Pre podporu technológií sprístupnenia je potrebné Gnome 2.0 s podporou Java</Text>
 				<Text id="n4234rw" xml:lang="de">Window Manager</Text>
 				<Text id="n4234rw" xml:lang="en-US">Window Manager</Text>
 				<Text id="n4234rw" xml:lang="pt">Window Manager</Text>
@@ -319,6 +405,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="n4234rw" xml:lang="tr">Window Manager</Text>
 				<Text id="n4234rw" xml:lang="ar">Window Manager</Text>
 				<Text id="n4234rw" xml:lang="ca">Window Manager</Text>
+				<Text id="n4234rw" xml:lang="cs">Správce oken</Text>
+				<Text id="n4234rw" xml:lang="sk">Správca okien</Text>
 			</List>
 		</Paragraph>
 		<Paragraph id="Solia2" os="SOLARIS" cpuname="INTEL">
@@ -344,6 +432,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s23h" xml:lang="tr">Solaris 7 Betriebssystem (Intel Plattform) oder höher (Solaris 9 empfohlen)</Text>
 				<Text id="s23h" xml:lang="ar">Solaris 7 Betriebssystem (Intel Plattform) oder hِher (Solaris 9 empfohlen)</Text>
 				<Text id="s23h" xml:lang="ca">Solaris 7 Betriebssystem (Intel Plattform) oder höher (Solaris 9 empfohlen)</Text>
+				<Text id="s23h" xml:lang="cs">Operační systém Solaris 7 (platforma Intel) nebo vyšší (doporučeno Solaris 9)</Text>
+				<Text id="s23h" xml:lang="sk">Operačný systém Solaris 7 (platforma SPARC) alebo vyšší (doporučujeme Solaris 9)</Text>
 				<Text id="s24f" xml:lang="de">64 MB RAM</Text>
 				<Text id="s24f" xml:lang="en-US">64 MB RAM</Text>
 				<Text id="s24f" xml:lang="pt">64 MB RAM</Text>
@@ -365,8 +455,12 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s24f" xml:lang="tr">64 MB RAM</Text>
 				<Text id="s24f" xml:lang="ar">64 MB RAM</Text>
 				<Text id="s24f" xml:lang="ca">64 MB RAM</Text>
+				<Text id="s24f" xml:lang="cs">64 MB RAM</Text>
+				<Text id="s24f" xml:lang="sk">64 MB RAM</Text>
 				<Text id="fgheg" xml:lang="de">300 MB (CJK-Version: 450 MB) verfügbarer Festplattenplatz</Text>
 				<Text id="fgheg" xml:lang="en-US">300 MB (CJK version: 450 MB) available hard disk space</Text>
+				<Text id="fgheg" xml:lang="cs">300 MB (verze CJK: 450 MB) volného místa na disku</Text>
+				<Text id="fgheg" xml:lang="sk">300 MB (verzia CJK: 450 MB) voľného miesta na disku</Text>
 				<Text id="fghfgh" xml:lang="de">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="fghfgh" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
 				<Text id="fghfgh" xml:lang="pt">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
@@ -385,8 +479,12 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="fghfgh" xml:lang="ko">800x600 포인트 이상의 화면 해상도를 갖는 X 서버, 최소 256 색</Text>
 				<Text id="fghfgh" xml:lang="zh-CN">X 服务器具备 800x600 像素或以上，至少 256 色</Text>
 				<Text id="fghfgh" xml:lang="zh-TW">X 伺服器具備 800x600 像素或以上，至少 256 色</Text>
+				<Text id="fghfgh" xml:lang="cs">X Server s rozlišením 800x600 nebo vyšším, alespoň 256 barev</Text>
+				<Text id="fghfgh" xml:lang="sk">X Server s rozlíšením 800x600 alebo vyšším, minimálne 256 farieb</Text>
 				<Text id="wd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
 				<Text id="wd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
+				<Text id="wd2dff" xml:lang="cs">Pro podporu technologií zpřístupnění je vyžadováno Gnome 2.0 s podporou Java</Text>
+				<Text id="wd2dff" xml:lang="sk">Pre podporu technológií sprístupnenia je potrebné Gnome 2.0 s podporou Java</Text>
 				<Text id="mgjfg" xml:lang="de">Window Manager </Text>
 				<Text id="mgjfg" xml:lang="en-US">Window Manager</Text>
 				<Text id="mgjfg" xml:lang="pt">Window Manager</Text>
@@ -405,6 +503,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="mgjfg" xml:lang="ko">Window 관리자</Text>
 				<Text id="mgjfg" xml:lang="zh-CN">视窗管理器</Text>
 				<Text id="mgjfg" xml:lang="zh-TW">視窗管理員</Text>
+				<Text id="mgjfg" xml:lang="cs">Správce oken</Text>
+				<Text id="mgjfg" xml:lang="sk">Správca okien</Text>
 			</List>
 		</Paragraph>
 		<Paragraph id="Linuxi2" os="LINUX" cpuname="INTEL">
@@ -430,27 +530,31 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s2we35" xml:lang="tr">Linux Kernel Version 2.2.13 oder höher</Text>
 				<Text id="s2we35" xml:lang="ar">Linux Kernel Version 2.2.13 oder hِher</Text>
 				<Text id="s2we35" xml:lang="ca">Linux Kernel Version 2.2.13 oder höher</Text>
-				<Text id="s253we" xml:lang="de">glibc2 Version 2.1.3 oder höher</Text>
-				<Text id="s253we" xml:lang="en-US">glibc2 version 2.1.3 or higher</Text>
-				<Text id="s253we" xml:lang="pt">glibc2 Version 2.1.3 oder höher</Text>
+				<Text id="s2we35" xml:lang="cs">Linuxové jádro verze 2.2.13 nebo vyšší</Text>
+				<Text id="s2we35" xml:lang="sk">Linuxové jadro verzia 2.2.13 alebo vyššia</Text>
+				<Text id="s253we" xml:lang="de">glibc2 Version 2.2.0 oder höher</Text>
+				<Text id="s253we" xml:lang="en-US">glibc2 version 2.2.0 or higher</Text>
+				<Text id="s253we" xml:lang="pt">glibc2 Version 2.2.0 oder höher</Text>
 				<Text id="s253we" xml:lang="ru">glibc2 версия 2.1.2 и выше</Text>
 				<Text id="s253we" xml:lang="el">glibc2 Version 2.1.2 oder hφher</Text>
-				<Text id="s253we" xml:lang="nl">glibc2 versie 2.1.3 of hoger</Text>
-				<Text id="s253we" xml:lang="fr">glibc2 version 2.1.3 ou plus</Text>
-				<Text id="s253we" xml:lang="es">glibc2 Versión 2.1.3 o superior</Text>
-				<Text id="s253we" xml:lang="fi">glibc2-versio 2.1.3 tai uudempi</Text>
-				<Text id="s253we" xml:lang="it">glibc2 versione 2.1.3 o più recente</Text>
-				<Text id="s253we" xml:lang="da">glibc2 version 2.1.3 eller højere</Text>
-				<Text id="s253we" xml:lang="sv">glibc2-version 2.1.3 eller senare</Text>
-				<Text id="s253we" xml:lang="pl">glibc2 Version 2.1.3 oder höher</Text>
-				<Text id="s253we" xml:lang="pt-BR">glibc2 Version 2.1.3 oder höher</Text>
-				<Text id="s253we" xml:lang="ja">glibc2 バージョン 2.1.3 以降</Text>
+				<Text id="s253we" xml:lang="nl">glibc2 versie 2.2.0 of hoger</Text>
+				<Text id="s253we" xml:lang="fr">glibc2 version 2.2.0 ou plus</Text>
+				<Text id="s253we" xml:lang="es">glibc2 Versión 2.2.0 o superior</Text>
+				<Text id="s253we" xml:lang="fi">glibc2-versio 2.2.0 tai uudempi</Text>
+				<Text id="s253we" xml:lang="it">glibc2 versione 2.2.0 o più recente</Text>
+				<Text id="s253we" xml:lang="da">glibc2 version 2.2.0 eller højere</Text>
+				<Text id="s253we" xml:lang="sv">glibc2-version 2.2.0 eller senare</Text>
+				<Text id="s253we" xml:lang="pl">glibc2 Version 2.2.0 oder höher</Text>
+				<Text id="s253we" xml:lang="pt-BR">glibc2 Version 2.2.0 oder höher</Text>
+				<Text id="s253we" xml:lang="ja">glibc2 バージョン 2.2.0 以降</Text>
 				<Text id="s253we" xml:lang="ko">glibc2 버전 2.1.2 이상</Text>
-				<Text id="s253we" xml:lang="zh-CN">glibc2 版本 2.1.3 或以上</Text>
-				<Text id="s253we" xml:lang="zh-TW">glibc2 版本 2.1.3 或以上</Text>
-				<Text id="s253we" xml:lang="tr">glibc2 Version 2.1.3 oder höher</Text>
+				<Text id="s253we" xml:lang="zh-CN">glibc2 版本 2.2.0 或以上</Text>
+				<Text id="s253we" xml:lang="zh-TW">glibc2 版本 2.2.0 或以上</Text>
+				<Text id="s253we" xml:lang="tr">glibc2 Version 2.2.0 oder höher</Text>
 				<Text id="s253we" xml:lang="ar">glibc2 Version 2.1.2 oder hِher</Text>
-				<Text id="s253we" xml:lang="ca">glibc2 Version 2.1.3 oder höher</Text>
+				<Text id="s253we" xml:lang="ca">glibc2 Version 2.2.0 oder höher</Text>
+				<Text id="s253we" xml:lang="cs">glibc2 verze 2.2.0 nebo vyšší</Text>
+				<Text id="s253we" xml:lang="sk">glibc2 verzia 2.2.0 alebo vyššia</Text>
 				<Text id="s2etfseg" xml:lang="de">Pentium kompatibler PC</Text>
 				<Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC</Text>
 				<Text id="s2etfseg" xml:lang="pt">Pentium kompatibler PC</Text>
@@ -472,7 +576,11 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s2etfseg" xml:lang="tr">Pentium kompatibler PC</Text>
 				<Text id="s2etfseg" xml:lang="ar">Pentium kompatibler PC</Text>
 				<Text id="s2etfseg" xml:lang="ca">Pentium kompatibler PC</Text>
+				<Text id="s2etfseg" xml:lang="cs">Pentium kompatibilní PC</Text>
+				<Text id="s2etfseg" xml:lang="sk">Pentium kompatibilné PC</Text>
 				<Text id="s2ssdfe" xml:lang="de">64 MB RAM</Text>
+				<Text id="s2ssdfe" xml:lang="cs">64 MB RAM</Text>
+				<Text id="s2ssdfe" xml:lang="sk">64 MB RAM</Text>
 				<Text id="s2ssdfe" xml:lang="en-US">64 MB RAM</Text>
 				<Text id="s2ssdfe" xml:lang="pt">64 MB RAM</Text>
 				<Text id="s2ssdfe" xml:lang="ru">64 MB RAM</Text>
@@ -495,6 +603,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="s2ssdfe" xml:lang="ca">64 MB RAM</Text>
 				<Text id="n42dfgf" xml:lang="de">300 MB (CJK-Version: 350 MB) verfügbarer Festplattenplatz</Text>
 				<Text id="n42dfgf" xml:lang="en-US">300 MB (CJK version: 350 MB) available hard disk space</Text>
+				<Text id="n42dfgf" xml:lang="cs">300 MB (verze CJK: 450 MB) volného místa na disku</Text>
+				<Text id="n42dfgf" xml:lang="sk">300 MB (verzia CJK: 450 MB) voľného miesta na disku</Text>
 				<Text id="ghjhhr" xml:lang="de">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="ghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
 				<Text id="ghjhhr" xml:lang="pt">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
@@ -516,8 +626,12 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="ghjhhr" xml:lang="tr">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="ghjhhr" xml:lang="ar">X Server mit einer Bildschirmauflِsung von 800x600 Punkten oder hِher, mindestens 256 Farben</Text>
 				<Text id="ghjhhr" xml:lang="ca">X Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
+				<Text id="ghjhhr" xml:lang="cs">X Server s rozlišením 800x600 nebo vyšším, alespoň 256 barev</Text>
+				<Text id="ghjhhr" xml:lang="sk">X Server s rozlíšením 800x600 alebo vyšším, minimálne 256 farieb</Text>
 				<Text id="wd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
 				<Text id="wd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
+				<Text id="wd2dff" xml:lang="cs">Pro podporu technologií zpřístupnění je vyžadováno Gnome 2.0 s podporou Java</Text>
+				<Text id="wd2dff" xml:lang="sk">Pre podporu technológií sprístupnenia je potrebné Gnome 2.0 s podporou Java</Text>
 				<Text id="fhrtz5" xml:lang="de">Window Manager</Text>
 				<Text id="fhrtz5" xml:lang="en-US">Window Manager</Text>
 				<Text id="fhrtz5" xml:lang="pt">Window Manager</Text>
@@ -539,6 +653,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="fhrtz5" xml:lang="tr">Window Manager</Text>
 				<Text id="fhrtz5" xml:lang="ar">Window Manager</Text>
 				<Text id="fhrtz5" xml:lang="ca">Window Manager</Text>
+				<Text id="fhrtz5" xml:lang="cs">Správce oken</Text>
+				<Text id="fhrtz5" xml:lang="sk">Správca okien</Text>
 			</List>
 		</Paragraph>
 		<Paragraph id="B763ef" os="WNT">
@@ -563,6 +679,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="edssc3d" xml:lang="tr">Hinweis: Bitte beachten Sie, dass für den Installationsvorgang   Administratorrechte benötigt werden.</Text>
 			<Text id="edssc3d" xml:lang="ar">Hinweis: Bitte beachten Sie, dass für den Installationsvorgang   Administratorrechte benِtigt werden.</Text>
 			<Text id="edssc3d" xml:lang="ca">Hinweis: Bitte beachten Sie, dass für den Installationsvorgang   Administratorrechte benötigt werden.</Text>
+			<Text id="edssc3d" xml:lang="cs">Poznámka: Nezapomeňte, že pro instalaci budete potřebujete práva správce systému.</Text>
+			<Text id="edssc3d" xml:lang="sk">Poznámka: Nezabudnite, že pre inštaláciu budete potrebovať práva správcu systému.</Text>
 			<Text id="dsdsdf33" xml:lang="de" Wrap="true">Hinweis für Java 1.4.1 Installation unter Windows: Wenn Sie im OpenOffice.org Installationsprogramm Java installieren, fragt Sie das Installationsprogramm nach einem Neustart Ihres Systems. Bitte ignorieren Sie diesen Hinweis oder rufen Sie das OpenOffice.org Installationsprogramm nach dem Neustart erneut auf.</Text>
 			<Text id="dsdsdf33" xml:lang="en-US" Wrap="true">Note for Windows 98 users only: If you choose to install Java during the OpenOffice.org installation program, the installer will ask you to reboot your system. You should either ignore this message or open the OpenOffice.org installation program again after the reboot.</Text>
 			<Text id="dsdsdf33" xml:lang="pt" Wrap="true">Note for MS-Windows 98 users only: If you choose to install Java during the OpenOffice.org setup the installer asks you to reboot your system. You should either ignore this message or run the OpenOffice.org setup a second time.</Text>
@@ -585,6 +703,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="dsdsdf33" xml:lang="ar" Wrap="true">Note for MS-Windows 98 users only: If you choose to install Java during the OpenOffice.org setup the installer asks you to reboot your system. You should either ignore this message or run the OpenOffice.org setup a second time.</Text>
 			<Text id="dsdsdf33" xml:lang="ca" Wrap="true">Note for MS-Windows 98 users only: If you choose to install Java during the OpenOffice.org setup the installer asks you to reboot your system. You should either ignore this message or run the OpenOffice.org setup a second time.</Text>
 			<Text id="dsdsdf33" xml:lang="th" Wrap="true">Note for MS-Windows 98 users only: If you choose to install Java during the OpenOffice.org setup the installer asks you to reboot your system. You should either ignore this message or run the OpenOffice.org setup a second time.</Text>
+			<Text id="dsdsdf33" xml:lang="cs" Wrap="true">Poznámka pro uživatele Windows 98: Pokud si během instalace OpenOffice.org zvolíte instalaci Java, instalační program vás požádá o restart systému. Tuto zprávu buď ignorujte, nebo po restartu opět spusťte instalační program OpenOffice.org.</Text>
+			<Text id="dsdsdf33" xml:lang="sk" Wrap="true">Poznámka pre užívateľov Windows 98: Pokiaľ si počas inštalácie OpenOffice.org zvolíte inštaláciu Java, inštalační program vás požiada o reštart systému. Túto správu buď ignorujte, alebo po reštarte znovu spustite inštalačný program OpenOffice.org.</Text>
 		</Paragraph>
 		<Paragraph id="Grafik" os="all">
 			<Text id="abcdef" xml:lang="de">Probleme beim Start von OpenOffice.org (z.B. Hängenbleiben der Applikation) sowie Probleme bei der Darstellung auf dem Bildschirm, können häufig auf den im System verwendeten Grafikkartentreiber zurückgeführt werden. Bitte aktualisieren Sie bei Problemen dieser Art auch den von Ihnen verwendeten Grafikkartentreiber bzw. benutzen Sie testweise den Standardgrafiktreiber ihres Betriebssystems. Darstellungsprobleme bei 3D-Objekten können häufig auch durch das Abschalten der Option &quot;Open GL benutzen&quot; unter Extras-Optionen-Ansicht-3D-Darstellung beseitigt werden.</Text>
@@ -598,6 +718,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abcdef" xml:lang="zh-TW">Probleme beim Start von OpenOffice.org (z.B. H�ngenbleiben der Applikation) sowie Probleme bei der Darstellung auf dem Bildschirm, k�nen h�ufig auf den im System verwendeten Grafikkartentreiber zur�kgef�rt werden. Bitte aktualisieren Sie bei Problemen dieser Art auch den von Ihnen verwendeten Grafikkartentreiber bzw. benutzen sie testweise den Standardgrafiktreiber ihres Betriebssystems. Darstellungsprobleme bei 3D-Objekten k�nen h�ufig auch durch das Abschalten der Option &quot;Open GL benutzen&quot; unter Extras-Optionen-Ansicht-3D-Darstellung beseitigt werden.</Text>
 			<Text id="abcdef" xml:lang="ar">Probleme beim Start von OpenOffice.org (z.B. Hنngenbleiben der Applikation) sowie Probleme bei der Darstellung auf dem Bildschirm, kِnnen hنufig auf den im System verwendeten Grafikkartentreiber zurückgeführt werden. Bitte aktualisieren Sie bei Problemen dieser Art auch den von Ihnen verwendeten Grafikkartentreiber bzw. benutzen sie testweise den Standardgrafiktreiber ihres Betriebssystems. Darstellungsprobleme bei 3D-Objekten kِnnen hنufig auch durch das Abschalten der Option &quot;Open GL benutzen&quot; unter Extras-Optionen-Ansicht-3D-Darstellung beseitigt werden.</Text>
 			<Text id="abcdef" xml:lang="ca">Probleme beim Start von OpenOffice.org (z.B. Hängenbleiben der Applikation) sowie Probleme bei der Darstellung auf dem Bildschirm, können häufig auf den im System verwendeten Grafikkartentreiber zurückgeführt werden. Bitte aktualisieren Sie bei Problemen dieser Art auch den von Ihnen verwendeten Grafikkartentreiber bzw. benutzen sie testweise den Standardgrafiktreiber ihres Betriebssystems. Darstellungsprobleme bei 3D-Objekten können häufig auch durch das Abschalten der Option &quot;Open GL benutzen&quot; unter Extras-Optionen-Ansicht-3D-Darstellung beseitigt werden.</Text>
+			<Text id="abcdef" xml:lang="cs">Potíže při spouštění OpenOffice.org (např. zatuhnutí aplikace) a problémy se zobrazováním často způsobuje ovladač grafické karty. Pokud takové potíže nastanou, zkuste aktualizovat ovladač grafické karty nebo použít ovladač operačního systému. Potíže se zobrazováním 3D objektů lze často vyřešit vypnutím volby &quot;Použít OpenGL&quot; v menu &apos;Nástroje - Volby - Zobrazení - 3D pohled&apos;.</Text>
+			<Text id="abcdef" xml:lang="sk">Problémy pri spúšťaní OpenOffice.org (napr. zamrznutie aplikácie) a problémy so zobrazovaním často spôsobuje ovládač grafickej karty. V prípade že takéto problémy nastanú, skúste aktualizovať ovládač grafickej karty alebo použiť ovládač operačného systému. Problémy so zobrazovaním 3D objektov je často možné vyiešiť vypnutím voľby &quot;Používať OpenGL&quot; v menu &apos;Nástroje - Voľby - Zobraziť - 3D pohľad&apos;.</Text>
 		</Paragraph>
 		<Paragraph id="b4tz" os="SOLARIS">
 			<Text id="ghtz5" xml:lang="de">Vor der Installation von OpenOffice.org müssen ein oder mehrere Benötigte Betriebssystem-Patches von SUN Microsystems installiert werden. Diese sind auf der Programm-CD in den folgenden Verzeichnissen enthalten oder können unter http://sunsolve.sun.com heruntergeladen werden:</Text>
@@ -621,6 +743,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="ghtz5" xml:lang="tr">Vor der Installation von OpenOffice.org müssen ein oder mehrere Betriebssystem Patche von SUN Microsystems installiert werden. Diese sind auf der Programm-CD in den folgenden Verzeichnissen enthalten oder können unter http://sunsolve.sun.com heruntergeladen werden::</Text>
 			<Text id="ghtz5" xml:lang="ar">Vor der Installation von OpenOffice.org müssen ein oder mehrere Betriebssystem Patche von SUN Microsystems installiert werden. Diese sind auf der Programm-CD in den folgenden Verzeichnissen enthalten oder kِnnen unter http://sunsolve.sun.com heruntergeladen werden::</Text>
 			<Text id="ghtz5" xml:lang="ca">Vor der Installation von OpenOffice.org müssen ein oder mehrere Betriebssystem Patche von SUN Microsystems installiert werden. Diese sind auf der Programm-CD in den folgenden Verzeichnissen enthalten oder können unter http://sunsolve.sun.com heruntergeladen werden::</Text>
+			<Text id="ghtz5" xml:lang="cs">Před instalací OpenOffice.org je třeba nainstalovat několik patchů operačního systému od SUN Microsystems. Najdete je na CD programu v následujícím adresáři nebo na http://sunsolve.sun.com</Text>
+			<Text id="ghtz5" xml:lang="sk">Pred inštaláciou OpenOffice.org je potrebné nainštalovať niekoľko patchov operačného systému od SUN Microsystems. Nájdete ich na CD programu v nasledujúcom adresári alebo na http://sunsolve.sun.com</Text>
 		</Paragraph>
 		<Paragraph id="Sols3" os="SOLARIS">
 			<Text id="dfg4tr" xml:lang="de">Benötigte Betriebssystem-Patches:</Text>
@@ -644,6 +768,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="dfg4tr" xml:lang="tr">Benötigte Betriebssystem Patche:</Text>
 			<Text id="dfg4tr" xml:lang="ar">Benِtigte Betriebssystem Patche:</Text>
 			<Text id="dfg4tr" xml:lang="ca">Benötigte Betriebssystem Patche:</Text>
+			<Text id="dfg4tr" xml:lang="cs">Potřebné patche operačního systému:</Text>
+			<Text id="dfg4tr" xml:lang="sk">Potrebné patche operačného systému:</Text>
 		</Paragraph>
 		<Paragraph id="Sols_Patch" os="SOLARIS" cpuname="SPARC">
 			<List>
@@ -668,6 +794,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="dd3s" xml:lang="tr">für Solaris 7: 106327-11, 106300-16 (nur 64 bit)</Text>
 				<Text id="dd3s" xml:lang="ar">für Solaris 7: 106327-11, 106300-16 (nur 64 bit)</Text>
 				<Text id="dd3s" xml:lang="ca">für Solaris 7: 106327-11, 106300-16 (nur 64 bit)</Text>
+				<Text id="dd3s" xml:lang="cs">pro Solaris 7: 106327-11, 106300-16 (pouze 64 bit)</Text>
+				<Text id="dd3s" xml:lang="sk">pre Solaris 7: 106327-11, 106300-16 (len 64 bit)</Text>
 				<Text id="xch3" xml:lang="de">für Solaris 8: 108434-04, 108773-13, 108435-04 (nur 64 bit), 109147-14</Text>
 				<Text id="xch3" xml:lang="en-US">for Solaris 8: 108434-04, 108773-13, 108435-04 (only 64 bit), 109147-14</Text>
 				<Text id="xch3" xml:lang="pt">für Solaris 8: 108434-04, 108773-13, 108435-04 (nur 64 bit), 109147-14</Text>
@@ -689,6 +817,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="xch3" xml:lang="tr">für Solaris 8: 108434-04, 108773-13, 108435-04 (nur 64 bit), 109147-14</Text>
 				<Text id="xch3" xml:lang="ar">für Solaris 8: 108434-04, 108773-13, 108435-04 (nur 64 bit), 109147-14</Text>
 				<Text id="xch3" xml:lang="ca">für Solaris 8: 108434-04, 108773-13, 108435-04 (nur 64 bit), 109147-14</Text>
+				<Text id="xch3" xml:lang="cs">pro Solaris 8: 108434-04, 108773-13, 108435-04 (pouze 64 bit), 109147-14</Text>
+				<Text id="xch3" xml:lang="sk">pre Solaris 8: 108434-04, 108773-13, 108435-04 (len 64 bit), 109147-14</Text>
 			</List>
 		</Paragraph>
 		<Paragraph id="Soli_Patch" os="SOLARIS" cpuname="INTEL">
@@ -714,6 +844,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="bg4" xml:lang="tr">für Solaris 7: 106328-08</Text>
 				<Text id="bg4" xml:lang="ar">für Solaris 7: 106328-08</Text>
 				<Text id="bg4" xml:lang="ca">für Solaris 7: 106328-08</Text>
+				<Text id="bg4" xml:lang="cs">pro Solaris 7: 106328-08</Text>
+				<Text id="bg4" xml:lang="sk">pre Solaris 7: 106328-08</Text>
 				<Text id="fg4" xml:lang="de">für Solaris 8: 108436-01, 108774-12</Text>
 				<Text id="fg4" xml:lang="en-US">for Solaris 8: 108436-01, 108774-12</Text>
 				<Text id="fg4" xml:lang="pt">für Solaris 8: 108436-01, 108774-12</Text>
@@ -735,6 +867,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 				<Text id="fg4" xml:lang="tr">für Solaris 8: 108436-01, 108774-12</Text>
 				<Text id="fg4" xml:lang="ar">für Solaris 8: 108436-01, 108774-12</Text>
 				<Text id="fg4" xml:lang="ca">für Solaris 8: 108436-01, 108774-12</Text>
+				<Text id="fg4" xml:lang="cs">pro Solaris 8: 108436-01, 108774-12</Text>
+				<Text id="fg4" xml:lang="sk">pre Solaris 8: 108436-01, 108774-12</Text>
 			</List>
 		</Paragraph>
 		<Paragraph id="P_Note" os="SOLARIS">
@@ -759,6 +893,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="dfgferd34" xml:lang="tr">Die oben genannten Revisionsangaben sind Mindestangaben, neuere (höhere) Revisionsnummern sind ebenfalls zulässig.</Text>
 			<Text id="dfgferd34" xml:lang="ar">Die oben genannten Revisionsangaben sind Mindestangaben, neuere (hِhere) Revisionsnummern sind ebenfalls zulنssig.</Text>
 			<Text id="dfgferd34" xml:lang="ca">Die oben genannten Revisionsangaben sind Mindestangaben, neuere (höhere) Revisionsnummern sind ebenfalls zulässig.</Text>
+			<Text id="dfgferd34" xml:lang="cs">Zmíněné verze jsou minimální požadavky, fungovat budou i novější verze.</Text>
+			<Text id="dfgferd34" xml:lang="sk">Spomínané verzie sú len minimálne požiadavky, fungovať budú aj novšie verzie.</Text>
 		</Paragraph>
 		<Paragraph id="B2l3">
 			<Text id="erter343534" xml:lang="de">OpenOffice.org 1.1 kann parallel zu einer älteren Version von OpenOffice.org installiert werden. Im Falle einer späteren Deinstallation des alten OpenOffice.org muss das Installationsprogramm Programm der neuen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wird sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
@@ -782,6 +918,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="erter343534" xml:lang="tr">OpenOffice.org 1.1 kann parallel zu einer älteren Version von OpenOffice.org installiert werden. Nach der Deinstallation der alten OpenOffice.org Version muss das Setup Programm der aktuellen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wir sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
 			<Text id="erter343534" xml:lang="ar">OpenOffice.org 1.1 kann parallel zu einer نlteren Version von OpenOffice.org installiert werden. Nach der Deinstallation der alten OpenOffice.org Version muss das Setup Programm der aktuellen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wir sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
 			<Text id="erter343534" xml:lang="ca">OpenOffice.org 1.1 kann parallel zu einer älteren Version von OpenOffice.org installiert werden. Nach der Deinstallation der alten OpenOffice.org Version muss das Setup Programm der aktuellen Version aufgerufen und eine Reparatur durchgeführt werden. Dadurch wir sichergestellt, dass die aktuelle Version korrekt im System angemeldet ist.</Text>
+			<Text id="erter343534" xml:lang="cs">OpenOffice.org 1.1 můžete instalovat paralelně se starší verzí. Když se později rozhodnete odinstalovat předchozí verzi OpenOffice.org, musíte spustit instalační program novější verze a zvolit Opravit. To zajistí, že bude novější verze správně zaregistrována do systému.</Text>
+			<Text id="erter343534" xml:lang="sk">OpenOffice.org 1.1 môžete inštalovať paralelne so staršou verziou. Keď sa neskôr rozhodnete odinštalovať predchádzajúcu verziu OpenOffice.org, musíte spustiť inštalační program novšej verzie a zvoliť Opraviť. To zaistí, že bude novšia verzia správne zaregistrovaná do systému.</Text>
 			<Text id="erter34353ew4" xml:lang="de" Wrap="true">Bitte beachten Sie, dass das Kopieren und Einfügen über die Zwischenablage zwischen OpenOffice.org 1.0 und OpenOffice.org 1.1 im OpenOffice.org-Format teilweise nicht funktioniert. Rufen Sie in einem solchem Fall den Dialog Bearbeiten-Inhalte einfügen auf und wählen Sie ein anderes Format als OpenOffice.org aus oder öffnen Sie stattdessen das betreffende Dokument in OpenOffice.org 1.1 direkt.</Text>
 			<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between OpenOffice.org 1.0 and OpenOffice.org 1.1 might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than OpenOffice.org, or open the document in OpenOffice.org 1.1 directly.</Text>
 			<Text id="erter34353ew4" xml:lang="pt" Wrap="true">Please note that copy and paste via clipboard in between OpenOffice.org/StarSuite 1.0 and OpenOffice.org might not work. Instead please open the document in question direct in OpenOffice.org instead.</Text>
@@ -804,10 +942,14 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="erter34353ew4" xml:lang="zh-TW" Wrap="true">Please note that copy and paste via clipboard in between OpenOffice.org/StarSuite 1.0 and OpenOffice.org might not work. Instead please open the document in question direct in OpenOffice.org instead.</Text>
 			<Text id="erter34353ew4" xml:lang="ar" Wrap="true">Please note that copy and paste via clipboard in between OpenOffice.org/StarSuite 1.0 and OpenOffice.org might not work. Instead please open the document in question direct in OpenOffice.org instead.</Text>
 			<Text id="erter34353ew4" xml:lang="ca" Wrap="true">Please note that copy and paste via clipboard in between OpenOffice.org/StarSuite 1.0 and OpenOffice.org might not work. Instead please open the document in question direct in OpenOffice.org instead.</Text>
+			<Text id="erter34353ew4" xml:lang="cs" Wrap="true">Poznámka: kopírování a vkládání přes schránku mezi OpenOffice.org 1.0 a OpenOffice.org 1.1 nemusí ve formátu OpenOffice.org fungovat. Pokud k tomu dojde, zvolte &apos;Úpravy - Vložit jinak&apos; a vyberte jiný formát než OpenOffice.org, nebo otevřete dokument přímo v OpenOffice.org 1.1.</Text>
+			<Text id="erter34353ew4" xml:lang="sk" Wrap="true">Poznámka: kopírovanie a vkladanie cez schránku medzi OpenOffice.org 1.0 a OpenOffice.org 1.1 nemusí vo formáte OpenOffice.org fungovať. Pokiaľ k tomu dôjde, zvoľte &apos;Úpravy - Vložiť inak&apos; a vyberte iný formát ako OpenOffice.org, alebo otvorte dokument priamo v OpenOffice.org 1.1.</Text>
 		</Paragraph>
 		<Paragraph id="B3">
 			<Text id="erte53t434534" xml:lang="de">Bitte stellen Sie sicher, dass genügend freier Speicherplatz im temporären Verzeichnis Ihres Systems vorhanden ist und dass für dieses Verzeichnis Schreib-, Lese- und Ausführungsrechte gesetzt sind. Bitte beachten Sie, dass während der Installation kein anderes Programm ausgeführt werden darf.</Text>
 			<Text id="erte53t434534" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</Text>
+			<Text id="erte53t434534" xml:lang="cs">Zkontrolujte dostatek volného místa v adresáři pro dočasná data a zda máte práva ke čtení, zápisu a spouštění. Před začátkem instalace ukončete všechny ostatní programy.</Text>
+			<Text id="erte53t434534" xml:lang="sk">Skontrolujte dostatok voľného miesta v adresári pre dočasné dáta a či máte práva pre čítanie, zapisovanie a spúšťanie. Pred začiatkom inštalácie skončte všetky ostatné programy.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Networkinstallation">
@@ -833,6 +975,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sddf3f" xml:lang="tr">Netzwerkinstallation: Fehler beim Aufruf des OpenOffice.org Schnellstarter</Text>
 			<Text id="sddf3f" xml:lang="ar">Netzwerkinstallation: Fehler beim Aufruf des OpenOffice.org Schnellstarter</Text>
 			<Text id="sddf3f" xml:lang="ca">Netzwerkinstallation: Fehler beim Aufruf des OpenOffice.org Schnellstarter</Text>
+			<Text id="sddf3f" xml:lang="cs">Síťová instalace: chyba při spuštění OpenOffice.org QuickStarter</Text>
+			<Text id="sddf3f" xml:lang="sk">Sieťová inštalácia: chyba pri spúšťaní OpenOffice.org QuickStarter</Text>
 		</Paragraph>
 		<Paragraph id="s2" os="WNT">
 			<Text id="dew32f" xml:lang="de">Sollte es während des Systemstarts zu Problemen beim Aufruf des OpenOffice.org Schnellstarters kommen (üngültige Verknüpfung), so liegt dieses wahrscheinlich darin begründet, dass das Netzwerklaufwerk, auf dem die dazugehörige Netzwerkinstallation installiert wurde, nicht oder noch nicht zur Verfügung steht.</Text>
@@ -856,6 +1000,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="dew32f" xml:lang="tr">Sollte es während des Systemstarts zu Problemen beim Aufruf des OpenOffice.org Schnellstarters kommen (üngültige Verknüpfung), so liegt dieses wahrscheinlich darin begründet, dass das Netzwerklaufwerk, auf dem die dazugehörige Netzwerkinstallation installiert wurde, nicht oder noch nicht zur Verfügung steht.</Text>
 			<Text id="dew32f" xml:lang="ar">Sollte es wنhrend des Systemstarts zu Problemen beim Aufruf des OpenOffice.org Schnellstarters kommen (üngültige Verknüpfung), so liegt dieses wahrscheinlich darin begründet, dass das Netzwerklaufwerk, auf dem die dazugehِrige Netzwerkinstallation installiert wurde, nicht oder noch nicht zur Verfügung steht.</Text>
 			<Text id="dew32f" xml:lang="ca">Sollte es während des Systemstarts zu Problemen beim Aufruf des OpenOffice.org Schnellstarters kommen (üngültige Verknüpfung), so liegt dieses wahrscheinlich darin begründet, dass das Netzwerklaufwerk, auf dem die dazugehörige Netzwerkinstallation installiert wurde, nicht oder noch nicht zur Verfügung steht.</Text>
+			<Text id="dew32f" xml:lang="cs">Pokud se při startu systému objeví problémy s OpenOffice.org Quickstarterem (např. neplatný odkaz), může to být způsobeno, že v okamžiku spuštění síťové instalace není k dispozici síťový disk, na kterém se nachází síťová instalace.</Text>
+			<Text id="dew32f" xml:lang="sk">Pokiaľ sa pri štarte systému objavia problémy s OpenOffice.org Quickstar (napr. neplatný odkaz), môže to byť spôsobené tým, že v momente spustenia sieťovej inštalácie nie je k dispozícii sieťový disk, na ktorom sa nachádza sieťová inštalácia.</Text>
 		</Paragraph>
 		<Paragraph id="d2" os="WNT">
 			<Text id="df3df" xml:lang="de">In den meisten Fällen geschieht dieses, wenn die Anmeldung der Netzwerklaufwerke über ein Login-Script erfolgt und so die Verbindung der Netzwerklaufwerke parallel mit dem Ausführen der Programme der Autostartgruppe stattfindet, aus der auch der Schnellstarter gestartet wird.</Text>
@@ -879,6 +1025,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="df3df" xml:lang="tr">In den meisten Fällen geschieht dieses, wenn die Anmeldung der Netzwerklaufwerke über ein Login-Script erfolgt und so die Verbindung der Netzwerklaufwerke parallel mit dem Ausführen der Programme der Autostartgruppe stattfindet, aus der auch der Schnellstarter gestartet wird.</Text>
 			<Text id="df3df" xml:lang="ar">In den meisten Fنllen geschieht dieses, wenn die Anmeldung der Netzwerklaufwerke über ein Login-Script erfolgt und so die Verbindung der Netzwerklaufwerke parallel mit dem Ausführen der Programme der Autostartgruppe stattfindet, aus der auch der Schnellstarter gestartet wird.</Text>
 			<Text id="df3df" xml:lang="ca">In den meisten Fällen geschieht dieses, wenn die Anmeldung der Netzwerklaufwerke über ein Login-Script erfolgt und so die Verbindung der Netzwerklaufwerke parallel mit dem Ausführen der Programme der Autostartgruppe stattfindet, aus der auch der Schnellstarter gestartet wird.</Text>
+			<Text id="df3df" xml:lang="cs">Ve většině případů toto nastane v okamžiku, když se síťový disk připojuje pomocí login skriptu, a tudíž se připojuje ve stejný okamžik jako skupina autostart, z níž se spouští Quickstarter.</Text>
+			<Text id="df3df" xml:lang="sk">Vo väčšine prípadov toto nastane v okamihu, keď sa sieťový disk pripája pomocou login skriptu, a zároveň sa pripája v tom istom momente ako skupina autostart, z ktorej sa spúšťa Quickstarter.</Text>
 		</Paragraph>
 		<Paragraph id="d3" os="WNT">
 			<Text id="sd23f" xml:lang="de">Um dieses Problem zu umgehen, sollte das Netzwerklaufwerk nach Möglichkeit über die systemeigenen Dienste verbunden werden. Sollte dieses nicht möglich sein, kann alternativ der Link zum Aufrufen des Schnellstarters aus der Autostartgruppe des Systems entfernt werden, bzw. der Schnellstarter schon bei der Installation der Workstation Installation abgewählt werden. Wählt der Systemadministrator bereits beim Installieren der Netzwerkinstallation den Schnellstarter ab, so kann dieser bei einer späteren Workstation-Installation nicht durch den Benutzer zur Installation ausgewählt werden.</Text>
@@ -902,6 +1050,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sd23f" xml:lang="tr">Um dieses Problem zu umgehen, sollte das Netzwerklaufwerk nach Möglichkeit über die systemeigenen Dienste verbunden werden. Sollte dieses nicht möglich sein, kann alternativ der Link zum Aufrufen des Schnellstarters aus der Autostartgruppe des Systems entfernt werden, bzw. der Schnellstarter schon bei der Installation der Workstation Installation abgewählt werden. Wählt der Systemadministrator bereits beim Installieren der Netzwerkinstallation den Schnellstarter ab, so kann dieser bei einer späteren Workstation-Installation nicht durch den Benutzer zur Installation ausgewählt werden.</Text>
 			<Text id="sd23f" xml:lang="ar">Um dieses Problem zu umgehen, sollte das Netzwerklaufwerk nach Mِglichkeit über die systemeigenen Dienste verbunden werden. Sollte dieses nicht mِglich sein, kann alternativ der Link zum Aufrufen des Schnellstarters aus der Autostartgruppe des Systems entfernt werden, bzw. der Schnellstarter schon bei der Installation der Workstation Installation abgewنhlt werden. Wنhlt der Systemadministrator bereits beim Installieren der Netzwerkinstallation den Schnellstarter ab, so kann dieser bei einer spنteren Workstation-Installation nicht durch den Benutzer zur Installation ausgewنhlt werden.</Text>
 			<Text id="sd23f" xml:lang="ca">Um dieses Problem zu umgehen, sollte das Netzwerklaufwerk nach Möglichkeit über die systemeigenen Dienste verbunden werden. Sollte dieses nicht möglich sein, kann alternativ der Link zum Aufrufen des Schnellstarters aus der Autostartgruppe des Systems entfernt werden, bzw. der Schnellstarter schon bei der Installation der Workstation Installation abgewählt werden. Wählt der Systemadministrator bereits beim Installieren der Netzwerkinstallation den Schnellstarter ab, so kann dieser bei einer späteren Workstation-Installation nicht durch den Benutzer zur Installation ausgewählt werden.</Text>
+			<Text id="sd23f" xml:lang="cs">Pro odstranění problému je třeba, aby se síťový disk připojoval prostřednictvím síťových služeb. Pokud to není možné, pak je třeba odstranit Quickstarter ze skupiny autostart nebo ho zcela vypnout při instalaci pracovní stanice. Pokud správce systému již vypnul během instalace Quickstarter, pak ho není možné později znovu aktivovat.</Text>
+			<Text id="sd23f" xml:lang="sk">Pre odstránenie problémov je potrebné, aby sa sieťový disk pripájal pomocou sieťových služieb. Pokiaľ to nie je možné, musíte odstrániť Quickstarter zo skupiny autostart, alebo ho vypnúť celkom pri inštalácii pracovnej stanice. V prípade, že správca systému už Quickstarter vypol počas inštalácie, potom už nie je možné znovu ho aktivovať.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="CDE">
@@ -927,6 +1077,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="asas" xml:lang="tr">Deinstallation einer Netzwerkinstallation unter Common Desktop Environment (CDE)</Text>
 			<Text id="asas" xml:lang="ar">Deinstallation einer Netzwerkinstallation unter Common Desktop Environment (CDE)</Text>
 			<Text id="asas" xml:lang="ca">Deinstallation einer Netzwerkinstallation unter Common Desktop Environment (CDE)</Text>
+			<Text id="asas" xml:lang="cs">Odinstalace síťové instalace v prostředí Common Common Desktop Environment (CDE)</Text>
+			<Text id="asas" xml:lang="sk">Odinštalovanie sieťovej inštalácie v prostredí Common Desktop Environment (CDE)</Text>
 		</Paragraph>
 		<Paragraph id="saw" os="SOLARIS">
 			<Text id="asd3" xml:lang="de">Die bei einer Netzwerkinstallation im CDE angelegten Verweise werden bei der Deinstallation nicht automatisch entfernt. Um die Verweise aus dem CDE zu entfernen, muss vor der Deinstallation folgende Befehlszeile als Administrator (root) eingegeben werden: /usr/dt/bin/dtappintegrate -u -s [Pfad zu OpenOffice.org].</Text>
@@ -950,6 +1102,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="asd3" xml:lang="tr">Die bei einer Netzwerkinstallation im CDE angelegten Verweise werden bei der Deinstallation nicht automatisch entfernt. Um die Verweise aus dem CDE zu entfernen, muss vor der Deinstallation folgende Befehlszeile als Administrator (root) eingegeben werden: /usr/dt/bin/dtappintegrate -u -s [Pfad zu OpenOffice.org].</Text>
 			<Text id="asd3" xml:lang="ar">Die bei einer Netzwerkinstallation im CDE angelegten Verweise werden bei der Deinstallation nicht automatisch entfernt. Um die Verweise aus dem CDE zu entfernen, muss vor der Deinstallation folgende Befehlszeile als Administrator (root) eingegeben werden: /usr/dt/bin/dtappintegrate -u -s [Pfad zu OpenOffice.org].</Text>
 			<Text id="asd3" xml:lang="ca">Die bei einer Netzwerkinstallation im CDE angelegten Verweise werden bei der Deinstallation nicht automatisch entfernt. Um die Verweise aus dem CDE zu entfernen, muss vor der Deinstallation folgende Befehlszeile als Administrator (root) eingegeben werden: /usr/dt/bin/dtappintegrate -u -s [Pfad zu OpenOffice.org].</Text>
+			<Text id="asd3" xml:lang="cs">Během odinstalace se neodstraní odkazy vytvořené síťovou instalací v CDE. Pro odstranění odkazů z CDE zadejte před odinstalací jako Administrátor (root) následující příkaz: /usr/dt/bin/dtappintegrate -u -s [cesta k OpenOffice.org].</Text>
+			<Text id="asd3" xml:lang="sk">Počas odinštalovania sa neodstránia odkazy vytvorené sieťovou inštaláciou v CDE. Pre odstránenie odkazov z CDE zadajte pred odinštaláciou ako Administrátor (root) následujúci príkaz: /usr/dt/bin/dtappintegrate -u -s [cesta k OpenOffice.org].</Text>
 		</Paragraph>
 		<Paragraph id="df3d" os="SOLARIS">
 			<Text id="ef3s" xml:lang="de">Beispiel: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.1</Text>
@@ -973,6 +1127,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="ef3s" xml:lang="tr">Beispiel: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.1</Text>
 			<Text id="ef3s" xml:lang="ar">Beispiel: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.1</Text>
 			<Text id="ef3s" xml:lang="ca">Beispiel: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.1</Text>
+			<Text id="ef3s" xml:lang="cs">Například: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.1</Text>
+			<Text id="ef3s" xml:lang="sk">Napríklad: /usr/dt/bin/dtappintegrate -u -s /usr/local/OpenOffice.org1.1</Text>
 		</Paragraph>
 	</Section>
 	<Section id="SessionManager">
@@ -999,6 +1155,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="naso" xml:lang="ar">Problems During Program Startup on Gnome</Text>
 			<Text id="naso" xml:lang="ca">Problems During Program Startup on Gnome</Text>
 			<Text id="naso" xml:lang="th">Problems During Program Startup on Gnome</Text>
+			<Text id="naso" xml:lang="cs">Potíže při startu programu v Gnome</Text>
+			<Text id="naso" xml:lang="sk">Problémy pri štarte programu v Gnome</Text>
 		</Paragraph>
 		<Paragraph id="F1b" gui="UNX">
 			<Text id="naso2" xml:lang="de">Sollte es beim OpenOffice.org-Programmstart zu Problemen kommen (meistens im Zusammenhang mit Gnome) müssen Sie die Umgebungsvariable "SESSION_MANAGER" innerhalb der für den OpenOffice.org-Start benutzte Shell umdefinieren. Dies können Sie tun, in dem Sie "unset SESSION_MANAGER" am Anfang des soffice Shell-Scriptes einfügen, dass Sie im Verzeichnis "[Office Verzeichnis]/program" finden können.</Text>
@@ -1023,6 +1181,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="naso2" xml:lang="ar">If you experience OpenOffice.org startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start OpenOffice.org. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
 			<Text id="naso2" xml:lang="ca">If you experience OpenOffice.org startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start OpenOffice.org. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
 			<Text id="naso2" xml:lang="th">If you experience OpenOffice.org startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start OpenOffice.org. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
+			<Text id="naso2" xml:lang="cs">Pokud při startu OpenOffice.org pozorujete problémy (hlavně při používání Gnome), použijte v příkazovém interpretu, z něhož spouštíte OpenOffice.org, příkaz &apos;unset&apos; ke zrušení proměnné prostředí SESSION_MANAGER. Můžete to zařídit přidáním řádku &quot;unset SESSION_MANAGER&quot; na začátek skriptu soffice, který se nachází v adresáři &quot;[adresář OpenOffice.org]/program&quot;.</Text>
+			<Text id="naso2" xml:lang="sk">Pokiaľ pri štarte OpenOffice.org spozorujete problémy (hlavne pri používaní Gnome), použite v príkazovom interpreteri, z ktorého spúšťate OpenOffice.org, príkaz &apos;unset&apos; pre zrušenie premennej prostredia SESSION_MANAGER. Môžete to zariadiť pridaním riadku &quot;unset SESSION_MANAGER&quot; na začiatok skriptu soffice, ktorý sa nachádza v adresári &quot;[adresár OpenOffice.org]/program&quot;.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="ArabicFont">
@@ -1049,6 +1209,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe" xml:lang="ar">Important Information for Arabic and Hebrew Versions</Text>
 			<Text id="abdfe" xml:lang="ca">Important Information for Arabic and Hebrew Versions</Text>
 			<Text id="abdfe" xml:lang="th">Important Information for Arabic and Hebrew Versions</Text>
+			<Text id="abdfe" xml:lang="cs">Důležitá informace pro arabskou a hebrejskou verzi</Text>
+			<Text id="abdfe" xml:lang="sk">Dôležitá informácia pre arabské a hebrejské verzie</Text>
 		</Paragraph>
 		<Paragraph id="F2b" os="none" gui="UNX">
 			<Text id="abdfe2" xml:lang="de">Sollte die Benutzungsoberfläche der arabischen oder hebräischen Versionen nur Leerzeichen oder Rechtecke statt Text anzeigen, dann installieren Sie bitte das neueste Java Runtime Environment (JRE 1.4.1) bevor das OpenOffice.org-Installationsprogramm gestartet wird. Das JRE installiert die benötigten Schriftarten für die arabische und hebräische Versionen.</Text>
@@ -1073,6 +1235,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe2" xml:lang="ar">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the OpenOffice.org Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
 			<Text id="abdfe2" xml:lang="ca">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the OpenOffice.org Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
 			<Text id="abdfe2" xml:lang="th">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the OpenOffice.org Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
+			<Text id="abdfe2" xml:lang="cs">Pokud se v uživatelském rozhraní arabské či hebrejské verze místo textu zobrazují prázdná místa nebo čtverečky, nainstalujte, prosím, před spuštěním instalačního programu OpenOffice.org nejnovější Java Runtime Environment (JRE 1.4.1). JRE nainstaluje fonty potřebné pro arabskou a hebrejskou verzi.</Text>
+			<Text id="abdfe2" xml:lang="sk">Pokiaľ sa v užívateľskom rozhraní arabskej alebo hebrejskej verzie namiesto textu zobrazujú prázdne miesta alebo štvorčeky, nainštalujte, prosím, pred spustením inštalačného programu OpenOffice.org najnovší Java Runtime Environment (JRE 1.4.1). JRE nainštaluje písma potrebné pre arabskú a hebrejskú verziu.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="AsianVersions">
@@ -1099,6 +1263,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe" xml:lang="zh-TW">Important Information for Asian Versions</Text>
 			<Text id="abdfe" xml:lang="ar">Important Information for Asian Versions</Text>
 			<Text id="abdfe" xml:lang="ca">Important Information for Asian Versions</Text>
+			<Text id="abdfe" xml:lang="cs">Důležité informace pro asijské verze</Text>
+			<Text id="abdfe" xml:lang="sk">Dôležité informácie pre ázijské verzie</Text>
 		</Paragraph>
 		<Paragraph id="F2bd" style="H3" os="LINUX">
 			<Text id="abdfe2" xml:lang="de">Überprüfen der Eingabesequenz für thailändisch</Text>
@@ -1123,6 +1289,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe2" xml:lang="zh-TW">Thai input sequence checking</Text>
 			<Text id="abdfe2" xml:lang="ar">Thai input sequence checking</Text>
 			<Text id="abdfe2" xml:lang="ca">Thai input sequence checking</Text>
+			<Text id="abdfe2" xml:lang="cs">Kontrola thajského vstupu</Text>
+			<Text id="abdfe2" xml:lang="sk">Kontrola thajského vstupu</Text>
 		</Paragraph>
 		<Paragraph id="F2cd" os="LINUX">
 			<Text id="abdfe3" xml:lang="de">In einem “th_TH” Gebietsschema führt der Thai XIM die Prüfung der Eingangssequenz selbst durch. Dadurch ist OpenOffice.org nicht in der Lage, die Normalisierung und Autokorrektur der Eingabesequenz selbst vorzunehmen. </Text>
@@ -1147,6 +1315,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe3" xml:lang="zh-TW">In a ﾓth_THﾔ locale the Thai XIM will do the input sequence check so OpenOffice.org will not be able to normalize and auto-correct the Thai input sequences.</Text>
 			<Text id="abdfe3" xml:lang="ar">In a “th_TH” locale the Thai XIM will do the input sequence check so OpenOffice.org will not be able to normalize and auto-correct the Thai input sequences.</Text>
 			<Text id="abdfe3" xml:lang="ca">In a “th_TH” locale the Thai XIM will do the input sequence check so OpenOffice.org will not be able to normalize and auto-correct the Thai input sequences.</Text>
+			<Text id="abdfe3" xml:lang="cs">Při nastavení locale "th_TH" se o kontrolu vstupu postará Thai XIM. To znamená, že OpenOffice.org nemůže normalizovat a automaticky opravovat thajské vstupní sekvence.</Text>
+			<Text id="abdfe3" xml:lang="sk">Pri nastavení locale "th_TH" sa o kontrolu vstupu postará Thai XIM. To znamená, že OpenOffice.org nemôže normalizovať a automaticky opravovať thajské vstupné sekvencie.</Text>
 		</Paragraph>
 		<Paragraph id="F2dd" os="LINUX">
 			<Text id="abdfe4" xml:lang="de">Bitte ändern Sie folgende Zeilen in Ihren User Environment-Einstellungen bevor Sie die Applikation starten.</Text>
@@ -1171,6 +1341,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe4" xml:lang="zh-TW">Please change the following line in your user environment settings before running the application.</Text>
 			<Text id="abdfe4" xml:lang="ar">Please change the following line in your user environment settings before running the application.</Text>
 			<Text id="abdfe4" xml:lang="ca">Please change the following line in your user environment settings before running the application.</Text>
+			<Text id="abdfe4" xml:lang="cs">Před spuštěním aplikace, prosím, změňte následující řádky ve svém uživatelském nastavení prostředí.</Text>
+			<Text id="abdfe4" xml:lang="sk">Pred spustením aplikácie, prosím, zmeňte nasledujúce riadky vo svojom užívateľskom nastavení prostredia.</Text>
 		</Paragraph>
 		<Paragraph id="F2ed" os="LINUX">
 			<Text id="abdfe4" xml:lang="de">XMODIFIERS="@im=BasicCheck” oder XMODIFIERS="@im=Strict”</Text>
@@ -1195,6 +1367,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe4" xml:lang="zh-TW">XMODIFIERS=&quot;@im=BasicCheckﾔ or XMODIFIERS=&quot;@im=Strictﾔ</Text>
 			<Text id="abdfe4" xml:lang="ar">XMODIFIERS=&quot;@im=BasicCheck” or XMODIFIERS=&quot;@im=Strict”</Text>
 			<Text id="abdfe4" xml:lang="ca">XMODIFIERS=&quot;@im=BasicCheck” or XMODIFIERS=&quot;@im=Strict”</Text>
+			<Text id="abdfe4" xml:lang="cs">XMODIFIERS=&quot;@im=BasicCheck” nebo XMODIFIERS=&quot;@im=Strict”</Text>
+			<Text id="abdfe4" xml:lang="sk">XMODIFIERS=&quot;@im=BasicCheck” alebo XMODIFIERS=&quot;@im=Strict”</Text>
 		</Paragraph>
 		<Paragraph id="F2fd" os="LINUX">
 			<Text id="abdfe5" xml:lang="de">in (bzw. fügen Sie die folgenden Zeilen hinzu, sollten sie nicht existieren)</Text>
@@ -1219,14 +1393,22 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="abdfe5" xml:lang="zh-TW">to (or add the following lines if they do not exist at all):</Text>
 			<Text id="abdfe5" xml:lang="ar">to (or add the following lines if they do not exist at all):</Text>
 			<Text id="abdfe5" xml:lang="ca">to (or add the following lines if they do not exist at all):</Text>
+			<Text id="abdfe5" xml:lang="cs">na (nebo přidejte následující řádky, pokud neexistují):</Text>
+			<Text id="abdfe5" xml:lang="sk">do (alebo pridajte nasledujúce riadky, pokiaľ neexistujú):</Text>
 		</Paragraph>
 		<Paragraph id="F2gd" os="LINUX" localized="false">
 			<Text id="abdfe6" xml:lang="de">XMODIFIERS="@im=none"</Text>
 			<Text id="abdfe6" xml:lang="en-US">XMODIFIERS="@im=none"</Text>
+			<Text id="abdfe6" xml:lang="cs">XMODIFIERS="@im=none"</Text>
+			<Text id="abdfe6" xml:lang="sk">XMODIFIERS="@im=none"</Text>
 			<Text id="wabdfe6" xml:lang="de" Wrap="true">export </Text>
 			<Text id="wabdfe6" xml:lang="en-US" Wrap="true">export </Text>
+			<Text id="wabdfe6" xml:lang="cs" Wrap="true">export </Text>
+			<Text id="wabdfe6" xml:lang="sk" Wrap="true">export </Text>
 			<Text id="ewabdfe6" xml:lang="de" Wrap="true">XMODIFIERS</Text>
 			<Text id="ewabdfe6" xml:lang="en-US" Wrap="true">XMODIFIERS</Text>
+			<Text id="ewabdfe6" xml:lang="cs" Wrap="true">XMODIFIERS</Text>
+			<Text id="ewabdfe6" xml:lang="sk" Wrap="true">XMODIFIERS</Text>
 		</Paragraph>
 	</Section>
 	<Section id="JavaAccessibility">
@@ -1253,6 +1435,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="aw22" xml:lang="ar">Important Accessibility Notes</Text>
 			<Text id="aw22" xml:lang="ca">Important Accessibility Notes</Text>
 			<Text id="aw22" xml:lang="th">Important Accessibility Notes</Text>
+			<Text id="aw22" xml:lang="cs">Důležité poznámky ke zpřístupnění</Text>
+			<Text id="aw22" xml:lang="sk">Dôležité poznámky k sprístupneniu</Text>
 		</Paragraph>
 		<Paragraph id="aw344">
 			<Text id="aw453" xml:lang="de">Durch ein Problem der Java(TM) Access Bridge ist es notwendig, die Sprache (das Gebietsschema) des Betriebssystems auf “Englisch (United States)“ (bzw. “EN-us“) einzustellen, um die Zusammenarbeit mit Programmen wie z.B. ZoomText zu ermöglichen. (Hinweis: Das Programm WindowEyes funktioniert nicht mit OpenOffice.org, da es die Java Accessibility API nicht unterstützt.)</Text>
@@ -1277,6 +1461,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="aw453" xml:lang="ar">Due to a problem within the Java(TM) Accessibility Bride it is necessary to set the operating system locale to &quot;English (United States)&quot;. Only this setting will enable co-operation with programs like ZoomText.</Text>
 			<Text id="aw453" xml:lang="ca">Due to a problem within the Java(TM) Accessibility Bride it is necessary to set the operating system locale to &quot;English (United States)&quot;. Only this setting will enable co-operation with programs like ZoomText.</Text>
 			<Text id="aw453" xml:lang="th">Due to a problem within the Java(TM) Accessibility Bride it is necessary to set the operating system locale to &quot;English (United States)&quot;. Only this setting will enable co-operation with programs like ZoomText.</Text>
+			<Text id="aw453" xml:lang="cs">Vzhledem k potížím s Java(TM) Access Bridge musíte nastavit jazyk systému na &quot;Anglicky (Spojené státy)&quot; nebo &quot;(EN-us)&quot;. Jedině při tomto nastavení můžete používat programy, jako např. ZoomText. (Poznámka: Program WindowsEyes nespolupracuje s OpenOffice.org, protože nepodporuje Java Accessibility API.)</Text>
+			<Text id="aw453" xml:lang="sk">Vzhľadom k problémom s Java(TM) Access Bridge musíte nastaviť jazyk systému na &quot;Anglický (Spojené štáty)&quot; alebo &quot;(EN-us)&quot;. Iba pri tomto nastavení môžete používať programy, ako napr. ZoomText. (Poznámka: Program WindowsEyes nespolupracuje s OpenOffice.org, pretože nepodporuje Java Accessibility API.)</Text>
 			<Text id="aw4333" xml:lang="de">Die Java(TM) Access Bridge, die mit dieser Early Access Version installiert wird, arbeitet  unter Umständen nicht richtig mit normalen Java Anwendung zusammen.</Text>
 			<Text id="aw4333" xml:lang="en-US">The Java(TM) Access Bridge installed with this early access version does not work properly with conventional Java applications.</Text>
 			<Text id="aw4333" xml:lang="pt">The Java(TM) Access Bridge installed with this early access version does not work properly with conventional Java applications.</Text>
@@ -1299,6 +1485,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="aw4333" xml:lang="ar">The Java(TM) Access Bridge installed with this early access version does not work properly with conventional Java applications.</Text>
 			<Text id="aw4333" xml:lang="ca">The Java(TM) Access Bridge installed with this early access version does not work properly with conventional Java applications.</Text>
 			<Text id="aw4333" xml:lang="th">The Java(TM) Access Bridge installed with this early access version does not work properly with conventional Java applications.</Text>
+			<Text id="aw4333" xml:lang="cs">Java(TM) Access Bridge nainstalovaný se staršími verzemi nespolupracuje správně s běžnými Java aplikacemi.</Text>
+			<Text id="aw4333" xml:lang="sk">Java(TM) Access Bridge nainštalovaný so staršími verziami nespolupracuje správne s bežnými Java aplikáciami.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Zoomtext">
@@ -1325,6 +1513,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="aw2" xml:lang="ar">Ai Squared ZoomText 7.11</Text>
 			<Text id="aw2" xml:lang="ca">Ai Squared ZoomText 7.11</Text>
 			<Text id="aw2" xml:lang="th">Ai Squared ZoomText 7.11</Text>
+			<Text id="aw2" xml:lang="cs">Ai Squared ZoomText 7.11</Text>
+			<Text id="aw2" xml:lang="sk">Ai Squared ZoomText 7.11</Text>
 		</Paragraph>
 		<Paragraph id="aw3" os="WNT">
 			<Text id="aw4" xml:lang="de">Für eine Zusammenarbeit mit OpenOffice.org 1.1 wird Ai Squared ZoomText 7.11 oder höher benötigt. Das Herunterladen dieser Version muss nach dem 12. Juni 2002 erfolgt sein, damit die nötigen Erweiterungen im Programm enthalten sind.</Text>
@@ -1349,6 +1539,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="aw4" xml:lang="ar">Ai Squared ZoomText 7.11 or higher is needed for working together with OpenOffice.org 1.1 . Date of download must be after 12th of June 2002 to contain all necessary enhancements within the program.</Text>
 			<Text id="aw4" xml:lang="ca">Ai Squared ZoomText 7.11 or higher is needed for working together with OpenOffice.org 1.1. Date of download must be after 12th of June 2002 to contain all necessary enhancements within the program.</Text>
 			<Text id="aw4" xml:lang="th">Ai Squared ZoomText 7.11 or higher is needed for working together with OpenOffice.org 1.1. Date of download must be after 12th of June 2002 to contain all necessary enhancements within the program.</Text>
+			<Text id="aw4" xml:lang="cs">Pokud chcete s OpenOffice.org 1.1 používat Ai Squared ZoomText, potřebujete verzi 7.11 nebo vyšší. Datum stažení Ai Squared ZoomText musí být 12. června 2002 nebo novější, aby obsahoval všechny potřebné vlastnosti.</Text>
+			<Text id="aw4" xml:lang="sk">Pokiaľ chcete s OpenOffice.org 1.1 používať Ai Squared ZoomText, potrebujete verziu 7.11 alebo vyššiu. Dátum stiahnutia Ai Squared ZoomText musí byť 12. júna 2002 alebo novší, aby obsahoval všetky potrebné vlastnosti.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Netscape">
@@ -1374,6 +1566,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdfsd32asrc" xml:lang="tr">Mozilla Adressbuch Treiber</Text>
 			<Text id="sdfsd32asrc" xml:lang="ar">Mozilla Adressbuch Treiber</Text>
 			<Text id="sdfsd32asrc" xml:lang="ca">Mozilla Adressbuch Treiber</Text>
+			<Text id="sdfsd32asrc" xml:lang="cs">Ovladač adresáře Mozilla</Text>
+			<Text id="sdfsd32asrc" xml:lang="sk">Ovládač adresára Mozilla</Text>
 		</Paragraph>
 		<Paragraph id="E33" os="SOLARIS">
 			<Text id="sdcc32asrc" xml:lang="de">Der Mozilla Adressbuch Treiber benötigt das Paket SUNWzlib. Dieses Paket ist nicht Bestandteil der minimalen Installation des Solaris Betriebssystems. Wenn Sie Zugriff auf das Mozilla Adressbuch benötigen, dann fügen Sie dieses Paket Ihrem Solaris Betriebssystem mittels des Kommandos "pkgadd" von der Installations-CD hinzu.</Text>
@@ -1397,6 +1591,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdcc32asrc" xml:lang="tr">Der Mozilla Adressbuch Treiber benötigt das Paket SUNWzlib. Dieses Paket ist nicht Bestandteil der minimalen Installation des Solaris Betriebssystems. Wenn Sie Zugriff auf das Mozilla Adressbuch benötigen, dann fügen Sie dieses Paket Ihrem Solaris Betriebssystem mittels des Kommandos &quot;pkgadd&quot; von der Installations-CD hinzu.</Text>
 			<Text id="sdcc32asrc" xml:lang="ar">Der Mozilla Adressbuch Treiber benِtigt das Paket SUNWzlib. Dieses Paket ist nicht Bestandteil der minimalen Installation des Solaris Betriebssystems. Wenn Sie Zugriff auf das Mozilla Adressbuch benِtigen, dann fügen Sie dieses Paket Ihrem Solaris Betriebssystem mittels des Kommandos &quot;pkgadd&quot; von der Installations-CD hinzu.</Text>
 			<Text id="sdcc32asrc" xml:lang="ca">Der Mozilla Adressbuch Treiber benötigt das Paket SUNWzlib. Dieses Paket ist nicht Bestandteil der minimalen Installation des Solaris Betriebssystems. Wenn Sie Zugriff auf das Mozilla Adressbuch benötigen, dann fügen Sie dieses Paket Ihrem Solaris Betriebssystem mittels des Kommandos &quot;pkgadd&quot; von der Installations-CD hinzu.</Text>
+			<Text id="sdcc32asrc" xml:lang="cs">Ovladač adresáře Mozilla vyžaduje balík SUNWzlib. Tento balík není součástí minimální instalace operačního systému Solaris. Pokud potřebujete přístup k adresáři Mozilla, přidejte tento balík z instalačního CD do svého operačního systému Solaris s pomocí příkazu &quot;pkgadd&quot;.</Text>
+			<Text id="sdcc32asrc" xml:lang="sk">Ovládač adresára Mozilla vyžaduje balík SUNWzlib. Tento balík nie je súčasťou minimálnej inštalácie operačného systému Solaris. Pokiaľ potrebujete prístup k adresáru Mozilla, pridajte tento balík z inštalačného CD do svojho operačného systému Solaris s pomocou príkazu &quot;pkgadd&quot;.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="UI_Font">
@@ -1422,6 +1618,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="awe" xml:lang="tr">Ändern der Schriftart für die Benutzeroberfläche</Text>
 			<Text id="awe" xml:lang="ar">ؤndern der Schriftart für die Benutzeroberflنche</Text>
 			<Text id="awe" xml:lang="ca">Ändern der Schriftart für die Benutzeroberfläche</Text>
+			<Text id="awe" xml:lang="cs">Změna písma pro uživatelské rozhraní</Text>
+			<Text id="awe" xml:lang="sk">Zmena písma pre užívateľské rozhranie</Text>
 		</Paragraph>
 		<Paragraph id="abc1">
 			<Text id="w32e" xml:lang="de">OpenOffice.org bietet die Möglichkeit, Schriften für die Anzeige und den Druck in OpenOffice.org durch eine andere auf dem System installierte Schriftart zu ersetzen. Dies geschieht mit Hilfe der Funktion 'Schriftersetzung', die Sie über das Menü Extras - Optionen - OpenOffice.org - Register Schriftersetzung erreichen.</Text>
@@ -1445,6 +1643,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="w32e" xml:lang="tr">OpenOffice.org bietet die Möglichkeit, Schriften für die Anzeige und den Druck in OpenOffice.org durch eine andere auf dem System installierte Schriftart zu ersetzen. Dies geschieht mit Hilfe der Funktion Schriftersetzung, die über das Menü im Menü Extras - Optionen - OpenOffice.org - Register Schriftersetzung zu erreichen ist.</Text>
 			<Text id="w32e" xml:lang="ar">OpenOffice.org bietet die Mِglichkeit, Schriften für die Anzeige und den Druck in OpenOffice.org durch eine andere auf dem System installierte Schriftart zu ersetzen. Dies geschieht mit Hilfe der Funktion Schriftersetzung, die über das Menü im Menü Extras - Optionen - OpenOffice.org - Register Schriftersetzung zu erreichen ist.</Text>
 			<Text id="w32e" xml:lang="ca">OpenOffice.org bietet die Möglichkeit, Schriften für die Anzeige und den Druck in OpenOffice.org durch eine andere auf dem System installierte Schriftart zu ersetzen. Dies geschieht mit Hilfe der Funktion Schriftersetzung, die über das Menü im Menü Extras - Optionen - OpenOffice.org - Register Schriftersetzung zu erreichen ist.</Text>
+			<Text id="w32e" xml:lang="cs">V OpenOffice.org můžete změnit písmo používané pro zobrazování na monitoru a pro tisk. K tomu slouží funkce náhrady písem. Pro přístup k funkci zvolte Nástroje - Volby - OpenOffice.org - Náhrada písem.</Text>
+			<Text id="w32e" xml:lang="sk">V OpenOffice.org môžete zmeniť písmo používané pre zobrazovanie na monitore a pre tlač. K tomu slúži funkcia náhrady písiem. Pre prístup k funkcii zvolte Nástroje - Voľby - OpenOffice.org - Náhrada písiem.</Text>
 		</Paragraph>
 		<Paragraph id="abc2">
 			<Text id="asw3" xml:lang="de">Um die Schriftart der Benutzeroberfläche von OpenOffice.org zu ändern, muss dort die Schrift "Andale Sans UI", die standardmäßig für die Benutzeroberfläche von OpenOffice.org verwendet wird, gegen eine beliebige andere Schriftart ersetzt und die Einstellung "immer" für die Ersetzung ausgewählt werden.</Text>
@@ -1468,6 +1668,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="asw3" xml:lang="tr">Um die Schriftart der Benutzeroberfläche von OpenOffice.org zu ändern, muss dort die Schrift &quot;Andale Sans UI&quot;, die standardmäßig für die Benutzeroberfläche von OpenOffice.org verwendet wird, gegen eine beliebige andere Schriftart ersetzt und die Einstellung &quot;immer&quot; für die Ersetzung ausgewählt werden.</Text>
 			<Text id="asw3" xml:lang="ar">Um die Schriftart der Benutzeroberflنche von OpenOffice.org zu نndern, muss dort die Schrift &quot;Andale Sans UI&quot;, die standardmنكig für die Benutzeroberflنche von OpenOffice.org verwendet wird, gegen eine beliebige andere Schriftart ersetzt und die Einstellung &quot;immer&quot; für die Ersetzung ausgewنhlt werden.</Text>
 			<Text id="asw3" xml:lang="ca">Um die Schriftart der Benutzeroberfläche von OpenOffice.org zu ändern, muss dort die Schrift &quot;Andale Sans UI&quot;, die standardmäßig für die Benutzeroberfläche von OpenOffice.org verwendet wird, gegen eine beliebige andere Schriftart ersetzt und die Einstellung &quot;immer&quot; für die Ersetzung ausgewählt werden.</Text>
+			<Text id="asw3" xml:lang="cs">Pro změnu písma uživatelského rozhraní stačí vyměnit výchozí písmo "Andale Sans UI" za jiné a nastavit "vždy".</Text>
+			<Text id="asw3" xml:lang="sk">Pre zmenu písma užívateľského rozhrania stačí vymeniť východzie písmo "Andale Sans UI" za iné a nastaviť "vždy".</Text>
 		</Paragraph>
 		<Paragraph id="abc3">
 			<Text id="sdf3" xml:lang="de">Eine ausführliche Erklärung des Dialogs entnehmen Sie bitte der OpenOffice.org-Hilfe</Text>
@@ -1491,6 +1693,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdf3" xml:lang="tr">Eine ausführliche Erklärung des Dialogs entnehmen Sie bitte der OpenOffice.org Online-Hilfe</Text>
 			<Text id="sdf3" xml:lang="ar">Eine ausführliche Erklنrung des Dialogs entnehmen Sie bitte der OpenOffice.org Online-Hilfe</Text>
 			<Text id="sdf3" xml:lang="ca">Eine ausführliche Erklärung des Dialogs entnehmen Sie bitte der OpenOffice.org Online-Hilfe</Text>
+			<Text id="sdf3" xml:lang="cs">Bližší informace naleznete v nápovědě OpenOffice.org.</Text>
+			<Text id="sdf3" xml:lang="sk">Bližšie informácie nájdete v Pomocníkovi OpenOffice.org.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Keyboard">
@@ -1517,6 +1721,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="awe1" xml:lang="ar">Shortcut Keys</Text>
 			<Text id="awe1" xml:lang="ca">Shortcut Keys</Text>
 			<Text id="awe1" xml:lang="th">Shortcut Keys</Text>
+			<Text id="awe1" xml:lang="cs">Klávesové zkratky</Text>
+			<Text id="awe1" xml:lang="sk">Klávesové skratky</Text>
 		</Paragraph>
 		<Paragraph id="abc12">
 			<Text id="w32e1" xml:lang="de">In OpenOffice.org können nur Tastenkombinationen benutzt werden, die nicht vom Betriebssystem verwendet werden. Sollte in OpenOffice.org eine Tastenkombination nicht wie in der OpenOffice.org-Hilfe beschrieben funktionieren, muss überprüft werden, ob diese Kombination bereits vom Betriebssystem verwendet wird. Um diesen Konflikt aufzuheben, kann die Belegung des Betriebssystems umdefiniert bzw. aufgehoben werden. Weiterhin bietet auch OpenOffice.org die Möglichkeit, die meisten Tastaturbelegungen von OpenOffice.org zu ändern. Weitere Hinweise zu diesem Thema bietet die OpenOffice.org-Hilfe sowie die Hilfe des Betriebssystems.</Text>
@@ -1541,6 +1747,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="w32e1" xml:lang="ar">Only shortcut keys (key combinations) not used by the operating system can be used in OpenOffice.org. If a key combination in OpenOffice.org does not work as described in the OpenOffice.org Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in OpenOffice.org. For more information on this topic, refer to the OpenOffice.org Help or the Help documention of your operating system.</Text>
 			<Text id="w32e1" xml:lang="ca">Only shortcut keys (key combinations) not used by the operating system can be used in OpenOffice.org. If a key combination in OpenOffice.org does not work as described in the OpenOffice.org Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in OpenOffice.org. For more information on this topic, refer to the OpenOffice.org Help or the Help documention of your operating system.</Text>
 			<Text id="w32e1" xml:lang="th">Only shortcut keys (key combinations) not used by the operating system can be used in OpenOffice.org. If a key combination in OpenOffice.org does not work as described in the OpenOffice.org Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in OpenOffice.org. For more information on this topic, refer to the OpenOffice.org Help or the Help documention of your operating system.</Text>
+			<Text id="w32e1" xml:lang="cs">V OpenOffice.org lze použít pouze klávesové zkratky, které nepoužívá operační systém. Pokud klávesová zkratka v OpenOffice.org nefunguje, jak je popsáno v nápovědě, zkontrolujte, zda tuto klávesovou zkratku již nepoužívá operační systém. Abyste předešli těmto konfliktům, můžete změnit klávesy používané operačním systémem. Anebo můžete změnit téměř všechny klávesové zkratky v OpenOffice.org. Bližší informace naleznete v nápovědě OpenOffice.org nebo dokumentaci operačního systému.</Text>
+			<Text id="w32e1" xml:lang="sk">V OpenOffice.org je možné použiť iba klávesové skratky, ktoré nepoužíva operačný systém. Pokiaľ klávesová skratka v OpenOffice.org nefunguje, tak ako je opísané v pomocníkovi, skontrolujte, či túto klávesovú skratku už nepoužíva operačný systém. Aby ste predišli týmto konfliktom, môžete zmeniť klávesy používané operačným systémom. Alebo môžete zmeniť takmer všetky klávesové skratky v OpenOffice.org. Bližšie informácie nájdete v pomocníkovi OpenOffice.org alebo v dokumentácii operačného systému.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="ReiserFS">
@@ -1566,6 +1774,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdf3" xml:lang="tr">Dateisystem ReiserFS: OpenOffice.org startet nicht bei Benutzer-ID größer als 65535</Text>
 			<Text id="sdf3" xml:lang="ar">Dateisystem ReiserFS: OpenOffice.org startet nicht bei Benutzer-ID grِكer als 65535</Text>
 			<Text id="sdf3" xml:lang="ca">Dateisystem ReiserFS: OpenOffice.org startet nicht bei Benutzer-ID größer als 65535</Text>
+			<Text id="sdf3" xml:lang="cs">Souborový systém ReiserFS: OpenOffice.org nespustí uživatel s ID vyšším než 65535</Text>
+			<Text id="sdf3" xml:lang="sk">Souborový systém ReiserFS: OpenOffice.org nespustí užívateľ s ID vyšším ako 65535</Text>
 		</Paragraph>
 		<Paragraph id="F22" gui="UNX">
 			<Text id="scs2" xml:lang="de">Das Dateisystem ReiserFS in einer Version kleiner als 3.6 führt zu Problemen, sobald die Benutzer-ID größer als 65535 ist. Diese äußern sich darin, dass von OpenOffice.org angelegte temporäre Dateien nicht mehr vom Programm selbst, sondern nur noch vom Systemadministrator entfernt werden können ( z.B. /tmp/OSL_PIPE_xxx ). Dies führt dazu, dass OpenOffice.org nicht mehr gestartet werden kann. Das geschilderte Verhalten ist ein Problem des Dateisystems ReiserFS und ist in Version 3.6 und höher behoben.</Text>
@@ -1589,6 +1799,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="scs2" xml:lang="tr">Das Dateisystem ReiserFS in einer Version kleiner als 3.6 führt zu Problemen, sobald die Benutzer-ID größer als 65535 ist. Diese äußern sich darin, dass von OpenOffice.org angelegte temporäre Dateien nicht mehr vom Programm selbst, sondern nur noch vom Systemadministrator entfernt werden können ( z.B. /tmp/OSL_PIPE_xxx ). Dies führt dazu, dass OpenOffice.org nicht mehr gestartet werden kann. Das geschilderte Verhalten ist ein Problem des Dateisystems ReiserFS und ist in Version 3.6 und höher behoben.</Text>
 			<Text id="scs2" xml:lang="ar">Das Dateisystem ReiserFS in einer Version kleiner als 3.6 führt zu Problemen, sobald die Benutzer-ID grِكer als 65535 ist. Diese نuكern sich darin, dass von OpenOffice.org angelegte temporنre Dateien nicht mehr vom Programm selbst, sondern nur noch vom Systemadministrator entfernt werden kِnnen ( z.B. /tmp/OSL_PIPE_xxx ). Dies führt dazu, dass OpenOffice.org nicht mehr gestartet werden kann. Das geschilderte Verhalten ist ein Problem des Dateisystems ReiserFS und ist in Version 3.6 und hِher behoben.</Text>
 			<Text id="scs2" xml:lang="ca">Das Dateisystem ReiserFS in einer Version kleiner als 3.6 führt zu Problemen, sobald die Benutzer-ID größer als 65535 ist. Diese äußern sich darin, dass von OpenOffice.org angelegte temporäre Dateien nicht mehr vom Programm selbst, sondern nur noch vom Systemadministrator entfernt werden können ( z.B. /tmp/OSL_PIPE_xxx ). Dies führt dazu, dass OpenOffice.org nicht mehr gestartet werden kann. Das geschilderte Verhalten ist ein Problem des Dateisystems ReiserFS und ist in Version 3.6 und höher behoben.</Text>
+			<Text id="scs2" xml:lang="cs">V nižší verzi než 3.6 způsoboval ReiserFS problémy v okamžiku, kdy ID uživatele bylo vyšší než 65535. Problém byl ten, že dočasné soubory ukládané OpenOffice.org nemohly být již odstraněny, protože to mohl pouze správce systému (např. /tmp/OSL_PIPE_xxx). Výsledkem bylo, že nebylo možné spustit OpenOffice.org. Tento problém byl již ve verzi 3.6 a vyšší odstraněn.</Text>
+			<Text id="scs2" xml:lang="sk">V nižšej verzii ako 3.6 spôsoboval ReiserFS problémy v okamihu, keď ID užívateľa bolo vyššie ako 65535. Problém bol v tom, že dočasné súbory ukladané OpenOffice.org nemohli byť už odstránené, pretože to mohol len správca systému (napr. /tmp/OSL_PIPE_xxx). Výsledkom bolo, že nebolo možné spustiť OpenOffice.org. Tento problém bol už vo verzii 3.6 a vyššej odstránený.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="FileLocking">
@@ -1614,6 +1826,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="gfh6w" xml:lang="tr">File locking</Text>
 			<Text id="gfh6w" xml:lang="ar">File locking</Text>
 			<Text id="gfh6w" xml:lang="ca">File locking</Text>
+			<Text id="gfh6w" xml:lang="cs">Zamykání souborů</Text>
+			<Text id="gfh6w" xml:lang="sk">Zamykanie súborov</Text>
 		</Paragraph>
 		<Paragraph id="G2" gui="UNX">
 			<Text id="pji76w" xml:lang="de">Normalerweise (Standardeinstellung) ist in OpenOffice.org "File Locking" (Dateisperrung) ausgeschaltet. Um dies zu aktivieren, müssen die entsprechenden Umgebungsvariablen gesetzt werden SAL_ENABLE_FILE_LOCKING=1 und export SAL_ENABLE_FILE_LOCKING. Diese Einträge sind  bereits in auskommentierter Form in der soffice Script-Datei enthalten.</Text>
@@ -1637,6 +1851,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="pji76w" xml:lang="tr">Normalerweise (Standardeinstellung) ist in OpenOffice.org File Locking ausgeschaltet. Um dies zu aktivieren, kann die entsprechende Umgebungsvariable gesetzt werden (SAL_ENABLE_FILE_LOCKING 1). Dieser Eintrag ist bereits in auskommentierter Form in der soffice Script Datei enthalten.</Text>
 			<Text id="pji76w" xml:lang="ar">Normalerweise (Standardeinstellung) ist in OpenOffice.org File Locking ausgeschaltet. Um dies zu aktivieren, kann die entsprechende Umgebungsvariable gesetzt werden (SAL_ENABLE_FILE_LOCKING 1). Dieser Eintrag ist bereits in auskommentierter Form in der soffice Script Datei enthalten.</Text>
 			<Text id="pji76w" xml:lang="ca">Normalerweise (Standardeinstellung) ist in OpenOffice.org File Locking ausgeschaltet. Um dies zu aktivieren, kann die entsprechende Umgebungsvariable gesetzt werden (SAL_ENABLE_FILE_LOCKING 1). Dieser Eintrag ist bereits in auskommentierter Form in der soffice Script Datei enthalten.</Text>
+			<Text id="pji76w" xml:lang="cs">Ve výchozím nastavení je zamykání souboru vypnuto. Pro jeho aktivaci je třeba nastavit proměnou prostředí SAL_ENABLE_FILE_LOCKING=1 a vyexportovat ji. Tyto položky jsou již uvedeny ve skriptu soffice, takže je stačí případně odkomentovat.</Text>
+			<Text id="pji76w" xml:lang="sk">Vo východzom nastavení je zamykanie súborov vypnuté. Pre jeho aktiváciu je potrebné nastaviť premennú prostredia SAL_ENABLE_FILE_LOCKING=1 a vyexportovať ju. Tieto položky sú už uvedené v skripte soffice, takže ich stačí prípadne odkomentovať.</Text>
 		</Paragraph>
 		<Paragraph id="G3" gui="UNX">
 			<Text id="pji76wsdf" xml:lang="de">Achtung: Bei aktiviertem File-Locking kann es zu Problemen mit Solaris 2.5.1 und 2.7 in Verbindung mit Linux NFS 2.0 kommen. Wenn Ihre Systemumgebung diese Parameter aufweist, raten wir dringend von der Verwendung des File-Locking ab. Andernfalls hängt OpenOffice.org, wenn Sie versuchen, eine Datei eines NFS-gemounteten Verzeichnisses von einem Linux Rechner aus zu öffnen. </Text>
@@ -1660,6 +1876,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="pji76wsdf" xml:lang="tr">Achtung:Bei aktiviertem File-Locking kann es zu Problemen mit Solaris 2.5.1 und 2.7 in Verbindung mit Linux NFS 2.0 kommen. Wenn Ihre Systemumgebung diese Parameter aufweist, raten wir dringend von der Verwendung des File-Locking ab. Andernfalls hängt OpenOffice.org, wenn Sie versuchen, eine Datei eines NFS-gemounteten Verzeichnisses von einem Linux Computer aus zu öffnen.</Text>
 			<Text id="pji76wsdf" xml:lang="ar">Achtung:Bei aktiviertem File-Locking kann es zu Problemen mit Solaris 2.5.1 und 2.7 in Verbindung mit Linux NFS 2.0 kommen. Wenn Ihre Systemumgebung diese Parameter aufweist, raten wir dringend von der Verwendung des File-Locking ab. Andernfalls hنngt OpenOffice.org, wenn Sie versuchen, eine Datei eines NFS-gemounteten Verzeichnisses von einem Linux Computer aus zu ِffnen.</Text>
 			<Text id="pji76wsdf" xml:lang="ca">Achtung:Bei aktiviertem File-Locking kann es zu Problemen mit Solaris 2.5.1 und 2.7 in Verbindung mit Linux NFS 2.0 kommen. Wenn Ihre Systemumgebung diese Parameter aufweist, raten wir dringend von der Verwendung des File-Locking ab. Andernfalls hängt OpenOffice.org, wenn Sie versuchen, eine Datei eines NFS-gemounteten Verzeichnisses von einem Linux Computer aus zu öffnen.</Text>
+			<Text id="pji76wsdf" xml:lang="cs">Upozornění: zamykání souborů může způsobit problémy na Solarisu 2.5.1 a 2.7 při spolupráci s linuxovým NFS 2.0. Pokud používáte tyto verze, pak vám nedoporučujeme tuto funkci aktivovat. Jinak OpenOffice.org zamrzne v případě, že se pokusíte otevřít soubor z adresáře na linuxovém stroji připojeném prostřednictvím NFS.</Text>
+			<Text id="pji76wsdf" xml:lang="sk">Upozornenie: zamykanie súborov môže spôsobiť problémy na Solarise 2.5.1 a 2.7 pri spolupráci s linuxovým NFS 2.0. Pokiaľ používate tieto verzie, potom vám nedoporučujeme túto funkciu aktivovať. Inak OpenOffice.org zamrzne v prípade, že sa pokúsite otvoriť súbor z adresára na linuxovom stroji pripojenom prostredníctvom NFS.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Mapi">
@@ -1686,6 +1904,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="gfh6w" xml:lang="ar">Problems when sending documents as e-mails out of OpenOffice.org</Text>
 			<Text id="gfh6w" xml:lang="ca">Problems when sending documents as e-mails out of OpenOffice.org</Text>
 			<Text id="gfh6w" xml:lang="th">Problems when sending documents as e-mails out of OpenOffice.org</Text>
+			<Text id="gfh6w" xml:lang="cs">Potíže při odesílání dokumentů e-mailem z OpenOffice.org</Text>
+			<Text id="gfh6w" xml:lang="sk">Problémy pri odosielaní dokumentov e-mailom z OpenOffice.org</Text>
 		</Paragraph>
 		<Paragraph id="G2a" gui="WNT">
 			<Text id="pji76w" xml:lang="de">Beim Versenden eines Dokumentes über 'Datei - Senden - Dokument als E-Mail' oder 'Dokument als PDF Anhang', kann es zu Problemen (Absturz bzw. Programm reagiert nicht) kommen. Die Ursache hierfür ist die Windows Systemdatei "Mapi" (Messaging Application Programming Interface), die in einigen Datei-Versionen diese Probleme verursacht. Leider kann das Problem nicht auf eine bestimmte Revisionsnummer eingegrenzt werden. Bitte wenden Sie sich im Internet unter http://www.microsoft.com an die Microsoft Knowledge Base und suchen Sie dort nach dem Begriff "mapi dll“.</Text>
@@ -1710,6 +1930,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="pji76w" xml:lang="ar">Mapi Text Body - Transaltion follows</Text>
 			<Text id="pji76w" xml:lang="ca">Mapi Text Body - Transaltion follows</Text>
 			<Text id="pji76w" xml:lang="th">Mapi Text Body - Transaltion follows</Text>
+			<Text id="pji76w" xml:lang="cs">Při odesílání dokumentu pomocí &apos;Soubor - Odeslat - Dokument e-mailem&apos; nebo &apos;Dokument jako přílohu v PDF&apos; se mohou vyskytnou problémy (program spadne nebo přestane reagovat). Způsobuje to &quot;Mapi&quot; (Messaging Application Programming Interface) systému Windows, který v některých verzích působí problémy. Bohužel se nepodařilo vysledovat problém k určité verzi souboru. Bližší informace zjistíte na http://www.microsoft.com a vyhledáním &quot;mapi dll&quot; v Microsoft Knowledge Base.</Text>
+			<Text id="pji76w" xml:lang="sk">Pri odosielaní dokumentov pomocou &apos;Súbor - Odoslať - Dokument e-mailom&apos; alebo &apos;Dokument ako prílohu v PDF&apos; sa môžu vyskytnúť problémy (program spadne alebo prestane reagovať). Spôsobuje to &quot;Mapi&quot; (Messaging Application Programming Interface) systému Windows, ktorý v niektorých verziách spôsobuje problémy. Bohužiaľ sa nepodarilo vysledovať problém k určitej verzii súboru. Bližšie informácie zistíte na http://www.microsoft.com a vyhľadaním &quot;mapi dll&quot; v Microsoft Knowledge Base.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Info-ZIP">
@@ -1735,6 +1957,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdff34343few" xml:lang="tr">Verwendung von Info-ZIP</Text>
 			<Text id="sdff34343few" xml:lang="ar">Verwendung von Info-ZIP</Text>
 			<Text id="sdff34343few" xml:lang="ca">Verwendung von Info-ZIP</Text>
+			<Text id="sdff34343few" xml:lang="cs">Používání Info-ZIP</Text>
+			<Text id="sdff34343few" xml:lang="sk">Používanie Info-ZIP</Text>
 		</Paragraph>
 		<Paragraph id="G23">
 			<Text id="a" xml:lang="de">OpenOffice.org benutzt Info-ZIP zum Erstellen und Entpacken der OpenOffice.org Installation, sowie zum Packen und Entpacken des OpenOffice.org XML Dateiformats. Info-ZIP Programme (ZIP, UnZip und weitere Utilities) sind frei verfügbar und können im Source Code und als ausführbares Programm von verschiedenen Anonymous-FTP Seiten wie z.B. ftp.uu.net:/pub/archiving/zip/*. bezogen werden.</Text>
@@ -1758,6 +1982,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="a" xml:lang="tr">OpenOffice.org benutzt Info-ZIP zum Erstellen und Entpacken der OpenOffice.org Installation, sowie zum Packen und Entpacken des OpenOffice.org XML Dateiformats. Info-ZIP Programme (ZIP, UnZip und weitere Utilities) sind frei verfügbar und können im Source Code und als ausführbares Programm von verschiedenen Anonymous-FTP Seiten wie z.B. ftp.uu.net:/pub/archiving/zip/*. bezogen werden.</Text>
 			<Text id="a" xml:lang="ar">OpenOffice.org benutzt Info-ZIP zum Erstellen und Entpacken der OpenOffice.org Installation, sowie zum Packen und Entpacken des OpenOffice.org XML Dateiformats. Info-ZIP Programme (ZIP, UnZip und weitere Utilities) sind frei verfügbar und kِnnen im Source Code und als ausführbares Programm von verschiedenen Anonymous-FTP Seiten wie z.B. ftp.uu.net:/pub/archiving/zip/*. bezogen werden.</Text>
 			<Text id="a" xml:lang="ca">OpenOffice.org benutzt Info-ZIP zum Erstellen und Entpacken der OpenOffice.org Installation, sowie zum Packen und Entpacken des OpenOffice.org XML Dateiformats. Info-ZIP Programme (ZIP, UnZip und weitere Utilities) sind frei verfügbar und können im Source Code und als ausführbares Programm von verschiedenen Anonymous-FTP Seiten wie z.B. ftp.uu.net:/pub/archiving/zip/*. bezogen werden.</Text>
+			<Text id="a" xml:lang="cs">OpenOffice.org používá Info-ZIP pro vytváření a rozbalování instalace OpenOffice.org a také pro zabalování a rozbalování souborů v XML formátu. Info-ZIP soubory (ZIP, UnZip a další utility) jsou volně šiřitelné a je možné je použít ve zdrojovém kódu jako spustitelný program. Naleznete je např. na anonymním FTP serveru ftp://ftp.uu.net/pub/archiving/zip/*.</Text>
+			<Text id="a" xml:lang="sk">OpenOffice.org používa Info-ZIP pre vytváranie a rozbaľovanie inštalácie OpenOffice.org a tiež pre zabaľovanie a rozbaľovanie súborov v XML formáte. Info-ZIP súbory (ZIP, UnZip a ďalšie utility) sú voľne šíriteľné a je možné ich použiť v zdrojovom kóde ako spustiteľný program. Nájdete ich napr. na anonymnom FTP servery ftp://ftp.uu.net/pub/archiving/zip/*.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="ModifiedSourceCode">
@@ -1783,6 +2009,8 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdffd23r3cefwefew" xml:lang="tr">Verwendeter / modifizierter Quelltext (Source Code)</Text>
 			<Text id="sdffd23r3cefwefew" xml:lang="ar">Verwendeter / modifizierter Quelltext (Source Code)</Text>
 			<Text id="sdffd23r3cefwefew" xml:lang="ca">Verwendeter / modifizierter Quelltext (Source Code)</Text>
+			<Text id="sdffd23r3cefwefew" xml:lang="cs">Použité/upravené zdrojové kódy</Text>
+			<Text id="sdffd23r3cefwefew" xml:lang="sk">Použité/upravené zdrojové kódy</Text>
 		</Paragraph>
 		<Paragraph id="HH2">
 			<Text id="sdffd23red32efew" xml:lang="de">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
@@ -1806,113 +2034,193 @@ Go to the OpenOffice.org program folder and start the 'crashrep.exe' file.</Text
 			<Text id="sdffd23red32efew" xml:lang="tr">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
 			<Text id="sdffd23red32efew" xml:lang="ar">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
 			<Text id="sdffd23red32efew" xml:lang="ca">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
+			<Text id="sdffd23red32efew" xml:lang="cs">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
+			<Text id="sdffd23red32efew" xml:lang="sk">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="GettingInvolved">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">Getting Involved </Text>
+			<Text id="a" xml:lang="cs">Jak se zapojit</Text>
+			<Text id="a" xml:lang="sk">Ako sa zapojiť</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US">The OpenOffice.org Community would very much benefit from your active participation in the development of this important open source project.</Text>
+			<Text id="a" xml:lang="cs">OpenOffice.org komunita bude mít prospěch z vaší aktivní účasti na vývoji tohoto významného Open Source projektu.</Text>
+			<Text id="a" xml:lang="sk">OpenOffice.org komunita bude mať prospech z vašej aktívnej účasti na vývoji tohto významného Open Source projektu.</Text>
 		</Paragraph>
 		<Paragraph id="A3">
 			<Text id="a" xml:lang="en-US" url="ahead">As a User, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the Community. Please join and checkout the user page at: </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Jako uživatel jste již významnou částí vývoje a rádi bychom vás podpořili při rozvíjení dalších aktivit týkajících se OpenOffice.org. Podívejte se, prosím, na uživatelské stránky na adrese: </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Ako užívateľ ste už významnou časťou vývoja a radi by sme vás podporili pri rozvíjaní ďalších aktivít týkajúcich sa OpenOffice.org. Pozrite sa, prosím, na užívateľské stránky na adrese: </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org </Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">www.openoffice.org </Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">www.openoffice.org </Text>
 		</Paragraph>
 		<Paragraph id="A4"/>
 	</Section>
 	<Section id="Registration">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">Registration </Text>
+			<Text id="a" xml:lang="cs">Registrace</Text>
+			<Text id="a" xml:lang="sk">Registrácia</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the Community to make an even better software suite and address User needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Věnujte prosím chvilku při instalaci pro registraci produktu. I když je registrace volitelná, doporučujeme vám se zaregistrovat, protože tyto informace umožní komunitě vytvářet kvalitnější software a cíleně reflektovat potřeby uživatelů. Přitom jsou zachována vaše práva na ochranu osobních údajů. Pokud neprovedete registraci již při instalaci, můžete tak učinit i později na stránkách </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Venujte prosím chvíľku pri inštalácii pre registráciu produktu. Aj keď je registrácia dobrovoľná, doporučujeme vám sa zaregistrovať, pretože tieto informácie umožnia komunite vytvárať kvalitnejší software a cielene reflektovať potreby užívateľov. Pritom sú zachováné vaše práva na ochranu osobných údajov. Pokiaľ neuskutočníte registráciu už pri inštalácii, môžete tak uskutočniť aj neskôr na stránkach </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
 		</Paragraph>
 	</Section>
 	<Section id="UserSurvey">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">User Survey </Text>
+			<Text id="a" xml:lang="cs">Uživatelský dotazník</Text>
+			<Text id="a" xml:lang="sk">Užívateľský dotazník</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help OpenOffice.org move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data.</Text>
+			<Text id="a" xml:lang="cs">Na stránkách OpenOffice.org také naleznete Uživatelský dotazník, který vám doporučujeme vyplnit. Výsledky dotazníku pomohou OpenOffice.org vytvořit si lepší představu o potřebách uživatelů dalších verzí kancelářského balíku. Komunita OpenOffice.org se zavazuje zabezpečit vaše osobní údaje.</Text>
+			<Text id="a" xml:lang="sk">Na stránkach OpenOffice.org tiež nájdete Užívateľský dotazník, ktorý vám doporučujeme vyplniť. Výsledky dotazníku pomôžu OpenOffice.org vytvoriť si lepšiu predstavu o potrebách užívateľov ďalších verzií kancelárskeho balíka. Komunita OpenOffice.org sa zaväzuje zabezpečiť vaše osobné údaje.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="ReportBugsIssues">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">Report Bugs &amp; Issues </Text>
+			<Text id="a" xml:lang="cs">Oznamování chyb a problémů </Text>
+			<Text id="a" xml:lang="sk">Oznamovanie chýb a problémov </Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all Users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the User Community can make to the ongoing development and improvement of the suite. </Text>
+			<Text id="a" xml:lang="cs">Na internetových stránkách OpenOffice.org naleznete také mechanismus pro oznamování, sledování a řešení chyb a problémů, který se nazývá IssueZilla. Vítáme zpětné reakce od všech uživatelů. Oznamování problémů je jednou z nejvýznamnějších možností, kterými mohou uživatelé přispět k dalšímu vylepšování kancelářského balíku.</Text>
+			<Text id="a" xml:lang="sk">Na internetových stránkach OpenOffice.org nájdete tiež mechanizmus pre oznamovanie, sledovania a riešenia chýb a problémov, ktorý sa nazýva IssueZilla. Vítame spätné reakcie od všetkých užívateľov. Oznamovanie problémov je jednou z najvýznamnejších možností, ktorými môžu užívatelia prispieť k ďalšiemu vylepšovaniu kancelárskeho balíka.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Subscribe">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">Subscribe </Text>
+			<Text id="a" xml:lang="cs">Přihlásit se do konference</Text>
+			<Text id="a" xml:lang="sk">Prihlásiť sa do konferencie</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Můžete se přihlásit do e-mailové konference českých uživatelů OpenOffice.org. Adresa konference je users@cs.openoffice.org nebo se můžete přihlásit přes webové rozhraní na adrese http://cs.openoffice.org/servlets/ProjectMailingListList. Dále je zde uvedeno několik dalších konferencí (anglicky), do kterých se můžete přihlásit </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Môžete sa prihlásiť do e-mailové konferencie slovenských užívateľov OpenOffice.org. Adresa konferencie je users@sk.openoffice.org alebo sa môžete prihlásiť cez webové rozhranie na adrese http://sk.openoffice.org/servlets/ProjectMailingListList. Ďalej je tu uvedených niekoľko ďalších konferencií (anglicky), do ktorých sa môžete prihlásiť </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/mail_list.html</Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">www.openoffice.org/mail_list.html</Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">www.openoffice.org/mail_list.html</Text>
 		</Paragraph>
 		<Paragraph id="A3">
 			<List>
 				<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic)</Text>
+				<Text id="a" xml:lang="cs">Novinky: announce@openoffice.org *doporučeno všem uživatelům* (nízká aktivita)</Text>
+				<Text id="a" xml:lang="sk">Novinky: announce@openoffice.org *doporučené všetkým užívateľom* (nízka aktivita)</Text>
 				<Text id="b" xml:lang="en-US">User support: users@openoffice.org *recommended to new users* (moderate traffic) </Text>
+				<Text id="b" xml:lang="cs">Uživatelská podpora: users@openoffice.org *doporučeno novým uživatelům* (střední aktivita) </Text>
+				<Text id="b" xml:lang="sk">Užívateľská podpora: users@openoffice.org *doporučené novým užívateľom* (stredná aktivita) </Text>
 				<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *Easy way to lurk on discussions* (heavy) </Text>
+				<Text id="c" xml:lang="cs">Hlavní uživatelské fórum: discuss@openoffice.org *snadná cesta k hlubokomyslným diskuzím* (vysoká aktivita) </Text>
+				<Text id="c" xml:lang="sk">Hlavné užívateľské fórum: discuss@openoffice.org *ľahká cesta k hlbokozmyselným diskusiám* (vysoká aktivita) </Text>
 				<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org*beyond development* (getting heavy) </Text>
+				<Text id="d" xml:lang="cs">Marketingové projekty: dev@marketing.openoffice.org *nejen vývoj* (vysoká aktivita) </Text>
+				<Text id="d" xml:lang="sk">Marketingové projekty: dev@marketing.openoffice.org *nielen vývoj* (vysoká aktivita) </Text>
 				<Text id="e" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
+				<Text id="e" xml:lang="cs">Vývojářská konference: dev@openoffice.org (střední až vysoká aktivita) </Text>
+				<Text id="e" xml:lang="sk">Vývojárska konferencia: dev@openoffice.org (stredna až vysoká aktivita) </Text>
 				<Text id="f" xml:lang="en-US">Groupware: groupware@whiteboard.openoffice.org (moderate) </Text>
+				<Text id="f" xml:lang="cs">Groupware: groupware@whiteboard.openoffice.org (střední aktivita) </Text>
+				<Text id="f" xml:lang="sk">Groupware: groupware@whiteboard.openoffice.org (stredná aktivita) </Text>
 			</List>
 		</Paragraph>
 	</Section>
 	<Section id="JoinProjects">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">Join one or more Projects</Text>
+			<Text id="a" xml:lang="cs">Připojit se k projektům</Text>
+			<Text id="a" xml:lang="sk">Pripojiť sa k projektom</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</Text>
+			<Text id="a" xml:lang="cs">Můžete se stát výraznou posilou vývojářského týmu a to i v případě, že máte pouze menší zkušenosti s vývojem softwaru.</Text>
+			<Text id="a" xml:lang="sk">Môžete sa stať výraznou posilou vývojárskeho teamu a to i v prípade, že máte len menšie skúsenosti s vývojom softwaru.</Text>
 		</Paragraph>
 		<Paragraph id="A3">
 			<Text id="a" xml:lang="en-US" url="ahead">At </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Na </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Na </Text>
 			<Text id="a" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
+			<Text id="a" xml:lang="cs" url="true">http://projects.openoffice.org/index.html</Text>
+			<Text id="a" xml:lang="sk" url="true">http://projects.openoffice.org/index.html</Text>
 			<Text id="a" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just be spreading the word and telling a friend about this office suite.</Text>
+			<Text id="a" xml:lang="cs"> naleznete projekty, které se vztahují od lokalizace přes portování a groupware až po samotné programování samotného kancelářského balíku. A pokud nejste vývojáři, pak můžete zkusit projekty pro dokumentaci nebo marketing, nebo třeba překladu do češtiny na adrese http://cs.openoffice.org.</Text>
+			<Text id="a" xml:lang="sk"> nájdete projekty, ktoré sa vzťahujú od lokalizácie cez portovanie a groupware až po samotné programovanie samotného kancelárskeho balíka. A pokiaľ nie ste vývojári, tak môžete skúsiť projekty pre dokumentáciu alebo marketing, alebo napr. preklad do Slovenčiny na adrese http://sk.openoffice.org.</Text>
 		</Paragraph>
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Můžete pomoci tím, že se přidáte k marketingové komunikační a informační síti na adrese: </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Môžete pomôcť tým, že sa pridáte k marketingovej komunikačnej a informačnej sieti na adrese: </Text>
 			<Text id="b" xml:lang="en-US" url="true">http://marketing.openoffice.org/contacts.html </Text>
+			<Text id="b" xml:lang="cs" url="true">http://marketing.openoffice.org/contacts.html </Text>
+			<Text id="b" xml:lang="sk" url="true">http://marketing.openoffice.org/contacts.html </Text>
 			<Text id="c" xml:lang="en-US"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
+			<Text id="c" xml:lang="cs"> kde se můžete zapojit do komunikace s tiskem, médii, vládními agenturami, konzultanty, školami, skupinami uživatelů Linuxu a vývojáři ve své zemi.</Text>
+			<Text id="c" xml:lang="sk"> kde sa môžete zapojiť do komunikácie s tlačou, médiami, vládnymi agentúrami, konzultantmi, školami, skupinami užívateľov Linuxu a vývojármi vo svojej krajine.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="UserSupport">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">User Support</Text>
+			<Text id="a" xml:lang="cs">Uživatelská podpora</Text>
+			<Text id="a" xml:lang="sk">Užívateľská podpora</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">For help with the OpenOffice.org 1.1 office suite, take a look at the archieves to questions already answered on the 'users@openoffice.org' mailing list at </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Podrobné informace o kancelářském balíku OpenOffice.org 1.1 můžete najít v archívu konference 'users@openoffice.org' (anglicky) na </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Podrobné informácie o kancelárskom balíku OpenOffice.org 1.1 môžete nájsť v archíve konferencie 'users@openoffice.org' (anglicky) na </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/mail_list.html</Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">www.openoffice.org/mail_list.html</Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">www.openoffice.org/mail_list.html</Text>
 			<Text id="c" xml:lang="en-US">. Alternativeely, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
+			<Text id="c" xml:lang="cs"> nebo česky na http://cs.openoffice.org/servlets/SummarizeList?listName=users. Další možností pak je poslat svůj dotaz přímo do konference users@openoffice.org nebo users@cs.openoffice.org. Nejdříve je ale třeba se do konference přihlásit.</Text>
+			<Text id="c" xml:lang="sk"> alebo česky na http://cs.openoffice.org/servlets/SummarizeList?listName=users. Ďalšou možnosťou je poslať svoju otázku priamo do konferencie users@openoffice.org alebo users@cs.openoffice.org. Najprv je ale potrebné sa do konferencie prihlásiť.</Text>
 		</Paragraph>
 		<Paragraph id="A3">
 			<Text id="a" xml:lang="en-US">Also check the FAQ section, found on left hand navigation bar of the OpenOffice.org homepage. Frequently asked questions are posted here.</Text>
+			<Text id="a" xml:lang="cs">Také můžete navštívit často kladené dotazy (FAQ) na domovských stránkách OpenOffice.org.</Text>
+			<Text id="a" xml:lang="sk">Tiež môžete navštíviť často kladené otázky (FAQ) na domovských stránkach OpenOffice.org.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="WayToStart">
 		<Paragraph id="A1" style="H2">
 			<Text id="a" xml:lang="en-US">Way to Start</Text>
+			<Text id="a" xml:lang="cs">Jak začít</Text>
+			<Text id="a" xml:lang="sk">Ako začať</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you're comfortable, all you need to do is make an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
+			<Text id="a" xml:lang="cs" url="ahead">Nejlepší cestou, jak začít, je přihlásit se do některé z konferencí (nebo do všech), chvíli číst a používat archív pro seznámení se s nejdůležitějšími tématy konference. Pak už se jenom e-mailem představíte a můžete se do toho pustit. Pokud máte zkušenosti s Open Source projekty, pak se podívejte do našeho seznamu úkolů (TODO) na adrese </Text>
+			<Text id="a" xml:lang="sk" url="ahead">Najlepšou cestou, ako začať, je prihlásiť sa do niektorej z konferencií (alebo do všetkých), chvíľu čítať a používať archív pre zoznámenie sa s najdôležitejšími témami konferencie. Potom už sa len e-mailom predstavíte a môžete sa do toho pustiť. Pokiaľ máte skúsenosti s Open Source projektami, potom sa pozrite do nášho zoznamu úloh (TODO) na adrese </Text>
 			<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/dev_docs/todos.html</Text>
+			<Text id="b" xml:lang="cs" url="true" path="url">www.openoffice.org/dev_docs/todos.html</Text>
+			<Text id="b" xml:lang="sk" url="true" path="url">www.openoffice.org/dev_docs/todos.html</Text>
 			<Text id="c" xml:lang="en-US">.</Text>
+			<Text id="c" xml:lang="cs">, zda nenajdete něco, s čím můžete pomoci.</Text>
+			<Text id="c" xml:lang="sk">, či nenájdete niečo, s čím môžete pomôcť.</Text>
 		</Paragraph>
 	</Section>
 	<Section id="Credits">
 		<Paragraph id="emptyparagraph" localized="false"/>
 		<Paragraph id="A1">
 			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new OpenOffice.org 1.1 and join us online.</Text>
+			<Text id="a" xml:lang="cs">Doufáme, že se vám bude s OpenOffice.org 1.1 dobře pracovat a že se k nám připojíte online.</Text>
+			<Text id="a" xml:lang="sk">Dúfame, že sa vám bude s OpenOffice.org 1.1 dobre pracovať a že sa k nám pripojíte online.</Text>
 		</Paragraph>
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US">The OpenOffice.org community</Text>
+			<Text id="a" xml:lang="cs">Komunita OpenOffice.org a autoři české verze</Text>
+			<Text id="a" xml:lang="sk">Komunita OpenOffice.org a autori slovenskej verzie</Text>
 		</Paragraph>
 		<Paragraph id="A3" localized="false">
 			<Text id="a" xml:lang="en-US"/>
