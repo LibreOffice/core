@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:04:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,7 @@ BOOL OJoinTableView::IsAddAllowed()
         // nicht wenn schon zuviele Tabellen
         Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
 
-        sal_Int32 nMax = xMetaData->getMaxTablesInSelect();
+        sal_Int32 nMax = xMetaData.is() ? xMetaData->getMaxTablesInSelect() : 0;
         if (nMax && nMax <= (sal_Int32)m_aTableMap.size())
             return FALSE;
     }
