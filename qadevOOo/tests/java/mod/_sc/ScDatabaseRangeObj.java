@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDatabaseRangeObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 19:00:06 $
+ *  last change:$Date: 2004-03-19 16:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,21 +58,16 @@
  *
  *
  ************************************************************************/
-
 package mod._sc;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNamed;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XCellRangeAddressable;
+import com.sun.star.sheet.XCellRangeReferrer;
 import com.sun.star.sheet.XDatabaseRanges;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
@@ -82,6 +77,17 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XImportable;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.SOfficeFactory;
+
 
 /**
 * Test for object which is represented by service
@@ -107,31 +113,33 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XCellRangeReferrer
 */
 public class ScDatabaseRangeObj extends TestCase {
-        XSpreadsheetDocument xSheetDoc = null;
+    XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a Spreadsheet document" );
+            log.println("creating a Spreadsheet document");
             xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn³t create document", e);
         }
     }
 
     /**
     * Disposes Spreadsheet document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xSheetDoc ");
+
+        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+                                   XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -154,24 +162,33 @@ public class ScDatabaseRangeObj extends TestCase {
     * @see com.sun.star.sheet.DatabaseRange
     * @see com.sun.star.table.CellRangeAddress
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "Creating a test environment" );
+        log.println("Creating a test environment");
 
-        log.println("Getting test object ") ;
+        log.println("Getting test object ");
 
-        XPropertySet docProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        XPropertySet docProps = (XPropertySet) UnoRuntime.queryInterface(
+                                        XPropertySet.class, xSheetDoc);
 
+        XSpreadsheets sheets = xSheetDoc.getSheets();
+        String[] names = sheets.getElementNames();
         XDatabaseRanges dbRanges = null;
+        XImportable xImp = null;
+
         try {
+            Object sheet = sheets.getByName(names[0]);
+            xImp = (XImportable) UnoRuntime.queryInterface(XImportable.class,
+                                                           sheet);
             dbRanges = (XDatabaseRanges) AnyConverter.toObject(
-                new Type(XDatabaseRanges.class),
-                    docProps.getPropertyValue("DatabaseRanges"));
+                               new Type(XDatabaseRanges.class),
+                               docProps.getPropertyValue("DatabaseRanges"));
+            _doImport(xImp);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get a property", e);
@@ -181,63 +198,95 @@ public class ScDatabaseRangeObj extends TestCase {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get a property", e);
+        } catch (com.sun.star.container.NoSuchElementException e) {
+            e.printStackTrace(log);
+            throw new StatusException(
+                    "Error getting test object from spreadsheet document", e);
         }
 
         if (dbRanges.hasByName("dbRange")) {
             dbRanges.removeByName("dbRange");
         }
 
-        CellRangeAddress aRange = new CellRangeAddress((short)0, 2, 4, 5, 6);
-        dbRanges.addNewByName("dbRange", aRange);
+        //CellRangeAddress aRange = new CellRangeAddress((short)0, 0, 0, 0, 13);
+        CellRangeAddress aRange = null;
 
-        XNameAccess dbrNA = (XNameAccess)
-            UnoRuntime.queryInterface(XNameAccess.class, dbRanges);
+        //dbRanges.addNewByName("dbRange", aRange);
+        XNameAccess dbrNA = (XNameAccess) UnoRuntime.queryInterface(
+                                    XNameAccess.class, dbRanges);
+        XNamed xNamed = null;
 
         try {
+            String[] dbNames = dbrNA.getElementNames();
+            xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+                                                        dbrNA.getByName(
+                                                                dbNames[0]));
+            xNamed.setName("dbRange");
+
+            XCellRangeReferrer aReferrer = (XCellRangeReferrer) UnoRuntime.queryInterface(
+                                                   XCellRangeReferrer.class,
+                                                   dbrNA.getByName("dbRange"));
+            XCellRangeAddressable aRangeA = (XCellRangeAddressable) UnoRuntime.queryInterface(
+                                                    XCellRangeAddressable.class,
+                                                    aReferrer.getReferredCells());
+            aRange = aRangeA.getRangeAddress();
             oObj = (XInterface) AnyConverter.toObject(
-                        new Type(XInterface.class),dbrNA.getByName("dbRange"));
+                           new Type(XInterface.class),
+                           dbrNA.getByName("dbRange"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
             throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
+                    "Error getting test object from spreadsheet document", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
             throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
+                    "Error getting test object from spreadsheet document", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
             throw new StatusException(
-                "Error getting test object from spreadsheet document",e) ;
+                    "Error getting test object from spreadsheet document", e);
         }
 
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         // Other parameters required for interface tests
         tEnv.addObjRelation("DATAAREA", aRange);
 
-        XSpreadsheets sheets = xSheetDoc.getSheets();
-        String names[] = sheets.getElementNames();
         XCellRange xCellRange = null;
+
         try {
             Object sheet = sheets.getByName(names[0]);
-            xCellRange = (XCellRange)UnoRuntime.queryInterface(
-                XCellRange.class, sheet);
-        } catch(com.sun.star.lang.WrappedTargetException e) {
+            xCellRange = (XCellRange) UnoRuntime.queryInterface(
+                                 XCellRange.class, sheet);
+        } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Error getting of first spreadsheet from spreadsheet"
-                + " document",e);
-        } catch(com.sun.star.container.NoSuchElementException e) {
+                    "Error getting of first spreadsheet from spreadsheet" +
+                    " document", e);
+        } catch (com.sun.star.container.NoSuchElementException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Error getting of first spreadsheet from spreadsheet"
-                + " document",e);
+                    "Error getting of first spreadsheet from spreadsheet" +
+                    " document", e);
         }
 
         tEnv.addObjRelation("XCELLRANGE", xCellRange);
 
         return tEnv;
     }
+
+    public void _doImport(XImportable imp) {
+        PropertyValue[] descriptor = imp.createImportDescriptor(false);
+
+        log.print("Setting the ImportDescriptor (Bibliograpy, SQL, select Identifier from biblio) -- ");
+        descriptor[0].Value = "Bibliography";
+        descriptor[1].Value = com.sun.star.sheet.DataImportMode.SQL;
+        descriptor[2].Value = "select Identifier from biblio";
+        log.println("done");
+
+        log.print("Importing data (Bibliograpy, Table, biblio) -- ");
+        imp.doImport(descriptor);
+        log.println("done");
+    }
 }
-
-
