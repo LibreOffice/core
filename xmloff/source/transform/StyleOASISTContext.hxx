@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:25:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class XMLStyleOASISTContext : public XMLPersElemContentTContext
     sal_Bool m_bPersistent;
     sal_Bool m_bControlStyle;
 
+    ::rtl::OUString m_aStyleFamily;
 public:
     TYPEINFO();
 
