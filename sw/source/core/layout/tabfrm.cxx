@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-19 14:25:49 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 14:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,13 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
     for ( USHORT i = 0; i < rLines.Count(); ++i )
     {
         SwRowFrm *pNew = new SwRowFrm( *rLines[i] );
-        pNew->InsertBehind( this, pPrev );
-        pPrev = pNew;
+        if( pNew->Lower() )
+        {
+            pNew->InsertBehind( this, pPrev );
+            pPrev = pNew;
+        }
+        else
+            delete pNew;
     }
 }
 
