@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:06:24 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,6 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TEXT_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, SW_RES(MN_OBJECTMENU_TEXT));
     SFX_CHILDWINDOW_REGISTRATION(FN_EDIT_FORMULA);
     SFX_CHILDWINDOW_REGISTRATION(SID_INSERT_DIAGRAM);
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);
