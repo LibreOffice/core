@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Semaphore.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2003-12-11 12:32:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "YES!\n" ): printf( "NO!\n" );
+    t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -89,9 +89,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    printf( "#printUString_u# " );
+    t_print("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 /** wait _nSec seconds.
@@ -99,8 +99,8 @@ inline void printUString( const ::rtl::OUString & str )
 void thread_sleep( sal_Int32 _nSec )
 {
     /// print statement in thread process must use fflush() to force display.
-    printf( "# wait %d seconds. ", _nSec );
-    fflush( stdout );
+    // t_print("wait %d seconds. ", _nSec );
+    // fflush( stdout );
 
 #ifdef WNT                               //Windows
     Sleep( _nSec * 1000 );
@@ -108,7 +108,19 @@ void thread_sleep( sal_Int32 _nSec )
 #if ( defined UNX ) || ( defined OS2 )   //Unix
     sleep( _nSec );
 #endif
-    printf( "# done\n" );
+}
+
+ void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
+ {
+#ifdef WNT      //Windows
+        Sleep(_nTenthSec * 100 );
+#endif
+#if ( defined UNX ) || ( defined OS2 )  //Unix
+        TimeValue nTV;
+        nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
+        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
+        osl_waitThread(&nTV);
+#endif
 }
 
 /** thread for testing Semaphore acquire.
@@ -130,7 +142,7 @@ protected:
     {
         // block here if it tries to decrease below zero.
         MySem.acquire( );
-        printf( "# Semaphore acquired. \n" );
+        t_print("Semaphore acquired. \n" );
         MySem.release( );
     }
 };
@@ -145,7 +157,7 @@ public:
 
     ~WaitThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#WaitThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "WaitThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     Semaphore& MySem;
@@ -154,7 +166,7 @@ protected:
     {
         // block here if the semaphore has been acquired
         MySem.acquire( );
-        thread_sleep( 2 );
+        thread_sleep_tenth_sec( 2 );
         MySem.release( );
     }
 };
@@ -186,7 +198,7 @@ public:
 
     ~WriterThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#WriterThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "WriterThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 protected:
     SemBuffer& MySemBuffer;
@@ -212,7 +224,7 @@ public:
 
     ~ReaderThread( )
     {
-        CPPUNIT_ASSERT_MESSAGE( "#ReaderThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        CPPUNIT_ASSERT_MESSAGE( "ReaderThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
     }
 
 protected:
@@ -332,12 +344,12 @@ namespace osl_Semaphore
 
             // if acquire in myThread does not work, 2 secs is long enough,
             // myThread should terminate now, and bRes1 should be sal_False
-            thread_sleep( 2 );
+            thread_sleep_tenth_sec( 2 );
             bRes1 = myThread.isRunning( );
 
             // after release semaphore, myThread stops blocking and will terminate immediately
             aSemaphore.release( );
-            thread_sleep( 1 );
+            thread_sleep_tenth_sec( 1 );
             bRes2 = myThread.isRunning( );
             myThread.join( );
 
@@ -362,12 +374,12 @@ namespace osl_Semaphore
             myThread3.create( );
 
             // if acquire in myThread does not work, 2 secs is long enough,
-            thread_sleep( 2 );
+            thread_sleep_tenth_sec( 2 );
             bRes1 = myThread1.isRunning( ) && myThread2.isRunning( ) && myThread3.isRunning( );
 
             // after release semaphore, myThread stops blocking and will terminate immediately
             aSemaphore.release( );
-            thread_sleep( 1 );
+            thread_sleep_tenth_sec( 1 );
             bRes2 = myThread1.isRunning( ) || myThread2.isRunning( ) || myThread3.isRunning( );
             myThread1.join( );
             myThread2.join( );
@@ -444,7 +456,7 @@ namespace osl_Semaphore
             myThread.create();
 
             // ensure the child thread acquire the semaphore
-            thread_sleep(1);
+            thread_sleep_tenth_sec(1);
             bRes1 = aSemaphore.tryToAcquire();
 
             if (bRes1 == sal_True)
@@ -496,7 +508,7 @@ namespace osl_Semaphore
             myThread.create( );
 
             // ensure the child thread acquire the mutex
-            thread_sleep( 1 );
+            thread_sleep_tenth_sec( 1 );
 
             bRunning = myThread.isRunning( );
             bRes1 = aSemaphore.tryToAcquire( );
