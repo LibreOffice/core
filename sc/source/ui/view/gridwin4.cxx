@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-18 10:42:15 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <so3/ipenv.hxx>
+#include <sfx2/printer.hxx>
 
 #ifdef MAC
 #include <svx/brshitem.hxx>
@@ -100,6 +101,7 @@
 #include "cbutton.hxx"
 #include "invmerge.hxx"
 #include "editutil.hxx"
+#include "inputopt.hxx"
 
 //#include "tabvwsh.hxx"            //! Test !!!!
 
@@ -409,6 +411,7 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
 
 void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdateMode eMode )
 {
+    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     BOOL bGridFirst = TRUE;     //! entscheiden!!!
 
     if (pViewData->IsMinimized())
@@ -498,6 +501,15 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
 
+    if ( bTextWysiwyg )
+    {
+        //  use printer for text formatting
+
+        OutputDevice* pFmtDev = pDoc->GetPrinter();
+        pFmtDev->SetMapMode( pViewData->GetLogicMode(eWhich) );
+        aOutputData.SetFmtDevice( pFmtDev );
+    }
+
     aOutputData.SetSyntaxMode       ( pViewData->IsSyntaxMode() );
     aOutputData.SetGridColor        ( rOpts.GetGridColor() );
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
@@ -576,7 +588,8 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
         DrawPagePreview(nX1,nY1,nX2,nY2);
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
-    aOutputData.DrawStrings();
+    if ( !bTextWysiwyg )
+        aOutputData.DrawStrings(FALSE);     // in pixel MapMode
 
         // Autofilter- und Pivot-Buttons
 
@@ -590,6 +603,8 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
         // Edit-Zellen
 
     SetMapMode(pViewData->GetLogicMode(eWhich));
+    if ( bTextWysiwyg )
+        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
     aOutputData.DrawEdit(TRUE);
 
     SetMapMode(MAP_PIXEL);
