@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:57:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/frame.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
