@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-22 10:32:50 $
+ *  last change: $Author: as $ $Date: 2001-03-05 12:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
     // Warn programmer at non existing elements in container.
     LOG_ASSERT( !(exist(xFrame)==sal_False), "FrameContainer::remove()\nFrame to remove not exist in container!\n" )
     // Safe impossible cases.
-    LOG_ASSERT( impldbg_lookForZombieFrames( xFrame ), "FrameContainer::remove()\nZombie frame detected!\n" )
+//  LOG_ASSERT( impldbg_lookForZombieFrames( xFrame ), "FrameContainer::remove()\nZombie frame detected!\n" )
 
     // Work only, if container not locked!
     if ( m_bLock == LOCK_OFF )
