@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglos.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:50:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,13 +122,6 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
 
-                // steht nur eine Tabelle im Autotext? Dann kopiere ggfs.
-                // Tabelle in Tabelle
-            BOOL bChkTblInTbl = pTblNd &&
-                                !aCpyPam.GetPoint()->nContent.GetIndex() &&
-                                pTblNd->EndOfSectionIndex() + 1 ==
-                                aCpyPam.GetPoint()->nNode.GetIndex();
-
             StartUndo( UNDO_INSGLOSSARY );
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;
             do {
@@ -138,36 +131,23 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                 SwStartNode* pBoxSttNd = (SwStartNode*)rInsPos.nNode.GetNode().
                                             FindTableBoxStartNode();
 
-                // nur wenn die Box keinen Inhalt hat
-                if( bChkTblInTbl && pBoxSttNd &&
-                    2 == pBoxSttNd->EndOfSectionIndex() - pBoxSttNd->GetIndex()
-                    && 0 != ( pTNd = GetNodes()[ pBoxSttNd->GetIndex() + 1]
-                        ->GetTxtNode() ) && !pTNd->GetTxt().Len() )
+                if( pBoxSttNd && 2 == pBoxSttNd->EndOfSectionIndex() -
+                                      pBoxSttNd->GetIndex() &&
+                    aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
                 {
-                    CopyTblInTbl( pTblNd->GetTable(),
-                                        pBoxSttNd->FindTableNode()->GetTable(),
-                                        SwNodeIndex( *pBoxSttNd ));
+                    // es wird mehr als 1 Node in die akt. Box kopiert.
+                    // Dann muessen die BoxAttribute aber entfernt werden.
+                    ClearBoxNumAttrs( rInsPos.nNode );
                 }
-                else
-                {
-                    if( pBoxSttNd && 2 == pBoxSttNd->EndOfSectionIndex() -
-                                          pBoxSttNd->GetIndex() &&
-                        aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
-                    {
-                        // es wird mehr als 1 Node in die akt. Box kopiert.
-                        // Dann muessen die BoxAttribute aber entfernt werden.
-                        ClearBoxNumAttrs( rInsPos.nNode );
-                    }
 
-                    SwDontExpandItem aACD;
-                    aACD.SaveDontExpandItems( rInsPos );
+                SwDontExpandItem aACD;
+                aACD.SaveDontExpandItems( rInsPos );
 
-                    pGDoc->Copy( aCpyPam, rInsPos );
+                pGDoc->Copy( aCpyPam, rInsPos );
 
-                    aACD.RestoreDontExpandItems( rInsPos );
-                    if( pShell )
-                        pShell->SaveTblBoxCntnt( &rInsPos );
-                }
+                aACD.RestoreDontExpandItems( rInsPos );
+                if( pShell )
+                    pShell->SaveTblBoxCntnt( &rInsPos );
             } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) !=
                         __pStartCrsr );
             EndUndo( UNDO_INSGLOSSARY );
