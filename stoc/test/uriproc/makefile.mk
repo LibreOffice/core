@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 13:22:11 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:44:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,13 @@ UNOTYPES = \
     com.sun.star.lang.XComponent \
     com.sun.star.lang.XMultiComponentFactory \
     com.sun.star.uno.XComponentContext \
+    com.sun.star.uri.ExternalUriReferenceTranslator \
+    com.sun.star.uri.UriReferenceFactory \
+    com.sun.star.uri.VndSunStarPkgUrlReferenceFactory \
+    com.sun.star.uri.XExternalUriReferenceTranslator \
     com.sun.star.uri.XUriReference \
     com.sun.star.uri.XUriReferenceFactory \
+    com.sun.star.uri.XVndSunStarPkgUrlReferenceFactory \
     com.sun.star.uri.XVndSunStarScriptUrlReference
 
 SHL1TARGET = $(TARGET)
