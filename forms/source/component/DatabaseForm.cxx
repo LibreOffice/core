@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:31:36 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 10:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1866,14 +1866,17 @@ void ODatabaseForm::fillProperties(
         staruno::Sequence< starbeans::Property >& _rProps,
         staruno::Sequence< starbeans::Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(14, m_xAggregateSet)
+    BEGIN_AGGREGATION_PROPERTY_HELPER(15, m_xAggregateSet)
         // this property is overwritten by the form
         RemoveProperty(_rAggregateProps, PROPERTY_PRIVILEGES);
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_DATASOURCE, starbeans::PropertyAttribute::CONSTRAINED, 0);
+        RemoveProperty(_rAggregateProps, PROPERTY_DATASOURCE);
+            // we remove and re-declare the DataSourceName property, 'cause we want it to be constrained, and the
+            // original property of our aggregate isn't
 
         DECL_PROP1(NAME,            ::rtl::OUString,                BOUND);
         DECL_PROP1(MASTERFIELDS,    StringSequence,                 BOUND);
         DECL_PROP1(DETAILFIELDS,    StringSequence,                 BOUND);
+        DECL_PROP2(DATASOURCE,      ::rtl::OUString,                BOUND, CONSTRAINED);
         DECL_PROP3(CYCLE,           starform::TabulatorCycle,       BOUND, MAYBEVOID, MAYBEDEFAULT);
         DECL_PROP1(NAVIGATION,      starform::NavigationBarMode,    BOUND);
         DECL_BOOL_PROP1(ALLOWADDITIONS,                             BOUND);
@@ -1955,6 +1958,16 @@ void ODatabaseForm::getFastPropertyValue( staruno::Any& rValue, sal_Int32 nHandl
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_DATASOURCE:
+        {
+            rValue = staruno::makeAny(::rtl::OUString());
+            try
+            {
+                rValue = m_xAggregateSet->getPropertyValue(PROPERTY_DATASOURCE);
+            }
+            catch(staruno::Exception&) { }
+        }
+        break;
         case PROPERTY_ID_THREADSAFE:
         {
             try
@@ -2033,6 +2046,13 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( staruno::Any& rConvertedValue,
     sal_Bool bModified(sal_False);
     switch (nHandle)
     {
+        case PROPERTY_ID_DATASOURCE:
+        {
+            staruno::Any aAggregateProperty;
+            getFastPropertyValue(aAggregateProperty, PROPERTY_ID_DATASOURCE);
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const ::rtl::OUString*>(NULL)));
+        }
+        break;
         case PROPERTY_ID_TARGET_URL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTargetURL);
             break;
@@ -2080,6 +2100,13 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const s
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_DATASOURCE:
+            try
+            {
+                m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
+            }
+            catch(staruno::Exception&) { }
+            break;
         case PROPERTY_ID_TARGET_URL:
             rValue >>= m_aTargetURL;
             break;
