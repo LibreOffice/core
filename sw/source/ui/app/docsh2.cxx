@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:21:16 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 16:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
@@ -103,6 +100,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -178,6 +178,9 @@
 #include <so3/clsids.hxx>
 #endif
 
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
 #ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
 #endif
@@ -1060,9 +1063,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     else
                     {
-                        Clipboard::Clear();
-                        Clipboard::CopyData( pStrm->GetData(), pStrm->GetSize(),
-                                             FORMAT_RTF );
+                        TransferDataContainer* pClipCntnr =
+                                                    new TransferDataContainer;
+                        STAR_REFERENCE( datatransfer::XTransferable )
+                                                        xRef( pClipCntnr );
+
+                        pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
+                                        pStrm->GetData(), pStrm->GetSize() );
+                        pClipCntnr->CopyToClipboard();
                         delete pStrm;
                     }
                 }
@@ -1701,6 +1709,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.16  2001/03/08 21:21:16  jp
+    change: old data transfer API to the new
+
     Revision 1.15  2001/02/26 07:56:31  mib
     xml filters for templates and global docs
 

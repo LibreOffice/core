@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-11 16:06:58 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 16:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,6 @@
 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
-#endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 #ifndef _VCL_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
