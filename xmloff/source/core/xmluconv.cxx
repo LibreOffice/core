@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:54:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,18 +624,85 @@ sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
 }
 
 /** convert double number to string (using SolarMath) */
-void SvXMLUnitConverter::convertNumber( ::rtl::OUStringBuffer& rBuffer,
-                                        double fNumber )
+void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
+    double fNumber, BOOL bWriteUnits) const
 {
-    // method operates on tools-String
+    SvXMLUnitConverter::convertDouble(rBuffer, fNumber,
+        bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
+}
+
+/** convert double number to string (using SolarMath) */
+void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer,
+    double fNumber, BOOL bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
+{
+    if(MAP_RELATIVE == eCoreUnit)
+    {
+        DBG_ASSERT(eDstUnit == MAP_RELATIVE, "MAP_RELATIVE only maps to MAP_RELATIVE!" );
+        String aResult;
+        SolarMath::DoubleToString(aResult, fNumber, 'A', INT_MAX, '.', sal_True);
+        rBuffer.append(rtl::OUString(aResult));
+        if(bWriteUnits)
+            rBuffer.append(sal_Unicode('%'));
+    }
+    else
+    {
+        OUStringBuffer sUnit;
+        String aResult;
+        double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eDstUnit);
+        if(fFactor != 1.0)
+            fNumber *= fFactor;
+        SolarMath::DoubleToString(aResult, fNumber, 'A', INT_MAX, '.', sal_True);
+        rBuffer.append(rtl::OUString(aResult));
+        if(bWriteUnits)
+            rBuffer.append(sUnit);
+    }
+}
+
+/** convert double number to string (using SolarMath) */
+void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber)
+{
     String aResult;
-    SolarMath::DoubleToString( aResult, fNumber, 'A', INT_MAX, '.', sal_True );
-    rBuffer.append( rtl::OUString( aResult ));
+    SolarMath::DoubleToString(aResult, fNumber, 'A', INT_MAX, '.', sal_True);
+    rBuffer.append(rtl::OUString(aResult));
 }
 
 /** convert string to double number (using SolarMath) */
-sal_Bool SvXMLUnitConverter::convertNumber( double& rValue,
-                                            const ::rtl::OUString& rString )
+sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
+    const ::rtl::OUString& rString, BOOL bLookForUnits) const
+{
+    if(bLookForUnits)
+    {
+        MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString(rString, meCoreMeasureUnit);
+
+        return SvXMLUnitConverter::convertDouble(rValue, rString,
+            eSrcUnit, meCoreMeasureUnit);
+    }
+    else
+    {
+        SvXMLUnitConverter::convertDouble(rValue, rString);
+    }
+}
+
+/** convert string to double number (using SolarMath) */
+sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
+    const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
+{
+    int nErr;
+    rValue = SolarMath::StringToDouble( rString, (sal_Unicode)(','), (sal_Unicode)('.'), nErr );
+
+    if(nErr == 0)
+    {
+        OUStringBuffer sUnit;
+        double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eSrcUnit);
+        if(fFactor != 1.0 && fFactor != 0.0)
+            rValue /= fFactor;
+    }
+
+    return ( nErr == 0 );
+}
+
+/** convert string to double number (using SolarMath) */
+sal_Bool SvXMLUnitConverter::convertDouble(double& rValue, const ::rtl::OUString& rString)
 {
     int nErr;
     rValue = SolarMath::StringToDouble( rString, (sal_Unicode)(','), (sal_Unicode)('.'), nErr );
@@ -1094,7 +1161,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
     {
         double fTempDateTime = 0.0;
         Date aTmpNullDate(aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
-        Date aTempDate(nDay, nMonth, nYear);
+        Date aTempDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
         sal_Int32 nTage = aTempDate - aTmpNullDate;
         fTempDateTime = nTage;
         double Hour = nHour;
@@ -1216,12 +1283,12 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
 
     if (bSuccess)
     {
-        rDateTime.Year = nYear;
-        rDateTime.Month = nMonth;
-        rDateTime.Day = nDay;
-        rDateTime.Hours = nHour;
-        rDateTime.Minutes = nMin;
-        rDateTime.Seconds = nSec;
+        rDateTime.Year = (sal_uInt16)nYear;
+        rDateTime.Month = (sal_uInt16)nMonth;
+        rDateTime.Day = (sal_uInt16)nDay;
+        rDateTime.Hours = (sal_uInt16)nHour;
+        rDateTime.Minutes = (sal_uInt16)nMin;
+        rDateTime.Seconds = (sal_uInt16)nSec;
         rDateTime.HundredthSeconds = 0;
     }
     return bSuccess;
@@ -1351,11 +1418,11 @@ void SvXMLUnitConverter::convertVector3D( OUStringBuffer &rBuffer,
     const Vector3D& rVector )
 {
     rBuffer.append(sal_Unicode('('));
-    convertNumber(rBuffer, rVector.X());
+    convertDouble(rBuffer, rVector.X());
     rBuffer.append(sal_Unicode(' '));
-    convertNumber(rBuffer, rVector.Y());
+    convertDouble(rBuffer, rVector.Y());
     rBuffer.append(sal_Unicode(' '));
-    convertNumber(rBuffer, rVector.Z());
+    convertDouble(rBuffer, rVector.Z());
     rBuffer.append(sal_Unicode(')'));
 }
 
