@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:11 $
+ *  last change: $Author: sb $ $Date: 2000-10-04 13:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #ifndef _SVT_FILEDLG_HXX
 #include <svtools/filedlg.hxx>
-#endif
-#ifndef _FSYS_HXX
-#include <tools/fsys.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -252,9 +249,7 @@ IMPL_LINK( LoginDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
 {
     PathDialog* pDlg = new PathDialog( this, WB_3DLOOK );
-    DirEntry aEntry;
-    aEntry.ToAbs();
-    pDlg->SetPath( aEntry.GetFull() );
+    pDlg->SetPath( aPathED.GetText() );
 
     if ( pDlg->Execute() == RET_OK )
         aPathED.SetText( pDlg->GetPath() );
@@ -348,4 +343,3 @@ void LoginDialog::ClearAccount()
     aAccountED.SetText( String() );
     aAccountED.GrabFocus();
 };
-
