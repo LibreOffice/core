@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:57:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ void        InitPage( void );
 String      DosToSystem( sal_Char *pSource );
 
 double      SnumToDouble( INT16 nVal );
+
+double          Snum32ToDouble( UINT32 nValue );
 
 typedef UINT16 StampTyp;
 
