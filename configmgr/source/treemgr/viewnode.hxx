@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewnode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace configmgr
             TreeData* get_impl() const
             { return m_addr; }
 
-            data::Accessor accessor() const   // has a Accessor
+            data::Accessor const& accessor() const   // has a Accessor
             { return m_accessor; }
 
         //    data::TreeAccessor getAccess() const;   // has a TreeAccessor
@@ -141,10 +141,10 @@ namespace configmgr
             Tree tree() const   // has a Tree
             { return m_tree; }
 
-            data::Accessor accessor() const   // has a Accessor
+            data::Accessor const& accessor() const   // has a Accessor
             { return m_tree.accessor(); }
 
-            data::NodeAccess getAccess() const;   // has a NodeAccess
+            data::NodeAccessRef getAccessRef() const;   // has a NodeAccess
 
         private:
             Tree        m_tree;   // has a Tree + Accessor
@@ -175,7 +175,7 @@ namespace configmgr
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
 
-            data::Accessor accessor() const   // has a TreeAccessor
+            data::Accessor const& accessor() const   // has a TreeAccessor
             { return m_node.accessor(); }
 
             data::ValueNodeAccess getAccess() const;   // has a NodeAccess
@@ -208,7 +208,7 @@ namespace configmgr
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
 
-            data::Accessor accessor() const   // has a TreeAccessor
+            data::Accessor const& accessor() const   // has a TreeAccessor
             { return m_node.accessor(); }
 
             data::GroupNodeAccess getAccess() const;   // has a NodeAccess
@@ -239,7 +239,7 @@ namespace configmgr
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
 
-            data::Accessor accessor() const   // has a TreeAccessor
+            data::Accessor const& accessor() const   // has a TreeAccessor
             { return m_node.accessor(); }
 
             data::SetNodeAccess getAccess() const;   // has a NodeAccess
