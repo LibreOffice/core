@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:29:51 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
-#include <com/sun/star/text/ScriptType.hdl>
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
 #ifndef _TXATBASE_HXX //autogen
@@ -125,7 +125,7 @@
 #include <scrpmtch.hxx>
 #endif
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 /*************************************
  * harte Formatierung (Attribute)

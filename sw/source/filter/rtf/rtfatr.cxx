@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:37:54 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #endif
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
-#include <com/sun/star/text/ScriptType.hdl>
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -665,7 +665,7 @@ RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd )
 
     // JP 15.11.00: first default to latin - this must be change, if it
     //              clear how we handle empty paragraphs
-    nCurScript = ::com::sun::star::text::ScriptType::LATIN;
+    nCurScript = ::com::sun::star::i18n::ScriptType::LATIN;
 
     // search the script changes and add this positions as a Item into
     // the attribute list
@@ -680,9 +680,9 @@ RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd )
             nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
                switch( nScript )
             {
-            case ::com::sun::star::text::ScriptType::LATIN:
-            case ::com::sun::star::text::ScriptType::ASIAN:
-            case ::com::sun::star::text::ScriptType::COMPLEX:
+            case ::com::sun::star::i18n::ScriptType::LATIN:
+            case ::com::sun::star::i18n::ScriptType::ASIAN:
+            case ::com::sun::star::i18n::ScriptType::COMPLEX:
                 if( nSttPos != nChg )
                 {
                     SfxPoolItem* pAttr = new
@@ -794,7 +794,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
     // size/weight/posture optional
     switch( nScript )
     {
-    case ::com::sun::star::text::ScriptType::LATIN:
+    case ::com::sun::star::i18n::ScriptType::LATIN:
         rWrt.Strm() << sRTF_RTLCH << sRTF_AF;
         rWrt.OutULong( nCmplx );
         rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
@@ -802,7 +802,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
         rWrt.OutULong( nLatin ) << sRTF_LOCH << sRTF_F;
         rWrt.OutULong( nLatin );
         break;
-    case ::com::sun::star::text::ScriptType::ASIAN:
+    case ::com::sun::star::i18n::ScriptType::ASIAN:
         rWrt.Strm() << sRTF_RTLCH << sRTF_AF;
         rWrt.OutULong( nCmplx );
         rWrt.Strm() << sRTF_LTRCH << sRTF_LOCH << sRTF_AF;
@@ -812,7 +812,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
         pIdArr = aAsianIds;
         break;
 
-    case ::com::sun::star::text::ScriptType::COMPLEX:
+    case ::com::sun::star::i18n::ScriptType::COMPLEX:
         rWrt.Strm() << sRTF_LTRCH << sRTF_DBCH << sRTF_AF;
         rWrt.OutULong( nAsian ) << sRTF_LOCH << sRTF_AF;
         rWrt.OutULong( nLatin ) << sRTF_HICH << sRTF_AF;
@@ -865,21 +865,21 @@ BOOL RTFEndPosLst::MatchScriptToId( USHORT nWhich ) const
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_WEIGHT:
-        bRet = nCurScript == ::com::sun::star::text::ScriptType::LATIN;
+        bRet = nCurScript == ::com::sun::star::i18n::ScriptType::LATIN;
         break;
     case RES_CHRATR_CJK_FONT:
     case RES_CHRATR_CJK_FONTSIZE:
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CJK_WEIGHT:
-        bRet = nCurScript == ::com::sun::star::text::ScriptType::ASIAN;
+        bRet = nCurScript == ::com::sun::star::i18n::ScriptType::ASIAN;
         break;
     case RES_CHRATR_CTL_FONT:
     case RES_CHRATR_CTL_FONTSIZE:
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
     case RES_CHRATR_CTL_WEIGHT:
-        bRet = nCurScript == ::com::sun::star::text::ScriptType::COMPLEX;
+        bRet = nCurScript == ::com::sun::star::i18n::ScriptType::COMPLEX;
         break;
     }
     return bRet;
@@ -3400,11 +3400,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.6 2000-11-20 09:37:54 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.7 2000-11-20 16:40:58 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/11/20 09:37:54  jp
+      new para attributes - expand para range
+
       Revision 1.5  2000/11/16 09:57:35  jp
       export CJK attributes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 16:59:40 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #include <svx/protitem.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HDL
-#include <com/sun/star/text/WordType.hdl>
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_CHARTYPE_HDL
-#include <com/sun/star/text/CharType.hdl>
+#ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
+#include <com/sun/star/i18n/CharType.hdl>
 #endif
 
 
@@ -137,7 +137,7 @@
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 static const USHORT coSrchRplcThreshold = 500;
 

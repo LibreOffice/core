@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:45:59 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_CHARACTERITERATORMODE_HDL_
-#include <com/sun/star/text/CharacterIteratorMode.hdl>
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
+#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #endif
 
 #ifndef _FMTCNTNT_HXX //autogen
@@ -188,7 +188,7 @@
 #include <breakit.hxx>
 #endif
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:28:08 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HDL
-#include <com/sun/star/text/WordType.hdl>
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
 #endif
 
 
@@ -200,7 +200,7 @@ SO2_DECL_REF(SvLinkName)
 #endif
 
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
