@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 12:57:30 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 15:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1512,6 +1512,17 @@ void SAL_CALL ScAccessibleCsvCell::grabFocus() throw( RuntimeException )
 
 
 // XAccessibleContext -----------------------------------------------------
+
+sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleChildCount() throw( RuntimeException )
+{
+    return AccessibleStaticTextBase::getAccessibleChildCount();
+}
+
+Reference< XAccessible > SAL_CALL ScAccessibleCsvCell::getAccessibleChild( sal_Int32 nIndex )
+        throw( IndexOutOfBoundsException, RuntimeException )
+{
+    return AccessibleStaticTextBase::getAccessibleChild( nIndex );
+}
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent() throw( RuntimeException )
 {

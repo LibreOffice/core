@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 15:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,14 @@ public:
     virtual void SAL_CALL grabFocus() throw( ::com::sun::star::uno::RuntimeException );
 
     // XAccessibleContext -----------------------------------------------------
+
+    /** Returns the child count. */
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    /** Returns the specified child. */
+    virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the index of this cell in the table. */
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()

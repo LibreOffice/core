@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 15:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ private:
     Font                        maHeaderFont;       /// Font for column and row headers.
     Font                        maMonoFont;         /// Monospace font for data cells.
     Size                        maWinSize;          /// Size of the control.
+    Size                        maEdEngSize;        /// Paper size for edit engine.
 
     ScCsvSplits                 maSplits;           /// Vector with split positions.
     ScCsvColStateVec            maColStates;        /// State of each column.

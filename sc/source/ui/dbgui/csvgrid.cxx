@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 15:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
 {
     mpEditEngine->SetRefDevice( &maBackgrDev );
     mpEditEngine->SetRefMapMode( MapMode( MAP_PIXEL ) );
+    maEdEngSize = mpEditEngine->GetPaperSize();
 
     maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 
@@ -1104,7 +1105,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
 {
     String aText( rText );
     aText.SearchAndReplaceAll( '\t', ' ' );
-    mpEditEngine->SetPaperSize( maWinSize );
+    mpEditEngine->SetPaperSize( maEdEngSize );
     mpEditEngine->SetText( aText );
     mpEditEngine->Draw( &maBackgrDev, rPos );
 
