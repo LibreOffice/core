@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tv $ $Date: 2002-05-28 15:21:55 $
+ *  last change: $Author: tv $ $Date: 2002-05-29 12:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 
 import com.sun.star.uno.Type;
 
-import com.sun.star.awt.XDialog;
+import com.sun.star.task.XJobExecutor;
 
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
@@ -172,7 +172,7 @@ public class CallReportWizard {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XDialog
+    public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XJobExecutor
     {
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
@@ -182,34 +182,24 @@ public class CallReportWizard {
         public ReportWizardImplementation(XMultiServiceFactory xmultiservicefactoryInitialization)
         {
             xmultiservicefactory = xmultiservicefactoryInitialization;
-        this.execute();
-        //System.err.println("ReportWizard wird gestartet!");
         }
 
 
-        public void setTitle( /*IN*/String Title ){}
-            public String getTitle(  ) {
-                    return "";
-                }
 
-            public short execute(  )
+            public void trigger(String sEvent)
                 {
             try
             {
                XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
                //ConnectToOfficeDatabase(xcomponentloader);
-        //System.err.println("ReportWizard wird gestartet!(2)");
 
-           ReportWizard.startReportWizard(xmultiservicefactory);
+                  ReportWizard.startReportWizard(xmultiservicefactory);
             }
             catch( Exception exception )
             {
                 System.err.println( exception );
-                                return 0;
             }
-                        return 1;
                 }
-            public void endExecute(  ){}
 
         /** The service name, that must be used to get an instance of this service.
          */
@@ -305,7 +295,7 @@ public class CallReportWizard {
         try
         {
             typeReturn = new Type[] {
-                new Type( XDialog.class ) ,
+                new Type( XJobExecutor.class ) ,
                 new Type( XTypeProvider.class ),
                 new Type( XServiceInfo.class ),
                 new Type( XInitialization.class )

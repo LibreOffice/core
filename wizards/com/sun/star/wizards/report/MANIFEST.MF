@@ -1,3 +1,1 @@
-Manifest-Version: 1.0
-Solar-Version: 642b(Build:7985)
 RegistrationClassName: com.sun.star.wizards.report.CallReportWizard
