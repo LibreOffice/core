@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-06 10:15:11 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ dutch ] = "Tweede overzichtsniveau";
     Text[ chinese_simplified ] = "µΪ¶ώΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Δεύτερο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦2 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦2 °³·«  ·ΉΊ§";
     Text[ turkish ] = "έkinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -418,7 +418,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ dutch ] = "Derde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΘύΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Τρίτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦3 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦3 °³·«  ·ΉΊ§";
     Text[ turkish ] = "άηόncό anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -446,7 +446,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ dutch ] = "Vierde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΛΔΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Τέταρτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦4 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦4 °³·«  ·ΉΊ§";
     Text[ turkish ] = "Dφrdόncό anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -475,7 +475,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ dutch ] = "Vijfde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΞεΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Πέμπτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦5 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦5 °³·«  ·ΉΊ§";
     Text[ turkish ] = "Beώinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -503,7 +503,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ dutch ] = "Zesde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΑωΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Έκτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦6 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦6 °³·«  ·ΉΊ§";
     Text[ turkish ] = "Altύncύ anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -531,7 +531,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ dutch ] = "Zevende overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΖίΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Έβδομο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦7 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦7 °³·«  ·ΉΊ§";
     Text[ turkish ] = "Yedinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -559,7 +559,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ dutch ] = "Achtste overzichtsniveau";
     Text[ chinese_simplified ] = "µΪ°ΛΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Όγδοο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦8 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦8  °³·«  ·ΉΊ§";
     Text[ turkish ] = "Sekizinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -587,7 +587,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ dutch ] = "Negende overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΎΕΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Ένατο επίπεδο διάρθρωσης";
-    Text[ korean ] = "Α¦9 °³Ώδ ·ΉΊ§";
+    Text[ korean ] = "Α¦9  °³·«  ·ΉΊ§";
     Text[ turkish ] = "Dokuzuncu anahat dόzeyi";
     Text[ language_user1 ] = " ";
 };
@@ -1161,7 +1161,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text[ dutch ] = "Standaard";
     Text[ chinese_simplified ] = "±κΧΌ";
     Text[ greek ] = "Προεπιλογή";
-    Text[ korean ] = "Θ¨";
+    Text[ korean ] = "±βΊ»";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
 };
