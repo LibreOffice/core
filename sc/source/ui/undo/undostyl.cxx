@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undostyl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2001-08-20 08:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include "docsh.hxx"
 #include "stlpool.hxx"
 #include "printfun.hxx"
+#include "scmod.hxx"
+#include "inputhdl.hxx"
 #include "globstr.hrc"
 
 // -----------------------------------------------------------------------
@@ -166,6 +168,10 @@ void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, BOOL bRem
     double nPPTY = aLogic.Y() / 1000.0;
     Fraction aZoom(1,1);
     pDoc->StyleSheetChanged( pStyle, bRemoved, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    if (pHdl)
+        pHdl->ForgetLastPattern();
 }
 
 // static
