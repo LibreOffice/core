@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:39:21 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:07:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,8 +99,13 @@ LIBOUT=$(SOLARLIBDIR)
 MY_COPY=$(GNUCOPY)
 MY_COPY_RECURSIVE=$(GNUCOPY) -r
 .ELSE
+.IF "$(OS)"=="MACOSX"
+MY_COPY=$(GNUCOPY)
+MY_COPY_RECURSIVE=$(GNUCOPY) -r
+.ELSE
 MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
@@ -131,7 +136,11 @@ MY_DIRCMP=dircmp
 MY_TEXTCOPY= tr -d "\015"
 
 MY_DLLPREFIX=lib
+.IF "$(OS)"=="MACOSX"
+MY_DLLPOSTFIX=.dylib
+.ELSE
 MY_DLLPOSTFIX=.so
+.ENDIF
 MY_DLLOUT=$(OUT)$/lib
 DLLOUT=$(SOLARLIBDIR)
 
