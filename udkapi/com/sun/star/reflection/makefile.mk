@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 16:15:23 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:57:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ IDLFILES=\
     XParameter.idl \
     XPropertyTypeDescription.idl\
     XProxyFactory.idl\
+    XPublished.idl \
     XServiceConstructorDescription.idl \
     XServiceTypeDescription.idl\
     XServiceTypeDescription2.idl \
