@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 14:27:00 $
+ *  last change: $Author: fs $ $Date: 2002-09-26 07:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4555,8 +4555,40 @@ void FmXFormShell::viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeacti
 {
     // deactivate our view if we are deactivated ourself
     // FS - 30.06.99 - 67308
-    if ( _pCurrentView && _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
-        _pCurrentView->GetImpl()->Deactivate( _bDeactivateController );
+    if ( _pCurrentView )
+    {
+        // deactivate the controls on this page
+        if ( _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
+        {
+            _pCurrentView->GetImpl()->Deactivate( _bDeactivateController );
+        }
+
+        // if we have an async load operation pending for the 0-th page for this view,
+        // we need to cancel this
+        // 103727 - 2002-09-26 - fs@openoffice.org
+        const SdrPageView* pCurPageView = _pCurrentView->GetPageViewPvNum( 0 );
+        const FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
+        if ( pPage )
+        {
+            // move all events from our queue to a new one, omit the events for the deactivated
+            // page
+            ::std::queue< FmLoadAction > aNewEvents;
+            while ( m_aLoadingPages.size() )
+            {
+                FmLoadAction aAction = m_aLoadingPages.front();
+                m_aLoadingPages.pop();
+                if ( pPage != aAction.pPage )
+                {
+                    aNewEvents.push( aAction );
+                }
+                else
+                {
+                    Application::RemoveUserEvent( aAction.nEventId );
+                }
+            }
+            m_aLoadingPages = aNewEvents;
+        }
+    }
 }
 
 //------------------------------------------------------------------------
