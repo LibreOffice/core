@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 20:20:42 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
     };
 
@@ -137,7 +137,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ arabic ] = "ÑÈØ ÏÇÎáí";
         Text[ turkish ] = "~İç";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Interior";
+        Text[ catalan ] = "Unió ~interior";
         Text[ finnish ] = "~Innerer";
     };
     RadioButton RB_LEFT
@@ -168,7 +168,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ arabic ] = "ÕáÉ íÓÑì";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Izquierda";
+        Text[ catalan ] = "Unió ~esquerra";
         Text[ finnish ] = "~Linker";
     };
     RadioButton RB_RIGHT
@@ -199,7 +199,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ arabic ] = "ÕáÉ íãäì";
         Text[ turkish ] = "~Sağ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Derecha";
+        Text[ catalan ] = "Unió ~dreta";
         Text[ finnish ] = "~Rechter";
     };
     RadioButton RB_FULL
@@ -230,7 +230,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ korean ] = "í’€ ì¡°ì¸(~F)";
         Text[ arabic ] = "ÕáÉ ßÇãáÉ";
         Text[ turkish ] = "Tam";
-        Text[ catalan ] = "~Completa";
+        Text[ catalan ] = "Unió ~completa (exterior)";
         Text[ finnish ] = "~Vollständiger";
     };
 
@@ -284,7 +284,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ arabic ] = "ÎÕÇÆÕ ÇáÑÈØ";
     Text[ turkish ] = "Birleşme özellikleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Propiedades de unión";
+    Text[ catalan ] = "Propietats de la unió";
     Text[ finnish ] = "Verbundeigenschaften";
 };
 
@@ -313,7 +313,7 @@ String STR_QUERY_INNER_JOIN
     Text[ arabic ] = "ıáÇ íÍÊæí ÅáÇ Úáì ÇáÓÌáÇÊ ÇáÊí íÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä.";
     Text[ turkish ] = "Yalnızca her iki tablodaki ilişkili alan içeriklerinin aynı olduğu kayıtları içerir.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contiene solo los registros en los que los contenidos de los campos vinculados de ambas tablas con iguales.";
+    Text[ catalan ] = "Inclou només els registres per als quals el contingut dels camps afins de les dues taules és idèntic.";
     Text[ finnish ] = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
 };
 
@@ -342,7 +342,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ arabic ] = "íÍÊæí Úáì ßá ÓÌáÇÊ '%1'¡ æÓÌáÇÊ '%2' ÇáÊí ÊÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä İŞØ.";
     Text[ turkish ] = "'%1' tablosundaki kayıtların TAMAMINI ve '%2' tablosundaki kayıtlardan yalnızca her iki tablodaki ilişkili alan içerikleri aynı olan kayıtları içerir.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y solo los registros de '%2' en los que los contenidos de los campos vinculados de ambas tablas son iguales.";
+    Text[ catalan ] = "Conté TOTS els registres de dades de '%1' i només els registres de '%2' en els que els continguts dels camps vinculats a totes dues taules són iguals.";
     Text[ finnish ] = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
 };
 
@@ -371,9 +371,10 @@ String STR_QUERY_FULL_JOIN
     Text[ arabic ] = "íÍÊæí Úáì ßá ÇáÓÌáÇÊ ãä '%1' æ '%2'.";
     Text[ turkish ] = "'%1' ve '%2' tablolarındaki TÜM kayıtları içerir.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
+    Text[ catalan ] = "Conté TOTS els registres de dades '%1' i de '%2'";
     Text[ finnish ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
 };
+
 
 
 
