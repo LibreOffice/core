@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 19:33:32 $
+ *  last change:$Date: 2004-11-02 12:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ public class AccessibleDrawDocumentView extends TestCase {
 
         log.println("ImplementationName "+utils.getImplName(oObj));
 
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
