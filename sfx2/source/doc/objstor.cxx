@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:36:02 $
+ *  last change: $Author: mba $ $Date: 2002-07-04 12:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( pMedium->GetFilter() &&  ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
         {
             bOk = ImportFrom(*pMedium);
+            FinishedLoading( SFX_LOADED_ALL );
         }
         else
         {
@@ -1528,11 +1529,9 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         else
             aArgs.realloc ( i-1 );
         xLoader->filter( aArgs );
-        FinishedLoading( SFX_LOADED_ALL );
         return sal_True;
     }
 
-    FinishedLoading( SFX_LOADED_ALL );
     return sal_False;
 }
 
