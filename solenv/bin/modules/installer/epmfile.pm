@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: is $ $Date: 2004-07-29 11:09:48 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:19:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -546,14 +546,18 @@ sub call_epm
         my $infoline = "Systemcall  (Try $i): $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        for ( my $j = 0; $j <= $#epmoutput; $j++ ) { push( @installer::globals::logfileinfo, "$epmoutput[$j]"); }
+        for ( my $j = 0; $j <= $#epmoutput; $j++ )
+        {
+            if ( $i < $maxepmcalls ) { $epmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
+            push( @installer::globals::logfileinfo, "$epmoutput[$j]");
+        }
 
         if ($returnvalue)
         {
             $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
             push( @installer::globals::logfileinfo, $infoline);
             if ( $i == $maxepmcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "call_epm"); }
-            }
+        }
         else
         {
             print "Success (Try $i): \"$systemcall\"\n";
@@ -951,7 +955,11 @@ sub create_packages_without_epm
             my $infoline = "Systemcall (Try $i): $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            for ( my $j = 0; $j <= $#pkgmkoutput; $j++ ) { push( @installer::globals::logfileinfo, "$pkgmkoutput[$j]"); }
+            for ( my $j = 0; $j <= $#pkgmkoutput; $j++ )
+            {
+                if ( $i < $maxpkgmkcalls ) { $pkgmkoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
+                push( @installer::globals::logfileinfo, "$pkgmkoutput[$j]");
+            }
 
             if ($returnvalue)
             {
@@ -1065,7 +1073,11 @@ sub create_packages_without_epm
             my $infoline = "Systemcall (Try $i): $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            for ( my $j = 0; $j <= $#rpmoutput; $j++ ) { push( @installer::globals::logfileinfo, "$rpmoutput[$j]"); }
+            for ( my $j = 0; $j <= $#rpmoutput; $j++ )
+            {
+                if ( $i < $maxrpmcalls ) { $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
+                push( @installer::globals::logfileinfo, "$rpmoutput[$j]");
+            }
 
             if ($returnvalue)
             {
