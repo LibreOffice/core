@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-05 14:07:13 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 12:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2997,8 +2997,6 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
     {
-        International aInternational( pFormatter->GetInternational() );
-        sal_Bool bInternationalChanged = sal_True;
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
@@ -3020,39 +3018,14 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
                 if ( Value >>= b )
                 {
                      pFormatter->SetStrictFormat( b );
-                    bInternationalChanged = sal_False;
                 }
-            }
-            break;
-            case BASEPROPERTY_DATESHOWCENTURY:
-            {
-                sal_Bool b;
-                if ( Value >>= b )
-                     aInternational.SetDateCentury( b );
-            }
-            break;
-            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-            {
-                sal_Bool b;
-                if ( Value >>= b )
-                     aInternational.EnableNumThousandSep( b );
-            }
-            break;
-            case BASEPROPERTY_CURRENCYSYMBOL:
-            {
-                ::rtl::OUString aString;
-                if ( Value >>= aString )
-                     aInternational.SetCurrSymbol( aString );
             }
             break;
             default:
             {
-                bInternationalChanged = sal_False;
                 VCLXSpinField::setProperty( PropertyName, Value );
             }
         }
-        if ( bInternationalChanged )
-            pFormatter->SetInternational( aInternational );
     }
 }
 
@@ -3075,21 +3048,6 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
             case BASEPROPERTY_STRICTFORMAT:
             {
                 aProp <<= (sal_Bool) pFormatter->IsStrictFormat();
-            }
-            break;
-            case BASEPROPERTY_DATESHOWCENTURY:
-            {
-                 aProp <<= (sal_Bool) pFormatter->GetInternational().IsDateCentury();
-            }
-            break;
-            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-            {
-                 aProp <<= (sal_Bool) pFormatter->GetInternational().IsNumThousandSep();
-            }
-            break;
-            case BASEPROPERTY_CURRENCYSYMBOL:
-            {
-                aProp <<= ::rtl::OUString( pFormatter->GetInternational().GetCurrSymbol() );
             }
             break;
             default:
@@ -3174,6 +3132,13 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
                     ((DateField*)GetWindow())->SetExtFormat( (ExtDateFieldFormat) n );
             }
             break;
+            case BASEPROPERTY_DATESHOWCENTURY:
+            {
+                sal_Bool b;
+                if ( Value >>= b )
+                     ((DateField*)GetWindow())->SetShowDateCentury( b );
+            }
+            break;
             default:
             {
                 VCLXFormattedSpinField::setProperty( PropertyName, Value );
@@ -3206,6 +3171,11 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             case BASEPROPERTY_DATEMAX:
             {
                 aProp <<= (sal_Int32) getMax();
+            }
+            break;
+            case BASEPROPERTY_DATESHOWCENTURY:
+            {
+                 aProp <<= ((DateField*)GetWindow())->IsShowDateCentury();
             }
             break;
             default:
@@ -3850,6 +3820,13 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
                      setDecimalDigits( n );
             }
             break;
+            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+            {
+                sal_Bool b;
+                if ( Value >>= b )
+                     ((NumericField*)GetWindow())->SetUseThousandSep( b );
+            }
+            break;
             default:
             {
                 VCLXFormattedSpinField::setProperty( PropertyName, Value );
@@ -3887,6 +3864,11 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
                 aProp <<= (double) getSpinSize();
+            }
+            break;
+            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+            {
+                 aProp <<= (sal_Bool) ((NumericField*)GetWindow())->IsUseThousandSep();
             }
             break;
             default:
@@ -4134,6 +4116,20 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
                      setDecimalDigits( n );
             }
             break;
+            case BASEPROPERTY_CURRENCYSYMBOL:
+            {
+                ::rtl::OUString aString;
+                if ( Value >>= aString )
+                     ((LongCurrencyField*)GetWindow())->SetCurrencySymbol( aString );
+            }
+            break;
+            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+            {
+                sal_Bool b;
+                if ( Value >>= b )
+                     ((LongCurrencyField*)GetWindow())->SetUseThousandSep( b );
+            }
+            break;
             default:
             {
                 VCLXFormattedSpinField::setProperty( PropertyName, Value );
@@ -4171,6 +4167,16 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             case BASEPROPERTY_VALUESTEP_DOUBLE:
             {
                 aProp <<= (double) getSpinSize();
+            }
+            break;
+            case BASEPROPERTY_CURRENCYSYMBOL:
+            {
+                aProp <<= ::rtl::OUString( ((LongCurrencyField*)GetWindow())->GetCurrencySymbol() );
+            }
+            break;
+            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+            {
+                 aProp <<= (sal_Bool) ((LongCurrencyField*)GetWindow())->IsUseThousandSep();
             }
             break;
             default:
