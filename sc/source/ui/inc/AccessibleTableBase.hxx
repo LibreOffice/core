@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:41:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
 #include "global.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
+#include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
@@ -88,8 +88,8 @@ class ScTabViewShell;
         <code>AccessibleTable</code> service.
 */
 
-typedef cppu::ImplHelper2< ::drafts::com::sun::star::accessibility::XAccessibleTable,
-                    ::drafts::com::sun::star::accessibility::XAccessibleSelection>
+typedef cppu::ImplHelper2< ::com::sun::star::accessibility::XAccessibleTable,
+                    ::com::sun::star::accessibility::XAccessibleSelection>
                     ScAccessibleTableBaseImpl;
 
 class ScAccessibleTableBase :
@@ -100,7 +100,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleTableBase(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScRange& rRange);
 protected:
@@ -160,12 +160,12 @@ public:
                     ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Returns the row headers as an AccessibleTable.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleRowHeaders(  )
                     throw (::com::sun::star::uno::RuntimeException);
 
     /// Returns the column headers as an AccessibleTable.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleColumnHeaders(  )
                     throw (::com::sun::star::uno::RuntimeException);
 
@@ -192,18 +192,18 @@ public:
                     ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Returns the Accessible at a specified row and column in the table.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
                             ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Returns the caption for the table.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleCaption(  )
                     throw (::com::sun::star::uno::RuntimeException);
 
     /// Returns the summary description of the table.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                 getAccessibleSummary(  )
                     throw (::com::sun::star::uno::RuntimeException);
 
@@ -243,7 +243,7 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
@@ -262,14 +262,14 @@ protected:
 public:
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the set of current states.
     // perhaps sometimes to be implemented
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -298,13 +298,13 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException);
 
