@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:53:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@
 #define PARAM_TRANSFORM     TEXT( " TRANSFORMS=" )
 #define PARAM_REBOOT        TEXT( " REBOOT=Force" )
 
+#define PARAM_RUNNING       TEXT( "ignore_running" )
+
 #define MSI_DLL             TEXT( "msi.dll" )
 #define ADVAPI32_DLL        TEXT( "advapi32.dll" )
 #define PROFILE_NAME        TEXT( "setup.ini" )
@@ -138,6 +140,7 @@ SetupAppX::SetupAppX()
 
     m_bQuiet          = false;
     m_bAdministrative = false;
+    m_bIgnoreAlreadyRunning = false;
 }
 
 //--------------------------------------------------------------------------
@@ -1175,8 +1178,13 @@ boolean SetupAppX::IsTerminalServerInstalled() const
 
 //--------------------------------------------------------------------------
 boolean SetupAppX::AlreadyRunning() const
-
 {
+    if ( m_bIgnoreAlreadyRunning )
+    {
+        Log( TEXT("Ignoring already running MSI instance!\r\n") );
+        return false;
+    }
+
     const TCHAR *sMutexName    = NULL;
     const TCHAR sGUniqueName[] = TEXT( "Global\\_MSISETUP_{EA8130C1-8D3D-4338-9309-1A52D530D846}" );
     const TCHAR sUniqueName[]  = TEXT( "_MSISETUP_{EA8130C1-8D3D-4338-9309-1A52D530D846}" );
@@ -1431,6 +1439,10 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
                     nRet = ERROR_OUTOFMEMORY;
                     break;
                 }
+            }
+            else if ( _tcsnicmp( pSub, PARAM_RUNNING, _tcslen( PARAM_RUNNING ) ) == 0 )
+            {
+                m_bIgnoreAlreadyRunning = true;
             }
             else if ( (*pSub) == 'i' || (*pSub) == 'I' || (*pSub) == 'f' || (*pSub) == 'F' ||
                       (*pSub) == 'p' || (*pSub) == 'P' || (*pSub) == 'x' || (*pSub) == 'X' ||
