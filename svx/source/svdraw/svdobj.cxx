@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-29 15:31:24 $
+ *  last change: $Author: aw $ $Date: 2002-10-30 14:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2712,6 +2712,25 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
     ExtOutputDevice aXOut( &aBlackHole );
     SdrObject*      pClone = Clone();
+
+    if(pClone && ISA(SdrEdgeObj))
+    {
+        // #102344# Flat cloned SdrEdgeObj, copy connections to original object(s).
+        // This is deleted later at delete pClone.
+        SdrObject* pLeft = ((SdrEdgeObj*)this)->GetConnectedNode(TRUE);
+        SdrObject* pRight = ((SdrEdgeObj*)this)->GetConnectedNode(FALSE);
+
+        if(pLeft)
+        {
+            pClone->ConnectToNode(TRUE, pLeft);
+        }
+
+        if(pRight)
+        {
+            pClone->ConnectToNode(FALSE, pRight);
+        }
+    }
+
     pClone->SetItem(XLineStyleItem(XLINE_SOLID));
     pClone->SetItem(XLineColorItem(String(), Color(COL_BLACK)));
     pClone->SetItem(XFillStyleItem(XFILL_NONE));
