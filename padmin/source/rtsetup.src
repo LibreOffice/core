@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-22 21:45:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,7 +816,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ portuguese ] = "~Substituir tipo de letra";
         Text[ russian ] = "~Çàìåíèòü òèï øğèôòà";
         Text[ greek ] = "~Substitute font";
-        Text[ dutch ] = "~Lettertype vervangen";
+        Text[ dutch ] = "~Vervang lettertype";
         Text[ french ] = "Substitution de p~olice";
         Text[ spanish ] = "~Sustituir fuente";
         Text[ italian ] = "Tipi di carattere sostituiti";
@@ -827,7 +827,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ japanese ] = "Ì«İÄ‚ğ’uŠ·‚·‚é(~C)";
         Text[ korean ] = "´ëÃ¼µÈ ±Û²Ã(~C)";
         Text[ chinese_simplified ] = "¸üÌæ×ÖÌå(~C)";
-        Text[ chinese_traditional ] = "¥N´À¦r«¬(~C)";
+        Text[ chinese_traditional ] = "¥N´À¦r«¬";
         Text[ turkish ] = "~Substitute font";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÎØ";
         Text[ finnish ] = "Ersetze Sc~hriftart";
@@ -1006,22 +1006,22 @@ TabPage RID_RTS_COMMANDPAGE
         Size = MAP_APPFONT( 85, 10 );
         Text = "~Konfigurieren als";
         Text [ english ] = "~Configure as";
-        Text[ english_us ] = "~Configure as:";
-        Text[ portuguese ] = "~Configurar como:";
+        Text[ english_us ] = "~Configure as";
+        Text[ portuguese ] = "~Configurar como";
         Text[ russian ] = "Êîíôèãóğèğîâàòü êàê :";
         Text[ greek ] = "Configure as : ";
-        Text[ dutch ] = "~Configureren als: ";
+        Text[ dutch ] = "~Configureren als";
         Text[ french ] = "~Configurer comme :";
-        Text[ spanish ] = "Con~figurar como :";
+        Text[ spanish ] = "Con~figurar como";
         Text[ italian ] = "Configura come :";
         Text[ danish ] = "Configure as : ";
-        Text[ swedish ] = "~Konfigurera som :";
-        Text[ polish ] = "Konfiguruj jako :";
+        Text[ swedish ] = "~Konfigurera som";
+        Text[ polish ] = "Konfiguruj jako";
         Text[ portuguese_brazilian ] = "Configure as : ";
-        Text[ japanese ] = "İ’è‘ÎÛ:";
+        Text[ japanese ] = "İ’è‘ÎÛ";
         Text[ korean ] = "Configure as : ";
-        Text[ chinese_simplified ] = "ÅäÖÃ³É£º";
-        Text[ chinese_traditional ] = "°t¸m¦¨¡G";
+        Text[ chinese_simplified ] = "ÅäÖÃ³É";
+        Text[ chinese_traditional ] = "°t¸m¦¨";
         Text[ turkish ] = "Configure as : ";
         Text[ arabic ] = "Êßæíä ßÜ :";
         Text[ finnish ] = "Konfigurieren als :";
@@ -1296,16 +1296,16 @@ TabPage RID_RTS_OTHERPAGE
         Text = "~Linke Randkorrektur" ;
         Text [ English ] = "~Left margin adjustment" ;
         Text[ english_us ] = "~Left margin adjustment";
-        Text[ portuguese ] = "~Ajuste da margem esquerda:";
+        Text[ portuguese ] = "~Ajuste da margem esquerda";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà :";
         Text[ greek ] = "Äéüñèùóç áñéóôåñïı ğåñéèùñßïõ :";
-        Text[ dutch ] = "~Linker marge :";
+        Text[ dutch ] = "~Linker marge corrigeren";
         Text[ french ] = "Correction de la marge ~gauche :";
-        Text[ spanish ] = "~Corrección del margen izquierdo :";
+        Text[ spanish ] = "~Corrección del margen izquierdo";
         Text[ italian ] = "Correggi margine ~sinistro:";
         Text[ danish ] = "~Left margin adjustment :";
         Text[ swedish ] = "Vänster margina~lkorrigering";
-        Text[ polish ] = "Wyrównanie lewego marginesu :";
+        Text[ polish ] = "Wyrównanie lewego marginesu";
         Text[ portuguese_brazilian ] = "~Left margin adjustment :";
         Text[ japanese ] = "¶—]”’‚Ì’²®(~L)";
         Text[ korean ] = "¿ŞÂÊ¡¡¿©¹é¡¡Á¶Á¤(~L)";
@@ -1334,16 +1334,16 @@ TabPage RID_RTS_OTHERPAGE
         Text = "~Obere Randkorrektur" ;
         Text [ English ] = "~Top margin adjustment" ;
         Text[ english_us ] = "~Top margin adjustment";
-        Text[ portuguese ] = "Aju~ste da margem superior:";
+        Text[ portuguese ] = "Aju~ste da margem superior";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó :";
         Text[ greek ] = "Äéüñèùóç ğÜíù ğåñéèùñß~ïõ :";
-        Text[ dutch ] = "~Marge boven :";
+        Text[ dutch ] = "~Marge boven corrigeren";
         Text[ french ] = "Correction de la marge ~supérieure :";
-        Text[ spanish ] = "~Corrección del margen superior:";
+        Text[ spanish ] = "~Corrección del margen superior";
         Text[ italian ] = "Correggi margine s~uperiore:";
         Text[ danish ] = "~Top margin adjustment :";
         Text[ swedish ] = "Övre marginalj~ustering";
-        Text[ polish ] = "Wyrównanie górnego marginesu :";
+        Text[ polish ] = "Wyrównanie górnego marginesu";
         Text[ portuguese_brazilian ] = "~Top margin adjustment :";
         Text[ japanese ] = "ã—]”’‚Ì’²®(~T)";
         Text[ korean ] = "À§¡¡¿©¹é¡¡Á¶Á¤(~T):";
@@ -1372,16 +1372,16 @@ TabPage RID_RTS_OTHERPAGE
         Text = "~Rechte Randkorrektur" ;
         Text [ English ] = "~Right margin adjustment" ;
         Text[ english_us ] = "~Right margin adjustment";
-        Text[ portuguese ] = "Ajuste ~da margem direita:";
+        Text[ portuguese ] = "Ajuste ~da margem direita";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà :";
         Text[ greek ] = "Äéüñèùóç äåîéïı ğå~ñéèùñßïõ :";
-        Text[ dutch ] = "~Rechter marge :";
+        Text[ dutch ] = "~Rechter marge corrigeren";
         Text[ french ] = "Correction de la marge ~droite :";
-        Text[ spanish ] = "~Corrección del margen derecho:";
+        Text[ spanish ] = "~Corrección del margen derecho";
         Text[ italian ] = "Correzione margine ~destro:";
         Text[ danish ] = "~Right margin adjustment :";
         Text[ swedish ] = "Höge~r marginalkorrigering";
-        Text[ polish ] = "Wyrównanie prawego marginesu :";
+        Text[ polish ] = "Wyrównanie prawego marginesu";
         Text[ portuguese_brazilian ] = "~Right margin adjustment :";
         Text[ japanese ] = "‰E—]”’‚Ì’²®(~R)";
         Text[ korean ] = "~¿À¸¥ÂÊ¡¡¿©¹é¡¡Á¶Á¤:";
@@ -1410,16 +1410,16 @@ TabPage RID_RTS_OTHERPAGE
         Text = "~Untere Randkorrektur" ;
         Text [ English ] = "~Bottom margin adjustment" ;
         Text[ english_us ] = "~Bottom margin adjustment";
-        Text[ portuguese ] = "Ajuste da margem ~inferior:";
+        Text[ portuguese ] = "Ajuste da margem ~inferior";
         Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó :";
         Text[ greek ] = "Äéüñèùóç êÜôù ğåñéèùñßï~õ :";
-        Text[ dutch ] = "M~arge beneden :";
+        Text[ dutch ] = "M~arge beneden corrigeren";
         Text[ french ] = "Correction de la marge ~inférieure :";
-        Text[ spanish ] = "~Corrección del margen inferior:";
+        Text[ spanish ] = "~Corrección del margen inferior";
         Text[ italian ] = "Correggi margine ~inferiore:";
         Text[ danish ] = "~Bottom margin adjustment :";
         Text[ swedish ] = "~Undre marginalkorrigering";
-        Text[ polish ] = "Wyrównanie dolnego marginesu :";
+        Text[ polish ] = "Wyrównanie dolnego marginesu";
         Text[ portuguese_brazilian ] = "~Bottom margin adjustment :";
         Text[ japanese ] = "‰º—]”’‚Ì’²®(~B)";
         Text[ korean ] = "¾Æ·¡¡¡¿©¹é¡¡Á¶Á¤ (~B):";
@@ -1448,16 +1448,16 @@ TabPage RID_RTS_OTHERPAGE
         Text = "~Kommentar" ;
         Text [ English ] = "~Comment" ;
         Text[ english_us ] = "~Comment";
-        Text[ portuguese ] = "~Comentário:";
+        Text[ portuguese ] = "~Comentário";
         Text[ russian ] = "~Êîììåíòàğèé :";
         Text[ greek ] = "ĞáñáôŞñçóç :";
-        Text[ dutch ] = "~Commentaar :";
+        Text[ dutch ] = "~Commentaar";
         Text[ french ] = "Co~mmentaire :";
-        Text[ spanish ] = "~Comentario:";
+        Text[ spanish ] = "~Comentario";
         Text[ italian ] = "Co~mmento:";
         Text[ danish ] = "~Comment :";
         Text[ swedish ] = "~Kommentar";
-        Text[ polish ] = "Komentarz :";
+        Text[ polish ] = "Komentarz";
         Text[ portuguese_brazilian ] = "~Comment :";
         Text[ japanese ] = "ºÒİÄ(~C)";
         Text[ korean ] = "ÁÖ¼® (~C):";
@@ -1481,17 +1481,17 @@ TabPage RID_RTS_OTHERPAGE
         Text = "~Standard";
         Text [ English ] = "~Standard";
         Text[ english_us ] = "~Default";
-        Text[ portuguese ] = "~Valores padrão";
+        Text[ portuguese ] = "~Padrão";
         Text[ russian ] = "~Ñòàíäàğòíûå çíà÷åíèÿ";
         Text[ greek ] = "Ôéìİ~ò ğñïåğéëïãŞò";
-        Text[ dutch ] = "~Standaardwaarden";
+        Text[ dutch ] = "~Standaard";
         Text[ french ] = "~Valeurs par défaut";
-        Text[ spanish ] = "~Valores estándar";
+        Text[ spanish ] = "~Estándar";
         Text[ finnish ] = "~Default Values";
-        Text[ italian ] = "~Valori standard";
+        Text[ italian ] = "Standard";
         Text[ danish ] = "~Default values";
         Text[ swedish ] = "~Standard";
-        Text[ polish ] = "Wartoœci domyœlne";
+        Text[ polish ] = "Standard";
         Text[ portuguese_brazilian ] = "~Default values";
         Text[ japanese ] = "•W€(~D)";
         Text[ korean ] = "~±âº»°ª";
@@ -1528,6 +1528,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "Please enter the fax number.";
     Text[ catalan ] = "Indique el número de fax";
 };
+
 
 
 
