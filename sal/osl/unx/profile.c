@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2000-10-30 11:56:26 $
+ *  last change: $Author: mfe $ $Date: 2000-10-31 15:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,7 +1280,8 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrNam
 
     /* Convert result to UNC notation */
 
-    rtl_uString_newFromAscii(&strNativeName,pszBuffer);
+    rtl_string2UString( strNativeName, pszBuffer, rtl_str_getLength( pszBuffer ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+
     osl_normalizePath( strNativeName, strProfileName );
     rtl_uString_release( strNativeName );
 
