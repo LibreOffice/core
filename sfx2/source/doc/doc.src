@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:32:40 $
+ *  last change: $Author: vg $ $Date: 2002-09-17 13:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2409,6 +2409,8 @@ String STR_EXPORTASPDF_TITLE
     Text[ japanese ] = "PDF としてエクスポート";
     Text[ korean ] = "PDF로 내보내기";
     Text[ chinese_simplified ] = "输出成 PDF";
+    Text[ french ] = "Exporter au format PDF";
+    Text[ italian ] = "Esporta come file PDF";
 };
 
 String STR_EXPORTWITHCFGBUTTON
@@ -2421,6 +2423,8 @@ String STR_EXPORTWITHCFGBUTTON
     Text[ japanese ] = "エクスポート...";
     Text[ korean ] = "내보내기...";
     Text[ chinese_simplified ] = "输出...";
+    Text[ french ] = "Exporter...";
+    Text[ italian ] = "~Esporta...";
 };
 
 String STR_EXPORTBUTTON
@@ -2433,6 +2437,8 @@ String STR_EXPORTBUTTON
     Text[ japanese ] = "エクスポート";
     Text[ korean ] = "내보내기";
     Text[ chinese_simplified ] = "输出";
+    Text[ french ] = "Exporter";
+    Text[ italian ] = "Esporta";
 };
 
 String RID_SVXSTR_SECURITY_ADDPATH
@@ -2444,12 +2450,12 @@ String RID_SVXSTR_SECURITY_ADDPATH
     Text[ russian ] = "Add this directory  to the list of secure paths: ";
     Text[ greek ] = "Add this directory  to the list of secure paths: ";
     Text[ dutch ] = "Add this directory  to the list of secure paths: ";
-    Text[ french ] = "Add this directory  to the list of secure paths: ";
+    Text[ french ] = "Ajouter ce r�pertoire � la liste des chemins s�curis�s : ";
     Text[ spanish ] = "A�ada este directorio a la lista de rutas seguras: ";
     Text[ finnish ] = "Add this directory  to the list of secure paths: ";
-    Text[ italian ] = "Add this directory  to the list of secure paths: ";
+    Text[ italian ] = "Aggiungi questa cartella all'elenco dei percorsi sicuri: ";
     Text[ danish ] = "Add this directory  to the list of secure paths: ";
-    Text[ swedish ] = "Add this directory  to the list of secure paths: ";
+    Text[ swedish ] = "L�gg till den h�r katalogen i listan �ver s�kra s�kv�gar: ";
     Text[ polish ] = "Add this directory  to the list of secure paths: ";
     Text[ portuguese_brazilian ] = "Add this directory  to the list of secure paths: ";
     Text[ japanese ] = "このディレクトリをセキュリティパスのリストに追加する。 ";
