@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 13:04:07 $
+ *  last change: $Author: pb $ $Date: 2000-11-21 12:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,23 +144,27 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             };
             PageItem
             {
-                Identifier = RID_SVXPAGE_CHAR ;
+                Identifier = RID_SVXPAGE_CHAR_NAME ;
                 Text = "Schrift" ;
+                Text [ english_us ] = "Font" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text = "Schrifteffekt" ;
+                Text [ english_us ] = "Font Effects" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_POSITION ;
                 Text = "Position" ;
+                Text [ english_us ] = "Position" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_ASIAN ;
                 Text = "Asiatisches Layout" ;
+                Text [ english_us ] = "Asian Layout" ;
             };
             PageItem
             {
