@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-18 18:40:36 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 13:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  *************************************************************************/
 
 #ifndef __HASH_MAP__
-#include <stl/hash_map>
+#include <hash_map>
 #endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTACTION_HPP_
 #include <com/sun/star/ucb/ContentAction.hpp>

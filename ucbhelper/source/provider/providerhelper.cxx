@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 15:15:21 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 13:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  *************************************************************************/
 
 #ifndef __HASH_MAP__
-#include <stl/hash_map>
+#include <hash_map>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>

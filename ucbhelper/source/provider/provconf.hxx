@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provconf.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:22:49 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 13:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _UCBHELPER_PROFCONF_HXX_
 
 #ifndef __VECTOR__
-#include <stl/vector>
+#include <vector>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
