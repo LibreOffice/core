@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 09:47:23 $
+#   last change: $Author: obo $ $Date: 2004-07-06 13:20:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 PRJNAME=svx
 TARGET=tbxctrls
 AUTOSEG=true
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
