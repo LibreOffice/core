@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-13 09:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,6 +1416,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         return FALSE;
 
     BOOL bChanged = FALSE;
+    BOOL bAlreadyPainted = FALSE;
 
     if ( !pLay->IsValid() || pLay->IsCompletePaint() )
     {
@@ -1493,7 +1494,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             else
             {
                 pImp->GetShell()->AddPaintRect( aPaint );
-                bAddRect = FALSE;
+                bAlreadyPainted = TRUE;
             }
         }
         pLay->ResetCompletePaint();
@@ -1508,6 +1509,9 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         if ( !pImp->GetShell()->AddPaintRect( aRect ) )
             pLay->ResetRetouche();
     }
+
+    if( bAlreadyPainted )
+        bAddRect = FALSE;
 
     CheckWaitCrsr();
 
