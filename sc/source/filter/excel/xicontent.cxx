@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,10 @@
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
+#endif
 
-
-#include "XclImpObjects.hxx"
 #include "excform.hxx"
 
 
@@ -486,16 +487,20 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     rStrm.Ignore( 10 );
     rStrm >> nObjId;
     if( nObjId != EXC_DVAL_NOOBJ )
-        rRoot.GetObjectManager().SetIgnoreObject( nObjId );
+    {
+        DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
+        rRoot.GetObjectManager().SetSkipObj( rRoot.GetScTab(), static_cast< sal_uInt16 >( nObjId ) );
+    }
 }
 
-void XclImpValidation::ReadDv( XclImpStream& rStrm, ExcelToSc& rFmlaConv )
+void XclImpValidation::ReadDv( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
     sal_uInt16 nTab = rRoot.GetScTab();
+    ExcelToSc& rFmlaConv = rRoot.GetFmlaConverter();
 
     // flags
     sal_uInt32 nFlags;
