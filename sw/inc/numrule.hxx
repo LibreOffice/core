@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ public:
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
 
-    inline unsigned char GetBulletChar( const SwNodeNum& ) const;
+    inline sal_Unicode GetBulletChar( const SwNodeNum& ) const;
     inline const Font* GetBulletFont( const SwNodeNum& ) const;
     static inline const Font& GetDefBulletFont();
 
@@ -391,7 +391,7 @@ inline USHORT SwNumRule::GetBullIndent( BYTE nLvl )
     return aDefNumIndents[ nLvl ];
 }
 
-inline unsigned char SwNumRule::GetBulletChar( const SwNodeNum& rNum ) const
+inline sal_Unicode SwNumRule::GetBulletChar( const SwNodeNum& rNum ) const
 {
     return Get( rNum.GetLevel() & ~NO_NUMLEVEL ).GetBulletChar();
 }
