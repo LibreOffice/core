@@ -6,6 +6,7 @@
 
 //package calc;
 //package MyComponent;
+package com.sun.star.wizards.report;
 
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XElementAccess;

@@ -1,5 +1,7 @@
 //package calc;
 //package .MyComponent;
+package com.sun.star.wizards.report;
+
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XInitialization;
@@ -26,7 +28,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.wizards.XReportWizard;
+import com.sun.star.wizards.report.XCallReportWizard;
 import com.sun.star.document.*;
 import com.sun.star.comp.helper.*;
 import com.sun.star.text.*;
@@ -62,7 +64,7 @@ import java.util.*;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2002-05-10 15:49:21 $
+ * @version $Date: 2002-05-13 13:55:37 $
  * @author Bertram Nolte
  */
 public class CallReportWizard {
@@ -112,7 +114,7 @@ public class CallReportWizard {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XReportWizard
+    public static class ReportWizardImplementation implements XInitialization, XTypeProvider, XServiceInfo, XCallReportWizard
     {
 
         public void CallReportDialog()
@@ -232,7 +234,7 @@ public class CallReportWizard {
         try
         {
             typeReturn = new Type[] {
-                new Type( XReportWizard.class),
+                new Type( XCallReportWizard.class),
                 new Type( XTypeProvider.class ),
                 new Type( XServiceInfo.class ),
                 new Type( XInitialization.class )
