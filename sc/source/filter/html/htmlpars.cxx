@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:27:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2252,6 +2252,22 @@ void ScHTMLTable::BodyOff( const ImportInfo& rInfo )
     CreateNewEntry( rInfo );
 }
 
+ScHTMLTable* ScHTMLTable::CloseTable( const ImportInfo& rInfo )
+{
+    if( mpParentTable )     // not allowed to close global table
+    {
+        PushEntry( rInfo, mbDataOn );
+        ImplDataOff();
+        ImplRowOff();
+        mpParentTable->PushTableEntry( GetTableId() );
+        mpParentTable->CreateNewEntry( rInfo );
+        if( mbPreFormText ) // enclose preformatted table with empty lines in parent table
+            mpParentTable->InsertLeadingEmptyLine();
+        return mpParentTable;
+    }
+    return this;
+}
+
 sal_uInt16 ScHTMLTable::GetDocSize( ScHTMLOrient eOrient, sal_uInt16 nCellPos ) const
 {
     const ScSizeVec& rSizes = maSizes[ eOrient ];
@@ -2450,22 +2466,6 @@ ScHTMLTable* ScHTMLTable::InsertNestedTable( const ImportInfo& rInfo, bool bPreF
     if( bPreFormText )      // enclose new preformatted table with empty lines
         InsertLeadingEmptyLine();
     return mpNestedTables->CreateTable( rInfo, bPreFormText );
-}
-
-ScHTMLTable* ScHTMLTable::CloseTable( const ImportInfo& rInfo )
-{
-    if( mpParentTable )     // not allowed to close global table
-    {
-        PushEntry( rInfo, mbDataOn );
-        ImplDataOff();
-        ImplRowOff();
-        mpParentTable->PushTableEntry( GetTableId() );
-        mpParentTable->CreateNewEntry( rInfo );
-        if( mbPreFormText ) // enclose preformatted table with empty lines in parent table
-            mpParentTable->InsertLeadingEmptyLine();
-        return mpParentTable;
-    }
-    return this;
 }
 
 void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
@@ -3070,6 +3070,11 @@ void ScHTMLQueryParser::PreOff( const ImportInfo& rInfo )
     mpCurrTable = mpCurrTable->PreOff( rInfo );
 }
 
+void ScHTMLQueryParser::CloseTable( const ImportInfo& rInfo )
+{
+    mpCurrTable = mpCurrTable->CloseTable( rInfo );
+}
+
 
 // ----------------------------------------------------------------------------
 
@@ -3099,7 +3104,7 @@ IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
 
         case HTMLIMP_END:
             while( mpCurrTable->GetTableId() != SC_HTML_GLOBAL_TABLE )
-                TableOff( *pInfo );
+                CloseTable( *pInfo );
         break;
 
         default:
