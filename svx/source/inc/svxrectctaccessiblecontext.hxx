@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-19 14:15:54 $
+ *  last change: $Author: os $ $Date: 2002-10-29 14:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,10 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL
         getAccessibleKeyBinding() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int32 SAL_CALL
+        getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL
+        getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 

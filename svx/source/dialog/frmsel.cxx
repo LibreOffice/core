@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 09:31:36 $
+ *  last change: $Author: os $ $Date: 2002-10-29 14:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ public:
     virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -710,6 +712,28 @@ uno::Any SvxFrameSelectorAccessible_Impl::getAccessibleKeyBinding(  ) throw (uno
         }
     }
     return aRet;
+}
+/*-- 04.02.2002 14:12:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SvxFrameSelectorAccessible_Impl::getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aRet;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return pFrameSel->GetControlForeground().GetColor();
+}
+/*-- 04.02.2002 14:12:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SvxFrameSelectorAccessible_Impl::getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aRet;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    IsValid();
+    return pFrameSel->GetControlBackground().GetColor();
 }
 /*-- 04.02.2002 14:12:04---------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-30 11:55:37 $
+ *  last change: $Author: os $ $Date: 2002-10-29 14:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,25 @@ Any SAL_CALL SvxRectCtlAccessibleContext::getAccessibleKeyBinding() throw( Runti
 {
     // here is no implementation, because here are no KeyBindings for every object
     return Any();
+}
+
+sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard   aGuard( m_aMutex );
+    return mpRepr->GetControlForeground()->GetColor();
+
+    ThrowExceptionIfNotAlive();
+}
+sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard   aGuard( m_aMutex );
+
+    ThrowExceptionIfNotAlive();
+    return mpRepr->GetControlBackground()->GetColor();
 }
 
 //=====  XServiceInfo  ========================================================
