@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: sj $ $Date: 2002-11-20 14:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,27 +64,31 @@ ModalDialog DLG_BREAK
 {
     OutputSize = TRUE;
     SVLook   = TRUE;
-    Pos              = MAP_APPFONT( 84, 34 );
+    Pos      = MAP_APPFONT( 84, 34 );
     Size     = MAP_APPFONT( 160, 74 );
     Text     = "Aufbrechen";
+    Text [ ENGLISH ] = "Break";
     Moveable = TRUE;
     FixedText FT_OBJ_INFO
     {
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 85, 10 );
         Text = "Bearbeitetes Metafile:";
+        Text [ ENGLISH ] = "Processing Metafile:";
     };
     FixedText FT_ACT_INFO
     {
         Pos = MAP_APPFONT( 6, 22 );
         Size = MAP_APPFONT( 106, 10 );
         Text = "Metaobjekte aufgebrochen:";
+        Text [ ENGLISH ] = "Brokened down metaobjects:";
     };
     FixedText FT_INS_INFO
     {
         Pos = MAP_APPFONT( 6, 38 );
         Size = MAP_APPFONT( 90, 10 );
         Text = "Zeichenobjekte eingefügt:";
+        Text [ ENGLISH ] = "Inserted drawing objects:";
     };
     FixedText FI_OBJ_INFO
     {
