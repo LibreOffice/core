@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 21:42:53 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ String STR_APPLY
     Text[ portuguese_brazilian ] = "Apply";
     Text[ japanese ] = "“K—p";
     Text[ korean ] = "Àû¿ë";
-    Text[ chinese_simplified ] = "Ì×ÓÃ";
+    Text[ chinese_simplified ] = "Ê¹ÓÃ";
     Text[ chinese_traditional ] = "®M¥Î";
     Text[ turkish ] = "Apply";
     Text[ arabic ] = "ÊØÈíŞ";
@@ -579,7 +579,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message[ chinese_traditional ] = "³o­Ó¼Ë¦¡µLªk³Q·í§@¼Ë¦¡¤å¥ó¡M\n§_«h·|¤Ş°_»¼Âk¤Ş¥Î¡C";
     Message[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ ßŞÇáÈ ÃÓÇÓí¡\náÃä åĞÇ Óæİ íÄÏí áäÔæÁ ãÑÌÚ ãÊÑÏÏ (¿).";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá ÷ñçóéìïğïéçèåß áõôü ğñüôõğï ùò âáóéêü ğñüôõğï;\nåğåéäŞ ğñïêığôåé ìßá áíáäñïìéêŞ ëåéôïõñãßá.";
-    Message[ korean ] = "ÀÌ ¼­½Ä ÆÄÀÏÀº ±âº» ¼­½Ä ÆÄÀÏ·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n¸®Ä¿¼ÇÀÌ¡¡¹ß»ıÇÒ ¼ö ÀÖ±â ¶§¹®ÀÔ´Ï´Ù.";
+    Message[ korean ] = "ÀÌ ¼­½Ä ÆÄÀÏÀº ±âº» ¼­½Ä ÆÄÀÏ·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n¸®Ä¿¼ÇÀÌ ¹ß»ıÇÒ ¼öµµ ÀÖ±â ¶§¹®ÀÔ´Ï´Ù.";
     Message[ turkish ] = "Bu şablon (özyineleme nedeniyle)\n temel şablon olarak kullanılamaz.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Esta plantilla no se puede utilizar como plantilla base,\nya que podría provocar una referencia recursiva.";
@@ -847,7 +847,7 @@ InfoBox MSG_LAYOUT_NOT_LOADING
     MESSAGE [ english_us ] = "Loading document without layout." ;
     MESSAGE[ chinese_simplified ] = "²»´ø°æÊ½µØ×°ÈëÎÄ¼ş¡£";
     MESSAGE[ russian ] = "Äîêóìåíò çàãğóæåòñÿ áåç ğàçìåòêè.";
-    MESSAGE[ polish ] = "Dokument jest ³adowany bez uk³adu.";
+    MESSAGE[ polish ] = "£adowanie dokumentu bez uk³adu.";
     MESSAGE[ japanese ] = "ÄŞ·­ÒİÄ‚ÍÚ²±³Ä‚È‚µ‚Å“Ç‚İ‚Ü‚ê‚Ü‚·B";
     MESSAGE[ chinese_traditional ] = "¸ü¤J¤å¥ó¡A¤£ªş±aª©¦¡¡C";
     MESSAGE[ arabic ] = "ÓíÊã ÊÍãíá Çáãáİ ÈÏæä ÊÎØíØ.";
@@ -1095,6 +1095,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
 
 
