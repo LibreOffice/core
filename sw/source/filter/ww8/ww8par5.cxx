@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 11:58:46 $
+ *  last change: $Author: cmc $ $Date: 2001-01-31 14:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2666,6 +2666,23 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
             // das Ende als "relative" Pos auf den Stack setzen
             pPaM->SetMark();
             pPaM->GetMark()->nContent += sDef.Len();
+            /*#83156#
+            We need to know the length of this content field here, but we
+            do not truly know the length of the final result as we may
+            have nested fields, but we have fundamental problems with
+            nested fields both in OOo and in this filter, we cannot handle
+            them properly. So for now we have to dump the raw content of the
+            field, field commands and all, as the payload of the hyperlink.
+
+            We also know in advance that characters less that 0x20 will not
+            be inserted in the document, as they will be stripped out, e.g
+            the field codes themselves 0x13,0x14,0x15. So we must adjust our
+            expected length by these.
+
+            */
+            for(xub_StrLen i=sDef.Len();i>0;i--)
+                if (sDef.GetChar(i-1) < 0x20)
+                    pPaM->GetMark()->nContent--;
             pRefFldStck->SetAttr( *pPaM->GetMark(), RES_TXTATR_INETFMT, FALSE );
             pPaM->DeleteMark();
 
@@ -2864,12 +2881,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.7 2001-01-18 11:58:46 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.8 2001-01-31 14:32:46 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/18 11:58:46  cmc
+      #82900# Needed the more sophisticated relative url converter for hyperlinks
+
       Revision 1.6  2000/12/04 14:08:08  khz
       #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
 
