@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 12:49:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ String STR_DESCRIPTION_SCALC_DOC
 };
 String STR_DESCRIPTION_SIMPRESS_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Präsentation" ;
+    Text [ de ] = "%PRODUCTNAME Prï¿½sentation" ;
     Text [ en-US ] = "%PRODUCTNAME presentation" ;
 };
 String STR_DESCRIPTION_SWRITER_DOC
@@ -311,7 +311,7 @@ String STR_DESCRIPTION_TEXTFILE
 };
 String STR_DESCRIPTION_LINK
 {
-    Text [ de ] = "Verknüpfung" ;
+    Text [ de ] = "Verknï¿½pfung" ;
     Text [ en-US ] = "Link" ;
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
@@ -356,7 +356,7 @@ String STR_DESCRIPTION_FACTORY_CALC
 };
 String STR_DESCRIPTION_FACTORY_IMPRESS
 {
-    Text [ de ] = "Präsentation";
+    Text [ de ] = "Prï¿½sentation";
     Text [ en-US ] = "Presentation";
 };
 String STR_DESCRIPTION_FACTORY_DRAW
@@ -391,7 +391,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
 };
 String STR_DESCRIPTION_IMPRESS_TEMPLATE
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentationsvorlage" ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Prï¿½sentationsvorlage" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template" ;
 };
 String STR_DESCRIPTION_WRITER_TEMPLATE
@@ -463,7 +463,7 @@ String STR_DESCRIPTION_SXCALC_DOC
 
 String STR_DESCRIPTION_SXIMPRESS_DOC
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation" ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Prï¿½sentation" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
 };
 
@@ -486,57 +486,57 @@ String STR_DESCRIPTION_MATHML_DOC
 
 String STR_DESCRIPTION_OO_DATABASE_DOC
 {
-    Text [ de ] = "Open Office Datenbank" ;
-    Text [ en-US ] = "Open Office Database" ;
+    Text [ de ] = "OpenDocument Datenbank" ;
+    Text [ en-US ] = "OpenDocument Database" ;
 };
 String STR_DESCRIPTION_OO_DRAW_DOC
 {
-    Text [ de ] = "Open Office Zeichnung" ;
-    Text [ en-US ] = "Open Office Drawing" ;
+    Text [ de ] = "OpenDocument Zeichnung" ;
+    Text [ en-US ] = "OpenDocument Drawing" ;
 };
 String STR_DESCRIPTION_OO_MATH_DOC
 {
-    Text [ de ] = "Open Office Formel" ;
-    Text [ en-US ] = "Open Office Formula" ;
+    Text [ de ] = "OpenDocument Formel" ;
+    Text [ en-US ] = "OpenDocument Formula" ;
 };
 String STR_DESCRIPTION_OO_GLOBAL_DOC
 {
-    Text [ de ] = "Open Office Globaldokument" ;
-    Text [ en-US ] = "Open Office Master Document" ;
+    Text [ de ] = "OpenDocument Globaldokument" ;
+    Text [ en-US ] = "OpenDocument Master Document" ;
 };
 String STR_DESCRIPTION_OO_IMPRESS_DOC
 {
-    Text [ de ] = "Open Office Präsentation" ;
-    Text [ en-US ] = "Open Office Presentation" ;
+    Text [ de ] = "OpenDocument Prï¿½sentation" ;
+    Text [ en-US ] = "OpenDocument Presentation" ;
 };
 String STR_DESCRIPTION_OO_CALC_DOC
 {
-    Text [ de ] = "Open Office Tabellendokument" ;
-    Text [ en-US ] = "Open Office Spreadsheet" ;
+    Text [ de ] = "OpenDocument Tabellendokument" ;
+    Text [ en-US ] = "OpenDocument Spreadsheet" ;
 };
 String STR_DESCRIPTION_OO_WRITER_DOC
 {
-    Text [ de ] = "Open Office Text" ;
-    Text [ en-US ] = "Open Office Text" ;
+    Text [ de ] = "OpenDocument Text" ;
+    Text [ en-US ] = "OpenDocument Text" ;
 };
 String STR_DESCRIPTION_OO_CALC_TEMPLATE
 {
-    Text [ de ] = "Open Office Tabellendokumentvorlage" ;
-    Text [ en-US ] = "Open Office Spreadsheet Template" ;
+    Text [ de ] = "OpenDocument Tabellendokumentvorlage" ;
+    Text [ en-US ] = "OpenDocument Spreadsheet Template" ;
 };
 String STR_DESCRIPTION_OO_DRAW_TEMPLATE
 {
-    Text [ de ] = "Open Office Zeichnungsdokumentvorlage" ;
-    Text [ en-US ] = "Open Office Drawing Template" ;
+    Text [ de ] = "OpenDocument Zeichnungsdokumentvorlage" ;
+    Text [ en-US ] = "OpenDocument Drawing Template" ;
 };
 String STR_DESCRIPTION_OO_IMPRESS_TEMPLATE
 {
-    Text [ de ] = "Open Office Präsentationsdokumentvorlage" ;
-    Text [ en-US ] = "Open Office Presentation Template" ;
+    Text [ de ] = "OpenDocument Prï¿½sentationsdokumentvorlage" ;
+    Text [ en-US ] = "OpenDocument Presentation Template" ;
 };
 String STR_DESCRIPTION_OO_WRITER_TEMPLATE
 {
-    Text [ de ] = "Open Office Textdokument Vorlage" ;
-    Text [ en-US ] = "Open Office Text Document Template" ;
+    Text [ de ] = "OpenDocument Textdokument Vorlage" ;
+    Text [ en-US ] = "OpenDocument Text Template" ;
 };
 
