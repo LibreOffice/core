@@ -57,6 +57,8 @@
 
 package org.openoffice.java.accessibility;
 
+import org.openoffice.java.accessibility.logging.*;
+
 import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
@@ -159,7 +161,16 @@ public class AccessibleHypertextImpl extends AccessibleTextImpl
 
     /** Creates new AccessibleHypertextImpl */
     public AccessibleHypertextImpl(XAccessibleHypertext xAccessibleHypertext) {
-        super(xAccessibleHypertext);
+        if (Build.PRODUCT) {
+            unoObject = xAccessibleHypertext;
+        } else {
+            String property = System.getProperty("AccessBridgeLogging");
+            if ((property != null) && (property.indexOf("text") != -1)) {
+                unoObject = new XAccessibleHypertextLog(xAccessibleHypertext);
+            } else {
+                unoObject = xAccessibleHypertext;
+            }
+        }
     }
 
     public static javax.accessibility.AccessibleText get(com.sun.star.uno.XInterface unoObject) {
