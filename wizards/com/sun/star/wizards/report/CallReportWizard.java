@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-19 10:32:03 $
+ *  last change: $Author: bc $ $Date: 2002-08-12 15:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,10 +188,12 @@ public class CallReportWizard {
     try{
         XComponentLoader xcomponentloader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
         if (sEvent.compareTo("start") == 0) {
-        ReportWizard.startReportWizard(xmultiservicefactory, null);
+        ReportWizard CurReportWizard = new ReportWizard();
+        CurReportWizard.startReportWizard(xmultiservicefactory, null);
         }
         else if (sEvent.compareTo("fill") == 0){
-            Dataimport.createReport(xmultiservicefactory);
+        Dataimport CurDataimport = new Dataimport();
+            CurDataimport.createReport(xmultiservicefactory);
         }
     }
     catch( Exception exception ){
@@ -216,7 +218,8 @@ public class CallReportWizard {
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-            ReportWizard.startReportWizard(xmultiservicefactory,object);
+        ReportWizard CurReportWizard = new ReportWizard();
+        CurReportWizard.startReportWizard(xmultiservicefactory,object);
 
     //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
         }
