@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: od $ $Date: 2004-03-11 13:22:15 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,9 +250,11 @@ SwFrmNotify::~SwFrmNotify()
                 {
                     //Wenn der Vorgaenger das Attribut fuer Zusammenhalten traegt
                     //muss er angestossen werden.
+                    // But only if it has an prev.
                     SwFrm *pPre;
                     if ( 0 != (pPre = pFrm->FindPrev()) &&
-                         pPre->GetAttrSet()->GetKeep().GetValue() )
+                         pPre->GetAttrSet()->GetKeep().GetValue() &&
+                         pPre->GetIndPrev() )
                         pPre->InvalidatePos();
                 }
             }
