@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-22 09:29:37 $
+#   last change: $Author: obo $ $Date: 2004-10-22 15:07:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,7 @@ CFLAGSCC=-xCC
 CFLAGSCXX=-features=no%altspell -library=no%Cstd
 
 # flags to enable build with symbols; required for crashdump feature
-CFLAGSENABLESYMBOLS=-g0 -x # was temporarily commented out, reenabled before Beta
+CFLAGSENABLESYMBOLS=-g0 -xs # was temporarily commented out, reenabled before Beta
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
