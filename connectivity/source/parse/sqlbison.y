@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.23 2001-04-12 12:34:59 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.24 2001-05-11 17:51:47 pl Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-04-12 12:34:59 $ $Revision: 1.23 $
+//	$Author: pl $ $Date: 2001-05-11 17:51:47 $ $Revision: 1.24 $
 //
 // Description:
 //
@@ -3063,7 +3063,7 @@ OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
 		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
-		if (rToken.equalsIgnoreCase(aKey))
+		if (rToken.equalsIgnoreAsciiCase(aKey))
 			return Intl_TokenID[i];
 	}
 

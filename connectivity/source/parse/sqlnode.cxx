@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:24 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 17:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,8 +520,8 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                         }
 
                         const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
-                        if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreCase(aFieldName)) ||
-                            pCol->getTokenValue().equalsIgnoreCase(aFieldName))
+                        if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
+                            pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName))
                             bFilter = sal_True;
 
                         // ok we found the field, if the following node is the
@@ -755,8 +755,8 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
         }
 
         const OSQLParseNode* pCol = m_aChilds[0]->getChild(m_aChilds[0]->count()-1);
-        if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreCase(aFieldName)) ||
-            pCol->getTokenValue().equalsIgnoreCase(aFieldName) )
+        if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
+            pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName) )
             bAddName = sal_False;
     }
 
