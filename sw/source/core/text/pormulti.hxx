@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:11:58 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,21 +100,25 @@ class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
     SwFldPortion *pFldRest; // Field rest from the previous line
-    sal_Bool bTabulator :1; // Multiportion includes tabulator
+    sal_Bool bTab1      :1; // First line tabulator
+    sal_Bool bTab2      :1; // Second line includes tabulator
     sal_Bool bDouble    :1; // Double line
     sal_Bool bRuby      :1; // Phonetics
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
     sal_Bool bFollowFld :1; // Field follow inside
 protected:
-    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTabulator( sal_False ),
-        bDouble( sal_False ), bRuby( sal_False ), bFormatted( sal_False ),
-        bFollowFld( sal_False )
+    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
+        bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
+        bFormatted( sal_False ), bFollowFld( sal_False )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     inline void SetDouble() { bDouble = sal_True; }
     inline void SetRuby() { bRuby = sal_True; }
     inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
-    inline void SetTabulator( sal_Bool bNew ) { bTabulator = bNew; }
+    inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
+    inline void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
+    inline sal_Bool GetTab1() const { return bTab1; }
+    inline sal_Bool GetTab2() const { return bTab2; }
 public:
     ~SwMultiPortion();
     const SwLineLayout& GetRoot() const { return aRoot; }
@@ -122,7 +126,7 @@ public:
     SwFldPortion* GetFldRest() { return pFldRest; }
     void SetFldRest( SwFldPortion* pNew ) { pFldRest = pNew; }
 
-    inline sal_Bool HasTabulator() const { return bTabulator; }
+    inline sal_Bool HasTabulator() const { return bTab1 || bTab2; }
     inline sal_Bool IsFormatted() const { return bFormatted; }
     inline void SetFormatted() { bFormatted = sal_True; }
     inline sal_Bool IsFollowFld() const { return bFollowFld; }
@@ -182,13 +186,20 @@ public:
 
 class SwRubyPortion : public SwMultiPortion
 {
+    xub_StrLen nRubyOffset;
     USHORT nAdjustment;
-    void _Adjust();
+    void _Adjust( SwTxtFormatInfo &rInf);
 public:
-    SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, sal_Bool bTp = sal_True ) :
-        SwMultiPortion( nEnd ), nAdjustment( nAdj ) { SetRuby(); SetTop(bTp); }
-    void Adjust() { if( nAdjustment && GetRoot().GetNext() ) _Adjust(); }
+    SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, USHORT nPos, xub_StrLen nOfst )
+        : SwMultiPortion( nEnd ), nRubyOffset( nOfst ), nAdjustment( nAdj )
+        { SetRuby(); SetTop(!nPos); }
+    SwRubyPortion( const SwTxtAttr& rAttr, const SwFont& rFnt, xub_StrLen nEnd,
+        xub_StrLen nOffs = 0 );
+    void CalcRubyOffset();
+    inline void Adjust( SwTxtFormatInfo &rInf )
+        { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
     inline USHORT GetAdjustment() const { return nAdjustment; }
+    inline xub_StrLen GetRubyOffset() const { return nRubyOffset; }
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:11:49 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,15 @@
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>  // SwFmtRuby
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>   // SwTxtRuby
+#endif
+#ifndef _CHARFMT_HXX    // SwCharFmt
+#include <charfmt.hxx>
+#endif
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
@@ -126,6 +135,12 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine )
         pLay->CalcLine( rLine );
         if( IsRuby() && ( OnTop() == ( pLay == &GetRoot() ) ) )
         {
+            // An empty phonetic line don't need an ascent or a height.
+            if( !pLay->Width() )
+            {
+                pLay->SetAscent( 0 );
+                pLay->Height( 0 );
+            }
             if( OnTop() )
                 SetAscent( GetAscent() + pLay->Height() );
         }
@@ -153,9 +168,9 @@ void SwMultiPortion::ActualizeTabulator()
 {
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
     // First line
-    for( bTabulator = sal_False; pPor; pPor = pPor->GetPortion() )
+    for( bTab1 = bTab2 = sal_False; pPor; pPor = pPor->GetPortion() )
         if( pPor->InTabGrp() )
-            SetTabulator( sal_True );
+            SetTab1( sal_True );
     if( GetRoot().GetNext() )
     {
         // Second line
@@ -163,7 +178,7 @@ void SwMultiPortion::ActualizeTabulator()
         do
         {
             if( pPor->InTabGrp() )
-                SetTabulator( sal_True );
+                SetTab2( sal_True );
             pPor = pPor->GetPortion();
         } while ( pPor );
     }
@@ -313,14 +328,15 @@ void SwDoubleLinePortion::CalcBlanks( SwTxtFormatInfo &rInf )
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
     xub_StrLen nNull = 0;
     xub_StrLen nStart = rInf.GetIdx();
-    SetTabulator( sal_False );
+    SetTab1( sal_False );
+    SetTab2( sal_False );
     for( nBlank1 = 0; pPor; pPor = pPor->GetPortion() )
     {
         if( pPor->InTxtGrp() )
             nBlank1 += ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
         rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
         if( pPor->InTabGrp() )
-            SetTabulator( sal_True );
+            SetTab1( sal_True );
     }
     nLineDiff = GetRoot().Width();
     if( GetRoot().GetNext() )
@@ -334,7 +350,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTxtFormatInfo &rInf )
             nBlank2 += ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
         rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
         if( pPor->InTabGrp() )
-            SetTabulator( sal_True );
+            SetTab2( sal_True );
     }
     rInf.SetIdx( nStart );
 }
@@ -399,27 +415,91 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
     delete pBracket;
 }
 
-void SwRubyPortion::_Adjust()
+SwRubyPortion::SwRubyPortion( const SwTxtAttr& rAttr,  const SwFont& rFnt,
+    xub_StrLen nEnd, xub_StrLen nOffs ) : SwMultiPortion( nEnd )
+{
+    SetRuby();
+    ASSERT( RES_TXTATR_CJK_RUBY == rAttr.Which(), "Wrong attribute" );
+    const SwFmtRuby& rRuby = rAttr.GetRuby();
+    nAdjustment = rRuby.GetAdjustment();
+    nRubyOffset = nOffs;
+    SetTop( !rRuby.GetPosition() );
+    const SwAttrSet& rSet = ((SwTxtRuby&)rAttr).GetCharFmt()->GetAttrSet();
+    SwFont *pRubyFont = new SwFont( rFnt );
+    pRubyFont->SetDiffFnt( &rSet );
+#ifdef ON_YOUR_OWN_RISK
+    pRubyFont->SetProportion( 50 );
+#endif
+    String aStr( rRuby.GetText(), nOffs, STRING_LEN );
+    SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
+    pFld->SetFollow( sal_True );
+    if( !rRuby.GetPosition() )
+        GetRoot().SetPortion( pFld );
+    else
+    {
+        GetRoot().SetNext( new SwLineLayout() );
+        GetRoot().GetNext()->SetPortion( pFld );
+    }
+}
+
+void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
 {
     SwTwips nLineDiff = GetRoot().Width() - GetRoot().GetNext()->Width();
+    xub_StrLen nOldIdx = rInf.GetIdx();
     if( !nLineDiff )
         return;
     SwLineLayout *pCurr;
     if( nLineDiff < 0 )
     {
+        if( GetTab1() )
+            return;
         pCurr = &GetRoot();
         nLineDiff = -nLineDiff;
     }
     else
+    {
+        if( GetTab2() )
+            return;
         pCurr = GetRoot().GetNext();
-
+        rInf.SetIdx( nOldIdx + GetRoot().GetLen() );
+    }
     KSHORT nLeft = 0;
     KSHORT nRight = 0;
+    USHORT nSub = 0;
     switch ( nAdjustment )
     {
-        case 1: nLeft = nLineDiff/2;    // no break
-        case 2: nRight = nLineDiff - nLeft; break;
-        case 3: break;
+        case 1: nRight = nLineDiff/2;    // no break
+        case 2: nLeft = nLineDiff - nRight; break;
+        case 3: nSub = 1; // no break
+        case 4:
+        {
+            xub_StrLen nCharCnt = 0;
+            SwLinePortion *pPor;
+            for( pPor = pCurr->GetFirstPortion(); pPor; pPor = pPor->GetPortion() )
+            {
+                if( pPor->InTxtGrp() )
+                    ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nCharCnt );
+                rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
+            }
+            if( nCharCnt > nSub )
+            {
+                SwTwips nCalc = nLineDiff / ( nCharCnt - nSub );
+                short nTmp;
+                if( nCalc < SHRT_MAX )
+                    nTmp = -short(nCalc);
+                else
+                    nTmp = SHRT_MIN;
+                pCurr->CreateSpaceAdd();
+                pCurr->GetSpaceAdd().Insert( nTmp, 0 );
+                nLineDiff -= nCalc * ( nCharCnt - 1 );
+            }
+            if( nLineDiff > 1 )
+            {
+                nRight = nLineDiff/2;
+                nLeft = nLineDiff - nRight;
+            }
+            break;
+        }
         default: ASSERT( sal_False, "New ruby adjustment" );
     }
     if( nLeft || nRight )
@@ -438,10 +518,46 @@ void SwRubyPortion::_Adjust()
             pMarg = new SwMarginPortion( 0 );
             pMarg->AddPrtWidth( nRight );
             pCurr->FindLastPortion()->Append( pMarg );
+            if( pCurr->GetpSpaceAdd() )
+                pCurr->GetSpaceAdd().Insert( short(0), 0 );
         }
     }
+    rInf.SetIdx( nOldIdx );
 }
 
+/*-----------------08.11.00 14:14-------------------
+ * CalcRubyOffset()
+ * has to change the nRubyOffset, if there's a fieldportion
+ * in the phonetic line.
+ * The nRubyOffset is the position in the rubystring, where the
+ * next SwRubyPortion has start the displaying of the phonetics.
+ * --------------------------------------------------*/
+
+void SwRubyPortion::CalcRubyOffset()
+{
+    const SwLineLayout *pCurr = &GetRoot();
+    if( !OnTop() )
+    {
+        pCurr = pCurr->GetNext();
+        if( !pCurr )
+            return;
+    }
+    const SwLinePortion *pPor = pCurr->GetFirstPortion();
+    const SwFldPortion *pFld = NULL;
+    while( pPor )
+    {
+        if( pPor->InFldGrp() )
+            pFld = (SwFldPortion*)pPor;
+        pPor = pPor->GetPortion();
+    }
+    if( pFld )
+    {
+        if( pFld->HasFollow() )
+            nRubyOffset = pFld->GetNextOffset();
+        else
+            nRubyOffset = STRING_LEN;
+    }
+}
 
 /*-----------------13.10.00 16:22-------------------
  * If we're inside a two-line-attribute,
@@ -449,7 +565,7 @@ void SwRubyPortion::_Adjust()
  * otherwise the function returns zero.
  * --------------------------------------------------*/
 
-const SwTxtAttr* SwTxtSizeInfo::GetTwoLines( const xub_StrLen nPos ) const
+const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
 {
     const SwpHints *pHints = pFrm->GetTxtNode()->GetpSwpHints();
     if( !pHints )
@@ -458,16 +574,16 @@ const SwTxtAttr* SwTxtSizeInfo::GetTwoLines( const xub_StrLen nPos ) const
     {
         const SwTxtAttr *pRet = (*pHints)[i];
         xub_StrLen nStart = *pRet->GetStart();
-        if( nPos < nStart )
+        if( rPos < nStart )
             break;
-        if( RES_CHRATR_TWO_LINES == pRet->Which()
-#ifdef FOR_YOUR_OWN_RISK
-            || RES_CHRATR_UNDERLINE == pRet->Which()
-#endif
-            )
+        if( RES_TXTATR_TWO_LINES == pRet->Which()
+            || RES_TXTATR_CJK_RUBY == pRet->Which() )
         {
-            if( nPos == nStart || *pRet->GetEnd() > nPos )
+            if( *pRet->GetEnd() > rPos )
+            {
+                rPos = *pRet->GetEnd();
                 return pRet;
+            }
         }
     }
     return NULL;
@@ -566,6 +682,9 @@ SwSpaceManipulator::~SwSpaceManipulator()
 void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti )
 {
+    if( rMulti.Width() > 1 )
+        GetInfo().DrawViewOpt( rMulti, POR_FLD );
+
     // old values must be saved and restored at the end
     xub_StrLen nOldLen = GetInfo().GetLen();
     KSHORT nOldX = GetInfo().X();
@@ -595,8 +714,13 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
         GetInfo().SetSpecialUnderline( sal_False );
-        if( ( bRest && pPor->InFldGrp() && !pPor->GetLen() ) )
-            SeekAndChgBefore( GetInfo() );
+        if( bRest && pPor->InFldGrp() && !pPor->GetLen() )
+        {
+            if( ((SwFldPortion*)pPor)->HasFont() )
+                 bSeeked = sal_False;
+            else
+                SeekAndChgBefore( GetInfo() );
+        }
         else if( pPor->InTxtGrp() || pPor->InFldGrp() || pPor->InTabGrp() )
             SeekAndChg( GetInfo() );
         else if ( !bFirst && pPor->IsBreakPortion() && GetInfo().GetOpt().IsParagraph() )
@@ -759,7 +883,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             aInf.SetRest( pFld );
         }
         aInf.SetRuby( rMulti.IsRuby() && rMulti.OnTop() );
-        BuildPortions( aInf );
+        // If there's no more rubytext, then buildportion is forbidden
+        if( pFirstRest || !aInf.IsRuby() )
+            BuildPortions( aInf );
         rMulti.CalcSize( *this );
         pCurr->SetRealHeight( pCurr->Height() );
         if( pCurr->GetLen() < nMultiLen || rMulti.IsRuby() || aInf.GetRest() )
@@ -775,7 +901,14 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             {
                 aTmp.SetRuby( !rMulti.OnTop() );
                 pNextFirst = aInf.GetRest();
-                aTmp.SetRest( pSecondRest );
+                if( pSecondRest )
+                {
+                    ASSERT( pSecondRest->InFldGrp(), "Fieldrest exspected");
+                    SwFldPortion *pFld = ((SwFldPortion*)pSecondRest)->Clone(
+                                    ((SwFldPortion*)pSecondRest)->GetExp() );
+                    pFld->SetFollow( sal_True );
+                    aTmp.SetRest( pFld );
+                }
                 if( !rMulti.OnTop() && nFirstLen < nMultiLen )
                     bRet = sal_True;
             }
@@ -850,7 +983,10 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     {
         rMulti.ActualizeTabulator();
         if( rMulti.IsRuby() )
-            ((SwRubyPortion&)rMulti).Adjust();
+        {
+            ((SwRubyPortion&)rMulti).Adjust( rInf );
+            ((SwRubyPortion&)rMulti).CalcRubyOffset();
+        }
     }
 
     if( bRet )
@@ -866,20 +1002,8 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             ASSERT( !pNextSecond || pNextSecond->InFldGrp(),
                 "BuildMultiPortion: Surprising restportion, field exspected" );
             pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
-                3 - ((SwRubyPortion&)rMulti).GetAdjustment(), rMulti.OnTop() );
-            if( pTmp->OnTop() )
-            {
-                if( !pNextFirst && pFirstRest )
-                {
-                    pNextFirst = ((SwFldPortion*)pFirstRest)->Clone(aEmptyStr);
-                    ((SwFldPortion*)pNextFirst)->SetFollow( sal_True );
-                }
-            }
-            else if( !pNextSecond && pSecondRest )
-            {
-                pNextSecond = ((SwFldPortion*)pSecondRest)->Clone(aEmptyStr);
-                ((SwFldPortion*)pNextSecond)->SetFollow( sal_True );
-            }
+                    ((SwRubyPortion&)rMulti).GetAdjustment(), !rMulti.OnTop(),
+                    ((SwRubyPortion&)rMulti).GetRubyOffset() );
             if( pNextSecond )
             {
                 pTmp->GetRoot().SetNext( new SwLineLayout() );
@@ -895,8 +1019,136 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         rInf.SetRest( pTmp );
     }
     rInf.SetTxt( *pOldTxt );
+    delete pFirstRest;
+    delete pSecondRest;
     return bRet;
 }
+
+/*-----------------08.11.00 09:29-------------------
+ * SwTxtFormatter::MakeRestPortion(..)
+ * When a fieldportion at the end of line breaks and needs a following
+ * fieldportion in the next line, then the "restportion" of the formatinfo
+ * has to be set. Normally this happens during the formatting of the first
+ * part of the fieldportion.
+ * But sometimes the formatting starts at the line with the following part,
+ * exspecally when the following part is on the next page.
+ * In this case the MakeRestPortion-function has to create the following part.
+ * The first parameter is the line that contains possibly a first part
+ * of a field. When the function finds such field part, it creates the right
+ * restportion. This may be a multiportion, e.g. if the field is surrounded by
+ * a doubleline- or ruby-portion.
+ * The second parameter is the start index of the line.
+ * --------------------------------------------------*/
+
+SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
+    xub_StrLen nPos )
+{
+    if( !nPos )
+        return NULL;
+    xub_StrLen nMultiPos = nPos - pLine->GetLen();
+    const SwMultiPortion *pTmpMulti = NULL;
+    const SwMultiPortion *pMulti = NULL;
+    const SwLinePortion* pPor = pLine->GetFirstPortion();
+    SwFldPortion *pFld = NULL;
+    while( pPor )
+    {
+        if( pPor->GetLen() )
+        {
+            pTmpMulti = NULL;
+            if( !pMulti )
+                nMultiPos += pPor->GetLen();
+        }
+        if( pPor->InFldGrp() )
+        {
+            pTmpMulti = NULL;
+            pFld = (SwFldPortion*)pPor;
+        }
+        else if( pPor->IsMultiPortion() )
+        {
+            pFld = NULL;
+            pTmpMulti = (SwMultiPortion*)pPor;
+        }
+        pPor = pPor->GetPortion();
+        // If the last portion is a multi-portion, we enter it
+        // and look for a field portion inside.
+        if( !pPor && pTmpMulti )
+        {
+            if( pMulti )
+            {   // We're already inside the multiportion, let's take the second
+                // line, if we are in a double line portion
+                if( !pMulti->IsRuby() )
+                    pPor = pMulti->GetRoot().GetNext();
+            }
+            else
+            {   // Now we enter a multiportion, in a ruby portion we take the
+                // main line, not the phonetic line, in a doublelineportion we
+                // starts with the first line.
+                pMulti = pTmpMulti;
+                nMultiPos -= pMulti->GetLen();
+                if( pMulti->IsRuby() && pMulti->OnTop() )
+                    pPor = pMulti->GetRoot().GetNext();
+                else
+                    pPor = pMulti->GetRoot().GetFirstPortion();
+            }
+            pTmpMulti = NULL;
+        }
+    }
+    if( pFld && !pFld->HasFollow() )
+        pFld = NULL;
+
+    SwLinePortion *pRest = NULL;
+    const SwTxtAttr *pHint;
+    if( pFld )
+    {
+        pHint = GetAttr( nPos - 1 );
+        if( pHint && pHint->Which() == RES_TXTATR_FIELD )
+        {
+            pRest = NewFldPortion( GetInfo(), pHint );
+            if( pRest->InFldGrp() )
+                ((SwFldPortion*)pRest)->TakeNextOffset( pFld );
+            else
+            {
+                delete pRest;
+                pRest = NULL;
+            }
+        }
+    }
+    if( !pMulti )
+        return pRest;
+
+    nPos = nMultiPos + pMulti->GetLen();
+    pHint = GetInfo().GetMultiAttr( nMultiPos );
+    ASSERT( pHint, "Multiportion without attribut?" );
+
+    if( pRest || nMultiPos > nPos || ( pMulti->IsRuby() &&
+        ((SwRubyPortion*)pMulti)->GetRubyOffset() < STRING_LEN ) )
+    {
+        SwMultiPortion* pTmp;
+        if( pMulti->IsDouble() )
+            pTmp = new SwDoubleLinePortion( *((SwDoubleLinePortion*)pMulti),
+                                            nMultiPos );
+        else if( pMulti->IsRuby() )
+            pTmp = new SwRubyPortion( *pHint, *GetInfo().GetFont(), nMultiPos,
+                                ((SwRubyPortion*)pMulti)->GetRubyOffset() );
+        else
+            return pRest;
+        pTmp->SetFollowFld();
+        if( pRest )
+        {
+            SwLineLayout *pLay = &pTmp->GetRoot();
+            if( pTmp->IsRuby() && pTmp->OnTop() )
+            {
+                pLay->SetNext( new SwLineLayout() );
+                pLay = pLay->GetNext();
+            }
+            pLay->SetPortion( pRest );
+        }
+        return pTmp;
+    }
+    return pRest;
+}
+
+
 
 /*-----------------23.10.00 10:47-------------------
  * SwTxtCursorSave notes the start and current line of a SwTxtCursor,

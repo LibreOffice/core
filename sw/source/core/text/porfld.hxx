@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-29 13:54:47 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ public:
 
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
+    inline const sal_Bool HasFont() const { return 0 != pFnt; }
 
     inline const XubString &GetExp() const { return aExpand; }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
