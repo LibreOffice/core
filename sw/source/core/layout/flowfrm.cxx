@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:08:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,8 +618,10 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
          (pOldParent->IsInSct() &&
           !(pSct = pOldParent->FindSctFrm())->ContainsCntnt() ) )
             pSct->DelEmpty( FALSE );
+
     // In einem spaltigen Bereich rufen wir lieber kein Calc "von unten"
-    if( !rThis.IsInSct() && ( !rThis.IsInTab() || rThis.IsTabFrm() ) )
+    if( !rThis.IsInSct() &&
+        ( !rThis.IsInTab() || ( rThis.IsTabFrm() && !rThis.GetUpper()->IsInTab() ) ) )
         rThis.GetUpper()->Calc();
     else if( rThis.GetUpper()->IsSctFrm() )
     {
@@ -830,7 +832,7 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
     if ( IsInFtn() )
         return bFwd ? GetNextFtnLeaf( eMakePage ) : GetPrevFtnLeaf( eMakePage );
 
-    if ( IsInTab() && !IsTabFrm() )
+    if ( IsInTab() && ( !IsTabFrm() || GetUpper()->IsCellFrm() ) ) // TABLE IN TABLE
         return bFwd ? GetNextCellLeaf( eMakePage ) : GetPrevCellLeaf( eMakePage );
 
     if ( IsInSct() )
@@ -1941,8 +1943,12 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             bNoFwd = !pBoss->IsInSct() || ( !pBoss->Lower()->GetNext() &&
                      !pBoss->GetPrev() );
         }
-        if ( !rThis.IsTabFrm() && rThis.IsInTab() &&
-            ( NULL != rThis.IsInSplitTableRow() ) )
+        // Allow the MoveFwd even if we do not have an IndPrev in these cases:
+        if ( rThis.IsInTab() &&
+            ( !rThis.IsTabFrm() ||
+                ( rThis.GetUpper()->IsInTab() &&
+                  rThis.GetUpper()->FindTabFrm()->IsFwdMoveAllowed() ) ) &&
+                ( NULL != rThis.IsInSplitTableRow() ) )
         {
             bNoFwd = FALSE;
         }
