@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 08:36:05 $
+ *  last change: $Author: os $ $Date: 2002-12-02 14:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ class SwPreviewPrintOptionsDialog : public SvxStandardDialog
     PushButton          aStandardPB;
 
     SwPagePreView&      rPreView;
+    SwPagePreViewWin&   rParentWin;
     PrintSettingsStruct aSettings;
 /*  Size                aPageMaxSize;
     Size                aPrtSize;
@@ -470,6 +471,7 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     aHelpBtn(this,SW_RES(BT_HELP)),
     aStandardPB(this,SW_RES(PB_STANDARD)),
     rPreView(rView),
+    rParentWin(rParent),
     bStandard(TRUE)
 {
     FreeResource();
@@ -504,6 +506,8 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     {
         // Orientation der PreviewData an den Drucker anpassen
         aData.SetLandscape(aSettings.bPrinterLandscape);
+        aData.SetRow(rParent.GetRow());
+        aData.SetCol(rParent.GetCol());
     }
     FillControls(aData);
 
@@ -724,6 +728,8 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, StandardHdl, PushButton*, EMPTYARG )
 {
     SetUpdateMode(TRUE);
     SwPagePreViewPrtData aData;
+    aData.SetRow(rParentWin.GetRow());
+    aData.SetCol(rParentWin.GetCol());
     FillControls(aData);
     bStandard = TRUE;
     aLSpaceMF.SetText(aEmptyStr);
@@ -732,8 +738,6 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, StandardHdl, PushButton*, EMPTYARG )
     aBSpaceMF.SetText(aEmptyStr);
     aHSpaceMF.SetText(aEmptyStr);
     aVSpaceMF.SetText(aEmptyStr);
-    aRowsNF.SetText(aEmptyStr);
-    aColsNF.SetText(aEmptyStr);
     aPreviewWin.Invalidate();
     SetUpdateMode(FALSE);
     return 0;
