@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 12:07:45 $
+ *  last change: $Author: mba $ $Date: 2001-03-01 16:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2464,7 +2464,10 @@ void SfxMedium::CreateTempFile()
         DELETEZ( pImp->pTempFile );
 
     BOOL bDeleteInputStream = ( pInStream == 0);
+    ULONG nOpenMode = nStorOpenMode;
     GetInStream();
+    BOOL bCopy = ( nStorOpenMode == nOpenMode );
+    nStorOpenMode = nOpenMode;
     ResetError();
 
     String          aParentName;
@@ -2475,17 +2478,21 @@ void SfxMedium::CreateTempFile()
 
     pImp->pTempFile = new ::utl::TempFile( &aParentName );
     pImp->pTempFile->EnableKillingFile( sal_True );
-
     aName = pImp->pTempFile->GetFileName();
 
-    GetOutStream();
-    if ( pInStream && pOutStream )
+    if ( bCopy )
     {
-        *pInStream >> *pOutStream;
-        CloseInStream();
-    }
+        GetOutStream();
+        if ( pInStream && pOutStream )
+        {
+            *pInStream >> *pOutStream;
+            CloseInStream();
+        }
 
-    CloseOutStream_Impl();
+        CloseOutStream_Impl();
+    }
+    else
+        CloseInStream();
     CloseStorage();
 }
 
