@@ -10,6 +10,22 @@ fi
 
 linenum=LINENUMBERPLACEHOLDER
 
+# Determining current platform
+
+platform=`uname -s`
+
+case $platform in
+SunOS)
+  tail_prog="tail"
+  ;;
+Linux)
+  tail_prog="tail -n"
+  ;;
+*)
+  tail_prog="tail"
+  ;;
+esac
+
 more << "EOF"
 LICENSEFILEPLACEHOLDER
 EOF
@@ -31,9 +47,6 @@ done
 echo
 echo "Searching for the PRODUCTNAMEPLACEHOLDER installation ..."
 
-# Determining current platform
-
-platform=`uname -s`
 case $platform in
 SunOS)
   PACKAGENAME=`pkginfo -x | grep PRODUCTNAMEPLACEHOLDER-core | sed "s/ .*//"`
@@ -101,14 +114,14 @@ echo "Unpacking and installing..."
 
 case $platform in
 SunOS)
-  tail +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
+  $tail_prog +$linenum $0 | gunzip | (cd $outdir; tar xvf -)
   adminfile=$outdir/admin.$$
   echo "basedir=$PRODUCTINSTALLLOCATION" > $adminfile
   /usr/sbin/pkgadd -d $outdir -a $adminfile PACKAGENAMEPLACEHOLDER
 
   ;;
 Linux)
-  tail +$linenum $0 > $outdir/PACKAGENAMEPLACEHOLDER
+  $tail_prog +$linenum $0 > $outdir/PACKAGENAMEPLACEHOLDER
   rpm --prefix $PRODUCTINSTALLLOCATION -i $outdir/PACKAGENAMEPLACEHOLDER
   ;;
 *)
