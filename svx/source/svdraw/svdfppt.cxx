@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-02 18:52:50 $
+ *  last change: $Author: sj $ $Date: 2001-01-18 12:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3618,8 +3618,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
         {
             SvxBrushItem aBrush( aGraphic, GPOS_MM );
             rNumberFormat.SetGraphicBrush( &aBrush );
-            UINT32 nHeight = ( (double)nFontHeight * 7.0    // 10.0
-                                        / ( 72.0 / 2.54 ) ) * nBulletHeight;
+            sal_uInt32 nHeight = (sal_uInt32)( (double)nFontHeight * 0.2540 * nBulletHeight + 0.5 );
             Size aPrefSize( aGraphic.GetPrefSize() );
             UINT32 nWidth = ( nHeight * aPrefSize.Width() ) / aPrefSize.Height();
             rNumberFormat.SetGraphicSize( Size( nWidth, nHeight ) );
@@ -3805,6 +3804,8 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
                                                 pParaObj->mnInstance, nInstanceInSheet, nFontHeight, pParaObj );
 
+    if ( rNumberFormat.GetNumType() != SVX_NUM_BITMAP )
+        pParaObj->UpdateBulletRelSize( nBulletHeight );
     if ( nHardCount )
         ImplGetNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth );
 
@@ -5453,6 +5454,22 @@ void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
         mbTab = mpPortionList[ mnPortionCount - 1 ]->HasTabulator();
 }
 
+void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
+{
+    if ( mpPortionList )
+    {
+        PPTPortionObj* pPortion = mpPortionList[ 0 ];
+        if ( pPortion )
+        {
+            if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontHeight ) )
+            {
+                nBulletRelSize *= pPortion->pCharSet->mnFontHeight;
+                nBulletRelSize /= mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
+            }
+        }
+    }
+}
+
 BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstanceInSheet )
 {
     UINT32  nMask = 1 << nAttr;
@@ -5483,22 +5500,6 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                             nRetValue = pPortion->pCharSet->mnColor;
                         else
                             nRetValue = mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
-                    }
-                }
-            }
-        }
-        else if ( nAttr == PPT_ParaAttr_BulletHeight )
-        {
-            nRetValue = pParaSet->mpArry[ PPT_ParaAttr_BulletHeight ];
-            if ( mpPortionList )
-            {
-                PPTPortionObj* pPortion = mpPortionList[ 0 ];
-                if ( pPortion )
-                {
-                    if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontHeight ) )
-                    {
-                        nRetValue *= pPortion->pCharSet->mnFontHeight;
-                        nRetValue /= mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
                     }
                 }
             }
@@ -5553,19 +5554,6 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                 nRetValue = rParaLevel.mnBulletHeight;
                 if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletHeight ) )
                     bIsHardAttribute = 1;
-                if ( mpPortionList )
-                {
-                    PPTPortionObj* pPortion = mpPortionList[ 0 ];
-                    if ( pPortion )
-                    {
-                        if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontHeight ) )
-                        {
-                            nRetValue *= pPortion->pCharSet->mnFontHeight;
-                            nRetValue /= mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
-                            bIsHardAttribute = 1;
-                        }
-                    }
-                }
             }
             break;
             case PPT_ParaAttr_BulletColor :
@@ -5757,9 +5745,9 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         {
             mpPortionList[ mnPortionCount - 1 ]->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
             if ( ((INT16)nUpperDist) > 0 )
-                nUpperDist = - ( ( nFontHeight * nUpperDist * 96 ) / 1000 );
+                nUpperDist = - ( ( nFontHeight * nUpperDist * 100 ) / 1000 );
             if ( ((INT16)nLowerDist) > 0 )
-                nLowerDist = - ( ( nFontHeight * nLowerDist * 96 ) / 1000 );
+                nLowerDist = - ( ( nFontHeight * nLowerDist * 100 ) / 1000 );
         }
         bIsHardAttribute = TRUE;
     }
