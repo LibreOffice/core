@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:11:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,8 +383,11 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     return pContext;
 }
 
-SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
-    SvXMLImport( nImportFlags ),
+// #110680#
+SwXMLImport::SwXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    sal_uInt16 nImportFlags)
+:   SvXMLImport( xServiceFactory, nImportFlags ),
     bLoadDoc( sal_True ),
     bInsert( sal_False ),
     bBlock( sal_False ),
@@ -405,15 +408,18 @@ SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
 }
 
 #ifdef XML_CORE_API
+// #110680#
 SwXMLImport::SwXMLImport(
-        SwDoc& rDoc, const SwPaM& rPaM,
-        sal_Bool bLDoc, sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
-        const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::frame::XModel > & rModel,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XGraphicObjectResolver > & rEGO,
-        SvStorage *pPkg ) :
-    SvXMLImport( rModel, rEGO ),
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SwDoc& rDoc,
+    const SwPaM& rPaM,
+    sal_Bool bLDoc,
+    sal_Bool bInsertMode,
+    sal_uInt16 nStyleFamMask,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rEGO,
+    SvStorage *pPkg )
+:   SvXMLImport( xServiceFactory, rModel, rEGO ),
     bLoadDoc( bLDoc ),
     bInsert( bInsertMode ),
     nStyleFamilyMask( nStyleFamMask ),
@@ -1202,7 +1208,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport(IMPORT_ALL);
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport(IMPORT_ALL);
+    return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_ALL );
 }
 
 OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
@@ -1223,7 +1231,12 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLImport(
+    //  IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
+    //  IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
+        rSMgr,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
         IMPORT_FONTDECLS );
 }
@@ -1246,7 +1259,12 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
+    // #110680#
+    //return (cppu::OWeakObject*)new SwXMLImport(
+    //  IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
+    //  IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
+        rSMgr,
         IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
         IMPORT_FONTDECLS );
 }
@@ -1269,7 +1287,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( IMPORT_META );
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport( IMPORT_META );
+    return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_META );
 }
 
 OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
@@ -1290,7 +1310,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( IMPORT_SETTINGS );
+    // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport( IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
 
