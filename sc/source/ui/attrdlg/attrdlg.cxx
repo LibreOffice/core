@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-02 15:32:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ IMPL_LINK( ScAttrDlg, OkHandler, void*, EMPTYARG )
 {
     ((Link&)GetOKButton().GetClickHdl()).Call( NULL );
 
-    return NULL;
+    return 0;
 }
 
 
