@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-30 12:24:14 $
+ *  last change: $Author: hdu $ $Date: 2001-12-21 16:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ class PrintFontManager
         bool                                        m_bKernPairsQueried;
         ::std::list< KernPair >                     m_aXKernPairs;
         ::std::list< KernPair >                     m_aYKernPairs;
+        ::std::hash_map< sal_Unicode, bool >        m_bVerticalSubstitutions;
 
         PrintFontMetrics() : m_bKernPairsQueried( false ) {}
     };
@@ -480,6 +481,10 @@ public:
 
     // info whether there are vertical substitutions
     bool hasVerticalSubstitutions( fontID nFontID ) const;
+
+    // info whether an array of glyphs has vertical substitutions
+    void hasVerticalSubstitutions( fontID nFontID, const sal_Unicode* pCharacters,
+        int nCharacters, bool* pHasSubst ) const;
 
     // get the XLFD for a font that originated from the X fontpath
     // note: this may not be the original line that was in the fonts.dir

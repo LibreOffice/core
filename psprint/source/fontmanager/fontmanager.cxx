@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-30 12:22:59 $
+ *  last change: $Author: hdu $ $Date: 2001-12-21 16:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
         }
         m_pMetrics->m_aPages[ nPage/8 ] |= (1 << ( nPage & 7 ));
         int i;
-        uint16 table[256];
+        uint16 table[256], table_vert[256];
 
         for( i = 0; i < 256; i++ )
             table[ i ] = 256*nPage + i;
@@ -334,18 +334,20 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
         }
 
         for( i = 0; i < 256; i++ )
-            table[ i ] = 256*nPage + i;
-        MapString( pTTFont, table, nCharacters, NULL, 1 );
+            table_vert[ i ] = 256*nPage + i;
+        MapString( pTTFont, table_vert, nCharacters, NULL, 1 );
         pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, 1 );
         if( pMetrics )
         {
             for( i = 0; i < nCharacters; i++ )
             {
-                if( table[i] )
+                if( table_vert[i] )
                 {
                     CharacterMetric& rChar = m_pMetrics->m_aMetrics[ nPage*256 + i + ( 1 << 16 ) ];
                     rChar.width = m_aGlobalMetricY.width;
                     rChar.height = pMetrics[ i ].adv;
+                    if( table_vert[i] != table[i] )
+                        m_pMetrics->m_bVerticalSubstitutions[ nPage*256 + i ] = 1;
                 }
             }
             free( pMetrics );
@@ -2215,6 +2217,35 @@ bool PrintFontManager::hasVerticalSubstitutions( fontID nFontID ) const
             analyzeTrueTypeFile( pFont );
     }
     return pFont->m_bHaveVerticalSubstitutedGlyphs;
+}
+
+// -------------------------------------------------------------------------
+
+void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
+    const sal_Unicode* pCharacters, int nCharacters, bool* pHasSubst ) const
+{
+    PrintFont* pFont = getFont( nFontID );
+    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    {
+        // might be a truetype font not yet analyzed
+        if( pFont->m_eType == fonttype::TrueType )
+            analyzeTrueTypeFile( pFont );
+    }
+
+    if( ! pFont->m_bHaveVerticalSubstitutedGlyphs )
+        memset( pHasSubst, 0, sizeof(bool)*nCharacters );
+    else
+    {
+        for( int i = 0; i < nCharacters; i++ )
+        {
+            sal_Unicode code = pCharacters[i];
+            if( ! pFont->m_pMetrics ||
+                ! ( pFont->m_pMetrics->m_aPages[ code >> 11 ] & ( 1 << ( ( code >> 8 ) & 7 ) ) ) )
+                pFont->queryMetricPage( code >> 8, m_pAtoms );
+            ::std::hash_map< sal_Unicode, bool >::const_iterator it = pFont->m_pMetrics->m_bVerticalSubstitutions.find( code );
+            pHasSubst[i] = it != pFont->m_pMetrics->m_bVerticalSubstitutions.end();
+        }
+    }
 }
 
 // -------------------------------------------------------------------------
