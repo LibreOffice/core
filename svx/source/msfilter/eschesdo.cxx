@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:36:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,6 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-
-#ifndef _XCEPTION_HXX_ //autogen wg. TRY
-#include <vos/xception.hxx>
 #endif
 
 #ifndef _FLTCALL_HXX
