@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2001-05-21 16:41:11 $
+#   last change: $Author: hr $ $Date: 2001-06-01 12:06:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.7 $ ';
+$id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -92,6 +92,7 @@ print "$script_name -- version: $script_rev\n";
                         'copy',
                         'dos',
                         'hedabu',
+                        'linklib',
                         'mkdir',
                         'touch'
                         );
@@ -115,6 +116,7 @@ $opt_force          = 0;            # option force copy
 $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 
+$has_symlinks       = 0;            # system supports symlinks
 
 for (@action_list) {
     $action_hash{$_}++;
@@ -179,6 +181,42 @@ sub do_hedabu {
     ($from, $to) = split(' ', $line);
 
     push( @hedabu_list, @{glob_line($from, $to)});
+}
+
+sub do_linklib {
+    my ($lib_base, $lib_major,$to_dir);
+    my $lib = shift;
+
+    print "linklib: $lib\n" if $is_debug;
+    print "has symlinks\n" if ( $has_symlinks && $is_debug );
+
+    $to_dir = expand_macros("%_DEST%/lib%_EXT%");
+
+    return unless ( -e "$to_dir/$lib" && $has_symlinks);
+
+    if ( $lib !~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/ ) {
+        print_error("invalid library name: $lib");
+    }
+    else {
+        $lib_base = $1;
+        $lib_major = "$lib_base.$2";
+    }
+    if ( $opt_check ) {
+        print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n";
+        print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_base\n";
+    }
+    else {
+        my $symlib;
+        my @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
+        # remove old symlinks
+        unlink(@symlibs);
+        foreach $symlib (@symlibs) {
+            print "LINKLIB: $lib -> $symlib\n";
+            if ( !symlink("$lib", "$symlib") ) {
+                print_error("can't symlink $lib -> $symlib: $!",0);
+            }
+        }
+    }
 }
 
 sub do_mkdir {
@@ -275,6 +313,9 @@ sub init_globals {
                 [ '%OUTPATH%',          $outpath        ],
                 [ '%UPD%',              $upd            ]
               );
+
+    # find out if the system supports symlinks
+    $has_symlinks = eval { symlink("",""); 1 };
 }
 
 sub get_base {
