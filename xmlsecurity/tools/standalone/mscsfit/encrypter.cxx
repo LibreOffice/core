@@ -8,8 +8,8 @@
 #include "libxslt/xslt.h"
 #endif
 
-#include "SecurityEnvironment_MSCryptImpl.hxx"
-#include "XMLElementWrapper_XmlSecImpl.hxx"
+#include "securityenvironment_mscryptimpl.hxx"
+#include "xmlelementwrapper_xmlsecimpl.hxx"
 
 #include "xmlsec/strings.h"
 #include "xmlsec/mscrypto/app.h"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certmngr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:22:31 $
+ *  last change: $Author: mmi $ $Date: 2004-07-19 11:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,14 @@ int SAL_CALL main( int argc, char **argv )
             if( !xcert.is() ) {
                 fprintf( stdout, "The personal certificate is not in the certificate database\n" ) ;
             }
+
+            //Get the certificate characters
+            sal_Int32 chars = pSecEnv->getCertificateCharacters( xPersonalCerts[i] ) ;
+            fprintf( stdout, "The certificate characters are %d\n", chars ) ;
+
+            //Get the certificate status
+            sal_Int32 validity = pSecEnv->verifyCertificate( xPersonalCerts[i] ) ;
+            fprintf( stdout, "The certificate validities are %d\n", validity ) ;
         }
     } catch( Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;

@@ -9,8 +9,8 @@
 #endif
 
 
-#include "SecurityEnvironment_XmlSecImpl.hxx"
-#include "XMLElementWrapper_XmlSecImpl.hxx"
+#include "securityenvironment_mscryptimpl.hxx"
+#include "xmlelementwrapper_xmlsecimpl.hxx"
 
 #include "nspr.h"
 #include "prtypes.h"
