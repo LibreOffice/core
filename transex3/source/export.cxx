@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-12 10:36:35 $
+ *  last change: $Author: nf $ $Date: 2001-04-05 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,6 +1192,8 @@ USHORT Export::GetLangIndex( const ByteString &rLang )
         return ARABIC_INDEX;
     else if ( sLang == "HEBREW" )
         return HEBREW_INDEX;
+    else if ( sLang == "CATALAN" )
+        return CATALAN_INDEX;
 
     return nLangIndex;
 }

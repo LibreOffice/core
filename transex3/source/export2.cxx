@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-18 11:49:11 $
+ *  last change: $Author: nf $ $Date: 2001-04-05 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,8 @@ USHORT Export::LangId[ LANGUAGES ] =
     CHINESE_TRADITIONAL,
     TURKISH,
     ARABIC,
-    HEBREW
+    HEBREW,
+    CATALAN
 };
 
 
@@ -180,6 +181,7 @@ CharSet Export::GetCharSet( USHORT nLangId )
         case TURKISH: return RTL_TEXTENCODING_MS_1254;
         case ARABIC: return RTL_TEXTENCODING_MS_1256;
         case HEBREW: return RTL_TEXTENCODING_MS_1255;
+        case CATALAN: return RTL_TEXTENCODING_MS_1252;
     }
     return 0xFFFF;
 }
@@ -246,6 +248,8 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return ARABIC;
     else if ( sLang == ByteString( HEBREW_ISO ).ToUpperAscii())
         return HEBREW;
+    else if ( sLang == ByteString( CATALAN_ISO ).ToUpperAscii())
+        return CATALAN;
 
     return 0xFFFF;
 }
@@ -282,6 +286,7 @@ ByteString Export::GetIsoLangByIndex( USHORT nIndex )
         case TURKISH_INDEX: return TURKISH_ISO;
         case ARABIC_INDEX: return ARABIC_ISO;
         case HEBREW_INDEX: return HEBREW_ISO;
+        case CATALAN_INDEX: return CATALAN_ISO;
     }
     return "";
 }
@@ -404,5 +409,6 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "chinese_traditional",
     "turkish",
     "arabic",
-    "hebrew"
+    "hebrew",
+    "catalan"
 };

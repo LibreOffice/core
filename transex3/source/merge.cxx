@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-30 09:28:19 $
+ *  last change: $Author: nf $ $Date: 2001-04-05 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@ USHORT MergeDataFile::GetLangIndex( USHORT nId )
         case TURKISH: return TURKISH_INDEX;
         case ARABIC: return ARABIC_INDEX;
         case HEBREW: return HEBREW_INDEX;
+        case CATALAN: return CATALAN_INDEX;
     }
     return 0xFFFF;
 }
