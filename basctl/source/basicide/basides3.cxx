@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 09:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,11 @@ DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName )
                     Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
                         ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
                     Reference< XInputStream > xInput( xISP->createInputStream() );
-                    ::xmlscript::importDialogModel( xInput, xDialogModel );
+                    Reference< XComponentContext > xContext;
+                    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+                    OSL_ASSERT( xProps.is() );
+                    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
 
                     // new dialog window
                     pWin = new DialogWindow( &GetViewFrame()->GetWindow(), pBasic, pShell, aLibName, aDlgName, xDialogModel );

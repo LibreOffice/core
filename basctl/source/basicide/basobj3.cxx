@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 09:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,11 @@ Reference< io::XInputStreamProvider > BasicIDE::CreateDialog( SfxObjectShell* pS
         xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
 
         // export dialog model
-        xISP = ::xmlscript::exportDialogModel( xDialogModel );
+        Reference< XComponentContext > xContext;
+        Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+        OSL_ASSERT( xProps.is() );
+        OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+        xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
         Any aElement;
         aElement <<= xISP;
 
@@ -495,8 +499,12 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
         if( xISP.is() )
         {
             // import dialog model
+            Reference< XComponentContext > xContext;
+            Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+            OSL_ASSERT( xProps.is() );
+            OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
             Reference< io::XInputStream > xInput( xISP->createInputStream() );
-            ::xmlscript::importDialogModel( xInput, xDialogModel );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
 
             // set new name as property
             Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
@@ -505,7 +513,7 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
             xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
 
             // export dialog model
-            xISP = ::xmlscript::exportDialogModel( xDialogModel );
+            xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
             aElement <<= xISP;
         }
 

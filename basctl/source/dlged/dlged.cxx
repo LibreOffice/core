@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 09:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,11 @@ void DlgEditor::Copy()
     }
 
     // export clipboard dialog model to xml
-    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel );
+    Reference< XComponentContext > xContext;
+    Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext );
     Reference< XInputStream > xStream( xISP->createInputStream() );
     Sequence< sal_Int8 > bytes;
     sal_Int32 nRead = xStream->readBytes( bytes, xStream->available() );
@@ -678,7 +682,11 @@ void DlgEditor::Paste()
 
                 if ( xClipDialogModel.is() )
                 {
-                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&bytes)) ) , xClipDialogModel );
+                    Reference< XComponentContext > xContext;
+                    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+                    OSL_ASSERT( xProps.is() );
+                    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&bytes)) ) , xClipDialogModel, xContext );
                 }
 
                 // get control models from clipboard dialog model

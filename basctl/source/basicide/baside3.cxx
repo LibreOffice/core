@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:28 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 09:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,11 @@ void DialogWindow::StoreData()
 
                 if( xDialogModel.is() )
                 {
-                    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel );
+                    Reference< XComponentContext > xContext;
+                    Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+                    OSL_ASSERT( xProps.is() );
+                    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
                     Any aAny;
                     aAny <<= xISP;
                     xLib->replaceByName( ::rtl::OUString( m_aDlgName ), aAny );
