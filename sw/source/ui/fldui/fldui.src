@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:19:52 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1570,7 +1570,7 @@ String FLD_EU_FIRMA
     TEXT[ chinese_simplified ] = "¹«Ë¾";
     TEXT[ russian ] = "Ôèðìà";
     TEXT[ polish ] = "Firma";
-    TEXT[ japanese ] = "‰ïŽÐ";
+    TEXT[ japanese ] = "‰ïŽÐ–¼";
     TEXT[ chinese_traditional ] = "¤½¥q";
     TEXT[ arabic ] = "ÇáÔÑßÉ";
     TEXT[ greek ] = "Åôáéñßá";
@@ -1832,7 +1832,7 @@ String FLD_EU_TELPRIV
     TEXT [ finnish ] = "Puh. (Koti)" ;
     TEXT [ danish ] = "Tlf. (privat)" ;
     TEXT [ french ] = "Tél. (domicile)" ;
-    TEXT [ swedish ] = "Tfn. (privat)" ;
+    TEXT [ swedish ] = "Tfn (privat)" ;
     TEXT [ dutch ] = "Tel. (privé)" ;
     TEXT [ spanish ] = "Tel. (Priv.)" ;
     TEXT [ english_us ] = "Tel. (Home)" ;
@@ -1859,7 +1859,7 @@ String FLD_EU_TELFIRMA
     TEXT [ finnish ] = "Puh. (Työ)" ;
     TEXT [ danish ] = "Tlf. (arbejde)" ;
     TEXT [ french ] = "Tél. (bureau)" ;
-    TEXT [ swedish ] = "Tfn. (företag)" ;
+    TEXT [ swedish ] = "Tfn (företag)" ;
     TEXT [ dutch ] = "Tel. (Bedrijf)" ;
     TEXT [ spanish ] = "Tel. (Emp.)" ;
     TEXT [ english_us ] = "Tel. (Work)" ;
@@ -2448,7 +2448,7 @@ String FMT_AUTHOR_SCUT
     TEXT [ finnish ] = "Nimikirjaimet" ;
     TEXT [ danish ] = "Initialer" ;
     TEXT [ french ] = "Abréviation" ;
-    TEXT [ swedish ] = "Inititaler" ;
+    TEXT [ swedish ] = "Initialer" ;
     TEXT [ dutch ] = "Initialen" ;
     TEXT [ spanish ] = "Iniciales" ;
     TEXT [ english_us ] = "Initials" ;
@@ -3598,5 +3598,6 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ catalan ] = "Editar";
     Text[ finnish ] = "Muokkaa";
 };
+
 
 
