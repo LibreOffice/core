@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:59:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec&
                     bInvalidatePeer = TRUE;
                 }
             }
-            else if (eOutDevType == OUTDEV_PRINTER || eOutDevType == OUTDEV_VIRDEV)
+            else if (eOutDevType == OUTDEV_PRINTER)
             {
                 uno::Reference< beans::XPropertySet > xP(xUnoControl->getModel(), uno::UNO_QUERY);
                 if (xP.is())
@@ -530,6 +530,13 @@ sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec&
                         }
                     }
                 }
+            }
+            else if (eOutDevType == OUTDEV_VIRDEV)
+            {
+                uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
+                xView->setGraphics( x );
+                Point aP = pOut->LogicToPixel( aRect.TopLeft() );
+                xView->draw( aP.X(), aP.Y() );
             }
             else
                 DBG_ERROR( "SdrUnoObj::DoPaintObject: Ehm - what kind of device is this?" );
