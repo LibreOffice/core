@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 09:08:28 $
+ *  last change: $Author: kso $ $Date: 2001-08-21 07:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,9 +409,10 @@ HierarchyDataSource::createInstance( const rtl::OUString & aServiceSpecifier )
     // Create view to root node.
 
     beans::PropertyValue aProp;
-    aProp.Name  =   rtl::OUString(
+    aProp.Name = rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM( CFGPROPERTY_NODEPATH ) );
-    aProp.Value <<= rtl::OUString(); // root node path == empty string
+    aProp.Value <<=
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIG_DATA_ROOT_KEY ) );
 
     uno::Sequence< uno::Any > aArguments( 1 );
     aArguments[ 0 ] <<= aProp;
