@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:55:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #define BINTEST_VERIFY( c ) \
     if (! (c)) { fprintf( stderr, "### binary compatibility test failed: " #c " [line %d]!!!\n", __LINE__ ); abort(); }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     fprintf( stderr, "> OFFSET_OF(" #s ", " #m ") = %d\n", OFFSET_OF(s, m) ); \
