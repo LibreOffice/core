@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-23 15:34:04 $
+ *  last change: $Author: gt $ $Date: 2002-03-13 14:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,6 @@ private:
     sal_uInt32              mnSearchIndex;
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
-    sal_Bool                mbContextMenuEnabled    : 1;
     sal_Bool                mbEnableDelete          : 1;
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
@@ -325,21 +324,21 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry,
-                                 const XubString& rNewText );
+    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
 
     void            EnableAutoResize() { mbAutoResize = sal_True; }
-    void            EnableContextMenu( sal_Bool bEnable ) { mbContextMenuEnabled = bEnable; }
     void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
-    sal_Bool        IsDeleteOrContextMenuEnabled() { return mbContextMenuEnabled || mbEnableDelete; }
+    sal_Bool        IsDeleteOrContextMenuEnabled() { return mbEnableDelete || IsContextMenuHandlingEnabled(); }
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
 
     DECL_LINK( ResetQuickSearch_Impl, Timer * );
+
+    virtual PopupMenu* CreateContextMenu( void );
+    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopentry );
 };
 
 // class HashedEntry --------------------------------------------------
@@ -704,7 +703,7 @@ protected:
 
 inline void SvtFileView_Impl::EnableContextMenu( sal_Bool bEnable )
 {
-    mpView->EnableContextMenu( bEnable );
+    mpView->EnableContextMenuHandling( bEnable );
     if( bEnable )
         mbReplaceNames = sal_False;
 }
@@ -809,7 +808,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mnSearchIndex   ( 0 ),
     mbResizeDisabled( sal_False ),
     mbAutoResize    ( sal_False ),
-    mbContextMenuEnabled ( sal_True ),
     mbEnableDelete  ( sal_True )
 
 {
@@ -850,6 +848,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
 
     mxCmdEnv = new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
+    EnableContextMenuHandling();
 }
 
 // -----------------------------------------------------------------------
@@ -993,72 +992,38 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-void ViewTabListBox_Impl::Command( const CommandEvent& rCEvt )
+PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && mbContextMenuEnabled )
+    PopupMenu* pRet;
+    sal_Int32 nSelectedEntries = GetSelectionCount();
+
+    if ( nSelectedEntries )
     {
-        Point nPos = rCEvt.GetMousePosPixel();
-
-        SvLBoxEntry* pClickedEntry = GetEntry( nPos );
-        if ( pClickedEntry )
-        {
-            sal_Bool bClickedIsSelected = sal_False;
-
-            // collect the currently selected entries
-            sal_Int32 nSelectedEntries = GetSelectionCount();
-            ::std::vector< SvLBoxEntry* > aSelectedEntries;
-            aSelectedEntries.reserve( nSelectedEntries );
-            {
-                SvLBoxEntry* pSelected = FirstSelected();
-                while ( pSelected )
-                {
-                    aSelectedEntries.push_back( pSelected );
-                    bClickedIsSelected |= ( pClickedEntry == pSelected );
-                    pSelected = NextSelected( pSelected );
-                }
-            }
-
-            // if the entry which the user clicked at is not selected
-            if ( !bClickedIsSelected )
-            {   // deselect all other and select the clicked one
-                SelectAll( sal_False );
-                Select( pClickedEntry, sal_True );
-            }
-
-            nSelectedEntries = GetSelectionCount();
-            if ( nSelectedEntries )
-            {
-                PopupMenu aMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
-                aMenu.EnableItem( MID_FILEVIEW_DELETE, 0 < nSelectedEntries );
-                aMenu.EnableItem( MID_FILEVIEW_RENAME, 1 == nSelectedEntries );
-                aMenu.RemoveDisabledEntries( sal_True, sal_True );
-
-                switch ( aMenu.Execute( this, nPos ) )
-                {
-                    case MID_FILEVIEW_DELETE :
-                        DeleteEntries();
-                        break;
-
-                    case MID_FILEVIEW_RENAME :
-                        EditEntry( FirstSelected() );
-                        break;
-                }
-            }
-
-            // restore the selection if necessary
-            if ( !bClickedIsSelected )
-            {
-                SelectAll( sal_False );
-                for (   ::std::vector< SvLBoxEntry* >::const_iterator aSelectLoop = aSelectedEntries.begin();
-                        aSelectLoop != aSelectedEntries.end();
-                        ++aSelectLoop
-                    )
-                    Select( *aSelectLoop, sal_True );
-            }
-        }
+        pRet = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
+        pRet->EnableItem( MID_FILEVIEW_DELETE, 0 < nSelectedEntries );
+        pRet->EnableItem( MID_FILEVIEW_RENAME, 1 == nSelectedEntries );
+        pRet->RemoveDisabledEntries( sal_True, sal_True );
     }
     else
-        SvHeaderTabListBox::Command( rCEvt );
+        pRet = NULL;
+
+    return pRet;
+}
+
+// -----------------------------------------------------------------------
+
+void ViewTabListBox_Impl::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
+{
+    switch ( nSelectedPopupEntry )
+    {
+        case MID_FILEVIEW_DELETE :
+            DeleteEntries();
+            break;
+
+        case MID_FILEVIEW_RENAME :
+            EditEntry( FirstSelected() );
+            break;
+    }
 }
 
 // -----------------------------------------------------------------------

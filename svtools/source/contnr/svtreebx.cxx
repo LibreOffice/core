@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-19 18:36:11 $
+ *  last change: $Author: gt $ $Date: 2002-03-13 14:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2382,3 +2382,33 @@ void SvTreeListBox::CancelPendingEdit()
         pImp->CancelPendingEdit();
 }
 
+PopupMenu* SvTreeListBox::CreateContextMenu( void )
+{
+    return NULL;
+}
+
+void SvTreeListBox::ExcecuteContextMenuAction( USHORT )
+{
+    DBG_WARNING( "SvTreeListBox::ExcecuteContextMenuAction(): now there's happening nothing!" );
+}
+
+void SvTreeListBox::EnableContextMenuHandling( void )
+{
+    DBG_ASSERT( pImp, "-SvTreeListBox::EnableContextMenuHandling(): No implementation!" );
+
+    pImp->bContextMenuHandling = TRUE;
+}
+
+void SvTreeListBox::EnableContextMenuHandling( BOOL b )
+{
+    DBG_ASSERT( pImp, "-SvTreeListBox::EnableContextMenuHandling(): No implementation!" );
+
+    pImp->bContextMenuHandling = b;
+}
+
+BOOL SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
+{
+    DBG_ASSERT( pImp, "-SvTreeListBox::IsContextMenuHandlingEnabled(): No implementation!" );
+
+    return pImp->bContextMenuHandling;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-08 12:29:09 $
+ *  last change: $Author: gt $ $Date: 2002-03-13 14:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     bInVScrollHdl = FALSE;
     nFlags |= F_FILLING;
 
-    bSubLstOpRet = bSubLstOpLR = FALSE;
+    bSubLstOpRet = bSubLstOpLR = bContextMenuHandling = FALSE;
 }
 
 SvImpLBox::~SvImpLBox()
@@ -1123,8 +1123,8 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
 
     Size aOSize( pView->Control::GetOutputSizePixel() );
 
-    int bVerSBar = (int)( pView->nWindowStyle & WB_VSCROLL );
-    int bHorBar = 0;
+    BOOL bVerSBar = ( pView->nWindowStyle & WB_VSCROLL ) != 0;
+    BOOL bHorBar = FALSE;
     long nMaxRight = aOSize.Width(); //GetOutputSize().Width();
     Point aOrigin( pView->GetMapMode().GetOrigin() );
     aOrigin.X() *= -1;
@@ -1133,7 +1133,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
     if( pTabBar || (
         (pView->nWindowStyle & WB_HSCROLL) &&
         (nVis < nMostRight || nMaxRight < nMostRight) ))
-        bHorBar = 1;
+        bHorBar = TRUE;
 
     // Anzahl aller nicht eingeklappten Eintraege
     ULONG nTotalCount = pView->GetVisibleCount();
@@ -1151,7 +1151,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
         {
             if( (pView->nWindowStyle & WB_HSCROLL) &&
                 (nVis < nMostRight || nMaxRight < nMostRight) )
-                bHorBar = 1;
+                bHorBar = TRUE;
         }
     }
 
@@ -1314,7 +1314,7 @@ void SvImpLBox::FillView()
 
 void SvImpLBox::ShowVerSBar()
 {
-    ULONG bVerBar = (ULONG)( pView->nWindowStyle & WB_VSCROLL );
+    BOOL bVerBar = ( pView->nWindowStyle & WB_VSCROLL ) != 0;
     ULONG nVis;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
@@ -2877,20 +2877,100 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
 
 void SvImpLBox::Command( const CommandEvent& rCEvt )
 {
-    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    USHORT              nCommand = rCEvt.GetCommand();
+
+    if( nCommand == COMMAND_CONTEXTMENU )
         aEditTimer.Stop();
+
     // Rollmaus-Event?
-    if( (rCEvt.GetCommand() == COMMAND_WHEEL) ||
-        (rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
-        (rCEvt.GetCommand() == COMMAND_AUTOSCROLL) )
-    {
-        if( pView->HandleScrollCommand( rCEvt, &aHorSBar, &aVerSBar ) )
+    if( ( ( nCommand == COMMAND_WHEEL ) || ( nCommand == COMMAND_STARTAUTOSCROLL ) || ( nCommand == COMMAND_AUTOSCROLL ) )
+        && pView->HandleScrollCommand( rCEvt, &aHorSBar, &aVerSBar ) )
             return;
+
+    if( bContextMenuHandling && nCommand == COMMAND_CONTEXTMENU )
+    {
+        Point   aPopupPos;
+
+        if( rCEvt.IsMouseEvent() )
+        {   // change selection, if mouse pos doesn't fit to selection
+
+            aPopupPos = rCEvt.GetMousePosPixel();
+
+            SvLBoxEntry*    pClickedEntry = GetEntry( aPopupPos );
+            if( pClickedEntry )
+            {   // mouse in non empty area
+                BOOL                bClickedIsSelected = FALSE;
+
+                // collect the currently selected entries
+                INT32               nSelectedEntries = pView->GetSelectionCount();
+                SvLBoxEntry*        pSelected = pView->FirstSelected();
+                while( pSelected )
+                {
+                    bClickedIsSelected |= ( pClickedEntry == pSelected );
+                    pSelected = pView->NextSelected( pSelected );
+                }
+
+                // if the entry which the user clicked at is not selected
+                if( !bClickedIsSelected )
+                {   // deselect all other and select the clicked one
+                    pView->SelectAll( FALSE );
+                    pView->SetCursor( pClickedEntry );
+                }
+            }
+            else if( aSelEng.GetSelectionMode() == SINGLE_SELECTION )
+                // does nothing because in singel select mode it's not possible to "select" nothing
+                return;
+            else
+            {   // deselect all
+                pView->SelectAll( FALSE );
+            }
+
+
+        }
+        else
+        {   // key event (or at least no mouse event)
+            INT32   nSelectionCount = pView->GetSelectionCount();
+
+            if( nSelectionCount )
+            {   // now allways take first visible as base for positioning the menu
+                SvLBoxEntry*    pSelected = pView->FirstSelected();
+                while( pSelected )
+                {
+                    if( IsEntryInView( pSelected ) )
+                        break;
+
+                    pSelected = pView->NextSelected( pSelected );
+                }
+
+                if( !pSelected )
+                {
+                    // no one was visible
+                    pSelected = pView->FirstSelected();
+                    pView->MakeVisible( pSelected );
+                }
+
+                aPopupPos = pView->GetFocusRect( pSelected, pView->GetEntryPos( pSelected ).Y() ).Center();
+            }
+            else
+                aPopupPos = Point( 0, 0 );
+        }
+
+        PopupMenu*  pPopup = pView->CreateContextMenu();
+
+        if( pPopup )
+        {
+            // do action for selected entry in popup menu
+            pView->ExcecuteContextMenuAction( pPopup->Execute( pView, aPopupPos ) );
+            delete pPopup;
+        }
     }
 #ifndef NOCOMMAND
-    const Point& rPos = rCEvt.GetMousePosPixel();
-    if( rPos.X() < aOutputSize.Width() && rPos.Y() < aOutputSize.Height() )
-        aSelEng.Command( rCEvt );
+    else
+    {
+        const Point& rPos = rCEvt.GetMousePosPixel();
+        if( rPos.X() < aOutputSize.Width() && rPos.Y() < aOutputSize.Height() )
+            aSelEng.Command( rCEvt );
+    }
 #endif
 }
 
