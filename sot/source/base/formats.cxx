@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:46:13 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,8 +1509,10 @@ static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >& rxT
     return bRet;
 }
 
-static USHORT GetTransferableAction_Impl( const Reference< XTransferable >& rxTransferable,
-                                          const SotAction_Impl* pArray, ULONG& rFormat )
+static USHORT GetTransferableAction_Impl(
+                            const Reference< XTransferable >& rxTransferable,
+                             const SotAction_Impl* pArray, ULONG& rFormat,
+                            ULONG nOnlyTestFormat )
 {
     try
     {
@@ -1535,7 +1537,8 @@ static USHORT GetTransferableAction_Impl( const Reference< XTransferable >& rxTr
             while( nId != 0xffff )
             {
                 rFormat = nId;
-                if( SotExchange::GetFormatDataFlavor( nId, aFlavor ) &&
+                if( ( !nOnlyTestFormat || nOnlyTestFormat == nId ) &&
+                    SotExchange::GetFormatDataFlavor( nId, aFlavor ) &&
                     rxTransferable->isDataFlavorSupported( aFlavor ) &&
                     ( !pArray->nContextCheckId ||
                       CheckTransferableContext_Impl( rxTransferable, *pArray ) ) )
@@ -1593,9 +1596,11 @@ static USHORT GetTransferableAction_Impl( const Reference< XTransferable >& rxTr
     return EXCHG_INOUT_ACTION_NONE;
 }
 
-USHORT SotExchange::GetExchangeAction( const Reference< XTransferable >& rxTransferable,
-                                       USHORT nDestination, USHORT nSourceOptions,
-                                       USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
+USHORT SotExchange::GetExchangeAction(
+                        const Reference< XTransferable >& rxTransferable,
+                        USHORT nDestination, USHORT nSourceOptions,
+                        USHORT nUserAction, ULONG& rFormat,
+                        USHORT& rDefaultAction, ULONG nOnlyTestFormat )
 {
     // hier wird jetzt die oben definierte Tabelle "implementiert"
     IMPL_DATA_ARRAY_1;
@@ -1632,19 +1637,26 @@ USHORT SotExchange::GetExchangeAction( const Reference< XTransferable >& rxTrans
     */
     if( nUserAction == EXCHG_IN_ACTION_DEFAULT )
     {
-        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aDefaultActions,rFormat);
+        nUserAction = GetTransferableAction_Impl( rxTransferable,
+                        pEntry->aDefaultActions, rFormat, nOnlyTestFormat );
         // Unterstuetzt die Quelle die Aktion?
         if( !(nUserAction & nSourceOptions ))
         {
             // Nein -> Alle Aktionen der Quelle checken
             rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
-            if( rDefaultAction && (nUserAction=GetTransferableAction_Impl(rxTransferable,pEntry->aCopyActions,rFormat)))
+            if( rDefaultAction && (nUserAction = GetTransferableAction_Impl(
+                                        rxTransferable, pEntry->aCopyActions,
+                                        rFormat, nOnlyTestFormat ) ) )
                 return nUserAction;
             rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
-            if( rDefaultAction && (nUserAction=GetTransferableAction_Impl(rxTransferable,pEntry->aLinkActions,rFormat)))
+            if( rDefaultAction && (nUserAction = GetTransferableAction_Impl(
+                                        rxTransferable, pEntry->aLinkActions,
+                                        rFormat, nOnlyTestFormat ) ) )
                 return nUserAction;
             rDefaultAction = (EXCHG_IN_ACTION_MOVE & nSourceOptions);
-            if( rDefaultAction && (nUserAction=GetTransferableAction_Impl(rxTransferable,pEntry->aMoveActions,rFormat)))
+            if( rDefaultAction && (nUserAction = GetTransferableAction_Impl(
+                                        rxTransferable, pEntry->aMoveActions,
+                                        rFormat, nOnlyTestFormat )))
                 return nUserAction;
             rDefaultAction = 0;
             return 0;
@@ -1657,15 +1669,18 @@ USHORT SotExchange::GetExchangeAction( const Reference< XTransferable >& rxTrans
     switch( nUserAction )
     {
     case EXCHG_IN_ACTION_MOVE:
-        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aMoveActions, rFormat);
+        nUserAction = GetTransferableAction_Impl( rxTransferable,
+                            pEntry->aMoveActions, rFormat, nOnlyTestFormat );
         break;
 
     case EXCHG_IN_ACTION_COPY:
-        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aCopyActions, rFormat);
+        nUserAction = GetTransferableAction_Impl( rxTransferable,
+                            pEntry->aCopyActions, rFormat, nOnlyTestFormat);
         break;
 
     case EXCHG_IN_ACTION_LINK:
-        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aLinkActions, rFormat);
+        nUserAction = GetTransferableAction_Impl( rxTransferable,
+                            pEntry->aLinkActions, rFormat, nOnlyTestFormat);
         break;
 
     default:
