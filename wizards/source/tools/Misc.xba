@@ -58,7 +58,7 @@ Dim oDBSource as Object
 				RegisterNewDataSource(DSName, PropertyList())
 			End If
 			oDBSource = oDBContext.GetByName(DSName)
-			ConnectToDatabase = oDBSource.GetConnection(UserID, Password)		
+			ConnectToDatabase = oDBSource.GetConnection(UserID, Password)
 		Else
 			Msgbox(&quot;DataSource &quot; &amp; DSName &amp; &quot; is not registered&quot; , 16, GetProductname())
 			ConnectToDatabase() = NULL
@@ -69,7 +69,7 @@ NOCONNECTION:
 		Msgbox(Error$, 16, GetProductName())
 		Resume LEAVESUB
 		LEAVESUB:
-	End If	
+	End If
 End Function
 
 
@@ -114,15 +114,13 @@ Dim sProdName as String
 	oProdNameAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
 	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
 	sVersion = oProdNameAccess.getByName(&quot;ooSetupVersion&quot;)
-	GetProductName = sProdName &amp; &quot;.&quot; &amp; sVersion
+	GetProductName = sProdName &amp; sVersion
 End Function
 
 
 &apos; Opens a Document, checks beforehand, wether it has to be loaded
-&apos; or wether it is already on the desktop.
-&apos; If the parameter bDisposable is set to False then then returned document
-&apos; should not be disposed afterwards, because it is already opened.
-Function OpenDocument(DocPath as String, Args(), Optional bDisposable as Boolean)
+&apos; or wether it is already on the desktop
+Function OpenDocument(DocPath as String, Args())
 Dim oComponents as Object
 Dim oComponent as Object
 	&apos; Search if one of the active Components ist the one that you search for
@@ -132,16 +130,10 @@ Dim oComponent as Object
   	  	If hasUnoInterfaces(oComponent,&quot;com.sun.star.frame.XModel&quot;) then
 			If UCase(oComponent.URL) = UCase(DocPath) then
 				OpenDocument() = oComponent
-				If Not IsMissing(bDisposable) Then
-					bDisposable = False
-				End If
 				Exit Function
 			End If
 		End If
 	Wend
-	If Not IsMissing(bDisposable) Then
-		bDisposable = True
-	End If
 	OpenDocument() = StarDesktop.LoadComponentFromURL(DocPath,&quot;_blank&quot;,0,Args())
 End Function
 
@@ -548,48 +540,48 @@ Dim oWindowPointer as Object
 End Sub
 
 
-
-Function CheckNewSheetname(oSheets as Object, Sheetname as String)
-Dim SpecialSignsList(32) as String
-Dim i as Integer
-	SpecialSignsList(0) = &quot;-&quot;
-	SpecialSignsList(1) = &quot;.&quot;
-	SpecialSignsList(2) = &quot;!&quot;
-	SpecialSignsList(3) = &quot;?&quot;
-	SpecialSignsList(4) = &quot;/&quot;
-	SpecialSignsList(5) = &quot;\&quot;
-	SpecialSignsList(6) = &quot;,&quot;
-	SpecialSignsList(7) = &quot;;&quot;
-	SpecialSignsList(8) = &quot;&apos;&quot;
-	SpecialSignsList(9) = &quot;(&quot;
-	SpecialSignsList(10) = &quot;)&quot;
-	SpecialSignsList(11) = &quot;{&quot;
-	SpecialSignsList(12) = &quot;}&quot;
-	SpecialSignsList(13) = &quot;[&quot;
-	SpecialSignsList(14) = &quot;]&quot;
-	SpecialSignsList(15) = &quot;:&quot;
-	SpecialSignsList(16) = &quot;&quot;&quot;&quot;
-	SpecialSignsList(17) = &quot;$&quot;
-	SpecialSignsList(18) = &quot;&amp;&quot;
-	SpecialSignsList(19) = &quot;%&quot;
-	SpecialSignsList(20) = &quot;=&quot;
-	SpecialSignsList(21) = &quot;*&quot;
-	SpecialSignsList(22) = &quot;?Â§&quot;
-	SpecialSignsList(23) = &quot;@&quot;
-	SpecialSignsList(24) = &quot;&lt;&quot;
-	SpecialSignsList(25) = &quot;&gt;&quot;
-	SpecialSignsList(26) = &quot;#&quot;
-	SpecialSignsList(27) = &quot;+&quot;
-	SpecialSignsList(28) = &quot;~&quot;
-	SpecialSignsList(29) = &quot;|&quot;
-	SpecialSignsList(30) = &quot;??&quot;
-	SpecialSignsList(31) = &quot;^&quot;
-	SpecialSignsList(32) = &quot;?Â°&quot;
-	For i = 0 To Ubound(SpecialSignsList())
-		SheetName = ReplaceString(Sheetname, &quot;_&quot;, SpecialSignsList(i)
-	Next i
+Function CheckNewSheetname(oSheets as Object, Sheetname as String, Optional oLocale) as String
+Dim nStartFlags as Long
+Dim nContFlags as Long
+Dim oCharService as Object
+Dim iSheetNameLength as Integer
+Dim iResultPos as Integer
+Dim WrongChar as String
+Dim oResult as Object
+	nStartFlags = com.sun.star.i18n.KParseTokens.ANY_LETTER_OR_NUMBER + com.sun.star.i18n.KParseTokens.ASC_UNDERSCORE
+	nContFlags = nStartFlags
+	oCharService = CreateUnoService(&quot;com.sun.star.i18n.CharacterClassification&quot;)
+	iSheetNameLength = Len(SheetName)
+	If IsMissing(oLocale) Then
+		oLocale = ThisComponent.CharLocale
+	End If
+	Do
+		oResult =oCharService.parsePredefinedToken(com.sun.star.i18n.KParseType.IDENTNAME, SheetName, 0, oLocale, nStartFlags, &quot;&quot;, nContFlags, &quot; &quot;)
+		iResultPos = oResult.EndPos
+		If iResultPos &lt; iSheetNameLength Then
+			WrongChar = Mid(SheetName, iResultPos+1,1)
+			SheetName = ReplaceString(SheetName,&quot;_&quot;, WrongChar)
+		End If
+	Loop Until iResultPos = iSheetNameLength
 	CheckNewSheetname = SheetName
 End Function
+
+
+Sub AddNewSheetName(oSheets as Object, ByVal SheetName as String)
+Dim Count as Integer
+Dim bSheetIsThere as Boolean
+Dim iSheetNameLength as Integer
+	iSheetNameLength = Len(SheetName)
+	Count = 2
+	Do
+		bSheetIsThere = oSheets.HasByName(SheetName)
+		If bSheetIsThere Then
+			SheetName = Right(SheetName,iSheetNameLength) &amp; &quot;_&quot; &amp; Count
+			Count = Count + 1
+		End If
+	Loop Until Not bSheetIsThere
+	AddNewSheetname = SheetName
+End Sub
 
 
 Function GetSheetIndex(oSheets, sName) as Integer
@@ -686,7 +678,7 @@ Dim oDisp as Object
 	oUrl.Complete = &quot;slot:&quot; &amp; CStr(SlotID)
 	oTrans.parsestrict(oUrl)
 
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp = StarDesktop.ActiveFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
 	oDisp.dispatch(oUrl, oArg())
 End Sub
 

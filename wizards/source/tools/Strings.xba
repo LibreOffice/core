@@ -455,7 +455,7 @@ End Function
 
 Function CheckDouble(DoubleString as String)
 On Local Error Goto WRONGDATATYPE
-	CheckDouble() = CDbl(DoubleString) 
+	CheckDouble() = CDbl(DoubleString)
 WRONGDATATYPE:
 	If Err &lt;&gt; 0 Then
 		CheckDouble() = 0
