@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:10:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,7 +895,8 @@ void _InitCore()
     //      - RES_PARATR_REGISTER
     //      + 2 Dummies fuer die einzelnen "Bereiche"
     SwAttrPool::pVersionMap1 = new USHORT[ 60 ];
-    for( USHORT i = 1; i <= 17; i++ )
+    USHORT i;
+    for( i = 1; i <= 17; i++ )
         SwAttrPool::pVersionMap1[ i-1 ] = i;
     for ( i = 18; i <= 27; ++i )
         SwAttrPool::pVersionMap1[ i-1 ] = i + 5;
