@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmmergepage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:17:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <mmmergepage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+TabPage DLG_MM_MERGE_PAGE
+{
+    HelpID = HID_MM_MERGEPAGE ;
+    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Personalisieren Sie die Serienbrief-Dokumente";
+        Text [ en-US ] = "Personalize the mail merge documents";
+    };
+    FixedText  FI_EDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 248 , 28 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Sie können jetzt die Dokumente personalisieren. Ein Klick auf die Schaltfläche '%1' schließt vorübergehend den Assistenten. Durch Klicken der 'Zurück zum Seriendruck-Assistenten' Schaltfläche - sichtbar in einem kleinen Fenster - gelangen Sie zurück zum Assistenten.";
+        Text [ en-US ] = "You can personalize particular documents. Clicking '%1' will temporarily reduce the wizard to a small window so you can edit your document. After editing the document, return to the wizard by clicking 'Return to Mail Merge Wizard' in the small window.";
+    };
+    PushButton PB_EDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 120 , 14 ) ;
+        Text [ de ] = "Individuelles Dokument bearbeiten...";
+        Text [ en-US ] = "~Edit individual document...";
+    };
+    FixedLine  FL_FIND
+    {
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Suche";
+        Text [ en-US ] = "~Find";
+    };
+    FixedText  FT_FIND
+    {
+        Pos = MAP_APPFONT ( 6 , 86 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text [ de ] = "Suchen ~nach:";
+        Text [ en-US ] = "~Search for:";
+    };
+    Edit       ED_FIND
+    {
+        Pos = MAP_APPFONT ( 55 , 84 ) ;
+        Size = MAP_APPFONT ( 140 , 12 ) ;
+        Border = TRUE;
+    };
+    PushButton PB_FIND
+    {
+        Pos = MAP_APPFONT ( 198 , 83 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "~Suchen...";
+        Text [ en-US ] = "~Find...";
+    };
+    CheckBox   CB_WHOLEWORDS
+    {
+        Pos = MAP_APPFONT ( 55 , 101 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        Text [ de ] = "Nur ganzes ~Wort suchen";
+        Text [ en-US ] = "Whole wor~ds only";
+    };
+    CheckBox   CB_BACKWARDS
+    {
+        Pos = MAP_APPFONT ( 55 , 114 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        Text [ de ] = "Nach ~oben";
+        Text [ en-US ] = "Back~wards";
+    };
+    CheckBox   CB_MATCHCASE
+    {
+        Pos = MAP_APPFONT ( 55 , 127 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        Text [ de ] = "~Groß-/Kleinschreibung";
+        Text [ en-US ] = "Ma~tch case";
+    };
+};
+
+
+
