@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:37:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,10 +263,10 @@ void lclGetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell 
 }
 
 /** Inserts the URL into a text cell. Does not modify value or formula cells. */
-void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, USHORT nScCol, USHORT nScRow )
+void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, SCCOL nScCol, SCROW nScRow )
 {
     ScDocument& rDoc = rRoot.GetDoc();
-    USHORT nScTab = rRoot.GetCurrScTab();
+    SCTAB nScTab = rRoot.GetCurrScTab();
     ScAddress aPos( nScCol, nScRow, nScTab );
     CellType eCellType = rDoc.GetCellType( aPos );
 
@@ -402,15 +402,17 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
             *pLongName += *pTextMark;
         }
 
-        USHORT nScTab = rRoot.GetCurrScTab();
-        ScRange aRange( nCol1, nRow1, nScTab, nCol2, nRow2, nScTab );
+        SCTAB nScTab = rRoot.GetCurrScTab();
+        ScRange aRange( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1),
+                nScTab, static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2),
+                nScTab );
         if( rRoot.CheckCellRange( aRange ) )
         {
-            USHORT nScCol1, nScCol2;
-            USHORT nScRow1, nScRow2;
+            SCCOL nScCol1, nScCol2;
+            SCROW nScRow1, nScRow2;
             aRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
-            for( USHORT nScCol = nScCol1; nScCol <= nScCol2 ; ++nScCol )
-                for( USHORT nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
+            for( SCCOL nScCol = nScCol1; nScCol <= nScCol2 ; ++nScCol )
+                for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
                     lclInsertUrl( rRoot, *pLongName, nScCol, nScRow );
         }
     }
@@ -836,7 +838,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
                 // apply all ranges
-                USHORT nScTab = rRoot.GetCurrScTab();
+                SCTAB nScTab = rRoot.GetCurrScTab();
                 for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
                     rDoc.ApplyPatternAreaTab( pRange->aStart.Col(), pRange->aStart.Row(),
                         pRange->aEnd.Col(), pRange->aEnd.Row(), nScTab, aPattern );
