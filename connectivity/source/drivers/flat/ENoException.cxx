@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ENoException.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:45:13 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,8 @@ sal_Bool OFlatTable::checkHeaderLine()
 //------------------------------------------------------------------
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
+    if ( !m_pFileStream )
+        return sal_False;
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     // ----------------------------------------------------------
     // Positionierung vorbereiten:

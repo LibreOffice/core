@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 08:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ namespace connectivity
                     const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
+
+            void construct(); // can throw any exception
 
             virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
             virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool bIsTable,sal_Bool bRetrieveData);

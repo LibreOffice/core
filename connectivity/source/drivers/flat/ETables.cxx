@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:47:13 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 08:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,11 @@ namespace starutil      = ::com::sun::star::util;
 
 Reference< XNamed > OFlatTables::createObject(const ::rtl::OUString& _rName)
 {
-    return new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    OFlatTable* pRet = new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
+    Reference< XNamed > xRet = pRet;
+    pRet->construct();
+    return xRet;
 }
 // -------------------------------------------------------------------------
 

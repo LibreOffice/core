@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:17:58 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 08:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,10 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
     ,m_nMaxRowCount(0)
 {
 
+}
+// -----------------------------------------------------------------------------
+void OFlatTable::construct()
+{
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
     LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'-');
 
@@ -406,8 +410,8 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
-    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")),UNO_QUERY);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
+    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")),UNO_QUERY);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
 
     INetURLObject aURL;
@@ -463,7 +467,7 @@ String OFlatTable::getEntry()
         sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
 
         // name and extension have to coincide
-        if ((sName == m_Name) && (sExt == sNeededExt))
+        if ((sName == m_Name) && (m_pConnection->matchesExtension( sExt )))
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
             aURL = xContentAccess->queryContentIdentifierString();
