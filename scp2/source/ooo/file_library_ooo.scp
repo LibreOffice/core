@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.57 $
+*  $Revision: 1.58 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 08:00:32 $
+*  last change: $Author: rt $ $Date: 2004-10-22 08:18:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1303,18 +1303,6 @@ File gid_File_Lib_Proxyfac
     Name = STRING(CONCAT2(proxyfac.uno,UNXSUFFIX));
   #else
     Name = "proxyfac.uno.dll";
-  #endif
-End
-
-File gid_File_Lib_Proxyset
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libproxyset,UNXSUFFIX));
-  #else
-    Name = "proxyset.dll";
   #endif
 End
 
