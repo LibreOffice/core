@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:03:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,7 @@ SfxInPlaceClient::~SfxInPlaceClient()
     // deleting the client before storing the object means discarding all changes
     m_pImp->m_bStoreObject = sal_False;
     SetObject(0);
+
     m_pImp->m_pClient = NULL;
 
     // the next call will destroy m_pImp if no other reference to it exists
@@ -730,6 +731,10 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
             m_pImp->m_xObject->setClientSite( 0 );
         }
     }
+
+    if ( !m_pViewSh || m_pViewSh->GetViewFrame()->GetFrame()->IsClosing_Impl() )
+        // sometimes applications reconnect clients on shutting down because it happens in their Paint methods
+        return;
 
     m_pImp->m_xObject = rObject;
 
