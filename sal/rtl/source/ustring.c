@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:58:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+    OSL_ASSERT(*ppThis != NULL);
     if ( (*ppThis) )
     {
         IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
@@ -474,6 +475,9 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
         {
             IMPL_RTL_STRCODE* pBuffer;
             *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+            if (*ppThis == NULL) {
+                return;
+            }
             pBuffer = (*ppThis)->buffer;
             do
             {
@@ -509,6 +513,9 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                 {
                     IMPL_RTL_STRCODE* pBuffer;
                     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+                    if (*ppThis == NULL) {
+                        return;
+                    }
                     pBuffer = (*ppThis)->buffer;
                     do
                     {
@@ -532,6 +539,9 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
 
             pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+            if (pTemp == NULL) {
+                return;
+            }
             nDestChars = rtl_convertTextToUnicode( hConverter, 0,
                                                    pStr, nLen,
                                                    pTemp->buffer, nNewLen,
@@ -547,6 +557,9 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                 rtl_freeMemory( pTemp );
                 nNewLen += 8;
                 pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+                if (pTemp == NULL) {
+                    return;
+                }
                 nDestChars = rtl_convertTextToUnicode( hConverter, 0,
                                                        pStr, nLen,
                                                        pTemp->buffer, nNewLen,
@@ -559,9 +572,11 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
             if ( nNewLen > nDestChars+8 )
             {
                 rtl_uString* pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestChars );
-                rtl_str_ImplCopy( pTemp2->buffer, pTemp->buffer, nDestChars );
-                rtl_freeMemory( pTemp );
-                pTemp = pTemp2;
+                if (pTemp2 != NULL) {
+                    rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
+                    rtl_freeMemory(pTemp);
+                    pTemp = pTemp2;
+                }
             }
             else
             {
