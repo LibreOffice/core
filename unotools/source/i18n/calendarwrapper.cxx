@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 14:05:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_XEXTENDEDCALENDAR_HPP_
-#include <drafts/com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <com/sun/star/i18n/XExtendedCalendar.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -90,7 +90,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
-using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
 
