@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:25:46 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -121,24 +122,24 @@ static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 
 SvXMLEnumMapEntry psXML_BrushRepeat[] =
 {
-    { sXML_background_repeat,       GraphicLocation_TILED   },
-    { sXML_background_no_repeat,    GraphicLocation_MIDDLE_MIDDLE       },
-    { sXML_background_stretch,      GraphicLocation_AREA    },
-    { 0,                            0           }
+    { XML_BACKGROUND_REPEAT,        GraphicLocation_TILED   },
+    { XML_BACKGROUND_NO_REPEAT,     GraphicLocation_MIDDLE_MIDDLE       },
+    { XML_BACKGROUND_STRETCH,       GraphicLocation_AREA    },
+    { XML_TOKEN_INVALID,            0           }
 };
 
 SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
-    { sXML_left,        GraphicLocation_LEFT_MIDDLE },
-    { sXML_right,       GraphicLocation_RIGHT_MIDDLE    },
-    { 0,                            0           }
+    { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
+    { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
+    { XML_TOKEN_INVALID,                    0           }
 };
 
 SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
-    { sXML_top,         GraphicLocation_MIDDLE_TOP  },
-    { sXML_bottom,      GraphicLocation_MIDDLE_BOTTOM   },
-    { 0,                            0           }
+    { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
+    { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
+    { XML_TOKEN_INVALID,                    0           }
 };
 
 void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,

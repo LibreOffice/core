@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-11 10:39:13 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,16 +138,17 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 //using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 static __FAR_DATA SvXMLEnumMapEntry aCategoryMap[] =
 {
-    { sXML_text, ParagraphStyleCategory::TEXT },
-    { sXML_chapter, ParagraphStyleCategory::CHAPTER },
-    { sXML_list, ParagraphStyleCategory::LIST },
-    { sXML_index, ParagraphStyleCategory::INDEX },
-    { sXML_extra, ParagraphStyleCategory::EXTRA },
-    { sXML_html, ParagraphStyleCategory::HTML },
-    { 0,          0 }
+    { XML_TEXT,     ParagraphStyleCategory::TEXT },
+    { XML_CHAPTER,  ParagraphStyleCategory::CHAPTER },
+    { XML_LIST,     ParagraphStyleCategory::LIST },
+    { XML_INDEX,    ParagraphStyleCategory::INDEX },
+    { XML_EXTRA,    ParagraphStyleCategory::EXTRA },
+    { XML_HTML,     ParagraphStyleCategory::HTML },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-31 18:15:39 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
-
+using namespace ::xmloff::token;
 
 
 //
@@ -1020,10 +1020,10 @@ TYPEINIT1( XMLPageContinuationImportContext, XMLTextFieldImportContext );
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aSelectPageAttrMap[] =
 {
-    { sXML_previous,    PageNumberType_PREV },
-    { sXML_current,     PageNumberType_CURRENT },
-    { sXML_next,        PageNumberType_NEXT },
-    { 0,                0 },
+    { XML_PREVIOUS,     PageNumberType_PREV },
+    { XML_CURRENT,      PageNumberType_CURRENT },
+    { XML_NEXT,         PageNumberType_NEXT },
+    { XML_TOKEN_INVALID, 0 },
 };
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(
@@ -2308,11 +2308,11 @@ TYPEINIT1( XMLFileNameImportContext, XMLTextFieldImportContext );
 
 static const SvXMLEnumMapEntry aFilenameDisplayMap[] =
 {
-    { sXML_path,                FilenameDisplayFormat::PATH },
-    { sXML_name,                FilenameDisplayFormat::NAME },
-    { sXML_name_and_extension,  FilenameDisplayFormat::NAME_AND_EXT },
-    { sXML_full,                FilenameDisplayFormat::FULL },
-    { 0,                        0 }
+    { XML_PATH,                 FilenameDisplayFormat::PATH },
+    { XML_NAME,                 FilenameDisplayFormat::NAME },
+    { XML_NAME_AND_EXTENSION,   FilenameDisplayFormat::NAME_AND_EXT },
+    { XML_FULL,                 FilenameDisplayFormat::FULL },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 XMLFileNameImportContext::XMLFileNameImportContext(
@@ -2396,13 +2396,13 @@ void XMLFileNameImportContext::PrepareField(
 
 static const SvXMLEnumMapEntry aTemplateDisplayMap[] =
 {
-    { sXML_full,                TemplateDisplayFormat::FULL },
-    { sXML_path,                TemplateDisplayFormat::PATH },
-    { sXML_name,                TemplateDisplayFormat::NAME },
-    { sXML_name_and_extension,  TemplateDisplayFormat::NAME_AND_EXT },
-    { sXML_area,                TemplateDisplayFormat::AREA },
-    { sXML_title,               TemplateDisplayFormat::TITLE },
-    { 0,                        0 }
+    { XML_FULL,                 TemplateDisplayFormat::FULL },
+    { XML_PATH,                 TemplateDisplayFormat::PATH },
+    { XML_NAME,                 TemplateDisplayFormat::NAME },
+    { XML_NAME_AND_EXTENSION,   TemplateDisplayFormat::NAME_AND_EXT },
+    { XML_AREA,                 TemplateDisplayFormat::AREA },
+    { XML_TITLE,                TemplateDisplayFormat::TITLE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 TYPEINIT1( XMLTemplateNameImportContext, XMLTextFieldImportContext );
@@ -2458,12 +2458,12 @@ TYPEINIT1( XMLChapterImportContext, XMLTextFieldImportContext );
 
 static const SvXMLEnumMapEntry aChapterDisplayMap[] =
 {
-    { sXML_name,                    ChapterFormat::NAME },
-    { sXML_number,                  ChapterFormat::NUMBER },
-    { sXML_number_and_name,         ChapterFormat::NAME_NUMBER },
-    { sXML_plain_number_and_name,   ChapterFormat::NO_PREFIX_SUFFIX },
-    { sXML_plain_number,            ChapterFormat::DIGIT },
-    { 0,                            0 }
+    { XML_NAME,                     ChapterFormat::NAME },
+    { XML_NUMBER,                   ChapterFormat::NUMBER },
+    { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
+    { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
+    { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 XMLChapterImportContext::XMLChapterImportContext(
@@ -2824,14 +2824,14 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
 {
-    { sXML_page,        ReferenceFieldPart::PAGE},
-    { sXML_chapter,     ReferenceFieldPart::CHAPTER },
-    { sXML_text,        ReferenceFieldPart::TEXT },
-    { sXML_direction,   ReferenceFieldPart::UP_DOWN },
-    { sXML_category_and_value, ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { sXML_caption,     ReferenceFieldPart::ONLY_CAPTION },
-    { sXML_value,       ReferenceFieldPart::ONLY_SEQUENCE_NUMBER },
-    { 0,                0 }
+    { XML_PAGE,         ReferenceFieldPart::PAGE},
+    { XML_CHAPTER,      ReferenceFieldPart::CHAPTER },
+    { XML_TEXT,         ReferenceFieldPart::TEXT },
+    { XML_DIRECTION,    ReferenceFieldPart::UP_DOWN },
+    { XML_CATEGORY_AND_VALUE, ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_CAPTION,      ReferenceFieldPart::ONLY_CAPTION },
+    { XML_VALUE,        ReferenceFieldPart::ONLY_SEQUENCE_NUMBER },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 void XMLReferenceFieldImportContext::StartElement(
@@ -3311,38 +3311,38 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
 // TODO: this is the same map as is used in XMLSectionExport; we need only one copy.
 SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
 {
-    { sXML_address,             BibliographyDataField::ADDRESS },
-    { sXML_annote,              BibliographyDataField::ANNOTE },
-    { sXML_author,              BibliographyDataField::AUTHOR },
-    { sXML_bibiliographic_type, BibliographyDataField::BIBILIOGRAPHIC_TYPE },
-    { sXML_booktitle,           BibliographyDataField::BOOKTITLE },
-    { sXML_chapter,             BibliographyDataField::CHAPTER },
-    { sXML_custom1,             BibliographyDataField::CUSTOM1 },
-    { sXML_custom2,             BibliographyDataField::CUSTOM2 },
-    { sXML_custom3,             BibliographyDataField::CUSTOM3 },
-    { sXML_custom4,             BibliographyDataField::CUSTOM4 },
-    { sXML_custom5,             BibliographyDataField::CUSTOM5 },
-    { sXML_edition,             BibliographyDataField::EDITION },
-    { sXML_editor,              BibliographyDataField::EDITOR },
-    { sXML_howpublished,        BibliographyDataField::HOWPUBLISHED },
-    { sXML_identifier,          BibliographyDataField::IDENTIFIER },
-    { sXML_institution,         BibliographyDataField::INSTITUTION },
-    { sXML_isbn,                BibliographyDataField::ISBN },
-    { sXML_journal,             BibliographyDataField::JOURNAL },
-    { sXML_month,               BibliographyDataField::MONTH },
-    { sXML_note,                BibliographyDataField::NOTE },
-    { sXML_number,              BibliographyDataField::NUMBER },
-    { sXML_organizations,       BibliographyDataField::ORGANIZATIONS },
-    { sXML_pages,               BibliographyDataField::PAGES },
-    { sXML_publisher,           BibliographyDataField::PUBLISHER },
-    { sXML_report_type,         BibliographyDataField::REPORT_TYPE },
-    { sXML_school,              BibliographyDataField::SCHOOL },
-    { sXML_series,              BibliographyDataField::SERIES },
-    { sXML_title,               BibliographyDataField::TITLE },
-    { sXML_url,                 BibliographyDataField::URL },
-    { sXML_volume,              BibliographyDataField::VOLUME },
-    { sXML_year,                BibliographyDataField::YEAR },
-    { NULL, NULL }
+    { XML_ADDRESS,              BibliographyDataField::ADDRESS },
+    { XML_ANNOTE,               BibliographyDataField::ANNOTE },
+    { XML_AUTHOR,               BibliographyDataField::AUTHOR },
+    { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
+    { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
+    { XML_CHAPTER,              BibliographyDataField::CHAPTER },
+    { XML_CUSTOM1,              BibliographyDataField::CUSTOM1 },
+    { XML_CUSTOM2,              BibliographyDataField::CUSTOM2 },
+    { XML_CUSTOM3,              BibliographyDataField::CUSTOM3 },
+    { XML_CUSTOM4,              BibliographyDataField::CUSTOM4 },
+    { XML_CUSTOM5,              BibliographyDataField::CUSTOM5 },
+    { XML_EDITION,              BibliographyDataField::EDITION },
+    { XML_EDITOR,               BibliographyDataField::EDITOR },
+    { XML_HOWPUBLISHED,         BibliographyDataField::HOWPUBLISHED },
+    { XML_IDENTIFIER,           BibliographyDataField::IDENTIFIER },
+    { XML_INSTITUTION,          BibliographyDataField::INSTITUTION },
+    { XML_ISBN,                 BibliographyDataField::ISBN },
+    { XML_JOURNAL,              BibliographyDataField::JOURNAL },
+    { XML_MONTH,                BibliographyDataField::MONTH },
+    { XML_NOTE,                 BibliographyDataField::NOTE },
+    { XML_NUMBER,               BibliographyDataField::NUMBER },
+    { XML_ORGANIZATIONS,        BibliographyDataField::ORGANIZATIONS },
+    { XML_PAGES,                BibliographyDataField::PAGES },
+    { XML_PUBLISHER,            BibliographyDataField::PUBLISHER },
+    { XML_REPORT_TYPE,          BibliographyDataField::REPORT_TYPE },
+    { XML_SCHOOL,               BibliographyDataField::SCHOOL },
+    { XML_SERIES,               BibliographyDataField::SERIES },
+    { XML_TITLE,                BibliographyDataField::TITLE },
+    { XML_URL,                  BibliographyDataField::URL },
+    { XML_VOLUME,               BibliographyDataField::VOLUME },
+    { XML_YEAR,                 BibliographyDataField::YEAR },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 // we'll process attributes on our own and forfit the standard

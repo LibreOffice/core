@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-05 16:11:03 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLTYPES_HXX
 #include "xmltypes.hxx"
@@ -218,44 +221,49 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
 SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
 {
-    { sXML_automatic,       ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO },
-    { sXML_side_by_side,    ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
-    { sXML_stagger_even,    ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
-    { sXML_stagger_odd,     ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD }
+    { ::xmloff::token::XML_AUTOMATIC,       ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO },
+    { ::xmloff::token::XML_SIDE_BY_SIDE,        ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
+    { ::xmloff::token::XML_STAGGER_EVEN,        ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
+    { ::xmloff::token::XML_STAGGER_ODD,     ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXMLChartErrorCategoryEnumMap[] =
 {
-    { sXML_none,                ::com::sun::star::chart::ChartErrorCategory_NONE },
-    { sXML_variance,            ::com::sun::star::chart::ChartErrorCategory_VARIANCE },
-    { sXML_standard_deviation,  ::com::sun::star::chart::ChartErrorCategory_STANDARD_DEVIATION },
-    { sXML_percentage,          ::com::sun::star::chart::ChartErrorCategory_PERCENT },
-    { sXML_error_margin,        ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN },
-    { sXML_constant,            ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE }
+    { ::xmloff::token::XML_NONE,                    ::com::sun::star::chart::ChartErrorCategory_NONE },
+    { ::xmloff::token::XML_VARIANCE,                ::com::sun::star::chart::ChartErrorCategory_VARIANCE },
+    { ::xmloff::token::XML_STANDARD_DEVIATION,  ::com::sun::star::chart::ChartErrorCategory_STANDARD_DEVIATION },
+    { ::xmloff::token::XML_PERCENTAGE,          ::com::sun::star::chart::ChartErrorCategory_PERCENT },
+    { ::xmloff::token::XML_ERROR_MARGIN,            ::com::sun::star::chart::ChartErrorCategory_ERROR_MARGIN },
+    { ::xmloff::token::XML_CONSTANT,            ::com::sun::star::chart::ChartErrorCategory_CONSTANT_VALUE },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXMLChartRegressionCurveTypeEnumMap[] =
 {
-    { sXML_none,        ::com::sun::star::chart::ChartRegressionCurveType_NONE },
-    { sXML_linear,      ::com::sun::star::chart::ChartRegressionCurveType_LINEAR },
-    { sXML_logarithmic, ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM },
-    { sXML_exponential, ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL },
-    { sXML_polynomial,  ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL },
-    { sXML_power,       ::com::sun::star::chart::ChartRegressionCurveType_POWER }
+    { ::xmloff::token::XML_NONE,        ::com::sun::star::chart::ChartRegressionCurveType_NONE },
+    { ::xmloff::token::XML_LINEAR,      ::com::sun::star::chart::ChartRegressionCurveType_LINEAR },
+    { ::xmloff::token::XML_LOGARITHMIC, ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM },
+    { ::xmloff::token::XML_EXPONENTIAL, ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL },
+    { ::xmloff::token::XML_POLYNOMIAL,  ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL },
+    { ::xmloff::token::XML_POWER,       ::com::sun::star::chart::ChartRegressionCurveType_POWER },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
 {
-    { sXML_cuboid,      ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID },
-    { sXML_cylinder,    ::com::sun::star::chart::ChartSolidType::CYLINDER },
-    { sXML_cone,        ::com::sun::star::chart::ChartSolidType::CONE },
-    { sXML_pyramid,     ::com::sun::star::chart::ChartSolidType::PYRAMID },
+    { ::xmloff::token::XML_CUBOID,      ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID },
+    { ::xmloff::token::XML_CYLINDER,    ::com::sun::star::chart::ChartSolidType::CYLINDER },
+    { ::xmloff::token::XML_CONE,            ::com::sun::star::chart::ChartSolidType::CONE },
+    { ::xmloff::token::XML_PYRAMID,     ::com::sun::star::chart::ChartSolidType::PYRAMID },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXMLChartDataRowSourceTypeEnumMap[] =
 {
-    { sXML_columns,     ::com::sun::star::chart::ChartDataRowSource_COLUMNS },
-    { sXML_rows,        ::com::sun::star::chart::ChartDataRowSource_ROWS }
+    { ::xmloff::token::XML_COLUMNS,     ::com::sun::star::chart::ChartDataRowSource_COLUMNS },
+    { ::xmloff::token::XML_ROWS,        ::com::sun::star::chart::ChartDataRowSource_ROWS },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS

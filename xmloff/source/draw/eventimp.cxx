@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:35:56 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,26 +123,27 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////
 
 SvXMLEnumMapEntry __READONLY_DATA aXML_EventActions_EnumMap[] =
 {
-    { sXML_none,            ClickAction_NONE    },
-    { sXML_previous_page,   ClickAction_PREVPAGE },
-    { sXML_next_page,       ClickAction_NEXTPAGE },
-    { sXML_first_page,      ClickAction_FIRSTPAGE },
-    { sXML_last_page,       ClickAction_LASTPAGE },
-    { sXML_hide,            ClickAction_INVISIBLE },
-    { sXML_stop,            ClickAction_STOPPRESENTATION },
-    { sXML_execute,         ClickAction_PROGRAM },
-    { sXML_show,            ClickAction_BOOKMARK },
-    { sXML_show,            ClickAction_DOCUMENT },
-    { sXML_execute_macro,   ClickAction_MACRO },
-    { sXML_verb,            ClickAction_VERB },
-    { sXML_fade_out,        ClickAction_VANISH },
-    { sXML_sound,           ClickAction_SOUND },
-    { 0, 0 }
+    { XML_NONE,             ClickAction_NONE    },
+    { XML_PREVIOUS_PAGE,    ClickAction_PREVPAGE },
+    { XML_NEXT_PAGE,        ClickAction_NEXTPAGE },
+    { XML_FIRST_PAGE,       ClickAction_FIRSTPAGE },
+    { XML_LAST_PAGE,        ClickAction_LASTPAGE },
+    { XML_HIDE,             ClickAction_INVISIBLE },
+    { XML_STOP,             ClickAction_STOPPRESENTATION },
+    { XML_EXECUTE,          ClickAction_PROGRAM },
+    { XML_SHOW,             ClickAction_BOOKMARK },
+    { XML_SHOW,             ClickAction_DOCUMENT },
+    { XML_EXECUTE_MACRO,    ClickAction_MACRO },
+    { XML_VERB,             ClickAction_VERB },
+    { XML_FADE_OUT,         ClickAction_VANISH },
+    { XML_SOUND,            ClickAction_SOUND },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 ///////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 10:07:18 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
@@ -160,22 +164,23 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
 {
-    { sXML_greyscale, drawing::ColorMode_GREYS },
-    { sXML_mono,      drawing::ColorMode_MONO },
-    { sXML_watermark, drawing::ColorMode_WATERMARK },
-    { sXML_standard,  drawing::ColorMode_STANDARD },
-    { NULL, 0 }
+    { XML_GREYSCALE,    drawing::ColorMode_GREYS },
+    { XML_MONO,         drawing::ColorMode_MONO },
+    { XML_WATERMARK,    drawing::ColorMode_WATERMARK },
+    { XML_STANDARD,     drawing::ColorMode_STANDARD },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA aXML_HorizontalAdjust_Enum[] =
 {
-    { sXML_left,    text::HorizontalAdjust_LEFT },
-    { sXML_center,  text::HorizontalAdjust_CENTER },
-    { sXML_right,   text::HorizontalAdjust_RIGHT },
-    { 0, 0 }
+    { XML_LEFT,     text::HorizontalAdjust_LEFT },
+    { XML_CENTER,   text::HorizontalAdjust_CENTER },
+    { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 

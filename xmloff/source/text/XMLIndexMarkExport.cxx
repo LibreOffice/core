@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexMarkExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-14 13:01:56 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,13 +193,13 @@ void XMLIndexMarkExport::ExportIndexMark(
         // but not for -mark-end
         Reference<XPropertySetInfo> xPropertySetInfo =
             xIndexMarkPropSet->getPropertySetInfo();
-        if (xPropertySetInfo->hasPropertyByName(sLevel))
+        if (xPropertySetInfo->hasPropertyByName(sUserIndexName))
         {
-            // table of content:
-            pElementNames = lcl_pTocMarkNames;
+            // user index mark
+            pElementNames = lcl_pUserIndexMarkName;
             if (nElementNo != 2)
             {
-                ExportTOCMarkAttributes(xIndexMarkPropSet);
+                ExportUserIndexMarkAttributes(xIndexMarkPropSet);
             }
         }
         else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
@@ -213,11 +213,11 @@ void XMLIndexMarkExport::ExportIndexMark(
         }
         else
         {
-            // user index mark
-            pElementNames = lcl_pUserIndexMarkName;
+            // table of content:
+            pElementNames = lcl_pTocMarkNames;
             if (nElementNo != 2)
             {
-                ExportUserIndexMarkAttributes(xIndexMarkPropSet);
+                ExportTOCMarkAttributes(xIndexMarkPropSet);
             }
         }
 
@@ -262,6 +262,9 @@ void XMLIndexMarkExport::ExportUserIndexMarkAttributes(
         rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_index_name,
                                  sIndexName);
     }
+
+    // additionally export outline level; just reuse ExportTOCMarkAttributes
+    ExportTOCMarkAttributes( rPropSet );
 }
 
 void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(

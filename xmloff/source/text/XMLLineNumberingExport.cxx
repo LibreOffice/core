@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -121,11 +122,11 @@ XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp) :
 
 SvXMLEnumMapEntry __READONLY_DATA aLineNumberPositionMap[] =
 {
-    { sXML_left,    style::LineNumberPosition::LEFT },
-    { sXML_right,   style::LineNumberPosition::RIGHT },
-    { sXML_inside,  style::LineNumberPosition::INSIDE },
-    { sXML_outside, style::LineNumberPosition::OUTSIDE },
-    { NULL, 0 }
+    { XML_LEFT,     style::LineNumberPosition::LEFT },
+    { XML_RIGHT,    style::LineNumberPosition::RIGHT },
+    { XML_INSIDE,   style::LineNumberPosition::INSIDE },
+    { XML_OUTSIDE,  style::LineNumberPosition::OUTSIDE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 

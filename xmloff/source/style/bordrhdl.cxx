@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bordrhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 // copied from svx/boxitem.hxx
 #define DEF_LINE_WIDTH_0        1
@@ -157,25 +158,25 @@ using namespace ::com::sun::star;
 
 SvXMLEnumMapEntry psXML_BorderStyles[] =
 {
-    { sXML_none,                SVX_XML_BORDER_STYLE_NONE   },
-    { sXML_hidden,              SVX_XML_BORDER_STYLE_NONE   },
-    { sXML_solid,               SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_double,              SVX_XML_BORDER_STYLE_DOUBLE },
-    { sXML_dotted,              SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_dashed,              SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_groove,              SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_ridge,               SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_inset,               SVX_XML_BORDER_STYLE_SOLID  },
-    { sXML_outset,              SVX_XML_BORDER_STYLE_SOLID  },
-    { 0,        0 }
+    { XML_NONE,                 SVX_XML_BORDER_STYLE_NONE   },
+    { XML_HIDDEN,               SVX_XML_BORDER_STYLE_NONE   },
+    { XML_SOLID,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DOUBLE,               SVX_XML_BORDER_STYLE_DOUBLE },
+    { XML_DOTTED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DASHED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_GROOVE,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_RIDGE,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_INSET,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_OUTSET,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_TOKEN_INVALID,        0 }
 };
 
 SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
 {
-    { sXML_thin,    SVX_XML_BORDER_WIDTH_THIN   },
-    { sXML_middle,  SVX_XML_BORDER_WIDTH_MIDDLE },
-    { sXML_thick,   SVX_XML_BORDER_WIDTH_THICK  },
-    { 0,        0 }
+    { XML_THIN,             SVX_XML_BORDER_WIDTH_THIN   },
+    { XML_MIDDLE,           SVX_XML_BORDER_WIDTH_MIDDLE },
+    { XML_THICK,            SVX_XML_BORDER_WIDTH_THICK  },
+    { XML_TOKEN_INVALID,    0 }
 };
 // mapping tables to map external xml input to intarnal box line widths
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,16 +527,16 @@ void XMLSectionExport::ExportIndexHeaderStart(
 }
 
 
-SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aIndexTypeMap[] =
 {
-    { "com.sun.star.text.ContentIndex",     TEXT_SECTION_TYPE_TOC },
-    { "com.sun.star.text.DocumentIndex",    TEXT_SECTION_TYPE_ALPHABETICAL },
-    { "com.sun.star.text.TableIndex",       TEXT_SECTION_TYPE_TABLE },
-    { "com.sun.star.text.ObjectIndex",      TEXT_SECTION_TYPE_OBJECT },
-    { "com.sun.star.text.Bibliography",     TEXT_SECTION_TYPE_BIBLIOGRAPHY },
-    { "com.sun.star.text.UserIndex",        TEXT_SECTION_TYPE_USER },
-    { "com.sun.star.text.IllustrationsIndex", TEXT_SECTION_TYPE_ILLUSTRATION },
-    { NULL, NULL }
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.ContentIndex", TEXT_SECTION_TYPE_TOC ),
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.DocumentIndex", TEXT_SECTION_TYPE_ALPHABETICAL ),
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.TableIndex", TEXT_SECTION_TYPE_TABLE ),
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.ObjectIndex", TEXT_SECTION_TYPE_OBJECT ),
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.Bibliography", TEXT_SECTION_TYPE_BIBLIOGRAPHY ),
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.UserIndex", TEXT_SECTION_TYPE_USER ),
+    ENUM_STRING_MAP_ENTRY( "com.sun.star.text.IllustrationsIndex", TEXT_SECTION_TYPE_ILLUSTRATION ),
+    ENUM_STRING_MAP_END()
 };
 
 enum SectionTypeEnum XMLSectionExport::MapSectionType(
@@ -1275,67 +1275,67 @@ enum TemplateParamEnum
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aTemplateTypeMap[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aTemplateTypeMap[] =
 {
-    { "TokenEntryNumber",           TOK_TTYPE_ENTRY_NUMBER },
-    { "TokenEntryText",             TOK_TTYPE_ENTRY_TEXT },
-    { "TokenTabStop",               TOK_TTYPE_TAB_STOP },
-    { "TokenText",                  TOK_TTYPE_TEXT },
-    { "TokenPageNumber",            TOK_TTYPE_PAGE_NUMBER },
-    { "TokenChapterInfo",           TOK_TTYPE_CHAPTER_INFO },
-    { "TokenHyperlinkStart",        TOK_TTYPE_HYPERLINK_START },
-    { "TokenHyperlinkEnd",          TOK_TTYPE_HYPERLINK_END },
-    { "TokenBibliographyDataField", TOK_TTYPE_BIBLIOGRAPHY },
-    { NULL, NULL }
+    ENUM_STRING_MAP_ENTRY( "TokenEntryNumber",  TOK_TTYPE_ENTRY_NUMBER ),
+    ENUM_STRING_MAP_ENTRY( "TokenEntryText",    TOK_TTYPE_ENTRY_TEXT ),
+    ENUM_STRING_MAP_ENTRY( "TokenTabStop",      TOK_TTYPE_TAB_STOP ),
+    ENUM_STRING_MAP_ENTRY( "TokenText",         TOK_TTYPE_TEXT ),
+    ENUM_STRING_MAP_ENTRY( "TokenPageNumber",   TOK_TTYPE_PAGE_NUMBER ),
+    ENUM_STRING_MAP_ENTRY( "TokenChapterInfo",  TOK_TTYPE_CHAPTER_INFO ),
+    ENUM_STRING_MAP_ENTRY( "TokenHyperlinkStart", TOK_TTYPE_HYPERLINK_START ),
+    ENUM_STRING_MAP_ENTRY( "TokenHyperlinkEnd", TOK_TTYPE_HYPERLINK_END ),
+    ENUM_STRING_MAP_ENTRY( "TokenBibliographyDataField", TOK_TTYPE_BIBLIOGRAPHY ),
+    ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aTemplateParamMap[] =
+SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
 {
-    { "TokenType",              TOK_TPARAM_TOKEN_TYPE },
-    { "CharacterStyleName",     TOK_TPARAM_CHAR_STYLE },
-    { "TabStopRightAligned",    TOK_TPARAM_TAB_RIGHT_ALIGNED },
-    { "TabStopPosition",        TOK_TPARAM_TAB_POSITION },
-    { "TabStopFillCharacter",   TOK_TPARAM_TAB_FILL_CHAR },
-    { "Text",                   TOK_TPARAM_TEXT },
-    { "ChapterFormat",          TOK_TPARAM_CHAPTER_FORMAT },
-    { "BibliographyDataField",  TOK_TPARAM_BIBLIOGRAPHY_DATA },
-    { NULL, NULL }
+    ENUM_STRING_MAP_ENTRY( "TokenType",             TOK_TPARAM_TOKEN_TYPE ),
+    ENUM_STRING_MAP_ENTRY( "CharacterStyleName",    TOK_TPARAM_CHAR_STYLE ),
+    ENUM_STRING_MAP_ENTRY( "TabStopRightAligned",   TOK_TPARAM_TAB_RIGHT_ALIGNED ),
+    ENUM_STRING_MAP_ENTRY( "TabStopPosition",       TOK_TPARAM_TAB_POSITION ),
+    ENUM_STRING_MAP_ENTRY( "TabStopFillCharacter",  TOK_TPARAM_TAB_FILL_CHAR ),
+    ENUM_STRING_MAP_ENTRY( "Text",                  TOK_TPARAM_TEXT ),
+    ENUM_STRING_MAP_ENTRY( "ChapterFormat",         TOK_TPARAM_CHAPTER_FORMAT ),
+    ENUM_STRING_MAP_ENTRY( "BibliographyDataField", TOK_TPARAM_BIBLIOGRAPHY_DATA ),
+    ENUM_STRING_MAP_END()
 };
 
 SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
 {
-    { sXML_address,             BibliographyDataField::ADDRESS },
-    { sXML_annote,              BibliographyDataField::ANNOTE },
-    { sXML_author,              BibliographyDataField::AUTHOR },
-    { sXML_bibiliographic_type, BibliographyDataField::BIBILIOGRAPHIC_TYPE },
-    { sXML_booktitle,           BibliographyDataField::BOOKTITLE },
-    { sXML_chapter,             BibliographyDataField::CHAPTER },
-    { sXML_custom1,             BibliographyDataField::CUSTOM1 },
-    { sXML_custom2,             BibliographyDataField::CUSTOM2 },
-    { sXML_custom3,             BibliographyDataField::CUSTOM3 },
-    { sXML_custom4,             BibliographyDataField::CUSTOM4 },
-    { sXML_custom5,             BibliographyDataField::CUSTOM5 },
-    { sXML_edition,             BibliographyDataField::EDITION },
-    { sXML_editor,              BibliographyDataField::EDITOR },
-    { sXML_howpublished,        BibliographyDataField::HOWPUBLISHED },
-    { sXML_identifier,          BibliographyDataField::IDENTIFIER },
-    { sXML_institution,         BibliographyDataField::INSTITUTION },
-    { sXML_isbn,                BibliographyDataField::ISBN },
-    { sXML_journal,             BibliographyDataField::JOURNAL },
-    { sXML_month,               BibliographyDataField::MONTH },
-    { sXML_note,                BibliographyDataField::NOTE },
-    { sXML_number,              BibliographyDataField::NUMBER },
-    { sXML_organizations,       BibliographyDataField::ORGANIZATIONS },
-    { sXML_pages,               BibliographyDataField::PAGES },
-    { sXML_publisher,           BibliographyDataField::PUBLISHER },
-    { sXML_report_type,         BibliographyDataField::REPORT_TYPE },
-    { sXML_school,              BibliographyDataField::SCHOOL },
-    { sXML_series,              BibliographyDataField::SERIES },
-    { sXML_title,               BibliographyDataField::TITLE },
-    { sXML_url,                 BibliographyDataField::URL },
-    { sXML_volume,              BibliographyDataField::VOLUME },
-    { sXML_year,                BibliographyDataField::YEAR },
-    { NULL, NULL }
+    { XML_ADDRESS,              BibliographyDataField::ADDRESS },
+    { XML_ANNOTE,               BibliographyDataField::ANNOTE },
+    { XML_AUTHOR,               BibliographyDataField::AUTHOR },
+    { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
+    { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
+    { XML_CHAPTER,              BibliographyDataField::CHAPTER },
+    { XML_CUSTOM1,              BibliographyDataField::CUSTOM1 },
+    { XML_CUSTOM2,              BibliographyDataField::CUSTOM2 },
+    { XML_CUSTOM3,              BibliographyDataField::CUSTOM3 },
+    { XML_CUSTOM4,              BibliographyDataField::CUSTOM4 },
+    { XML_CUSTOM5,              BibliographyDataField::CUSTOM5 },
+    { XML_EDITION,              BibliographyDataField::EDITION },
+    { XML_EDITOR,               BibliographyDataField::EDITOR },
+    { XML_HOWPUBLISHED,         BibliographyDataField::HOWPUBLISHED },
+    { XML_IDENTIFIER,           BibliographyDataField::IDENTIFIER },
+    { XML_INSTITUTION,          BibliographyDataField::INSTITUTION },
+    { XML_ISBN,                 BibliographyDataField::ISBN },
+    { XML_JOURNAL,              BibliographyDataField::JOURNAL },
+    { XML_MONTH,                BibliographyDataField::MONTH },
+    { XML_NOTE,                 BibliographyDataField::NOTE },
+    { XML_NUMBER,               BibliographyDataField::NUMBER },
+    { XML_ORGANIZATIONS,        BibliographyDataField::ORGANIZATIONS },
+    { XML_PAGES,                BibliographyDataField::PAGES },
+    { XML_PUBLISHER,            BibliographyDataField::PUBLISHER },
+    { XML_REPORT_TYPE,          BibliographyDataField::REPORT_TYPE },
+    { XML_SCHOOL,               BibliographyDataField::SCHOOL },
+    { XML_SERIES,               BibliographyDataField::SERIES },
+    { XML_TITLE,                BibliographyDataField::TITLE },
+    { XML_URL,                  BibliographyDataField::URL },
+    { XML_VOLUME,               BibliographyDataField::VOLUME },
+    { XML_YEAR,                 BibliographyDataField::YEAR },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 void XMLSectionExport::ExportIndexTemplateElement(

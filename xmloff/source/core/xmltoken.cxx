@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1986,6 +1986,28 @@ namespace xmloff { namespace token {
         TOKEN( "data-source-has-labels" ),     // XML_DATA_SOURCE_HAS_LABELS
         TOKEN( "link-data-style-to-source" ),  // XML_LINK_DATA_STYLE_TO_SOURCE
         TOKEN( "sort-algorithm" ),             // XML_SORT_ALGORITHM
+        TOKEN( "straight-line" ),              // XML_STRAIGHT_LINE
+        TOKEN( "angled-line" ),                // XML_ANGLED_LINE
+        TOKEN( "angled-connector-line" ),      // XML_ANGLED_CONNECTOR_LINE
+
+        TOKEN( "application/x-www-form-urlencoded" ), // XML_APPLICATION_X_WWW_FORM_URLENCODED
+        TOKEN( "multipart/formdata" ),         // XML_MULTIPART_FORMDATA
+        TOKEN( "application/text" ),           // XML_APPLICATION_TEXT
+        TOKEN( "get" ),                        // XML_GET
+        TOKEN( "post" ),                       // XML_POST
+        TOKEN( "query" ),                      // XML_QUERY
+        TOKEN( "parent" ),                     // XML_PARENT
+        TOKEN( "records" ),                    // XML_RECORDS
+        TOKEN( "push" ),                       // XML_PUSH
+        TOKEN( "submit" ),                     // XML_SUBMIT
+        TOKEN( "reset" ),                      // XML_RESET
+        TOKEN( "value-list" ),                 // XML_VALUE_LIST
+        TOKEN( "sql" ),                        // XML_SQL
+        TOKEN( "sql-pass-through" ),           // XML_SQL_PASS_THROUGH
+        TOKEN( "table-fields" ),               // XML_TABLE_FIELDS
+        TOKEN( "unchecked" ),                  // XML_UNCHECKED
+        TOKEN( "checked" ),                    // XML_CHECKED
+        TOKEN( "unknown" ),                    // XML_UNKNOWN
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

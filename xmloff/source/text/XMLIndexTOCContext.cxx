@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -201,14 +202,14 @@ static const sal_Char* aIndexSourceElementMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
 {
-    { sXML_table_of_content,    TEXT_INDEX_TOC },
-    { sXML_alphabetical_index,  TEXT_INDEX_ALPHABETICAL },
-    { sXML_table_index,         TEXT_INDEX_TABLE },
-    { sXML_object_index,        TEXT_INDEX_OBJECT },
-    { sXML_bibliography,        TEXT_INDEX_BIBLIOGRAPHY },
-    { sXML_user_index,          TEXT_INDEX_USER },
-    { sXML_illustration_index,  TEXT_INDEX_ILLUSTRATION },
-    { NULL, NULL }
+    { XML_TABLE_OF_CONTENT,     TEXT_INDEX_TOC },
+    { XML_ALPHABETICAL_INDEX,   TEXT_INDEX_ALPHABETICAL },
+    { XML_TABLE_INDEX,          TEXT_INDEX_TABLE },
+    { XML_OBJECT_INDEX,         TEXT_INDEX_OBJECT },
+    { XML_BIBLIOGRAPHY,         TEXT_INDEX_BIBLIOGRAPHY },
+    { XML_USER_INDEX,           TEXT_INDEX_USER },
+    { XML_ILLUSTRATION_INDEX,   TEXT_INDEX_ILLUSTRATION },
+    { XML_TOKEN_INVALID,        0 }
 };
 
 

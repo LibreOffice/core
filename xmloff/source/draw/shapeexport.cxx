@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 13:59:09 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -923,28 +924,28 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 
 SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
 {
-    { sXML_top_left,    drawing::Alignment_TOP_LEFT },
-    { sXML_top,         drawing::Alignment_TOP },
-    { sXML_top_right,   drawing::Alignment_TOP_RIGHT },
-    { sXML_left,        drawing::Alignment_LEFT },
-    { sXML_center,      drawing::Alignment_CENTER },
-    { sXML_right,       drawing::Alignment_RIGHT },
-    { sXML_bottom_left, drawing::Alignment_BOTTOM_LEFT },
-    { sXML_bottom,      drawing::Alignment_BOTTOM },
-    { sXML_bottom_right,drawing::Alignment_BOTTOM_RIGHT },
-    { NULL, 0 }
+    { XML_TOP_LEFT,     drawing::Alignment_TOP_LEFT },
+    { XML_TOP,          drawing::Alignment_TOP },
+    { XML_TOP_RIGHT,    drawing::Alignment_TOP_RIGHT },
+    { XML_LEFT,         drawing::Alignment_LEFT },
+    { XML_CENTER,       drawing::Alignment_CENTER },
+    { XML_RIGHT,        drawing::Alignment_RIGHT },
+    { XML_BOTTOM_LEFT,  drawing::Alignment_BOTTOM_LEFT },
+    { XML_BOTTOM,       drawing::Alignment_BOTTOM },
+    { XML_BOTTOM_RIGHT, drawing::Alignment_BOTTOM_RIGHT },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
 {
-    { sXML_auto,        drawing::EscapeDirection_SMART },
-    { sXML_left,        drawing::EscapeDirection_LEFT },
-    { sXML_right,       drawing::EscapeDirection_RIGHT },
-    { sXML_up,          drawing::EscapeDirection_UP },
-    { sXML_down,        drawing::EscapeDirection_DOWN },
-    { sXML_horizontal,  drawing::EscapeDirection_HORIZONTAL },
-    { sXML_vertical,    drawing::EscapeDirection_VERTICAL },
-    { NULL, 0 }
+    { XML_AUTO,         drawing::EscapeDirection_SMART },
+    { XML_LEFT,         drawing::EscapeDirection_LEFT },
+    { XML_RIGHT,        drawing::EscapeDirection_RIGHT },
+    { XML_UP,           drawing::EscapeDirection_UP },
+    { XML_DOWN,         drawing::EscapeDirection_DOWN },
+    { XML_HORIZONTAL,   drawing::EscapeDirection_HORIZONTAL },
+    { XML_VERTICAL,     drawing::EscapeDirection_VERTICAL },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 /** exports all user defined glue points */

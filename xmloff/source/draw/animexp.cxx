@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-23 11:55:10 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,61 +117,62 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
+using namespace ::xmloff::token;
 
 
 SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[] =
 {
-    { sXML_none,        EK_none },
-    { sXML_fade,        EK_fade },
-    { sXML_move,        EK_move },
-    { sXML_stripes,     EK_stripes },
-    { sXML_open,        EK_open },
-    { sXML_close,       EK_close },
-    { sXML_dissolve,    EK_dissolve },
-    { sXML_wavyline,    EK_wavyline },
-    { sXML_random,      EK_random },
-    { sXML_lines,       EK_lines },
-    { sXML_laser,       EK_laser },
-    { sXML_appear,      EK_appear },
-    { sXML_hide,        EK_hide },
-    { sXML_move_short,  EK_move_short },
-    { sXML_checkerboard,EK_checkerboard },
-    { sXML_rotate,      EK_rotate },
-    { sXML_stretch,     EK_stretch },
-    { NULL, 0 }
+    { XML_NONE,         EK_none },
+    { XML_FADE,         EK_fade },
+    { XML_MOVE,         EK_move },
+    { XML_STRIPES,      EK_stripes },
+    { XML_OPEN,         EK_open },
+    { XML_CLOSE,        EK_close },
+    { XML_DISSOLVE,     EK_dissolve },
+    { XML_WAVYLINE,     EK_wavyline },
+    { XML_RANDOM,       EK_random },
+    { XML_LINES,        EK_lines },
+    { XML_LASER,        EK_laser },
+    { XML_APPEAR,       EK_appear },
+    { XML_HIDE,         EK_hide },
+    { XML_MOVE_SHORT,   EK_move_short },
+    { XML_CHECKERBOARD, EK_checkerboard },
+    { XML_ROTATE,       EK_rotate },
+    { XML_STRETCH,      EK_stretch },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[] =
 {
-    { sXML_none,            ED_none },
-    { sXML_from_left,       ED_from_left },
-    { sXML_from_top,        ED_from_top },
-    { sXML_from_right,      ED_from_right },
-    { sXML_from_bottom,     ED_from_bottom },
-    { sXML_from_center,     ED_from_center },
-    { sXML_from_upper_left, ED_from_upperleft },
-    { sXML_from_upper_right,ED_from_upperright },
-    { sXML_from_lower_left, ED_from_lowerleft },
-    { sXML_from_lower_right,ED_from_lowerright },
-    { sXML_to_left,         ED_to_left },
-    { sXML_to_top,          ED_to_top },
-    { sXML_to_right,        ED_to_right },
-    { sXML_to_bottom,       ED_to_bottom },
-    { sXML_to_upper_left,   ED_to_upperleft },
-    { sXML_to_upper_right,  ED_to_upperright },
-    { sXML_to_lower_right,  ED_to_lowerright },
-    { sXML_to_lower_left,   ED_to_lowerleft },
-    { sXML_path,            ED_path },
-    { sXML_spiral_inward_left, ED_spiral_inward_left },
-    { sXML_spiral_inward_right,ED_spiral_inward_right },
-    { sXML_spiral_outward_left, ED_spiral_outward_left },
-    { sXML_spiral_outward_right, ED_spiral_outward_right },
-    { sXML_vertical,        ED_vertical },
-    { sXML_horizontal,      ED_horizontal },
-    { sXML_to_center,       ED_to_center },
-    { sXML_clockwise,       ED_clockwise },
-    { sXML_counter_clockwise,ED_cclockwise },
-    { NULL, 0 }
+    { XML_NONE,             ED_none },
+    { XML_FROM_LEFT,        ED_from_left },
+    { XML_FROM_TOP,         ED_from_top },
+    { XML_FROM_RIGHT,       ED_from_right },
+    { XML_FROM_BOTTOM,      ED_from_bottom },
+    { XML_FROM_CENTER,      ED_from_center },
+    { XML_FROM_UPPER_LEFT,  ED_from_upperleft },
+    { XML_FROM_UPPER_RIGHT, ED_from_upperright },
+    { XML_FROM_LOWER_LEFT,  ED_from_lowerleft },
+    { XML_FROM_LOWER_RIGHT, ED_from_lowerright },
+    { XML_TO_LEFT,          ED_to_left },
+    { XML_TO_TOP,           ED_to_top },
+    { XML_TO_RIGHT,         ED_to_right },
+    { XML_TO_BOTTOM,        ED_to_bottom },
+    { XML_TO_UPPER_LEFT,    ED_to_upperleft },
+    { XML_TO_UPPER_RIGHT,   ED_to_upperright },
+    { XML_TO_LOWER_RIGHT,   ED_to_lowerright },
+    { XML_TO_LOWER_LEFT,    ED_to_lowerleft },
+    { XML_PATH,             ED_path },
+    { XML_SPIRAL_INWARD_LEFT, ED_spiral_inward_left },
+    { XML_SPIRAL_INWARD_RIGHT,ED_spiral_inward_right },
+    { XML_SPIRAL_OUTWARD_LEFT, ED_spiral_outward_left },
+    { XML_SPIRAL_OUTWARD_RIGHT, ED_spiral_outward_right },
+    { XML_VERTICAL,         ED_vertical },
+    { XML_HORIZONTAL,       ED_horizontal },
+    { XML_TO_CENTER,        ED_to_center },
+    { XML_CLOCKWISE,        ED_clockwise },
+    { XML_COUNTER_CLOCKWISE,ED_cclockwise },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 const struct Effect
@@ -314,10 +315,10 @@ void SdXMLImplSetEffect( AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDir
 
 SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[] =
 {
-    { sXML_slow,    AnimationSpeed_SLOW },
-    { sXML_medium,  AnimationSpeed_MEDIUM },
-    { sXML_fast,    AnimationSpeed_FAST },
-    { NULL, 0 }
+    { XML_SLOW,     AnimationSpeed_SLOW },
+    { XML_MEDIUM,   AnimationSpeed_MEDIUM },
+    { XML_FAST,     AnimationSpeed_FAST },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 enum XMLActionKind

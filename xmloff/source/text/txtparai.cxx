@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:52:46 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
@@ -148,6 +151,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
+using namespace ::xmloff::token;
 
 
 // ---------------------------------------------------------------------
@@ -1324,6 +1328,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
 class XMLUserIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
 {
     const OUString sUserIndexName;
+    const OUString sLevel;
 
 public:
     TYPEINFO();
@@ -1351,7 +1356,8 @@ XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
     enum XMLTextPElemTokens nTok, XMLHints_Impl& rHnts) :
         XMLIndexMarkImportContext_Impl(rImport, nPrefix, rLocalName,
                                        nTok, rHnts),
-        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
+        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
+        sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
 {
 }
 
@@ -1359,15 +1365,38 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     sal_uInt16 nNamespace, OUString sLocalName, OUString sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
-    if ((XML_NAMESPACE_TEXT == nNamespace) &&
-        (sLocalName.equalsAsciiL(sXML_index_name, sizeof(sXML_index_name)-1)))
+    if ( XML_NAMESPACE_TEXT == nNamespace )
     {
-        Any aAny;
-        aAny <<= sValue;
-        rPropSet->setPropertyValue(sUserIndexName, aAny);
+        if ( IsXMLToken( sLocalName, XML_INDEX_NAME ) )
+        {
+            Any aAny;
+            aAny <<= sValue;
+            rPropSet->setPropertyValue(sUserIndexName, aAny);
+        }
+        else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
+        {
+            // ouline level: set Level property
+            sal_Int32 nTmp;
+            if (SvXMLUnitConverter::convertNumber(
+                nTmp, sValue, 0,
+               GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
+            {
+                Any aAny;
+                aAny <<= (sal_Int16)nTmp;
+                rPropSet->setPropertyValue(sLevel, aAny);
+            }
+            // else: value out of range -> ignore
+        }
+        else
+        {
+            // else: unknown text property: delegate to super class
+            XMLIndexMarkImportContext_Impl::ProcessAttribute(
+                nNamespace, sLocalName, sValue, rPropSet);
+        }
     }
     else
     {
+        // else: unknown namespace: delegate to super class
         XMLIndexMarkImportContext_Impl::ProcessAttribute(
             nNamespace, sLocalName, sValue, rPropSet);
     }

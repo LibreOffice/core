@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConstantsPropertyHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2000-09-27 13:55:58 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,13 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
+using ::xmloff::token::XMLTokenEnum;
 
 XMLConstantsPropertyHandler::XMLConstantsPropertyHandler(
     const SvXMLEnumMapEntry *pM,
-    const sal_Char *pDflt ) :
+    enum XMLTokenEnum eDflt ) :
         pMap( pM ),
-        pDefault( pDflt )
+        eDefault( eDflt )
 {
 }
 
@@ -114,8 +115,7 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
     sal_Int16 nEnum;
     rValue >>= nEnum;
 
-    sal_Bool bRet = rUnitConverter.convertEnum( aOut, nEnum, pMap,
-                                                (sal_Char *)pDefault );
+    sal_Bool bRet = rUnitConverter.convertEnum( aOut, nEnum, pMap, eDefault );
 
     rStrExpValue = aOut.makeStringAndClear();
 

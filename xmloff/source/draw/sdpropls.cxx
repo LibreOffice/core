@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-12 13:21:57 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
@@ -447,110 +448,110 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 
 SvXMLEnumMapEntry aXML_LineStyle_EnumMap[] =
 {
-    { sXML_none,    drawing::LineStyle_NONE },
-    { sXML_solid,   drawing::LineStyle_SOLID },
-    { sXML_dash,    drawing::LineStyle_DASH },
-    { NULL, 0 }
+    { XML_NONE,     drawing::LineStyle_NONE },
+    { XML_SOLID,    drawing::LineStyle_SOLID },
+    { XML_DASH,     drawing::LineStyle_DASH },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_LineJoint_EnumMap[] =
 {
-    { sXML_none,    drawing::LineJoint_NONE },
-    { sXML_miter,   drawing::LineJoint_MITER },
-    { sXML_round,   drawing::LineJoint_ROUND },
-    { sXML_bevel,   drawing::LineJoint_BEVEL },
-    { sXML_middle,  drawing::LineJoint_MIDDLE },
-    { NULL, 0 }
+    { XML_NONE,     drawing::LineJoint_NONE },
+    { XML_MITER,    drawing::LineJoint_MITER },
+    { XML_ROUND,    drawing::LineJoint_ROUND },
+    { XML_BEVEL,    drawing::LineJoint_BEVEL },
+    { XML_MIDDLE,   drawing::LineJoint_MIDDLE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_FillStyle_EnumMap[] =
 {
-    { sXML_none,    drawing::FillStyle_NONE },
-    { sXML_solid,   drawing::FillStyle_SOLID },
-    { sXML_bitmap,  drawing::FillStyle_BITMAP },
-    { sXML_gradient,drawing::FillStyle_GRADIENT },
-    { sXML_hatch,   drawing::FillStyle_HATCH },
-    { NULL, 0 }
+    { XML_NONE,     drawing::FillStyle_NONE },
+    { XML_SOLID,    drawing::FillStyle_SOLID },
+    { XML_BITMAP,   drawing::FillStyle_BITMAP },
+    { XML_GRADIENT, drawing::FillStyle_GRADIENT },
+    { XML_HATCH,    drawing::FillStyle_HATCH },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_PresChange_EnumMap[] =
 {
-    { sXML_manual,          0 },
-    { sXML_automatic,       1 },
-    { sXML_semi_automatic,  2 },
-    { NULL,                 0 }
+    { XML_MANUAL,           0 },
+    { XML_AUTOMATIC,        1 },
+    { XML_SEMI_AUTOMATIC,   2 },
+    { XML_TOKEN_INVALID,                    0 }
 };
 
 SvXMLEnumMapEntry aXML_TransSpeed_EnumMap[] =
 {
-    { sXML_fast,      presentation::AnimationSpeed_FAST },
-    { sXML_medium,    presentation::AnimationSpeed_MEDIUM },
-    { sXML_slow,      presentation::AnimationSpeed_SLOW },
-    { NULL, 0 }
+    { XML_FAST,     presentation::AnimationSpeed_FAST },
+    { XML_MEDIUM,   presentation::AnimationSpeed_MEDIUM },
+    { XML_SLOW,     presentation::AnimationSpeed_SLOW },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
 {
-    { sXML_none,                presentation::FadeEffect_NONE },
-    { sXML_fade_from_left,      presentation::FadeEffect_FADE_FROM_LEFT },
-    { sXML_fade_from_top,       presentation::FadeEffect_FADE_FROM_TOP },
-    { sXML_fade_from_right,     presentation::FadeEffect_FADE_FROM_RIGHT },
-    { sXML_fade_from_bottom,    presentation::FadeEffect_FADE_FROM_BOTTOM },
-    { sXML_fade_to_center,      presentation::FadeEffect_FADE_TO_CENTER },
-    { sXML_fade_from_center,    presentation::FadeEffect_FADE_FROM_CENTER },
-    { sXML_move_from_left,      presentation::FadeEffect_MOVE_FROM_LEFT },
-    { sXML_move_from_top,       presentation::FadeEffect_MOVE_FROM_TOP },
-    { sXML_move_from_right,     presentation::FadeEffect_MOVE_FROM_RIGHT },
-    { sXML_move_from_bottom,    presentation::FadeEffect_MOVE_FROM_BOTTOM },
-    { sXML_roll_from_left,      presentation::FadeEffect_ROLL_FROM_LEFT },
-    { sXML_roll_from_right,     presentation::FadeEffect_ROLL_FROM_RIGHT },
-    { sXML_roll_from_bottom,    presentation::FadeEffect_ROLL_FROM_BOTTOM },
-    { sXML_vertical_stripes,    presentation::FadeEffect_VERTICAL_STRIPES },
-    { sXML_horizontal_stripes,  presentation::FadeEffect_HORIZONTAL_STRIPES },
-    { sXML_clockwise,           presentation::FadeEffect_CLOCKWISE },
-    { sXML_counterclockwise,    presentation::FadeEffect_COUNTERCLOCKWISE },
-    { sXML_fade_from_upperleft, presentation::FadeEffect_FADE_FROM_UPPERLEFT },
-    { sXML_fade_from_upperright,presentation::FadeEffect_FADE_FROM_UPPERRIGHT },
-    { sXML_fade_from_lowerleft, presentation::FadeEffect_FADE_FROM_LOWERLEFT },
-    { sXML_fade_from_lowerright,presentation::FadeEffect_FADE_FROM_LOWERRIGHT },
-    { sXML_close_vertical,      presentation::FadeEffect_CLOSE_VERTICAL },
-    { sXML_close_horizontal,    presentation::FadeEffect_CLOSE_HORIZONTAL },
-    { sXML_open_vertical,       presentation::FadeEffect_OPEN_VERTICAL },
-    { sXML_open_horizontal,     presentation::FadeEffect_OPEN_HORIZONTAL },
-    { sXML_spiralin_left,       presentation::FadeEffect_SPIRALIN_LEFT },
-    { sXML_spiralin_right,      presentation::FadeEffect_SPIRALIN_RIGHT },
-    { sXML_spiralout_left,      presentation::FadeEffect_SPIRALOUT_LEFT },
-    { sXML_spiralout_right,     presentation::FadeEffect_SPIRALOUT_RIGHT },
-    { sXML_dissolve,            presentation::FadeEffect_DISSOLVE },
-    { sXML_wavyline_from_left,  presentation::FadeEffect_WAVYLINE_FROM_LEFT },
-    { sXML_wavyline_from_top,   presentation::FadeEffect_WAVYLINE_FROM_TOP },
-    { sXML_wavyline_from_right, presentation::FadeEffect_WAVYLINE_FROM_RIGHT },
-    { sXML_wavyline_from_bottom,presentation::FadeEffect_WAVYLINE_FROM_BOTTOM },
-    { sXML_random,              presentation::FadeEffect_RANDOM },
-    { sXML_stretch_from_left,   presentation::FadeEffect_STRETCH_FROM_LEFT },
-    { sXML_stretch_from_top,    presentation::FadeEffect_STRETCH_FROM_TOP },
-    { sXML_stretch_from_right,  presentation::FadeEffect_STRETCH_FROM_RIGHT },
-    { sXML_stretch_from_bottom, presentation::FadeEffect_STRETCH_FROM_BOTTOM },
-    { sXML_vertical_lines,      presentation::FadeEffect_VERTICAL_LINES },
-    { sXML_horizontal_lines,    presentation::FadeEffect_HORIZONTAL_LINES },
-    { NULL, 0 }
+    { XML_NONE,                 presentation::FadeEffect_NONE },
+    { XML_FADE_FROM_LEFT,       presentation::FadeEffect_FADE_FROM_LEFT },
+    { XML_FADE_FROM_TOP,        presentation::FadeEffect_FADE_FROM_TOP },
+    { XML_FADE_FROM_RIGHT,      presentation::FadeEffect_FADE_FROM_RIGHT },
+    { XML_FADE_FROM_BOTTOM,     presentation::FadeEffect_FADE_FROM_BOTTOM },
+    { XML_FADE_TO_CENTER,       presentation::FadeEffect_FADE_TO_CENTER },
+    { XML_FADE_FROM_CENTER,     presentation::FadeEffect_FADE_FROM_CENTER },
+    { XML_MOVE_FROM_LEFT,       presentation::FadeEffect_MOVE_FROM_LEFT },
+    { XML_MOVE_FROM_TOP,        presentation::FadeEffect_MOVE_FROM_TOP },
+    { XML_MOVE_FROM_RIGHT,      presentation::FadeEffect_MOVE_FROM_RIGHT },
+    { XML_MOVE_FROM_BOTTOM,     presentation::FadeEffect_MOVE_FROM_BOTTOM },
+    { XML_ROLL_FROM_LEFT,       presentation::FadeEffect_ROLL_FROM_LEFT },
+    { XML_ROLL_FROM_RIGHT,      presentation::FadeEffect_ROLL_FROM_RIGHT },
+    { XML_ROLL_FROM_BOTTOM,     presentation::FadeEffect_ROLL_FROM_BOTTOM },
+    { XML_VERTICAL_STRIPES,     presentation::FadeEffect_VERTICAL_STRIPES },
+    { XML_HORIZONTAL_STRIPES,   presentation::FadeEffect_HORIZONTAL_STRIPES },
+    { XML_CLOCKWISE,            presentation::FadeEffect_CLOCKWISE },
+    { XML_COUNTERCLOCKWISE,     presentation::FadeEffect_COUNTERCLOCKWISE },
+    { XML_FADE_FROM_UPPERLEFT,  presentation::FadeEffect_FADE_FROM_UPPERLEFT },
+    { XML_FADE_FROM_UPPERRIGHT,presentation::FadeEffect_FADE_FROM_UPPERRIGHT },
+    { XML_FADE_FROM_LOWERLEFT,  presentation::FadeEffect_FADE_FROM_LOWERLEFT },
+    { XML_FADE_FROM_LOWERRIGHT,presentation::FadeEffect_FADE_FROM_LOWERRIGHT },
+    { XML_CLOSE_VERTICAL,       presentation::FadeEffect_CLOSE_VERTICAL },
+    { XML_CLOSE_HORIZONTAL,     presentation::FadeEffect_CLOSE_HORIZONTAL },
+    { XML_OPEN_VERTICAL,        presentation::FadeEffect_OPEN_VERTICAL },
+    { XML_OPEN_HORIZONTAL,      presentation::FadeEffect_OPEN_HORIZONTAL },
+    { XML_SPIRALIN_LEFT,        presentation::FadeEffect_SPIRALIN_LEFT },
+    { XML_SPIRALIN_RIGHT,       presentation::FadeEffect_SPIRALIN_RIGHT },
+    { XML_SPIRALOUT_LEFT,       presentation::FadeEffect_SPIRALOUT_LEFT },
+    { XML_SPIRALOUT_RIGHT,      presentation::FadeEffect_SPIRALOUT_RIGHT },
+    { XML_DISSOLVE,             presentation::FadeEffect_DISSOLVE },
+    { XML_WAVYLINE_FROM_LEFT,   presentation::FadeEffect_WAVYLINE_FROM_LEFT },
+    { XML_WAVYLINE_FROM_TOP,    presentation::FadeEffect_WAVYLINE_FROM_TOP },
+    { XML_WAVYLINE_FROM_RIGHT,  presentation::FadeEffect_WAVYLINE_FROM_RIGHT },
+    { XML_WAVYLINE_FROM_BOTTOM,presentation::FadeEffect_WAVYLINE_FROM_BOTTOM },
+    { XML_RANDOM,               presentation::FadeEffect_RANDOM },
+    { XML_STRETCH_FROM_LEFT,    presentation::FadeEffect_STRETCH_FROM_LEFT },
+    { XML_STRETCH_FROM_TOP,     presentation::FadeEffect_STRETCH_FROM_TOP },
+    { XML_STRETCH_FROM_RIGHT,   presentation::FadeEffect_STRETCH_FROM_RIGHT },
+    { XML_STRETCH_FROM_BOTTOM,  presentation::FadeEffect_STRETCH_FROM_BOTTOM },
+    { XML_VERTICAL_LINES,       presentation::FadeEffect_VERTICAL_LINES },
+    { XML_HORIZONTAL_LINES,     presentation::FadeEffect_HORIZONTAL_LINES },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry   aXML_ConnectionKind_EnumMap[] =
 {
-    { sXML_standard,    drawing::ConnectorType_STANDARD },
-    { sXML_curve,       drawing::ConnectorType_CURVE },
-    { sXML_line,        drawing::ConnectorType_LINE },
-    { sXML_lines,       drawing::ConnectorType_LINES },
-    { NULL, 0 }
+    { XML_STANDARD,     drawing::ConnectorType_STANDARD },
+    { XML_CURVE,        drawing::ConnectorType_CURVE },
+    { XML_LINE,         drawing::ConnectorType_LINE },
+    { XML_LINES,        drawing::ConnectorType_LINES },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry   aXML_BitmapMode_EnumMap[] =
 {
-    { sXML_repeat,                  drawing::BitmapMode_REPEAT },
-    { sXML_stretch,                 drawing::BitmapMode_STRETCH },
-    { sXML_background_no_repeat,    drawing::BitmapMode_NO_REPEAT },
-    { NULL, 0 }
+    { XML_REPEAT,                   drawing::BitmapMode_REPEAT },
+    { XML_STRETCH,                  drawing::BitmapMode_STRETCH },
+    { XML_BACKGROUND_NO_REPEAT,     drawing::BitmapMode_NO_REPEAT },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -558,222 +559,222 @@ SvXMLEnumMapEntry   aXML_BitmapMode_EnumMap[] =
 
 SvXMLEnumMapEntry  aXML_NormalsKind_EnumMap[] =
 {
-    { sXML_object,      drawing::NormalsKind_SPECIFIC },
-    { sXML_flat,        drawing::NormalsKind_FLAT },
-    { sXML_sphere,      drawing::NormalsKind_SPHERE },
-    { NULL, 0 }
+    { XML_OBJECT,       drawing::NormalsKind_SPECIFIC },
+    { XML_FLAT,         drawing::NormalsKind_FLAT },
+    { XML_SPHERE,       drawing::NormalsKind_SPHERE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry  aXML_TexGenerationX_EnumMap[] =
 {
-    { sXML_object,      drawing::TextureProjectionMode_OBJECTSPECIFIC },
-    { sXML_parallel,    drawing::TextureProjectionMode_PARALLEL },
-    { sXML_sphere,      drawing::TextureProjectionMode_SPHERE },
-    { NULL, 0 }
+    { XML_OBJECT,       drawing::TextureProjectionMode_OBJECTSPECIFIC },
+    { XML_PARALLEL,     drawing::TextureProjectionMode_PARALLEL },
+    { XML_SPHERE,       drawing::TextureProjectionMode_SPHERE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry  aXML_TexGenerationY_EnumMap[] =
 {
-    { sXML_object,      drawing::TextureProjectionMode_OBJECTSPECIFIC },
-    { sXML_parallel,    drawing::TextureProjectionMode_PARALLEL },
-    { sXML_sphere,      drawing::TextureProjectionMode_SPHERE },
-    { NULL, 0 }
+    { XML_OBJECT,       drawing::TextureProjectionMode_OBJECTSPECIFIC },
+    { XML_PARALLEL,     drawing::TextureProjectionMode_PARALLEL },
+    { XML_SPHERE,       drawing::TextureProjectionMode_SPHERE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry  aXML_TexKind_EnumMap[] =
 {
-    { sXML_luminance,   drawing::TextureKind_LUMINANCE },
-//    { sXML_intensity, drawing::TextureKind_INTENSITY },
-    { sXML_color,       drawing::TextureKind_COLOR },
-    { NULL, 0 }
+    { XML_LUMINANCE,    drawing::TextureKind_LUMINANCE },
+//    { XML_INTENSITY,  drawing::TextureKind_INTENSITY },
+    { XML_COLOR,        drawing::TextureKind_COLOR },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry  aXML_TexMode_EnumMap[] =
 {
-    { sXML_replace,     drawing::TextureMode_REPLACE },
-    { sXML_modulate,    drawing::TextureMode_MODULATE },
-    { sXML_blend,       drawing::TextureMode_BLEND },
-    { NULL, 0 }
+    { XML_REPLACE,      drawing::TextureMode_REPLACE },
+    { XML_MODULATE,     drawing::TextureMode_MODULATE },
+    { XML_BLEND,        drawing::TextureMode_BLEND },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_RefPoint_EnumMap[] =
 {
-    { sXML_top_left,    drawing::RectanglePoint_LEFT_TOP },
-    { sXML_top,         drawing::RectanglePoint_MIDDLE_TOP },
-    { sXML_top_right,   drawing::RectanglePoint_RIGHT_TOP },
-    { sXML_left,        drawing::RectanglePoint_LEFT_MIDDLE },
-    { sXML_center,      drawing::RectanglePoint_MIDDLE_MIDDLE },
-    { sXML_right,       drawing::RectanglePoint_RIGHT_MIDDLE },
-    { sXML_bottom_left, drawing::RectanglePoint_LEFT_BOTTOM },
-    { sXML_bottom,      drawing::RectanglePoint_MIDDLE_BOTTOM },
-    { sXML_bottom_right,drawing::RectanglePoint_RIGHT_BOTTOM },
-    { NULL, 0 }
+    { XML_TOP_LEFT,     drawing::RectanglePoint_LEFT_TOP },
+    { XML_TOP,          drawing::RectanglePoint_MIDDLE_TOP },
+    { XML_TOP_RIGHT,    drawing::RectanglePoint_RIGHT_TOP },
+    { XML_LEFT,         drawing::RectanglePoint_LEFT_MIDDLE },
+    { XML_CENTER,       drawing::RectanglePoint_MIDDLE_MIDDLE },
+    { XML_RIGHT,        drawing::RectanglePoint_RIGHT_MIDDLE },
+    { XML_BOTTOM_LEFT,  drawing::RectanglePoint_LEFT_BOTTOM },
+    { XML_BOTTOM,       drawing::RectanglePoint_MIDDLE_BOTTOM },
+    { XML_BOTTOM_RIGHT, drawing::RectanglePoint_RIGHT_BOTTOM },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_CircleKind_EnumMap[] =
 {
-    { sXML_full,        drawing::CircleKind_FULL },
-    { sXML_section,     drawing::CircleKind_SECTION },
-    { sXML_cut,         drawing::CircleKind_CUT },
-    { sXML_arc,         drawing::CircleKind_ARC },
-    { NULL, 0 }
+    { XML_FULL,         drawing::CircleKind_FULL },
+    { XML_SECTION,      drawing::CircleKind_SECTION },
+    { XML_CUT,          drawing::CircleKind_CUT },
+    { XML_ARC,          drawing::CircleKind_ARC },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry aXML_WritingMode_EnumMap[] =
 {
-    { sXML_tb_rl,       text::WritingMode_TB_RL },
-    { sXML_lr_tb,       text::WritingMode_LR_TB },
-    { NULL, 0 }
+    { XML_TB_RL,        text::WritingMode_TB_RL },
+    { XML_LR_TB,        text::WritingMode_LR_TB },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Enum[] =
 {
-    { sXML_none,        drawing::TextAnimationKind_NONE },
-    { sXML_blinking,    drawing::TextAnimationKind_BLINK }, // will be filtered
-    { sXML_scroll,      drawing::TextAnimationKind_SCROLL },
-    { sXML_alternate,   drawing::TextAnimationKind_ALTERNATE },
-    { sXML_slide,       drawing::TextAnimationKind_SLIDE },
-    { 0, 0 }
+    { XML_NONE,         drawing::TextAnimationKind_NONE },
+    { XML_BLINKING,     drawing::TextAnimationKind_BLINK }, // will be filtered
+    { XML_SCROLL,       drawing::TextAnimationKind_SCROLL },
+    { XML_ALTERNATE,    drawing::TextAnimationKind_ALTERNATE },
+    { XML_SLIDE,        drawing::TextAnimationKind_SLIDE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Blinking_Enum[] =
 {
-    { sXML_false,       drawing::TextAnimationKind_NONE },
-    { sXML_true,        drawing::TextAnimationKind_BLINK },
-    { sXML_false,       drawing::TextAnimationKind_SCROLL },
-    { sXML_false,       drawing::TextAnimationKind_ALTERNATE },
-    { sXML_false,       drawing::TextAnimationKind_SLIDE },
-    { 0, 0 }
+    { XML_FALSE,        drawing::TextAnimationKind_NONE },
+    { XML_TRUE,         drawing::TextAnimationKind_BLINK },
+    { XML_FALSE,        drawing::TextAnimationKind_SCROLL },
+    { XML_FALSE,        drawing::TextAnimationKind_ALTERNATE },
+    { XML_FALSE,        drawing::TextAnimationKind_SLIDE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimationDirection_Enum[] =
 {
-    { sXML_left,        drawing::TextAnimationDirection_LEFT },
-    { sXML_right,       drawing::TextAnimationDirection_RIGHT },    // will be filtered
-    { sXML_up,          drawing::TextAnimationDirection_UP },
-    { sXML_down,        drawing::TextAnimationDirection_DOWN },
-    { 0, 0 }
+    { XML_LEFT,         drawing::TextAnimationDirection_LEFT },
+    { XML_RIGHT,        drawing::TextAnimationDirection_RIGHT },    // will be filtered
+    { XML_UP,           drawing::TextAnimationDirection_UP },
+    { XML_DOWN,         drawing::TextAnimationDirection_DOWN },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_TextAlign_Enum[] =
 {
-    { sXML_left,        drawing::TextHorizontalAdjust_LEFT },
-    { sXML_center,      drawing::TextHorizontalAdjust_CENTER },
-    { sXML_right,       drawing::TextHorizontalAdjust_RIGHT },
-    { sXML_justify,     drawing::TextHorizontalAdjust_BLOCK },
-    { 0, 0 }
+    { XML_LEFT,         drawing::TextHorizontalAdjust_LEFT },
+    { XML_CENTER,       drawing::TextHorizontalAdjust_CENTER },
+    { XML_RIGHT,        drawing::TextHorizontalAdjust_RIGHT },
+    { XML_JUSTIFY,      drawing::TextHorizontalAdjust_BLOCK },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
 {
-    { sXML_top,         drawing::TextVerticalAdjust_TOP },
-    { sXML_middle,      drawing::TextVerticalAdjust_CENTER },
-    { sXML_bottom,      drawing::TextVerticalAdjust_BOTTOM },
-    { 0, 0 }
+    { XML_TOP,          drawing::TextVerticalAdjust_TOP },
+    { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
+    { XML_BOTTOM,       drawing::TextVerticalAdjust_BOTTOM },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_FitToSize_Enum[] =
 {
-    { sXML_false,       drawing::TextFitToSizeType_NONE },
-    { sXML_true,        drawing::TextFitToSizeType_PROPORTIONAL },
-    { sXML_true,        drawing::TextFitToSizeType_ALLLINES },
-    { sXML_true,        drawing::TextFitToSizeType_RESIZEATTR },
-    { 0, 0 }
+    { XML_FALSE,        drawing::TextFitToSizeType_NONE },
+    { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
+    { XML_TRUE,         drawing::TextFitToSizeType_ALLLINES },
+    { XML_TRUE,         drawing::TextFitToSizeType_RESIZEATTR },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_MeasureUnit_Enum[] =
 {
-    { sXML_automatic,   0 },
-    { sXML_unit_mm,     1 },
-    { sXML_unit_cm,     2 },
-    { sXML_unit_m,      3 },
-    { sXML_unit_km,     4 },
-    { sXML_unit_pt,     6 },
-    { sXML_unit_pc,     7 },
-    { sXML_unit_inch,   8 },
-    { sXML_unit_foot,   9 },
-    { sXML_unit_miles,  10 },
-    { 0,0 }
+    { XML_AUTOMATIC,    0 },
+    { XML_UNIT_MM,      1 },
+    { XML_UNIT_CM,      2 },
+    { XML_UNIT_M,       3 },
+    { XML_UNIT_KM,      4 },
+    { XML_UNIT_PT,      6 },
+    { XML_UNIT_PC,      7 },
+    { XML_UNIT_INCH,    8 },
+    { XML_UNIT_FOOT,    9 },
+    { XML_UNIT_MILES,   10 },
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_HAlign_Enum[] =
 {
-    { sXML_automatic,       drawing::MeasureTextHorzPos_AUTO },
-    { sXML_left_outside,    drawing::MeasureTextHorzPos_LEFTOUTSIDE },
-    { sXML_inside,          drawing::MeasureTextHorzPos_INSIDE },
-    { sXML_right_outside,   drawing::MeasureTextHorzPos_RIGHTOUTSIDE},
-    { 0,0 }
+    { XML_AUTOMATIC,        drawing::MeasureTextHorzPos_AUTO },
+    { XML_LEFT_OUTSIDE,     drawing::MeasureTextHorzPos_LEFTOUTSIDE },
+    { XML_INSIDE,           drawing::MeasureTextHorzPos_INSIDE },
+    { XML_RIGHT_OUTSIDE,    drawing::MeasureTextHorzPos_RIGHTOUTSIDE},
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_VAlign_Enum[] =
 {
-    { sXML_automatic,   drawing::MeasureTextVertPos_AUTO },
-    { sXML_above,       drawing::MeasureTextVertPos_EAST },
-    { sXML_below,       drawing::MeasureTextVertPos_WEST },
-    { sXML_center,      drawing::MeasureTextVertPos_CENTERED },
-    { 0,0 }
+    { XML_AUTOMATIC,    drawing::MeasureTextVertPos_AUTO },
+    { XML_ABOVE,        drawing::MeasureTextVertPos_EAST },
+    { XML_BELOW,        drawing::MeasureTextVertPos_WEST },
+    { XML_CENTER,       drawing::MeasureTextVertPos_CENTERED },
+    { XML_TOKEN_INVALID,0 }
 };
 
 // #FontWork#
 SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Style_Enum[] =
 {
-    { sXML_rotate,      0 }, //XFT_ROTATE,
-    { sXML_upright,     1 }, //XFT_UPRIGHT,
-    { sXML_slant_x,     2 }, //XFT_SLANTX,
-    { sXML_slant_y,     3 }, //XFT_SLANTY,
-    { sXML_none,        4 }, //XFT_NONE
-    { 0,0 }
+    { XML_ROTATE,       0 }, //XFT_ROTATE,
+    { XML_UPRIGHT,      1 }, //XFT_UPRIGHT,
+    { XML_SLANT_X,      2 }, //XFT_SLANTX,
+    { XML_SLANT_Y,      3 }, //XFT_SLANTY,
+    { XML_NONE,         4 }, //XFT_NONE
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Adjust_Enum[] =
 {
-    { sXML_left,        0 }, //XFT_LEFT,
-    { sXML_right,       1 }, //XFT_RIGHT,
-    { sXML_autosize,    2 }, //XFT_AUTOSIZE,
-    { sXML_center,      3 }, //XFT_CENTER
-    { 0,0 }
+    { XML_LEFT,         0 }, //XFT_LEFT,
+    { XML_RIGHT,        1 }, //XFT_RIGHT,
+    { XML_AUTOSIZE,     2 }, //XFT_AUTOSIZE,
+    { XML_CENTER,       3 }, //XFT_CENTER
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Shadow_Enum[] =
 {
-    { sXML_normal,      0 }, //XFTSHADOW_NORMAL,
-    { sXML_slant,       1 }, //XFTSHADOW_SLANT,
-    { sXML_none,        2 }, //XFTSHADOW_NONE
-    { 0,0 }
+    { XML_NORMAL,       0 }, //XFTSHADOW_NORMAL,
+    { XML_SLANT,        1 }, //XFTSHADOW_SLANT,
+    { XML_NONE,         2 }, //XFTSHADOW_NONE
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Form_Enum[] =
 {
-    { sXML_none,            0 }, //XFTFORM_NONE,
-    { sXML_topcircle,       1 }, //XFTFORM_TOPCIRC,
-    { sXML_bottomcircle,    2 }, //XFTFORM_BOTCIRC,
-    { sXML_leftcircle,      3 }, //XFTFORM_LFTCIRC,
-    { sXML_rightcircle,     4 }, //XFTFORM_RGTCIRC,
-    { sXML_toparc,          5 }, //XFTFORM_TOPARC,
-    { sXML_bottomarc,       6 }, //XFTFORM_BOTARC,
-    { sXML_leftarc,         7 }, //XFTFORM_LFTARC,
-    { sXML_rightarc,        8 }, //XFTFORM_RGTARC,
-    { sXML_button1,         9 }, //XFTFORM_BUTTON1,
-    { sXML_button2,         10 }, //XFTFORM_BUTTON2,
-    { sXML_button3,         11 }, //XFTFORM_BUTTON3,
-    { sXML_button4,         12 }, //XFTFORM_BUTTON4
-    { 0,0 }
+    { XML_NONE,             0 }, //XFTFORM_NONE,
+    { XML_TOPCIRCLE,        1 }, //XFTFORM_TOPCIRC,
+    { XML_BOTTOMCIRCLE,     2 }, //XFTFORM_BOTCIRC,
+    { XML_LEFTCIRCLE,       3 }, //XFTFORM_LFTCIRC,
+    { XML_RIGHTCIRCLE,      4 }, //XFTFORM_RGTCIRC,
+    { XML_TOPARC,           5 }, //XFTFORM_TOPARC,
+    { XML_BOTTOMARC,        6 }, //XFTFORM_BOTARC,
+    { XML_LEFTARC,          7 }, //XFTFORM_LFTARC,
+    { XML_RIGHTARC,         8 }, //XFTFORM_RGTARC,
+    { XML_BUTTON1,          9 }, //XFTFORM_BUTTON1,
+    { XML_BUTTON2,          10 }, //XFTFORM_BUTTON2,
+    { XML_BUTTON3,          11 }, //XFTFORM_BUTTON3,
+    { XML_BUTTON4,          12 }, //XFTFORM_BUTTON4
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Esc_Dir_Enum[] =
 {
-    { sXML_horizontal,      0 }, //SDRCAPT_ESCHORIZONTAL,
-    { sXML_vertical,        1 }, //SDRCAPT_ESCVERTICAL,
-    { sXML_auto,            2 }, //SDRCAPT_ESCBESTFIT,
-    { 0,0 }
+    { XML_HORIZONTAL,       0 }, //SDRCAPT_ESCHORIZONTAL,
+    { XML_VERTICAL,         1 }, //SDRCAPT_ESCVERTICAL,
+    { XML_AUTO,             2 }, //SDRCAPT_ESCBESTFIT,
+    { XML_TOKEN_INVALID,0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Type_Enum[] =
 {
-    { sXML_straight_line,           0 }, //SDRCAPT_TYPE1,
-    { sXML_angled_line,             1 }, //SDRCAPT_TYPE2,
-    { sXML_angled_connector_line,   2 }, //SDRCAPT_TYPE3,
-    { 0,0 }
+    { XML_STRAIGHT_LINE,            0 }, //SDRCAPT_TYPE1,
+    { XML_ANGLED_LINE,              1 }, //SDRCAPT_TYPE2,
+    { XML_ANGLED_CONNECTOR_LINE,    2 }, //SDRCAPT_TYPE3,
+    { XML_TOKEN_INVALID,0 }
 };
 
 //////////////////////////////////////////////////////////////////////////////

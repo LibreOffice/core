@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@
 
 using namespace ::std;
 //using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -327,17 +328,17 @@ enum TemplateTokenType
 
 SvXMLEnumMapEntry aTemplateTokenTypeMap[] =
 {
-    { sXML_index_entry_chapter, XML_TOK_INDEX_TYPE_CHAPTER },
-    { sXML_index_entry_text, XML_TOK_INDEX_TYPE_ENTRY_TEXT },
-    { sXML_index_entry_tab_stop, XML_TOK_INDEX_TYPE_TAB_STOP },
-    { sXML_index_entry_span, XML_TOK_INDEX_TYPE_TEXT },
-    { sXML_index_entry_page_number, XML_TOK_INDEX_TYPE_PAGE_NUMBER },
-    { sXML_index_entry_chapter_number, XML_TOK_INDEX_TYPE_CHAPTER_NUMBER },
-    { sXML_index_entry_chapter, XML_TOK_INDEX_TYPE_CHAPTER },
-    { sXML_index_entry_link_start, XML_TOK_INDEX_TYPE_LINK_START },
-    { sXML_index_entry_link_end, XML_TOK_INDEX_TYPE_LINK_END },
-    { sXML_index_entry_bibliography, XML_TOK_INDEX_TYPE_BIBLIOGRAPHY },
-    { 0, 0 }
+    { XML_INDEX_ENTRY_CHAPTER,      XML_TOK_INDEX_TYPE_CHAPTER },
+    { XML_INDEX_ENTRY_TEXT,         XML_TOK_INDEX_TYPE_ENTRY_TEXT },
+    { XML_INDEX_ENTRY_TAB_STOP,     XML_TOK_INDEX_TYPE_TAB_STOP },
+    { XML_INDEX_ENTRY_SPAN,         XML_TOK_INDEX_TYPE_TEXT },
+    { XML_INDEX_ENTRY_PAGE_NUMBER,  XML_TOK_INDEX_TYPE_PAGE_NUMBER },
+    { XML_INDEX_ENTRY_CHAPTER_NUMBER, XML_TOK_INDEX_TYPE_CHAPTER_NUMBER },
+    { XML_INDEX_ENTRY_CHAPTER,      XML_TOK_INDEX_TYPE_CHAPTER },
+    { XML_INDEX_ENTRY_LINK_START,   XML_TOK_INDEX_TYPE_LINK_START },
+    { XML_INDEX_ENTRY_LINK_END,     XML_TOK_INDEX_TYPE_LINK_END },
+    { XML_INDEX_ENTRY_BIBLIOGRAPHY, XML_TOK_INDEX_TYPE_BIBLIOGRAPHY },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
@@ -437,17 +438,17 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 
 const SvXMLEnumMapEntry aLevelNameTOCMap[] =
 {
-    { sXML_1, 1 },
-    { sXML_2, 2 },
-    { sXML_3, 3 },
-    { sXML_4, 4 },
-    { sXML_5, 5 },
-    { sXML_6, 6 },
-    { sXML_7, 7 },
-    { sXML_8, 8 },
-    { sXML_9, 9 },
-    { sXML_10, 10 },
-    { NULL, NULL }
+    { XML_1, 1 },
+    { XML_2, 2 },
+    { XML_3, 3 },
+    { XML_4, 4 },
+    { XML_5, 5 },
+    { XML_6, 6 },
+    { XML_7, 7 },
+    { XML_8, 8 },
+    { XML_9, 9 },
+    { XML_10, 10 },
+    { XML_TOKEN_INVALID, NULL }
 };
 
 const sal_Char* aLevelStylePropNameTOCMap[] =
@@ -487,11 +488,11 @@ const sal_Bool aAllowedTokenTypesUser[] =
 
 const SvXMLEnumMapEntry aLevelNameAlphaMap[] =
 {
-    { sXML_separator, 1 },
-    { sXML_1, 2 },
-    { sXML_2, 3 },
-    { sXML_3, 4 },
-    { NULL, NULL }
+    { XML_SEPARATOR, 1 },
+    { XML_1, 2 },
+    { XML_2, 3 },
+    { XML_3, 4 },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 const sal_Char* aLevelStylePropNameAlphaMap[] =
@@ -516,29 +517,29 @@ const sal_Bool aAllowedTokenTypesAlpha[] =
 
 const SvXMLEnumMapEntry aLevelNameBibliographyMap[] =
 {
-    { sXML_article, 1 },
-    { sXML_book, 2 },
-    { sXML_booklet, 3 },
-    { sXML_conference, 4 },
-    { sXML_custom1, 5 },
-    { sXML_custom2, 6 },
-    { sXML_custom3, 7 },
-    { sXML_custom4, 8 },
-    { sXML_custom5, 9 },
-    { sXML_email, 10 },
-    { sXML_inbook, 11 },
-    { sXML_incollection, 12 },
-    { sXML_inproceedings, 13 },
-    { sXML_journal, 14 },
-    { sXML_manual, 15 },
-    { sXML_mastersthesis, 16 },
-    { sXML_misc, 17 },
-    { sXML_phdthesis, 18 },
-    { sXML_proceedings, 19 },
-    { sXML_techreport, 20 },
-    { sXML_unpublished, 21 },
-    { sXML_www, 22 },
-    { NULL, NULL }
+    { XML_ARTICLE, 1 },
+    { XML_BOOK, 2 },
+    { XML_BOOKLET, 3 },
+    { XML_CONFERENCE, 4 },
+    { XML_CUSTOM1, 5 },
+    { XML_CUSTOM2, 6 },
+    { XML_CUSTOM3, 7 },
+    { XML_CUSTOM4, 8 },
+    { XML_CUSTOM5, 9 },
+    { XML_EMAIL, 10 },
+    { XML_INBOOK, 11 },
+    { XML_INCOLLECTION, 12 },
+    { XML_INPROCEEDINGS, 13 },
+    { XML_JOURNAL, 14 },
+    { XML_MANUAL, 15 },
+    { XML_MASTERSTHESIS, 16 },
+    { XML_MISC, 17 },
+    { XML_PHDTHESIS, 18 },
+    { XML_PROCEEDINGS, 19 },
+    { XML_TECHREPORT, 20 },
+    { XML_UNPUBLISHED, 21 },
+    { XML_WWW, 22 },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 // TODO: replace with real property names, when available

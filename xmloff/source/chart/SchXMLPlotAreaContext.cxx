@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-13 13:59:26 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,14 +131,15 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
 {
-    { sXML_category,    SCH_XML_AXIS_CATEGORY   },
-    { sXML_domain,      SCH_XML_AXIS_DOMAIN     },
-    { sXML_value,       SCH_XML_AXIS_VALUE      },
-    { sXML_series,      SCH_XML_AXIS_SERIES     },
-    { 0, 0 }
+    { XML_CATEGORY,     SCH_XML_AXIS_CATEGORY   },
+    { XML_DOMAIN,       SCH_XML_AXIS_DOMAIN     },
+    { XML_VALUE,        SCH_XML_AXIS_VALUE      },
+    { XML_SERIES,       SCH_XML_AXIS_SERIES     },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,

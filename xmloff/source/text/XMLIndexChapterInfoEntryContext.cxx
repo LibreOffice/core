@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexChapterInfoEntryContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 
 
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
@@ -133,13 +134,13 @@ XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext()
 
 static const SvXMLEnumMapEntry aChapterDisplayMap[] =
 {
-    { sXML_name,                    ChapterFormat::NAME },
-    { sXML_number,                  ChapterFormat::NUMBER },
-    { sXML_number_and_name,         ChapterFormat::NAME_NUMBER },
+    { XML_NAME,                     ChapterFormat::NAME },
+    { XML_NUMBER,                   ChapterFormat::NUMBER },
+    { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
 // not supported by the template:
-//  { sXML_plain_number_and_name,   ChapterFormat::NO_PREFIX_SUFFIX },
-//  { sXML_plain_number,            ChapterFormat::DIGIT },
-    { 0,                            0 }
+//  { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
+//  { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
+    { XML_TOKEN_INVALID,            0 }
 };
 
 void XMLIndexChapterInfoEntryContext::StartElement(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:29 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,15 +89,16 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry psXML_BreakTypes[] =
 {
-    { sXML_auto,    0 },
-    { sXML_column, 1 },
-    { sXML_page,   2 },
-    { sXML_even_page, 2 },
-    { sXML_odd_page, 2 },
-    { 0, 0}
+    { XML_AUTO,         0 },
+    { XML_COLUMN,       1 },
+    { XML_PAGE,         2 },
+    { XML_EVEN_PAGE,    2 },
+    { XML_ODD_PAGE,     2 },
+    { XML_TOKEN_INVALID, 0}
 };
 
 ///////////////////////////////////////////////////////////////////////////////

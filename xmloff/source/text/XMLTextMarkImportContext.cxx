@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 TYPEINIT1( XMLTextMarkImportContext, SvXMLImportContext);
 
@@ -137,13 +138,13 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
 {
-    { sXML_reference_mark,          TypeReference },
-    { sXML_reference_mark_start,    TypeReferenceStart },
-    { sXML_reference_mark_end,      TypeReferenceEnd },
-    { sXML_bookmark,                TypeBookmark },
-    { sXML_bookmark_start,          TypeBookmarkStart },
-    { sXML_bookmark_end,            TypeBookmarkEnd },
-    { 0,                            0 },
+    { XML_REFERENCE_MARK,           TypeReference },
+    { XML_REFERENCE_MARK_START,     TypeReferenceStart },
+    { XML_REFERENCE_MARK_END,       TypeReferenceEnd },
+    { XML_BOOKMARK,                 TypeBookmark },
+    { XML_BOOKMARK_START,           TypeBookmarkStart },
+    { XML_BOOKMARK_END,             TypeBookmarkEnd },
+    { XML_TOKEN_INVALID,            0 },
 };
 
 void XMLTextMarkImportContext::StartElement(

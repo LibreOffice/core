@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adjushdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-30 08:50:10 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,24 +93,25 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
 {
-    { sXML_start,       style::ParagraphAdjust_LEFT },
-    { sXML_end,         style::ParagraphAdjust_RIGHT },
-    { sXML_center,      style::ParagraphAdjust_CENTER },
-    { sXML_justify,     style::ParagraphAdjust_BLOCK },
-    { sXML_justified,   style::ParagraphAdjust_BLOCK }, // obsolete
-    { 0, 0 }
+    { XML_START,        style::ParagraphAdjust_LEFT },
+    { XML_END,          style::ParagraphAdjust_RIGHT },
+    { XML_CENTER,       style::ParagraphAdjust_CENTER },
+    { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
+    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
+    { XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Align_Last_Enum[] =
 {
-    { sXML_start,       style::ParagraphAdjust_LEFT },
-    { sXML_center,      style::ParagraphAdjust_CENTER },
-    { sXML_justify,     style::ParagraphAdjust_BLOCK },
-    { sXML_justified,   style::ParagraphAdjust_BLOCK }, // obsolete
-    { 0, 0 }
+    { XML_START,        style::ParagraphAdjust_LEFT },
+    { XML_CENTER,       style::ParagraphAdjust_CENTER },
+    { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
+    { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
+    { XML_TOKEN_INVALID, 0 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +142,7 @@ sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
     rValue >>= nVal;
 
-    sal_Bool bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, sXML_start );
+    sal_Bool bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Adjust_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 
@@ -178,7 +179,7 @@ sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno:
     rValue >>= nVal;
 
     if( nVal != style::ParagraphAdjust_LEFT )
-        bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, sXML_start );
+        bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();
 

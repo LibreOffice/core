@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::std::vector;
@@ -155,10 +156,10 @@ XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport()
 
 static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
 {
-    { sXML_left,    text::HorizontalAdjust_LEFT },
-    { sXML_center,  text::HorizontalAdjust_CENTER },
-    { sXML_right,   text::HorizontalAdjust_RIGHT },
-    { 0, 0 }
+    { XML_LEFT,     text::HorizontalAdjust_LEFT },
+    { XML_CENTER,   text::HorizontalAdjust_CENTER },
+    { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 void XMLFootnoteSeparatorImport::StartElement(

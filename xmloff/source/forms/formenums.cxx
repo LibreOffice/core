@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 12:25:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -114,6 +117,7 @@ namespace xmloff
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::awt;
+    using namespace ::xmloff::token;
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
@@ -146,10 +150,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aSubmitEncodingMap[] =
                     {
-                        { "application/x-www-form-urlencoded", FormSubmitEncoding_URL },
-                        { "multipart/formdata", FormSubmitEncoding_MULTIPART },
-                        { "application/text", FormSubmitEncoding_TEXT },
-                        { NULL, 0 }
+                        { XML_APPLICATION_X_WWW_FORM_URLENCODED, FormSubmitEncoding_URL },
+                        { XML_MULTIPART_FORMDATA, FormSubmitEncoding_MULTIPART },
+                        { XML_APPLICATION_TEXT, FormSubmitEncoding_TEXT },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aSubmitEncodingMap;
                 }
@@ -159,9 +163,9 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aSubmitMethodMap[] =
                     {
-                        { "get", FormSubmitMethod_GET },
-                        { "post", FormSubmitMethod_POST },
-                        { NULL, 0 }
+                        { XML_GET, FormSubmitMethod_GET },
+                        { XML_POST, FormSubmitMethod_POST },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aSubmitMethodMap;
                 }
@@ -171,10 +175,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aCommandTypeMap[] =
                     {
-                        { "table", CommandType::TABLE },
-                        { "query", CommandType::QUERY },
-                        { "command", CommandType::COMMAND },
-                        { NULL, 0 }
+                        { XML_TABLE, CommandType::TABLE },
+                        { XML_QUERY, CommandType::QUERY },
+                        { XML_COMMAND, CommandType::COMMAND },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aCommandTypeMap;
                 }
@@ -184,10 +188,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aNavigationTypeMap[] =
                     {
-                        { "none", NavigationBarMode_NONE },
-                        { "current", NavigationBarMode_CURRENT },
-                        { "parent", NavigationBarMode_PARENT },
-                        { NULL, 0 }
+                        { XML_NONE, NavigationBarMode_NONE },
+                        { XML_CURRENT, NavigationBarMode_CURRENT },
+                        { XML_PARENT, NavigationBarMode_PARENT },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aNavigationTypeMap;
                 };
@@ -197,10 +201,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aTabulytorCycleMap[] =
                     {
-                        { "records", TabulatorCycle_RECORDS },
-                        { "current", TabulatorCycle_CURRENT },
-                        { "page", TabulatorCycle_PAGE },
-                        { NULL, 0 }
+                        { XML_RECORDS, TabulatorCycle_RECORDS },
+                        { XML_CURRENT, TabulatorCycle_CURRENT },
+                        { XML_PAGE, TabulatorCycle_PAGE },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aTabulytorCycleMap;
                 };
@@ -210,11 +214,11 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aFormButtonTypeMap[] =
                     {
-                        { "push", FormButtonType_PUSH },
-                        { "submit", FormButtonType_SUBMIT },
-                        { "reset", FormButtonType_RESET },
-                        { "url", FormButtonType_URL },
-                        { NULL, 0 }
+                        { XML_PUSH, FormButtonType_PUSH },
+                        { XML_SUBMIT, FormButtonType_SUBMIT },
+                        { XML_RESET, FormButtonType_RESET },
+                        { XML_URL, FormButtonType_URL },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aFormButtonTypeMap;
                 };
@@ -224,13 +228,13 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aListSourceTypeMap[] =
                     {
-                        { "value-list", ListSourceType_VALUELIST },
-                        { "table", ListSourceType_TABLE },
-                        { "query", ListSourceType_QUERY },
-                        { "sql", ListSourceType_SQL },
-                        { "sql-pass-through", ListSourceType_SQLPASSTHROUGH },
-                        { "table-fields", ListSourceType_TABLEFIELDS },
-                        { NULL, 0 }
+                        { XML_VALUE_LIST, ListSourceType_VALUELIST },
+                        { XML_TABLE, ListSourceType_TABLE },
+                        { XML_QUERY, ListSourceType_QUERY },
+                        { XML_SQL, ListSourceType_SQL },
+                        { XML_SQL_PASS_THROUGH, ListSourceType_SQLPASSTHROUGH },
+                        { XML_TABLE_FIELDS, ListSourceType_TABLEFIELDS },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aListSourceTypeMap;
                 };
@@ -240,10 +244,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aCheckStateMap[] =
                     {
-                        { "unchecked", STATE_NOCHECK },
-                        { "checked", STATE_CHECK },
-                        { "unknown", STATE_DONTKNOW },
-                        { NULL, 0 }
+                        { XML_UNCHECKED, STATE_NOCHECK },
+                        { XML_CHECKED, STATE_CHECK },
+                        { XML_UNKNOWN, STATE_DONTKNOW },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aCheckStateMap;
                 };
@@ -252,12 +256,12 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aTextAlignMap[] =
                     {
-                        { sXML_start,       TextAlign::LEFT },
-                        { sXML_center,      TextAlign::CENTER },
-                        { sXML_end,         TextAlign::RIGHT },
-                        { sXML_justify,     -1 },
-                        { sXML_justified,   -1 },
-                        { NULL, 0 }
+                        { XML_START,        TextAlign::LEFT },
+                        { XML_CENTER,       TextAlign::CENTER },
+                        { XML_END,          TextAlign::RIGHT },
+                        { XML_JUSTIFY,      -1 },
+                        { XML_JUSTIFIED,    -1 },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aTextAlignMap;
                 };
@@ -266,17 +270,17 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aBorderTypeMap[] =
                     {
-                        { sXML_none,    0 },
-                        { sXML_hidden,  0 },
-                        { sXML_solid,   2 },
-                        { sXML_double,  2 },
-                        { sXML_dotted,  2 },
-                        { sXML_dashed,  2 },
-                        { sXML_groove,  1 },
-                        { sXML_ridge,   1 },
-                        { sXML_inset,   1 },
-                        { sXML_outset,  1 },
-                        { NULL, 0 }
+                        { XML_NONE,     0 },
+                        { XML_HIDDEN,   0 },
+                        { XML_SOLID,    2 },
+                        { XML_DOUBLE,   2 },
+                        { XML_DOTTED,   2 },
+                        { XML_DASHED,   2 },
+                        { XML_GROOVE,   1 },
+                        { XML_RIDGE,    1 },
+                        { XML_INSET,    1 },
+                        { XML_OUTSET,   1 },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aBorderTypeMap;
                 };
@@ -286,12 +290,12 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aFontEmphasisMap[] =
                     {
-                        { sXML_none,    FontEmphasisMark::NONE },
-                        { sXML_dot,     FontEmphasisMark::DOT },
-                        { sXML_circle,  FontEmphasisMark::CIRCLE },
-                        { sXML_disc,    FontEmphasisMark::DISC },
-                        { sXML_accent,  FontEmphasisMark::ACCENT },
-                        { 0, 0 }
+                        { XML_NONE,     FontEmphasisMark::NONE },
+                        { XML_DOT,      FontEmphasisMark::DOT },
+                        { XML_CIRCLE,   FontEmphasisMark::CIRCLE },
+                        { XML_DISC,     FontEmphasisMark::DISC },
+                        { XML_ACCENT,   FontEmphasisMark::ACCENT },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aFontEmphasisMap;
                 }
@@ -301,10 +305,10 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aFontReliefMap[] =
                     {
-                        { sXML_none,        FontRelief::NONE },
-                        { sXML_engraved,    FontRelief::ENGRAVED },
-                        { sXML_embossed,    FontRelief::EMBOSSED },
-                        { 0, 0 }
+                        { XML_NONE,     FontRelief::NONE },
+                        { XML_ENGRAVED, FontRelief::ENGRAVED },
+                        { XML_EMBOSSED, FontRelief::EMBOSSED },
+                        { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aFontReliefMap;
                 }
@@ -322,6 +326,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/06/07 12:25:52  fs
+ *  #86096# enums for FontEmphasis and FontRelief
+ *
  *  Revision 1.5  2000/12/19 12:13:57  fs
  *  some changes ... now the exported styles are XSL conform
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-13 18:44:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //-------------------------------------------------------------------------
 
@@ -381,16 +382,16 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleElemAttrMap[] =
 
 static __FAR_DATA SvXMLEnumMapEntry aStyleValueMap[] =
 {
-    { sXML_short, sal_False },
-    { sXML_long,  sal_True  },
-    { 0,          0 }
+    { XML_SHORT,            sal_False   },
+    { XML_LONG,             sal_True    },
+    { XML_TOKEN_INVALID,    0 }
 };
 
 static __FAR_DATA SvXMLEnumMapEntry aFormatSourceMap[] =
 {
-    { sXML_fixed,    sal_False },
-    { sXML_language, sal_True  },
-    { 0,             0 }
+    { XML_FIXED,            sal_False },
+    { XML_LANGUAGE,         sal_True  },
+    { XML_TOKEN_INVALID,    0 }
 };
 
 //-------------------------------------------------------------------------

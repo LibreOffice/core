@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postuhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,14 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA aPostureGenericMapping[] =
 {
-    { sXML_posture_normal,      ITALIC_NONE     },
-    { sXML_posture_italic,      ITALIC_NORMAL   },
-    { sXML_posture_oblique,     ITALIC_OBLIQUE  },
-    { 0,                        0               }
+    { XML_POSTURE_NORMAL,       ITALIC_NONE     },
+    { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
+    { XML_POSTURE_OBLIQUE,      ITALIC_OBLIQUE  },
+    { XML_TOKEN_INVALID,        0               }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

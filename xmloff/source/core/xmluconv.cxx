@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:46:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
 using namespace com::sun::star::style;
+using namespace ::xmloff::token;
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
@@ -536,11 +537,11 @@ void SvXMLUnitConverter::convertMeasurePx( OUStringBuffer& rBuffer,
 */
 sal_Bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
                                       const OUString& rValue,
-                                      const SvXMLEnumMapEntry *pMap )
+                                      const SvXMLEnumStringMapEntry *pMap )
 {
     while( pMap->pName )
     {
-        if( rValue.compareToAscii( pMap->pName ) == 0 )
+        if( rValue.equalsAsciiL( pMap->pName, pMap->nNameLength ) )
         {
             rEnum = pMap->nValue;
             return sal_True;
@@ -551,6 +552,25 @@ sal_Bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
     return sal_False;
 }
 
+/** convert string to enum using given token map, if the enum is
+    not found in the map, this method will return false */
+sal_Bool SvXMLUnitConverter::convertEnum(
+    sal_uInt16& rEnum,
+    const OUString& rValue,
+    const SvXMLEnumMapEntry *pMap )
+{
+    while( pMap->eToken != XML_TOKEN_INVALID )
+    {
+        if( IsXMLToken( rValue, pMap->eToken ) )
+        {
+            rEnum = pMap->nValue;
+            return sal_True;
+        }
+        pMap++;
+    }
+    return sal_False;
+}
+
 /** convert enum to string using given enum map with optional
     default string. If the enum is not found in the map,
     this method will either use the given default or return
@@ -558,7 +578,7 @@ sal_Bool SvXMLUnitConverter::convertEnum( sal_uInt16& rEnum,
 */
 sal_Bool SvXMLUnitConverter::convertEnum( OUStringBuffer& rBuffer,
                                       sal_uInt16 nValue,
-                                      const SvXMLEnumMapEntry *pMap,
+                                      const SvXMLEnumStringMapEntry *pMap,
                                       sal_Char * pDefault /* = NULL */ )
 {
     const sal_Char *pStr = pDefault;
@@ -580,6 +600,38 @@ sal_Bool SvXMLUnitConverter::convertEnum( OUStringBuffer& rBuffer,
         rBuffer.appendAscii( pStr );
 
     return NULL != pStr;
+}
+
+/** convert enum to string using given token map with an optional
+    default token. If the enum is not found in the map,
+    this method will either use the given default or return
+    false if no default is set */
+sal_Bool SvXMLUnitConverter::convertEnum(
+    OUStringBuffer& rBuffer,
+    sal_uInt16 nValue,
+    const SvXMLEnumMapEntry *pMap,
+    enum XMLTokenEnum eDefault)
+{
+    enum XMLTokenEnum eTok = eDefault;
+
+    while( pMap->eToken != XML_TOKEN_INVALID )
+    {
+        if( pMap->nValue == nValue )
+        {
+            eTok = pMap->eToken;
+            break;
+        }
+        pMap++;
+    }
+
+    // the map may have contained XML_TOKEN_INVALID
+    if( eTok == XML_TOKEN_INVALID )
+        eTok = eDefault;
+
+    if( eTok != XML_TOKEN_INVALID )
+        rBuffer.append( GetXMLToken(eTok) );
+
+    return (eTok != XML_TOKEN_INVALID);
 }
 
 int lcl_gethex( int nChar )

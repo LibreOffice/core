@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -128,10 +129,10 @@ static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_HatchStyle_Enum[] =
 {
-    { sXML_hatchstyle_single,   drawing::HatchStyle_SINGLE },
-    { sXML_hatchstyle_double,   drawing::HatchStyle_DOUBLE },
-    { sXML_hatchstyle_triple,   drawing::HatchStyle_TRIPLE },
-    { 0, 0 }
+    { XML_HATCHSTYLE_SINGLE,    drawing::HatchStyle_SINGLE },
+    { XML_HATCHSTYLE_DOUBLE,    drawing::HatchStyle_DOUBLE },
+    { XML_HATCHSTYLE_TRIPLE,    drawing::HatchStyle_TRIPLE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 XMLHatchStyle::XMLHatchStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,

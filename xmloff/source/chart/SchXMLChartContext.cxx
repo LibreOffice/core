@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: af $ $Date: 2001-06-08 14:57:28 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 #define SCH_BUILDCHART(xDoc) if( xDoc->hasControllersLocked() ) {\
     xDoc->unlockControllers();\
@@ -143,25 +144,25 @@ enum SchXMLChartType
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
 {
-    { sXML_line,        XML_CHART_CLASS_LINE    },
-    { sXML_area,        XML_CHART_CLASS_AREA    },
-    { sXML_circle,      XML_CHART_CLASS_CIRCLE  },
-    { sXML_ring,        XML_CHART_CLASS_RING    },
-    { sXML_scatter,     XML_CHART_CLASS_SCATTER },
-    { sXML_radar,       XML_CHART_CLASS_RADAR   },
-    { sXML_bar,         XML_CHART_CLASS_BAR     },
-    { sXML_stock,       XML_CHART_CLASS_STOCK   },
-    { sXML_bubble,      XML_CHART_CLASS_BUBBLE  },
-    { 0, 0 }
+    { XML_LINE,         XML_CHART_CLASS_LINE    },
+    { XML_AREA,         XML_CHART_CLASS_AREA    },
+    { XML_CIRCLE,       XML_CHART_CLASS_CIRCLE  },
+    { XML_RING,         XML_CHART_CLASS_RING    },
+    { XML_SCATTER,      XML_CHART_CLASS_SCATTER },
+    { XML_RADAR,        XML_CHART_CLASS_RADAR   },
+    { XML_BAR,          XML_CHART_CLASS_BAR     },
+    { XML_STOCK,        XML_CHART_CLASS_STOCK   },
+    { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
 {
-    { sXML_left,        chart::ChartLegendPosition_LEFT     },
-    { sXML_top,         chart::ChartLegendPosition_TOP      },
-    { sXML_right,       chart::ChartLegendPosition_RIGHT    },
-    { sXML_bottom,      chart::ChartLegendPosition_BOTTOM   },
-    { 0, 0 }
+    { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
+    { XML_TOP,          chart::ChartLegendPosition_TOP      },
+    { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
+    { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 // ----------------------------------------

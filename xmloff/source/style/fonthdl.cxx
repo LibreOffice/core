@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,24 +89,25 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 static SvXMLEnumMapEntry __READONLY_DATA aFontFamilyGenericMapping[] =
 {
-    { sXML_decorative,  FAMILY_DECORATIVE },
+    { XML_DECORATIVE,       FAMILY_DECORATIVE },
 
-    { sXML_modern,      FAMILY_MODERN   },
-    { sXML_roman,       FAMILY_ROMAN    },
-    { sXML_script,      FAMILY_SCRIPT   },
-    { sXML_swiss,       FAMILY_SWISS    },
-    { sXML_system,      FAMILY_SYSTEM   },
-    { 0,                0               }
+    { XML_MODERN,           FAMILY_MODERN   },
+    { XML_ROMAN,            FAMILY_ROMAN    },
+    { XML_SCRIPT,           FAMILY_SCRIPT   },
+    { XML_SWISS,            FAMILY_SWISS    },
+    { XML_SYSTEM,           FAMILY_SYSTEM   },
+    { XML_TOKEN_INVALID,    0               }
 };
 
 static SvXMLEnumMapEntry __READONLY_DATA aFontPitchMapping[] =
 {
-    { sXML_fixed,       PITCH_FIXED     },
-    { sXML_variable,    PITCH_VARIABLE  },
-    { 0,                0               }
+    { XML_FIXED,            PITCH_FIXED     },
+    { XML_VARIABLE,         PITCH_VARIABLE  },
+    { XML_TOKEN_INVALID,    0               }
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -356,7 +357,7 @@ sal_Bool XMLFontPitchPropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 
     if( PITCH_DONTKNOW != ePitch )
     {
-        bRet = rUnitConverter.convertEnum( aOut, ePitch, aFontPitchMapping, sXML_fixed );
+        bRet = rUnitConverter.convertEnum( aOut, ePitch, aFontPitchMapping, XML_FIXED );
         rStrExpValue = aOut.makeStringAndClear();
     }
 

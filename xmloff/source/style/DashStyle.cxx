@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include<rtl/ustrbuf.hxx>
 #endif
@@ -109,6 +113,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -136,11 +141,11 @@ static __FAR_DATA SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_DashStyle_Enum[] =
 {
-    { sXML_rect,        drawing::DashStyle_RECT },
-    { sXML_round,       drawing::DashStyle_ROUND },
-    { sXML_rect,        drawing::DashStyle_RECTRELATIVE },
-    { sXML_round,       drawing::DashStyle_ROUNDRELATIVE },
-    { 0, 0 }
+    { XML_RECT,         drawing::DashStyle_RECT },
+    { XML_ROUND,        drawing::DashStyle_ROUND },
+    { XML_RECT,         drawing::DashStyle_RECTRELATIVE },
+    { XML_ROUND,        drawing::DashStyle_ROUNDRELATIVE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 XMLDashStyle::XMLDashStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > * _pHandler,

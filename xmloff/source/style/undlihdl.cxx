@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undlihdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,28 +90,29 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Underline_Enum[] =
 {
-    { sXML_underline_none,              FontUnderline::NONE },
-    { sXML_underline_single,            FontUnderline::SINGLE },
-    { sXML_underline_double,            FontUnderline::DOUBLE },
-    { sXML_underline_dotted,            FontUnderline::DOTTED },
-    { sXML_underline_dash,              FontUnderline::DASH },
-    { sXML_underline_long_dash,         FontUnderline::LONGDASH },
-    { sXML_underline_dot_dash,          FontUnderline::DASHDOT },
-    { sXML_underline_dot_dot_dash,      FontUnderline::DASHDOTDOT },
-    { sXML_underline_wave,              FontUnderline::WAVE },
-    { sXML_underline_bold,              FontUnderline::BOLD },
-    { sXML_underline_bold_dotted,       FontUnderline::BOLDDOTTED },
-    { sXML_underline_bold_dash,         FontUnderline::BOLDDASH },
-    { sXML_underline_bold_long_dash,    FontUnderline::BOLDLONGDASH },
-    { sXML_underline_bold_dot_dash,     FontUnderline::BOLDDASHDOT },
-    { sXML_underline_bold_dot_dot_dash, FontUnderline::BOLDDASHDOTDOT },
-    { sXML_underline_bold_wave,         FontUnderline::BOLDWAVE },
-    { sXML_underline_double_wave,       FontUnderline::DOUBLEWAVE },
-    { sXML_underline_small_wave,        FontUnderline::SMALLWAVE },
-    { 0,                                0 }
+    { XML_UNDERLINE_NONE,               FontUnderline::NONE },
+    { XML_UNDERLINE_SINGLE,             FontUnderline::SINGLE },
+    { XML_UNDERLINE_DOUBLE,             FontUnderline::DOUBLE },
+    { XML_UNDERLINE_DOTTED,             FontUnderline::DOTTED },
+    { XML_UNDERLINE_DASH,               FontUnderline::DASH },
+    { XML_UNDERLINE_LONG_DASH,          FontUnderline::LONGDASH },
+    { XML_UNDERLINE_DOT_DASH,           FontUnderline::DASHDOT },
+    { XML_UNDERLINE_DOT_DOT_DASH,       FontUnderline::DASHDOTDOT },
+    { XML_UNDERLINE_WAVE,               FontUnderline::WAVE },
+    { XML_UNDERLINE_BOLD,               FontUnderline::BOLD },
+    { XML_UNDERLINE_BOLD_DOTTED,        FontUnderline::BOLDDOTTED },
+    { XML_UNDERLINE_BOLD_DASH,          FontUnderline::BOLDDASH },
+    { XML_UNDERLINE_BOLD_LONG_DASH,     FontUnderline::BOLDLONGDASH },
+    { XML_UNDERLINE_BOLD_DOT_DASH,      FontUnderline::BOLDDASHDOT },
+    { XML_UNDERLINE_BOLD_DOT_DOT_DASH,  FontUnderline::BOLDDASHDOTDOT },
+    { XML_UNDERLINE_BOLD_WAVE,          FontUnderline::BOLDWAVE },
+    { XML_UNDERLINE_DOUBLE_WAVE,        FontUnderline::DOUBLEWAVE },
+    { XML_UNDERLINE_SMALL_WAVE,         FontUnderline::SMALLWAVE },
+    { XML_TOKEN_INVALID,                0 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

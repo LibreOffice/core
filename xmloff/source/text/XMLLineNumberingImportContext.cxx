@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-30 10:21:38 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -159,11 +160,11 @@ XMLLineNumberingImportContext::~XMLLineNumberingImportContext()
 
 static const SvXMLEnumMapEntry aLineNumberPositionMap[] =
 {
-    { sXML_left,    style::LineNumberPosition::LEFT },
-    { sXML_right,   style::LineNumberPosition::RIGHT },
-    { sXML_inside,  style::LineNumberPosition::INSIDE },
-    { sXML_outside, style::LineNumberPosition::OUTSIDE },
-    { NULL, 0 }
+    { XML_LEFT,     style::LineNumberPosition::LEFT },
+    { XML_RIGHT,    style::LineNumberPosition::RIGHT },
+    { XML_INSIDE,   style::LineNumberPosition::INSIDE },
+    { XML_OUTSIDE,  style::LineNumberPosition::OUTSIDE },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 static SvXMLTokenMapEntry aLineNumberingTokenMap[] =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-15 12:37:49 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -143,10 +144,10 @@ static __FAR_DATA SvXMLTokenMapEntry aColSepAttrTokenMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Sep_Align_Enum[] =
 {
-    { sXML_top,         VerticalAlignment_TOP   },
-    { sXML_middle,      VerticalAlignment_MIDDLE },
-    { sXML_bottom,      VerticalAlignment_BOTTOM },
-    { 0, 0 }
+    { XML_TOP,          VerticalAlignment_TOP   },
+    { XML_MIDDLE,       VerticalAlignment_MIDDLE },
+    { XML_BOTTOM,       VerticalAlignment_BOTTOM },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 class XMLTextColumnContext_Impl: public SvXMLImportContext

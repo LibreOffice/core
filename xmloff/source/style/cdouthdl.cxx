@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdouthdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,15 +89,16 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_Crossedout_Enum[] =
 {
-    { sXML_crossedout_none,      STRIKEOUT_NONE },
-    { sXML_crossedout_single,    STRIKEOUT_SINGLE },
-    { sXML_crossedout_double,    STRIKEOUT_DOUBLE },
-    { sXML_crossedout_thick,     STRIKEOUT_BOLD },
-    { sXML_crossedout_slash,     STRIKEOUT_SLASH },
-    { sXML_crossedout_cross,     STRIKEOUT_X }
+    { XML_CROSSEDOUT_NONE,      STRIKEOUT_NONE },
+    { XML_CROSSEDOUT_SINGLE,    STRIKEOUT_SINGLE },
+    { XML_CROSSEDOUT_DOUBLE,    STRIKEOUT_DOUBLE },
+    { XML_CROSSEDOUT_THICK,     STRIKEOUT_BOLD },
+    { XML_CROSSEDOUT_SLASH,     STRIKEOUT_SLASH },
+    { XML_CROSSEDOUT_CROSS,     STRIKEOUT_X }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,19 +89,20 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry psXML_BrushHorizontalPos[] =
 {
-    { sXML_left,        style::GraphicLocation_LEFT_MIDDLE   },
-    { sXML_right,       style::GraphicLocation_RIGHT_MIDDLE },
-    { 0,                0       }
+    { XML_LEFT,             style::GraphicLocation_LEFT_MIDDLE   },
+    { XML_RIGHT,            style::GraphicLocation_RIGHT_MIDDLE },
+    { XML_TOKEN_INVALID,    0       }
 };
 
 SvXMLEnumMapEntry psXML_BrushVerticalPos[] =
 {
-    { sXML_top,         style::GraphicLocation_MIDDLE_TOP   },
-    { sXML_bottom,      style::GraphicLocation_MIDDLE_BOTTOM    },
-    { 0,                0       }
+    { XML_TOP,              style::GraphicLocation_MIDDLE_TOP   },
+    { XML_BOTTOM,           style::GraphicLocation_MIDDLE_BOTTOM    },
+    { XML_TOKEN_INVALID,    0       }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

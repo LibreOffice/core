@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csmaphdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 12:52:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,15 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 static SvXMLEnumMapEntry pXML_Casemap_Enum[] =
 {
-    { sXML_none,                style::CaseMap::NONE },
-    { sXML_casemap_lowercase,   style::CaseMap::LOWERCASE },
-    { sXML_casemap_uppercase,   style::CaseMap::UPPERCASE },
-    { sXML_casemap_capitalize,  style::CaseMap::TITLE },
-    { 0,0 }
+    { XML_NONE,                 style::CaseMap::NONE },
+    { XML_CASEMAP_LOWERCASE,    style::CaseMap::LOWERCASE },
+    { XML_CASEMAP_UPPERCASE,    style::CaseMap::UPPERCASE },
+    { XML_CASEMAP_CAPITALIZE,   style::CaseMap::TITLE },
+    { XML_TOKEN_INVALID,        0 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-30 12:28:15 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,12 +177,13 @@ static const sal_Char sAPI_current_presentation[]   = "CurrentPresentation";
 static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
 
 
-using namespace rtl;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::text;
-using namespace com::sun::star::style;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
 
 
 
@@ -1195,14 +1196,14 @@ enum ValueType
 
 static SvXMLEnumMapEntry __READONLY_DATA aValueTypeMap[] =
 {
-    { sXML_float,       XML_VALUE_TYPE_FLOAT },
-    { sXML_currency,    XML_VALUE_TYPE_CURRENCY },
-    { sXML_percentage,  XML_VALUE_TYPE_PERCENTAGE },
-    { sXML_date,        XML_VALUE_TYPE_DATE },
-    { sXML_time,        XML_VALUE_TYPE_TIME },
-    { sXML_boolean,     XML_VALUE_TYPE_BOOLEAN },
-    { sXML_string,      XML_VALUE_TYPE_STRING },
-    { 0,                0 },
+    { XML_FLOAT,        XML_VALUE_TYPE_FLOAT },
+    { XML_CURRENCY,     XML_VALUE_TYPE_CURRENCY },
+    { XML_PERCENTAGE,   XML_VALUE_TYPE_PERCENTAGE },
+    { XML_DATE,         XML_VALUE_TYPE_DATE },
+    { XML_TIME,         XML_VALUE_TYPE_TIME },
+    { XML_BOOLEAN,      XML_VALUE_TYPE_BOOLEAN },
+    { XML_STRING,       XML_VALUE_TYPE_STRING },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 XMLValueImportHelper::XMLValueImportHelper(

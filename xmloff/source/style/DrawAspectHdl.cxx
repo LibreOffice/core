@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 10:07:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -89,11 +90,11 @@ using namespace ::com::sun::star;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_DrawAspect_Enum[] =
 {
-    { sXML_content,         1   },
-    { sXML_thumbnail,       2   },
-    { sXML_icon,            4   },
-    { sXML_print,           8   },
-    { 0, 0 }
+    { XML_CONTENT,          1   },
+    { XML_THUMBNAIL,        2   },
+    { XML_ICON,             4   },
+    { XML_PRINT,            8   },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 DrawAspectHdl::~DrawAspectHdl()

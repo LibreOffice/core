@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-26 13:17:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
-
+using namespace ::xmloff::token;
 
 //
 //  XMLFootnoteConfigHelper
@@ -306,10 +306,10 @@ const SvXMLTokenMap&
 
 static SvXMLEnumMapEntry __READONLY_DATA aFootnoteNumberingMap[] =
 {
-    { sXML_page,        FootnoteNumbering::PER_PAGE },
-    { sXML_chapter,     FootnoteNumbering::PER_CHAPTER },
-    { sXML_document,    FootnoteNumbering::PER_DOCUMENT },
-    { 0,                0 },
+    { XML_PAGE,             FootnoteNumbering::PER_PAGE },
+    { XML_CHAPTER,          FootnoteNumbering::PER_CHAPTER },
+    { XML_DOCUMENT,         FootnoteNumbering::PER_DOCUMENT },
+    { XML_TOKEN_INVALID,    0 },
 };
 
 void XMLFootnoteConfigurationImportContext::StartElement(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyEntryContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 
 
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
@@ -137,38 +138,38 @@ XMLIndexBibliographyEntryContext::~XMLIndexBibliographyEntryContext()
 
 const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
 {
-    { sXML_address,             BibliographyDataField::ADDRESS },
-    { sXML_annote,              BibliographyDataField::ANNOTE },
-    { sXML_author,              BibliographyDataField::AUTHOR },
-    { sXML_bibiliographic_type, BibliographyDataField::BIBILIOGRAPHIC_TYPE },
-    { sXML_booktitle,           BibliographyDataField::BOOKTITLE },
-    { sXML_chapter,             BibliographyDataField::CHAPTER },
-    { sXML_custom1,             BibliographyDataField::CUSTOM1 },
-    { sXML_custom2,             BibliographyDataField::CUSTOM2 },
-    { sXML_custom3,             BibliographyDataField::CUSTOM3 },
-    { sXML_custom4,             BibliographyDataField::CUSTOM4 },
-    { sXML_custom5,             BibliographyDataField::CUSTOM5 },
-    { sXML_edition,             BibliographyDataField::EDITION },
-    { sXML_editor,              BibliographyDataField::EDITOR },
-    { sXML_howpublished,        BibliographyDataField::HOWPUBLISHED },
-    { sXML_identifier,          BibliographyDataField::IDENTIFIER },
-    { sXML_institution,         BibliographyDataField::INSTITUTION },
-    { sXML_isbn,                BibliographyDataField::ISBN },
-    { sXML_journal,             BibliographyDataField::JOURNAL },
-    { sXML_month,               BibliographyDataField::MONTH },
-    { sXML_note,                BibliographyDataField::NOTE },
-    { sXML_number,              BibliographyDataField::NUMBER },
-    { sXML_organizations,       BibliographyDataField::ORGANIZATIONS },
-    { sXML_pages,               BibliographyDataField::PAGES },
-    { sXML_publisher,           BibliographyDataField::PUBLISHER },
-    { sXML_report_type,         BibliographyDataField::REPORT_TYPE },
-    { sXML_school,              BibliographyDataField::SCHOOL },
-    { sXML_series,              BibliographyDataField::SERIES },
-    { sXML_title,               BibliographyDataField::TITLE },
-    { sXML_url,                 BibliographyDataField::URL },
-    { sXML_volume,              BibliographyDataField::VOLUME },
-    { sXML_year,                BibliographyDataField::YEAR },
-    { NULL, NULL }
+    { XML_ADDRESS,              BibliographyDataField::ADDRESS },
+    { XML_ANNOTE,               BibliographyDataField::ANNOTE },
+    { XML_AUTHOR,               BibliographyDataField::AUTHOR },
+    { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
+    { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
+    { XML_CHAPTER,              BibliographyDataField::CHAPTER },
+    { XML_CUSTOM1,              BibliographyDataField::CUSTOM1 },
+    { XML_CUSTOM2,              BibliographyDataField::CUSTOM2 },
+    { XML_CUSTOM3,              BibliographyDataField::CUSTOM3 },
+    { XML_CUSTOM4,              BibliographyDataField::CUSTOM4 },
+    { XML_CUSTOM5,              BibliographyDataField::CUSTOM5 },
+    { XML_EDITION,              BibliographyDataField::EDITION },
+    { XML_EDITOR,               BibliographyDataField::EDITOR },
+    { XML_HOWPUBLISHED,         BibliographyDataField::HOWPUBLISHED },
+    { XML_IDENTIFIER,           BibliographyDataField::IDENTIFIER },
+    { XML_INSTITUTION,          BibliographyDataField::INSTITUTION },
+    { XML_ISBN,                 BibliographyDataField::ISBN },
+    { XML_JOURNAL,              BibliographyDataField::JOURNAL },
+    { XML_MONTH,                BibliographyDataField::MONTH },
+    { XML_NOTE,                 BibliographyDataField::NOTE },
+    { XML_NUMBER,               BibliographyDataField::NUMBER },
+    { XML_ORGANIZATIONS,        BibliographyDataField::ORGANIZATIONS },
+    { XML_PAGES,                BibliographyDataField::PAGES },
+    { XML_PUBLISHER,            BibliographyDataField::PUBLISHER },
+    { XML_REPORT_TYPE,          BibliographyDataField::REPORT_TYPE },
+    { XML_SCHOOL,               BibliographyDataField::SCHOOL },
+    { XML_SERIES,               BibliographyDataField::SERIES },
+    { XML_TITLE,                BibliographyDataField::TITLE },
+    { XML_URL,                  BibliographyDataField::URL },
+    { XML_VOLUME,               BibliographyDataField::VOLUME },
+    { XML_YEAR,                 BibliographyDataField::YEAR },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 void XMLIndexBibliographyEntryContext::StartElement(

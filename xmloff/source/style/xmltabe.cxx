@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-16 11:31:05 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,16 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry psXML_tabstop_style[] =
 {
-    { "left", style::TabAlign_LEFT  },
-    { "center", style::TabAlign_CENTER  },
-    { "right", style::TabAlign_RIGHT    },
-    { "char", style::TabAlign_DECIMAL   },
-    { "default", style::TabAlign_DEFAULT  },    // ?????????????????????????????????????
-    { 0,        0 }
+    { XML_LEFT,     style::TabAlign_LEFT    },
+    { XML_CENTER,   style::TabAlign_CENTER  },
+    { XML_RIGHT,    style::TabAlign_RIGHT   },
+    { XML_CHAR,     style::TabAlign_DECIMAL },
+    { XML_DEFAULT,  style::TabAlign_DEFAULT  }, // ?????????????????????????????????????
+    { XML_TOKEN_INVALID,        0 }
 };
 
 void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop* pTabStop )

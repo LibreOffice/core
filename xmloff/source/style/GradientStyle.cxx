@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GradientStyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -138,13 +139,13 @@ static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_GradientStyle_Enum[] =
 {
-    { sXML_gradientstyle_linear,        awt::GradientStyle_LINEAR },
-    { sXML_gradientstyle_axial,         awt::GradientStyle_AXIAL },
-    { sXML_gradientstyle_radial,        awt::GradientStyle_RADIAL },
-    { sXML_gradientstyle_ellipsoid,     awt::GradientStyle_ELLIPTICAL },
-    { sXML_gradientstyle_square,        awt::GradientStyle_SQUARE },
-    { sXML_gradientstyle_rectangular,   awt::GradientStyle_RECT },
-    { 0, 0 }
+    { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
+    { XML_GRADIENTSTYLE_AXIAL,          awt::GradientStyle_AXIAL },
+    { XML_GRADIENTSTYLE_RADIAL,         awt::GradientStyle_RADIAL },
+    { XML_GRADIENTSTYLE_ELLIPSOID,      awt::GradientStyle_ELLIPTICAL },
+    { XML_GRADIENTSTYLE_SQUARE,         awt::GradientStyle_SQUARE },
+    { XML_GRADIENTSTYLE_RECTANGULAR,    awt::GradientStyle_RECT },
+    { XML_TOKEN_INVALID, 0 }
 };
 
 XMLGradientStyle::XMLGradientStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > * _pHandler,

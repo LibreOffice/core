@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTableSourceContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-12 18:27:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@
 #endif
 
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -163,15 +164,15 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
 {
 
-    { sXML_text,            ReferenceFieldPart::TEXT },
-    { sXML_category_and_value,  ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { sXML_caption,         ReferenceFieldPart::ONLY_CAPTION },
+    { XML_TEXT,                 ReferenceFieldPart::TEXT },
+    { XML_CATEGORY_AND_VALUE,   ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_CAPTION,              ReferenceFieldPart::ONLY_CAPTION },
 
     // wrong values that previous versions wrote:
-    { sXML_chapter,         ReferenceFieldPart::CATEGORY_AND_NUMBER },
-    { sXML_page,            ReferenceFieldPart::ONLY_CAPTION },
+    { XML_CHAPTER,              ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { XML_PAGE,                 ReferenceFieldPart::ONLY_CAPTION },
 
-    { 0,                0 }
+    { XML_TOKEN_INVALID,        0 }
 };
 
 void XMLIndexTableSourceContext::ProcessAttribute(
