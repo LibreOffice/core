@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 13:01:26 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 08:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
         uno::Reference< drawing::XDrawPage > xMasterPage;
 
-        if(xDrawPage.is())
+        if(xDrawPage.is() && xMasterPages.is())
         {
             sal_Bool bDone(FALSE);
 

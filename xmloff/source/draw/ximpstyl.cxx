@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 08:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,7 +1283,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     UniString sPrefix(rMaster.GetName(), (sal_uInt16)rMaster.GetName().getLength());
     sPrefix += sal_Unicode('-');
 
-    if(GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetName()))
+    if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetName()))
     {
         uno::Any aAny(GetSdImport().GetLocalDocStyleFamilies()->getByName(rMaster.GetName()));
         uno::Reference< container::XNameAccess > xMasterPageStyles;
@@ -1521,33 +1521,36 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
         uno::Reference< drawing::XDrawPage > xNewMasterPage;
         uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
 
-        if(GetSdImport().GetNewMasterPageCount() + 1 > xMasterPages->getCount())
+        if( xMasterPages.is() )
         {
-            // new page, create and insert
-            xNewMasterPage = xMasterPages->insertNewByIndex(xMasterPages->getCount());
-        }
-        else
-        {
-            // existing page, use it
-            uno::Any aAny(xMasterPages->getByIndex(GetSdImport().GetNewMasterPageCount()));
-            aAny >>= xNewMasterPage;
-        }
-
-        // increment global import page counter
-        GetSdImport().IncrementNewMasterPageCount();
-
-        if(xNewMasterPage.is())
-        {
-            uno::Reference< drawing::XShapes > xNewShapes(xNewMasterPage, uno::UNO_QUERY);
-            if(xNewShapes.is() && GetSdImport().GetShapeImport()->GetStylesContext())
+            if(GetSdImport().GetNewMasterPageCount() + 1 > xMasterPages->getCount())
             {
-                pContext = new SdXMLMasterPageContext(GetSdImport(),
-                    nPrefix, rLocalName, xAttrList, xNewShapes);
+                // new page, create and insert
+                xNewMasterPage = xMasterPages->insertNewByIndex(xMasterPages->getCount());
+            }
+            else
+            {
+                // existing page, use it
+                uno::Any aAny(xMasterPages->getByIndex(GetSdImport().GetNewMasterPageCount()));
+                aAny >>= xNewMasterPage;
+            }
 
-                if(pContext)
+            // increment global import page counter
+            GetSdImport().IncrementNewMasterPageCount();
+
+            if(xNewMasterPage.is())
+            {
+                uno::Reference< drawing::XShapes > xNewShapes(xNewMasterPage, uno::UNO_QUERY);
+                if(xNewShapes.is() && GetSdImport().GetShapeImport()->GetStylesContext())
                 {
-                    pContext->AddRef();
-                    maMasterPageList.Insert((SdXMLMasterPageContext*)pContext, LIST_APPEND);
+                    pContext = new SdXMLMasterPageContext(GetSdImport(),
+                        nPrefix, rLocalName, xAttrList, xNewShapes);
+
+                    if(pContext)
+                    {
+                        pContext->AddRef();
+                        maMasterPageList.Insert((SdXMLMasterPageContext*)pContext, LIST_APPEND);
+                    }
                 }
             }
         }
