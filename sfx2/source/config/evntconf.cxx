@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SV_RESARY_HXX
 #include <vcl/resary.hxx>
 #endif
@@ -145,6 +148,14 @@ static const USHORT nOldVersion = 4;
 static const USHORT nVersion = 5;
 
 TYPEINIT1(SfxEventHint, SfxHint);
+
+// class SfxMacroQueryDlg_Impl -------------------------------------------
+
+class SfxMacroQueryDlg_Impl : public QueryBox
+{
+public:
+                            SfxMacroQueryDlg_Impl( const String& rMacro, BOOL bDefault );
+};
 
 // class SfxMacroQueryDlg_Impl -------------------------------------------
 
@@ -528,7 +539,7 @@ BOOL SfxEventConfigItem_Impl::LoadXML( SvStream& rInStream )
         long nCount = aCfg.aEventNames.getLength();
         for ( long i=0; i<nCount; i++ )
         {
-            SvxMacro* pMacro = SfxEvents_Impl::ConvertToMacro( aCfg.aEventsProperties[i], NULL );
+            SvxMacro* pMacro = SfxEvents_Impl::ConvertToMacro( aCfg.aEventsProperties[i], NULL, TRUE );
             USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aCfg.aEventNames[i] );
             if ( nID && pMacro )
                 pEvConfig->PropagateEvent_Impl( pObjShell, nID, pMacro );
@@ -659,6 +670,10 @@ int SfxEventConfigItem_Impl::Load( SotStorage& rStorage )
 
 BOOL SfxEventConfigItem_Impl::Store( SotStorage& rStorage )
 {
+    if ( pObjShell )
+        // DocEventConfig is stored with the document
+        return TRUE;
+
     SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxEventConfigItem_Impl::GetStreamName(), STREAM_STD_READWRITE|STREAM_TRUNC );
     if ( xStream->GetError() )
         return FALSE;
@@ -722,6 +737,8 @@ void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
 {
     if ( pDoc )
     {
+        // if CfgMgr does not exist, create it, otherwise ConfigItem will not have a ConfigManager!
+        pDoc->GetConfigManager(TRUE);
         pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
         //pDocEventConfig->aMacroTable = rTable;
         //pDocEventConfig->SetDefault(FALSE);
@@ -1134,7 +1151,7 @@ BOOL SfxEventConfiguration::Export( SvStream* pInStream, SvStream& rOutStream, S
         DBG_ASSERT( !pInStream, "DocEventConfig can't be converted!" );
         SfxEventConfigItem_Impl* pCfg = pDoc->GetEventConfig_Impl();
         if ( pCfg )
-            return ( pCfg->Store( rOutStream ) == SfxConfigItem::ERR_OK );
+            return pCfg->Store( rOutStream );
         DBG_ERROR("Couldn't create EventConfiguration!");
         return FALSE;
     }
