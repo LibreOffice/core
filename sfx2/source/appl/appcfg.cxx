@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:00:19 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,14 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = TRUE;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), aSaveOptions.IsPrettyPrinting())))
+                                bRet = FALSE;
+                    }
+                    break;
+                case SID_ATTR_WARNALIENFORMAT:
+                    {
+                        bRet = TRUE;
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT))
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), aSaveOptions.IsWarnAlienFormat())))
                                 bRet = FALSE;
                     }
                     break;
@@ -774,6 +782,13 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
         aSaveOptions.SetPrettyPrinting( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
+    }
+
+    // WarnAlienFormat
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
+        aSaveOptions.SetWarnAlienFormat( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
     }
 
     // AutoSave
