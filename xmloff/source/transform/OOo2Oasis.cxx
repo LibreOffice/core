@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:54:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,8 +533,9 @@ static XMLTransformerActionInit aActionTable[] =
         OOO_XLINK_ACTIONS ), /* generated entry */
     ENTRY1( FORM, FORM, XML_ETACTION_PROC_ATTRS,
         OOO_FORM_CONTROL_ACTIONS ),
-    ENTRY1( CHART, SYMBOL_IMAGE, XML_ETACTION_PROC_ATTRS,
-        OOO_XLINK_ACTIONS ), /* generated entry */
+    ENTRY2QN( STYLE, SYMBOL_IMAGE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
+              XML_NAMESPACE_CHART, XML_SYMBOL_IMAGE,
+              OOO_BACKGROUND_IMAGE_ACTIONS ),
 
     ENTRY2QN( CONFIG, CONFIG_ITEM_SET, XML_ETACTION_PROC_ATTRS_COND,
         XML_NAMESPACE_OFFICE, XML_SETTINGS,
@@ -708,7 +709,7 @@ static XMLTransformerActionInit aStyleRefActionTable[] =
     ENTRY0( DRAW, MASTER_PAGE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( PRESENTATION, PRESENTATION_PAGE_LAYOUT_NAME,
             XML_ATACTION_ENCODE_STYLE_NAME_REF ),
-    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_False ),
     ENTRY1( TEXT, CONDITION, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                      XML_NAMESPACE_OOOW ),
     ENTRY1( TEXT, FORMULA, XML_ATACTION_ADD_NAMESPACE_PREFIX,
@@ -1175,7 +1176,7 @@ void XMLBodyTransformerContext_Impl::StartElement(
     XMLTransformerContext::StartElement( rAttrList );
 
     XMLMutableAttributeList *pMutableAttrList =
-        new XMLMutableAttributeList();
+        new XMLMutableAttributeList( rAttrList );
     Reference< XAttributeList > xAttrList = pMutableAttrList;
     OUString aClass( GetTransformer().GetClass() );
     if( !aClass.getLength() )
