@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:36:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,12 @@ public:
                                 ESelection* pEdSelection,
                                 SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 bool bCellSelection,
-                                LanguageType eConvLanguage );
+                                LanguageType eSourceLanguage,   // source language for conversion
+                                LanguageType eTargetLanguage,   // target language for conversion
+                                const Font *pTargetFont,        // target font to be used if language has to be changed
+                                sal_Int32 nOptions,             // misc conversion flags
+                                sal_Bool bIsInteractive         // textconversiob has (specific) dialog that may be raised
+                            );
 
     /** Converts all cells in the selection or sheet according to set language. */
     virtual void            ConvertAll( EditView& rEditView );
@@ -196,7 +201,11 @@ protected:
     virtual bool            NeedsConversion();
 
 private:
-    LanguageType            meConvLang;     /// Language for text conversion.
+    LanguageType    meSourceLang;       // source language for conversion
+    LanguageType    meTargetLang;       // target language for conversion
+    const Font *    mpTargetFont;       // target font to be used if language has to be changed
+    sal_Int32       mnOptions;          // misc conversion flags
+    sal_Bool        mbIsInteractive;    // textconversiob has (specific) dialog that may be raised
 };
 
 // ============================================================================
