@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoForbiddenCharsTable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-04 15:51:51 $
+ *  last change: $Author: cl $ $Date: 2001-04-05 16:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,21 @@
 #ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSUPPORTEDLOCALES_HPP_
+#include <com/sun/star/linguistic2/XSupportedLocales.hpp>
+#endif
 
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 class SvxForbiddenCharactersTable;
 
-class SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper1<com::sun::star::i18n::XForbiddenCharacters>
+class SvxUnoForbiddenCharsTable : public cppu::WeakImplHelper2<
+                                        com::sun::star::i18n::XForbiddenCharacters,
+                                        com::sun::star::linguistic2::XSupportedLocales>
 {
 protected:
     /** this virtual function is called if the forbidden characters are changed */
@@ -86,10 +91,15 @@ public:
     SvxUnoForbiddenCharsTable(vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars);
     ~SvxUnoForbiddenCharsTable();
 
+    // XForbiddenCharacters
     virtual com::sun::star::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::container::NoSuchElementException, com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setForbiddenCharacters( const com::sun::star::lang::Locale& rLocale, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeForbiddenCharacters( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
+
+    // XSupportedLocales
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getLocales(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasLocale( const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // _SVX_UNOFORBIDDENCHARSTABLE_HXX_

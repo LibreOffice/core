@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoForbiddenCharsTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-04 15:53:10 $
+ *  last change: $Author: cl $ $Date: 2001-04-05 16:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,4 +141,31 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale
     mxForbiddenChars->ClearForbiddenCharacters( eLang );
 
     onChange();
+}
+
+// XSupportedLocales
+Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
+    throw(RuntimeException)
+{
+    const sal_Int32 nCount = mxForbiddenChars.isValid() ? mxForbiddenChars->Count() : 0;
+
+    Sequence< Locale > aLocales( nCount );
+    if( nCount )
+    {
+        Locale* pLocales = aLocales.getArray();
+
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            const ULONG nLanguage = mxForbiddenChars->GetObjectKey( nIndex );
+            SvxLanguageToLocale ( *pLocales++, static_cast < LanguageType > (nLanguage) );
+        }
+    }
+
+    return aLocales;
+}
+
+sal_Bool SAL_CALL SvxUnoForbiddenCharsTable::hasLocale( const Locale& aLocale )
+    throw(RuntimeException)
+{
+    return hasForbiddenCharacters( aLocale );
 }
