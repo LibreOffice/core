@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-10-23 14:22:05 $
+#   last change: $Author: npower $ $Date: 2003-01-30 16:07:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES=\
         $(SLO)$/ScriptElement.obj\
         $(SLO)$/XMLElement.obj\
             $(SLO)$/ScriptStorageManager.obj\
+            $(SLO)$/ScriptSecurityManager.obj\
 
 SHL1TARGET=	$(TARGET)
 
