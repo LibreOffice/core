@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextPortionEnumeration.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 09:22:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
  The elements created by this enumeration contains either parts of text with
  equal properties or text content elements like text fields, reference marks or bookmarks.
  */
-service TextPortionEnumeration
+published service TextPortionEnumeration
 {
     /** This interface provides access to the elements of a paragraph in a text document.
      */
