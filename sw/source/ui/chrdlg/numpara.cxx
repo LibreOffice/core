@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-07-06 10:03:08 $
+ *  last change: $Author: os $ $Date: 2002-11-06 10:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aNumberStyleLB          ( this, ResId( LB_NUMBER_STYLE ) ),
     aNewStartFL             ( this, ResId( FL_NEW_START ) ),
     aNewStartCB             ( this, ResId( CB_NEW_START ) ),
-    aNewStartFT             ( this, ResId( FT_NEW_START ) ),
+    aNewStartNumberCB       ( this, ResId( CB_NUMBER_NEW_START ) ),
     aNewStartNF             ( this, ResId( NF_NEW_START ) ),
     aCountParaFL            ( this, ResId( FL_COUNT_PARA        ) ),
     aCountParaCB            ( this, ResId( CB_COUNT_PARA        ) ),
@@ -140,6 +140,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
         }
     }
     aNewStartCB.SetClickHdl(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
+    aNewStartNumberCB.SetClickHdl(LINK(this, SwParagraphNumTabPage, NewStartHdl_Impl));
     aNumberStyleLB.SetSelectHdl(LINK(this, SwParagraphNumTabPage, StyleHdl_Impl));
     aCountParaCB.SetClickHdl(LINK(this,
                     SwParagraphNumTabPage, LineCountHdl_Impl));
@@ -188,12 +189,15 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
     if(aNewStartCB.GetState() != aNewStartCB.GetSavedValue() ||
+        aNewStartNumberCB.GetState() != aNewStartNumberCB.GetSavedValue()||
         aNewStartNF.GetText() != aNewStartNF.GetSavedValue())
     {
         bModified = TRUE;
-        BOOL bChecked = STATE_CHECK == aNewStartCB.GetState();
-        rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bChecked));
-        rSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT, (USHORT)aNewStartNF.GetValue()));
+        BOOL bNewStartChecked = STATE_CHECK == aNewStartCB.GetState();
+        BOOL bNumberNewStartChecked = STATE_CHECK == aNewStartNumberCB.GetState();
+        rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
+        rSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
+                  bNumberNewStartChecked && bNewStartChecked ? (USHORT)aNewStartNF.GetValue() : USHRT_MAX));
     }
 
     if(aCountParaCB.GetSavedValue() != aCountParaCB.GetState() ||
@@ -239,8 +243,9 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
         bCurNumrule = TRUE;
+        const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART);
         aNewStartCB.SetState(
-            ((const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART)).GetValue() ?
+            rStart.GetValue() ?
                         STATE_CHECK : STATE_NOCHECK );
         aNewStartCB.EnableTriState(FALSE);
     }
@@ -252,12 +257,20 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     if( eItemState > SFX_ITEM_AVAILABLE )
     {
         USHORT nNewStart = ((const SfxUInt16Item&)rSet.Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        aNewStartNumberCB.Check(USHRT_MAX != nNewStart);
         if(USHRT_MAX == nNewStart)
             nNewStart = 1;
+        else
+            aNewStartCB.SetState( STATE_CHECK );
+
         aNewStartNF.SetValue(nNewStart);
-        NewStartHdl_Impl(&aNewStartCB);
+        aNewStartNumberCB.EnableTriState(FALSE);
     }
+    else
+        aNewStartCB.SetState(STATE_DONTKNOW);
+    NewStartHdl_Impl(&aNewStartCB);
     aNewStartNF.SaveValue();
+    aNewStartNumberCB.SaveValue();
     StyleHdl_Impl(&aNumberStyleLB);
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_LINENUMBER))
     {
@@ -290,7 +303,7 @@ void SwParagraphNumTabPage::EnableNewStart()
 {
     aNewStartFL.Show();
     aNewStartCB.Show();
-    aNewStartFT.Show();
+    aNewStartNumberCB.Show();
     aNewStartNF.Show();
 }
 
@@ -299,9 +312,9 @@ void SwParagraphNumTabPage::EnableNewStart()
 --------------------------------------------------*/
 IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, pBox )
 {
-    BOOL bEnable = pBox->IsChecked();
-    aNewStartFT.Enable(bEnable);
-    aNewStartNF.Enable(bEnable);
+    BOOL bEnable = aNewStartCB.IsChecked();
+    aNewStartNumberCB.Enable(bEnable);
+    aNewStartNF.Enable(bEnable && aNewStartNumberCB.IsChecked());
     return 0;
 }
 
