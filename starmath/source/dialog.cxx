@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:50:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
 
 void SmFontDialog::InitColor_Impl()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Color aBC( GetDisplayBackground().GetColor() );
 #endif
     ColorData   nBgCol  = COL_WHITE,
@@ -1607,7 +1607,7 @@ SmSymbolDialog::~SmSymbolDialog()
 
 void SmSymbolDialog::InitColor_Impl()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Color aBC( GetDisplayBackground().GetColor() );
 #endif
     ColorData   nBgCol  = COL_WHITE,
@@ -2192,7 +2192,7 @@ SmSymDefineDialog::~SmSymDefineDialog()
 
 void SmSymDefineDialog::InitColor_Impl()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Color aBC( GetDisplayBackground().GetColor() );
 #endif
     ColorData   nBgCol  = COL_WHITE,
