@@ -16,6 +16,7 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\source\invocation_adapterfactory\invadp.xml %_DEST%\xml%_EXT%\invadp.xml
 ..\source\io\io.xml %_DEST%\xml%_EXT%\io.xml
 ..\source\javavm\jen.xml %_DEST%\xml%_EXT%\jen.xml
+..\source\javaloader\javaloader.xml %_DEST%\xml%_EXT%\javaloader.xml
 ..\source\loader\cpld.xml %_DEST%\xml%_EXT%\cpld.xml
 ..\source\namingservice\namingservice.xml %_DEST%\xml%_EXT%\namingservice.xml
 ..\source\proxy_factory\proxyfac.xml %_DEST%\xml%_EXT%\proxyfac.xml
