@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:13:11 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,7 +1440,7 @@ BOOL ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
         SvFileStream aTmp( aFileUrl.PathToFileName(), STREAM_READ );
 
         String* pDest = new String( aTargetUrl.GetPartBeforeLastName() );
-        *pDest += aFileUrl.GetName();
+        *pDest += String(aFileUrl.GetName());
 
         if( bFileToFile )
         {
