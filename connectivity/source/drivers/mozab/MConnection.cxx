@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:41:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,22 +117,7 @@ using namespace com::sun::star::sdbcx;
 // --------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------
 
-namespace connectivity {
-    namespace mozab {
-        // For the moment, we will connect the Mozilla address book to the Mozilla
-        // top-level address book which will display whatever is in the preferences
-        // file of Mozilla.
-        static sal_Char*    MOZ_SCHEME_MOZILLA          = "moz-abdirectory://";
-        // This one is a base uri which will be completed with the connection data.
-        static sal_Char*    MOZ_SCHEME_LDAP             = "moz-abldapdirectory://";
-        // These two uris will be used to obtain directory factories to access all
-        // address books of the given type.
-        static sal_Char*    MOZ_SCHEME_OUTLOOK_MAPI     = "moz-aboutlookdirectory://op/";
-        static sal_Char*    MOZ_SCHEME_OUTLOOK_EXPRESS  = "moz-aboutlookdirectory://oe/";
-    }
-}
 // -----------------------------------------------------------------------------
 const sal_Char* OConnection::getSDBC_SCHEME_MOZILLA()
 {
@@ -218,7 +203,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else {
             OSL_TRACE( "No subschema given!!!\n");
             ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("No subschema provided"),NULL);
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No subschema provided")),NULL);
         }
     }
     else {
@@ -242,8 +227,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // * for windows system address book
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
-        m_sBindDN   = rtl::OUString::createFromAscii("");
-        m_sPassword = rtl::OUString::createFromAscii("");
+        m_sBindDN   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
+        m_sPassword = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
         m_bUseSSL   = sal_False;
 
     if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_MOZILLA() ) == 0 ) {
@@ -299,24 +284,24 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         }
         else {
             ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("No HostName provided"),NULL);
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No HostName provided")),NULL);
         }
 
         if ( nPortNumber > 0 ) {
-            m_sMozillaURI += rtl::OUString::createFromAscii( ":" );
+            m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(":") );
             m_sMozillaURI += rtl::OUString::valueOf( nPortNumber );
         }
 
         if ( sBaseDN.getLength() != 0 ) {
-            m_sMozillaURI += rtl::OUString::createFromAscii( "/" );
+            m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") );
             m_sMozillaURI += sBaseDN;
         }
         else {
             ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("No BaseDN provided"),NULL);
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No BaseDN provided")),NULL);
         }
         // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
-        m_sMozillaURI += ::rtl::OUString::createFromAscii("?(or(DisplayName,=,DontDoThisAtHome))");
+        m_sMozillaURI += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?(or(DisplayName,=,DontDoThisAtHome)))"));
 
     }
     else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_OUTLOOK_MAPI() ) == 0 ) {
@@ -331,7 +316,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         OSL_TRACE("Invalid subschema given!!!\n");
         ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii("Invalid subschema provided"),NULL);
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid subschema provided")),NULL);
     }
 
     OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
@@ -355,7 +340,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // Test connection by getting to get the Table Names
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
-    if ( !_aDbHelper.getTableStrings( this, tables, types,sal_True ) ) {
+    if ( !_aDbHelper.getTableStrings( this, tables, types ) ) {
         ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
     }
 
