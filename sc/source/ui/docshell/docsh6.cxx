@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 19:00:20 $
+ *  last change: $Author: nn $ $Date: 2001-09-25 08:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,10 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
 
     //      hier Position anpassen!
 
-    aDocument.SnapVisArea( aArea );
+    //  #92248# when loading an ole object, the VisArea is set from the document's
+    //  view settings and must be used as-is (document content may not be complete yet).
+    if ( !aDocument.IsImportingXML() )
+        aDocument.SnapVisArea( aArea );
 
     SvInPlaceEnvironment* pEnv = GetIPEnv();
     if (pEnv)
