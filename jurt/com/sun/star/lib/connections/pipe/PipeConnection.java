@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PipeConnection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:32:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import java.util.StringTokenizer;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.sun.star.lib.util.NativeLibraryLoader;
 
 import com.sun.star.io.XStreamListener;
 
@@ -81,7 +82,7 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2003-03-26 12:32:55 $
+ * @version     $Revision: 1.3 $ $ $Date: 2003-04-15 14:33:59 $
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.PipeAcceptor
  * @see         com.sun.star.comp.connections.PipeConnector
@@ -93,41 +94,10 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * When set to true, enables various debugging output.
      */
     static public final boolean DEBUG = false;
-    static private final String PIPE_LIB_NAME = "jpipe";
 
-    static
-    {
-
-        // determine name of executable soffice
-        String aExec = "soffice"; // default for UNIX
-        String aOS = System.getProperty("os.name");
-
-        // running on Windows?
-        if (aOS.startsWith("Windows"))
-            aExec = "soffice.exe";
-
-        // add other non-UNIX operating systems here
-
-        // find soffice executable via CLASSPATH:
-        // <INSTDIR>/program/classes/*.jar => <INSTDIR>/program/soffice
-        String mProgramPath = null;
-        String aClassPath = System.getProperty("java.class.path" );
-        java.util.StringTokenizer aTokenizer = new java.util.StringTokenizer(
-            aClassPath, java.io.File.pathSeparator );
-        while ( mProgramPath == null && aTokenizer.hasMoreTokens() )
-        {
-            java.io.File aJAR = new java.io.File( aTokenizer.nextToken() ).getAbsoluteFile();
-            String aPath = aJAR.getParentFile().getParent();
-            java.io.File aProgFile = new java.io.File(
-                aPath + java.io.File.separator + aExec );
-            if ( aProgFile.exists() )
-                mProgramPath = aProgFile.getParent();
-
-        }
-
-                // load libofficebean.so/officebean.dll
-                System.load( mProgramPath + java.io.File.separator +
-                        System.mapLibraryName(PIPE_LIB_NAME) );
+    static {
+        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(),
+                                        "jpipe");
     }
 
     protected String    _aDescription;
