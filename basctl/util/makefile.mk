@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 16:17:10 $
+#   last change: $Author: vg $ $Date: 2003-03-26 12:52:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,8 +123,9 @@ DEF1EXPORTFILE	= basctl.dxp
 
 LIB1TARGET      =$(SLB)$/basctl.lib
 LIB1FILES       = \
-            $(LIBPRE) $(SLB)$/basicide.lib	\
-            $(LIBPRE) $(SLB)$/dlged.lib
+            $(LIBPRE) $(SLB)$/basicide.lib		\
+            $(LIBPRE) $(SLB)$/dlged.lib			\
+            $(LIBPRE) $(SLB)$/accessibility.lib
 
 SRSFILELIST=\
                 $(SRS)$/basicide.srs \
