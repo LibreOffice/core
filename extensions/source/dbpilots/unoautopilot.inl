@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoautopilot.inl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:24:52 $
+ *  last change: $Author: obo $ $Date: 2001-03-06 10:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,9 @@ template <class TYPE, class SERVICEINFO>
 
 //---------------------------------------------------------------------
 template <class TYPE, class SERVICEINFO>
-::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySetInfo>  SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -168,6 +168,9 @@ void OUnoAutoPilot<TYPE, SERVICEINFO>::implInitialize(const com::sun::star::uno:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:24:52  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 10:18:07  fs
  ************************************************************************/
