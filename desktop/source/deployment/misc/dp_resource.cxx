@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:12:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "dp_misc.h"
 #include "dp_resource.h"
 #include "osl/module.hxx"
+#include "osl/mutex.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "unotools/configmgr.hxx"
 #include "tools/isolang.hxx"
@@ -89,29 +90,26 @@ void dummy() {}
 struct DeploymentResMgr : public rtl::StaticWithInit<
     ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
-        const ::vos::OGuard guard( g_pResMgrMutex );
         return ResMgr::CreateResMgr( "deployment" LIBRARY_SOLARUPD(),
                                      OfficeLocale::get() );
     }
 };
 
-::vos::OMutex s_mutex;
+osl::Mutex s_mutex;
 
 } // anon namespace
-
-::vos::IMutex * g_pResMgrMutex = &s_mutex;
 
 //==============================================================================
 ResId getResId( USHORT id )
 {
-    const ::vos::OGuard guard( g_pResMgrMutex );
+    const osl::MutexGuard guard( s_mutex );
     return ResId( id, DeploymentResMgr::get() );
 }
 
 //==============================================================================
 String getResourceString( USHORT id )
 {
-    const ::vos::OGuard guard( g_pResMgrMutex );
+    const osl::MutexGuard guard( s_mutex );
     String ret( ResId( id, DeploymentResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         static String s_brandName;
