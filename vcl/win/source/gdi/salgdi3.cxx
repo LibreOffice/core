@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:20:28 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,9 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     aDFA.mbSubsettable = false;
     if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
         if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
-            aDFA.mbSubsettable = true;
+            // TODO: implement type1 or CFF subsetting
+            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
+                aDFA.mbSubsettable = true;
 
     // get family name
     aDFA.maName = ImplSalGetUniString( rLogFont.lfFaceName );
@@ -418,7 +420,9 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     aDFA.mbSubsettable = false;
     if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
         if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
-            aDFA.mbSubsettable = true;
+            // TODO: implement type1 or CFF subsetting
+            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
+                aDFA.mbSubsettable = true;
 
     // get family name
     aDFA.maName = rLogFont.lfFaceName;
@@ -745,7 +749,7 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
 void ImplWinFontData::ReadCmapTable( HDC hDC )
 {
     CmapResult aResult;
-    aResult.mnCount     = 0;
+    aResult.mnPairCount = 0;
     aResult.mbSymbolic  = (meWinCharSet == SYMBOL_CHARSET);
     aResult.mbRecoded   = true;
 
@@ -766,8 +770,9 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
 
     mbDisableGlyphApi |= aResult.mbRecoded;
 
-    if( aResult.mnCount > 0 )
-        mpUnicodeMap = new ImplFontCharMap( aResult.mnCount, aResult.mpCodes );
+    if( aResult.mnPairCount > 0 )
+        mpUnicodeMap = new ImplFontCharMap( aResult.mnPairCount,
+            aResult.mpPairCodes, aResult.mpStartGlyphs );
     else
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
 }
