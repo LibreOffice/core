@@ -60,8 +60,8 @@
 
 
 /*Java Uno Helper Classes*/
-import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
-import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import com.sun.star.lib.uno.adapters.XInputStreamToInputStreamAdapter;
+import com.sun.star.lib.uno.adapters.XOutputStreamToOutputStreamAdapter;
 
 /*StarOffice/Uno Classes*/
 import com.sun.star.lang.XMultiServiceFactory;
@@ -222,11 +222,13 @@ public class XMergeBridge {
             sFileName=(String) pValue[i].Value;
             //System.out.println(pValue[i].Name+" "+sFileName);
         }
+
         if (pValue[i].Name.compareTo("URL")==0){
             sURL = (String)pValue[i].Value;
             //System.out.println(pValue[i].Name+" "+sURL);
         }
         }
+
 
         try{
 
@@ -280,6 +282,7 @@ public class XMergeBridge {
         sFileName=null;
         String sDirectory = null;
         String sURL=null;
+        String title=null;
         String udConvertClass=msUserData[0];
         udJarPath=msUserData[1];
         String udImport =msUserData[2];
@@ -290,23 +293,29 @@ public class XMergeBridge {
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
         for  (int  i = 0 ; i < pValue.length; i++)
         {
+
         if (pValue[i].Name.compareTo("OutputStream")==0){
             xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
-
             //    System.out.println(pValue[i].Name+" "+xos);
         }
         if (pValue[i].Name.compareTo("FileName")==0){
             sFileName=(String) pValue[i].Value;
             //System.out.println(pValue[i].Name+" "+sFileName);
         }
+        if (pValue[i].Name.compareTo("Title")==0){
+            title=(String) pValue[i].Value;
+            //System.out.println(pValue[i].Name+" "+title);
+        }
         if (pValue[i].Name.compareTo("URL")==0){
             sURL = (String)pValue[i].Value;
             //System.out.println(pValue[i].Name+" "+sURL);
         }
         }
-
-
+        if (sFileName==null){
+        sFileName=title;
+        }
          try{
+
          Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
          XConfigManager xCfgMgr = (XConfigManager) UnoRuntime.queryInterface(
                                             XConfigManager.class , xCfgMgrObj );
@@ -383,8 +392,21 @@ public class XMergeBridge {
     }
     public void characters(String str){
         //System.out.println(str);
+        String tmp=str;
+        if (tmp.indexOf("<")!=-1){
+        str=tmp.substring(0,tmp.indexOf("<"));
+        str=str.concat("&lt;");
+        str=str.concat(tmp.substring(tmp.indexOf("<")+1,tmp.length()));
+        tmp=str;
+        }
+        if (tmp.indexOf(">")!=-1){
+        str=tmp.substring(0,tmp.indexOf(">"));
+        str=str.concat("&gt;");
+        str=str.concat(tmp.substring(tmp.indexOf(">")+1,tmp.length()));
+        tmp=str;
+        }
         try{
-         xOutStream.writeBytes(str.getBytes("UTF-8"));
+         xOutStream.writeBytes(tmp.getBytes("UTF-8"));
         }
        catch (Exception e){
            System.out.println("\n"+e);
@@ -450,20 +472,26 @@ public class XMergeBridge {
              else
              {
                  cv.addInputStream(name,(InputStream)xis,false);
-
                  ConvertData dataOut = cv.convert();
 
                  Enumeration docEnum = dataOut.getDocumentEnumeration();
-                 while (docEnum.hasMoreElements()) {
+                 if (docEnum.hasMoreElements()){
                  Document docOut      = (Document)docEnum.nextElement();
                  String fileName      = docOut.getFileName();
                  docOut.write(newxos);
 
                  newxos.flush();
                  newxos.close();
-
                  }
-                 //System.out.println("\n Finished converting");
+                 //No support for multiple files yet
+                 /* while (docEnum.hasMoreElements()) {
+                 Document docOut      = (Document)docEnum.nextElement();
+                 String fileName      = docOut.getFileName();
+                 docOut.write(newxos);
+
+                 newxos.flush();
+                 newxos.close();
+                 }*/
              }
              ConverterInfoMgr.removeByJar(jarName);
 
