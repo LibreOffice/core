@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 12:52:32 $
+ *  last change: $Author: ama $ $Date: 2001-12-18 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,6 +1296,14 @@ void SwCntntNode::DelFrms()
     for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
          pFrm = (SwCntntFrm*)aIter.Next() )
     {
+        if( pFrm->HasFollow() )
+            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
+        if( pFrm->IsFollow() )
+        {
+            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            pMaster->SetFollow( pFrm->GetFollow() );
+            pFrm->_SetIsFollow( FALSE );
+        }
         pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
                                 //Andernfalls kann es sein, dass ein Follow
                                 //vor seinem Master zerstoert wird, der Master
