@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:33:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/boxitem.hxx>
 #include <svx/prtqry.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
@@ -127,6 +128,7 @@
 #include "prevwsh.hxx"
 #include "tpprint.hxx"
 #include "scextopt.hxx"
+#include "printopt.hxx"
 
 #ifndef SC_NAVSETT_HXX
 #include "navsett.hxx"
@@ -1133,6 +1135,36 @@ USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress,
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
+
+    //  get the list of affected sheets (using the "only selected sheets" option) before SfxViewShell::Print
+    ScPrintOptions aOptions;
+    const SfxItemSet& rOptionSet = pDocShell->GetPrinter()->GetOptions();
+    const SfxPoolItem* pItem;
+    BOOL bHasOptions = ( rOptionSet.GetItemState(SID_SCPRINTOPTIONS, FALSE, &pItem) == SFX_ITEM_SET );
+    if (bHasOptions)
+        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
+    else
+        aOptions = SC_MOD()->GetPrintOptions();     // use configuration
+    BOOL bAllTabs = aOptions.GetAllSheets();
+
+    uno::Sequence<sal_Int32> aSheets;
+    USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
+    USHORT nPrinted = 0;
+    const ScMarkData& rMarkData = GetViewData()->GetMarkData();
+    for ( USHORT nTab=0; nTab<nTabCount; nTab++ )
+        if ( bAllTabs || rMarkData.GetTableSelect(nTab) )
+        {
+            aSheets.realloc( nPrinted + 1 );
+            aSheets[nPrinted] = nTab;
+            ++nPrinted;
+        }
+
+    uno::Sequence < beans::PropertyValue > aProps(1);
+    aProps[0].Name=::rtl::OUString::createFromAscii("PrintSheets");
+    aProps[0].Value <<= aSheets;
+    SetAdditionalPrintOptions( aProps );
+
+    //  ... use aSheets here ...
 
     SfxViewShell::Print( rProgress, pPrintDialog );
     pDocShell->Print( rProgress, pPrintDialog, &GetViewData()->GetMarkData(),
