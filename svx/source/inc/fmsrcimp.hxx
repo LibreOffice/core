@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: oj $ $Date: 2000-10-23 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ private:
     ::rtl::OUString FormatField(const FieldInfo& rField);
         // formatiert das Feld mit dem NumberFormatter
 
-    sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.getValue() != NULL; }
+    sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
     DECL_LINK(OnSearchTerminated, FmSearchThread*);
         // wird vom SuchThread benutzt, nach Rueckkehr aus diesem Handler loescht sich der Thread selber
