@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:52:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 17:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,12 +467,22 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         (eConfigType != E_DOCUMENT                           )    // no localization in document mode!
        )
     {
-        // use different start pathes ... because called method uses it as an in/out parameter!
-        ::rtl::OUString sLocalizedSharePath(sRelPath);
-        ::rtl::OUString sLocalizedUserPath (sRelPath);
+        // First try to find the right localized set inside share layer.
+        // Fallbacks are allowed there.
+        ::comphelper::Locale aShareLocale       = aLocale ;
+        ::rtl::OUString      sLocalizedSharePath(sRelPath);
+        sal_Bool             bAllowFallbacks    = sal_True;
+        xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
 
-        xShare   = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aLocale);
-        xUser    = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath , eUserMode , sal_False, aLocale);
+        // The try to locate the right sub dir inside user layer ... without using fallbacks!
+        // Normaly the corresponding sub dir should be created matching the specified locale.
+        // Because we allow creation of storages inside user layer by default.
+        ::comphelper::Locale aUserLocale        = aLocale  ;
+        ::rtl::OUString      sLocalizedUserPath(sRelPath)  ;
+                             bAllowFallbacks    = sal_False;
+        xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode , sal_False, aUserLocale, bAllowFallbacks);
+
+        // TODO ... may be we need one relpath value for every supported config layer .-)
         sRelPath = sLocalizedUserPath;
     }
 
@@ -812,14 +822,48 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(      ::rtl::OUString&      sPath  ,
-                                                                                                      sal_Int32             eMode  ,
-                                                                                                      sal_Bool              bShare ,
-                                                                                                const ::comphelper::Locale& aLocale)
+::std::vector< ::rtl::OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(const ::std::vector< ::rtl::OUString >& lLocalizedValues,
+                                                                                                      ::comphelper::Locale&             aLocale         ,
+                                                                                                      sal_Bool                          bAllowFallbacks )
+{
+    ::std::vector< ::rtl::OUString >::const_iterator pFound = lLocalizedValues.end();
+    if (bAllowFallbacks)
+    {
+        pFound = ::comphelper::Locale::getFallback(lLocalizedValues, aLocale.toISO());
+    }
+    else
+    {
+        for (  pFound  = lLocalizedValues.begin();
+               pFound != lLocalizedValues.end()  ;
+             ++pFound                            )
+        {
+            const ::rtl::OUString&     sCheckISO   = *pFound;
+                  ::comphelper::Locale aCheckLocale(sCheckISO);
+            if (aCheckLocale.equals(aLocale))
+                break;
+        }
+    }
+
+    // if we found a valid locale ... take it over to our in/out parameter aLocale
+    if (pFound != lLocalizedValues.end())
+    {
+        const ::rtl::OUString& sISOLocale = *pFound;
+        aLocale.fromISO(sISOLocale);
+    }
+
+    return pFound;
+}
+
+//-----------------------------------------------
+css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(::rtl::OUString&      sPath         ,
+                                                                                                sal_Int32             eMode         ,
+                                                                                                sal_Bool              bShare        ,
+                                                                                                ::comphelper::Locale& aLocale       ,
+                                                                                                sal_Bool              bAllowFallback)
 {
     css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
     ::std::vector< ::rtl::OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
-    ::std::vector< ::rtl::OUString >::const_iterator pLocaleFolder = ::comphelper::Locale::getFallback(lSubFolders, aLocale.toISO());
+    ::std::vector< ::rtl::OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, aLocale, bAllowFallback);
 
     // no fallback ... creation not allowed => no storage
     if (
