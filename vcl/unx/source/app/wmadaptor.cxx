@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
+ *  last change: $Author: pl $ $Date: 2002-07-18 11:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,10 +902,7 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
             aLocaleString += aCountry;
         }
         if( aVariant.getLength() )
-        {
-            aLocaleString += ::rtl::OUString::createFromAscii( "." );
             aLocaleString += aVariant;
-        }
         aWMLocale = ::rtl::OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
     }
     else
