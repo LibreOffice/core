@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 12:17:16 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 16:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ struct PHLayout
 
 static PHLayout pPHLayout[] =
 {
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLESLIDE,            0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x10, TRUE, TRUE, FALSE },
     { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
     { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
     { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, TRUE, TRUE },
@@ -963,7 +963,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                                         sal_Bool bWriteEvenEmptyTextObjects = sal_False );
         sal_Bool            ImplGetMasterTitleAndBody();
         sal_Bool            ImplGetStyleSheets();
-        void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj, sal_uInt32 nTextStyle );
+        void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                                             sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBu );

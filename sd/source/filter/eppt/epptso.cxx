@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 12:17:37 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 16:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1533,7 +1533,7 @@ sal_Bool PPTWriter::ImplGetMasterTitleAndBody()
             if ( ! ( --nSearchFor ) )
                 break;
         }
-        else if ( mType == "presentation.Outliner" )
+        else if ( ( mType == "presentation.Outliner" ) || ( mType == "presentation.Subtitle" ) )
         {
             mnMasterBodyIndex = i;
             if ( ! ( --nSearchFor ) )
@@ -1545,7 +1545,7 @@ sal_Bool PPTWriter::ImplGetMasterTitleAndBody()
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj, sal_uInt32 nTextStyle )
+void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 {
     sal_Bool            bFirstParagraph = TRUE;
     sal_uInt32          nCharCount;
@@ -2875,7 +2875,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
 
         sal_uInt32 nSize, nPos = rOut.Tell();
         rOut << (sal_uInt32)( EPP_StyleTextPropAtom << 16 ) << (sal_uInt32)0;
-        ImplWriteParagraphs( rOut, aTextObj, mnTextStyle );
+        ImplWriteParagraphs( rOut, aTextObj );
         ImplWritePortions( rOut, aTextObj );
         nSize = rOut.Tell() - nPos;
         rOut.SeekRel( - ( (sal_Int32)nSize - 4 ) );
@@ -4572,7 +4572,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                 }
             }
-            else if ( ( mType == "drawing.Text" ) || ( mType == "presentation.Subtitle" ) || ( mType == "presentation.Notes" ) )
+            else if ( ( mType == "drawing.Text" ) || ( mType == "presentation.Notes" ) )
             {
                 if ( ( ePageType == NOTICE ) && mbPresObj )
                 {
@@ -4626,7 +4626,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     SHAPE_TEXT( TRUE );
                 }
             }
-            else if ( mType == "presentation.Outliner" )
+            else if ( ( mType == "presentation.Outliner" ) || ( mType == "presentation.Subtitle" ) )
             {
                 if ( mbPresObj )
                 {
