@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,8 +1249,8 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
         sal_uInt16 nColId = GetCurColumnId();
         sal_uInt32 nRow = GetCurRow();
 
-        m_bWasEditing = IsEditing();
-        if (m_bWasEditing)
+        sal_Bool bWasEditing = IsEditing();
+        if (bWasEditing)
             DeactivateCell();
 
         OTableFields::reverse_iterator aIter = getFields().rbegin();
@@ -1262,9 +1262,8 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
                 RemoveField((sal_uInt16)nPos, sal_False);
         }
 
-        if (m_bWasEditing)
+        if (bWasEditing)
             ActivateCell(nRow , nColId);
-        m_bWasEditing = sal_False;
     }
 }
 
@@ -1290,8 +1289,8 @@ void OSelectionBrowseBox::SetColWidth()
 void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    m_bWasEditing = IsEditing();
-    if (m_bWasEditing)
+    sal_Bool bWasEditing = IsEditing();
+    if (bWasEditing)
         DeactivateCell();
 
     // die Basisklasse machen lassen
@@ -1302,9 +1301,8 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
     if (pEntry.isValid())
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
 
-    if (m_bWasEditing)
+    if (bWasEditing)
         ActivateCell(GetCurRow(), GetCurColumnId());
-    m_bWasEditing = sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -1786,8 +1784,8 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis)
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(_nWhich>=0 && _nWhich<m_bVisibleRow.size(), "OSelectionBrowseBox::SetRowVisible : invalid parameter !");
 
-    m_bWasEditing = IsEditing();
-    if (m_bWasEditing)
+    sal_Bool bWasEditing = IsEditing();
+    if (bWasEditing)
         DeactivateCell();
 
     // do this before removing or inserting rows, as this triggers ActivateCell-calls, which rely on m_bVisibleRow
@@ -1805,9 +1803,8 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis)
         --m_nVisibleCount;
     }
 
-    if (m_bWasEditing)
+    if (bWasEditing)
         ActivateCell();
-    m_bWasEditing = sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -1985,8 +1982,8 @@ String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
 void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const String& strNewText)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    m_bWasEditing = IsEditing() && (GetCurColumnId() == nColId) && IsRowVisible(nRow) && (GetCurRow() == GetBrowseRow(nRow));
-    if (m_bWasEditing)
+    sal_Bool bWasEditing = IsEditing() && (GetCurColumnId() == nColId) && IsRowVisible(nRow) && (GetCurRow() == GetBrowseRow(nRow));
+    if (bWasEditing)
         DeactivateCell();
 
     OTableFieldDescRef pEntry = getEntry(nColId - 1);
@@ -2033,10 +2030,9 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
     if (pEntry->IsEmpty())
         pEntry->SetVisible(sal_False);
 
-    if (m_bWasEditing)
+    if (bWasEditing)
         ActivateCell(nCellIndex, (sal_uInt16)nColId);
 
-    m_bWasEditing = sal_False;
     static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 }
 //------------------------------------------------------------------------------
@@ -2267,5 +2263,12 @@ void OSelectionBrowseBox::GetFocus()
     if(!IsEditing() && !m_bWasEditing)
         ActivateCell();
     EditBrowseBox::GetFocus();
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::DeactivateCell(sal_Bool _bUpdate)
+{
+    m_bWasEditing = sal_True;
+    EditBrowseBox::DeactivateCell(_bUpdate);
+    m_bWasEditing = sal_False;
 }
 // -----------------------------------------------------------------------------

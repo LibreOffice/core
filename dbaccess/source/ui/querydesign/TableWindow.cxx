@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,7 @@ void OTableWindow::SetBoldTitle( BOOL bBold )
 //------------------------------------------------------------------------------
 void OTableWindow::GetFocus()
 {
+    Window::GetFocus();
     SetBoldTitle( TRUE );
     m_bActive = TRUE;
 }
@@ -561,8 +562,11 @@ void OTableWindow::GetFocus()
 //------------------------------------------------------------------------------
 void OTableWindow::LoseFocus()
 {
+    Window::LoseFocus();
     SetBoldTitle( FALSE );
     m_bActive = FALSE;
+    if (m_pListBox && m_pListBox->GetSelectionCount() != 0)
+        m_pListBox->SelectAll(FALSE);
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:36 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,11 @@ BOOL ORelationTableConnectionData::Update()
 
     Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
     OSL_ENSURE(xKey.is(),"Key is null!");
+    ::rtl::OUString sSourceName;
+    m_xSource->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
+    ::rtl::OUString sKeyName = sSourceName;
+    sKeyName += m_aDestWinName;
+    xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
     xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
     xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(m_aDestWinName)));
     xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,15 +225,19 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
                         m_pTabWin->GetSizePixel().Height() - m_pTabWin->GetListBox()->GetSizePixel().Height());
 
             aSize.Height() += (m_pTabWin->GetListBox()->GetEntryCount() + 2) * m_pTabWin->GetListBox()->GetEntryHeight();
-            m_pTabWin->SetSizePixel(aSize);
+            if(m_pTabWin->GetSizePixel() != aSize)
+            {
+                m_pTabWin->SetSizePixel(aSize);
 
-            OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-            OSL_ENSURE(pView,"No OQueryTableView!");
-            ::std::vector<OTableConnection*>* pConns = pView->GetTabConnList();
-            ::std::for_each(pConns->begin(),pConns->end(),::std::mem_fun(&OTableConnection::RecalcLines));
+                OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
+                OSL_ENSURE(pView,"No OQueryTableView!");
+                ::std::vector<OTableConnection*>* pConns = pView->GetTabConnList();
+                ::std::for_each(pConns->begin(),pConns->end(),::std::mem_fun(&OTableConnection::RecalcLines));
 
-            pView->InvalidateConnections();
-            pView->getDesignView()->getController()->setModified(sal_True);
+                pView->InvalidateConnections();
+                pView->getDesignView()->getController()->setModified(sal_True);
+                pView->Invalidate(INVALIDATE_NOCHILDREN);
+            }
         }
         else
         {

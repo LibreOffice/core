@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:46:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,9 @@ long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
             nDone = 1L;
         }
     }
-    return nDone ? nDone : OJoinDesignView::PreNotify(rNEvt);
+    if(!nDone)
+        nDone = OJoinDesignView::PreNotify(rNEvt);
+    return nDone;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 IMPL_LINK( OTableWindowListBox, DropHdl, void *, EMPTY_ARG)
 {
     // create the connection
+    m_nDropEvent = NULL;
     OSL_ENSURE(m_pTabWin,"No TableWindow!");
     try
     {
@@ -390,16 +391,12 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 //------------------------------------------------------------------------------
 void OTableWindowListBox::LoseFocus()
 {
-    m_pTabWin->LoseFocus();
     SvTreeListBox::LoseFocus();
 }
 
 //------------------------------------------------------------------------------
 void OTableWindowListBox::GetFocus()
 {
-    if(m_pTabWin)
-        m_pTabWin->GetFocus();
-    SvTreeListBox::GetFocus();
     if (GetCurEntry() != NULL)
     {
         if (GetSelectionCount() == 0)
@@ -407,6 +404,10 @@ void OTableWindowListBox::GetFocus()
         else
             ShowFocusRect(FirstSelected());
     }
+    SvTreeListBox::GetFocus();
+
+    if(m_pTabWin)
+        m_pTabWin->GrabFocus();
 }
 
 //------------------------------------------------------------------------------
