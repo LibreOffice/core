@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dl $ $Date: 2001-07-02 12:31:51 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 20:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
+#ifndef _CLIPLISTENER_HXX
+#include <svtools/cliplistener.hxx>
+#endif
 
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
@@ -281,7 +284,9 @@ void SdOutlineViewShell::Construct(SdDrawDocShell* pDocSh)
 SdOutlineViewShell::SdOutlineViewShell(SfxViewFrame* pFrame, SfxViewShell* pOldShell) :
     SdViewShell(pFrame, &pFrame->GetWindow(), FALSE),
     pOlView(NULL),
-    pLastPage( NULL )
+    pLastPage( NULL ),
+    pClipEvtLstnr(NULL),
+    bPastePossible(FALSE)
 {
     if (pOldShell)
     {
@@ -312,7 +317,9 @@ SdOutlineViewShell::SdOutlineViewShell(SfxViewFrame* pFrame,
                                  const SdOutlineViewShell& rShell) :
     SdViewShell(pFrame, rShell),
     pOlView(NULL),
-    pLastPage( NULL )
+    pLastPage( NULL ),
+    pClipEvtLstnr(NULL),
+    bPastePossible(FALSE)
 {
     pFrameView = new FrameView(pDoc);
     pFrameView->Connect();
@@ -355,6 +362,12 @@ __EXPORT SdOutlineViewShell::~SdOutlineViewShell()
     delete pOlView;
 
     pFrameView->Disconnect();
+
+    if ( pClipEvtLstnr )
+    {
+        pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
+        pClipEvtLstnr->release();
+    }
 }
 
 /*************************************************************************
@@ -925,6 +938,22 @@ void SdOutlineViewShell::FuPermanent(SfxRequest &rReq)
 }
 
 
+IMPL_LINK( SdOutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+{
+    if ( pDataHelper )
+    {
+        bPastePossible = ( pDataHelper->GetFormatCount() != 0 &&
+                            ( pDataHelper->HasFormat( FORMAT_STRING ) ||
+                              pDataHelper->HasFormat( FORMAT_RTF ) ||
+                              pDataHelper->HasFormat( SOT_FORMATSTR_ID_HTML ) ) );
+
+        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_PASTE );
+        rBindings.Invalidate( SID_PASTE2 );
+        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+    return 0;
+}
 
 /*************************************************************************
 |*
@@ -1134,12 +1163,22 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) )
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+        if ( !pClipEvtLstnr )
+        {
+            // create listener
+            pClipEvtLstnr = new TransferableClipboardListener( LINK( this, SdOutlineViewShell, ClipboardChanged ) );
+            pClipEvtLstnr->acquire();
+            pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), TRUE );
 
-        if( !aDataHelper.GetFormatCount() ||
-            ( !aDataHelper.HasFormat( FORMAT_STRING ) &&
-              !aDataHelper.HasFormat( FORMAT_RTF )    &&
-              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ) )
+            // get initial state
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+            bPastePossible = ( aDataHelper.GetFormatCount() != 0 &&
+                                ( aDataHelper.HasFormat( FORMAT_STRING ) ||
+                                  aDataHelper.HasFormat( FORMAT_RTF ) ||
+                                  aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ) );
+        }
+
+        if( !bPastePossible )
         {
             rSet.DisableItem( SID_PASTE );
         }

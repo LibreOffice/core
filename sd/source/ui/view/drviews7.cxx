@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:53:01 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 20:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@
 
 #include <svx/pfiledlg.hxx>
 #include <svx/grafctrl.hxx>
+#include <svtools/cliplistener.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -174,6 +175,20 @@ SfxUndoManager* ImpGetUndoManagerFromViewShell(SdDrawViewShell& rDViewShell)
         return pViewShell->GetViewFrame()->GetDispatcher()->GetShell(0)->GetUndoManager();
     DBG_ASSERT(pViewShell, "ViewShell not found");
     return 0L;
+}
+
+IMPL_LINK( SdDrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+{
+    if ( pDataHelper )
+    {
+        bPastePossible = ( pDataHelper->GetFormatCount() != 0 );
+
+        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_PASTE );
+        rBindings.Invalidate( SID_PASTE2 );
+        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+    return 0;
 }
 
 /*************************************************************************
@@ -533,9 +548,19 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+        if ( !pClipEvtLstnr )
+        {
+            // create listener
+            pClipEvtLstnr = new TransferableClipboardListener( LINK( this, SdDrawViewShell, ClipboardChanged ) );
+            pClipEvtLstnr->acquire();
+            pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), TRUE );
 
-        if( !aDataHelper.GetFormatCount() )
+            // get initial state
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+            bPastePossible = ( aDataHelper.GetFormatCount() != 0 );
+        }
+
+        if( !bPastePossible )
         {
             rSet.DisableItem( SID_PASTE );
             rSet.DisableItem( SID_PASTE2 );
@@ -544,6 +569,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
         {
             SvxClipboardFmtItem aItem( SID_CLIPBOARD_FORMAT_ITEMS );
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
 
             for( sal_uInt32 i = 0; i < aDataHelper.GetFormatCount(); i++ )
             {
