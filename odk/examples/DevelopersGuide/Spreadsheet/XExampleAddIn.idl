@@ -1,0 +1,30 @@
+#ifndef _COM_SUN_STAR_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
+#define _COM_SUN_STAR_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/XVolatileResult.idl>
+
+module com {
+  module sun {
+    module star {
+      module sheet {
+        module addin {
+
+            /// The interface that the example addin implements
+            interface XExampleAddIn : com::sun::star::uno::XInterface
+            {
+                /// Sample function that just increments a value.
+                long getIncremented( [in] long nValue );
+
+                /// Sample function that returns a volatile result.
+                com::sun::star::sheet::XVolatileResult getCounter( [in] string aName );
+            };
+
+        };
+      };
+    };
+  };
+};
+
+#endif
+
