@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:39:48 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,21 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void SortByOutline(ParaStyles &rStyles);
+
+        /** Does a node have a "page break before" applied
+
+            Both text nodes and tables in writer can have "page break before"
+            This function gives a unified view to both entities
+
+            @param rNode
+            The SwNode to query the page break of
+
+            @return true if there is a page break, false otherwise
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        bool HasPageBreak(const SwNode &rNode);
     }
 
     namespace hack
