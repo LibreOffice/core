@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,10 @@ private:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxRootStorage;  // package
     SfxObjectShell*             mpDocPersist;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxContainerStorage; // container sub package for
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxTempStorage;  // package
                                                 // objects
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
     SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
-    void*                       mpDummy2;
 
     SVX_DLLPRIVATE sal_Bool                 ImplGetStorageNames(
                                     const ::rtl::OUString& rURLStr,
