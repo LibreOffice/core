@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:24:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2004-03-11 16:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,28 @@ extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
 #endif
 
 
+BYTE GetRealLevel( BYTE nLvl )
+{
+    return nLvl & (NO_NUMLEVEL - 1);
+}
+
+BOOL IsNum( BYTE nLvl )
+{
+    return 0 == (nLvl & NO_NUMLEVEL);
+}
+
+BOOL IsShowNum( BYTE nLvl )
+{
+    return IsNum(nLvl) && nLvl != NO_NUMBERING;
+}
+
+void SetNoNum( BYTE * nLvl, BOOL nVal )
+{
+    if (nVal)
+        *nLvl |= NO_NUMLEVEL;
+    else
+        *nLvl &= ~NO_NUMLEVEL;
+}
 
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
 {
