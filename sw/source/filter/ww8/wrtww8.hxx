@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:56:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,6 @@ public:
     void push_charpropstart(xub_StrLen nPos);
     void pop_charpropstart();
     xub_StrLen top_charpropstart() const;
-    bool empty_charpropstart() const;
     void GetCurrentItems(WW8Bytes &rItems) const;
     void SetHdFtPageRoot(const SwTxtNode *pNd) { mpTopNodeOfHdFtPage = pNd; }
     const SwTxtNode *GetHdFtPageRoot() const { return mpTopNodeOfHdFtPage; }
