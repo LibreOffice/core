@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:22:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,9 +218,7 @@ void __EXPORT ScClient::ViewChanged()
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
 
-    // TODO/LEAN: working with Visual Area needs running state
-    svt::EmbeddedObjectRef::TryRunningState( xObj );
-
+    // TODO/LEAN: working with Visual Area can switch object to running state
     awt::Size aSz = xObj->getVisualAreaSize( GetAspect() );
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
