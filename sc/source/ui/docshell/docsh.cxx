@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 17:06:29 $
+ *  last change: $Author: er $ $Date: 2001-05-22 13:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1941,20 +1941,12 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         {
             WaitObject aWait( GetDialogParent() );
 
-            //  Formeln mit exportieren?
-
-            ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-            const ScViewOptions& rOpt = (pViewSh)
-                                        ? pViewSh->GetViewData()->GetOptions()
-                                        : aDocument.GetViewOptions();
-            BOOL bShowFormulas = rOpt.GetOption( VOPT_FORMULAS );
-
             USHORT nEndCol, nEndRow;
             aDocument.GetCellArea( 0, nEndCol, nEndRow );
             ScRange aRange( 0,0,0, nEndCol,nEndRow,0 );
 
             ScImportExport aImExport( &aDocument, aRange );
-            aImExport.SetFormulas(bShowFormulas);
+            aImExport.SetFormulas( TRUE );
             bRet = aImExport.ExportStream( *pStream, SOT_FORMATSTR_ID_SYLK );
         }
     }
