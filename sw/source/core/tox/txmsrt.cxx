@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 10:56:11 $
+ *  last change: $Author: jp $ $Date: 2000-11-27 13:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,6 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
 {
     if( pNd )
     {
-        DBG_ASSERT(pTOXIntl, "No SwTOXInternational" );
         xub_StrLen n = 0;
         if( pTxtMark )
             n = *pTxtMark->GetStart();
