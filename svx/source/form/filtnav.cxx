@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:54:04 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,18 +197,38 @@ using namespace ::com::sun::star::lang;
 using namespace ::svxform;
 
 
-//========================================================================
-SvxFmFilterExch::SvxFmFilterExch(FmFormItem* pFormItem, const ::std::vector<FmFilterItem*>& lstWhich )
-                :m_aDraggedEntries(lstWhich)
-                ,m_pFormItem(pFormItem)
+//........................................................................
+namespace svxform
 {
-    m_aDataTypeList.Insert( SvDataType(Exchange::RegisterFormatName(SVX_FM_FILTER_FIELDS)) );
+//........................................................................
+
+//========================================================================
+OFilterItemExchange::OFilterItemExchange()
+{
 }
 
 //------------------------------------------------------------------------
-sal_Bool SvxFmFilterExch::GetData( SvData* pData )
+void OFilterItemExchange::AddSupportedFormats()
 {
-    return sal_False;
+    AddFormat(getFormatId());
+}
+
+//------------------------------------------------------------------------
+sal_uInt32 OFilterItemExchange::getFormatId()
+{
+    static sal_uInt32 s_nFormat = (sal_uInt32)-1;
+    if ((sal_uInt32)-1 == s_nFormat)
+    {
+        s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.FilterControlExchange"));
+        DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
+    }
+    return s_nFormat;
+}
+
+//------------------------------------------------------------------------
+OLocalExchange* OFilterExchangeHelper::createExchange() const
+{
+    return new OFilterItemExchange;
 }
 
 //========================================================================
@@ -530,7 +550,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
     //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
     FmFilterRows& rRows = pController->getFilterRows();
 
-    DBG_ASSERT(nRowPos < rRows.size(), "wrong row pos");
+    DBG_ASSERT(nRowPos < (sal_Int32)rRows.size(), "wrong row pos");
     // Suchen der aktuellen Row
     FmFilterRow& rRow = rRows[nRowPos];
 
@@ -839,7 +859,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
     FmFilterRows& rRows = pController->getFilterRows();
 
     // determine the filter position
-    if (nInsertPos >= rRows.size())
+    if (nInsertPos >= (sal_Int32)rRows.size())
         rRows.push_back(FmFilterRow());
 }
 
@@ -881,7 +901,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
 
         // how many entries do we have
         // it's the last row than we just empty it
-        if (nPos == (rRows.size() - 1))
+        if (nPos == (sal_Int32)(rRows.size() - 1))
         {
             // remove all childs and stay current
             ::std::vector<FmFilterData*>& rChilds = ((FmFilterItems*)pData)->GetChilds();
@@ -907,7 +927,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
                 ::std::vector<FmFilterData*>::iterator j = i;
 
                 // give a new current postion
-                if (nPos < (rRows.size() - 1))
+                if (nPos < (sal_Int32)(rRows.size() - 1))
                     // set it to the next row
                     ++j;
                 else
@@ -1235,6 +1255,7 @@ void FmFilterString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, S
 //========================================================================
 FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
+                  ,m_aControlExchange(this)
 {
     SetHelpId( HID_FILTER_NAVIGATOR );
 
@@ -1427,12 +1448,12 @@ IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
 
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::QueryDrop( DropEvent& rDEvt )
+sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    Point aDropPos = rDEvt.GetPosPixel();
+    Point aDropPos = rEvt.maPosPixel;
 
     // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
-    if (rDEvt.IsLeaveWindow())
+    if (rEvt.mbLeaving)
     {
         if (m_aDropActionTimer.IsActive())
             m_aDropActionTimer.Stop();
@@ -1485,57 +1506,56 @@ sal_Bool FmFilterNavigator::QueryDrop( DropEvent& rDEvt )
 
 
     // Hat das Object das richtige Format?
-    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rDEvt );
+    if (!m_aControlExchange.isDragSource())
+        return DND_ACTION_NONE;
 
-    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-    if (!rTypeList.Get(Exchange::RegisterFormatName(SVX_FM_FILTER_FIELDS)))
-        return sal_False;
+    if (!m_aControlExchange->hasFormat(GetDataFlavorExVector()))
+        return DND_ACTION_NONE;
 
-    SvxFmFilterExchRef xExch = (SvxFmFilterExch*)&xDataObj;
     // do we conain the formitem?
-    if (!FindEntry(xExch->GetFormItem()))
-        return sal_False;
+    if (!FindEntry(m_aControlExchange->getFormItem()))
+        return DND_ACTION_NONE;
 
     SvLBoxEntry* pDropTarget = GetEntry(aDropPos);
     if (!pDropTarget)
-        return sal_False;
+        return DND_ACTION_NONE;
 
     FmFilterData* pData = (FmFilterData*)pDropTarget->GetUserData();
     FmFormItem* pForm = NULL;
     if (pData->ISA(FmFilterItem))
     {
         pForm = PTR_CAST(FmFormItem,pData->GetParent()->GetParent());
-        if (pForm != xExch->GetFormItem())
-            return sal_False;
+        if (pForm != m_aControlExchange->getFormItem())
+            return DND_ACTION_NONE;
     }
     else if (pData->ISA(FmFilterItems))
     {
         pForm = PTR_CAST(FmFormItem,pData->GetParent());
-        if (pForm != xExch->GetFormItem())
-            return sal_False;
+        if (pForm != m_aControlExchange->getFormItem())
+            return DND_ACTION_NONE;
     }
     else
-        return sal_False;
+        return DND_ACTION_NONE;
 
-    return sal_True;
+    return rEvt.mnAction;
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::Drop( const DropEvent& rDEvt )
+sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
     if (m_aDropActionTimer.IsActive())
         m_aDropActionTimer.Stop();
 
     // Format-Ueberpruefung
-    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rDEvt );
-    SvxFmFilterExchRef xExch = (SvxFmFilterExch*)&xDataObj;
+    if (!m_aControlExchange.isDragSource())
+        return DND_ACTION_NONE;
 
     // das Ziel des Drop sowie einige Daten darueber
-    Point aDropPos = rDEvt.GetPosPixel();
+    Point aDropPos = rEvt.maPosPixel;
     SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
     if (!pDropTarget)
-        return sal_False;
+        return DND_ACTION_COPY;
 
     // search the container where to add the items
     FmFilterData*   pData = (FmFilterData*)pDropTarget->GetUserData();
@@ -1546,8 +1566,8 @@ sal_Bool FmFilterNavigator::Drop( const DropEvent& rDEvt )
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
 
-    sal_Bool bCopy = rDEvt.GetAction() == DROP_COPY;
-    ::std::vector<FmFilterItem*> aItemList = xExch->GetDraggedEntries();
+    sal_Bool bCopy = rEvt.mnAction == DND_ACTION_COPY;
+    ::std::vector<FmFilterItem*> aItemList = m_aControlExchange->getDraggedEntries();
 
     for (::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin(); i != aItemList.end(); i++)
     {
@@ -1706,56 +1726,53 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 }
 
 //------------------------------------------------------------------------------
+void FmFilterNavigator::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
+    EndSelection();
+
+    // be sure that the data is only used within a only one form!
+    FmFormItem* pFirstItem = NULL;
+    SvLBoxEntry* pCurEntry = GetCurEntry();
+
+    m_aControlExchange.prepareDrag();
+
+    sal_Bool bHandled = sal_True;
+    sal_Bool bFoundSomething = sal_False;
+    for (SvLBoxEntry* pEntry = FirstSelected();
+         bHandled && pEntry != NULL;
+         pEntry = NextSelected(pEntry))
+    {
+        FmFilterItem* pFilter = PTR_CAST(FmFilterItem, (FmFilterData*)pEntry->GetUserData());
+        if (pFilter)
+        {
+            FmFormItem* pForm = PTR_CAST(FmFormItem,pFilter->GetParent()->GetParent());
+            if (!pForm)
+                bHandled = sal_False;
+            else if (!pFirstItem)
+                pFirstItem = pForm;
+            else if (pFirstItem != pForm)
+                bHandled = sal_False;
+
+            if (bHandled)
+            {
+                m_aControlExchange->addSelectedItem(pFilter);
+                bFoundSomething = sal_True;
+            }
+        }
+    }
+    if (!bHandled || !bFoundSomething)
+        return;
+
+    m_aControlExchange->setFormItem(pFirstItem);
+    m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
+}
+
+//------------------------------------------------------------------------------
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {
     sal_Bool bHandled = sal_False;
     switch (rEvt.GetCommand())
     {
-        case COMMAND_STARTDRAG:
-        {
-            EndSelection();
-            Pointer aMovePtr( POINTER_MOVEDATA ),
-                    aCopyPtr( POINTER_COPYDATA ),
-                    aLinkPtr( POINTER_COPYDATA );
-
-            // be sure that the data is only used within a only one form!
-            ::std::vector<FmFilterItem*> aSelectList;
-            FmFormItem* pFirstItem = NULL;
-            SvLBoxEntry* pCurEntry = GetCurEntry();
-
-            bHandled = sal_True;
-            for (SvLBoxEntry* pEntry = FirstSelected();
-                 bHandled && pEntry != NULL;
-                 pEntry = NextSelected(pEntry))
-            {
-                FmFilterItem* pFilter = PTR_CAST(FmFilterItem, (FmFilterData*)pEntry->GetUserData());
-                if (pFilter)
-                {
-                    FmFormItem* pForm = PTR_CAST(FmFormItem,pFilter->GetParent()->GetParent());
-                    if (!pForm)
-                        bHandled = sal_False;
-                    else if (!pFirstItem)
-                        pFirstItem = pForm;
-                    else if (pFirstItem != pForm)
-                        bHandled = sal_False;
-
-                    if (bHandled)
-                        aSelectList.push_back(pFilter);
-                }
-            }
-            if (!bHandled || aSelectList.empty())
-                break;
-
-            SvxFmFilterExch* pExch = new SvxFmFilterExch(pFirstItem, aSelectList);
-            short nDragResult = pExch->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_MOVEABLE | DRAG_COPYABLE );
-            if (nDragResult == DROP_CANCEL)
-            {
-                SetCursor(pCurEntry, sal_True);
-                MakeVisible(pCurEntry);
-            }
-            bHandled = sal_True;
-            break;
-        }
         case COMMAND_CONTEXTMENU:
         {
             // die Stelle, an der geklickt wurde
@@ -2038,3 +2055,6 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *pParent, sal_uInt16 nI
     ((SfxDockingWindow*)pWindow)->Initialize( pInfo );
 }
 
+//........................................................................
+}   // namespace svxform
+//........................................................................

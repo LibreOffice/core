@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,25 @@
 #endif
 
 #ifndef _SVX_FMTOOLS_HXX
-#include <fmtools.hxx>
-#endif // _SVX_FMTOOLS_HXX
+#include "fmtools.hxx"
+#endif
+#ifndef _SVX_FMEXCH_HXX
+#include "fmexch.hxx"
+#endif
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
+#ifndef _SVX_FMEXCH_HXX
+#include "fmexch.hxx"
+#endif
 
 class FmFormShell;
+
+//........................................................................
+namespace svxform
+{
+//........................................................................
+
 class FmFilterItem;
 class FmFilterItems;
 class FmParentData;
@@ -278,12 +290,56 @@ protected:
 };
 
 //========================================================================
+//========================================================================
+class OFilterItemExchange : public OLocalExchange
+{
+    SvDataTypeList          m_aDataTypeList;
+    vector<FmFilterItem*>   m_aDraggedEntries;
+    FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
+
+public:
+    OFilterItemExchange();
+
+    static sal_uInt32       getFormatId( );
+    inline static sal_Bool  hasFormat( const DataFlavorExVector& _rFormats );
+
+    const vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
+    FmFormItem* getFormItem() const { return m_pFormItem; }
+
+    void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
+    void addSelectedItem( FmFilterItem* _pItem) { m_aDraggedEntries.push_back(_pItem); }
+
+protected:
+    virtual void AddSupportedFormats();
+};
+
+inline sal_Bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats )
+{
+    return implHasFormat( _rFormats, getFormatId() );
+}
+
+//====================================================================
+//= OFilterExchangeHelper
+//====================================================================
+class OFilterExchangeHelper : public OLocalExchangeHelper
+{
+public:
+    OFilterExchangeHelper(Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
+
+    OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_pTransferable); }
+
+protected:
+    virtual OLocalExchange* createExchange() const;
+};
+
+//========================================================================
 class FmFilterNavigator : public SvTreeListBox, public SfxListener
 {
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
 
-    FmFilterModel*      m_pModel;
-    Timer               m_aSelectTimer;
+    FmFilterModel*          m_pModel;
+    Timer                   m_aSelectTimer;
+    OFilterExchangeHelper   m_aControlExchange;
 
     AutoTimer           m_aDropActionTimer;
     unsigned short      m_aTimerCounter;
@@ -305,8 +361,10 @@ protected:
     virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
     virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection );
     virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
-    virtual sal_Bool QueryDrop( DropEvent& rDEvt );
-    virtual sal_Bool Drop( const DropEvent& rDEvt );
+
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     void DeleteSelection();
     void Clear();
@@ -351,26 +409,9 @@ public:
     SFX_DECL_CHILDWINDOW( FmFilterNavigatorWinMgr );
 };
 
-//========================================================================
-class FmFormItem;
-class FmFilterItem;
-class SvxFmFilterExch : public SvDataObject
-{
-    SvDataTypeList          m_aDataTypeList;
-    vector<FmFilterItem*>   m_aDraggedEntries;
-    FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
-
-public:
-    SvxFmFilterExch(FmFormItem*  pFormItem, const vector<FmFilterItem*>& lstWhich );
-
-    virtual const SvDataTypeList& GetTypeList() const { return m_aDataTypeList; }
-    virtual sal_Bool  GetData( SvData* );
-
-    const vector<FmFilterItem*>& GetDraggedEntries() const { return m_aDraggedEntries; }
-    FmFormItem* GetFormItem() const {return m_pFormItem;}
-};
-
-SV_DECL_IMPL_REF( SvxFmFilterExch );
+//........................................................................
+}   // namespace svxform
+//........................................................................
 
 #endif // _SVX_FILTNAV_HXX
 

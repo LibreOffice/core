@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 12:04:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,51 +94,7 @@ class SvLBoxEntry;
 #define SVX_FM_FILTER_FIELDS        String("SvxFilterFieldExchange",        sizeof("SvxFilterFieldExchange"))
 
 //========================================================================
-
-typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<sal_uInt32> > FmControlPaths;
-
-//========================================================================
 class SvTreeListBox;
-class SvxFmExplCtrlExch : public SvDataObject
-{
-    FmFormShell*    m_pShell;
-    FmFormPage*     m_pPage;
-
-    SvDataTypeList  m_aDataTypeList;
-
-    std::vector<SvLBoxEntry*>   m_aDraggedEntries;
-    FmControlPaths          m_aControlPaths;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >    m_seqControls;
-
-public:
-    SvxFmExplCtrlExch( const std::vector<SvLBoxEntry*>& lstWhich, FmFormShell* pShell, FmFormPage* pPage );
-    SvxFmExplCtrlExch( SvLBoxEntry* pEntry );
-
-    virtual const SvDataTypeList& GetTypeList() const { return m_aDataTypeList; }
-    virtual sal_Bool  GetData( SvData* );
-
-    SvLBoxEntry* GetDragEntry() const { return m_aDraggedEntries.front(); }
-    void AddItem(SvLBoxEntry* pNew) { m_aDraggedEntries.push_back( pNew ); }
-
-    FmFormShell*                    GetShell() const            { return m_pShell; }
-    FmFormPage*                     GetPage() const             { return m_pPage; }
-    const ::std::vector<SvLBoxEntry*>&      GetDraggedEntries() const   { return m_aDraggedEntries; }
-    const FmControlPaths            GetControlPaths()           { return m_aControlPaths; }
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >  GetHiddenControls()         { return m_seqControls; }
-
-    void BuildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
-        // baut aus m_aDraggedEntries m_aControlPaths auf
-        // (es wird davon ausgegangen, dass die Eintraege in m_aDraggedEntries sortiert sind in Bezug auf die Nachbar-Beziehung)
-    void BuildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
-        // der umgekehrte Weg : wirft alles aus m_aDraggedEntries weg und baut es mittels m_aControlPaths neu auf
-
-    void AddHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqInterfaces);
-        // fuegt ein SVX_FML_HIDDEN_CONTROLS-Format hinzu und merk sich dafuer die uebergebenen Interfaces
-        // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
-        // Aufrufer sicherstellen)
-};
-
-SV_DECL_IMPL_REF( SvxFmExplCtrlExch );
 
 //........................................................................
 namespace svxform
@@ -146,40 +102,155 @@ namespace svxform
 //........................................................................
 
     //====================================================================
-    //= OFieldNameExchange
+
+    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<sal_uInt32> > FmControlPaths;
+
+    DECLARE_STL_VECTOR( SvLBoxEntry*, ListBoxEntryArray );
+
     //====================================================================
-    class OFieldNameExchange : public TransferableHelper
+    //= OLocalExchange
+    //====================================================================
+    class OLocalExchange : public TransferableHelper
     {
-    protected:
-        ::std::vector< SvLBoxEntry* >   m_aSelectedEntries;
-        SvLBoxEntry*                    m_pFocusEntry;
-        sal_Bool                        m_bDragging;
+    private:
+        sal_Bool            m_bDragging;
 
     public:
-        OFieldNameExchange( SvLBoxEntry* _pFocusEntry );
+        class GrantAccess
+        {
+            friend class OLocalExchangeHelper;
+        };
 
-        void addSelectedEntry( SvLBoxEntry* _pEntry );
-
-        static sal_uInt32   getFormatId( );
-        static sal_Bool     canAceept( const DataFlavorExVector& _rFormats );
+    public:
+        OLocalExchange( );
 
         sal_Bool    isDragging() const { return m_bDragging; }
-        void        startDrag( Window* pWindow, sal_Int8 nDragSourceActions );
-
-        SvLBoxEntry*    focused() const { return m_pFocusEntry; }
-        const ::std::vector< SvLBoxEntry* >&
-                        selected() const { return m_aSelectedEntries; }
+        void        startDrag( Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
 
     protected:
-        virtual void                AddSupportedFormats();
-        virtual sal_Bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void                DragFinished( sal_Int8 nDropAction );
+        virtual void        DragFinished( sal_Int8 nDropAction );
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
+        static  sal_Bool    implHasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
+
+    private:
         void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
         {   // don't allow this base class method to be called from outside
             TransferableHelper::StartDrag(pWindow, nDragSourceActions, nDragPointer, nDragImage);
         }
     };
+
+    //====================================================================
+    //= OLocalExchangeHelper
+    //====================================================================
+    /// a helper for navigator windows (SvTreeListBox'es) which allow DnD within themself
+    class OLocalExchangeHelper
+    {
+    protected:
+        Window*             m_pDragSource;
+        OLocalExchange*     m_pTransferable;
+
+    public:
+        OLocalExchangeHelper(Window* _pDragSource);
+        ~OLocalExchangeHelper();
+
+        void        prepareDrag( );
+        void        startDrag( sal_Int8 nDragSourceActions );
+        sal_Bool    isDragSource() const { return m_pTransferable && m_pTransferable->isDragging(); }
+
+    protected:
+        virtual OLocalExchange* createExchange() const = 0;
+
+    protected:
+        void implReset();
+    };
+
+    //====================================================================
+    //= OControlExchange
+    //====================================================================
+    class OControlExchange : public OLocalExchange
+    {
+    protected:
+        ListBoxEntryArray   m_aSelectedEntries;
+        FmControlPaths      m_aControlPaths;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+                            m_aHiddenControlModels;
+        SvLBoxEntry*        m_pFocusEntry;
+        FmFormShell*        m_pShell;
+        FmFormPage*         m_pPage;
+
+    public:
+        OControlExchange( );
+        OControlExchange( SvLBoxEntry* _pFocusEntry );
+
+        void addSelectedEntry( SvLBoxEntry* _pEntry );
+        void setFocusEntry( SvLBoxEntry* _pFocusEntry );
+
+        void setShellAndPage( FmFormShell* _pShell, FmFormPage* _pPage ) { m_pShell = _pShell; m_pPage = _pPage; }
+
+        void buildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
+            // baut aus m_aSelectedEntries m_aControlPaths auf
+            // (es wird davon ausgegangen, dass die Eintraege in m_aSelectedEntries sortiert sind in Bezug auf die Nachbar-Beziehung)
+
+
+        void buildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
+            // der umgekehrte Weg : wirft alles aus m_aSelectedEntries weg und baut es mittels m_aControlPaths neu auf
+
+        void addHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqInterfaces);
+            // fuegt ein SVX_FML_HIDDEN_CONTROLS-Format hinzu und merk sich dafuer die uebergebenen Interfaces
+            // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
+            // Aufrufer sicherstellen)
+
+        static sal_uInt32       getFieldExchangeFormatId( );
+        static sal_uInt32       getControlPathFormatId( );
+        static sal_uInt32       getHiddenControlModelsFormatId( );
+
+        inline static sal_Bool  hasFieldExchangeFormat( const DataFlavorExVector& _rFormats );
+        inline static sal_Bool  hasControlPathFormat( const DataFlavorExVector& _rFormats );
+        inline static sal_Bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
+
+        SvLBoxEntry*                focused() const { return m_pFocusEntry; }
+        const ListBoxEntryArray&    selected() const { return m_aSelectedEntries; }
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+                                    hiddenControls() const { return m_aHiddenControlModels; }
+
+        FmFormShell*            getShell() const { return m_pShell; }
+        FmFormPage*             getPage() const { return m_pPage; }
+
+    protected:
+        virtual void                AddSupportedFormats();
+    };
+
+    //====================================================================
+    //= OControlExchangeHelper
+    //====================================================================
+    class OControlExchangeHelper : public OLocalExchangeHelper
+    {
+    public:
+        OControlExchangeHelper(Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
+
+        OControlExchange* operator->() const { return static_cast<OControlExchange*>(m_pTransferable); }
+
+    protected:
+        virtual OLocalExchange* createExchange() const;
+    };
+
+    //====================================================================
+    //====================================================================
+    inline sal_Bool OControlExchange::hasFieldExchangeFormat( const DataFlavorExVector& _rFormats )
+    {
+        return implHasFormat( _rFormats, getFieldExchangeFormatId() );
+    }
+
+    inline sal_Bool OControlExchange::hasControlPathFormat( const DataFlavorExVector& _rFormats )
+    {
+        return implHasFormat( _rFormats, getControlPathFormatId() );
+    }
+
+    inline sal_Bool OControlExchange::hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats )
+    {
+        return implHasFormat( _rFormats, getHiddenControlModelsFormatId() );
+    }
 
 //........................................................................
 }   // namespace svxform

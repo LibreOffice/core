@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:54:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,10 @@
 #include "fmview.hxx"
 #endif
 
+#include "fmexch.hxx"
+
 #ifndef _SVX_FMTOOLS_HXX
-#include <fmtools.hxx>
+#include "fmtools.hxx"
 #endif
 
 class SdrObjListIter;
@@ -458,6 +460,8 @@ class FmExplorer : public SvTreeListBox, public SfxListener
     // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
     ImageList           m_ilNavigatorImages;
 
+    ::svxform::OControlExchangeHelper   m_aControlExchange;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     FmExplorerModel*    m_pExplModel;
     SvLBoxEntry*        m_pRootEntry;
@@ -536,6 +540,10 @@ class FmExplorer : public SvTreeListBox, public SfxListener
 protected:
     virtual void Command( const CommandEvent& rEvt );
 
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+
 public:
     FmExplorer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&  _xORB, Window* pParent );
     virtual ~FmExplorer();
@@ -556,8 +564,6 @@ public:
 
     virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
     virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_Bool QueryDrop( DropEvent& rDEvt );
-    virtual sal_Bool Drop( const DropEvent& rDEvt );
     virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
     virtual void MouseButtonUp( const MouseEvent& rMEvt );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 16:14:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,8 +248,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 using namespace ::svxform;
+using namespace ::com::sun::star::uno;
 
 //========================================================================
 
@@ -1681,6 +1685,7 @@ SdrObject* FmExplorerModel::Search(SdrObjListIter& rIter, const ::com::sun::star
 FmExplorer::FmExplorer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
                        Window* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER )
+    ,m_aControlExchange(this)
     ,nEditEvent(0)
     ,m_pEditEntry(NULL)
     ,m_nSelectLock(0)
@@ -1781,70 +1786,63 @@ void FmExplorer::Update( FmFormShell* pFormShell )
 }
 
 //------------------------------------------------------------------------------
+void FmExplorer::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    EndSelection();
+
+    SvLBoxEntry* pCurEntry = GetCurEntry();
+    if (!pCurEntry)
+        return;
+
+    m_aControlExchange.prepareDrag();
+    m_aControlExchange->setFocusEntry( pCurEntry );
+
+    // die Informationen fuer das AcceptDrop und ExecuteDrop
+    CollectSelectionData(SDI_ALL);
+    if (!m_arrCurrentSelection.Count())
+        // nothing to do
+        return;
+
+    for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i)
+        m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[i]);
+
+    m_aControlExchange->setShellAndPage( GetExplModel()->GetFormShell(), GetExplModel()->GetFormPage() );
+    m_aControlExchange->buildPathFormat(this, m_pRootEntry);
+
+    // testen, ob es sich vielleicht ausschliesslich um hidden controls handelt (dann koennte ich pCtrlExch noch ein
+    // zusaetzliches Format geben)
+    sal_Bool bHasNonHidden = sal_False;
+    for (i=0; i<m_arrCurrentSelection.Count(); i++)
+    {
+        FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection[i]->GetUserData());
+        if (IsHiddenControl(pCurrent))
+            continue;
+        bHasNonHidden = sal_True;
+        break;
+    }
+    if (!bHasNonHidden)
+    {
+        // eine entsprechende Sequenz aufbauen
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqIFaces(m_arrCurrentSelection.Count());
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > * pArray = seqIFaces.getArray();
+        for (i=0; i<m_arrCurrentSelection.Count(); i++)
+            pArray[i] = ((FmEntryData*)(m_arrCurrentSelection[i]->GetUserData()))->GetElement();
+
+        // und das neue Format
+        m_aControlExchange->addHiddenControlsFormat(seqIFaces);
+    }
+
+    // jetzt haben wir alle in der aktuelle Situation moeglichen Formate eingesammelt, es kann also losgehen ...
+    m_bShellOrPageChanged = m_bDragDataDirty = sal_False;
+    m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
+}
+
+//------------------------------------------------------------------------------
 void FmExplorer::Command( const CommandEvent& rEvt )
 {
     sal_Bool bHandled = sal_False;
     switch( rEvt.GetCommand() )
     {
-        case COMMAND_STARTDRAG:
-        {
-            EndSelection();
-            Pointer aMovePtr( POINTER_COPYDATA ),
-                    aCopyPtr( POINTER_COPYDATA ),
-                    aLinkPtr( POINTER_LINKDATA );
-
-            SvLBoxEntry* pCurEntry = GetCurEntry();
-
-            // die Informationen fuer das QueryDrop und Drop
-            CollectSelectionData(SDI_ALL);
-            if (!m_arrCurrentSelection.Count())
-                // nothing to do
-                return;
-            vector<SvLBoxEntry*> lstToDrag;
-            int i;
-            for (i=0; i<m_arrCurrentSelection.Count(); i++)
-                lstToDrag.push_back(m_arrCurrentSelection[i]);
-            SvxFmExplCtrlExch* pCtrlExch = new SvxFmExplCtrlExch(lstToDrag, GetExplModel()->GetFormShell(), GetExplModel()->GetFormPage());
-            pCtrlExch->BuildPathFormat(this, m_pRootEntry);
-
-            // testen, ob es sich vielleicht ausschliesslich um hidden controls handelt (dann koennte ich pCtrlExch noch ein
-            // zusaetzliches Format geben)
-            sal_Bool bHasNonHidden = sal_False;
-            for (i=0; i<m_arrCurrentSelection.Count(); i++)
-            {
-                FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection[i]->GetUserData());
-                if (IsHiddenControl(pCurrent))
-                    continue;
-                bHasNonHidden = sal_True;
-                break;
-            }
-            if (!bHasNonHidden)
-            {
-                // eine entsprechende Sequenz aufbauen
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqIFaces(m_arrCurrentSelection.Count());
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > * pArray = seqIFaces.getArray();
-                for (i=0; i<m_arrCurrentSelection.Count(); i++)
-                    pArray[i] = ((FmEntryData*)(m_arrCurrentSelection[i]->GetUserData()))->GetElement();
-
-                // und das neue Format
-                pCtrlExch->AddHiddenControlsFormat(seqIFaces);
-            }
-
-            // jetzt haben wir alle in der aktuelle Situation moeglichen Formate eingesammelt, es kann also losgehen ...
-            m_bShellOrPageChanged = m_bDragDataDirty = sal_False;
-            short nDragResult = pCtrlExch->ExecuteDrag( this, aMovePtr, aCopyPtr, aLinkPtr, DRAG_MOVEABLE | DRAG_COPYABLE );
-            if (nDragResult == DROP_CANCEL)
-            {
-                if (!m_bShellOrPageChanged)   // wenn die Shell (oder Page) umgeschaltet wurde, ist pCurEntry nicht mehr gueltig
-                {
-                    SetCursor(pCurEntry, sal_True);
-                    MakeVisible(pCurEntry);
-                }
-            }
-            bHandled = sal_True;
-            break;
-        }
-
         case COMMAND_CONTEXTMENU:
         {
             // die Stelle, an der geklickt wurde
@@ -2221,12 +2219,12 @@ sal_Bool FmExplorer::IsFormComponentEntry( SvLBoxEntry* pEntry )
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmExplorer::QueryDrop( DropEvent& rDEvt )
+sal_Int8 FmExplorer::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    Point aDropPos = rDEvt.GetPosPixel();
+    Point aDropPos = rEvt.maPosPixel;
 
     // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
-    if (rDEvt.IsLeaveWindow())
+    if (rEvt.mbLeaving)
     {
         if (m_aDropActionTimer.IsActive())
             m_aDropActionTimer.Stop();
@@ -2260,7 +2258,7 @@ sal_Bool FmExplorer::QueryDrop( DropEvent& rDEvt )
         {
             // neu anfangen zu zaehlen
             m_aTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-            // die Pos merken, da ich auch QueryDrops bekomme, wenn sich die Maus gar nicht bewegt hat
+            // die Pos merken, da ich auch AcceptDrops bekomme, wenn sich die Maus gar nicht bewegt hat
             m_aTimerTriggered = aDropPos;
             // und den Timer los
             if (!m_aDropActionTimer.IsActive()) // gibt es den Timer schon ?
@@ -2275,71 +2273,69 @@ sal_Bool FmExplorer::QueryDrop( DropEvent& rDEvt )
 
     //////////////////////////////////////////////////////////////////////
     // Hat das Object das richtige Format?
-    SvDataObjectRef xDataObj( SvDataObject::PasteDragServer( rDEvt ));
+    if (!m_aControlExchange.isDragSource())
+        return DND_ACTION_NONE;
 
-    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-    sal_Bool bHasDefControlFormat = NULL != rTypeList.Get(Exchange::RegisterFormatName(SVX_FM_CONTROL_EXCH));
-    sal_Bool bHasControlPathFormat = NULL != rTypeList.Get(Exchange::RegisterFormatName(SVX_FM_CONTROLS_AS_PATH));
-    sal_Bool bHasHiddenControlsFormat = NULL != rTypeList.Get(Exchange::RegisterFormatName(SVX_FM_HIDDEN_CONTROLS));
+    sal_Bool bHasDefControlFormat = m_aControlExchange->hasFieldExchangeFormat(GetDataFlavorExVector());
+    sal_Bool bHasControlPathFormat = m_aControlExchange->hasControlPathFormat(GetDataFlavorExVector());
+    sal_Bool bHasHiddenControlsFormat = m_aControlExchange->hasHiddenControlModelsFormat(GetDataFlavorExVector());
     if (!bHasDefControlFormat && !bHasControlPathFormat && !bHasHiddenControlsFormat)
-        return sal_False;
+        return DND_ACTION_NONE;
 
-    // die Liste der gedroppten Eintraege aus dem DragServer
-    SvxFmExplCtrlExch* xDragExch = (SvxFmExplCtrlExch*)&xDataObj;
-
-    sal_Bool bForeignShellOrPage = xDragExch->GetShell() != GetExplModel()->GetFormShell()
-        || xDragExch->GetPage() != GetExplModel()->GetFormPage();
-    if (bForeignShellOrPage || (bHasHiddenControlsFormat && (rDEvt.GetAction() == DROP_COPY)))
+    sal_Bool bForeignShellOrPage =
+                m_aControlExchange->getShell() != GetExplModel()->GetFormShell()
+            ||  m_aControlExchange->getPage() != GetExplModel()->GetFormPage();
+    if (bForeignShellOrPage || (bHasHiddenControlsFormat && (DND_ACTION_COPY == rEvt.mnAction)))
     {
-        // ueber Shells/Pages hinweg kann ich nur hidden Controls austauschen
+        // crossing shell/page boundaries, we can exchange hidden controls only
         if (!bHasHiddenControlsFormat)
-            return sal_False;
+            return DND_ACTION_NONE;
 
         SvLBoxEntry* pDropTarget = GetEntry(aDropPos);
         if (!pDropTarget || (pDropTarget == m_pRootEntry) || !IsFormEntry(pDropTarget))
-            return sal_False;
+            return DND_ACTION_NONE;
 
-        rDEvt.SetAction(DROP_COPY);     // hidden controls ueber Shell-Grenzen werden nur kopiert, nie verschoben
-        return sal_True;
+        return DND_ACTION_COPY;
     }
 
-    if (rDEvt.GetAction() != DROP_MOVE) // normale Control innerhalb einer Shell werden nur verschoben
-        return sal_False;
+    if (DND_ACTION_MOVE != rEvt.mnAction) // 'normal' controls within a shell are moved only (never copied)
+        return DND_ACTION_NONE;
 
     if (m_bDragDataDirty)
     {
         if (!bHasControlPathFormat)
             // ich befinde mich zwar in der Shell/Page, aus der die Controls stammen, habe aber kein Format, das den stattgefundenen
             // Shell-Wechsel ueberlebt hat (SVX_FM_CONTROLS_AS_PATH)
-            return sal_False;
+            return DND_ACTION_NONE;
 
         // da die Shell waehrend des Draggens umgeschaltet wude, muss ich die Liste des ExchangeObjektes wieder neu aufbauen
         // (dort stehen SvLBoxEntries drin, und die sind bei der Umschaltung floeten gegangen)
-        xDragExch->BuildListFromPath(this, m_pRootEntry);
+        m_aControlExchange->buildListFromPath(this, m_pRootEntry);
         m_bDragDataDirty = sal_False;
     }
 
     // die Liste der gedroppten Eintraege aus dem DragServer
-    vector<SvLBoxEntry*> lstDropped = xDragExch->GetDraggedEntries();
-    DBG_ASSERT(lstDropped.size() >= 1, "FmExplorer::QueryDrop : keine Eintraege !");
+    ListBoxEntryArray aDropped = m_aControlExchange->selected();
+    DBG_ASSERT(aDropped.size() >= 1, "FmExplorer::AcceptDrop : keine Eintraege !");
 
     // das Ziel des Droppens (plus einige Daten, die ich nicht in jeder Schleife ermitteln will)
     SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
     if (!pDropTarget)
-        return sal_False;
-    sal_Bool bDropTargetIsComponent = IsFormComponentEntry(pDropTarget);
+        return DND_ACTION_NONE;
+
+    sal_Bool bDropTargetIsComponent = IsFormComponentEntry( pDropTarget );
     SvLBoxEntry* pDropTargetParent = GetParent( pDropTarget );
 
-    // so, folgende Bedingungen, unter denen ich das Drop verbiete :
-    // 0) die Root ist in der Liste mit drin
-    // 1) einer der zu droppenden Eintraege soll in sein eigenes Parent gedroppt werden
-    // 2) -               "               - wird auf sich selber gezogen
-    // 3) -               "               - ist eine ::com::sun::star::form::Form und wird auf einen unter ihm stehenden Eintrag gezogen
-    // 4) einer der Eintraege ist ein Control und wird auf die Root gedroppt
-    // 5) ein Control oder Formular wird auf ein Control NICHT auf der selben Hierarchie-Ebene gezogen (auf eines der selben
-    //      heisst Platz vertauschen, ist also erlaubt)
+    // conditions to disallow the drop
+    // 0) the root entry is part of the list (can't DnD the root!)
+    // 1) one of the draged entries is to be dropped onto it's own parent
+    // 2) -               "       - is to be dropped onto itself
+    // 3) -               "       - is a Form and to be dropped onto one of it's descendants
+    // 4) one of the entries is a controls and to be dropped onto the root
+    // 5) a control or form will be dropped onto a control which is _not_ a sibling (dropping onto a sibling
+    //      means moving the control)
 
-    // um 3) etwas fixer testen zu koennen, sammle ich ich die Vorfahren des DropTargets ein
+    // collect the ancestors of the drop targte (speeds up 3)
     SvLBoxEntrySortedArray arrDropAnchestors;
     SvLBoxEntry* pLoop = pDropTarget;
     while (pLoop)
@@ -2348,88 +2344,87 @@ sal_Bool FmExplorer::QueryDrop( DropEvent& rDEvt )
         pLoop = GetParent(pLoop);
     }
 
-    for (size_t i=0; i<lstDropped.size(); i++)
+    for (size_t i=0; i<aDropped.size(); i++)
     {
-        SvLBoxEntry* pCurrent = lstDropped[i];
+        SvLBoxEntry* pCurrent = aDropped[i];
         SvLBoxEntry* pCurrentParent = GetParent(pCurrent);
 
-        // Test auf 0)
+        // test for 0)
         if (pCurrent == m_pRootEntry)
-            return sal_False;
+            return DND_ACTION_NONE;
 
-        // Test auf 1)
+        // test for 1)
         if ( pDropTarget == pCurrentParent )
-            return sal_False;
+            return DND_ACTION_NONE;
 
-        // Test auf 2)
+        // test for 2)
         if (pCurrent == pDropTarget)
-            return sal_False;
+            return DND_ACTION_NONE;
 
-        // Test auf 5)
+        // test for 5)
 //      if ( bDropTargetIsComponent && (pDropTargetParent != pCurrentParent) )
-        if ( bDropTargetIsComponent )   // TODO : die obige Zeile wieder rein, dann muss aber Drop das Vertauschen auch beherrschen
-            return sal_False;
+            if ( bDropTargetIsComponent )   // TODO : die obige Zeile wieder rein, dann muss aber ExecuteDrop das Vertauschen auch beherrschen
+                return DND_ACTION_NONE;
 
-        // Test auf 3)
+        // test for 3)
         if ( IsFormEntry(pCurrent) )
         {
             sal_uInt16 nPosition;
             if ( arrDropAnchestors.Seek_Entry(pCurrent, &nPosition) )
-                return sal_False;
-        } else
-            if ( IsFormComponentEntry(pCurrent) )
-            {
-                // Test auf 4)
-                if (pDropTarget == m_pRootEntry)
-                    return sal_False;
-            }
+                return DND_ACTION_NONE;
+        } else if ( IsFormComponentEntry(pCurrent) )
+        {
+            // test for 4)
+            if (pDropTarget == m_pRootEntry)
+                return DND_ACTION_NONE;
+        }
     }
 
-    return sal_True;
+    return DND_ACTION_MOVE;
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
+sal_Int8 FmExplorer::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
     if (m_aDropActionTimer.IsActive())
         m_aDropActionTimer.Stop();
 
     // Format-Ueberpruefung
-    SvDataObjectRef xDataObj( SvDataObject::PasteDragServer( rDEvt ));
-    SvxFmExplCtrlExchRef xDragExch( (SvxFmExplCtrlExch*)&xDataObj);
+    if (!m_aControlExchange.isDragSource())
+        return DND_ACTION_NONE;
 
-    sal_Bool bHasHiddenControlsFormat = NULL != xDataObj->GetTypeList().Get(Exchange::RegisterFormatName(SVX_FM_HIDDEN_CONTROLS));
+    sal_Bool bHasHiddenControlsFormat = m_aControlExchange->hasHiddenControlModelsFormat(GetDataFlavorExVector());
 #ifdef DBG_UTIL
-    sal_Bool bForeignShellOrPage = xDragExch->GetShell() != GetExplModel()->GetFormShell()
-        || xDragExch->GetPage() != GetExplModel()->GetFormPage();
-    DBG_ASSERT(!bForeignShellOrPage || bHasHiddenControlsFormat, "FmExplorer::Drop : invalid format (QueryDrop shouldn't have let this pass) !");
-    DBG_ASSERT(bForeignShellOrPage || !m_bDragDataDirty, "FmExplorer::Drop : invalid state (shell changed since last exchange resync) !");
-        // das sollte in QueryDrop erledigt worden sein : dort wird in xDragExch die Liste der Controls aufgebaut und m_bDragDataDirty
+    sal_Bool bForeignShellOrPage =
+                m_aControlExchange->getShell() != GetExplModel()->GetFormShell()
+            ||  m_aControlExchange->getPage() != GetExplModel()->GetFormPage();
+    DBG_ASSERT(!bForeignShellOrPage || bHasHiddenControlsFormat, "FmExplorer::ExecuteDrop : invalid format (AcceptDrop shouldn't have let this pass) !");
+    DBG_ASSERT(bForeignShellOrPage || !m_bDragDataDirty, "FmExplorer::ExecuteDrop : invalid state (shell changed since last exchange resync) !");
+        // das sollte in AcceptDrop erledigt worden sein : dort wird in m_aControlExchange die Liste der Controls aufgebaut und m_bDragDataDirty
         // zurueckgesetzt
 #endif
 
-    // das Ziel des Drop sowie einige Daten darueber
-    Point aDropPos = rDEvt.GetPosPixel();
+    // das Ziel des ExecuteDrop sowie einige Daten darueber
+    Point aDropPos = rEvt.maPosPixel;
     SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
     if (!pDropTarget)
-        return sal_False;
+        return DND_ACTION_NONE;
 
-//  sal_uInt32 nDropEntryPos = GetModel()->GetRelPos( pDropTarget );  // brauche ich spaeter mal fuer das Verschieben
     sal_Bool bDropTargetIsForm = IsFormEntry(pDropTarget);
     FmFormData* pTargetData = bDropTargetIsForm ? (FmFormData*)pDropTarget->GetUserData() : NULL;
 
-    if (rDEvt.GetAction() == DROP_COPY)
+    if (DND_ACTION_COPY == rEvt.mnAction)
     {
-        DBG_ASSERT(bHasHiddenControlsFormat, "FmExplorer::Drop : only copying of hidden controls is supported !");
-            // das sollte das QueryDrop abgefangen haben
+        DBG_ASSERT(bHasHiddenControlsFormat, "FmExplorer::ExecuteDrop : only copying of hidden controls is supported !");
+            // das sollte das AcceptDrop abgefangen haben
 
         // da ich gleich die Zielobjekte alle selektieren will (und nur die)
         SelectAll(sal_False);
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqControls = xDragExch->GetHiddenControls();
-        sal_Int32 nCount = seqControls.getLength();
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > * pControls = seqControls.getConstArray();
+        Sequence< Reference< XInterface > > aControls = m_aControlExchange->hiddenControls();
+        sal_Int32 nCount = aControls.getLength();
+        const Reference< XInterface >* pControls = aControls.getConstArray();
 
         FmFormShell* pFormShell = GetExplModel()->GetFormShell();
         FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : NULL;
@@ -2456,7 +2451,7 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
 #if DEBUG || DBG_UTIL
             // nur mal eben sehen, ob das Ding tatsaechlich ein hidden control ist
             sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
-            DBG_ASSERT(nClassId == ::com::sun::star::form::FormComponentType::HIDDENCONTROL, "FmExplorer::Drop : invalid control in drop list !");
+            DBG_ASSERT(nClassId == ::com::sun::star::form::FormComponentType::HIDDENCONTROL, "FmExplorer::ExecuteDrop : invalid control in drop list !");
                 // wenn das SVX_FM_HIDDEN_CONTROLS-Format vorhanden ist, dann sollten wirklich nur hidden controls in der Sequenz
                 // stecken
 #endif // DEBUG || DBG_UTIL
@@ -2481,19 +2476,19 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
 
         if (pFormModel)
             pFormModel->EndUndo();
-        return sal_True;
+        return DND_ACTION_COPY;
     }
 
 
     // die Liste der gedraggten Eintraege
-    vector<SvLBoxEntry*> lstDropped = xDragExch->GetDraggedEntries();
-    DBG_ASSERT(lstDropped.size() >= 1, "FmExplorer::Drop : keine Eintraege !");
+    const ListBoxEntryArray& aDropped = m_aControlExchange->selected();
+    DBG_ASSERT(aDropped.size() >= 1, "FmExplorer::ExecuteDrop : keine Eintraege !");
 
     // die Shell und das Model
     FmFormShell* pFormShell = GetExplModel()->GetFormShell();
     FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : NULL;
     if (!pFormModel)
-        return sal_False;
+        return DND_ACTION_NONE;
 
     // fuer's Undo
     XubString strUndoDescription(SVX_RES(RID_STR_UNDO_CONTAINER_REPLACE));
@@ -2505,12 +2500,12 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
     LockSelectionHandling();
 
     // jetzt durch alle gedroppten Eintraege ...
-    for (size_t i=0; i<lstDropped.size(); ++i)
+    for (size_t i=0; i<aDropped.size(); ++i)
     {
         // ein paar Daten zum aktuellen Element
-        SvLBoxEntry* pCurrent = lstDropped[i];
-        DBG_ASSERT(pCurrent != NULL, "FmExplorer::Drop : ungueltiger Eintrag");
-        DBG_ASSERT(GetParent(pCurrent) != NULL, "FmExplorer::Drop : ungueltiger Eintrag");
+        SvLBoxEntry* pCurrent = aDropped[i];
+        DBG_ASSERT(pCurrent != NULL, "FmExplorer::ExecuteDrop : ungueltiger Eintrag");
+        DBG_ASSERT(GetParent(pCurrent) != NULL, "FmExplorer::ExecuteDrop : ungueltiger Eintrag");
             // die Root darf nicht gedraggt werden
 
         FmEntryData* pCurrentUserData = (FmEntryData*)pCurrent->GetUserData();
@@ -2520,7 +2515,7 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
 
 
         FmFormData* pCurrentParentUserData = (FmFormData*)pCurrentUserData->GetParent();
-        DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "FmExplorer::Drop : ungueltiges Parent");
+        DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "FmExplorer::ExecuteDrop : ungueltiges Parent");
 
         // beim Vater austragen
         if (pCurrentParentUserData)
@@ -2608,7 +2603,7 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
     // logischen Seite nichts zu tun hat), wohl aber meine Selektion, die ich also wieder an der Markierung ausrichten muss
     SynchronizeSelection();
 
-    return sal_True;
+    return rEvt.mnAction;
 }
 
 //------------------------------------------------------------------------

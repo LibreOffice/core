@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 12:04:28 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,180 +92,247 @@
 static sal_uInt32 nFieldFormat = 0;
 static sal_uInt32 nControlFormat = 0;
 
-//========================================================================
-// class SvxFmExplCtrlExch
-//========================================================================
-
-//------------------------------------------------------------------------
-SvxFmExplCtrlExch::SvxFmExplCtrlExch( const vector<SvLBoxEntry*>& lstWhich, FmFormShell* pShell, FmFormPage* pPage )
-    :m_aDraggedEntries(lstWhich)
-    ,m_pShell(pShell)
-    ,m_pPage(pPage)
-{
-    m_aDataTypeList.Insert( SvDataType(Exchange::RegisterFormatName(SVX_FM_CONTROL_EXCH)) );
-}
-
-//------------------------------------------------------------------------
-SvxFmExplCtrlExch::SvxFmExplCtrlExch( SvLBoxEntry* pEntry )
-    :m_pShell(NULL)
-    ,m_pPage(NULL)
-{
-    m_aDataTypeList.Insert( SvDataType(Exchange::RegisterFormatName(SVX_FM_CONTROL_EXCH)) );
-
-    AddItem(pEntry);
-}
-
-//------------------------------------------------------------------------
-sal_Bool SvxFmExplCtrlExch::GetData( SvData* pData )
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------------
-void SvxFmExplCtrlExch::BuildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
-{
-    if (m_aControlPaths.getLength() == 0)
-    {
-        // Unterstuetzung des neuen Formats anzeigen
-        m_aDataTypeList.Insert( SvDataType(Exchange::RegisterFormatName(SVX_FM_CONTROLS_AS_PATH)) );
-    }
-    m_aControlPaths.realloc(0);
-
-    sal_Int32 nEntryCount = m_aDraggedEntries.size();
-    if (nEntryCount == 0)
-        return;
-
-    m_aControlPaths.realloc(nEntryCount);
-    ::com::sun::star::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
-    for (sal_Int32 i=0; i<nEntryCount; ++i)
-    {
-        // erst mal sammeln wir den Pfad in einem Array ein
-        SvULongs arrCurrentPath;
-        SvLBoxEntry* pCurrentEntry = m_aDraggedEntries[i];
-
-        SvLBoxEntry* pLoop = pCurrentEntry;
-        while (pLoop != pRoot)
-        {
-            arrCurrentPath.Insert(pLoop->GetChildListPos(), arrCurrentPath.Count());
-            pLoop = pTreeBox->GetParent(pLoop);
-            DBG_ASSERT((pLoop != NULL) || (pRoot == 0), "SvxFmExplCtrlExch::BuildPathFormat : invalid root or entry !");
-                // pLoop == NULL heisst, dass ich am oberen Ende angelangt bin, dann sollte das Ganze abbrechen, was nur bei pRoot == NULL der Fall sein wird
-        }
-
-        // dann koennen wir ihn in die ::com::sun::star::uno::Sequence uebertragen
-        ::com::sun::star::uno::Sequence<sal_uInt32>& rCurrentPath = pAllPaths[i];
-        sal_Int32 nDepth = arrCurrentPath.Count();
-
-        rCurrentPath.realloc(nDepth);
-        sal_uInt32* pSeq = rCurrentPath.getArray();
-        sal_Int32 j,k;
-        for (j = nDepth - 1, k = 0; k<nDepth; --j, ++k)
-        {
-            pSeq[j] = arrCurrentPath.GetObject(k);
-        }
-    }
-}
-
-//------------------------------------------------------------------------
-void SvxFmExplCtrlExch::BuildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
-{
-    m_aDraggedEntries.clear();
-
-    sal_Int32 nControls = m_aControlPaths.getLength();
-    const ::com::sun::star::uno::Sequence<sal_uInt32>* pPaths = m_aControlPaths.getConstArray();
-    for (sal_Int32 i=0; i<nControls; ++i)
-    {
-        sal_Int32 nThisPatLength = pPaths[i].getLength();
-        const sal_uInt32* pThisPath = pPaths[i].getConstArray();
-        SvLBoxEntry* pSearch = pRoot;
-        for (sal_Int32 j=0; j<nThisPatLength; ++j)
-            pSearch = pTreeBox->GetEntry(pSearch, pThisPath[j]);
-
-        m_aDraggedEntries.push_back(pSearch);
-    }
-}
-
-//------------------------------------------------------------------------
-void SvxFmExplCtrlExch::AddHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqInterfaces)
-{
-    m_aDataTypeList.Insert( SvDataType(Exchange::RegisterFormatName(SVX_FM_HIDDEN_CONTROLS)) );
-    m_seqControls = seqInterfaces;
-}
-
 //........................................................................
 namespace svxform
 {
 //........................................................................
 
+    //====================================================================
+    //= OLocalExchange
+    //====================================================================
     //--------------------------------------------------------------------
-    OFieldNameExchange::OFieldNameExchange( SvLBoxEntry* _pFocusEntry )
-        :m_pFocusEntry(_pFocusEntry)
-        ,m_bDragging(sal_False)
+    OLocalExchange::OLocalExchange( )
+        :m_bDragging(sal_False)
     {
     }
 
     //--------------------------------------------------------------------
-    void OFieldNameExchange::AddSupportedFormats()
-    {
-        AddFormat(getFormatId());
-    }
-
-    //--------------------------------------------------------------------
-    void OFieldNameExchange::addSelectedEntry( SvLBoxEntry* _pEntry )
-    {
-        m_aSelectedEntries.push_back(_pEntry);
-    }
-
-    //--------------------------------------------------------------------
-    void OFieldNameExchange::startDrag( Window* _pWindow, sal_Int8 _nDragSourceActions )
+    void OLocalExchange::startDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, const GrantAccess& )
     {
         m_bDragging = sal_True;
         StartDrag( _pWindow, _nDragSourceActions );
     }
 
     //--------------------------------------------------------------------
-    void OFieldNameExchange::DragFinished( sal_Int8 nDropAction )
+    void OLocalExchange::DragFinished( sal_Int8 nDropAction )
     {
         TransferableHelper::DragFinished( nDropAction );
         m_bDragging = sal_False;
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OFieldNameExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor )
+    sal_Bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor )
     {
-        if (getFormatId() == SotExchange::GetFormat(_rFlavor))
-            return sal_True;    // dummy
-
-        return sal_False;
+        return sal_True;    // dummy
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OFieldNameExchange::canAceept( const DataFlavorExVector& _rFormats )
+    sal_Bool OLocalExchange::implHasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId )
     {
-        sal_uInt32 nRecognizedFormat = getFormatId();
         for (DataFlavorExVector::const_iterator aSearch = _rFormats.begin();
             aSearch != _rFormats.end();
             ++aSearch)
-            if (aSearch->mnSotId == nRecognizedFormat)
+            if (aSearch->mnSotId == _nFormatId)
                 return sal_True;
 
         return sal_False;
     }
 
+    //====================================================================
+    //= OControlExchange
+    //====================================================================
     //--------------------------------------------------------------------
-    sal_uInt32 OFieldNameExchange::getFormatId()
+    OControlExchange::OControlExchange( )
+        :m_pFocusEntry(NULL)
+        ,m_pShell(NULL)
+        ,m_pPage(NULL)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    OControlExchange::OControlExchange( SvLBoxEntry* _pFocusEntry )
+        :m_pFocusEntry(_pFocusEntry)
+        ,m_pShell(NULL)
+        ,m_pPage(NULL)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    void OControlExchange::AddSupportedFormats()
+    {
+        if (m_pFocusEntry && m_aSelectedEntries.size())
+            AddFormat(getFieldExchangeFormatId());
+
+        if (m_aControlPaths.getLength())
+            AddFormat(getControlPathFormatId());
+
+        if (m_aHiddenControlModels.getLength())
+            AddFormat(getHiddenControlModelsFormatId());
+    }
+
+    //--------------------------------------------------------------------
+    void OControlExchange::addSelectedEntry( SvLBoxEntry* _pEntry )
+    {
+        m_aSelectedEntries.push_back(_pEntry);
+    }
+
+    //--------------------------------------------------------------------
+    void OControlExchange::setFocusEntry( SvLBoxEntry* _pFocusEntry )
+    {
+        m_pFocusEntry = _pFocusEntry;
+    }
+
+    //------------------------------------------------------------------------
+    void OControlExchange::addHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqInterfaces)
+    {
+        m_aHiddenControlModels = seqInterfaces;
+    }
+
+    //------------------------------------------------------------------------
+    void OControlExchange::buildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
+    {
+        m_aControlPaths.realloc(0);
+
+        sal_Int32 nEntryCount = m_aSelectedEntries.size();
+        if (nEntryCount == 0)
+            return;
+
+        m_aControlPaths.realloc(nEntryCount);
+        ::com::sun::star::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
+        for (sal_Int32 i=0; i<nEntryCount; ++i)
+        {
+            // erst mal sammeln wir den Pfad in einem Array ein
+            ::std::vector< sal_uInt32 > aCurrentPath;
+            SvLBoxEntry* pCurrentEntry = m_aSelectedEntries[i];
+
+            SvLBoxEntry* pLoop = pCurrentEntry;
+            while (pLoop != pRoot)
+            {
+                aCurrentPath.push_back(pLoop->GetChildListPos());
+                pLoop = pTreeBox->GetParent(pLoop);
+                DBG_ASSERT((pLoop != NULL) || (pRoot == 0), "OControlExchange::buildPathFormat: invalid root or entry !");
+                    // pLoop == NULL heisst, dass ich am oberen Ende angelangt bin, dann sollte das Ganze abbrechen, was nur bei pRoot == NULL der Fall sein wird
+            }
+
+            // dann koennen wir ihn in die ::com::sun::star::uno::Sequence uebertragen
+            ::com::sun::star::uno::Sequence<sal_uInt32>& rCurrentPath = pAllPaths[i];
+            sal_Int32 nDepth = aCurrentPath.size();
+
+            rCurrentPath.realloc(nDepth);
+            sal_uInt32* pSeq = rCurrentPath.getArray();
+            sal_Int32 j,k;
+            for (j = nDepth - 1, k = 0; k<nDepth; --j, ++k)
+                pSeq[j] = aCurrentPath[k];
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void OControlExchange::buildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot)
+    {
+        m_aSelectedEntries.clear();
+
+        sal_Int32 nControls = m_aControlPaths.getLength();
+        const ::com::sun::star::uno::Sequence<sal_uInt32>* pPaths = m_aControlPaths.getConstArray();
+        for (sal_Int32 i=0; i<nControls; ++i)
+        {
+            sal_Int32 nThisPatLength = pPaths[i].getLength();
+            const sal_uInt32* pThisPath = pPaths[i].getConstArray();
+            SvLBoxEntry* pSearch = pRoot;
+            for (sal_Int32 j=0; j<nThisPatLength; ++j)
+                pSearch = pTreeBox->GetEntry(pSearch, pThisPath[j]);
+
+            m_aSelectedEntries.push_back(pSearch);
+        }
+    }
+
+    //--------------------------------------------------------------------
+    sal_uInt32 OControlExchange::getControlPathFormatId()
+    {
+        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
+        if ((sal_uInt32)-1 == s_nFormat)
+        {
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.ControlPathExchange"));
+            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getControlPathFormatId: bad exchange id!");
+        }
+        return s_nFormat;
+    }
+
+    //--------------------------------------------------------------------
+    sal_uInt32 OControlExchange::getHiddenControlModelsFormatId()
+    {
+        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
+        if ((sal_uInt32)-1 == s_nFormat)
+        {
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.HiddenControlModelsExchange"));
+            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getHiddenControlModelsFormatId: bad exchange id!");
+        }
+        return s_nFormat;
+    }
+
+    //--------------------------------------------------------------------
+    sal_uInt32 OControlExchange::getFieldExchangeFormatId()
     {
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
             s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.FieldNameExchange"));
-            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFieldNameExchange::getFormatId: bad exchange id!");
+            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getFieldExchangeFormatId: bad exchange id!");
         }
         return s_nFormat;
+    }
+
+    //====================================================================
+    //= OControlExchangeHelper
+    //====================================================================
+    OLocalExchange* OControlExchangeHelper::createExchange() const
+    {
+        return new OControlExchange;
+    }
+
+    //====================================================================
+    //= OLocalExchangeHelper
+    //====================================================================
+    //--------------------------------------------------------------------
+    OLocalExchangeHelper::OLocalExchangeHelper(Window* _pDragSource)
+        :m_pDragSource(_pDragSource)
+        ,m_pTransferable(NULL)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    OLocalExchangeHelper::~OLocalExchangeHelper()
+    {
+        implReset();
+    }
+
+    //--------------------------------------------------------------------
+    void OLocalExchangeHelper::startDrag( sal_Int8 nDragSourceActions )
+    {
+        DBG_ASSERT(m_pTransferable, "OLocalExchangeHelper::startDrag: not prepared!");
+        m_pTransferable->startDrag( m_pDragSource, nDragSourceActions, OControlExchange::GrantAccess() );
+    }
+
+    //--------------------------------------------------------------------
+    void OLocalExchangeHelper::implReset()
+    {
+        if (m_pTransferable)
+        {
+            m_pTransferable->release();
+            m_pTransferable = NULL;
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void OLocalExchangeHelper::prepareDrag( )
+    {
+        DBG_ASSERT(!m_pTransferable || !m_pTransferable->isDragging(), "OLocalExchangeHelper::prepareDrag: recursive DnD?");
+
+        implReset();
+        m_pTransferable = createExchange();
+        m_pTransferable->acquire();
     }
 
 //........................................................................
 }
 //........................................................................
-
 
