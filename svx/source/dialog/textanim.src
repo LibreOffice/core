@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 11:47:26 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 22:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ english_us ] = "~Continuous" ;
         Text [ italian ] = "Continuo" ;
         Text [ spanish ] = "~Continuo" ;
-        Text [ french ] = "~Continu" ;
+        Text [ french ] = "Continu" ;
         Text [ swedish ] = "~Kontinuerligt" ;
         Text [ danish ] = "Endeløs" ;
         Text [ portuguese ] = "~Contínuo" ;
@@ -812,7 +812,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ english_us ] = "~Automatic" ;
         Text [ italian ] = "Automatico" ;
         Text [ spanish ] = "~Automático" ;
-        Text [ french ] = "~Automatique" ;
+        Text [ french ] = "Automatique" ;
         Text [ swedish ] = "~Automatisk" ;
         Text [ danish ] = "Automatisk" ;
         Text [ portuguese ] = "~Automaticamente" ;
