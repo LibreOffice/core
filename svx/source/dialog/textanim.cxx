@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
+ *  last change: $Author: aw $ $Date: 2001-10-09 15:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         aStr != aNumFldCount.GetSavedValue() )
     {
         long nValue = 0;
-        if( eState == STATE_CHECK )
+        if( eState == STATE_CHECK /*#89844#*/ && aTsbEndless.IsEnabled())
             bModified = TRUE;
         else
         {
