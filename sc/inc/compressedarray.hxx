@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compressedarray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $  $Date: 2004-08-20 09:07:40 $
+ *  last change: $Author: rt $  $Date: 2004-08-25 10:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,15 @@
 #ifndef SC_COMPRESSEDARRAY_HXX
 #define SC_COMPRESSEDARRAY_HXX
 
-#include <cstddef>      // size_t
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
+#endif
+
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
 
 const size_t nScCompressedArrayDelta = 4;
 
