@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:43:17 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 10:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ ModalDialog MD_EDIT_REGION
         Text[ russian ] = "Ξαλΰρςό";
         Text[ polish ] = "Obszar";
         Text[ japanese ] = "”ΝΝ";
-        Text[ language_user1 ] = "θλθ: Ξαλΰρςό - -";
+        Text[ language_user1 ] = "θλ? Ξαλΰρς?- -";
         Text[ chinese_traditional ] = "¤ΐΓώ";
         Text[ arabic ] = "ΗαδΨΗή";
         Text[ greek ] = "Ενότητα";
@@ -714,7 +714,7 @@ QueryBox QB_CONNECT
     Message[ chinese_traditional ] = "¨Ο¥ΞΐΙ®Χ³sµ²·|§R°£°Ο°μ¤Ί·ν«eªΊ¤Ί®e΅C±zΑΩ¬O­n°υ¦ζ³sµ²΅H";
     Message[ arabic ] = "ΣνΔΟν ΗΚΥΗα Ηαγαέ Εαμ ΝΠέ ΗαγΝΚζνΗΚ ΗαΝΗανΙ. εα ΚΡνΟ ΗαΗΚΥΗα Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
     Message[ greek ] = "Μια σύνδεση αρχείου διαγράφει το τρέχον περιεχόμενο του τμήματος. Να πραγματοποιηθεί η σύνδεση παρ΄ όλα αυτά;";
-    Message[ korean ] = "ΖΔΐΟ ΑΆΌΣΐΜ Ηφΐη ±ΈΏªΐΗ ³»Ώλΐ» »θΑ¦ ΗÒ°ΝΐΤ΄Ο΄Ω . ±Χ·΅µµ ΑΆΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "ΖΔΐΟ Ώ¬°αΐΊ Ηφΐη ±ΈΏªΐΗ ³»Ώλΐ» »θΑ¦ΗÒ °ΝΐΤ΄Ο΄Ω . ±Χ·΅µµ Ώ¬°αΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Bir dosya baπlantύsύ, ώu anki bφlόm iηeriπini silecek? Baπlantύ yine de yapύlsύn mύ?";
 };
 InfoBox REG_WRONG_PASSWORD
@@ -928,7 +928,7 @@ TabDialog DLG_INSERT_SECTION
     Text[ greek ] = "Προσθήκη τομέα";
     Text[ polish ] = "Wstaw obszar";
     Text[ japanese ] = "”ΝΝ‚Μ‘}“ό";
-    Text[ korean ] = "±ΈΏª»πΐΤ";
+    Text[ korean ] = "±ΈΏª »πΐΤ";
     Text[ chinese_simplified ] = "²εΘλΗψΣς";
     Text[ chinese_traditional ] = "΄΅¤J°Ο°μ";
     Text[ arabic ] = "ΕΟΡΗΜ δΨΗή";
@@ -1503,7 +1503,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ polish ] = "zbierz na koρcu obszaru";
         Text[ portuguese_brazilian ] = "Collect at end of section";
         Text[ japanese ] = "”ΝΝ––‚Ι‘}“ό(~O)";
-        Text[ korean ] = "±ΈΏª ³΅Ώ΅ ΌφΑύ(~O)";
+        Text[ korean ] = "ΏµΏª ³΅Ώ΅ ΌφΑύ(~O)";
         Text[ chinese_simplified ] = "Ό―ΦΠΤΪΗψΣςΞ²¶Λ(~O)";
         Text[ chinese_traditional ] = "¦b°Ο°μ§ΐΊέ¦¬¶°";
         Text[ arabic ] = "ΚΜγνΪ ΪδΟ δεΗνΙ ΗαδΨΗή";
