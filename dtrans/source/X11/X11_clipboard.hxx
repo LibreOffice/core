@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ namespace x11 {
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
         virtual void clearTransferable();
         virtual void fireContentsChanged();
+        virtual Reference< XInterface > getReference() throw();
     };
 
 // ------------------------------------------------------------------------
