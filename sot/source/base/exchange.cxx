@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-12 12:55:34 $
+ *  last change: $Author: bm $ $Date: 2001-03-15 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,10 +254,15 @@ ULONG SotExchange::RegisterFormatName( const String& rName )
         if( COMPARE_EQUAL == rName.CompareToAscii( aFormatArray_Impl[ i ].pName ) )
             return i;
 
+    // BM: the chart format 105 ("StarChartDocument 5.0") was written
+    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
+    // The registry only contains the entry for the 42 format id.
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( COMPARE_EQUAL == rName.CompareToAscii( aFormatArray_Impl[ i ].pName ) )
-            return i;
+        if( rName.EqualsAscii( aFormatArray_Impl[ i ].pName ) )
+            return ( (i == SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50)
+                     ? SOT_FORMATSTR_ID_STARCHART_50
+                     : i );
 
     // dann in der dynamischen Liste
     List& rL = InitFormats_Impl();
@@ -382,10 +387,15 @@ ULONG SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
         if( rMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
+    // BM: the chart format 105 ("StarChartDocument 5.0") was written
+    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
+    // The registry only contains the entry for the 42 format id.
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
         if( rMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
-            return i;
+            return ( (i == SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50)
+                     ? SOT_FORMATSTR_ID_STARCHART_50
+                     : i );
 
     // dann in der dynamischen Liste
     List& rL = InitFormats_Impl();
@@ -416,10 +426,15 @@ ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
         if( aMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
             return i;
 
+    // BM: the chart format 105 ("StarChartDocument 5.0") was written
+    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
+    // The registry only contains the entry for the 42 format id.
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
         if( aMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
-            return i;
+            return ( (i == SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50)
+                     ? SOT_FORMATSTR_ID_STARCHART_50
+                     : i );
 
     // dann in der dynamischen Liste
     List& rL = InitFormats_Impl();
