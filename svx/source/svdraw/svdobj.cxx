@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:47:51 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,12 +217,12 @@ void SdrObjUserData::operator=(const SdrObjUserData& rData)    // nicht implemen
 {
 }
 
-FASTBOOL SdrObjUserData::operator==(const SdrObjUserData& rData) const // nicht implementiert
+sal_Bool SdrObjUserData::operator==(const SdrObjUserData& rData) const // nicht implementiert
 {
     return FALSE;
 }
 
-FASTBOOL SdrObjUserData::operator!=(const SdrObjUserData& rData) const // nicht implementiert
+sal_Bool SdrObjUserData::operator!=(const SdrObjUserData& rData) const // nicht implementiert
 {
     return FALSE;
 }
@@ -1349,6 +1349,12 @@ SdrObject::SdrObject():
     bNotVisibleAsMaster=FALSE;
     bClosedObj       =FALSE;
 
+    // #i25616#
+    mbLineIsOutsideGeometry = sal_False;
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_False;
+
     //#110094#-1
     //bWriterFlyFrame  =FALSE;
 
@@ -1748,7 +1754,7 @@ void SdrObject::BroadcastObjectChange() const
         return;
 
     sal_Bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
-    sal_Bool bObjectChange(bInserted && pModel);
+    sal_Bool bObjectChange(IsInserted() && pModel);
 
     if(bPlusDataBroadcast || bObjectChange)
     {
@@ -1797,7 +1803,7 @@ void SdrObject::SetChanged()
     // notification now.
     ActionChanged();
 
-    if(bInserted && pModel)
+    if(IsInserted() && pModel)
     {
         pModel->SetChanged();
     }
@@ -4628,9 +4634,9 @@ SvStream& operator<<(SvStream& rOut, const SdrObject& rObj)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrObject::SetInserted(FASTBOOL bIns)
+void SdrObject::SetInserted(sal_Bool bIns)
 {
-    if (bIns!=bInserted) {
+    if (bIns!=IsInserted()) {
         bInserted=bIns;
         Rectangle aBoundRect0(GetLastBoundRect());
         if (bIns) SendUserCall(SDRUSERCALL_INSERTED,aBoundRect0);
@@ -4644,12 +4650,12 @@ void SdrObject::SetInserted(FASTBOOL bIns)
     }
 }
 
-void SdrObject::SetMoveProtect(FASTBOOL bProt)
+void SdrObject::SetMoveProtect(sal_Bool bProt)
 {
     bMovProt = bProt;
     SetChanged();
 
-    if(bInserted && pModel)
+    if(IsInserted() && pModel)
     {
         SdrHint aHint(*this);
         // aHint.SetNeedRepaint(FALSE);
@@ -4657,22 +4663,22 @@ void SdrObject::SetMoveProtect(FASTBOOL bProt)
     }
 }
 
-void SdrObject::SetResizeProtect(FASTBOOL bProt)
+void SdrObject::SetResizeProtect(sal_Bool bProt)
 {
     bSizProt=bProt;
     SetChanged();
-    if (bInserted && pModel!=NULL) {
+    if (IsInserted() && pModel!=NULL) {
         SdrHint aHint(*this);
         // aHint.SetNeedRepaint(FALSE);
         pModel->Broadcast(aHint);
     }
 }
 
-void SdrObject::SetPrintable(FASTBOOL bPrn)
+void SdrObject::SetPrintable(sal_Bool bPrn)
 {
     bNoPrint=!bPrn;
     SetChanged();
-    if (bInserted && pModel!=NULL) {
+    if (IsInserted() && pModel!=NULL) {
         SdrHint aHint(*this);
         // aHint.SetNeedRepaint(FALSE);
         pModel->Broadcast(aHint);
@@ -4790,7 +4796,7 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, S
     }
 }
 
-FASTBOOL SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
+sal_Bool SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
 {
     FASTBOOL bRet = FALSE;
 
@@ -4835,11 +4841,14 @@ FASTBOOL SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
         {
             SdrGrafObj* pGrafObj = (SdrGrafObj*) this;
 
-            if( ( (const SdrGrafTransparenceItem&) rAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
-                ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
-            {
-                bRet = TRUE;
-            }
+            // #i25616#
+            bRet = pGrafObj->IsObjectTransparent();
+
+            //#i25616#if( ( (const SdrGrafTransparenceItem&) rAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
+            //#i25616#    ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
+            //#i25616#{
+            //#i25616#  bRet = TRUE;
+            //#i25616#}
         }
     }
 
