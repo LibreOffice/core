@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:14:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#include <rope>
 #ifndef DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
 #include "QueryDesignFieldUndoAct.hxx"
 #endif
