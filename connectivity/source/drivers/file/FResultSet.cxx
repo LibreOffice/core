@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-17 12:17:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(!x.is())
-        throw ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
         throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
@@ -1113,7 +1113,7 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(!x.is())
-        throw ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
         throw ::com::sun::star::sdbc::SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,::com::sun::star::uno::Any());
@@ -2490,7 +2490,7 @@ void OResultSet::GetAssignValues()
 {
     if (m_pParseTree == NULL)
     {
-        throw ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
         return;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 08:40:55 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,27 +550,30 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
 }
 // -------------------------------------------------------------------------
 
@@ -587,28 +590,33 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeE
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) throw(SQLException, RuntimeException)
@@ -619,23 +627,27 @@ Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) th
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    throw ::dbtools::FunctionSequenceException(*this);
+    ::dbtools::throwFunctionSequenceException(*this);
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 

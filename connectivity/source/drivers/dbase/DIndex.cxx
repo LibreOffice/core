@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:06:15 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ BOOL ODbaseIndex::CreateImpl()
 
     // ist die Spalte schon indiziert ?
     if (!xCol.is())
-        throw ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 //  else if (pColumn && pColumn->IsIndexed())
 //  {
 //      String aText = String(OResId(STR_STAT_INDEX_COLUMN_ALREADY_INDEXED));

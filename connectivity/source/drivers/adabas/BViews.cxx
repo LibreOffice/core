@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descr
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
     if(!aName.getLength())
-        ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 
     createView(descriptor);
     OCollection_TYPE::appendByDescriptor(descriptor);

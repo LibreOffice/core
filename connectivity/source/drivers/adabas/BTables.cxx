@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
     if(!aName.getLength())
-        ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 
     createTable(descriptor);
 
@@ -296,7 +296,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     Any aTypeName;
     sal_Int32 nCount = xColumns->getCount();
     if(!nCount)
-        ::dbtools::FunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(*this);
 
     for(sal_Int32 i=0;i<nCount;++i)
     {
