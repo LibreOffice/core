@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-03 10:10:05 $
+ *  last change: $Author: fs $ $Date: 2002-07-17 12:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,10 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
             String sOld = GetText();
             ReFormat();
             if (GetText() != sOld)
+            {
                 Modify();
+                m_bValueDirty = FALSE;
+            }
         }
     }
 
