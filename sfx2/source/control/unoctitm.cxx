@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:08:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 09:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,7 +908,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     aListener->statusChanged( aEvent );
 }
 
-void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pSlotServ )
 {
     if ( !pDispatch )
         return;
@@ -945,18 +945,13 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         // Retrieve metric from pool to have correct sub ID when calling QueryValue
         USHORT     nSubId( 0 );
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
-        if ( pDispatcher )
-        {
-            // retrieve the core metric
-            // it's enough to check the objectshell, the only shell that does not use the pool of the document
-            // is SfxViewFrame, but it hasn't any metric parameters
-            // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
-            SfxViewFrame* pFrame = pDispatcher->GetFrame();
-            if ( pFrame )
-                eMapUnit = GetCoreMetric( pFrame->GetObjectShell()->GetPool(), nSID );
-            else
-                eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), nSID );
-        }
+
+        // retrieve the core metric
+        // it's enough to check the objectshell, the only shell that does not use the pool of the document
+        // is SfxViewFrame, but it hasn't any metric parameters
+        // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
+        if ( pSlotServ && pDispatcher )
+            eMapUnit = GetCoreMetric( pDispatcher->GetShell( pSlotServ->GetShellLevel() )->GetPool(), nSID );
 
         if ( eMapUnit == SFX_MAPUNIT_TWIP )
             nSubId |= CONVERT_TWIPS;
@@ -992,4 +987,9 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             }
         }
     }
+}
+
+void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+{
+    StateChanged( nSID, eState, pState, 0 );
 }
