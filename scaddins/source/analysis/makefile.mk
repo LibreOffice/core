@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.11 2003-06-04 10:32:23 vg Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.12 2003-08-25 15:23:39 kz Exp $
 #
-#     $Date: 2003-06-04 10:32:23 $
-#     $Author: vg $
-#     $Revision: 1.11 $
+#     $Date: 2003-08-25 15:23:39 $
+#     $Author: kz $
+#     $Revision: 1.12 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -119,7 +119,8 @@ SLOFILES+=$(SLO)$/staticmb.obj
 ALLIDLFILES=\
     analysisadd.idl
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         analysis.src		\
         analysis_funcnames.src	\
         analysis_deffuncnames.src
