@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:32:17 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,7 @@ private:
 
 struct IndexKey {
     sal_Unicode key;
-    sal_Unicode* desc;
-    sal_Int16 desc_leng;
+    rtl::OUString desc;
 };
 
 class IndexTable
