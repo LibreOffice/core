@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 18:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,28 +73,57 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef COM_SUN_STAR_PACKAGES_ZIP_ZIPENTRY_HPP
+#include <com/sun/star/packages/zip/ZipEntry.hpp>
+#endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
+#ifndef _INFLATER_HXX
+#include <Inflater.hxx>
+#endif
 
-namespace osl { class File; }
-
+class EncryptionData;
+typedef void* rtlCipher;
 class XFileStream : public com::sun::star::io::XInputStream,
                     public com::sun::star::io::XSeekable,
                     public cppu::OWeakObject
 {
 protected:
-    osl::File *pFile;
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxZipStream;
+    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxTempIn;
+    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxTempSeek;
+    com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > mxTempOut;
+    com::sun::star::uno::Sequence < sal_Int8 > maBuffer, maCompBuffer;
+    com::sun::star::packages::zip::ZipEntry maEntry;
+    vos::ORef < EncryptionData > mxData;
+    rtlCipher maCipher;
+    Inflater maInflater;
+    sal_Bool mbRawStream, mbFinished;
+    sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize;
+    void fill( sal_Int64 nUntil );
+
 public:
-    XFileStream( osl::File * pNewFile );
-    virtual ~XFileStream(void);
+    XFileStream( com::sun::star::packages::zip::ZipEntry & rEntry,
+                 com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
+                 com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
+                 const vos::ORef < EncryptionData > &rData,
+                 sal_Bool bRawStream );
+    virtual ~XFileStream();
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
         throw(com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(void)
+    virtual void SAL_CALL acquire()
         throw();
-    virtual void SAL_CALL release(void)
+    virtual void SAL_CALL release()
         throw();
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 18:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,67 @@
 #ifndef _XFILE_STREAM_HXX
 #include <XFileStream.hxx>
 #endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
+#ifndef _ENCRYPTION_DATA_HXX_
+#include <EncryptionData.hxx>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
+#endif
+#ifndef _PACKAGE_CONSTANTS_HXX_
+#include <PackageConstants.hxx>
+#endif
+#ifndef _RTL_CIPHER_H_
+#include <rtl/cipher.h>
+#endif
+#ifndef _ZIP_FILE_HXX
+#include <ZipFile.hxx>
 #endif
 #include <memory.h> // for memcpy
 
-using namespace osl;
+using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using com::sun::star::lang::IllegalArgumentException;
+using ::rtl::OUString;
 
-XFileStream::XFileStream( File * pNewFile )
-: pFile (pNewFile )
+XFileStream::XFileStream( com::sun::star::packages::zip::ZipEntry & rEntry,
+                           com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
+                           com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
+                           const vos::ORef < EncryptionData > &rData,
+                           sal_Bool bNewRawStream )
+: maEntry ( rEntry )
+, mxData ( rData )
+, mbRawStream ( bNewRawStream )
+, mbFinished ( sal_False )
+, mxTempIn ( xNewTempStream )
+, mxTempSeek ( xNewTempStream, UNO_QUERY )
+, mxTempOut ( xNewTempStream, UNO_QUERY )
+, mxZipStream ( xNewZipStream )
+, mxZipSeek ( xNewZipStream, UNO_QUERY )
+, maInflater ( sal_True )
+, maCipher ( NULL )
 {
+    mnZipCurrent = maEntry.nOffset;
+    if (mbRawStream)
+    {
+        mnZipSize = maEntry.nMethod == DEFLATED ? maEntry.nCompressedSize : maEntry.nSize;
+        mnZipEnd = maEntry.nOffset + mnZipSize;
+    }
+    else
+    {
+        mnZipSize = maEntry.nSize;
+        mnZipEnd = maEntry.nMethod == DEFLATED ? maEntry.nOffset + maEntry.nCompressedSize : maEntry.nOffset + maEntry.nSize;
+    }
+    if ( rData->aSalt.getLength() )
+        ZipFile::StaticGetCipher ( rData, maCipher );
 }
-XFileStream::~XFileStream(void)
+
+XFileStream::~XFileStream()
 {
-    delete pFile;
+    if ( maCipher )
+        rtl_cipher_destroy ( maCipher );
 }
+
 Any SAL_CALL  XFileStream::queryInterface( const Type& rType )
         throw(RuntimeException)
 {
@@ -90,105 +134,136 @@ Any SAL_CALL  XFileStream::queryInterface( const Type& rType )
                                         static_cast< XSeekable*     > ( this ) );
 
 }
+
 void SAL_CALL  XFileStream::acquire(void)
     throw()
 {
     OWeakObject::acquire();
 }
+
 void SAL_CALL  XFileStream::release(void)
     throw()
 {
     OWeakObject::release();
 }
-sal_Int32 SAL_CALL XFileStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+
+void XFileStream::fill( sal_Int64 nUntil)
 {
-    if (nBytesToRead < 0)
-        throw BufferSizeExceededException(::rtl::OUString(),*this);
+    sal_Int32 nRead;
+    sal_Int64 nPosition = mxTempSeek->getPosition();
+    mxTempSeek->seek ( mxTempSeek->getLength() );
+    maBuffer.realloc ( n_ConstBufferSize );
 
-    sal_uInt64 nBytesRead = 0;
-    aData.realloc ( nBytesToRead );
-    FileBase::RC nError = pFile->read ( aData.getArray(), nBytesToRead, nBytesRead );
+    while ( mxTempSeek->getLength() < nUntil )
+    {
+        if ( !mbRawStream )
+        {
+            while ( 0 == ( nRead = maInflater.doInflate( maBuffer ) ) )
+            {
+                if ( maInflater.finished() || maInflater.needsDictionary() )
+                {
+                    // some error handling ?
+                    return;
+                }
 
-    if ( nError != FileBase::E_None )
-        throw IOException ();
+                sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
+                if ( nDiff >= 0 )
+                {
+                    mxZipSeek->seek ( mnZipCurrent );
+                    nRead = mxZipStream->readBytes ( maCompBuffer, static_cast < sal_Int32 > ( nDiff < n_ConstBufferSize ? nDiff : n_ConstBufferSize ) );
+                    mnZipCurrent += nRead;
+                    // maCompBuffer now has the uncompressed data, check if we need to decrypt
+                    // before passing to the Inflater
+                    if ( maCipher )
+                    {
+                        Sequence < sal_Int8 > aCryptBuffer ( nRead );
+                        rtlCipherError aResult = rtl_cipher_decode ( maCipher,
+                                      maCompBuffer.getConstArray(),
+                                      nRead,
+                                      reinterpret_cast < sal_uInt8 * > (aCryptBuffer.getArray()),
+                                      nRead);
+                        OSL_ASSERT (aResult == rtl_Cipher_E_None);
+                        maCompBuffer = aCryptBuffer; // Now it holds the decrypted data
 
-    return static_cast < sal_Int32 > (nBytesRead);
+                    }
+                    maInflater.setInput ( maCompBuffer );
+                }
+                else
+                {
+                    // some error handling ?
+                    return;
+                }
+            }
+        }
+        else
+        {
+            sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
+            mxZipSeek->seek ( mnZipCurrent );
+            nRead = mxZipStream->readBytes ( maBuffer, static_cast < sal_Int32 > ( nDiff < n_ConstBufferSize ? nDiff : n_ConstBufferSize ) );
+            mnZipCurrent += nRead;
+        }
+        Sequence < sal_Int8 > aTmpBuffer ( maBuffer.getConstArray(), nRead );
+        mxTempOut->writeBytes ( aTmpBuffer );
+    }
+    mxTempSeek->seek ( nPosition );
+}
+
+sal_Int32 SAL_CALL XFileStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+        throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+{
+    sal_Int64 nPosition = mxTempSeek->getPosition();
+    if ( nPosition + nBytesToRead > mnZipSize )
+        nBytesToRead = static_cast < sal_Int32 > ( mnZipSize - nPosition );
+
+    sal_Int64 nUntil = nBytesToRead + nPosition + n_ConstBufferSize;
+    if (nUntil > mnZipSize )
+        nUntil = mnZipSize;
+    if ( nUntil > mxTempSeek->getLength() )
+        fill ( nUntil );
+    sal_Int32 nRead = mxTempIn->readBytes ( aData, nBytesToRead );
+    return nRead;
 }
 
 sal_Int32 SAL_CALL XFileStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    return readBytes(aData, nMaxBytesToRead);
+    return readBytes ( aData, nMaxBytesToRead );
 }
 void SAL_CALL XFileStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    if (nBytesToSkip < 0)
-        throw BufferSizeExceededException(::rtl::OUString(),*this);
-
-    FileBase::RC nError = pFile->setPos ( osl_Pos_Current, nBytesToSkip );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
+    seek ( mxTempSeek->getPosition() + nBytesToSkip );
 }
 
 sal_Int32 SAL_CALL XFileStream::available(  )
-        throw(NotConnectedException, IOException, RuntimeException)
+        throw( NotConnectedException, IOException, RuntimeException)
 {
-    sal_uInt64 nPos, nEndPos;
-    sal_Int32 nResult = 0;
-    FileBase::RC nError = pFile->getPos ( nPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    nError = pFile->setPos ( osl_Pos_End, 0 );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    nError = pFile->getPos ( nEndPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    nResult = static_cast < sal_Int32 > ( nEndPos - nPos );
-    nError = pFile->setPos ( osl_Pos_Absolut, nPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    return nResult;
+    return static_cast < sal_Int32 > ( mnZipSize - mxTempSeek->getPosition() );
 }
 
 void SAL_CALL XFileStream::closeInput(  )
-        throw(NotConnectedException, IOException, RuntimeException)
+        throw( NotConnectedException, IOException, RuntimeException)
 {
-    pFile->close();
 }
 void SAL_CALL XFileStream::seek( sal_Int64 location )
-        throw(::com::sun::star::lang::IllegalArgumentException, IOException, RuntimeException)
+        throw( IllegalArgumentException, IOException, RuntimeException)
 {
-    FileBase::RC nError = pFile->setPos ( osl_Pos_Absolut, location );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
+    if ( location > mnZipSize || location < 0 )
+        throw IllegalArgumentException();
+    if ( location > mxTempSeek->getLength() )
+    {
+        sal_Int64 nUntil = location + n_ConstBufferSize > mnZipSize ? mnZipSize : location + n_ConstBufferSize;
+        fill ( nUntil );
+    }
+    mxTempSeek->seek ( location );
 }
 sal_Int64 SAL_CALL XFileStream::getPosition(  )
         throw(IOException, RuntimeException)
 {
-    sal_uInt64 nPos;
-    FileBase::RC nError = pFile->getPos ( nPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    return nPos;
+    return mxTempSeek->getPosition();
 }
 sal_Int64 SAL_CALL XFileStream::getLength(  )
         throw(IOException, RuntimeException)
 {
-    sal_uInt64 nPos, nEndPos;
-    FileBase::RC nError = pFile->getPos ( nPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    nError = pFile->setPos ( osl_Pos_End, 0 );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    nError = pFile->getPos ( nEndPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    nError = pFile->setPos ( osl_Pos_Absolut, nPos );
-    if ( nError != FileBase::E_None )
-        throw IOException ();
-    return nEndPos;
+    return mnZipSize;
 }
