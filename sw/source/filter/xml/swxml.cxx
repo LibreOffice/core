@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 08:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                                                      sal_False );
         xEmbeddedGraphicExport = pGraphicHelper;
 
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_READ | STREAM_NOCREATE );
         xDocStream->SetBufferSize( 16*1024 );
@@ -282,6 +282,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/02 10:57:15  mib
+      #80795#: use packages
+
       Revision 1.4  2000/11/20 09:18:37  jp
       must change: processfactory moved
 

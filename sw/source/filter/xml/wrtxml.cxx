@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-06 08:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     SvStorage *pStorage = bPlain ? 0 : rMed.GetOutputStorage( sal_True );
     if( pStorage )
     {
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
+        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
         xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
 //      xDocStream->SetBufferSize( 16*1024 );
@@ -226,11 +226,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.7 2000-12-02 10:57:15 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.8 2000-12-06 08:39:34 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2000/12/02 10:57:15  mib
+      #80795#: use packages
+
       Revision 1.6  2000/11/27 13:44:40  mib
       #80795#: Use packages within XML filter
 
