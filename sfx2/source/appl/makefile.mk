@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cd $ $Date: 2000-10-16 07:39:09 $
+#   last change: $Author: cd $ $Date: 2000-10-23 08:06:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,8 @@ SLOFILES =  \
         $(SLO)$/oinstanceprovider.obj \
         $(SLO)$/opipeconnection.obj \
         $(SLO)$/opluginframefactory.obj \
-        $(SLO)$/pluginacceptthread.obj
+        $(SLO)$/pluginacceptthread.obj	\
+        $(SLO)$/officeacceptthread.obj
 
 EXCEPTIONSFILES=\
         $(SLO)$/appmain.obj		\
