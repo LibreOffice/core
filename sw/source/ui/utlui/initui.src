@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:26:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Stránka";
         TEXT[ hebrew ] = "‮דף‬";
         TEXT[ hindi ] = "पृष्ठ";
+        TEXT[ slovak ] = "Stránka";
     };
     String STR_POSTIT_LINE
     {
@@ -129,6 +130,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Řádek";
         Text[ hebrew ] = "‮קו‬";
         Text[ hindi ] = "रेखा";
+        Text[ slovak ] = "Úsečka";
     };
     String STR_POSTIT_AUTHOR
     {
@@ -160,6 +162,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Autor";
         TEXT[ hebrew ] = "‮מחבר‬";
         TEXT[ hindi ] = "लेखक";
+        TEXT[ slovak ] = "Autor";
     };
     String STR_CALC_SYNTAX
     {
@@ -191,6 +194,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Syntaktická chyba **";
         TEXT[ hebrew ] = "** Syntax Fehler **";
         TEXT[ hindi ] = "** सिन्टाक्स गलती **";
+        TEXT[ slovak ] = "** Syntaktická chyba **";
     };
     String STR_CALC_ZERODIV
     {
@@ -222,6 +226,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Dělení nulou **";
         TEXT[ hebrew ] = "** Division durch Null **";
         TEXT[ hindi ] = "** शून्य से विभाजन **";
+        TEXT[ slovak ] = "** Delenie nulou **";
     };
     String STR_CALC_BRACK
     {
@@ -253,6 +258,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Chybné použití závorek **";
         TEXT[ hebrew ] = "** Fehlerhafte Klammerung **";
         TEXT[ hindi ] = "** कोष्ठकों का गलत उपयोग **";
+        TEXT[ slovak ] = "** Chybné použitie zátvoriek **";
     };
     String STR_CALC_POW
     {
@@ -285,6 +291,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Přetečení funkce umocnění **";
         TEXT[ hebrew ] = "** Überlauf in Quadratfunktion **";
         TEXT[ hindi ] = "** वर्ग फंक्शन में अधिकता  **";
+        TEXT[ slovak ] = "** Pretečenie funkcie umocnenia **";
     };
     String STR_CALC_VARNFND
     {
@@ -305,7 +312,7 @@ Resource RID_SW_SHELLRES
         TEXT[ russian ] = "** ���������� �� ������� **";
         TEXT[ polish ] = "** Nie znaleziono zmiennej **";
         TEXT[ japanese ] = "**変数が見つかりません**";
-        TEXT[ chinese_traditional ] = "** 沒有找到變量 **";
+        TEXT[ chinese_traditional ] = "** 沒有找到變數 **";
         TEXT[ arabic ] = "** ���� ������ ��� �������� **";
         TEXT[ greek ] = "** ��� ������� � ��������� **";
         TEXT[ korean ] = "** 변수를 찾지 못했습니다 **";
@@ -316,6 +323,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Proměnná nenalezena **";
         TEXT[ hebrew ] = "** Variable wurde nicht gefunden **";
         TEXT[ hindi ] = "** वेरिऐबल नहीं मिला **";
+        TEXT[ slovak ] = "** Premenná nenájdená **";
     };
     String STR_CALC_OVERFLOW
     {
@@ -348,6 +356,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Přetečení **";
         TEXT[ hebrew ] = "** Überlauf **";
         TEXT[ hindi ] = "** अधिकता **";
+        TEXT[ slovak ] = "** Pretečenie **";
     };
     String STR_CALC_WRONGTIME
     {
@@ -379,6 +388,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Chybný formát času **";
         TEXT[ hebrew ] = "** Falsches Zeitformat **";
         TEXT[ hindi ] = "** गलत समय रचना **";
+        TEXT[ slovak ] = "** Chybný formát času **";
     };
     String STR_CALC_DEFAULT
     {
@@ -410,6 +420,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Chyba **";
         TEXT[ hebrew ] = "** Fehler **";
         TEXT[ hindi ] = "** गलती **";
+        TEXT[ slovak ] = "** Chyba **";
     };
     String STR_CALC_ERROR
     {
@@ -441,6 +452,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "** Výraz je chybný **";
         TEXT[ hebrew ] = "** Fehlerhafter Ausdruck **";
         TEXT[ hindi ] = "** दोषयुक्त वर्णन **";
+        TEXT[ slovak ] = "** Výraz je chybný **";
     };
     String STR_GETREFFLD_UP
     {
@@ -471,6 +483,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "nahoře";
         Text[ hebrew ] = "oben";
         Text[ hindi ] = "ऊपर";
+        Text[ slovak ] = "hore";
     };
     String STR_GETREFFLD_DOWN
     {
@@ -501,6 +514,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "dole";
         Text[ hebrew ] = "unten";
         Text[ hindi ] = "नीचे";
+        Text[ slovak ] = "pod";
     };
     String STR_ALLPAGE_HEADFOOT
     {
@@ -531,6 +545,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Vše";
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "सब";
+        Text[ slovak ] = "Všetko";
     };
     String STR_TEMPLATE_NONE
     {
@@ -561,6 +576,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Nic";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "कोई नहीं";
+        Text[ slovak ] = "Žiadne";
     };
     String STR_FIELD_FIXED
     {
@@ -592,6 +608,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "(neměnný)";
         TEXT[ hebrew ] = "(fix)";
         TEXT[ hindi ] = "(स्थिर)";
+        TEXT[ slovak ] = "(nemenný)";
     };
     String STR_TOI
     {
@@ -623,6 +640,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Abecední rejstřík";
         TEXT[ hebrew ] = "Stichwortverzeichnis";
         TEXT[ hindi ] = "वर्णमाला अनुक्रमणिका";
+        TEXT[ slovak ] = "Abecedný Index";
     };
 
     String STR_TOU
@@ -655,6 +673,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Uživatelem definované";
         TEXT[ hebrew ] = "Benutzerdefiniert";
         TEXT[ hindi ] = "उपभोक्ता से परिभाषित";
+        TEXT[ slovak ] = "Definované užívateľom";
     };
 
     String STR_TOC
@@ -687,6 +706,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Obsah";
         TEXT[ hebrew ] = "Inhaltsverzeichnis";
         TEXT[ hindi ] = "विषयसूची सारणी";
+        TEXT[ slovak ] = "Obsah";
     };
 
     String STR_TOX_AUTH
@@ -718,6 +738,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Seznam použité literatury";
         TEXT[ hebrew ] = "Literaturverzeichnis";
         TEXT[ hindi ] = "ग्रन्थ-सूची";
+        TEXT[ slovak ] = "Zoznam použitej literatúry";
     };
     String STR_TOX_TBL
     {
@@ -748,6 +769,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Seznam tabulek";
         TEXT[ hebrew ] = "Tabellenverzeichnis";
         TEXT[ hindi ] = "सारणियों का अनुक्रमणिका";
+        TEXT[ slovak ] = "Zoznam tabuliek";
     };
     String STR_TOX_OBJ
     {
@@ -778,6 +800,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Tabulky objektů";
         TEXT[ hebrew ] = "Objektverzeichnis";
         TEXT[ hindi ] = "वस्तुओं का सारणी";
+        TEXT[ slovak ] = "Tabuľka objektov";
     };
     String STR_TOX_ILL
     {
@@ -808,6 +831,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Rejstřík ilustrací";
         TEXT[ hebrew ] = "Abbildungsverzeichnis";
         TEXT[ hindi ] = "दृष्टान्त अनुक्रमणिका";
+        TEXT[ slovak ] = "Zoznam ilustrácií";
     };
 
 
@@ -843,6 +867,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Název";
         TEXT[ hebrew ] = "‮כותרת‬";
         TEXT[ hindi ] = "शीर्षक";
+        TEXT[ slovak ] = "Titul";
     };
     String FLD_DOCINFO_THEMA
     {
@@ -874,6 +899,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Předmět";
         TEXT[ hebrew ] = "‮נושא‬";
         TEXT[ hindi ] = "विषय";
+        TEXT[ slovak ] = "Predmet";
     };
     String FLD_DOCINFO_KEYS
     {
@@ -906,6 +932,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Klíčová slova";
         TEXT[ hebrew ] = "‮מילות מפתח‬";
         TEXT[ hindi ] = "प्रधान शब्द";
+        TEXT[ slovak ] = "Kľúčové slová";
     };
     String FLD_DOCINFO_COMMENT
     {
@@ -937,6 +964,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Popis";
         TEXT[ hebrew ] = "‮תאור‬";
         TEXT[ hindi ] = "विवरण";
+        TEXT[ slovak ] = "Komentár";
     };
     String FLD_DOCINFO_INFO1
     {
@@ -968,6 +996,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Informace 0";
         TEXT[ hebrew ] = "Info 0";
         TEXT[ hindi ] = "जानकारी 0";
+        TEXT[ slovak ] = "Informácia 0";
     };
     String FLD_DOCINFO_INFO2
     {
@@ -999,6 +1028,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Informace 1";
         TEXT[ hebrew ] = "Info 1";
         TEXT[ hindi ] = "जानकारी 1";
+        TEXT[ slovak ] = "Informácia 1";
     };
     String FLD_DOCINFO_INFO3
     {
@@ -1030,6 +1060,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Informace 2";
         TEXT[ hebrew ] = "Info 2";
         TEXT[ hindi ] = "जानकारी 2";
+        TEXT[ slovak ] = "Informácia 2";
     };
     String FLD_DOCINFO_INFO4
     {
@@ -1061,6 +1092,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Informace 3";
         TEXT[ hebrew ] = "Info 3";
         TEXT[ hindi ] = "जानकारी 3";
+        TEXT[ slovak ] = "Informácia 3";
     };
     String FLD_DOCINFO_CREATE
     {
@@ -1092,6 +1124,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Vytvořeno";
         TEXT[ hebrew ] = "‮נוצר‬";
         TEXT[ hindi ] = "उत्पन्न किया";
+        TEXT[ slovak ] = "Vytvorené";
     };
     String FLD_DOCINFO_CHANGE
     {
@@ -1124,6 +1157,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Upraveno";
         TEXT[ hebrew ] = "‮עודכן‬";
         TEXT[ hindi ] = "सुधार किया";
+        TEXT[ slovak ] = "Zmenené";
     };
     String FLD_DOCINFO_PRINT
     {
@@ -1155,6 +1189,7 @@ Resource RID_SW_SHELLRES
         TEXT[ czech ] = "Naposledy tisknuto";
         TEXT[ hebrew ] = "Letzter Druck";
         TEXT[ hindi ] = "अंतिम बार छपाई किया";
+        TEXT[ slovak ] = "Naposledy tlačené";
     };
     String FLD_DOCINFO_DOCNO
     {
@@ -1185,6 +1220,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Číslo dokumentu";
         Text[ hebrew ] = "Dokumentnummer";
         Text[ hindi ] = "लेखपत्र संख्या";
+        Text[ slovak ] = "Číslo dokumentu";
     };
     String FLD_DOCINFO_EDIT
     {
@@ -1215,6 +1251,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Datum a čas úpravy";
         Text[ hebrew ] = "Bearbeitungszeit";
         Text[ hindi ] = "संपादन समय ";
+        Text[ slovak ] = "Dátum a čas úpravy";
     };
     BITMAP BMP_FRAME_ANCHOR { FILE = "anchor.bmp" ; };
     BITMAP BMP_FRAME_DRAG_ANCHOR { FILE = "danchor.bmp" ; };
@@ -1248,6 +1285,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Převést $(ARG1)";
         Text[ hebrew ] = "Konvert $(ARG1)";
         Text[ hindi ] = "बदलो $(ARG1)";
+        Text[ slovak ] = "Konverzia $(ARG1)";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
@@ -1278,6 +1316,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Napřed převést $(ARG1)";
         Text[ hebrew ] = "Erste Konvert $(ARG1)";
         Text[ hindi ] = "पहिले बदलो $(ARG1)";
+        Text[ slovak ] = "Prvá konverzia $(ARG1)";
     };
     String STR_PAGEDESC_FOLLOWNAME
     {
@@ -1308,6 +1347,7 @@ Resource RID_SW_SHELLRES
         Text[ czech ] = "Poté převést $(ARG1)";
         Text[ hebrew ] = "Konvert Folge $(ARG1)";
         Text[ hindi ] = "अगला बदलो $(ARG1)";
+        Text[ slovak ] = "Ďalšia konverzia $(ARG1)";
     };
 };
 
@@ -1339,6 +1379,7 @@ String STR_AUTH_TYPE_ARTICLE
     Text[ czech ] = "Článek";
     Text[ hebrew ] = "Artikel";
     Text[ hindi ] = "अन्तर्नियम";
+    Text[ slovak ] = "Článok";
 };
 String STR_AUTH_TYPE_BOOK
 {
@@ -1369,6 +1410,7 @@ String STR_AUTH_TYPE_BOOK
     Text[ czech ] = "Kniha";
     Text[ hebrew ] = "Buch";
     Text[ hindi ] = "पुस्तक ";
+    Text[ slovak ] = "Kniha";
 };
 String STR_AUTH_TYPE_BOOKLET
 {
@@ -1399,6 +1441,7 @@ String STR_AUTH_TYPE_BOOKLET
     Text[ czech ] = "Příručky";
     Text[ hebrew ] = "Broschüre";
     Text[ hindi ] = "छोटी पुस्तक";
+    Text[ slovak ] = "Príručky";
 };
 String STR_AUTH_TYPE_CONFERENCE
 {
@@ -1429,6 +1472,7 @@ String STR_AUTH_TYPE_CONFERENCE
     Text[ czech ] = "Výnosy porady";
     Text[ hebrew ] = "Konferenzbericht";
     Text[ hindi ] = "सम्मेलन कृति";
+    Text[ slovak ] = "Výnosy porady";
 };
 String STR_AUTH_TYPE_INBOOK
 {
@@ -1459,6 +1503,7 @@ String STR_AUTH_TYPE_INBOOK
     Text[ czech ] = "Výtah z knihy";
     Text[ hebrew ] = "Buchauszug";
     Text[ hindi ] = "पुस्तक";
+    Text[ slovak ] = "Výťah z knihy";
 };
 String STR_AUTH_TYPE_INCOLLECTION
 {
@@ -1489,6 +1534,7 @@ String STR_AUTH_TYPE_INCOLLECTION
     Text[ czech ] = "Výtah z knihy s nadpisem";
     Text[ hebrew ] = "Buchauszug mit Titel";
     Text[ hindi ] = "उपाधि सहित पुस्तक ";
+    Text[ slovak ] = "Výťah z knihy s nadpisom";
 };
 String STR_AUTH_TYPE_INPROCEEDINGS
 {
@@ -1519,6 +1565,7 @@ String STR_AUTH_TYPE_INPROCEEDINGS
     Text[ czech ] = "Výnosy porady";
     Text[ hebrew ] = "Tagungsbericht";
     Text[ hindi ] = "सम्मेलन कृति";
+    Text[ slovak ] = "Výnosy porady";
 };
 String STR_AUTH_TYPE_JOURNAL
 {
@@ -1549,6 +1596,7 @@ String STR_AUTH_TYPE_JOURNAL
     Text[ czech ] = "Časopis";
     Text[ hebrew ] = "Zeitschrift";
     Text[ hindi ] = "पत्रिका ";
+    Text[ slovak ] = "Časopis";
 };
 String STR_AUTH_TYPE_MANUAL
 {
@@ -1579,6 +1627,7 @@ String STR_AUTH_TYPE_MANUAL
     Text[ czech ] = "Technická dokumentace";
     Text[ hebrew ] = "Techn. Dokumentation";
     Text[ hindi ] = "परिभाषा लेखपत्र";
+    Text[ slovak ] = "Technická dokumentácia";
 };
 String STR_AUTH_TYPE_MASTERSTHESIS
 {
@@ -1609,6 +1658,7 @@ String STR_AUTH_TYPE_MASTERSTHESIS
     Text[ czech ] = "Diplomová práce";
     Text[ hebrew ] = "Diplomarbeit";
     Text[ hindi ] = "लेख";
+    Text[ slovak ] = "Diplomová práca";
 };
 String STR_AUTH_TYPE_MISC
 {
@@ -1639,6 +1689,7 @@ String STR_AUTH_TYPE_MISC
     Text[ czech ] = "Různé";
     Text[ hebrew ] = "Verschiedenes";
     Text[ hindi ] = "मिला जुला";
+    Text[ slovak ] = "Rôzne";
 };
 String STR_AUTH_TYPE_PHDTHESIS
 {
@@ -1669,6 +1720,7 @@ String STR_AUTH_TYPE_PHDTHESIS
     Text[ czech ] = "Disertace";
     Text[ hebrew ] = "Dissertation";
     Text[ hindi ] = "विवरण";
+    Text[ slovak ] = "Dizertácia";
 };
 String STR_AUTH_TYPE_PROCEEDINGS
 {
@@ -1699,6 +1751,7 @@ String STR_AUTH_TYPE_PROCEEDINGS
     Text[ czech ] = "Výnosy porady";
     Text[ hebrew ] = "Tagungsbericht";
     Text[ hindi ] = "सम्मेलन कृति";
+    Text[ slovak ] = "Výnosy porady";
 };
 String STR_AUTH_TYPE_TECHREPORT
 {
@@ -1729,6 +1782,7 @@ String STR_AUTH_TYPE_TECHREPORT
     Text[ czech ] = "Vědecká zpráva";
     Text[ hebrew ] = "Forschungsbericht";
     Text[ hindi ] = "अन्वेषण रिपोर्ट ";
+    Text[ slovak ] = "Vedecká správa";
 };
 String STR_AUTH_TYPE_UNPUBLISHED
 {
@@ -1759,6 +1813,7 @@ String STR_AUTH_TYPE_UNPUBLISHED
     Text[ czech ] = "Neuveřejněno";
     Text[ hebrew ] = "Unveröffentlicht";
     Text[ hindi ] = "अप्रकाशित";
+    Text[ slovak ] = "Neuverejnené";
 };
 String STR_AUTH_TYPE_EMAIL
 {
@@ -1789,6 +1844,7 @@ String STR_AUTH_TYPE_EMAIL
     Text[ czech ] = "e-mail";
     Text[ hebrew ] = "e-mail";
     Text[ hindi ] = "इ-मेइल";
+    Text[ slovak ] = "e-mail";
 };
 String STR_AUTH_TYPE_WWW
 {
@@ -1819,6 +1875,7 @@ String STR_AUTH_TYPE_WWW
     Text[ czech ] = "WWW dokument";
     Text[ hebrew ] = "WWW-Dokument";
     Text[ hindi ] = "WWW लेखपत्र";
+    Text[ slovak ] = "WWW dokument";
 };
 String STR_AUTH_TYPE_CUSTOM1
 {
@@ -1849,6 +1906,7 @@ String STR_AUTH_TYPE_CUSTOM1
     Text[ czech ] = "Uživatelem definované 1";
     Text[ hebrew ] = "Benutzertyp1";
     Text[ hindi ] = "उपभोक्ता से परिभाषित1";
+    Text[ slovak ] = "Užívateľom definované1";
 };
 String STR_AUTH_TYPE_CUSTOM2
 {
@@ -1879,6 +1937,7 @@ String STR_AUTH_TYPE_CUSTOM2
     Text[ czech ] = "Uživatelem definované 2";
     Text[ hebrew ] = "Benutzertyp2";
     Text[ hindi ] = "उपभोक्ता से परिभाषित2";
+    Text[ slovak ] = "Užívateľom definované2";
 };
 String STR_AUTH_TYPE_CUSTOM3
 {
@@ -1909,6 +1968,7 @@ String STR_AUTH_TYPE_CUSTOM3
     Text[ czech ] = "Uživatelem definované 3";
     Text[ hebrew ] = "Benutzertyp3";
     Text[ hindi ] = "उपभोक्ता से परिभाषित3";
+    Text[ slovak ] = "Užívateľom definované3";
 };
 String STR_AUTH_TYPE_CUSTOM4
 {
@@ -1939,6 +1999,7 @@ String STR_AUTH_TYPE_CUSTOM4
     Text[ czech ] = "Uživatelem definované 4";
     Text[ hebrew ] = "Benutzertyp4";
     Text[ hindi ] = "उपभोक्ता से परिभाषित4";
+    Text[ slovak ] = "Užívateľom definované4";
 };
 String STR_AUTH_TYPE_CUSTOM5
 {
@@ -1969,6 +2030,7 @@ String STR_AUTH_TYPE_CUSTOM5
     Text[ czech ] = "Uživatelem definované 5";
     Text[ hebrew ] = "Benutzertyp5";
     Text[ hindi ] = "उपभोक्ता से परिभाषित5";
+    Text[ slovak ] = "Užívateľom definované5";
 };
 
 String STR_AUTH_FIELD_IDENTIFIER
@@ -1999,6 +2061,7 @@ String STR_AUTH_FIELD_IDENTIFIER
     Text[ czech ] = "Krátký název";
     Text[ hebrew ] = "~Kurzbezeichnung";
     Text[ hindi ] = "छोटा नाम";
+    Text[ slovak ] = "Krátky názov";
 };
 String STR_AUTH_FIELD_AUTHORITY_TYPE
 {
@@ -2029,6 +2092,7 @@ String STR_AUTH_FIELD_AUTHORITY_TYPE
     Text[ czech ] = "Typ";
     Text[ hebrew ] = "‮סוג‬";
     Text[ hindi ] = "वर्ग";
+    Text[ slovak ] = "Typ";
 };
 String STR_AUTH_FIELD_ADDRESS
 {
@@ -2058,6 +2122,7 @@ String STR_AUTH_FIELD_ADDRESS
     Text[ czech ] = "Adresa";
     Text[ hebrew ] = "Adresse";
     Text[ hindi ] = "पता";
+    Text[ slovak ] = "Adresa";
 };
 String STR_AUTH_FIELD_ANNOTE
 {
@@ -2087,6 +2152,7 @@ String STR_AUTH_FIELD_ANNOTE
     Text[ czech ] = "Anotace";
     Text[ hebrew ] = "~Anmerkung";
     Text[ hindi ] = "टीका";
+    Text[ slovak ] = "An~otácia";
 };
 String STR_AUTH_FIELD_AUTHOR
 {
@@ -2117,6 +2183,7 @@ String STR_AUTH_FIELD_AUTHOR
     Text[ czech ] = "Autor(ři)";
     Text[ hebrew ] = "A~utor(en)";
     Text[ hindi ] = "लेखक";
+    Text[ slovak ] = "Autor(ri)";
 };
 String STR_AUTH_FIELD_BOOKTITLE
 {
@@ -2147,6 +2214,7 @@ String STR_AUTH_FIELD_BOOKTITLE
     Text[ czech ] = "Název knihy";
     Text[ hebrew ] = "Bu~chtitel";
     Text[ hindi ] = "पुस्तक का शीर्षक";
+    Text[ slovak ] = "Názov knihy";
 };
 String STR_AUTH_FIELD_CHAPTER
 {
@@ -2177,6 +2245,7 @@ String STR_AUTH_FIELD_CHAPTER
     Text[ czech ] = "Kapitola";
     Text[ hebrew ] = "Ka~pitel";
     Text[ hindi ] = "अध्याय";
+    Text[ slovak ] = "Kapitola";
 };
 String STR_AUTH_FIELD_EDITION
 {
@@ -2207,6 +2276,7 @@ String STR_AUTH_FIELD_EDITION
     Text[ czech ] = "Vydání";
     Text[ hebrew ] = "Aus~gabe";
     Text[ hindi ] = "प्रकाशन";
+    Text[ slovak ] = "Vydanie";
 };
 String STR_AUTH_FIELD_EDITOR
 {
@@ -2237,6 +2307,7 @@ String STR_AUTH_FIELD_EDITOR
     Text[ czech ] = "Vydavatel";
     Text[ hebrew ] = "Herausge~ber";
     Text[ hindi ] = "संपादक";
+    Text[ slovak ] = "Redaktor";
 };
 String STR_AUTH_FIELD_HOWPUBLISHED
 {
@@ -2267,6 +2338,7 @@ String STR_AUTH_FIELD_HOWPUBLISHED
     Text[ czech ] = "Druh publikace";
     Text[ hebrew ] = "Au~sgabeart";
     Text[ hindi ] = "प्रकाशन वर्ग";
+    Text[ slovak ] = "Druh publikácie";
 };
 String STR_AUTH_FIELD_INSTITUTION
 {
@@ -2297,6 +2369,7 @@ String STR_AUTH_FIELD_INSTITUTION
     Text[ czech ] = "Instituce";
     Text[ hebrew ] = "~Institution";
     Text[ hindi ] = "संस्था";
+    Text[ slovak ] = "Inštitúcia";
 };
 String STR_AUTH_FIELD_JOURNAL
 {
@@ -2327,6 +2400,7 @@ String STR_AUTH_FIELD_JOURNAL
     Text[ czech ] = "Časopis";
     Text[ hebrew ] = "~Zeitschrift";
     Text[ hindi ] = "पत्रिका";
+    Text[ slovak ] = "Časopis";
 };
 String STR_AUTH_FIELD_MONTH
 {
@@ -2357,6 +2431,7 @@ String STR_AUTH_FIELD_MONTH
     Text[ czech ] = "Měsíc";
     Text[ hebrew ] = "~Monat";
     Text[ hindi ] = "मास";
+    Text[ slovak ] = "Mesiac";
 };
 String STR_AUTH_FIELD_NOTE
 {
@@ -2386,6 +2461,7 @@ String STR_AUTH_FIELD_NOTE
     Text[ czech ] = "Poznámka";
     Text[ hebrew ] = "~Notiz";
     Text[ hindi ] = "टिप्प~णी ";
+    Text[ slovak ] = "Po~známka";
 };
 String STR_AUTH_FIELD_NUMBER
 {
@@ -2416,6 +2492,7 @@ String STR_AUTH_FIELD_NUMBER
     Text[ czech ] = "Číslo";
     Text[ hebrew ] = "Numme~r";
     Text[ hindi ] = "संख्या";
+    Text[ slovak ] = "Číslo";
 };
 String STR_AUTH_FIELD_ORGANIZATIONS
 {
@@ -2446,6 +2523,7 @@ String STR_AUTH_FIELD_ORGANIZATIONS
     Text[ czech ] = "Organizace";
     Text[ hebrew ] = "~Organisation";
     Text[ hindi ] = "संस्था";
+    Text[ slovak ] = "Organizácia";
 };
 String STR_AUTH_FIELD_PAGES
 {
@@ -2476,6 +2554,7 @@ String STR_AUTH_FIELD_PAGES
     Text[ czech ] = "Stránky";
     Text[ hebrew ] = "Seite(n)";
     Text[ hindi ] = "पृष्ठ";
+    Text[ slovak ] = "Stránky";
 };
 String STR_AUTH_FIELD_PUBLISHER
 {
@@ -2506,6 +2585,7 @@ String STR_AUTH_FIELD_PUBLISHER
     Text[ czech ] = "Vydavatel";
     Text[ hebrew ] = "Ver~lag";
     Text[ hindi ] = "प्रकाशक";
+    Text[ slovak ] = "Vydávateľ";
 };
 String STR_AUTH_FIELD_SCHOOL
 {
@@ -2536,6 +2616,7 @@ String STR_AUTH_FIELD_SCHOOL
     Text[ czech ] = "Vysoká škola/Univerzita";
     Text[ hebrew ] = "Hochschule/Universit~ät";
     Text[ hindi ] = "विश्व विद्यालय";
+    Text[ slovak ] = "Vysoká škola/Univerzita";
 };
 String STR_AUTH_FIELD_SERIES
 {
@@ -2565,6 +2646,7 @@ String STR_AUTH_FIELD_SERIES
     Text[ czech ] = "Série";
     Text[ hebrew ] = "Ser~ie";
     Text[ hindi ] = "श्रृंखला";
+    Text[ slovak ] = "Séria";
 };
 String STR_AUTH_FIELD_TITLE
 {
@@ -2595,6 +2677,7 @@ String STR_AUTH_FIELD_TITLE
     Text[ czech ] = "Titul";
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Titul";
 };
 String STR_AUTH_FIELD_TYPE
 {
@@ -2625,6 +2708,7 @@ String STR_AUTH_FIELD_TYPE
     Text[ czech ] = "Typ zprávy";
     Text[ hebrew ] = "Art des Berichts";
     Text[ hindi ] = "रिपोर्ट वर्ग";
+    Text[ slovak ] = "Typ správy";
 };
 String STR_AUTH_FIELD_VOLUME
 {
@@ -2654,6 +2738,7 @@ String STR_AUTH_FIELD_VOLUME
     Text[ czech ] = "Svazek";
     Text[ hebrew ] = "Band";
     Text[ hindi ] = "परिमाण ";
+    Text[ slovak ] = "Zväzok";
 };
 String STR_AUTH_FIELD_YEAR
 {
@@ -2683,6 +2768,7 @@ String STR_AUTH_FIELD_YEAR
     Text[ czech ] = "Rok";
     Text[ hebrew ] = "~Jahr";
     Text[ hindi ] = "वर्ष ";
+    Text[ slovak ] = "Rok";
 };
 String STR_AUTH_FIELD_URL
 {
@@ -2713,6 +2799,7 @@ String STR_AUTH_FIELD_URL
     Text[ czech ] = "URL";
     Text[ hebrew ] = "URL";
     Text[ hindi ] = "URL";
+    Text[ slovak ] = "URL";
 };
 String STR_AUTH_FIELD_CUSTOM1
 {
@@ -2742,6 +2829,7 @@ String STR_AUTH_FIELD_CUSTOM1
     Text[ czech ] = "Uživatelem definované 1";
     Text[ hebrew ] = "Benutzerfeld~1";
     Text[ hindi ] = "उपभोक्ता से परिभाषित ~1";
+    Text[ slovak ] = "Užívateľom definované ~1";
 };
 String STR_AUTH_FIELD_CUSTOM2
 {
@@ -2771,6 +2859,7 @@ String STR_AUTH_FIELD_CUSTOM2
     Text[ czech ] = "Uživatelem definované 2";
     Text[ hebrew ] = "Benutzerfeld~2";
     Text[ hindi ] = "उपभोक्ता से परिभाषित ~2";
+    Text[ slovak ] = "Užívateľom definované ~2";
 };
 String STR_AUTH_FIELD_CUSTOM3
 {
@@ -2800,6 +2889,7 @@ String STR_AUTH_FIELD_CUSTOM3
     Text[ czech ] = "Uživatelem definované 3";
     Text[ hebrew ] = "Benutzerfeld~3";
     Text[ hindi ] = "उपभोक्ता से परिभाषित ~3";
+    Text[ slovak ] = "Užívateľom definované ~3";
 };
 String STR_AUTH_FIELD_CUSTOM4
 {
@@ -2829,6 +2919,7 @@ String STR_AUTH_FIELD_CUSTOM4
     Text[ czech ] = "Uživatelem definované 4";
     Text[ hebrew ] = "Benutzerfeld~4";
     Text[ hindi ] = "उपभोक्ता से परिभाषित ~4";
+    Text[ slovak ] = "Užívateľom definované ~4";
 };
 String STR_AUTH_FIELD_CUSTOM5
 {
@@ -2859,6 +2950,7 @@ String STR_AUTH_FIELD_CUSTOM5
     Text[ czech ] = "Uživatelem definované 5";
     Text[ hebrew ] = "Benutzerfeld~5";
     Text[ hindi ] = "उपभोक्ता से परिभाषित ~5";
+    Text[ slovak ] = "Užívateľom definované ~5";
 };
 String STR_AUTH_FIELD_ISBN
 {
@@ -2889,7 +2981,10 @@ String STR_AUTH_FIELD_ISBN
     Text[ czech ] = "ISBN";
     Text[ hebrew ] = "ISBN";
     Text[ hindi ] = "ISBN";
+    Text[ slovak ] = "ISBN";
 };
+
+
 
 
 
