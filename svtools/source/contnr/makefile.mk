@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-22 12:34:27 $
+#   last change: $Author: vg $ $Date: 2005-03-10 17:04:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,17 +93,6 @@ SLOFILES=   $(EXCEPTIONSFILES) \
             $(SLO)$/imivctl2.obj	\
             $(SLO)$/ivctrl.obj		\
             $(SLO)$/tooltiplbox.obj
-
-# Fuer das Setup bauen wir noch mal statisch
-
-OBJFILES=	$(OBJ)$/svtabbx.obj	\
-            $(OBJ)$/svicnvw.obj	\
-            $(OBJ)$/svimpicn.obj	\
-            $(OBJ)$/treelist.obj	\
-            $(OBJ)$/svlbox.obj	\
-            $(OBJ)$/svimpbox.obj	\
-            $(OBJ)$/svlbitm.obj	\
-            $(OBJ)$/svtreebx.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
