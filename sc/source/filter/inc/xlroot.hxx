@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:49:34 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,12 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
 #endif
-
-#ifndef SC_ADDRESS_HXX
-#include "address.hxx"
-#endif
-
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
 #endif
@@ -111,17 +104,19 @@ struct XclRootData
     ScAddress           maXclMaxPos;    /// Highest Excel cell position.
     ScAddress           maMaxPos;       /// Highest position valid in Calc and Excel.
 
-    ScEEDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
-    ScHeaderEEPtr       mpHFEditEngine; /// Edit engine for header/footer.
-    EditEnginePtr       mpDrawEditEng;  /// Edit engine for text boxes.
+    ScEEDefaulterPtr    mxEditEngine;   /// Edit engine for rich strings etc.
+    ScHeaderEEPtr       mxHFEditEngine; /// Edit engine for header/footer.
+    EditEnginePtr       mxDrawEditEng;  /// Edit engine for text boxes.
 
-    ScExtDocOptionsPtr  mpExtDocOpt;    /// Extended document options.
-    XclTracerPtr        mpTracer;       /// Filter tracer.
+    ScExtDocOptionsPtr  mxExtDocOpt;    /// Extended document options.
+    XclTracerPtr        mxTracer;       /// Filter tracer.
 
     long                mnCharWidth;    /// Width of '0' in default font (twips).
     SCTAB               mnScTab;        /// Current Calc sheet index.
     const bool          mbExport;       /// false = Import, true = Export.
-    bool                mbTruncated;    /// Flag for the table truncated warning box.
+    bool                mbColTrunc;     /// Flag for "columns truncated" warning box.
+    bool                mbRowTrunc;     /// Flag for "rows truncated" warning box.
+    bool                mbTabTrunc;     /// Flag for "tables truncated" warning box.
     bool                mbHasPassw;     /// true = Password already querried.
 
     ::std::auto_ptr< RootData > mxRD;//!
@@ -145,6 +140,7 @@ class SfxObjectShell;
 class ScModelObj;
 class SfxPrinter;
 class SvNumberFormatter;
+class SdrPage;
 class ScDocumentPool;
 class ScStyleSheetPool;
 class ScRangeName;
@@ -178,8 +174,12 @@ public:
     inline long         GetCharWidth() const { return mrData.mnCharWidth; }
     /** Returns the current Calc sheet index. */
     inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
-    /** Returns whether the "some cells have been cut" warning box should show. */
-    inline bool         IsTruncated() const { return mrData.mbTruncated; }
+    /** Returns whether the "some columns have been cut" warning box should be shown. */
+    inline bool         IsColTruncated() const { return mrData.mbColTrunc; }
+    /** Returns whether the "some rows have been cut" warning box should be shown. */
+    inline bool         IsRowTruncated() const { return mrData.mbRowTrunc; }
+    /** Returns whether the "some sheets have been cut" warning box should be shown. */
+    inline bool         IsTabTruncated() const { return mrData.mbTabTrunc; }
 
     /** Returns the medium to import from. */
     inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
@@ -206,7 +206,7 @@ public:
     inline ScDocument&  GetDoc() const { return mrData.mrDoc; }
     /** Returns pointer to the destination document (import) or source document (export). */
     inline ScDocument*  GetDocPtr() const { return &mrData.mrDoc; }
-    /** Returns the object shell of the Calc document. May be NULL (i.e. import from clipboard). */
+    /** Returns the object shell of the Calc document. May be 0 (i.e. import from clipboard). */
     SfxObjectShell*     GetDocShell() const;
     /** Returns the object model of the Calc document. */
     ScModelObj*         GetDocModelObj() const;
@@ -218,6 +218,8 @@ public:
     ScStyleSheetPool&   GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */
     ScRangeName&        GetNamedRanges() const;
+    /** Returns the drawing layer page of the passed sheet, if present. */
+    SdrPage*            GetSdrPage( SCTAB nScTab ) const;
 
     /** Returns the edit engine for import/export of rich strings etc. */
     ScEditEngineDefaulter& GetEditEngine() const;
@@ -251,6 +253,8 @@ protected:
     /** Sets the width of the '0' character (default font) for the current printer (twips).
         @param rFontData  The font used for the '0' character. */
     void                SetCharWidth( const XclFontData& rFontData );
+    /** Sets the current Calc sheet index. */
+    inline void         SetCurrScTab( SCTAB nScTab ) { mrData.mnScTab = nScTab; }
     /** Increases the current Calc sheet index by 1. */
     inline void         IncCurrScTab() { ++mrData.mnScTab; }
 
