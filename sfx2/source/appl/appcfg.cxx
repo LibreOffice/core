@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:52:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
     SfxItemPool &rPool = GetPool();
-    String aTRUEStr = 0x0031; // ^= '1'
+    String aTRUEStr('1');
 
     const USHORT *pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
