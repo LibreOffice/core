@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mkout.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2001-04-19 15:43:15 $
+#   last change: $Author: hr $ $Date: 2001-04-19 15:54:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 
 #
-# mkout - create output tree
+# mkout.pl - create output tree
 #
 
 use Cwd;
@@ -73,9 +73,9 @@ use File::Path;
 
 #### script id #####
 
-( $script_name = $0 ) =~ s/^.*\W(\w+)$/$1/;
+( $script_name = $0 ) =~ s/^.*\W(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.1 $ ';
+$id_str = ' $Revision: 1.2 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
