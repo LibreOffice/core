@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-23 16:17:47 $
+ *  last change: $Author: ma $ $Date: 2001-04-12 15:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,6 @@ class SwColumnPage : public SfxTabPage
     // Example
     SwColExample        aPgeExampleWN;
     SwColumnOnlyExample aFrmExampleWN;
-    FixedLine        aFLExample;
 
     SwColMgr*       pColMgr;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-23 16:17:36 $
+ *  last change: $Author: ma $ $Date: 2001-04-12 15:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,6 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     aPgeExampleWN(this,     ResId(WN_BSP)),
     aFrmExampleWN(this,     ResId(WN_BSP)),
-    aFLExample(this,        ResId(FL_BSP)),
 
     nFirstVis(0),
     bFrm(FALSE),
