@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-23 09:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ namespace dbaui
         void    EnsureVisible(const OTableWindow* _pWin);
 
         // wieviel Tabellen mit einem bestimmten Namen habe ich schon ?
-        USHORT  CountTableAlias(const String& rName, USHORT& rMax);
+        sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
 
         // ein Feld einfuegen (wird einfach an das Elter weitergereicht
         void InsertField(const OTableFieldDesc& rInfo);

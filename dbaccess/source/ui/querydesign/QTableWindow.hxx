@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:33:13 $
+ *  last change: $Author: oj $ $Date: 2001-03-23 09:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace dbaui
     //==================================================================
     class OQueryTableWindow : public OTableWindow
     {
-        USHORT              m_nAliasNum;
+        sal_Int32           m_nAliasNum;
         ::rtl::OUString     m_strInitialAlias;
     public:
         TYPEINFO();
@@ -98,7 +98,7 @@ namespace dbaui
         // spaeter Constructor, die Basisklasse ERZEUGT beim ersten Aufruf die Listbox
         virtual BOOL    Init();
 
-        USHORT          GetAliasNum() const { return m_nAliasNum; }
+        sal_Int32       GetAliasNum() const { return m_nAliasNum; }
 
         BOOL            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDesc& rInfo);
         BOOL            ExistsAVisitedConn() const;
