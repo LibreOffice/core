@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:53:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ void SwXDispatch::dispatch(
 
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
         ::svx::ODataAccessDescriptor aDescriptor;
-        aDescriptor[::svx::daDataSource]    <<= rData.sDataSource;
+        aDescriptor.setDataSource(rData.sDataSource);
         aDescriptor[::svx::daCommand]       <<= rData.sCommand;
         aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
 
@@ -374,7 +374,7 @@ void SwXDispatch::addStatusListener(
         const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
 
         ::svx::ODataAccessDescriptor aDescriptor;
-        aDescriptor[::svx::daDataSource]    <<= rData.sDataSource;
+        aDescriptor.setDataSource(rData.sDataSource);
         aDescriptor[::svx::daCommand]       <<= rData.sCommand;
         aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
 
