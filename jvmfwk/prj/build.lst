@@ -1,0 +1,3 @@
+jv jvmfwk : cppu NULL
+jv jvmfwk\source\framework nmake - all jv_framework NULL
+jv jvmfwk\util nmake - all jv_util jv_framework NULL
