@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
-#endif  INCLUDED_VECTOR
+#endif  //  INCLUDED_VECTOR
 
 namespace configmgr
 {
