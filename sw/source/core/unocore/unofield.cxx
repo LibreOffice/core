@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 10:44:28 $
+ *  last change: $Author: os $ $Date: 2000-11-10 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,6 +2314,20 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                 m_pProps->sPar2 = String(uTmp);
             }
             break;
+            case FIELD_PROP_PAR3:
+            {
+                OUString uTmp;
+                aValue >>= uTmp;
+                m_pProps->sPar3 = String(uTmp);
+            }
+            break;
+            case FIELD_PROP_PAR4:
+            {
+                OUString uTmp;
+                aValue >>= uTmp;
+                m_pProps->sPar4 = String(uTmp);
+            }
+            break;
             case FIELD_PROP_FORMAT:
             {
                 aValue >>= m_pProps->nFormat;
@@ -2432,6 +2446,12 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
             break;
             case FIELD_PROP_PAR2:
                 aRet <<= OUString(m_pProps->sPar2);
+            break;
+            case FIELD_PROP_PAR3:
+                aRet <<= OUString(m_pProps->sPar3);
+            break;
+            case FIELD_PROP_PAR4:
+                aRet <<= OUString(m_pProps->sPar4);
             break;
             case FIELD_PROP_FORMAT:
                 aRet <<= m_pProps->nFormat;
