@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:30:17 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,7 +1487,8 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     nPrevCellType(0),
     nSolarMutexLocked(0),
     pScUnoGuard(NULL),
-    nRangeOverflowType(0)
+    nRangeOverflowType(0),
+    bSelfImportingXMLSet(sal_False)
 
 //  pParaItemMapper( 0 ),
 {
@@ -2261,6 +2262,19 @@ void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Refer
 }
 
 // ::com::sun::star::xml::sax::XDocumentHandler
+void SAL_CALL ScXMLImport::startDocument(void)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    LockSolarMutex();
+    SvXMLImport::startDocument();
+    if (pDoc && !pDoc->IsImportingXML())
+    {
+        ScModelObj::getImplementation(GetModel())->BeforeXMLLoading();
+        bSelfImportingXMLSet = sal_True;
+    }
+    UnlockSolarMutex();
+}
+
 void SAL_CALL ScXMLImport::endDocument(void)
     throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
@@ -2315,6 +2329,12 @@ void SAL_CALL ScXMLImport::endDocument(void)
             xActionLockable->removeActionLock();
     }
     SvXMLImport::endDocument();
+
+    if (pDoc && bSelfImportingXMLSet)
+    {
+        ScModelObj::getImplementation(GetModel())->AfterXMLLoading(sal_True);
+    }
+
     UnlockSolarMutex();
 }
 
