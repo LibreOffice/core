@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-28 08:44:47 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 10:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,6 +1558,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     XubString aMultiStr( rInf.GetTxt(), 0, nMultiLen + rInf.GetIdx() );
     rInf.SetTxt( aMultiStr );
     SwTxtFormatInfo aInf( rInf, rMulti.GetRoot(), nActWidth );
+    // Do we allow break cuts? The FirstMulti-Flag is evaluated during
+    // line break determination.
+    sal_Bool bFirstMulti = rInf.GetIdx() != rInf.GetLineStart();
 
     SwLinePortion *pNextFirst = NULL;
     SwLinePortion *pNextSecond = NULL;
@@ -1571,6 +1574,8 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         aInf.X( nTmpX );
         aInf.Width( KSHORT(nActWidth) );
         aInf.RealWidth( KSHORT(nActWidth) );
+        aInf.SetFirstMulti( bFirstMulti );
+
         if( pFirstRest )
         {
             ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest exspected");
@@ -1588,6 +1593,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         pCurr->SetRealHeight( pCurr->Height() );
         if( rMulti.HasRotation() && !rMulti.IsDouble() )
             break;
+        // second line has to be formatted
         else if( pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
         {
             xub_StrLen nFirstLen = pCurr->GetLen();
@@ -1617,6 +1623,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             aInf.SetRest( NULL );
             BuildPortions( aTmp );
             rMulti.CalcSize( *this, aInf );
+            rMulti.GetRoot().SetRealHeight( rMulti.GetRoot().Height() );
             pCurr->SetRealHeight( pCurr->Height() );
             if( rMulti.IsRuby() )
             {
@@ -1628,14 +1635,22 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 pNextFirst = aTmp.GetRest();
             if( ( !aTmp.IsRuby() && nFirstLen + pCurr->GetLen() < nMultiLen )
                 || aTmp.GetRest() )
+                // our guess for width of multiportion was too small,
+                // text did not fit into multiportion
                 bRet = sal_True;
         }
         if( rMulti.IsRuby() )
             break;
         if( bRet )
         {
+            // our guess for multiportion width was too small,
+            // we set min to act
             nMinWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
+            if ( nActWidth == nMaxWidth && rInf.GetLineStart() == rInf.GetIdx() )
+            // we have too less space, we must allow break cuts
+            // ( the first multi flag is considered during TxtPortion::_Format() )
+                bFirstMulti = sal_False;
             if( nActWidth <= nMinWidth )
                 break;
         }
@@ -1647,6 +1662,8 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
             if( nActWidth >= nMaxWidth )
                 break;
+            // we do not allow break cuts during formatting
+            bFirstMulti = sal_True;
         }
         delete pNextFirst;
         pNextFirst = NULL;
