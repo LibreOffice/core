@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:33:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,17 +130,16 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, SvLinkManager* pMgr, BOOL bHtm
     aRbManual( this, ResId( RB_MANUAL ) ),
     aFtFullFileName( this, ResId( FT_FULL_FILE_NAME ) ),
     aFtFullSourceName( this, ResId( FT_FULL_SOURCE_NAME ) ),
-    aFtFullTypeName( this, ResId( FT_FULL_TYPE_NAME ) )
+    aFtFullTypeName( this, ResId( FT_FULL_TYPE_NAME ) ),
+    aStrAutolink( ResId( STR_AUTOLINK, DIALOG_MGR() ) ),
+    aStrManuallink( ResId( STR_MANUALLINK, DIALOG_MGR() ) ),
+    aStrBrokenlink( ResId( STR_BROKENLINK, DIALOG_MGR() ) ),
+    aStrGraphiclink( ResId( STR_GRAPHICLINK, DIALOG_MGR() ) ),
+    aStrButtonclose( ResId( STR_BUTTONCLOSE, DIALOG_MGR() ) ),
+    aStrCloselinkmsg( ResId( STR_CLOSELINKMSG, DIALOG_MGR() ) ),
+    aStrCloselinkmsgMulti( ResId( STR_CLOSELINKMSG_MULTI, DIALOG_MGR() ) ),
+    aStrWaitinglink( ResId( STR_WAITINGLINK, DIALOG_MGR() ) )
 {
-    aStrAutolink = String( ResId( STR_AUTOLINK ) );
-    aStrManuallink = String( ResId( STR_MANUALLINK ) );
-    aStrBrokenlink = String( ResId( STR_BROKENLINK ) );
-    aStrGraphiclink = String( ResId( STR_GRAPHICLINK ) );
-    aStrButtonclose = String( ResId( STR_BUTTONCLOSE ) );
-    aStrCloselinkmsg = String( ResId( STR_CLOSELINKMSG ) );
-    aStrCloselinkmsgMulti = String( ResId( STR_CLOSELINKMSG_MULTI ) );
-    aStrWaitinglink = String( ResId( STR_WAITINGLINK ) );
-
     FreeResource();
 
     aTbLinks.SetHelpId(HID_LINKDLG_TABLB);
