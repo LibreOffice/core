@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 13:07:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 08:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #ifndef _SVX_OPTCTL_HXX
 #include "optctl.hxx"
 #endif
+#ifndef _SVX_OPTJAVA_HXX
+#include "optjava.hxx"
+#endif
 #ifndef _SVX_OPTSAVE_HXX //autogen
 #include "optsave.hxx"
 #endif
@@ -272,6 +275,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_SSO:                       fnCreate = ( CreateTabPage ) GetSSOCreator(); break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
+        case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
