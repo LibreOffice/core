@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.15 $
+*  $Revision: 1.16 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-24 16:29:53 $
+*  last change: $Author: vg $ $Date: 2005-03-10 18:23:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -444,3 +444,41 @@ End
 #endif
 
 #endif
+
+//i38417
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_LibXMLSec_xmlseccore
+    FileID = gid_File_Lib_LibXMLSec_xmlseccore;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_LibXMLSec_xmlseccore_2
+    ShortcutID = gid_Shortcut_Lib_LibXMLSec_xmlseccore;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libxmlsec1,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_LibXMLSec_xmlsecnss
+    FileID = gid_File_Lib_LibXMLSec_xmlsecnss;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_LibXMLSec_xmlsecnss_2
+    ShortcutID = gid_Shortcut_Lib_LibXMLSec_xmlsecnss;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libxmlsec1-nss,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif
+//i38417 -end-
