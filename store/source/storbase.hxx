@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-26 21:10:51 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 17:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.3 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -68,9 +68,6 @@
 
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
-#endif
-#ifndef _RTL_MEMORY_H_
-#include <rtl/memory.h>
 #endif
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
@@ -96,9 +93,55 @@
 #include <store/lockbyte.hxx>
 #endif
 
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
+#endif
+
+#ifndef INCLUDED_CSTRING
+#include <cstring>
+#define INCLUDED_CSTRING
+#endif
+
+/*========================================================================
+ *
+ * store common internals.
+ *
+ *======================================================================*/
+/* MSVC 6.0 still has std functions in global namespace */
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#define __STORE_CSTD
+#else
+#define __STORE_CSTD std
+#endif /* _MSC_VER */
+
 #ifndef __STORE_DELETEZ
 #define __STORE_DELETEZ(p) (delete p, p = 0)
 #endif
+
+/*
+ * __store_memcpy.
+ */
+inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
+{
+    __STORE_CSTD::memcpy (dst, src, n);
+}
+
+/*
+ * __store_memmove.
+ */
+inline void __store_memmove (void * dst, const void * src, sal_uInt32 n)
+{
+    __STORE_CSTD::memmove (dst, src, n);
+}
+
+/*
+ * __store_memset.
+ */
+inline void __store_memset (void * dst, int val, sal_uInt32 n)
+{
+    __STORE_CSTD::memset (dst, val, n);
+}
 
 namespace store
 {
@@ -391,7 +434,7 @@ struct OStorePageNameBlock
         m_aGuard  = G();
         m_aKey    = K();
         m_nAttrib = 0;
-        rtl_zeroMemory (m_pData, sizeof(m_pData));
+        __store_memset (m_pData, 0, sizeof(m_pData));
     }
 
     /** Construction.
@@ -399,7 +442,7 @@ struct OStorePageNameBlock
     OStorePageNameBlock (void)
         : m_nAttrib (0)
     {
-        rtl_zeroMemory (m_pData, sizeof(m_pData));
+        __store_memset (m_pData, 0, sizeof(m_pData));
     }
 
     /** Comparison.
@@ -605,6 +648,17 @@ class OStorePageObject
     typedef OStorePageDescriptor D;
 
 public:
+    /** Allocation.
+     */
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
+    }
+
     /** Construction.
      */
     inline OStorePageObject (page& rPage);
