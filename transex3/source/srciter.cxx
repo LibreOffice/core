@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srciter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-22 14:11:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,18 @@
 
 /*****************************************************************************/
 SourceTreeIterator::SourceTreeIterator(
-    const ByteString &rRootDirectory, const ByteString &rVersion )
+    const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal )
 /*****************************************************************************/
                 : pRootDirectory( NULL ),
-                bInExecute( FALSE )
+                bInExecute( FALSE ) , bLocal( bLocal )
 {
-    pRootDirectory = SourceDirectory::CreateRootDirectory(
-        rRootDirectory, rVersion, TRUE );
-    fprintf( stderr, "\n" );
+    if(!bLocal){
+        pRootDirectory = SourceDirectory::CreateRootDirectory(
+            rRootDirectory, rVersion, TRUE );
+        fprintf( stderr, "\n" );
+    }
+    else
+        pRootDirectory = 0;
 }
 
 /*****************************************************************************/
