@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale version="1.2">
+<LC_INFO>
+<Language>
+<LangID>cy</LangID>
+<DefaultName>Welsh</DefaultName>
+</Language>
+<Country>
+<CountryID>GB</CountryID>
+<DefaultName>United Kingdom</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="en_GB"/>
+<LC_FORMAT ref="en_GB" replaceFrom="[CURRENCY]" replaceTo="[$£-452]"/>
+<LC_COLLATION ref="en_GB"/>
+<LC_SEARCH ref="en_GB"/>
+<LC_CALENDAR ref="en_GB"/>
+<LC_CURRENCY ref="en_GB"/>
+<LC_TRANSLITERATION ref="en_GB"/>
+<LC_MISC ref="en_GB"/>
+<LC_NumberingLevel ref="en_GB"/>
+<LC_OutLineNumberingLevel ref="en_GB"/>
+</Locale>
