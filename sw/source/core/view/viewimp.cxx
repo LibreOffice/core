@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-10-08 13:19:49 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 {
     bResetXorVisibility = bShowHdlPaint =
     bResetHdlHiddenPaint = bScrolled =
-    bPaintInScroll = bSmoothUpdate = bStopSmooth = FALSE;
+    bPaintInScroll = bSmoothUpdate = bStopSmooth = bStopPrt = FALSE;
     bFirstPageInvalid = bScroll = bNextScroll = TRUE;
 
     aScrollTimer.SetTimeout( 1500 );
@@ -536,4 +536,12 @@ void SwViewImp::FireAccessibleEvents()
     if( IsAccessible() )
         GetAccessibleMap().FireEvents();
 }
+
+IMPL_LINK(SwViewImp, SetStopPrt, void *, EMPTYARG)
+{
+    bStopPrt = TRUE;
+
+    return 0;
+}
+
 #endif

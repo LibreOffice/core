@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 08:01:56 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,31 @@ class SwViewImp
 
     BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
     BOOL bStopSmooth        :1;
+    BOOL bStopPrt           :1; // Stop Printing
 
     USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
+
+    /**
+        Signal whether to stop printing.
+
+        @param _useless just to fit macro
+    */
+    DECL_LINK(SetStopPrt, void * _useless = NULL);
+
+    /**
+       Returns if printer shall be stopped.
+
+       @retval TRUE The printer shall be stopped.
+       @retval FALSE else
+    */
+    BOOL IsStopPrt() { return bStopPrt; }
+
+    /**
+       Resets signal for stopping printing.
+
+    */
+    void ResetStopPrt() { bStopPrt = FALSE; }
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-08 08:26:15 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ class SwLayAction
 
     SwWait *pWait;
 
+    SfxProgress * pProgress;
+
     //Wenn ein Absatz - oder was auch immer - bei der Formatierung mehr
     //als eine Seite rueckwaerts floss traegt er seine neue Seitennummer
     //hier ein. Die Steuerung der InternalAction kann dann geeignet reagieren.
@@ -169,6 +171,7 @@ class SwLayAction
 
     inline void CheckIdleEnd();
     inline ULONG GetStartTicks() { return nStartTicks; }
+
 #endif
 
 public:
@@ -189,6 +192,8 @@ public:
     BOOL IsIdle()               const       { return bIdle;  }
     BOOL IsReschedule()         const       { return bReschedule;  }
     BOOL IsPaintExtraData()     const       { return bPaintExtraData;}
+    BOOL IsStopPrt()          const;
+    BOOL IsInterrupt()        const { return IsInput() || IsStopPrt(); }
 
     USHORT GetInputType()    const { return nInputType; }
 #endif
@@ -204,6 +209,8 @@ public:
 
     void SetAgain()         { bAgain = TRUE; }
     void SetUpdateExpFlds() {bUpdateExpFlds = TRUE; }
+    void SetProgress(SfxProgress * _pProgress = NULL)
+    { pProgress = _pProgress; }
 
     inline void SetCheckPageNum( USHORT nNew );
     inline void SetCheckPageNumDirect( USHORT nNew ) { nCheckPageNum = nNew; }
@@ -224,7 +231,6 @@ public:
     //Auch andere sollen den Wartecrsr einschalten koennen.
     void CheckWaitCrsr();
 };
-
 
 class SwLayIdle
 {
