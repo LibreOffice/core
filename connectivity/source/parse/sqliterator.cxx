@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:33:29 $
+ *  last change: $Author: oj $ $Date: 2000-11-29 10:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,9 +247,11 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                     aTableName += sName;
                 }
             }
-            m_xTables->getByName(aTableName) >>= m_aTables[aTableRange];
+            if(m_xTables->hasByName(aTableName)) // the name can be changed before
+                m_xTables->getByName(aTableName) >>= m_aTables[aTableRange];
 
-        }catch(...)
+        }
+        catch(Exception&)
         {
             OSL_ENSHURE(0,"traverseOneTableName: Exception occured!");
         }
@@ -484,7 +486,7 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
                             break;
                         }
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                     }
                 }
