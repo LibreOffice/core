@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 22:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <cstdarg>
 #endif
 
-#include <stl/list>
+#include <list>
 
 #ifdef USE_NAMESPACE
 using namespace std;
