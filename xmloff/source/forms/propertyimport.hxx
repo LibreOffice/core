@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:33:40 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ namespace xmloff
         sal_Bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(::rtl::OUString::createFromAscii(_pAttributeName)); }
 
         /** enables the tracking of the encountered attributes
-            <p>The tracking will raise the import costs a little but, but it's cheaper than
+            <p>The tracking will raise the import costs a little bit, but it's cheaper than
             derived classes tracking this themself.</p>
         */
         void        enableTrackAttributes() { m_bTrackAttributes = sal_True; }
