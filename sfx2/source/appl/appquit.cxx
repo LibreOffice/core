@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 14:56:21 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ BOOL SfxApplication::QueryExit_Impl()
 */
 
 {
-    StoreConfig();
+    SaveConfiguration();
     BOOL bQuit = TRUE;
 
     // laufen noch Drucker?

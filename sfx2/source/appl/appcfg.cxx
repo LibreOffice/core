@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-19 12:31:59 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
 #include <svtools/isethint.hxx>
 #endif
 
+#include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
 #include <svtools/saveopt.hxx>
@@ -1179,13 +1180,15 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 
 void SfxApplication::SaveConfiguration() const
 {
-    if ( !bDowning )
-    {
-        // bei bDowning koennten falsche Sachen gespeichert werden bishin
-        // zu Abstuerzen
-        if (!pCfgMgr->StoreConfiguration())
-            HandleConfigError_Impl((USHORT)pCfgMgr->GetErrorCode());
-    }
+    // Workingset schreiben?
+//    if ( SvtOptions().IsSaveWorkingSet() )
+//        SfxTaskManager::SaveWorkingSet();
+//(mba/task): Implementierung fehlt
+
+    if ( !pCfgMgr->StoreConfiguration() )
+        HandleConfigError_Impl( (sal_uInt16)pCfgMgr->GetErrorCode() );
+
+    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 }
 
 //--------------------------------------------------------------------
@@ -1195,11 +1198,12 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
-    if ( !pDoc )
-        pAppData_Impl->pEventConfig->ExecuteEvent( rEventHint.GetEventId(), pDoc, bSynchron, rEventHint.GetArgs() );
+    pAppData_Impl->pEventConfig->ExecuteEvent( rEventHint.GetEventId(), pDoc, bSynchron, rEventHint.GetArgs() );
+/*
     else
         // is loaded on demand!
         pDoc->GetEventConfig_Impl();
+*/
     if ( bSynchron )
     {
         Broadcast(rEventHint);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: as $ $Date: 2001-08-22 13:03:33 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,180 +317,7 @@ void SfxApplication::InitializeDisplayName_Impl()
 //--------------------------------------------------------------------
 
 void SfxApplication::OpenClients()
-
-/*  [Beschreibung]
-
-    Diese virtuelle Hook-Methode gibt dem Applikationsentwickler
-    Gelegenheit, bei bereits sichtbarem Applikationsfenster unmittelbar
-    vor Application::Execute() z.B. initiale Fenster (insbesondere
-    das initiale Dokumentfenster) zu "offnen.
-
-    Die Basisklasse sollte nicht gerufen werden.
-*/
 {
-    /*
-    BOOL bLoaded = FALSE;
-    if ( !( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
-    {
-        // Crash-Recovery
-        SvtInternalOptions  aInternalOptions        ;
-        sal_Bool            bUserCancel = sal_False ;
-        ::rtl::OUString     sURL                    ;
-        ::rtl::OUString     sFilter                 ;
-        ::rtl::OUString     sTempName               ;
-
-        while   (
-                    ( aInternalOptions.IsRecoveryListEmpty()    ==  sal_False   )   &&
-                    ( bUserCancel                               ==  sal_False   )
-                )
-        {
-            // Read and delete(!) top recovery item from list.
-            aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
-
-            sal_Bool    bIsURL          = ( sURL.getLength() > 0 );
-            String      sRealFileName   ( sURL      );
-            String      sTempFileName   ( sTempName );
-
-            String aMsg( SfxResId( STR_RECOVER_QUERY ) );
-            aMsg.SearchAndReplaceAscii( "$1", sRealFileName );
-            MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK, String( SfxResId( STR_RECOVER_TITLE ) ), aMsg );
-
-            switch( aBox.Execute() )
-            {
-                case RET_YES: // recover a file
-                {
-                    SfxStringItem   aTargetName     ( SID_TARGETNAME    , DEFINE_CONST_UNICODE("_blank")        );
-                    SfxStringItem   aReferer        ( SID_REFERER       , DEFINE_CONST_UNICODE("private:user")  );
-                    SfxStringItem   aTempFileItem   ( SID_FILE_NAME     , sTempFileName                         );
-                    SfxStringItem   aFilterItem     ( SID_FILTER_NAME   , sFilter                               );
-                    SfxBoolItem     aReadOnlyItem   ( SID_DOC_READONLY  , sal_False                             );
-
-                    if( bIsURL == sal_False )
-                    {
-                        sRealFileName.Erase();
-                    }
-
-                    SfxStringItem aSalvageItem( SID_DOC_SALVAGE, sRealFileName );
-                    if( bIsURL == sal_True )
-                    {
-                        SfxStringItem aRealURLItem( SID_ORIGURL, sRealFileName );
-                        pAppDispat->Execute(    SID_OPENDOC             ,
-                                                SFX_CALLMODE_SYNCHRON   ,
-                                                &aTempFileItem          ,
-                                                &aFilterItem            ,
-                                                &aSalvageItem           ,
-                                                &aTargetName            ,
-                                                &aRealURLItem           ,
-                                                &aReadOnlyItem          ,
-                                                &aReferer               ,
-                                                0L                      );
-                    }
-                    else
-                    {
-                        SfxBoolItem aAsTemplateItem( SID_TEMPLATE, !bIsURL );
-                        pAppDispat->Execute(    SID_OPENDOC             ,
-                                                SFX_CALLMODE_SYNCHRON   ,
-                                                &aTempFileItem          ,
-                                                &aFilterItem            ,
-                                                &aSalvageItem           ,
-                                                &aTargetName            ,
-                                                &aAsTemplateItem        ,
-                                                &aReadOnlyItem          ,
-                                                &aReferer               ,
-                                                0L                      );
-                    }
-                    SfxContentHelper::Kill( sTempFileName );
-                }
-                break;
-
-                case RET_NO: // skip this file
-                {
-                    SfxContentHelper::Kill( sTempFileName );
-                }
-                break;
-
-                case RET_CANCEL: // cancel recovering
-                {
-                    SfxContentHelper::Kill( sTempFileName );
-                    bUserCancel = sal_True; // and all following!
-                    // Don't forget to delete recovery list!
-                    while( aInternalOptions.IsRecoveryListEmpty() == sal_False )
-                    {
-                        aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
-                        SfxContentHelper::Kill( sTempName );
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    String aEmptyStr;
-    if ( pAppData_Impl->aOpenList.Len() )
-    {
-        bLoaded = TRUE;
-        ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
-                                        APPEVENT_OPEN_STRING,
-                                        pAppData_Impl->aOpenList );
-        GetpApp()->AppEvent( *pAppEvt );
-        delete pAppEvt;
-    }
-
-    if ( pAppData_Impl->aPrintList.Len() )
-    {
-        bLoaded = TRUE;
-        ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
-                                        APPEVENT_PRINT_STRING,
-                                        pAppData_Impl->aPrintList );
-        GetpApp()->AppEvent( *pAppEvt );
-        delete pAppEvt;
-    }
-
-    if ( bLoaded || SfxObjectShell::GetFirst() || ( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
-        return;
-
-    if( pAppData_Impl->bInvisible )
-        return;
-
-//(mba/task): neu zu implementieren
-//  if ( SvtSaveOptions().IsSaveWorkingSet() )
-//            SfxTaskManager::RestoreWorkingSet();
-//  else
-    {
-        SfxAllItemSet aSet( GetPool() );
-
-        // Dateiname
-        //TODO:
-        //    (as) If feature of "StartDocument" should be reactivated - add code to read document name here!
-        String aName;
-        if ( !aName.Len() )
-        {
-            aName = String( DEFINE_CONST_UNICODE("private:factory/" ) );
-            SvtModuleOptions aOpt;
-            if ( aOpt.IsWriter() )
-                aName += DEFINE_CONST_UNICODE("swriter");
-            else if ( aOpt.IsCalc() )
-                aName += DEFINE_CONST_UNICODE("scalc");
-            else if ( aOpt.IsImpress() )
-                aName += DEFINE_CONST_UNICODE("simpress");
-            else if ( aOpt.IsDraw() )
-                aName += DEFINE_CONST_UNICODE("sdraw");
-            else
-                return;
-        }
-
-        SfxStringItem aNameItem( SID_FILE_NAME, aName );
-        aSet.Put( aNameItem, aNameItem.Which() );
-        aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-
-        // Referer
-        aSet.Put( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) ) );
-        pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
-        Reference < ::com::sun::star::frame::XDesktop > xDesktop(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY );
-    }
-*/
 }
 
 //--------------------------------------------------------------------
@@ -589,18 +416,7 @@ ModalDialog* SfxApplication::CreateAboutDialog()
 
 //--------------------------------------------------------------------
 
-void SfxApplication::HandleConfigError_Impl
-(
-    sal_uInt16 nErrorCode
-
-)   const
-
-/*  [Beschreibung]
-
-    Hilfsroutine zum Anzeigen einer ErrorBox mit einer von nErrorCode
-    abh"angigen Fehlermeldung.
-*/
-
+void SfxApplication::HandleConfigError_Impl( sal_uInt16 nErrorCode ) const
 {
     sal_uInt16 nResId = 0;
     switch(nErrorCode)
@@ -627,30 +443,6 @@ void SfxApplication::HandleConfigError_Impl
         ErrorBox aErrorBox(NULL, SfxResId(nResId));
         aErrorBox.Execute();
     }
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::StoreConfig()
-
-/*  [Beschreibung]
-
-    Interne Routine zum Speichern der Konfiguration in SfxIniManager
-    und SfxConfigManager.
-*/
-
-{
-    // Workingset schreiben?
-//    if ( SvtOptions().IsSaveWorkingSet() )
-//        SfxTaskManager::SaveWorkingSet();
-//(mba/task): Implementierung fehlt
-
-    if (!pCfgMgr->StoreConfiguration())
-        HandleConfigError_Impl((sal_uInt16)pCfgMgr->GetErrorCode());
-    else
-        SaveConfiguration();
-
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 }
 
 //--------------------------------------------------------------------
