@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlFixedLineModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:07:55 $
+ *  last change:$Date: 2003-11-18 16:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,18 @@ public class _UnoControlFixedLineModel extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(4321) : null ;
+            }
+        }) ;
+    }
+
+    /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
+    public void _TextLineColor() {
+        testProperty("TextLineColor", new PropertyTester() {
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) : null ;
             }
