@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:08:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,31 @@ namespace
         // end accompanying sound effect, if any
         if( mpSoundPlayer.get() )
             mpSoundPlayer->stopPlayback();
+
+        if (mpEnteringBitmap.get() != 0)
+        {
+            // draw fully entered bitmap:
+            ViewVector::const_iterator iPos( maViews.begin() );
+            const ViewVector::const_iterator iEnd( maViews.end() );
+            for ( ; iPos != iEnd; ++iPos )
+            {
+                const cppcanvas::CanvasSharedPtr pCanvas(
+                    (*iPos)->getCanvas() );
+                // need to render without any transformation (we
+                // assume device units):
+                const basegfx::B2DHomMatrix viewTransform(
+                    pCanvas->getTransformation() );
+                const basegfx::B2DPoint posPixel(
+                    viewTransform * basegfx::B2DPoint() );
+                const cppcanvas::CanvasSharedPtr pDevicePixelCanvas(
+                    pCanvas->clone() );
+                basegfx::B2DHomMatrix transform;
+                transform.translate( posPixel.getX(), posPixel.getY() );
+                pDevicePixelCanvas->setTransformation( transform );
+                mpEnteringBitmap->draw( pDevicePixelCanvas );
+            }
+            // TODO: Slide::show() initial Sliderendering may be obsolete now
+        }
 
         mbSpritesVisible = false;
 
