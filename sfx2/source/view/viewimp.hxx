@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:04:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 
 // forward ---------------------------------------------------------------
 
-class SfxFrameSetDescriptor;
 class SfxMenuBarManager;
 class SfxAcceleratorManager;
 class SfxOfficeDispatch;
@@ -103,7 +102,6 @@ struct SfxViewShell_Impl
     SbxObjectRef                xSelectionObj;
     SvBorder                    aBorder;
     Size                        aOptimalSize;
-    SfxFrameSetDescriptor*      pSetDescr;
     Size                        aMargin;
     USHORT                      nPrinterLocks;
     BOOL                        bUseObjectSize;
