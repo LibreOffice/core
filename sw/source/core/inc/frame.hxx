@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:21:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ class SwCntntFrm;
 class SfxPoolItem;
 class SwAttrSet;
 class ViewShell;
-class Brush;
 class Color;
 class SwBorderAttrs;
 class SwCache;
