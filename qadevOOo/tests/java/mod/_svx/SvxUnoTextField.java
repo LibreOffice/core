@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextField.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:39:13 $
+ *  last change:$Date: 2003-09-08 12:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package mod._svx;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DrawTools;
+import util.SOfficeFactory;
+
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -69,13 +78,6 @@ import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DrawTools;
-import util.SOfficeFactory;
 
 /**
  *
@@ -105,7 +107,7 @@ public class SvxUnoTextField extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc( (XMultiServiceFactory) tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -139,9 +141,7 @@ public class SvxUnoTextField extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    public TestEnvironment createTestEnvironment( TestParameters tParam,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
         XShape oShape = null;
@@ -151,7 +151,7 @@ public class SvxUnoTextField extends TestCase {
         log.println( "creating a test environment" );
         try {
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)  tParam.getMSF());
               oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Rectangle");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         }
@@ -161,13 +161,15 @@ public class SvxUnoTextField extends TestCase {
             throw new StatusException("Couldn't create Shape ",e);
         }
 
+        XTextCursor the_Cursor = null;
+
           // create testobject here
         try {
 
             XText the_Text = (XText) UnoRuntime.queryInterface(XText.class,oShape);
             XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
                 UnoRuntime.queryInterface( XMultiServiceFactory.class, xDrawDoc );
-            XTextCursor the_Cursor = the_Text.createTextCursor();
+            the_Cursor = the_Text.createTextCursor();
             oObj = (XInterface)
                 oDocMSF.createInstance( "com.sun.star.text.TextField.DateTime" );
             XTextContent the_Field = (XTextContent)
@@ -184,7 +186,7 @@ public class SvxUnoTextField extends TestCase {
 
         log.println( "creating a new environment for FieldMaster object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
+        tEnv.addObjRelation("RANGE", the_Cursor);
 
         return tEnv;
     } // finish method getTestEnvironment
