@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 08:56:32 $
+ *  last change: $Author: tl $ $Date: 2001-07-30 10:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,6 +1733,8 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if (pSubset)
             aFontsSubsetLB.SelectEntry( pSubset->GetName() );
+        else
+            aFontsSubsetLB.SetNoSelection();
     }
 
     aSymbolDisplay.SetChar( cChar );
