@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:48:29 $
+ *  last change: $Author: sj $ $Date: 2002-10-31 11:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ BOOL PictReader::Callback(USHORT nPercent)
     return FALSE;
 }
 
-inline Point PictReader::ReadPoint()
+Point PictReader::ReadPoint()
 {
     short nx,ny;
 
@@ -277,7 +277,7 @@ inline Point PictReader::ReadPoint()
                  (long) ( Fraction( (long) ny ) * aVRes ) - aBoundingRect.Top() );
 }
 
-inline Point PictReader::ReadDeltaH(Point aBase)
+Point PictReader::ReadDeltaH(Point aBase)
 {
     signed char ndh;
 
@@ -287,7 +287,7 @@ inline Point PictReader::ReadDeltaH(Point aBase)
                   aBase.Y() );
 }
 
-inline Point PictReader::ReadDeltaV(Point aBase)
+Point PictReader::ReadDeltaV(Point aBase)
 {
     signed char ndv;
 
@@ -296,25 +296,25 @@ inline Point PictReader::ReadDeltaV(Point aBase)
     return Point( aBase.X(), aBase.Y() + (long) ( Fraction( (long) ndv ) * aVRes ) );
 }
 
-inline Point PictReader::ReadUnsignedDeltaH(Point aBase)
+Point PictReader::ReadUnsignedDeltaH(Point aBase)
 {
-    char ndh;
+    sal_uInt8 ndh;
 
     *pPict >> ndh;
 
-    return Point(aBase.X() + (long) ( Fraction( (long) ndh ) * aHRes ), aBase.Y() );
+    return Point(aBase.X() + (long) ( Fraction( (long)ndh ) * aHRes ), aBase.Y() );
 }
 
-inline Point PictReader::ReadUnsignedDeltaV(Point aBase)
+Point PictReader::ReadUnsignedDeltaV(Point aBase)
 {
-    char ndv;
+    sal_uInt8 ndv;
 
     *pPict >> ndv;
 
-    return Point( aBase.X(), aBase.Y() + (long) ( Fraction( (long) ndv ) * aVRes ) );
+    return Point( aBase.X(), aBase.Y() + (long) ( Fraction( (long)ndv ) * aVRes ) );
 }
 
-inline Size PictReader::ReadSize()
+Size PictReader::ReadSize()
 {
     short nx,ny;
 
