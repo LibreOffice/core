@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:17:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ Pathes::Pathes( Window* pParent,
                 const String& rOutPath,
                 const USHORT nLang ) :
             ModalDialog ( pParent, ResId( DLG_PATH ) ),
+            aBtnOk      ( this, ResId( BTN_OK ) ),
+            aBtnCancel  ( this, ResId( BTN_CANCEL ) ),
             aGrpPath    ( this, ResId( GRP_PATH ) ),
             aFtSrs      ( this, ResId( FT_SRS ) ),
             aFtRes      ( this, ResId( FT_RES ) ),
@@ -207,9 +209,7 @@ Pathes::Pathes( Window* pParent,
             aEdtOut     ( this, ResId( EDT_OUT ) ),
             aBtnOut     ( this, ResId( BTN_OUT ) ),
             aGrpLang    ( this, ResId( GRP_LANG ) ),
-            aLbLang     ( this, ResId( LB_LANG ) ),
-            aBtnOk      ( this, ResId( BTN_OK ) ),
-            aBtnCancel  ( this, ResId( BTN_CANCEL ) )
+            aLbLang     ( this, ResId( LB_LANG ) )
 {
     FreeResource();
 
@@ -358,8 +358,6 @@ void BmpApp::Main( )
     PopupMenu*  pPB = new PopupMenu();
     String      aLangDir;
     String      aOutName;
-    int         nCmdCount = GetCommandLineParamCount();
-    USHORT      nCurCmd = 0;
 
     Resource::SetResManager( pAppResMgr );
 
