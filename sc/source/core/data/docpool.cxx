@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-18 19:38:58 $
+ *  last change: $Author: nn $ $Date: 2001-07-12 10:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include "scitems.hxx"
 #include <tools/shl.hxx>
-#include <vcl/system.hxx>
+#include <vcl/outdev.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/itemiter.hxx>
 #include <svx/algitem.hxx>
@@ -217,8 +217,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
                         aItemInfos, NULL, bLoadRefCounts ),
         pSecondary  ( pSecPool )
 {
-    //  latin font from GetDefaultFonts is not used, STDFONT_SWISS instead
-    Font aStdFont = System::GetStandardFont( STDFONT_SWISS );
+    //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
+    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, 0 );
     SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamily(),
                                             aStdFont.GetName(), aStdFont.GetStyleName(),
                                             aStdFont.GetPitch(), aStdFont.GetCharSet(),
