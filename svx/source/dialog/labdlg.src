@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:55:23 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,7 @@ TabPage RID_SVXPAGE_CAPTION
     Text[ chinese_simplified ] = "ΝΌΐύ";
     Text[ russian ] = "Λεγενδΰ";
     Text[ polish ] = "Legenda";
-    Text[ japanese ] = "‚«o‚µ";
+    Text[ japanese ] = "–}—α";
     Text[ chinese_traditional ] = "ΉΟ¨Ò";
     Text[ arabic ] = "ΚΪανή ΚέΣνΡν";
     Text[ greek ] = "Επιγραφή";
@@ -950,7 +950,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ chinese_simplified ] = "ΝΌΐύ";
                 Text[ russian ] = "Λεγενδΰ";
                 Text[ polish ] = "Legenda";
-                Text[ japanese ] = "‚«o‚µ";
+                Text[ japanese ] = "–}—α";
                 Text[ chinese_traditional ] = "ΉΟ¨Ò";
                 Text[ arabic ] = "ΚΪανή ΚέΣνΡν";
                 Text[ greek ] = "Επιγραφή";
@@ -963,7 +963,7 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ chinese_simplified ] = "ΝΌΐύ";
     Text[ russian ] = "Λεγενδΰ";
     Text[ polish ] = "Legenda";
-    Text[ japanese ] = "‚«o‚µ";
+    Text[ japanese ] = "–}—α";
     Text[ chinese_traditional ] = "ΉΟ¨Ò";
     Text[ arabic ] = "ΚΪανή ΚέΣνΡν";
     Text[ greek ] = "Επιγραφή";
