@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include "svx/frmdiritem.hxx"
 #endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
@@ -203,6 +206,14 @@ void SwPageDesc::Mirror()
     aSet.Put( aMaster.GetShadow() );
     aSet.Put( aMaster.GetCol() );
     aLeft.SetAttr( aSet );
+}
+
+void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
+{
+    SwFrmFmt& rFmt = bLeft ? GetLeft() : GetMaster();
+
+    rFmt.ResetAllAttr();
+    rFmt.SetAttr( SvxFrameDirectionItem() );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,8 @@ class SwPageDesc : public SwModify
     //Kein Abgleich an anderer Stelle.
     void Mirror();
 
+    void ResetAllAttr( sal_Bool bLeft );
+
     SwPageDesc(const String&, SwFrmFmt*, SwDoc *pDc );
 public:
     const String &GetName() const { return aDescName; }
@@ -228,6 +230,11 @@ public:
           SwFrmFmt &GetLeft()   { return aLeft; }
     const SwFrmFmt &GetMaster() const { return aMaster; }
     const SwFrmFmt &GetLeft()   const { return aLeft; }
+
+    // Reset all attrs of the format but keep the ones a pagedesc
+    // cannot live without.
+    inline void ResetAllMasterAttr();
+    inline void ResetAllLeftAttr();
 
     //Mit den folgenden Methoden besorgt sich das Layout ein Format
     //um eine Seite erzeugen zu koennen
@@ -323,6 +330,16 @@ inline UseOnPage SwPageDesc::GetUseOn() const
     eRet = (UseOnPage) (eRet & PD_NOFOOTERSHARE);
     // (USHORT&)eRet &= (USHORT)PD_NOFOOTERSHARE;
     return eRet;
+}
+
+inline void SwPageDesc::ResetAllMasterAttr()
+{
+    ResetAllAttr( sal_False );
+}
+
+inline void SwPageDesc::ResetAllLeftAttr()
+{
+    ResetAllAttr( sal_True );
 }
 
 inline SwFrmFmt *SwPageDesc::GetRightFmt()

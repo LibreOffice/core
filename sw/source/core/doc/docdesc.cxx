@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-25 11:59:57 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 12:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include "svx/frmdiritem.hxx"
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -702,6 +705,9 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy)
         //Default-Seitenformat einstellen.
         ::lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(),
                               GetPrt(), FALSE );
+        pNew->GetMaster().SetAttr( SvxFrameDirectionItem() );
+        pNew->GetLeft().SetAttr( SvxFrameDirectionItem() );
+
         if( GetPrt() )
             pNew->SetLandscape( ORIENTATION_LANDSCAPE ==
                                 GetPrt()->GetOrientation() );
