@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:38:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,8 +438,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         }
 
                         // dann setze im StartNode noch den Link:
-                        SwFmtINetFmt aINet( URIHelper::SmartRelToAbs(
-                                                sFileName ), aEmptyStr );
+                        SwFmtINetFmt aINet( sFileName , aEmptyStr );
                         SwTxtNode* pTNd = (SwTxtNode*)pSttNd;
                         pTNd->Insert( aINet, 0, pTNd->GetTxt().Len() );
 
@@ -457,8 +456,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         SwSection aSect( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFmt* pFmt = MakeSectionFmt( 0 );
-                        aSect.SetLinkFileName(
-                            URIHelper::SmartRelToAbs( sFileName ) );
+                        aSect.SetLinkFileName(sFileName  );
                         aSect.SetProtect();
 
                         aEndIdx--;  // im InsertSection ist Ende inclusive
