@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleExtendedComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:22:41 $
+ *  last change:$Date: 2003-09-08 10:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,9 @@
 package ifc.accessibility;
 
 import lib.MultiMethodTest;
+
 import com.sun.star.accessibility.XAccessibleExtendedComponent;
-import com.sun.star.accessibility.XAccessibleStateSet;
-import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.awt.XFont;
-import com.sun.star.uno.UnoRuntime;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleExtendedComponent</code>
@@ -82,15 +80,8 @@ import com.sun.star.uno.UnoRuntime;
  * @see com.sun.star.accessibility.XAccessibleExtendedComponent
  */
 public class _XAccessibleExtendedComponent extends MultiMethodTest {
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleExtendedComponent" ;
 
     public XAccessibleExtendedComponent oObj = null;
-
-    // temporary while accessibility package is in com.sun.star
-    protected String getTestedClassName() {
-        return className;
-    }
 
     /**
      * Just calls the method.
