@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2002-06-14 10:07:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore)
 sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore)
 {
     OSL_ASSERT(Semaphore != 0);
-    return (WaitForSingleObject((HANDLE)Semaphore, 0) == WAIT_OBJECT_0);
+    return (sal_Bool)(WaitForSingleObject((HANDLE)Semaphore, 0) == WAIT_OBJECT_0);
 }
 
 
@@ -137,9 +137,8 @@ sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore)
 {
     OSL_ASSERT(Semaphore != 0);
 
-    return (ReleaseSemaphore((HANDLE)Semaphore,
-                             1,                 /* increase count by one */
-                             NULL));            /* not interested in previous count */
+    /* increase count by one, not interested in previous count */
+    return (sal_Bool)(ReleaseSemaphore((HANDLE)Semaphore, 1, NULL) != FALSE);
 }
 
 
