@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleBrowseBoxTable.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:02:24 $ 
+'*  last change:$Date: 2003-06-11 16:28:14 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -101,7 +101,8 @@ On Error Goto ErrHndl
     oWin = createUnoService("com.sun.star.awt.Toolkit").getActiveTopWindow()
 
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 48, "Table")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+                       com.sun.star.accessibility.AccessibleRole.TABLE, "Table")
     Out.log(oObj.getImplementationName)
 Exit Sub
 ErrHndl:
