@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 14:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,7 @@ namespace pcr
             else
             {   // perhaps it's a grid column
                 Reference< XGridColumnFactory >  xGrid;
-                Reference< ::com::sun::star::container::XChild >  xChild(_rxObject, UNO_QUERY);
+                Reference< XChild >  xChild(_rxObject, UNO_QUERY);
 
                 if (xChild.is())
                     xGrid = Reference< XGridColumnFactory > (xChild->getParent(),UNO_QUERY);
@@ -635,6 +635,9 @@ namespace pcr
                         m_pView->SetHelpId(HID_FM_DLG_PROP_GRIDCTR);
                     setObject(makeAny(_rxObject), aAdditionalEvents);
                 }
+                else
+                    // it's something else
+                    setObject(makeAny(_rxObject), aAdditionalEvents);
             }
 
             // propagate the new object to our view
@@ -876,6 +879,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/18 14:45:10  rt
+ *  #65293# semicolon removed
+ *
  *  Revision 1.2  2001/01/12 14:44:49  fs
  *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
  *
