@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-02-04 12:32:51 $
+dnl * Date: $Date: 2004-02-25 13:50:21 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.60 $ )
+AC_REVISION( $Revision: 1.61 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -354,8 +354,10 @@ case "$_os" in
 		PTHREAD_CFLAGS="-D_THREAD_SAFE"
 		if test "$OSVERSION" -lt "500016"; then
 			PTHREAD_LIBS="-pthread"
-		else
+		elif test "$OSVERSION" -lt "502102"; then
 			PTHREAD_LIBS="-lc_r"
+		else 
+			PTHREAD_LIBS="-lpthread"
 		fi
 		;;
 	"OSF1")
