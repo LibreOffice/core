@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_COLLECT_HXX
 #define SC_COLLECT_HXX
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -189,7 +193,7 @@ public:
                   nValue(nVal),
                   nStrType(nType) {}
 
-            TypedStrData( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
+            TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                             BOOL bAllStrings );
 
             TypedStrData( const TypedStrData& rCpy )
