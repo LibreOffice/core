@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:16:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,7 +1385,7 @@ String STR_REGISTER_ON
     Text[ catalan ] = "Conforme al registre";
     Text[ finnish ] = "Rivirekisteri";
     Text[ thai ] = "ลงทะเบียน-จริง";
-    Text[ czech ] = "Registr";
+    Text[ czech ] = "Řádkový rejstřík";
     Text[ hebrew ] = "Registerhaltigkeit";
     Text[ hindi ] = "रिजिस्टर-सच्चा";
     Text[ slovak ] = "Register";
@@ -1418,7 +1418,7 @@ String STR_REGISTER_OFF
     Text[ catalan ] = "No conforme al registre";
     Text[ finnish ] = "Ei rivirekisteri�";
     Text[ thai ] = "ไม่ลงทะเบียน-จริง";
-    Text[ czech ] = "Bez registru";
+    Text[ czech ] = "Bez řádkového rejstříku";
     Text[ hebrew ] = "keine Registerhaltigkeit";
     Text[ hindi ] = "रजिस्टर-सही नहीं";
     Text[ slovak ] = "Bez registra";
@@ -2580,6 +2580,24 @@ String STR_GRID_LINES_CHARS
     Text[ hindi ] = "Grid (lines and characters)";
     Text[ slovak ] = "Mriežka (riadky a znaky)";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
