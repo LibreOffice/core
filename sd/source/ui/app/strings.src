@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:28:22 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 10:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5099,7 +5099,7 @@ String STR_SCALE_OBJECTS
     Text [ portuguese_brazilian ] = "Das Format der neuen Seiten wird angepaßt.\nWollen Sie die Objekte auch anpassen?" ;
     Text[ chinese_simplified ] = "ÒÑ¾­ÏàÓ¦µ÷ÕûÁËĞÂ½¨Ò³ÃæµÄ¸ñÊ½¡£\nÒ²ÒªÏàÓ¦µ÷ÕûÕâ¸ö¶ÔÏóÂğ£¿";
     Text[ russian ] = "Ôîğìàò íîâîé ñòğàíèöû áóäåò ñîãëàñîâàí.\nÂû õîòèòå òàêæå ñîãëàñîâàòü îáúåêòû?";
-    Text[ polish ] = "Format nowych stron zostanie dopasowany.\nCzy chcesz dopasowaæ równie¿ obiekty?";
+    Text[ polish ] = "Format nowych stron zostanie dopasowany.\nCzy dopasowaæ równie¿ obiekty?";
     Text[ japanese ] = "V‚µ‚¢Íß°¼Ş‚Ì‘®‚ª’²®‚³‚ê‚Ü‚·B\nµÌŞ¼Şª¸Ä‚à’²®‚µ‚Ü‚·‚©H";
     Text[ greek ] = "Ç ìïñöŞ ôùí íİùí óåëéäşí èá ğñïóáñìïóôåß.\nÈİëåôå íá ãßíåé ğñïóáñìïãŞ êáé ôùí áíôéêåéìİíùí;";
     Text[ korean ] = "»õ ÆäÀÌÁöÀÇ ¼­½ÄÀÌ Á¶Á¤µÉ °ÍÀÔ´Ï´Ù. \n°³Ã¼µµ Á¶Á¤ÇÏ½Ã°Ú½À´Ï±î?";
@@ -6312,7 +6312,7 @@ String STR_PRINT_NOTES
     Text[ polish ] = "(Notatki)";
     Text[ japanese ] = "(ÒÓ’ )";
     Text[ greek ] = "(Óçìåéşóåéò)";
-    Text[ korean ] = "(¸Ş¸ğ)";
+    Text[ korean ] = " (¸Ş¸ğ)";
     Text[ chinese_traditional ] = "(³Æª`)";
     Text[ arabic ] = "(ãáÇÍÙÇÊ)";
     Text[ turkish ] = "(Notlar)";
@@ -7759,7 +7759,7 @@ String STR_EFFECT_WAVYLINE_FROM_B
     Text[ polish ] = "Linia falista z do³u";
     Text[ japanese ] = "‰º‚©‚çÖs";
     Text[ greek ] = "ÊõìáôéóôŞ ãñáììŞ áğü êÜôù";
-    Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ¹°°á¼±";
+    Text[ korean ] = "¾Æ·¡ºÎÅÍ ¹°°á¼±";
     Text[ chinese_traditional ] = "¦V¤UªºÅs¦±½u";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä ÃÓİá";
     Text[ turkish ] = "Aşağıdan yılan hareketi";
@@ -10490,7 +10490,7 @@ String STR_ASK_GALLERY_INSERT
     Text[ polish ] = "Czy chcesz dodaæ dŸwiêk do galerii?";
     Text[ japanese ] = "»³İÄŞ‚ğ·Ş¬×Ø°Ã°Ï‚É‘}“ü‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
     Text[ greek ] = "Èİëåôå íá åéóá÷èåß ï Ş÷ïò óôï èİìá ôçò Gallery;";
-    Text[ korean ] = "»ç¿îµå¸¦ Gallery Å×¸¶·Î Ãß°¡ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "»ç¿îµå¸¦ °¶·¯¸® ÁÖÁ¦¿¡ Ãß°¡ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_traditional ] = "±z­n±N³o­Ó­µÀW¥[¤Jµe´Y¥DÃD¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÅÖÇİÉ ÇáÕæÊ Åáì ãæÖæÚ ÇáÌÇáíÑí¿";
     Text[ turkish ] = "Sesi galeri konusuna eklemek istiyor musunuz?";
@@ -12083,7 +12083,7 @@ String STR_HTMLEXP_ERROR_GALLERY
     Text[ polish ] = "Wyst¹pi³ b³¹d w kopiowaniu plików graficznych z galerii.";
     Text[ portuguese_brazilian ] = "Error while copying graphic filese from the Gallery.";
     Text[ japanese ] = "·Ş¬×Ø‚©‚ç¸Ş×Ì¨¯¸Ì§²Ù‚ÌºËß°’†‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "Gallery¿¡¼­ ±×·¡ÇÈ ÆÄÀÏÀ» º¹»çÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ korean ] = "°¶·¯¸®¿¡¼­ ±×·¡ÇÈ ÆÄÀÏÀ» º¹»çÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚ¸´ÖÆ»­ÀÈÖĞµÄÍ¼ĞÎÎÄ¼şÊ±³öÏÖÁËÒ»¸ö´íÎó";
     Text[ chinese_traditional ] = "±qµe´YÎ`»s¹Ï§ÎÀÉ®Éµo¥Í¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ äÓÎ ãáİÇÊ ÇáÑÓæãÇÊ ãä ÇáÌÇáíÑí.";
