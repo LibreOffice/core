@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-21 15:08:59 $
+ *  last change: $Author: aw $ $Date: 2002-10-29 15:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2289,7 +2289,11 @@ void SdrObject::ImpDrawLineGeometry(
 
                 if( aBounds.GetWidth() )
                 {
-                    double fScale( (double)rLineParameters.GetStartWidth() / (double)rLineParameters.GetLineWidth() *
+                    // #104527# Avoid division by zero. If rLineParameters.GetLineWidth
+                    // is zero this is a hairline which we can be handled as 1.0.
+                    double fLineWidth(rLineParameters.GetLineWidth() ? (double)rLineParameters.GetLineWidth() : 1.0);
+
+                    double fScale( (double)rLineParameters.GetStartWidth() / fLineWidth *
                                    (double)SvtGraphicStroke::normalizedArrowWidth / (double)aBounds.GetWidth() );
                     aStartPoly.Scale( fScale, fScale );
                 }
@@ -2307,7 +2311,11 @@ void SdrObject::ImpDrawLineGeometry(
 
                 if( aBounds.GetWidth() )
                 {
-                    double fScale( (double)rLineParameters.GetEndWidth() / (double)rLineParameters.GetLineWidth() *
+                    // #104527# Avoid division by zero. If rLineParameters.GetLineWidth
+                    // is zero this is a hairline which we can be handled as 1.0.
+                    double fLineWidth(rLineParameters.GetLineWidth() ? (double)rLineParameters.GetLineWidth() : 1.0);
+
+                    double fScale( (double)rLineParameters.GetEndWidth() / fLineWidth *
                                    (double)SvtGraphicStroke::normalizedArrowWidth / (double)aBounds.GetWidth() );
                     aEndPoly.Scale( fScale, fScale );
                 }
