@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: os $ $Date: 2001-06-27 14:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
     aDrawRect( Point(0,0), GetOutputSizePixel() )
 
 {
+    SetBorderStyle(WINDOW_BORDER_MONO);
     Paint( aDrawRect );
 }
 
@@ -307,7 +308,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
 
 */
 {
-    SetLineColor(COL_BLACK);
+    SetLineColor();
     DrawRect( aDrawRect );
     if ( bIsBmp )
     {
