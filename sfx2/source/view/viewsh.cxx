@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 16:06:03 $
+ *  last change: $Author: as $ $Date: 2000-12-01 10:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/miscopt.hxx>
 
 #pragma hdrstop
 
@@ -1400,7 +1401,11 @@ void SfxViewShell::CheckIPClient_Impl( SvInPlaceClient *pIPClient,
 #ifdef SOLAR_PLUGIN
     bPlugIn = Application::IsRemoteServer() ? FALSE : (USHORT)pIniMgr->Get( SFX_KEY_INET_EXE_PLUGIN ).ToInt32();
 #endif
+#else//MUSTINI
+#ifdef SOLAR_PLUGIN
+    bPlugIn = Application::IsRemoteServer() ? FALSE : SvtMiscOptions().IsPluginsEnabled();
 #endif
+#endif//MUSTINI
 
     SvAppletObjectRef aAppRef = pIPClient->GetIPObj();
     SvPlugInObjectRef aPlugRef = pIPClient->GetIPObj();
