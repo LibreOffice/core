@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 07:08:55 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,20 @@ class SwFrmSwapper
 public:
     SwFrmSwapper( const SwTxtFrm* pFrm, sal_Bool bSwapIfNotSwapped );
     ~SwFrmSwapper();
+};
+
+#endif
+
+#ifdef BIDI
+
+class SwLayoutModeModifier
+{
+    const OutputDevice& rOut;
+    long nOldLayoutMode;
+public:
+    SwLayoutModeModifier( const OutputDevice& rOutp );
+    ~SwLayoutModeModifier();
+    Modify( sal_Bool bChgToRTL );
 };
 
 #endif
