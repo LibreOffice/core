@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 15:52:20 $
+ *  last change: $Author: jp $ $Date: 2001-01-25 20:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,9 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
     return bRet;
 }
 
+#ifdef DEBUG
+#include <rubylist.hxx>
+#endif
 
 void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
 {
@@ -451,7 +454,26 @@ void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
                                         bRight, bModulus );
     }
     else
+#ifdef DEBUG
+    {
+        SwRubyList aList;
+        USHORT nC = GetDoc()->FillRubyList( *pCrsr, aList,0 );
+        for( USHORT n = 0; n < nC; ++n )
+        {
+            SwRubyListEntry* pE = aList[ n ];
+            switch ( n)
+            {
+            case 3: pE->SetText( String::CreateFromAscii( "Replace-3" )); break;
+            case 4: pE->GetRubyAttr().SetText( String::CreateFromAscii( "Hallo" ));
+                    break;
+            }
+        }
+        if( nC )
+            GetDoc()->SetRubyList( *pCrsr, aList,0 );
+    }
+#else
         GetDoc()->MoveLeftMargin( *pCrsr, bRight, bModulus );
+#endif
 
     EndUndo( UNDO_END );
     EndAllAction();
@@ -543,6 +565,6 @@ USHORT SwEditShell::GetCurLang() const
 {
     const SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
-    return pTNd ? pTNd->GetLang( pCrsr->GetPoint()->nContent.GetIndex(), 1 )
+    return pTNd ? pTNd->GetLang( pCrsr->GetPoint()->nContent.GetIndex(), 0 )
                 : LANGUAGE_DONTKNOW;
 }
