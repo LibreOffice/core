@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,14 @@
 #ifndef SW_LINEINFO_HXX
 #define SW_LINEINFO_HXX
 
-
 #ifndef _CALBCK_HXX
 #include "calbck.hxx"
 #endif
 #ifndef _NUMRULE_HXX
 #include "numrule.hxx"
+#endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 class SwCharFmt;
@@ -80,7 +82,7 @@ enum LineNumberPosition
     LINENUMBER_POS_OUTSIDE
 };
 
-class SwLineNumberInfo : public SwClient //purpose of derivation from SwClient:
+class SW_DLLPUBLIC SwLineNumberInfo : public SwClient //purpose of derivation from SwClient:
                                          //character style for displaying the numbers.
 {
     SvxNumberType       aType;              //e.g. roman linenumbers
