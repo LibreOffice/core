@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:35:56 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3434,10 +3434,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Absatz-Hintergruende werden nur fuer den SW ausgegeben
-    if( rHt.Which() < RES_CHRATR_END ||
-        rHTMLWrt.IsHTMLMode(HTMLMODE_FULL_STYLES) )
-        OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, 0 );
+    OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, 0 );
 
     return rWrt;
 }
