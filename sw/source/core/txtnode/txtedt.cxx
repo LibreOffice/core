@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-06 15:22:55 $
+ *  last change: $Author: fme $ $Date: 2001-08-14 14:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,12 +535,17 @@ BOOL SwScanner::NextWord( LanguageType aLang )
 
     if( pWrong )
     {
+        xub_StrLen nOldBegin = nBegin;
         nBegin = bReverse ? pWrong->LastWrong( nBegin )
                           : pWrong->NextWrong( nBegin );
         if( STRING_LEN == nBegin )
             return FALSE;
-    }
 
+        // if we jumped over a range marked as valid, we have to adjust
+        // the word boundaries
+        if ( nBegin != nOldBegin )
+            bStart = TRUE;
+    }
 
     Boundary aBound;
     if( bStart )
