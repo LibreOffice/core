@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 10:02:38 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 06:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,6 @@ void ODbaseIndexDialog::Init()
         ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
         aURL.SetSmartURL(aName);
         aExt = aURL.getExtension();
-        aURL.removeExtension();
         if(aExt == aIndexExt.getStr())
         {
             m_aFreeIndexList.push_back( OTableIndex(aURL.getName()) );
@@ -599,6 +598,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/16 10:02:38  fs
+ *  #87037# Config requires system notation / correct loop ranges / Init: RemoveFreeIndex after doing the complete loop
+ *
  *  Revision 1.6  2001/05/14 13:25:31  fs
  *  #86942# +checkButtons / OnListEntrySelected
  *
