@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:55:53 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1732,7 +1732,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 
         const FontCollectionEntry* pDesc = maFontCollection.GetById( pPortion->mnFont );
         sal_Int16 nNormalSpacing = 100;
-        if ( pDesc )
+        if ( !mbFontIndependentLineSpacing && pDesc )
         {
             double fN = 100.0;
             fN *= pDesc->Scaling;
@@ -1747,7 +1747,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         {
             if ( nLineSpacing > 0 )
             {
-                if ( pDesc )
+                if ( !mbFontIndependentLineSpacing && pDesc )
                      nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
             }
             else
@@ -2030,12 +2030,18 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 sal_Bool PPTWriter::ImplGetText()
 {
     mnTextSize = 0;
+    mbFontIndependentLineSpacing = sal_False;
     mXText = ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XSimpleText >
             ( mXShape, ::com::sun::star::uno::UNO_QUERY );
 
     if ( mXText.is() )
+    {
         mnTextSize = mXText->getString().getLength();
+        ::com::sun::star::uno::Any aAny;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FontIndependentLineSpacing" ) ) ), sal_True )
+            aAny >>= mbFontIndependentLineSpacing;
+    }
     return ( mnTextSize != 0 );
 }
 
@@ -3144,6 +3150,7 @@ ImplTextObj::ImplTextObj( int nInstance )
     mnInstance = nInstance;
     mpList = new List;
     mbHasExtendedBullets = FALSE;
+    mbFixedCellHeightUsed = FALSE;
 }
 
 ImplTextObj::~ImplTextObj()
