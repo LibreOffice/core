@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 15:56:16 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,10 @@ void ScInterpreter::ScIfJump()
                         {
                             double fVal;
                             bool bTrue;
-                            BOOL bIsValue;
-                            const MatValue* pMatVal = pMat->Get( nC, nR,
-                                    bIsValue);      // bIsValue used as bString
-                            bIsValue = !bIsValue;
+                            ScMatValType nType = 0;
+                            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
+                                    nType);
+                            bool bIsValue = (nType == SC_MATVAL_VALUE);
                             if ( bIsValue )
                             {
                                 fVal = pMatVal->fVal;
@@ -264,10 +264,10 @@ void ScInterpreter::ScChoseJump()
                         for ( SCSIZE nR=0; nR < nRows; ++nR )
                         {
                             double fVal;
-                            BOOL bIsValue;
-                            const MatValue* pMatVal = pMat->Get( nC, nR,
-                                    bIsValue);      // bIsValue used as bString
-                            bIsValue = !bIsValue;
+                            ScMatValType nType;
+                            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
+                                    nType);
+                            bool bIsValue = (nType == SC_MATVAL_VALUE);
                             if ( bIsValue )
                             {
                                 fVal = pMatVal->fVal;
@@ -1135,6 +1135,9 @@ void ScInterpreter::ScOr()
 
 void ScInterpreter::ScNeg()
 {
+    // Simple negation doesn't change current format type to number, keep
+    // current type.
+    nFuncFmtType = nCurFmtType;
     switch ( GetStackType() )
     {
         case svMatrix :
@@ -3460,6 +3463,13 @@ void ScInterpreter::ScMatch()
                     }
                 }
                 break;
+                case svMatrix :
+                {
+                    ScMatValType nType = GetDoubleOrStringFromMatrix(
+                            rEntry.nVal, *rEntry.pStr);
+                    rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+                }
+                break;
                 default:
                 {
                     SetIllegalParameter();
@@ -3800,6 +3810,13 @@ void ScInterpreter::ScSumIf()
             case svString:
                 rString = GetString();
             break;
+            case svMatrix :
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
+                        rString);
+                bIsString = (nType != SC_MATVAL_VALUE);
+            }
+            break;
             default:
             {
                 fVal = GetDouble();
@@ -4133,6 +4150,13 @@ void ScInterpreter::ScLookup()
                 }
             }
             break;
+            case svMatrix :
+            {
+                ScMatValType nType = GetDoubleOrStringFromMatrix( rEntry.nVal,
+                        *rEntry.pStr);
+                rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+            }
+            break;
             default:
             {
                 SetIllegalParameter();
@@ -4407,6 +4431,13 @@ void ScInterpreter::ScHLookup()
                     }
                 }
                 break;
+                case svMatrix :
+                {
+                    ScMatValType nType = GetDoubleOrStringFromMatrix(
+                            rEntry.nVal, *rEntry.pStr);
+                    rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
+                }
+                break;
                 default:
                 {
                     SetIllegalParameter();
@@ -4659,6 +4690,13 @@ void ScInterpreter::ScVLookup()
                             *rEntry.pStr = sStr;
                         }
                     }
+                }
+                break;
+                case svMatrix :
+                {
+                    ScMatValType nType = GetDoubleOrStringFromMatrix(
+                            rEntry.nVal, *rEntry.pStr);
+                    rEntry.bQueryByString = (nType != SC_MATVAL_VALUE);
                 }
                 break;
                 default:
@@ -5410,7 +5448,7 @@ void ScInterpreter::ScIndex()
             nMaxAnz = (short) PopByte();
         else                                            // sonst Einzelselektion
             nMaxAnz = 1;
-        if (nBereich > nMaxAnz || nBereich < 1)
+        if (nBereich > nMaxAnz || nBereich < 1 || nCol < 0 || nRow < 0)
         {
             SetIllegalParameter();
             return;
