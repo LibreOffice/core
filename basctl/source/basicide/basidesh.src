@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:22:49 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3085,16 +3085,16 @@ String RID_STR_QUERYREPLACEMACRO
     Text[ russian ] = "Do you want to overwrite the macro XX ?";
     Text[ greek ] = "Do you want to overwrite the macro XX ?";
     Text[ dutch ] = "Do you want to overwrite the macro XX ?";
-    Text[ french ] = "Do you want to overwrite the macro XX ?";
+    Text[ french ] = "Voulez-vous �craser la macro XX ?";
     Text[ spanish ] = "�Desea sobrescribir la macro XX?";
     Text[ finnish ] = "Do you want to overwrite the macro XX ?";
-    Text[ italian ] = "Do you want to overwrite the macro XX ?";
+    Text[ italian ] = "Volete soprascrivere la macro XX?";
     Text[ danish ] = "Do you want to overwrite the macro XX ?";
     Text[ swedish ] = "Vill du skriva �ver makrot XX ?";
     Text[ polish ] = "Do you want to overwrite the macro XX ?";
     Text[ portuguese_brazilian ] = "Do you want to overwrite the macro XX ?";
-    Text[ japanese ] = "Do you want to overwrite the macro XX ?";
-    Text[ korean ] = "macro XX를 ?";
+    Text[ japanese ] = "マクロ XX に上書きしますか。";
+    Text[ korean ] = "macro XX 를 대체하시겠습니까?";
     Text[ chinese_simplified ] = "您要改写宏 XX ？";
     Text[ chinese_traditional ] = "您要覆寫 XX 巨集 ?";
     Text[ turkish ] = "Do you want to overwrite the macro XX ?";
