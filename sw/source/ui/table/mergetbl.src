@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:53:15 $
+ *  last change: $Author: vg $ $Date: 2001-07-14 20:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ chinese_traditional ] = "©M¤W¤@­Óªí®æ¦X¨Ö(~P)";
         Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÓÇÈŞ";
         Text[ greek ] = "İíùóç ìå ğñïçãïıìåíï ğßíáêá";
-        Text[ korean ] = "ÀÌÀü Ç¥¿¡¡¡¿¬°á(~P)";
+        Text[ korean ] = "ÀÌÀü Å×ÀÌºí¿¡ ¿¬°á(~P)";
         Text[ turkish ] = "~Önceki tablo ile birleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "unir con la tabla ~anterior";
@@ -171,7 +171,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ chinese_traditional ] = "©M¤U¤@­Óªí®æ¦X¨Ö(~N)";
         Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÊÇáí";
         Text[ greek ] = "İíùóç ìå åğüìåíï ğßíáêá";
-        Text[ korean ] = "´ÙÀ½ Ç¥¿¡¡¡¿¬°á(~N)";
+        Text[ korean ] = "´ÙÀ½ Å×ÀÌºí¿¡ ¿¬°á(~N)";
         Text[ turkish ] = "S~onraki tablo ile birleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "unir con la tabla ~siguiente";
@@ -199,6 +199,7 @@ ModalDialog DLG_MERGE_TABLE
     Text[ catalan ] = "unir tablas";
     Text[ finnish ] = "Yhdistä taulukot";
 };
+
 
 
 
