@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-15 13:40:45 $
+ *  last change: $Author: jp $ $Date: 2001-08-23 14:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,6 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     SwViewOption aUsrPref( *pUsrPref);
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     sal_Bool bVal;
-
     bVal = xProp.is() ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_AUTO)).getValue() : sal_False;
     aUsrPref.SetOnlineSpell( bVal );
@@ -839,6 +838,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_HIDE)).getValue() : sal_False;
     aUsrPref.SetHideSpell( bVal );
 
+    sal_Bool bOldShellWasPagePreView = FALSE,
+             bOldShellWasSrcView = FALSE;
     if( !pOldSh )
     {
         //Gibt es schon eine Sicht auf das Dokument?
@@ -852,7 +853,10 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     {
         sSwViewData = ((SwPagePreView*)pOldSh)->GetPrevSwViewData();
         sNewCrsrPos = ((SwPagePreView*)pOldSh)->GetNewCrsrPos();
+        bOldShellWasPagePreView = TRUE;
     }
+    else if( pOldSh->IsA( TYPE( SwSrcView ) ) )
+        bOldShellWasSrcView = TRUE;
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
     if(PTR_CAST( SwView, pOldSh))
@@ -866,7 +870,9 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     {
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
-        if( PTR_CAST(SwSrcView, pOldSh) || pWebDShell )
+        if( bOldShellWasSrcView
+                ? !pWebDShell->GetDoc()->GetRootFrm()
+                : ( pWebDShell && !bOldShellWasPagePreView ))
             rDoc.SetBrowseMode( sal_True );
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
