@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ namespace connectivity
         private:
             MQueryDirectory                *m_aQueryDirectory;
             MQueryHelper                   *m_aQueryHelper;
+        MNameMapper            *m_aNameMapper;
             ::std::vector< ::rtl::OUString> m_aAttributes;
             ::rtl::OUString                 m_aAddressbook;
             ::std::vector< ::rtl::OUString> m_aMatchItems;
@@ -174,7 +175,7 @@ namespace connectivity
             sal_Bool                        getQuerySubDirs(void) const;
             void                            setSqlOppr( ::std::vector< eSqlOppr >&);
             const ::std::vector< eSqlOppr >       &getSqlOppr(void) const;
-            sal_Int32                       executeQuery(sal_Bool _bIsOutlookExpress);
+            sal_Int32                       executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon);
 
             sal_Int32                       getRowCount( void );
 
@@ -195,6 +196,7 @@ namespace connectivity
             MQuery();
             MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString> &);
             virtual ~MQuery();
+            static MNameMapper* CreateNameMapper();
         };
     }
 }

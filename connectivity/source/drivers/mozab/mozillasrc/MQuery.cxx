@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <MQueryHelper.hxx>
 #include <MNameMapper.hxx>
+#include <MConnection.hxx>
 
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -329,7 +330,7 @@ const ::std::vector< MQuery::eSqlOppr > &MQuery::getSqlOppr() const
     return(m_aSqlOppr);
 }
 // -------------------------------------------------------------------------
-sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress)
+sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
 {
     OSL_TRACE("IN MQuery::executeQuery()\n");
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -343,7 +344,8 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress)
         return(-1);
 
     nsCOMPtr<nsIAbDirectory> directory;
-    MNameMapper *nmap = MNameMapper::getInstance();
+    MNameMapper *nmap = _pCon->getNameMapper();
+
 
     if ( nmap->getDir( m_aAddressbook, getter_AddRefs( directory ) ) == sal_False )
         return( -1 );
@@ -592,3 +594,11 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow, rtl::OUString& aDBC
 
     OSL_TRACE( "\tOUT MQuery::getRowValue()\n");
 }
+// -------------------------------------------------------------------------
+MNameMapper*
+MQuery::CreateNameMapper()
+{
+    return( new MNameMapper() );
+}
+
+

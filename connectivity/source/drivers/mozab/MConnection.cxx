@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:44:40 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
                          m_nMaxResultRecords( -1 ),
                          m_UsesFactory(sal_False),
                          m_IsLDAP(sal_False),
+                         m_aNameMapper(NULL),
                          m_bOutlookExpress(sal_False)
 {
     m_pDriver->acquire();
@@ -539,3 +540,12 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
     return xTab;
 }
 // -----------------------------------------------------------------------------
+
+MNameMapper* OConnection::getNameMapper ()
+{
+    if (m_aNameMapper==NULL)
+        m_aNameMapper = MQuery::CreateNameMapper();
+
+    return m_aNameMapper;
+}
+

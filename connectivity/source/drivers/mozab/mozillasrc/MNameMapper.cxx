@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNameMapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,6 @@ bool
 MNameMapper::ltstr::operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const
 {
     return s1.compareTo(s2) < 0;
-}
-
-MNameMapper *MNameMapper::instance = NULL;
-
-MNameMapper*
-MNameMapper::getInstance()
-{
-    if ( MNameMapper::instance == NULL )
-        MNameMapper::instance = new MNameMapper();
-
-    return( MNameMapper::instance );
 }
 
 MNameMapper::MNameMapper()

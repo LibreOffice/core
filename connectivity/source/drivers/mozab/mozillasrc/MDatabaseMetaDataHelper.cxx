@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:59:14 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
 
     ::rtl::OUString aTableName;
 
-    MNameMapper *nmap = MNameMapper::getInstance();
+    MNameMapper *nmap = _pCon->getNameMapper();
 
     do {
         nsCOMPtr<nsIAbDirectory> subDirectory;

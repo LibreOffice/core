@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:44:40 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@ namespace connectivity
         class OStatement_Base;
         class MozabDriver;
         class ODatabaseMetaData;
+        class MNameMapper;
+
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
@@ -147,6 +149,7 @@ namespace connectivity
             sal_Bool        m_UsesFactory ;
             sal_Bool        m_IsLDAP ;
             sal_Bool        m_bOutlookExpress;
+            MNameMapper*    m_aNameMapper;
             // End of Additions from the land of mozilla
 
         public:
@@ -221,6 +224,8 @@ namespace connectivity
             static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
             static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
             static ::rtl::OUString    getDriverImplementationName();
+
+            MNameMapper* getNameMapper();
 
             // End of Additions from the land of mozilla
         };

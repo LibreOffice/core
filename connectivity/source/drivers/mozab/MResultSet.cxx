@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:49:52 $
+ *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,7 +1715,7 @@ void OResultSet::fillRowData()
     rtl::OUString aStr(  m_pTable->getName() );
     m_aQuery.setAddressbook( aStr );
 
-    sal_Int32 rv = m_aQuery.executeQuery(xConnection->isOutlookExpress());
+    sal_Int32 rv = m_aQuery.executeQuery(xConnection->isOutlookExpress(), xConnection);
     if ( rv == -1 ) {
         ::dbtools::throwGenericSQLException(
                     ::rtl::OUString::createFromAscii("Error querying addressbook"),NULL);
