@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-19 09:53:25 $
+#   last change: $Author: fs $ $Date: 2001-07-25 13:58:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,8 +191,7 @@ SHL2STDLIBS= \
             $(RTLLIB) \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
-            $(COMPHELPERLIB) \
-            $(DBTOOLSLIB) 
+            $(COMPHELPERLIB)
 
 .IF "$(TF_UCB)" == ""
 SHL2STDLIBS+=\
@@ -275,7 +274,6 @@ LIB2TARGET      =$(SLB)$/dl.lib
 LIB2FILES       = $(LIBEXTRAFILES)
 .ELSE
 LIB1FILES+=$(LIBEXTRAFILES)
-SHL1STDLIBS+=$(DBTOOLSLIB) 
 .ENDIF
 
 .IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
@@ -659,6 +657,7 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ??_G>>$@
     @echo ??_H>>$@
     @echo ??_I>>$@
+    @echo ___CT>>$@
 #   @echo ?CreateType@>>$@
 #   @echo ?LinkStub>>$@
 .ENDIF
