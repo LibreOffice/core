@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:46:08 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,10 @@ Resource RSC_DATASOURCE_TYPES
         Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument;Adressbok";
         Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi¹¿ka adresowa";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;•¶‘;•\\ŒvZÄŞ·­ÒİÄ;±ÄŞÚ½’ ";
-        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ADO;ÅØ½ºÆ®;½ºÇÁ·¹µå½ÃÆ® ¹®¼­;ÁÖ¼Ò·Ï";
-        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ÎÄ×Ö;¹¤×÷±íÎÄµµ;Í¨Ñ¶²¾";
-        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;¤å¦r;¤u§@ªí¤å¥ó;³q°T¿ı";
+        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;æ–‡æ›¸;è¡¨è¨ˆç®—ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„;ï½±ï¾„ï¾ï¾šï½½å¸³";
+        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ADO;í…ìŠ¤íŠ¸;ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ë¬¸ì„œ;ì£¼ì†Œë¡";
+        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;æ–‡å­—;å·¥ä½œè¡¨æ–‡æ¡£;é€šè®¯ç°¿";
+        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;æ–‡å­—;å·¥ä½œè¡¨æ–‡ä»¶;é€šè¨ŠéŒ„";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ;ãÓÊäÏ ÌÏÇæá";
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
@@ -133,10 +133,10 @@ Resource RSC_CHARSETS
         Text[ swedish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
         Text[ polish ] = "Ansi;Mac;IBMPC(437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
         Text[ portuguese_brazilian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ japanese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¼½ÃÑ;UTF-8";
-        Text[ korean ] = "Ansi;Mac;IBMPC(437);IBMPC(850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);½Ã½ºÅÛ;UTF-8";
-        Text[ chinese_simplified ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ÏµÍ³;UTF-8";
-        Text[ chinese_traditional ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¨t²Î;UTF-8";
+        Text[ japanese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ï½¼ï½½ï¾ƒï¾‘;UTF-8";
+        Text[ korean ] = "Ansi;Mac;IBMPC(437);IBMPC(850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ì‹œìŠ¤í…œ;UTF-8";
+        Text[ chinese_simplified ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ç³»ç»Ÿ;UTF-8";
+        Text[ chinese_traditional ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ç³»çµ±;UTF-8";
         Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
         Text[ arabic ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);äÙÇã";
         Text[ catalan ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
@@ -160,10 +160,10 @@ String STR_GENERAL_SDB_ERROR
     Text[ swedish ] = "Fel under förbindelsen med datakällan";
     Text[ polish ] = "B³¹d w ³¹czeniu ze Ÿród³em danych";
     Text[ portuguese_brazilian ] = "Error while connecting to the data source";
-    Text[ japanese ] = "ÃŞ°À¿°½‚ÖÚ‘±‚Ì´×°";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º¿¡ ¿¬°á½Ã¿¡ ¿À·ù";
-    Text[ chinese_simplified ] = "ÔÚºÍÊı¾İÔ´Á¬½ÓÊ±·¢ÉúÒ»¸ö´íÎó";
-    Text[ chinese_traditional ] = "³s½u¨ì¸ê®Æ·½®Éµo¥Í¤@­Ó¿ù»~";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã¸æ¥ç¶šæ™‚ã®ï½´ï¾—ï½°";
+    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ì— ì—°ê²°ì‹œì— ì˜¤ë¥˜";
+    Text[ chinese_simplified ] = "åœ¨å’Œæ•°æ®æºè¿æ¥æ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯";
+    Text[ chinese_traditional ] = "é€£ç·šåˆ°è³‡æ–™æºæ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤";
     Text[ turkish ] = "Error while connecting to the data source";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteyttä tietolähteeseen";
@@ -186,10 +186,10 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ swedish ] = "Fel när objekt skulle skapas!";
     Text[ polish ] = "B³¹d w trakcie tworzenia!";
     Text[ portuguese_brazilian ] = "Error while creating!";
-    Text[ japanese ] = "ì¬‚·‚é‚Æ‚«‚Ì´×°B";
-    Text[ korean ] = "ÀÛ¼º ¿À·ù!";
-    Text[ chinese_simplified ] = "ÔÚÉú³ÉÊ±·¢ÉúÒ»¸ö´íÎó£¡";
-    Text[ chinese_traditional ] = "¦b«Ø¥ß®Éµo¥Í¿ù»~";
+    Text[ japanese ] = "ä½œæˆã™ã‚‹ã¨ãã®ï½´ï¾—ï½°ã€‚";
+    Text[ korean ] = "ì‘ì„± ì˜¤ë¥˜!";
+    Text[ chinese_simplified ] = "åœ¨ç”Ÿæˆæ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯ï¼";
+    Text[ chinese_traditional ] = "åœ¨å»ºç«‹æ™‚ç™¼ç”ŸéŒ¯èª¤";
     Text[ turkish ] = "Error while creating!";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÅäÔÇÁ!";
     Text[ finnish ] = "Fehler beim Erzeugen!";
@@ -213,10 +213,10 @@ String STR_UNEXPECTED_ERROR
     Text[ swedish ] = "Ett oväntat fel har uppstått. Det går inte att utföra operationen.";
     Text[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d. Operacji nie mo¿na wykonaæ.";
     Text[ portuguese_brazilian ] = "An unexpected error occured. The operation could not be completed.";
-    Text[ japanese ] = "—\\Šú‚µ‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B‘€ì‚ÌÀs‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "¿¹»óÄ¡ ¸øÇß´ø ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ÀÛ¾÷À» ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù";
-    Text[ chinese_simplified ] = "·¢ÉúÒ»¸öÒâÍâµÄ´íÎó¡£ÎŞ·¨Ö´ĞĞÕâ¸ö²Ù×÷¡£";
-    Text[ chinese_traditional ] = "µo¥Í¤@­Ó·N¥~ªº¿ù»~¡CµLªk°õ¦æ³o­Ó°Ê§@¡C";
+    Text[ japanese ] = "äºˆæœŸã—ãªã„ï½´ï¾—ï½°ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ“ä½œã®å®Ÿè¡Œã¯ã§ãã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ì˜ˆìƒì¹˜ ëª»í–ˆë˜ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ì‘ì—…ì„ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
+    Text[ chinese_simplified ] = "å‘ç”Ÿä¸€ä¸ªæ„å¤–çš„é”™è¯¯ã€‚æ— æ³•æ‰§è¡Œè¿™ä¸ªæ“ä½œã€‚";
+    Text[ chinese_traditional ] = "ç™¼ç”Ÿä¸€å€‹æ„å¤–çš„éŒ¯èª¤ã€‚ç„¡æ³•åŸ·è¡Œé€™å€‹å‹•ä½œã€‚";
     Text[ turkish ] = "An unexpected error occured. The operation could not be completed.";
     Text[ arabic ] = "An unexpected error occured. The operation could not be completed.";
     Text[ catalan ] = "An unexpected error occured. The operation could not be completed.";
@@ -239,10 +239,10 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text[ swedish ] = "Det gick inte att öppna dokumentet\n\n$file$\n\n.";
     Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Th document\n\n$file$\n\ncould not be opened.";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ\n\n$file$ ‚Í\n\nŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "\n\n$ÆÄÀÏ$\n\n¹®¼­¸¦ ¿­¼ö ¾ø¾ú½À´Ï´Ù";
-    Text[ chinese_simplified ] = "Õâ¸öÎÄµµ\n\n$file$\n\nÎŞ·¨±»´ò¿ª¡£";
-    Text[ chinese_traditional ] = "³o­Ó¤å¥ó\n\n$file$\n\nµLªk¶}±Ò¡C";
+    Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„\n\n$file$ ã¯\n\né–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "\n\n$íŒŒì¼$\n\në¬¸ì„œë¥¼ ì—´ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤";
+    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡æ¡£\n\n$file$\n\næ— æ³•è¢«æ‰“å¼€ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶\n\n$file$\n\nç„¡æ³•é–‹å•Ÿã€‚";
     Text[ turkish ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ arabic ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text[ catalan ] = "Th document\n\n$file$\n\ncould not be opened.";
@@ -265,10 +265,10 @@ String STR_MISSING_TABLES_XDROP
     Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
     Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ nie jest ona os³ugiwana przez po³¹czenie z baz¹ danych.";
     Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
-    Text[ japanese ] = "Ã°ÌŞÙ‚ÍÃŞ°ÀÍŞ°½‚ÌÚ‘±‚ª‚±‚ê‚ğx‰‡‚µ‚È‚¢‚½‚ßíœ‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á¿¡¼­ Áö¿øµÇÁö ¾Ê±â ¶§¹®¿¡ Å×ÀÌºíÀ» »èÁ¦ÇÒ ¼ö ¾ø½À´Ï´Ù";
-    Text[ chinese_simplified ] = "ÒòÎªÊı¾İ¿âµÄÁ¬½Ó²»Ö§³ÖÕâ¸ö¹¦ÄÜ¶øÎŞ·¨É¾³ıÕâ¸ö±í¸ñ¡£";
-    Text[ chinese_traditional ] = "¦]¬°¸ê®Æ®w³s½u¤£¤ä´©³o­Ó°Ê§@¦ÓµLªk§R°£³o­Óªí®æ¡C";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã¯ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã®æ¥ç¶šãŒã“ã‚Œã‚’æ”¯æ´ã—ãªã„ãŸã‚å‰Šé™¤ã§ãã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°ì—ì„œ ì§€ì›ë˜ì§€ ì•Šê¸° ë•Œë¬¸ì— í…Œì´ë¸”ì„ ì‚­ì œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
+    Text[ chinese_simplified ] = "å› ä¸ºæ•°æ®åº“çš„è¿æ¥ä¸æ”¯æŒè¿™ä¸ªåŠŸèƒ½è€Œæ— æ³•åˆ é™¤è¿™ä¸ªè¡¨æ ¼ã€‚";
+    Text[ chinese_traditional ] = "å› ç‚ºè³‡æ–™åº«é€£ç·šä¸æ”¯æ´é€™å€‹å‹•ä½œè€Œç„¡æ³•åˆªé™¤é€™å€‹è¡¨æ ¼ã€‚";
     Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ catalan ] = "The table can't be dropped, 'cause the database connection does not support this.";
@@ -293,10 +293,10 @@ String STR_BUTTON_TEXT_ALL
     Text[ swedish ] = "~Alla";
     Text[ polish ] = "~Wszystkie";
     Text[ portuguese_brazilian ] = "~All";
-    Text[ japanese ] = "‚·‚×‚Ä(~A)";
-    Text[ korean ] = "ÀüÃ¼(~A)";
-    Text[ chinese_simplified ] = "È«²¿(~A)";
-    Text[ chinese_traditional ] = "¥ş³¡(~A)";
+    Text[ japanese ] = "ã™ã¹ã¦(~A)";
+    Text[ korean ] = "ì „ì²´(~A)";
+    Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
+    Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
     Text[ turkish ] = "~All";
     Text[ arabic ] = "~All";
     Text[ catalan ] = "~All";
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/07/13 20:46:08  kz
+ *  Merge SRC638: 13.07.01 - 22:45:06
+ *
  *  Revision 1.29  2001/07/03 22:18:04  kz
  *  Merge SRC633: 04.07.01 - 00:16:38
  *
@@ -352,6 +355,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
