@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: obo $ $Date: 2004-11-16 15:25:18 $
-#*    $Revision: 1.21 $
+#*    last change       $Author: vg $ $Date: 2005-02-16 18:20:35 $
+#*    $Revision: 1.22 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -30,7 +30,7 @@ interface Application : Module
 
     [Anmerkungen]
 
-    Die von OLE-Automation gewÅnschten (optional) Methoden Repeat und Undo
+    Die von OLE-Automation gewuenschten (optional) Methoden Repeat und Undo
     sind von uns hier nicht sinnvoll implementierbar, da Repeat, Undo
     und Redo Dokument-spezifisch sind.
 */
@@ -352,7 +352,7 @@ shell SfxApplication
 
     [Anmerkungen]
 
-    Die von OLE-Automation gewÅnschten (optional) Methoden Repeat und Undo
+    Die von OLE-Automation gewuenschten (optional) Methoden Repeat und Undo
     sind von uns hier nicht sinnvoll implementierbar, da Repeat, Undo
     und Redo Dokument-spezifisch sind.
 */
