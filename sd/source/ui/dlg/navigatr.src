@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:04:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ Window FLT_NAVIGATOR
                 Text[ japanese ] = "ζ€εγ®γƒγƒΌγ‚Έ";
                 Text[ chinese_traditional ] = "ι¦–ι ";
                 Text[ arabic ] = "ΗαΥέΝΙ ΗαΓζαμ";
-                Text[ greek ] = "Πρώτη σελίδα";
+                Text[ greek ] = "Πρώτη διαφάνεια";
                 Text[ korean ] = "μ²«λ²μ§Έ μ¬λΌμ΄λ“";
                 Text[ turkish ] = "έlk slayt";
                 Text[ language_user1 ] = " ";
@@ -217,7 +217,7 @@ Window FLT_NAVIGATOR
                 Text[ japanese ] = "ε‰γ®γƒγƒΌγ‚Έ";
                 Text[ chinese_traditional ] = "δΈδΈ€ι ";
                 Text[ arabic ] = "ΗαΥέΝΙ ΗαΣΗΘήΙ";
-                Text[ greek ] = "Προηγούμενη σελίδα";
+                Text[ greek ] = "Προηγούμενη διαφάνεια";
                 Text[ korean ] = "μ΄μ „ μ¬λΌμ΄λ“";
                 Text[ turkish ] = "Φnceki slayt";
                 Text[ language_user1 ] = " ";
@@ -253,7 +253,7 @@ Window FLT_NAVIGATOR
                 Text[ japanese ] = "ζ¬΅γ®γƒγƒΌγ‚Έ";
                 Text[ chinese_traditional ] = "δΈ‹δΈ€ι ";
                 Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
-                Text[ greek ] = "Επόμενη σελίδα";
+                Text[ greek ] = "Επόμενη διαφάνεια";
                 Text[ korean ] = "λ‹¤μ μ¬λΌμ΄λ“";
                 Text[ turkish ] = "Sonraki sayfa";
                 Text[ language_user1 ] = " ";
@@ -287,7 +287,7 @@ Window FLT_NAVIGATOR
                 Text[ japanese ] = "ζ€εΎγ®γƒγƒΌγ‚Έ";
                 Text[ chinese_traditional ] = "ζ€εΎδΈ€ι ";
                 Text[ arabic ] = "ΗαΥέΝΙ ΗαΓΞνΡΙ";
-                Text[ greek ] = "Τελευταία σελίδα";
+                Text[ greek ] = "Τελευταία διαφάνεια";
                 Text[ korean ] = "λ§μ§€λ§‰ μ¬λΌμ΄λ“";
                 Text[ turkish ] = "Son slayt";
                 Text[ language_user1 ] = " ";
@@ -413,6 +413,7 @@ Window FLT_NAVIGATOR
         NAVIGATR_IDLIST
     };
 };
+
 
 
 
