@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-10 15:22:42 $
+ *  last change: $Author: ab $ $Date: 2001-05-10 15:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,56 +213,63 @@ String implGetWrappedMsg( WrappedTargetException& e1 )
 }
 
 // Von Uno nach Sbx wandeln
-SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
+SbxDataType unoToSbxType( TypeClass eType )
 {
     SbxDataType eRetType = SbxVOID;
 
+    switch( eType )
+    {
+        case TypeClass_INTERFACE:
+        case TypeClass_TYPE:
+        case TypeClass_STRUCT:          eRetType = SbxOBJECT;   break;
+
+        /* folgende Typen lassen wir erstmal weg
+        case TypeClass_SERVICE:         break;
+        case TypeClass_CLASS:           break;
+        case TypeClass_TYPEDEF:         break;
+        case TypeClass_UNION:           break;
+        case TypeClass_EXCEPTION:       break;
+        case TypeClass_ARRAY:           break;
+        */
+        case TypeClass_ENUM:            eRetType = SbxLONG;     break;
+        case TypeClass_SEQUENCE:
+            eRetType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+            break;
+
+        /*
+        case TypeClass_VOID:            break;
+        case TypeClass_UNKNOWN:         break;
+        */
+
+        case TypeClass_ANY:             eRetType = SbxVARIANT;  break;
+        case TypeClass_BOOLEAN:         eRetType = SbxBOOL;     break;
+        case TypeClass_CHAR:            eRetType = SbxCHAR;     break;
+        case TypeClass_STRING:          eRetType = SbxSTRING;   break;
+        case TypeClass_FLOAT:           eRetType = SbxSINGLE;   break;
+        case TypeClass_DOUBLE:          eRetType = SbxDOUBLE;   break;
+        //case TypeClass_OCTET:                                 break;
+        case TypeClass_BYTE:            eRetType = SbxBYTE;     break;
+        //case TypeClass_INT:               eRetType = SbxINT;  break;
+        case TypeClass_SHORT:           eRetType = SbxINTEGER;  break;
+        case TypeClass_LONG:            eRetType = SbxLONG;     break;
+        //case TypeClass_HYPER:                                 break;
+        //case TypeClass_UNSIGNED_OCTET:                        break;
+        case TypeClass_UNSIGNED_SHORT:  eRetType = SbxUSHORT;   break;
+        case TypeClass_UNSIGNED_LONG:   eRetType = SbxULONG;    break;
+        //case TypeClass_UNSIGNED_HYPER:                        break;
+        //case TypeClass_UNSIGNED_INT:  eRetType = SbxUINT;     break;
+        //case TypeClass_UNSIGNED_BYTE: eRetType = SbxUSHORT;   break;
+    }
+    return eRetType;
+}
+
+SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
+{
+    SbxDataType eRetType = SbxVOID;
     if( xIdlClass.is() )
     {
         TypeClass eType = xIdlClass->getTypeClass();
-        switch( eType )
-        {
-            case TypeClass_INTERFACE:
-            case TypeClass_TYPE:
-            case TypeClass_STRUCT:          eRetType = SbxOBJECT;   break;
-
-            /* folgende Typen lassen wir erstmal weg
-            case TypeClass_SERVICE:         break;
-            case TypeClass_CLASS:           break;
-            case TypeClass_TYPEDEF:         break;
-            case TypeClass_UNION:           break;
-            case TypeClass_EXCEPTION:       break;
-            case TypeClass_ARRAY:           break;
-            */
-            case TypeClass_ENUM:            eRetType = SbxLONG;     break;
-            case TypeClass_SEQUENCE:
-                eRetType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
-                break;
-
-            /*
-            case TypeClass_VOID:            break;
-            case TypeClass_UNKNOWN:         break;
-            */
-
-            case TypeClass_ANY:             eRetType = SbxVARIANT;  break;
-            case TypeClass_BOOLEAN:         eRetType = SbxBOOL;     break;
-            case TypeClass_CHAR:            eRetType = SbxCHAR;     break;
-            case TypeClass_STRING:          eRetType = SbxSTRING;   break;
-            case TypeClass_FLOAT:           eRetType = SbxSINGLE;   break;
-            case TypeClass_DOUBLE:          eRetType = SbxDOUBLE;   break;
-            //case TypeClass_OCTET:                                 break;
-            case TypeClass_BYTE:            eRetType = SbxBYTE;     break;
-            //case TypeClass_INT:               eRetType = SbxINT;  break;
-            case TypeClass_SHORT:           eRetType = SbxINTEGER;  break;
-            case TypeClass_LONG:            eRetType = SbxLONG;     break;
-            //case TypeClass_HYPER:                                 break;
-            //case TypeClass_UNSIGNED_OCTET:                        break;
-            case TypeClass_UNSIGNED_SHORT:  eRetType = SbxUSHORT;   break;
-            case TypeClass_UNSIGNED_LONG:   eRetType = SbxULONG;    break;
-            //case TypeClass_UNSIGNED_HYPER:                        break;
-            //case TypeClass_UNSIGNED_INT:  eRetType = SbxUINT;     break;
-            //case TypeClass_UNSIGNED_BYTE: eRetType = SbxUSHORT;   break;
-        }
+        eRetType = unoToSbxType( eType );
     }
     return eRetType;
 }
@@ -344,22 +351,37 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             Reference< XIdlArray > xIdlArray = xIdlTargetClass->getArray();
             sal_Int32 i, nLen = xIdlArray->getLen( aValue );
             // In Basic Array anlegen
-            SbxDimArrayRef xArray = new SbxDimArray( SbxVARIANT );
-            if( nLen >= 0 )
+            SbxDimArrayRef xArray;
+            if( nLen > 0 )
+            {
+                xArray = new SbxDimArray( SbxVARIANT );
                 xArray->unoAddDim( 0, nLen - 1 );
 
-            // Elemente als Variablen eintragen
-            for( i = 0 ; i < nLen ; i++ )
-            {
-                // Elemente wandeln
-                Any aElementAny = xIdlArray->get( aValue, (UINT32)i );
-                //Any aElementAny = pSeqReflection->get( aValue, (UINT32)i );
-                SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-                unoToSbxValue( (SbxVariable*)xVar, aElementAny );
+                // Elemente als Variablen eintragen
+                for( i = 0 ; i < nLen ; i++ )
+                {
+                    // Elemente wandeln
+                    Any aElementAny = xIdlArray->get( aValue, (UINT32)i );
+                    //Any aElementAny = pSeqReflection->get( aValue, (UINT32)i );
+                    SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+                    unoToSbxValue( (SbxVariable*)xVar, aElementAny );
 
-                // Ins Array braten
-                short nIndex = (short)i;
-                xArray->Put( (SbxVariable*)xVar, &nIndex );
+                    // Ins Array braten
+                    short nIndex = (short)i;
+                    xArray->Put( (SbxVariable*)xVar, &nIndex );
+                }
+            }
+            else
+            {
+                typelib_TypeDescription * pTD = 0;
+                aType.getDescription( &pTD );
+                OSL_ASSERT( pTD && pTD->eTypeClass == typelib_TypeClass_SEQUENCE );
+                Type aElementType( ((typelib_IndirectTypeDescription *)pTD)->pType );
+                ::typelib_typedescription_release( pTD );
+
+                SbxDataType eSbxElementType = unoToSbxType( aElementType.getTypeClass() );
+                xArray = new SbxDimArray( eSbxElementType );
+                xArray->unoAddDim( 0, 1 );
             }
 
             // Array zurueckliefern
