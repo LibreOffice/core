@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:03:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@ const sal_uInt16 EXC_WIN2_MIRRORED          = 0x0040;
 #define EXC_OUTLINE_COUNT           (EXC_OUTLINE_MAX + 1)
 
 // defines for change tracking ================================================
+
+#define EXC_STREAM_USERNAMES        CREATE_STRING( "User Names" )
+#define EXC_STREAM_REVLOG           CREATE_STRING( "Revision Log" )
 
 // opcodes
 #define EXC_CHTR_OP_COLFLAG         0x0001
