@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:07:46 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Οξθρκ οξυξζθυ";
         Text[ polish ] = "Szukaj podo~bnych";
         Text[ japanese ] = "—ή—½ΝίΩ‚Μυ(~I)";
-        Text[ chinese_traditional ] = "Γώ¦ό΄M§δ(~I)";
+        Text[ chinese_traditional ] = "¬Ϋ¦ό¦r·j΄M(~I)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ ίαγΗΚ γΚΤΗΘεΙ";
         Text[ greek ] = "Αναζήτηση ομοιότητας";
         Text[ korean ] = "ΐ―»ηΌΊ Γ£±β(~I)";
@@ -624,7 +624,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "οπθμεχΰνθÿυ";
         Text[ polish ] = "~notatkach";
         Text[ japanese ] = "ÒΣ’ (~N)";
-        Text[ chinese_traditional ] = "³Ζª`(~N)";
+        Text[ chinese_traditional ] = "³Ζµω(~N)";
         Text[ arabic ] = "ΗαγαΗΝΩΗΚ";
         Text[ greek ] = "Σημειώσεις";
         Text[ korean ] = "ΈήΈπ";
