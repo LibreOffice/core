@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-21 11:16:11 $
+ *  last change: $Author: tl $ $Date: 2002-04-18 12:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,9 @@ void SmGraphicWindow::StateChanged( StateChangedType eType )
 
 void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
 {
-    SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+    const StyleSettings aSettings( GetSettings().GetStyleSettings() );
+    SetBackground( aSettings.GetWindowColor() );
+    //SetTextColor( aSettings.GetWindowTextColor() );
     ScrollableWindow::DataChanged( rEvt );
 }
 
@@ -519,10 +521,6 @@ SmCmdBoxWindow::~SmCmdBoxWindow ()
 SmViewShell * SmCmdBoxWindow::GetView()
 {
     SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
-#ifdef DEBUG
-    SfxViewShell *pActiveView = SmGetActiveView();
-    DBG_ASSERT( !pActiveView  ||  pActiveView == pView , "view mismatch" );
-#endif
     return PTR_CAST(SmViewShell, pView);
 }
 

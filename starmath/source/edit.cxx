@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-21 11:16:11 $
+ *  last change: $Author: tl $ $Date: 2002-04-18 12:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,9 +222,12 @@ SfxItemPool * SmEditWindow::GetEditEngineItemPool()
 
 void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
-    SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-
-    SetPointFont( GetSettings().GetStyleSettings().GetAppFont() );
+    const StyleSettings aSettings( GetSettings().GetStyleSettings() );
+    SetBackground( aSettings.GetWindowColor() );
+    // edit fields in other Applications use this font instead of
+    // the application font thus we use this one too
+    SetPointFont( aSettings.GetFieldFont() /*aSettings.GetAppFont()*/ );
+    SetTextColor( aSettings.GetWindowTextColor() );
 
     EditEngine  *pEditEngine = GetEditEngine();
     SfxItemPool *pEditEngineItemPool = GetEditEngineItemPool();
@@ -237,6 +240,23 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
         pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
+        USHORT aFntInfoId[3] = {
+                EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL };
+        for (int i = 0;  i < 3;  ++i)
+        {
+            const SfxPoolItem *pItem;
+            if ((pItem = pEditEngineItemPool->GetPoolDefaultItem(  aFntInfoId[i] )))
+            {
+                const SvxFontItem *pFntItem = ((const SvxFontItem *) pItem);
+                const Font &rFnt = aSettings.GetFieldFont();
+                SvxFontItem aFntItem( rFnt.GetFamily(), rFnt.GetName(),
+                        rFnt.GetStyleName(), rFnt.GetPitch(),
+                        pFntItem->GetCharSet(),
+                        aFntInfoId[i] );
+                pEditEngineItemPool->SetPoolDefaultItem( aFntItem );
+            }
+        }
+
         SvxFontHeightItem aItem( GetFont().GetSize().Height(), 100,
                                  EE_CHAR_FONTHEIGHT );
         pEditEngineItemPool->SetPoolDefaultItem( aItem );
@@ -246,7 +266,11 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         pEditEngineItemPool->SetPoolDefaultItem( aItem );
 
         // forces new settings to be used
+        // unfortunately this resets the whole edit engine
+        // thus we need to save at least the text
+        String aTxt( pEditEngine->GetText( LINEEND_LF ) );
         pEditEngine->Clear();   //#77957 incorrect font size
+        pEditEngine->SetText( aTxt );
     }
 
     AdjustScrollBars();
