@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:37:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,9 +364,13 @@ void Clipboard::CreateSlideTransferable (
         if (bDrag)
         {
             pTransferable->SetView (&mrController.GetView());
-            pTransferable->StartDrag (
-                pActionWindow,
-                DND_ACTION_COPY | DND_ACTION_MOVE );
+            sal_Int8 nDragSourceActions (DND_ACTION_COPY);
+            // The move action is available only when not all pages would be
+            // moved.  Otherwise an empty document would remain.  Crash.
+            sal_Int32 nRemainingPages = mrController.GetModel().GetPageCount() - aBookmarkList.Count();
+            if (nRemainingPages > 0)
+                nDragSourceActions |= DND_ACTION_MOVE;
+            pTransferable->StartDrag (pActionWindow, nDragSourceActions);
         }
         else
             pTransferable->CopyToClipboard (pActionWindow);
