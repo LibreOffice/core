@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:39:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **strFile);
     this process
     @see osl_getCommandArg
 */
-sal_uInt32 SAL_CALL osl_getCommandArgCount();
+sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
 
 /** Get the nArg-th command-line argument passed to the main-function of this process.
     @param nArg [in] The number of the argument to return.
