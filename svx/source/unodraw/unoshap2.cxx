@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:15:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>  //added by BerryJia for fixing Bug102407 2002-11-4
@@ -775,6 +781,7 @@ SvxShapeControlPropertyMapping[] =
     { MAP_CHAR_LEN("CharRelief"),   MAP_CHAR_LEN("FontRelief") },
     { MAP_CHAR_LEN("CharUnderlineColor"),   MAP_CHAR_LEN("TextLineColor") },
     { MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_ADJUST), MAP_CHAR_LEN("Align") },
+    { MAP_CHAR_LEN("TextVerticalAdjust"), MAP_CHAR_LEN("VerticalAlign") },
     { MAP_CHAR_LEN("ControlBackground"), MAP_CHAR_LEN("BackgroundColor") },
     { MAP_CHAR_LEN("ControlSymbolColor"), MAP_CHAR_LEN("SymbolColor") },
     { MAP_CHAR_LEN("ControlBorder"), MAP_CHAR_LEN("Border") },
@@ -783,7 +790,7 @@ SvxShapeControlPropertyMapping[] =
     { NULL,0, NULL, 0 }
 };
 
-void SvxShapeControl::convertPropertyName( const OUString& rApiName, OUString& rInternalName, sal_Bool& rNeedsConversion )
+void SvxShapeControl::convertPropertyName( const OUString& rApiName, OUString& rInternalName )
 {
     sal_uInt16 i = 0;
     while( SvxShapeControlPropertyMapping[i].mpAPIName )
@@ -791,9 +798,8 @@ void SvxShapeControl::convertPropertyName( const OUString& rApiName, OUString& r
         if( rApiName.reverseCompareToAsciiL( SvxShapeControlPropertyMapping[i].mpAPIName, SvxShapeControlPropertyMapping[i].mnAPINameLen ) == 0 )
         {
             rInternalName = OUString( SvxShapeControlPropertyMapping[i].mpFormName, SvxShapeControlPropertyMapping[i].mnFormNameLen, RTL_TEXTENCODING_ASCII_US );
-            rNeedsConversion = i == 0;
         }
-        i++;
+        ++i;
     }
 }
 
@@ -849,13 +855,48 @@ void SvxShapeControl::valueParaAdjustToAlign(Any& rValue)
     }
 }
 
+namespace
+{
+    void convertVerticalAdjustToVerticalAlign( Any& _rValue ) SAL_THROW( ( lang::IllegalArgumentException ) )
+    {
+        if ( !_rValue.hasValue() )
+            return;
+
+        drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
+        style::VerticalAlignment    eAlign  = style::VerticalAlignment_TOP;
+        if ( !( _rValue >>= eAdjust ) )
+            throw lang::IllegalArgumentException();
+        switch ( eAdjust )
+        {
+        case drawing::TextVerticalAdjust_TOP:    eAlign = style::VerticalAlignment_TOP; break;
+        case drawing::TextVerticalAdjust_BOTTOM: eAlign = style::VerticalAlignment_BOTTOM; break;
+        default:                                 eAlign = style::VerticalAlignment_MIDDLE; break;
+        }
+        _rValue <<= eAlign;
+    }
+
+    void convertVerticalAlignToVerticalAdjust( Any& _rValue )
+    {
+        if ( !_rValue.hasValue() )
+            return;
+        style::VerticalAlignment    eAlign  = style::VerticalAlignment_TOP;
+        drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
+        OSL_VERIFY( _rValue >>= eAlign );
+        switch ( eAlign )
+        {
+        case style::VerticalAlignment_TOP:    eAdjust = drawing::TextVerticalAdjust_TOP; break;
+        case style::VerticalAlignment_BOTTOM: eAdjust = drawing::TextVerticalAdjust_BOTTOM; break;
+        default:                              eAdjust = drawing::TextVerticalAdjust_CENTER; break;
+        }
+        _rValue <<= eAdjust;
+    }
+}
+
 void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
     OUString aFormsName;
-    sal_Bool bNeedConversion;
-
-    convertPropertyName( aPropertyName, aFormsName, bNeedConversion );
+    convertPropertyName( aPropertyName, aFormsName );
     if( aFormsName.getLength() )
     {
         uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
@@ -864,23 +905,24 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
             uno::Reference< beans::XPropertySetInfo > xInfo( xControl->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
             {
-                if( bNeedConversion )
+                uno::Any aConvertedValue( aValue );
+                if ( aFormsName.equalsAscii( "FontSlant" ) )
                 {
                     awt::FontSlant nSlant;
                     if( !(aValue >>= nSlant ) )
                         throw lang::IllegalArgumentException();
-
-                    xControl->setPropertyValue( aFormsName, uno::makeAny( (sal_Int16)nSlant ) );
+                    aConvertedValue <<= (sal_Int16)nSlant;
                 }
-                else
+                else if ( aFormsName.equalsAscii( "Align" ) )
                 {
-                    //modified by BerryJia for fixing Bug102407 2002-11-4
-                    Any rValue;
-                    rValue = aValue;
-                    if (::rtl::OUString::createFromAscii("Align") == aFormsName)
-                        valueParaAdjustToAlign(rValue);
-                    xControl->setPropertyValue( aFormsName, rValue );
+                    valueParaAdjustToAlign( aConvertedValue );
                 }
+                else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
+                {
+                    convertVerticalAdjustToVerticalAlign( aConvertedValue );
+                }
+
+                xControl->setPropertyValue( aFormsName, aConvertedValue );
             }
         }
     }
@@ -894,38 +936,44 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OUString aFormsName;
-    sal_Bool bNeedConversion;
-
-    convertPropertyName( aPropertyName, aFormsName, bNeedConversion );
+    convertPropertyName( aPropertyName, aFormsName );
     if( aFormsName.getLength() )
     {
         uno::Reference< beans::XPropertySet > xControl( getControl(), uno::UNO_QUERY );
 
+        uno::Any aValue;
         if( xControl.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xInfo( xControl->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aFormsName ) )
             {
-                if( bNeedConversion )
+                aValue = xControl->getPropertyValue( aFormsName );
+                if ( aFormsName.equalsAscii( "FontSlant" ) )
                 {
+                    awt::FontSlant eSlant = awt::FontSlant_NONE;
                     sal_Int16 nSlant;
-                    xControl->getPropertyValue( aFormsName ) >>= nSlant;
-                    return uno::makeAny( (awt::FontSlant)nSlant );
+                    if ( aValue >>= nSlant )
+                    {
+                        eSlant = (awt::FontSlant)nSlant;
+                    }
+                    else
+                    {
+                        OSL_VERIFY( aValue >>= eSlant );
+                    }
+                    aValue <<= eSlant;
                 }
-                else
+                else if ( aFormsName.equalsAscii( "Align" ) )
                 {
-                    //modified by BerryJia for fixing Bug102407 2002-11-4
-                    Any rValue;
-                    rValue = xControl->getPropertyValue( aFormsName );
-                    if (::rtl::OUString::createFromAscii("Align") == aFormsName)
-                        valueAlignToParaAdjust(rValue);
-                    return rValue;
+                    valueAlignToParaAdjust( aValue );
+                }
+                else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
+                {
+                    convertVerticalAlignToVerticalAdjust( aValue );
                 }
             }
         }
 
-        uno::Any aAny;
-        return aAny;
+        return aValue;
     }
     else
     {
@@ -938,9 +986,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
 beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     OUString aFormsName;
-    sal_Bool bNeedConversion;
-
-    convertPropertyName( PropertyName, aFormsName, bNeedConversion );
+    convertPropertyName( PropertyName, aFormsName );
     if( aFormsName.getLength() )
     {
         uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
@@ -966,9 +1012,7 @@ beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OU
 void SAL_CALL SvxShapeControl::setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     OUString aFormsName;
-    sal_Bool bNeedConversion;
-
-    convertPropertyName( PropertyName, aFormsName, bNeedConversion );
+    convertPropertyName( PropertyName, aFormsName );
     if( aFormsName.getLength() )
     {
         uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
@@ -993,26 +1037,29 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     OUString aFormsName;
-    sal_Bool bNeedConversion;
-
-    convertPropertyName( aPropertyName, aFormsName, bNeedConversion );
+    convertPropertyName( aPropertyName, aFormsName );
     if( aFormsName.getLength() )
     {
         uno::Reference< beans::XPropertyState > xControl( getControl(), uno::UNO_QUERY );
 
         if( xControl.is() )
         {
-            if( bNeedConversion )
+            Any aDefault( xControl->getPropertyDefault( aFormsName ) );
+            if ( aFormsName.equalsAscii( "FontSlant" ) )
             {
-                sal_Int16 nSlant;
-                xControl->getPropertyDefault( aFormsName ) >>= nSlant;
-
-                return uno::makeAny( (awt::FontSlant)nSlant );
+                sal_Int16 nSlant( 0 );
+                aDefault >>= nSlant;
+                aDefault <<= (awt::FontSlant)nSlant;
             }
-            else
+            else if ( aFormsName.equalsAscii( "Align" ) )
             {
-                return xControl->getPropertyDefault( aFormsName );
+                valueAlignToParaAdjust( aDefault );
             }
+            else if ( aFormsName.equalsAscii( "VerticalAlign" ) )
+            {
+                convertVerticalAlignToVerticalAdjust( aDefault );
+            }
+            return aDefault;
         }
 
         throw beans::UnknownPropertyException();
