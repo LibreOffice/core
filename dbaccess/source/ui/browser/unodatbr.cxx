@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:32:01 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,7 +810,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             }
         }
     }
-    catch(Exception&)
+    catch(Exception& e)
     {
         OSL_ASSERT(0);
     }
@@ -1407,7 +1407,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
     {
         SvLBoxEntry* pTemp      = m_pTreeView->getListBox()->GetParent(pEntry);
         SvLBoxEntry* pQueries   = m_pTreeView->getListBox()->GetEntry(pDSEntry,0);
-        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE, (pQueries == pEntry || pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_DESIGN, (pQueries == pEntry || pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_TEXT, (pQueries == pEntry || pQueries == pTemp));
         aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,   (pQueries != pEntry && pQueries == pTemp));
         aContextMenu.EnableItem(ID_TREE_QUERY_DELETE, (pQueries != pEntry && pQueries == pTemp));
     }
@@ -1467,7 +1468,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
             closeConnection(pDSEntry);
         }
             break;
-        case ID_TREE_QUERY_CREATE:
+        case ID_TREE_QUERY_CREATE_DESIGN:
+        case ID_TREE_QUERY_CREATE_TEXT:
         case ID_TREE_QUERY_EDIT:
             {
                 ::osl::MutexGuard aGuard(m_aEntryMutex);
@@ -1524,7 +1526,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                 if (ID_TREE_QUERY_EDIT == nPos)
                     aDispatcher.editQuery(aDSName, sCurrentQuery, xConnection);
                 else
-                    aDispatcher.createQuery(aDSName, xConnection);
+                    aDispatcher.createQuery(aDSName, xConnection,nPos == ID_TREE_QUERY_CREATE_DESIGN);
             }
             break;
         case ID_TREE_QUERY_DELETE:
