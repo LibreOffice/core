@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
+ *  last change: $Author: pl $ $Date: 2002-02-20 14:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ ImplToolItem::ImplToolItem()
     mbBreak         = FALSE;
     mnNonStdSize    = 0;
     mnSepSize       = TB_SEP_SIZE;
+    mnImageAngle    = 0;
+    mbMirrorMode    = false;
 }
 
 // -----------------------------------------------------------------------
@@ -136,6 +138,8 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const Image& rImage,
     mbBreak         = FALSE;
     mnNonStdSize    = 0;
     mnSepSize       = TB_SEP_SIZE;
+    mnImageAngle    = 0;
+    mbMirrorMode    = false;
 }
 
 // -----------------------------------------------------------------------
@@ -158,6 +162,8 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const XubString& rText,
     mbBreak         = FALSE;
     mnNonStdSize    = 0;
     mnSepSize       = TB_SEP_SIZE;
+    mnImageAngle    = 0;
+    mbMirrorMode    = false;
 }
 
 // -----------------------------------------------------------------------
@@ -181,6 +187,8 @@ ImplToolItem::ImplToolItem( USHORT nItemId, const Image& rImage,
     mbBreak         = FALSE;
     mnNonStdSize    = 0;
     mnSepSize       = TB_SEP_SIZE;
+    mnImageAngle    = 0;
+    mbMirrorMode    = false;
 }
 
 // -----------------------------------------------------------------------
@@ -942,6 +950,117 @@ void ToolBox::SetItemImage( USHORT nItemId, const Image& rImage )
 
 // -----------------------------------------------------------------------
 
+static Image ImplRotImage( const Image& rImage, long nAngle10 )
+{
+    Image aRet;
+
+    // rotate the image to the new angle
+    Bitmap aRotBitmap = rImage.GetBitmap();
+    if( rImage.HasMaskColor() )
+    {
+        aRotBitmap.Rotate( nAngle10, rImage.GetMaskColor() );
+        aRet = Image( aRotBitmap, rImage.GetMaskColor() );
+    }
+    else if( rImage.HasMaskBitmap() )
+    {
+        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
+        Bitmap aRotMask = rImage.GetMaskBitmap();
+        aRotMask.Rotate( nAngle10, Color( COL_WHITE ) );
+        aRet = Image( aRotBitmap, aRotMask );
+    }
+    else
+    {
+        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
+        aRet = Image( aRotBitmap );
+    }
+    return aRet;
+}
+
+void ToolBox::SetItemImageAngle( USHORT nItemId, long nAngle10 )
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != TOOLBOX_ITEM_NOTFOUND )
+    {
+        ImplToolItem* pItem = mpItemList->GetObject( nPos );
+        Size aOldSize = pItem->maImage.GetSizePixel();
+
+        long nDeltaAngle = (nAngle10 - pItem->mnImageAngle) % 3600;
+        while( nDeltaAngle < 0 )
+            nDeltaAngle += 3600;
+
+        pItem->mnImageAngle = nAngle10;
+        if( nDeltaAngle && !!pItem->maImage )
+        {
+            pItem->maImage = ImplRotImage( pItem->maImage, nDeltaAngle );
+            if( !!pItem->maHighImage )
+                pItem->maHighImage = ImplRotImage( pItem->maHighImage, nDeltaAngle );
+        }
+
+        if ( !mbCalc )
+        {
+            if ( aOldSize != pItem->maImage.GetSizePixel() )
+                ImplInvalidate( TRUE );
+            else
+                ImplUpdateItem( nPos );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+static Image ImplMirrorImage( const Image& rImage )
+{
+    Image aRet;
+
+    // rotate the image to the new angle
+    Bitmap aMirrorBitmap = rImage.GetBitmap();
+    aMirrorBitmap.Mirror( BMP_MIRROR_HORZ );
+    if( rImage.HasMaskColor() )
+    {
+        aRet = Image( aMirrorBitmap, rImage.GetMaskColor() );
+    }
+    else if( rImage.HasMaskBitmap() )
+    {
+        Bitmap aMirrorMask = rImage.GetMaskBitmap();
+        aMirrorMask.Mirror( BMP_MIRROR_HORZ );
+        aRet = Image( aMirrorBitmap, aMirrorMask );
+    }
+    else
+    {
+        aRet = Image( aMirrorBitmap );
+    }
+    return aRet;
+}
+
+void ToolBox::SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror )
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != TOOLBOX_ITEM_NOTFOUND )
+    {
+        ImplToolItem* pItem = mpItemList->GetObject( nPos );
+
+        if( ( pItem->mbMirrorMode && ! bMirror ) ||
+            ( ! pItem->mbMirrorMode && bMirror )
+            )
+        {
+            pItem->mbMirrorMode = bMirror ? true : false;
+            if( !!pItem->maImage )
+            {
+                pItem->maImage = ImplMirrorImage( pItem->maImage );
+                if( !!pItem->maHighImage )
+                    pItem->maHighImage = ImplMirrorImage( pItem->maHighImage );
+            }
+
+            if ( !mbCalc )
+                ImplUpdateItem( nPos );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Image ToolBox::GetItemImage( USHORT nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -950,6 +1069,30 @@ Image ToolBox::GetItemImage( USHORT nItemId ) const
         return pItem->maImage;
     else
         return Image();
+}
+
+// -----------------------------------------------------------------------
+
+long ToolBox::GetItemImageAngle( USHORT nItemId ) const
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if ( pItem )
+        return pItem->mnImageAngle;
+    else
+        return 0;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ToolBox::GetItemImageMirrorMode( USHORT nItemId ) const
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if ( pItem )
+        return pItem->mbMirrorMode;
+    else
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------
