@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-30 11:39:56 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 08:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,17 +1324,17 @@ Image IMG_PIPETTE_H
 Image IMG_GET1OBJECT_H
 {
     ImageBitmap = Bitmap { File = "get1obj_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
 };
 Image IMG_GETALLOBJECT_H
 {
     ImageBitmap = Bitmap { File = "getallob_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
 };
 Image IMG_REMOVEBMP_H
 {
     ImageBitmap = Bitmap { File = "del1bmp_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
 };
 Image IMG_REMOVEALLBMP_H
 {
