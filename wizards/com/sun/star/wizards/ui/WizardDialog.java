@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 12:10:26 $
+ *  last change: $Author: kz $ $Date: 2004-11-29 14:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,8 +363,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
             Helper.setUnoPropertyValue(super.xDialogModel, "HelpURL", "HID:" + hid);
 
-            insertButton("btnWizardHelp", null , propNames ,
-                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + hid + 1, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth });
+            insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, propNames ,
+                                new Object[] { new Boolean(true), IButtonHeight, "HID:" + (hid + 1), oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth });
 
             insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames ,
                                 new Object[] { new Boolean(false), IButtonHeight, "HID:" + (hid + 2) ,oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
