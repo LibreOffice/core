@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:17:15 $
+ *  last change: $Author: kz $ $Date: 2003-07-10 14:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,8 +777,8 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
         pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
 
         // set processed flag
-        aRequest.pcProcessed->set();
-
+        if (aRequest.pcProcessed != NULL)
+            aRequest.pcProcessed->set();
     }
 }
 

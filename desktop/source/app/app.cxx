@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:42:13 $
+ *  last change: $Author: kz $ $Date: 2003-07-10 14:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1909,6 +1909,7 @@ void Desktop::OpenClients()
     if ( !pArgs->IsServer() )
     {
         ProcessDocumentsRequest aRequest;
+        aRequest.pcProcessed = NULL;
 
         pArgs->GetOpenList( aRequest.aOpenList );
         pArgs->GetViewList( aRequest.aViewList );
