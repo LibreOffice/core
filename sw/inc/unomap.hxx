@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 08:52:38 $
+ *  last change: $Author: os $ $Date: 2000-10-25 12:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@
 #define PROPERTY_MAP_VIEW_SETTINGS          33
 #define PROPERTY_MAP_TEXTPORTION_EXTENSIONS 34
 #define PROPERTY_MAP_FOOTNOTE               35
-#define PROPERTY_MAP_END                    36
+#define PROPERTY_MAP_TEXT_COLUMS            36
+#define PROPERTY_MAP_END                    37
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
@@ -249,6 +250,14 @@
 #define WID_CONTINUOUS                  1
 #define WID_RULE_NAME                   2
 #define WID_IS_ABS_MARGINS              3
+
+//TextColumns
+#define WID_TXTCOL_LINE_WIDTH           0
+#define WID_TXTCOL_LINE_COLOR           1
+#define WID_TXTCOL_LINE_REL_HGT         2
+#define WID_TXTCOL_LINE_ALIGN           3
+#define WID_TXTCOL_LINE_IS_ON           4
+
 
 /* -----------------04.07.98 11:41-------------------
  *

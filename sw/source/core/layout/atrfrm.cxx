@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
+ *  last change: $Author: os $ $Date: 2000-10-25 13:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,6 +1168,28 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             bRet = sal_True;
             nWidth = nWidthSum;
             bOrtho = sal_False;
+
+            uno::Reference<lang::XUnoTunnel> xNumTunnel((*pxCols), uno::UNO_QUERY);
+            SwXTextColumns* pSwColums = 0;
+            if(xNumTunnel.is())
+            {
+                pSwColums = (SwXTextColumns*)
+                    xNumTunnel->getSomething( SwXTextColumns::getUnoTunnelId() );
+            }
+            if(pSwColums)
+            {
+                nLineWidth = pSwColums->GetSepLineWidth();
+                aLineColor.SetColor(pSwColums->GetSepLineColor());
+                nLineHeight = pSwColums->GetSepLineHeightRelative();
+                if(!pSwColums->GetSepLineIsOn())
+                    eAdj = COLADJ_NONE;
+                else switch(pSwColums->GetSepLineVertAlign())
+                {
+                    case 0: eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
+                    case 1: eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
+                    case 2: eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
+                }
+            }
         }
     }
     return bRet;

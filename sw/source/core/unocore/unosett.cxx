@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 15:12:56 $
+ *  last change: $Author: os $ $Date: 2000-10-25 13:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
 
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
@@ -196,6 +199,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::style;
 
 struct PropValData
 {
@@ -379,10 +383,10 @@ SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
 // Numerierung
 const unsigned short aSvxToUnoAdjust[] =
 {
-    text::HoriOrientation::LEFT,    //3
-    text::HoriOrientation::RIGHT,  //1
+    HoriOrientation::LEFT,  //3
+    HoriOrientation::RIGHT,  //1
     USHRT_MAX,
-    text::HoriOrientation::CENTER, //2
+    HoriOrientation::CENTER, //2
     USHRT_MAX,
     USHRT_MAX
 };
@@ -505,13 +509,13 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
-                        case  text::FootnoteNumbering::PER_PAGE:
+                        case  FootnoteNumbering::PER_PAGE:
                             aFtnInfo.eNum = FTNNUM_PAGE;
                         break;
-                        case  text::FootnoteNumbering::PER_CHAPTER:
+                        case  FootnoteNumbering::PER_CHAPTER:
                             aFtnInfo.eNum = FTNNUM_CHAPTER;
                         break;
-                        case  text::FootnoteNumbering::PER_DOCUMENT:
+                        case  FootnoteNumbering::PER_DOCUMENT:
                             aFtnInfo.eNum = FTNNUM_DOC;
                         break;
                     }
@@ -614,13 +618,13 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     switch(rFtnInfo.eNum)
                     {
                         case  FTNNUM_PAGE:
-                            nRet = text::FootnoteNumbering::PER_PAGE;
+                            nRet = FootnoteNumbering::PER_PAGE;
                         break;
                         case  FTNNUM_CHAPTER:
-                            nRet = text::FootnoteNumbering::PER_CHAPTER;
+                            nRet = FootnoteNumbering::PER_CHAPTER;
                         break;
                         case  FTNNUM_DOC:
-                            nRet = text::FootnoteNumbering::PER_DOCUMENT;
+                            nRet = FootnoteNumbering::PER_DOCUMENT;
                         break;
                     }
                     aRet <<= nRet;
@@ -1791,7 +1795,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     sal_Int16 nValue;
                     pData->aVal >>= nValue;
                     if(nValue > 0 &&
-                        nValue <= text::HoriOrientation::LEFT &&
+                        nValue <= HoriOrientation::LEFT &&
                             USHRT_MAX != aUnoToSvxAdjust[nValue])
                     {
                         aFmt.SetAdjust((SvxAdjust)aUnoToSvxAdjust[nValue]);
@@ -2337,7 +2341,13 @@ Sequence< OUString > SwXTextColumns::getSupportedServiceNames(void) throw( Runti
 
  ---------------------------------------------------------------------------*/
 SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
-    nReference(0)
+    nReference(0),
+    nSepLineWidth(0),
+    nSepLineColor(0), //black
+    nSepLineHeightRelative(100),//full height
+    nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
+    bSepLineIsOn(sal_False),
+    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS))
 {
     if(nColCount)
         setColumnCount(nColCount);
@@ -2347,7 +2357,8 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
   -----------------------------------------------------------------------*/
 SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     aTextColumns(rFmtCol.GetNumCols()),
-    nReference(0)
+    nReference(0),
+    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS))
 {
     TextColumn* pColumns = aTextColumns.getArray();
     const SwColumns& rCols = rFmtCol.GetColumns();
@@ -2363,6 +2374,17 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     if(!aTextColumns.getLength())
         nReference = USHRT_MAX;
 
+    nSepLineWidth = rFmtCol.GetLineWidth();
+    nSepLineColor = rFmtCol.GetLineColor().GetColor();
+    nSepLineHeightRelative = rFmtCol.GetLineHeight();
+    bSepLineIsOn = rFmtCol.GetLineAdj() != COLADJ_NONE;
+    switch(rFmtCol.GetLineAdj())
+    {
+        case COLADJ_TOP:    nSepLineVertAlign = style::VerticalAlignment_TOP;   break;
+        case COLADJ_BOTTOM: nSepLineVertAlign = style::VerticalAlignment_BOTTOM;    break;
+        case COLADJ_CENTER:
+        case COLADJ_NONE:   nSepLineVertAlign = style::VerticalAlignment_MIDDLE;
+    }
 }
 /*-- 16.12.98 14:06:54---------------------------------------------------
 
@@ -2396,7 +2418,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
     if(nColumns <= 0)
         throw uno::RuntimeException();
     aTextColumns.realloc(nColumns);
-     text::TextColumn* pCols = aTextColumns.getArray();
+     TextColumn* pCols = aTextColumns.getArray();
     nReference = USHRT_MAX;
     sal_uInt16 nWidth = nReference / nColumns;
     sal_uInt16 nDiff = nReference - nWidth * nColumns;
@@ -2411,7 +2433,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
 /*-- 16.12.98 14:06:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Sequence< text::TextColumn > SwXTextColumns::getColumns(void) throw( uno::RuntimeException )
+uno::Sequence< TextColumn > SwXTextColumns::getColumns(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     return aTextColumns;
@@ -2419,12 +2441,12 @@ uno::Sequence< text::TextColumn > SwXTextColumns::getColumns(void) throw( uno::R
 /*-- 16.12.98 14:06:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumns)
+void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
             throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_uInt16 nReferenceTemp = 0;
-    const text::TextColumn* prCols = rColumns.getConstArray();
+    const TextColumn* prCols = rColumns.getConstArray();
     for(long i = 0; i < rColumns.getLength(); i++)
     {
         //wenn die Breite Null ist, oder die Raender breiter als die Spalte werden -> exception
@@ -2436,227 +2458,142 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
     nReference = !nReferenceTemp ? USHRT_MAX : nReferenceTemp;
     aTextColumns = rColumns;
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2000/10/23 09:18:49  mib
-    bug fixes for numbering rules
-
-    Revision 1.6  2000/10/19 13:59:53  os
-    check numbering type of footnotes
-
-    Revision 1.5  2000/10/18 09:03:35  os
-    #78254# use of NumberingRules service completed
-
-    Revision 1.4  2000/10/12 17:29:11  mib
-    Don't create styles then querying footnote info properties
-
-    Revision 1.3  2000/10/12 07:06:04  os
-    #79412# service name corrected
-
-    Revision 1.2  2000/09/27 13:57:06  os
-    #78252# don't create styles without a name
-
-    Revision 1.1.1.1  2000/09/19 00:08:29  hr
-    initial import
-
-    Revision 1.64  2000/09/18 16:04:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.63  2000/09/18 12:34:26  os
-    property AnchorCharStyleName in Footnotes/Endnotes
-
-    Revision 1.62  2000/09/05 15:17:55  os
-    string length available again
-
-    Revision 1.61  2000/08/25 09:03:37  os
-    service NumberingRules added
-
-    Revision 1.60  2000/08/24 11:14:34  mib
-    bug fixes for XML import
-
-    Revision 1.59  2000/08/10 08:25:05  mib
-    #74404#: NumberingCharStyleName now handles programmatic names
-
-    Revision 1.58  2000/08/07 09:16:51  os
-    #77157# service name LineNumberingSettings
-
-    Revision 1.57  2000/07/19 11:01:02  os
-    #76846# properties added
-
-    Revision 1.56  2000/07/05 09:00:26  os
-    #76619# service name added
-
-    Revision 1.55  2000/06/20 10:51:30  os
-    #70059# set character style name if pDocShell or pDoc is set
-
-    Revision 1.54  2000/05/25 09:55:12  hr
-    exception specification
-
-    Revision 1.53  2000/05/16 09:14:55  os
-    project usr removed
-
-    Revision 1.52  2000/04/26 11:35:20  os
-    GetName() returns String&
-
-    Revision 1.51  2000/04/19 13:35:31  os
-    UNICODE
-
-    Revision 1.50  2000/04/11 08:31:04  os
-    UNICODE
-
-    Revision 1.49  2000/03/31 06:06:48  os
-    UNO III: toolkit includes
-
-    Revision 1.48  2000/03/27 10:21:10  os
-    UNO III
-
-    Revision 1.47  2000/03/21 15:42:25  os
-    UNOIII
-
-    Revision 1.46  2000/02/11 14:35:52  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.45  2000/02/02 16:52:53  sub
-    #65293#: PropertyValue changes
-
-    Revision 1.44  1999/12/03 11:11:11  os
-    #70234# property name defined
-
-    Revision 1.43  1999/11/22 10:37:57  os
-    missing headers added
-
-    Revision 1.42  1999/11/19 16:40:19  os
-    modules renamed
-
-    Revision 1.41  1999/11/04 07:44:46  mib
-    SwXNumberingRule bug fixes
-
-    Revision 1.40  1999/11/01 11:40:21  mib
-    SwXNumberingRules bug fixes
-
-    Revision 1.39  1999/10/28 07:44:05  os
-    new properties/changes for XML
-
-    Revision 1.38  1999/07/07 05:41:04  OS
-    #67461# check index
-
-
-      Rev 1.37   07 Jul 1999 07:41:04   OS
-   #67461# check index
-
-      Rev 1.36   22 Jun 1999 11:00:00   OS
-   #66004# bullet and graphic properties not in chapter numbering
-
-      Rev 1.35   10 May 1999 11:16:00   OS
-   #66004# Zuordnung ChapterNumbering/NumberingRules berichtigt
-
-      Rev 1.34   22 Apr 1999 16:13:54   OS
-   #65194# throw -> throw; #65124# not impl. nur noch warning; EventListener
-
-      Rev 1.33   25 Mar 1999 14:36:44   OS
-   #63922# sal_Int32 statt sal_Int16 fuer Numerierungseinzuege
-
-      Rev 1.32   15 Mar 1999 14:37:48   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.31   12 Mar 1999 09:41:26   OS
-   #62845# lang::XServiceInfo impl.
-
-      Rev 1.30   09 Mar 1999 12:41:26   OS
-   #62008# Solar-Mutex
-
-      Rev 1.29   08 Mar 1999 07:45:20   MH
-   update 515
-
-      Rev 1.28   05 Mar 1999 13:52:08   OS
-   HoriOrientation - UPD515
-
-      Rev 1.27   04 Mar 1999 15:03:08   OS
-   #62191# UINT nicht mehr verwenden
-
-      Rev 1.26   23 Feb 1999 10:22:12   OS
-   #61767# Kapitelnumerierung funktioniert wieder
-
-      Rev 1.25   22 Feb 1999 15:38:32   OS
-   #60606# Numerierungsregel incl. Font richtig setzen;#62196 text::TextColumns: richtige Raender
-
-      Rev 1.24   19 Feb 1999 16:54:54   OS
-   #60606# Numerierungsregel setzbar
-
-      Rev 1.23   15 Feb 1999 11:25:02   OS
-   #52654# NumberingType in der NumberingRules
-
-      Rev 1.22   28 Jan 1999 16:45:02   OS
-   #56371# keine Objekte fuer DEBUG anlegen
-
-      Rev 1.21   21 Jan 1999 09:57:04   OS
-   #60971# Zeichenvorlagen der Numerierung an Absatzvorlagen setzen
-
-      Rev 1.20   05 Jan 1999 12:11:10   OS
-   #60606# #52654# Font fuer Numerierung setzen
-
-      Rev 1.19   16 Dec 1998 14:28:20   OS
-   #56371# Zwischenstand
-
-      Rev 1.18   10 Dec 1998 15:53:34   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.17   17 Nov 1998 11:05:06   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.16   06 Nov 1998 13:11:24   OS
-   #52654##59069# Spalten vollstaendig
-
-      Rev 1.15   17 Sep 1998 16:01:08   OS
-   52654# ParagraphStyle->ParaStyle, CharacterStyle->CharStyle
-
-      Rev 1.14   10 Sep 1998 12:51:56   OS
-   #52654# PROPERTY_NONE statt PROPERTY_BOUND
-
-      Rev 1.13   10 Jul 1998 18:08:30   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.12   27 Jun 1998 16:22:06   OS
-   SwXNumberingRule ist Client
-
-      Rev 1.11   18 Jun 1998 18:10:48   OS
-   Twip-mm-Konvertierung
-
-      Rev 1.10   18 Jun 1998 13:25:08   OS
-   queryInterface im ChapterNumbering
-
-
-      Rev 1.9   18 Jun 1998 08:53:56   MH
-   Chg: Syntax OS2
-
-      Rev 1.8   12 Jun 1998 13:49:14   OS
-   Package-Umstellung
-
-      Rev 1.7   04 Jun 1998 09:40:02   OS
-   getIdlClasses
-
-
-      Rev 1.6   29 May 1998 13:49:08   OS
-   Spalten eingebaut
-
-      Rev 1.5   26 May 1998 12:34:00   OS
-   SwXNumberingRules verbessert
-
-      Rev 1.4   25 May 1998 09:57:12   OS
-   +SwXNumberingRules, SwXChapterNumbering hierher verschoben
-
-      Rev 1.3   13 May 1998 15:27:02   OS
-   Umstellung der text::TextDocument-Interfaces
-
-      Rev 1.2   07 May 1998 14:56:18   MIB
-   Header
-
-      Rev 1.1   05 May 1998 10:04:00   OS
-   Properties vollstaendig
-
-      Rev 1.0   04 May 1998 13:41:04   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
+/*-- 25.10.00 10:15:39---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Reference< XPropertySetInfo > SwXTextColumns::getPropertySetInfo(  ) throw(RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( _pMap );
+    return aRef;
+}
+/*-- 25.10.00 10:15:39---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any& aValue )
+        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
+{
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                    _pMap, rPropertyName);
+    if(!pMap)
+        throw UnknownPropertyException();
+    switch(pMap->nWID)
+    {
+        case WID_TXTCOL_LINE_WIDTH:
+        {
+            sal_Int32 nTmp; aValue >>= nTmp;
+            if(nTmp < 0)
+                throw IllegalArgumentException();
+            nSepLineWidth = nTmp;
+        }
+        break;
+        case WID_TXTCOL_LINE_COLOR:
+            aValue >>= nSepLineColor;
+        break;
+        case WID_TXTCOL_LINE_REL_HGT:
+        {
+            sal_Int8 nTmp; aValue >>= nTmp;
+            if(nTmp < 0)
+                throw IllegalArgumentException();
+            nSepLineHeightRelative = nTmp;
+        }
+        break;
+        case WID_TXTCOL_LINE_ALIGN:
+        {
+            style::VerticalAlignment eAlign;
+            if(!(aValue >>= eAlign))
+                throw IllegalArgumentException();
+            nSepLineVertAlign = eAlign;
+        }
+        break;
+        case WID_TXTCOL_LINE_IS_ON:
+            bSepLineIsOn = *(sal_Bool*)aValue.getValue();
+        break;
+    }
+}
+/*-- 25.10.00 10:15:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                    _pMap, rPropertyName);
+    if(!pMap)
+        throw UnknownPropertyException();
+    Any aRet;
+    switch(pMap->nWID)
+    {
+        case WID_TXTCOL_LINE_WIDTH:
+            aRet <<= nSepLineWidth;
+        break;
+        case WID_TXTCOL_LINE_COLOR:
+            aRet <<= nSepLineColor;
+        break;
+        case WID_TXTCOL_LINE_REL_HGT:
+            aRet <<= nSepLineHeightRelative;
+        break;
+        case WID_TXTCOL_LINE_ALIGN:
+            aRet <<= (style::VerticalAlignment)nSepLineVertAlign;
+        break;
+        case WID_TXTCOL_LINE_IS_ON:
+            aRet.setValue(&bSepLineIsOn, ::getBooleanCppuType());
+        break;
+    }
+    return aRet;
+}
+/*-- 25.10.00 10:15:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextColumns::addPropertyChangeListener(
+    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 25.10.00 10:15:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextColumns::removePropertyChangeListener(
+    const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 25.10.00 10:15:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextColumns::addVetoableChangeListener(
+    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/*-- 25.10.00 10:15:40---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextColumns::removeVetoableChangeListener(
+    const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+/* -----------------------------25.10.00 11:04--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const uno::Sequence< sal_Int8 > & SwXTextColumns::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+/* -----------------------------10.03.00 18:04--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int64 SAL_CALL SwXTextColumns::getSomething( const uno::Sequence< sal_Int8 >& rId )
+    throw(uno::RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return 0;
+}
 

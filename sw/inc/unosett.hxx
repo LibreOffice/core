@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 15:11:32 $
+ *  last change: $Author: os $ $Date: 2000-10-25 12:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -304,8 +310,11 @@ public:
 /* -----------------27.05.98 15:44-------------------
  *
  * --------------------------------------------------*/
-class SwXTextColumns : public cppu::WeakAggImplHelper2
+class SwXTextColumns : public cppu::WeakAggImplHelper4
 <
+
+    ::com::sun::star::lang::XUnoTunnel,
+    ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::text::XTextColumns,
     ::com::sun::star::lang::XServiceInfo
 >
@@ -313,10 +322,25 @@ class SwXTextColumns : public cppu::WeakAggImplHelper2
     sal_uInt32                  nReference;
     ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn>    aTextColumns;
 
+    const SfxItemPropertyMap*   _pMap;
+
+    //separator line
+    sal_Int32                   nSepLineWidth;
+    sal_Int32                   nSepLineColor;
+    sal_Int8                    nSepLineHeightRelative;
+    sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
+    sal_Bool                    bSepLineIsOn;
+
 public:
     SwXTextColumns(sal_uInt16 nColCount);
     SwXTextColumns(const SwFmtCol& rFmtCol);
     virtual ~SwXTextColumns();
+
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    //XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     //XTextColumns
     virtual sal_Int32 SAL_CALL getReferenceValue(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -325,10 +349,25 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setColumns( const ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn >& Columns ) throw(::com::sun::star::uno::RuntimeException);
 
+    //XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    sal_Int32   GetSepLineWidth() const {return nSepLineWidth;}
+    sal_Int32   GetSepLineColor() const {return     nSepLineColor;}
+    sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
+    sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
+    sal_Bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
 };
 #endif
 
