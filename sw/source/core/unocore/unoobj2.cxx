@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:14:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 12:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2778,6 +2778,14 @@ void    SwXParaFrameEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 // -----------------------------------------------------------------------------
-IMPLEMENT_FORWARD_XINTERFACE2(SwXTextCursor,SwXTextCursor_Base,OTextCursorHelper)
+IMPLEMENT_FORWARD_REFCOUNT( SwXTextCursor,SwXTextCursor_Base )
+
+::com::sun::star::uno::Any SAL_CALL SwXTextCursor::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if( _rType == ::getCppuType( (uno::Reference<XUnoTunnel>*)0)  )
+        return OTextCursorHelper::queryInterface( _rType );
+    else
+        return SwXTextCursor_Base::queryInterface( _rType );
+}
 
 
