@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-11 10:33:58 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 13:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,13 +826,7 @@ void OListBoxModel::loadData()
 
                 if (!bHaveFormat)
                 {
-                    String sLanguage, sCountry;
-                    ConvertLanguageToIsoNames(Application::GetSettings().GetUILanguage(), sLanguage, sCountry);
-                    Locale aAppLanguage(
-                        sLanguage,
-                        sCountry,
-                        ::rtl::OUString());
-
+                    Locale aAppLanguage = Application::GetSettings().GetUILocale();
                     if (xSupplier.is())
                     {
                         Reference< XNumberFormatTypes > xNumTypes(xSupplier->getNumberFormats(), UNO_QUERY);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-11 10:33:58 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 13:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,9 +849,7 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
                     Reference<XNumberFormatTypes>  xTypes(xSupplier->getNumberFormats(), UNO_QUERY);
                     if (xTypes.is())
                     {
-                        UniString sLanguage, sCountry;
-                        ConvertLanguageToIsoNames(Application::GetSettings().GetUILanguage(), sLanguage, sCountry);
-                        Locale aApplicationLocale(sLanguage, sCountry, ::rtl::OUString());
+                        Locale aApplicationLocale = Application::GetSettings().GetUILocale();
 
                         sal_Int32 nNewKey = 0;
                         if (m_bOriginalNumeric)

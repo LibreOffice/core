@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-11 10:33:58 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 13:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,13 +266,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
     Reference<XPropertySet>  xEditProps;
     query_interface(static_cast<XWeak*>(m_pEditPart), xEditProps);
 
-    UniString sLanguage, sCountry;
-    ConvertLanguageToIsoNames(Application::GetSettings().GetUILanguage(), sLanguage, sCountry);
-    Locale aAppLanguage(
-        sLanguage,
-        sCountry,
-        ::rtl::OUString());
-
+    Locale aAppLanguage = Application::GetSettings().GetUILocale();
     dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
 
     // then write the edit part, after switching to "fake mode"
