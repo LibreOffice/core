@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 15:28:42 $
+ *  last change: $Author: fs $ $Date: 2002-10-29 08:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
 
+class Window;
 //........................................................................
 namespace toolkit
 {
@@ -152,6 +156,8 @@ namespace toolkit
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -164,6 +170,8 @@ namespace toolkit
         void startModelListening( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
         // stops listening at the control model
         void stopModelListening( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+
+        Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };
 
 //........................................................................
@@ -175,6 +183,9 @@ namespace toolkit
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/05/17 15:28:42  tbe
+ *  #97222# removed isShowing, isVisible, isFocusTraversable, addFocusListener, removeFocusListener
+ *
  *  Revision 1.1  2002/04/26 14:30:04  fs
  *  initial checkin - fallback AccessibleContext for uno controls
  *

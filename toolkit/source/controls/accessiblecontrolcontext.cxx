@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-12 13:16:58 $
+ *  last change: $Author: fs $ $Date: 2002-10-29 08:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,11 +280,25 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
+    Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
+    {
+        Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
+        Reference< awt::XWindow > xWindow;
+        if ( xControl.is() )
+            xWindow = xWindow.query( xControl->getPeer() );
+
+        Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : NULL;
+
+        if ( _pxUNOWindow )
+            *_pxUNOWindow = xWindow;
+        return pWindow;
+    }
+
+    //--------------------------------------------------------------------
     awt::Rectangle SAL_CALL OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
             // want to do some VCL stuff here ...
-
         OContextEntryGuard aGuard( this );
 
         OSL_ENSURE( sal_False, "OAccessibleControlContext::implGetBounds: performance issue: forced to calc the size myself!" );
@@ -299,10 +313,8 @@ namespace toolkit
         // from this info, we can determine the the position of our peer relative to the foreign parent
 
         // our control
-        Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
-        if ( xControl.is() )
-            xWindow = xWindow.query( xControl->getPeer() );
+        Window* pVCLWindow = implGetWindow( &xWindow );
 
         awt::Rectangle aBounds( 0, 0, 0, 0 );
         if ( xWindow.is() )
@@ -310,7 +322,6 @@ namespace toolkit
             // ugly, but .... though the XWindow has a getPosSize, it is impossible to determine the
             // parent which this position/size is relative to. This means we must tunnel UNO and ask the
             // implementation
-            Window* pVCLWindow = VCLUnoHelper::GetWindow( xWindow );
             Window* pVCLParent = pVCLWindow ? pVCLWindow->GetParent() : NULL;
 
             // the relative location of the window
@@ -363,6 +374,52 @@ namespace toolkit
         return Any();
     }
 
+    //--------------------------------------------------------------------
+    sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            // want to do some VCL stuff here ...
+        OContextEntryGuard aGuard( this );
+
+        Window* pWindow = implGetWindow( );
+        sal_Int32 nColor = 0;
+        if ( pWindow )
+        {
+            if ( pWindow->IsControlForeground() )
+                nColor = pWindow->GetControlForeground().GetColor();
+            else
+            {
+                Font aFont;
+                if ( pWindow->IsControlFont() )
+                    aFont = pWindow->GetControlFont();
+                else
+                    aFont = pWindow->GetFont();
+                nColor = aFont.GetColor().GetColor();
+            }
+        }
+        return nColor;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            // want to do some VCL stuff here ...
+        OContextEntryGuard aGuard( this );
+
+        Window* pWindow = implGetWindow( );
+        sal_Int32 nColor = 0;
+        if ( pWindow )
+        {
+            if ( pWindow->IsControlBackground() )
+                nColor = pWindow->GetControlBackground().GetColor();
+            else
+                nColor = pWindow->GetBackground().GetColor().GetColor();
+        }
+
+        return nColor;
+    }
+
 //........................................................................
 }   //namespace toolkit
 //........................................................................
@@ -370,6 +427,9 @@ namespace toolkit
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/06/12 13:16:58  fs
+ *  #100126# exception thrown in wrong situation
+ *
  *  Revision 1.2  2002/05/17 15:29:11  tbe
  *  #97222# removed isShowing, isVisible, isFocusTraversable, addFocusListener, removeFocusListener
  *
