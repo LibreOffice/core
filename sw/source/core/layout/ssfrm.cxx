@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:09:09 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,15 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // ClearPara()
+#endif
+#ifndef _CELLFRM_HXX
+#include <cellfrm.hxx>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+#ifndef _FMTFSIZE_HXX //autogen
+#include <fmtfsize.hxx>
 #endif
 #ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
@@ -298,6 +307,8 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
     Prt().Width( Frm().Width() - nLeft - nRight );
 }
 
+const USHORT nMinVertCellHeight = 1135;
+
 /*-----------------11.9.2001 11:11------------------
  * SwFrm::CheckDirChange(..)
  * checks the layout direction and
@@ -317,6 +328,23 @@ void SwFrm::CheckDirChange()
         InvalidateAll();
         if( IsLayoutFrm() )
         {
+            // set minimum row height for vertical cells in horizontal table:
+            if ( IsCellFrm() && GetUpper() )
+            {
+                if ( IsVertical() != GetUpper()->IsVertical() )
+                {
+                    SwTableLine* pLine = (SwTableLine*)((SwCellFrm*)this)->GetTabBox()->GetUpper();
+                    SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
+                    SwFmtFrmSize aNew( pFrmFmt->GetFrmSize() );
+                    if ( ATT_FIX_SIZE != aNew.GetSizeType() )
+                        aNew.SetSizeType( ATT_MIN_SIZE );
+                    if ( aNew.GetHeight() < nMinVertCellHeight )
+                        aNew.SetHeight( nMinVertCellHeight );
+                    SwDoc* pDoc = pFrmFmt->GetDoc();
+                    pDoc->SetAttr( aNew, *pLine->ClaimFrmFmt() );
+                }
+            }
+
             SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
             const SwFmtCol* pCol = NULL;
             SwLayoutFrm* pBody;
