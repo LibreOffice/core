@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: fs $ $Date: 2002-04-23 11:11:06 $
+#   last change: $Author: ka $ $Date: 2002-05-06 09:59:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=	\
             $(SLO)$/accessiblecomponenthelper.obj \
             $(SLO)$/accessiblecontexthelper.obj \
+            $(SLO)$/accessibleselectionhelper.obj \
             $(SLO)$/accimplaccess.obj \
             $(SLO)$/interaction.obj \
             $(SLO)$/types.obj \
