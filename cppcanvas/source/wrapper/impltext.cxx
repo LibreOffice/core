@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "impltext.hxx"
+#include <impltext.hxx>
 #include <canvas/canvastools.hxx>
 
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
@@ -114,12 +114,14 @@ namespace cppcanvas
             aText.StartPosition = 0;
             aText.Length = maText.getLength();
 
-            // TODO: implement caching
+            // TODO(P1): implement caching
+            // TODO(F2): where to get current BiDi status?
+            sal_Int8 nBidiOption = rendering::TextDirection::WEAK_LEFT_TO_RIGHT;
             pCanvas->getUNOCanvas()->drawText( aText,
                                                mpFont->getUNOFont(),
                                                pCanvas->getViewState(),
                                                maRenderState,
-                                               rendering::TextDirection::LEFT_TO_RIGHT );
+                                               nBidiOption );
 
             return true;
         }
