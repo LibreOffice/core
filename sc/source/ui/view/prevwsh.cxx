@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:38:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _SVX_ZOOM_HXX
 #include <svx/zoom_def.hxx>
 #endif
+
+#include "sc.hrc" //CHINA001
+#include "scabstdlg.hxx" //CHINA001
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
 
@@ -485,7 +488,13 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
 
 SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
-    return ScTpPrintOptions::Create( pParent, rOptions );
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    //CHINA001 return ScTpPrintOptions::Create( pParent, rOptions );
+    ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
+    if ( ScTpPrintOptionsCreate )
+        return  (*ScTpPrintOptionsCreate)( pParent, rOptions);
+    return 0;
 }
 
 void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
