@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphhelp.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:46:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,24 +66,9 @@ Bitmap BMP_SIGNATURE
     File = "signet.png";
 };
 
-Bitmap BMP_128X128_BASE_DOC
-{
-    File = "128x128_base_doc-p.png";
-};
-
 Bitmap BMP_128X128_CALC_DOC
 {
     File = "128x128_calc_doc-p.png";
-};
-
-Bitmap BMP_128X128_CALC_TEMP
-{
-    File = "128x128_calc_temp-p.png";
-};
-
-Bitmap BMP_128X128_CHART_DOC
-{
-    File = "128x128_chart_doc-p.png";
 };
 
 Bitmap BMP_128X128_DRAW_DOC
@@ -91,24 +76,9 @@ Bitmap BMP_128X128_DRAW_DOC
     File = "128x128_draw_doc-p.png";
 };
 
-Bitmap BMP_128X128_DRAW_TEMP
-{
-    File = "128x128_draw_temp-p.png";
-};
-
 Bitmap BMP_128X128_IMPRESS_DOC
 {
     File = "128x128_impress_doc-p.png";
-};
-
-Bitmap BMP_128X128_IMPRESS_TEMP
-{
-    File = "128x128_impress_temp-p.png";
-};
-
-Bitmap BMP_128X128_MASTER_DOC
-{
-    File = "128x128_master_doc-p.png";
 };
 
 Bitmap BMP_128X128_MATH_DOC
@@ -119,10 +89,5 @@ Bitmap BMP_128X128_MATH_DOC
 Bitmap BMP_128X128_WRITER_DOC
 {
     File = "128x128_writer_doc-p.png";
-};
-
-Bitmap BMP_128X128_WRITER_TEMP
-{
-    File = "128x128_writer_temp-p.png";
 };
 
