@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 13:21:29 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 13:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ namespace xmloff
         { PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO, sXML_background_color,    XML_TYPE_COLOR, 0 },
         { PROPERTY_ALIGN,   XML_NAMESPACE_STYLE,    sXML_text_align,            XML_TYPE_TEXT_ALIGN, 0 },
         { PROPERTY_BORDER,  XML_NAMESPACE_FO,       sXML_border,                XML_TYPE_CONTROL_BORDER, 0 },
-        { "TextColor",      XML_NAMESPACE_STYLE,    sXML_color,                 XML_TYPE_COLOR, 0 },
         { "FontCharWidth",  XML_NAMESPACE_STYLE,    sXML_font_char_width,       XML_TYPE_NUMBER16, 0 },
         { "FontCharset",    XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
         { "FontFamily",     XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
@@ -148,6 +147,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/19 13:21:29  fs
+ *  #85097# add TextColor to the styles map, so it won't be exported as ordinary property
+ *
  *  Revision 1.6  2001/04/02 05:58:40  fs
  *  added TextColor to the property map
  *
