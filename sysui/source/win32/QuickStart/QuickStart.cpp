@@ -52,7 +52,7 @@ bool launchSoffice( )
         strcpy( p+1, "soffice.exe" );
 
         char imagename[_MAX_PATH + 1];
-        wsprintf(imagename, "\"%s\" -invisible", filename );
+        wsprintf(imagename, "\"%s\" -quickstart", filename );
 
         UINT ret = WinExec( imagename, SW_SHOW );
         if ( ret < 32 )
