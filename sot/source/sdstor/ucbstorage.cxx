@@ -230,8 +230,10 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
             // copy the original stream into the temporary stream ( only transacted mode is supported )
             if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS )
                 m_pSource->ResetError();
-            else
+            else {
                 *m_pSource >> *m_pStream;
+                m_pStream->Flush();
+            }
         }
         else
         {
@@ -296,8 +298,10 @@ void UCBStorageStream_Impl::SwitchToWritable( StreamMode nMode, BOOL bDirect )
             // copy the original stream into the temporary stream ( only transacted mode is supported )
             if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS )
                 m_pSource->ResetError();
-            else
+            else {
                 *m_pSource >> *m_pStream;
+                m_pStream->Flush();
+            }
         }
     }
 
@@ -697,6 +701,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     // copy data into the temporary file
     m_pStream = m_pTempFile->GetStream( STREAM_STD_READWRITE );
     rStream >> *m_pStream;
+    m_pStream->Flush();
     m_pStream->Seek(0);
     m_pSource->Seek(0);
 
