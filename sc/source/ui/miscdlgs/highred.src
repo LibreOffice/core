@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:02:20 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,8 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     {
         Hide = TRUE ;
         QuickHelpText [ de ] = "Verkleinern/Vergrößern" ;
-        Pos = MAP_APPFONT ( 142 , 119 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 142 , 118 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Minimize/Maximize" ;
         QuickHelpText [ x-comment ] = " ";
