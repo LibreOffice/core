@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 07:52:26 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 08:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,6 +1144,8 @@ public class ReportWizard {
         CurUNODialog.assignPropertyToDialogControl("lstGroup", "StringItemList", CurDBMetaData.FieldNames);
         xSelGroupListBox.removeItems((short) 0, xSelGroupListBox.getItemCount());
         GroupFieldVector = new java.util.Vector(CurDBMetaData.FieldNames.length);
+        CurReportDocument.GroupFormatVector = new java.util.Vector();
+
     }
     }
     catch( Exception exception ){

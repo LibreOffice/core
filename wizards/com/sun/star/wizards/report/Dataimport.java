@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 07:52:26 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 08:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,6 @@ public class Dataimport extends ReportWizard{
         dialog = x;
     }*/
     Thread ProgressThread = new Thread(new Runnable() {
-
     public void run(){
     try{
         if (reconnectToDatabase(xMSF, CurReportDocument)){
@@ -267,6 +266,7 @@ public class Dataimport extends ReportWizard{
     CurUNOProgressDialog.xComponent.dispose();
     }
         });
+
     ProgressThread.start();
 //        try {
 //      ProgressThread.join();
