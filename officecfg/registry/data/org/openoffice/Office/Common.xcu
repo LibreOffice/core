@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:33:27 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,14 +187,14 @@
       </node>
       <node oor:name="m4" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >private:factory/sdatabase?Interactive</value>
+          <value >service:com.sun.star.sdb.DatabaseWizardDialog</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="de">Datenbank...</value>
           <value xml:lang="en-US">Database...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_default</value>
+          <value >_self</value>
         </prop>
       </node>
       <node oor:name="m5" oor:op="replace">
