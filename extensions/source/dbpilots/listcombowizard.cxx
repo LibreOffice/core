@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 16:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 06:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,8 @@ namespace dbp
             // do some quotings
             if (xMetaData.is())
             {
-                getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField);
+                if (isListBox()) // only when we have a listbox this should be not empty
+                    getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField);
                 getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable);
                 getSettings().sListContentField = quoteTableName(xMetaData, getSettings().sListContentField);
             }
@@ -614,6 +615,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/30 16:48:06  fs
+ *  #86714# show the data source of the form on the first not data source related page
+ *
  *  Revision 1.6  2001/03/30 13:15:43  fs
  *  added a description to the laste page of the list box wizard
  *
