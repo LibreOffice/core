@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 10:27:26 $
+ *  last change: $Author: mtg $ $Date: 2001-06-22 11:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,8 +371,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
             pTempEntry->sName = rPath + (*aCI).first;
 
-            sal_Bool bToBeCompressed = pStream->IsToBeCompressed();
             sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && bHaveEncryptionKey;
+            sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();
 
             aPropSet[0].Name = sMediaTypeProperty;
             aPropSet[0].Value <<= pStream->GetMediaType( );
