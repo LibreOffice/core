@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 21:04:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,6 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FONTWEIGHT,       "FontWeight");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FONTWIDTH,        "FontWidth");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FONTWORDLINEMODE, "FontWordLineMode");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FONTTYPE,         "FontType");
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS, "AppendTableAliasName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PERSISTENT_NAME,  "PersistentName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_EMBEDDEDOBJECT,   "EmbeddedObject");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORIGINAL,         "Original");
