@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-18 10:03:32 $
+ *  last change: $Author: pl $ $Date: 2002-02-26 14:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,7 +1845,11 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
       //    only when SAL_INPUTCONTEXT_TEXT is set.
 
       if (!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT))
+    {
+        if( maFrameData.mpInputContext )
+            maFrameData.mpInputContext->Unmap( this );
         return;
+    }
 
     // 2. We should use on-the-spot inputstyle
       //    only when SAL_INPUTCONTEXT_EXTTEXTINPUT is set.
@@ -1864,6 +1868,8 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
                 maFrameData.mpInputContext->SetICFocus( this );
         }
       }
+    else
+        maFrameData.mpInputContext->Map( this );
       return;
 }
 
