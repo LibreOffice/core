@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasgraphichelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:57:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 #include <canvasgraphichelper.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP_
-#include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP_
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP_
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP_
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
 
 #ifndef _CANVAS_CANVASTOOLS_HXX
@@ -83,7 +83,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 /* Implementation of CanvasGraphicHelper class */
 
