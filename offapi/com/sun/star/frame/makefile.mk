@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+#   last change: $Author: as $ $Date: 2000-11-20 10:06:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,10 +85,12 @@ IDLFILES=\
     FrameActionEvent.idl\
     FrameControl.idl\
     FrameLoader.idl\
+    FrameLoaderFactory.idl\
     FramesContainer.idl\
     FrameSearchFlag.idl\
     MediaTypeDetectionHelper.idl\
     Settings.idl\
+    SynchronousFrameLoader.idl\
     TerminationVetoException.idl\
     WindowArrange.idl\
     XBrowseHistoryRegistry.idl\
@@ -116,6 +118,7 @@ IDLFILES=\
     XModel.idl\
     XStatusListener.idl\
     XStorable.idl\
+    XSynchronousFrameLoader.idl\
     XTask.idl\
     XTasksSupplier.idl\
     XTerminateListener.idl\
