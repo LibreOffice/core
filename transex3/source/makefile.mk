@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
-#   last change: $Author: rt $ $Date: 2005-01-11 11:25:08 $
+#   $Revision: 1.35 $
+#   last change: $Author: obo $ $Date: 2005-03-15 08:57:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,7 @@ APP1STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP1STDLIBS+= $(BTSTRPLIB)   
+APP1STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 APP1LIBS+=	$(LB)$/$(PRJNAME).lib
@@ -134,7 +134,7 @@ APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj $(OBJ)$/hw2fw.obj
-APP2STDLIBS=$(BTSTRPLIB) $(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB) 
+APP2STDLIBS=$(BTSTRPLIB) $(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
@@ -216,7 +216,11 @@ EXCEPTIONSFILES=                            \
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
 
 .IF "$(OS)"!="MACOSX"
-APP9STDLIBS+= $(BTSTRPLIB)
+.IF "$(GUI)"=="UNX"
+APP9STDLIBS+= $(BTSTRPLIB) -lbootstrp2
+.ELSE
+APP9STDLIBS+= $(BTSTRPLIB) $(LIBPRE) bootstrp2.lib
+.ENDIF
 .ENDIF
 
 APP9STDLIBS+= \
@@ -226,7 +230,7 @@ APP9STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
-APP9STDLIBS+= $(BTSTRPLIB)   
+APP9STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
