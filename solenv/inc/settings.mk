@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.125 $
+#   $Revision: 1.126 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-31 13:10:18 $
+#   last change: $Author: rt $ $Date: 2002-11-06 14:49:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1487,13 +1487,8 @@ CDEFS+= -DTF_NEWEX
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
 UNOUCROUT*=$(OUT)$/inc
-.IF "$(UDKSTAMP)"==""
-UNOUCRRDB*=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRDEP*=$(SOLARBINDIR)$/udkapi.rdb
-.ELSE           # "$(UDKSTAMP)"==""
 UNOUCRRDB*=$(SOLARBINDIR)$/types.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/types.rdb
-.ENDIF          # "$(UDKSTAMP)"==""
 
 # --- Compiler -----------------------------------------------------
 .INCLUDE : rules.mk
