@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:30:48 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+#ifndef _SV_MENU_HXX
+#include <menu.hxx>
 #endif
 #undef private
 
@@ -2016,6 +2019,46 @@ long ImplHandleSalMouseActivate( Window* pWindow, SalMouseActivateEvent* pEvent 
 
 // -----------------------------------------------------------------------
 
+static long ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, USHORT nEvent )
+{
+    // Find SystemWindow and its Menubar and let it dispatch the command
+    long nRet = 0;
+    Window *pWin = pWindow->mpFirstChild;
+    while ( pWin )
+    {
+        if ( pWin->mbSysWin )
+            break;
+        pWin = pWin->mpNext;
+    }
+    if( pWin )
+    {
+        MenuBar *pMenuBar = ((SystemWindow*) pWin)->GetMenuBar();
+        if( pMenuBar )
+        {
+            switch( nEvent )
+            {
+                case SALEVENT_MENUACTIVATE:
+                    nRet = pMenuBar->HandleMenuActivateEvent( (Menu*) pEvent->mpMenu ) ? 1 : 0;
+                    break;
+                case SALEVENT_MENUDEACTIVATE:
+                    nRet = pMenuBar->HandleMenuDeActivateEvent( (Menu*) pEvent->mpMenu ) ? 1 : 0;
+                    break;
+                case SALEVENT_MENUHIGHLIGHT:
+                    nRet = pMenuBar->HandleMenuHighlightEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
+                    break;
+                case SALEVENT_MENUCOMMAND:
+                    nRet = pMenuBar->HandleMenuCommandEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -2171,6 +2214,13 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             break;
         case SALEVENT_KEYMODCHANGE:
             ImplHandleSalKeyMod( (Window*)pInst, (SalKeyModEvent*)pEvent );
+            break;
+
+        case SALEVENT_MENUACTIVATE:
+        case SALEVENT_MENUDEACTIVATE:
+        case SALEVENT_MENUHIGHLIGHT:
+        case SALEVENT_MENUCOMMAND:
+            nRet = ImplHandleMenuEvent( (Window*)pInst, (SalMenuEvent*)pEvent, nEvent );
             break;
 
         case SALEVENT_WHEELMOUSE:
