@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:09:29 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,6 @@ class ImportExcel8 : public ImportExcel
         void                    Msodrawing( void );             // 0xEC
         void                    Msodrawingselection( void );    // 0xED
         void                    Labelsst( void );               // 0xFD
-        void                    Rstring( void );                // 0xD6
-        void                    Label( void );                  // 0x0204
 
         void                    Txo( void );                    // 0x01B6
         void                    Hlink( void );                  // 0x01B8
@@ -153,12 +151,7 @@ class ImportExcel8 : public ImportExcel
         virtual FltError        ReadChart8( ScfSimpleProgressBar&, const BOOL bOwnTab );
 
     public:
-                                ImportExcel8(
-                                    SfxMedium&  rMedium,
-                                    SvStream&   aStream,
-                                    XclBiff     eBiff,
-                                    ScDocument* pDoc );
-
+                                ImportExcel8( XclImpRootData& rImpData );
         virtual                 ~ImportExcel8( void );
 
         virtual FltError        Read( void );
