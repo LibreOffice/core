@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:59:26 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
 
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/MemberResultFlags.hpp>
+
 #include "dbfunc.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
@@ -90,7 +93,10 @@
 #include "dpobject.hxx"
 #include "dpsave.hxx"
 #include "dbdocfun.hxx"
+#include "dpoutput.hxx"
 #include "editable.hxx"
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -681,6 +687,200 @@ void ScDBFunc::RecalcPivotTable()
     }
     else
         ErrorMessage(STR_PIVOT_NOTFOUND);
+}
+
+void ScDBFunc::GetSelectedMemberList( StrCollection& rEntries, long& rDimension )
+{
+    ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+    if ( !pDPObj )
+        return;
+
+    long nStartDimension = -1;
+    long nStartHierarchy = -1;
+    long nStartLevel     = -1;
+
+    ScRangeListRef xRanges;
+    GetViewData()->GetMultiArea( xRanges );         // incl. cursor if nothing is selected
+    ULONG nRangeCount = xRanges->Count();
+    BOOL bContinue = TRUE;
+
+    for (ULONG nRangePos=0; nRangePos<nRangeCount && bContinue; nRangePos++)
+    {
+        ScRange aRange = *xRanges->GetObject(nRangePos);
+        SCCOL nStartCol = aRange.aStart.Col();
+        SCROW nStartRow = aRange.aStart.Row();
+        SCCOL nEndCol = aRange.aEnd.Col();
+        SCROW nEndRow = aRange.aEnd.Row();
+        SCTAB nTab = aRange.aStart.Tab();
+
+        for (SCROW nRow=nStartRow; nRow<=nEndRow && bContinue; nRow++)
+            for (SCCOL nCol=nStartCol; nCol<=nEndCol && bContinue; nCol++)
+            {
+                ScDPPositionData aData;
+                pDPObj->GetPositionData( aData, ScAddress( nCol, nRow, nTab ) );
+
+                if ( aData.nDimension < 0 )
+                    bContinue = FALSE;              // not part of any dimension
+                else
+                {
+                    if ( nStartDimension < 0 )      // first member?
+                    {
+                        nStartDimension = aData.nDimension;
+                        nStartHierarchy = aData.nHierarchy;
+                        nStartLevel     = aData.nLevel;
+                    }
+                    if ( aData.nDimension != nStartDimension ||
+                         aData.nHierarchy != nStartHierarchy ||
+                         aData.nLevel     != nStartLevel )
+                    {
+                        bContinue = FALSE;          // cannot mix dimensions
+                    }
+                }
+                if ( bContinue )
+                {
+                    // accept any part of a member description, also subtotals,
+                    // but don't stop if empty parts are contained
+                    if ( aData.nFlags & sheet::MemberResultFlags::HASMEMBER )
+                    {
+                        StrData* pNew = new StrData( aData.aMemberName );
+                        if ( !rEntries.Insert( pNew ) )
+                            delete pNew;
+                    }
+                }
+            }
+    }
+
+    rDimension = nStartDimension;   // dimension from which the found members came
+    if (!bContinue)
+        rEntries.FreeAll();         // remove all if not valid
+}
+
+BOOL ScDBFunc::HasSelectionForDrillDown( USHORT& rOrientation )
+{
+    BOOL bRet = FALSE;
+
+    ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+    if ( pDPObj )
+    {
+        StrCollection aEntries;
+        long nSelectDimension = -1;
+        GetSelectedMemberList( aEntries, nSelectDimension );
+
+        if ( aEntries.GetCount() > 0 )
+        {
+            BOOL bIsDataLayout;
+            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            if ( !bIsDataLayout )
+            {
+                ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+                ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName( aDimName );
+                if ( pDim )
+                {
+                    USHORT nDimOrient = pDim->GetOrientation();
+                    ScDPSaveDimension* pInner = pSaveData->GetInnermostDimension( nDimOrient );
+                    if ( pDim == pInner )
+                    {
+                        rOrientation = nDimOrient;
+                        bRet = TRUE;
+                    }
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+
+void ScDBFunc::SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName )
+{
+    ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                        GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+    if ( pDPObj )
+    {
+        StrCollection aEntries;
+        long nSelectDimension = -1;
+        GetSelectedMemberList( aEntries, nSelectDimension );
+
+        if ( aEntries.GetCount() > 0 )
+        {
+            BOOL bIsDataLayout;
+            String aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+            if ( !bIsDataLayout )
+            {
+                ScDPSaveData aData( *pDPObj->GetSaveData() );
+                ScDPSaveDimension* pDim = aData.GetDimensionByName( aDimName );
+
+                if ( bShow && pNewDimensionName )
+                {
+                    //  add the new dimension with the same orientation, at the end
+
+                    ScDPSaveDimension* pNewDim = aData.GetDimensionByName( *pNewDimensionName );
+                    ScDPSaveDimension* pDuplicated = NULL;
+                    if ( pNewDim->GetOrientation() == sheet::DataPilotFieldOrientation_DATA )
+                    {
+                        // Need to duplicate the dimension, create column/row in addition to data:
+                        // The duplicated dimension inherits the existing settings, pNewDim is modified below.
+                        pDuplicated = aData.DuplicateDimension( *pNewDimensionName );
+                    }
+
+                    USHORT nOrientation = pDim->GetOrientation();
+                    pNewDim->SetOrientation( nOrientation );
+
+                    long nPosition = LONG_MAX;
+                    aData.SetPosition( pNewDim, nPosition );
+
+                    ScDPSaveDimension* pDataLayout = aData.GetDataLayoutDimension();
+                    if ( pDataLayout->GetOrientation() == nOrientation &&
+                         aData.GetDataDimensionCount() <= 1 )
+                    {
+                        // If there is only one data dimension, the data layout dimension
+                        // must still be the last one in its orientation.
+                        aData.SetPosition( pDataLayout, nPosition );
+                    }
+
+                    if ( pDuplicated )
+                    {
+                        // The duplicated (data) dimension needs to be behind the original dimension
+                        aData.SetPosition( pDuplicated, nPosition );
+                    }
+
+                    //  Hide details for all visible members (selected are changed below).
+                    //! Use all members from source level instead (including non-visible)?
+
+                    StrCollection aVisibleEntries;
+                    pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
+
+                    USHORT nVisCount = aVisibleEntries.GetCount();
+                    for (USHORT nVisPos=0; nVisPos<nVisCount; nVisPos++)
+                    {
+                        String aVisName = aVisibleEntries[nVisPos]->GetString();
+                        ScDPSaveMember* pMember = pDim->GetMemberByName( aVisName );
+                        pMember->SetShowDetails( FALSE );
+                    }
+                }
+
+                USHORT nEntryCount = aEntries.GetCount();
+                for (USHORT nEntry=0; nEntry<nEntryCount; nEntry++)
+                {
+                    String aEntryName = aEntries[nEntry]->GetString();
+                    ScDPSaveMember* pMember = pDim->GetMemberByName( aEntryName );
+                    pMember->SetShowDetails( bShow );
+                }
+
+                // apply changes
+                ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+                ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+                pNewObj->SetSaveData( aData );
+                aFunc.DataPilotUpdate( pDPObj, pNewObj, TRUE, FALSE );
+                delete pNewObj;
+
+                // unmark cell selection
+                Unmark();
+            }
+        }
+    }
 }
 
 
