@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: od $ $Date: 2002-12-02 07:55:21 $
+ *  last change: $Author: od $ $Date: 2002-12-03 15:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,6 +563,9 @@ void ViewShell::PreViewPage(
     @param _nRows
     input parameter - initial number of page rows in the preview.
 
+    @param _orMaxPageSize
+    output parameter - maximal size in width and height of all pages
+
     @param _orPreviewDocSize
     output parameter - size of the document in the proposed preview layout
     included the spacing between the pages.
@@ -580,6 +583,7 @@ void ViewShell::PreViewPage(
 */
 bool ViewShell::InitPreviewLayout( const sal_uInt16 _nCols,
                                    const sal_uInt16 _nRows,
+                                   Size&            _orMaxPageSize,
                                    Size&            _orPreviewDocSize,
                                    const bool       _bCalcScale,
                                    const Size*      _pPxWinSize
@@ -607,11 +611,11 @@ bool ViewShell::InitPreviewLayout( const sal_uInt16 _nCols,
     // environment and parameters ok
 
     // clear existing preview settings
-    Imp()->GetCurrPreviewSettings().Clear();
+    Imp()->CurrPrevwSet().Clear();
 
     // set layout information at preview settings
-    Imp()->GetCurrPreviewSettings().nCols = _nCols;
-    Imp()->GetCurrPreviewSettings().nRows = _nRows;
+    Imp()->CurrPrevwSet().nCols = _nCols;
+    Imp()->CurrPrevwSet().nRows = _nRows;
 
     // calculate maximal page size; calculate also number of pages
     const SwPageFrm* pPage = static_cast<const SwPageFrm*>(pRootFrm->Lower());
@@ -629,19 +633,22 @@ bool ViewShell::InitPreviewLayout( const sal_uInt16 _nCols,
         pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     }
     // set maximal page size, column width and row height at preview settings
-    Imp()->GetCurrPreviewSettings().aMaxPageSize = aMaxPageSize;
-    Imp()->GetCurrPreviewSettings().nColWidth = aMaxPageSize.Width() + nXFree;
-    Imp()->GetCurrPreviewSettings().nRowHeight = aMaxPageSize.Height() + nYFree;
+    Imp()->CurrPrevwSet().aMaxPageSize = aMaxPageSize;
+    Imp()->CurrPrevwSet().nColWidth = aMaxPageSize.Width() + nXFree;
+    Imp()->CurrPrevwSet().nRowHeight = aMaxPageSize.Height() + nYFree;
 
     // set number of pages at preview settings
-    Imp()->GetCurrPreviewSettings().nPages = nPages;
+    Imp()->CurrPrevwSet().nPages = nPages;
     // validate layout information
-    Imp()->GetCurrPreviewSettings().bLayoutInfoValid = true;
+    Imp()->CurrPrevwSet().bLayoutInfoValid = true;
+
+    // return calculated maximal size in width and height of all pages
+    _orMaxPageSize = Imp()->CurrPrevwSet().aMaxPageSize;
 
     // calculate document size in preview layout and set it at preview settings
     {
         // document width
-        Imp()->GetCurrPreviewSettings().aPreviewDocSize.Width() =
+        Imp()->CurrPrevwSet().aPreviewDocSize.Width() =
                 _nCols * aMaxPageSize.Width() + (_nCols+1) * nXFree;
 
         // document height
@@ -650,13 +657,11 @@ bool ViewShell::InitPreviewLayout( const sal_uInt16 _nCols,
         sal_uInt16 nDocRows = (nPages + 1) / _nCols;
         if ( ( (nPages + 1) % _nCols ) > 0 )
             ++nDocRows;
-        Imp()->GetCurrPreviewSettings().aPreviewDocSize.Height() =
+        Imp()->CurrPrevwSet().aPreviewDocSize.Height() =
                 nDocRows * aMaxPageSize.Height() + (nDocRows+1) * nYFree;
     }
     // return calculated document size in preview layout
-    _orPreviewDocSize = Imp()->GetCurrPreviewSettings().aPreviewDocSize;
-    // FOR TESTING
-    _orPreviewDocSize = Imp()->GetCurrPreviewSettings().aMaxPageSize;
+    _orPreviewDocSize = Imp()->CurrPrevwSet().aPreviewDocSize;
 
     if ( _bCalcScale )
     {
@@ -689,10 +694,10 @@ bool ViewShell::InitPreviewLayout( const sal_uInt16 _nCols,
     }
 
     // set window size in twips at preview settings
-    Imp()->GetCurrPreviewSettings().aWinSize =
+    Imp()->CurrPrevwSet().aWinSize =
                     GetOut()->PixelToLogic( *(_pPxWinSize) );
     // validate layout sizes
-    Imp()->GetCurrPreviewSettings().bLayoutSizesValid = true;
+    Imp()->CurrPrevwSet().bLayoutSizesValid = true;
 
     return true;
 }
@@ -726,18 +731,22 @@ bool ViewShell::InitPreviewLayout( const sal_uInt16 _nCols,
     output parameter - virtual number of page, which will be painted in the
     left-top-corner in the current output device.
 
-    @param _oaStartPos
-    output parameter - absolute position of the virtual preview document,
-    which will be painted in the left-top-corner in the current output device.
+    @param _orDocPreviewPaintRect
+    output parameter - rectangle of preview document, which will be painted.
 
     @return boolean, indicating, if prepare of preview paint was successful.
 */
+extern void lcl_CalcAdditionalPaintOffset( CurrentPreviewSettings& _rPrevwSettings );
+extern void lcl_CalcDocPrevwPaintRect( const CurrentPreviewSettings& _rPrevwSettings,
+                                       Rectangle& _orDocPrevwPaintRect );
+
 bool ViewShell::PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
-                          const Point      _aProposedStartPos,
-                          sal_uInt16&      _onStartPageNum,
-                          sal_uInt16&      _onStartPageVirtNum,
-                          Point&           _oaStartPos
-                        )
+                                     const Point      _aProposedStartPos,
+                                     const Size*      _pPxWinSize,
+                                     sal_uInt16&      _onStartPageNum,
+                                     sal_uInt16&      _onStartPageVirtNum,
+                                     Rectangle&       _orDocPreviewPaintRect
+                                   )
 {
     sal_uInt16 nProposedStartPageNum = _nProposedStartPageNum;
     const SwRootFrm* pRootFrm = GetLayout();
@@ -747,26 +756,31 @@ bool ViewShell::PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
         if ( !pRootFrm )
             return false;
 
-        bool bLayoutSettingsValid = Imp()->GetCurrPreviewSettings().bLayoutInfoValid &&
-                                    Imp()->GetCurrPreviewSettings().bLayoutSizesValid;
+        bool bLayoutSettingsValid = Imp()->CurrPrevwSet().bLayoutInfoValid &&
+                                    Imp()->CurrPrevwSet().bLayoutSizesValid;
         ASSERT( bLayoutSettingsValid,
                 "no valid preview layout info/sizes - no prepare of preview paint");
         if ( !bLayoutSettingsValid )
             return false;
 
         bool bStartPageRangeValid =
-                _nProposedStartPageNum <= Imp()->GetCurrPreviewSettings().nPages;
+                _nProposedStartPageNum <= Imp()->CurrPrevwSet().nPages;
         ASSERT( bStartPageRangeValid,
                 "proposed start page not existing - no prepare of preview paint");
         if ( !bStartPageRangeValid )
             return false;
 
         bool bStartPosRangeValid =
-                _aProposedStartPos.X() <= Imp()->GetCurrPreviewSettings().aPreviewDocSize.Width() &&
-                _aProposedStartPos.Y() <= Imp()->GetCurrPreviewSettings().aPreviewDocSize.Height();
+                _aProposedStartPos.X() <= Imp()->CurrPrevwSet().aPreviewDocSize.Width() &&
+                _aProposedStartPos.Y() <= Imp()->CurrPrevwSet().aPreviewDocSize.Height();
         ASSERT( bStartPosRangeValid,
                 "proposed start position out of range - no prepare of preview paint");
         if ( !bStartPosRangeValid )
+            return false;
+
+        bool bWinSizeValid = _pPxWinSize->Width() != 0 && _pPxWinSize->Height() != 0;
+        ASSERT ( bWinSizeValid, "no window size - no prepare of preview paint");
+        if ( !bWinSizeValid )
             return false;
 
         bool bStartInfoValid = _nProposedStartPageNum > 0 ||
@@ -777,14 +791,17 @@ bool ViewShell::PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
 
     // environment and parameter ok
 
-    // get preview setting data
-    sal_uInt16 nCols = Imp()->GetCurrPreviewSettings().nCols;
-    sal_uInt16 nRows = Imp()->GetCurrPreviewSettings().nRows;
-    sal_uInt16 nPages = Imp()->GetCurrPreviewSettings().nPages;
-    sal_uInt16 nColWidth = static_cast<sal_uInt16>(Imp()->GetCurrPreviewSettings().nColWidth);
-    sal_uInt16 nRowHeight = static_cast<sal_uInt16>(Imp()->GetCurrPreviewSettings().nRowHeight);
+    // update window size at preview setting data
+    Imp()->CurrPrevwSet().aWinSize = GetOut()->PixelToLogic( *(_pPxWinSize) );
 
-    sal_uInt16 nStartPageNum, nColOfProposed, nRowOfProposed;
+    // get preview setting data
+    sal_uInt16 nCols = Imp()->CurrPrevwSet().nCols;
+    sal_uInt16 nRows = Imp()->CurrPrevwSet().nRows;
+    sal_uInt16 nPages = Imp()->CurrPrevwSet().nPages;
+    sal_uInt16 nColWidth = static_cast<sal_uInt16>(Imp()->CurrPrevwSet().nColWidth);
+    sal_uInt16 nRowHeight = static_cast<sal_uInt16>(Imp()->CurrPrevwSet().nRowHeight);
+
+    sal_uInt16 nStartPageNum, nColOfProposed, nStartCol, nRowOfProposed;
     Point aStartPageOffset;
     Point aPreviewDocOffset;
     if ( nProposedStartPageNum > 0 )
@@ -795,56 +812,74 @@ bool ViewShell::PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
         sal_uInt16 nTmpRow = (nProposedStartPageNum+1) / nCols;
         nRowOfProposed = nTmpCol ? nTmpRow+1 : nTmpRow;
         // determine start page == first page in the row of proposed start page
-        if ( nProposedStartPageNum == 1 )
-        {
+        if ( nProposedStartPageNum == 1 || nRowOfProposed == 1 )
             nStartPageNum = 1;
-            nColOfProposed = 1;
-        }
         else
             nStartPageNum = nProposedStartPageNum - (nColOfProposed-1);
+        // set starting column
+        nStartCol = 1;
         // page offset == (-1,-1), indicating no offset and paint of free space.
         aStartPageOffset.X() = -1;
         aStartPageOffset.Y() = -1;
         // virtual preview document offset.
         aPreviewDocOffset.X() = 0;
-        aPreviewDocOffset.Y() = (nRowOfProposed-1) * nRowHeight;
+        if ( nRowOfProposed == 1)
+            aPreviewDocOffset.Y() = 0;
+        else
+            aPreviewDocOffset.Y() = (nRowOfProposed-1) * nRowHeight + 1;
     }
     else
     {
         // determine column and row of proposed start position
-        sal_uInt16 nTmpCol = _aProposedStartPos.X() / nColWidth;
-        nColOfProposed =
-                (_aProposedStartPos.X() % nColWidth) ? nTmpCol+1 : nTmpCol;
-        sal_uInt16 nTmpRow = _aProposedStartPos.Y() / nRowHeight;
-        nRowOfProposed =
-                (_aProposedStartPos.Y() % nRowHeight) ? nTmpRow+1 : nTmpRow;
+        if ( _aProposedStartPos.X() == 0 )
+            nColOfProposed = 1;
+        else
+        {
+            sal_uInt16 nTmpCol = _aProposedStartPos.X() / nColWidth;
+            nColOfProposed =
+                    (_aProposedStartPos.X() % nColWidth) ? nTmpCol+1 : nTmpCol;
+        }
+        if ( _aProposedStartPos.Y() == 0 )
+            nRowOfProposed = 1;
+        else
+        {
+            sal_uInt16 nTmpRow = _aProposedStartPos.Y() / nRowHeight;
+            nRowOfProposed =
+                    (_aProposedStartPos.Y() % nRowHeight) ? nTmpRow+1 : nTmpRow;
+        }
         // determine start page == page at proposed start position
         if ( nRowOfProposed == 1 && nColOfProposed == 1 )
             nStartPageNum = 1;
         else
             nStartPageNum = (nRowOfProposed-1) * nCols + (nColOfProposed-1);
+        // set starting column
+        nStartCol = nColOfProposed;
 // NOTE: <nStartPageNum> can be greater than <nPages> - consider case later
         // page offset
         SwTwips nTmpXOffset = (_aProposedStartPos.X() % nColWidth) - nXFree;
-        aStartPageOffset.X() = nTmpXOffset < 0 ? -1 : nTmpXOffset;
         SwTwips nTmpYOffset = (_aProposedStartPos.Y() % nRowHeight) - nYFree;
-        aStartPageOffset.Y() = nTmpYOffset < 0 ? -1 : nTmpYOffset;
+        if ( nTmpXOffset < 0 && nTmpYOffset < 0 )
+            aStartPageOffset = Point( -1,-1 );
+        else
+        {
+            aStartPageOffset.X() = nTmpXOffset < 0 ? 0 : nTmpXOffset;
+            aStartPageOffset.Y() = nTmpYOffset < 0 ? 0 : nTmpYOffset;
+        }
         // virtual preview document offset.
         aPreviewDocOffset = _aProposedStartPos;
     }
 
     // set paint data at preview settings
-    Imp()->GetCurrPreviewSettings().nPaintPhyStartPageNum = nStartPageNum;
-    Imp()->GetCurrPreviewSettings().nPaintStartCol = nColOfProposed;
-    Imp()->GetCurrPreviewSettings().nPaintStartRow = nRowOfProposed;
-    Imp()->GetCurrPreviewSettings().aPaintStartPageOffset = aStartPageOffset;
-    Imp()->GetCurrPreviewSettings().aPaintPreviewDocOffset = aPreviewDocOffset;
+    Imp()->CurrPrevwSet().nPaintPhyStartPageNum = nStartPageNum;
+    Imp()->CurrPrevwSet().nPaintStartCol = nStartCol;
+    Imp()->CurrPrevwSet().nPaintStartRow = nRowOfProposed;
+    Imp()->CurrPrevwSet().aPaintStartPageOffset = aStartPageOffset;
+    Imp()->CurrPrevwSet().aPaintPreviewDocOffset = aPreviewDocOffset;
     // validate paint date
-    Imp()->GetCurrPreviewSettings().bPaintInfoValid = true;
+    Imp()->CurrPrevwSet().bPaintInfoValid = true;
 
-    // return start page and start position
+    // return start page
     _onStartPageNum = nStartPageNum;
-    _oaStartPos = aPreviewDocOffset;
     // return virtual page number of start page
     _onStartPageVirtNum = 0;
     if ( nStartPageNum <= nPages )
@@ -858,20 +893,92 @@ bool ViewShell::PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
             _onStartPageVirtNum = pPage->GetVirtPageNum();
     }
 
+    // determine additional paint offset, if preview layout fits into window.
+    lcl_CalcAdditionalPaintOffset( Imp()->CurrPrevwSet() );
+
+    // determine rectangle to be painted from document preview
+    lcl_CalcDocPrevwPaintRect( Imp()->CurrPrevwSet(), _orDocPreviewPaintRect );
+
     return true;
 };
 
-/** paint prepared preview
+void lcl_CalcAdditionalPaintOffset( CurrentPreviewSettings& _rPrevwSettings )
+{
+    Size aWinSize = _rPrevwSettings.aWinSize;
 
-    OD 28.11.2002 #103492#
+    SwTwips nPrevwLayoutHeight =
+            _rPrevwSettings.nRows * _rPrevwSettings.nRowHeight + nYFree;
+    if ( nPrevwLayoutHeight <= aWinSize.Height() &&
+         _rPrevwSettings.aPaintStartPageOffset.Y() <= 0 )
+    {
+        _rPrevwSettings.bDoesLayoutRowsFitIntoWindow = true;
+        _rPrevwSettings.aAdditionalPaintOffset.Y() =
+            (aWinSize.Height() - nPrevwLayoutHeight) / 2;
+
+    }
+    else
+    {
+        _rPrevwSettings.bDoesLayoutRowsFitIntoWindow = false;
+        _rPrevwSettings.aAdditionalPaintOffset.Y() = 0;
+    }
+
+    SwTwips nPrevwLayoutWidth =
+            _rPrevwSettings.nCols * _rPrevwSettings.nColWidth + nXFree;
+    if ( nPrevwLayoutWidth <= aWinSize.Width() &&
+         _rPrevwSettings.aPaintStartPageOffset.X() <= 0 )
+        _rPrevwSettings.aAdditionalPaintOffset.X() =
+                (aWinSize.Width() - nPrevwLayoutWidth) / 2;
+    else
+        _rPrevwSettings.aAdditionalPaintOffset.X() = 0;
+
+}
+
+void lcl_CalcDocPrevwPaintRect( const CurrentPreviewSettings& _rPrevwSettings,
+                                Rectangle& _orDocPrevwPaintRect )
+{
+    Point aTopLeftPos = _rPrevwSettings.aPaintPreviewDocOffset;
+    _orDocPrevwPaintRect.SetPos( aTopLeftPos );
+
+    Size aSize;
+    aSize.Width() = Min( _rPrevwSettings.aPreviewDocSize.Width() -
+                            aTopLeftPos.X(),
+                        _rPrevwSettings.aWinSize.Width() -
+                            _rPrevwSettings.aAdditionalPaintOffset.X() );
+    if ( _rPrevwSettings.bDoesLayoutRowsFitIntoWindow )
+        aSize.Height() = _rPrevwSettings.nRows * _rPrevwSettings.nRowHeight + nYFree;
+    else
+        aSize.Height() = Min( _rPrevwSettings.aPreviewDocSize.Height() -
+                                aTopLeftPos.Y(),
+                              _rPrevwSettings.aWinSize.Height() -
+                                _rPrevwSettings.aAdditionalPaintOffset.Y() );
+    _orDocPrevwPaintRect.SetSize( aSize );
+}
+
+/** property <DoesPreviewLayoutRowsFitIntoWin> of current preview layout
+
+    OD 03.12.2002 #103492#
 
     @author OD
 
-    @return boolean, indicating, if paint of preview was performed
+    @return boolean, indicating that the rows of the current preview layout
+    fit into the current window size.
+*/
+bool ViewShell::DoesPreviewLayoutRowsFitIntoWindow()
+{
+    return Imp()->CurrPrevwSet().bDoesLayoutRowsFitIntoWindow;
+}
+
+/** helper method for <ViewShell::PaintPreview(..)>
+
+    OD 03.12.2002 #103492#
+
+    @author OD
 */
 void lcl_CalcPreviewBackgrd( const Rectangle  _aOutRect,
                              const sal_uInt16 _nStartCol,
                              const sal_uInt16 _nCols,
+                             const sal_uInt16 _nRows,
+                             const bool       _bDoesLayoutFits,
                              const SwTwips    _nColWidth,
                              const SwTwips    _nRowHeight,
                              const Size       _aMaxPageSize,
@@ -881,16 +988,19 @@ void lcl_CalcPreviewBackgrd( const Rectangle  _aOutRect,
 {
     const SwPageFrm* pPage = _pStartPage;
     sal_uInt16 nCurrCol = _nStartCol;
+    sal_uInt16 nConsideredRows = 0;
     Point aCurrPaintOffset = _rPaintOffset;
     // loop on pages to determine preview background retangles
     while ( pPage &&
-            aCurrPaintOffset.X() < _aOutRect.GetWidth() &&
-            aCurrPaintOffset.Y() < _aOutRect.GetHeight() )
+            aCurrPaintOffset.X() < _aOutRect.Right() &&
+            aCurrPaintOffset.Y() < _aOutRect.Bottom() &&
+            (!_bDoesLayoutFits || nConsideredRows < _nRows) )
     {
         pPage->Calc();  // don't know, if necessary.
 
         // consider only pages, which have to be painted.
-        if ( aCurrPaintOffset.X() < _aOutRect.GetWidth() )
+        if ( aCurrPaintOffset.X() < _aOutRect.Right() ||
+             nCurrCol < _nStartCol )
         {
             if ( pPage->GetPhyPageNum() == 1 && _nCols != 1 && nCurrCol == 1)
             {
@@ -927,14 +1037,29 @@ void lcl_CalcPreviewBackgrd( const Rectangle  _aOutRect,
         ++nCurrCol;
         if ( nCurrCol > _nCols )
         {
+            ++nConsideredRows;
             aCurrPaintOffset.X() = _rPaintOffset.X();
-            nCurrCol = _nStartCol;
+            nCurrCol = 1;
             aCurrPaintOffset.Y() += _nRowHeight;
         }
     }
 }
 
+/** paint prepared preview
 
+    OD 28.11.2002 #103492#
+
+    @author OD
+
+    @param _nSelectedPageNum
+    input parameter - physical number of page, which should be painted as
+    selected by am extra border in color COL_LIGHTBLUE.
+
+    @param _aOutRect
+    input parameter - Twip rectangle of window, which should be painted.
+
+    @return boolean, indicating, if paint of preview was performed
+*/
 bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
                               const Rectangle  _aOutRect )
 {
@@ -945,9 +1070,9 @@ bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
         if ( !pRootFrm )
             return false;
 
-        ASSERT( Imp()->GetCurrPreviewSettings().bPaintInfoValid,
+        ASSERT( Imp()->CurrPrevwSet().bPaintInfoValid,
                 "invalid preview settings - no paint of preview" );
-        if ( !Imp()->GetCurrPreviewSettings().bPaintInfoValid )
+        if ( !Imp()->CurrPrevwSet().bPaintInfoValid )
             return false;
     }
 
@@ -959,7 +1084,7 @@ bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
     SET_CURR_SHELL( this );
 
     // determine start page frame
-    sal_uInt16 nStartPageNum = Imp()->GetCurrPreviewSettings().nPaintPhyStartPageNum;
+    sal_uInt16 nStartPageNum = Imp()->CurrPrevwSet().nPaintPhyStartPageNum;
     const SwPageFrm* pStartPage = static_cast<const SwPageFrm*>( pRootFrm->Lower() );
     while ( pStartPage && pStartPage->GetPhyPageNum() < nStartPageNum )
     {
@@ -972,44 +1097,44 @@ bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
         Imp()->pFirstVisPage = const_cast<SwPageFrm*>(pStartPage);
     }
     // get necessary preview layout data
-    sal_uInt16 nCols = Imp()->GetCurrPreviewSettings().nCols;
-    SwTwips nColWidth = Imp()->GetCurrPreviewSettings().nColWidth;
-    SwTwips nRowHeight = Imp()->GetCurrPreviewSettings().nRowHeight;
-    Size aMaxPageSize = Imp()->GetCurrPreviewSettings().aMaxPageSize;
+    sal_uInt16 nCols = Imp()->CurrPrevwSet().nCols;
+    sal_uInt16 nRows = Imp()->CurrPrevwSet().nRows;
+    bool bDoesLayoutFits = Imp()->CurrPrevwSet().bDoesLayoutRowsFitIntoWindow;
+    SwTwips nColWidth = Imp()->CurrPrevwSet().nColWidth;
+    SwTwips nRowHeight = Imp()->CurrPrevwSet().nRowHeight;
+    Size aMaxPageSize = Imp()->CurrPrevwSet().aMaxPageSize;
 
     // calculate initial paint offset
-    Point aInitialPaintOffset = Imp()->GetCurrPreviewSettings().aPaintStartPageOffset;
-    bool bIsSetPageOffset = aInitialPaintOffset != Point( -1, -1 ) ? true : false;
-    if ( bIsSetPageOffset )
-        aInitialPaintOffset = Point( aInitialPaintOffset.X() - nColWidth,
-                                     aInitialPaintOffset.Y() - nRowHeight );
+    Point aInitialPaintOffset;
+    if ( Imp()->CurrPrevwSet().aPaintStartPageOffset != Point( -1, -1 ) )
+    {
+        Point aPageOffset( Imp()->CurrPrevwSet().aPaintStartPageOffset );
+        if ( aPageOffset.X() > 0 )
+            aInitialPaintOffset.X() = -aPageOffset.X();
+        else
+            aInitialPaintOffset.X() = nXFree;
+        if ( aPageOffset.Y() > 0 )
+            aInitialPaintOffset.Y() = -aPageOffset.Y();
+        else
+            aInitialPaintOffset.Y() = nYFree;
+    }
     else
         aInitialPaintOffset = Point( nXFree, nYFree );
+    aInitialPaintOffset += Imp()->CurrPrevwSet().aAdditionalPaintOffset;
 
     // init data structure for preview background rectangles
     SwRegionRects aPreviewBackgrdRegion( _aOutRect );
     // calculate preview background rectangles
     lcl_CalcPreviewBackgrd( _aOutRect,
-                            Imp()->GetCurrPreviewSettings().nPaintStartCol,
-                            nCols, nColWidth, nRowHeight, aMaxPageSize,
+                            Imp()->CurrPrevwSet().nPaintStartCol,
+                            nCols, nRows, bDoesLayoutFits,
+                            nColWidth, nRowHeight, aMaxPageSize,
                             pStartPage, aInitialPaintOffset,
                             aPreviewBackgrdRegion );
-
-    /*
-    // TESTING
-    Color aFill( GetOut()->GetFillColor() );
-    Color aLine( GetOut()->GetLineColor() );
-    GetOut()->SetFillColor( Color(COL_RED) );
-    GetOut()->SetLineColor( Color(COL_RED) );
-    GetOut()->DrawRect( _aOutRect );
-    GetOut()->SetFillColor( aFill );
-    GetOut()->SetLineColor( aLine );
-    */
-
     // paint preview background rectangles
     _PaintDesktop( aPreviewBackgrdRegion );
 
-    // prepare paint of pages
+    // prepare data for paint of pages
     const Rectangle aPxOutRect( GetOut()->LogicToPixel( _aOutRect ) );
     MapMode aMapMode( GetOut()->GetMapMode() );
     MapMode aSavedMapMode = aMapMode;
@@ -1025,15 +1150,20 @@ bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
 
     // prepare loop data
     const SwPageFrm* pPage = pStartPage;
-    sal_uInt16 nCurrCol = Imp()->GetCurrPreviewSettings().nPaintStartCol;
+    sal_uInt16 nCurrCol = Imp()->CurrPrevwSet().nPaintStartCol;
+    sal_uInt16 nPaintedRows = 0;
     Point aCurrPaintOffset = aInitialPaintOffset;
     // loop on pages to determine preview background retangles
     while ( pPage &&
-            aCurrPaintOffset.X() < _aOutRect.GetWidth() &&
-            aCurrPaintOffset.Y() < _aOutRect.GetHeight() )
+            aCurrPaintOffset.X() < _aOutRect.Right() &&
+            aCurrPaintOffset.Y() < _aOutRect.Bottom() &&
+            ( !bDoesLayoutFits || nPaintedRows < nRows )
+          )
     {
         // consider only pages, which have to be painted.
-        if ( aCurrPaintOffset.X() < _aOutRect.GetWidth() )
+        if ( aCurrPaintOffset.X() < _aOutRect.Right() ||
+             nCurrCol < Imp()->CurrPrevwSet().nPaintStartCol
+           )
         {
             if ( pPage->GetPhyPageNum() == 1 && nCols != 1 && nCurrCol == 1)
             {
@@ -1157,8 +1287,9 @@ bool ViewShell::PaintPreview( const sal_uInt16 _nSelectedPageNum,
         ++nCurrCol;
         if ( nCurrCol > nCols )
         {
+            ++nPaintedRows;
             aCurrPaintOffset.X() = aInitialPaintOffset.X();
-            nCurrCol = Imp()->GetCurrPreviewSettings().nPaintStartCol;
+            nCurrCol = 1;
             aCurrPaintOffset.Y() += nRowHeight;
         }
     }
@@ -1970,6 +2101,9 @@ Point ViewShell::GetPreviewFreePix() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2002/12/02 07:55:21  od
+      #103492# implement new methods for new preview functionality
+
       Revision 1.11  2002/06/17 10:19:33  ama
       Fix #99298#: Light blue as page preview selection border
 
