@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-17 11:51:47 $
+ *  last change: $Author: fme $ $Date: 2002-11-04 12:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,23 +340,18 @@ public:
 
 /*************************************************************************
  *                          SwHookOut
+ *
+ * Change current output device to printer, this has to be done before
+ * formatting.
  *************************************************************************/
 
 class SwHookOut
 {
-    SwTxtSizeInfo *pInf;
+    SwTxtSizeInfo* pInf;
+    OutputDevice* pOut;
 public:
-    inline SwHookOut( SwTxtSizeInfo *pInfo )
-         : pInf(pInfo->OnWin() && pInfo->GetPrt() ? pInfo : 0)
-    {
-        if( pInf )
-            pInf->SetPrtOut();
-    }
-    inline ~SwHookOut()
-    {
-        if( pInf )
-            pInf->SetWinOut();
-    }
+    SwHookOut( SwTxtSizeInfo& rInfo );
+    ~SwHookOut();
 };
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:28:22 $
+ *  last change: $Author: fme $ $Date: 2002-11-04 12:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,7 +1543,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
             "SwTxtFormatter::FormatLine( nStart ) with unswapped frame" );
 #endif
 
-    SwHookOut aHook( &GetInfo() );
+    SwHookOut aHook( GetInfo() );
     if( GetInfo().GetLen() < GetInfo().GetTxt().Len() )
         GetInfo().SetLen( GetInfo().GetTxt().Len() );
 

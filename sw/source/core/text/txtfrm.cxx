@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-21 09:57:13 $
+ *  last change: $Author: fme $ $Date: 2002-11-04 12:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1983,9 +1983,8 @@ KSHORT SwTxtFrm::CalcFitToContent( )
     aInf.SetIgnoreFly( sal_True );
 
     SwTxtFormatter  aLine( this, &aInf );
-    SwTxtFormatInfo *pInf = &aInf;
 
-    SwHookOut aHook( pInf );
+    SwHookOut aHook( aInf );
     KSHORT nMax = aLine._CalcFitToContent( );
     if ( nMax )
         nMax -= KSHORT( GetLeftMargin() );

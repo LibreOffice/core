@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
+ *  last change: $Author: fme $ $Date: 2002-11-04 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "paratr.hxx"
 #include "errhdl.hxx"
 
+#ifndef _SV_OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
 #ifndef _SVX_PARAVERTALIGNITEM_HXX //autogen
 #include <svx/paravertalignitem.hxx>
 #endif
@@ -567,4 +570,41 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
     }
 }
 
+/*************************************************************************
+ *                          SwHookOut
+ *
+ * Change current output device to printer, this has to be done before
+ * formatting.
+ *************************************************************************/
+
+SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) : pInf( 0 ), pOut( 0 )
+{
+    if ( rInfo.GetPrt() )
+    {
+        // first case: outdev = window
+        if ( rInfo.OnWin() )
+        {
+            pInf = &rInfo;
+            pInf->SetPrtOut();
+        }
+        // second case: outdev = pdf export
+        else if ( rInfo.GetOut() && OUTDEV_PRINTER != rInfo.GetOut()->GetOutDevType() )
+        {
+            pInf = &rInfo;
+            pOut = pInf->GetOut();
+            pInf->SetOut( pInf->GetPrt() );
+        }
+    }
+}
+
+SwHookOut::~SwHookOut()
+{
+    if( pInf )
+    {
+        if ( pOut )
+            pInf->SetOut( pOut );
+        else
+            pInf->SetWinOut();
+    }
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-19 11:52:48 $
+ *  last change: $Author: fme $ $Date: 2002-11-04 12:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ public:
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }
     inline const OutputDevice *GetOut() const { return pOut; }
+    inline void SetOut( OutputDevice* pNewOut ) { pOut = pNewOut; }
     inline OutputDevice *GetWin() { return pWin; }
     inline const OutputDevice *GetWin() const { return pWin; }
     inline OutputDevice *GetPrt() { return pPrt; }
