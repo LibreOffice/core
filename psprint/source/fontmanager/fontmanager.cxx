@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-02 12:10:11 $
+ *  last change: $Author: pl $ $Date: 2002-09-30 19:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,6 +1667,10 @@ void PrintFontManager::initialize( void* pInitDisplay )
             ByteString aLine;
             aStream.ReadLine( aLine );
             normPath( aLine );
+            // try to avoid bad fonts in RTL case
+            static bool bRTL = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "iw", 2 ) == 0);
+            if( bRTL && aLine.Search( "iso_8859" ) != STRING_NOTFOUND )
+                continue;
             m_aFontDirectories.push_back( aLine );
         }
     }
@@ -1742,6 +1746,11 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 m_aFontFileToFontID[ aFileName ].insert( aFont );
                                 if( bUpdateFont && isPrivateFontFile( aFont ) )
                                     changeFontProperties( aFont, OStringToOUString( getXLFD( *it ), RTL_TEXTENCODING_UTF8 ) );
+#ifdef DEBUG
+                                fprintf( stderr, "adding font %d: \"%s\" from %s\n", aFont,
+                                         OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
+                                         getFontFileSysPath( aFont ).getStr() );
+#endif
                             }
                         }
                     }
