@@ -18,7 +18,6 @@ the existing vm given back.
         <service-dependency> ... </service-dependency>
         <type>  com.sun.star.java.XJavaVM                       </type>
         <type>  com.sun.star.java.XJavaVM                       </type>
-        <type>  com.sun.star.java.XJavaThreadRegister_11        </type>
         <type>  com.sun.star.container.XNameAccess              </type>
     <type>  com.sun.star.container.XContainer  </type>
     <type>  com.sun.star.container.XContainerListener  </type>
@@ -46,10 +45,11 @@ the existing vm given back.
     <type>  com.sun.star.task.XInteractionRetry  </type>
     <type>  com.sun.star.java.JavaInitializationException  </type>
     <type>  com.sun.star.java.JavaDisabledException  </type>
-    <type>  com.sun.star.java.JavaNotConfiguredException  </type>
-    <type>  com.sun.star.java.MissingJavaRuntimeException  </type>
+    <type>  com.sun.star.java.JavaNotFoundException </type>
+    <type>  com.sun.star.java.InvalidJavaSettingsException </type>
+    <type>  com.sun.star.java.RestartRequiredException </type>
     <type>  com.sun.star.java.JavaVMCreationFailureException  </type>
-
+    <type>  com.sun.star.container.XNameAccess </type>
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>
