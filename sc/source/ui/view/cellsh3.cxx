@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:59:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -124,7 +125,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             case SID_OPENDLG_CHART:
                     //  #53318# inplace macht die EditShell Aerger...
                     //! kann nicht immer umgeschaltet werden ????
-                    if (!pTabViewShell->GetViewFrame()->ISA(SfxInPlaceFrame))
+                    if (!pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace())
                         pTabViewShell->SetDontSwitch(TRUE);         // EditShell nicht abschalten
                     // kein break
 
@@ -937,13 +938,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pTabViewShell->RemoveHintWindow();              // Eingabemeldung abschalten
                 else
                 {
-                    SfxObjectShell* pObjSh = GetViewData()->GetSfxDocShell();
-                    if (pObjSh->GetInPlaceObject() &&
-                        pObjSh->GetInPlaceObject()->GetIPClient())
-                    {
-                        GetViewData()->GetDocShell()->
-                            DoInPlaceActivate(FALSE);       // OLE beenden
-                    }
+                    // TODO/LATER: when is this code executed?
+                    pTabViewShell->Escape();
+                    //SfxObjectShell* pObjSh = GetViewData()->GetSfxDocShell();
+                    //if (pObjSh->GetInPlaceObject() &&
+                    //    pObjSh->GetInPlaceObject()->GetIPClient())
+                    //{
+                    //    GetViewData()->GetDocShell()->
+                    //        DoInPlaceActivate(FALSE);       // OLE beenden
+                    //}
                 }
 
 //              SetSumAssignMode(); //ScInputWindow
