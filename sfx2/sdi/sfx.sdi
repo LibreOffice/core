@@ -716,6 +716,34 @@ SfxVoidItem ArrangeHorizontal SID_HORIZONTALDOCKWINS
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ExportTo SID_EXPORTDOC
+(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem ArrangeHorizontal SID_HORIZONTALWINS
 ()
 [

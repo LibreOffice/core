@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-04-08 16:48:37 $ $Revision: 1.2 $
+    $Author: mav $ $Date: 2002-04-12 08:20:04 $ $Revision: 1.3 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -331,11 +331,19 @@ shell SfxObjectShell
     [
         StateMethod = GetState_Impl ;
     ]
+    SID_EXPORTDOC
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
 } ;
 
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/04/08 16:48:37  mba
+    #98405#: prepare items and slots for new recording
+
     Revision 1.1.1.1  2000/09/18 16:52:25  hr
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-08 16:45:05 $
+ *  last change: $Author: mav $ $Date: 2002-04-12 08:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,30 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 */
+#ifndef  _COM_SUN_STAR_AWT_XDIALOG_HPP_
+#include <com/sun/star/awt/XDialog.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HDL_
+#include <com/sun/star/lang/XMultiServiceFactory.hdl>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HDL_
+#include <com/sun/star/beans/XPropertyAccess.hdl>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
+#include <com/sun/star/beans/PropertyValue.hdl>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HDL_
+#include <com/sun/star/container/XNameAccess.hdl>
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -145,6 +169,9 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
 
 //====================================================================
 
@@ -223,7 +250,7 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 sal_Bool SfxObjectShell::APISaveAs_Impl
 (
     const String& aFileName,
-    const String& aFilterName,
+    String aFilterName,
     SfxItemSet*   aParams
 )
 {
@@ -234,21 +261,35 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
     pImp->bSetStandardName=FALSE;
     if ( GetMedium() )
     {
-        // API-Call => suppress dialogs
-        //SfxBoolResetter aSilentReset( pImp->bSilent );
-        //pImp->bSilent = TRUE;
+        SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+        sal_Bool bSaveTo = pSaveToItem && pSaveToItem->GetValue();
+
+        // in case no filter defined use default one
+        if( !aFilterName.Len() )
+        {
+            sal_uInt16 nActFilt = 0;
+            for( const SfxFilter* pFilt = GetFactory().GetFilter( 0 );
+                 pFilt && ( !pFilt->CanExport()
+                  || !bSaveTo && !pFilt->CanImport() // SaveAs case
+                  || pFilt->IsInternal() );
+                  pFilt = GetFactory().GetFilter( ++nActFilt ) );
+
+            DBG_ASSERT( pFilt, "No default filter!\n" );
+
+            if( pFilt )
+                aFilterName = pFilt->GetFilterName();
+
+            aParams->Put(SfxStringItem( SID_FILTER_NAME, aFilterName));
+        }
+
 
         {
             SfxObjectShellRef xLock( this ); // ???
 
-            // The saving of DocumentInfo is duplicated - not good
-            // check if a "SaveTo" is wanted, no "SaveAs"
-            SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-            sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
-
-            // because saving a document modified its DocumentInfo, the current DocumentInfo must be saved on "SaveTo", because
+            // since saving a document modified its DocumentInfo, the current DocumentInfo must be saved on "SaveTo", because
             // it must be restored after saving
             SfxDocumentInfo aSavedInfo;
+            sal_Bool bCopyTo =  bSaveTo || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
             if ( bCopyTo )
                 aSavedInfo = GetDocInfo();
 
@@ -274,10 +315,20 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
 sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 {
     INetURLObject aURL;
+
+    SFX_REQUEST_ARG( (*pRequest), pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+    sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
+    sal_Bool bIsExport = ( pRequest->GetSlot() == SID_EXPORTDOC );
+
+    DBG_ASSERT( !bIsExport || bSaveTo, "Export mode should use SaveTo mechanics!\n" );
+
     sal_uInt16 nActFilt = 0;
     const SfxFilter* pFilt;
     for( pFilt = GetFactory().GetFilter( 0 );
-         pFilt && ( !pFilt->CanExport() || pFilt->IsInternal() );
+         pFilt && ( !pFilt->CanExport()
+                 || bIsExport && pFilt->CanImport() // Export case ( only for GUI )
+                 || !bSaveTo && !pFilt->CanImport() // SaveAs case
+                 || pFilt->IsInternal() );
          pFilt = GetFactory().GetFilter( ++nActFilt ) );
 
     DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
@@ -291,7 +342,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     if ( pRequest->GetArgs() )
         pParams->Put( *pRequest->GetArgs() );
 
-    BOOL bDialogUsed = sal_False;
+    sal_Bool bDialogUsed = sal_False;
+    sal_Bool bUseFilterOptions = sal_False;
     if ( !pFileNameItem )
     {
         bDialogUsed = sal_True;
@@ -299,30 +351,40 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         {
             // check if we have a filter which allows for filter options
             sal_Bool bAllowOptions = sal_False;
-            {
-                SfxFilterMatcher* pMatcher = new SfxFilterMatcher( GetFactory().GetFilterContainer() );
-                SfxFilterMatcherIter aIter( pMatcher, SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
 
-                for ( const SfxFilter* pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
-                {
-                    if ( 0 != ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) )
-                        bAllowOptions = sal_True;
-                }
-                DELETEZ( pMatcher );
+            SfxFilterMatcher aMatcher( GetFactory().GetFilterContainer() );
+            SfxFilterMatcherIter aIter(
+                                &aMatcher,
+                                SFX_FILTER_EXPORT | ( bSaveTo ? 0 : SFX_FILTER_IMPORT ),
+                                SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | ( bIsExport ? SFX_FILTER_IMPORT : 0 ) );
+
+            const SfxFilter* pFilter;
+            for ( pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
+            {
+                if ( 0 != ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) )
+                    bAllowOptions = sal_True;
             }
 
             // get the filename by dialog ...
             // create the file dialog
-            sfx2::FileDialogHelper aFileDlg( bAllowOptions ? FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS : FILESAVE_AUTOEXTENSION_PASSWORD,
-                                             0L, GetFactory() );
+            sfx2::FileDialogHelper aFileDlg(
+                            bAllowOptions ? FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS : FILESAVE_AUTOEXTENSION_PASSWORD,
+                            0L );
+
+            // fill in filter list
+            for ( pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )
+                aFileDlg.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
             if ( HasName() )
             {
                 String aLastName = QueryTitle( SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL );
                 const SfxFilter* pMedFilter = GetMedium()->GetFilter();
-                if( pImp->bSetStandardName && !IsTemplate() || !pMedFilter ||
-                    !pMedFilter->CanExport() /*!!!||
-                    pMedFilter->GetVersion() != SOFFICE_FILEFORMAT_CURRENT*/ )
+                if( pImp->bSetStandardName && !IsTemplate()
+                    || !pMedFilter
+                    || !pMedFilter->CanExport()
+                    || bIsExport && pMedFilter->CanImport() // Export case ( only for GUI )
+                     || !bSaveTo && !pMedFilter->CanImport() // SaveAs case
+                    /*!!!|| pMedFilter->GetVersion() != SOFFICE_FILEFORMAT_CURRENT*/ )
                 {
                     if( aLastName.Len() )
                     {
@@ -335,13 +397,13 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     }
 
-                    aFileDlg.SetCurrentFilter( pFilt->GetFilterName() );
+                    aFileDlg.SetCurrentFilter( pFilt->GetUIName() );
                 }
                 else
                 {
                     if( aLastName.Len() )
                         aFileDlg.SetDisplayDirectory( aLastName );
-                    aFileDlg.SetCurrentFilter( pMedFilter->GetFilterName() );
+                    aFileDlg.SetCurrentFilter( pMedFilter->GetUIName() );
                 }
             }
             else
@@ -349,11 +411,23 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
             }
 
-            if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
+            String aFilterUIName;
+            SfxItemSet* pTempSet = NULL;
+            if ( aFileDlg.Execute( pTempSet, aFilterUIName ) != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
                 return sal_False;
             }
+
+            // merge in results of the dialog execution
+            if( pTempSet )
+                pParams->Put( *pTempSet );
+
+            // find the internal filter name
+            for ( pFilter = aIter.First(); pFilter && pFilter->GetUIName() != aFilterUIName; pFilter = aIter.Next() );
+
+            if ( pFilter )
+                aFilterName = pFilter->GetFilterName();
 
             // get the path from the dialog
             aURL.SetURL( aFileDlg.GetPath() );
@@ -387,13 +461,12 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 try
                 {
-                    sal_Bool bSelectFilter = sal_False;
                     if ( bAllowOptions )
                     {
                         Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
-                        aValue >>= bSelectFilter;
+                        aValue >>= bUseFilterOptions;
                     }
-                    pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bSelectFilter ) );
+                    pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bUseFilterOptions ) );
                 }
                 catch( IllegalArgumentException ){}
             }
@@ -423,8 +496,6 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     // now we can get the filename from the SfxRequest
     DBG_ASSERT( pRequest->GetArgs() != 0, "fehlerhafte Parameter");
-    SFX_REQUEST_ARG( (*pRequest), pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-    FASTBOOL bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
 
     if ( !pFileNameItem && bSaveTo )
     {
@@ -435,11 +506,16 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
                                          0L, GetFactory() );
 
+        SfxItemSet* pTempSet = NULL;
         if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
         {
             SetError(ERRCODE_IO_ABORT);
             return sal_False;
         }
+
+        // merge in results of the dialog execution
+        if( pTempSet )
+            pParams->Put( *pTempSet );
 
         // get the path from the dialog
         aURL.SetURL( aFileDlg.GetPath() );
@@ -478,9 +554,73 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     const INetURLObject aActName(pActMed->GetName());
     if ( aURL != aActName )
     {
+        // this is defenitly not a Save
         pImp->bIsSaving = sal_False; // here it's already clear
-        UpdateDocInfoForSave();
+
+        if( bSaveTo || bUseFilterOptions )
+        {
+            // call filter dialog
+            Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+            if( xServiceManager.is() )
+            {
+                Reference< XNameAccess > xFilterCFG(
+                            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.dun.star.document.FilterFactory" ) ),
+                            UNO_QUERY );
+
+                if( xFilterCFG.is() )
+                {
+                    try {
+                        Sequence < PropertyValue > aProps;
+                        Any aAny = xFilterCFG->getByName( aFilterName );
+                        if ( aAny >>= aProps )
+                        {
+                            ::rtl::OUString aServiceName;
+                            sal_Int32 nPropertyCount = aProps.getLength();
+                            for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                                if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                                {
+                                    ::rtl::OUString aServiceName;
+                                    aProps[nProperty].Value >>= aServiceName;
+                                    Reference< XDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
+                                    Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
+
+                                    if( xFilterDialog.is() && xFilterProperties.is() )
+                                    {
+                                        bDialogUsed = sal_True;
+
+                                        Sequence< PropertyValue > aPropsForDialog;
+                                        TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
+                                        xFilterProperties->setPropertyValues( aPropsForDialog ); //???
+
+                                        xFilterDialog->execute();
+
+                                        SfxAllItemSet aNewParams( GetPool() );
+                                        TransformParameters( pRequest->GetSlot(),
+                                                             xFilterProperties->getPropertyValues(),
+                                                             aNewParams,
+                                                             NULL );
+                                        pParams->Put( aNewParams );
+                                    }
+
+                                    break;
+                                }
+                        }
+                    }
+                    catch( NoSuchElementException& )
+                    {
+                        // the filter name is unknown
+                        SetError( ERRCODE_IO_INVALIDPARAMETER );
+                        return sal_False;
+                    }
+                    catch( Exception& )
+                    {
+                    }
+                }
+            }
+        }
+
         // ggf. DocInfo Dialog
+        UpdateDocInfoForSave();
         if (  eCreateMode == SFX_CREATE_MODE_STANDARD && 0 == ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
         {
             SvtSaveOptions aOptions;
@@ -812,13 +952,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        case SID_EXPORTDOC:
+            rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
+            // another part is pretty the same as for SID_SAVEASDOC
         case SID_SAVEASURL:
         case SID_SAVEASDOC:
         {
             //!! detaillierte Auswertung eines Fehlercodes
             SfxObjectShellRef xLock( this );
             SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
-            //SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOC,this));
 
             // Bei Calls "uber StarOne OverWrite-Status checken
             SFX_REQUEST_ARG( rReq, pOverwriteItem, SfxBoolItem, SID_OVERWRITE, FALSE );

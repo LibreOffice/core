@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
+ *  last change: $Author: mav $ $Date: 2002-04-12 08:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,8 +1704,13 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
     DBG_ASSERT( aParams->Count() != 0, "fehlerhafte Parameter");
 
+    SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+    sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
+
     const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter( aFilterName );
-    if ( !pFilter )
+    if ( !pFilter
+        || !pFilter->CanExport()
+        || !bSaveTo && !pFilter->CanImport() )
     {
         SetError( ERRCODE_IO_INVALIDPARAMETER );
         return sal_False;
