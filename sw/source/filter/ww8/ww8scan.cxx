@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4404,7 +4404,7 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
                 p->nSprmsLen -= nSprmL;
 
                 // Pos des evtl. naechsten Sprm
-                if( p->nSprmsLen <= 0 )
+                if (p->nSprmsLen < maSprmParser.MinSprmLen())
                 {
                     // sicherheitshalber auf Null setzen, da Enden folgen!
                     p->pMemPos = 0;
@@ -4416,7 +4416,7 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
             else
                 p->nSprmsLen = 0;
         }
-        if( p->nSprmsLen <= 0 )
+        if (p->nSprmsLen < maSprmParser.MinSprmLen())
             p->nStartPos = LONG_MAX;    // es folgen Enden
     }
     else

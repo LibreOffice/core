@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:32:02 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@ public:
     USHORT GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const;
     BYTE SprmDataOfs(sal_uInt16 nId) const;
     USHORT DistanceToData(sal_uInt16 nId) const;
+
+    //The minimum acceptable sprm len possible for this type of parser
+    int MinSprmLen() { return (mnVersion < 8) ? 2 : 3; }
 };
 
 //--Line abovewhich the code has meaningful comments
