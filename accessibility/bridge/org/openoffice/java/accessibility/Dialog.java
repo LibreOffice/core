@@ -244,7 +244,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 // dispatch thread ..
                 javax.accessibility.AccessibleContext ac = accessibleContext;
                 if (ac!= null) {
-                    ac.setAccessibleDescription(title);
+                    ac.setAccessibleName(title);
                 }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
@@ -410,7 +410,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 }
             }
 
-              /** Invoked when a window is changed from a minimized to a normal state. */
+            /** Invoked when a window is changed from a minimized to a normal state. */
             public void windowDeiconified(java.awt.event.WindowEvent e) {
                 if (Build.DEBUG) {
                     System.err.println("[Dialog] " + getTitle() + " has been deiconified");
