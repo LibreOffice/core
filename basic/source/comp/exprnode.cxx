@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-14 14:41:54 $
+ *  last change: $Author: ab $ $Date: 2001-08-22 10:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #define HUGE_VAL    HUGE
 #include <math.h>
 
+#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
+#include <tools/solmath.hxx>
+#endif
 #include "sbcomp.hxx"
 #pragma hdrstop
 #include "expr.hxx"
@@ -440,6 +443,10 @@ void SbiExprNode::FoldConstants()
                     case IMP:
                         nVal = (double) ( ~ll | lr ); eType = SbxLONG; break;
                 }
+
+                if( SolarMath::IsINF( nVal ) || SolarMath::IsNAN( nVal ) )
+                    pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
+
                 // Den Datentyp wiederherstellen, um Rundungsfehler
                 // zu killen
                 if( bCheckType && bBothInt
