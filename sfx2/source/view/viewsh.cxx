@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,4 +1913,10 @@ BOOL SfxViewShell::HasKeyListeners_Impl()
 BOOL SfxViewShell::HasMouseClickListeners_Impl()
 {
     return pImp->pController ? pImp->pController->HasMouseClickListeners_Impl() : FALSE;
+}
+
+void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
+{
+    pImp->aPrintOpts = rOpts;
+     GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
