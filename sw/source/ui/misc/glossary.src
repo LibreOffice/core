@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:21:36 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Zobrazovat zbytek názvu jako návrh při psaní";
         Text[ hebrew ] = "‮הצגת המשך השם תוך כדי הדפסה, כהצעה‬";
         Text[ hindi ] = "~टइपिंग के समय के सुझाव के अनुसार बचा हुआ नाम को दिखाता है ।";
+        Text[ slovak ] = "Zo~brazovať zvyšok názvu ako návrh pri písaní";
     };
     FixedText FT_NAME
     {
@@ -150,6 +151,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_NAME
     {
@@ -193,6 +195,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Zkratka";
         Text[ hebrew ] = "‮שם מקוצר‬";
         Text[ hindi ] = "~सरल विधि";
+        Text[ slovak ] = "~Skratka";
     };
     Edit ED_SHORTNAME
     {
@@ -239,6 +242,7 @@ ModalDialog DLG_GLOSSARY
             Text[ czech ] = "pouze ke čtení";
             Text[ hebrew ] = "‮קריאה בלבד‬";
             Text[ hindi ] = "केवल पढ़ने केलिए";
+            Text[ slovak ] = "len na čítanie";
         };
     };
     FixedLine FL_RELATIVE
@@ -272,6 +276,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Uložit odkazy na relativně k";
         Text[ hebrew ] = "‮שמירת קישורים בהתיחסות ל ‬";
         Text[ hindi ] = "के सम्बन्धित लिंक को संचित करो";
+        Text[ slovak ] = "Uložiť odkazy relatívne k";
     };
     CheckBox CB_FILE_REL
     {
@@ -305,6 +310,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Souborovému systému";
         Text[ hebrew ] = "‮מערכת הקבצים‬";
         Text[ hindi ] = "~फाइल सिस्टम";
+        Text[ slovak ] = "~Súborovému systému";
     };
     CheckBox CB_NET_REL
     {
@@ -337,6 +343,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Internetu";
         Text[ hebrew ] = "‮אינטרנט‬";
         Text[ hindi ] = "इन्टरने~ट्";
+        Text[ slovak ] = "Inte~rnetu";
     };
     Window WIN_EXAMPLE
     {
@@ -380,6 +387,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Zobrazit náhled";
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "पूर्वदृश्य ~दिखाओ";
+        Text[ slovak ] = "Zo~braziť náhľad";
     };
     OKButton PB_INSERT
     {
@@ -421,6 +429,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "~Vložiť";
     };
     CancelButton PB_CLOSE
     {
@@ -456,6 +465,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     HelpButton PB_HELP
     {
@@ -495,6 +505,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Automatický text";
         Text[ hebrew ] = "‮טקסט מקובץ‬";
         Text[ hindi ] = "स्व~चालित टेक्स्ट्";
+        Text[ slovak ] = "Autom. te~xt";
     };
     PushButton PB_BIB
     {
@@ -529,6 +540,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Kategorie...";
         Text[ hebrew ] = "‮קטגוריות‬";
         Text[ hindi ] = "~वर्ग...";
+        Text[ slovak ] = "K~ategórie...";
     };
     PushButton PB_PATH
     {
@@ -562,6 +574,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Cesta...";
         Text[ hebrew ] = "~Pfad...";
         Text[ hindi ] = "~मार्ग...";
+        Text[ slovak ] = "~Cesta...";
     };
     String ST_READONLY_PATH
     {
@@ -591,6 +604,7 @@ ModalDialog DLG_GLOSSARY
         Text[ czech ] = "Adresáře s automatickým textem jsou pouze pro čtení. Přejete si zobrazit dialog pro výběr cest?";
         Text[ hebrew ] = "Für die Verzeichnisse für 'AutoText' sind sind keine Schreibrechte vorhanden. Möchten Sie den Pfaddialog aufrufen?";
         Text[ hindi ] = "'स्वचालित टेक्स्ट्' डैरक्टरियाँ केवल-पढ़ने केलिए है । आप मार्ग निर्धारण का डयलॉग को बुलाना चाहते है?";
+        Text[ slovak ] = "Adresáre s automatickým textom sú len na čítanie. Prajete si zobraziťdialóg na výber ciest?";
     };
     Menu MNU_EDIT
     {
@@ -628,6 +642,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Nový";
                 Text[ hebrew ] = "‮חדש‬";
                 Text[ hindi ] = "~नया";
+                Text[ slovak ] = "~Nový";
             };
             MenuItem
             {
@@ -660,6 +675,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Nový (pouze text)";
                 Text[ hebrew ] = "Neu (nur ~Text)";
                 Text[ hindi ] = "नया (केवल टेक्स्ट्)";
+                Text[ slovak ] = "Nový (iba text)";
             };
             MenuItem
             {
@@ -692,6 +708,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Kopírovat";
                 Text[ hebrew ] = "‮העתקה‬";
                 Text[ hindi ] = "~प्रतिलिपि";
+                Text[ slovak ] = "~Kopírovať";
             };
             MenuItem
             {
@@ -725,6 +742,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Nahradit";
                 Text[ hebrew ] = "‮החלפה‬";
                 Text[ hindi ] = "प्रतिस्थापन";
+                Text[ slovak ] = "Nahradiť";
             };
             MenuItem
             {
@@ -757,6 +775,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Nahradit (pouze text)";
                 Text[ hebrew ] = "E~rsetzen (nur Text)";
                 Text[ hindi ] = "प्रतिस्थाप~न (केवल टेक्स्ट्)";
+                Text[ slovak ] = "Na~hradiť (len text)";
             };
             MenuItem
             {
@@ -789,6 +808,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Přejmenovat";
                 Text[ hebrew ] = "~Umbenennen...";
                 Text[ hindi ] = "पुनः नाम दो...";
+                Text[ slovak ] = "Premenovať";
             };
             MenuItem
             {
@@ -823,6 +843,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Smazat";
                 Text[ hebrew ] = "‮מחיקה‬";
                 Text[ hindi ] = "~मिटाओ";
+                Text[ slovak ] = "Z~mazať";
             };
             MenuItem
             {
@@ -860,6 +881,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Upravit";
                 Text[ hebrew ] = "‮עריכה‬";
                 Text[ hindi ] = "~संपादन";
+                Text[ slovak ] = "~Upraviť";
             };
             MenuItem
             {
@@ -897,6 +919,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Makro...";
                 Text[ hebrew ] = "‮הפעלת מאקרו...‬";
                 Text[ hindi ] = "~मॉक्रो...";
+                Text[ slovak ] = "~Makro...";
             };
             MenuItem
             {
@@ -932,6 +955,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ czech ] = "Importovat...";
                 Text[ hebrew ] = "~Importieren...";
                 Text[ hindi ] = "~आयात...";
+                Text[ slovak ] = "~Importovať...";
             };
         };
     };
@@ -950,6 +974,7 @@ ModalDialog DLG_GLOSSARY
     Text[ czech ] = "Automatický text";
     Text[ hebrew ] = "AutoText";
     Text[ hindi ] = "स्वचालित टेक्स्ट्";
+    Text[ slovak ] = "Automatický text";
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
@@ -982,6 +1007,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ czech ] = "Název zkratky již existuje. Prosím zvolte jiný.";
     MESSAGE[ hebrew ] = "Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben";
     MESSAGE[ hindi ] = "सरल विधि नाम पहिले से ही अस्तित्व में है । कृपया दूसरा नाम चुनिए ।";
+    MESSAGE[ slovak ] = "Názov skratky už existuje. Prosím vyberte iný.";
 };
 QueryBox MSG_QUERY_DELETE
 {
@@ -1016,6 +1042,7 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE[ czech ] = "Odstranit automatický text?";
     MESSAGE[ hebrew ] = "Soll der AutoText gelöscht werden?";
     MESSAGE[ hindi ] = "स्वचालित टेक्स्ट् को मिटाना है?";
+    MESSAGE[ slovak ] = "Odstrániť automatický text?";
 };
 String STR_QUERY_DELETE_GROUP1
 {
@@ -1046,6 +1073,7 @@ String STR_QUERY_DELETE_GROUP1
     Text[ czech ] = "Smazat kategorii ";
     Text[ hebrew ] = "Soll der Bereich";
     Text[ hindi ] = "वर्ग को मिटाना है ";
+    Text[ slovak ] = "Zmazať kategóriu ";
 };
 String STR_QUERY_DELETE_GROUP2
 {
@@ -1077,6 +1105,7 @@ String STR_QUERY_DELETE_GROUP2
     Text[ czech ] = "?";
     Text[ hebrew ] = " gelöscht werden?";
     Text[ hindi ] = "?";
+    Text[ slovak ] = "?";
 };
 String STR_GLOSSARY
 {
@@ -1108,6 +1137,7 @@ String STR_GLOSSARY
     Text[ czech ] = "Automatický text: ";
     Text[ hebrew ] = "Textbaustein :";
     Text[ hindi ] = "स्वचालित टेक्स्ट् : ";
+    Text[ slovak ] = "Automatický text: ";
 };
 ModalDialog DLG_RENAME_GLOS
 {
@@ -1163,6 +1193,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_ON
     {
@@ -1203,6 +1234,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ czech ] = "Zkratka";
         Text[ hebrew ] = "Kü~rzel";
         Text[ hindi ] = "स~रल विधि";
+        Text[ slovak ] = "S~kratka";
     };
     Edit ED_OS
     {
@@ -1243,6 +1275,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
+        Text[ slovak ] = "~Nový";
     };
     Edit ED_NN
     {
@@ -1283,6 +1316,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ czech ] = "Zkratka";
         Text[ hebrew ] = "~Kürzel";
         Text[ hindi ] = "~सरल विधि";
+        Text[ slovak ] = "~Skratka";
     };
     Edit ED_NS
     {
@@ -1322,6 +1356,7 @@ ModalDialog DLG_RENAME_GLOS
     Text[ czech ] = "Přejmenovat automatický text";
     Text[ hebrew ] = "Textbaustein umbenennen";
     Text[ hindi ] = "स्वचालित टेक्स्ट् को पुनः नाम दो";
+    Text[ slovak ] = "Premenovať automatický text";
 };
 String STR_SAVE_GLOSSARY
 {
@@ -1352,6 +1387,7 @@ String STR_SAVE_GLOSSARY
     Text[ czech ] = "Uložit automatický text";
     Text[ hebrew ] = "Textbaustein speichern";
     Text[ hindi ] = "स्वचालित टेक्स्ट् को संचित करो";
+    Text[ slovak ] = "Uložiť automatický text";
 };
 InfoBox MSG_NO_GLOSSARIES
 {
@@ -1381,7 +1417,10 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ czech ] = "V tomto souboru není žádný automatický text.";
     MESSAGE[ hebrew ] = "Diese Datei enthält keine Textbausteine.";
     MESSAGE[ hindi ] = "इस फाइल में कोई स्वचालित टेक्स्ट् नहीं है ।";
+    MESSAGE[ slovak ] = "V tomto súbore nie je žiadny automatický text.";
 };
+
+
 
 
 
