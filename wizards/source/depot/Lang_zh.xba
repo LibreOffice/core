@@ -54,10 +54,10 @@ Sub LoadChineseSimpleLanguage()
 	sMarket(0,0) = &quot;美元&quot;
 	sMarket(0,1) = &quot;$&quot;
 	sMarket(0,2) = &quot;纽约&quot;
-	sMarket(0,3) = &quot;http://quote.yahoo.com/d/quotes.csv?s=&lt;StockID&gt;&amp;f=sl1d1t1c1ohgv&amp;e=.csv&quot;
-	sMarket(0,4) = &quot;http://table.finance.yahoo.com/table.csv?&quot; &amp;_
-					&quot;a=&lt;StartMonth&gt;&amp;b=&lt;StartDay&gt;&amp;c=&lt;Startyear&gt;&amp;d=&lt;EndMonth&gt;&amp;&quot; &amp;_
-					&quot;e=&lt;EndDay&gt;&amp;f=&lt;Endyear&gt;&amp;s=&lt;StockID&gt;&amp;y=0&amp;g=&lt;interval&gt;&amp;ignore=.csv&quot;
+	sMarket(0,3) = &quot;http://finance.yahoo.com/d/quotes.csv?s=&lt;StockID&gt;&amp;f=sl1d1t1c1ohgv&amp;e=.csv&quot;
+	sMarket(0,4) = &quot;http://ichart.finance.yahoo.com/table.csv?&quot; &amp;_
+				   &quot;s=&lt;StockID&gt;&amp;d=&lt;EndMonth&gt;&amp;e=&lt;EndDay&gt;&amp;f=&lt;Endyear&gt;&amp;g=d&amp;&quot; &amp;_
+				   &quot;a=&lt;StartMonth&gt;&amp;b=&lt;StartDay&gt;&amp;c=&lt;Startyear&gt;&amp;ignore=.csv&quot;
 	sMarket(0,5) = &quot;图标&quot;
 	sMarket(0,6) = &quot;en&quot;
 	sMarket(0,7) = &quot;US&quot;
@@ -154,4 +154,5 @@ Sub LoadChineseSimpleLanguage()
 		.cmdGoOn.Label = sOk
 		.cmdCancel.Label = sCancel
 	End With
-End Sub</script:module>
+End Sub
+</script:module>
