@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
  *  last change: $Author: ka $
  *
@@ -255,11 +255,10 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 aAny <<= aMimeType;
                 xStm->SetProperty( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
             }
-            else
-            {
-                aAny <<= ( (sal_Bool) sal_True );
-                xStm->SetProperty( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
-            }
+
+            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == OUString::createFromAscii( "image/tiff" ) ) );
+            aAny <<= bCompressed;
+            xStm->SetProperty( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
             if( aGfxLink.GetDataSize() )
                 xStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
