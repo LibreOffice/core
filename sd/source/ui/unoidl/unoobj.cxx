@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-27 20:41:32 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 15:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,12 @@ uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException 
     {
         SdrPage* pPage = pObj->GetPage();
         if( !pPage->IsMasterPage() )
+        {
+            if( 0 == pPage->GetMasterPageCount() )
+                return aAny;
+
             pPage = pPage->GetMasterPage(0);
+        }
 
         String aLayoutName( pPage->GetLayoutName() );
         aLayoutName = aLayoutName.Erase(aLayoutName.Search( String( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) )));
