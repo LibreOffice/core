@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 09:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,6 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-//#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HDL_
-//#include <com/sun/star/sdbcx/XColumnsSupplier.hdl>
-//#endif
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -135,10 +132,14 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
             aKey.put_Name(::rtl::OUString::createFromAscii("PrimaryKey") );
 
         ADOKeys* pKeys = m_aCollection;
-        if(FAILED(pKeys->Append(OLEVariant((ADOKey*)pKey->getImpl()),
-                                eKey,
-                                vOptional)))
+        if ( FAILED(pKeys->Append(OLEVariant((ADOKey*)aKey),
+                                adKeyPrimary, // must be every time adKeyPrimary
+                                vOptional)) )
+        {
             ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+            // just make sure that an SQLExceptionis thrown here
+            throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        }
     }
     else
         throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
