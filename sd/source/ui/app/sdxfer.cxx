@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-04 14:38:20 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 11:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,9 +389,6 @@ void SdTransferable::CreateData()
 
 void SdTransferable::AddSupportedFormats()
 {
-    if( !bLateInit )
-        CreateData();
-
     if( pOLEDataHelper )
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-23 10:50:28 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 11:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,9 @@ BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
     if( bRet )
     {
         BrkAction();
+
+        if( IsTextEdit() )
+            EndTextEdit();
 
         SdViewShell* pViewShell= pDocSh->GetViewShell();
 

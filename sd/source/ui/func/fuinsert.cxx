@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-04 14:36:40 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 11:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,6 +633,7 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                 pObj->SetEmptyPresObj(FALSE);
                                 ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
                                 ( (SdrOle2Obj*) pObj)->SetObjRef(aIPObj);
+                                ( (SdrOle2Obj*) pObj)->SetPersistName(aName);
                                 ( (SdrOle2Obj*) pObj)->SetName(aName);
                                 Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
