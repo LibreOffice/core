@@ -12,6 +12,7 @@ public interface PropertyName {
     final public static String OFFICE_PROVIDER = "OfficeProvider";
     final public static String LOG_WRITER = "LogWriter";
     final public static String TIME_OUT = "TimeOut";
+    final public static String THREAD_TIME_OUT = "ThreadTimeOut";
     final public static String OPERATING_SYSTEM = "OperatingSystem";
 
     final public static String WNTMSCI = "wntmsci";
