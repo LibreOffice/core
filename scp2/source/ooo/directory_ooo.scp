@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.21 $
+*  $Revision: 1.22 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-13 19:22:24 $
+*  last change: $Author: kz $ $Date: 2005-01-21 12:13:48 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1505,147 +1505,10 @@ End
 
 #ifdef UNX
 
-Directory gid_Dir_Kde_Netdir
+Directory gid_Dir_Share_Xdg
     ParentID = gid_Dir_Share;
-    DosName = "kde";
+    DosName = "xdg";
 End
 
 #endif
 
-#ifdef UNX
-
-Directory gid_Dir_Share_Kde_Net
-    ParentID = gid_Dir_Kde_Netdir;
-    DosName = "net";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Share_Kde_Net_Applnk
-    ParentID = gid_Dir_Share_Kde_Net;
-    DosName = "applnk";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Share_Kde_Net_Applnk_Product
-    ParentID = gid_Dir_Share_Kde_Net_Applnk;
-    DosName = "%PRODUCTNAME %PRODUCTVERSION";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Applnk_Netdir
-    ParentID = gid_Dir_Kde_Netdir;
-    DosName = "applnk";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Icons_Netdir
-    ParentID = gid_Dir_Kde_Netdir;
-    DosName = "icons";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Icons_Mini_Netdir
-    ParentID = gid_Dir_Icons_Netdir;
-    DosName = "mini";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Mimelnk_Netdir
-    ParentID = gid_Dir_Kde_Netdir;
-    DosName = "mimelnk";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Mimelnk_Application_Netdir
-    ParentID = gid_Dir_Mimelnk_Netdir;
-    DosName = "application";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Mimelnk_Text_Netdir
-    ParentID = gid_Dir_Mimelnk_Netdir;
-    DosName = "text";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Kde_Share
-    ParentID = PREDEFINED_KDEHOME;
-    DosName = "share";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Kde_Share_Applnk
-    ParentID = gid_Dir_Kde_Share;
-    DosName = "applnk";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Kde_Share_Applnk_Product
-    ParentID = gid_Dir_Kde_Share_Applnk;
-    DosName = "%PRODUCTNAME %PRODUCTVERSION";
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Cde
-    ParentID = PREDEFINED_HOMEDIR;
-    DosName = ".dt";
-    Styles = (DONT_DELETE);
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Cde_Icons
-    ParentID = gid_Dir_Cde;
-    DosName = "icons";
-    Styles = (DONT_DELETE);
-End
-
-#endif
-
-#ifdef UNX
-
-Directory gid_Dir_Cde_Types
-    ParentID = gid_Dir_Cde;
-    DosName = "types";
-    Styles = (DONT_DELETE);
-End
-
-#endif
