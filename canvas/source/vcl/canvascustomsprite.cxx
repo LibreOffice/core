@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:57:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,5 +582,17 @@ namespace vclcanvas
         // TODO(Q1): Use AW's wrappers once resynced
         return ::basegfx::B2DSize( maSize.Width(),
                                    maSize.Height() );
+    }
+
+    bool CanvasCustomSprite::repaint( const GraphicObjectSharedPtr& rGrf,
+                                      const ::Point&                rPt,
+                                      const ::Size&                 rSz,
+                                      const GraphicAttr&            rAttr ) const
+    {
+        tools::LocalGuard aGuard;
+
+        mbSurfaceDirty = true;
+
+        return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
     }
 }
