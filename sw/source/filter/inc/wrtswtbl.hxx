@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 15:17:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,7 @@ public:
                     BOOL bRel, USHORT nMaxDepth = USHRT_MAX,
                     USHORT nLeftSub=0, USHORT nRightSub=0 );
     SwWriteTable( const SwHTMLTableLayout *pLayoutInfo );
+    virtual ~SwWriteTable();
 
     const SwWriteTableCols& GetCols() const { return aCols; }
     const SwWriteTableRows& GetRows() const { return aRows; }
