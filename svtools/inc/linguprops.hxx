@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linguprops.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:59:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #define UPN_IS_AUTO_CLOSE_DIALOG            "IsAutoCloseDialog"
 #define UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST     "IsShowEntriesRecentlyUsedFirst"
 #define UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES  "IsAutoReplaceUniqueEntries"
+#define UPN_IS_DIRECTION_TO_SIMPLIFIED  "IsDirectionToSimplified"
+#define UPN_IS_USE_CHARACTER_VARIANTS  "IsUseCharacterVariants"
+#define UPN_IS_TRANSLATE_COMMON_TERMS  "IsTranslateCommonTerms"
+#define UPN_IS_REVERSE_MAPPING  "IsReverseMapping"
 
 // uno property handles
 #define UPH_IS_GERMAN_PRE_REFORM             0
@@ -128,6 +132,10 @@
 #define UPH_IS_AUTO_CLOSE_DIALOG            27
 #define UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST     28
 #define UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES  29
+#define UPH_IS_DIRECTION_TO_SIMPLIFIED      30
+#define UPH_IS_USE_CHARACTER_VARIANTS       31
+#define UPH_IS_TRANSLATE_COMMON_TERMS       32
+#define UPH_IS_REVERSE_MAPPING              33
 
 #endif
 
