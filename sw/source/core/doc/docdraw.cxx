@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 09:59:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,9 @@ void lcl_AdjustPositioningAttr( SwFrmFmt* _pFrmFmt,
             }
 
         }
-        Point aAnchorPos = _rSdrObj.GetAnchorPos();
+        const Point aAnchorPos = _rSdrObj.GetAnchorPos();
         // use geometry of drawing object
-        SwRect aObjRect = _rSdrObj.GetSnapRect();
+        const SwRect aObjRect = _rSdrObj.GetSnapRect();
         if ( bVert )
         {
             nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
@@ -304,6 +304,21 @@ void lcl_AdjustPositioningAttr( SwFrmFmt* _pFrmFmt,
 
     _pFrmFmt->SetAttr( SwFmtHoriOrient( nHoriRelPos, HORI_NONE, FRAME ) );
     _pFrmFmt->SetAttr( SwFmtVertOrient( nVertRelPos, VERT_NONE, FRAME ) );
+    // --> OD 2004-10-01 #i34750# - keep current object rectangle for  drawing
+    // objects. The object rectangle is used on events from the drawing layer
+    // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
+    {
+        const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
+        if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+        {
+            const SwAnchoredDrawObject* pAnchoredDrawObj =
+                            static_cast<const SwAnchoredDrawObject*>(pAnchoredObj);
+            const SwRect aObjRect = _rSdrObj.GetSnapRect();
+            const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
+                                        ->SetLastObjRect( aObjRect.SVRect() );
+        }
+    }
+    // <--
 }
 
 SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
@@ -347,6 +362,10 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                                 RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
                                 GetDfltFrmFmt() );
         pFmt->SetAttr( aAnch );
+        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        pFmt->SetPositionLayoutDir(
+            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+        // <--
 
         rDrawView.GroupMarked();
         ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
@@ -417,6 +436,10 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
                                                             GetDfltFrmFmt() );
                         pFmt->SetAttr( aAnch );
+                        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+                        pFmt->SetPositionLayoutDir(
+                            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+                        // <--
                         SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
                         pContact->ConnectToLayout();
                         // OD 2004-04-07 #i26791# - Adjust positioning and
