@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:01:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,44 +68,15 @@ TabPage TP_FLD_DOK
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Dokument" ;
-    Text [ ENGLISH ] = "Document" ;
+    Text [ de ] = "Dokument" ;
     FixedText FT_DOKTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Feldtyp" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
-        Text [ portuguese ] = "~Tipo de campo" ;
-        Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "~Type" ;
-        Text [ french ] = "~Type de champ" ;
-        Text [ swedish ] = "~Fälttyp" ;
-        Text [ dutch ] = "~Veldtype" ;
-        Text [ spanish ] = "~Tipo de campo" ;
-        Text [ english_us ] = "~Type" ;
+        Text [ de ] = "~Feldtyp" ;
+        Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "~Typ pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
-        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
-        Text[ arabic ] = "äæÚ ÇáÍŞá";
-        Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ turkish ] = "~Alan tipi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipus";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKTYPE
     {
@@ -120,38 +91,10 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Auswahl" ;
-        Text [ ENGLISH ] = "Selection" ;
-        Text [ norwegian ] = "Selection" ;
-        Text [ italian ] = "Selezione" ;
-        Text [ portuguese_brazilian ] = "~Selecionar" ;
-        Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "~Valitse" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ french ] = "~Sélection" ;
-        Text [ swedish ] = "Urv~al" ;
-        Text [ dutch ] = "~Selectie" ;
-        Text [ spanish ] = "Se~lección" ;
-        Text [ english_us ] = "S~elect" ;
+        Text [ de ] = "~Auswahl" ;
+        Text [ en-US ] = "S~elect" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
-        Text[ russian ] = "Âûáğàòü";
-        Text[ polish ] = "~Wybór";
-        Text[ japanese ] = "é¸æŠ(~E)";
-        Text[ chinese_traditional ] = "é¸å–(~E)";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ(~E)";
-        Text[ turkish ] = "~Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~elecciona";
-        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
-        Text[ czech ] = "Vybrat";
-        Text[ hebrew ] = "~Auswahl";
-        Text[ hindi ] = "à¤šà¥~à¤¨à¥‹";
-        Text[ slovak ] = "Vy~braÅ¥";
-        Text[ hungarian ] = "~KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izb~eri";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKSELECTION
     {
@@ -164,37 +107,10 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        TEXT = "F~ormat" ;
-        TEXT [ English ] = "Format" ;
+        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
-        Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "F~ormato" ;
-        Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "~Format" ;
-        Text [ italian ] = "F~ormato" ;
-        Text [ spanish ] = "F~ormato" ;
-        Text [ french ] = "F~ormat" ;
-        Text [ dutch ] = "~Notatie" ;
-        Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "~Format";
-        Text[ japanese ] = "æ›¸å¼(~O)";
-        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
-        Text[ arabic ] = "ÇáÊäÓíŞ";
-        Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "ì„œì‹(~O)";
-        Text[ turkish ] = "F~ormat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormata";
-        Text[ finnish ] = "M~uotoilu";
-        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "F~ormat";
-        Text[ hindi ] = "à¤°~à¤šà¤¨à¤¾";
-        Text[ slovak ] = "F~ormÃ¡t";
-        Text[ hungarian ] = "~FormÃ¡tum";
-        Text[ slovenian ] = "O~blika";
+        Text [ en-US ] = "F~ormat" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKFORMAT
     {
@@ -219,39 +135,11 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 170 , 155 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        TEXT = "Ko~rrektur" ;
-        TEXT [ English ] = "Offs~et" ;
-        TEXT [ norwegian ] = "Offset" ;
-        TEXT [ italian ] = "~Correzione" ;
-        TEXT [ portuguese_brazilian ] = "~Compensar" ;
-        TEXT [ portuguese ] = "~Correcção" ;
-        TEXT [ finnish ] = "~Siirtymä" ;
-        TEXT [ danish ] = "~Forskydning" ;
-        TEXT [ french ] = "C~orrection" ;
-        TEXT [ swedish ] = "Ko~rrigering" ;
-        TEXT [ dutch ] = "~Correctie" ;
-        TEXT [ spanish ] = "~Corrección" ;
-        TEXT [ english_us ] = "O~ffset" ;
+        Text [ de ] = "Ko~rrektur" ;
+        Text [ en-US ] = "O~ffset" ;
         Left = TRUE ;
         Hide = TRUE ;
-        TEXT[ chinese_simplified ] = "ä¿®æ”¹(~F)";
-        TEXT[ russian ] = "Ñìåùåíèå";
-        TEXT[ polish ] = "Prz~esuniêcie";
-        TEXT[ japanese ] = "ä¿®æ­£(~F)";
-        TEXT[ chinese_traditional ] = "ä¿®æ”¹(~F)";
-        TEXT[ arabic ] = "ÇáÊÕÍíÍ";
-        TEXT[ greek ] = "Äéüñèùóç";
-        TEXT[ korean ] = "ìˆ˜ì •(~F)";
-        TEXT[ turkish ] = "Düzeltme";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Correcció";
-        TEXT[ thai ] = "à¸­à¸­~à¸Ÿà¹€à¸‹à¸•";
-        TEXT[ czech ] = "Odchylka";
-        TEXT[ hebrew ] = "Ko~rrektur";
-        TEXT[ hindi ] = "~à¤‘à¤«à¤¸à¥‡à¤Ÿà¥à¤Ÿ";
-        TEXT[ slovak ] = "O~dchÃ½lka";
-        TEXT[ hungarian ] = "~EltolÃ¡s";
-        TEXT[ slovenian ] = "O~dmik";
+        Text [ x-comment ] = " ";
     };
     Edit ED_DOKVALUE
     {
@@ -295,37 +183,10 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 170 , 170 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
-        TEXT = "~Inhalt fixieren" ;
-        TEXT [ English ] = "Fixed content" ;
+        Text [ de ] = "~Inhalt fixieren" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Fixed content" ;
-        Text [ portuguese_brazilian ] = "Conteúdo ~fixo" ;
-        Text [ swedish ] = "Fi~xera innehåll" ;
-        Text [ danish ] = "Fast in~dhold" ;
-        Text [ italian ] = "~Fissa il contenuto" ;
-        Text [ spanish ] = "~Contenido fijo" ;
-        Text [ french ] = "Contenu fixe" ;
-        Text [ dutch ] = "~Inhoud fixeren" ;
-        Text [ portuguese ] = "Conteúdo ~fixo" ;
-        Text[ chinese_simplified ] = "å›ºå®šå†…å®¹(~F)";
-        Text[ russian ] = "Ôèêñ. ñîäåğæèìîå";
-        Text[ polish ] = "St~a³a treœæ";
-        Text[ japanese ] = "å†…å®¹ã®å›ºå®š(~F)";
-        Text[ chinese_traditional ] = "å›ºå®šå…§å®¹(~F)";
-        Text[ arabic ] = "ÊËÈíÊ ÇáãÍÊæíÇÊ";
-        Text[ greek ] = "Ğáãßùóç ğåñ~éå÷ïìİíùí";
-        Text[ korean ] = "ë‚´ìš© ê³ ì •(~F)";
-        Text[ turkish ] = "İçeriği sabitle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contingut ~fix";
-        Text[ finnish ] = "~Kiinteä sisältö";
-        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²~à¸„à¸‡à¸—à¸µà¹ˆ";
-        Text[ czech ] = "PevnÃ½ obsah";
-        Text[ hebrew ] = "~Inhalt fixieren";
-        Text[ hindi ] = "~à¤¸à¥à¤¥à¤¿à¤° à¤µà¤¿à¤·à¤¯";
-        Text[ slovak ] = "Pe~vnÃ½ obsah";
-        Text[ hungarian ] = "~RÃ¶gzÃ­tett tartalom";
-        Text[ slovenian ] = "~Fiksna vsebina";
+        Text [ en-US ] = "~Fixed content" ;
+        Text [ x-comment ] = " ";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -337,98 +198,18 @@ TabPage TP_FLD_DOK
     };
     String STR_DOKDATEOFF
     {
-        TEXT = "Ko~rrektur in Tagen" ;
-        TEXT [ English ] = "Offs~et in days" ;
-        Text [ english_us ] = "Offs~et in days" ;
-        Text [ portuguese_brazilian ] = "Com~pensar em dias" ;
-        Text [ swedish ] = "Ko~rrigering i dagar" ;
-        Text [ danish ] = "Forskydning i dage" ;
-        Text [ italian ] = "Correzione in ~giorni" ;
-        Text [ spanish ] = "~Corrección en días" ;
-        Text [ french ] = "Co~rrection en jours" ;
-        Text [ dutch ] = "Co~rrectie in dagen" ;
-        Text [ portuguese ] = "Co~rrecção em dias" ;
-        Text[ chinese_simplified ] = "ä¿®æ”¹å¤©æ•°(~E)";
-        Text[ russian ] = "Ñìåùåíèå â äíÿõ";
-        Text[ polish ] = "Prz~esuniêcie (dni)";
-        Text[ japanese ] = "æ—¥ã®ä¿®æ­£(~E)";
-        Text[ chinese_traditional ] = "ä¿®æ”¹æ—¥æœŸçš„å¤©æ•¸(~E)";
-        Text[ arabic ] = "ÇáÊÕÍíÍ ÈÇáÃíÇã";
-        Text[ greek ] = "Äéüñèùóç óå çìİñåò";
-        Text[ korean ] = "ë‚ ì§œ ìˆ˜ì •(~E)";
-        Text[ turkish ] = "Düzeltme (gün)";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Correcció en dies";
-        Text[ finnish ] = "~Siirtymä päivinä";
-        Text[ thai ] = "à¸­à¸­à¸Ÿà¹€~à¸‹à¸•à¹ƒà¸™à¸§à¸±à¸™";
-        Text[ czech ] = "Odchylka ve dnech";
-        Text[ hebrew ] = "Ko~rrektur in Tagen";
-        Text[ hindi ] = "à¤‘~à¤«à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤¦à¤¿à¤¨à¥‹à¤‚ à¤®à¥‡à¤‚";
-        Text[ slovak ] = "OdchÃ½lka v dÅˆ~och";
-        Text[ hungarian ] = "~Napokban megadott eltolÃ¡s";
-        Text[ slovenian ] = "O~dmik v dnevih";
+        Text [ de ] = "Ko~rrektur in Tagen" ;
+        Text [ en-US ] = "Offs~et in days" ;
+        Text [ x-comment ] = " ";
     };
     String STR_DOKTIMEOFF
     {
-        TEXT = "Ko~rrektur in Minuten" ;
-        TEXT [ English ] = "Offs~et in minutes" ;
-        Text [ english_us ] = "Offs~et in minutes" ;
-        Text [ portuguese_brazilian ] = "Compe~nsar em minutos" ;
-        Text [ swedish ] = "Ko~rrigering i minuter" ;
-        Text [ danish ] = "Forskydning i minutter" ;
-        Text [ italian ] = "Co~rrezione in minuti" ;
-        Text [ spanish ] = "~Corrección en minutos" ;
-        Text [ french ] = "Co~rrection en minutes" ;
-        Text [ dutch ] = "Co~rrectie in minuten" ;
-        Text [ portuguese ] = "Co~rrecção em minutos" ;
-        Text[ chinese_simplified ] = "ä¿®æ”¹åˆ†é’Ÿè®¾å®š(~E)";
-        Text[ russian ] = "Ñìåùåíèå â ìèíóòàõ";
-        Text[ polish ] = "Prz~esuniêcie (minuty)";
-        Text[ japanese ] = "åˆ†ã®ä¿®æ­£(~E)";
-        Text[ chinese_traditional ] = "ä¿®æ”¹åˆ†é˜è¨­å®š(~E)";
-        Text[ arabic ] = "ÇáÊÕÍíÍ ÈÇáÏŞÇÆŞ";
-        Text[ greek ] = "Äéüñèùóç óå ëåğôÜ";
-        Text[ korean ] = "ë¶„ ìˆ˜ì •(~E)";
-        Text[ turkish ] = "Düzeltme (dakika)";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Correcció en minuts";
-        Text[ finnish ] = "~Siirtymä minuutteina";
-        Text[ thai ] = "à¸­à¸­à¸Ÿà¹€~à¸‹à¸•à¹ƒà¸™à¸™à¸²à¸—à¸µ";
-        Text[ czech ] = "Odchylka v minutÃ¡ch";
-        Text[ hebrew ] = "Ko~rrektur in Minuten";
-        Text[ hindi ] = "à¤‘~à¤«à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤®à¤¿à¤¨à¤Ÿà¥‹à¤‚ à¤®à¥‡à¤‚";
-        Text[ slovak ] = "Od~chÃ½lka v minÃºtach";
-        Text[ hungarian ] = "~Percekben megadott eltolÃ¡s";
-        Text[ slovenian ] = "Od~mik v minutah";
+        Text [ de ] = "Ko~rrektur in Minuten" ;
+        Text [ en-US ] = "Offs~et in minutes" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "Document" ;
-    Text [ portuguese_brazilian ] = "Documento" ;
-    Text [ swedish ] = "Dokument" ;
-    Text [ danish ] = "Dokument" ;
-    Text [ italian ] = "Documento" ;
-    Text [ spanish ] = "Documento" ;
-    Text [ french ] = "Document" ;
-    Text [ dutch ] = "Document" ;
-    Text [ portuguese ] = "Documento" ;
-    Text[ chinese_simplified ] = "æ–‡æ¡£";
-    Text[ russian ] = "Äîêóìåíò";
-    Text[ polish ] = "Dokument";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ chinese_traditional ] = "æ–‡ä»¶";
-    Text[ arabic ] = "ÇáãÓÊäÏ";
-    Text[ greek ] = "¸ããñáöï";
-    Text[ korean ] = "ë¬¸ì„œ";
-    Text[ turkish ] = "Belge";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Document";
-    Text[ finnish ] = "Asiakirja";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "Dokument";
-    Text[ hebrew ] = "Dokument";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°";
-    Text[ slovak ] = "Dokument";
-    Text[ hungarian ] = "Dokumentum";
-    Text[ slovenian ] = "Dokument";
+    Text [ en-US ] = "Document" ;
+    Text [ x-comment ] = " ";
 };
 
 
