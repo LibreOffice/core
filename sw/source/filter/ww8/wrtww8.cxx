@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:48:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,23 +333,6 @@ public:
 //  String GetWWBkmkName( const String& rName ) const;
 };
 
-class WW8_WrtRedlineAuthor
-{
-private:
-    std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
-
-    USHORT GetPos( const String& rNm );
-
-    //No copying
-    WW8_WrtRedlineAuthor(const WW8_WrtRedlineAuthor&);
-    WW8_WrtRedlineAuthor& operator=(const WW8_WrtRedlineAuthor&);
-public:
-    WW8_WrtRedlineAuthor() {}
-
-    USHORT AddName( const String& rNm );
-    void Write( SwWW8Writer& rWrt );
-};
-
 #define ANZ_DEFAULT_STYLES 16
 
 // die Namen der StorageStreams
@@ -394,9 +377,9 @@ static void WriteDop( SwWW8Writer& rWrt )
         rDop.dttmCreated = rDop.dttmRevised = rDop.dttmLastPrint = 0x45FBAC69;
     else
     {
-        rDop.dttmCreated = rWrt.GetDTTM(pInf->GetCreated().GetTime());
-        rDop.dttmRevised = rWrt.GetDTTM(pInf->GetChanged().GetTime());
-        rDop.dttmLastPrint = rWrt.GetDTTM(pInf->GetPrinted().GetTime());
+        rDop.dttmCreated = sw::ms::DateTime2DTTM(pInf->GetCreated().GetTime());
+        rDop.dttmRevised = sw::ms::DateTime2DTTM(pInf->GetChanged().GetTime());
+        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(pInf->GetPrinted().GetTime());
     }
 
     rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
@@ -1529,25 +1512,11 @@ void SwWW8Writer::AppendBookmark( const String& rName, USHORT nOffset )
 //--------------------------------------------------------------------------
 /*  */
 
-USHORT WW8_WrtRedlineAuthor::AddName( const String& rNm )
+void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
-    USHORT nRet;
-    typedef std::vector<String>::iterator myiter;
-    myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
-    if (aIter != maAuthors.end())
-        nRet = aIter - maAuthors.begin();
-    else
-    {
-        nRet = maAuthors.size();
-        maAuthors.push_back(rNm);
-    }
-    return nRet;
-}
-
-void WW8_WrtRedlineAuthor::Write( SwWW8Writer& rWrt )
-{
-    rWrt.WriteAsStringTable(maAuthors, rWrt.pFib->fcSttbfRMark,
-        rWrt.pFib->lcbSttbfRMark, rWrt.bWrtWW8 ? 0 : 2);
+    SwWW8Writer & rWW8Wrt = (SwWW8Writer&)rWrt;
+    rWW8Wrt.WriteAsStringTable(maAuthors, rWW8Wrt.pFib->fcSttbfRMark,
+        rWW8Wrt.pFib->lcbSttbfRMark, rWW8Wrt.bWrtWW8 ? 0 : 2);
 }
 
 USHORT SwWW8Writer::AddRedlineAuthor( USHORT nId )
@@ -1818,37 +1787,6 @@ void SwWW8Writer::WriteChar( sal_Unicode c )
         Strm() << c;
     else
         Strm() << (BYTE)c;
-}
-
-long SwWW8Writer::GetDTTM( const DateTime& rDT )
-{
-/*
-mint    short   :6  0000003F    minutes (0-59)
-hr      short   :5  000007C0    hours (0-23)
-dom     short   :5  0000F800    days of month (1-31)
-mon     short   :4  000F0000    months (1-12)
-yr      short   :9  1FF00000    years (1900-2411)-1900
-wdy     short   :3  E0000000    weekday(Sunday=0
-                                        Monday=1
-( wdy can be ignored )                  Tuesday=2
-                                        Wednesday=3
-                                        Thursday=4
-                                        Friday=5
-                                        Saturday=6)
-*/
-
-    long nDT = ( rDT.GetDayOfWeek() + 1 ) % 7;
-    nDT <<= 9;
-    nDT += ( rDT.GetYear() - 1900 ) & 0x1ff;
-    nDT <<= 4;
-    nDT += rDT.GetMonth() & 0xf;
-    nDT <<= 5;
-    nDT += rDT.GetDay() & 0x1f;
-    nDT <<= 5;
-    nDT += rDT.GetHour() & 0x1f;
-    nDT <<= 6;
-    nDT += rDT.GetMin() & 0x3f;
-    return nDT;
 }
 
 /*  */
