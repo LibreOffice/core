@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.16 $
-*  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
+*  $Revision: 1.17 $
+*  last change: $Author: npower $ $Date: 2003-02-19 16:07:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -630,19 +630,86 @@ throw ( lang::IllegalArgumentException,
         return results;
     }
 
-
-    results.realloc( h_it->second.size() );
-
     //find the implementations for the given logical name
     Datas_vec::const_iterator it_datas = h_it->second.begin();
     Datas_vec::const_iterator it_datas_end = h_it->second.end();
+
+    OUString queryLang = scriptURI.getLanguage();
+    OUString queryFunc = scriptURI.getFunctionName();
+   OSL_TRACE(  "Query uri logicalname [%s], functionName [%s], language [%s]",
+                ::rtl::OUStringToOString( scriptURI.getLogicalName(),
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( scriptURI.getFunctionName(),
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( scriptURI.getLanguage(),
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+    bool checkFuncNeeded = ( queryFunc.getLength() > 0 );
+    bool checkLangNeeded = ( queryLang.getLength() > 0 );
+    int scriptsIndex = 0;
+    if ( checkLangNeeded )
+        OSL_TRACE("Need to check language");
+    if ( checkFuncNeeded )
+        OSL_TRACE("Need to check funcname");
+    // initially set the size of the array to be the max set of
+    // matches possible ie the size of the matches on logical name
+    // alone
+    results.realloc( h_it->second.size() );
+
     for ( sal_Int32 count = 0; it_datas != it_datas_end ; ++it_datas )
     {
-        OSL_TRACE( "Adding to sequence of impls " );
-        Reference< storage::XScriptInfo > xScriptInfo = new ScriptInfo (
-            *it_datas, m_scriptStorageID );
+        ScriptData scriptData = *it_datas;
+        Reference< storage::XScriptInfo > xScriptInfo;
+        OSL_TRACE(  "compare uri logicalname [%s], functionName [%s], language [%s]",
+                ::rtl::OUStringToOString( scriptData.logicalname,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( scriptData.functionname,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( scriptData.language,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-        results[ count++ ] = xScriptInfo;
+        if ( checkFuncNeeded && checkLangNeeded )
+        {
+            OSL_TRACE("checking funcname and lang (func)");
+            if ( queryLang.equals( scriptData.functionname ) == sal_True )
+            {
+                continue;
+            }
+            OSL_TRACE("checking funcname and lang (lang)");
+            if ( queryFunc.equals( scriptData.language ) == sal_True)
+            {
+                continue;
+            }
+            OSL_TRACE("checking funcname and lang (pass)");
+        }
+        else if ( checkFuncNeeded )
+        {
+            OSL_TRACE("checking funcname");
+            if ( queryFunc.equals( scriptData.functionname ) == sal_True )
+            {
+                continue;
+            }
+            OSL_TRACE("checking funcname (passed)");
+        }
+        else if ( checkLangNeeded )
+        {
+            OSL_TRACE("checking lang");
+            if ( queryLang.equals( scriptData.language ) == sal_True )
+            {
+                continue;
+            }
+            OSL_TRACE("checking lang (passed)");
+        }
+        OSL_TRACE("match found adding script");
+        xScriptInfo = new ScriptInfo ( scriptData, m_scriptStorageID );
+        results[ scriptsIndex++ ] = xScriptInfo;
+        OSL_TRACE( "Adding to sequence of impls " );
+    }
+    if ( scriptsIndex < h_it->second.size() )
+    {
+        OSL_TRACE("reducing size of array returned from %d to %d",
+            h_it->second.size(), scriptsIndex );
+        results.realloc( scriptsIndex );
     }
     OSL_TRACE( "returning from ScriptStorage::getImplementations with %d entries",
     results.getLength() );
