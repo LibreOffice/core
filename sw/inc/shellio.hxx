@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 13:43:19 $
+ *  last change: $Author: jp $ $Date: 2001-01-30 17:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,7 @@ public:
     BOOL IsReadOnly() const;                // ReadOnly-Flag von pImp
 
     BOOL GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl );
+    BOOL SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTbl );
 
     String GetValidShortCut( const String& rLong,
                              BOOL bCheckInBlock = FALSE ) const;
