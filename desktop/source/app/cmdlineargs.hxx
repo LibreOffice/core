@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:05:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,14 @@ class CommandLineArgs
             CMD_BOOLPARAM_GLOBAL,
             CMD_BOOLPARAM_MATH,
             CMD_BOOLPARAM_WEB,
+            CMD_BOOLPARAM_BASE,
             CMD_BOOLPARAM_HELPWRITER,
             CMD_BOOLPARAM_HELPCALC,
             CMD_BOOLPARAM_HELPDRAW,
             CMD_BOOLPARAM_HELPBASIC,
             CMD_BOOLPARAM_HELPMATH,
             CMD_BOOLPARAM_HELPIMPRESS,
+            CMD_BOOLPARAM_HELPBASE,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
@@ -165,12 +167,14 @@ class CommandLineArgs
         sal_Bool                IsHelpCalc() const;
         sal_Bool                IsHelpDraw() const;
         sal_Bool                IsHelpImpress() const;
+        sal_Bool                IsHelpBase() const;
         sal_Bool                IsHelpMath() const;
         sal_Bool                IsHelpBasic() const;
         sal_Bool                IsWriter() const;
         sal_Bool                IsCalc() const;
         sal_Bool                IsDraw() const;
         sal_Bool                IsImpress() const;
+        sal_Bool                IsBase() const;
         sal_Bool                IsGlobal() const;
         sal_Bool                IsMath() const;
         sal_Bool                IsWeb() const;
