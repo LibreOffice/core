@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:06:24 $
+#   last change: $Author: rt $ $Date: 2003-12-01 17:57:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ $(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
 [assembly:System.Reflection.AssemblyCompany( "Sun Microsystems, Inc." )] \
 [assembly:System.Reflection.AssemblyCopyright( "2003" )] \
     > $(OUT)$/misc$/assembly.cs
-    +csc $(CSCFLAGS) \
+    +$(WRAPCMD) csc $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_types.dll \
