@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polypolyaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,11 @@
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
 #include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTURE_HPP_
+#include <drafts/com/sun/star/rendering/Texture.hpp>
+#endif
 
-#include "action.hxx"
+#include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
 class PolyPolygon;
@@ -103,6 +106,10 @@ namespace cppcanvas
             PolyPolyAction( const ::PolyPolygon&,
                             const CanvasSharedPtr&,
                             const OutDevState&,
+                            const ::drafts::com::sun::star::rendering::Texture& );
+            PolyPolyAction( const ::PolyPolygon&,
+                            const CanvasSharedPtr&,
+                            const OutDevState&,
                             Mode                );
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
             PolyPolyAction( const ::PolyPolygon&,
@@ -111,7 +118,7 @@ namespace cppcanvas
                             int                 nTransparency );
             virtual ~PolyPolyAction();
 
-            virtual bool render() const;
+            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
 
         private:
             // default: disabled copy/assignment
@@ -122,6 +129,8 @@ namespace cppcanvas
                 ::drafts::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
             CanvasSharedPtr                                             mpCanvas;
             ::drafts::com::sun::star::rendering::RenderState            maState;
+
+            ::drafts::com::sun::star::rendering::Texture                maTexture;
 
             ::com::sun::star::uno::Sequence< double >                   maFillColor;
             ::com::sun::star::uno::Sequence< double >                   maStrokeColor;
