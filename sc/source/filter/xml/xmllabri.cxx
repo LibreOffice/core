@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -78,16 +77,6 @@
 #include <xmloff/xmltoken.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
-#include <com/sun/star/sheet/XLabelRanges.hpp>
-#endif
-
-#ifndef _SC_XMLCONVERTER_HXX
-#include "XMLConverter.hxx"
-#endif
-#ifndef SC_UNONAMES_HXX
-#include "unonames.hxx"
-#endif
 #ifndef SC_XMLIMPRT_HXX
 #include "xmlimprt.hxx"
 #endif
@@ -188,26 +177,15 @@ SvXMLImportContext* ScXMLLabelRangeContext::CreateChildContext(
 
 void ScXMLLabelRangeContext::EndElement()
 {
-    if (GetScImport().GetModel().is())
-    {
-        uno::Reference< beans::XPropertySet > xPropSet( GetScImport().GetModel(), uno::UNO_QUERY );
-        if( xPropSet.is() )
-        {
-            uno::Any aAny = xPropSet->getPropertyValue( bColumnOrientation ?
-                OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_COLLABELRNG ) ) :
-                OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ROWLABELRNG ) ) );
-            uno::Reference< sheet::XLabelRanges > xLabelRanges;
-            if( aAny >>= xLabelRanges )
-            {
-                table::CellRangeAddress aLabelRange;
-                table::CellRangeAddress aDataRange;
-                sal_Int32 nOffset1(0);
-                sal_Int32 nOffset2(0);
-                if (ScXMLConverter::GetRangeFromString( aLabelRange, sLabelRangeStr, GetScImport().GetDocument(), nOffset1 ) &&
-                    ScXMLConverter::GetRangeFromString( aDataRange, sDataRangeStr, GetScImport().GetDocument(), nOffset2 ))
-                    xLabelRanges->addNew( aLabelRange, aDataRange );
-            }
-        }
-    }
+    //  #b5071088# Label ranges must be stored as strings until all sheets are loaded
+    //  (like named expressions).
+
+    ScMyLabelRange* pLabelRange = new ScMyLabelRange;
+
+    pLabelRange->sLabelRangeStr = sLabelRangeStr;
+    pLabelRange->sDataRangeStr = sDataRangeStr;
+    pLabelRange->bColumnOrientation = bColumnOrientation;
+
+    GetScImport().AddLabelRange(pLabelRange);
 }
 
