@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 15:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ContentProperties::ContentProperties( const OUString& rContentType )
 #if SUPD>614
   nSize( 0 ),
   bCompressed( sal_True ),
-  bCompressed( sal_False )
+  bEncrypted( sal_False )
 #else
   nSize( 0 )
 #endif
