@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2003-06-05 13:18:00 $
+#   last change: $Author: dbo $ $Date: 2003-07-02 14:17:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,7 @@ ALLTAR : \
     $(OUT)$/bin$/cli_ure.dll
 
 CSFILES = \
-    uno$/QueryInterface.cs						\
-    uno$/Runtime.cs							\
+    assembly.cs							\
     uno$/ServiceImplementationAttribute.cs				\
     uno$/SingletonAttribute.cs					\
     uno$/util$/DisposeGuard.cs					\

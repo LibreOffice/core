@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2003-06-02 12:42:03 $
+ *  last change: $Author: dbo $ $Date: 2003-07-02 14:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void TypeEmitter::emit_Any_boxed_ctor(
     param_types[ 0 ] = integral_type;
     Emit::ConstructorBuilder * ctor_builder =
         type_builder->DefineConstructor(
-            s_ctor_attr, CallingConventions::Standard, param_types );
+            c_ctor_method_attr, CallingConventions::Standard, param_types );
     ctor_builder->DefineParameter( 1, ParameterAttributes::In, S"Value" );
     Emit::ILGenerator * code = ctor_builder->GetILGenerator();
     code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -292,7 +292,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             param_types[ 1 ] = __typeof (::System::Object);
             Emit::ConstructorBuilder * ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard, param_types );
+                    c_ctor_method_attr, CallingConventions::Standard,
+                    param_types );
             ctor_builder->DefineParameter(
                 1, ParameterAttributes::In, S"Type" );
             ctor_builder->DefineParameter(
@@ -357,7 +358,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             param_types[ 0 ] = __typeof (::System::Type);
             ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard, param_types );
+                    c_ctor_method_attr, CallingConventions::Standard,
+                    param_types );
             ctor_builder->DefineParameter(
                 1, ParameterAttributes::In, S"Value" );
             code = ctor_builder->GetILGenerator();
@@ -374,7 +376,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             param_types[ 0 ] = __typeof (::System::String);
             ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard, param_types );
+                    c_ctor_method_attr, CallingConventions::Standard,
+                    param_types );
             ctor_builder->DefineParameter(
                 1, ParameterAttributes::In, S"Value" );
             code = ctor_builder->GetILGenerator();
@@ -386,6 +389,54 @@ void TypeEmitter::emit_Any_boxed_ctor(
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldarg_1 );
             code->Emit( Emit::OpCodes::Stfld, field_Value );
+            code->Emit( Emit::OpCodes::Ret );
+
+            // public override String ToString()
+            const MethodAttributes c_method_attr = (MethodAttributes)
+                (MethodAttributes::Public |
+                 MethodAttributes::Virtual |
+                 MethodAttributes::HideBySig
+                 /* | xxx todo: ??? compiler does not know Instance ???
+                    MethodAttributes::Instance*/);
+            Emit::MethodBuilder * method_builder =
+                type_builder->DefineMethod(
+                    S"ToString", c_method_attr,
+                    __typeof (::System::String),
+                    new ::System::Type * __gc [ 0 ] );
+            code = method_builder->GetILGenerator();
+            Emit::LocalBuilder * local_var =
+                code->DeclareLocal( __typeof (::System::Object * __gc []) );
+            code->Emit( Emit::OpCodes::Ldc_I4_5 );
+            code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Object) );
+            code->Emit( Emit::OpCodes::Stloc, local_var );
+            code->Emit( Emit::OpCodes::Ldloc, local_var );
+            code->Emit( Emit::OpCodes::Ldc_I4_0 );
+            code->Emit( Emit::OpCodes::Ldstr, "uno.Any { Type=" );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc, local_var );
+            code->Emit( Emit::OpCodes::Ldc_I4_1 );
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldfld, field_Type );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc, local_var );
+            code->Emit( Emit::OpCodes::Ldc_I4_2 );
+            code->Emit( Emit::OpCodes::Ldstr, ", Value=" );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc, local_var );
+            code->Emit( Emit::OpCodes::Ldc_I4_3 );
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldfld, field_Value );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc, local_var );
+            code->Emit( Emit::OpCodes::Ldc_I4_4 );
+            code->Emit( Emit::OpCodes::Ldstr, " }" );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc, local_var );
+            param_types = new ::System::Type * __gc [ 1 ];
+            param_types[ 0 ] = __typeof (::System::Object * __gc []);
+            code->Emit( Emit::OpCodes::Call,
+                        __typeof (::System::String)->GetMethod(
+                            "Concat", param_types ) );
             code->Emit( Emit::OpCodes::Ret );
 
             if (g_verbose)
@@ -421,7 +472,7 @@ void TypeEmitter::emit_Any_boxed_ctor(
                 S"Context", __typeof (::System::Object),
                 FieldAttributes::Public );
             // default .ctor
-            type_builder->DefineDefaultConstructor( s_ctor_attr );
+            type_builder->DefineDefaultConstructor( c_ctor_method_attr );
             // .ctor
             ::System::Type * param_types __gc [] =
                   new ::System::Type * __gc [ 2 ];
@@ -429,7 +480,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             param_types[ 1 ] = __typeof (::System::Object);
             Emit::ConstructorBuilder * ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard, param_types );
+                    c_ctor_method_attr, CallingConventions::Standard,
+                    param_types );
             ctor_builder->DefineParameter(
                 1, ParameterAttributes::In, S"Message" );
             ctor_builder->DefineParameter(
@@ -479,7 +531,7 @@ void TypeEmitter::emit_Any_boxed_ctor(
                                         TypeAttributes::AnsiClass),
                       type_Exception );
             // default .ctor
-            type_builder->DefineDefaultConstructor( s_ctor_attr );
+            type_builder->DefineDefaultConstructor( c_ctor_method_attr );
             // .ctor
             ::System::Type * param_types __gc [] =
                   new ::System::Type * __gc [ 2 ];
@@ -487,7 +539,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             param_types[ 1 ] = __typeof (::System::Object);
             Emit::ConstructorBuilder * ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard, param_types );
+                    c_ctor_method_attr, CallingConventions::Standard,
+                    param_types );
             ctor_builder->DefineParameter(
                 1, ParameterAttributes::In, S"Message" );
             ctor_builder->DefineParameter(
@@ -563,7 +616,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // default .ctor
             Emit::ConstructorBuilder * ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard,
+                    c_ctor_method_attr, CallingConventions::Standard,
                     new ::System::Type * __gc [ 0 ] );
             Emit::ILGenerator * code = ctor_builder->GetILGenerator();
             code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -593,7 +646,8 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             param_types[ 2 ] = __typeof (bool);
             ctor_builder =
                 type_builder->DefineConstructor(
-                    s_ctor_attr, CallingConventions::Standard, param_types );
+                    c_ctor_method_attr, CallingConventions::Standard,
+                    param_types );
             ctor_builder->DefineParameter(
                 1, ParameterAttributes::In, S"Raises" );
             ctor_builder->DefineParameter(
@@ -618,7 +672,8 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             ::System::Type * no_params __gc [] =
                   new ::System::Type * __gc [ 0 ];
             params = new ::System::Type * __gc [ 1 ];
-            MethodAttributes property_method_attr = (MethodAttributes)
+
+            const MethodAttributes c_property_method_attr = (MethodAttributes)
                 (MethodAttributes::Public |
                  MethodAttributes::HideBySig |
                  MethodAttributes::SpecialName |
@@ -633,23 +688,29 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // getter
             Emit::MethodBuilder * method_builder =
                 type_builder->DefineMethod(
-                    S"get_Raises", property_method_attr,
+                    S"get_Raises", c_property_method_attr,
                     __typeof (::System::Type * __gc []), no_params );
             code = method_builder->GetILGenerator();
+            Emit::LocalBuilder * local_ar0 =
+                code->DeclareLocal( __typeof (::System::Type * __gc []) );
+            Emit::LocalBuilder * local_ar1 =
+                code->DeclareLocal( __typeof (::System::Type * __gc []) );
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Brtrue_S, (::System::Byte) 0x16 );
+            Emit::Label label_else = code->DefineLabel();
+            code->Emit( Emit::OpCodes::Brtrue_S, label_else );
             code->Emit( Emit::OpCodes::Ldc_I4_1 );
             code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Type) );
-            code->Emit( Emit::OpCodes::Stloc_1 );
-            code->Emit( Emit::OpCodes::Ldloc_1 );
+            code->Emit( Emit::OpCodes::Stloc, local_ar1 );
+            code->Emit( Emit::OpCodes::Ldloc, local_ar1 );
             code->Emit( Emit::OpCodes::Ldc_I4_0 );
             code->Emit( Emit::OpCodes::Ldtoken, get_type_RuntimeException() );
             code->Emit(
                 Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
             code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc_1 );
+            code->Emit( Emit::OpCodes::Ldloc, local_ar1 );
             code->Emit( Emit::OpCodes::Ret );
+            code->MarkLabel( label_else );
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
             code->Emit( Emit::OpCodes::Ldlen );
@@ -658,10 +719,10 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             code->Emit( Emit::OpCodes::Add );
             code->Emit( Emit::OpCodes::Conv_Ovf_U4 );
             code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Type) );
-            code->Emit( Emit::OpCodes::Stloc_0 );
+            code->Emit( Emit::OpCodes::Stloc, local_ar0 );
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldloc_0 );
+            code->Emit( Emit::OpCodes::Ldloc, local_ar0 );
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
             code->Emit( Emit::OpCodes::Ldlen );
@@ -674,7 +735,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             code->Emit(
                 Emit::OpCodes::Call,
                 __typeof (::System::Array)->GetMethod( "Copy", param_types ) );
-            code->Emit( Emit::OpCodes::Ldloc_0 );
+            code->Emit( Emit::OpCodes::Ldloc, local_ar0 );
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
             code->Emit( Emit::OpCodes::Ldlen );
@@ -683,13 +744,13 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             code->Emit(
                 Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
             code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc_0 );
+            code->Emit( Emit::OpCodes::Ldloc, local_ar0 );
             code->Emit( Emit::OpCodes::Ret );
             property_builder->SetGetMethod( method_builder );
             // setter
             method_builder =
                 type_builder->DefineMethod(
-                    S"set_Raises", property_method_attr,
+                    S"set_Raises", c_property_method_attr,
                     __typeof (void), params );
             method_builder->DefineParameter(
                 1, ParameterAttributes::In, S"value" );
@@ -709,7 +770,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // getter
             method_builder =
                 type_builder->DefineMethod(
-                    S"get_OneWay", property_method_attr,
+                    S"get_OneWay", c_property_method_attr,
                     __typeof (bool), no_params );
             code = method_builder->GetILGenerator();
             code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -719,7 +780,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // setter
             method_builder =
                 type_builder->DefineMethod(
-                    S"set_OneWay", property_method_attr,
+                    S"set_OneWay", c_property_method_attr,
                     __typeof (void), params );
             method_builder->DefineParameter(
                 1, ParameterAttributes::In, S"value" );
@@ -739,7 +800,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // getter
             method_builder =
                 type_builder->DefineMethod(
-                    S"get_AttributeMethod", property_method_attr,
+                    S"get_AttributeMethod", c_property_method_attr,
                     __typeof (bool), no_params );
             code = method_builder->GetILGenerator();
             code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -749,7 +810,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // setter
             method_builder =
                 type_builder->DefineMethod(
-                    S"set_AttributeMethod", property_method_attr,
+                    S"set_AttributeMethod", c_property_method_attr,
                     __typeof (void), params );
             method_builder->DefineParameter(
                 1, ParameterAttributes::In, S"value" );
@@ -1103,7 +1164,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         // default .ctor
         Emit::ConstructorBuilder * ctor_builder =
             type_builder->DefineConstructor(
-                s_ctor_attr, CallingConventions::Standard,
+                c_ctor_method_attr, CallingConventions::Standard,
                 new ::System::Type * __gc [ 0 ] );
         Emit::ILGenerator * ctor_code = ctor_builder->GetILGenerator();
         ctor_code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -1171,7 +1232,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
 
         // parameterized .ctor including all base members
         ctor_builder = type_builder->DefineConstructor(
-            s_ctor_attr, CallingConventions::Standard, all_param_types );
+            c_ctor_method_attr, CallingConventions::Standard, all_param_types );
         for ( member_pos = 0; member_pos < all_members_length; ++member_pos )
         {
             ctor_builder->DefineParameter(
@@ -1319,7 +1380,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         Sequence< Reference< reflection::XTypeDescription > > seq_exceptions;
         Emit::MethodBuilder * method_builder;
 
-        const MethodAttributes method_attr = (MethodAttributes)
+        const MethodAttributes c_method_attr = (MethodAttributes)
             (MethodAttributes::Public |
              MethodAttributes::Abstract |
              MethodAttributes::Virtual |
@@ -1359,7 +1420,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             // create method
             method_builder = type_builder->DefineMethod(
                 ustring_to_String( xMethod->getMemberName() ),
-                method_attr, get_type( xMethod->getReturnType() ),
+                c_method_attr, get_type( xMethod->getReturnType() ),
                 param_types );
             // then define parameter infos
             params_pos = 0;
@@ -1425,7 +1486,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 type_builder->DefineMethod(
                     ustring_to_String( OUSTR("get") +
                                        xAttribute->getMemberName() ),
-                    method_attr, attribute_type, parameters );
+                    c_method_attr, attribute_type, parameters );
             // exception spec
             ::System::Object * args __gc [] = new ::System::Object * __gc [ 3 ];
             args[ 0 ] = 0; // implies com.sun.star.uno.RuntimeException
@@ -1446,7 +1507,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     type_builder->DefineMethod(
                         ustring_to_String( OUSTR("set") +
                                            xAttribute->getMemberName() ),
-                        method_attr, 0, parameters );
+                        c_method_attr, 0, parameters );
                 // define parameter info
                 method_builder->DefineParameter(
                     1 /* starts with 1 */, ParameterAttributes::In, S"value" );
@@ -1569,13 +1630,7 @@ void TypeEmitter::Dispose()
 TypeEmitter::TypeEmitter(
     ::System::Reflection::Emit::ModuleBuilder * module_builder,
     ::System::Reflection::Assembly * extra_assemblies __gc [] )
-    : s_ctor_attr( (MethodAttributes)
-                    (MethodAttributes::Public |
-                     MethodAttributes::HideBySig |
-                     MethodAttributes::SpecialName |
-                     MethodAttributes::RTSpecialName |
-                     MethodAttributes::Instance) ),
-      m_module_builder( module_builder ),
+    : m_module_builder( module_builder ),
       m_extra_assemblies( extra_assemblies ),
       m_method_info_Type_GetTypeFromHandle( 0 ),
       m_type_Exception( 0 ),

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: DisposeGuard.cs,v $
+ *  $RCSfile: assembly.cs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: dbo $ $Date: 2003-07-02 14:17:31 $
+ *  last change: $Author: dbo $ $Date: 2003-07-02 14:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,43 +59,8 @@
  *
  ************************************************************************/
 
-using System;
-using unoidl.com.sun.star.lang;
+[assembly:System.Reflection.AssemblyProduct( "CLI-UNO Language Binding" )]
+// xxx todo AssemblyCompany, AssemblyCopyright, AssemblyTrademark
+[assembly:System.Reflection.AssemblyDescription( "CLI-UNO Runtime Library" )]
+[assembly:System.Reflection.AssemblyVersion( "3.1.0.0" )]
 
-namespace uno.util
-{
-
-/** Helper class to conveniently auto dispose UNO objects from within
-    managed code.
-*/
-public struct DisposeGuard : IDisposable
-{
-    private XComponent m_xComponent;
-
-    /** ctor.
-
-        @param obj target object
-    */
-    public DisposeGuard( Object obj )
-    {
-        m_xComponent = (XComponent) obj;
-    }
-    /** ctor.
-
-        @param obj target object
-    */
-    public DisposeGuard( XComponent obj )
-    {
-        m_xComponent = obj;
-    }
-    
-    /** System.IDisposable impl
-    */
-    public void Dispose()
-    {
-        if (null != m_xComponent)
-            m_xComponent.dispose();
-    }
-}
-
-}

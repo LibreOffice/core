@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2003-06-02 12:42:03 $
+ *  last change: $Author: dbo $ $Date: 2003-07-02 14:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,18 @@ inline ::rtl::OUString String_to_ustring( ::System::String * str )
     return ::rtl::OUString( chars, str->get_Length() );
 }
 
+const ::System::Reflection::MethodAttributes c_ctor_method_attr =
+(::System::Reflection::MethodAttributes)
+    (::System::Reflection::MethodAttributes::Public |
+     ::System::Reflection::MethodAttributes::HideBySig |
+     ::System::Reflection::MethodAttributes::SpecialName |
+     ::System::Reflection::MethodAttributes::RTSpecialName
+     /* | xxx todo: ??? compiler does not know Instance ???
+        ::System::Reflection::MethodAttributes::Instance*/);
+
 //==============================================================================
 __gc class TypeEmitter : public ::System::IDisposable
 {
-    const ::System::Reflection::MethodAttributes s_ctor_attr;
-
     ::System::Reflection::Emit::ModuleBuilder * m_module_builder;
     ::System::Reflection::Assembly * m_extra_assemblies __gc [];
 
