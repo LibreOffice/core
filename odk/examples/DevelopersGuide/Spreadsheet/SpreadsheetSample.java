@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetSample.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-23 08:57:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -661,7 +661,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         com.sun.star.table.XCellRange xCellRange;
         com.sun.star.beans.XPropertySet xPropSet = null;
         com.sun.star.container.XIndexAccess xRangeIA = null;
-        com.sun.star.lang.XMultiServiceFactory xServiceManager;
+        com.sun.star.lang.XMultiServiceFactory xDocServiceManager;
 
 
         // --- Cell styles ---
@@ -674,9 +674,9 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
             UnoRuntime.queryInterface( com.sun.star.container.XNameContainer.class, aCellStylesObj );
 
         // create a new cell style
-        xServiceManager = (com.sun.star.lang.XMultiServiceFactory)
+        xDocServiceManager = (com.sun.star.lang.XMultiServiceFactory)
             UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
-        Object aCellStyle = xServiceManager.createInstance( "com.sun.star.style.CellStyle" );
+        Object aCellStyle = xDocServiceManager.createInstance( "com.sun.star.style.CellStyle" );
         String aStyleName = "MyNewCellStyle";
         xCellStylesNA.insertByName( aStyleName, aCellStyle );
 
@@ -727,11 +727,15 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Table auto formats ---
-        // get the global collection of table auto formats, use global service manager
-        xServiceManager = getServiceManager();
-        Object aAutoFormatsObj = xServiceManager.createInstance( "com.sun.star.sheet.TableAutoFormats" );
-        com.sun.star.container.XNameContainer xAutoFormatsNA = (com.sun.star.container.XNameContainer)
-            UnoRuntime.queryInterface( com.sun.star.container.XNameContainer.class, aAutoFormatsObj );
+        // get the global collection of table auto formats, use global service
+        // manager
+        com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
+
+        Object aAutoFormatsObj = xServiceManager.createInstanceWithContext(
+            "com.sun.star.sheet.TableAutoFormats", getContext());
+        com.sun.star.container.XNameContainer xAutoFormatsNA =
+            (com.sun.star.container.XNameContainer)UnoRuntime.queryInterface(
+                com.sun.star.container.XNameContainer.class, aAutoFormatsObj );
 
         // create a new table auto format and insert into the container
         String aAutoFormatName =  "Temp_Example";
@@ -743,14 +747,16 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         else
         {
             // create a new auto format (with document service manager!)
-            xServiceManager = (com.sun.star.lang.XMultiServiceFactory)
-                UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
-            aAutoFormatObj = xServiceManager.createInstance( "com.sun.star.sheet.TableAutoFormat" );
+//             xDocServiceManager = (com.sun.star.lang.XMultiServiceFactory)
+//                 UnoRuntime.queryInterface( com.sun.star.lang.XMultiServiceFactory.class, getDocument() );
+            aAutoFormatObj = xDocServiceManager.createInstance(
+                "com.sun.star.sheet.TableAutoFormat" );
             xAutoFormatsNA.insertByName( aAutoFormatName, aAutoFormatObj );
         }
         // index access to the auto format fields
-        com.sun.star.container.XIndexAccess xAutoFormatIA = (com.sun.star.container.XIndexAccess)
-            UnoRuntime.queryInterface( com.sun.star.container.XIndexAccess.class, aAutoFormatObj );
+        com.sun.star.container.XIndexAccess xAutoFormatIA =
+            (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+                com.sun.star.container.XIndexAccess.class, aAutoFormatObj );
 
         // set properties of all auto format fields
         for (int nRow = 0; nRow < 4; ++nRow)
@@ -773,7 +779,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
                 // get the auto format field and apply properties
                 Object aFieldObj = xAutoFormatIA.getByIndex( 4 * nRow + nColumn );
                 xPropSet = (com.sun.star.beans.XPropertySet)
-                    UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aFieldObj );
+                    UnoRuntime.queryInterface(
+                        com.sun.star.beans.XPropertySet.class, aFieldObj );
                 xPropSet.setPropertyValue( "CellBackColor", new Integer( nColor ) );
             }
         }
@@ -1057,11 +1064,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         String aDatabase = null;
         try
         {
-            com.sun.star.lang.XMultiServiceFactory xServiceManager = getServiceManager();
+            com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
             com.sun.star.container.XNameAccess xContext =
                 (com.sun.star.container.XNameAccess) UnoRuntime.queryInterface(
                     com.sun.star.container.XNameAccess.class,
-                    xServiceManager.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
+                    xServiceManager.createInstanceWithContext(
+                        "com.sun.star.sdb.DatabaseContext", getContext()) );
             String[] aNames = xContext.getElementNames();
             if ( aNames.length > 0 )
                 aDatabase = aNames[0];
@@ -1085,18 +1093,23 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         String aTable = null;
         try
         {
-            com.sun.star.lang.XMultiServiceFactory xServiceManager = getServiceManager();
+            com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
             com.sun.star.container.XNameAccess xContext = (com.sun.star.container.XNameAccess)
                 UnoRuntime.queryInterface( com.sun.star.container.XNameAccess.class,
-                    xServiceManager.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
-            com.sun.star.sdb.XCompletedConnection xSource = ( com.sun.star.sdb.XCompletedConnection )
-                UnoRuntime.queryInterface( com.sun.star.sdb.XCompletedConnection.class,
+                    xServiceManager.createInstanceWithContext(
+                        "com.sun.star.sdb.DatabaseContext", getContext()) );
+            com.sun.star.sdb.XCompletedConnection xSource =
+                (com.sun.star.sdb.XCompletedConnection)UnoRuntime.queryInterface(
+                    com.sun.star.sdb.XCompletedConnection.class,
                     xContext.getByName( aDatabase ) );
-            com.sun.star.task.XInteractionHandler xHandler = ( com.sun.star.task.XInteractionHandler )
-                UnoRuntime.queryInterface( com.sun.star.task.XInteractionHandler.class,
-                    xServiceManager.createInstance( "com.sun.star.sdb.InteractionHandler" ) );
-            com.sun.star.sdbcx.XTablesSupplier xSupplier = ( com.sun.star.sdbcx.XTablesSupplier )
-                UnoRuntime.queryInterface( com.sun.star.sdbcx.XTablesSupplier.class,
+            com.sun.star.task.XInteractionHandler xHandler =
+                (com.sun.star.task.XInteractionHandler)UnoRuntime.queryInterface(
+                    com.sun.star.task.XInteractionHandler.class,
+                    xServiceManager.createInstanceWithContext(
+                        "com.sun.star.sdb.InteractionHandler", getContext()) );
+            com.sun.star.sdbcx.XTablesSupplier xSupplier =
+                (com.sun.star.sdbcx.XTablesSupplier)UnoRuntime.queryInterface(
+                    com.sun.star.sdbcx.XTablesSupplier.class,
                     xSource.connectWithCompletion( xHandler ) );
             com.sun.star.container.XNameAccess xTables = xSupplier.getTables();
             String[] aNames = xTables.getElementNames();
@@ -1335,13 +1348,15 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
     private void doFunctionAccessSamples() throws RuntimeException, Exception
     {
         System.out.println( "\n*** Samples for function handling ***\n" );
-        com.sun.star.lang.XMultiServiceFactory xServiceManager = getServiceManager();
+        com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
 
 
         // --- Calculate a function ---
-        Object aFuncInst = xServiceManager.createInstance( "com.sun.star.sheet.FunctionAccess" );
-        com.sun.star.sheet.XFunctionAccess xFuncAcc = (com.sun.star.sheet.XFunctionAccess)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XFunctionAccess.class, aFuncInst );
+        Object aFuncInst = xServiceManager.createInstanceWithContext(
+            "com.sun.star.sheet.FunctionAccess", getContext());
+        com.sun.star.sheet.XFunctionAccess xFuncAcc =
+            (com.sun.star.sheet.XFunctionAccess)UnoRuntime.queryInterface(
+                com.sun.star.sheet.XFunctionAccess.class, aFuncInst );
         // put the data in a two-dimensional array
         double[][] aData = { { 1.0, 2.0, 3.0 } };
         // construct the array of function arguments
@@ -1354,20 +1369,25 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- Get the list of recently used functions ---
-        Object aRecInst = xServiceManager.createInstance( "com.sun.star.sheet.RecentFunctions" );
-        com.sun.star.sheet.XRecentFunctions xRecFunc = (com.sun.star.sheet.XRecentFunctions)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XRecentFunctions.class, aRecInst );
+        Object aRecInst = xServiceManager.createInstanceWithContext(
+            "com.sun.star.sheet.RecentFunctions", getContext());
+        com.sun.star.sheet.XRecentFunctions xRecFunc =
+            (com.sun.star.sheet.XRecentFunctions)UnoRuntime.queryInterface(
+                com.sun.star.sheet.XRecentFunctions.class, aRecInst );
         int[] nRecentIds = xRecFunc.getRecentFunctionIds();
 
 
         // --- Get the names for these functions ---
-        Object aDescInst = xServiceManager.createInstance( "com.sun.star.sheet.FunctionDescriptions" );
-        com.sun.star.sheet.XFunctionDescriptions xFuncDesc = (com.sun.star.sheet.XFunctionDescriptions)
-            UnoRuntime.queryInterface( com.sun.star.sheet.XFunctionDescriptions.class, aDescInst );
+        Object aDescInst = xServiceManager.createInstanceWithContext(
+            "com.sun.star.sheet.FunctionDescriptions", getContext());
+        com.sun.star.sheet.XFunctionDescriptions xFuncDesc =
+            (com.sun.star.sheet.XFunctionDescriptions)UnoRuntime.queryInterface(
+                com.sun.star.sheet.XFunctionDescriptions.class, aDescInst );
         System.out.print("Recently used functions: ");
         for (int nFunction=0; nFunction<nRecentIds.length; nFunction++)
         {
-            com.sun.star.beans.PropertyValue[] aProperties = xFuncDesc.getById( nRecentIds[nFunction] );
+            com.sun.star.beans.PropertyValue[] aProperties =
+                xFuncDesc.getById( nRecentIds[nFunction] );
             for (int nProp=0; nProp<aProperties.length; nProp++)
                 if ( aProperties[nProp].Name.equals( "Name" ) )
                     System.out.print( aProperties[nProp].Value + " " );
@@ -1380,16 +1400,19 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
     private void doApplicationSettingsSamples() throws RuntimeException, Exception
     {
         System.out.println( "\n*** Samples for application settings ***\n" );
-        com.sun.star.lang.XMultiServiceFactory xServiceManager = getServiceManager();
+        com.sun.star.lang.XMultiComponentFactory xServiceManager = getServiceManager();
 
 
         // --- Get the user defined sort lists ---
-        Object aSettings = xServiceManager.createInstance( "com.sun.star.sheet.GlobalSheetSettings" );
-        com.sun.star.beans.XPropertySet xPropSet = (com.sun.star.beans.XPropertySet)
-            UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, aSettings );
+        Object aSettings = xServiceManager.createInstanceWithContext(
+            "com.sun.star.sheet.GlobalSheetSettings", getContext());
+        com.sun.star.beans.XPropertySet xPropSet =
+            (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, aSettings );
         AnyConverter aAnyConv = new AnyConverter();
         String[] aEntries = (String[])
-            aAnyConv.toObject(String[].class, xPropSet.getPropertyValue( "UserLists" ));
+            aAnyConv.toObject(String[].class,
+                              xPropSet.getPropertyValue( "UserLists" ));
         System.out.println("User defined sort lists:");
         for ( int i=0; i<aEntries.length; i++ )
             System.out.println( aEntries[i] );
