@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
+ *  last change: $Author: pl $ $Date: 2001-06-29 15:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2397,7 +2397,9 @@ void SelectionManager::dragDoDispatch()
     while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( m_aDragExecuteThread ) )
     {
         osl_yieldThread();
-        dispatchEvent( 200 );
+        // let the thread in the run method do the dispatching
+        // just look occasionally here whether drop timed out or is completed
+        poll( NULL, 0, 200 );
     }
     oslThread aThread = m_aDragExecuteThread;
 #ifdef DEBUG
