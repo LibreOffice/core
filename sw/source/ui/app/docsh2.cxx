@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2004-04-20 13:32:34 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,7 +1036,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         aTempFile.EnableKillingFile();
                         pSrcView->SaveContent(aTempFile.GetURL());
                         bDone = TRUE;
-                        SetActualSize(pSrcView->GetEditWin().GetSizePixel());
                         SfxEventConfiguration* pEvent = SFX_APP()->GetEventConfig();
                         SvxMacro aMac(aEmptyStr, aEmptyStr, STARBASIC);
                         pEvent->ConfigureEvent(SFX_EVENT_OPENDOC,       aMac, this);
