@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.121 $
+#   $Revision: 1.122 $
 #
-#   last change: $Author: vg $ $Date: 2004-10-22 13:19:52 $
+#   last change: $Author: vg $ $Date: 2004-10-22 15:18:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,14 +91,14 @@
     };
 
     ### for XML file format
-    use lib ("/home/vg119683/work/modules");
+    #use lib ("/home/vg119683/work/modules");
     eval { require XMLBuildListParser; import XMLBuildListParser; };
     $enable_xml = 1 if (!$@);
 #### script id #####
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.121 $ ';
+    $id_str = ' $Revision: 1.122 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -461,7 +461,8 @@ sub get_parents_array {
     my $build_list_ref = $build_lists_hash{$module};
 
     if (ref($build_list_ref) eq 'XMLBuildListParser') {
-        return $build_list_ref->getModuleDependencies(split('\s' , $ENV{BUILD_TYPE}));
+        my @modes_array = split('\s' , $ENV{BUILD_TYPE});
+        return $build_list_ref->getModuleDependencies(\@modes_array);
     };
     foreach (@$build_list_ref) {
         if ($_ =~ /#/) {
