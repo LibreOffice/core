@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtasc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 12:40:07 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,50 +265,5 @@ void GetASCWriter( const String& rFltNm, WriterRef& xRet )
 {
   xRet = new SwASCWriter( rFltNm );
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/wrtasc.cxx,v 1.2 2001-01-19 12:40:07 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:53  hr
-      initial import
-
-      Revision 1.61  2000/09/18 16:04:39  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.60  2000/08/04 16:25:32  jp
-      read/write unicode ascii files
-
-      Revision 1.59  2000/05/08 17:37:06  jp
-      Changes for Unicode
-
-      Revision 1.58  2000/03/03 16:23:14  pl
-      #73771# workaround for c50 intel compiler
-
-      Revision 1.57  1999/08/30 08:01:52  JP
-      WriteStream - set lineend string
-
-
-      Rev 1.56   30 Aug 1999 10:01:52   JP
-   WriteStream - set lineend string
-
-      Rev 1.55   26 Aug 1999 20:34:10   JP
-   load and save Text with more options (charset/language/lineend/font)
-
-      Rev 1.54   16 Jun 1999 19:47:26   JP
-   Change interface of base class Writer
-
-      Rev 1.53   04 May 1999 14:59:40   JP
-   FilterExportklasse Writer von SvRef abgeleitet, damit sie immer zerstoert wird
-
-      Rev 1.52   27 Jun 1998 16:01:50   JP
-   Writer mit neuen Flags; fuer den ASCII-Writer, etwas aufgeraeumt
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-02 11:20:58 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2337,103 +2337,4 @@ void Ww1HeaderFooter::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
     }
 }
 
-/***********************************************************************
 
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1filter.cxx,v 1.2 2001-02-02 11:20:58 mtg Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:57  hr
-      initial import
-
-      Revision 1.29  2000/09/18 16:04:56  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.28  2000/05/11 16:06:52  jp
-      Changes for Unicode
-
-      Revision 1.27  2000/02/11 14:39:31  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.26  1999/03/16 11:12:24  JP
-      Task #63047#: keine Abfrage mehr auf ein SVX_TAB_DEFDIST
-
-
-      Rev 1.25   16 Mar 1999 12:12:24   JP
-   Task #63047#: keine Abfrage mehr auf ein SVX_TAB_DEFDIST
-
-      Rev 1.24   17 Nov 1998 10:48:18   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.23   27 Feb 1998 19:29:06   HJS
-   SH 27.02.98
-
-      Rev 1.20   09 Dec 1997 17:04:38   JP
-   neue InhaltsVerzeichnis Poolvorlagen -> neuer MaxLevel
-
-      Rev 1.19   29 Nov 1997 17:37:10   MA
-   includes
-
-      Rev 1.18   21 Nov 1997 17:22:44   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.17   14 Oct 1997 14:17:18   OM
-   Feldumstellung
-
-      Rev 1.16   09 Oct 1997 14:13:46   JP
-   Aenderungen von SH
-
-      Rev 1.15   02 Oct 1997 15:26:00   OM
-   Feldumstellung
-
-      Rev 1.14   29 Sep 1997 12:16:56   OM
-   Feldumstellung
-
-      Rev 1.13   24 Sep 1997 15:25:24   OM
-   Feldumstellung
-
-      Rev 1.12   04 Sep 1997 11:18:00   JP
-   include
-
-      Rev 1.11   03 Sep 1997 14:16:58   SH
-   Flys, Tabellen ok, Style-Abhaengigkeiten u.v.a.m
-
-      Rev 1.10   15 Aug 1997 12:50:36   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.9   12 Aug 1997 14:16:34   OS
-   Header-Umstellung
-
-      Rev 1.8   11 Aug 1997 12:51:02   SH
-   Flys und einfache Tabellen und Tabulatoren
-
-      Rev 1.7   17 Jul 1997 15:20:52   MA
-   Bitmap Typ 99 geht nicht, abgeklemmt
-
-      Rev 1.6   16 Jun 1997 13:08:56   MA
-   Stand Micheal Dietrich
-
-      Rev 1.5   24 Mar 1997 03:04:22   HJS
-   fuer os2 auskommentiert
-
-      Rev 1.4   12 Mar 1997 19:12:18   SH
-   MDT: Progressbar, Pagedesc-Bug, Spalten, Anfang Tabellen u.a.
-
-      Rev 1.3   10 Jan 1997 18:46:30   SH
-   Stabiler und mehr von MDT
-
-      Rev 1.2   28 Nov 1996 18:08:50   SH
-   Schneller Schoener Weiter von MDT
-
-      Rev 1.1   30 Sep 1996 23:23:40   SH
-   neu von MDT
-
-      Rev 1.0   14 Aug 1996 19:32:28   SH
-   Initial revision.
-
-
-***********************************************************************/
-//]})

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascatr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 12:40:07 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,109 +289,3 @@ SwNodeFnTab aASCNodeFnTab = {
 /* RES_OLENODE  */                   0
 };
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/ascatr.cxx,v 1.2 2001-01-19 12:40:07 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:53  hr
-      initial import
-
-      Revision 1.59  2000/09/18 16:04:38  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.58  2000/05/08 17:36:58  jp
-      Changes for Unicode
-
-      Revision 1.57  2000/02/11 14:36:19  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.56  1999/11/01 17:49:58  jp
-      own convert from char to UNICODE char
-
-      Revision 1.55  1999/11/01 11:11:14  jp
-      call string-convert with the CharSet of the font
-
-      Revision 1.54  1999/08/26 18:34:10  JP
-      load and save Text with more options (charset/language/lineend/font)
-
-
-      Rev 1.53   26 Aug 1999 20:34:10   JP
-   load and save Text with more options (charset/language/lineend/font)
-
-      Rev 1.52   27 Jun 1998 16:01:50   JP
-   Writer mit neuen Flags; fuer den ASCII-Writer, etwas aufgeraeumt
-
-      Rev 1.51   27 Jan 1998 19:37:12   HR
-   Ueberfluessige Klammern weg, HPUX mag sie nicht
-
-      Rev 1.50   25 Nov 1997 18:55:18   MA
-   includes
-
-      Rev 1.49   03 Nov 1997 14:03:46   MA
-   precomp entfernt
-
-      Rev 1.48   10 Oct 1997 12:19:46   JP
-   beim Clipboard das letzte CR/LF nicht schreiben
-
-      Rev 1.47   14 Jan 1997 08:43:32   MA
-   includes
-
-      Rev 1.46   23 Oct 1996 19:49:00   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.45   28 Jun 1996 13:59:08   MA
-   includes
-
-      Rev 1.44   03 Apr 1996 12:32:26   JP
-   OutSwTxtNode: nur im letzten Node entscheiden, ob CRLF geschrieben wird
-
-      Rev 1.43   26 Mar 1996 15:24:08   JP
-   Bugfix: unbeannte Zeichen richtig schreiben
-
-      Rev 1.42   13 Feb 1996 19:41:30   JP
-   Bug #25428#: LineEnd von SV holen und entsp. auswerten
-
-      Rev 1.41   31 Jan 1996 14:27:36   mk
-   SINIX
-
-      Rev 1.40   24 Nov 1995 17:24:46   OM
-   PCH->PRECOMPILED
-
-      Rev 1.39   30 Oct 1995 13:03:38   MA
-   chg: ConvertUnknown direkt eingebaut.
-
-      Rev 1.38   02 Oct 1995 13:10:48   JP
-   Umstellung auf schreiben verschiedener CodeSets
-
-      Rev 1.37   25 Oct 1994 15:10:22   MA
-   PreHdr.
-
-      Rev 1.36   21 Jul 1994 09:29:52   JP
-   OutASC_SwTxtNode: fuer den ZeilenUmbruch im Translate die Laenge vom Node
-       benutzen und nicht die vom String. Stehen Felder/Nummern/usw. im String
-       kann es nie passen!
-
-      Rev 1.35   04 Mar 1994 10:58:28   JP
-   Translate: auf const char* casten.
-
-      Rev 1.34   25 Feb 1994 12:54:46   JP
-   schreibe mit expandierten Feldern und Numerierung
-
-      Rev 1.33   15 Feb 1994 08:24:10   MI
-   Filter ab jetzt handsegmentiert
-
-      Rev 1.32   28 Jan 1994 11:28:36   MI
-   TCOV() entfernt, SW_... nach SEG_... umbenannt
-
-      Rev 1.31   13 Jan 1994 08:28:28   MI
-   Segmentierung per #define ermoeglicht
-
-      Rev 1.30   12 Jan 1994 11:22:46   MI
-   Segmentierungs-Probleme
-
-*************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-21 19:08:14 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,63 +1698,3 @@ public:
                Ww1Fields* = 0);
 };
 
-/**********************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1class.hxx,v 1.2 2001-05-21 19:08:14 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:57  hr
-      initial import
-
-      Revision 1.19  2000/09/18 16:04:56  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.18  2000/09/09 12:53:29  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.17  2000/05/11 16:06:48  jp
-      Changes for Unicode
-
-      Revision 1.16  1998/02/19 16:01:14  HJS
-      fuer sh eingechecked
-
-
-      Rev 1.15   19 Feb 1998 17:01:14   HJS
-   fuer sh eingechecked
-
-      Rev 1.12   14 Nov 1997 10:55:28   OS
-   SH-Aenderung fuer Textmarken
-
-      Rev 1.11   09 Oct 1997 14:13:46   JP
-   Aenderungen von SH
-
-      Rev 1.10   03 Sep 1997 14:16:28   SH
-   Flys, Tabellen ok, Style-Abhaengigkeiten u.v.a.m
-
-      Rev 1.9   11 Aug 1997 12:49:26   SH
-   Flys und einfache Tabellen und Tabulatoren
-
-      Rev 1.8   18 Jul 1997 09:31:38   MA
-   Stand von SH, #41738# GPF und Tabellen etwas besser
-
-      Rev 1.5   16 Jun 1997 13:09:04   MA
-   Stand Micheal Dietrich
-
-      Rev 1.4   12 Mar 1997 19:11:24   SH
-   MDT: Progressbar, Pagedesc-Bug, Spalten, Anfang Tabellen u.a.
-
-      Rev 1.3   10 Jan 1997 18:43:58   SH
-   Stabiler und mehr von MDT
-
-      Rev 1.2   28 Nov 1996 18:08:06   SH
-   Schneller Schoener Weiter von MDT
-
-      Rev 1.1   30 Sep 1996 23:22:18   SH
-   neu von MDA
-
-
-**********************************************************************/

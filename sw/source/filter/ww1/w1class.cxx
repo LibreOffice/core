@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-21 19:08:14 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,73 +1376,4 @@ BOOL Ww1Manager::HasPDxaAbs()
     return aPap.HasId(26); // Ww1SingleSprmPDxaAbs
 }
 
-/**********************************************************************
 
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1class.cxx,v 1.2 2001-05-21 19:08:14 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:57  hr
-      initial import
-
-      Revision 1.19  2000/09/18 16:04:56  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.18  2000/05/11 16:06:45  jp
-      Changes for Unicode
-
-      Revision 1.17  1998/02/19 16:00:42  HJS
-      fuer sh eingechecked
-
-
-      Rev 1.16   19 Feb 1998 17:00:42   HJS
-   fuer sh eingechecked
-
-      Rev 1.15   29 Nov 1997 17:37:08   MA
-   includes
-
-      Rev 1.14   09 Oct 1997 14:13:46   JP
-   Aenderungen von SH
-
-      Rev 1.13   03 Sep 1997 14:15:58   SH
-   Flys, Tabellen ok, Style-Abhaengigkeiten u.v.a.m
-
-      Rev 1.12   11 Aug 1997 12:49:08   SH
-   Flys und einfache Tabellen und Tabulatoren
-
-      Rev 1.11   18 Jul 1997 09:31:38   MA
-   Stand von SH, #41738# GPF und Tabellen etwas besser
-
-      Rev 1.9   16 Jun 1997 13:08:56   MA
-   Stand Micheal Dietrich
-
-      Rev 1.7   12 Mar 1997 19:11:52   SH
-   MDT: Progressbar, Pagedesc-Bug, Spalten, Anfang Tabellen u.a.
-
-      Rev 1.6   10 Jan 1997 18:42:40   SH
-   Stabiler und mehr von MDT
-
-      Rev 1.5   28 Nov 1996 18:08:28   SH
-   Schneller Schoener Weiter von MDT
-
-      Rev 1.4   05 Nov 1996 12:47:28   mda
-   kein io.h unter Unix includen
-
-      Rev 1.3   14 Oct 1996 13:07:12   KH
-   explizite Feldlaenge wg. compiler bug
-
-      Rev 1.2   30 Sep 1996 23:27:52   SH
-   neu von MDA
-
-      Rev 1.1   11 Sep 1996 11:23:40   TRI
-   WIN16 brauchte Cast
-
-      Rev 1.0   10 Sep 1996 02:10:06   SH
-   Initial revision.
-
-
-**********************************************************************/
-//]})

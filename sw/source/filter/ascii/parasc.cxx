@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-19 17:04:14 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,100 +962,4 @@ ULONG SwASCIIParser::ReadChars()
 
 
 #endif
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/parasc.cxx,v 1.3 2001-09-19 17:04:14 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2001/01/19 12:40:07  jp
-      use new stream interface instead of one implementation; Bugfix: #76023#: Textfilter use system charset
-
-      Revision 1.1.1.1  2000/09/18 17:14:53  hr
-      initial import
-
-      Revision 1.25  2000/09/18 16:04:39  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.24  2000/08/04 16:25:28  jp
-      read/write unicode ascii files
-
-      Revision 1.23  2000/05/08 17:37:02  jp
-      Changes for Unicode
-
-      Revision 1.22  2000/03/16 16:42:31  kz
-      chg. include to sfx2/printer
-
-      Revision 1.21  1999/10/25 19:26:58  jp
-      Bug #69048#: dont change LF to #
-
-      Revision 1.20  1999/10/08 16:31:54  jp
-      Bug #69048#: dont change tab to #
-
-      Revision 1.19  1999/08/26 18:34:10  JP
-      load and save Text with more options (charset/language/lineend/font)
-
-
-      Rev 1.18   26 Aug 1999 20:34:10   JP
-   load and save Text with more options (charset/language/lineend/font)
-
-      Rev 1.17   23 Jul 1998 11:11:14   JP
-   Task #52654#: Einfuegen Doc nicht mit einer CrsrShell sondern mit einen PaM
-
-      Rev 1.16   29 Jun 1998 13:01:16   JP
-   SvxFmtBreakItem ohne Flag!
-
-      Rev 1.15   29 Apr 1998 08:17:14   MIB
-   MUSS-Aenderung: SvStream::operator!() faellt weg
-
-      Rev 1.14   27 Feb 1998 09:19:56   JP
-   ObjectDying-MessageItem umbenannt
-
-      Rev 1.13   22 Jan 1998 20:00:10   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.12   30 Oct 1997 17:13:52   AMA
-   Chg: Kein AutoFlag mehr an Break bzw. PageDesc-Attributen
-
-      Rev 1.11   10 Oct 1997 12:20:22   JP
-   Warnings vom Ueberlauf entfernt
-
-      Rev 1.10   09 Oct 1997 14:26:02   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.9   12 Aug 1997 10:06:46   OS
-   Header-Umstellung
-
-      Rev 1.8   07 Aug 1997 15:07:08   OM
-   Headerfile-Umstellung
-
-      Rev 1.7   06 Aug 1997 12:46:52   HJS
-   includes
-
-      Rev 1.6   13 Dec 1996 12:18:58   JP
-   Bug #34482#: nach dem Lesen auf SystemCodeSet umschalten
-
-      Rev 1.5   29 Oct 1996 12:10:24   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.4   09 Oct 1996 17:58:46   MA
-   Progress
-
-      Rev 1.3   28 Jun 1996 13:59:08   MA
-   includes
-
-      Rev 1.2   02 May 1996 11:48:46   JP
-   zum Testen: asynchrones Laden erweitert
-
-      Rev 1.1   30 Apr 1996 12:09:38   JP
-   Vorbereitung fuer asynchrones laden
-
-      Rev 1.0   29 Apr 1996 18:11:00   JP
-   Initial revision.
-
-*************************************************************************/
 

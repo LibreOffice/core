@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfact.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 10:59:14 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,80 +141,5 @@ ULONG SwDocFac::Count() const
     // minus den Grund-SectionNodes
     return pDoc ? pDoc->GetNodes().GetEndOfContent().GetIndex() - 10 : 0;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/basflt/docfact.cxx,v 1.1.1.1 2000-09-19 10:59:14 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.36  2000/09/18 16:04:39  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.35  2000/05/08 16:42:28  jp
-      Changes for Unicode
-
-      Revision 1.34  1999/06/29 10:14:48  KZ
-      ins. #include <tools/ref.hxx>
-
-
-      Rev 1.33   29 Jun 1999 12:14:48   KZ
-   ins. #include <tools/ref.hxx>
-
-      Rev 1.32   25 Nov 1997 19:07:32   MA
-   includes
-
-      Rev 1.31   03 Nov 1997 14:04:36   MA
-   precomp entfernt
-
-      Rev 1.30   09 Oct 1997 14:30:40   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.29   03 Dec 1996 16:55:58   AMA
-   Chg: Der Drucker wird nur im !Browsemodus angelegt.
-
-      Rev 1.28   29 Oct 1996 12:05:40   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.27   28 Jun 1996 14:18:54   MA
-   includes
-
-      Rev 1.26   24 Nov 1995 17:24:12   OM
-   PCH->PRECOMPILED
-
-      Rev 1.25   22 Nov 1995 15:31:34   JP
-   Segementierung - virtual Methoden impl.
-
-      Rev 1.24   02 Oct 1995 18:30:42   JP
-   Durcker ItemSet erweitert
-
-      Rev 1.23   28 Apr 1995 17:05:34   OS
-   Range fuer Printer-Options-Item veraendert
-
-      Rev 1.22   25 Apr 1995 19:41:54   JP
-   ueberfluessige Methoden entfernt (rund um JobSetup)
-
-      Rev 1.21   22 Apr 1995 19:09:04   JP
-   CTOR: AddLink auf vorhandenes Doc; GetDoc: Printer nur auf bedarf anlegen (Bug 11653)
-
-      Rev 1.20   04 Apr 1995 15:05:14   MA
-   unuetze deletez entfernt.
-
-      Rev 1.19   12 Feb 1995 18:14:40   JP
-   GetDoc: falls Printer schon vorhanden ist nicht neu setzen - ClipBoard !!!!
-
-      Rev 1.18   15 Dec 1994 20:49:14   SWG
-   *ARR* Ersetzungen, svmem, __far_data etc.
-
-      Rev 1.17   08 Nov 1994 16:17:58   OK
-   Pre.Hdr gerichtet
-
-      Rev 1.16   03 Nov 1994 17:38:52   PK
-   sfxitemset fuer printer
-
-*************************************************************************/
 
 

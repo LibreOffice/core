@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,64 +897,4 @@ void Ww1SingleSprmPFromText::Start(
 #undef STOP1
 #undef STOP2
 
-/**********************************************************************
 
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1sprm.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.19  2000/09/18 16:04:57  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.18  2000/05/11 16:06:59  jp
-      Changes for Unicode
-
-      Revision 1.17  2000/03/03 15:22:12  os
-      StarView remainders removed
-
-      Revision 1.16  1998/06/29 11:01:32  JP
-      SvxFmtBreakItem ohne Flag!
-
-
-      Rev 1.15   29 Jun 1998 13:01:32   JP
-   SvxFmtBreakItem ohne Flag!
-
-      Rev 1.14   19 Feb 1998 17:01:14   HJS
-   fuer sh eingechecked
-
-      Rev 1.12   29 Nov 1997 17:37:08   MA
-   includes
-
-      Rev 1.11   09 Oct 1997 14:13:48   JP
-   Aenderungen von SH
-
-      Rev 1.6   11 Aug 1997 12:52:20   SH
-   Flys und einfache Tabellen und Tabulatoren
-
-      Rev 1.5   18 Jul 1997 09:31:38   MA
-   Stand von SH, #41738# GPF und Tabellen etwas besser
-
-      Rev 1.4   16 Jun 1997 13:08:56   MA
-   Stand Micheal Dietrich
-
-      Rev 1.3   12 Mar 1997 19:12:54   SH
-   MDT: Progressbar, Pagedesc-Bug, Spalten, Anfang Tabellen u.a.
-
-      Rev 1.2   13 Jan 1997 16:42:02   NF
-   __READONLY_DATA fÅr Win16 korrigiert: Typ __READONLY_DATA identifier ...
-
-      Rev 1.1   10 Jan 1997 18:47:34   SH
-   Stabiler und mehr von MDT
-
-      Rev 1.0   28 Nov 1996 18:09:30   SH
-   Schneller Schoener Weiter von MDT
-
-      Rev 1.0   14 Aug 1996 19:32:28   SH
-   Initial revision.
-
-
-**********************************************************************/
-//]})

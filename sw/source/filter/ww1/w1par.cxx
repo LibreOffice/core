@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1par.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:13:10 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,76 +190,3 @@ Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, BOOL bNew, ULONG nFieldFlags)
 }
 
 
-
-/**********************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/w1par.cxx,v 1.2 2000-11-20 14:13:10 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:58  hr
-      initial import
-
-      Revision 1.20  2000/09/18 16:04:57  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.19  2000/05/15 16:37:48  jp
-      Changes for Unicode
-
-      Revision 1.18  2000/05/11 16:07:43  jp
-      Changes for Unicode
-
-      Revision 1.17  1998/07/23 09:13:52  JP
-      Task #52654#: Einfuegen Doc nicht mit einer CrsrShell sondern mit einen PaM
-
-
-      Rev 1.16   23 Jul 1998 11:13:52   JP
-   Task #52654#: Einfuegen Doc nicht mit einer CrsrShell sondern mit einen PaM
-
-      Rev 1.15   27 Feb 1998 19:29:46   HJS
-   SH 27.02.98
-
-      Rev 1.13   29 Nov 1997 17:37:08   MA
-   includes
-
-      Rev 1.12   09 Oct 1997 14:13:48   JP
-   Aenderungen von SH
-
-      Rev 1.11   04 Sep 1997 12:37:38   JP
-   Umstellungen fuer FilterDetection im SwModule und SwDLL
-
-      Rev 1.10   03 Sep 1997 14:14:24   SH
-   Flys, Tabellen ok, Style-Abhaengigkeiten u.v.a.m
-
-      Rev 1.9   12 Aug 1997 14:16:36   OS
-   Header-Umstellung
-
-      Rev 1.8   11 Aug 1997 14:07:32   OM
-   Headerfile-Umstellung
-
-      Rev 1.7   16 Jun 1997 13:08:58   MA
-   Stand Micheal Dietrich
-
-      Rev 1.6   12 Mar 1997 19:12:40   SH
-   MDT: Progressbar, Pagedesc-Bug, Spalten, Anfang Tabellen u.a.
-
-      Rev 1.5   10 Jan 1997 18:47:12   SH
-   Stabiler und mehr von MDT
-
-      Rev 1.4   28 Nov 1996 18:09:18   SH
-   Schneller Schoener Weiter von MDT
-
-      Rev 1.3   18 Oct 1996 10:58:36   JP
-   aufbreitet fuer PRJPCH
-
-      Rev 1.2   30 Sep 1996 23:24:10   SH
-   neu von MDA
-
-      Rev 1.0   14 Aug 1996 19:32:28   SH
-   Initial revision.
-
-**********************************************************************/
-//]})
