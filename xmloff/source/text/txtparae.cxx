@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-05 08:32:07 $
+ *  last change: $Author: vg $ $Date: 2001-09-06 09:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ enum eParagraphPropertyNamesEnumAuto
 {
     NUMBERING_RULES_AUTO = 0,
     PARA_CONDITIONAL_STYLE_NAME_AUTO = 1,
-    PARA_STYLE_NAME_AUTO = 2,
+    PARA_STYLE_NAME_AUTO = 2
 };
 
 static const sal_Char* aParagraphPropertyNames[] =
