@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:34:38 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <ary_i/d_token.hxx>
 #include <toolkit/out_tree.hxx>
 #include <adc_cl.hxx>
+#include <adc_msg.hxx>
 #include "hfi_typetext.hxx"
 #include "hi_ary.hxx"
 #include "hi_env.hxx"
@@ -252,12 +253,19 @@ HF_IdlDocuTextDisplay::Display_TextToken( const csi::dsapi::DT_TextToken & i_rTo
         }
         else
         {
-            Cerr() << "Error in documentation: Too many or too few tokens for a link in <member> or <type>." << Endl();
-            Cerr() << "  Link won't be created, but all tokens shown plain." << Endl();
-            Cerr() << "  \"" << sLinkToken << "\"";
-            if ( pScopeGivingCe != 0 )
-                Cerr() << " in " << pScopeGivingCe->LocalName();
-            Cerr() << Endl();
+            if ( pScopeGivingCe == 0 )
+            {   // only in original file
+                TheMessages().Out_TypeVsMemberMisuse(sLinkToken, Env().CurPageCe_AsText(), 0);
+            }
+            else
+            {
+                Cerr() << "Error in documentation: Too many or too few tokens for a link in <member> or <type>." << Endl();
+                Cerr() << "  Link won't be created, but all tokens shown plain." << Endl();
+                Cerr() << "  \"" << sLinkToken << "\"";
+                if ( pScopeGivingCe != 0 )
+                    Cerr() << " in " << pScopeGivingCe->LocalName();
+                Cerr() << Endl();
+            }
             StopLinkGathering();
         }
     }   // endif (bGatherLink)
@@ -330,11 +338,7 @@ HF_IdlDocuTextDisplay::CreateTypeLink()
 {
     if (strchr(sLinkToken,':') != 0)
     {
-         Cerr() << "Warning: Qualified name (probably member) \""
-                << sLinkToken
-                << "\" found in <type> tag in "
-               << Env().CurPageCe_AsText()
-               << Endl();
+        TheMessages().Out_TypeVsMemberMisuse(sLinkToken, Env().CurPageCe_AsFile(".idl"), 0);
         CurOut() << sLinkToken;
         return;
     }
