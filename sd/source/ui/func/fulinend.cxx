@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:16:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                     SdDrawDocument* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
