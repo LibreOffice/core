@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:25:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
 #endif
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -107,7 +111,7 @@ SV_DECL_REF(DrawDocShell)
 |*
 \************************************************************************/
 
-class SdPageObjsTLB : public SvTreeListBox
+class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
@@ -125,13 +129,13 @@ public:
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
 
-        virtual             ~SdPageObjsTransferable();
+        SD_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        virtual void        DragFinished( sal_Int8 nDropAction );
+        SD_DLLPRIVATE virtual void      AddSupportedFormats();
+        SD_DLLPRIVATE virtual sal_Bool  GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        SD_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction );
 
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+        SD_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 
     public:
 
