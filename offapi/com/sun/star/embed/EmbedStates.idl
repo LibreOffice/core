@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EmbedStates.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:22:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,65 +62,72 @@
 #define __com_sun_star_embed_EmbedStates_idl__
 
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module embed {
 
-//=============================================================================
-/** There are possible states for a contained object.
-
-    @see XEmbeddedObject
+//============================================================================
+/** This constant set contains possible states for
+<type>EmbeddedObject</type>.
 */
 constants EmbedStates
 {
-    //-------------------------------------------------------------------------
-    /** "Loaded" - the persistent representation of the object is loaded in memory
+    //------------------------------------------------------------------------
+    /** "Loaded" - the persistent representation of the object is loaded in
+        memory.
 
-    <p> the object is created and assigned with a persistent entry,
-    and a view representation ( metafile and etc. ) can be retrieved ( if there is any ).
-    </p>
-
+        <p>
+        The object is created and assigned with a persistent entry,
+        and a view representation ( metafile and etc. ) can be retrieved
+        ( if there is any ).
+        </p>
      */
-    const long EMBED_LOADED = 0;
+    const long LOADED = 0;
 
-    //-------------------------------------------------------------------------
-    /** "Running" - the object is connected and loaded
+    //------------------------------------------------------------------------
+    /** "Running" - the object is connected and loaded.
 
-    <p> the object has a connection to the container client and a component loaded from persistent entry;
-    in case of internal document it also means existing of document model( XModel interface implementation ).
-    </p>
-
+        <p>
+        The object has a connection to the container client and a component
+        loaded from persistent entry. In case of internal document it also
+        means existing of document model that implements
+        <type scope="com::sun::star::frame">XModel</type> interface.
+        </p>
      */
-    const long EMBED_RUNNING = 1;
+    const long RUNNING = 1;
 
-    //-------------------------------------------------------------------------
-    /** "Active" - the object is activated in separate window ( outplace activation ).
+    //------------------------------------------------------------------------
+    /** "Active" - the object is activated in separate window
+        ( outplace activation ).
      */
-    const long EMBED_ACTIVE = 2;
+    const long ACTIVE = 2;
 
-    //-------------------------------------------------------------------------
-    /** "Inplace active" - the object has own window in the container's window
+    //------------------------------------------------------------------------
+    /** "Inplace active" - the object has own window in the container's
+        window.
 
-    <p> the object is activated and has it's own window in the container's window
-    that allows object to process mouse events and control own rendering.
-    </p>
-
+        <p>
+        The object is activated and has it's own window in the container's
+        window that allows object to process mouse events and control own
+        rendering.
+        </p>
      */
-    const long EMBED_INPLACE_ACTIVE = 3;
+    const long INPLACE_ACTIVE = 3;
 
-    //-------------------------------------------------------------------------
-    /** "UI active" - the inplace active object that has user interface
+    //------------------------------------------------------------------------
+    /** "UI active" - the inplace active object that has user interface.
 
-    <p> the object is inplace active, allowed to have menues, toolbars, keyboard accelerators, and has the focus.
-    </p>
-
+        <p>
+        The object is inplace active, allowed to have menues, toolbars,
+        keyboard accelerators, and has the focus.
+        </p>
      */
-    const long EMBED_UI_ACTIVE = 4;
-
+    const long UI_ACTIVE = 4;
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
 #endif
+
