@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:38:17 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,10 @@ TabPage RID_SFXPAGE_GENERAL
     Text [ dutch ] = "Gebruikersgegevens" ;
     Text [ portuguese_brazilian ] = "Benutzerdaten" ;
     Text [ portuguese ] = "Dados de utilizador" ;
-    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÊı¾İ";
+    Text[ chinese_simplified ] = "ä½¿ç”¨è€…æ•°æ®";
     Text[ russian ] = "Äàííûå ïîëüçîâàòåëÿ";
     Text[ polish ] = "Dane u¿ytkownika";
-    Text[ japanese ] = "Õ°»Ş°ÃŞ°À";
+    Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°ï¾ƒï¾ï½°ï¾€";
     FixedText FT_COMPANY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
@@ -109,14 +109,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "~Firma" ;
         Text [ spanish ] = "E~mpresa" ;
         Text [ english_us ] = "~Company" ;
-        Text[ chinese_simplified ] = "¹«Ë¾(~C)";
+        Text[ chinese_simplified ] = "å…¬å¸(~C)";
         Text[ russian ] = "Îğãàíèçàöèÿ";
         Text[ polish ] = "Firma";
-        Text[ japanese ] = "‰ïĞ–¼(~C)";
-        Text[ chinese_traditional ] = "¤½¥q(~C)";
+        Text[ japanese ] = "ä¼šç¤¾å(~C)";
+        Text[ chinese_traditional ] = "å…¬å¸(~C)";
         Text[ arabic ] = "ÇáÔÑßÉ";
         Text[ greek ] = "Å~ôáéñßá";
-        Text[ korean ] = "È¸»ç(~C)";
+        Text[ korean ] = "íšŒì‚¬(~C)";
         Text[ turkish ] = "Şirket";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~mpresa";
@@ -145,14 +145,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "~Voor-/Naam/Initialen" ;
         Text [ spanish ] = "Nom~bre/Apellidos/Iniciales" ;
         Text [ english_us ] = "First/Last ~name/Initials" ;
-        Text[ chinese_simplified ] = "Ãû×Ö/ĞÕÊÏ/ËõĞ´(~N)";
+        Text[ chinese_simplified ] = "åå­—/å§“æ°/ç¼©å†™(~N)";
         Text[ russian ] = "Èìÿ/Ôàìèëèÿ/Èíèöèàëû";
         Text[ polish ] = "I~miê/Nazwisko/Inicja³y";
-        Text[ japanese ] = "–¼/©/²Æ¼¬Ù(~N)";
-        Text[ chinese_traditional ] = "¦W¦r/©m¤ó/ÁY¼g(~N)";
+        Text[ japanese ] = "å/å§“/ï½²ï¾†ï½¼ï½¬ï¾™(~N)";
+        Text[ chinese_traditional ] = "åå­—/å§“æ°/ç¸®å¯«(~N)";
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ";
         Text[ greek ] = "¼íïìá/Åğşíõìï/Áñ~÷éêÜ";
-        Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ´Ï¼È(~N)";
+        Text[ korean ] = "ì´ë¦„/ì„±/ì´ë‹ˆì…œ(~N)";
         Text[ turkish ] = "~Ad/Soyad/Başharfler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom~bre/Apellidos/Iniciales";
@@ -174,7 +174,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ danish ] = " ";
         Text[ portuguese_brazilian ] = "~Father/First/Last/Id";
         Text[ japanese ] = " ";
-        Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ¸§/¸Ó¸®±ÛÀÚ";
+        Text[ korean ] = "ì´ë¦„/ì„±/ì´ë¦„/ë¨¸ë¦¬ê¸€ì";
         Text[ chinese_traditional ] = " ";
         Text[ turkish ] = "~Baba adı/Ad/Soyad/Başharfler";
         Text[ english_us ] = " ";
@@ -227,14 +227,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "~Straat" ;
         Text [ spanish ] = "~Calle" ;
         Text [ english_us ] = "~Street" ;
-        Text[ chinese_simplified ] = "½ÖµÀ(~S)";
+        Text[ chinese_simplified ] = "è¡—é“(~S)";
         Text[ russian ] = "Óëèöà";
         Text[ polish ] = "Ulica";
-        Text[ japanese ] = "s’¬‘º–¼ ”Ô’n(~S)";
-        Text[ chinese_traditional ] = "µó¹D(~S)";
+        Text[ japanese ] = "å¸‚ç”ºæ‘å ç•ªåœ°(~S)";
+        Text[ chinese_traditional ] = "è¡—é“(~S)";
         Text[ arabic ] = "ÇáÔÇÑÚ";
         Text[ greek ] = "Ïäüò";
-        Text[ korean ] = "°Å¸® ¹øÁö¼ö(~S)";
+        Text[ korean ] = "ê±°ë¦¬ ë²ˆì§€ìˆ˜(~S)";
         Text[ turkish ] = "Cadde";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Calle";
@@ -257,7 +257,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "-";
         Text[ portuguese_brazilian ] = "~Street/Apartmentnumber";
         Text[ japanese ] = " ";
-        Text[ korean ] = "°Å¸® ÀÌ¸§/°Ç¹° È£¼ö";
+        Text[ korean ] = "ê±°ë¦¬ ì´ë¦„/ê±´ë¬¼ í˜¸ìˆ˜";
         Text[ chinese_traditional ] = " ";
         Text[ turkish ] = "Cadde/No.";
         Text[ english_us ] = " ";
@@ -297,12 +297,12 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "Postnr/~Ort";
         Text[ polish ] = "Kod pocztowy/Miejscowoœæ";
         Text[ portuguese_brazilian ] = "~Zip/City";
-        Text[ japanese ] = "—X•Ö”Ô†/“s“¹•{Œ§–¼";
-        Text[ chinese_simplified ] = "ÓÊ±à/³ÇÊĞ";
-        Text[ chinese_traditional ] = "¶l»¼°Ï¸¹/«°¥«";
+        Text[ japanese ] = "éƒµä¾¿ç•ªå·/éƒ½é“åºœçœŒå";
+        Text[ chinese_simplified ] = "é‚®ç¼–/åŸå¸‚";
+        Text[ chinese_traditional ] = "éƒµéå€è™Ÿ/åŸå¸‚";
         Text[ arabic ] = "ÇáÑãÒ ÇáÈÑíÏí/ÇáãÏíäÉ";
         Text[ greek ] = "Ô.Ê./Ğüëç";
-        Text[ korean ] = "¿ìÆí¹øÈ£/µµ½Ã";
+        Text[ korean ] = "ìš°í¸ë²ˆí˜¸/ë„ì‹œ";
         Text[ turkish ] = "Posta kodu/şehir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "CP/C~iudad";
@@ -356,12 +356,12 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "~Land";
         Text[ polish ] = "Pañstwo";
         Text[ portuguese_brazilian ] = "Pa?s/~CEP/Cidade";
-        Text[ japanese ] = "‘–¼";
-        Text[ chinese_simplified ] = "¹ú¼Ò(~L)";
-        Text[ chinese_traditional ] = "°ê®a(~L)";
+        Text[ japanese ] = "å›½å";
+        Text[ chinese_simplified ] = "å›½å®¶(~L)";
+        Text[ chinese_traditional ] = "åœ‹å®¶(~L)";
         Text[ arabic ] = "ÇáÈáÏ";
         Text[ greek ] = "×şñá";
-        Text[ korean ] = "±¹°¡";
+        Text[ korean ] = "êµ­ê°€";
         Text[ turkish ] = "Ülke";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~País";
@@ -389,14 +389,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ danish ] = "Titel/Stilling" ;
         Text [ portuguese_brazilian ] = "~Titel/Position" ;
         Text [ portuguese ] = "~Título/Posição" ;
-        Text[ chinese_simplified ] = "Í·ÏÎ/Ö°Îñ(~T)";
+        Text[ chinese_simplified ] = "å¤´è¡”/èŒåŠ¡(~T)";
         Text[ russian ] = "Òèòóë/Äîëæíîñòü";
         Text[ polish ] = "Tytu³/Stanowisko";
-        Text[ japanese ] = "Œ¨‘‚«/•”(~T)";
-        Text[ chinese_traditional ] = "ÀY»Î/Â¾°È(~T)";
+        Text[ japanese ] = "è‚©æ›¸ã/éƒ¨ç½²(~T)";
+        Text[ chinese_traditional ] = "é ­éŠœ/è·å‹™(~T)";
         Text[ arabic ] = "ÇáãÓãì ÇáæÙíİí/ÇáãÑßÒ";
         Text[ greek ] = "Ôßôëïò/Èİóç";
-        Text[ korean ] = "Á÷ÇÔ/Á÷À§(~T)";
+        Text[ korean ] = "ì§í•¨/ì§ìœ„(~T)";
         Text[ turkish ] = "~Unvan/Pozisyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título/p~osición";
@@ -432,14 +432,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ spanish ] = "~Tel. (Privado/trabajo)" ;
         Text [ english_us ] = "Tel. (Home/Work)" ;
         LeftLabel = TRUE ;
-        Text[ chinese_simplified ] = "µç»°(Ë½ÈË/°ì¹«ÊÒ)(~E)";
+        Text[ chinese_simplified ] = "ç”µè¯(ç§äºº/åŠå…¬å®¤)(~E)";
         Text[ russian ] = "Òåëåôîí (äîì./ñëóæ.)";
         Text[ polish ] = "Tel. (pryw./s³u¿b.)";
-        Text[ japanese ] = "Tel.(©‘î/‰ïĞ)";
-        Text[ chinese_traditional ] = "¹q¸Ü(¨p¤H/¿ì¤½«Ç)(~E)";
+        Text[ japanese ] = "Tel.(è‡ªå®…/ä¼šç¤¾)";
+        Text[ chinese_traditional ] = "é›»è©±(ç§äºº/è¾¦å…¬å®¤)(~E)";
         Text[ arabic ] = "ÇáåÇÊİ (ãäÒá/Úãá)";
         Text[ greek ] = "Ôçë. (Ïéêßá/Åñãáóßá)";
-        Text[ korean ] = "Tel. (ÀÚÅÃ/È¸»ç)";
+        Text[ korean ] = "Tel. (ìíƒ/íšŒì‚¬)";
         Text[ turkish ] = "Tlf. (Ev/İş)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tel. (Privado/trabajo)";
@@ -474,14 +474,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "Fa~x/e-mail" ;
         Text [ spanish ] = "Fa~x/E-mail" ;
         Text [ english_us ] = "Fa~x / E-mail" ;
-        Text[ chinese_simplified ] = "´«Õæ/µç×ÓÓÊ¼ş(~X)";
+        Text[ chinese_simplified ] = "ä¼ çœŸ/ç”µå­é‚®ä»¶(~X)";
         Text[ russian ] = "Ôàêñ ¹/Àäğåñ ıë. ïî÷òû";
         Text[ polish ] = "Faks/e-mail";
         Text[ japanese ] = "Fa~x/E-mail";
-        Text[ chinese_traditional ] = "¶Ç¯u/¹q¤l¶l¥ó(~X)";
+        Text[ chinese_traditional ] = "å‚³çœŸ/é›»å­éƒµä»¶(~X)";
         Text[ arabic ] = "İÇßÓ/ÈÑíÏ ÅáßÊÑæäí";
         Text[ greek ] = "Fax/E-mail";
-        Text[ korean ] = "ÆÑ½º/E-mail(~X)";
+        Text[ korean ] = "íŒ©ìŠ¤/E-mail(~X)";
         Text[ turkish ] = "Faks/e-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fa~x/E-mail";
@@ -515,14 +515,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "Adres  " ;
         Text [ spanish ] = "Dirección " ;
         Text [ english_us ] = "Address " ;
-        Text[ chinese_simplified ] = " µØÖ· ";
+        Text[ chinese_simplified ] = " åœ°å€ ";
         Text[ russian ] = "Àäğåñ ";
         Text[ polish ] = "Adres ";
-        Text[ japanese ] = "ZŠ ";
-        Text[ chinese_traditional ] = " ¦a§} ";
+        Text[ japanese ] = "ä½æ‰€ ";
+        Text[ chinese_traditional ] = " åœ°å€ ";
         Text[ arabic ] = "ÇáÚäæÇä ";
         Text[ greek ] = "Äéåıèõíóç ";
-        Text[ korean ] = "ÁÖ¼Ò ";
+        Text[ korean ] = "ì£¼ì†Œ ";
         Text[ turkish ] = "Adres ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "  Dirección ";
@@ -543,14 +543,14 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ portuguese ] = "Usar ~dados para as propriedades do documento" ;
         Text[ portuguese_brazilian ] = "~Daten f? Dokumenteigenschaften verwenden";
         Text[ danish ] = "Brug data for dokumentegenskaber";
-        Text[ chinese_simplified ] = "Ê¹ÓÃÎÄµµÊôĞÔµÄÊı¾İ";
+        Text[ chinese_simplified ] = "ä½¿ç”¨æ–‡æ¡£å±æ€§çš„æ•°æ®";
         Text[ russian ] = "Èñïîëüçîâàòü äàííûå äëÿ ñâîéñòâ äîêóìåíòà";
         Text[ polish ] = "U¿yj danych dla w³aœciwoœci dokumentów";
-        Text[ japanese ] = "ÄŞ·­ÒİÄ‘®«‚ÌÃŞ°À‚ğg—p";
-        Text[ chinese_traditional ] = "¨Ï¥Î¤å¥óÄİ©Êªº¸ê®Æ";
+        Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„å±æ€§ã®ï¾ƒï¾ï½°ï¾€ã‚’ä½¿ç”¨";
+        Text[ chinese_traditional ] = "ä½¿ç”¨æ–‡ä»¶å±¬æ€§çš„è³‡æ–™";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÈíÇäÇÊ ÎÕÇÆÕ ÇáãÓÊäÏ";
         Text[ greek ] = "×ñŞóç äåäïìİíùí ãéá ôéò éäéüôçôåò ôïõ åããñÜöïõ";
-        Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸¿ë µ¥ÀÌÅÍ »ç¿ë";
+        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ì •ë³´ìš© ë°ì´í„° ì‚¬ìš©";
         Text[ turkish ] = "Verileri belge özellikleri için kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usar ~datos para las propiedades del documento";
@@ -573,12 +573,12 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "~Ort/Land/Postnr";
         Text[ polish ] = "Ulica/Województwo/Kod pocztowy";
         Text[ portuguese_brazilian ] = "Staat/PLZ/~L.";
-        Text[ japanese ] = "“s“¹•{Œ§–¼/B–¼/—X•Ö”Ô†";
-        Text[ chinese_simplified ] = "½ÖµÀ/¹ú¼Ò/ÓÊ±à(~S)";
-        Text[ chinese_traditional ] = "µó¹D/°ê®a/¶l»¼°Ï¸¹(~S)";
+        Text[ japanese ] = "éƒ½é“åºœçœŒå/å·å/éƒµä¾¿ç•ªå·";
+        Text[ chinese_simplified ] = "è¡—é“/å›½å®¶/é‚®ç¼–(~S)";
+        Text[ chinese_traditional ] = "è¡—é“/åœ‹å®¶/éƒµéå€è™Ÿ(~S)";
         Text[ arabic ] = "ÇáãÏíäÉ/ÇáÈáÏ/ÇáÑãÒ ÇáÈÑíÏí";
         Text[ greek ] = "Ğüëç/×şñá/Ô.Ê.";
-        Text[ korean ] = "µµ½Ã/±¹°¡/¿ìÆí¹øÈ£";
+        Text[ korean ] = "ë„ì‹œ/êµ­ê°€/ìš°í¸ë²ˆí˜¸";
         Text[ turkish ] = "Şehir/Ülke/Posta kodu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ciudad/País/CP";
@@ -599,21 +599,21 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "Observera att gatu- och postadress används för beräkningen av registreringsnyckeln. Fram till registreringen kan användardata inte ändras. Vill du ändra de här användardata nu?";
         Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podanie nazwy ulicy, kodu pocztowego i miejscowoœci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji danych tych nie bêdzie mo¿na zmieniæ. Czy chcesz je zmieniæ teraz?";
         Text[ portuguese_brazilian ] = "Bitte beachten Sie, da? Stra?e, Postleitzahl und Ort f? die Berechnung des Registrierungsschl?sels herangezogen werden. Bis zur Registrierung k?nen diese Benutzerdaten nicht mehr ge?ndert werden.  Wollen Sie diese Benutzerdaten jetzt noch ?ndern?";
-        Text[ japanese ] = "s’¬‘º–¼A—X•Ö”Ô†A“s“¹•{Œ§–¼‚Í“o˜^·°‚ğ”­s‚·‚éè‚ª‚©‚è‚Æ‚È‚è‚Ü‚·B“o˜^‚ªÏ‚Ş‚Ü‚Å‚ÍÕ°»Ş°ÃŞ°À‚Í•ÏX‚Å‚«‚Ü‚¹‚ñB‚±‚ÌÕ°»Ş°ÃŞ°À‚ğ¡•ÏX‚µ‚Ü‚·‚©H";
-        Text[ chinese_simplified ] = "Çë×¢Òâ£º½ÖµÀ£¬ÓÊ±àºÍ³ÇÊĞÊÇÓÃÀ´Éú³É×¢²áÃÜÂëµÄÊı¾İ¡£ÔÚÕıÊ½×¢²áÇ°Äú²»ÄÜÔÙ¸ü¸ÄÕâĞ©Ê¹ÓÃÕß×ÊÁÏ¡£ÄúÏÖÔÚÒª¸ü¸ÄÕâĞ©Ê¹ÓÃÕß×ÊÁÏÂğ£¿";
-        Text[ chinese_traditional ] = "½Ğµù·N±z¿é¤Jªºµó¹D¤Î«°¥«µ¥¸ê®Æ¬O¥Î¨Ó²£¥Íµù¥UÁä½X¡C¥¿¦¡µù¥U®É±z¤£¯à­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡C±z²{¦b­n­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡H";
+        Text[ japanese ] = "å¸‚ç”ºæ‘åã€éƒµä¾¿ç•ªå·ã€éƒ½é“åºœçœŒåã¯ç™»éŒ²ï½·ï½°ã‚’ç™ºè¡Œã™ã‚‹æ‰‹ãŒã‹ã‚Šã¨ãªã‚Šã¾ã™ã€‚ç™»éŒ²ãŒæ¸ˆã‚€ã¾ã§ã¯ï¾•ï½°ï½»ï¾ï½°ï¾ƒï¾ï½°ï¾€ã¯å¤‰æ›´ã§ãã¾ã›ã‚“ã€‚ã“ã®ï¾•ï½°ï½»ï¾ï½°ï¾ƒï¾ï½°ï¾€ã‚’ä»Šå¤‰æ›´ã—ã¾ã™ã‹ï¼Ÿ";
+        Text[ chinese_simplified ] = "è¯·æ³¨æ„ï¼šè¡—é“ï¼Œé‚®ç¼–å’ŒåŸå¸‚æ˜¯ç”¨æ¥ç”Ÿæˆæ³¨å†Œå¯†ç çš„æ•°æ®ã€‚åœ¨æ­£å¼æ³¨å†Œå‰æ‚¨ä¸èƒ½å†æ›´æ”¹è¿™äº›ä½¿ç”¨è€…èµ„æ–™ã€‚æ‚¨ç°åœ¨è¦æ›´æ”¹è¿™äº›ä½¿ç”¨è€…èµ„æ–™å—ï¼Ÿ";
+        Text[ chinese_traditional ] = "è«‹è¨»æ„æ‚¨è¼¸å…¥çš„è¡—é“åŠåŸå¸‚ç­‰è³‡æ–™æ˜¯ç”¨ä¾†ç”¢ç”Ÿè¨»å†Šéµç¢¼ã€‚æ­£å¼è¨»å†Šæ™‚æ‚¨ä¸èƒ½ä¿®æ”¹é€™äº›ä½¿ç”¨è€…è³‡æ–™ã€‚æ‚¨ç¾åœ¨è¦ä¿®æ”¹é€™äº›ä½¿ç”¨è€…è³‡æ–™ï¼Ÿ";
         Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇáÈíÇäÇÊ ÇáÎÇÕÉ ÈÇáÔÇÑÚ æÇáÑãÒ ÇáÈÑíÏí æÇáãÏíäÉ ÊÏÎá Öãä ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãİÊÇÍ ÇáÊÓÌíá. áÇ íãßäß ÊÛííÑ ÈíÇäÇÊ Çáã";
         Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé ç ïäüò, ï Ô.Ê. êáé ç ğüëç ÷ñçóéìïğïéïıíôáé ãéá ôïí äçìéïõñãßá ôïõ êëåéäéïı äŞëùóçò. ¸ùò ôçí äŞëùóç äåí èá ìğïñİóåôå íá ? ";
-        Text[ korean ] = "ÁÖ¼Ò³ª ¿ìÆí¹øÈ£ µîÀº µî·Ï Å° »êÃâ¿¡ ÀÌ¿ëµÈ´Ù´Â »ç½ÇÀ» ¸í½ÉÇÏ½Ê½Ã¿À. µî·ÏÀÌ ¿Ï·áµÉ ¶§±îÁö´Â ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ ´õ ÀÌ»ó ¹Ù²Ü ¼ö ¾ø½À´Ï´Ù. Áö±İÀÌ¶óµµ ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ½Ã°Ú½À±î?";
+        Text[ korean ] = "ì£¼ì†Œë‚˜ ìš°í¸ë²ˆí˜¸ ë“±ì€ ë“±ë¡ í‚¤ ì‚°ì¶œì— ì´ìš©ëœë‹¤ëŠ” ì‚¬ì‹¤ì„ ëª…ì‹¬í•˜ì‹­ì‹œì˜¤. ë“±ë¡ì´ ì™„ë£Œë  ë•Œê¹Œì§€ëŠ” ì´ ì‚¬ìš©ì ë°ì´í„°ë¥¼ ë” ì´ìƒ ë°”ê¿€ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì§€ê¸ˆì´ë¼ë„ ì´ ì‚¬ìš©ì ë°ì´í„°ë¥¼ ë³€ê²½í•˜ì‹œê² ìŠµê¹Œ?";
         Text[ turkish ] = "Cadde, posta kodu ve şehir bilgilerinin kayıt kodunun oluşturulması için kullanıldığını dikkate alın. Kayıt yapılana kadar bu kullanıcı verileri değiştirilemez. Kullanıcı verilerini şimdi değiştirmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tenga en cuenta que la calle, el código postal y la ciudad se tendrán en cuenta para determinar la clave de registro. Estos datos no podrán ser modificados hasta que se registre. ¿Desea modificar aún estos datos de usuario?";
         Text[ finnish ] = "Katuosoite-, postinumero- ja postitoimipaikkatietoja käytetään rekisteröintiavaimen luonnissa. Käyttäjätietoja ei voi käyttää ennen kuin rekisteröinti on valmis. Haluatko muokata henkilötietoja?";
     };
-    Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¸ê®Æ";
+    Text[ chinese_traditional ] = "ä½¿ç”¨è€…è³‡æ–™";
     Text[ arabic ] = "ÈíÇäÇÊ ÇáãÓÊÎÏã";
     Text[ greek ] = "ĞñïóùğéêÜ äåäïìİíá";
-    Text[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ";
+    Text[ korean ] = "ì‚¬ìš©ì ë°ì´í„°";
     Text[ turkish ] = "Kullanıcı verileri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Datos del usuario";
@@ -637,14 +637,14 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ portuguese ] = "Modificou os dados de utilizador.\nNão se esqueça de que o seu registo expirará.\nPor esta razão necessitará de um novo código de registo dentro do prazo de 30 dias.\nEncontrará o formulário de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
     Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten ge?ndert.\nBitte bedenken Sie, da? dadurch die Registrierung verf?llt.\nSie ben?igen einen neuen Registrierungsschl?sel, der innerhalb der n?chsten 30 Tage eingegeben werden mu?.\nDas Registrierungsformular finden Sie im Men?Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ?ndern?";
     Message[ danish ] = "Du har ændret brugerdataene.\nBemærk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnøgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjælp - Registrering...\nEr du sikker på, at du vil ændre brugerdataene?";
-    Message[ chinese_simplified ] = "ÄúÒÑ¾­¸ü¸ÄÁËÓÃ»§×ÊÁÏ¡£\nÕâÑùÄúµÄ×¢²á¾Í»áÎŞĞ§¡£\nÄú±ØĞëÔÚ½ñºó30ÌìÖ®ÄÚÊäÈëÒ»¸öĞÂµÄ×¢²áÃÜÂë¡£\nÄúÄÜ¹»ÔÚ²Ëµ¥\"°ïÖú - ×¢²á...\"´¦ÕÒµ½×¢²á±íµ¥¡£\nÄúÕæÒª¸ü¸ÄÊ¹ÓÃÕß×ÊÁÏ£¿";
+    Message[ chinese_simplified ] = "æ‚¨å·²ç»æ›´æ”¹äº†ç”¨æˆ·èµ„æ–™ã€‚\nè¿™æ ·æ‚¨çš„æ³¨å†Œå°±ä¼šæ— æ•ˆã€‚\næ‚¨å¿…é¡»åœ¨ä»Šå30å¤©ä¹‹å†…è¾“å…¥ä¸€ä¸ªæ–°çš„æ³¨å†Œå¯†ç ã€‚\næ‚¨èƒ½å¤Ÿåœ¨èœå•\"å¸®åŠ© - æ³¨å†Œ...\"å¤„æ‰¾åˆ°æ³¨å†Œè¡¨å•ã€‚\næ‚¨çœŸè¦æ›´æ”¹ä½¿ç”¨è€…èµ„æ–™ï¼Ÿ";
     Message[ russian ] = "Âû èçìåíèëè äàííûå ïîëüçîâàòåëÿ.\nÏîæàëóéñòà, ïîìíèòå, ÷òî èç-çà ıòîãî Âû óòğàòèòå ğåãèñòğàöèş.\nÂàì ïîíîäîáèòñÿ íîâûé ğåãèñòğàöèîííûé êëş÷, êîòîğûé íåîáõîäèìî áóäåò ââåñòè â òå÷åíèå 30 äíåé.\nĞåãèñòğàöèîííûé ôîğìóëÿğ Âû íàéäåòå â ìåíş Ñïğàâêà - Ğåãèñòğàöèÿ...\nÂû äåéñòâèòåëüíî õîòèòå èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
     Message[ polish ] = "Zmieniono dane u¿ytkownika.\nNale¿y uwzglêdniæ, ¿e przez to traci wa¿noœæ rejestracja.\nWymagany bêdzie nowy klucz rejestracyjny, który nale¿y wprowadziæ w ci¹gu nastêpnych 30 dni.\nFormularz rejestracyjny znajduje siê w menu Pomoc - Rejestracja...\nCzy na pewno zmieniæ dane u¿ytkownika?";
-    Message[ japanese ] = "Õ°»Ş°ÃŞ°À‚ª•ÏX‚³‚ê‚Ü‚µ‚½B\n‚»‚Ì‚½‚ß“o˜^‚ª¸Œø‚·‚é‚Ì‚Í–Æ‚ê‚Ü‚¹‚ñB\nV‚µ‚¢“o˜^·°‚ª•K—v‚Æ‚È‚è¤‚»‚ê‚ğ30“úˆÈ“à‚ÉÏ‚Ü‚³‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n“o˜^—p†‚Í[ÒÆ­°ÍÙÌß/“o˜^...]‚É‚ ‚è‚Ü‚·B\nÕ°»Ş°ÃŞ°À‚ğ–{“–‚É•ÏX‚µ‚Ü‚·‚©?";
-    Message[ chinese_traditional ] = "±z¤w¸gÅÜ§ó¨Ï¥ÎªÌ¸ê®Æ¡C\n³o¼Ë±zªºµù¥U´N·|µL®Ä¡C\n±z»İ­n¤@­Ó·sªº¡M¥B¥²¶·¦b30¤Ñ¤§¤º¿é¤Jªºµù¥U±KÁä½X¡C\n±z¯à°÷¦b¥\\¯àªí»¡©ú¡Aµù¥U¤§¤U§ä¨ìµù¥Uªí®æ¡C\n¯u­n­×§ï¨Ï¥ÎªÌ¸ê®Æ¡H";
+    Message[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°ï¾ƒï¾ï½°ï¾€ãŒå¤‰æ›´ã•ã‚Œã¾ã—ãŸã€‚\nãã®ãŸã‚ç™»éŒ²ãŒå¤±åŠ¹ã™ã‚‹ã®ã¯å…ã‚Œã¾ã›ã‚“ã€‚\næ–°ã—ã„ç™»éŒ²ï½·ï½°ãŒå¿…è¦ã¨ãªã‚Šï½¤ãã‚Œã‚’30æ—¥ä»¥å†…ã«æ¸ˆã¾ã•ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚\nç™»éŒ²ç”¨ç´™ã¯[ï¾’ï¾†ï½­ï½°ï¾ï¾™ï¾Œï¾Ÿ/ç™»éŒ²...]ã«ã‚ã‚Šã¾ã™ã€‚\nï¾•ï½°ï½»ï¾ï½°ï¾ƒï¾ï½°ï¾€ã‚’æœ¬å½“ã«å¤‰æ›´ã—ã¾ã™ã‹?";
+    Message[ chinese_traditional ] = "æ‚¨å·²ç¶“è®Šæ›´ä½¿ç”¨è€…è³‡æ–™ã€‚\né€™æ¨£æ‚¨çš„è¨»å†Šå°±æœƒç„¡æ•ˆã€‚\næ‚¨éœ€è¦ä¸€å€‹æ–°çš„ï¹ä¸”å¿…é ˆåœ¨30å¤©ä¹‹å…§è¼¸å…¥çš„è¨»å†Šå¯†éµç¢¼ã€‚\næ‚¨èƒ½å¤ åœ¨åŠŸèƒ½è¡¨èªªæ˜ï¼Œè¨»å†Šä¹‹ä¸‹æ‰¾åˆ°è¨»å†Šè¡¨æ ¼ã€‚\nçœŸè¦ä¿®æ”¹ä½¿ç”¨è€…è³‡æ–™ï¼Ÿ";
     Message[ arabic ] = "áŞÏ ŞãÊ ÈÊÚÏíá ÈíÇäÇÊ ÇáãÓÊÎÏã.\nÇáÑÌÇÁ ãáÇÍÙÉ Ãä åĞÇ ÇáÊÚÏíá Óæİ íÌÚá ÇáÊÓÌíá ÛíÑ ÕÇáÍ.\nÓæİ ÊÍÊÇÌ Åáì ãİÊÇÍ ÊÓÌíá ÌÏíÏ¡ íÌÈ ÅÏÎÇáå ÎáÇá ÇáËáÇËíä íæãÇğ ÇáŞÇÏãíä.\níãßäß ÇáÍÕæá Úáì ÇÓÊãÇÑÉ ÇáÊÓÌíá İí ŞÇÆãÉ \"ãÓÇÚÏÉ\" ÊÍÊ \"ÊÓÌíá\"...\nåá ÊÑíÏ ÈÇáÊÃßíÏ ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã¿";
     Message[ greek ] = "ÁëëÜîáôå ôá äåäïìİíá ôïõ ÷ñŞóôç.\nĞñïóİîôå üôé ìå áõôŞ ôçí åíİñãåéá ğáıåé íá éó÷ıåé ç äŞëùóç.\nÓå áõôŞ ôç ğåñßğôùóç èá ÷ñåéáóôåßôå İíá íİï êëåéäß äŞëùóçò, ôï ïğïßï èá ğñİğåé íá åéóá÷èåß ìİóá óôï ÷ñïíéêü äéÜóôçìá ôùí åğïìİíùí 30 çìåñşí.\nÔç öüñìá äŞëùóçò èá ôç âñåßôå óôï ìåíïı ÂïŞèåéá - ÄŞëùóç...\nÈİëåôå ğñáãìáôéêÜ íá áëëÜîåôå ôá äåäïìİíá ôïõ ÷ñŞóôç;";
-    Message[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ¼Ì½À´Ï´Ù.\nÀÌ·Î ÀÎÇØ µî·ÏÀÌ ¹«È¿È­µÈ´Ù´Â »ç½ÇÀ» À¯³äÇÏ½Ê½Ã¿À.\n¾ÕÀ¸·Î 30ÀÏ³»¿¡ ÀÔ·ÂÇØ¾ß ÇÒ »õ µî·Ï Å°°¡ ÇÊ¿äÇÕ´Ï´Ù.\nµî·Ï ¾ç½ÄÀº µµ¿ò¸»-µî·Ï... ¸Ş´º¿¡¼­ Ã£À» ¼ö ÀÖ½À´Ï´Ù.\n»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦¡¡Á¤¸» º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ì‚¬ìš©ì ë°ì´í„°ë¥¼ ë³€ê²½í•˜ì…¨ìŠµë‹ˆë‹¤.\nì´ë¡œ ì¸í•´ ë“±ë¡ì´ ë¬´íš¨í™”ëœë‹¤ëŠ” ì‚¬ì‹¤ì„ ìœ ë…í•˜ì‹­ì‹œì˜¤.\nì•ìœ¼ë¡œ 30ì¼ë‚´ì— ì…ë ¥í•´ì•¼ í•  ìƒˆ ë“±ë¡ í‚¤ê°€ í•„ìš”í•©ë‹ˆë‹¤.\në“±ë¡ ì–‘ì‹ì€ ë„ì›€ë§-ë“±ë¡... ë©”ë‰´ì—ì„œ ì°¾ì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.\nì‚¬ìš©ì ë°ì´í„°ë¥¼ã€€ì •ë§ ë³€ê²½í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "Kullanıcı verilerini değiştirdiniz.\nBu nedenle kayıt işlemi de iptal edilecektir.\nEn geç 30 gün içerisinde yeni bir kayıt koduı girmeniz gerekiyor.\nİlgili kayıt formunu mönüde, \"Yardım - Kayıt...\" altında bulabilirsiniz.\nKullanıcı verilerini gerçekten değiştirmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirará el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los próximos 30 días.\nEl formulario de registro lo encuentra en el menú Ayuda - Registro...\n¿Desea realmente modificar los datos de usuario?";
@@ -813,15 +813,15 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
     ItemList [ chinese_simplified ] =
     {
-        < "ºÁÃ×" ; FUNIT_MM ; > ;
-        < "ÀåÃ×" ; FUNIT_CM ; > ;
-        < "Ã×" ; FUNIT_M ; > ;
-        < "¹«Àï" ; FUNIT_KM ; > ;
-        < "Ó¢´ç" ; FUNIT_INCH ; > ;
-        < "Ó¢³ß" ; FUNIT_FOOT ; > ;
-        < "Ó¢Àï" ; FUNIT_MILE ; > ;
-        < "Æ¤¿É" ; FUNIT_PICA ; > ;
-        < "µã" ; FUNIT_POINT ; > ;
+        < "æ¯«ç±³" ; FUNIT_MM ; > ;
+        < "å˜ç±³" ; FUNIT_CM ; > ;
+        < "ç±³" ; FUNIT_M ; > ;
+        < "å…¬é‡Œ" ; FUNIT_KM ; > ;
+        < "è‹±å¯¸" ; FUNIT_INCH ; > ;
+        < "è‹±å°º" ; FUNIT_FOOT ; > ;
+        < "è‹±é‡Œ" ; FUNIT_MILE ; > ;
+        < "çš®å¯" ; FUNIT_PICA ; > ;
+        < "ç‚¹" ; FUNIT_POINT ; > ;
     };
     ItemList [ russian ] =
     {
@@ -849,27 +849,27 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
     ItemList [ japanese ] =
     {
-        < "ĞØÒ°ÄÙ" ; FUNIT_MM ; > ;
-        < "¾İÁÒ°ÄÙ" ; FUNIT_CM ; > ;
-        < "Ò°ÄÙ" ; FUNIT_M ; > ;
-        < "·ÛÒ°ÄÙ" ; FUNIT_KM ; > ;
-        < "²İÁ" ; FUNIT_INCH ; > ;
-        < "Ì¨°Ä" ; FUNIT_FOOT ; > ;
-        < "Ï²Ù" ; FUNIT_MILE ; > ;
-        < "Êß²¶" ; FUNIT_PICA ; > ;
-        < "Îß²İÄ" ; FUNIT_POINT ; > ;
+        < "ï¾ï¾˜ï¾’ï½°ï¾„ï¾™" ; FUNIT_MM ; > ;
+        < "ï½¾ï¾ï¾ï¾’ï½°ï¾„ï¾™" ; FUNIT_CM ; > ;
+        < "ï¾’ï½°ï¾„ï¾™" ; FUNIT_M ; > ;
+        < "ï½·ï¾›ï¾’ï½°ï¾„ï¾™" ; FUNIT_KM ; > ;
+        < "ï½²ï¾ï¾" ; FUNIT_INCH ; > ;
+        < "ï¾Œï½¨ï½°ï¾„" ; FUNIT_FOOT ; > ;
+        < "ï¾ï½²ï¾™" ; FUNIT_MILE ; > ;
+        < "ï¾Šï¾Ÿï½²ï½¶" ; FUNIT_PICA ; > ;
+        < "ï¾ï¾Ÿï½²ï¾ï¾„" ; FUNIT_POINT ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
-        < "²@¦Ì" ; FUNIT_MM ; > ;
-        < "Íù¦Ì" ; FUNIT_CM ; > ;
-        < "¦Ì" ; FUNIT_M ; > ;
-        < "¤½¨½" ; FUNIT_KM ; > ;
-        < "­^¦T" ; FUNIT_INCH ; > ;
-        < "­^¤Ø" ; FUNIT_FOOT ; > ;
-        < "­^¨½" ; FUNIT_MILE ; > ;
-        < "¥Ö¥i" ; FUNIT_PICA ; > ;
-        < "ÂI" ; FUNIT_POINT ; > ;
+        < "æ¯«ç±³" ; FUNIT_MM ; > ;
+        < "å˜ç±³" ; FUNIT_CM ; > ;
+        < "ç±³" ; FUNIT_M ; > ;
+        < "å…¬é‡Œ" ; FUNIT_KM ; > ;
+        < "è‹±å‹" ; FUNIT_INCH ; > ;
+        < "è‹±å°º" ; FUNIT_FOOT ; > ;
+        < "è‹±é‡Œ" ; FUNIT_MILE ; > ;
+        < "çš®å¯" ; FUNIT_PICA ; > ;
+        < "é»" ; FUNIT_POINT ; > ;
     };
     ItemList [ arabic ] =
     {
@@ -897,15 +897,15 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
     ItemList [ korean ] =
     {
-        < "¹Ğ¸®¹ÌÅÍ" ; FUNIT_MM ; > ;
-        < "¼¾Æ¼¹ÌÅÍ" ; FUNIT_CM ; > ;
-        < "¹ÌÅÍ" ; FUNIT_M ; > ;
-        < "Å³·Î¹ÌÅÍ" ; FUNIT_KM ; > ;
-        < "ÀÎÄ¡" ; FUNIT_INCH ; > ;
-        < " ÇÇÆ®" ; FUNIT_FOOT ; > ;
-        < "¸¶ÀÏ" ; FUNIT_MILE ; > ;
-        < "ÆÄÀÌÄ¿" ; FUNIT_PICA ; > ;
-        < "Æ÷ÀÎÆ®" ; FUNIT_POINT ; > ;
+        < "ë°€ë¦¬ë¯¸í„°" ; FUNIT_MM ; > ;
+        < "ì„¼í‹°ë¯¸í„°" ; FUNIT_CM ; > ;
+        < "ë¯¸í„°" ; FUNIT_M ; > ;
+        < "í‚¬ë¡œë¯¸í„°" ; FUNIT_KM ; > ;
+        < "ì¸ì¹˜" ; FUNIT_INCH ; > ;
+        < " í”¼íŠ¸" ; FUNIT_FOOT ; > ;
+        < "ë§ˆì¼" ; FUNIT_MILE ; > ;
+        < "íŒŒì´ì»¤" ; FUNIT_PICA ; > ;
+        < "í¬ì¸íŠ¸" ; FUNIT_POINT ; > ;
     };
     ItemList [ turkish ] =
     {
@@ -946,6 +946,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
 
 
