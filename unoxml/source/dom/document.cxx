@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:41:55 $
+ *  last change: $Author: lo $ $Date: 2004-03-01 13:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 
 #include "../events/event.hxx"
 #include "../events/mutationevent.hxx"
+#include "../events/uievent.hxx"
+#include "../events/mouseevent.hxx"
 
 namespace DOM
 {
@@ -545,15 +547,14 @@ namespace DOM
             aType.compareToAscii("DOMAttrModified")             == 0||
             aType.compareToAscii("DOMCharacterDataModified")    == 0)
         {
-            events::CMutationEvent* pMEvent = new events::CMutationEvent;
-                pEvent = pMEvent;
+            pEvent = new events::CMutationEvent;
+
         } else if (
             aType.compareToAscii("DOMFocusIn")  == 0||
             aType.compareToAscii("DOMFocusOut") == 0||
             aType.compareToAscii("DOMActivate") == 0)
         {
-            // XXX UIEvents
-            throw RuntimeException();
+            pEvent = new events::CUIEvent;
         } else if (
             aType.compareToAscii("click")     == 0||
             aType.compareToAscii("mousedown") == 0||
@@ -562,8 +563,7 @@ namespace DOM
             aType.compareToAscii("mousemove") == 0||
             aType.compareToAscii("mouseout")  == 0 )
         {
-            // XXX MouseEvents
-            throw RuntimeException();
+            pEvent = new events::CMouseEvent;
         }
         else // generic event
         {

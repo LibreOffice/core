@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lo $ $Date: 2004-02-16 16:41:50 $
+#   last change: $Author: lo $ $Date: 2004-03-01 13:24:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,8 @@ SLOFILES =\
     $(SLO)$/event.obj \
     $(SLO)$/eventdispatcher.obj \
     $(SLO)$/mutationevent.obj \
+    $(SLO)$/uievent.obj \
+    $(SLO)$/mouseevent.obj \
     $(SLO)$/testlistener.obj            
 
 # --- Targets ------------------------------------------------------

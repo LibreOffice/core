@@ -73,8 +73,7 @@ namespace DOM { namespace events
 
     sal_Bool SAL_CALL CMutationEvent::getCancelable() throw (RuntimeException)
     {
-        // mutation events cannot be canceled
-        return sal_False;
+        return CEvent::getCancelable();
     }
 
     com::sun::star::util::Time SAL_CALL CMutationEvent::getTimeStamp() throw (RuntimeException)
@@ -84,11 +83,11 @@ namespace DOM { namespace events
 
     void SAL_CALL CMutationEvent::stopPropagation() throw (RuntimeException)
     {
-        // do nothing, does not apply to mutation events        
+        CEvent::stopPropagation();
     }
     void SAL_CALL CMutationEvent::preventDefault() throw (RuntimeException)
     {
-        // no effect
+        CEvent::preventDefault();
     }
 
     void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 

@@ -1,5 +1,8 @@
 #include "eventdispatcher.hxx"
+#include "event.hxx"
 #include "mutationevent.hxx"
+#include "uievent.hxx"
+#include "mouseevent.hxx"
 #include "../dom/node.hxx"
 
 namespace DOM { namespace events {
@@ -103,20 +106,50 @@ namespace DOM { namespace events {
                     aMEvent->getNewValue(), aMEvent->getAttrName(),
                     aMEvent->getAttrChange());
                 pEvent = pMEvent;
+        } else if ( // UIEvent
+            aType.compareToAscii("DOMFocusIn")  == 0||
+            aType.compareToAscii("DOMFocusOut") == 0||
+            aType.compareToAscii("DOMActivate") == 0)
+        {
+            Reference< XUIEvent > aUIEvent(aEvent, UNO_QUERY);
+            CUIEvent* pUIEvent = new CUIEvent;
+            pUIEvent->initUIEvent(aType,
+                aUIEvent->getBubbles(), aUIEvent->getCancelable(),
+                aUIEvent->getView(), aUIEvent->getDetail());
+            pEvent = pUIEvent;
+        } else if ( // MouseEvent
+            aType.compareToAscii("click")     == 0||
+            aType.compareToAscii("mousedown") == 0||
+            aType.compareToAscii("mouseup")   == 0||
+            aType.compareToAscii("mouseover") == 0||
+            aType.compareToAscii("mousemove") == 0||
+            aType.compareToAscii("mouseout")  == 0)
+        {
+            Reference< XMouseEvent > aMouseEvent(aEvent, UNO_QUERY);
+            CMouseEvent *pMouseEvent = new CMouseEvent;
+            pMouseEvent->initMouseEvent(aType,
+                aMouseEvent->getBubbles(), aMouseEvent->getCancelable(),
+                aMouseEvent->getView(), aMouseEvent->getDetail(),
+                aMouseEvent->getScreenX(), aMouseEvent->getScreenY(),
+                aMouseEvent->getClientX(), aMouseEvent->getClientY(),
+                aMouseEvent->getCtrlKey(), aMouseEvent->getAltKey(),
+                aMouseEvent->getShiftKey(), aMouseEvent->getMetaKey(),
+                aMouseEvent->getButton(), aMouseEvent->getRelatedTarget());
+            pEvent = pMouseEvent;
         }
         else // generic event
         {
             pEvent = new CEvent;
             pEvent->initEvent(
                 aType, aEvent->getBubbles(), aEvent->getCancelable());
-
-
         }
         pEvent->m_target = Reference< XEventTarget >(DOM::CNode::get(aNodePtr));
         pEvent->m_currentTarget = aEvent->getCurrentTarget();
         pEvent->m_time = aEvent->getTimeStamp();
-        xEvent = Reference< XEvent >(static_cast< CEvent* >(pEvent));
 
+        // create the reference to the provate event implementation
+        // that will be dispatched to the listeners
+        xEvent = Reference< XEvent >(pEvent);
 
         // build the path from target node to the root
         NodeVector captureVector;
