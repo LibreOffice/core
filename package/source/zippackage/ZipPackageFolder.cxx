@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 09:19:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,10 @@ using vos::ORef;
 
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
-ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory )
+ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory,
+                                     sal_Bool bPackageFormat )
 : m_xFactory( xFactory )
+, m_bPackageFormat( bPackageFormat )
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to the package folder!" );
 
@@ -602,7 +604,12 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
+    {
+        if ( !m_bPackageFormat )
+            throw PropertyVetoException();
+
         aValue >>= sMediaType;
+    }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
         aValue >>= aEntry.nSize;
     else
