@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-13 15:59:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ class FuDraw : public FuPoor
 
     // #97016# II
     virtual void SelectionHasChanged();
+
+    BOOL IsReSizingNote(const MouseEvent& rMEvt) const;
+    void CheckVisibleNote() const;
 
  private:
     void    DoModifiers(const MouseEvent& rMEvt);
