@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:02:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,22 +91,21 @@ public class ParcelBrowseNode extends PropertySet
     private ScriptProvider provider;
     //private RootBrowseNode parent;
     private Collection browsenodes;
-    private String name;
     private ParcelContainer container;
     private Parcel parcel;
     public boolean deletable = true;
     public boolean editable  = false;
     public boolean creatable = false;
+    public boolean renamable = true;
 
     public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
         this.provider = provider;
-        this.name = parcelName;
         this.container = container;
 
         // TODO decide whether exception is propagated out or not
         try
         {
-            parcel = (Parcel)this.container.getByName( parcelName );
+            this.parcel = (Parcel)this.container.getByName( parcelName );
         }
         catch ( Exception e )
         {
@@ -121,6 +120,8 @@ public class ParcelBrowseNode extends PropertySet
             (short)0, "editable");
         registerProperty("Creatable", new Type(boolean.class),
             (short)0, "creatable");
+        registerProperty("Renamable", new Type(boolean.class),
+            (short)0, "renamable");
         if (provider.hasScriptEditor() == true)
         {
             this.creatable = true;
@@ -129,24 +130,21 @@ public class ParcelBrowseNode extends PropertySet
     }
 
     public String getName() {
-        return name;
+        return parcel.getName();
     }
 
     public XBrowseNode[] getChildNodes() {
         try
         {
 
-            if ( container != null && container.hasByName( name ) && parcel != null )
+            if ( container != null && container.hasByName( parcel.getName() ) && parcel != null )
             {
                 String[] names = parcel.getElementNames();
-                if ( browsenodes == null )
-                {
-                    browsenodes = new ArrayList( names.length );
+                browsenodes = new ArrayList( names.length );
 
-                    for ( int index = 0; index < names.length; index++ )
-                    {
-                        browsenodes.add( new ScriptBrowseNode( provider, parcel, names[ index ] ));
-                    }
+                for ( int index = 0; index < names.length; index++ )
+                {
+                    browsenodes.add( new ScriptBrowseNode( provider, parcel, names[ index ] ));
                 }
             }
         }
@@ -160,7 +158,7 @@ public class ParcelBrowseNode extends PropertySet
     }
 
     public boolean hasChildNodes() {
-        if ( container != null && container.hasByName( name ) && parcel != null )
+        if ( container != null && container.hasByName( parcel.getName() ) && parcel != null )
         {
             return parcel.hasElements();
         }
@@ -199,7 +197,7 @@ public class ParcelBrowseNode extends PropertySet
         {
             try
             {
-                String name;
+                String newName;
 
                 if (aParams == null || aParams.length < 1 ||
                     AnyConverter.isString(aParams[0]) == false)
@@ -214,26 +212,26 @@ public class ParcelBrowseNode extends PropertySet
                         DialogFactory dialogFactory =
                             DialogFactory.getDialogFactory();
 
-                        name = dialogFactory.showInputDialog(title, prompt);
+                        newName = dialogFactory.showInputDialog(title, prompt);
                     }
                     catch (Exception e)
                     {
-                        name = JOptionPane.showInputDialog(null, prompt, title,
+                        newName = JOptionPane.showInputDialog(null, prompt, title,
                             JOptionPane.QUESTION_MESSAGE);
                     }
                 }
                 else {
-                    name = (String) AnyConverter.toString(aParams[0]);
+                    newName = (String) AnyConverter.toString(aParams[0]);
                 }
 
-                if (name == null || name.equals(""))
+                if (newName == null || newName.equals(""))
                 {
                     result =  new Any(new Type(Boolean.class), Boolean.FALSE);
                 }
                 else
                 {
                     String source = new String(provider.getScriptEditor().getTemplate().getBytes());
-                    String languageName = name + "." + provider.getScriptEditor().getExtension();
+                    String languageName = newName + "." + provider.getScriptEditor().getExtension();
                     String language = container.getLanguage();
 
                     ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
@@ -256,7 +254,7 @@ public class ParcelBrowseNode extends PropertySet
             }
             catch (Exception e)
             {
-                    System.err.print("create failed with: " + e );
+                    //System.err.print("create failed with: " + e );
                 LogUtils.DEBUG( LogUtils.getTrace( e ) );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
 
@@ -268,45 +266,9 @@ public class ParcelBrowseNode extends PropertySet
         {
             try
             {
-                boolean goAhead = false;
-
-                String prompt = "Do you really want to delete this Parcel?";
-                String title = "Delete Parcel";
-
-                // try to get a DialogFactory instance, if it fails
-                // just use a Swing JOptionPane to prompt for the name
-                try
+                if ( container.deleteParcel(getName()) )
                 {
-                    DialogFactory dialogFactory =
-                        DialogFactory.getDialogFactory();
-
-                    goAhead = dialogFactory.showConfirmDialog(title, prompt);
-                }
-                catch (Exception e)
-                {
-                    int reply = JOptionPane.showConfirmDialog(
-                        null, prompt, title, JOptionPane.YES_NO_OPTION);
-
-                    if (reply == JOptionPane.YES_OPTION)
-                    {
-                        goAhead = true;
-                    }
-                    else
-                    {
-                        goAhead = false;
-                    }
-                }
-
-                if (goAhead == true)
-                {
-                    if ( container.deleteParcel(getName()) )
-                    {
-                        result = new Any(new Type(Boolean.class), Boolean.TRUE);
-                    }
-                    else
-                    {
-                        result = new Any(new Type(Boolean.class), Boolean.FALSE);
-                    }
+                    result = new Any(new Type(Boolean.class), Boolean.TRUE);
                 }
                 else
                 {
@@ -319,6 +281,34 @@ public class ParcelBrowseNode extends PropertySet
 
                 // throw new com.sun.star.reflection.InvocationTargetException(
                 //     "Error deleting parcel: " + e.getMessage());
+            }
+        }
+        else if (aFunctionName.equals("Renamable"))
+        {
+            try
+            {
+                LogUtils.DEBUG( "Renaming parcel");
+                String newName = (String) AnyConverter.toString(aParams[0]);
+                container.renameParcel( getName(), newName );
+                Parcel p = (Parcel)container.getByName( newName );
+                if(browsenodes == null )
+                {
+                    getChildNodes();
+                }
+                ScriptBrowseNode[] childNodes = (ScriptBrowseNode[])browsenodes.toArray(new ScriptBrowseNode[0]);
+
+                for ( int index = 0; index < childNodes.length; index++ )
+                {
+                    childNodes[ index ].updateURI( p );
+                }
+                result = new Any(new Type(XBrowseNode.class), this);
+            }
+            catch (Exception e)
+            {
+                result =  new Any(new Type(Boolean.class), null);
+
+                // throw new com.sun.star.reflection.InvocationTargetException(
+                //     "Error renaming parcel: " + e.getMessage());
             }
         }
         else {
