@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:28:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case ' ' :
                 case CH_TAB    :
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
+                case CHAR_SOFTHYPHEN:
+                case CHAR_HARDBLANK:
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
