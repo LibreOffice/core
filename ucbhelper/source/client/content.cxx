@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:36:37 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+
+#include <cppuhelper/implbase1.hxx>
 
 #ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONERROR_HPP_
 #include <com/sun/star/ucb/ContentCreationError.hpp>
@@ -187,6 +189,56 @@ using namespace com::sun::star::uno;
 
 namespace ucb
 {
+
+class EmptyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
+{
+public:
+    virtual sal_Int32 SAL_CALL readBytes(
+        Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead )
+        throw (IOException, RuntimeException);
+    virtual sal_Int32 SAL_CALL readSomeBytes(
+        Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead )
+        throw (IOException, RuntimeException);
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+        throw (IOException, RuntimeException);
+    virtual sal_Int32 SAL_CALL available()
+        throw (IOException, RuntimeException);
+    virtual void SAL_CALL closeInput()
+        throw (IOException, RuntimeException);
+};
+
+sal_Int32 EmptyInputStream::readBytes(
+    Sequence< sal_Int8 > & data, sal_Int32 nBytesToRead )
+    throw (IOException, RuntimeException)
+{
+    data.realloc( 0 );
+    return 0;
+}
+
+sal_Int32 EmptyInputStream::readSomeBytes(
+    Sequence< sal_Int8 > & data, sal_Int32 nMaxBytesToRead )
+    throw (IOException, RuntimeException)
+{
+    data.realloc( 0 );
+    return 0;
+}
+
+void EmptyInputStream::skipBytes( sal_Int32 nBytesToSkip )
+    throw (IOException, RuntimeException)
+{
+}
+
+sal_Int32 EmptyInputStream::available()
+    throw (IOException, RuntimeException)
+{
+    return 0;
+}
+
+void EmptyInputStream::closeInput()
+    throw (IOException, RuntimeException)
+{
+}
+
 
 //=========================================================================
 //=========================================================================
@@ -1272,7 +1324,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     return insertNewContent( rContentType,
                              rPropertyNames,
                              rPropertyValues,
-                             Reference< XInputStream >(),
+                             new EmptyInputStream,
                              rNewContent );
 }
 
@@ -1287,7 +1339,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     return insertNewContent( rContentType,
                              nPropertyHandles,
                              rPropertyValues,
-                             Reference< XInputStream >(),
+                             new EmptyInputStream,
                              rNewContent );
 }
 
