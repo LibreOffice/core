@@ -5,17 +5,29 @@
 #
 
 $return = 0;
+$possible_error = 0;
+$possible_error_descript = "";
 while( <STDIN> )
 {
     if( /^diff/ )
     {
-        print STDERR "ERROR : files differ ".substr( $_, 5 );
-        $return++;
+        $possible_error = 1;
+        $possible_error_descript = $_;
     }
-    if( /^Binary/ )
+    elsif( /^Binary/ )
     {
         print STDERR "ERROR : $_";
         $return++;
+    }
+    elsif( /^[0-9]/ && $possible_error == 1 )
+    {
+        print STDERR "ERROR : diff ".$possible_error_descript;
+        $return++;
+        $possible_error = 0;
+    }
+    else
+    {
+        $possible_error = 0;
     }
 }
 if( $return != 0 )
