@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSingleSelectQueryComposer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-09-08 15:55:16 $
+ *  last change:$Date: 2005-01-06 09:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ import com.sun.star.container.XIndexAccess;
 *  <li><code>appendGroupByColumn()</code></li>
 *  <li><code>setGroup()</code></li>
 *  <li><code>setHavingClause()</code></li>
-*  <li><code>setStructuredHavingFilter()</code></li>
-*  <li><code>appendHavingFilterByColumn()</code></li>
+*  <li><code>setStructuredHavingClause()</code></li>
+*  <li><code>appendHavingClauseByColumn()</code></li>
 *  <li><code>appendOrderByColumn()</code></li>
 *  <li><code>setOrder()</code></li>
 
@@ -304,10 +304,10 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
     /**
     * At first <code>setHavingClause</code> sets a complex clause.
-    * Then method <code>getStructuredHavingFilter</code> from object relation
+    * Then method <code>getStructuredHavingClause</code> from object relation
     * <code>xQueryAna</code> returns a valid <code>PropertyValue[][]</code>
     * Method <code>setHavingClause</code> was called with an empty sting to
-    * reset filter. Now <code>setStructuredHavingFilter</code> with the valid
+    * reset filter. Now <code>setStructuredHavingClause</code> with the valid
     * <code>PropertyValue[][]</code> as parameter was called.
     * Test is ok if <code>getHavingClause</code> from <code>xQueryAna</code>
     * returns the complex clause from beginning.
@@ -318,7 +318,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     * <li><code>setStructuredFilter</code></li>
     *</ul>
     */
-    public void _setStructuredHavingFilter() {
+    public void _setStructuredHavingClause() {
         requiredMethod("setHavingClause()");
         executeMethod("setStructuredFilter()");
         String complexFilter = "( \"Identifier\" = '1' AND \"Type\" = '4' ) OR ( \"Identifier\" = '2' AND \"Type\" = '5' ) OR ( \"Identifier\" = '3' AND \"Type\" = '6' AND \"Address\" = '7' ) OR ( \"Address\" = '8' ) OR ( \"Type\" = '9' )";
@@ -326,15 +326,15 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
            oObj.setHavingClause(complexFilter);
            PropertyValue[][] aStructuredHaving =
-                                          xQueryAna.getStructuredHavingFilter();
+                                          xQueryAna.getStructuredHavingClause();
            oObj.setHavingClause("");
-           oObj.setStructuredHavingFilter(aStructuredHaving);
-           tRes.tested("setStructuredHavingFilter()",
+           oObj.setStructuredHavingClause(aStructuredHaving);
+           tRes.tested("setStructuredHavingClause()",
                            (xQueryAna.getHavingClause().equals(complexFilter)));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
-            tRes.tested("setStructuredHavingFilter()", false);
+            tRes.tested("setStructuredHavingClause()", false);
         }
     }
 
@@ -345,29 +345,29 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     * Second an empty <code>XPropertySet</code> was given as parameter. An
     * <code>com.sun.star.sdbc.SQLException</code> must be thrown.
     */
-    public void _appendHavingFilterByColumn() {
+    public void _appendHavingClauseByColumn() {
         boolean ok = true;
         try{
 
-            oObj.appendHavingFilterByColumn(xProp, true);
-            log.println("appendHavingFilterByColumn: " + xQueryAna.getFilter());
+            oObj.appendHavingClauseByColumn(xProp, true);
+            log.println("appendHavingClauseByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
-            tRes.tested("appendHavingFilterByColumn()", false);
+            tRes.tested("appendHavingClauseByColumn()", false);
         }
         try{
             XPropertySet dummy = null;
-            oObj.appendHavingFilterByColumn(dummy, true);
+            oObj.appendHavingClauseByColumn(dummy, true);
             log.println("unexpected Exception was not thorwn");
-            tRes.tested("appendHavingFilterByColumn()", false);
+            tRes.tested("appendHavingClauseByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("expected Exception");
             ok = ok && true;
         }
-        tRes.tested("appendHavingFilterByColumn()", ok);
+        tRes.tested("appendHavingClauseByColumn()", ok);
     }
 
     /**

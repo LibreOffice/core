@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSingleSelectQueryAnalyzer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-09-08 15:55:01 $
+ *  last change:$Date: 2005-01-06 09:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.container.XIndexAccess;
 *  <li><code>getGroup()</code></li>
 *  <li><code>getGroupColumns()</code></li>
 *  <li><code>getHavingClause()</code></li>
-*  <li><code>getStructuredHavingFilter()</code></li>
+*  <li><code>getStructuredHavingClause()</code></li>
 *  <li><code>getOrder()</code></li>
 *  <li><code>getOrderColumns()</code></li>
 
@@ -273,7 +273,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     * <li><code>getStructuredFilter</code></li>
     *</ul>
     */
-    public void _getStructuredHavingFilter() {
+    public void _getStructuredHavingClause() {
         requiredMethod("setQuery()");
         requiredMethod("getFilter()");
         executeMethod("getStructuredFilter()");
@@ -281,15 +281,15 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
 
         try{
            xComposer.setHavingClause(complexFilter);
-           PropertyValue[][] aStructuredHaving = oObj.getStructuredHavingFilter();
+           PropertyValue[][] aStructuredHaving = oObj.getStructuredHavingClause();
            xComposer.setHavingClause("");
-           xComposer.setStructuredHavingFilter(aStructuredHaving);
-           tRes.tested("getStructuredHavingFilter()",
+           xComposer.setStructuredHavingClause(aStructuredHaving);
+           tRes.tested("getStructuredHavingClause()",
                                 (oObj.getHavingClause().equals(complexFilter)));
 
         } catch (com.sun.star.sdbc.SQLException e){
             log.println("unexpected Exception: " + e.toString());
-            tRes.tested("getStructuredHavingFilter()", false);
+            tRes.tested("getStructuredHavingClause()", false);
         }
     }
 
