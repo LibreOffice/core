@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 10:00:31 $
+ *  last change: $Author: fs $ $Date: 2002-09-24 15:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,10 +1659,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 else
                     aReturn = SbaXDataBrowserController::GetState(nId);
 
-                aReturn.aState = makeAny( (sal_Bool)sal_False );
-                    // since fixing 99030, this is defined as meaning "please do not display a drop down
-                    // menu for the clipboard formats to paste".
-                    // 22.05.2002 - 99030 - fs@openoffice.org
                 break;
 
             default:

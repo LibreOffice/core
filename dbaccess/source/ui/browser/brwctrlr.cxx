@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 10:00:30 $
+ *  last change: $Author: fs $ $Date: 2002-09-24 15:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,13 +1446,6 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             break;
 
             case ID_BROWSER_PASTE:
-                    aReturn.aState = makeAny( (sal_Bool)sal_False );
-                        // since fixing 99030, this is defined as meaning "please do not display a drop down
-                        // menu for the clipboard formats to paste".
-                        // 22.05.2002 - 99030 - fs@openoffice.org
-
-                    // NO BREAK
-
             case ID_BROWSER_COPY:
             case ID_BROWSER_CUT:
             {
