@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-07 10:50:36 $
+#   last change: $Author: kz $ $Date: 2002-01-10 09:48:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -307,7 +307,7 @@ $(SRS)$/hidother.hid: hidother.src
     @+echo 	NO HIDS!
     @+echo
     +copy ..\inc\helpid.h .
-    @+-mhids hidother.src $(SRS) $(PRJNAME)
+    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
     +del helpid.h
 .ENDIF
 .ELSE
