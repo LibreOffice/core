@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 10:52:53 $
+#   last change: $Author: vg $ $Date: 2005-03-23 11:36:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,8 @@ SLOFILES =	\
         $(SLO)$/convert.obj \
         $(SLO)$/enumeration.obj \
         $(SLO)$/resourcehelper.obj \
-        $(SLO)$/xmlhelper.obj
+        $(SLO)$/xmlhelper.obj \
+        $(SLO)$/xformsevent.obj
 
 
 # --- Tagets -------------------------------------------------------
