@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:47:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,9 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
     return;
 }
 
-    // und jetzt mal raus auf den Drucker
+// output print preview on printer
+// OD 05.05.2003 #i14016# - consider empty pages on calculation of scaling
+// and on calculation of paint offset.
 void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                                   USHORT nRowCol, SfxProgress& rProgress,
                                   const SwPagePreViewPrtData* pPrtData )
@@ -270,24 +272,6 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
         else
             nPageNo = nFirstPageNo;
 
-
-    /*-----------------01.03.95 13:06-------------------
-
-    // Diese Options nur per Dialog einstellbar
-
-        if( !rOptions.bPaperFromSetup )     // Schacht einstellen.
-            pPrt->SetPaperBin( pStPage->GetFmt()->GetPaperBin().
-                                    GetBin() );
-
-        // Orientation einstellen: Breiter als Hoch -> Landscape,
-        // sonst -> Portrait.
-        if( pStPage->GetPageDesc()->GetLandscape() )
-            pPrt->SetOrientation( ORIENTATION_LANDSCAPE );
-        else
-            pPrt->SetOrientation( ORIENTATION_PORTRAIT );
-
-    --------------------------------------------------*/
-
         // ein Array fuer die Seiten anlegen, die auf eine Drucker-Seite
         // gedruckt werden sollen.
         BYTE nRow = BYTE(nRowCol >> 8), nCol = BYTE(nRowCol & 0xff);
@@ -338,10 +322,23 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                 else
                     aPageArr[ nCntPage++ ] = (SwPageFrm*)pStPage;
 
-                const Size& rSz = pStPage->Frm().SSize();
-                nCalcW += rSz.Width();
-                if( nCalcH < rSz.Height() )
-                    nCalcH = rSz.Height();
+                // OD 05.05.2003 #i14016# - consider empty pages on calculation
+                // of page size, used for calculation of scaling.
+                Size aPageSize;
+                if ( pStPage->IsEmptyPage() )
+                {
+                    if ( pStPage->GetPhyPageNum() % 2 == 0 )
+                        aPageSize = pStPage->GetPrev()->Frm().SSize();
+                    else
+                        aPageSize = pStPage->GetNext()->Frm().SSize();
+                }
+                else
+                {
+                    aPageSize = pStPage->Frm().SSize();
+                }
+                nCalcW += aPageSize.Width();
+                if( nCalcH < aPageSize.Height() )
+                    nCalcH = aPageSize.Height();
 
                 if( 0 == (nCntPage % nCol ) ||          // neue Zeile
                     nCntPage == nPages || pStPage == pEndPage )
@@ -354,7 +351,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                     {
                         // dann Werte mit der letzen Seite auffuellen
                         if( nCntPage < nCol )
-                            nCalcW += rSz.Width() * (nCol - nCntPage);
+                            nCalcW += aPageSize.Width() * (nCol - nCntPage);
 
                         BYTE nRows = (BYTE) ( nCntPage / nCol + 1 );
                         if( nRows < nRow )
@@ -375,24 +372,6 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                         Fraction aScX( aPrtSize.Width(), nMaxColSz );
                         Fraction aScY( aPrtSize.Height(), nMaxRowSz );
 
-// JP 19.08.98: wird zur Zeit nicht ausgewertet, weil
-//              der Font sich nicht enstprechend
-//              stretch laesst.
-#if 0
-                        if( pPrtData && pPrtData->GetStretch() )
-                        {
-                            // fuer Drawing, damit diese ihre Objecte vernuenftig Painten
-                            // koennen, auf "glatte" Prozentwerte setzen
-                            long nTmp = (long)(aScY *= Fraction( 1000, 1 ));
-                            if( 1 < nTmp ) --nTmp; else nTmp = 1;
-                            aScY = Fraction( nTmp, 1000 );
-
-                            nTmp = (long)(aScX *= Fraction( 1000, 1 ));
-                            if( 1 < nTmp ) --nTmp; else nTmp = 1;
-                            aScX = Fraction( nTmp, 1000 );
-                        }
-                        else
-#endif
                         {
                             if( aScX < aScY )
                                 aScY = aScX;
@@ -463,7 +442,20 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                             aMapMode.SetOrigin( aPos );
                             pPrt->SetMapMode( aMapMode );
                             (*ppTmpPg)->GetUpper()->Paint( (*ppTmpPg)->Frm() );
-                            aCalcPt.X() += nHOffs + (*ppTmpPg)->Frm().Width();
+                            // OD 05.05.2003 #i14016# - consider empty pages
+                            // on calculation of the paint offset for the next page.
+                            aCalcPt.X() += nHOffs;
+                            if ( (*ppTmpPg)->IsEmptyPage() )
+                            {
+                                if ( (*ppTmpPg)->GetPhyPageNum() % 2 == 0 )
+                                    aCalcPt.X() += (*ppTmpPg)->GetPrev()->Frm().SSize().Width();
+                                else
+                                    aCalcPt.X() += (*ppTmpPg)->GetNext()->Frm().SSize().Width();
+                            }
+                            else
+                            {
+                                aCalcPt.X() += (*ppTmpPg)->Frm().Width();
+                            }
                             ++ppTmpPg;
                         }
                         aCalcPt.Y() += nVOffs + nPageHeight;
@@ -506,7 +498,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
     pFntCache->Flush();
 }
 
-    // Prospektdruck
+// print brochure
+// OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
+// for a page to be printed.
 void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                                SfxProgress& rProgress )
 {
@@ -684,22 +678,55 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                                 ? pNxtPage = (SwPageFrm*)aArr[ nEPg ]
                                 : 0;
 
+            // OD 05.05.2003 #i14016# - consider empty pages on calculation
+            // of page size, used for calculation of scaling.
+            Size aSttPageSize;
+            if ( pStPage )
+            {
+                if ( pStPage->IsEmptyPage() )
+                {
+                    if ( pStPage->GetPhyPageNum() % 2 == 0 )
+                        aSttPageSize = pStPage->GetPrev()->Frm().SSize();
+                    else
+                        aSttPageSize = pStPage->GetNext()->Frm().SSize();
+                }
+                else
+                {
+                    aSttPageSize = pStPage->Frm().SSize();
+                }
+            }
+            Size aNxtPageSize;
+            if ( pNxtPage )
+            {
+                if ( pNxtPage->IsEmptyPage() )
+                {
+                    if ( pNxtPage->GetPhyPageNum() % 2 == 0 )
+                        aNxtPageSize = pNxtPage->GetPrev()->Frm().SSize();
+                    else
+                        aNxtPageSize = pNxtPage->GetNext()->Frm().SSize();
+                }
+                else
+                {
+                    aNxtPageSize = pNxtPage->Frm().SSize();
+                }
+            }
+
             if( !pStPage )
             {
-                nMaxColSz = 2 * pNxtPage->Frm().SSize().Width();
-                nMaxRowSz = pNxtPage->Frm().SSize().Height();
+                nMaxColSz = 2 * aNxtPageSize.Width();
+                nMaxRowSz = aNxtPageSize.Height();
             }
             else if( !pNxtPage )
             {
-                nMaxColSz = 2 * pStPage->Frm().SSize().Width();
-                nMaxRowSz = pStPage->Frm().SSize().Height();
+                nMaxColSz = 2 * aSttPageSize.Width();
+                nMaxRowSz = aSttPageSize.Height();
             }
             else
             {
-                nMaxColSz = pNxtPage->Frm().SSize().Width() +
-                            pStPage->Frm().SSize().Width();
-                nMaxRowSz = Max( pNxtPage->Frm().SSize().Height(),
-                                 pStPage->Frm().SSize().Height() );
+                nMaxColSz = aNxtPageSize.Width() +
+                            aSttPageSize.Width();
+                nMaxRowSz = Max( aNxtPageSize.Height(),
+                                 aSttPageSize.Height() );
             }
 
             if( 0 == ( nSPg & 1 ) )     // diese muss gespiegel werden
