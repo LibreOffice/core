@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2002-04-03 14:34:41 $
+ *  last change: $Author: nn $ $Date: 2002-04-09 13:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include <svtools/filter.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
+#include <so3/transbnd.hxx>
 
 
 #include <vcl/svapp.hxx>
@@ -519,8 +520,33 @@ ULONG ScHTMLParser::Read( SvStream& rStream )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLParser, HTMLImportHdl ) );
-    ULONG nErr = pEdit->Read( rStream, EE_FORMAT_HTML,
-        pDoc->GetDocumentShell()->GetHeaderAttributes() );
+
+    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+    BOOL bLoading = pObjSh && pObjSh->IsLoading();
+
+    SvKeyValueIteratorRef xValues;
+    SvKeyValueIterator* pAttributes = NULL;
+    if ( bLoading )
+        pAttributes = pObjSh->GetHeaderAttributes();
+    else
+    {
+        //  When not loading, set up fake http headers to force the SfxHTMLParser to use UTF8
+        //  (used when pasting from clipboard)
+
+        const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
+        if( pCharSet )
+        {
+            String aContentType = String::CreateFromAscii( "text/html; charset=" );
+            aContentType.AppendAscii( pCharSet );
+
+            xValues = new SvKeyValueIterator;
+            xValues->Append( SvKeyValue( String::CreateFromAscii( sHTML_META_content_type ), aContentType ) );
+            pAttributes = xValues;
+        }
+    }
+
+    ULONG nErr = pEdit->Read( rStream, EE_FORMAT_HTML, pAttributes );
+
     pEdit->SetImportHdl( aOldLink );
     // Spaltenbreiten erzeugen
     if( bCalcWidthHeight )
