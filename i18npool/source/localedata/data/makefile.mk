@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.6 $
+#*  $Revision: 1.7 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-26 13:33:32 $
+#*  last change: $Author: bustamam $ $Date: 2002-06-01 01:42:02 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -139,6 +139,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_it_CH.cxx  \
     $(MISC)$/localedata_it_IT.cxx  \
     $(MISC)$/localedata_ja_JP.cxx  \
+    $(MISC)$/localedata_kn_IN.cxx  \
     $(MISC)$/localedata_ko_KR.cxx  \
     $(MISC)$/localedata_nb_NO.cxx  \
     $(MISC)$/localedata_nl_BE.cxx  \
@@ -151,6 +152,8 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ru_RU.cxx  \
     $(MISC)$/localedata_sv_FI.cxx  \
     $(MISC)$/localedata_sv_SE.cxx  \
+    $(MISC)$/localedata_ta_IN.cxx  \
+    $(MISC)$/localedata_te_IN.cxx  \
     $(MISC)$/localedata_th_TH.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
     $(MISC)$/localedata_zh_CN.cxx  \
