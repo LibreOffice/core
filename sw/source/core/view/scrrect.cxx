@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 10:07:48 $
+ *  last change: $Author: od $ $Date: 2002-11-20 09:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "doc.hxx"
+// OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
+#include "setmapvirtdev.hxx"
 
 DBG_NAME(RefreshTimer);
 
@@ -768,9 +770,11 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
                     aTmp = pOld->PixelToLogic( aTmp );
                     SwRect aTmp2( aTmp );
 
-                    Point aOrigin( aTmp2.Pos() );
-                    aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
-                    aMapMode.SetOrigin( aOrigin );
+                    // OD 12.11.2002 #96272# - use method to set mapping
+                    //Point aOrigin( aTmp2.Pos() );
+                    //aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
+                    //aMapMode.SetOrigin( aOrigin );
+                    ::SetMappingForVirtDev( aTmp2.Pos(), &aMapMode, pOld, pVout );
                     pVout->SetMapMode( aMapMode );
 
                     pLayout->Paint( aTmp2 );
@@ -1173,6 +1177,9 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2002/09/16 10:07:48  fme
+      #100842# Do not read uninitialized nControl from document
+
       Revision 1.4  2001/11/29 15:50:52  ama
       Fix: Paragraph scrolling in vertical text
 
