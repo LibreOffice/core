@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:03:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_FLD_DB
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇÊµåÀ¯Çü";
+        Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
         Text[ turkish ] = "Alan tipi";
     };
     ListBox LB_DBTYPE
@@ -140,7 +140,7 @@ TabPage TP_FLD_DB
         TEXT[ chinese_traditional ] = "±ø¥ó(~C)";
         TEXT[ arabic ] = "ÇáÔÑØ";
         TEXT[ greek ] = "¼ñïò";
-        TEXT[ korean ] = "Á¶°Ç)";
+        TEXT[ korean ] = "Á¶°Ç)(~C)";
         TEXT[ turkish ] = "Koşul";
     };
     Edit ED_DBCONDITION
@@ -210,7 +210,7 @@ TabPage TP_FLD_DB
         Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ®w(~E)";
         Text[ arabic ] = "ÇÎÊíÇÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ";
+        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ(~E)";
         Text[ turkish ] = "Veritabanı seçimi";
     };
     Control TLB_DBLIST
