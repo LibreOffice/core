@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:20:40 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 15:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ String RID_SVXITEMS_SEARCHIN_FORMULA
     Text [ English ] = "Formula" ;
     Text [ norwegian ] = "Formel" ;
     Text [ italian ] = "Formula" ;
-    Text [ portuguese_brazilian ] = "Fórmula" ;
+    Text [ portuguese_brazilian ] = "F?mula" ;
     Text [ portuguese ] = "Fórmula" ;
     Text [ finnish ] = "Kaava" ;
     Text [ danish ] = "Formel" ;
@@ -409,7 +409,7 @@ String RID_SVXITEMS_SEARCHIN_VALUE
     Text [ english_us ] = "Value" ;
     Text[ chinese_simplified ] = "ÊıÖµ";
     Text[ russian ] = "Çíà÷åíèå";
-    Text[ polish ] = "Wartoœæ";
+    Text[ polish ] = "Warto?æ";
     Text[ japanese ] = "’l";
     Text[ chinese_traditional ] = "¼Æ­È";
     Text[ arabic ] = "ÇáŞíãÉ";
@@ -425,7 +425,7 @@ String RID_SVXITEMS_SEARCHIN_NOTE
     Text [ English ] = "Note" ;
     Text [ norwegian ] = "Merknad" ;
     Text [ italian ] = "Nota" ;
-    Text [ portuguese_brazilian ] = "Observação" ;
+    Text [ portuguese_brazilian ] = "Observa??o" ;
     Text [ portuguese ] = "Anotação" ;
     Text [ finnish ] = "Huomautus" ;
     Text [ danish ] = "Note" ;
@@ -470,7 +470,7 @@ String RID_SVXITEMS_BREAK_NONE
     Text [ English ] = "No break" ;
     Text [ norwegian ] = "Ingen skift" ;
     Text [ italian ] = "Nessuna interruzione" ;
-    Text [ portuguese_brazilian ] = "Sem interrupção" ;
+    Text [ portuguese_brazilian ] = "Sem interrup??o" ;
     Text [ portuguese ] = "Sem quebra" ;
     Text [ finnish ] = "Ei rivinvaihtoa" ;
     Text [ danish ] = "Ingen skift" ;
@@ -524,7 +524,7 @@ String RID_SVXITEMS_BREAK_COLUMN_AFTER
     Text [ English ] = "Break after new column" ;
     Text [ norwegian ] = "Skiftt etter ny kolonne" ;
     Text [ italian ] = "Interrompi dopo nuova colonna" ;
-    Text [ portuguese_brazilian ] = "Interromper após nova coluna" ;
+    Text [ portuguese_brazilian ] = "Interromper ap? nova coluna" ;
     Text [ portuguese ] = "Quebra após nova coluna" ;
     Text [ finnish ] = "Rivinvaihto uuden sarakkeen jälkeen" ;
     Text [ danish ] = "Skift efter ny kolonne" ;
@@ -551,7 +551,7 @@ String RID_SVXITEMS_BREAK_COLUMN_BOTH
     Text [ English ] = "Break before and after new column" ;
     Text [ norwegian ] = "Skift før og etter ny kolonne" ;
     Text [ italian ] = "Interrompi prima e dopo nuova colonna" ;
-    Text [ portuguese_brazilian ] = "Interromper antes e após nova coluna" ;
+    Text [ portuguese_brazilian ] = "Interromper antes e ap? nova coluna" ;
     Text [ portuguese ] = "Quebra antes e após nova coluna" ;
     Text [ finnish ] = "Rivinvaihto uutta saraketta ennen ja uuden sarakkeen jälkeen" ;
     Text [ danish ] = "Skift før og efter ny kolonne" ;
@@ -578,7 +578,7 @@ String RID_SVXITEMS_BREAK_PAGE_BEFORE
     Text [ English ] = "Break before new page" ;
     Text [ norwegian ] = "Skift før ny side" ;
     Text [ italian ] = "Interrompi prima di nuova pagina" ;
-    Text [ portuguese_brazilian ] = "Interromper antes de nova página" ;
+    Text [ portuguese_brazilian ] = "Interromper antes de nova p?gina" ;
     Text [ portuguese ] = "Quebra antes de nova página" ;
     Text [ finnish ] = "Rivinvaihto ennen uutta sivua" ;
     Text [ danish ] = "Skift før ny side" ;
@@ -605,7 +605,7 @@ String RID_SVXITEMS_BREAK_PAGE_AFTER
     Text [ English ] = "Break after new page" ;
     Text [ norwegian ] = "Skift etter ny side" ;
     Text [ italian ] = "Interrompi dopo nuova pagina" ;
-    Text [ portuguese_brazilian ] = "Interromper após nova página" ;
+    Text [ portuguese_brazilian ] = "Interromper ap? nova p?gina" ;
     Text [ portuguese ] = "Quebra após nova página" ;
     Text [ finnish ] = "Rivinvaihto uuden sivun jälkeen" ;
     Text [ danish ] = "Skift efter ny side" ;
@@ -632,7 +632,7 @@ String RID_SVXITEMS_BREAK_PAGE_BOTH
     Text [ English ] = "Break before and after new page" ;
     Text [ norwegian ] = "Skift før  og etter ny side" ;
     Text [ italian ] = "Interrompi prima e dopo nuova pagina" ;
-    Text [ portuguese_brazilian ] = "Interromper antes e após nova página" ;
+    Text [ portuguese_brazilian ] = "Interromper antes e ap? nova p?gina" ;
     Text [ portuguese ] = "Quebra antes e após nova página" ;
     Text [ finnish ] = "Rivinvaihto uutta sivua ennen ja uuden sivun jälkeen" ;
     Text [ danish ] = "Skift før og efter ny side" ;
@@ -687,7 +687,7 @@ String RID_SVXITEMS_SHADOW_TOPLEFT
     Text [ English ] = "Shadow top left" ;
     Text [ norwegian ] = "Skygge venstre topp" ;
     Text [ italian ] = "Ombra in alto a sinistra" ;
-    Text [ portuguese_brazilian ] = "Sombra no topo à esquerda" ;
+    Text [ portuguese_brazilian ] = "Sombra no topo ? esquerda" ;
     Text [ portuguese ] = "Sombra em cima à esquerda" ;
     Text [ finnish ] = "Varjostus ylävasemmalle" ;
     Text [ danish ] = "Skygge øverst til venstre" ;
@@ -714,7 +714,7 @@ String RID_SVXITEMS_SHADOW_TOPRIGHT
     Text [ English ] = "Shadow top right" ;
     Text [ norwegian ] = "Skygge høyre topp" ;
     Text [ italian ] = "Ombra in alto a destra" ;
-    Text [ portuguese_brazilian ] = "Sombra no topo à direita" ;
+    Text [ portuguese_brazilian ] = "Sombra no topo ? direita" ;
     Text [ portuguese ] = "Sombra em cima à direita" ;
     Text [ finnish ] = "Varjostus yläoikealle" ;
     Text [ danish ] = "Skygge øverst til højre" ;
@@ -741,7 +741,7 @@ String RID_SVXITEMS_SHADOW_BOTTOMLEFT
     Text [ English ] = "Shadow bottom left" ;
     Text [ norwegian ] = "Skygge venstre bunn" ;
     Text [ italian ] = "Ombra in basso a sinistra" ;
-    Text [ portuguese_brazilian ] = "Sombra na base à esquerda" ;
+    Text [ portuguese_brazilian ] = "Sombra na base ? esquerda" ;
     Text [ portuguese ] = "Sombra em baixo à esquerda" ;
     Text [ finnish ] = "Varjostus alavasemmalle" ;
     Text [ danish ] = "Skygge nederst til venstre" ;
@@ -768,7 +768,7 @@ String RID_SVXITEMS_SHADOW_BOTTOMRIGHT
     Text [ English ] = "Shadow bottom right" ;
     Text [ norwegian ] = "Skygge høyre bunn" ;
     Text [ italian ] = "Ombra in basso a destra" ;
-    Text [ portuguese_brazilian ] = "Sombra na base à direita" ;
+    Text [ portuguese_brazilian ] = "Sombra na base ? direita" ;
     Text [ portuguese ] = "Sombra em baixo à direita" ;
     Text [ finnish ] = "Varjostus alaoikealle" ;
     Text [ danish ] = "Skygge nederst til højre" ;
@@ -823,7 +823,7 @@ String RID_SVXITEMS_BRUSHSTYLE_SOLID
     Text [ English ] = "Solid" ;
     Text [ norwegian ] = "Solid" ;
     Text [ italian ] = "Pieno" ;
-    Text [ portuguese_brazilian ] = "Sólido" ;
+    Text [ portuguese_brazilian ] = "S?ido" ;
     Text [ portuguese ] = "Cheio" ;
     Text [ finnish ] = "Tasainen" ;
     Text [ danish ] = "Massiv" ;
@@ -1575,7 +1575,7 @@ String RID_SVXITEMS_ITALIC_NONE
     Text [ English ] = "Not italic" ;
     Text [ norwegian ] = "Ikke kursiv" ;
     Text [ italian ] = "Non corsivo" ;
-    Text [ portuguese_brazilian ] = "Não itálico" ;
+    Text [ portuguese_brazilian ] = "N?o it?lico" ;
     Text [ portuguese ] = "Sem Itálico" ;
     Text [ finnish ] = "Ei kursivoitu" ;
     Text [ danish ] = "Ikke kursiv" ;
@@ -1603,7 +1603,7 @@ String RID_SVXITEMS_ITALIC_OBLIQUE
     Text [ English ] = "Oblique italic" ;
     Text [ norwegian ] = "+++Oblique kursiv" ;
     Text [ italian ] = "Corsivo obliquo" ;
-    Text [ portuguese_brazilian ] = "Itálico oblíquo" ;
+    Text [ portuguese_brazilian ] = "It?lico obl?quo" ;
     Text [ portuguese ] = "Itálico oblíquo" ;
     Text [ finnish ] = "Kallistettu kursiivi" ;
     Text [ danish ] = "Skrå kursiv" ;
@@ -1614,7 +1614,7 @@ String RID_SVXITEMS_ITALIC_OBLIQUE
     Text [ english_us ] = "Oblique italic" ;
     Text[ chinese_simplified ] = "ÄÚÇãĞ±Ìå";
     Text[ russian ] = "Íàêëîííûé êóğñèâ";
-    Text[ polish ] = "Skoœna kursywa";
+    Text[ polish ] = "Sko?na kursywa";
     Text[ japanese ] = "Î“Š‰e–@‚ÌÎ‘Ì";
     Text[ chinese_traditional ] = "¤º¶É±×Åé";
     Text[ arabic ] = "ãÇÆá ãäÍÏÑ";
@@ -1630,7 +1630,7 @@ String RID_SVXITEMS_ITALIC_NORMAL
     Text [ English ] = "Italic" ;
     Text [ norwegian ] = "Kursiv" ;
     Text [ italian ] = "Corsivo" ;
-    Text [ portuguese_brazilian ] = "Itálico" ;
+    Text [ portuguese_brazilian ] = "It?lico" ;
     Text [ portuguese ] = "Itálico" ;
     Text [ finnish ] = "Kursivointi" ;
     Text [ danish ] = "Kursiv" ;
@@ -1799,7 +1799,7 @@ String RID_SVXITEMS_WEIGHT_MEDIUM
     Text [ English ] = "medium" ;
     Text [ norwegian ] = "medium" ;
     Text [ italian ] = "medio" ;
-    Text [ portuguese_brazilian ] = "médio" ;
+    Text [ portuguese_brazilian ] = "m?dio" ;
     Text [ portuguese ] = "médio" ;
     Text [ finnish ] = "normaali" ;
     Text [ danish ] = "middel" ;
@@ -1810,7 +1810,7 @@ String RID_SVXITEMS_WEIGHT_MEDIUM
     Text [ english_us ] = "medium" ;
     Text[ chinese_simplified ] = "ÖĞµÈ";
     Text[ russian ] = "ñğåäíèé";
-    Text[ polish ] = "œrednio";
+    Text[ polish ] = "?rednio";
     Text[ japanese ] = "•’Ê";
     Text[ chinese_traditional ] = "¤¤µ¥";
     Text[ arabic ] = "ãÊæÓØ";
@@ -1946,7 +1946,7 @@ String RID_SVXITEMS_UL_NONE
     Text [ english_us ] = "No underline" ;
     Text[ chinese_simplified ] = "Ã»ÓĞÏÂ»®Ïß";
     Text[ russian ] = "Áåç ïîä÷åğêèâàíèÿ";
-    Text[ polish ] = "Nie podkreœlony";
+    Text[ polish ] = "Nie podkre?lony";
     Text[ japanese ] = "‰ºü‚È‚µ";
     Text[ chinese_traditional ] = "µL©³½u";
     Text[ arabic ] = "ÈÏæä ÎØ ÊÍÊí";
@@ -1973,7 +1973,7 @@ String RID_SVXITEMS_UL_SINGLE
     Text [ english_us ] = "Single underline" ;
     Text[ chinese_simplified ] = "µ¥ÏÂ»®Ïß";
     Text[ russian ] = "Îäèíàğíîå ïîä÷åğêèâàíèå";
-    Text[ polish ] = "Pojedyncze podkreœlenie";
+    Text[ polish ] = "Pojedyncze podkre?lenie";
     Text[ japanese ] = "‰ºü";
     Text[ chinese_traditional ] = "³æ©³½u";
     Text[ arabic ] = "ÎØ ÊÍÊí ãİÑÏ";
@@ -2000,7 +2000,7 @@ String RID_SVXITEMS_UL_DOUBLE
     Text [ english_us ] = "Double underlne" ;
     Text[ chinese_simplified ] = "Ë«ÏÂ»®Ïß";
     Text[ russian ] = "Äâîéíîå ïîä÷åğêèâàíèå";
-    Text[ polish ] = "Podwójne podkreœlenie";
+    Text[ polish ] = "Podwójne podkre?lenie";
     Text[ japanese ] = "“ñd‰ºü";
     Text[ chinese_traditional ] = "Âù©³½u";
     Text[ arabic ] = "ÎØ ÊÍÊí ãÒÏæÌ";
@@ -2027,7 +2027,7 @@ String RID_SVXITEMS_UL_DOTTED
     Text [ english_us ] = "Dotted underline" ;
     Text[ chinese_simplified ] = "ÏÂ»®µãÏß";
     Text[ russian ] = "Òî÷å÷íîå ïîä÷åğêèâàíèå";
-    Text[ polish ] = "Kropkowanie podkreœlone";
+    Text[ polish ] = "Kropkowanie podkre?lone";
     Text[ japanese ] = "“_‰ºü";
     Text[ chinese_traditional ] = "¤U¹ºÂI½u";
     Text[ arabic ] = "ÎØ ÊÍÊí ãäŞØ";
@@ -2050,7 +2050,7 @@ String RID_SVXITEMS_UL_DONTKNOW
     Text[ italian ] = "Sottolineato";
     Text[ danish ] = "Understreget";
     Text[ swedish ] = "Understruken";
-    Text[ polish ] = "Podkreœlenie";
+    Text[ polish ] = "Podkre?lenie";
     Text[ portuguese_brazilian ] = "Underline";
     Text[ japanese ] = "‰ºü";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß";
@@ -2076,7 +2076,7 @@ String RID_SVXITEMS_UL_DASH
     Text[ italian ] = "Sottolineato (tratto)";
     Text[ danish ] = "Understreget (streg)";
     Text[ swedish ] = "Understruken (streck)";
-    Text[ polish ] = "Podkreœlenie (kreski)";
+    Text[ polish ] = "Podkre?lenie (kreski)";
     Text[ portuguese_brazilian ] = "Underline (Dash)";
     Text[ japanese ] = "‰ºü(”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(»®Ïß)";
@@ -2102,7 +2102,7 @@ String RID_SVXITEMS_UL_LONGDASH
     Text[ italian ] = "Sottolineato (tratto lungo)";
     Text[ danish ] = "Understreget (streg lang)";
     Text[ swedish ] = "Understruken (långt streck)";
-    Text[ polish ] = "Podkreœlenie (D³ugi ³¹cznik)";
+    Text[ polish ] = "Podkre?lenie (D³ugi ³¹cznik)";
     Text[ portuguese_brazilian ] = "Underline (Long dash)";
     Text[ japanese ] = "‰ºü(’·‚¢”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(³¤»®Ïß)";
@@ -2128,7 +2128,7 @@ String RID_SVXITEMS_UL_DASHDOT
     Text[ italian ] = "Sottolineato (punto tratto)";
     Text[ danish ] = "Understreget (prik streg)";
     Text[ swedish ] = "Understruken (punkt streck)";
-    Text[ polish ] = "Podkreœlenie (kropka-kreska)";
+    Text[ polish ] = "Podkre?lenie (kropka-kreska)";
     Text[ portuguese_brazilian ] = "Underline (Dot dash)";
     Text[ japanese ] = "‰ºü(ˆê“_½ü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(µã»®Ïß)";
@@ -2154,7 +2154,7 @@ String RID_SVXITEMS_UL_DASHDOTDOT
     Text[ italian ] = "Sottolineato (punto punto tratto)";
     Text[ danish ] = "Understreget (prik prik streg)";
     Text[ swedish ] = "Understruken (punkt punkt streck)";
-    Text[ polish ] = "Podkreœlenie (kropka-kropka-kreska)";
+    Text[ polish ] = "Podkre?lenie (kropka-kropka-kreska)";
     Text[ portuguese_brazilian ] = "Underline (Dot dot dash)";
     Text[ japanese ] = "‰ºü(“ñ“_½ü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(µãµã»®Ïß)";
@@ -2180,7 +2180,7 @@ String RID_SVXITEMS_UL_SMALLWAVE
     Text[ italian ] = "Sottolineato (linea ondulata piccola)";
     Text[ danish ] = "Understreget (bølger små)";
     Text[ swedish ] = "Understruken (liten våg)";
-    Text[ polish ] = "Podkreœlenie (Cienka fala)";
+    Text[ polish ] = "Podkre?lenie (Cienka fala)";
     Text[ portuguese_brazilian ] = "Underline (Small wave)";
     Text[ japanese ] = "‰ºü(×‚©‚¢”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(Ğ¡²¨ÀËÏß)";
@@ -2206,7 +2206,7 @@ String RID_SVXITEMS_UL_WAVE
     Text[ italian ] = "Sottolienato (linea ondulata)";
     Text[ danish ] = "Understreget (bølger)";
     Text[ swedish ] = "Understruken (våg)";
-    Text[ polish ] = "Podkreœlenie (Fala)";
+    Text[ polish ] = "Podkre?lenie (Fala)";
     Text[ portuguese_brazilian ] = "Underline (Wave)";
     Text[ japanese ] = "‰ºü(”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(²¨ÀËÏß)";
@@ -2232,7 +2232,7 @@ String RID_SVXITEMS_UL_DOUBLEWAVE
     Text[ italian ] = "Sottolineato (linea ondulata doppia)";
     Text[ danish ] = "Understreget (bølger dobbelt)";
     Text[ swedish ] = "Understruken (dubbel våg)";
-    Text[ polish ] = "Podkreœlenie (Podwójna fala)";
+    Text[ polish ] = "Podkre?lenie (Podwójna fala)";
     Text[ portuguese_brazilian ] = "Underline (Double wave)";
     Text[ japanese ] = "‰ºü(“ñd”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(Ë«²¨ÀËÏß)";
@@ -2258,7 +2258,7 @@ String RID_SVXITEMS_UL_BOLD
     Text[ italian ] = "Sottolineato grassetto";
     Text[ danish ] = "Understreget (fed)";
     Text[ swedish ] = "Fet understruken";
-    Text[ polish ] = "Podkreœlenie pogrubione";
+    Text[ polish ] = "Podkre?lenie pogrubione";
     Text[ portuguese_brazilian ] = "Bold underline";
     Text[ japanese ] = "‘¾‚¢‰ºü";
     Text[ chinese_simplified ] = "´ÖĞÍÏÂ»®Ïß";
@@ -2284,7 +2284,7 @@ String RID_SVXITEMS_UL_BOLDDOTTED
     Text[ italian ] = "Sottolineato grassetto punteggiato";
     Text[ danish ] = "Understreget (fed punkteret)";
     Text[ swedish ] = "Fet prickad understruken";
-    Text[ polish ] = "Podkreœlenie w kropki pogrubione";
+    Text[ polish ] = "Podkre?lenie w kropki pogrubione";
     Text[ portuguese_brazilian ] = "Bold dotted underline";
     Text[ japanese ] = "‘¾‚¢“_‰ºü";
     Text[ chinese_simplified ] = "´ÖĞÍÏÂ»®µãÏß";
@@ -2310,7 +2310,7 @@ String RID_SVXITEMS_UL_BOLDDASH
     Text[ italian ] = "Sottolineato (tratto grassetto)";
     Text[ danish ] = "Understreget (streg fed)";
     Text[ swedish ] = "Understruken (streck fet)";
-    Text[ polish ] = "Podkreœlenie (pogrubione kreski)";
+    Text[ polish ] = "Podkre?lenie (pogrubione kreski)";
     Text[ portuguese_brazilian ] = "Underline (Bold dash)";
     Text[ japanese ] = "‰ºü(‘¾‚¢”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍ»®Ïß)";
@@ -2336,7 +2336,7 @@ String RID_SVXITEMS_UL_BOLDLONGDASH
     Text[ italian ] = "Sottolineato (tratto grassetto lungo)";
     Text[ danish ] = "Undertreget (streg fed lang)";
     Text[ swedish ] = "Understruken (streck fet lång)";
-    Text[ polish ] = "Podkreœlenie (Gruby d³ugi ³¹cznik)";
+    Text[ polish ] = "Podkre?lenie (Gruby d³ugi ³¹cznik)";
     Text[ portuguese_brazilian ] = "Underline (Bold long dash)";
     Text[ japanese ] = "‰ºü(‘¾’·‚¢”jü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍ³¤»®Ïß)";
@@ -2362,7 +2362,7 @@ String RID_SVXITEMS_UL_BOLDDASHDOT
     Text[ italian ] = "Sottolineato (punto tratto grassetto)";
     Text[ danish ] = "Understreget (prik streg fed)";
     Text[ swedish ] = "Understruken (punkt streck fet)";
-    Text[ polish ] = "Podkreœlenie (kropka-gruba kreska)";
+    Text[ polish ] = "Podkre?lenie (kropka-gruba kreska)";
     Text[ portuguese_brazilian ] = "Underline (Bold dot dash)";
     Text[ japanese ] = "‰ºü(‘¾‚¢ˆê“_½üj";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍµã»®Ïß)";
@@ -2388,7 +2388,7 @@ String RID_SVXITEMS_UL_BOLDDASHDOTDOT
     Text[ italian ] = "Sottolineato (punto punto tratto grassetto)";
     Text[ danish ] = "Understreget (prik prik streg fed)";
     Text[ swedish ] = "Understruken (punkt punkt streck fet)";
-    Text[ polish ] = "Podkreœlenie (kropka-kropka-gruba kreska)";
+    Text[ polish ] = "Podkre?lenie (kropka-kropka-gruba kreska)";
     Text[ portuguese_brazilian ] = "Underline (Bold dot dot dash)";
     Text[ japanese ] = "‰ºü(‘¾‚¢“ñ“_½ü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍµãµã»®Ïß)";
@@ -2414,7 +2414,7 @@ String RID_SVXITEMS_UL_BOLDWAVE
     Text[ italian ] = "Sottolineato (linea ondulata grassetto)";
     Text[ danish ] = "Understreget (bølge fed)";
     Text[ swedish ] = "Understruken (våg fet)";
-    Text[ polish ] = "Podkreœlenie (Gruba fala)";
+    Text[ polish ] = "Podkre?lenie (Gruba fala)";
     Text[ portuguese_brazilian ] = "Underline (Bold wave)";
     Text[ japanese ] = "‰ºü(‘¾‚¢”gü)";
     Text[ chinese_simplified ] = "ÏÂ»®Ïß(´ÖĞÍ²¨ÀËÏß)";
@@ -2445,7 +2445,7 @@ String RID_SVXITEMS_STRIKEOUT_NONE
     Text [ english_us ] = "No strikethrough" ;
     Text[ chinese_simplified ] = "²»ÓÃÉ¾³ıÏß";
     Text[ russian ] = "Áåç çà÷åğêèâàíèÿ";
-    Text[ polish ] = "Nie przekreœlony";
+    Text[ polish ] = "Nie przekre?lony";
     Text[ japanese ] = "æ‚èÁ‚µü‚È‚µ";
     Text[ chinese_traditional ] = "¤£¥Î§R°£½u";
     Text[ arabic ] = "ÛíÑ ãÔØæÈ";
@@ -2472,7 +2472,7 @@ String RID_SVXITEMS_STRIKEOUT_SINGLE
     Text [ english_us ] = "Single strikethrough" ;
     Text[ chinese_simplified ] = "µ¥É¾³ıÏß";
     Text[ russian ] = "Îäèíàğíîå çà÷åğêèâàíèå";
-    Text[ polish ] = "Pojedyncze podkreœlenie";
+    Text[ polish ] = "Pojedyncze podkre?lenie";
     Text[ japanese ] = "æ‚èÁ‚µü";
     Text[ chinese_traditional ] = "³æ§R°£½u";
     Text[ arabic ] = "ãÔØæÈ ãÑÉ æÇÍÏÉ";
@@ -2499,7 +2499,7 @@ String RID_SVXITEMS_STRIKEOUT_DOUBLE
     Text [ english_us ] = "Double strikethrough" ;
     Text[ chinese_simplified ] = "Ë«É¾³ıÏß";
     Text[ russian ] = "Äâîéíîå çà÷åğêèâàíèå";
-    Text[ polish ] = "Podwójne przekreœlenie";
+    Text[ polish ] = "Podwójne przekre?lenie";
     Text[ japanese ] = "“ñdæ‚èÁ‚µü";
     Text[ chinese_traditional ] = "Âù§R°£½u";
     Text[ arabic ] = "ãÔØæÈ ÈÎØ ãÒÏæÌ";
@@ -2522,7 +2522,7 @@ String RID_SVXITEMS_STRIKEOUT_BOLD
     Text[ italian ] = "Barrato grassetto";
     Text[ danish ] = "Fed gennemstreget";
     Text[ swedish ] = "Fet genomstruken";
-    Text[ polish ] = "Przekreœlenie pogrubione";
+    Text[ polish ] = "Przekre?lenie pogrubione";
     Text[ portuguese_brazilian ] = "Bold strike through";
     Text[ japanese ] = "‘¾‚¢æ‚èÁ‚µü";
     Text[ chinese_simplified ] = "´ÖĞÍÉ¾³ıÏß";
@@ -2548,7 +2548,7 @@ String RID_SVXITEMS_STRIKEOUT_SLASH
     Text[ italian ] = "Barrato con /";
     Text[ danish ] = "Gennemstreget med /";
     Text[ swedish ] = "Genomstruken med /";
-    Text[ polish ] = "Przekreœlenie przez /";
+    Text[ polish ] = "Przekre?lenie przez /";
     Text[ portuguese_brazilian ] = "Strike through with /";
     Text[ japanese ] = "/ ‚Åæ‚èÁ‚µ";
     Text[ chinese_simplified ] = "ÓÃ / ´úÌæÉ¾³ıÏß";
@@ -2574,7 +2574,7 @@ String RID_SVXITEMS_STRIKEOUT_X
     Text[ italian ] = "Barrato con X";
     Text[ danish ] = "Gennemstreget med X";
     Text[ swedish ] = "Genomstruken med X";
-    Text[ polish ] = "Przekreœlenie przez X";
+    Text[ polish ] = "Przekre?lenie przez X";
     Text[ portuguese_brazilian ] = "Strike through with X";
     Text[ japanese ] = "X ‚Åæ‚èÁ‚µ";
     Text[ chinese_simplified ] = "ÓÃ X ´úÌæÉ¾³ıÏß";
@@ -2621,7 +2621,7 @@ String RID_SVXITEMS_CASEMAP_VERSALIEN
     Text [ English ] = "All caps" ;
     Text [ norwegian ] = "Alle bokstaver" ;
     Text [ italian ] = "Tutto maiuscole" ;
-    Text [ portuguese_brazilian ] = "Tudo em maiúsculas" ;
+    Text [ portuguese_brazilian ] = "Tudo em mai?culas" ;
     Text [ portuguese ] = "Maiúsculas" ;
     Text [ finnish ] = "Kirjaimet" ;
     Text [ danish ] = "Store bogstaver" ;
@@ -2675,7 +2675,7 @@ String RID_SVXITEMS_CASEMAP_TITEL
     Text [ English ] = "Title" ;
     Text [ norwegian ] = "Tittel" ;
     Text [ italian ] = "Titolo" ;
-    Text [ portuguese_brazilian ] = "Título" ;
+    Text [ portuguese_brazilian ] = "T?tulo" ;
     Text [ portuguese ] = "Caracteres do título" ;
     Text [ finnish ] = "Otsikko" ;
     Text [ danish ] = "Titelskrift" ;
@@ -2931,7 +2931,7 @@ String RID_SVXITEMS_ADJUST_CENTER
     Text [ english_us ] = "Centered" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ russian ] = "Ïî öåíòğó";
-    Text[ polish ] = "Wyœrodkowany";
+    Text[ polish ] = "Wy?rodkowany";
     Text[ japanese ] = "’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ";
@@ -3166,7 +3166,7 @@ String RID_SVXITEMS_TAB_ADJUST_CENTER
     Text [ english_us ] = "Centered" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ russian ] = "Ïî öåíòğó";
-    Text[ polish ] = "Wyœrodkowany";
+    Text[ polish ] = "Wy?rodkowany";
     Text[ japanese ] = "’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ";
@@ -3182,7 +3182,7 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
     Text [ English ] = "Default" ;
     Text [ norwegian ] = "Standard" ;
     Text [ italian ] = "Predefinito" ;
-    Text [ portuguese_brazilian ] = "Padrão" ;
+    Text [ portuguese_brazilian ] = "Padr?o" ;
     Text [ portuguese ] = "Padrão" ;
     Text [ finnish ] = "Oletusarvo" ;
     Text [ danish ] = "Standard" ;
@@ -3193,7 +3193,7 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏ";
     Text[ russian ] = "Ïî óìîë÷àíèş";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "Šù’è’l";
     Text[ chinese_traditional ] = "Àq»{";
     Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -3265,7 +3265,7 @@ String RID_ATTR_TABSTOP
     Text [ English ] = "Tabstops" ;
     Text [ norwegian ] = "Tabulatorstoppere" ;
     Text [ italian ] = "Tabulazioni" ;
-    Text [ portuguese_brazilian ] = "Paradas de tabulação" ;
+    Text [ portuguese_brazilian ] = "Paradas de tabula??o" ;
     Text [ portuguese ] = "Tabulações" ;
     Text [ finnish ] = "Sarkaimet" ;
     Text [ danish ] = "Tabulatorer" ;
@@ -3304,7 +3304,7 @@ String RID_ATTR_CHAR
     Text [ English ] = "Char" ;
     Text [ norwegian ] = "Char" ;
     Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Merkki" ;
     Text [ danish ] = "Tegn" ;
@@ -3397,7 +3397,7 @@ String RID_ATTR_CHAR_WEIGHT
     Text [ english_us ] = "Font Weight" ;
     Text[ chinese_simplified ] = "×ÖÌå´ÖÏ¸";
     Text[ russian ] = "Òîëùèíà øğèôòà";
-    Text[ polish ] = "Gruboœæ czcionki";
+    Text[ polish ] = "Grubo?æ czcionki";
     Text[ japanese ] = "Ì«İÄ‚Ì‘¾‚³";
     Text[ chinese_traditional ] = "¦r«¬²Ê²Ó";
     Text[ arabic ] = "ÚÑÖ ÇáÎØ";
@@ -3507,7 +3507,7 @@ String RID_ATTR_CHAR_STRIKEOUT
     Text [ english_us ] = "Strikethrough" ;
     Text[ chinese_simplified ] = "É¾³ıÏß";
     Text[ russian ] = "Çà÷åğêíóòûé";
-    Text[ polish ] = "Przekreœlony";
+    Text[ polish ] = "Przekre?lony";
     Text[ japanese ] = "æ‚èÁ‚µü";
     Text[ chinese_traditional ] = "§R°£½u";
     Text[ arabic ] = "ÔØÈ";
@@ -3534,7 +3534,7 @@ String RID_ATTR_CHAR_UNDERLINE
     Text [ english_us ] = "Underline" ;
     Text[ chinese_simplified ] = "ÏÂ»®Ïß";
     Text[ russian ] = "Ïîä÷åğêíóòûé";
-    Text[ polish ] = "Podkreœlenie";
+    Text[ polish ] = "Podkre?lenie";
     Text[ japanese ] = "‰ºü";
     Text[ chinese_traditional ] = "©³½u";
     Text[ arabic ] = "ÊÍÊå ÎØ";
@@ -3562,7 +3562,7 @@ String RID_ATTR_CHAR_FONTHEIGHT
     Text [ english_us ] = "Font Height" ;
     Text[ chinese_simplified ] = "×ÖÌå¸ß¶È";
     Text[ russian ] = "Âûñîòà øğèôòà";
-    Text[ polish ] = "Wysokoœæ czcionki";
+    Text[ polish ] = "Wysoko?æ czcionki";
     Text[ japanese ] = "Ì«İÄ‚Ìc";
     Text[ chinese_traditional ] = "¦r«¬°ª«×";
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÎØ";
@@ -3590,7 +3590,7 @@ String RID_ATTR_CHAR_PROPSIZE
     Text [ english_us ] = "Rel. Font Size" ;
     Text[ chinese_simplified ] = "±ê×¼×ÖÌå´óĞ¡";
     Text[ russian ] = "Ğàçìåğ îòíîñèò.";
-    Text[ polish ] = "Wzglêdna wielkoœæ czcionki";
+    Text[ polish ] = "Wzglêdna wielko?æ czcionki";
     Text[ japanese ] = "‘Š‘Î“I Ì«İÄ‚Ì»²½Ş";
     Text[ chinese_traditional ] = "¼Ğ·Ç¦r«¬¤j¤p";
     Text[ arabic ] = "ÇáÍÌã ÇáäÓÈí ááÎØ";
@@ -3808,7 +3808,7 @@ String RID_ATTR_PARA
     Text [ English ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Par?grafo" ;
     Text [ portuguese ] = "Parágrafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -3882,7 +3882,7 @@ String RID_ATTR_PARA_LINESPACE
     Text [ English ] = "Linespace" ;
     Text [ norwegian ] = "Linjemellomrom" ;
     Text [ italian ] = "Interlinea" ;
-    Text [ portuguese_brazilian ] = "Espaço de linha" ;
+    Text [ portuguese_brazilian ] = "Espa?o de linha" ;
     Text [ portuguese ] = "Entrelinhas" ;
     Text [ finnish ] = "Riviväli" ;
     Text [ danish ] = "Linjeafstand" ;
@@ -3921,7 +3921,7 @@ String RID_ATTR_PARA_PAGEBREAK
     Text [ English ] = "Pagebreak" ;
     Text [ norwegian ] = "Sideskift" ;
     Text [ italian ] = "Interruzione di pagina" ;
-    Text [ portuguese_brazilian ] = "Quebra de página" ;
+    Text [ portuguese_brazilian ] = "Quebra de p?gina" ;
     Text [ portuguese ] = "Quebra de página" ;
     Text [ finnish ] = "Sivunvaihto" ;
     Text [ danish ] = "Sideskift" ;
@@ -3948,7 +3948,7 @@ String RID_ATTR_PARA_HYPHENZONE
     Text [ English ] = "Hyphenzone" ;
     Text [ norwegian ] = "Orddelingssone" ;
     Text [ italian ] = "Sillabazione" ;
-    Text [ portuguese_brazilian ] = "Zona de hífen" ;
+    Text [ portuguese_brazilian ] = "Zona de h?fen" ;
     Text [ portuguese ] = "Divisão silábica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
@@ -3975,7 +3975,7 @@ String RID_ATTR_PARA_SPLIT
     Text [ English ] = "Split paragraph" ;
     Text [ norwegian ] = "Del opp avsnitt" ;
     Text [ italian ] = "Dividi paragrafo" ;
-    Text [ portuguese_brazilian ] = "Partir parágrafo" ;
+    Text [ portuguese_brazilian ] = "Partir par?grafo" ;
     Text [ portuguese ] = "Dividir parágrafo" ;
     Text [ finnish ] = "Jaa kappale" ;
     Text [ danish ] = "Del afsnit" ;
@@ -4029,7 +4029,7 @@ String RID_ATTR_PARA_ORPHANS
     Text [ English ] = "Orphans" ;
     Text [ norwegian ] = "Enkelinjer nederst" ;
     Text [ italian ] = "Orfane" ;
-    Text [ portuguese_brazilian ] = "Órfãos" ;
+    Text [ portuguese_brazilian ] = "?rf?os" ;
     Text [ portuguese ] = "Órfãos" ;
     Text [ finnish ] = "Leskirivit" ;
     Text [ danish ] = "Horeunger" ;
@@ -4056,7 +4056,7 @@ String RID_ATTR_PARA_ULSPACE
     Text [ English ] = "Distance" ;
     Text [ norwegian ] = "Avstand" ;
     Text [ italian ] = "Distanza" ;
-    Text [ portuguese_brazilian ] = "Distância" ;
+    Text [ portuguese_brazilian ] = "Dist?ncia" ;
     Text [ portuguese ] = "Espaçamento" ;
     Text [ finnish ] = "Välit" ;
     Text [ danish ] = "Mellemrum" ;
@@ -4153,7 +4153,7 @@ String RID_ATTR_ULSPACE
     Text [ English ] = "Distance" ;
     Text [ norwegian ] = "Avstand" ;
     Text [ italian ] = "Distanza" ;
-    Text [ portuguese_brazilian ] = "Distância" ;
+    Text [ portuguese_brazilian ] = "Dist?ncia" ;
     Text [ portuguese ] = "Espaçamento" ;
     Text [ finnish ] = "Välit" ;
     Text [ danish ] = "Mellemrum" ;
@@ -4180,7 +4180,7 @@ String RID_ATTR_PAGE
     Text [ English ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "Página" ;
+    Text [ portuguese_brazilian ] = "P?gina" ;
     Text [ portuguese ] = "Página" ;
     Text [ finnish ] = "Sivu" ;
     Text [ danish ] = "Side" ;
@@ -4291,7 +4291,7 @@ String RID_ATTR_PARA_KEEP
     Text [ English ] = "Keep paragraphs together" ;
     Text [ norwegian ] = "Hold avsnitt samlet" ;
     Text [ italian ] = "Tieni paragrafi assieme" ;
-    Text [ portuguese_brazilian ] = "Manter parágrafos juntos" ;
+    Text [ portuguese_brazilian ] = "Manter par?grafos juntos" ;
     Text [ portuguese ] = "Manter parágrafos juntos" ;
     Text [ finnish ] = "Sido seuraavaan kappaleeseen" ;
     Text [ danish ] = "Hold sammen med næste afsnit" ;
@@ -4345,7 +4345,7 @@ String RID_SINGLE_LINE1
     Text [ English ] = "Single, thin" ;
     Text [ portuguese ] = "Simples, fina" ;
     Text [ english_us ] = "Single, thin" ;
-    Text [ portuguese_brazilian ] = "Einfach, dünn" ;
+    Text [ portuguese_brazilian ] = "Einfach, d?n" ;
     Text [ swedish ] = "Enkel, tunn" ;
     Text [ danish ] = "Enkelt, tynd" ;
     Text [ italian ] = "Semplice, sottile" ;
@@ -4476,7 +4476,7 @@ String RID_DOUBLE_LINE1
     Text [ English ] = "Double, Fine line, Dist.: big" ;
     Text [ portuguese ] = "Dupla, linha fina, espaçamento: grande" ;
     Text [ english_us ] = "Double, fine line, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Haarlinie, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Haarlinie, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, fin linje, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, hårfin streg, afstand: stor" ;
     Text [ italian ] = "Doppio, linea sottile, distanza: grande" ;
@@ -4503,7 +4503,7 @@ String RID_DOUBLE_LINE2
     Text [ English ] = "Double, thin, Dist.: small" ;
     Text [ portuguese ] = "Dupla, fina, espaçamento: pequeno" ;
     Text [ english_us ] = "Double, thin, spacing: small" ;
-    Text [ portuguese_brazilian ] = "Doppelt, dünn, Abstand: klein" ;
+    Text [ portuguese_brazilian ] = "Doppelt, d?n, Abstand: klein" ;
     Text [ swedish ] = "Dubbel, tunn, avstånd: litet" ;
     Text [ danish ] = "Dobbelt, tynd, afstand: lille" ;
     Text [ italian ] = "Doppio, sottile, distanza: piccola" ;
@@ -4530,7 +4530,7 @@ String RID_DOUBLE_LINE3
     Text [ English ] = "Double, thin, Dist.: big" ;
     Text [ portuguese ] = "Dupla, grossa, espaçamento: grande" ;
     Text [ english_us ] = "Double, thick, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, dick, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, dick, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, tjock, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, spesso, distanza: grande" ;
@@ -4557,7 +4557,7 @@ String RID_DOUBLE_LINE4
     Text [ English ] = "Double, In: Fine line, Out: thin, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: linhas finas, Exterior: fina, Espaçamento: grande" ;
     Text [ english_us ] = "Double, inside: fine lines, outside: thin, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: Haarlinie, Außen: dünn, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: Haarlinie, Au?en: d?n, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, insida: fin linje, utsida: tunn, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, inderside: hårfin streg, yderside: tynd, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: linea sottile, esterno: sottile, distanza: grande" ;
@@ -4584,7 +4584,7 @@ String RID_DOUBLE_LINE5
     Text [ English ] = "Double, In: Fine line, Out: thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: linhas finas, Exterior: grossa, Espaçamento: grande" ;
     Text [ english_us ] = "Double, inside: fine lines, outside: thick, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: Haarlinie, Außen: dick, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: Haarlinie, Au?en: dick, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, insida: fin linje, utsida: tjock, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, inderside: hårfin streg, yderside: tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: linea sottile, esterno: spesso, distanza: grande" ;
@@ -4611,7 +4611,7 @@ String RID_DOUBLE_LINE6
     Text [ English ] = "Double, In: Fine line, Out: very thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: linhas finas, Exterior: muito grossa, Espaçamento: grande" ;
     Text [ english_us ] = "Double, inside: fine lines, outside: very thick, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: Haarlinie, Außen: sehr dick, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: Haarlinie, Au?en: sehr dick, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, insida: fin linje, utsida: mycket tjock, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, inderside: hårfin streg, yderside: meget tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: linea sottile, esterno: molto spesso, distanza: grande" ;
@@ -4638,7 +4638,7 @@ String RID_DOUBLE_LINE7
     Text [ English ] = "Double, In: thin, Out: thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: fina, Exterior: grossa, Espaçamento: grande" ;
     Text [ english_us ] = "Double, inside: thin, outside: thick, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: dünn, Außen: dick, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: d?n, Au?en: dick, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, insida: tunn, utsida: tjock, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, inderside: tynd, yderside: tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: sottile, esterno: spesso, distanza: grande" ;
@@ -4665,7 +4665,7 @@ String RID_DOUBLE_LINE8
     Text [ English ] = "Double, In: thick, Out: thin, Dist.: small" ;
     Text [ portuguese ] = "Dupla, Interior: grossa, Exterior: fina, Espaçamento: pequeno" ;
     Text [ english_us ] = "Double, inside: thick, outside: thin, spacing: small" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: dick, Außen: dünn, Abstand: klein" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: dick, Au?en: d?n, Abstand: klein" ;
     Text [ swedish ] = "Dubbel, innanför: tjock, utanför: tunn, avstånd: litet" ;
     Text [ danish ] = "Dobbelt, inderside: tyk, yderside: tynd, afstand: lille" ;
     Text [ italian ] = "Doppio, interno: spesso, esterno: sottile, distanza: piccola" ;
@@ -4692,7 +4692,7 @@ String RID_DOUBLE_LINE9
     Text [ English ] = "Double, In: thick, Out: very thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: grossa, Exterior: muito grossa, Espaçamento: grande" ;
     Text [ english_us ] = "Double, inside: thick, outside: very thick, spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: dick, Außen: sehr dick, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: dick, Au?en: sehr dick, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, insida: tjock, utsida: mycket tjock, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, inderside: tyk, yderside: meget tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: molto spesso, distanza: grande" ;
@@ -4719,7 +4719,7 @@ String RID_DOUBLE_LINE10
     Text [ English ] = "Double, In: very thick, Out: thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: muito grossa, Exterior: grossa, Espaçamento: grande" ;
     Text [ english_us ] = "Double, inside: very thick, outside: thick, Spacing: large" ;
-    Text [ portuguese_brazilian ] = "Doppelt, Innen: sehr dick, Außen: dick, Abstand: groß" ;
+    Text [ portuguese_brazilian ] = "Doppelt, Innen: sehr dick, Au?en: dick, Abstand: gro?" ;
     Text [ swedish ] = "Dubbel, insida: mycket tjock, utsida: tjock, avstånd: stort" ;
     Text [ danish ] = "Dobbelt, inderside: meget tyk, yderside: tyk, afstand: stor" ;
     Text [ italian ] = "Doppio, interno: molto spesso, esterno:spesso, distanza: grande" ;
@@ -4769,7 +4769,7 @@ String RID_SVXITEMS_HORJUST_STANDARD
     Text [ ENGLISH ] = "Adjust standard" ;
     Text [ norwegian ] = "Tilpass Standard " ;
     Text [ italian ] = "Allineamento orizzontale standard" ;
-    Text [ portuguese_brazilian ] = "Ajuste padrão" ;
+    Text [ portuguese_brazilian ] = "Ajuste padr?o" ;
     Text [ portuguese ] = "Alinhamento padrão horizontal" ;
     Text [ finnish ] = "Vaakakohdistus oletusarvona" ;
     Text [ danish ] = "Vandretjustering standard" ;
@@ -4834,7 +4834,7 @@ String RID_SVXITEMS_HORJUST_CENTER
     Text [ english_us ] = "Centered horizontally" ;
     Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
     Text[ russian ] = "Ïî ãîğèçîíòàëè â öåíòğå";
-    Text[ polish ] = "Wyœrodkowany poziomo";
+    Text[ polish ] = "Wy?rodkowany poziomo";
     Text[ japanese ] = "‰¡ˆÊ’u‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ ÃİŞí";
@@ -4931,7 +4931,7 @@ String RID_SVXITEMS_VERJUST_STANDARD
     Text [ ENGLISH ] = "Adjust Standard" ;
     Text [ norwegian ] = "Tilpass Standard" ;
     Text [ italian ] = "Allineamento verticale standard" ;
-    Text [ portuguese_brazilian ] = "Ajustar Padrão" ;
+    Text [ portuguese_brazilian ] = "Ajustar Padr?o" ;
     Text [ portuguese ] = "Alinhamento padrão vertical" ;
     Text [ finnish ] = "Pystykohdistus oletusarvona" ;
     Text [ danish ] = "Lodretjustering standard" ;
@@ -4996,7 +4996,7 @@ String RID_SVXITEMS_VERJUST_CENTER
     Text [ english_us ] = "Centered vertically" ;
     Text[ chinese_simplified ] = "´¹Ö±¾ÓÖĞ";
     Text[ russian ] = "Âåğòèêàëüíî ïî öåíòğó";
-    Text[ polish ] = "Wyœrodkowany pionowo";
+    Text[ polish ] = "Wy?rodkowany pionowo";
     Text[ japanese ] = "ã‰º‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "««ª½¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ ÚãæÏí";
@@ -5039,7 +5039,7 @@ String RID_SVXITEMS_ORI_STANDARD
     Text [ ENGLISH ] = "Orientation standard" ;
     Text [ norwegian ] = "Retningsstandard" ;
     Text [ italian ] = "Orientamento standard" ;
-    Text [ portuguese_brazilian ] = "Orientação padrão" ;
+    Text [ portuguese_brazilian ] = "Orienta??o padr?o" ;
     Text [ portuguese ] = "Orientação padrão" ;
     Text [ finnish ] = "Oletussuuntaus" ;
     Text [ danish ] = "Standardskriveretning" ;
@@ -5050,7 +5050,7 @@ String RID_SVXITEMS_ORI_STANDARD
     Text [ english_us ] = "Default orientation" ;
     Text[ chinese_simplified ] = "±ê×¼ÊäÈë·½Ïò";
     Text[ russian ] = "Ñòàíäàğòíîå íàïğàâëåíèå ïèñüìà";
-    Text[ polish ] = "Orientacja domyœlna";
+    Text[ polish ] = "Orientacja domy?lna";
     Text[ japanese ] = "‹L“ü•ûŒü •W€";
     Text[ chinese_traditional ] = "¼Ğ·Ç¿é¤J¤è¦V";
     Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ ÇáÇİÊÑÇÖí";
@@ -5176,7 +5176,7 @@ String RID_SVXITEMS_SHADOWED_FALSE
     Text [ ENGLISH ] = "Not Shadowed" ;
     Text [ norwegian ] = "Ikke Skygget" ;
     Text [ italian ] = "Non ombreggiato" ;
-    Text [ portuguese_brazilian ] = "Não Sombreado" ;
+    Text [ portuguese_brazilian ] = "N?o Sombreado" ;
     Text [ portuguese ] = "Sem sombreado" ;
     Text [ finnish ] = "Ei varjostettu" ;
     Text [ danish ] = "Ikke afskygget" ;
@@ -5255,7 +5255,7 @@ String RID_SVXITEMS_AUTOKERN_TRUE
     Text [ ENGLISH ] = "Auto Kerning" ;
     Text [ norwegian ] = "Auto Bokstavsperring" ;
     Text [ italian ] = "Crenatura a coppia" ;
-    Text [ portuguese_brazilian ] = "Kerning Automático" ;
+    Text [ portuguese_brazilian ] = "Kerning Autom?tico" ;
     Text [ portuguese ] = "Kerning de pares" ;
     Text [ finnish ] = "Parilimitys" ;
     Text [ danish ] = "Parvis knibning" ;
@@ -5282,7 +5282,7 @@ String RID_SVXITEMS_AUTOKERN_FALSE
     Text [ ENGLISH ] = "No Auto Kerning" ;
     Text [ norwegian ] = "Ingen Auto Bokstavsperring" ;
     Text [ italian ] = "Senza kerning automatico" ;
-    Text [ portuguese_brazilian ] = "Sem Kerning Automático" ;
+    Text [ portuguese_brazilian ] = "Sem Kerning Autom?tico" ;
     Text [ portuguese ] = "Sem kerning de pares" ;
     Text [ finnish ] = "Ei parilimitystä" ;
     Text [ danish ] = "Ingen parvis knibning" ;
@@ -5336,7 +5336,7 @@ String RID_SVXITEMS_WORDLINE_FALSE
     Text [ ENGLISH ] = "Not Words Only" ;
     Text [ norwegian ] = "Kun innrykk av ord" ;
     Text [ italian ] = "Non solo parole" ;
-    Text [ portuguese_brazilian ] = "Não Apenas Palavras" ;
+    Text [ portuguese_brazilian ] = "N?o Apenas Palavras" ;
     Text [ portuguese ] = "Não só palavras" ;
     Text [ finnish ] = "Ei vain sanoja" ;
     Text [ danish ] = "Ikke ordvis" ;
@@ -5363,7 +5363,7 @@ String RID_SVXITEMS_CONTOUR_TRUE
     Text [ ENGLISH ] = "Outline" ;
     Text [ norwegian ] = "Outline" ;
     Text [ italian ] = "Contorno" ;
-    Text [ portuguese_brazilian ] = "Esboço" ;
+    Text [ portuguese_brazilian ] = "Esbo?o" ;
     Text [ portuguese ] = "Contorno" ;
     Text [ finnish ] = "Jäsennys" ;
     Text [ danish ] = "Konturskrift" ;
@@ -5390,7 +5390,7 @@ String RID_SVXITEMS_CONTOUR_FALSE
     Text [ ENGLISH ] = "No Outline" ;
     Text [ norwegian ] = "Ingen Omriss" ;
     Text [ italian ] = "Nessun contorno" ;
-    Text [ portuguese_brazilian ] = "Não Vazado" ;
+    Text [ portuguese_brazilian ] = "N?o Vazado" ;
     Text [ portuguese ] = "Sem contornos" ;
     Text [ finnish ] = "Ei jäsennystä" ;
     Text [ danish ] = "Ingen konturskrift" ;
@@ -5460,7 +5460,7 @@ String RID_SVXITEMS_PRINT_FALSE
     Text [ ENGLISH ] = "Not Print" ;
     Text [ norwegian ] = "Ikke Skriv ut" ;
     Text [ italian ] = "Non stampare" ;
-    Text [ portuguese_brazilian ] = "Não Imprimir" ;
+    Text [ portuguese_brazilian ] = "N?o Imprimir" ;
     Text [ portuguese ] = "Não imprimir" ;
     Text [ finnish ] = "Älä tulosta" ;
     Text [ danish ] = "Udskriv ikke" ;
@@ -5514,7 +5514,7 @@ String RID_SVXITEMS_OPAQUE_FALSE
     Text [ ENGLISH ] = "Not Opaque" ;
     Text [ norwegian ] = "Ikke Ugjennomsiktig" ;
     Text [ italian ] = "Non opaco" ;
-    Text [ portuguese_brazilian ] = "Não Opaco" ;
+    Text [ portuguese_brazilian ] = "N?o Opaco" ;
     Text [ portuguese ] = "Não opaco" ;
     Text [ finnish ] = "Ei läpinäkymätön" ;
     Text [ danish ] = "Ikke uigennemsigtig" ;
@@ -5542,7 +5542,7 @@ String RID_SVXITEMS_FMTKEEP_TRUE
     Text [ ENGLISH ] = "Keep Paragraphs Together" ;
     Text [ norwegian ] = "Hold Avsnittene Samlet" ;
     Text [ italian ] = "Tieni paragrafi assieme" ;
-    Text [ portuguese_brazilian ] = "Manter Parágrafos Juntos" ;
+    Text [ portuguese_brazilian ] = "Manter Par?grafos Juntos" ;
     Text [ portuguese ] = "Manter parágrafos juntos" ;
     Text [ finnish ] = "Sido seuraavaan kappaleeseen" ;
     Text [ danish ] = "Hold sammen med næste afsnit" ;
@@ -5570,7 +5570,7 @@ String RID_SVXITEMS_FMTKEEP_FALSE
     Text [ ENGLISH ] = "Not Keep Paragraphs Together" ;
     Text [ norwegian ] = "Hold ikke Avsnittene Samlet" ;
     Text [ italian ] = "Non tenere paragrafi assieme" ;
-    Text [ portuguese_brazilian ] = "Não Manter Parágrafos Juntos" ;
+    Text [ portuguese_brazilian ] = "N?o Manter Par?grafos Juntos" ;
     Text [ portuguese ] = "Não manter parágrafos juntos" ;
     Text [ finnish ] = "Älä sido kappaleita toisiinsa" ;
     Text [ danish ] = "Hold afsnit ikke sammen" ;
@@ -5597,7 +5597,7 @@ String RID_SVXITEMS_FMTSPLIT_TRUE
     Text [ ENGLISH ] = "Split Paragraph" ;
     Text [ norwegian ] = "Del opp Avsnitt" ;
     Text [ italian ] = "Dividi paragrafo" ;
-    Text [ portuguese_brazilian ] = "Quebrar Parágrafo" ;
+    Text [ portuguese_brazilian ] = "Quebrar Par?grafo" ;
     Text [ portuguese ] = "Dividir parágrafo" ;
     Text [ finnish ] = "Jaa kappale" ;
     Text [ danish ] = "Del afsnit" ;
@@ -5624,7 +5624,7 @@ String RID_SVXITEMS_FMTSPLIT_FALSE
     Text [ ENGLISH ] = "Not Split Paragraph" ;
     Text [ norwegian ] = "Del ikke opp avsnitt" ;
     Text [ italian ] = "Non dividere paragrafo" ;
-    Text [ portuguese_brazilian ] = "Não Quebrar Parágrafo" ;
+    Text [ portuguese_brazilian ] = "N?o Quebrar Par?grafo" ;
     Text [ portuguese ] = "Manter linhas juntas" ;
     Text [ finnish ] = "Älä jaa kappaletta" ;
     Text [ danish ] = "Del afsnit ikke" ;
@@ -5652,7 +5652,7 @@ String RID_SVXITEMS_PROT_CONTENT_TRUE
     Text [ ENGLISH ] = "Content protected" ;
     Text [ norwegian ] = "Innholdsbeskyttet" ;
     Text [ italian ] = "Contenuto protetto" ;
-    Text [ portuguese_brazilian ] = "Conteúdo protegido" ;
+    Text [ portuguese_brazilian ] = "Conte?o protegido" ;
     Text [ portuguese ] = "Conteúdo protegido" ;
     Text [ finnish ] = "Suojattu sisältö" ;
     Text [ danish ] = "Indholdet er beskyttet" ;
@@ -5663,7 +5663,7 @@ String RID_SVXITEMS_PROT_CONTENT_TRUE
     Text [ english_us ] = "Contents protected" ;
     Text[ chinese_simplified ] = "ÄÚÈİÊÇÊÜ±£»¤µÄ";
     Text[ russian ] = "Ñîäåğæèìîå çàùèùåíî";
-    Text[ polish ] = "Zawartoœæ chroniona";
+    Text[ polish ] = "Zawarto?æ chroniona";
     Text[ japanese ] = "“à—e‚Í•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚·B";
     Text[ chinese_traditional ] = "¤º®e¨ü«OÅ@";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ ãÍãíÉ";
@@ -5680,7 +5680,7 @@ String RID_SVXITEMS_PROT_CONTENT_FALSE
     Text [ ENGLISH ] = "Content not protected" ;
     Text [ norwegian ] = "Innhold ikke beskyttet" ;
     Text [ italian ] = "Contenuto non protetto" ;
-    Text [ portuguese_brazilian ] = "Conteúdo não protegido" ;
+    Text [ portuguese_brazilian ] = "Conte?o n?o protegido" ;
     Text [ portuguese ] = "Conteúdo desprotegido" ;
     Text [ finnish ] = "Suojaamaton sisältö" ;
     Text [ danish ] = "Indholdet er ikke beskyttet" ;
@@ -5691,7 +5691,7 @@ String RID_SVXITEMS_PROT_CONTENT_FALSE
     Text [ english_us ] = "Contents not protected" ;
     Text[ chinese_simplified ] = "Ã»ÓĞ±£»¤ÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå íå çàùèùåíî";
-    Text[ polish ] = "Zawartoœæ nie chroniona";
+    Text[ polish ] = "Zawarto?æ nie chroniona";
     Text[ japanese ] = "“à—e‚Í•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¤º®e¤£¨ü«OÅ@";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ ÛíÑ ãÍãíÉ";
@@ -5736,7 +5736,7 @@ String RID_SVXITEMS_PROT_SIZE_FALSE
     Text [ ENGLISH ] = "Size not protected" ;
     Text [ norwegian ] = "Størrelse ikke beskyttet" ;
     Text [ italian ] = "Dimensione non protetta" ;
-    Text [ portuguese_brazilian ] = "Tamanho não protegido" ;
+    Text [ portuguese_brazilian ] = "Tamanho n?o protegido" ;
     Text [ portuguese ] = "Tamanho desprotegido" ;
     Text [ finnish ] = "Suojaamaton koko" ;
     Text [ danish ] = "Størrelsen er ikke beskyttet" ;
@@ -5764,7 +5764,7 @@ String RID_SVXITEMS_PROT_POS_TRUE
     Text [ ENGLISH ] = "Position protected" ;
     Text [ norwegian ] = "Posisjonsbeskyttet" ;
     Text [ italian ] = "Posizione protetta" ;
-    Text [ portuguese_brazilian ] = "Posição protegida" ;
+    Text [ portuguese_brazilian ] = "Posi??o protegida" ;
     Text [ portuguese ] = "Posição protegida" ;
     Text [ finnish ] = "Suojattu sijainti" ;
     Text [ danish ] = "Placeringen er beskyttet" ;
@@ -5792,7 +5792,7 @@ String RID_SVXITEMS_PROT_POS_FALSE
     Text [ ENGLISH ] = "Position not protected" ;
     Text [ norwegian ] = "Posisjon ikke beskyttet" ;
     Text [ italian ] = "Posizione non protetta" ;
-    Text [ portuguese_brazilian ] = "Posição não protegida" ;
+    Text [ portuguese_brazilian ] = "Posi??o n?o protegida" ;
     Text [ portuguese ] = "Posição desprotegida" ;
     Text [ finnish ] = "Suojaamaton sijainti" ;
     Text [ danish ] = "Placeringen er ikke beskyttet" ;
@@ -5846,7 +5846,7 @@ String RID_SVXITEMS_TRANSPARENT_FALSE
     Text [ ENGLISH ] = "Not Transparent" ;
     Text [ norwegian ] = "Ikke Transparent" ;
     Text [ italian ] = "Non trasparente" ;
-    Text [ portuguese_brazilian ] = "Não Transparente" ;
+    Text [ portuguese_brazilian ] = "N?o Transparente" ;
     Text [ portuguese ] = "Não transparente" ;
     Text [ finnish ] = "Ei läpinäkyvä" ;
     Text [ danish ] = "Ikke transparent" ;
@@ -5900,7 +5900,7 @@ String RID_SVXITEMS_BOXINF_TABLE_FALSE
     Text [ ENGLISH ] = "Not Table" ;
     Text [ norwegian ] = "Ikke Tabell" ;
     Text [ italian ] = "Non tabella" ;
-    Text [ portuguese_brazilian ] = "Não Tabela" ;
+    Text [ portuguese_brazilian ] = "N?o Tabela" ;
     Text [ portuguese ] = "Sem tabela" ;
     Text [ finnish ] = "Ei taulukko" ;
     Text [ danish ] = "Ikke tabel" ;
@@ -5927,7 +5927,7 @@ String RID_SVXITEMS_BOXINF_DIST_TRUE
     Text [ ENGLISH ] = "Distance enabled" ;
     Text [ norwegian ] = "+++Distance enabled" ;
     Text [ italian ] = "Distanza abilitata" ;
-    Text [ portuguese_brazilian ] = "Distância ativada" ;
+    Text [ portuguese_brazilian ] = "Dist?ncia ativada" ;
     Text [ portuguese ] = "Espaçamento activado" ;
     Text [ finnish ] = "Välit otettu käyttöön" ;
     Text [ danish ] = "Afstand aktiveret" ;
@@ -5954,7 +5954,7 @@ String RID_SVXITEMS_BOXINF_DIST_FALSE
     Text [ ENGLISH ] = "Distance disabled" ;
     Text [ norwegian ] = "+++Distance disabled" ;
     Text [ italian ] = "Distanza disabilitata" ;
-    Text [ portuguese_brazilian ] = "Distância desativada" ;
+    Text [ portuguese_brazilian ] = "Dist?ncia desativada" ;
     Text [ portuguese ] = "Espaçamento desactivado" ;
     Text [ finnish ] = "Välit poistettu käytöstä" ;
     Text [ danish ] = "Afstand deaktiveret" ;
@@ -5981,7 +5981,7 @@ String RID_SVXITEMS_BOXINF_MDIST_TRUE
     Text [ ENGLISH ] = "Not fall short of distance" ;
     Text [ norwegian ] = "+++Not fall short of distance" ;
     Text [ italian ] = "Brevi distanze non consentite" ;
-    Text [ portuguese_brazilian ] = "Não ficar com distância insuficiente" ;
+    Text [ portuguese_brazilian ] = "N?o ficar com dist?ncia insuficiente" ;
     Text [ portuguese ] = "Manter espaçamento" ;
     Text [ finnish ] = "Säilytä välit" ;
     Text [ danish ] = "Underskrid afstand ikke" ;
@@ -6008,7 +6008,7 @@ String RID_SVXITEMS_BOXINF_MDIST_FALSE
     Text [ ENGLISH ] = "Allowed to fall short of distance" ;
     Text [ norwegian ] = "+++Allowed to fall short of distance" ;
     Text [ italian ] = "Brevi distanze consentite" ;
-    Text [ portuguese_brazilian ] = "Permitido ficar com distância insuficiente" ;
+    Text [ portuguese_brazilian ] = "Permitido ficar com dist?ncia insuficiente" ;
     Text [ portuguese ] = "Permitido espaçamento menor do que o especificado" ;
     Text [ finnish ] = "Sallitaan jääminen väliä pienemmäksi" ;
     Text [ danish ] = "Tilladt at underskride afstand" ;
@@ -6035,7 +6035,7 @@ String RID_SVXITEMS_HYPHEN_TRUE
     Text [ ENGLISH ] = "Hyphen" ;
     Text [ norwegian ] = "Bindestrek" ;
     Text [ italian ] = "Sillabazione" ;
-    Text [ portuguese_brazilian ] = "Hífen" ;
+    Text [ portuguese_brazilian ] = "H?fen" ;
     Text [ portuguese ] = "Divisão silábica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
@@ -6062,7 +6062,7 @@ String RID_SVXITEMS_HYPHEN_FALSE
     Text [ ENGLISH ] = "No Hyphen" ;
     Text [ norwegian ] = "Ingen Bindestrek" ;
     Text [ italian ] = "Senza sillabazione" ;
-    Text [ portuguese_brazilian ] = "Sem Hífen" ;
+    Text [ portuguese_brazilian ] = "Sem H?fen" ;
     Text [ portuguese ] = "Sem divisão silábica" ;
     Text [ finnish ] = "Ei tavutusta" ;
     Text [ danish ] = "Ingen orddeling" ;
@@ -6089,7 +6089,7 @@ String RID_SVXITEMS_PAGE_END_TRUE
     Text [ ENGLISH ] = "Page End" ;
     Text [ norwegian ] = "Sideslutt" ;
     Text [ italian ] = "Fine pagina" ;
-    Text [ portuguese_brazilian ] = "Final de Página" ;
+    Text [ portuguese_brazilian ] = "Final de P?gina" ;
     Text [ portuguese ] = "Fim de página" ;
     Text [ finnish ] = "Sivun loppu" ;
     Text [ danish ] = "Sideslutning" ;
@@ -6116,7 +6116,7 @@ String RID_SVXITEMS_PAGE_END_FALSE
     Text [ ENGLISH ] = "No Page End" ;
     Text [ norwegian ] = "Ingen Sideslutt" ;
     Text [ italian ] = "Nessuna fine pagina" ;
-    Text [ portuguese_brazilian ] = "Sem Final de Página" ;
+    Text [ portuguese_brazilian ] = "Sem Final de P?gina" ;
     Text [ portuguese ] = "Sem fim de página" ;
     Text [ finnish ] = "Ei sivun loppua" ;
     Text [ danish ] = "Ingen sideslutning" ;
@@ -6262,7 +6262,7 @@ String RID_SVXITEMS_SIZE_WIDTH
     Text [ spanish ] = "Ancho:   " ;
     Text[ chinese_simplified ] = "¿í¶È£º ";
     Text[ russian ] = "Øèğèíà: ";
-    Text[ polish ] = "Szerokoœæ: ";
+    Text[ polish ] = "Szeroko?æ: ";
     Text[ japanese ] = "•: ";
     Text[ chinese_traditional ] = "¼e«×¡G ";
     Text[ arabic ] = "ÇáÚÑÖ: ";
@@ -6290,7 +6290,7 @@ String RID_SVXITEMS_SIZE_HEIGHT
     Text [ spanish ] = "Alto:   " ;
     Text[ chinese_simplified ] = "¸ß¶È£º ";
     Text[ russian ] = "Âûñîòà: ";
-    Text[ polish ] = "Wysokoœæ: ";
+    Text[ polish ] = "Wysoko?æ: ";
     Text[ japanese ] = "‚‚³: ";
     Text[ chinese_traditional ] = "°ª«×¡G ";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ: ";
@@ -6574,7 +6574,7 @@ String RID_SVXITEMS_BORDER_DISTANCE
     Text [ English ] = "Distance " ;
     Text [ norwegian ] = "Avsnitt " ;
     Text [ italian ] = "Distanza  " ;
-    Text [ portuguese_brazilian ] = "Distância " ;
+    Text [ portuguese_brazilian ] = "Dist?ncia " ;
     Text [ portuguese ] = "Espaçamento  " ;
     Text [ english_us ] = "Spacing " ;
     Text [ finnish ] = "Objektivälit" ;
@@ -6793,7 +6793,7 @@ String RID_SVXITEMS_PAGE_NUM_ARABIC
     Text [ English ] = "Arabic" ;
     Text [ norwegian ] = "Arabisk" ;
     Text [ italian ] = "Arabo" ;
-    Text [ portuguese_brazilian ] = "Arábico" ;
+    Text [ portuguese_brazilian ] = "Ar?bico" ;
     Text [ portuguese ] = "Árabe" ;
     Text [ english_us ] = "Arabic" ;
     Text [ finnish ] = "arabia" ;
@@ -7063,7 +7063,7 @@ String RID_SVXITEMS_ORPHANS_COMPLETE
     Text [ English ] = "Orphans " ;
     Text [ norwegian ] = "Enkelinjer nederst " ;
     Text [ italian ] = "Orfane  " ;
-    Text [ portuguese_brazilian ] = "Órfãos " ;
+    Text [ portuguese_brazilian ] = "?rf?os " ;
     Text [ portuguese ] = "Controlar orfãos  " ;
     Text [ english_us ] = "Widow control " ;
     Text [ finnish ] = "Leskirivien ohjaus" ;
@@ -7653,7 +7653,7 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ italian ] = "Disattiva 'A due righe'";
     Text[ danish ] = "Two lines off";
     Text[ swedish ] = "Dubbla rader av";
-    Text[ polish ] = "Wy³¹cz dwuwierszowoœæ";
+    Text[ polish ] = "Wy³¹cz dwuwierszowo?æ";
     Text[ portuguese_brazilian ] = "Two lines off";
     Text[ japanese ] = "2sg‚¢ µÌ";
     Text[ korean ] = "µÎ Çà, ¿ÀÇÁ";
@@ -7884,7 +7884,7 @@ String RID_SVXITEMS_CHARROTATE
     Text[ danish ] = "character rotated by $(ARG1)°";
     Text[ swedish ] = "Tecken roterat med $(ARG1)°";
     Text[ polish ] = "znaki obrócono o $(ARG1)°";
-    Text[ portuguese_brazilian ] = "character rotated by $(ARG1)°";
+    Text[ portuguese_brazilian ] = "character rotated by $(ARG1)?";
     Text[ japanese ] = "•¶š‚ğ $(ARG1)° ‰ñ“]";
     Text[ korean ] = " $(ARG1)?È¸ÀüµÈ ¹®ÀÚ";
     Text[ chinese_simplified ] = "×Ö·ûĞı×ª $(ARG1)";
@@ -8134,7 +8134,7 @@ String RID_SVXITEMS_PARAVERTALIGN_CENTER
     Text[ italian ] = "Allineamento tel testo al centro";
     Text[ danish ] = "text alignment center";
     Text[ swedish ] = "Textjustering centrerat";
-    Text[ polish ] = "Wyœrodkowanie tekstu";
+    Text[ polish ] = "Wy?rodkowanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment center";
     Text[ japanese ] = "’†‰›‘µ‚¦‚ÅÃ·½Ä”z’u";
     Text[ korean ] = "text alignment center";
