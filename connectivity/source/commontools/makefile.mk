@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-19 11:46:15 $
+#   last change: $Author: oj $ $Date: 2000-11-03 13:30:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ SLOFILES=\
         $(SLO)$/dbconversion.obj	\
         $(SLO)$/CommonTools.obj		\
         $(SLO)$/DateConversion.obj	\
+        $(SLO)$/TDatabaseMetaDataBase.obj
 
 .IF "$(OS)$(COM)"=="LINUXGCC"
 NOOPTFILES= \
