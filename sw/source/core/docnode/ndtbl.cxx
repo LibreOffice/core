@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,9 @@
 #endif
 #endif
 
+#include <node.hxx>
+#include <ndtxt.hxx>
+
 const sal_Unicode T2T_PARA = 0x0a;
 
 extern void ClearFEShellTabCols();
@@ -337,6 +340,28 @@ void lcl_SetDfltBoxAttr( SwTableBox& rBox, SvPtrarr &rBoxFmtArr, BYTE nId,
     }
     rBox.ChgFrmFmt( pNewBoxFmt );
 }
+
+/* --> #109161# */
+static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
+{
+    bool bResult = false;
+
+    if (SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState(which))
+        bResult = true;
+
+    return bResult;
+}
+
+static bool lcl_IsItemSet(const SwFmt & rFmt, USHORT which)
+{
+    bool bResult = false;
+
+    if (SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(which))
+        bResult = true;
+
+    return bResult;
+}
+/* <-- #109161# */
 
 SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
                                     USHORT nCols, BYTE nId )
@@ -481,10 +506,11 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
 // --------------- einfuegen einer neuen Tabelle --------------
 
 const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
-                                    USHORT nCols, SwHoriOrient eAdjust,
-                                    USHORT nInsTblFlags,
-                                    const SwTableAutoFmt* pTAFmt,
-                                    const SvUShorts* pColArr )
+                                   USHORT nCols, SwHoriOrient eAdjust,
+                                   USHORT nInsTblFlags,
+                                   const SwTableAutoFmt* pTAFmt,
+                                   const SvUShorts* pColArr,
+                                   BOOL bCalledFromShell )
 {
     ASSERT( nRows, "Tabelle ohne Zeile?" );
     ASSERT( nCols, "Tabelle ohne Spalten?" );
@@ -521,8 +547,13 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
     /* #106283# Save content node to extract FRAMEDIR from. */
     const SwCntntNode * pCntntNd = rPos.nNode.GetNode().GetCntntNode();
 
-    SwTableNode *pTblNd = GetNodes().InsertTable( rPos.nNode, nCols,
-                                                pBodyColl, nRows, pHeadColl );
+    /* #109161# If we are called from a shell pass the attrset from
+        pCntntNd (aka the node the table is inserted at) thus causing
+        SwNodes::InsertTable to propagate an adjust item if
+        necessary. */
+    SwTableNode *pTblNd = GetNodes().InsertTable
+        ( rPos.nNode, nCols, pBodyColl, nRows, pHeadColl,
+          bCalledFromShell ? &pCntntNd->GetSwAttrSet() : 0 );
 
     // dann erstelle die Box/Line/Table-Struktur
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
@@ -685,10 +716,11 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
 }
 
 SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
-                                    USHORT nBoxes,
-                                    SwTxtFmtColl* pCntntTxtColl,
-                                    USHORT nLines,
-                                    SwTxtFmtColl* pHeadlineTxtColl )
+                                   USHORT nBoxes,
+                                   SwTxtFmtColl* pCntntTxtColl,
+                                   USHORT nLines,
+                                   SwTxtFmtColl* pHeadlineTxtColl,
+                                   const SwAttrSet * pAttrSet)
 {
     if( !nBoxes )
         return 0;
@@ -712,7 +744,24 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
             SwStartNode* pSttNd = new SwStartNode( aIdx, ND_STARTNODE,
                                                     SwTableBoxStartNode );
             pSttNd->pStartOfSection = pTblNd;
-            new SwTxtNode( aIdx, pTxtColl );
+
+            /** #109161# If there is no adjust item in pTxtColl
+                 propagate any existing adjust item in pAttrSet to the
+                 newly created context node in the new cell.
+             */
+            SwTxtNode * pTmpNd = new SwTxtNode( aIdx, pTxtColl );
+
+            const SfxPoolItem * pItem = NULL;
+
+            if (! lcl_IsItemSet(*pTmpNd, RES_PARATR_ADJUST) &&
+                pAttrSet != NULL &&
+                SFX_ITEM_SET == pAttrSet->GetItemState( RES_PARATR_ADJUST, TRUE,
+                                                        &pItem)
+                )
+            {
+                static_cast<SwCntntNode *>(pTmpNd)->SetAttr(*pItem);
+            }
+
             new SwEndNode( aIdx, *pSttNd );
         }
         pTxtColl = pCntntTxtColl;
