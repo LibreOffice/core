@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:55 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 11:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,7 @@ PyObject *PyUNO_str( PyObject * self )
         Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
         if( rHolder.is() )
         {
+            PyThreadDetach antiguard;
             Any a = rHolder->getMaterial();
             OUString s = val2str( (void*) a.getValue(), a.getValueType().getTypeLibType() );
             buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
@@ -385,7 +386,7 @@ PyObject *PyUNO_str( PyObject * self )
     else
     {
         // a common UNO object
-
+        PyThreadDetach antiguard;
         buf.append( "pyuno object " );
 
         OUString s = val2str( (void*)me->members->wrappedObject.getValue(),
@@ -489,13 +490,23 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
         if (me->members->xInvocation->hasProperty ( attrName))
         {
             //Return the value of the property
-            PyRef ret = runtime.any2PyObject ( me->members->xInvocation->getValue (attrName) );
+            Any anyRet;
+            {
+                PyThreadDetach antiguard;
+                anyRet = me->members->xInvocation->getValue (attrName);
+            }
+            PyRef ret = runtime.any2PyObject(anyRet);
             Py_XINCREF( ret.get() );
             return ret.get();
         }
         if (strcmp (name, "_print") == 0 && me->members->xInvocation->hasProperty (constPrint))
         {
-            PyRef ret = runtime.any2PyObject ( me->members->xInvocation->getValue(constPrint));
+            Any anyRet;
+            {
+                PyThreadDetach antiguard;
+                anyRet = me->members->xInvocation->getValue(constPrint);
+            }
+            PyRef ret = runtime.any2PyObject ( anyRet );
             Py_XINCREF( ret.get() );
             return ret.get();
         }
