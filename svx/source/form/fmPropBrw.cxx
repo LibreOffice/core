@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 15:32:03 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 09:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,6 @@ FmPropBrwMgr::FmPropBrwMgr( Window *pParent, sal_uInt16 nId,
     ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
 }
 
-
 //========================================================================
 //========================================================================
 const long STD_WIN_SIZE_X = 300;
@@ -294,14 +293,9 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
         m_xMeAsFrame.clear();
     }
 
-    // append our frame
-//  Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
-//  Reference < XFrames > xFrames = xSup->getFrames();
-//  xFrames->append( m_xMeAsFrame );
-    // TODO: where to append?
-
     if (m_xMeAsFrame.is())
     {
+        pMgr->SetFrame( m_xMeAsFrame );
         try
         {
             Sequence< Any > aArgs(1);
