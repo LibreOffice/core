@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:30:28 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:28:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ SLOFILES =  \
         $(SLO)$/txtnum.obj
 
 EXCEPTIONSFILES =  \
+        $(SLO)$/drwtxtsh.obj \
         $(SLO)$/textsh.obj \
         $(SLO)$/textsh2.obj \
         $(SLO)$/grfshex.obj	\
