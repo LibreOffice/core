@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:51:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,6 +962,9 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
+    if( mbOutputClipped )
+        return;
+
     Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );
     BOOL        bDrawn = FALSE;
 
@@ -977,11 +980,8 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             if( mbInitClipRegion )
                 ImplInitClipRegion();
 
-            if( !mbOutputClipped )
-            {
-                bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                                              (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
-            }
+            bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                                          (BYTE*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
         }
 
         if( !bDrawn && pSubst )
