@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-29 08:26:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 14:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,9 @@
 #include "XMLChangeImportContext.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLCALCULATION_SETTINGS_CONTEXT_HXX
+#include "XMLCalculationSettingsContext.hxx"
+#endif
 #ifndef _XMLOFF_FORMSIMP_HXX
 #include "formsimp.hxx"
 #endif
@@ -247,6 +250,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_change_end,      XML_TOK_TEXT_CHANGE_END },
     { XML_NAMESPACE_TEXT, sXML_change,          XML_TOK_TEXT_CHANGE },
     { XML_NAMESPACE_OFFICE, sXML_forms,         XML_TOK_TEXT_FORMS },
+    { XML_NAMESPACE_TABLE, sXML_calculation_settings,   XML_TOK_TEXT_CALCULATION_SETTINGS },
 
     XML_TOKEN_MAP_END
 };
@@ -1547,7 +1551,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 //      pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
         bContent = sal_False;
         break;
-
+    case XML_TOK_TEXT_CALCULATION_SETTINGS:
+        pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
+    break;
     default:
         if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_TEXTBOX == eType ||
