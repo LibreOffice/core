@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:21:26 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ ModalDialog DLG_BIB_BASE
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
+        Text[ slovak ] = "~Nový";
     };
     PushButton PB_DELETE
     {
@@ -150,6 +151,7 @@ ModalDialog DLG_BIB_BASE
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "Z~mazať";
     };
     PushButton PB_RENAME
     {
@@ -184,6 +186,7 @@ ModalDialog DLG_BIB_BASE
         Text[ czech ] = "Přejmenovat";
         Text[ hebrew ] = "~Umbenennen";
         Text[ hindi ] = "~पुनः नाम दो";
+        Text[ slovak ] = "P~remenovať";
     };
     FixedText FT_BIB
     {
@@ -217,6 +220,7 @@ ModalDialog DLG_BIB_BASE
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "Bereichstitel";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Kategórie";
     };
     OKButton BT_OK
     {
@@ -275,6 +279,7 @@ ModalDialog DLG_BIB_BASE
         Text[ czech ] = "Cesta";
         Text[ hebrew ] = "Pfad";
         Text[ hindi ] = "मार्ग";
+        Text[ slovak ] = "Cesta";
     };
     ListBox LB_PATH
     {
@@ -315,6 +320,7 @@ ModalDialog DLG_BIB_BASE
         Text[ czech ] = "Seznam pro výběr";
         Text[ hebrew ] = "Auswahlliste";
         Text[ hindi ] = "चुनाव सूची";
+        Text[ slovak ] = "Zoznam pre výber";
     };
     Control TLB_GROUPS
     {
@@ -351,6 +357,7 @@ ModalDialog DLG_BIB_BASE
     Text[ czech ] = "Upravit kategorie";
     Text[ hebrew ] = "Bereiche bearbeiten";
     Text[ hindi ] = "वर्गों का संपादन";
+    Text[ slovak ] = "Upraviť kategórie";
 };
 /*
 String STR_GLOSSARY_BIB_DLG
@@ -367,6 +374,8 @@ String STR_GLOSSARY_BIB_DLG
     Text [ portuguese ] = "Editar sec��es" ;
     Text [ portuguese_brazilian ] = "Bereiche bearbeiten" ;
 };*/
+
+
 
 
 
