@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:55:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ ModalDialog DLG_GLOSSARY
         {
             Text = "schreibgeschόtzt" ;
             Text [ ENGLISH ] = "readonly" ;
-            Text[ english_us ] = "read only";
+            Text[ english_us ] = "read-only";
             Text[ portuguese ] = "sσ leitura";
             Text[ russian ] = "ςξλόκξ δλÿ χςενθÿ";
             Text[ greek ] = "μόνο για ανάγνωση";
@@ -545,7 +545,7 @@ ModalDialog DLG_GLOSSARY
     {
         Text = "Fόr die Verzeichnisse fόr 'AutoText' sind sind keine Schreibrechte vorhanden. Mφchten Sie den Pfaddialog aufrufen?" ;
         Text [ ENGLISH ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?" ;
-        Text[ english_us ] = "The 'AutoText' directories are read only. Do you want to call the path settings dialog?";
+        Text[ english_us ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
         Text[ portuguese ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ russian ] = "Κΰςΰλξγ 'AutoText' οπεδνΰηνΰχεν ςξλόκξ δλÿ χςενθÿ. Βϋ υξςθςε βϋηβΰςό δθΰλξγ ηΰδΰνθÿ οσςθ?";
         Text[ greek ] = "Δεν υπάρχουν δικαιώματα επεξεργασίας για τους καταλόγους του 'ΑυτοΚείμενο'. Θέλετε να καλέσετε τον διάλογο διαδρομής;";
