@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-03 11:19:05 $
+ *  last change: $Author: gt $ $Date: 2002-07-22 07:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,8 +1091,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     sHyphAuto           ( ResId( STR_HYPH_AUTO ) ),
     sHyphSpecial        ( ResId( STR_HYPH_SPECIAL ) ),
 
-    aChkunBmp           ( ResId( BMP_CHKBUT_UNCHECKED ) ),
-    aChkchBmp           ( ResId( BMP_CHKBUT_CHECKED ) ),
     pLinguData          ( NULL )
 {
     pCheckButtonData = NULL;
@@ -1858,11 +1856,7 @@ SvLBoxEntry* SvxLinguTabPage::CreateEntry( String& rTxt, USHORT nCol )
     SvLBoxEntry* pEntry = new SvLBoxEntry;
 
     if( !pCheckButtonData )
-    {
-        pCheckButtonData = new SvLBoxButtonData;
-        pCheckButtonData->aBmps[SV_BMP_UNCHECKED] = aChkunBmp;
-        pCheckButtonData->aBmps[SV_BMP_CHECKED]   = aChkchBmp;
-    }
+        pCheckButtonData = new SvLBoxButtonData( &aLinguOptionsCLB );
 
     String sEmpty;
     if (CBCOL_FIRST == nCol)
