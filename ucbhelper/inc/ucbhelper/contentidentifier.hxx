@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentidentifier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 09:48:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #endif
 
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
+
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
@@ -94,7 +98,7 @@ struct ContentIdentifier_Impl;
   * The only difference is that the URL scheme will be lower cased. This can
   * be done, because URL schemes are never case sensitive.
   */
-class ContentIdentifier :
+class UCBHELPER_DLLPUBLIC ContentIdentifier :
                 public cppu::OWeakObject,
                 public com::sun::star::lang::XTypeProvider,
                   public com::sun::star::ucb::XContentIdentifier
