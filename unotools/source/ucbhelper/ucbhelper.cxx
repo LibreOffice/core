@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-29 12:47:37 $
+ *  last change: $Author: pb $ $Date: 2001-07-03 13:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,16 +615,27 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
 sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
 {
     sal_Bool bRet = sal_False;
-    Content aCnt( rFolder, Reference< XCommandEnvironment > () );
-    Reference< XChild > xChild( aCnt.get(), UNO_QUERY );
-    if ( xChild.is() )
+    try
     {
-        Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
-        if ( xParent.is() )
+        Content aCnt( rFolder, Reference< XCommandEnvironment > () );
+        Reference< XChild > xChild( aCnt.get(), UNO_QUERY );
+        if ( xChild.is() )
         {
-            String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
-            bRet = ( aParentURL.Len() > 0 && aParentURL != rFolder );
+            Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
+            if ( xParent.is() )
+            {
+                String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
+                bRet = ( aParentURL.Len() > 0 && aParentURL != rFolder );
+            }
         }
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "UCBContentHelper::HasParentFolder(): CommandAbortedException" );
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        DBG_ERRORFILE( "UCBContentHelper::HasParentFolder(): Any other exception" );
     }
 
     return bRet;
