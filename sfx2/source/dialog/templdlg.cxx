@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 12:16:38 $
+ *  last change: $Author: pb $ $Date: 2002-06-24 11:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,23 +454,24 @@ SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParent,
 SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16,8)
 SV_IMPL_PTRARR(ExpandedEntries, StringPtr)
 
-
 /*  [Beschreibung]
 
     TreeListBox- Klasse f"ur die Anzeige der hierarchischen View
     der Vorlagen
 
 */
+
 class StyleTreeListBox_Impl: public DropListBox_Impl
 {
-    SvLBoxEntry *pCurEntry;
-    Link            aDoubleClickLink;
-    Link            aDropLink;
-    String          aParent;
-    String          aStyle;
-    SfxCommonTemplateDialog_Impl* pCommon;
-protected:
+private:
+    SvLBoxEntry*                    pCurEntry;
+    SfxCommonTemplateDialog_Impl*   pCommon;
+    Link                            aDoubleClickLink;
+    Link                            aDropLink;
+    String                          aParent;
+    String                          aStyle;
 
+protected:
     virtual void    Command( const CommandEvent& rMEvt );
     virtual BOOL    DoubleClickHdl();
     virtual long    ExpandingHdl();
@@ -478,14 +479,17 @@ protected:
     virtual BOOL    NotifyMoving(SvLBoxEntry*  pTarget,
                                  SvLBoxEntry*  pEntry,
                                  SvLBoxEntry*& rpNewParent,
-                                 ULONG&           rNewChildPos);
+                                 ULONG&        rNewChildPos);
 public:
     StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
-    void SetDoubleClickHdl(const Link &rLink) { aDoubleClickLink = rLink; }
-    void SetDropHdl(const Link &rLink) { aDropLink = rLink; }
-    const String &GetParent() const { return aParent; }
-    const String &GetStyle() const { return aStyle; }
-    void MakeExpanded_Impl(ExpandedEntries& rEntries) const;
+
+    void                SetDoubleClickHdl(const Link &rLink) { aDoubleClickLink = rLink; }
+    void                SetDropHdl(const Link &rLink) { aDropLink = rLink; }
+    const String&       GetParent() const { return aParent; }
+    const String&       GetStyle() const { return aStyle; }
+    void                MakeExpanded_Impl(ExpandedEntries& rEntries) const;
+
+    virtual PopupMenu*  CreateContextMenu( void );
 };
 
 //-------------------------------------------------------------------------
@@ -505,6 +509,10 @@ void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries& rEntries) const
     }
 }
 
+PopupMenu* StyleTreeListBox_Impl::CreateContextMenu()
+{
+    return pDialog->CreateContextMenu();
+}
 
 BOOL StyleTreeListBox_Impl::DoubleClickHdl()
 
@@ -619,9 +627,8 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(
 
 */
 {
-//    SetDragOptions(DROP_MOVE);
+    EnableContextMenuHandling();
 }
-
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -1147,7 +1154,7 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( BOOL bEnable )
 
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
-    DBG_ASSERT(pTreeBox, "FillTreeBox ohne TreeBox");
+    DBG_ASSERT( pTreeBox, "FillTreeBox() without treebox");
     if(pStyleSheetPool && nActFamily != 0xffff)
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
@@ -1179,25 +1186,24 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 //      EnableEdit(FALSE);
         EnableItem(SID_STYLE_WATERCAN,FALSE);
 
-        SfxTemplateItem *pState = pFamilyState[nActFamily-1];
+        SfxTemplateItem* pState = pFamilyState[nActFamily-1];
 
-        if(nCount)
-            pTreeBox->Expand(pTreeBox->First());
+        if ( nCount )
+            pTreeBox->Expand( pTreeBox->First() );
 
-        for(SvLBoxEntry *pEntry=pTreeBox->First();
-            pEntry;pEntry=pTreeBox->Next(pEntry))
+        for ( SvLBoxEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next( pEntry ) )
         {
-            if(IsExpanded_Impl(aEntries,pTreeBox->GetEntryText(pEntry)))
-                pTreeBox->Expand(pEntry);
+            if ( IsExpanded_Impl( aEntries, pTreeBox->GetEntryText( pEntry ) ) )
+                pTreeBox->Expand( pEntry );
         }
+
+        pTreeBox->SetUpdateMode( TRUE );
 
         String aStyle;
         if(pState)  //Aktuellen Eintrag selektieren
             aStyle = pState->GetStyleName();
         SelectStyle(aStyle);
         EnableDelete();
-
-        pTreeBox->SetUpdateMode( TRUE );
     }
 }
 
