@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:45:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 18:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,44 +67,16 @@ ModalDialog DLG_PRESLT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 212 , 185 ) ;
-    Text = "Seitenvorlage" ;
-    Text [ ENGLISH ] = "Page template" ;
+    Text [ de ] = "Seitenvorlage" ;
     Moveable = TRUE ;
     FixedText FT_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Wählen Sie eine ~Seitenvorlage : Wõhlen Sie eine ~Seitenvorlage */
-        Text = "Wählen Sie eine ~Seitenvorlage" ;
-        Text [ ENGLISH ] = "Choose a ~page template" ;
-        Text [ english_us ] = "~Select a slide design" ;
-        Text [ italian ] = "Scegliete un modello di diapositiva" ;
-        Text [ spanish ] = "Seleccione un diseño de ~diapositiva" ;
-        Text [ french ] = "Sélectionnez un ~style de page" ;
-        Text [ dutch ] = "~Kies een pagina-opmaakprofiel" ;
-        Text [ swedish ] = "Välj en ~sidformatmall" ;
-        Text [ danish ] = "~Vælg et diasdesign" ;
-        Text [ portuguese ] = "Escolha um estilo de ~página" ;
-        Text [ portuguese_brazilian ] = "Selecione um esboço de ~slide" ;
-        Text[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªé¡µé¢æ ·å¼(~S)";
-        Text[ russian ] = "Âûáåğèòå äèçàéí ñëàéäà";
-        Text[ polish ] = "Z~aznacz uk³ad slajdu";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«ã‚’é¸æŠã—ã¾ã™(~S)";
-        Text[ chinese_traditional ] = "è«‹æ‚¨é¸æ“‡ä¸€å€‹é é¢æ¨£å¼(~S)";
-        Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÎØíØ ÇáÕİÍÉ";
-        Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï ~äéáöÜíåéáò";
-        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ë””ìì¸ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤(~S)";
-        Text[ turkish ] = "Bir sayfa biçimi seçin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Selecciona un disseny de diapositives";
-        Text[ finnish ] = "Valitse ~diamalli";
-        Text[ thai ] = "à¹€~à¸¥à¸·à¸­à¸à¸à¸²à¸£à¸­à¸­à¸à¹à¸šà¸šà¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
-        Text[ czech ] = "Vybrat nÃ¡vrh snÃ­mku";
-        Text[ hebrew ] = "WÃ¤hlen Sie eine ~Seitenvorlage";
-        Text[ hindi ] = "~à¤¸à¥à¤²à¤‡à¤¡ à¤¡à¤¿à¤¸à¥ˆà¤¨ à¤šà¥à¤¨à¥‹";
-        Text[ slovak ] = "VybraÅ¥ design ~snÃ­mku";
-        Text[ hungarian ] = "~Diaterv kivÃ¡lasztÃ¡sa";
-        Text[ slovenian ] = "I~zberite oblikovanje diapozitiva";
+        Text [ de ] = "Wählen Sie eine ~Seitenvorlage" ;
+        Text [ en-US ] = "~Select a slide design" ;
+        Text [ x-comment ] = " ";
     };
     Control VS_LAYOUT
     {
@@ -131,109 +103,28 @@ ModalDialog DLG_PRESLT
     {
         Pos = MAP_APPFONT ( 6 , 158 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
-        Text = "Hintergrundseite ~austauschen" ;
-        Text [ ENGLISH ] = "~Exchange master page" ;
+        Text [ de ] = "Hintergrundseite ~austauschen" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Exchange background page" ;
-        Text [ portuguese ] = "~Substituir página de fundo" ;
-        Text [ swedish ] = "Byt b~akgrundssida" ;
-        Text [ danish ] = "~Udskift baggrundsside" ;
-        Text [ italian ] = "Scambia pagina di sfondo" ;
-        Text [ spanish ] = "~Intercambiar página de fondo" ;
-        Text [ french ] = "Échanger la page d'arrière-plan" ;
-        Text [ dutch ] = "Achtergrondpagina ~wisselen" ;
-        Text [ portuguese_brazilian ] = "~Trocar a página do plano de fundo" ;
-        Text[ chinese_simplified ] = "æ›´æ¢èƒŒæ™¯é¡µé¢(~E)";
-        Text[ russian ] = "Çàìåíà ôîíà ñòğàíèö";
-        Text[ polish ] = "~Wymieñ stronê t³a";
-        Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒšãƒ¼ã‚¸ã‚’å–ã‚Šæ›¿ãˆã‚‹(~E)";
-        Text[ chinese_traditional ] = "æ›´æ›èƒŒæ™¯é é¢(~E)";
-        Text[ arabic ] = "ÇÓÊÈÏÇá ÕİÍÉ ÇáÎáİíÉ";
-        Text[ greek ] = "~ÁíôáëëáãŞ óåëßäáò öüíôïõ";
-        Text[ korean ] = "ë°°ê²½ í˜ì´ì§€ ë°”ê¾¸ê¸°(~E)";
-        Text[ language_user1 ] = " ";
-        Text[ turkish ] = "Artalan sayfasını değiştir";
-        Text[ catalan ] = "~Intercanvia la pàgina de fons";
-        Text[ finnish ] = "~Vaihda taustasivu";
-        Text[ thai ] = "à¹~à¸¥à¸à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸«à¸™à¹‰à¸²à¸‚à¸­à¸‡à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-        Text[ czech ] = "VymÄ›nit strÃ¡nku pozadÃ­";
-        Text[ hebrew ] = "Hintergrundseite ~austauschen";
-        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‹ à¤…à¤¦à¤²à¤¾-à¤¬à¤¦à¤²à¤¾ à¤•à¤°à¥‹";
-        Text[ slovak ] = "Vym~eniÅ¥ strÃ¡nku pozadia";
-        Text[ hungarian ] = "~HÃ¡ttÃ©rkÃ©pek levÃ¡ltÃ¡sa";
-        Text[ slovenian ] = "~Zamenjaj stran za ozadje";
+        Text [ en-US ] = "~Exchange background page" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CBX_CHECK_MASTERS
     {
         Pos = MAP_APPFONT ( 6 , 170 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text = "Nicht ~verwendete Hintergrundseiten löschen" ;
-        Text [ ENGLISH ] = "~Remove not used master pages" ;
+        Text [ de ] = "Nicht ~verwendete Hintergrundseiten löschen" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~Delete unused backgrounds";
-        Text[ portuguese ] = "~Eliminar páginas de fundo não utilizadas";
-        Text[ russian ] = "Óäàëèòü íåèñïîëüçîâàííûå ôîíû";
-        Text[ dutch ] = "~Niet-gebruikte achtergrondpagina's wissen";
-        Text[ french ] = "Supprimer les pages d'arrière-plan ~inutilisées";
-        Text[ spanish ] = "~Borrar las páginas de fondo no utilizadas";
-        Text[ italian ] = "Elimina pagine di sfondo non utilizzate";
-        Text[ danish ] = "~Slet ubrugte baggrundssider";
-        Text[ swedish ] = "Radera ~ej använda bakgrundssidor";
-        Text[ polish ] = "~Usuñ nieu¿ywane t³a";
-        Text[ portuguese_brazilian ] = "~Excluir planos de fundo não utilizados";
-        Text[ japanese ] = "æœªä½¿ç”¨ã®ãƒã‚¹ã‚¿ãƒ¼ãƒšãƒ¼ã‚¸ã¯å‰Šé™¤ã™ã‚‹(~D)";
-        Text[ chinese_simplified ] = "åˆ é™¤ä¸ç”¨çš„èƒŒæ™¯é¡µé¢(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤ä¸ç”¨çš„èƒŒæ™¯é é¢(~D)";
-        Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
-        Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİíùí óåëéäşí ~öüíôïõ";
-        Text[ korean ] = "ì‚¬ìš©í•˜ì§€ ì•Šì€ ë°°ê²½ ì‚­ì œ(~D)";
-        Text[ turkish ] = "Kullanılmayan artalan sayfalarını sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix els fons no utilitzats";
-        Text[ finnish ] = "~Poista käyttämättömät taustat";
-        Text[ thai ] = "~à¸¥à¸šà¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹ƒà¸Šà¹‰";
-        Text[ czech ] = "Smazat nepouÅ¾itÃ¡ pozadÃ­";
-        Text[ hebrew ] = "Nicht ~verwendete Hintergrundseiten lÃ¶schen";
-        Text[ hindi ] = "~à¤…à¤¨à¥à¤­à¥à¤¯à¤¸à¥à¤¤ à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "ZmazaÅ¥ nepouÅ¾itÃ© poza~dia";
-        Text[ hungarian ] = "~Nem hasznÃ¡lt hÃ¡ttÃ©r tÃ¶rlÃ©se";
-        Text[ slovenian ] = "~IzbriÅ¡i neuporabljena ozadja";
+        Text [ en-US ] = "~Delete unused backgrounds";
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 156 , 155 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Laden..." ;
-        Text [ ENGLISH ] = "~Load..." ;
+        Text [ de ] = "~Laden..." ;
         TabStop = TRUE ;
-        Text [ dutch ] = "~Laden..." ;
-        Text [ english_us ] = "~Load..." ;
-        Text [ italian ] = "Carica..." ;
-        Text [ spanish ] = "~Cargar..." ;
-        Text [ french ] = "~Charger..." ;
-        Text [ swedish ] = "~Ladda..." ;
-        Text [ danish ] = "Ind~læs..." ;
-        Text [ portuguese_brazilian ] = "~Carregar..." ;
-        Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "è£…å…¥(~L)...";
-        Text[ russian ] = "~Çàãğóçêà...";
-        Text[ polish ] = "~Za³aduj...";
-        Text[ japanese ] = "èª­ã¿è¾¼ã¿(~L)...";
-        Text[ chinese_traditional ] = "è¼‰å…¥(~L)...";
-        Text[ arabic ] = "ÊÍãíá...";
-        Text[ greek ] = "Öüñôùóç...";
-        Text[ korean ] = "ë¡œë“œ(~L)...";
-        Text[ turkish ] = "Yükle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Carrega...";
-        Text[ finnish ] = "L~ataa...";
-        Text[ thai ] = "à¹‚~à¸«à¸¥à¸”...";
-        Text[ czech ] = "NaÄÃ­st...";
-        Text[ hebrew ] = "â€®×˜×¢×™× ×”â€¬";
-        Text[ hindi ] = "~à¤²à¥‹à¤¡ à¤•à¤°à¥‹...";
-        Text[ slovak ] = "~NaÄÃ­taÅ¥...";
-        Text[ hungarian ] = "~BetÃ¶ltÃ©s...";
-        Text[ slovenian ] = "~NaloÅ¾i...";
+        Text [ en-US ] = "~Load..." ;
+        Text [ x-comment ] = " ";
     };
     HelpButton BTN_HELP
     {
@@ -241,34 +132,8 @@ ModalDialog DLG_PRESLT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Slide Design" ;
-    Text [ italian ] = "Modello diapositiva" ;
-    Text [ spanish ] = "Diseño de diapositiva" ;
-    Text [ french ] = "Style de page" ;
-    Text [ dutch ] = "Pagina-opmaakprofiel" ;
-    Text [ swedish ] = "Sidformatmall" ;
-    Text [ danish ] = "Diasdesign" ;
-    Text [ portuguese ] = "Estilo de página" ;
-    Text [ portuguese_brazilian ] = "Esboço do Slide" ;
-    Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
-    Text[ russian ] = "Äèçàéí ñëàéäà";
-    Text[ polish ] = "Uk³ad slajdu";
-    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«";
-    Text[ chinese_traditional ] = "é é¢æ¨£å¼";
-    Text[ arabic ] = "äãØ ÕİÍÉ";
-    Text[ greek ] = "Ğñüôõğï äéáöÜíåéáò";
-    Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ë””ìì¸";
-    Text[ turkish ] = "Slayt tasarımı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Disseny de la diapositiva";
-    Text[ finnish ] = "Diamalli";
-    Text[ thai ] = "à¸­à¸­à¸à¹à¸šà¸šà¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
-    Text[ czech ] = "NÃ¡vrh snÃ­mku";
-    Text[ hebrew ] = "Seitenvorlage";
-    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤¡à¤¿à¤¸à¥ˆà¤¨";
-    Text[ slovak ] = "NÃ¡vrh snÃ­mku";
-    Text[ hungarian ] = "DiatervezÅ‘";
-    Text[ slovenian ] = "Oblikovanje diapozitiva";
+    Text [ en-US ] = "Slide Design" ;
+    Text [ x-comment ] = " ";
 };
 
 
