@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SjSettings.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+ *  last change: $Author: jl $ $Date: 2001-11-01 13:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,16 +183,14 @@ public final class SjSettings {
         // detect changes
         if( pChangeProps != null )
         {
+            // Changes of http.proxyHost, http.proxyPort, ftp.proxyHost, ftp.proxyPort,
+            // http.nonProxyHosts, ftp.nonProxyHosts are detected by the JavaVM service
+            // and changed in the VM.
             bHttpClientChanged =
-                 !equalsImpl( props.get( "http.proxyHost" ), pChangeProps.get( "http.proxyHost" ) )
-              || !equalsImpl( props.get( "http.proxyPort" ), pChangeProps.get( "http.proxyPort" ) )
-              || !equalsImpl( props.get( "http.maxConnections" ), pChangeProps.get( "http.maxConnections" ) )
-              || !equalsImpl( props.get( "http.keepAlive" ), pChangeProps.get( "http.keepAlive" ) )
-              || !equalsImpl( props.get( "http.nonProxyHosts" ), pChangeProps.get( "http.nonProxyHosts" ) );
+              !equalsImpl( props.get( "http.maxConnections" ), pChangeProps.get( "http.maxConnections" ) )
+                || !equalsImpl( props.get( "http.keepAlive" ), pChangeProps.get( "http.keepAlive" ) );
             bFtpClientChanged =
-                 !equalsImpl( props.get( "ftpProxySet" ), pChangeProps.get( "ftpProxySet" ) )
-              || !equalsImpl( props.get( "ftpProxyHost" ), pChangeProps.get( "ftpProxyHost" ) )
-              || !equalsImpl( props.get( "ftpProxyPort" ), pChangeProps.get( "ftpProxyPort" ) );
+                !equalsImpl( props.get( "ftpProxySet" ), pChangeProps.get( "ftpProxySet" ) );
             bSecurityChanged =
                  !equalsImpl( props.get( "appletviewer.security.mode" ), pChangeProps.get( "appletviewer.security.mode" ) )
               || !equalsImpl( props.get( "stardiv.security.disableSecurity" ), pChangeProps.get( "stardiv.security.disableSecurity" ) );
