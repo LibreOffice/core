@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 10:53:33 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,22 @@ SwLayNotify::~SwLayNotify()
          (bPos || bNotify) && !(pLay->GetType() & 0x1823) )  //Tab, Row, FtnCont, Root, Page
     {
         // --> OD 2005-03-11 #i44016# - force unlock of position of lower objects.
-        pLay->NotifyLowerObjs( true );
+        // --> OD 2005-03-30 #i43913# - no unlock of position of objects,
+        // if <pLay> is a cell frame, and its table frame resp. its parent table
+        // frame is locked.
+        bool bUnlockPosOfObjs( true );
+        if ( pLay->IsCellFrm() )
+        {
+            SwTabFrm* pTabFrm( pLay->FindTabFrm() );
+            if ( pTabFrm &&
+                 ( pTabFrm->IsJoinLocked() ||
+                   ( pTabFrm->IsFollow() &&
+                     pTabFrm->FindMaster()->IsJoinLocked() ) ) )
+            {
+                bUnlockPosOfObjs = false;
+            }
+        }
+        pLay->NotifyLowerObjs( bUnlockPosOfObjs );
         // <--
     }
     if ( bPos && pLay->IsFtnFrm() && pLay->Lower() )
