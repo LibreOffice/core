@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-25 10:32:00 $
+ *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,29 @@ void GalleryThemePopup::StateChanged( USHORT nSID, SfxItemState eState, const Sf
     }
 }
 
+// ------------------
+// - GalleryToolBox -
+// ------------------
+
+GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
+    ToolBox( pParent )
+{
+}
+
+// ------------------------------------------------------------------------
+
+GalleryToolBox::~GalleryToolBox()
+{
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
+{
+    if( !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
+        ToolBox::KeyInput( rKEvt );
+}
+
 // -------------------
 // - GalleryBrowser2 -
 // -------------------
@@ -503,6 +526,87 @@ void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoi
 
 // -----------------------------------------------------------------------------
 
+BOOL GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+{
+    const ULONG nItemId = ImplGetSelectedItemId( NULL );
+    BOOL        bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
+
+    if( !bRet && nItemId && mpCurTheme )
+    {
+        USHORT              nExecuteId = 0;
+        const SgaObjKind    eObjKind = mpCurTheme->GetObjectKind( nItemId - 1 );
+        INetURLObject       aURL;
+
+        const_cast< GalleryTheme* >( mpCurTheme )->GetURL( nItemId - 1, aURL );
+
+        const BOOL  bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
+        BOOL        bPreview = bValidURL;
+        BOOL        bAdd = ( bValidURL && SGA_OBJ_SOUND != eObjKind );
+        BOOL        bAddLink = ( bValidURL && SGA_OBJ_SVDRAW != eObjKind && SGA_OBJ_SOUND != eObjKind );
+        BOOL        bDelete = FALSE;
+        BOOL        bTitle = FALSE;
+
+        if( !mpCurTheme->IsReadOnly() && mpCurTheme->GetObjectCount() )
+        {
+            bDelete = ( GALLERYBROWSERMODE_PREVIEW != GetMode() );
+            bTitle = TRUE;
+        }
+
+        switch( rKEvt.GetKeyCode().GetCode() )
+        {
+            case( KEY_SPACE ):
+            case( KEY_RETURN ):
+            case( KEY_P ):
+            {
+                if( bPreview )
+                {
+                    TogglePreview( pWindow );
+                    bRet = TRUE;
+                }
+            }
+            break;
+
+            case( KEY_INSERT ):
+            case( KEY_I ):
+            {
+                if( bAddLink && rKEvt.GetKeyCode().IsShift() && rKEvt.GetKeyCode().IsMod1() )
+                    nExecuteId = MN_ADD_LINK;
+                else if( bAdd )
+                    nExecuteId = MN_ADD;
+            }
+            break;
+
+            case( KEY_DELETE ):
+            case( KEY_D ):
+            {
+                if( bDelete )
+                    nExecuteId = MN_DELETE;
+            }
+            break;
+
+            case( KEY_T ):
+            {
+                if( bTitle )
+                    nExecuteId = MN_TITLE;
+            }
+            break;
+
+            default:
+            break;
+        }
+
+        if( nExecuteId )
+        {
+            ImplExecute( nExecuteId );
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
 void GalleryBrowser2::SelectTheme( const String& rThemeName )
 {
     delete mpIconView, mpIconView = NULL;
@@ -617,6 +721,73 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
 // -----------------------------------------------------------------------------
 
+Window* GalleryBrowser2::GetViewWindow() const
+{
+    Window* pRet;
+
+    switch( GetMode() )
+    {
+        case( GALLERYBROWSERMODE_LIST ): pRet = mpListView; break;
+        case( GALLERYBROWSERMODE_PREVIEW ): pRet = mpPreview; break;
+
+        default:
+            pRet = mpIconView;
+        break;
+    }
+
+    return pRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
+{
+    if( mpCurTheme )
+    {
+        const ULONG nItemId = ImplGetSelectedItemId( NULL );
+
+        if( nItemId )
+        {
+            ULONG nNewItemId = nItemId;
+
+            switch( eTravel )
+            {
+                case( GALLERYBROWSERTRAVEL_FIRST ):     nNewItemId = 1; break;
+                case( GALLERYBROWSERTRAVEL_LAST ):      nNewItemId = mpCurTheme->GetObjectCount(); break;
+                case( GALLERYBROWSERTRAVEL_PREVIOUS ):  nNewItemId--; break;
+                case( GALLERYBROWSERTRAVEL_NEXT ):      nNewItemId++; break;
+            }
+
+            if( nNewItemId < 1 )
+                nNewItemId = 1;
+            else if( nNewItemId > mpCurTheme->GetObjectCount() )
+                nNewItemId = mpCurTheme->GetObjectCount();
+
+            if( nNewItemId != nItemId )
+            {
+                ImplSelectItemId( nNewItemId );
+                ImplUpdateInfoBar();
+
+                if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
+                {
+                    Graphic     aGraphic;
+                    const ULONG nPos = nNewItemId - 1;
+
+                    mpCurTheme->GetGraphic( nPos, aGraphic );
+                    mpPreview->SetGraphic( aGraphic );
+
+                    if( SGA_OBJ_SOUND == mpCurTheme->GetObjectKind( nPos ) )
+                        mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );
+
+                    mpPreview->Invalidate();
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void GalleryBrowser2::ImplUpdateViews( USHORT nSelectionId )
 {
     mpIconView->Hide();
@@ -705,6 +876,128 @@ void GalleryBrowser2::ImplSelectItemId( ULONG nItemId )
     {
         mpIconView->SelectItem( (USHORT) nItemId );
         mpListView->SelectRow( nItemId - 1 );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser2::ImplExecute( USHORT nId )
+{
+    const ULONG nItemId = ImplGetSelectedItemId( NULL );
+
+    if( mpCurTheme && nItemId )
+    {
+        mnCurActionPos = nItemId - 1;
+
+        switch( nId )
+        {
+            case( MN_ADD ):
+            case( MN_ADD_LINK ):
+            {
+                sal_uInt32 nFormat;
+
+                mbCurActionIsLinkage = ( MN_ADD_LINK == nId );
+
+                switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
+                {
+                    case( SGA_OBJ_BMP ):
+                    case( SGA_OBJ_ANIM ):
+                    case( SGA_OBJ_INET ):
+                        nFormat = SGA_FORMAT_GRAPHIC | SGA_FORMAT_STRING;
+                    break;
+
+                    case ( SGA_OBJ_SOUND ) :
+                        nFormat = SGA_FORMAT_SOUND | SGA_FORMAT_STRING;
+                    break;
+
+                    case( SGA_OBJ_SVDRAW ):
+                        nFormat = SGA_FORMAT_GRAPHIC | SGA_FORMAT_SVDRAW | SGA_FORMAT_STRING;
+                    break;
+
+                    default :
+                    break;
+                }
+
+                const SfxUInt32Item aItem( SID_GALLERY_FORMATS, nFormat );
+                SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+                    SID_GALLERY_FORMATS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+            }
+            break;
+
+            case( MN_PREVIEW ):
+                SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
+            break;
+
+            case( MN_DELETE ):
+            {
+                if( !mpCurTheme->IsReadOnly() &&
+                    QueryBox( NULL, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETEOBJ ) ) ).Execute() == RET_YES )
+                {
+                    mpCurTheme->RemoveObject( mnCurActionPos );
+                }
+            }
+            break;
+
+            case( MN_TITLE ):
+            {
+                SgaObject* pObj = mpCurTheme->AcquireObject( mnCurActionPos );
+
+                if( pObj )
+                {
+                    const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
+                    TitleDialog     aDlg( this, aOldTitle );
+
+                    if( aDlg.Execute() == RET_OK )
+                    {
+                        String aNewTitle( aDlg.GetTitle() );
+
+                        if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
+                        {
+                            if( !aNewTitle.Len() )
+                                aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
+
+                            pObj->SetTitle( aNewTitle );
+                            mpCurTheme->InsertObject( *pObj );
+                        }
+                    }
+
+                    mpCurTheme->ReleaseObject( pObj );
+                }
+            }
+            break;
+
+            case( MN_COPYCLIPBOARD ):
+            {
+                Window* pWindow;
+
+                switch( GetMode() )
+                {
+                    case( GALLERYBROWSERMODE_ICON ): pWindow = (Window*) mpIconView; break;
+                    case( GALLERYBROWSERMODE_LIST ): pWindow = (Window*) mpListView; break;
+                    case( GALLERYBROWSERMODE_PREVIEW ): pWindow = (Window*) mpPreview; break;
+
+                    default:
+                        pWindow = NULL;
+                    break;
+                }
+
+                mpCurTheme->CopyToClipboard( pWindow, mnCurActionPos );
+            }
+            break;
+
+            case( MN_PASTECLIPBOARD ):
+            {
+                if( !mpCurTheme->IsReadOnly() )
+                {
+                    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
+                    mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
+                }
+            }
+            break;
+
+            default:
+            break;
+        }
     }
 }
 
@@ -835,125 +1128,7 @@ BOOL GalleryBrowser2::IsLinkage() const
 IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
 {
     if( pMenu )
-    {
-        const USHORT    nId = pMenu->GetCurItemId();
-        const ULONG     nItemId = ImplGetSelectedItemId( NULL );
-
-        if( mpCurTheme && nItemId )
-        {
-            mnCurActionPos = nItemId - 1;
-
-            switch( nId )
-            {
-                case( MN_ADD ):
-                case( MN_ADD_LINK ):
-                {
-                    sal_uInt32 nFormat;
-
-                    mbCurActionIsLinkage = ( MN_ADD_LINK == nId );
-
-                    switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
-                    {
-                        case( SGA_OBJ_BMP ):
-                        case( SGA_OBJ_ANIM ):
-                        case( SGA_OBJ_INET ):
-                            nFormat = SGA_FORMAT_GRAPHIC | SGA_FORMAT_STRING;
-                        break;
-
-                        case ( SGA_OBJ_SOUND ) :
-                            nFormat = SGA_FORMAT_SOUND | SGA_FORMAT_STRING;
-                        break;
-
-                        case( SGA_OBJ_SVDRAW ):
-                            nFormat = SGA_FORMAT_GRAPHIC | SGA_FORMAT_SVDRAW | SGA_FORMAT_STRING;
-                        break;
-
-                        default :
-                        break;
-                    }
-
-                    const SfxUInt32Item aItem( SID_GALLERY_FORMATS, nFormat );
-                    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
-                        SID_GALLERY_FORMATS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-                }
-                break;
-
-                case( MN_PREVIEW ):
-                    SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
-                break;
-
-                case( MN_DELETE ):
-                {
-                    if( !mpCurTheme->IsReadOnly() &&
-                        QueryBox( NULL, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETEOBJ ) ) ).Execute() == RET_YES )
-                    {
-                        mpCurTheme->RemoveObject( mnCurActionPos );
-                    }
-                }
-                break;
-
-                case( MN_TITLE ):
-                {
-                    SgaObject* pObj = mpCurTheme->AcquireObject( mnCurActionPos );
-
-                    if( pObj )
-                    {
-                        const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
-                        TitleDialog     aDlg( this, aOldTitle );
-
-                        if( aDlg.Execute() == RET_OK )
-                        {
-                            String aNewTitle( aDlg.GetTitle() );
-
-                            if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
-                            {
-                                if( !aNewTitle.Len() )
-                                    aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
-
-                                pObj->SetTitle( aNewTitle );
-                                mpCurTheme->InsertObject( *pObj );
-                            }
-                        }
-
-                        mpCurTheme->ReleaseObject( pObj );
-                    }
-                }
-                break;
-
-                case( MN_COPYCLIPBOARD ):
-                {
-                    Window* pWindow;
-
-                    switch( GetMode() )
-                    {
-                        case( GALLERYBROWSERMODE_ICON ): pWindow = (Window*) mpIconView; break;
-                        case( GALLERYBROWSERMODE_LIST ): pWindow = (Window*) mpListView; break;
-                        case( GALLERYBROWSERMODE_PREVIEW ): pWindow = (Window*) mpPreview; break;
-
-                        default:
-                            pWindow = NULL;
-                        break;
-                    }
-
-                    mpCurTheme->CopyToClipboard( pWindow, mnCurActionPos );
-                }
-                break;
-
-                case( MN_PASTECLIPBOARD ):
-                {
-                    if( !mpCurTheme->IsReadOnly() )
-                    {
-                        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
-                        mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
-                    }
-                }
-                break;
-
-                default:
-                break;
-            }
-        }
-    }
+        ImplExecute( pMenu->GetCurItemId() );
 
     return 0;
 }

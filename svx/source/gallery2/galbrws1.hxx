@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
+ *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,25 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
+#include <svtools/lstner.hxx>
+#include <vector>
 #include "galbrws.hxx"
+
+// -----------------
+// - GalleryButton -
+// -----------------
+
+class GalleryButton : public PushButton
+{
+private:
+
+    virtual void    KeyInput( const KeyEvent& rKEvt );
+
+public:
+
+                    GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits );
+                    ~GalleryButton();
+};
 
 // -----------------------
 // - GalleryThemeListBox -
@@ -70,8 +88,6 @@
 
 class GalleryThemeListBox : public ListBox
 {
-private:
-
 protected:
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
@@ -88,21 +104,25 @@ public:
 
 class Gallery;
 class GalleryThemeEntry;
+class GalleryTheme;
 struct ExchangeData;
 
 class GalleryBrowser1 : public Control, SfxListener
 {
+    friend class GalleryBrowser;
     friend class GalleryThemeListBox;
 
 private:
 
-    PushButton              maNewTheme;
+    GalleryButton           maNewTheme;
     GalleryThemeListBox*    mpThemes;
     Gallery*                mpGallery;
 
     void                    ImplAdjustControls();
     ULONG                   ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
+    ::std::vector< USHORT > ImplGetExecuteVector();
+    void                    ImplExecute( USHORT nId );
 
     // Control
     virtual void            Resize();
@@ -125,4 +145,5 @@ public:
     String                  GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : String(); }
 
     void                    ShowContextMenu();
+    BOOL                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };

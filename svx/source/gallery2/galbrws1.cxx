@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-31 17:04:45 $
+ *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #endif
 
+#include <algorithm>
+
 // --------------
 // - Namespaces -
 // --------------
@@ -83,6 +85,29 @@ using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
+
+// -----------------
+// - GalleryButton -
+// -----------------
+
+GalleryButton::GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits ) :
+    PushButton( pParent, nWinBits )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+GalleryButton::~GalleryButton()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryButton::KeyInput( const KeyEvent& rKEvt )
+{
+    if( !static_cast< GalleryBrowser1* >( GetParent() )->KeyInput( rKEvt, this ) )
+        PushButton::KeyInput( rKEvt );
+}
 
 // -----------------------
 // - GalleryThemeListBox -
@@ -103,17 +128,24 @@ GalleryThemeListBox::~GalleryThemeListBox()
 
 long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nRet = ListBox::PreNotify( rNEvt );
+    long nDone = 0;
 
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
 
-        if( pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
-            ( (GalleryBrowser1*) GetParent() )->ShowContextMenu();
+        if( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
+            static_cast< GalleryBrowser1* >( GetParent() )->ShowContextMenu();
+    }
+    else if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+
+        if( pKEvt )
+            nDone = static_cast< GalleryBrowser1* >( GetParent() )->KeyInput( *pKEvt, this );
     }
 
-    return nRet;
+    return( nDone ? nDone : ListBox::PreNotify( rNEvt ) );
 }
 
 // -------------------
@@ -240,94 +272,18 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser1::Resize()
+::std::vector< USHORT > GalleryBrowser1::ImplGetExecuteVector()
 {
-    Control::Resize();
-    ImplAdjustControls();
-}
-
-// -----------------------------------------------------------------------------
-
-void GalleryBrowser1::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-    const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
-
-    switch( rGalleryHint.GetType() )
-    {
-        case( GALLERY_HINT_THEME_CREATED ):
-            ImplInsertThemeEntry( mpGallery->GetThemeInfo( rGalleryHint.GetThemeName() ) );
-        break;
-
-        case( GALLERY_HINT_THEME_RENAMED ):
-        {
-            const USHORT nCurSelectPos = mpThemes->GetSelectEntryPos();
-            const USHORT nRenameEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
-
-            mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
-            ImplInsertThemeEntry( mpGallery->GetThemeInfo( rGalleryHint.GetStringData() ) );
-
-            if( nCurSelectPos == nRenameEntryPos )
-            {
-                mpThemes->SelectEntry( rGalleryHint.GetStringData() );
-                SelectThemeHdl( NULL );
-            }
-        }
-        break;
-
-        case( GALLERY_HINT_THEME_REMOVED ):
-        {
-            mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
-        }
-        break;
-
-        case( GALLERY_HINT_CLOSE_THEME ):
-        {
-            const USHORT nCurSelectPos = mpThemes->GetSelectEntryPos();
-            const USHORT nCloseEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
-
-            if( nCurSelectPos == nCloseEntryPos )
-            {
-                if( nCurSelectPos < ( mpThemes->GetEntryCount() - 1 ) )
-                    mpThemes->SelectEntryPos( nCurSelectPos + 1 );
-                else if( nCurSelectPos )
-                    mpThemes->SelectEntryPos( nCurSelectPos - 1 );
-                else
-                    mpThemes->SetNoSelection();
-
-                SelectThemeHdl( NULL );
-            }
-        }
-        break;
-
-        default:
-        break;
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-void GalleryBrowser1::ShowContextMenu()
-{
-    Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this );
-}
-
-// -----------------------------------------------------------------------------
-
-IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
-{
-    GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+    ::std::vector< USHORT > aExecVector;
+    GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
     if( pTheme )
     {
-        PopupMenu           aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
         BOOL                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
         static const BOOL   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
 
-
         if( pTheme->IsReadOnly() )
-        {
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = FALSE;
-        }
         else if( pTheme->IsImported() )
         {
             bUpdateAllowed = FALSE;
@@ -341,27 +297,30 @@ IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
         else
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = TRUE;
 
-        aMenu.EnableItem( MN_ACTUALIZE, bUpdateAllowed && pTheme->GetObjectCount() );
-        aMenu.EnableItem( MN_RENAME, bRenameAllowed );
-        aMenu.EnableItem( MN_DELETE, bRemoveAllowed );
-        aMenu.EnableItem( MN_ASSIGN_ID, bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() );
+        if( bUpdateAllowed && pTheme->GetObjectCount() )
+            aExecVector.push_back( MN_ACTUALIZE );
+
+        if( bRenameAllowed )
+            aExecVector.push_back( MN_RENAME );
+
+        if( bRemoveAllowed )
+            aExecVector.push_back( MN_DELETE );
+
+        if( bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() )
+            aExecVector.push_back( MN_ASSIGN_ID );
+
+        aExecVector.push_back( MN_PROPERTIES );
 
         mpGallery->ReleaseTheme( pTheme, *this );
-
-        aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
-        aMenu.RemoveDisabledEntries();
-        aMenu.Execute( this, GetPointerPosPixel() );
     }
 
-    return 0L;
+    return aExecVector;
 }
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
+void GalleryBrowser1::ImplExecute( USHORT nId )
 {
-    const USHORT nId = pMenu->GetCurItemId();
-
     switch( nId )
     {
         case( MN_ACTUALIZE ):
@@ -460,7 +419,157 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
         }
         break;
     }
+}
 
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser1::Resize()
+{
+    Control::Resize();
+    ImplAdjustControls();
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser1::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
+
+    switch( rGalleryHint.GetType() )
+    {
+        case( GALLERY_HINT_THEME_CREATED ):
+            ImplInsertThemeEntry( mpGallery->GetThemeInfo( rGalleryHint.GetThemeName() ) );
+        break;
+
+        case( GALLERY_HINT_THEME_RENAMED ):
+        {
+            const USHORT nCurSelectPos = mpThemes->GetSelectEntryPos();
+            const USHORT nRenameEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
+
+            mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
+            ImplInsertThemeEntry( mpGallery->GetThemeInfo( rGalleryHint.GetStringData() ) );
+
+            if( nCurSelectPos == nRenameEntryPos )
+            {
+                mpThemes->SelectEntry( rGalleryHint.GetStringData() );
+                SelectThemeHdl( NULL );
+            }
+        }
+        break;
+
+        case( GALLERY_HINT_THEME_REMOVED ):
+        {
+            mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
+        }
+        break;
+
+        case( GALLERY_HINT_CLOSE_THEME ):
+        {
+            const USHORT nCurSelectPos = mpThemes->GetSelectEntryPos();
+            const USHORT nCloseEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
+
+            if( nCurSelectPos == nCloseEntryPos )
+            {
+                if( nCurSelectPos < ( mpThemes->GetEntryCount() - 1 ) )
+                    mpThemes->SelectEntryPos( nCurSelectPos + 1 );
+                else if( nCurSelectPos )
+                    mpThemes->SelectEntryPos( nCurSelectPos - 1 );
+                else
+                    mpThemes->SetNoSelection();
+
+                SelectThemeHdl( NULL );
+            }
+        }
+        break;
+
+        default:
+        break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser1::ShowContextMenu()
+{
+    Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this );
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+{
+    BOOL bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
+
+    if( !bRet )
+    {
+        ::std::vector< USHORT > aExecVector( ImplGetExecuteVector() );
+        USHORT                  nExecuteId = 0;
+
+        switch( rKEvt.GetKeyCode().GetCode() )
+        {
+            case( KEY_I ):
+            case( KEY_INSERT ):
+            {
+                ClickNewThemeHdl( NULL );
+            }
+            break;
+
+            case( KEY_U ):
+                nExecuteId = MN_ACTUALIZE;
+            break;
+
+            case( KEY_DELETE ):
+            case( KEY_D ):
+                nExecuteId = MN_DELETE;
+            break;
+
+            case( KEY_R ):
+                nExecuteId = MN_RENAME;
+            break;
+
+            case( KEY_RETURN ):
+                nExecuteId = rKEvt.GetKeyCode().IsMod1() ? MN_PROPERTIES : 0;
+            break;
+        }
+
+        if( nExecuteId && ( ::std::find( aExecVector.begin(), aExecVector.end(), nExecuteId ) != aExecVector.end() ) )
+        {
+            ImplExecute( nExecuteId );
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
+{
+    ::std::vector< USHORT > aExecVector( ImplGetExecuteVector() );
+
+    if( aExecVector.size() )
+    {
+        PopupMenu aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
+
+        aMenu.EnableItem( MN_ACTUALIZE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ACTUALIZE ) != aExecVector.end() );
+        aMenu.EnableItem( MN_RENAME, ::std::find( aExecVector.begin(), aExecVector.end(), MN_RENAME ) != aExecVector.end() );
+        aMenu.EnableItem( MN_DELETE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_DELETE ) != aExecVector.end() );
+        aMenu.EnableItem( MN_ASSIGN_ID, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ASSIGN_ID ) != aExecVector.end() );
+        aMenu.EnableItem( MN_PROPERTIES, ::std::find( aExecVector.begin(), aExecVector.end(), MN_PROPERTIES ) != aExecVector.end() );
+        aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
+        aMenu.RemoveDisabledEntries();
+        aMenu.Execute( this, GetPointerPosPixel() );
+    }
+
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
+{
+    ImplExecute( pMenu->GetCurItemId() );
     return 0L;
 }
 
@@ -469,7 +578,6 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 IMPL_LINK( GalleryBrowser1, SelectThemeHdl, void*, p )
 {
     ( (GalleryBrowser*) GetParent() )->ThemeSelectionHasChanged();
-
     return 0L;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 10:05:18 $
+ *  last change: $Author: ka $ $Date: 2002-02-07 15:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,44 @@ void GalleryBrowser::Resize()
                                  Size( aNewSize.Width() - aSplitSize.Width() - aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );
 
     maLastSize = aNewSize;
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
+{
+    const USHORT    nCode = rKEvt.GetKeyCode().GetCode();
+    BOOL            bForward = FALSE;
+    BOOL            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
+                           ( ( KEY_TAB == nCode ) || ( KEY_F6 == nCode && rKEvt.GetKeyCode().IsMod2() ) ) );
+
+    if( bRet )
+    {
+        if( !rKEvt.GetKeyCode().IsShift() )
+        {
+            if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
+                mpBrowser2->GetViewWindow()->GrabFocus();
+            else if( mpBrowser2->GetViewWindow()->HasFocus() )
+//                mpBrowser2->maViewBox.GrabFocus();
+//            else if( mpBrowser2->maViewBox.HasFocus() )
+                mpBrowser1->maNewTheme.GrabFocus();
+            else
+                mpBrowser1->mpThemes->GrabFocus();
+        }
+        else
+        {
+            if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
+                mpBrowser1->maNewTheme.GrabFocus();
+            else if( mpBrowser1->maNewTheme.HasFocus() )
+//                mpBrowser2->maViewBox.GrabFocus();
+//            else if( mpBrowser2->maViewBox.HasFocus() )
+                mpBrowser2->GetViewWindow()->GrabFocus();
+            else
+                mpBrowser1->mpThemes->GrabFocus();
+        }
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
