@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-10 14:27:36 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:43:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
