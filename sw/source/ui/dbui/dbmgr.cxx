@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: os $ $Date: 2001-11-26 15:07:28 $
+ *  last change: $Author: os $ $Date: 2001-11-30 13:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,8 +417,8 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         //"real" data base connections added here have to re-use the already available
         //DSData and set the correct CommandType
         SwDBData aTempData(aData);
-        pTemp = FindDSData(aData, FALSE);
         aData.nCommandType = -1;
+        pTemp = FindDSData(aData, FALSE);
         if(pTemp)
             *pTemp = *pImpl->pMergeData;
         else
