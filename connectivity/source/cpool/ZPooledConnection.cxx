@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPooledConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-15 15:17:39 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 09:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef CONNECTIVITY_POOLEDCONNECTION_HXX
 #include "ZPooledConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_ZCONNECTIONWEAKWRAPPER_HXX_
+#include "ZConnectionWrapper.hxx"
+#endif
 #ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
 #endif
@@ -111,41 +114,6 @@ void SAL_CALL OPooledConnection::disposing(void)
 void SAL_CALL OPooledConnection::disposing( const EventObject& Source ) throw (RuntimeException)
 {
     m_xComponent = NULL;
-}
-// -----------------------------------------------------------------------------
-namespace connectivity
-{
-    using namespace ::cppu;
-    typedef ::cppu::WeakComponentImplHelper1< XCloseable > OConnectionWeakWrapper_BASE;
-    class OConnectionWeakWrapper :  public ::comphelper::OBaseMutex
-                                  , public OConnectionWeakWrapper_BASE
-                                  , public OConnectionWrapper
-    {
-    public:
-        OConnectionWeakWrapper(Reference< XAggregation >& _xConnection)
-            : OConnectionWeakWrapper_BASE(m_aMutex)
-            ,OConnectionWrapper()
-        {
-            setDelegation(_xConnection,m_refCount);
-        }
-        DECLARE_XINTERFACE()
-        DECLARE_XTYPEPROVIDER( )
-        // --------------------------------------------------------------------------------
-        // XCloseable
-        void SAL_CALL close(  ) throw(SQLException, RuntimeException)
-        {
-            {
-                ::osl::MutexGuard aGuard( m_aMutex );
-                checkDisposed(rBHelper.bDisposed);
-
-            }
-            dispose();
-        }
-
-    };
-
-    IMPLEMENT_FORWARD_XINTERFACE2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
 }
 // -----------------------------------------------------------------------------
 //XPooledConnection
