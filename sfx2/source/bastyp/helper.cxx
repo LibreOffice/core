@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-19 07:38:01 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 07:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -130,14 +133,14 @@ DECLARE_LIST( StringList_Impl, OUString* );
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
                          Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds ) );
 
-void AppendDateTime_Impl( const ::com::sun::star::util::DateTime rDT, String& rRow )
+void AppendDateTime_Impl( const ::com::sun::star::util::DateTime rDT,
+                          String& rRow, const LocaleDataWrapper& rWrapper )
 {
     DateTime aDT;
     CONVERT_DATETIME( rDT, aDT );
-    const International& rInter = Application::GetAppInternational();
-    String aDateStr = rInter.GetDate( aDT );
+    String aDateStr = rWrapper.getDate( aDT );
     aDateStr += String::CreateFromAscii( ", " );
-    aDateStr += rInter.GetTime( aDT );
+    aDateStr += rWrapper.getTime( aDT );
     rRow += aDateStr;
 }
 
@@ -478,6 +481,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 
         if ( xResultSet.is() )
         {
+            LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
             pProperties = new StringList_Impl;
             Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
             Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
@@ -499,7 +503,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 //!                 aRow += '\t';
                     aRow += String::CreateFromInt64( nSize );
                     aRow += '\t';
-                    AppendDateTime_Impl( aDT, aRow );
+                    AppendDateTime_Impl( aDT, aRow, aLocaleWrapper );
                     aRow += '\t';
                     aRow += String( xContentAccess->queryContentIdentifierString() );
                     aRow += '\t';
