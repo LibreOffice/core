@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2001-06-12 07:39:28 $
+ *  last change: $Author: jb $ $Date: 2001-07-11 14:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ namespace
 //--------------------------------------------------------------------------
     std::auto_ptr< INode > implReduceLocalizedSet(ISubtree const&  _aSubtree, FindBestLocale& _rLocaleMatcher)
     {
+    // -- find the best-match locale -----------------------------
         _rLocaleMatcher.reset();
 
         OSelectForLocale aSelector(_rLocaleMatcher);
@@ -152,30 +153,44 @@ namespace
         aSelector.applyToChildren(_aSubtree);
 
         std::auto_ptr< INode > pResult;
+
+    // -- look for a non-NULL value -----------------------------
+        uno::Type aValueType;
         if (aSelector.hasResult())
         {
             ValueNode const& rSelected = *aSelector.getResult();
-            OSL_ENSURE( rSelected.getValueType() == parseTemplateName(_aSubtree.getElementTemplateName()),
-                        "ERROR: Found Value Type doesn't match encoded value type in pseudo template name" );
 
-            std::auto_ptr< ValueNode > pClonedValue(
-                new ValueNode(  _aSubtree.getName(),
-                                rSelected.getValue(), rSelected.getDefault(),
-                                _aSubtree.getAttributes() ) );
+            aValueType = rSelected.getValueType();
 
-            pResult.reset( pClonedValue.release() );
+            if (!rSelected.isNull()) // values are present - clone it from the values
+            {
+                pResult.reset ( new ValueNode(  _aSubtree.getName(),
+                                                rSelected.getValue(), rSelected.getDefault(),
+                                                _aSubtree.getAttributes()
+                              ) );
+
+            }
         }
-        else // create a NULL
+        else // no entry - exract the type to be used from the template name
+            aValueType = parseTemplateName(_aSubtree.getElementTemplateName());
+
+    // --  create NULL value, if none was found -----------------------------
+        // create a NULL of the found type
+        if (pResult.get() == NULL)
         {
-            uno::Type aValueType = parseTemplateName(_aSubtree.getElementTemplateName());
-
-            std::auto_ptr< ValueNode > pClonedValue(
-                new ValueNode(  _aSubtree.getName(),
-                                aValueType,
-                                _aSubtree.getAttributes() ) );
-
-            pResult.reset( pClonedValue.release() );
+            pResult.reset( new ValueNode(  _aSubtree.getName(),
+                                            aValueType,
+                                            _aSubtree.getAttributes()
+                         ) );
         }
+
+    // -- -----------------------------
+        OSL_ENSURE( aValueType != uno::Type(), "VOID result type found");
+        OSL_ENSURE( aValueType == parseTemplateName(_aSubtree.getElementTemplateName()),
+                    "ERROR: Found Value Type doesn't match encoded value type in pseudo template name");
+        OSL_POSTCOND( static_cast<ValueNode&>(*pResult).getValueType() == aValueType,
+                      "ERROR: Resulting Value Type doesn't match original value type" );
+
         return pResult;
     }
 //--------------------------------------------------------------------------
