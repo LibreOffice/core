@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:01:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "doc.hxx"
@@ -567,6 +566,19 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     ASSERT( Frm().Height() >= 0,
             "<SwFlyFreeFrm::CheckClip(..)> - fly frame has negative height now." );
     // <--
+}
+
+/** method to determine, if a <MakeAll()> on the Writer fly frame is possible
+
+    OD 2005-03-03 #i43771#
+
+    @author OD
+*/
+bool SwFlyFreeFrm::IsFormatPossible() const
+{
+    return SwFlyFrm::IsFormatPossible() &&
+           ( GetPageFrm() ||
+             ( GetAnchorFrm() && GetAnchorFrm()->IsInFly() ) );
 }
 
 /*************************************************************************
