@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:30:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,6 +539,60 @@ StreamStr::operator_read_line( bstream & i_src )
         }
     }
     return *this;
+}
+
+void
+StreamStr::strip_front(char i_cToRemove)
+{
+    const_iterator it = begin();
+    for ( ;
+          it != end() ? *it == i_cToRemove : false;
+          ++it );
+    pop_front(it - begin());
+}
+
+void
+StreamStr::strip_back(char i_cToRemove)
+{
+    const_iterator it = end();
+    for ( ;
+          it != begin() ? *(it-1) == i_cToRemove : false;
+          --it );
+    pop_back(end() - it);
+}
+
+void
+StreamStr::strip_frontback(char i_cToRemove)
+{
+    strip_front(i_cToRemove);
+    strip_back(i_cToRemove);
+}
+
+void
+StreamStr::strip_front_whitespace()
+{
+    const_iterator it = begin();
+    for ( ;
+          it != end() ? *it < 33 : false;
+          ++it );
+    pop_front(it - begin());
+}
+
+void
+StreamStr::strip_back_whitespace()
+{
+    const_iterator it = end();
+    for ( ;
+          it != begin() ? *(it-1) < 33 : false;
+          --it );
+    pop_back(end() - it);
+}
+
+void
+StreamStr::strip_frontback_whitespace()
+{
+    strip_front_whitespace();
+    strip_back_whitespace();
 }
 
 void
