@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:19:29 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ TYPEINIT1(FmFormModel, SdrModel);
 struct FmFormModelImplData
 {
     FmXUndoEnvironment*     pUndoEnv;
-    XubString               sNextPageId;
     sal_Bool                bOpenInDesignIsDefaulted;
     sal_Bool                bMovingPage;
 
@@ -125,7 +124,6 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers)
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
-    m_pImpl->sNextPageId = '0';
 #endif
 }
 
@@ -146,7 +144,6 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
-    m_pImpl->sNextPageId = '0';
 #endif
 }
 
@@ -167,7 +164,6 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers,
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
-    m_pImpl->sNextPageId = '0';
 #endif
 }
 
@@ -188,7 +184,6 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
     m_pImpl = new FmFormModelImplData;
     m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
     m_pImpl->pUndoEnv->acquire();
-    m_pImpl->sNextPageId = '0';
 #endif
 }
 
@@ -521,26 +516,3 @@ FmXUndoEnvironment& FmFormModel::GetUndoEnv()
 {
     return *m_pImpl->pUndoEnv;
 }
-
-//------------------------------------------------------------------------
-XubString FmFormModel::GetUniquePageId()
-{
-    XubString sReturn = m_pImpl->sNextPageId;
-
-    xub_Unicode aNextChar = m_pImpl->sNextPageId.GetChar(m_pImpl->sNextPageId.Len() - 1);
-    sal_Bool bNeedNewChar = sal_False;
-    switch (aNextChar)
-    {
-        case '9' : aNextChar = 'A'; break;
-        case 'Z' : aNextChar = 'a'; break;
-        case 'z' : aNextChar = '0'; bNeedNewChar = sal_True; break;
-        default: ++aNextChar; break;
-    }
-    m_pImpl->sNextPageId.SetChar(m_pImpl->sNextPageId.Len() - 1, aNextChar);
-    if (bNeedNewChar)
-        m_pImpl->sNextPageId += '0';
-
-    return sReturn;
-}
-
-
