@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-29 13:35:56 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 06:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ namespace svxform
     //------------------------------------------------------------------------
     NavigatorTree::NavigatorTree( const Reference< XMultiServiceFactory >& _xORB,
                            Window* pParent )
-        :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER )
+        :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL ) // #100258# OJ WB_HSCROLL added
         ,m_aControlExchange(this)
         ,nEditEvent(0)
         ,m_pEditEntry(NULL)
@@ -2203,6 +2203,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/05/29 13:35:56  fs
+ *  #99674# correctly set the collapsed/expanded images for both bitmap modes
+ *
  *  Revision 1.5  2002/05/27 12:37:24  fs
  *  #99541# #99543#
  *
