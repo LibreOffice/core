@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-29 14:42:43 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 17:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,11 @@ using namespace ::rtl;
 #define CONCAT5( x, y, z, a, b )            DOCONCAT5(x,y,z,a,b)
 
 #ifdef UNX
+#ifdef MACOSX
+#define LIBNAME(name)                       STRING(CONCAT5(lib,name,SUPD, DLLSUFFIX,.dylib.framework))
+#else
 #define LIBNAME(name)                       STRING(CONCAT5(lib,name,SUPD, DLLSUFFIX,.so))
+#endif
 #else
 #define LIBNAME(name)                       STRING(CONCAT4( name, SUPD, DLLSUFFIX, .dll))
 #endif
