@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:00:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,8 +248,7 @@ inline SwRect SwFrmOrObj::GetBox() const
     }
     else if( pObj )
         return SwRect( pObj->GetCurrentBoundRect() );
-    else
-        return SwRect();
+    return SwRect();
 
 }
 
@@ -268,6 +267,7 @@ inline SwRect SwFrmOrObj::GetBounds() const
     }
     else if( pObj )
         return SwRect( pObj->GetCurrentBoundRect() );
+    return SwRect();
 }
 
 
