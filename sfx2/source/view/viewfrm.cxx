@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:21:00 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,6 +884,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     DELETEZ( pView->pImp->pMenuBar );
                     pView->GetBindings().LEAVEREGISTRATIONS();
                     pView->GetDispatcher()->LockUI_Impl( sal_False );
+                }
+
+                if ( xNewObj.Is() )
+                {
+                    // Propagate document closure.
+                    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, xOldObj ) );
                 }
 
                 // als erledigt recorden
