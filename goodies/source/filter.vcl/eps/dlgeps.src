@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:55:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,8 @@ ModalDialog DLG_EXPORT_EPS
     Text[ hindi ] = "EPS निर्यात विकल्प";
     Text[ slovak ] = "Voľby pre export EPS";
 };
+
+
 
 
 
