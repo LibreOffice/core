@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: th $ $Date: 2001-08-24 15:22:34 $
+ *  last change: $Author: hro $ $Date: 2001-08-28 14:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,9 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         rSettings.SetStyleSettings( aStyleSettings );
     }
 
+    if ( bCallHdl )
+        GetpApp()->SystemSettingsChanging( rSettings, this );
+
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
@@ -344,9 +347,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         rSettings.SetStyleSettings( aStyleSettings );
     }
 #endif
-
-    if ( bCallHdl )
-        GetpApp()->SystemSettingsChanging( rSettings, this );
 }
 
 // -----------------------------------------------------------------------
@@ -555,8 +555,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             nFrameStyle |= SAL_FRAME_STYLE_CLOSEABLE;
         if ( nStyle & WB_APP )
             nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
-        if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) )
-            nFrameStyle = 0;
 
         SalFrame* pParentFrame = NULL;
         if ( pParent )
@@ -570,15 +568,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         pFrame->SetCallback( this, ImplWindowFrameProc );
 #else
-        if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) )
-            nStyle = 0;
-
         RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
         RmFrameWindow* pFrame = new RmFrameWindow( this );
         if ( !pFrame->IsValid() )
         {
-            delete pFrame;
-            pFrame = NULL;
+            delete pFrame, pFrame = NULL;
             GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         }
         else
@@ -4676,23 +4670,9 @@ void Window::PostStateChanged( StateChangedType nState )
 
 // -----------------------------------------------------------------------
 
-BOOL Window::IsLocked( BOOL bChilds ) const
+BOOL Window::IsLocked( BOOL bChilds, BOOL bSystemWindows ) const
 {
-    if ( mnLockCount != 0 )
-        return TRUE;
-
-    if ( bChilds || mbChildNotify )
-    {
-        Window* pChild = mpFirstChild;
-        while ( pChild )
-        {
-            if ( pChild->IsLocked( TRUE ) )
-                return TRUE;
-            pChild = pChild->mpNext;
-        }
-    }
-
-    return FALSE;
+    return mnLockCount != 0;
 }
 
 // -----------------------------------------------------------------------
@@ -4944,15 +4924,14 @@ void Window::SetSettings( const AllSettings& rSettings, BOOL bChild )
     AllSettings aOldSettings = maSettings;
     OutputDevice::SetSettings( rSettings );
     ULONG nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
-
-    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
-    ImplInitResolutionSettings();
-
     if ( nChangeFlags )
     {
         DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
     }
+
+    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
+    ImplInitResolutionSettings();
 
     if ( bChild || mbChildNotify )
     {
@@ -4981,15 +4960,14 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
 
     AllSettings aOldSettings = maSettings;
     ULONG nChangeFlags = maSettings.Update( maSettings.GetWindowUpdate(), rSettings );
-
-    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
-    ImplInitResolutionSettings();
-
     if ( nChangeFlags )
     {
         DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
     }
+
+    // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
+    ImplInitResolutionSettings();
 
     if ( bChild || mbChildNotify )
     {
@@ -6920,21 +6898,13 @@ Reference< XClipboard > Window::GetSelection()
 
                 if( xFactory.is() )
                 {
-                    mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                    Sequence< Any > aArgumentList( 2 );
+                      aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
+                    aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
 
-                    if( mpFrameData->mxSelection.is() )
-                    {
-                        Reference< XInitialization > xInit = Reference< XInitialization >( mpFrameData->mxSelection, UNO_QUERY );
+                    mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
+                    OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
 
-                        if( xInit.is() )
-                        {
-                            Sequence< Any > aArgumentList( 2 );
-                            aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                            aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
-
-                            xInit->initialize( aArgumentList );
-                        }
-                    }
                 }
 #endif
 #endif
