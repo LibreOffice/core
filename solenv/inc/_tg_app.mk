@@ -110,7 +110,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP1TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -148,6 +148,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP2LINKTYPE)" != ""
@@ -260,7 +261,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP2TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -298,6 +299,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP3LINKTYPE)" != ""
@@ -410,7 +412,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP3TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -448,6 +450,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP4LINKTYPE)" != ""
@@ -560,7 +563,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP4TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -598,6 +601,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP5LINKTYPE)" != ""
@@ -710,7 +714,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP5TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -748,6 +752,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP6LINKTYPE)" != ""
@@ -860,7 +865,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP6TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -898,6 +903,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP7LINKTYPE)" != ""
@@ -1010,7 +1016,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP7TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -1048,6 +1054,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP8LINKTYPE)" != ""
@@ -1160,7 +1167,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP8TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -1198,6 +1205,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP9LINKTYPE)" != ""
@@ -1310,7 +1318,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP9TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -1348,6 +1356,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP10LINKTYPE)" != ""
@@ -1460,7 +1469,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP10TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
@@ -1498,3 +1507,4 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target

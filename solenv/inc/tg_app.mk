@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-26 21:41:43 $
-#*    $Revision: 1.8 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-11-09 14:18:00 $
+#*    $Revision: 1.9 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -156,7 +156,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF		# "$(linkinc)" == ""
 
 .IF "$(APP$(TNR)TARGET)" == "loader"
-    +perl5 loader.pl $@
+    +$(PERL) loader.pl $@
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
