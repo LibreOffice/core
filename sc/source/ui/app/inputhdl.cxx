@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-05 19:19:10 $
+ *  last change: $Author: nn $ $Date: 2002-04-17 11:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,12 +994,22 @@ void ScInputHandler::UseColData()           // beim Tippen
                         ULONG nEdLen = pEngine->GetTextLen() + nParCnt - 1;
                         String aIns = aNew.Copy( (xub_StrLen)nEdLen );
 
-                        //  Selektion muss "verkehrtherum" sein, damit der Cursor hinter
-                        //  dem eingegebenen Zeichen steht:
-                        pActiveView->InsertText( aIns, FALSE );
-                        pActiveView->SetSelection( ESelection(
-                                                    aSel.nEndPara, aSel.nEndPos + aIns.Len(),
-                                                    aSel.nEndPara, aSel.nEndPos ) );
+                        //  selection must be "backwards", so the cursor stays behind the last
+                        //  typed character
+                        ESelection aSelection( aSel.nEndPara, aSel.nEndPos + aIns.Len(),
+                                               aSel.nEndPara, aSel.nEndPos );
+
+                        //  when editing in input line, apply to both edit views
+                        if ( pTableView )
+                        {
+                            pTableView->InsertText( aIns, FALSE );
+                            pTableView->SetSelection( aSelection );
+                        }
+                        if ( pTopView )
+                        {
+                            pTopView->InsertText( aIns, FALSE );
+                            pTopView->SetSelection( aSelection );
+                        }
 
                         aAutoSearch = aText;    // zum Weitersuchen - nAutoPos ist gesetzt
 
