@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:23 $
+ *  last change: $Author: fs $ $Date: 2002-11-08 13:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,6 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
 
     switch (_nId)
     {
-        case SID_CLOSEDOC:
-            break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(isEditable());
             break;
@@ -399,7 +397,6 @@ void OJoinController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]        = ID_BROWSER_REDO;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseDoc")]    = SID_CLOSEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddTable")] = ID_BROWSER_ADDTABLE;
 }
 // -----------------------------------------------------------------------------
