@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 12:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ inline void __copyConstructAnyFromData(
         break;
     case typelib_TypeClass_BOOLEAN:
         pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Bool) );
-        *(sal_Bool *)pDestAny->pData = *(sal_Bool *)pSource;
+        *(sal_Bool *)pDestAny->pData = (*(sal_Bool *)pSource != sal_False);
         break;
     case typelib_TypeClass_BYTE:
         pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int8) );
@@ -602,7 +602,7 @@ inline void __copyConstructData(
         *(sal_Unicode *)pDest = *(sal_Unicode *)pSource;
         break;
     case typelib_TypeClass_BOOLEAN:
-        *(sal_Bool *)pDest = *(sal_Bool *)pSource;
+        *(sal_Bool *)pDest = (*(sal_Bool *)pSource != sal_False);
         break;
     case typelib_TypeClass_BYTE:
         *(sal_Int8 *)pDest = *(sal_Int8 *)pSource;

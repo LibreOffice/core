@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 12:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ inline sal_Bool __assignData(
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_BOOLEAN:
-            *(sal_Bool *)pDest = *(sal_Bool *)pSource;
+            *(sal_Bool *)pDest = (*(sal_Bool *)pSource != sal_False);
             return sal_True;
         }
         return sal_False;
