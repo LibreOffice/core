@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmfwk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:27:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,8 @@ css::uno::Any SAL_CALL JavaMigration::execute(
                css::uno::RuntimeException)
 {
     migrateJavarc();
-    m_xLayer->readData(this);
+    if (m_xLayer.is())
+        m_xLayer->readData(this);
 
     return css::uno::Any();
 }
