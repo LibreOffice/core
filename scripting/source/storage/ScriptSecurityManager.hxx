@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:26 $
+*  last change: $Author: dfoster $ $Date: 2003-01-31 15:14:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -78,7 +78,7 @@ namespace scripting_securitymgr
 struct StoragePerm {
     rtl::OUString url;
     sal_Int32 storageID;
-    bool execPermission;
+    sal_Bool execPermission;
 };
 
 /**

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2003-01-30 16:08:41 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-31 15:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
     newPerm.storageID=storageID;
 
     // we err on the side of caution!!
-    newPerm.execPermission=false;
+    newPerm.execPermission=sal_False;
     switch( m_officeBasic )
     {
         case 0:         // never
@@ -120,21 +120,46 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                 {
                     if( path.equals( m_secureURL[j-1] ) )
                     {
-                        newPerm.execPermission=true;
+                        newPerm.execPermission=sal_True;
                         break;
                     }
                 }
-                // confirm dialog
+                // confirm dialog presumably only if this doc actually
+                // contains scripts???
                 break;
             }
         case 2:         // always
-            newPerm.execPermission=true;
+            // warning dialog presumably only if this doc actually
+            // contains scripts???
+            newPerm.execPermission=sal_True;
             break;
         default:
             //
             throw RuntimeException(
                 OUSTR( "ScriptSecurityManager::addScriptStorage got invalid OfficeBasic setting"),
                 Reference< XInterface > ());
+    }
+    if ( newPerm.execPermission == sal_True )
+    {
+        OSL_TRACE("setting exec permission to true for %s",
+            ::rtl::OUStringToOString( url,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+    }
+    else
+    {
+        OSL_TRACE("setting exec permission to false for %s",
+            ::rtl::OUStringToOString( url,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+    }
+    ::std::vector< StoragePerm >::iterator iter;
+    ::std::vector< StoragePerm >::iterator iterEnd =
+        m_permissionSettings.end();
+    for ( iter = m_permissionSettings.begin() ; iter != iterEnd; ++iter )
+    {
+        if ( iter->url.equals( url ) )
+        {
+            m_permissionSettings.erase(iter);
+        }
     }
     m_permissionSettings.push_back(newPerm);
 }
