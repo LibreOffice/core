@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:33:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ swedish ] = "~Tidsf鋖t";
             Text[ polish ] = "Pole czasu";
             Text[ portuguese_brazilian ] = "Tim~e Field";
-            Text[ japanese ] = "帪娫台百霓(~E)";
+            Text[ japanese ] = "帪崗台百霓(~E)";
             Text[ korean ] = "矫埃 鞘靛(~E)";
             Text[ chinese_simplified ] = "时间字段(~E)";
             Text[ chinese_traditional ] = "丁逆(~E)";
