@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorable.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ interface XStorable: com::sun::star::uno::XInterface
 
         @see XStorable::store
         @see XStorable::storeToURL
-        @see MediaDescriptor
+        @see com::sun::star::document::MediaDescriptor
      */
     void storeAsURL(
         [in] string sURL,
@@ -178,9 +178,13 @@ interface XStorable: com::sun::star::uno::XInterface
             if an IO error occured during save operation
             (may the location is unknown)
 
+        @param lArguments
+            optional parameters for saving
+            (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
+
         @see XStorable::store
         @see XStorable::storeAsURL
-        @see MediaDescriptor
+        @see com::sun::star::document::MediaDescriptor
      */
     void storeToURL(
         [in] string sURL,
