@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:50:59 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1834,16 +1834,16 @@ void ScInterpreter::ScDde()
         const ScMatrix* pLinkMat = pLink->GetResult();
         if (pLinkMat)
         {
-            USHORT nC, nR, nMatInd;
+            USHORT nC, nR;
             pLinkMat->GetDimensions(nC, nR);
-            ScMatrix* pNewMat = GetNewMat( nC, nR, nMatInd );
+            ScMatrixRef pNewMat = GetNewMat( nC, nR);
             if (pNewMat)
             {
                 pLinkMat->MatCopy(*pNewMat);        // kopieren
                 PushMatrix( pNewMat );
-                nRetMat = nMatInd;
             }
-            // sonst Fehler schon in GetNewMat gesetzt
+            else
+                PushError();
         }
         else
             SetNV();
