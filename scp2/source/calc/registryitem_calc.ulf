@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_calc.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:16:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,5 +75,10 @@ de = "StarOffice 5.0 Tabelle"
 en-US = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet Template"
 de = "%PRODUCTNAME %PRODUCTVERSION Tabellendokumentvorlage"
 
+[STR_REG_VAL_OO_CALC]
+en-US = "Open Office Spreadsheet"
+de = "Open Office Tabelle"
 
-
+[STR_REG_VAL_OO_CALC_TEMPLATE]
+en-US = "Open Office Spreadsheet Template"
+de = "Open Office Tabellendokumentvorlage"
