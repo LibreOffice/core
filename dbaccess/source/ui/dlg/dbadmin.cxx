@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 16:04:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 11:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     try
     {
         xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-        DBG_ASSERT(xDriverManager.is(), "ODbAdminDialog::createConnection: could not instantiate the driver manager, or it does not provide the necessary interface!");
+        DBG_ASSERT(xDriverManager.is(), "ODbAdminDialog::getDriver: could not instantiate the driver manager, or it does not provide the necessary interface!");
     }
     catch (Exception& e)
     {
@@ -362,6 +362,8 @@ Reference<XConnection> ODbAdminDialog::createConnection()
             showError(aErrorInfo,this,getORB());
         }
     }
+    if(xConnection.is())
+        successfullyConnected();// notify the admindlg to save the password
 
     return xConnection;
 }
@@ -1889,6 +1891,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.62  2001/06/25 16:04:40  fs
+ *  #88004# outsourced ODataSourceMap and ODataSourceSelector / adjusted fillDatasourceInfo so that settings without and UI are do not survive the method
+ *
  *  Revision 1.61  2001/06/25 08:27:18  oj
  *  #88699# new control for ldap rowcount
  *
