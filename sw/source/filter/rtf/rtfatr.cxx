@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-15 14:59:18 $
+ *  last change: $Author: cmc $ $Date: 2002-12-04 12:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,10 @@ BOOL SttEndPos::HasScriptChange() const
 
 void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
 {
+#if 1
+    const SfxPoolItem* pI = &rAttr;
+    aArr.Insert(pI, aArr.Count());
+#else
     const SfxPoolItem* pI = &rAttr;
     USHORT n = aArr.Count();
     switch( rAttr.Which() )
@@ -886,6 +890,7 @@ void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
     }
     if( pI )
         aArr.Insert( pI, aArr.Count() );
+#endif
 }
 
 RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd,
@@ -1005,79 +1010,63 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
     rWrt.SetAssociatedFlag( FALSE );
 
     // the font MUST be at the first position !!!
-    static const USHORT aLatinIds[] =  {
-            RES_CHRATR_FONT,
-            RES_CHRATR_FONTSIZE, RES_CHRATR_LANGUAGE,
-            RES_CHRATR_POSTURE,  RES_CHRATR_WEIGHT,
-            0
-        },
-        aAsianIds[] =  {
-            RES_CHRATR_CJK_FONT,
-            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
-            RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
-            0
-        },
-        aCmplxIds[] =  {
-            RES_CHRATR_CTL_FONT,
-            RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_LANGUAGE,
-            RES_CHRATR_CTL_POSTURE,  RES_CHRATR_CTL_WEIGHT,
-            0
-        };
+    static const USHORT aLatinIds[] =
+    {
+        RES_CHRATR_FONT,
+        RES_CHRATR_FONTSIZE, RES_CHRATR_LANGUAGE,
+        RES_CHRATR_POSTURE,  RES_CHRATR_WEIGHT,
+        0
+    };
+    static const USHORT aAsianIds[] =
+    {
+        RES_CHRATR_CJK_FONT,
+        RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_LANGUAGE,
+        RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CJK_WEIGHT,
+        0
+    };
+    static const USHORT aCmplxIds[] =
+    {
+        RES_CHRATR_CTL_FONT,
+        RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_LANGUAGE,
+        RES_CHRATR_CTL_POSTURE,  RES_CHRATR_CTL_WEIGHT,
+        0
+    };
 
     // size/weight/posture optional
-    const USHORT* pIdArr;
+    const USHORT* pIdArr = 0;
     ByteString sOut;
-    switch( nScript )
+    switch (nScript)
     {
-    case ::com::sun::star::i18n::ScriptType::LATIN:
-//      ( sOut += sRTF_LTRCH ) += sRTF_LOCH;
-        sOut += sRTF_LOCH;
-        pIdArr = aLatinIds;
-        break;
-    case ::com::sun::star::i18n::ScriptType::ASIAN:
-//      ( sOut += sRTF_LTRCH ) += sRTF_DBCH;
-        sOut += sRTF_DBCH;
-        pIdArr = aAsianIds;
-        break;
-
-    case ::com::sun::star::i18n::ScriptType::COMPLEX:
-        sOut += sRTF_RTLCH;
-        pIdArr = aCmplxIds;
-        break;
+        default:    //fall through
+            ASSERT(pIdArr, "unknown script, strange");
+        case ::com::sun::star::i18n::ScriptType::LATIN:
+            sOut = sRTF_LOCH;
+            pIdArr = aLatinIds;
+            break;
+        case ::com::sun::star::i18n::ScriptType::ASIAN:
+            sOut = sRTF_DBCH;
+            pIdArr = aAsianIds;
+            break;
+        case ::com::sun::star::i18n::ScriptType::COMPLEX:
+            sOut = sRTF_RTLCH;
+            pIdArr = aCmplxIds;
+            break;
     }
 
-    if( sOut.Len() )
+    if (sOut.Len())
     {
-        FnAttrOut pOut = aRTFAttrFnTab[ *pIdArr - RES_CHRATR_BEGIN];
-        if( pOut )
-        {
-            const SfxPoolItem* pItem = HasItem( *pIdArr );
-            if( !pItem )
-                pItem = &GetPool().GetDefaultItem( *pIdArr );
-            rWrt.Strm() << sOut.GetBuffer();
-            (*pOut)( rWrt, *pItem );
-        }
+        rWrt.Strm() << sOut.GetBuffer();
 
-/*
-        FnAttrOut pOut;
-        const SfxPoolItem* pItem;
-        for( int nCnt = 0 ; *pIdArr; ++pIdArr, ++nCnt )
+        for (const USHORT* pId = pIdArr; *pId; ++pId)
         {
-            if( ( 0 != (pItem = HasItem( *pIdArr )) ||
-                    // the font must be written
-                  ( !nCnt &&
-                    0 != ( pItem = &GetPool().GetDefaultItem( *pIdArr ))) )&&
-                0 != ( pOut = aRTFAttrFnTab[ *pIdArr - RES_CHRATR_BEGIN] ))
+            if (FnAttrOut pOut = aRTFAttrFnTab[ *pId - RES_CHRATR_BEGIN])
             {
-                if( sOut.Len() )
-                {
-                    rWrt.Strm() << sOut.GetBuffer();
-                    sOut.Erase();
-                }
-                (*pOut)( rWrt, *pItem );
+                const SfxPoolItem* pItem = HasItem(*pId);
+                if (!pItem)
+                    pItem = &GetPool().GetDefaultItem(*pId);
+                (*pOut)(rWrt, *pItem);
             }
         }
-*/
     }
 }
 
@@ -1229,25 +1218,80 @@ const SfxPoolItem& SwRTFWriter::GetItem( USHORT nWhich ) const
     return pDoc->GetAttrPool().GetDefaultItem( nWhich );
 }
 
+static void OutSvxFrmDir(SwRTFWriter& rRTFWrt, const SfxPoolItem& rHt )
+{
+    // write it only for pasgedesc's - not for frames
+    SvxFrameDirectionItem aItem((const SvxFrameDirectionItem&)rHt);
+    USHORT nVal = 0;
+    const sal_Char* pStr = 0;
+    bool bRTL = false;
+
+    if (rRTFWrt.pFlyFmt)
+        aItem.SetValue(rRTFWrt.TrueFrameDirection(*rRTFWrt.pFlyFmt));
+
+    switch (aItem.GetValue())
+    {
+        case FRMDIR_ENVIRONMENT:
+            ASSERT(0, "Not expected to see FRMDIR_ENVIRONMENT here");
+            break;
+        case FRMDIR_VERT_TOP_RIGHT:
+            nVal = 1;
+            pStr = sRTF_FRMTXTBRLV;
+            break;
+        case FRMDIR_HORI_RIGHT_TOP:
+            bRTL = true;
+//          nVal = 3;
+//          A val of three isn't working as expected in word :-( so leave it
+//          as normal ltr 0 textflow with rtl sect property, neither does
+//          the frame textflow
+//          pStr = sRTF_FRMTXTBRL;
+            break;
+        case FRMDIR_VERT_TOP_LEFT:
+            nVal = 4;
+            pStr = sRTF_FRMTXLRTBV;
+            break;
+    }
+
+    if( rRTFWrt.pFlyFmt && rRTFWrt.bRTFFlySyntax && pStr )
+    {
+        rRTFWrt.Strm() << pStr;
+        rRTFWrt.bOutFmtAttr = TRUE;
+    }
+    else if( rRTFWrt.bOutPageDesc)
+    {
+        if (nVal)
+        {
+            rRTFWrt.Strm() << sRTF_STEXTFLOW;
+            rRTFWrt.OutULong( nVal );
+        }
+        if (bRTL)
+            rRTFWrt.Strm() << sRTF_RTLSECT;
+        rRTFWrt.bOutFmtAttr = TRUE;
+    }
+    else if (!rRTFWrt.pFlyFmt && !rRTFWrt.bOutPageDesc)
+    {
+        rRTFWrt.Strm() << (bRTL ? sRTF_RTLPAR : sRTF_LTRPAR);
+        rRTFWrt.bOutFmtAttr = TRUE;
+    }
+}
+
 void OutRTF_SwRTL(SwRTFWriter& rWrt, const SwTxtNode *pNd)
 {
     if (!pNd)
         return;
-    const SwFmt& rFmt = pNd->GetAnyFmtColl();
-    const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
-        pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
-    if (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT)
+    SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+    if (const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
+        pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR))
+    {
+        eDir = static_cast<SvxFrameDirection>(pItem->GetValue());
+    }
+    if (eDir == FRMDIR_ENVIRONMENT)
     {
         SwPosition aPos(*pNd);
-        if (FRMDIR_HORI_RIGHT_TOP == rWrt.pDoc->GetTextDirection(aPos))
-        {
-            SfxItemSet aSet( *rFmt.GetAttrSet().GetPool(),
-                rFmt.GetAttrSet().GetRanges() );
-            aSet.SetParent( &rFmt.GetAttrSet() );
-            aSet.Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
-            OutRTF_SfxItemSet( rWrt, aSet, TRUE );
-        }
+        eDir =
+            static_cast<SvxFrameDirection>(rWrt.pDoc->GetTextDirection(aPos));
     }
+    OutSvxFrmDir(rWrt, SvxFrameDirectionItem(eDir));
 }
 
 static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
@@ -3647,60 +3691,9 @@ static Writer& OutRTF_SvxFmtKeep( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    // write it only for pasgedesc's - not for frames
     SwRTFWriter& rRTFWrt = ((SwRTFWriter&)rWrt);
-    SvxFrameDirectionItem aItem((const SvxFrameDirectionItem&)rHt);
-    USHORT nVal = 0;
-    const sal_Char* pStr = 0;
-    bool bRTL = false;
-
-    if (rRTFWrt.pFlyFmt)
-        aItem.SetValue(rRTFWrt.TrueFrameDirection(*rRTFWrt.pFlyFmt));
-
-    switch (aItem.GetValue())
-    {
-        case FRMDIR_ENVIRONMENT:
-            ASSERT(0, "Not expected to see FRMDIR_ENVIRONMENT here");
-            break;
-        case FRMDIR_VERT_TOP_RIGHT:
-            nVal = 1;
-            pStr = sRTF_FRMTXTBRLV;
-            break;
-        case FRMDIR_HORI_RIGHT_TOP:
-            bRTL = true;
-//          nVal = 3;
-//          A val of three isn't working as expected in word :-( so leave it
-//          as normal ltr 0 textflow with rtl sect property, neither does
-//          the frame textflow
-//          pStr = sRTF_FRMTXTBRL;
-            break;
-        case FRMDIR_VERT_TOP_LEFT:
-            nVal = 4;
-            pStr = sRTF_FRMTXLRTBV;
-            break;
-    }
-
-    if( rRTFWrt.pFlyFmt && rRTFWrt.bRTFFlySyntax && pStr )
-    {
-        rWrt.Strm() << pStr;
-        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
-    }
-    else if( rRTFWrt.bOutPageDesc)
-    {
-        if (nVal)
-        {
-            rWrt.Strm() << sRTF_STEXTFLOW;
-            rWrt.OutULong( nVal );
-        }
-        if (bRTL)
-            rWrt.Strm() << sRTF_RTLSECT;
-        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
-    }
-    else if (!rRTFWrt.pFlyFmt && !rRTFWrt.bOutPageDesc)
-    {
-        rWrt.Strm() << (bRTL ? sRTF_RTLPAR : sRTF_LTRPAR);
-        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
-    }
+    if (rRTFWrt.pFlyFmt || rRTFWrt.bOutPageDesc)
+        OutSvxFrmDir(rRTFWrt, rHt);
     return rWrt;
 }
 
