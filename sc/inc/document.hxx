@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:23:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1304,8 +1304,17 @@ public:
     const ScRange*  GetPrintRange( USHORT nTab, USHORT nPos );
     const ScRange*  GetRepeatColRange( USHORT nTab );
     const ScRange*  GetRepeatRowRange( USHORT nTab );
-    void            SetPrintRangeCount( USHORT nTab, USHORT nNew );
-    void            SetPrintRange( USHORT nTab, USHORT nPos, const ScRange& rNew );
+    /** Returns true, if the specified sheet is always printed. */
+    BOOL            IsPrintEntireSheet( USHORT nTab ) const;
+
+    /** Removes all print ranges. */
+    void            ClearPrintRanges( USHORT nTab );
+    /** Adds a new print ranges. */
+    void            AddPrintRange( USHORT nTab, const ScRange& rNew );
+    /** Removes all old print ranges and sets the passed print ranges. */
+    void            SetPrintRange( USHORT nTab, const ScRange& rNew );
+    /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
+    void            SetPrintEntireSheet( USHORT nTab );
     void            SetRepeatColRange( USHORT nTab, const ScRange* pNew );
     void            SetRepeatRowRange( USHORT nTab, const ScRange* pNew );
     ScPrintRangeSaver* CreatePrintRangeSaver() const;
