@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:17:52 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1226,11 +1226,11 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         switch( nClearedAction )
         {
         case EXCHG_OUT_ACTION_INSERT_PRIVATE:
-ASSERT( FALSE, "EXCHG_OUT_ACTION_INSERT_PRIVATE: was soll hier passieren?" );
+ASSERT( pPt, "EXCHG_OUT_ACTION_INSERT_PRIVATE: was soll hier passieren?" );
             break;
 
         case EXCHG_OUT_ACTION_MOVE_PRIVATE:
-ASSERT( FALSE, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
+ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
             break;
 
 
@@ -1311,6 +1311,18 @@ ASSERT( FALSE, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
                 nRet = SwTransferable::_PasteFileList( rData, rSh, pPt, bMsg );
                 break;
 
+            case SOT_FORMATSTR_ID_SONLK:
+                if( pPt )
+                {
+                    NaviContentBookmark aBkmk;
+                    if( aBkmk.Paste( rData ) )
+                    {
+                        rSh.NavigatorPaste( aBkmk, nClearedAction );
+                        nRet = 1;
+                    }
+                }
+                break;
+
             case SOT_FORMATSTR_ID_INET_IMAGE:
             case SOT_FORMATSTR_ID_NETSCAPE_IMAGE:
                 nRet = SwTransferable::_PasteTargetURL( rData, rSh,
@@ -1319,7 +1331,7 @@ ASSERT( FALSE, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
                 break;
 
             default:
-                ASSERT( FALSE, "unbekanntes Format" );
+                ASSERT( pPt, "unbekanntes Format" );
             }
             break;
 
