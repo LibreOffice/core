@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlinerIterator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:39:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,13 +682,28 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
     {
         maPosition.mnPageIndex = nPageIndex;
 
-        // Get page pointer.
-        if (nPageIndex >= 0)
+        sal_Int32 nPageCount;
+        if (maPosition.meEditMode == EM_PAGE)
+            nPageCount = mpDocument->GetSdPageCount(maPosition.mePageKind);
+        else
+            nPageCount = mpDocument->GetMasterSdPageCount(
+                maPosition.mePageKind);
+
+        // Get page pointer.  Here we have three cases: regular pages,
+        // master pages and invalid page indices.  The later ones are not
+        // errors but the effect of the iterator advancing to the next page
+        // and going past the last one.  This dropping of the rim at the far
+        // side is detected here and has to be reacted to by the caller.
+        if (nPageIndex>=0 && nPageIndex < nPageCount)
         {
             if (maPosition.meEditMode == EM_PAGE)
-                mpPage = mpDocument->GetSdPage ((USHORT)nPageIndex, maPosition.mePageKind);
+                mpPage = mpDocument->GetSdPage (
+                    (USHORT)nPageIndex,
+                    maPosition.mePageKind);
             else
-                mpPage = mpDocument->GetMasterSdPage ((USHORT)nPageIndex, maPosition.mePageKind);
+                mpPage = mpDocument->GetMasterSdPage (
+                    (USHORT)nPageIndex,
+                    maPosition.mePageKind);
         }
         else
             mpPage = NULL;
