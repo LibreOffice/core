@@ -7137,3 +7137,15 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?release@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBA@AAXXZ
 ?release@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBE@AAXXZ
 ?release@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WM@AAXXZ
+??0SfxMacroInfo@@QAE@ABVString@@@Z
+??1ToolBoxDescriptor@framework@@QAE@XZ
+?acquire@?$WeakImplHelper1@VXFilePickerListener@dialogs@ui@star@sun@com@@@cppu@@WBE@AAXXZ
+?queryInterface@?$WeakImplHelper1@VXFilePickerListener@dialogs@ui@star@sun@com@@@cppu@@WBE@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@?$WeakImplHelper1@VXFilePickerListener@dialogs@ui@star@sun@com@@@cppu@@WBE@AAXXZ
+?acquire@?$WeakImplHelper6@VXFilePickerControlAccess@dialogs@ui@star@sun@com@@VXFilePickerNotifier@23456@VXFilePreview@23456@VXFilterManager@23456@VXInitialization@lang@456@VXServiceInfo@lang@456@@cppu@@WCI@AAXXZ
+?queryInterface@?$WeakImplHelper6@VXFilePickerControlAccess@dialogs@ui@star@sun@com@@VXFilePickerNotifier@23456@VXFilePreview@23456@VXFilterManager@23456@VXInitialization@lang@456@VXServiceInfo@lang@456@@cppu@@WCI@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@?$WeakImplHelper6@VXFilePickerControlAccess@dialogs@ui@star@sun@com@@VXFilePickerNotifier@23456@VXFilePreview@23456@VXFilterManager@23456@VXInitialization@lang@456@VXServiceInfo@lang@456@@cppu@@WCI@AAXXZ
+?acquire@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBI@AAXXZ
+?queryInterface@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBI@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBI@AAXXZ
+??1TransferableObjectDescriptor@@QAE@XZ
