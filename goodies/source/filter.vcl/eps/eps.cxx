@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-26 09:51:47 $
+ *  last change: $Author: sj $ $Date: 2002-09-24 14:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,11 +440,14 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     aLineColor = Color( COL_BLACK );
     bFillColor = TRUE;
     aFillColor = Color( COL_WHITE );
+    bTextFillColor = TRUE;
+    aTextFillColor = Color( COL_BLACK );
     fLineWidth = 1;
     fMiterLimit = 10;
     eLineCap = SvtGraphicStroke::capButt;
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = Color( COL_WHITE );
+    eTextAlign = ALIGN_BASELINE;
     bRegionChanged = FALSE;
     aClipRegion.SetEmpty();
 
@@ -2214,7 +2217,7 @@ void PSWriter::ImplGetMapMode( const MapMode& aMapMode )
             nMul = 35,27777778 * EPS_SCALING_FAKTOR;
             break;
         default:
-            // that does not look right
+            nMul = 1.0;
             break;
     }
     ImplTranslate( aMapMode.GetOrigin().X() * nMul, aMapMode.GetOrigin().Y() * nMul );
