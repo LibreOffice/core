@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 15:58:40 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:23:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,10 +86,10 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 
 SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)$(COMID)
 SHL1STDLIBS= \
+    $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(VOSLIB) \
-    $(SALLIB)
+    $(VOSLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(COMPHLP_TARGET)
