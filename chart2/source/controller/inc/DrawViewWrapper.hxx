@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 16:58:41 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ public:
 
     void InitRedraw( OutputDevice* pOut, const Region& rReg );
 
+    SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;
     SdrOutliner* getOutliner() const;
 
