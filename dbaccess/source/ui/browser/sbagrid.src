@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ String RID_STR_UNDO_MODIFY_RECORD
 
 String RID_STR_SAVE_CURRENT_RECORD
 {
-    Text = "aktuellen Datensatz speichern" ;
+    Text = "Aktuellen Datensatz speichern" ;
     Text [ ENGLISH ] = "aktuellen Datensatz speichern" ;
     Text[ english_us ] = "Save current record";
     Text[ portuguese ] = "Guardar registo de dados activo";
