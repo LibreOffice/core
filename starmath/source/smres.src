@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-17 20:57:20 $
+ *  last change: $Author: rt $ $Date: 2001-10-19 21:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,7 +918,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ portuguese ] = "F~ixo";
         Text[ russian ] = "Ôèêñèğîâàííûé";
         Text[ greek ] = "F~ixed";
-        Text[ dutch ] = "F~ixed";
+        Text[ dutch ] = "V~ast";
         Text[ french ] = "F~ixe";
         Text[ spanish ] = "F~ijo";
         Text[ finnish ] = "F~ixed";
@@ -5870,7 +5870,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ italian ] = "Insieme quoziente" ;
                 Text [ spanish ] = "Conjunto cociente" ;
                 Text [ french ] = "Ensemble quotient" ;
-                Text [ dutch ] = "Quotiëntenverzameling  " ;
+                Text [ dutch ] = "Quotiëntenverzameling" ;
                 Text [ portuguese ] = "Conjunto de quociente " ;
                 Text[ chinese_simplified ] = "å•†æ•°é›†";
                 Text[ russian ] = "Ìíîæåñòâî ÷àñòíûõ";
@@ -5897,7 +5897,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ danish ] = "aleph ";
                 TEXT[ french ] = "Aleph";
                 TEXT[ swedish ] = "Alef";
-                TEXT[ dutch ] = "aleph  ";
+                TEXT[ dutch ] = "aleph";
                 TEXT[ spanish ] = "aleph";
                 TEXT[ english_us ] = "Aleph";
                 TEXT[ chinese_simplified ] = "aleph";
@@ -8582,7 +8582,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ portuguese ] = "Parênteses rectos (ajustáveis)";
                 Text[ russian ] = "Äâîéíûå êâàäğàòíûå ñêîáêè (èçì.)";
                 Text[ greek ] = "áãêıëåò (êëéìáêşìåíåò)";
-                Text[ dutch ] = "Dubbele hoekige haakjes (uitbreidbaar)";
+                Text[ dutch ] = "dubbele hoekige haakjes (uitbreidbaar)";
                 Text[ french ] = "Crochets doubles (taille variable)";
                 Text[ spanish ] = "corchetes dobles (graduables)";
                 Text[ italian ] = "Parentesi quadre doppie (in scala)";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
