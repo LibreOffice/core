@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-02-02 19:10:01 $
+ *  last change: $Author: er $ $Date: 2001-03-07 19:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ SvNumberFormatter::~SvNumberFormatter()
         delete pEntry;
         pEntry = aFTable.Next();
     }
+    delete pFormatTable;
     delete pCalendar;
     delete pLocaleData;
     delete pCharClass;
@@ -897,8 +898,10 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
                                                     ULONG& FIndex,
                                                     LanguageType eLnge)
 {
-    delete pFormatTable;
-    pFormatTable = new SvNumberFormatTable; // neuer Table
+    if ( pFormatTable )
+        pFormatTable->Clear();
+    else
+        pFormatTable = new SvNumberFormatTable;
     ChangeIntl(eLnge);
     ULONG CLOffset = ImpGetCLOffset(ActLnge);
     SvNumberformat* pEntry;
