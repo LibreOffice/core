@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class ColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     sal_Bool            m_bEditMode;
     rtl::OUString       m_sIsVisible;
     rtl::OUString       m_sLoadedScheme;
+    sal_Bool            m_bIsBroadcastEnabled;
     static sal_Bool     m_bLockBroadcast;
     static sal_Bool     m_bBroadcastWhenUnlocked;
 
@@ -165,6 +166,10 @@ public:
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
+
+    static void                     DisableBroadcast();
+    static void                     EnableBroadcast();
+    static sal_Bool                 IsEnableBroadcast();
 
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
@@ -265,7 +270,8 @@ sal_Bool ColorConfig_Impl::m_bBroadcastWhenUnlocked = sal_False;
 ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     ConfigItem(C2U("Office.UI/ColorScheme")),
     m_sIsVisible(C2U("/IsVisible")),
-    m_bEditMode(bEditMode)
+    m_bEditMode(bEditMode),
+    m_bIsBroadcastEnabled(sal_True)
 {
     if(!m_bEditMode)
     {
@@ -288,6 +294,21 @@ ColorConfig_Impl::~ColorConfig_Impl()
 {
     // #100822#
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
+}
+// -----------------------------------------------------------------------------
+void ColorConfig_Impl::DisableBroadcast()
+{
+    ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_False;
+}
+// -----------------------------------------------------------------------------
+void ColorConfig_Impl::EnableBroadcast()
+{
+    ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
+}
+// -----------------------------------------------------------------------------
+sal_Bool ColorConfig_Impl::IsEnableBroadcast()
+{
+    return ColorConfig::m_pImpl->m_bIsBroadcastEnabled;
 }
 /* -----------------------------22.03.2002 14:38------------------------------
 
@@ -449,14 +470,16 @@ void ColorConfig_Impl::LockBroadcast()
  * --------------------------------------------------*/
 void ColorConfig_Impl::UnlockBroadcast()
 {
-    if(m_bBroadcastWhenUnlocked)
+    if ( m_bBroadcastWhenUnlocked )
     {
-
-        m_bBroadcastWhenUnlocked = sal_False;
-        if(ColorConfig::m_pImpl)
+        if ( m_bBroadcastWhenUnlocked = ColorConfig::m_pImpl != NULL )
         {
             ColorConfig::m_pImpl->ImplUpdateApplicationSettings();
-            ColorConfig::m_pImpl->Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
+            if ( ColorConfig::m_pImpl->IsEnableBroadcast() )
+            {
+                m_bBroadcastWhenUnlocked = sal_False;
+                ColorConfig::m_pImpl->Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
+            }
         }
     }
     m_bLockBroadcast = sal_False;
@@ -761,5 +784,16 @@ void EditableColorConfig::Commit()
         m_pImpl->Commit();
     m_bModified = sal_False;
 }
+// -----------------------------------------------------------------------------
+void EditableColorConfig::DisableBroadcast()
+{
+    m_pImpl->DisableBroadcast();
+}
+// -----------------------------------------------------------------------------
+void EditableColorConfig::EnableBroadcast()
+{
+    m_pImpl->EnableBroadcast();
+}
+// -----------------------------------------------------------------------------
 
 }//namespace svtools
