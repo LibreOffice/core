@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.47 $ )
+AC_REVISION( $Revision: 1.48 $ )
 clear;
 AC_PREREQ(2.13)
 AC_INIT()
@@ -212,6 +212,8 @@ case "$_os" in
 	"SunOS")
 	;;
 	"Linux")
+	;;
+	"GNU")
 	;;
 	"WINNT")
 	;;
@@ -519,7 +521,7 @@ AC_HEADER_STDC
 dnl ===================================================================
 dnl Check if pam-appl.h is available on Linux or FreeBSD
 dnl ===================================================================
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "GNU"; then
    AC_MSG_CHECKING([pam_appl.h])
    if test -f "/usr/include/security/pam_appl.h"; then
       AC_MSG_RESULT([yes])
@@ -544,7 +546,10 @@ if test "$_os" = "WINNT"; then
    fi
 fi
 
-AC_PROG_CXX
+dnl Autoconf 2.53 can do this test for cl.exe, 2.13 can't!
+if test test "$_os" != "WINNT"; then
+   AC_PROG_CXX
+fi
 
 dnl ===================================================================
 dnl Set the gxx include directories
