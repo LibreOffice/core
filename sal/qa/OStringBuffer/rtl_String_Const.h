@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:37:17 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,12 +515,12 @@ static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
  static sal_Unicode aUStr50[kTestStr50Len+1];
  static sal_Unicode aUStr51[kTestStr51Len+1];
  static sal_Unicode aUStr52[kTestStr52Len+1]={83,117,110,32,32767};
- static sal_Unicode aUStr53[kTestStr53Len+1]={83,117,110,32,-32768};
+    static sal_Unicode aUStr53[kTestStr53Len+1]={83,117,110,32,0x8000 /*-32768*/};
  static sal_Unicode aUStr54[kTestStr54Len+1]={32767};
- static sal_Unicode aUStr55[kTestStr55Len+1]={-32768};
+    static sal_Unicode aUStr55[kTestStr55Len+1]={0x8000 /*-32768*/};
  static sal_Unicode aUStr56[kTestStr56Len+1];
  static sal_Unicode aUStr57[kTestStr57Len+1]={40,3,5,7,9,11,13,15,115,117,110,32767};
- static sal_Unicode aUStr58[kTestStr58Len+1]={40,3,5,7,9,11,13,15,115,117,110,-32768};
+    static sal_Unicode aUStr58[kTestStr58Len+1]={40,3,5,7,9,11,13,15,115,117,110,0x8000 /* -32768 */};
  static sal_Unicode aUStr59[kTestStr59Len+1];
  static sal_Unicode aUStr60[kTestStr60Len+1];
  static sal_Unicode aUStr61[kTestStr61Len+1];
