@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-11 17:32:03 $
+ *  last change: $Author: tbe $ $Date: 2001-12-12 14:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,7 +1202,6 @@ void LibPage::DeleteCurrent()
     DBG_ASSERT( pBasMgr, "BasMgr?!" );
     SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
     SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
-    DBG_ASSERT( pCurEntry && aLibBox.GetModel()->GetAbsPos( pCurEntry ), "Kann nicht loeschen!" );
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
