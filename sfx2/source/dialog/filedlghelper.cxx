@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 06:58:59 $
+ *  last change: $Author: mba $ $Date: 2002-04-02 12:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ struct CheckPasswordCapability
 {
     sal_Bool operator() ( const SfxFilter* _pFilter )
     {
-        return  _pFilter
+        return  _pFilter && _pFilter->IsOwnFormat()
             &&  _pFilter->UsesStorage()
             &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
     }
