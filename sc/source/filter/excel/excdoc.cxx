@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-09 12:05:49 $
+ *  last change: $Author: dr $ $Date: 2002-11-11 13:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,9 +1050,6 @@ void ExcTable::FillAsTable( void )
                 aRange.aEnd.SetCol( aIterator.GetEndCol() );
                 pRecDval->InsertCellRange( aRange, nHandle );
             }
-
-            // label ranges
-            Add( new XclExpRecLabelranges( rR ) );
         }
 
         bIter = aIterator.GetNext();
@@ -1073,7 +1070,8 @@ void ExcTable::FillAsTable( void )
             nPrevRow++;
             nColMin = aIterator.GetStartCol();
             nFirstCol = Min( nFirstCol, nColMin );
-
+            pLastBlank = NULL;
+            pLastRKMulRK = NULL;
         }
     }
 
@@ -1088,6 +1086,9 @@ void ExcTable::FillAsTable( void )
     // insert merged cells
     Add( rR.pCellMerging );
     rR.pCellMerging = NULL;
+    // label ranges
+    if( rR.eDateiTyp >= Biff8 )
+        Add( new XclExpRecLabelranges( rR ) );
     // insert data validation
     if( pRecDval )
         Add( pRecDval );
