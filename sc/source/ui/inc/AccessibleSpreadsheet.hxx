@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:28:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public:
                 getSelectedAccessibleColumns(  )
                     throw (::com::sun::star::uno::RuntimeException);
 
-    ///  Returns a boolean value indicating whether the specified row is selected.
+    /// Returns a boolean value indicating whether the specified row is selected.
     virtual sal_Bool SAL_CALL
                 isAccessibleRowSelected( sal_Int32 nRow )
                     throw (::com::sun::star::uno::RuntimeException,
