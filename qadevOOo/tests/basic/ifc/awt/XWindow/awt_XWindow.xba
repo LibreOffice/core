@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: awt_XWindow.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:44:52 $ 
+'*  last change:$Date: 2003-03-05 16:16:32 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -77,7 +77,7 @@ option explicit
 
 '*************************************************************************
 '       Global oXWindow as Object
-'       Global oCtrlShape as Variant optional
+'       Global oCtrlShape as Variant (could be NULL)
 
 
 Dim bCB1_windowResized As Boolean
@@ -191,7 +191,7 @@ On Error Goto ErrHndl
     oObj.addWindowListener(oListener2)
     oObj.setVisible(false)
     oObj.setVisible(true)
-    if isObject(oCtrlShape) then
+    if NOT isNull(oCtrlShape) then
         size = oCtrlShape.Size
         size.Width = size.Width + 100
         size.Height = size.Height + 100
@@ -229,7 +229,7 @@ On Error Goto ErrHndl
     oObj.setVisible(true)
     oObj.setVisible(false)
     oObj.setVisible(true)
-    if isObject(oCtrlShape) then
+    if NOT isNull(oCtrlShape) then
         size = oCtrlShape.Size
         size.Width = size.Width + 100
         size.Height = size.Height + 100
