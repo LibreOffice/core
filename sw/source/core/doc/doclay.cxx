@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,10 +437,10 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 }
             } */
 
-            // TODO/LATER: the old object closed the object, cleared all references to it, but didn't remove it from the container.
+            // TODO/MBA: the old object closed the object, cleared all references to it, but didn't remove it from the container.
             // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
-            uno::Reference < util::XCloseable > xClose( pOLENd->GetOLEObj().GetOleRef(), uno::UNO_QUERY );
-            if ( xClose.is() )
+            //uno::Reference < util::XCloseable > xClose( pOLENd->GetOLEObj().GetOleRef(), uno::UNO_QUERY );
+            //if ( xClose.is() )
             {
                 try
                 {
@@ -451,7 +451,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 }
             }
 
-            pOLENd->GetOLEObj().GetOleRef() = 0;
+            //pOLENd->GetOLEObj().GetOleRef() = 0;
         }
     }
 
