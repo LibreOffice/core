@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:21:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-24 09:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
           }
         if ((nOldStep < SOTEMPLATEPAGE) && (super.getNewStep() >= SOTEMPLATEPAGE)){
             CurReportDocument.CurDBMetaData.setRecordFieldNames();
-            CurReportLayouter.initialize(ReportPath + "/cnt-default.stw");
+            CurReportLayouter.initialize(ReportPath + "/cnt-default.ott");
         }
     }
 
@@ -242,7 +242,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         }
         if (bQueryCreated){
             CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
-            CurReportLayouter.initialize(ReportPath + "/cnt-default.stw");
+            CurReportLayouter.initialize(ReportPath + "/cnt-default.ott");
         }
         else
             super.vetoableChange(null);
@@ -346,7 +346,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         CurDBMetaData = CurReportDocument.CurDBMetaData;
         if (CurDBMetaData.getConnection(CurPropertyValue)){
             CurReportDocument.xProgressBar.setValue(20);
-            CurReportDocument.oTextStyleHandler.loadStyleTemplates(ReportPath + "/stl-default.stw", "LoadPageStyles");
+            CurReportDocument.oTextStyleHandler.loadStyleTemplates(ReportPath + "/stl-default.ott", "LoadPageStyles");
             CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
             buildSteps();
             this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
