@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bc $ $Date: 2001-08-08 14:14:36 $
+ *  last change: $Author: bc $ $Date: 2001-09-12 16:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,12 @@ hidspecial HID { HelpID = HID_DLGIMPORT_2_EDEXPORTDOCUMENTPATH; };
 hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDEXPORTPATHSELECT; };
 #define HID_DLGIMPORT_3_TBSUMMARY           34595
 hidspecial HID { HelpID = HID_DLGIMPORT_3_TBSUMMARY; };
+
+#define HID_DLGIMPORT_2_CMDTEMPLATEPATHSELECT2   34600
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDTEMPLATEPATHSELECT2; };
+#define HID_DLGIMPORT_2_CMDDOCUMENTPATHSELECT2   34601
+hidspecial HID { HelpID = HID_DLGIMPORT_2_CMDDOCUMENTPATHSELECT2; };
+
 
 #define HID_DLGIMPORT_0_CHWRITER        34596
 hidspecial HID { HelpID = HID_DLGIMPORT_0_CHWRITER; };
