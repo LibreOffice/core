@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:12:19 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ SetElementChangeImpl* SetNodeImpl::implAdjustToAddedElement(data::Accessor const
 {
     OSL_ENSURE( validatedName(aNewElement) == aName, "Unexpected Name on new element" );
 
-    if (Element* pOriginal = getStoredElement(aName))
+    if (hasStoredElement(aName))
     {
         OSL_ENSURE( _bReplacing, "Added Element already exists - replacing" );
 
