@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-09 11:39:29 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,14 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
     rURL += aHelpOpt.GetSystem();
 }
 
-SfxHelp_Impl::SfxHelp_Impl()
+SfxHelp_Impl::SfxHelp_Impl() :
+
+    bIsDebug( sal_False )
+
 {
+    char* pEnv = getenv( "help_debug" );
+    if ( pEnv )
+        bIsDebug = sal_True;
 }
 
 SfxHelp_Impl::~SfxHelp_Impl()
@@ -313,6 +319,19 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
     }
     else
         return FALSE;
+}
+
+XubString SfxHelp_Impl::GetHelpText( ULONG nHelpId )
+{
+    XubString aHelpText;
+    if ( bIsDebug )
+    {
+        aHelpText = GetHelpModuleName( nHelpId );
+        aHelpText += DEFINE_CONST_UNICODE(" - ");
+        aHelpText += String::CreateFromInt32( nHelpId );
+    }
+
+    return aHelpText;
 }
 
 /*-----------------22.11.2000 10:59-----------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-13 15:44:45 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 14:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,12 @@ class SfxHelp_Impl : public Help
 {
     String          aTicket;        // for Plugins
     String          aUser;
+    sal_Bool        bIsDebug;
 
 private:
     virtual BOOL    Start( ULONG nHelpId );
     String          GetHelpModuleName( ULONG nHelpId );
+
 public:
                     SfxHelp_Impl();
                     ~SfxHelp_Impl();
@@ -83,6 +85,8 @@ public:
                     { aTicket = rTicket;}
     void            SetUser( const String& rUser )
                     { aUser = rUser;}
+
+    virtual XubString   GetHelpText( ULONG nHelpId );
 };
 #endif // _PRIVATE
 
