@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:50:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text = "Abs‰tze je Kapitel" ;
         Text [ English ] = "Paragraphs per Outline" ;
         Text [ english_us ] = "Subpoints per level" ;
-        Text [ portuguese_brazilian ] = "Sub pontos por nÌvel" ;
+        Text [ portuguese_brazilian ] = "Sub par·grafos por nÌvel" ;
         Text [ swedish ] = "Stycken per kapitel" ;
         Text [ danish ] = "Afsnit per kapitel" ;
         Text [ italian ] = "Paragrafi per capitolo" ;
@@ -217,7 +217,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ English ] = "The selected number of paragraphs of the included outline levels will be used to create the summary." ;
         WordBreak = TRUE ;
         Text [ english_us ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
-        Text [ portuguese_brazilian ] = "O resumo contÈm o n˙mero de par·grafos selecionados a partir dos nÌveis da estrutura de tÛpicos incluidos." ;
+        Text [ portuguese_brazilian ] = "O resumo contÈm o n˙mero de par·grafos selecionados a partir dos nÌveis da estrutura de tÛpicos incluÌdos" ;
         Text [ swedish ] = "Utdraget innehÂller det utvalda antalet stycken frÂn de inkluderade kapitelnivÂerna." ;
         Text [ danish ] = "Abstractet indeholder det valgte antal afsnit fra de inkluderede kapitelniveauer." ;
         Text [ italian ] = "Il sunto contiene il numero di paragrafi scelto dai livelli di capitolo inclusi." ;
@@ -291,6 +291,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ hindi ] = "‡§∏‡•ç‡§µ‡§ö‡§æ‡§≤‡§ø‡§§ ‡§¢‡§Ç‡§ó ‡§∏‡•á ‡§∏‡§æ‡§∞‡§æ‡§Ç‡§∂ ‡§â‡§§‡•ç‡§™‡§®‡•ç‡§® ‡§ï‡§∞‡•ã";
     Text[ slovak ] = "Vytvori≈• automatick√Ω konspekt";
 };
+
 
 
 
