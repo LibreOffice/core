@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:41:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
 
     const PropertyValue *pBegin = info.getConstArray();
     const PropertyValue *pEnd   = pBegin + info.getLength();
-    ::rtl::OUString aAdminUid,aAdminPwd;
+    ::rtl::OUString sHostName;
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
@@ -141,16 +141,14 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     sal_Int32 nTimeout = 20;
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii("CTRLUSER"))
-            pBegin->Value >>= aAdminUid;
-        else if(!pBegin->Name.compareToAscii("CTRLPWD"))
-            pBegin->Value >>= aAdminPwd;
-        else if(!pBegin->Name.compareToAscii("Timeout"))
+        if ( !pBegin->Name.compareToAscii("Timeout") )
             pBegin->Value >>= nTimeout;
         else if(!pBegin->Name.compareToAscii("user"))
             pBegin->Value >>= aUID;
         else if(!pBegin->Name.compareToAscii("password"))
             pBegin->Value >>= aPWD;
+        else if(!pBegin->Name.compareToAscii("HostName"))
+            pBegin->Value >>= sHostName;
         else if(0 == pBegin->Name.compareToAscii("CharSet"))
         {
             ::rtl::OUString sIanaName;
@@ -168,6 +166,8 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     }
     m_sUser = aUID;
 
+    if ( sHostName.getLength() )
+        aDSN = sHostName + ':' + aDSN;
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, aUID,aPWD);
 
     return nSQLRETURN;
