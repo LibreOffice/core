@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 15:17:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,7 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 #ifndef __SGI_STL_LIST
 #include <list>
 #endif
