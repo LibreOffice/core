@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:04:16 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ namespace abp
     //---------------------------------------------------------------------
     IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, NOTINTERESTEDIN )
     {
+        getDialog()->typeSelectionChanged( getSelectedType() );
         implCheckNextButton();
         return 0L;
     }
