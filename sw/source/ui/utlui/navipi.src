@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:34:12 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 22:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "ζ‹–ζ›³ζ¨΅εΌ";
                 Text[ arabic ] = "ΨΡνήΙ ΗαΣΝΘ";
                 Text[ greek ] = "Κατάσταση συρμού";
-                Text[ korean ] = "λ“λκ·Έ λª¨λ“";
+                Text[ korean ] = "λκΈ° λª¨λ“";
                 Text[ turkish ] = "Sόrόkleme kipi";
                 Text[ catalan ] = "Modo Arrastrar";
                 Text[ finnish ] = "Vetotila";
@@ -398,7 +398,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "ι΅―η¤Ί/ι±ε…¥ζΈ…ε–®ζ–Ήε΅";
                 Text[ arabic ] = "ΕΩεΗΡ/ΕΞέΗΑ ΥδΟζή ΗαΗΞΚνΗΡ";
                 Text[ greek ] = "Πλαίσιο επιλογής Ναι/Όχι";
-                Text[ korean ] = "λª©λ΅μƒμ λ‚νƒ€λ‚΄κΈ°/μ¨κΈ°κΈ°";
+                Text[ korean ] = "λª©λ΅μƒμ ν‘μ‹/μ¨κΈ°κΈ°";
                 Text[ turkish ] = "Liste kutusu aηύk/kapalύ";
                 Text[ catalan ] = "Mostrar/ocultar cuadro de selecciσn";
                 Text[ finnish ] = "Luetteloruutu on/off";
@@ -459,7 +459,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "θ¨­ε®ζι†’";
                 Text[ arabic ] = "ζΦΪ ΪαΗγΙ ΚΠίνΡ";
                 Text[ greek ] = "Ορισμός υπενθύμισης";
-                Text[ korean ] = "λ§μ»¤ μ„¤μ •";
+                Text[ korean ] = "ν‘μ‹μ μ„¤μ •";
                 Text[ turkish ] = "Anύmsatύcύ yerleώtir";
                 Text[ catalan ] = "Insertar marca";
             };
@@ -801,7 +801,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "ε„²ε­ε…§ε®Ή";
                 Text[ arabic ] = "ΝέΩ ΗαγΝΚζνΗΚ";
                 Text[ greek ] = "Αποθήκευση και των περιεχομένων";
-                Text[ korean ] = "λ‚΄μ©ν•¨κ»γ€€μ €μ¥";
+                Text[ korean ] = "λ‚΄μ© μ €μ¥";
                 Text[ turkish ] = "έηeriπi de kaydet";
                 Text[ catalan ] = "Guardar contenidos";
                 Text[ finnish ] = "Tallenna my? sis?lt?";
@@ -957,7 +957,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "ζ‹–ζ›³ζ¨΅εΌ";
         Text[ arabic ] = "ΨΡνήΙ ΗαΣΝΘ";
         Text[ greek ] = "Κατάσταση συρμού";
-        Text[ korean ] = "λ“λκ·Έ λª¨λ“";
+        Text[ korean ] = "λκΈ° λª¨λ“";
         Text[ turkish ] = "Sόrόkleme kipi";
         Text[ catalan ] = "Modo Arrastrar";
         Text[ finnish ] = "Vetotila";
@@ -1161,7 +1161,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "δΈδ½Ώη”¨";
         Text[ arabic ] = "ΫνΡ δΤΨ";
         Text[ greek ] = "μη ενεργό";
-        Text[ korean ] = "λΉ„ ν™μ„±";
+        Text[ korean ] = "λΉ„ν™μ„±";
         Text[ turkish ] = "etkin deπil";
         Text[ catalan ] = "inactivo";
         Text[ finnish ] = "ei k?yt?s?";
@@ -1258,7 +1258,7 @@ Window DLG_NAVIGATION_PI
         Text[ swedish ] = "Redigera lδnk";
         Text[ polish ] = "Edytuj ³Ήcze";
         Text[ portuguese_brazilian ] = "Edit link";
-        Text[ japanese ] = "Edit link";
+        Text[ japanese ] = "οΎοΎο½Έγ®η·¨ι›†";
         Text[ korean ] = "Edit link";
         Text[ chinese_simplified ] = "ηΌ–θΎ‘ι“Ύζ¥";
         Text[ chinese_traditional ] = "η·¨θΌ―ζ·εΎ‘";
@@ -1730,6 +1730,7 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
 
