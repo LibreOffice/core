@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 13:59:26 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,10 +686,6 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (!getBrowserView())
         return sal_False;
 
-    // now that we have a view we can create the clipboard listener
-    m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard(getView());
-    m_aSystemClipboard.StartClipboardListening( );
-
     // late construction
     sal_Bool bSuccess = sal_False;
     try
@@ -711,6 +707,14 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
         m_pView = NULL;
         return sal_False;
     }
+
+    // now that we have a view we can create the clipboard listener
+    m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
+    m_aSystemClipboard.StartClipboardListening( );
+
+    m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, SbaXDataBrowserController, OnClipboardChanged ) );
+    m_pClipbordNotifier->acquire();
+    m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
 
     // this call create the toolbox
     OGenericUnoController::Construct(pParent);
@@ -1227,6 +1231,13 @@ void SbaXDataBrowserController::disposing()
 
     removeModelListeners(getControlModel());
 
+    if ( getView() )
+    {
+        m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
+        m_pClipbordNotifier->release();
+        m_pClipbordNotifier = NULL;
+    }
+
     if (getBrowserView())
     {
         removeControlListeners(getBrowserView()->getGridControl());
@@ -1456,15 +1467,12 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                             aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly;
                             if(aReturn.bEnabled)
                             {
-                                TransferableDataHelper aTrans = TransferableDataHelper::CreateFromSystemClipboard(getBrowserView());
-                                aReturn.bEnabled = aReturn.bEnabled &&
-                                                IsFormatSupported(aTrans.GetDataFlavorExVector(),FORMAT_STRING);
+                                aReturn.bEnabled = aReturn.bEnabled && IsFormatSupported( m_aSystemClipboard.GetDataFlavorExVector(), FORMAT_STRING );
                             }
-                            aReturn.aState = makeAny( (sal_Bool)sal_True );
-                                // This is weird. Unfortunately, since we do not use our own toolbox items anymore,
-                                // but the ones of the application we're plugged into (at least for cut/copy/paste),
-                                // we depend on some SFX code, which, for some odd, not really fixable reason
-                                // asks for a boolean state for the PASTE slot. Okay, here it goes.
+
+                            aReturn.aState = makeAny( (sal_Bool)sal_False );
+                                // since fixing 99030, this is defined as meaning "please do not display a drop down
+                                // menu for the clipboard formats to paste".
                                 // 22.05.2002 - 99030 - fs@openoffice.org
                             break;
                     }
@@ -2132,6 +2140,12 @@ void SbaXDataBrowserController::CellDeactivated()
 {
     m_aInvalidateClipboard.Stop();
     LINK(this, SbaXDataBrowserController, OnInvalidateClipboard).Call(NULL);
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK( SbaXDataBrowserController, OnClipboardChanged, void*, EMPTYARG )
+{
+    return OnInvalidateClipboard( NULL );
 }
 
 //------------------------------------------------------------------------------
