@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:33:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_ALIGN );
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
+        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
         ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
         ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_DEFAULT );
         ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_VALUE );
@@ -117,6 +118,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_TABSTOP );
         ImplRegisterProperty( BASEPROPERTY_TEXT );
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
+        ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
         ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
 
         Any aTreatAsNumber;
