@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-19 10:56:50 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ String RID_STR_ENTERPASSWORD
     Text[ greek ] = "Enter password for 'XX'";
     Text[ dutch ] = "Enter password for 'XX'";
     Text[ french ] = "Saisie du mot de passe pour 'XX'";
-    Text[ spanish ] = "Introducir contraseÒa para 'XX'";
+    Text[ spanish ] = "Introducir una contraseÒa para 'XX'";
     Text[ finnish ] = "Enter password for 'XX'";
     Text[ italian ] = "Digita password per 'XX'";
     Text[ danish ] = "Indtast adgangskode for 'XX'";
@@ -924,7 +924,7 @@ String RID_STR_GENERATESOURCE
     Text [ ENGLISH ] = "Generating source" ;
     Text [ english_us ] = "Generating source" ;
     Text [ italian ] = "Creazione del testo sorgente" ;
-    Text [ spanish ] = "Creando un texto fuente" ;
+    Text [ spanish ] = "CreaciÛn del texto fuente" ;
     Text [ french ] = "GÈnÈration du texte source" ;
     Text [ dutch ] = "Brontekst maken" ;
     Text [ swedish ] = "Skapa k‰lltext" ;
@@ -1155,7 +1155,7 @@ String RID_STR_OBJNOTFOUND
     Text [ dutch ] = "Object of methode niet gevonden." ;
     Text [ english_us ] = "Object or method not found" ;
     Text [ italian ] = "Oggetto o metodo non trovato" ;
-    Text [ spanish ] = "No se ha encontrado el objeto o mÈtodo" ;
+    Text [ spanish ] = "El objeto o mÈtodo no se encuentra" ;
     Text [ french ] = "Impossible de dÈtecter l'objet ou mÈthode !" ;
     Text [ swedish ] = "Objekt eller metod hittades inte" ;
     Text [ danish ] = "Objektet eller metoden blev ikke fundet" ;
@@ -1304,7 +1304,7 @@ String RID_BASICIDE_OBJECTBAR
     Text [ french ] = "Barre de macro" ;
     Text [ swedish ] = "Makrolist" ;
     Text [ dutch ] = "Macrobalk" ;
-    Text [ spanish ] = "Barra de macro" ;
+    Text [ spanish ] = "Barra de la macro" ;
     Text [ english_us ] = "Macro Bar" ;
     Text[ chinese_simplified ] = "ÂÆèÊ†è";
     Text[ russian ] = "œ‡ÌÂÎ¸ Ï‡ÍÓÒ‡";
@@ -1592,7 +1592,7 @@ String RID_STR_NEWLIB
     Text [ swedish ] = "Nytt bibliotek" ;
     Text [ danish ] = "Nyt bibliotek" ;
     Text [ italian ] = "Nuova library" ;
-    Text [ spanish ] = "Nueva biblioteca" ;
+    Text [ spanish ] = "Biblioteca nueva" ;
     Text [ french ] = "Nouvelle bibliothËque" ;
     Text [ dutch ] = "Nieuwe bibliotheek" ;
     Text[ chinese_simplified ] = "Êñ∞ÁöÑÁ®ãÂ∫èÂ∫ì";
@@ -1619,7 +1619,7 @@ String RID_STR_NEWMOD
     Text [ swedish ] = "Ny modul" ;
     Text [ danish ] = "Nyt modul" ;
     Text [ italian ] = "Nuovo modulo" ;
-    Text [ spanish ] = "Nuevo mÛdulo" ;
+    Text [ spanish ] = "MÛdulo nuevo" ;
     Text [ french ] = "Nouveau module" ;
     Text [ dutch ] = "Nieuwe module" ;
     Text [ portuguese ] = "Novo mÛdulo" ;
@@ -1647,7 +1647,7 @@ String RID_STR_NEWDLG
     Text [ swedish ] = "Ny dialog" ;
     Text [ danish ] = "Ny dialog" ;
     Text [ italian ] = "Nuovo dialogo" ;
-    Text [ spanish ] = "Nuevo di·logo" ;
+    Text [ spanish ] = "Di·logo nuevo" ;
     Text [ french ] = "Nouvelle boÓte de dialogue" ;
     Text [ dutch ] = "Nieuwe dialoog" ;
     Text [ portuguese ] = "Novo di·logo" ;
@@ -1761,7 +1761,7 @@ String RID_STR_WILLSTOPPRG
     Text [ dutch ] = "U moet uw programma na deze wijziging opnieuw opstarten.\nDoorgaan?" ;
     Text [ english_us ] = "You will have to restart the program after this edit.\nContinue?" ;
     Text [ italian ] = "Dopo questa modifica Ë necessario riavviare il programma.\nProseguire?" ;
-    Text [ spanish ] = "Tendr· que volver a iniciar el programa despuÈs de estas modificaciones.\nøContinuar?" ;
+    Text [ spanish ] = "Deber· volver a iniciar el programa despuÈs de esta modificaciÛn.\nøContinuar?" ;
     Text [ french ] = "Vous devrez redÈmarrer le programme aprËs cette modification.\nPoursuivre ?" ;
     Text [ swedish ] = "Du mÂste starta om ditt program efter den h‰r ‰ndringen.\nForts‰tta ‰ndÂ?" ;
     Text [ danish ] = "Programmet skal genstartes efter denne Êndring.\nFortsÊt?" ;
@@ -2542,7 +2542,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ dutch ] = "Brontekst invoegen" ;
             Text [ english_us ] = "Insert Source Text" ;
             Text [ italian ] = "Inserisci testo sorgente" ;
-            Text [ spanish ] = "Insertar texto fuente" ;
+            Text [ spanish ] = "Insertar el texto fuente" ;
             Text [ french ] = "InsÈrer le texte source" ;
             Text [ swedish ] = "Infoga k‰lltext" ;
             Text [ danish ] = "IndsÊt kildetekst" ;
@@ -2577,7 +2577,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ french ] = "Enregistrer le texte source sous..." ;
             Text [ swedish ] = "Spara k‰lltext som..." ;
             Text [ dutch ] = "Brontekst opslaan als..." ;
-            Text [ spanish ] = "Guardar texto fuente como..." ;
+            Text [ spanish ] = "Guardar el texto fuente como..." ;
             Text [ english_us ] = "Save Source As..." ;
             Text[ greek ] = "¡ÔËﬁÍÂıÛÁ ÍÂÈÏ›ÌÔı ÒÔ›ÎÂıÛÁÚ ˘Ú...";
             Text[ dutch ] = "Brontekst opslaan als...";
