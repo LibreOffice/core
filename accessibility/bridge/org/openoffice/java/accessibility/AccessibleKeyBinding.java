@@ -92,34 +92,34 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
 
         switch(s) {
             case com.sun.star.awt.Key.NUM0:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD0;
+                keycode = java.awt.event.KeyEvent.VK_0;
                 break;
             case com.sun.star.awt.Key.NUM1:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD1;
+                keycode = java.awt.event.KeyEvent.VK_1;
                 break;
             case com.sun.star.awt.Key.NUM2:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD2;
+                keycode = java.awt.event.KeyEvent.VK_2;
                 break;
             case com.sun.star.awt.Key.NUM3:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD3;
+                keycode = java.awt.event.KeyEvent.VK_3;
                 break;
             case com.sun.star.awt.Key.NUM4:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD4;
+                keycode = java.awt.event.KeyEvent.VK_4;
                 break;
             case com.sun.star.awt.Key.NUM5:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD5;
+                keycode = java.awt.event.KeyEvent.VK_5;
                 break;
             case com.sun.star.awt.Key.NUM6:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD6;
+                keycode = java.awt.event.KeyEvent.VK_6;
                 break;
             case com.sun.star.awt.Key.NUM7:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD7;
+                keycode = java.awt.event.KeyEvent.VK_7;
                 break;
             case com.sun.star.awt.Key.NUM8:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD8;
+                keycode = java.awt.event.KeyEvent.VK_8;
                 break;
             case com.sun.star.awt.Key.NUM9:
-                keycode = java.awt.event.KeyEvent.VK_NUMPAD9;
+                keycode = java.awt.event.KeyEvent.VK_9;
                 break;
             case com.sun.star.awt.Key.A:
                 keycode = java.awt.event.KeyEvent.VK_A;
