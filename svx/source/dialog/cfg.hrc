@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:10:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #define QBX_CONFIRM_RESET (64 + CFG_OFFSET)
 #define QBX_CONFIRM_DELETE_MENU (65 + CFG_OFFSET)
 #define QBX_CONFIRM_RESTORE_DEFAULT (66 + CFG_OFFSET)
+#define QBX_CONFIRM_DELETE_TOOLBAR (67 + CFG_OFFSET)
 
 #define MD_MENU_ORGANISER (79 + CFG_OFFSET)
 #define TXT_MENU (80 + CFG_OFFSET)
