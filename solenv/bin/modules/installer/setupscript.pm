@@ -2,9 +2,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:59:45 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:38:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,6 +157,34 @@ sub get_all_scriptvariables_from_installation_object
     }
 
     return \@installobjectvariables;
+}
+
+######################################################################
+# Including LCPRODUCTNAME into the array
+######################################################################
+
+sub add_lowercase_productname_setupscriptvariable
+{
+    my ( $variablesref ) = @_;
+
+    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+    {
+        my $variableline = ${$variablesref}[$j];
+
+        my ($key, $value);
+
+        if ( $variableline =~ /^\s*\%(\w+?)\s+(.*?)\s*$/ )
+        {
+            $key = $1;
+            $value = $2;
+
+            if ( $key eq "PRODUCTNAME" )
+            {
+                my $newline = "\%LCPRODUCTNAME " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+            }
+        }
+    }
 }
 
 ######################################################################
