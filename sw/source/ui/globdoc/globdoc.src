@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:57:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@ String STR_WRITER_GLOBALDOC_FULLTYPE_50
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE
 {
-    Text = "%PRODUCTNAME 6.0 Global Dokument" ;
-    TEXT [ English ] = "%PRODUCTNAME 6.0 Master Document" ;
-    TEXT[ english_us ] = "%PRODUCTNAME 6.0 Master Document";
+    Text = "%PRODUCTNAME %PRODUCTVERSION Globaldokument" ;
+    TEXT [ English ] = "%PRODUCTNAME %PRODUCTVERSION Master Document" ;
+    TEXT[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Master Document";
     TEXT[ portuguese ] = "%PRODUCTNAME 6.0 Documento-mestre";
     TEXT[ russian ] = "Составной документ (%PRODUCTNAME 6.0)";
     TEXT[ greek ] = "%PRODUCTNAME 6.0 - Кэсйп Эггсбцп";
