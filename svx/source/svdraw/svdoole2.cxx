@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:33:47 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,60 +779,67 @@ void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* pNewModel )
-{
-    const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
-
-    if( pModel )
-        Disconnect();
-
-    SdrRectObj::operator=( rObj );
-
-    // #108867# Manually copying bClosedObj attribute
-    SetClosedObj( rObj.IsClosedObj() );
-
-    if( pNewPage )
-        pPage = pNewPage;
-
-    if( pNewModel )
-        pModel = pNewModel;
-
-    aName = rOle2Obj.aName;
-    mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
-    aProgName = rOle2Obj.aProgName;
-    bFrame = rOle2Obj.bFrame;
-
-    if( rOle2Obj.pGraphic )
-    {
-        if( pGraphic )
-        {
-            delete pGraphic;
-            delete mpImpl->pGraphicObject;
-        }
-
-        pGraphic = new Graphic( *rOle2Obj.pGraphic );
-        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
-    }
-
-    if( pModel && rObj.GetModel() )
-    {
-        SvPersist* pDestPers = pModel->GetPersist();
-        SvPersist* pSrcPers = rObj.GetModel()->GetPersist();
-
-        if( pDestPers && pSrcPers )
-        {
-            ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
-
-            if( rOle2Obj.ppObjRef->Is() && ppObjRef->Is() &&
-                ( (*rOle2Obj.ppObjRef)->GetMapUnit() == (*ppObjRef)->GetMapUnit() ) )
-            {
-                    (*ppObjRef)->SetVisArea( (*rOle2Obj.ppObjRef)->GetVisArea() );
-            }
-        }
-
-        Connect();
-    }
-}
+// #116235#
+//void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* pNewModel, sal_Bool bRestoreModel )
+//{
+//    const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
+//  SdrModel* pOldModel = pModel;
+//
+//  if( pModel )
+//        Disconnect();
+//
+//    SdrRectObj::operator=( rObj );
+//
+//    // #108867# Manually copying bClosedObj attribute
+//    SetClosedObj( rObj.IsClosedObj() );
+//
+//    if( pNewPage )
+//        pPage = pNewPage;
+//
+//    if( pNewModel )
+//        pModel = pNewModel;
+//
+//    aName = rOle2Obj.aName;
+//  mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
+//  aProgName = rOle2Obj.aProgName;
+//  bFrame = rOle2Obj.bFrame;
+//
+//  if( rOle2Obj.pGraphic )
+//  {
+//      if( pGraphic )
+//      {
+//          delete pGraphic;
+//          delete mpImpl->pGraphicObject;
+//      }
+//
+//        pGraphic = new Graphic( *rOle2Obj.pGraphic );
+//      mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+//  }
+//
+//  if( pModel && rObj.GetModel() )
+//    {
+//      SvPersist* pDestPers = pModel->GetPersist();
+//      SvPersist* pSrcPers = rObj.GetModel()->GetPersist();
+//
+//        if( pDestPers && pSrcPers )
+//        {
+//            ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
+//
+//            if( rOle2Obj.ppObjRef->Is() && ppObjRef->Is() &&
+//                ( (*rOle2Obj.ppObjRef)->GetMapUnit() == (*ppObjRef)->GetMapUnit() ) )
+//            {
+//                    (*ppObjRef)->SetVisArea( (*rOle2Obj.ppObjRef)->GetVisArea() );
+//            }
+//        }
+//
+//        Connect();
+//  }
+//
+//  if(bRestoreModel)
+//  {
+//      pModel = pOldModel;
+//  }
+//}
 
 // -----------------------------------------------------------------------------
 
@@ -873,25 +880,83 @@ void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, 
 void SdrOle2Obj::operator=(const SdrObject& rObj)
 {
     if( &rObj != this )
-        ImpAssign( rObj );
+    {
+        // #116235#
+        // ImpAssign( rObj );
+        const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
+        SdrModel* pOldModel = pModel;
+
+        if( pModel )
+            Disconnect();
+
+        SdrRectObj::operator=( rObj );
+
+        // #108867# Manually copying bClosedObj attribute
+        SetClosedObj( rObj.IsClosedObj() );
+
+        // #116235#
+        //if( pNewPage )
+        //  pPage = pNewPage;
+
+        // #116235#
+        //if( pNewModel )
+        //  pModel = pNewModel;
+
+        aName = rOle2Obj.aName;
+        mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
+        aProgName = rOle2Obj.aProgName;
+        bFrame = rOle2Obj.bFrame;
+
+        if( rOle2Obj.pGraphic )
+        {
+            if( pGraphic )
+            {
+                delete pGraphic;
+                delete mpImpl->pGraphicObject;
+            }
+
+            pGraphic = new Graphic( *rOle2Obj.pGraphic );
+            mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+        }
+
+        if( pModel && rObj.GetModel() )
+        {
+            SvPersist* pDestPers = pModel->GetPersist();
+            SvPersist* pSrcPers = rObj.GetModel()->GetPersist();
+
+            if( pDestPers && pSrcPers )
+            {
+                ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
+
+                if( rOle2Obj.ppObjRef->Is() && ppObjRef->Is() &&
+                    ( (*rOle2Obj.ppObjRef)->GetMapUnit() == (*ppObjRef)->GetMapUnit() ) )
+                {
+                        (*ppObjRef)->SetVisArea( (*rOle2Obj.ppObjRef)->GetVisArea() );
+                }
+            }
+
+            Connect();
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
 
-SdrObject* SdrOle2Obj::Clone( SdrPage* pNewPage, SdrModel* pNewModel ) const
-{
-    SdrOle2Obj* pObj = static_cast< SdrOle2Obj* >( SdrObjFactory::MakeNewObject( GetObjInventor(), GetObjIdentifier(),NULL ) );
-
-    if( pObj )
-    {
-        pObj->ImpAssign( *this, pNewPage, pNewModel );
-
-        if( pNewModel )
-            pObj->SetModel( pNewModel );
-    }
-
-    return pObj;
-}
+// #116235#
+//SdrObject* SdrOle2Obj::Clone( SdrPage* pNewPage, SdrModel* pNewModel ) const
+//{
+//  SdrOle2Obj* pObj = static_cast< SdrOle2Obj* >( SdrObjFactory::MakeNewObject( GetObjInventor(), GetObjIdentifier(),NULL ) );
+//
+//    if( pObj )
+//    {
+//        pObj->ImpAssign( *this, pNewPage, pNewModel, sal_True );
+//
+//        if( pNewModel )
+//          pObj->SetModel( pNewModel );
+//    }
+//
+//  return pObj;
+//}
 
 // -----------------------------------------------------------------------------
 
