@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 18:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,7 @@ private:
     CheckBox aCbxQuickEdit;
     CheckBox aCbxPickThrough;
     GroupBox aGrpText;
-
-    // Template und Layout laufen z.Z. synchron!
     CheckBox aCbxStartWithTemplate;
-//    CheckBox aCbxStartWithLayout;
     GroupBox aGrpProgramStart;
 
     CheckBox aCbxMasterPageCache;

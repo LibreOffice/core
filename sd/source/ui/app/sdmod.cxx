@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 17:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
     pSearchItem = new SvxSearchItem(ITEMID_SEARCH);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
+    StartListening( *SFX_APP() );
 }
 
 
@@ -154,8 +155,6 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
 
 SdModule::~SdModule()
 {
-    delete pImpressOptions;
-    delete pDrawOptions;
     delete pSearchItem;
 }
 
@@ -260,8 +259,6 @@ SfxModule* SdModuleDummy::Load()
     return (NULL);
 }
 
-
-
 /*************************************************************************
 |*
 |* Modul laden
@@ -273,7 +270,21 @@ SfxModule* SdModule::Load()
     return (this);
 }
 
+/*************************************************************************
+|*
+|* get notifications
+|*
+\************************************************************************/
 
+void SdModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if( rHint.ISA( SfxSimpleHint ) &&
+        ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_DEINITIALIZING )
+    {
+        delete pImpressOptions, pImpressOptions = NULL;
+        delete pDrawOptions, pDrawOptions = NULL;
+    }
+}
 
 /*************************************************************************
 |*
@@ -298,22 +309,14 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     if (eDocType == DOCUMENT_TYPE_DRAW)
     {
         if (!pDrawOptions)
-        {
-            pDrawOptions = new SdOptions(SDCFG_DRAW);
-            pDrawOptions->SetDefault(FALSE);
-            pDrawOptions->Initialize();
-        }
+            pDrawOptions = new SdOptions( SDCFG_DRAW );
 
         pOptions = pDrawOptions;
     }
     else if (eDocType == DOCUMENT_TYPE_IMPRESS)
     {
         if (!pImpressOptions)
-        {
-            pImpressOptions = new SdOptions(SDCFG_IMPRESS);
-            pImpressOptions->SetDefault(FALSE);
-            pImpressOptions->Initialize();
-        }
+            pImpressOptions = new SdOptions( SDCFG_IMPRESS );
 
         pOptions = pImpressOptions;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:27 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 17:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,9 +707,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
         }
     }
 
-    pOptions->SetDefault( FALSE );
     pOptions->StoreConfig();
-    // Speichert die Konfiguration SOFORT
     SFX_APP()->SaveConfiguration();
 
     // Nur, wenn auch der Dokumenttyp uebereinstimmt...

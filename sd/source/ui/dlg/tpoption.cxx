@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 18:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 
     if( pAttr )
     {
-        SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
+        SdOptionsGridItem* pGridAttr = (SdOptionsGridItem*) pAttr;
         if(pGridAttr->GetUseGridSnap() != aCbxSnapGrid.IsChecked())
         {
             pGridAttr->SetUseGridSnap( aCbxSnapGrid.IsChecked() );
@@ -227,7 +227,7 @@ void SdTpOptionsSnap::ActivatePage( const SfxItemSet& rSet )
 
     if(pAttr)
     {
-        SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
+        SdOptionsGridItem* pGridAttr = (SdOptionsGridItem*) pAttr;
         aCbxSnapGrid.Check( pGridAttr->GetUseGridSnap() );
     }
 }
@@ -530,7 +530,6 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     // Template & Layout laufen z.Z. synchron!
     aCbxStartWithTemplate       ( this, SdResId( CBX_START_WITH_TEMPLATE ) ),
-//    aCbxStartWithLayout         ( this, SdResId( CBX_START_WITH_LAYOUT ) ),
     aGrpProgramStart            ( this, SdResId( GRP_PROGRAMSTART ) ),
 
     aCbxMasterPageCache         ( this, SdResId( CBX_MASTERPAGE_CACHE ) ),
@@ -574,18 +573,13 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 
-        // Layout & Template laufen z.Z. synchron!
         aOptsItem.SetStartWithTemplate( aCbxStartWithTemplate.IsChecked() );
-        // aOptsItem.SetStartWithLayout( aCbxStartWithLayout.IsChecked() );
-
         aOptsItem.SetMarkedHitMovesAlways( aCbxMarkedHitMovesAlways.IsChecked() );
         aOptsItem.SetCrookNoContortion( aCbxCrookNoContortion.IsChecked() );
         aOptsItem.SetQuickEdit( aCbxQuickEdit.IsChecked() );
         aOptsItem.SetPickThrough( aCbxPickThrough.IsChecked() );
         aOptsItem.SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
         aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
-
-        /// NEU
         aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
 
         rAttrs.Put( aOptsItem );
@@ -602,28 +596,21 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs.
                         Get( ATTR_OPTIONS_MISC ) );
 
-    // Template & Layout laufen z.Z. synchron!
     aCbxStartWithTemplate.Check( aOptsItem.IsStartWithTemplate() );
-    // aCbxStartWithLayout.Check( aOptsItem.IsStartWithLayout() );
-
     aCbxMarkedHitMovesAlways.Check( aOptsItem.IsMarkedHitMovesAlways() );
     aCbxCrookNoContortion.Check( aOptsItem.IsCrookNoContortion() );
     aCbxQuickEdit.Check( aOptsItem.IsQuickEdit() );
     aCbxPickThrough.Check( aOptsItem.IsPickThrough() );
     aCbxMasterPageCache.Check( aOptsItem.IsMasterPagePaintCaching() );
     aCbxCopy.Check( aOptsItem.IsDragWithCopy() );
-    /// NEU
     aCbxStartWithActualPage.Check( aOptsItem.IsStartWithActualPage() );
-
     aCbxStartWithTemplate.SaveValue();
-    // aCbxStartWithLayout.SaveValue();
     aCbxMarkedHitMovesAlways.SaveValue();
     aCbxCrookNoContortion.SaveValue();
     aCbxQuickEdit.SaveValue();
     aCbxPickThrough.SaveValue();
     aCbxMasterPageCache.SaveValue();
     aCbxCopy.SaveValue();
-    /// NEU
     aCbxStartWithActualPage.SaveValue();
 }
 

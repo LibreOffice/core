@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 18:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,6 @@ void SdDrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
     if( !bDefault )
     {
-        pOptions->SetDefault( FALSE );
         pOptions->StoreConfig();
 
         // Speichert die Konfiguration SOFORT

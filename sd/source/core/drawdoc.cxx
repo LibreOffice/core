@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-27 09:06:50 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 17:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,13 +172,11 @@
 #include "../ui/inc/grdocsh.hxx"
 #endif //!SVX_LIGHT
 #include "../ui/inc/frmview.hxx"
-#include "../ui/inc/optsite2.hxx"
 #else
 #ifndef SVX_LIGHT
 #include "docshell.hxx"
 #include "grdocsh.hxx"
 #include "sdresid.hxx"
-#include "optsite2.hxx"
 #include "optsitem.hxx"
 #include "dragserv.hxx"
 #include "viewshel.hxx"

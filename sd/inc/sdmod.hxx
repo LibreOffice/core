@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: ka $ $Date: 2000-09-28 17:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
 
 class SdOptions;
 class BasicIDE;
@@ -109,7 +112,7 @@ enum SdOptionStreamMode
 |*
 \************************************************************************/
 
-class SdModule : public SdModuleDummy
+class SdModule : public SdModuleDummy, public SfxListener
 {
 protected:
     SdOptions*          pImpressOptions;
@@ -121,6 +124,7 @@ protected:
     BOOL                bWaterCan;
 
     virtual BOOL        QueryUnload();
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:
     TYPEINFO();
