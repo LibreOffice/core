@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hd_docu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ class Docu_Display : public ary::cpp::Display,
                                                 i_rData );
     virtual void        Display_LabelTag(
                             const ary::info::LabelTag &
+                                                i_rData );
+    virtual void        Display_SinceTag(
+                            const ary::info::SinceTag &
                                                 i_rData );
 
     virtual void        Display_DT_Text(
