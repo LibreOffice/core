@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:56:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,11 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
     SetClickHdl( LINK( this, SvxHyperlinkDlg, TBClickHdl ) );
     SetSelectHdl( LINK( this, SvxHyperlinkDlg, TBSelectHdl ) );
     SetDeactivateHdl( LINK( this, SvxHyperlinkDlg, TBDeactivateHdl ) );
+    SetDropdownClickHdl( LINK( this, SvxHyperlinkDlg, DropdownClick ) );
+
+    SetItemBits( BTN_TARGET, GetItemBits( BTN_TARGET ) | TIB_DROPDOWNONLY );
+    SetItemBits( BTN_INET_SEARCH, GetItemBits( BTN_INET_SEARCH ) | TIB_DROPDOWN );
+    SetItemBits( BTN_INET_SEARCH, GetItemBits( BTN_TARGET ) | TIB_DROPDOWNONLY );
 
     aLinkPopup.SetSelectHdl(LINK(this, SvxHyperlinkDlg, LinkPopupSelectHdl));
 
@@ -351,48 +356,16 @@ IMPL_LINK( SvxHyperlinkDlg, TBClickHdl, ToolBox *, pBox )
 {
     switch (pBox->GetCurItemId())
     {
+        case BTN_LINK:
+        {
+            if (!bSend) // Link ins Dokument einfuegen
+                SendToApp(HLINK_DEFAULT);
+        }
+        break;
+
         case BTN_OPENDIALOG:
         {
             GetBindings().GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
-        }
-        break;
-
-        case BTN_LINK:
-        {
-            // Link-Popup anstossen
-            bSend = FALSE;
-            aTimer.Start();
-        }
-        break;
-
-        case BTN_INET_SEARCH:
-        {
-            // Search-Engines per Popup auswaehlen
-            PopupMenu *pMenu = new PopupMenu;
-            pMenu->SetSelectHdl(LINK(this, SvxHyperlinkDlg, SearchPopupSelectHdl));
-
-            sal_uInt16         nCount = aSearchConfig.Count();
-            String sFound;
-            for (USHORT i = 0; i < nCount; i++)
-            {
-                if (i)
-                    pMenu->InsertSeparator();
-                const SvxSearchEngineData&  rData = aSearchConfig.GetData(i);
-                pMenu->InsertItem( i + 1, rData.sEngineName);
-            }
-            pBox->SetItemDown(BTN_INET_SEARCH, TRUE, TRUE);
-            pMenu->Execute( this, GetItemRect( BTN_INET_SEARCH ), FLOATWIN_POPUPMODE_DOWN );
-            pBox->SetItemDown(BTN_INET_SEARCH, FALSE, TRUE);
-            EndSelection();
-            delete pMenu;
-        }
-        break;
-
-        case BTN_TARGET:
-        {
-            // Target Frame einstellen
-            TargetMenu(GetSelTarget(), TRUE);
-            EndSelection();
         }
         break;
     }
@@ -424,6 +397,54 @@ IMPL_LINK( SvxHyperlinkDlg, TBSelectHdl, ToolBox *, pBox )
                                                           INetURLObject::DECODE_UNAMBIGUOUS ) );
             GetBindings().GetDispatcher()->Execute(
                 SID_CREATELINK, SFX_CALLMODE_ASYNCHRON, &aName, &aURL, 0L );
+        }
+        break;
+    }
+
+    return TRUE;
+}
+
+IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
+{
+    switch (pBox->GetCurItemId())
+    {
+        case BTN_LINK:
+        {
+            // Link-Popup anstossen
+            EndSelection(); // Vor dem Execute, damit Popup den Focus bekommt
+            aLinkPopup.EnableItem(MN_BUTTON, !bHtmlMode);
+            aLinkPopup.Execute( this, GetItemRect( BTN_LINK ), FLOATWIN_POPUPMODE_DOWN );
+        }
+        break;
+
+        case BTN_INET_SEARCH:
+        {
+            // Search-Engines per Popup auswaehlen
+            PopupMenu *pMenu = new PopupMenu;
+            pMenu->SetSelectHdl(LINK(this, SvxHyperlinkDlg, SearchPopupSelectHdl));
+
+            sal_uInt16         nCount = aSearchConfig.Count();
+            String sFound;
+            for (USHORT i = 0; i < nCount; i++)
+            {
+                if (i)
+                    pMenu->InsertSeparator();
+                const SvxSearchEngineData&  rData = aSearchConfig.GetData(i);
+                pMenu->InsertItem( i + 1, rData.sEngineName);
+            }
+            pBox->SetItemDown(BTN_INET_SEARCH, TRUE, TRUE);
+            pMenu->Execute( this, GetItemRect( BTN_INET_SEARCH ), FLOATWIN_POPUPMODE_DOWN );
+            pBox->SetItemDown(BTN_INET_SEARCH, FALSE, TRUE);
+            EndSelection();
+            delete pMenu;
+        }
+        break;
+
+        case BTN_TARGET:
+        {
+            // Target Frame einstellen
+            TargetMenu(GetSelTarget(), TRUE);
+            EndSelection();
         }
         break;
     }
@@ -502,20 +523,6 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
 
 IMPL_LINK( SvxHyperlinkDlg, TBDeactivateHdl, ToolBox *, pBox )
 {
-    switch (pBox->GetCurItemId())
-    {
-        case BTN_LINK:
-        {
-            if (aTimer.IsActive())
-            {
-                aTimer.Stop();
-                if (!bSend) // Link ins Dokument einfuegen
-                    SendToApp(HLINK_DEFAULT);
-            }
-        }
-        break;
-    }
-
     return TRUE;
 }
 
@@ -525,9 +532,6 @@ IMPL_LINK( SvxHyperlinkDlg, TBDeactivateHdl, ToolBox *, pBox )
 
 IMPL_LINK( SvxHyperlinkDlg, TimeHdl, Timer *, pTimer )
 {
-    EndSelection(); // Vor dem Execute, damit Popup den Focus bekommt
-    aLinkPopup.EnableItem(MN_BUTTON, !bHtmlMode);
-    aLinkPopup.Execute( this, GetItemRect( BTN_LINK ), FLOATWIN_POPUPMODE_DOWN );
     return TRUE;
 }
 
