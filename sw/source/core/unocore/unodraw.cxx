@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-10 10:44:19 $
+ *  last change: $Author: vg $ $Date: 2001-09-13 11:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
 /*-- 22.01.99 11:13:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwFmDrawPage::~SwFmDrawPage()
+SwFmDrawPage::~SwFmDrawPage() throw ()
 {
     RemovePageView();
 }
@@ -333,7 +333,7 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
 /*-- 22.01.99 11:13:09---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape > & xShape )
+SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape > & xShape ) throw ()
 {
     //TODO: stimmt das so - kann die Methode weg?
     return SvxFmDrawPage::_CreateSdrObject( xShape );
@@ -342,7 +342,7 @@ SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape
 
   -----------------------------------------------------------------------*/
 
-uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj ) const
+uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj ) const throw ()
 {
     uno::Reference< drawing::XShape >  xRet;
     if(pObj->IsWriterFlyFrame() || pObj->GetObjInventor() == SWGInventor)
