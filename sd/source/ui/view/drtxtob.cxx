@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-30 11:24:24 $
+ *  last change: $Author: dl $ $Date: 2001-02-07 09:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
 #endif
 
 #pragma hdrstop
@@ -330,6 +333,62 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
             break;
 
+            case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+            case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+            {
+                BOOL bLeftToRight = FALSE;
+                BOOL bTopToBottom = FALSE;
+
+                SdrOutliner* pOutl = pView->GetTextEditOutliner();
+                if( pOutl )
+                {
+                    if( pOutl->IsVertical() )
+                        bTopToBottom = TRUE;
+                    else
+                        bLeftToRight = TRUE;
+                }
+                else
+                {
+                    const SdrMarkList& rMark = pView->GetMarkList();
+                    USHORT nCount = (USHORT) Min( rMark.GetMarkCount(), (ULONG) 10 );
+                    OutlinerParaObject* pOPO = 0;
+                    for( USHORT i = 0; i < nCount; i++ )
+                    {
+                        pOPO = rMark.GetMark( i )->GetObj()->GetOutlinerParaObject();
+                        if( !pOPO )
+                        {
+                            bLeftToRight = FALSE;
+                            bTopToBottom = FALSE;
+                             break;
+                        }
+                        else if ( pOPO->IsVertical() )
+                        {
+                            if( bLeftToRight )
+                            {
+                                bLeftToRight = FALSE;
+                                break;
+                            }
+                            else
+                                bTopToBottom = TRUE;
+                        }
+                        else
+                        {
+                            if( bTopToBottom )
+                            {
+                                bTopToBottom = FALSE;
+                                break;
+                            }
+                            else
+                                bLeftToRight = TRUE;
+                        }
+                    }
+                }
+
+                rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
+                rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, bTopToBottom ) );
+            }
+            break;
+
             default:
             break;
         }
@@ -356,6 +415,8 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
         rSet.DisableItem( SID_ATTR_PARA_LINESPACE_20 );
         rSet.DisableItem( SID_PARASPACE_INCREASE );
         rSet.DisableItem( SID_PARASPACE_DECREASE );
+        rSet.DisableItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
+        rSet.DisableItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
     }
     else
     {

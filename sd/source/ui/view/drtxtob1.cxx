@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-30 11:24:34 $
+ *  last change: $Author: dl $ $Date: 2001-02-07 09:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
 #endif
 
 
@@ -332,6 +335,57 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustHeight( 1 );
             }
+            rReq.Done();
+        }
+        break;
+
+        case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+        case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+        {
+            SdrOutliner* pOutl = pView->GetTextEditOutliner();
+            if( pOutl )
+            {
+                if( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
+                {
+                    if( pOutl->IsVertical() )
+                        pOutl->SetVertical( FALSE );
+                }
+                else
+                {
+                    if( !pOutl->IsVertical() )
+                        pOutl->SetVertical( TRUE );
+                }
+            }
+
+            const SdrMarkList& rMark = pView->GetMarkList();
+            SdrObject* pObj = NULL;
+            OutlinerParaObject* pOPO = 0;
+            for( ULONG i = 0; i < rMark.GetMarkCount(); i++ )
+            {
+                pObj = rMark.GetMark( i )->GetObj();
+                pOPO = pObj->GetOutlinerParaObject();
+                if( pOPO )
+                {
+                    SdrOutliner* pOutl = pView->GetTextEditOutliner();
+                    if( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
+                    {
+                        if( pOPO && pOPO->IsVertical() )
+                        {
+                            pOPO->SetVertical( FALSE );
+                            pObj->SendRepaintBroadcast();
+                        }
+                    }
+                    else
+                    {
+                        if( pOPO && !pOPO->IsVertical() )
+                        {
+                            pOPO->SetVertical( TRUE );
+                            pObj->SendRepaintBroadcast();
+                        }
+                    }
+                }
+            }
+
             rReq.Done();
         }
         break;
