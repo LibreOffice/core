@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:38:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,12 @@
 
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
+#endif
+#ifndef _SV_GDIMTF_HXX
+#include <vcl/gdimtf.hxx>
+#endif
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
 #endif
 
 #ifndef _GRFMGR_HXX
@@ -1230,6 +1236,15 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     }
                 }
             }
+
+            // #110496# Issue cell break comment after the bullet, to
+            // separate it from the following item text
+            GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
+            if( pMtf != NULL &&
+                IsVerboseTextComments() )
+            {
+                pMtf->AddAction( new MetaCommentAction( "XTEXT_EOC" ) );
+            }
         }
 
         // Bei zusammengeklappten Absaetzen einen Strich vor den Text malen.
@@ -2335,6 +2350,16 @@ void Outliner::ImplBlockInsertionCallbacks( BOOL b )
     }
 }
 
+// #110496#
+void Outliner::EnableVerboseTextComments( BOOL bEnable )
+{
+    pEditEngine->EnableVerboseTextComments( bEnable );
+}
+
+BOOL Outliner::IsVerboseTextComments() const
+{
+    return pEditEngine->IsVerboseTextComments();
+}
 
 IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
 {
