@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenu.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:30 $
+ *  last change: $Date: 2003-03-26 13:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import drafts.com.sun.star.accessibility.AccessibleRole;
 import drafts.com.sun.star.accessibility.XAccessible;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleAction;
 import drafts.com.sun.star.accessibility.XAccessibleText;
 import drafts.com.sun.star.awt.XExtendedToolkit;
@@ -157,9 +158,15 @@ public class AccessibleMenu extends TestCase {
 
 //        at.printAccessibleTree(log, xRoot);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU, "File");
-        Object menu2 = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.MENU, "Edit");
+        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUBAR);
+        Object menu2 = null;
+
+        try {
+            oObj = menubar.getAccessibleChild(2);
+            menu2 = menubar.getAccessibleChild(1);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -175,6 +182,10 @@ public class AccessibleMenu extends TestCase {
                 public void fireEvent() {
                     try {
                         act2.doAccessibleAction(0);
+                        try {
+                            Thread.sleep(500) ;
+                        } catch (InterruptedException e) {
+                        }
                         act1.doAccessibleAction(0);
                     } catch(com.sun.star.lang.IndexOutOfBoundsException e){}
                 }
@@ -184,6 +195,8 @@ public class AccessibleMenu extends TestCase {
                     UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
+
+        tEnv.addObjRelation("EditOnly","Can't change or select Text in Menu");
 
         return tEnv;
 
