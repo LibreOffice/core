@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:13:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,11 +1443,13 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         SfxAllItemSet aSet(pDrawModel->GetItemPool());
         if (SdrObject *pObject = ReadGrafPrimitive(nLeft, pDo, aSet))
         {
-            pObject->SetMergedItemSetAndBroadcast(aSet);
+            // #116150#
+            // first add and then set ItemSet
             SdrObjList *pSubGroup = pObj->GetSubList();
             ASSERT(pSubGroup, "Why no sublist available?");
             if (pSubGroup)
                 pSubGroup->InsertObject(pObject, 0);
+            pObject->SetMergedItemSetAndBroadcast(aSet);
         }
     }
 
