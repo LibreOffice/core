@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 16:22:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,13 @@ typedef enum
      */
     rtl_UriEncodeCheckEscapes,
 
+    /** Like rtl_UriEncodeIgnoreEscapes, but indicating failure when converting
+        unmappable characters.
+
+        @since #109735#
+     */
+    rtl_UriEncodeStrict,
+
     rtl_UriEncode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 }
 rtl_UriEncodeMechanism;
@@ -221,6 +228,13 @@ typedef enum
         are decoded and translated to Unicode, if possible.
      */
     rtl_UriDecodeWithCharset,
+
+    /** Like rtl_UriDecodeWithCharset, but indicating failure when converting
+        unmappable characters.
+
+        @since #109735#
+     */
+    rtl_UriDecodeStrict,
 
     rtl_UriDecode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 }
@@ -270,6 +284,10 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     @param pResult
     Returns an encoded representation of the input text.  Must itself not be
     null, and must point to either null or a valid string.
+
+    If the encode mechanism is rtl_UriEncodeStrict, and pText cannot be
+    converted to eCharset because it contains unmappable characters (which
+    implies that pText is not empty), then an empty string is returned.
  */
 void SAL_CALL rtl_uriEncode(rtl_uString * pText,
                             sal_Bool const * pCharClass,
@@ -302,6 +320,11 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText,
     @param pResult
     Returns a decoded representation of the input text.  Must itself not be
     null, and must point to either null or a valid string.
+
+    If the decode mechanism is rtl_UriDecodeStrict, and pText cannot be
+    converted to eCharset because it contains (encodings of) unmappable
+    characters (which implies that pText is not empty), then an empty string is
+    returned.
  */
 void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                             rtl_UriDecodeMechanism eMechanism,
