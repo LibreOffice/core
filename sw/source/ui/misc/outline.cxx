@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:34:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -163,16 +160,6 @@
 
 DBG_NAME(outlinehdl);
 
-USHORT lcl_AdjustToPos(SvxAdjust eAdjust)
-{
-    USHORT nRet = 0;
-    switch( eAdjust )
-    {
-        case SVX_ADJUST_CENTER: nRet = 1;break;
-        case SVX_ADJUST_RIGHT: nRet = 2; break;
-    }
-    return nRet;
-}
 /*---------------------------------------------------------------------
 
 ---------------------------------------------------------------------*/
