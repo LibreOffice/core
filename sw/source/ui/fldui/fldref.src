@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:47:35 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "À¯Çü(~T)";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo de campo";
     };
     ListBox LB_REFTYPE
     {
@@ -135,6 +136,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "¼±ÅÃ(~E)";
         Text[ turkish ] = "S~eçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Se~lección";
     };
     ListBox LB_REFSELECTION
     {
@@ -170,6 +172,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "F~ormato";
     };
     ListBox LB_REFFORMAT
     {
@@ -206,6 +209,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "ÀÌ¸§(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No~mbre";
     };
     Edit ED_REFNAME
     {
@@ -244,6 +248,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "°ª(~V)";
         Text[ turkish ] = "~Deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Valor";
     };
     Edit ED_REFVALUE
     {
@@ -277,6 +282,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "Ã¥°¥ÇÇ";
         Text[ turkish ] = "Metin iþareti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marcas de texto";
     };
     String STR_REFFOOTNOTE
     {
@@ -303,6 +309,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "°¢ÁÖ";
         Text[ turkish ] = "Dipnotlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Notas al pie";
     };
     String STR_REFENDNOTE
     {
@@ -327,6 +334,7 @@ TabPage TP_FLD_REF
         Text[ korean ] = "¹ÌÁÖ";
         Text[ turkish ] = "Son notlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Notas finales";
     };
     Text [ english_us ] = "References" ;
     Text [ portuguese_brazilian ] = "Referenzen" ;
@@ -347,4 +355,5 @@ TabPage TP_FLD_REF
     Text[ korean ] = "ÂüÁ¶";
     Text[ turkish ] = "Referans";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Referencias";
 };
