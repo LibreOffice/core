@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:28:49 $
+#   last change: $Author: hr $ $Date: 2004-10-12 17:57:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ SLOFILES =  \
         $(SLO)$/fuconarc.obj \
         $(SLO)$/fuconuno.obj \
         $(SLO)$/fuconpol.obj \
+        $(SLO)$/fuconcustomshape.obj \
         $(SLO)$/fuins1.obj \
         $(SLO)$/fuins2.obj \
         $(SLO)$/futext.obj \
