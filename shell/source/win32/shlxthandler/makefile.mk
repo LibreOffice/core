@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2002-08-26 11:47:21 $
+#   last change: $Author: tra $ $Date: 2002-12-06 15:38:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,8 @@ SHL1STDLIBS=uwinapi.lib\
     ole32.lib\
     uuid.lib\
     shell32.lib\
-    comctl32.lib
+    comctl32.lib\
+    gdi32.lib
     
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
@@ -148,5 +149,5 @@ APP1DEF=$(MISC)$/$(APP1TARGET).def
 # using lngconvex.exe 
 
 $(RCFILES) : $(LNGFILES) makefile.mk rcfooter.txt rcheader.txt rctmpl.txt ctrylnglist.txt
-    +$(BIN)$/lngconvex.exe -lng ..\..\source\win32\shlxthandler\shlxthdl.lng -rc ..\..\source\win32\shlxthandler\shlxthdl.rc -c  ..\..\source\win32\shlxthandler\ctrylnglist.txt  -rct ..\..\source\win32\shlxthandler\rctmpl.txt -rch ..\..\source\win32\shlxthandler\rcheader.txt -rcf ..\..\source\win32\shlxthandler\rcfooter.txt
+    +$(BIN)$/lngconvex.exe -lng shlxthdl.lng -rc shlxthdl.rc -c  ctrylnglist.txt  -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
     
