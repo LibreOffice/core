@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:15:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ String ERR_INET_NAME_RESOLVE
     Text[ hebrew ] = "‮לא ניתן לתרגם את שם המחשב לכתובת אינטרנט.\n‬";
     Text[ hindi ] = "गणकयंत्र का नाम निर्णय नहीं कर सकते है\n";
     Text[ slovak ] = "Názov počítača nebolo možné zistiť.\n";
+    Text[ hungarian ] = "A gép nevét nem lehet feloldani\n";
+    Text[ slovenian ] = "Imena računalnika ni bilo mogoče razrešiti\n";
 };
 String ERR_INET_CONNECT
 {
@@ -104,7 +106,7 @@ String ERR_INET_CONNECT
     Text [ spanish ] = "No se pudo crear la conexi�n Internet" ;
     Text [ french ] = "Impossible d'�tablir la connexion Internet" ;
     Text [ swedish ] = "Det gick inte att uppr�tta en Internet-f�rbindelse" ;
-    Text [ danish ] = "Det var ikke muligt at oprette en forbindelse til Internettet" ;
+    Text [ danish ] = "Det var ikke muligt at oprette en internetforbindelse" ;
     Text [ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o com a Internet." ;
     Text [ portuguese ] = "Imposs�vel estabelecer a liga��o com a Internet." ;
     Text[ chinese_simplified ] = "无法和国际互联网建立连接";
@@ -123,6 +125,8 @@ String ERR_INET_CONNECT
     Text[ hebrew ] = "‮לא ניתן להתחבר לאינטרנט‬";
     Text[ hindi ] = "इन्टरनेट् कनेक्शन् स्थापित नहीं कर सकते है";
     Text[ slovak ] = "Internetové spojenie nie je možné naviazať.";
+    Text[ hungarian ] = "Nem sikerült internet-kapcsolatot létesíteni.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z internetom";
 };
 String ERR_INET_READ
 {
@@ -134,7 +138,7 @@ String ERR_INET_READ
     Text [ spanish ] = "Los datos no se pudieron leer a trav�s de Internet.\nMensaje de error del servidor: $(ARG1)" ;
     Text [ french ] = "Impossible de lire des donn�es via Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
     Text [ swedish ] = "Data kunde inte l�sas via Internet.\nServerfelmeddelande: $(ARG1)" ;
-    Text [ danish ] = "Det var ikke muligt at indl�se data over Internettet.\nServerfejlmelding: $(ARG1)" ;
+    Text [ danish ] = "Det var ikke muligt at indl�se data fra Internet.\nServerfejlmeddelelse: $(ARG1)" ;
     Text [ portuguese ] = "Foi imposs�vel ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
     Text [ portuguese_brazilian ] = "Erro ao ler dados da Internet.\nMensagem de erro do servidor: $(ARG1)" ;
     Text[ chinese_simplified ] = "无法通过国际互联网读取数据。\n服务器报告错误：$(ARG1)";
@@ -153,6 +157,8 @@ String ERR_INET_READ
     Text[ hebrew ] = "‮‪שגיאה בקריאת נתונים מהאינטרנט.\nהודעת השרת: $(ARG1)‪‬";
     Text[ hindi ] = "ड़ॉटा को इन्टरनेट् से पढ़ने के समय गलती ।\nसर्वर से गलती का संदेश: $(ARG1)";
     Text[ slovak ] = "Chyba pri čítaní dát z Internetu.\nChybová správa zo serveru: $(ARG1)";
+    Text[ hungarian ] = "Hiba az internetről történő adatolvasás közben.\nA kiszolgáló hibaüzenete: $(ARG1)";
+    Text[ slovenian ] = "Napaka pri branju podatkov z interneta\n.Sporočilo o napaki na strežniku: $(ARG1)";
 };
 String ERR_INET_WRITE
 {
@@ -164,7 +170,7 @@ String ERR_INET_WRITE
     Text [ spanish ] = "Los datos no se pudieron transferir a Internet.\nMensaje de error del servidor: $(ARG1)" ;
     Text [ french ] = "Impossible de transmettre les donn�es � l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
     Text [ swedish ] = "Data kunde inte �verf�ras till Internet.\nServerfelmeddelande: $(ARG1)" ;
-    Text [ danish ] = "Det var ikke muligt at overf�re data til Internettet.\nServerfejlmelding: $(ARG1)" ;
+    Text [ danish ] = "Det var ikke muligt at overf�re data til Internet.\nServerfejlmeddelelse: $(ARG1)" ;
     Text [ portuguese ] = "Foi imposs�vel transmitir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
     Text [ portuguese_brazilian ] = "N�o foi poss�vel transmitir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
     Text[ chinese_simplified ] = "无法向国际互联网传递数据。\n服务器报告错误：$(ARG1)";
@@ -183,6 +189,8 @@ String ERR_INET_WRITE
     Text[ hebrew ] = "‮שגיאה בהעברת נתונים מהאינטרנט.\nהודעת השרת: $(ARG1)‪‬";
     Text[ hindi ] = "ड़ॉटा को इन्टरनेट् से स्थानांतर करने के समय गलती ।\nसर्वर से गलती का संदेश: $(ARG1)";
     Text[ slovak ] = "Chyba pri prenose dát na Internet.\nChybová sprava zo serveru: $(ARG1)";
+    Text[ hungarian ] = "Hiba történt az adat internetre továbbítása közben.\nA kiszolgáló hibaüzenete: $(ARG1)";
+    Text[ slovenian ] = "Napaka pri prenosu podatkov na internet.\nSporočilo o napaki na strežniku: $(ARG1)";
 };
 String ERR_INET_GENERAL
 {
@@ -194,7 +202,7 @@ String ERR_INET_GENERAL
     Text [ spanish ] = "Error general en Internet" ;
     Text [ french ] = "Erreur g�n�rale Internet" ;
     Text [ swedish ] = "Ett allm�nt Internet-fel uppstod" ;
-    Text [ danish ] = "Der opstod en generel Internetfejl" ;
+    Text [ danish ] = "Generel internetfejl" ;
     Text [ portuguese ] = "Surgiu um erro geral na �rea da Internet." ;
     Text [ portuguese_brazilian ] = "Ocorreu um erro geral relativo � Internet." ;
     Text[ chinese_simplified ] = "在国际互联网内发生一个一般错误。";
@@ -213,6 +221,8 @@ String ERR_INET_GENERAL
     Text[ hebrew ] = "‮שגיאת אינטרנט לא מפורטת‬";
     Text[ hindi ] = "सामान्य इन्टरनेट् गलती";
     Text[ slovak ] = "Všeobecná chyba Internetu";
+    Text[ hungarian ] = "Általános internethiba";
+    Text[ slovenian ] = "Splošna internetna napaka";
 };
 String ERR_WRONG_URL
 {
@@ -243,6 +253,8 @@ String ERR_WRONG_URL
     Text[ hebrew ] = "‮URL פגום‬";
     Text[ hindi ] = "दोषयुक्त URL\n";
     Text[ slovak ] = "Chybné URL\n";
+    Text[ hungarian ] = "Hibás URL\n";
+    Text[ slovenian ] = "Napačen URL\n";
 };
 String ERR_ACTIVEDOWNLOADS
 {
@@ -251,7 +263,7 @@ String ERR_ACTIVEDOWNLOADS
     Text[ italian ] = "Ci sono ancora dei download attivi.\nVolete davvero terminare?\n";
     Text[ portuguese_brazilian ] = "Existem ainda alguns downloads ativos.\nDeseja cancel�-los?\n";
     Text[ portuguese ] = "Existem ainda alguns downloads em curso.\nCancelar?\n";
-    Text[ danish ] = "Der er fortsat aktive overf�rsler.\nEr du sikker p�, at du vil annullere?\n";
+    Text[ danish ] = "Der er fortsat aktive overf�rsler.\nEr du sikker p�, at du vil afslutte?\n";
     Text[ french ] = "Vous avez des t�l�chargements en cours.\nVoulez-vous vraiment annuler ?\n";
     Text[ swedish ] = "Det finns fortfarande aktiva nedladdningar.\nVill du verkligen avbryta?\n";
     Text[ dutch ] = "Er zijn nog downloads actief.\nWilt u de toepassing werkelijk annuleren?\n";
@@ -272,6 +284,8 @@ String ERR_ACTIVEDOWNLOADS
     Text[ hebrew ] = "‮  הורדות מהאינטרנט מתבצעות כעת.\nהאם בכל זאת לצאת?\n‬";
     Text[ hindi ] = "क्रियाशील ड़ौनलोड़ की कार्य अभी भी बचा है।\nआप सचमुच त्यागना चाहते है?\n";
     Text[ slovak ] = "Stále prebieha sťahovanie súborov.\nSte si istý, že chcete program ukončiť?\n";
+    Text[ hungarian ] = "Letöltések folyamatban. \nBiztosan ki akar lépni?\n";
+    Text[ slovenian ] = "Še vedno so aktivni nekateri prenosi.\nAli ste prepričani, da želite končati?\n";
 };
 String ERR_QUEUEDDOWNLOADS
 {
@@ -302,6 +316,8 @@ String ERR_QUEUEDDOWNLOADS
     Text[ hebrew ] = "‮נשארו הורדות מהאינטרנט לביצוע.\nהאם אכן לצאת?‬";
     Text[ hindi ] = "ड़ौनलोड़ की कार्य अभी भी बचा है।\nआप सचमुच त्यागना चाहते है?\n";
     Text[ slovak ] = "Nejaké súbory sú ešte nastavené na stiahnutie.\nNaozaj chcete program ukončiť?\n";
+    Text[ hungarian ] = "Egy vagy több letöltés függőben van.\nBiztosan ki akar lépni?\n";
+    Text[ slovenian ] = "Še vedno je treba izvesti nekaj prenosov.\nAli res želite končati?\n";
 };
 String ERR_FILEISLOCAL
 {
@@ -332,6 +348,8 @@ String ERR_FILEISLOCAL
     Text[ hebrew ] = "‮הקובץ כבר קיים במחשב זה.\nהאם להעתיקו בכל זאת?‬";
     Text[ hindi ] = "फाइल आपके गणकयंत्र में पहिले से अस्तित्व में है ।\nआप किसी तरह से उसका प्रतिलिपि बनाना चाहते है?";
     Text[ slovak ] = "Takýto súbor už vo vašom počítači existuje.\nPrajete si ho i napriek tomu kopírovať?";
+    Text[ hungarian ] = "A fájl már létezik a számítógépen.\nEnnek ellenére másolni akarja?";
+    Text[ slovenian ] = "Datoteka že obstaja na vašem računalniku.\nAli jo vseeno želite kopirati?";
 };
 String ERR_FILENAMECHECK83
 {
@@ -341,7 +359,7 @@ String ERR_FILENAMECHECK83
     Text [ portuguese ] = "O nome do ficheiro indicado n�o � v�lido.\nO nome do ficheiro dever� ter no m�ximo 8 caracteres\n e a respectiva extens�o o m�ximo de 3." ;
     Text [ portuguese_brazilian ] = "O nome do arquivo especificado n�o � v�lido.\nObserve que o nome do arquivo n�o pode exceder o m�ximo de 8 caracteres\n e a respectiva extens�o no m�ximo de 3." ;
     Text [ swedish ] = "Det inmatade filnamnet �r ogiltigt.\nVar v�nlig och se till att filnamnet inneh�ller maximalt 8 tecken\n och filnamnstill�gget maximalt 3 tecken." ;
-    Text [ danish ] = "Det indtastede navn er ugyldigt.\nBem�rk venligst at filnavnet h�jst m� indeholde 8 tegn \nog filypenavnet h�jst m� best� af 3 tegn." ;
+    Text [ danish ] = "Det indtastede navn er ugyldigt.\nBem�rk at filnavnet h�jst m� indeholde 8 tegn\n og at filypenavnet h�jst m� best� af 3 tegn." ;
     Text [ italian ] = "Il nome del file digitato non � valido.\nTenete presente che il nome del file pu� avere una lunghezza massima di 8 caratteri\ne l'estensione del file di 3." ;
     Text [ spanish ] = "El nombre del archivo especificado no es v�lido.\\Tenga en cuenta que el nombre debe tener un m�ximo de 8 caracteres\ny la terminaci�n 3." ;
     Text [ french ] = "Le nom de fichier indiqu� est incorrect.\nIl peut comporter au maximum 8 caract�res\net l'extension de fichier au maximum 3 caract�res." ;
@@ -362,6 +380,8 @@ String ERR_FILENAMECHECK83
     Text[ hebrew ] = "‮שם הקובץ אינו חוקי.\nאין להשתמש בשם קובץ ארוך משמונה תווים\nובסיומת ארוכה משלושה תווים.‬";
     Text[ hindi ] = "प्रविष्ट किया हुआ फाइल का नाम अमान्य है ।\nकृपया ध्यान दीजिए कि फाइल का नाम 8 अक्षरों से अधिक नहीं हो सकता है\n और फाइल का ऍक्स्टेन्शन् सिर्फ़ 3 अक्षरों का होना चाहिए ।";
     Text[ slovak ] = "Zadaný názov súboru je neplatný.\nNázvy súborov nemôžu prekročiť dĺžku 8 znakov\na príponu súboru môžu tvori? nejviac 3 znaky.";
+    Text[ hungarian ] = "A megadott fájlnév hibás.\nA fájl neve nem lehet 8 karakternél hosszabb, \nés a kiterjesztés csak 3 karakter lehet.";
+    Text[ slovenian ] = "Vnešeno ime datoteke je neveljavno.\nVedite, da imena datotek ne smejo presegati 8 znakov,\npripone datotek pa smejo vsebovati le 3 znake.";
 };
 String ERR_INSUFFICIENTDISKSPACE
 {
@@ -370,7 +390,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ italian ] = "Il file %1 occupa pi� spazio di quello disponibile sul disco.\nVolete continuare?\n";
     Text[ portuguese_brazilian ] = "O arquivo %1 excede o espa�o dispon�vel no disco.\nDeseja continuar mesmo assim?\n";
     Text[ portuguese ] = "O ficheiro %1 excede o espa�o dispon�vel no disco.\nContinuar?\n";
-    Text[ danish ] = "Filen %1 overskrider den tilg�ngelige diskplads.\nVil du forts�tte alligevel?\n";
+    Text[ danish ] = "Filen %1 overskrider den ledige diskplads.\nVil du forts�tte alligevel?\n";
     Text[ french ] = "La taille du fichier %1 d�passe l'espace libre sur votre disque dur.\nSouhaitez-vous poursuivre ?\n";
     Text[ swedish ] = "Filen %1 blir st�rre �n det tillg�ngliga diskutrymmet.\nVill du �nd� forts�tta?\n";
     Text[ dutch ] = "Bestand %1 wordt groter dan de beschikbare schuifruimte.\nWilt u doorgaan?\n";
@@ -391,6 +411,8 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ hebrew ] = "‮קובץ 1% גדול מהמקום הנותר בדיסק.\nהאם להמשיך בכל זאת?‬";
     Text[ hindi ] = "फाइल %1 प्राप्य डिस्क् का जगह से अधिक है। \nआप किसी तरह आगे बढ़ना चाहते है?\n";
     Text[ slovak ] = "Súbor %1 prekračuje dostupnú veľkosť voľného miesta na disku.\nPrajete si i napriek tomu pokračovať?\n";
+    Text[ hungarian ] = "A(z) %1 fájl nem fér el a rendelkezésre álló szabad területen. \nMindenképpen folytatja?\n";
+    Text[ slovenian ] = "Datoteka %1 presega količino prostora na disku, ki je na voljo.\nAli vseeno želite nadaljevati?\n";
 };
 //= Texte "downloadcontroller" =================================================================
 String STR_DOWNLOAD_SOURCE
@@ -422,6 +444,8 @@ String STR_DOWNLOAD_SOURCE
     Text[ hebrew ] = "‮מקור‬";
     Text[ hindi ] = "मूल";
     Text[ slovak ] = "Zdroj";
+    Text[ hungarian ] = "Forrás";
+    Text[ slovenian ] = "Vir";
 };
 String STR_DOWNLOAD_DESTINATION
 {
@@ -452,6 +476,8 @@ String STR_DOWNLOAD_DESTINATION
     Text[ hebrew ] = "‮יעד‬";
     Text[ hindi ] = "नियत स्थान";
     Text[ slovak ] = "Cieľ";
+    Text[ hungarian ] = "Cél";
+    Text[ slovenian ] = "Cilj";
 };
 String STR_DOWNLOAD_STATE
 {
@@ -482,6 +508,8 @@ String STR_DOWNLOAD_STATE
     Text[ hebrew ] = "‮מצב‬";
     Text[ hindi ] = "वस्तुस्थिति";
     Text[ slovak ] = "Stav";
+    Text[ hungarian ] = "Állapot";
+    Text[ slovenian ] = "Stanje";
 };
 String STR_DOWNLOAD_REMAININGTIME
 {
@@ -512,6 +540,8 @@ String STR_DOWNLOAD_REMAININGTIME
     Text[ hebrew ] = "‮זמן נותר‬";
     Text[ hindi ] = "बचा हुआ समय";
     Text[ slovak ] = "Zostávajúci čas";
+    Text[ hungarian ] = "Hátralevő idő";
+    Text[ slovenian ] = "Preostali čas";
 };
 String STR_DOWNLOAD_STATEFORMAT
 {
@@ -542,6 +572,8 @@ String STR_DOWNLOAD_STATEFORMAT
     Text[ hebrew ] = "‮$(READ) מתוך $(TOTAL)[ $(TIME) ]‬";
     Text[ hindi ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
     Text[ slovak ] = "$(READ) z $(TOTAL) [ $(TIME) ]";
+    Text[ hungarian ] = "$(READ)/$(TOTAL) [ $(TIME) ]";
+    Text[ slovenian ] = "$(READ) od $(TOTAL) [ $(TIME) ]";
 };
 
 Resource RID_DLSTATUS2
@@ -556,7 +588,7 @@ Resource RID_DLSTATUS2
         Text [ spanish ] = "Conexi�n con: $(HOST). Esperando respuesta..." ;
         Text [ french ] = "Connexion � : $(HOST). Attend r�ponse..." ;
         Text [ swedish ] = "Ansluter till: $(HOST). V�ntar p� svar..." ;
-        Text [ danish ] = "Forbindelse til: $(HOST). Venter p� svar..." ;
+        Text [ danish ] = "Opretter forbindelse til: $(HOST). Venter p� svar..." ;
         Text [ portuguese_brazilian ] = "Conectando com: $(HOST). Aguardando resposta ..." ;
         Text [ portuguese ] = "Liga��o com: $(HOST). Esperando resposta ..." ;
         Text[ chinese_simplified ] = "连接：$(HOST)。正在等候回应...";
@@ -578,6 +610,8 @@ Resource RID_DLSTATUS2
         Text[ hebrew ] = "‮התחברות ל $(HOST) מתבצעת. בהמתנה לתשובה...‬";
         Text[ hindi ] = "$(HOST) केलिए कनेक्ट कर रहा है । जवाब केलिए ठहरा हुआ है...";
         Text[ slovak ] = "Pripojovanie k: $(HOST). Čakám na odpoveď...";
+        Text[ hungarian ] = "Csatlakozás a következőhöz:$(HOST). Várakozás válaszra...";
+        Text[ slovenian ] = "Vzpostavljanje povezave z: $(HOST). Čakanje na odgovor...";
     };
     String SVBINDSTATUS_CONNECTING
     {
@@ -589,7 +623,7 @@ Resource RID_DLSTATUS2
         Text [ spanish ] = "Abriendo: $(TARGET) en $(HOST)" ;
         Text [ french ] = "Ouverture de $(TARGET) sur $(HOST)" ;
         Text [ swedish ] = "$(TARGET) �ppnas p� $(HOST)" ;
-        Text [ danish ] = "F�lgende �bnes: $(TARGET) p� $(HOST)" ;
+        Text [ danish ] = "�bnes $(TARGET) p� $(HOST)" ;
         Text [ portuguese ] = "Abrir: $(TARGET) em $(HOST)" ;
         Text [ portuguese_brazilian ] = "Abrindo: $(TARGET) em $(HOST)" ;
         Text[ chinese_simplified ] = "打开： $(HOST)上的$(TARGET)";
@@ -611,6 +645,8 @@ Resource RID_DLSTATUS2
         Text[ hebrew ] = "‮פתיחה של $(TARGET) על $(HOST) מתבצעת‬";
         Text[ hindi ] = "$(HOST) में $(TARGET) को खोल रहा है";
         Text[ slovak ] = "Otvára sa $(TARGET) na $(HOST)";
+        Text[ hungarian ] = "$(TARGET) megnyitása itt: $(HOST)";
+        Text[ slovenian ] = "Odpiranje $(TARGET) na $(HOST)";
     };
     String SVBINDSTATUS_DOWNLOADINGDATA
     {
@@ -622,7 +658,7 @@ Resource RID_DLSTATUS2
         Text [ french ] = "Transfert de $(TARGET) Lu : $(BYTE)" ;
         Text [ dutch ] = "Geladen wordt: $(TARGET) Gelezen: $(BYTE)" ;
         Text [ swedish ] = "�verf�rs: $(TARGET) L�st: $(BYTE)" ;
-        Text [ danish ] = "F�lgende overf�res: $(TARGET) L�st: $(BYTE)" ;
+        Text [ danish ] = "Overf�rer: $(TARGET) L�st: $(BYTE)" ;
         Text [ portuguese_brazilian ] = "Transferindo: $(TARGET) Lido: $(BYTES)" ;
         Text [ portuguese ] = "Transferir: $(TARGET) Lidos: $(BYTE)" ;
         Text[ chinese_simplified ] = "传递：$(TARGET)已经阅读：$(BYTE)";
@@ -644,6 +680,8 @@ Resource RID_DLSTATUS2
         Text[ hebrew ] = "‮העברת $(TARGET), נקראו $(BYTE) בתים‬";
         Text[ hindi ] = "स्थानान्तर हो रहा है: $(TARGET) पढ़ा: $(BYTE)";
         Text[ slovak ] = "Prebieha prenos: $(TARGET) Načítané: $(BYTE)";
+        Text[ hungarian ] = "Átvitel: $(TARGET) Beolvasva: $(BYTE)";
+        Text[ slovenian ] = "Prenašanje: $(TARGET) Branje: $(BYTE)";
     };
     String SVBINDSTATUS_ENDDOWNLOADDATA
     {
@@ -677,6 +715,8 @@ Resource RID_DLSTATUS2
         Text[ hebrew ] = "‮מנותק‬";
         Text[ hindi ] = "डिसकनेक्ट किया";
         Text[ slovak ] = "Spojenie prerušené";
+        Text[ hungarian ] = "Szétkapcsolva";
+        Text[ slovenian ] = "Povezava je prekinjena";
     };
 };
 
@@ -685,6 +725,8 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
+
 
 
 
