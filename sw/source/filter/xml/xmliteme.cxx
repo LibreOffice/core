@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:07:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,9 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 
 void SwXMLExport::_InitItemExport()
 {
+    // #110680#
     pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP,
-                                GetMM100UnitConverter().getXMLMeasureUnit() );
+        GetMM100UnitConverter().getXMLMeasureUnit(), getServiceFactory() );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
