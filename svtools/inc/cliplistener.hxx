@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cliplistener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 19:26:53 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 07:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ public:
             ~TransferableClipboardListener();
 
     void    AddRemoveListener( Window* pWin, BOOL bAdd );
+    void    ClearCallbackLink();
 
             // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )

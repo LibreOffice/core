@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cliplistener.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 19:30:53 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 07:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,5 +120,10 @@ void TransferableClipboardListener::AddRemoveListener( Window* pWin, BOOL bAdd )
     catch( const ::com::sun::star::uno::Exception& )
     {
     }
+}
+
+void TransferableClipboardListener::ClearCallbackLink()
+{
+    aLink = Link();
 }
 
