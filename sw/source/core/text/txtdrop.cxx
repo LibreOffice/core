@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
+ *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,32 +116,114 @@
 #ifndef _TXATBASE_HXX
 #include <txatbase.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
+#ifndef _SVX_LANGITEM_HXX //autogen
+#include <svx/langitem.hxx>
+#endif
+#ifndef _CHARATR_HXX
+#include <charatr.hxx>
+#endif
+
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
+
+/*************************************************************************
+ *                lcl_IsDropFlyInter
+ *
+ *  Calculates if a drop caps portion intersects with a fly
+ *  The width and height of the drop caps portion are passed as arguments,
+ *  the position is calculated from the values in rInf
+ *************************************************************************/
+
+sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
+                             USHORT nWidth, USHORT nHeight )
+{
+    const SwTxtFly *pTxtFly = rInf.GetTxtFly();
+    if( pTxtFly && pTxtFly->IsOn() )
+    {
+        SwRect aRect( rInf.GetTxtFrm()->Frm().Pos(), Size( nWidth, nHeight) );
+        aRect.Pos() += rInf.GetTxtFrm()->Prt().Pos();
+        aRect.Pos().X() += rInf.X();
+        aRect.Pos().Y() = rInf.Y();
+        aRect = pTxtFly->GetFrm( aRect );
+        return aRect.HasArea();
+    }
+
+    return sal_False;
+}
+
+/*************************************************************************
+ *                class SwDropSave
+ *************************************************************************/
+
+class SwDropSave
+{
+    SwTxtPaintInfo* pInf;
+    xub_StrLen nIdx;
+    xub_StrLen nLen;
+    long nX;
+    long nY;
+
+public:
+    SwDropSave( const SwTxtPaintInfo &rInf );
+    ~SwDropSave();
+};
+
+SwDropSave::SwDropSave( const SwTxtPaintInfo &rInf ) :
+        pInf( ((SwTxtPaintInfo*)&rInf) ), nIdx( rInf.GetIdx() ),
+        nLen( rInf.GetLen() ), nX( rInf.X() ), nY( rInf.Y() )
+{
+}
+
+SwDropSave::~SwDropSave()
+{
+    pInf->SetIdx( nIdx );
+    pInf->SetLen( nLen );
+    pInf->X( nX );
+    pInf->Y( nY );
+}
+
+/*************************************************************************
+ *                SwDropPortionPart DTor
+ *************************************************************************/
+
+SwDropPortionPart::~SwDropPortionPart()
+{
+    if ( pFollow )
+        delete pFollow;
+    delete pFnt;
+}
 
 /*************************************************************************
  *                SwDropPortion CTor, DTor
  *************************************************************************/
 
-SwDropPortion::SwDropPortion( SwFont *pF, const MSHORT nLineCnt,
-                                          const KSHORT nDropHeight,
-                                          const KSHORT nDropDescent,
-                                          const KSHORT nDistance )
-  : pFnt( pF ),
+SwDropPortion::SwDropPortion( const MSHORT nLineCnt,
+                              const KSHORT nDropHeight,
+                              const KSHORT nDropDescent,
+                              const KSHORT nDistance )
+  : pPart( 0 ),
     nLines( nLineCnt ),
     nDropHeight(nDropHeight),
     nDropDescent(nDropDescent),
     nDistance(nDistance),
     nX(0),
-    nY(0),
     nFix(0)
 {
     SetWhichPor( POR_DROP );
 }
 
-
-
 SwDropPortion::~SwDropPortion()
 {
-    delete pFnt;
+    delete pPart;
     if( pBlink )
         pBlink->Delete( this );
 }
@@ -165,6 +247,8 @@ sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos )
 
 /*************************************************************************
  *                    SwTxtNode::GetDropLen()
+ *
+ * nWishLen = 0 indicates that we want a whole word
  *************************************************************************/
 
 MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
@@ -172,12 +256,39 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     xub_StrLen nEnd = GetTxt().Len();
     if( nWishLen && nWishLen < nEnd )
         nEnd = nWishLen;
+
+    if ( ! nWishLen && pBreakIt->xBreak.is() )
+    {
+        // find first word
+        const SwAttrSet& rAttrSet = GetSwAttrSet();
+        const USHORT nTxtScript = pBreakIt->xBreak->getScriptType( GetTxt(),0 );
+        LanguageType eLanguage;
+
+        switch ( nTxtScript )
+        {
+        case i18n::ScriptType::ASIAN :
+            eLanguage = rAttrSet.GetCJKLanguage().GetLanguage();
+            break;
+        case i18n::ScriptType::COMPLEX :
+            eLanguage = rAttrSet.GetCTLLanguage().GetLanguage();
+            break;
+        default :
+            eLanguage = rAttrSet.GetLanguage().GetLanguage();
+            break;
+        }
+
+        Boundary aBound =
+            pBreakIt->xBreak->getWordBoundary( GetTxt(), 0,
+            pBreakIt->GetLocale( eLanguage ), WordType::DICTIONARY_WORD, sal_True );
+
+        nEnd = (xub_StrLen)aBound.endPos;
+    }
+
     xub_StrLen i = 0;
     for( ; i < nEnd; ++i )
     {
         xub_Unicode cChar = GetTxt().GetChar( i );
         if( CH_TAB == cChar || CH_BREAK == cChar ||
-            ( !nWishLen && CH_BLANK == cChar ) ||
             (( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar )
                 && SwTxtSizeInfo::_HasHint( this, i ) ) )
             break;
@@ -191,37 +302,46 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
 
 // Die Breite manipulieren, sonst werden die Buchstaben gestretcht
 
-
-
-void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf /*, const sal_Bool bBack*/ )
-    const
+void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 {
-    if ( rInf.OnWin() )
+    if ( rInf.OnWin() && rInf.GetOpt().IsField() )
+        rInf.DrawBackground( *this );
+
+    ASSERT( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
+
+    const SwDropPortionPart* pCurrPart = GetPart();
+    const xub_StrLen nOldLen = GetLen();
+
+    const SwTwips nBasePosY  = rInf.Y();
+    ((SwTxtPaintInfo&)rInf).Y( nBasePosY + nY );
+    SwDropSave aSave( rInf );
+
+    while ( pCurrPart )
     {
-        if( rInf.GetOpt().IsField() )
-            rInf.DrawBackground( *this );
-//      else if ( bBack )
-//          rInf.DrawRect( *this );
+        ((SwDropPortion*)this)->SetLen( pCurrPart->GetLen() );
+        ((SwTxtPaintInfo&)rInf).SetLen( pCurrPart->GetLen() );
+        SwFontSave aSave( rInf, &pCurrPart->GetFont() );
+
+        SwTxtPortion::Paint( rInf );
+
+        ((SwTxtPaintInfo&)rInf).SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
+        ((SwTxtPaintInfo&)rInf).X( rInf.X() + pCurrPart->GetWidth() );
+        pCurrPart = pCurrPart->GetFollow();
     }
-    ((SwDropPortion*)this)->Width( Width() - nDistance );
-    SwTxtPortion::Paint( rInf );
-    ((SwDropPortion*)this)->Width( Width() + nDistance );
+
+    ((SwTxtPaintInfo&)rInf).Y( nBasePosY );
+    ((SwDropPortion*)this)->SetLen( nOldLen );
 }
 
 /*************************************************************************
  *                   SwDropPortion::Paint()
  *************************************************************************/
 
-
 void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
 {
-    // ganz normale Ausgabe
-    if( !nDropHeight || !pFnt || nLines == 1 )
-    {
-        SwFontSave aTmp( rInf, pFnt );
-        PaintTxt( rInf /*, sal_False */);
+    // ganz normale Ausgabe wird während des normalen Paints erledigt
+    if( ! nDropHeight || ! pPart || nLines == 1 )
         return;
-    }
 
     // Luegenwerte einstellen!
     const KSHORT nOldHeight = Height();
@@ -234,10 +354,13 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
                          - pPara->GetRealHeight() + pPara->Height() );
     // Retusche nachholen.
 
-    ((SwTxtPaintInfo&)rInf).Y( aOutPos.Y() + nDropHeight + nY );
-    ((SwDropPortion*)this)->Height( nDropHeight+nDropDescent );
+    // Set baseline
+    ((SwTxtPaintInfo&)rInf).Y( aOutPos.Y() + nDropHeight );
+
+    // for background
+    ((SwDropPortion*)this)->Height( nDropHeight + nDropDescent );
     ((SwDropPortion*)this)->Width( Width() - nX );
-    ((SwDropPortion*)this)->SetAscent( nDropHeight + nY );
+    ((SwDropPortion*)this)->SetAscent( nDropHeight );
 
     // Clipregion auf uns einstellen!
     // Und zwar immer, und nie mit dem bestehenden ClipRect
@@ -253,16 +376,13 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     aClip.ChgClip( aClipRect );
 
     // Das machen, was man sonst nur macht ...
-    SwFontSave aSave( rInf, pFnt );
-    PaintTxt( rInf /*, sal_True */);
+    PaintTxt( rInf );
 
     // Alte Werte sichern
     ((SwDropPortion*)this)->Height( nOldHeight );
     ((SwDropPortion*)this)->Width( nOldWidth );
     ((SwDropPortion*)this)->SetAscent( nOldAscent );
     ((SwTxtPaintInfo&)rInf).Y( nOldPosY );
-    ((SwTxtPaintInfo&)rInf).X( nOldPosX );
-
 }
 
 /*************************************************************************
@@ -273,8 +393,13 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
 void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     // ganz normale Ausgabe wird hier erledigt.
-    if( !nDropHeight || !pFnt )
-        PaintTxt( rInf /*, sal_False */);
+    if( ! nDropHeight || ! pPart || 1 == nLines )
+    {
+        if ( rInf.OnWin() && rInf.GetOpt().IsField() )
+            rInf.DrawBackground( *this );
+
+        SwTxtPortion::Paint( rInf );
+    }
 }
 
 /*************************************************************************
@@ -305,8 +430,34 @@ sal_Bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
 
 SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
-    SwFontSave aSave( rInf, pFnt );
-    return SwTxtPortion::GetTxtSize( rInf );
+    USHORT nX = 0;
+    xub_StrLen nIdx = 0;
+
+    const SwDropPortionPart* pCurrPart = GetPart();
+
+    // skip parts
+    while ( pCurrPart && nIdx + pCurrPart->GetLen() < rInf.GetLen() )
+    {
+        nX += pCurrPart->GetWidth();
+        nIdx += pCurrPart->GetLen();
+        pCurrPart = pCurrPart->GetFollow();
+    }
+
+    xub_StrLen nOldIdx = rInf.GetIdx();
+    xub_StrLen nOldLen = rInf.GetLen();
+
+    ((SwTxtSizeInfo&)rInf).SetIdx( nIdx );
+    ((SwTxtSizeInfo&)rInf).SetLen( rInf.GetLen() - nIdx );
+
+    // robust
+    SwFontSave aSave( rInf, pCurrPart ? &pCurrPart->GetFont() : 0 );
+    SwPosSize aPosSize( SwTxtPortion::GetTxtSize( rInf ) );
+    aPosSize.Width( aPosSize.Width() + nX );
+
+    ((SwTxtSizeInfo&)rInf).SetIdx( nOldIdx );
+    ((SwTxtSizeInfo&)rInf).SetLen( nOldLen );
+
+    return aPosSize;
 }
 
 /*************************************************************************
@@ -409,8 +560,7 @@ void SwTxtFormatter::GuessDropHeight( const MSHORT nLines )
  *                SwTxtFormatter::NewDropPortion
  *************************************************************************/
 
-
-SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf ) const
+SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 {
     if( !pDropFmt )
         return 0;
@@ -429,27 +579,73 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf ) const
     if ( !( GetDropHeight() || IsOnceMore() ) )
     {
         if ( GetNext() )
-            ((SwTxtFormatter*)this)->CalcDropHeight( pDropFmt->GetLines() );
+            CalcDropHeight( pDropFmt->GetLines() );
         else
-            ((SwTxtFormatter*)this)->GuessDropHeight( pDropFmt->GetLines() );
+            GuessDropHeight( pDropFmt->GetLines() );
     }
-    SwFont *pTmpFnt = new SwFont( pDropFmt->GetCharFmt()
-                                 ? &pDropFmt->GetCharFmt()->GetAttrSet()
-                                 : &rInf.GetCharAttr(), rInf.GetDoc() );
-    // we do not allow a vertical font for the drop portion
-    pTmpFnt->SetVertical( 0 );
 
-    // the constructor above does not set the right script
-    pTmpFnt->SetActual( rInf.GetFont()->GetActual() );
-
+    // the DropPortion
     if( GetDropHeight() )
-        pDropPor = new SwDropPortion( pTmpFnt, GetDropLines(),
-                                 GetDropHeight(), GetDropDescent(),
-                                 pDropFmt->GetDistance() );
+        pDropPor = new SwDropPortion( GetDropLines(), GetDropHeight(),
+                                      GetDropDescent(), pDropFmt->GetDistance() );
     else
-        pDropPor = new SwDropPortion( pTmpFnt,0,0,0,pDropFmt->GetDistance() );
+        pDropPor = new SwDropPortion( 0,0,0,pDropFmt->GetDistance() );
 
     pDropPor->SetLen( nPorLen );
+
+    // If it was not possible to create a proper drop cap portion
+    // due to avoiding endless loops. We return a drop cap portion
+    // with an empty SwDropCapPart. For these portions the current
+    // font is used.
+    if ( GetDropLines() < 2 )
+    {
+        ((SwTxtFormatter*)this)->SetPaintDrop( sal_True );
+        return pDropPor;
+    }
+
+    // build DropPortionParts:
+    ASSERT( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
+    xub_StrLen nIdx = rInf.GetIdx();
+    xub_StrLen nNextChg = 0;
+    const SwCharFmt* pFmt = pDropFmt->GetCharFmt();
+    SwDropPortionPart* pCurrPart = 0;
+
+    while ( nNextChg  < nPorLen )
+    {
+        // check for attribute changes and if the portion has to split:
+        Seek( nNextChg );
+
+        // the font is deleted in the destructor of the drop portion part
+        SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+        if ( pFmt )
+        {
+            const SwAttrSet& rSet = pFmt->GetAttrSet();
+            pTmpFnt->SetDiffFnt( &rSet, rInf.GetDoc() );
+        }
+
+        // we do not allow a vertical font for the drop portion
+        pTmpFnt->SetVertical( 0 );
+
+        // find next attribute change / script change
+        const xub_StrLen nIdx = nNextChg;
+        xub_StrLen nNextAttr = Min( GetNextAttr(), rInf.GetTxt().Len() );
+        nNextChg = pScriptInfo->NextScriptChg( nIdx );
+        if( nNextChg > nNextAttr )
+            nNextChg = nNextAttr;
+        if ( nNextChg > nPorLen )
+            nNextChg = nPorLen;
+
+        SwDropPortionPart* pPart =
+                new SwDropPortionPart( *pTmpFnt, nNextChg - nIdx );
+
+        if ( ! pCurrPart )
+            pDropPor->SetPart( pPart );
+        else
+            pCurrPart->SetFollow( pPart );
+
+        pCurrPart = pPart;
+    }
+
     ((SwTxtFormatter*)this)->SetPaintDrop( sal_True );
     return pDropPor;
 }
@@ -515,6 +711,8 @@ void SwTxtPainter::PaintDropPortion()
 }
 
 /*************************************************************************
+ *                      clas SwDropCapCache
+ *
  * Da die Berechnung der Fontgroesse der Initialen ein teures Geschaeft ist,
  * wird dies durch einen DropCapCache geschleust.
  *************************************************************************/
@@ -525,7 +723,7 @@ class SwDropCapCache
 {
     long aMagicNo[ DROP_CACHE_SIZE ];
     XubString aTxt[ DROP_CACHE_SIZE ];
-    Size aSize[ DROP_CACHE_SIZE ];
+    USHORT aFactor[ DROP_CACHE_SIZE ];
     KSHORT aWishedHeight[ DROP_CACHE_SIZE ];
     short aDescent[ DROP_CACHE_SIZE ];
     MSHORT nIndex;
@@ -535,7 +733,9 @@ public:
     void CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf );
 };
 
-
+/*************************************************************************
+ *                  SwDropCapCache Ctor / Dtor
+ *************************************************************************/
 
 SwDropCapCache::SwDropCapCache() : nIndex( 0 )
 {
@@ -543,224 +743,353 @@ SwDropCapCache::SwDropCapCache() : nIndex( 0 )
     memset( &aWishedHeight, 0, sizeof(aWishedHeight) );
 }
 
-
-
-void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
-{
-    const void* pFntNo;
-    MSHORT nTmpIdx;
-    SwFont *pFnt = pDrop->pFnt;
-    pFnt->GetMagic( pFntNo, nTmpIdx, pFnt->GetActual() );
-    XubString aStr( rInf.GetTxt(), rInf.GetIdx(), pDrop->GetLen() );
-
-    nTmpIdx = 0;
-    while( nTmpIdx < DROP_CACHE_SIZE &&
-        ( aTxt[ nTmpIdx ] != aStr || aMagicNo[ nTmpIdx ] != long(pFntNo) ||
-          aWishedHeight[ nTmpIdx ] != pDrop->GetDropHeight() ) )
-        ++nTmpIdx;
-    if( nTmpIdx >= DROP_CACHE_SIZE )
-    {
-        ++nIndex;
-        nIndex %= DROP_CACHE_SIZE;
-        nTmpIdx = nIndex;
-
-        aMagicNo[ nTmpIdx ] = long(pFntNo);
-        aTxt[ nTmpIdx ] = aStr;
-        long nWishedHeight = pDrop->GetDropHeight();
-
-        Size aNewSize = Size( 0, nWishedHeight );
-
-        aSize[ nTmpIdx ] = aNewSize;
-
-        long nAscent = 0;
-        long nDescent = 0;
-
-        OutputDevice *pOut = rInf.GetOut();
-
-        xub_StrLen nLen = aStr.Len();
-
-        sal_Bool bGrow = ( nLen != 0 );
-#ifdef DEBUG
-        long nGrow = 0;
-#endif
-        long nMin, nMax = KSHRT_MAX;
-        nMin = aNewSize.Height()/2;
-
-        sal_Bool bWinUsed = sal_False;
-        Font aOldFnt;
-        MapMode aOldMap( MAP_TWIP );
-        OutputDevice *pWin;
-        if( rInf.GetVsh() && rInf.GetVsh()->GetWin() )
-            pWin = rInf.GetVsh()->GetWin();
-        else
-            pWin = GetpApp()->GetDefaultDevice();
-        while( bGrow )
-        {
-            pFnt->SetSize( aNewSize, pFnt->GetActual() );
-            pFnt->ChgPhysFnt( rInf.GetVsh(), pOut );
-            nAscent = pFnt->GetAscent( rInf.GetVsh(), pOut );
-
-            // Wir besorgen uns das alle Buchstaben umfassende Rechteck:
-            Rectangle aRect, aTmp;
-            sal_Bool bTakeRect = sal_False;
-            for ( xub_StrLen i = 0; i < nLen; i++ )
-            {
-                if( pOut->GetGlyphBoundRect( aStr.GetChar(i), aTmp, sal_False )
-                    && !aTmp.IsEmpty() )
-                {
-                    if ( bTakeRect )
-                        aRect.Union( aTmp );
-                    else
-                    {
-                        aRect = aTmp;
-                        bTakeRect = sal_True;
-                    }
-                }
-            }
-            if ( bTakeRect )
-            {
-                // Der tiefste Punkt der Buchstaben
-                nDescent = aRect.Bottom()-nAscent;
-                // Der hoechste Punkt der Buchstaben
-                nAscent = nAscent-aRect.Top();
-            }
-            // Wenn kein Rectangle ermittelt werden konnte, nehmen wir weiterhin
-            // einfach den Ascent mit all den bekannten Folgen (Q,g etc.)
-            else
-            {
-                if ( pWin )
-                {
-                    if ( bWinUsed )
-                        pWin->SetFont( pFnt->GetActualFont() );
-                    else
-                    {
-                        bWinUsed = sal_True;
-                        aOldMap = pWin->GetMapMode( );
-                        pWin->SetMapMode( MapMode( MAP_TWIP ) );
-                        aOldFnt = pWin->GetFont();
-                        pWin->SetFont( pFnt->GetActualFont() );
-                    }
-                    for ( xub_StrLen i = 0; i < nLen; i++ )
-                    {
-                        if( pWin->GetGlyphBoundRect( aStr.GetChar(i), aTmp, sal_False )
-                            && !aTmp.IsEmpty() )
-                        {
-                            if ( bTakeRect )
-                                aRect.Union( aTmp );
-                            else
-                            {
-                                aRect = aTmp;
-                                bTakeRect = sal_True;
-                            }
-                        }
-                    }
-                }
-                if ( bTakeRect )
-                {
-                    FontMetric aWinMet( pWin->GetFontMetric() );
-                    nAscent = (KSHORT) aWinMet.GetAscent();
-                    // Der tiefste Punkt der Buchstaben
-                    nDescent = aRect.Bottom()-nAscent;
-                    // Der hoechste Punkt der Buchstaben
-                    nAscent = nAscent-aRect.Top();
-                }
-                else
-                    nDescent = 0; // nAscent stimmt eh noch.
-            }
-            const long nHght = nAscent + nDescent;
-            if ( nHght )
-            {
-                if ( nHght > nWishedHeight )
-                    nMax = aNewSize.Height();
-                else
-                {
-                    aSize[ nTmpIdx ] = aNewSize;
-                    nMin = aNewSize.Height();
-                }
-                const long nNewHeight = ( aNewSize.Height() * nWishedHeight )
-                                        / nHght;
-                bGrow = ( nNewHeight > nMin ) && ( nNewHeight < nMax );
-#ifdef DEBUG
-                if ( bGrow )
-                    nGrow++;
-#endif
-                aNewSize.Height() = KSHORT( nNewHeight );
-            }
-            else
-                bGrow = sal_False;
-        }
-        if ( bWinUsed )
-        {
-            nDescent += pFnt->GetLeading( rInf.GetVsh(), pWin );
-            pWin->SetMapMode( aOldMap );
-            pWin->SetFont( aOldFnt );
-        }
-        else
-            nDescent += pFnt->GetLeading( rInf.GetVsh(), pOut );
-
-        aDescent[ nTmpIdx ] = -short( nDescent );
-        aWishedHeight[ nTmpIdx ] = KSHORT(nWishedHeight);
-    }
-    pDrop->nY = aDescent[ nTmpIdx ];
-    pFnt->SetSize( aSize[ nTmpIdx ], pFnt->GetActual() );
-}
-
-
-
 void SwDropPortion::DeleteDropCapCache()
 {
     delete pDropCapCache;
 }
 
 /*************************************************************************
- *                virtual Format()
+ *                  SwDropCapCache::CalcFontSize
  *************************************************************************/
 
+void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
+{
+    const void* pFntNo;
+    MSHORT nTmpIdx = 0;
+
+    ASSERT( pDrop->GetPart(),"DropPortion without part during font calculation");
+
+    SwDropPortionPart* pCurrPart = pDrop->GetPart();
+    const sal_Bool bUseCache = ! pCurrPart->GetFollow();
+    xub_StrLen nIdx = rInf.GetIdx();
+    XubString aStr( rInf.GetTxt(), nIdx, pCurrPart->GetLen() );
+
+    long nAscent = 0;
+    long nDescent = 0;
+    long nFactor = -1;
+
+    if ( bUseCache )
+    {
+        SwFont& rFnt = pCurrPart->GetFont();
+        rFnt.ChkMagic( rInf.GetVsh(), rFnt.GetActual() );
+        rFnt.GetMagic( pFntNo, nTmpIdx, rFnt.GetActual() );
+
+        nTmpIdx = 0;
+
+        while( nTmpIdx < DROP_CACHE_SIZE &&
+            ( aTxt[ nTmpIdx ] != aStr || aMagicNo[ nTmpIdx ] != long(pFntNo) ||
+            aWishedHeight[ nTmpIdx ] != pDrop->GetDropHeight() ) )
+            ++nTmpIdx;
+    }
+
+    // we have to calculate a new font scaling factor if
+    // 1. we did not find a scaling factor in the cache or
+    // 2. we are not allowed to use the cache because the drop portion
+    //    consists of more than one part
+    if( nTmpIdx >= DROP_CACHE_SIZE || ! bUseCache )
+    {
+        ++nIndex;
+        nIndex %= DROP_CACHE_SIZE;
+        nTmpIdx = nIndex;
+
+        long nWishedHeight = pDrop->GetDropHeight();
+
+        // find out biggest font size for initial scaling factor
+        long nMaxFontHeight = 0;
+        while ( pCurrPart )
+        {
+            const SwFont& rFnt = pCurrPart->GetFont();
+            const long nCurrHeight = rFnt.GetHeight( rFnt.GetActual() );
+            if ( nCurrHeight > nMaxFontHeight )
+                nMaxFontHeight = nCurrHeight;
+
+            pCurrPart = pCurrPart->GetFollow();
+        }
+
+        nFactor = ( 1000 * nWishedHeight ) / nMaxFontHeight;
+
+        if ( bUseCache )
+        {
+            // save keys for cache
+            aMagicNo[ nTmpIdx ] = long(pFntNo);
+            aTxt[ nTmpIdx ] = aStr;
+            aWishedHeight[ nTmpIdx ] = KSHORT(nWishedHeight);
+            // save initial scaling factor
+            aFactor[ nTmpIdx ] = (USHORT)nFactor;
+        }
+
+        sal_Bool bGrow = ( pDrop->GetLen() != 0 );
+
+        // for growing controll
+        long nMax = KSHRT_MAX;
+        long nMin = nFactor / 2;
+#ifdef DEBUG
+        long nGrow = 0;
+#endif
+
+        sal_Bool bWinUsed = sal_False;
+        Font aOldFnt;
+        MapMode aOldMap( MAP_TWIP );
+        OutputDevice *pOut = rInf.GetOut();
+        OutputDevice *pWin;
+        if( rInf.GetVsh() && rInf.GetVsh()->GetWin() )
+            pWin = rInf.GetVsh()->GetWin();
+        else
+            pWin = GetpApp()->GetDefaultDevice();
+
+        while( bGrow )
+        {
+            // reset pCurrPart to first part
+            pCurrPart = pDrop->GetPart();
+            sal_Bool bFirstGlyphRect = sal_True;
+            sal_Bool bHaveGlyphRect = sal_False;
+            Rectangle aCommonRect, aTmp, aRect;
+
+            while ( pCurrPart )
+            {
+                XubString aTmpStr( rInf.GetTxt(), nIdx, pCurrPart->GetLen() );
+
+                // current font
+                SwFont& rFnt = pCurrPart->GetFont();
+
+                // Get height including proportion
+                const USHORT nCurrHeight =
+                         (USHORT)rFnt.GetHeight( rFnt.GetActual() );
+
+                // Get without proportion
+                const BYTE nOldProp = rFnt.GetPropr();
+                rFnt.SetProportion( 100 );
+                Size aOldSize = Size( 0, rFnt.GetHeight( rFnt.GetActual() ) );
+
+                Size aNewSize( 0, ( nFactor * nCurrHeight ) / 1000 );
+                rFnt.SetSize( aNewSize, rFnt.GetActual() );
+                rFnt.ChgPhysFnt( rInf.GetVsh(), pOut );
+                nAscent = rFnt.GetAscent( rInf.GetVsh(), pOut ) -
+                          rFnt.GetLeading( rInf.GetVsh(), pOut );
+
+                // Wir besorgen uns das alle Buchstaben umfassende Rechteck:
+                bHaveGlyphRect = sal_False;
+                for ( xub_StrLen i = 0; i < pCurrPart->GetLen(); i++ )
+                {
+                    if( pOut->GetGlyphBoundRect( aTmpStr.GetChar(i), aTmp, sal_False )
+                        && !aTmp.IsEmpty() )
+                    {
+                        if ( bHaveGlyphRect )
+                            aRect.Union( aTmp );
+                        else
+                        {
+                            aRect = aTmp;
+                            bHaveGlyphRect = sal_True;
+                        }
+                    }
+                }
+
+                if ( ! bHaveGlyphRect )
+                {
+                    // getting glyph boundaries failed for some reason,
+                    // we take the window for calculating sizes
+                    if ( pWin )
+                    {
+                        if ( ! bWinUsed )
+                        {
+                            bWinUsed = sal_True;
+                            aOldMap = pWin->GetMapMode( );
+                            pWin->SetMapMode( MapMode( MAP_TWIP ) );
+                            aOldFnt = pWin->GetFont();
+                        }
+                        pWin->SetFont( rFnt.GetActualFont() );
+
+                        for ( xub_StrLen i = 0; i < pCurrPart->GetLen(); i++ )
+                        {
+                            if( pWin->GetGlyphBoundRect( aTmpStr.GetChar(i), aTmp, sal_False )
+                                && !aTmp.IsEmpty() )
+                            {
+                                if ( bHaveGlyphRect )
+                                    aRect.Union( aTmp );
+                                else
+                                {
+                                    aRect = aTmp;
+                                    bHaveGlyphRect = sal_True;
+                                }
+                            }
+                        }
+                    }
+                    if ( bHaveGlyphRect )
+                    {
+                        FontMetric aWinMet( pWin->GetFontMetric() );
+                        nAscent = (KSHORT) aWinMet.GetAscent();
+                    }
+                    else
+                    // We do not have a window or our window could not
+                    // give us glyph boundaries.
+                        aRect = Rectangle( Point( 0, 0 ), Size( 0, nAscent ) );
+                }
+
+                // Now we (hopefully) have a bounding rectangle for the
+                // glyphs of the current portion and the ascent of the current
+                // font
+
+                // reset font size and proportion
+                rFnt.SetSize( aOldSize, rFnt.GetActual() );
+                rFnt.SetProportion( nOldProp );
+
+                // shift aRect to have baseline 0
+                aRect.Top() -= nAscent;
+                aRect.Bottom() -= nAscent;
+
+                if ( bFirstGlyphRect )
+                {
+                    aCommonRect = aRect;
+                    bFirstGlyphRect = sal_False;
+                }
+                else
+                    aCommonRect.Union( aRect );
+
+                nIdx += pCurrPart->GetLen();
+                pCurrPart = pCurrPart->GetFollow();
+            }
+
+            // now we have a union ( aCommonRect ) of all glyphs with
+            // respect to a common baseline : 0
+
+            // get descent and ascent from union
+            nDescent = aCommonRect.Bottom();
+            nAscent = aCommonRect.Top();
+            if ( nAscent < 0 )
+                nAscent = -nAscent;
+
+            const long nHght = nAscent + nDescent;
+            if ( nHght )
+            {
+                if ( nHght > nWishedHeight )
+                    nMax = nFactor;
+                else
+                {
+                    if ( bUseCache )
+                        aFactor[ nTmpIdx ] = (USHORT)nFactor;
+                    nMin = nFactor;
+                }
+
+                nFactor = ( nFactor * nWishedHeight ) / nHght;
+                bGrow = ( nFactor > nMin ) && ( nFactor < nMax );
+#ifdef DEBUG
+                if ( bGrow )
+                    nGrow++;
+#endif
+                nIdx = rInf.GetIdx();
+            }
+            else
+                bGrow = sal_False;
+        }
+
+        if ( bWinUsed )
+        {
+            // reset window if it has been used
+            pWin->SetMapMode( aOldMap );
+            pWin->SetFont( aOldFnt );
+        }
+
+        if ( bUseCache )
+            aDescent[ nTmpIdx ] = -short( nDescent );
+    }
+
+    pCurrPart = pDrop->GetPart();
+
+    // did made any new calculations or did we use the cache?
+    if ( -1 == nFactor )
+    {
+        nFactor = aFactor[ nTmpIdx ];
+        nDescent = aDescent[ nTmpIdx ];
+    }
+    else
+        nDescent = -nDescent;
+
+    while ( pCurrPart )
+    {
+        // scale current font
+        SwFont& rFnt = pCurrPart->GetFont();
+        Size aNewSize( 0, ( nFactor * rFnt.GetHeight( rFnt.GetActual() ) ) / 1000 );
+
+        const BYTE nOldProp = rFnt.GetPropr();
+        rFnt.SetProportion( 100 );
+        rFnt.SetSize( aNewSize, rFnt.GetActual() );
+        rFnt.SetProportion( nOldProp );
+
+        pCurrPart = pCurrPart->GetFollow();
+    }
+    pDrop->SetY( (short)nDescent );
+}
+
+/*************************************************************************
+ *                virtual Format()
+ *************************************************************************/
 
 sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = sal_False;
     Fix( (USHORT)rInf.X() );
-    if( nDropHeight && pFnt && nLines!=1 )
+    if( nDropHeight && pPart && nLines!=1 )
     {
-        pFnt->ChkMagic( rInf.GetVsh(), pFnt->GetActual() );
         if( !pDropCapCache )
             pDropCapCache = new SwDropCapCache();
+
+        // adjust font sizes to fit into the rectangle
         pDropCapCache->CalcFontSize( this, rInf );
+
+        const long nOldX = rInf.X();
         {
-            SwFontSave aSave( rInf, pFnt );
-            bFull = FormatTxt( rInf );
-            if( !bFull )
+            SwDropSave aSave( rInf );
+            SwDropPortionPart* pCurrPart = pPart;
+
+            while ( pCurrPart )
             {
-                // 7631, 7633: bei Ueberlappungen mit Flys ist Schluss.
-                const SwTxtFly *pTxtFly = rInf.GetTxtFly();
-                if( pTxtFly && pTxtFly->IsOn() )
+                rInf.SetLen( pCurrPart->GetLen() );
+                SwFont& rFnt = pCurrPart->GetFont();
                 {
-                    SwRect aRect( rInf.GetTxtFrm()->Frm().Pos(), SvLSize() );
-                    aRect.Height( nDropHeight );
-                    aRect.Pos() += rInf.GetTxtFrm()->Prt().Pos();
-                    aRect.Pos().X() += rInf.X();
-                    aRect.Pos().Y() = rInf.Y();
-                    aRect = pTxtFly->GetFrm( aRect );
-                    bFull = aRect.HasArea();
+                    SwFontSave aSave( rInf, &rFnt );
+                    bFull = FormatTxt( rInf );
+
+                    if ( bFull )
+                        break;
                 }
+
+                SwTwips nTmpWidth =
+                        ( InSpaceGrp() && rInf.GetSpaceAdd() ) ?
+                        Width() + CalcSpacing( rInf.GetSpaceAdd(), rInf ) :
+                        Width();
+
+                // set values
+                pCurrPart->SetWidth( (USHORT)nTmpWidth );
+
+                // Move
+                rInf.SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
+                rInf.X( rInf.X() + nTmpWidth );
+                pCurrPart = pCurrPart->GetFollow();
             }
+
+            Width( (USHORT)(rInf.X() - nOldX) );
         }
+
+        // reset my length
+        SetLen( rInf.GetLen() );
+
+        // 7631, 7633: bei Ueberlappungen mit Flys ist Schluss.
+        if( ! bFull )
+            bFull = lcl_IsDropFlyInter( rInf, Width(), nDropHeight );
+
         if( bFull )
         {
             // Durch FormatTxt kann nHeight auf 0 gesetzt worden sein
             if ( !Height() )
                 Height( rInf.GetTxtHeight() );
 
+            // Jetzt noch einmal der ganze Spass
+            nDropHeight = nLines = 0;
+            delete pPart;
+            pPart = NULL;
+
+            // meanwhile use normal formatting
             bFull = SwTxtPortion::Format( rInf );
-            if ( !bFull )
-            {
-                // Jetzt noch einmal der ganze Spass
-                nDropHeight = nLines = 0;
-                delete pFnt;
-                pFnt = NULL;
-            }
-//          bFull = FormatTxt( rInf );
         }
         else
             rInf.SetDropInit( sal_True );
@@ -770,25 +1099,19 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
     }
     else
         bFull = SwTxtPortion::Format( rInf );
-//      bFull = FormatTxt( rInf );
 
     if( bFull )
         nDistance = 0;
     else
     {
         const KSHORT nWant = Width() + GetDistance();
-        const KSHORT nRest = rInf.Width() - rInf.X();
-        if( nWant > nRest )
-        //  Robust: Kann die gewuenschte Distance nicht eingehalten werden,
-        //          gibt es gar keine!
-        //  nDistance = nWant - nRest;
+        const KSHORT nRest = (USHORT)(rInf.Width() - rInf.X());
+        if( ( nWant > nRest ) ||
+            lcl_IsDropFlyInter( rInf, Width() + GetDistance(), nDropHeight ) )
             nDistance = 0;
 
         Width( Width() + nDistance );
     }
     return bFull;
 }
-
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ class SwTxtFormatter : public SwTxtPainter
     SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
     SwTabPortion *NewTabPortion( SwTxtFormatInfo &rInf ) const;
     SwNumberPortion *NewNumberPortion( SwTxtFormatInfo &rInf ) const;
-    SwDropPortion *NewDropPortion( SwTxtFormatInfo &rInf ) const;
+    SwDropPortion *NewDropPortion( SwTxtFormatInfo &rInf );
     SwNumberPortion *NewFtnNumPortion( SwTxtFormatInfo &rInf ) const;
     SwErgoSumPortion *NewErgoSumPortion( SwTxtFormatInfo &rInf ) const;
     SwExpandPortion *NewFldPortion( SwTxtFormatInfo &rInf,
@@ -105,7 +105,7 @@ class SwTxtFormatter : public SwTxtPainter
     SwFtnPortion *NewFtnPortion( SwTxtFormatInfo &rInf, SwTxtAttr *pHt );
     SwFlyCntPortion *NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                        SwTxtAttr *pHt ) const;
-    SwLinePortion *WhichFirstPortion( SwTxtFormatInfo &rInf ) const;
+    SwLinePortion *WhichFirstPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion *WhichTxtPor( SwTxtFormatInfo &rInf ) const;
 
     // Das Herzstueck der Formatierung

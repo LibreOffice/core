@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,6 +583,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // 1. Underlined portions due to special underline feature
         // 2. Right Tab
         // 3. Multiportions
+        // 4. DropCaps
         else if ( ( ! rInf.GetPaintOfst() || nUnderLineStart < rInf.GetPaintOfst() ) &&
                   // 1. Underlined portions
                   nUnderLineStart &&
@@ -599,8 +600,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         else if (  ! rInf.GetPaintOfst() &&
                    // 2. Right Tab
                    ( ( pPor->InTabGrp() && !pPor->IsTabLeftPortion() ) ||
-                   // 3. Multi Portion
-                     ( pPor->IsMultiPortion() &&
+                   // 3. Multi Portion and 4. Drop Caps
+                     ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() )&&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
                    )
@@ -894,7 +895,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
  *                 SwTxtFormatter::WhichFirstPortion()
  *************************************************************************/
 
-SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf) const
+SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 {
     SwLinePortion *pPor = 0;
 

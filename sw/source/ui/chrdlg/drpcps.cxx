@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
+ *  last change: $Author: fme $ $Date: 2001-10-19 08:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         if (!aWholeWordCB.IsChecked())
             nVal = (USHORT)aDropCapsField.GetValue();
         else
-            nVal = (USHORT)aDropCapsField.GetMax();
+            nVal = 0;
 
         if (bFormat || !rSh.GetDropTxt(1).Len())
             sPreview = GetDefaultString(nVal);
@@ -512,14 +512,6 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         {
             sPreview = sEdit.Copy(0, sPreview.Len());
             bSetText = FALSE;
-        }
-
-        if (aWholeWordCB.IsChecked())   // Nur erstes Wort anzeigen
-        {
-            USHORT nPos = sPreview.Search(' ');
-
-            if (nPos != STRING_NOTFOUND)
-                sPreview.Erase(nPos);
         }
 
         if (bSetText)
@@ -616,6 +608,9 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
 /*--------------------------------------------------
   $Log: not supported by cvs2svn $
+  Revision 1.2  2001/05/30 16:28:21  fme
+  Fix #86988#: Redesign of dialogs
+
   Revision 1.1.1.1  2000/09/18 17:14:32  hr
   initial import
 

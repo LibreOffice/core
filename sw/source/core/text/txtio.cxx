@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 15:24:45 $
+ *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,11 +1138,11 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
     CONSTCHAR( pTxt, " {DROP:" );
     rOs << pTxt;
     SwTxtPortion::operator<<( rOs );
-    if( pFnt && nDropHeight )
+    if( pPart && nDropHeight )
     {
         rOs << " H:" << nDropHeight;
         rOs << " L:" << nLines;
-        rOs <<" Fnt:" << pFnt->GetHeight();
+        rOs <<" Fnt:" << pPart->GetFont().GetHeight();
         if( nX || nY )
             rOs << " [" << nX << '/' << nY << ']';
     }
