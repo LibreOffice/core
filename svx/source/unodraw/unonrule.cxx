@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:33 $
+ *  last change: $Author: cl $ $Date: 2001-06-29 12:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,12 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 if(aStr.getLength())
                 {
                     aFmt.SetBulletChar(aStr[0]);
-                    continue;
                 }
+                else
+                {
+                    aFmt.SetBulletChar(0);
+                }
+                continue;
             }
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_ADJUST)))
