@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 11:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef DBAUI_DBTREEMODEL_HXX
 #include "dbtreemodel.hxx"
 #endif
+#include "dbaccess_helpid.hrc"
 
 // .........................................................................
 namespace dbaui
@@ -89,6 +90,7 @@ DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
     m_pTreeListBox->EnableInplaceEditing( sal_False );
+    m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
     m_pTreeListBox->Show();
 }
 
