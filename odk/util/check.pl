@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-07 17:31:15 $
+#   last change: $Author: rt $ $Date: 2005-03-29 12:19:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,8 @@ if (-d "$StartDir") {
              "notsupported.html","sdk_styles.css","tools.html",
              "images/nada.gif","images/arrow-1.gif",
              "images/arrow-2.gif","images/arrow-3.gif",
-             "images/bg_table.gif","images/bluball.gif",
+             "images/bg_table.gif","images/bg_table2.gif",
+             "images/bg_table3.gif","images/bluball.gif",
              "images/nada.gif","images/nav_down.png",
              "images/nav_home.png","images/nav_left.png",
              "images/nav_right.png","images/nav_up.png",
@@ -400,7 +401,7 @@ if (-d "$StartDir") {
                "OLE/delphi",
                "OLE/delphi/InsertTables",
                "OLE/activex",
-               "CLI/C#/Spreadsheet",
+               "CLI/CSharp/Spreadsheet",
                "CLI/VB.NET/WriterDemo",
                "cpp",
                "cpp/counter",
