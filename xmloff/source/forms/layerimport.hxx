@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:17:04 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ namespace xmloff
     //= ControlReference
     //=====================================================================
     /// a structure containing a property set (the referred control) and a string (the list of referring controls)
-    struct ControlReference
+/*  struct ControlReference
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     xReferredControl;
@@ -118,6 +118,7 @@ namespace xmloff
         {
         }
     };
+*/
 
     //=====================================================================
     //= OFormLayerXMLImport_Impl
@@ -148,8 +149,14 @@ namespace xmloff
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
         MapDrawPage2MapIterator m_aCurrentPageIds;      // ifs of the controls on the current page
 
-        DECLARE_STL_VECTOR( ControlReference, ControlReferenceArray );
-        ControlReferenceArray   m_aControlReferences;   // control reference descriptions for current page
+        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::rtl::OUString >
+                                ModelStringPair;
+        ::std::vector< ModelStringPair >
+                                m_aControlReferences;   // control reference descriptions for current page
+        ::std::vector< ModelStringPair >
+                                m_aCellValueBindings;   // information about controls bound to spreadsheet cells
+        ::std::vector< ModelStringPair >
+                                m_aCellRangeListSources;// information about controls bound to spreadsheet cell range list sources
 
     public:
         // IControlIdMap
@@ -167,12 +174,21 @@ namespace xmloff
                                             getServiceFactory();
         virtual SvXMLImport&                getGlobalContext();
         const SvXMLStyleContext*            getStyleElement(const ::rtl::OUString& _rStyleName) const;
-        void applyControlNumberStyle(
+        virtual void                        enterEventContext();
+        virtual void                        leaveEventContext();
+        void                                applyControlNumberStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rControlNumerStyleName
         );
-        virtual void                        enterEventContext();
-        virtual void                        leaveEventContext();
+        virtual void                        registerCellValueBinding(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rCellAddress
+        );
+
+        virtual void                        registerCellRangeListSource(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rCellRangeAddress
+        );
 
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
@@ -230,6 +246,14 @@ namespace xmloff
         /** announces the auto-style context to the form importer
         */
         void setAutoStyleContext(SvXMLStylesContext* _pNewContext);
+
+        /** to be called when the document has been completely imported
+
+            <p>For some documents (currently: only some spreadsheet documents) it's necessary
+            do to a post processing, since not all information from the file can be processed
+            if the document is not completed, yet.</p>
+        */
+        void documentDone( );
     };
 
 //.........................................................................
@@ -241,6 +265,18 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10.160.1  2003/10/01 09:55:23  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.10.156.1  2003/09/25 14:28:41  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.10.152.1  2003/09/17 12:26:56  fs
+ *  #18999# #19367# persistence for cell value and cell range bindings
+ *
+ *  Revision 1.10  2002/10/25 13:17:04  fs
+ *  #104402# importing grid column styles now
+ *
  *  Revision 1.9  2001/05/28 14:59:18  fs
  *  #86712# added control number style related functionality
  *
