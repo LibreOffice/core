@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:51:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,9 @@ void SwEditShell::OptimizeTblBoxWidthMinMax()
 
         // ueber alle Spalten aller Zeilen und die Min/Max Breiten einsammeln
         SwTableLines& rTblLns = pTblNd->GetTable().GetTabLines();
-        for( USHORT n = rTblLns.Count(); n; )
+        USHORT n;
+
+        for( n = rTblLns.Count(); n; )
         {
             SwTableBoxes& rTblBxs = rTblLns[ --n ]->GetTabBoxes();
             for( USHORT i = 0; i < rTblBxs.Count(); ++i )
