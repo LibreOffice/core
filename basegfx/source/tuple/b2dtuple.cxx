@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:18:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,21 @@
 
 namespace { struct EmptyTuple : public rtl::Static<basegfx::B2DTuple, EmptyTuple> {}; }
 
+#ifndef _BGFX_TUPLE_B2ITUPLE_HXX
+#include <basegfx/tuple/b2ituple.hxx>
+#endif
+
 namespace basegfx
 {
     const B2DTuple& B2DTuple::getEmptyTuple()
     {
         return EmptyTuple::get();
     }
+
+    B2DTuple::B2DTuple(const B2ITuple& rTup)
+    :   mfX( rTup.getX() ),
+        mfY( rTup.getY() )
+    {}
 
     bool B2DTuple::equalZero() const
     {
@@ -131,6 +140,11 @@ namespace basegfx
                 mfY = fCompareValue;
             }
         }
+    }
+
+    B2ITuple fround(const B2DTuple& rTup)
+    {
+        return B2ITuple(fround(rTup.getX()), fround(rTup.getY()));
     }
 } // end of namespace basegfx
 
