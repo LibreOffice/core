@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:52:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,11 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
     Window::ImplInit( pParent, nStyle, NULL );
 
     ImplInitSettings();
+
+    // if the tabpage is drawn (ie filled) by a native widget, make sure all contols will have transparent background
+    // otherwise they will paint with a wrong background
+    if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
+        EnableChildTransparentMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -182,7 +187,24 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void TabPage::Paint( const Rectangle& rRect )
 {
-    Window::Paint( rRect );
+    // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
+    if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
+    {
+        const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+
+        ControlState nState = CTRL_STATE_ENABLED;
+        int part = PART_ENTIRE_CONTROL;
+        if ( !IsEnabled() )
+            nState &= ~CTRL_STATE_ENABLED;
+        if ( HasFocus() )
+            nState |= CTRL_STATE_FOCUSED;
+        Point aPoint;
+        // pass the whole window region to NWF as the tab body might be a gradient or bitmap
+        // that has to be scaled properly, clipping makes sure that we do not paint too much
+        Region aCtrlRegion( Rectangle( aPoint, GetOutputSizePixel() ) );
+        DrawNativeControl( CTRL_TAB_BODY, part, aCtrlRegion, nState,
+                aControlValue, rtl::OUString() );
+    }
 }
 
 // -----------------------------------------------------------------------
