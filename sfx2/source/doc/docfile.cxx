@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 09:24:10 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 14:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1608,7 +1608,7 @@ void SfxMedium::GetMedium_Impl()
                 Done_Impl( ERRCODE_IO_NOTEXISTS );
             }
             else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED && bIsWritable && bAllowReadOnlyMode ||
-                    pImp->xLockBytes->GetError() == ERRCODE_IO_NOTSUPPORTED )
+                    pImp->xLockBytes->GetError() == ERRCODE_IO_NOTSUPPORTED && bIsWritable )
             {
                 if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED )
                 {
