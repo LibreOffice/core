@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 07:09:10 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 18:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,12 +843,33 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
             }
             else
             {
+/*
                 // alle Pams verschieben
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
                         MoveAndJoin( *pTmp, aPos );
+                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
+*/
+                // copy all Pams and then delete all
+                SwPaM* pTmp = (SwPaM*)&rPam;
+                BOOL bOldFlag = bCopyIsMove, bOldUndo = bUndo;
+                bCopyIsMove = TRUE;
+                bUndo = FALSE;
+                do {
+                    if( pTmp->HasMark() &&
+                        *pTmp->GetPoint() != *pTmp->GetMark() )
+                        Copy( *pTmp, aPos );
+                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
+                bCopyIsMove = bOldFlag;
+                bUndo = bOldUndo;
+
+                pTmp = (SwPaM*)&rPam;
+                do {
+                    if( pTmp->HasMark() &&
+                        *pTmp->GetPoint() != *pTmp->GetMark() )
+                        DeleteAndJoin( *pTmp );
                 } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
             }
         } while( sal_False );
