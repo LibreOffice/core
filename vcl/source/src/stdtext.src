@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-05 20:10:01 $
+ *  last change: $Author: rt $ $Date: 2002-08-15 20:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,10 @@ String SV_ACCESSERROR_WRONG_VERSION
     Text[ swedish ] = "Wrong version";
     Text[ polish ] = "Wrong version";
     Text[ portuguese_brazilian ] = "Wrong version";
-    Text[ japanese ] = "Wrong version";
+    Text[ japanese ] = "バージョンが正しくありません";
     Text[ korean ] = "Wrong version";
-    Text[ chinese_simplified ] = "Wrong version";
-    Text[ chinese_traditional ] = "Wrong version";
+    Text[ chinese_simplified ] = "错误的版本";
+    Text[ chinese_traditional ] = "錯誤的版本";
     Text[ turkish ] = "Wrong version";
     Text[ arabic ] = "Wrong version";
     Text[ catalan ] = "Wrong version";
@@ -164,10 +164,10 @@ String SV_ACCESSERROR_WRONG_VERSION_MSG
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION には、Java Access Bridge 1.03 以降のバージョンが必要です。最新版の Java Access Bridge をインストールしてください。アクセシビリティの支援なしで %PRODUCTNAME %PRODUCTVERSION を起動させるには、［無視する］ボタンをクリックします。または［キャンセル］ボタンをクリックします。";
     Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 需要一個[Java Access Bridge 1.03]或之上的版本。請安裝一個最新的[Java Access Bridge]版本。按一下「忽略」，省去協助工具支援，而直接啓動安裝 %PRODUCTNAME %PRODUCTVERSION 。或者按下「取消」，中斷安裝過程。";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
@@ -191,10 +191,10 @@ String SV_ACCESSERROR_MISSING_BRIDGE
     Text[ swedish ] = "No Java Access Bridge";
     Text[ polish ] = "No Java Access Bridge";
     Text[ portuguese_brazilian ] = "No Java Access Bridge";
-    Text[ japanese ] = "No Java Access Bridge";
+    Text[ japanese ] = "Java Access Bridge はありません";
     Text[ korean ] = "No Java Access Bridge";
     Text[ chinese_simplified ] = "No Java Access Bridge";
-    Text[ chinese_traditional ] = "No Java Access Bridge";
+    Text[ chinese_traditional ] = "沒有[Java Access Bridge]";
     Text[ turkish ] = "No Java Access Bridge";
     Text[ arabic ] = "No Java Access Bridge";
     Text[ catalan ] = "No Java Access Bridge";
@@ -218,10 +218,10 @@ String SV_ACCESSERROR_MISSING_BRIDGE_MSG
     Text[ swedish ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ polish ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese_brazilian ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ japanese ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ japanese ] = "お使いのシステムに Java Access Bridge は見つかりませんでした。Java Access Bridge をインストールしてください。アクセシビリティの支援なしで %PRODUCTNAME %PRODUCTVERSION を起動させるには、［無視する］ボタンをクリックします。または［キャンセル］ボタンをクリックします。";
     Text[ korean ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ chinese_simplified ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ chinese_traditional ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ chinese_traditional ] = "在系統内沒有找到[Java Access Bridge]。請安裝一個[Java Access Bridge]。按一下「忽略」，省去協助工具支援，而直接啓動安裝 %PRODUCTNAME %PRODUCTVERSION 。或者按下「取消」，中斷安裝過程。";
     Text[ turkish ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ arabic ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ catalan ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
@@ -245,10 +245,10 @@ String SV_ACCESSERROR_FAULTY_JAVA
     Text[ swedish ] = "Faulty Java installation";
     Text[ polish ] = "Faulty Java installation";
     Text[ portuguese_brazilian ] = "Faulty Java installation";
-    Text[ japanese ] = "Faulty Java installation";
+    Text[ japanese ] = "Java は正常にインストールされていません";
     Text[ korean ] = "Faulty Java installation";
-    Text[ chinese_simplified ] = "Faulty Java installation";
-    Text[ chinese_traditional ] = "Faulty Java installation";
+    Text[ chinese_simplified ] = "错误的 Java 安装";
+    Text[ chinese_traditional ] = "錯誤的 Java 安裝";
     Text[ turkish ] = "Faulty Java installation";
     Text[ arabic ] = "Faulty Java installation";
     Text[ catalan ] = "Faulty Java installation";
@@ -272,10 +272,10 @@ String SV_ACCESSERROR_FAULTY_JAVA_MSG
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ japanese ] = "システムに正常にインストールされなかった Java が %PRODUCTNAME %PRODUCTVERSION で検出されました。Java をもう一度インストールしなおすか、セットアップで修復を行うかしてください。アクセシビリティの支援なしで %PRODUCTNAME %PRODUCTVERSION を起動させるには、［無視する］ボタンをクリックします。または［キャンセル］ボタンをクリックします。";
     Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 發現在系統内有一個錯誤的 Java 版本。請重新安裝 Java 或啓動修復安裝程式。按一下「忽略」，省去協助工具支援，而直接啓動安裝 %PRODUCTNAME %PRODUCTVERSION 。或者按下「取消」，中斷安裝過程。";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ catalan ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
@@ -299,10 +299,10 @@ String SV_ACCESSERROR_MISSING_JAVA
     Text[ swedish ] = "No Java Installation";
     Text[ polish ] = "No Java Installation";
     Text[ portuguese_brazilian ] = "No Java Installation";
-    Text[ japanese ] = "No Java Installation";
+    Text[ japanese ] = "Java はインストールされていません";
     Text[ korean ] = "No Java Installation";
-    Text[ chinese_simplified ] = "No Java Installation";
-    Text[ chinese_traditional ] = "No Java Installation";
+    Text[ chinese_simplified ] = "没有安装 Java";
+    Text[ chinese_traditional ] = "沒有安裝好 Java";
     Text[ turkish ] = "No Java Installation";
     Text[ arabic ] = "No Java Installation";
     Text[ catalan ] = "No Java Installation";
@@ -326,10 +326,10 @@ String SV_ACCESSERROR_MISSING_JAVA_MSG
     Text[ swedish ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ polish ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese_brazilian ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ japanese ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ japanese ] = "お使いのシステムに Java はインストールされていません。Java のバージョンをインストールしてください。アクセシビリティの支援なしで %PRODUCTNAME %PRODUCTVERSION を起動させるには、［無視する］ボタンをクリックしてください。または［キャンセル］ボタンをクリックしてください。";
     Text[ korean ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ chinese_simplified ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
-    Text[ chinese_traditional ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
+    Text[ chinese_simplified ] = "在系统内没有找到一个 Java 版本。请安装一个 Java 版本。点击“忽略”，省去辅助功能支持，而直接开始安装 %PRODUCTNAME %PRODUCTVERSION 。或者点击“取消”，中断安装过程。";
+    Text[ chinese_traditional ] = "在系統内沒有找到一個 Java 版本。 請安裝一個 Java 版本。按一下「忽略」，省去協助工具支援，而直接啓動安裝 %PRODUCTNAME %PRODUCTVERSION 。或者按下「取消」，中斷安裝過程。";
     Text[ turkish ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ arabic ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ catalan ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
