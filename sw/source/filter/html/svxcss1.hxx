@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,8 @@ class SvxCSS1Parser : public CSS1Parser
     SvxCSS1Map aPages;
     SvxCSS1Map aTags;
 
+    String sBaseURL;
+
     SfxItemSet *pSheetItemSet;  // der Item-Set fuer Style-Sheets
     SfxItemSet *pItemSet;       // der aktuelle Item-Set
     SvxCSS1MapEntry *pSearchEntry;
@@ -333,6 +335,7 @@ public:
 
 
     SvxCSS1Parser( SfxItemPool& rPool,
+                    const String& rBaseURL,
                    sal_uInt16 nMinFixLineSp,
                    sal_uInt16 *pWhichIds=0, sal_uInt16 nWhichIds=0 );
     virtual ~SvxCSS1Parser();
@@ -411,6 +414,9 @@ public:
     sal_Bool IsSetWesternProps() const { return (nScriptFlags & CSS1_SCRIPT_WESTERN) != 0; }
     sal_Bool IsSetCJKProps() const { return (nScriptFlags & CSS1_SCRIPT_CJK) != 0; }
     sal_Bool IsSetCTLProps() const { return (nScriptFlags & CSS1_SCRIPT_CTL) != 0; }
+
+    const String& GetBaseURL() const { return sBaseURL;}
+
 };
 
 inline void SvxCSS1Parser::InsertId( const String& rId,

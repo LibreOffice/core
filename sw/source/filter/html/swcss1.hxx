@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcss1.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ protected:
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 public:
-    SwCSS1Parser( SwDoc *pDoc, ULONG aFHeight[7], BOOL bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, ULONG aFHeight[7], const String& rBaseURL, BOOL bNewDoc );
     virtual ~SwCSS1Parser();
 
     virtual BOOL ParseStyleSheet( const String& rIn );
