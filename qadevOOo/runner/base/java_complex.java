@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:20 $
+ *  last change:$Date: 2003-05-27 12:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,25 @@
 
 package base;
 
-import com.sun.star.lang.XMultiServiceFactory;
 import java.lang.reflect.Constructor;
+import java.io.InputStream;
+import java.io.File;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import java.util.Enumeration;
 import complexlib.ComplexTestCase;
 import lib.DynamicClassLoader;
 import share.DescGetter;
 import helper.ComplexDescGetter;
-import helper.OfficeProvider;
+import helper.AppProvider;
+import helper.CfgParser;
 import share.DescEntry;
 import share.LogWriter;
 import stats.Summarizer;
 import base.TestBase;
+import lib.Status;
+import lib.TestParameters;
 
 /**
  * Test base for executing a java complex test.
@@ -84,45 +92,101 @@ public class java_complex implements TestBase{
      * @param param The test parameters.
      * @return True, if the test was executed.
      */
-    public boolean executeTest(lib.TestParameters param) {
-        // get the test job without leading "-o "
-        String testJob = ((String)param.get("TestJob")).substring(3).trim();
-        ComplexTestCase testClass = null;
+    public boolean executeTest(TestParameters param) {
+        // is there an ini file for the complex tests defined?
+        String complexIniFileName = ((String)param.get("ComplexIni"));
+        CfgParser ini = new CfgParser(complexIniFileName);
+        ini.getIniParameters(param);
+
+        // get the test job
+        String testJob = ((String)param.get("TestJob"));
+
+        DescGetter descGetter = new ComplexDescGetter();
+        // get the test jobs
+        DescEntry[] entries = descGetter.getDescriptionFor(testJob,null,true);
+        if (entries == null) return false;
+
         DynamicClassLoader dcl = new DynamicClassLoader();
-        // create an instance
-        try {
-            testClass = (ComplexTestCase)dcl.getInstance(testJob);
-        }
-        catch(java.lang.Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        DescGetter descGetter = new ComplexDescGetter(testClass);
-        DescEntry dEntry = descGetter.getDescriptionFor(testJob,null,true)[0];
+        ComplexTestCase testClass = null;
+        boolean returnVal = true;
 
-        LogWriter log = (LogWriter)dcl.getInstance(
-                                            (String)param.get("LogWriter"));
-        log.initialize(dEntry,true);
-        dEntry.Logger = log;
+        param.put("TimeOut", new Integer(0));
 
-        if (!param.getBool("NoOffice")) {
-            OfficeProvider office = new OfficeProvider();
-            XMultiServiceFactory msf = (XMultiServiceFactory)
-                                            office.getManager(param);
-            if (msf == null) return false;
-            param.put("ServiceFactory",msf);
-        }
+        for (int i=0; i<entries.length; i++) {
 
-        testClass.executeMethods(dEntry, param);
+            String iniName = entries[i].longName;
+            iniName = iniName.replace('.', '/');
+            getParamsForComplexTest(iniName+".props", param);
 
-        Summarizer sum = new Summarizer();
-        sum.summarizeUp(dEntry);
+            LogWriter log = (LogWriter)dcl.getInstance(
+                                                (String)param.get("LogWriter"));
 
-        LogWriter out = (LogWriter)dcl.getInstance(
+            AppProvider office = null;
+            if (!param.getBool("NoOffice")) {
+                try {
+                    office = (AppProvider)dcl.getInstance("helper.OfficeProvider");
+                    Object msf = office.getManager(param);
+                    if (msf == null) {
+                        returnVal = false;
+                        continue;
+                    }
+                    param.put("ServiceFactory",msf);
+                }
+                catch(IllegalArgumentException e) {
+                    office = null;
+                }
+            }
+            log.initialize(entries[i],true);
+            entries[i].Logger = log;
+
+            // create an instance
+            try {
+                testClass = (ComplexTestCase)dcl.getInstance(entries[i].longName);
+            }
+            catch(java.lang.Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            testClass.executeMethods(entries[i], param);
+
+            Summarizer sum = new Summarizer();
+            sum.summarizeUp(entries[i]);
+
+            if (office != null) {
+                office.closeExistingOffice(param, false);
+            }
+
+            LogWriter out = (LogWriter)dcl.getInstance(
                                             (String)param.get("OutProducer"));
-        out.summary(dEntry);
-        return true;
+            out.summary(entries[i]);
+            returnVal &= entries[i].State.endsWith("OK");
+        }
+        return returnVal;
     }
 
 
+    private void getParamsForComplexTest(String fileName, TestParameters param) {
+        // get the resource file
+        try {
+            String path = System.getProperty("java.class.path");
+            java.net.URL url = this.getClass().getResource("/"+fileName);
+            if (url != null) {
+                java.net.URLConnection connection = url.openConnection();
+                java.io.InputStream in = connection.getInputStream();
+                Properties props = new Properties();
+                props.load(in);
+                Enumeration enum = props.keys();
+                while (enum.hasMoreElements()) {
+                    String key = (String)enum.nextElement();
+                    String value = (String)props.get(key);
+                    param.put(key, value);
+                }
+            }
+        }
+        catch(java.io.IOException e) {
+            System.out.println("Exception while reading property file '"+fileName+"'");
+            e.printStackTrace();
+        }
+        catch(java.lang.NullPointerException e) {}
+    }
 }
