@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 12:45:55 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,12 +201,13 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
+        SvXMLImport& rImport,
         const Reference<XPropertySet> & rInfoSet,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
         sal_Bool bBlockM, sal_Bool bOrganizerM,
         sal_Bool bPreserveRedlineMode ) :
-    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress, bBlockM,
-                         bOrganizerM ),
+    XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, bProgress,
+                         bBlockM, bOrganizerM ),
     pRedlineHelper( NULL )
 {
     Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
@@ -707,7 +708,7 @@ void SwXMLTextImportHelper::endPlugin()
 
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
-    return new SwXMLTextImportHelper( GetModel(), getImportInfo(),
+    return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
                                       IsInsertMode(),
                                       IsStylesOnlyMode(), bShowProgress,
                                       IsBlockMode(), IsOrganizerMode(),

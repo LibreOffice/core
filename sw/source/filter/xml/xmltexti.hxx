@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:31:51 $
+ *  last change: $Author: dvo $ $Date: 2001-09-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 class XMLRedlineImportHelper;
 class SwApplet_Impl;
 class SvPlugInObjectRef;
+class SvXMLImport;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
@@ -96,6 +97,7 @@ public:
     SwXMLTextImportHelper(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::frame::XModel>& rModel,
+            SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet>& rInfoSet,
             sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
