@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:31:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,9 +848,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
 
     Point aPos;
     BOOL bVertic = FALSE;
-#ifdef BIDI
     BOOL bRTL = FALSE;
-#endif
 
     if( FLY_PAGE == nAnchorId || FLY_AT_FLY == nAnchorId ) // LAYER_IMPL
     {
@@ -870,15 +868,11 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
             pFrm = pTmp;
         rRect = pFrm->Frm();
         SWRECTFN( pFrm )
-#ifdef BIDI
         bRTL = pFrm->IsRightToLeft();
         if ( bRTL )
             aPos = pFrm->Frm().TopRight();
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-#else
-        aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-#endif
 
         if( bVert )
         {
@@ -905,7 +899,6 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 default: aPos.X() += pFrm->Frm().Width();
             }
         }
-#ifdef BIDI
         else if ( bRTL )
         {
             switch ( eRelOrient )
@@ -918,7 +911,6 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                                                pFrm->Frm().Width(); break;
             }
         }
-#endif
         else
         {
             switch ( eRelOrient )
@@ -968,15 +960,27 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         if( bAtCntnt )
         {
             (rRect.*fnRect->fnSetTop)( (pFrm->Frm().*fnRect->fnGetTop)() );
-            if( bVert )
+            // OD 26.03.2003 #105559# - determine frame, which gives the
+            // environment for the fly frame, and use this environment frame
+            // for setting top and height respectively left and width.
+            SwFrm* pEnvironmentFrm = 0;
+            if ( pFrm->IsInFly() )
             {
-                rRect.Top( pPage->Frm().Top() );
-                rRect.Height( pPage->Frm().Height() );
+                pEnvironmentFrm = pUpper;
             }
             else
             {
-                rRect.Left( pPage->Frm().Left() );
-                rRect.Width( pPage->Frm().Width() );
+                pEnvironmentFrm = pPage;
+            }
+            if( bVert )
+            {
+                rRect.Top( pEnvironmentFrm->Frm().Top() );
+                rRect.Height( pEnvironmentFrm->Frm().Height() );
+            }
+            else
+            {
+                rRect.Left( pEnvironmentFrm->Frm().Left() );
+                rRect.Width( pEnvironmentFrm->Frm().Width() );
             }
         }
         else  // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
@@ -987,15 +991,11 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 rRect.Height( (rRect.Height()*9)/10 );
         }
 
-#ifdef BIDI
         bRTL = pFrm->IsRightToLeft();
         if ( bRTL )
             aPos = pFrm->Frm().TopRight();
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-#else
-        aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-#endif
 
         if( bVert )
         {
@@ -1029,7 +1029,6 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                                               + pPage->Prt().Left(); break;
             }
         }
-#ifdef BIDI
         else if ( bRTL )
         {
             switch ( eRelOrient )
@@ -1059,7 +1058,6 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                     break;
             }
         }
-#endif
         else
         {
             switch ( eRelOrient )
@@ -1082,10 +1080,8 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
     {
         if( bVertic )
             rRect.Pos( aPos.X() - rRect.Width() - rRect.Left(), rRect.Top() - aPos.Y() );
-#ifdef BIDI
         else if ( bRTL )
             rRect.Pos( - ( rRect.Right() - aPos.X() ), rRect.Top() - aPos.Y() );
-#endif
         else
             rRect.Pos( rRect.Left() - aPos.X(), rRect.Top() - aPos.Y() );
         if( bMirror )
