@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-12 14:53:05 $
+ *  last change: $Author: dl $ $Date: 2001-03-29 11:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ FASTBOOL SdrOle2Obj::IsEmpty() const
 void SdrOle2Obj::ImpAnmeldung()
 {
 #ifndef SVX_LIGHT
+    GetObjRef();    // try to load inplace object
     if(pModel && aName.Len())
     {
         SvPersist* pPers=pModel->GetPersist();
@@ -376,9 +377,7 @@ void SdrOle2Obj::ImpAbmeldung()
 
     if (pModel && aName.Len() )
     {
-        // Aus Cache entfernen
-        GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
-
+        GetObjRef();    // try to load inplace object
         if ( ppObjRef->Is() )
         {
             (*ppObjRef)->DoClose();
@@ -395,6 +394,9 @@ void SdrOle2Obj::ImpAbmeldung()
                 }
             }
         }
+
+        // Aus Cache entfernen
+        GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
     }
 #endif // SVX_LIGHT
 }
@@ -698,6 +700,7 @@ FASTBOOL SdrOle2Obj::HasSpecialDrag() const
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
 #ifndef SVX_LIGHT
+    GetObjRef();    // try to load inplace object
     SvInPlaceObjectRef& rIPRef=*ppObjRef;
 
     if (rIPRef.Is())
