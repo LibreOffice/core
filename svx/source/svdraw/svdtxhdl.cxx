@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-31 11:42:46 $
+ *  last change: $Author: aw $ $Date: 2002-07-31 16:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,14 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         const xub_StrLen nEndIndex(pInfo->nTextStart + pInfo->nTextLen);
         sal_Bool bUseBreakIterator(sal_False);
 
+        // correct font
+        if(bIsVertical)
+        {
+            Font aNewFont(aVDev.GetFont());
+            aNewFont.SetOrientation(0);
+            aVDev.SetFont(aNewFont);
+        }
+
         // initialize BreakIterator
         Reference < com::sun::star::i18n::XBreakIterator > xBreak;
         Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
@@ -364,6 +372,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
                 && aPolyPoly.Count())
             {
                 XPolyPolygon aXPP(aPolyPoly);
+
+                // rotate 270 degree if vertical since result is unrotated
+                if(bIsVertical)
+                    aXPP.Rotate(Point(), 2700);
 
                 // result is baseline oriented, thus move one line height, too
                 if(bIsVertical)
