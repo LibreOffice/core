@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:51:47 $
+ *  last change: $Author: jp $ $Date: 2000-12-18 11:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,16 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
+
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
-
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -113,14 +116,24 @@
 #include <sw3io.hxx>
 #endif
 
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
-class SwOLELRUCache : private SvPtrarr
+
+class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
 {
+    sal_uInt16 nLRU_InitSize;
+
+    com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames();
+
 public:
-    SwOLELRUCache( USHORT nInitSize )
-        : SvPtrarr( nInitSize, 1 )
-    {
-    }
+    SwOLELRUCache();
+
+    virtual void Notify( const com::sun::star::uno::Sequence<
+                                rtl::OUString>& aPropertyNames );
+    virtual void Commit();
+    void Load();
 
     SvPtrarr::Count;
 
@@ -136,7 +149,6 @@ public:
 };
 
 SwOLELRUCache* SwOLEObj::pOLELRU_Cache = 0;
-static USHORT nLRU_InitSize = 0;
 
 // --------------------
 // SwOLENode
@@ -536,22 +548,8 @@ SvInPlaceObjectRef SwOLEObj::GetOleRef()
     }
 
     if( !pOLELRU_Cache )
-    {
-        // Init Size besorgen
-        if( !nLRU_InitSize )
-        {
-#if 0
-//JP 13.11.00: must be change to the new configuration!
-            nLRU_InitSize = SFX_APP()->GetIniManager()->Get(
-                SFX_GROUP_WORKINGSET_IMPL, String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "MaxOLEObjectsInSWMemory" )))
-                    .ToInt32();
-#endif
-            if( 20 > nLRU_InitSize )
-                nLRU_InitSize = 20;
-        }
-        pOLELRU_Cache = new SwOLELRUCache( nLRU_InitSize );
-    }
+        pOLELRU_Cache = new SwOLELRUCache;
+
     pOLELRU_Cache->Insert( *this );
 
     return *pOLERef;
@@ -610,6 +608,61 @@ BOOL SwOLEObj::RemovedFromLRU()
     return bRet;
 }
 
+SwOLELRUCache::SwOLELRUCache()
+    : SvPtrarr( 64, 16 ),
+    utl::ConfigItem( OUString::createFromAscii( "Office.Common/Cache" )),
+    nLRU_InitSize( 20 )
+{
+    EnableNotification( GetPropertyNames() );
+    Load();
+}
+
+com::sun::star::uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
+{
+    Sequence< OUString > aNames( 1 );
+    OUString* pNames = aNames.getArray();
+    pNames[0] = OUString::createFromAscii( "Writer/OLE_Objects" );
+    return aNames;
+}
+
+void SwOLELRUCache::Notify( const com::sun::star::uno::Sequence<
+                                rtl::OUString>& rPropertyNames )
+{
+    Load();
+}
+
+void SwOLELRUCache::Commit()
+{
+}
+
+void SwOLELRUCache::Load()
+{
+    Sequence< OUString > aNames( GetPropertyNames() );
+    Sequence< Any > aValues = GetProperties( aNames );
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" )
+    if( aValues.getLength() == aNames.getLength() &&
+        pValues->hasValue() )
+    {
+        sal_Int32 nVal;
+        *pValues >>= nVal;
+        if( 20 > nVal )
+            nVal = 20;
+
+        USHORT nPos = SvPtrarr::Count();
+        if( nVal < nLRU_InitSize && nPos > nVal )
+        {
+            // remove the last entries
+            while( nPos > nVal )
+            {
+                SwOLEObj* pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
+                if( pObj->RemovedFromLRU() )
+                    SvPtrarr::Remove( nPos );
+            }
+        }
+        nLRU_InitSize = (USHORT)nVal;
+    }
+}
 
 void SwOLELRUCache::Insert( SwOLEObj& rObj )
 {
