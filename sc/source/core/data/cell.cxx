@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:57:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1621,10 +1621,8 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 }
 
 // Dynamically create the URLField on a mouse-over action on a hyperlink() cell.
-EditTextObject* ScFormulaCell::CreateURLObject()
+void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
 {
-    String aCellText;
-    String aURL;
     String aCellString;
 
     Color* pColor;
@@ -1642,12 +1640,12 @@ EditTextObject* ScFormulaCell::CreateURLObject()
     if ( IsValue() )
     {
         double fValue = GetValue();
-        pFormatter->GetOutputString( GetValue(), nCellFormat, aCellText, &pColor );
+        pFormatter->GetOutputString( GetValue(), nCellFormat, rCellText, &pColor );
     }
     else
     {
         GetString( aCellString );
-        pFormatter->GetOutputString( aCellString, nCellFormat, aCellText, &pColor );
+        pFormatter->GetOutputString( aCellString, nCellFormat, rCellText, &pColor );
     }
 
     if(pMatrix)
@@ -1658,19 +1656,26 @@ EditTextObject* ScFormulaCell::CreateURLObject()
         if (pMatVal)
         {
             if (nMatValType != SC_MATVAL_VALUE)
-                aURL = pMatVal->GetString();
+                rURL = pMatVal->GetString();
             else
-                pFormatter->GetOutputString( pMatVal->fVal, nURLFormat, aURL, &pColor );
+                pFormatter->GetOutputString( pMatVal->fVal, nURLFormat, rURL, &pColor );
         }
     }
 
-    if(!aURL.Len())
+    if(!rURL.Len())
     {
         if(IsValue())
-            pFormatter->GetOutputString( GetValue(), nURLFormat, aURL, &pColor );
+            pFormatter->GetOutputString( GetValue(), nURLFormat, rURL, &pColor );
         else
-            pFormatter->GetOutputString( aCellString, nURLFormat, aURL, &pColor );
+            pFormatter->GetOutputString( aCellString, nURLFormat, rURL, &pColor );
     }
+}
+
+EditTextObject* ScFormulaCell::CreateURLObject()
+{
+    String aCellText;
+    String aURL;
+    GetURLResult( aURL, aCellText );
 
     SvxURLField aUrlField( aURL, aCellText, SVXURLFORMAT_APPDEFAULT);
     EditEngine& rEE = pDocument->GetEditEngine();
