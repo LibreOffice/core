@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 09:01:35 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 18:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ private:
     ::drafts::com::sun::star::chart2::CurveStyle
                        m_eCurveStyle;
     bool               m_bHasSymbols;
+    bool               m_bHasLines;
     sal_Int32          m_nDim;
 
     // only used if m_nDim == 3
