@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-18 16:42:56 $
+#   last change: $Author: hjs $ $Date: 2001-07-18 16:45:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,9 @@ CFLAGSNOOPT+=-Ob0
 OBJFILES=   $(OBJ)$/javamaker.obj	\
             $(OBJ)$/javaoptions.obj	\
             $(OBJ)$/javatype.obj			
+
+NOOPTFILES= \
+            $(OBJ)$/javatype.obj
 
 
 APP1TARGET= $(TARGET)
