@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:54:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,24 @@ void ChildrenManager::UpdateSelection (void)
 {
     OSL_ASSERT (mpImpl != NULL);
     mpImpl->UpdateSelection ();
+}
+
+
+
+
+bool ChildrenManager::HasFocus (void)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    return mpImpl->HasFocus ();
+}
+
+
+
+
+void ChildrenManager::RemoveFocus (void)
+{
+    OSL_ASSERT (mpImpl != NULL);
+    mpImpl->RemoveFocus ();
 }
 
 
