@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-13 08:11:33 $
+ *  last change: $Author: hro $ $Date: 2001-07-16 15:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void InternalResMgr::GetResMgrPath( InternalResMgr* pThis,
     {
         if ( pAppFileName )
         {
-            INetURLObject aAppDir( *pAppFileName, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+            INetURLObject aAppDir( *pAppFileName, INET_PROT_FILE );
             aAppDir.CutName();
             UniString aAppPath = aAppDir.PathToFileName();
             aAppDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "resource" ) ) );
@@ -244,7 +244,7 @@ void InternalResMgr::GetResMgrPath( InternalResMgr* pThis,
     }
     else if ( pAppFileName )
     {
-        INetURLObject aPath( *pAppFileName, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aPath( *pAppFileName, INET_PROT_FILE );
         aFileName = aPath.GetName();
         aPath.CutName();
         aResPath = aPath.PathToFileName();
@@ -296,7 +296,7 @@ void InternalResMgr::GetResMgrPath( InternalResMgr* pThis,
 
     if( aResFile.Len() )
     {
-        INetURLObject aPath( aResFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aPath( aResFile, INET_PROT_FILE );
         pThis->aFileName = aPath.PathToFileName();
         pThis->aShortFileName = aPath.GetName();
     }
