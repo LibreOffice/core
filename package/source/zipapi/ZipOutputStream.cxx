@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:08:40 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,14 @@
 #ifndef _ZIP_ENTRY_HXX_
 #include <ZipEntry.hxx>
 #endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+
+
 using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -162,15 +170,15 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
 
         aCipher = rtl_cipher_create ( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
         aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionEncode,
-                            reinterpret_cast < const sal_uInt8 * > (xEncryptData->aKey.getConstArray()),
+                            reinterpret_cast < const sal_uInt8 * > (xEncryptData->aKey.getConstArray() ),
                             xEncryptData->aKey.getLength(),
-                            xEncryptData->aInitVector.getConstArray(),
+                            reinterpret_cast < const sal_uInt8 * > ( xEncryptData->aInitVector.getConstArray() ),
                             xEncryptData->aInitVector.getLength());
         OSL_ASSERT( aResult == rtl_Cipher_E_None );
         aDigest = rtl_digest_createSHA1();
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
-        xCurrentEncryptData = xEncryptData;
+        pCurrentEncryptData = xEncryptData.getBodyPtr();
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.getPosition()) - nLOCLength;
@@ -240,8 +248,10 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
             aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
             rtl_cipher_destroy ( aCipher );
-            xCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_SHA1 );
-            aDigestResult = rtl_digest_getSHA1 ( aDigest, xCurrentEncryptData->aDigest.getArray(), RTL_DIGEST_LENGTH_SHA1 );
+            pCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_SHA1 );
+            aDigestResult = rtl_digest_getSHA1 ( aDigest,
+                                                 reinterpret_cast < sal_uInt8 * > ( pCurrentEncryptData->aDigest.getArray() ),
+                                                 RTL_DIGEST_LENGTH_SHA1 );
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
             rtl_digest_destroySHA1 ( aDigest );
         }
