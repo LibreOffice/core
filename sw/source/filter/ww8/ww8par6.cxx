@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:58:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2538,7 +2538,11 @@ bool SwWW8ImplReader::IsDropCap()
     WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : 0;
     if (pPap)
     {
-        const BYTE *pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+        const BYTE *pDCS;
+        if (bVer67)
+            pDCS = pPap->HasSprm(46);
+        else
+            pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
         if(pDCS)
         {
             short nDCS = SVBT16ToShort( pDCS );
