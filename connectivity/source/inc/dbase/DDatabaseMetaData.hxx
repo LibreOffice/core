@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 10:38:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,11 @@ namespace connectivity
 
         class ODbaseDatabaseMetaData :  public file::ODatabaseMetaData
         {
+        protected:
+            virtual ~ODbaseDatabaseMetaData();
         public:
 
             ODbaseDatabaseMetaData(file::OConnection* _pCon);
-            ~ODbaseDatabaseMetaData();
 
             virtual sal_Bool SAL_CALL isReadOnly(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::rtl::OUString SAL_CALL getURL(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

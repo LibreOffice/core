@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 16:07:09 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@ namespace connectivity
         typedef file::OConnection ODbaseConnection_Base;
         class ODbaseConnection : public ODbaseConnection_Base
         {
+        protected:
+            virtual ~ODbaseConnection();
         public:
             ODbaseConnection(ODriver*   _pDriver);
-            virtual ~ODbaseConnection();
-
             // XServiceInfo
             DECLARE_SERVICE_INFO();
 

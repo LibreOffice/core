@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:18:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,11 +136,10 @@ namespace connectivity
             ::rtl::OUString getCompletePath();
             void closeImpl();
         protected:
-            ~ODbaseIndex();
+            virtual ~ODbaseIndex();
         public:
             ODbaseIndex(ODbaseTable* _pTable);
             ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const ::rtl::OUString& _Name);
-
 
             sal_Bool openIndexFile();
             virtual void refreshColumns();
