@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:55:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,13 +376,17 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
                 XML_TOK_TEXTFIELD_NUM_LETTER_SYNC },
     { XML_NAMESPACE_TEXT, XML_DISPLAY_FORMULA,
                 XML_TOK_TEXTFIELD_DISPLAY_FORMULA },
-    { XML_NAMESPACE_TEXT, XML_VALUE_TYPE, XML_TOK_TEXTFIELD_VALUE_TYPE },
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TEXTFIELD_VALUE_TYPE },
     { XML_NAMESPACE_TEXT, XML_VALUE, XML_TOK_TEXTFIELD_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_VALUE, XML_TOK_TEXTFIELD_VALUE },
     { XML_NAMESPACE_TEXT, XML_STRING_VALUE, XML_TOK_TEXTFIELD_STRING_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TEXTFIELD_STRING_VALUE },
     { XML_NAMESPACE_TEXT, XML_DATE_VALUE, XML_TOK_TEXTFIELD_DATE_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_DATE_VALUE, XML_TOK_TEXTFIELD_DATE_VALUE },
     { XML_NAMESPACE_TEXT, XML_TIME_VALUE, XML_TOK_TEXTFIELD_TIME_VALUE },
-    { XML_NAMESPACE_TEXT, XML_BOOLEAN_VALUE, XML_TOK_TEXTFIELD_BOOL_VALUE},
-    { XML_NAMESPACE_TEXT, XML_CURRENCY, XML_TOK_TEXTFIELD_CURRENCY},
+    { XML_NAMESPACE_OFFICE, XML_TIME_VALUE, XML_TOK_TEXTFIELD_TIME_VALUE },
+    { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_TOK_TEXTFIELD_BOOL_VALUE},
+    { XML_NAMESPACE_OFFICE, XML_CURRENCY, XML_TOK_TEXTFIELD_CURRENCY},
     { XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
                 XML_TOK_TEXTFIELD_DATA_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_DISPLAY_OUTLINE_LEVEL,
@@ -414,9 +418,6 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_TEXTFIELD_HREF },
     { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME,
       XML_TOK_TEXTFIELD_TARGET_FRAME },
-    { XML_NAMESPACE_OFFICE, XML_CREATE_DATE,
-                XML_TOK_TEXTFIELD_OFFICE_CREATE_DATE },
-    { XML_NAMESPACE_OFFICE, XML_AUTHOR, XML_TOK_TEXTFIELD_OFFICE_AUTHOR },
     { XML_NAMESPACE_TEXT, XML_ANNOTATION, XML_TOK_TEXTFIELD_ANNOTATION },
     { XML_NAMESPACE_SCRIPT, XML_LANGUAGE, XML_TOK_TEXTFIELD_LANGUAGE },
     { XML_NAMESPACE_TEXT, XML_KIND, XML_TOK_TEXTFIELD_MEASURE_KIND },
@@ -779,8 +780,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
 
         case XML_TOK_TEXT_REFERENCE_REF:
         case XML_TOK_TEXT_BOOKMARK_REF:
-        case XML_TOK_TEXT_FOOTNOTE_REF:
-        case XML_TOK_TEXT_ENDNOTE_REF:
+        case XML_TOK_TEXT_NOTE_REF:
         case XML_TOK_TEXT_SEQUENCE_REF:
             pContext = new XMLReferenceFieldImportContext( rImport, rHlp,
                                                            nToken,
@@ -1389,7 +1389,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
-                 sAttrValue, &bIsDefaultLanguage);
+                                               sAttrValue, &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormatKey = nKey;
@@ -1704,8 +1704,16 @@ void XMLDatabaseNextImportContext::ProcessAttribute(
 {
     if (XML_TOK_TEXTFIELD_CONDITION == nAttrToken)
     {
-        sCondition = sAttrValue;
-        bConditionOK = sal_True;
+        OUString sTmp;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+                                    sAttrValue, &sTmp );
+        if( XML_NAMESPACE_OOOW == nPrefix )
+        {
+            sCondition = sTmp;
+            bConditionOK = sal_True;
+        }
+        else
+            sCondition = sAttrValue;
     }
     else
     {
@@ -2117,8 +2125,8 @@ void XMLDateTimeDocInfoImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
         {
-            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(sAttrValue,
-                                                               &bIsDefaultLanguage);
+            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
+                                               sAttrValue, &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormat = nKey;
@@ -2253,8 +2261,16 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
 {
     if (XML_TOK_TEXTFIELD_CONDITION == nAttrToken)
     {
-        sCondition = sAttrValue;
-        bValid = sal_True;
+        OUString sTmp;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+                                    sAttrValue, &sTmp );
+        if( XML_NAMESPACE_OOOW == nPrefix )
+        {
+            sCondition = sTmp;
+            bValid = sal_True;
+        }
+        else
+            sCondition = sAttrValue;
     }
     else if (XML_TOK_TEXTFIELD_IS_HIDDEN == nAttrToken)
     {
@@ -2312,8 +2328,18 @@ void XMLConditionalTextImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_CONDITION:
-            sCondition = sAttrValue;
-            bConditionOK = sal_True;
+            {
+                OUString sTmp;
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                        GetKeyByAttrName( sAttrValue, &sTmp );
+                if( XML_NAMESPACE_OOOW == nPrefix )
+                {
+                    sCondition = sTmp;
+                    bConditionOK = sal_True;
+                }
+                else
+                    sCondition = sAttrValue;
+            }
             break;
         case XML_TOK_TEXTFIELD_STRING_VALUE_IF_FALSE:
             sFalseContent = sAttrValue;
@@ -2389,8 +2415,18 @@ void XMLHiddenTextImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_CONDITION:
-            sCondition = sAttrValue;
-            bConditionOK = sal_True;
+            {
+                OUString sTmp;
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                                        GetKeyByAttrName( sAttrValue, &sTmp );
+                if( XML_NAMESPACE_OOOW == nPrefix )
+                {
+                    sCondition = sTmp;
+                    bConditionOK = sal_True;
+                }
+                else
+                    sCondition = sAttrValue;
+            }
             break;
         case XML_TOK_TEXTFIELD_STRING_VALUE:
             sString = sAttrValue;
@@ -2906,7 +2942,7 @@ SvXMLImportContext* XMLMacroFieldImportContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
-         IsXMLToken( rLocalName, XML_EVENTS ) )
+         IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         // create events context and remember it!
         pContext = new XMLEventsImportContext(
@@ -3076,11 +3112,10 @@ void XMLReferenceFieldImportContext::StartElement(
         case XML_TOK_TEXT_BOOKMARK_REF:
             nSource = ReferenceFieldSource::BOOKMARK;
             break;
-        case XML_TOK_TEXT_FOOTNOTE_REF:
+        case XML_TOK_TEXT_NOTE_REF:
             nSource = ReferenceFieldSource::FOOTNOTE;
-            break;
-        case XML_TOK_TEXT_ENDNOTE_REF:
-            nSource = ReferenceFieldSource::ENDNOTE;
+//          nSource = ReferenceFieldSource::ENDNOTE;
+            OSL_ENSURE( !bTypeOK, "note reference type is not set correctly" );
             break;
         case XML_TOK_TEXT_SEQUENCE_REF:
             nSource = ReferenceFieldSource::SEQUENCE_FIELD;
@@ -3150,8 +3185,7 @@ void XMLReferenceFieldImportContext::PrepareField(
             xPropertySet->setPropertyValue(sPropertySourceName, aAny);
             break;
 
-        case XML_TOK_TEXT_FOOTNOTE_REF:
-        case XML_TOK_TEXT_ENDNOTE_REF:
+        case XML_TOK_TEXT_NOTE_REF:
             GetImportHelper().ProcessFootnoteReference(sName, xPropertySet);
             break;
 
@@ -3181,7 +3215,7 @@ enum DdeFieldDeclAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, XML_NAME, XML_TOK_DDEFIELD_NAME },
+    { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_DDEFIELD_NAME },
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION, XML_TOK_DDEFIELD_APPLICATION },
     { XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, XML_TOK_DDEFIELD_TOPIC },
     { XML_NAMESPACE_OFFICE, XML_DDE_ITEM, XML_TOK_DDEFIELD_ITEM },
@@ -3810,8 +3844,7 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
                                   nPrfx, sLocalName),
         sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author)),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
-        sPropertyDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_date)),
-        bDateOK(sal_False)
+        sPropertyDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_date))
 {
     bValid = sal_True;
 }
@@ -3820,29 +3853,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
 {
-    switch (nAttrToken)
-    {
-        case XML_TOK_TEXTFIELD_OFFICE_CREATE_DATE:
-        {
-            DateTime aDateTime;
-            if (SvXMLUnitConverter::convertDateTime(aDateTime, sAttrValue))
-            {
-                aDate.Year = aDateTime.Year;
-                aDate.Month = aDateTime.Month;
-                aDate.Day = aDateTime.Day;
-                bDateOK = sal_True;
-            }
-            break;
-        }
-
-        case XML_TOK_TEXTFIELD_OFFICE_AUTHOR:
-            sAuthor = sAttrValue;
-            break;
-
-        default:
-            // ignore
-            break;
-    }
+    // ignore
 }
 
 SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
@@ -3850,23 +3861,39 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {
-    return new XMLStringBufferImportContext(GetImport(), nPrefix,
+    SvXMLImportContext *pContext = 0;
+    if( XML_NAMESPACE_DC == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_CREATOR ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, aAuthorBuffer);
+        else if( IsXMLToken( rLocalName, XML_DATE ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, aDateBuffer);
+    }
+    if( !pContext )
+        pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                             rLocalName, aTextBuffer);
+
+    return pContext;
 }
 
 void XMLAnnotationImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
-    Any aAny;
-
     // import (possibly empty) author
-    aAny <<= sAuthor;
-    xPropertySet->setPropertyValue(sPropertyAuthor, aAny);
+    OUString sAuthor( aAuthorBuffer.makeStringAndClear() );
+    xPropertySet->setPropertyValue(sPropertyAuthor, makeAny(sAuthor));
 
-    if (bDateOK)
+    DateTime aDateTime;
+    if (SvXMLUnitConverter::convertDateTime(aDateTime,
+                                            aDateBuffer.makeStringAndClear()))
     {
-        aAny <<= aDate;
-        xPropertySet->setPropertyValue(sPropertyDate, aAny);
+        Date aDate;
+        aDate.Year = aDateTime.Year;
+        aDate.Month = aDateTime.Month;
+        aDate.Day = aDateTime.Day;
+        xPropertySet->setPropertyValue(sPropertyDate, makeAny(aDate));
     }
 
     // delete last paragraph mark (if necessary)
@@ -3875,8 +3902,7 @@ void XMLAnnotationImportContext::PrepareField(
     {
         sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
     }
-    aAny <<= sBuffer;
-    xPropertySet->setPropertyValue(sPropertyContent, aAny);
+    xPropertySet->setPropertyValue(sPropertyContent, makeAny(sBuffer));
 }
 
 
