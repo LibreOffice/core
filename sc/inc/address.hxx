@@ -2,9 +2,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $  $Date: 2004-06-24 15:33:46 $
+ *  last change: $Author: rt $  $Date: 2004-08-23 09:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,17 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#include <limits>
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
+#endif
+
+#ifndef INCLUDED_LIMITS
+#include <limits>
+#define INCLUDED_LIMITS
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 class ScDocument;
@@ -383,7 +391,7 @@ inline void ScAddressOldBitfieldConverter::Get( SCCOL& nCol, SCROW& nRow, SCTAB&
 
 // === ScAddress =============================================================
 
-class ScAddress
+class SC_DLLPUBLIC ScAddress
 {
 private:
     SCROW   nRow;
@@ -561,7 +569,7 @@ inline SvStream& operator>> ( SvStream& rStream, ScAddress& rAdr )
 
 // === ScRange ===============================================================
 
-class ScRange
+class SC_DLLPUBLIC ScRange
 {
 public:
     ScAddress aStart, aEnd;
@@ -854,7 +862,7 @@ bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         ScRefAddress& rEndRefAddress);
 
 /// append alpha representation of column to buffer
-void ColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
+SC_DLLPUBLIC void ColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
 
 inline void ColToAlpha( String& rStr, SCCOL nCol)
 {
