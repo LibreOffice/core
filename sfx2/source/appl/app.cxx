@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:33:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,6 @@ SfxApplication::SfxApplication()
     , pAppData_Impl( 0 )
     , nInterfaces( 0 )
     , pInterfaces( 0 )
-    , bDispatcherLocked( sal_False )
     , bInInit( sal_False )
     , bInExit( sal_False )
     , bDowning( sal_True )
@@ -563,48 +562,6 @@ public:
 //--------------------------------------------------------------------
 
 //====================================================================
-
-void SfxApplication::LockDispatcher
-(
-    sal_Bool bLock              /*  sal_True
-                                schaltet alle SfxDispatcher ein
-
-                                sal_False
-                                schaltet alle SfxDispatcher aus */
-)
-
-/*  [Beschreibung]
-
-    Mit dieser Methode werden alle Dispatcher der Applikation global
-    blockiert (bLock==sal_True) bzw. grundsaetzlich freigegeben
-    (bLock==sal_False).
-
-    Unabhaengig von diesem zentralen Schalter kann jeder Dispatcher
-    einzeln gelockt sein:
-
-        Dispatcher X    global      =>  gesamt
-
-        gelockt         gelockt     =>  gelockt
-        freigegeben     gelockt     =>  gelockt
-        gelockt         freigegeben =>  gelockt
-        freigegeben     freigegeben =>  freigegeben
-
-    Wenn der aktive Dispatcher gelockt ist, werden keine Requests mehr
-    dispatcht.
-
-    [Querverweise]
-    <SfxDispatcher::Lock(sal_Bool)> */
-
-{
-    bDispatcherLocked = bLock;
-    if ( !bLock )
-    {
-        GetDispatcher_Impl()->InvalidateBindings_Impl( pAppData_Impl->bInvalidateOnUnlock );
-        pAppData_Impl->bInvalidateOnUnlock = sal_False;
-    }
-}
-
-//--------------------------------------------------------------------
 
 SfxObjectShell* SfxApplication::GetActiveObjectShell() const
 
