@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 11:41:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,19 @@
 #ifndef _COM_SUN_STAR_AWT_XVIEW_HPP_
 #include <com/sun/star/awt/XView.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGESUPPLIER2_HPP_
+#include <com/sun/star/bridge/XBridgeSupplier2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
+#include <com/sun/star/bridge/ModelDependent.hpp>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
+#ifndef _RTL_PROCESS_H_
+#include <rtl/process.h>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -189,6 +197,8 @@ void DocumentHolder::CloseDocument()
             {}
         }
     }
+
+    m_pIDispatch = NULL;
     m_xDocument = uno::Reference< frame::XModel >();
 }
 
@@ -326,11 +336,11 @@ void DocumentHolder::resizeWin( const SIZEL& rNewSize )
 
         if ( xWindow.is() && xView.is() )
         {
-            float fScale = 0.1;
+            float fScale = 1;
             xView->setZoom( fScale, fScale );
 
             SIZEL aOldSize;
-            m_pOLEInterface->GetExtent( DVASPECT_CONTENT, &aOldSize );
+            GetExtent( &aOldSize );
 
             if ( aOldSize.cx != rNewSize.cx || aOldSize.cy != rNewSize.cy )
             {
@@ -456,11 +466,146 @@ void DocumentHolder::hide()
         m_xFrame->deactivate();
 }
 
+IDispatch* DocumentHolder::GetIDispatch()
+{
+    if ( !m_pIDispatch && m_xDocument.is() )
+    {
+        const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.bridge.OleBridgeSupplier2" ) );
+        uno::Reference< bridge::XBridgeSupplier2 > xSupplier( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+
+        if ( xSupplier.is() )
+        {
+            uno::Sequence< sal_Int8 > aProcId( 16 );
+            rtl_getGlobalProcessId( (sal_uInt8*)aProcId.getArray() );
+
+            try {
+                uno::Any anyResult = xSupplier->createBridge( uno::makeAny( m_xDocument ),
+                                                              aProcId,
+                                                              bridge::ModelDependent::UNO,
+                                                              bridge::ModelDependent::OLE );
+
+                if ( anyResult.getValueTypeClass() == getCppuType((sal_uInt32*) 0).getTypeClass() )
+                {
+                    VARIANT* pVariant = *(VARIANT**)anyResult.getValue();
+                    if ( pVariant->vt == VT_DISPATCH )
+                        m_pIDispatch = pVariant->pdispVal;
+
+                    VariantClear( pVariant );
+                    CoTaskMemFree( pVariant );
+                }
+            }
+            catch ( uno::Exception& )
+            {}
+        }
+    }
+
+    return m_pIDispatch;
+}
+
+HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
+{
+    if ( pRect && m_xDocument.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                // should allways be there
+                uno::Sequence< sal_Int32 > aRect(4);
+
+                aRect[0] = pRect->left;
+                aRect[1] = pRect->top;
+                aRect[2] = pRect->right;
+                aRect[3] = pRect->bottom;
+
+                aArgs[nInd].Value <<= aRect;
+
+                m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
+                return S_OK;
+            }
+
+        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
+    }
+
+    return E_FAIL;
+}
+
+HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
+{
+    if ( pRect && m_xDocument.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                uno::Sequence< sal_Int32 > aRect;
+                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
+                {
+                    pRect->left   = aRect[0];
+                    pRect->top    = aRect[1];
+                    pRect->right  = aRect[2];
+                    pRect->bottom = aRect[3];
+
+                    return S_OK;
+                }
+
+                break;
+            }
+    }
+
+    return E_FAIL;
+}
+
+HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
+{
+    if ( pSize && m_xDocument.is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                // should allways be there
+                uno::Sequence< sal_Int32 > aRect;
+                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
+                {
+                    aRect[2] = aRect[0] + pSize->cx; // right = left + cx
+                    aRect[3] = aRect[1] + pSize->cy; // bottom = top + cy
+
+                    aArgs[nInd].Value <<= aRect;
+
+                    m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
+                    return S_OK;
+                }
+            }
+
+        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
+    }
+
+    return E_FAIL;
+}
+
+HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
+{
+    RECTL aRect;
+    if ( pSize && GetVisArea( &aRect ) )
+    {
+        pSize->cx = aRect.right - aRect.left;
+        pSize->cy = aRect.top - aRect.bottom;
+
+        return S_OK;
+    }
+
+    return E_FAIL;
+}
 
 void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
+    {
+        m_pIDispatch = NULL;
         m_xDocument = uno::Reference< frame::XModel >();
+
+    }
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
         m_xFrame = uno::Reference< frame::XFrame >();
@@ -482,7 +627,10 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
         xEventBroadcaster->removeCloseListener( (util::XCloseListener*)this );
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
+    {
+        m_pIDispatch = NULL;
         m_xDocument = uno::Reference< frame::XModel >();
+    }
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
         m_xFrame = uno::Reference< frame::XFrame >();
