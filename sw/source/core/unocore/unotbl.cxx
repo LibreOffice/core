@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:46:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,7 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
 {
     if(rCell.IsValid())
     {
-        SwFrmFmt* pBoxFmt = rCell.pBox->GetFrmFmt();
+        SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
         pBoxFmt->LockModify();
         pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
         pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
@@ -715,7 +715,7 @@ void lcl_setValue( SwXCell &rCell, double nVal )
             lcl_setString( rCell, OUString() );
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
-        SwFrmFmt* pBoxFmt = rCell.pBox->GetFrmFmt();
+        SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
         SfxItemSet aSet(pDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE);
         const SfxPoolItem* pItem;
         if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
