@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-19 16:46:19 $
+ *  last change: $Author: ssa $ $Date: 2002-09-20 16:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6518,13 +6518,14 @@ void Window::SetPosSizePixel( long nX, long nY,
 
     if ( pWindow->mbFrame )
     {
+        long nOldWidth  = pWindow->mnOutWidth;
+        long nOldHeight = pWindow->mnOutHeight;
+
         if ( !(nFlags & WINDOW_POSSIZE_WIDTH) )
             nWidth = pWindow->mnOutWidth;
         if ( !(nFlags & WINDOW_POSSIZE_HEIGHT) )
             nHeight = pWindow->mnOutHeight;
 
-        long nOldWidth  = pWindow->mnOutWidth;
-        long nOldHeight = pWindow->mnOutHeight;
 
 #ifndef REMOTE_APPSERVER
         USHORT nSysFlags=0;
@@ -6543,21 +6544,29 @@ void Window::SetPosSizePixel( long nX, long nY,
                 nX = aRect.nLeft;
             }
         }
-        if( !(nFlags & WINDOW_POSSIZE_X) )
+        if( !(nFlags & WINDOW_POSSIZE_X) && pWindow->mpFrame->maGeometry.nWidth )
         {
             // --- RTL ---  make sure the old right aligned position is not changed
             //              system windows will always grow to the right
             if( pWindow->GetParent() && pWindow->GetParent()->ImplHasMirroredGraphics() )
             {
+                long myWidth = nOldWidth;
+                if( !myWidth )
+                    myWidth = mpFrame->GetUnmirroredGeometry().nWidth;
+                if( !myWidth )
+                    myWidth = nWidth;
                 nFlags |= WINDOW_POSSIZE_X;
                 nSysFlags |= SAL_FRAME_POSSIZE_X;
-                nX = mpFrame->GetUnmirroredGeometry().nX - pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nX;
-                nX = pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nX + pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nWidth - mpFrame->GetUnmirroredGeometry().nWidth - 1 - mpFrame->GetUnmirroredGeometry().nX;
+                nX = mpFrame->GetUnmirroredGeometry().nX - pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nX -
+                    mpFrame->GetUnmirroredGeometry().nLeftDecoration;
+                nX = pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nX - mpFrame->GetUnmirroredGeometry().nLeftDecoration +
+                    pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nWidth - myWidth - 1 - mpFrame->GetUnmirroredGeometry().nX;
                 if(!(nFlags & WINDOW_POSSIZE_Y))
                 {
                     nFlags |= WINDOW_POSSIZE_Y;
                     nSysFlags |= SAL_FRAME_POSSIZE_Y;
-                    nY = mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nY;
+                    nY = mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nY -
+                        mpFrame->GetUnmirroredGeometry().nTopDecoration;
                 }
             }
         }
