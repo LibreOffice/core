@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,12 +204,12 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                             ::com::sun::star::beans::Property >& rProperties );
-    void setPropertyValues(
-            const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::beans::PropertyValue >& rValues,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+                        ::com::sun::star::beans::Property >& rProperties );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+    setPropertyValues( const ::com::sun::star::uno::Sequence<
+                        ::com::sun::star::beans::PropertyValue >& rValues,
+                       const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );
 
     com::sun::star::uno::Reference<

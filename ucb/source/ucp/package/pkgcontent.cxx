@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -546,7 +549,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-        setPropertyValues( aProperties, Environment );
+        aRet <<= setPropertyValues( aProperties, Environment );
     }
     else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
@@ -1092,13 +1095,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 }
 
 //=========================================================================
-void Content::setPropertyValues(
+uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
     throw( ::com::sun::star::uno::Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
+    uno::Sequence< uno::Any > aRet( rValues.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -1118,6 +1122,7 @@ void Content::setPropertyValues(
     sal_Bool bExchange = sal_False;
     sal_Bool bStore    = sal_False;
     rtl::OUString aNewTitle;
+    sal_Int32 nTitlePos = -1;
 
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
@@ -1127,16 +1132,28 @@ void Content::setPropertyValues(
                     RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -1144,15 +1161,38 @@ void Content::setPropertyValues(
             rtl::OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
             {
-                if ( aNewValue != m_aProps.aTitle )
+                // No empty titles!
+                if ( aNewValue.getLength() > 0 )
                 {
-                    // modified title -> modified URL -> exchange !
-                    if ( m_eState == PERSISTENT )
-                        bExchange = sal_True;
+                    if ( aNewValue != m_aProps.aTitle )
+                    {
+                        // modified title -> modified URL -> exchange !
+                        if ( m_eState == PERSISTENT )
+                            bExchange = sal_True;
 
-                    // new value will be set later...
-                    aNewTitle = aNewValue;
+                        // new value will be set later...
+                        aNewTitle = aNewValue;
+
+                        // remember position within sequence of values
+                        // (for error handling).
+                        nTitlePos = n;
+                    }
                 }
+                else
+                {
+                    aRet[ n ] <<= lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Empty title not allowed!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 );
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                    "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1173,11 +1213,22 @@ void Content::setPropertyValues(
                     m_nModifiedProps |= MEDIATYPE_MODIFIED;
                 }
             }
+            else
+            {
+                aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                    "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+            }
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Compressed" ) ) )
@@ -1200,6 +1251,20 @@ void Content::setPropertyValues(
                         m_nModifiedProps |= COMPRESSED_MODIFIED;
                     }
                 }
+                else
+                {
+                    aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                        "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::UnknownPropertyException(
+                                rtl::OUString::createFromAscii(
+                                    "Compressed only supported by streams!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1223,12 +1288,30 @@ void Content::setPropertyValues(
                         m_nModifiedProps |= ENCRYPTED_MODIFIED;
                     }
                 }
+                else
+                {
+                    aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                        "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::UnknownPropertyException(
+                                rtl::OUString::createFromAscii(
+                                    "Encrypted only supported by streams!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "HasEncryptedEntries" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "SegmentSize" ) ) )
@@ -1251,6 +1334,20 @@ void Content::setPropertyValues(
                         m_nModifiedProps |= SEGMENTSIZE_MODIFIED;
                     }
                 }
+                else
+                {
+                    aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                        "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::UnknownPropertyException(
+                            rtl::OUString::createFromAscii(
+                                "SegmentSize only supported by root folder!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1278,23 +1375,41 @@ void Content::setPropertyValues(
                             rtl::OUString::createFromAscii( "EncryptionKey" ),
                             rValue.Value );
                     }
-                    catch ( beans::UnknownPropertyException const & )
+                    catch ( beans::UnknownPropertyException const & e )
                     {
                         // setPropertyValue
+                        aRet[ n ] <<= e;
                     }
-                    catch ( beans::PropertyVetoException const & )
+                    catch ( beans::PropertyVetoException const & e )
                     {
                         // setPropertyValue
+                        aRet[ n ] <<= e;
                     }
-                    catch ( lang::IllegalArgumentException const & )
+                    catch ( lang::IllegalArgumentException const & e )
                     {
                         // setPropertyValue
+                        aRet[ n ] <<= e;
                     }
-                    catch ( lang::WrappedTargetException const & )
+                    catch ( lang::WrappedTargetException const & e )
                     {
                         // setPropertyValue
+                        aRet[ n ] <<= e;
                     }
                 }
+                else
+                {
+                    aRet[ n ] <<= uno::Exception(
+                                rtl::OUString::createFromAscii(
+                                    "No property set for storing the value!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::UnknownPropertyException(
+                        rtl::OUString::createFromAscii(
+                            "EncryptionKey only supported by root folder!" ),
+                        static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else
@@ -1326,18 +1441,29 @@ void Content::setPropertyValues(
                         nChanged++;
                     }
                 }
-                catch ( beans::UnknownPropertyException const & )
+                catch ( beans::UnknownPropertyException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( lang::WrappedTargetException const & )
+                catch ( lang::WrappedTargetException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( beans::PropertyVetoException const & )
+                catch ( beans::PropertyVetoException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( lang::IllegalArgumentException const & )
+                catch ( lang::IllegalArgumentException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
+            }
+            else
+            {
+                aRet[ n ] <<= uno::Exception(
+                                rtl::OUString::createFromAscii(
+                                    "No property set for storing the value!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
     }
@@ -1368,6 +1494,11 @@ void Content::setPropertyValues(
         {
             // Do not set new title!
             aNewTitle = rtl::OUString();
+
+            // Set error .
+            aRet[ nTitlePos ] <<= uno::Exception(
+                    rtl::OUString::createFromAscii( "Exchange failed!" ),
+                    static_cast< cppu::OWeakObject * >( this ) );
         }
     }
 
@@ -1405,6 +1536,8 @@ void Content::setPropertyValues(
         aChanges.realloc( nChanged );
         notifyPropertiesChange( aChanges );
     }
+
+    return aRet;
 }
 
 //=========================================================================

@@ -58,6 +58,7 @@
     <type> com.sun.star.container.XNameContainer               </type>
     <type> com.sun.star.io.XActiveDataSink                     </type>
     <type> com.sun.star.io.XOutputStream                       </type>
+    <type> com.sun.star.lang.IllegalAccessException            </type>
     <type> com.sun.star.lang.XComponent                        </type>
     <type> com.sun.star.lang.XMultiServiceFactory              </type>
     <type> com.sun.star.lang.XServiceInfo                      </type>
