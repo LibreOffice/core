@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:06:02 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -771,10 +770,6 @@ void SwView::StartThesaurus()
 
             if( !bSelection )
             {
-                if(!pWrtShell->IsInWrd() && !pWrtShell->IsEndWrd() &&
-                    !pWrtShell->IsSttWrd())
-                    pWrtShell->PrvWrd();
-
                 if(pWrtShell->IsEndWrd())
                     pWrtShell->Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
 
@@ -812,9 +807,6 @@ void SwView::StartThesaurus()
 
     delete pDlg;
 
-#ifdef TL_NEVER
-    pSpell->ChgErrorLink( aOldLnk );
-#endif
     pVOpt->SetIdle( bOldIdle );
 
 }
