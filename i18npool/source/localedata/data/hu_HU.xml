@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale version="1.2">
+<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
 <LC_INFO>
 <Language>
 <LangID>hu</LangID>
@@ -36,19 +36,19 @@
 </LC_CTYPE>
 <LC_FORMAT>
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-<FormatCode>YYYY.MM.DD</FormatCode>
+<FormatCode>YYYY". "M". "D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-<FormatCode>NN DD.MMM YY</FormatCode>
+<FormatCode>YYYY". "MMM D., NNN</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
-<FormatCode>YY.MM</FormatCode>
+<FormatCode>YYYY-MM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-<FormatCode>MMM DD</FormatCode>
+<FormatCode>MMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
@@ -56,51 +56,51 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
-<FormatCode>QQ YY</FormatCode>
+<FormatCode>YYYY". "QQ</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-<FormatCode>YYYY.MM.DD</FormatCode>
+<FormatCode>YYYY-MM-DD</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-<FormatCode>YY.MM.DD</FormatCode>
+<FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
+<FormatCode>YY-MM-DD</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>YYYY.MMMM D</FormatCode>
+<FormatCode>YYYY". "MMMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>YY.MMM D</FormatCode>
+<FormatCode>YY". "MMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>YYYY.MMM D</FormatCode>
+<FormatCode>YYYY". "MMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>YYYY.MMMM D</FormatCode>
+<FormatCode>YYYY". "MMMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN YY.MMM D</FormatCode>
+<FormatCode>YY-MM-DD, NN</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN YYYY.MMMM D</FormatCode>
+<FormatCode>YYYY". "MMMM D., NN</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNNYYYY.MMMM D</FormatCode>
+<FormatCode>YYYY". "MMMM D., NNN</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-<FormatCode>D. MMM. YYYY</FormatCode>
+<FormatCode>YYYY". "MMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
-<FormatCode>D. MMMM YYYY</FormatCode>
+<FormatCode>YYYY". "MMMM D.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
@@ -111,12 +111,12 @@
 <FormatCode>YY-MM-DD</FormatCode>
 <DefaultName>ISO 8601</DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
+<FormatElement msgid="DateFormatskey20" default="true" type="medium" usage="DATE" formatindex="33">
 <FormatCode>YYYY-MM-DD</FormatCode>
 <DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
-<FormatCode>WW</FormatCode>
+<FormatCode>WW.</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
@@ -148,11 +148,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
-<FormatCode>YY.MM.DD HH:MM</FormatCode>
+<FormatCode>YY-MM-DD HH:MM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME"  formatindex="47">
-<FormatCode>YYYY.MM.DD HH:MM:SS</FormatCode>
+<FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
@@ -272,62 +272,62 @@
 <MonthsOfYear>
 <Month>
 <MonthID>jan</MonthID>
-<DefaultAbbrvName>jan.</DefaultAbbrvName>
+<DefaultAbbrvName>I.</DefaultAbbrvName>
 <DefaultFullName>január</DefaultFullName>
 </Month>
 <Month>
 <MonthID>feb</MonthID>
-<DefaultAbbrvName>febr.</DefaultAbbrvName>
+<DefaultAbbrvName>II.</DefaultAbbrvName>
 <DefaultFullName>február</DefaultFullName>
 </Month>
 <Month>
 <MonthID>mar</MonthID>
-<DefaultAbbrvName>márc.</DefaultAbbrvName>
+<DefaultAbbrvName>III.</DefaultAbbrvName>
 <DefaultFullName>március</DefaultFullName>
 </Month>
 <Month>
 <MonthID>apr</MonthID>
-<DefaultAbbrvName>ápr.</DefaultAbbrvName>
+<DefaultAbbrvName>IV.</DefaultAbbrvName>
 <DefaultFullName>április</DefaultFullName>
 </Month>
 <Month>
 <MonthID>may</MonthID>
-<DefaultAbbrvName>máj.</DefaultAbbrvName>
+<DefaultAbbrvName>V.</DefaultAbbrvName>
 <DefaultFullName>május</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jun</MonthID>
-<DefaultAbbrvName>jún.</DefaultAbbrvName>
+<DefaultAbbrvName>VI.</DefaultAbbrvName>
 <DefaultFullName>június</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jul</MonthID>
-<DefaultAbbrvName>júl.</DefaultAbbrvName>
+<DefaultAbbrvName>VII.</DefaultAbbrvName>
 <DefaultFullName>július</DefaultFullName>
 </Month>
 <Month>
 <MonthID>aug</MonthID>
-<DefaultAbbrvName>aug.</DefaultAbbrvName>
+<DefaultAbbrvName>VIII.</DefaultAbbrvName>
 <DefaultFullName>augusztus</DefaultFullName>
 </Month>
 <Month>
 <MonthID>sep</MonthID>
-<DefaultAbbrvName>szept.</DefaultAbbrvName>
+<DefaultAbbrvName>IX.</DefaultAbbrvName>
 <DefaultFullName>szeptember</DefaultFullName>
 </Month>
 <Month>
 <MonthID>oct</MonthID>
-<DefaultAbbrvName>okt.</DefaultAbbrvName>
+<DefaultAbbrvName>X.</DefaultAbbrvName>
 <DefaultFullName>október</DefaultFullName>
 </Month>
 <Month>
 <MonthID>nov</MonthID>
-<DefaultAbbrvName>nov.</DefaultAbbrvName>
+<DefaultAbbrvName>XI.</DefaultAbbrvName>
 <DefaultFullName>november</DefaultFullName>
 </Month>
 <Month>
 <MonthID>dec</MonthID>
-<DefaultAbbrvName>dec.</DefaultAbbrvName>
+<DefaultAbbrvName>XII.</DefaultAbbrvName>
 <DefaultFullName>december</DefaultFullName>
 </Month>
 </MonthsOfYear>
@@ -363,10 +363,10 @@
 <ReservedWords>
 <trueWord>Igaz</trueWord>
 <falseWord>Hamis</falseWord>
-<quarter1Word>1. negyed</quarter1Word>
-<quarter2Word>2. negyed</quarter2Word>
-<quarter3Word>3. negyed</quarter3Word>
-<quarter4Word>4. negyed</quarter4Word>
+<quarter1Word>I. negyedév</quarter1Word>
+<quarter2Word>II. negyedév</quarter2Word>
+<quarter3Word>III. negyedév</quarter3Word>
+<quarter4Word>IV. negyedév</quarter4Word>
 <aboveWord>felett</aboveWord>
 <belowWord>alatt</belowWord>
 <quarter1Abbreviation>N1</quarter1Abbreviation>
