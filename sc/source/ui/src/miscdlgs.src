@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:41:28 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3511,23 +3511,23 @@ FloatingWindow RID_SCDLG_TEAM
     FixedBitmap 1 { Pos = MAP_APPFONT ( 1 , 1 ) ; };
     Text = "Das StarCalc Team" ;
     Text [ ENGLISH ] = "The StarCalc Team" ;
-    Text [ ENGLISH_US ] = "The StarOffice Calc Team" ;
-    Text [ italian ] = "Entwickleri di StarOffice Calci (sansi QS)" ;
-    Text [ spanish ] = "El equipo de StarOffice Calc" ;
-    Text [ french ] = "L'Èquipe de StarOffice Calc" ;
-    Text [ dutch ] = "Het StarOffice Calc Team" ;
-    Text [ swedish ] = "StarOffice Calc-teamet" ;
-    Text [ danish ] = "StarOffice Calc-teamet" ;
-    Text [ portuguese ] = "A equipa do StarOffice Calc" ;
-    Text [ portuguese_brazilian ] = "Das StarOffice Calc Team" ;
-    Text[ chinese_simplified ] = "StarOffice Calc π§◊˜◊È";
-    Text[ russian ] = " ÓÎÎÂÍÚË‚ StarOffice Calc";
-    Text[ polish ] = "ZespÛ≥ StarOffice Calc";
-    Text[ japanese ] = "StarOffice Calc ¡∞—";
-    Text[ chinese_traditional ] = "StarOffice Calc §p≤’";
-    Text[ arabic ] = "›—Ìﬁ StarOffice Calc";
-    Text[ greek ] = "« ÔÏ‹‰· ÙÔı StarOffice Calc.";
-    Text[ korean ] = "StarOffice Calc ∆¿";
+    Text [ ENGLISH_US ] = "The %PRODUCTNAME Calc Team" ;
+    Text [ italian ] = "Entwickleri di %PRODUCTNAME Calci (sansi QS)" ;
+    Text [ spanish ] = "El equipo de %PRODUCTNAME Calc" ;
+    Text [ french ] = "L'Èquipe de %PRODUCTNAME Calc" ;
+    Text [ dutch ] = "Het %PRODUCTNAME Calc Team" ;
+    Text [ swedish ] = "%PRODUCTNAME Calc-teamet" ;
+    Text [ danish ] = "%PRODUCTNAME Calc-teamet" ;
+    Text [ portuguese ] = "A equipa do %PRODUCTNAME Calc" ;
+    Text [ portuguese_brazilian ] = "Das %PRODUCTNAME Calc Team" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME Calc π§◊˜◊È";
+    Text[ russian ] = " ÓÎÎÂÍÚË‚ %PRODUCTNAME Calc";
+    Text[ polish ] = "ZespÛ≥ %PRODUCTNAME Calc";
+    Text[ japanese ] = "%PRODUCTNAME Calc ¡∞—";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Calc §p≤’";
+    Text[ arabic ] = "›—Ìﬁ %PRODUCTNAME Calc";
+    Text[ greek ] = "« ÔÏ‹‰· ÙÔı %PRODUCTNAME Calc.";
+    Text[ korean ] = "%PRODUCTNAME Calc ∆¿";
     Text[ turkish ] = "StarCalc Ekibi";
     Text[ language_user1 ] = " ";
 };
