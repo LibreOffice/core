@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:30:16 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
 #define BTN_DETECTCAT           26
 #define BTN_TOTALCOL            27
 #define BTN_TOTALROW            28
+#define BTN_FILTER              29
+#define BTN_DRILLDOWN           30
 
 #define PIVOTSTR_SUM            1
 #define PIVOTSTR_COUNT          2
