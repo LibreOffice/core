@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 15:42:44 $
+ *  last change: $Author: nn $ $Date: 2002-05-30 13:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
 
 //==================================================================
 
-#define IMAGE(id) pImgMgr->SeekImage(id,pScMod)
+#define IMAGE(id) pImgMgr->SeekImage(id,bDark,pScMod)
 
 //==================================================================
 //  class ScInputWindow
@@ -173,6 +173,8 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     ScTabViewShell*  pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     ScModule*        pScMod  = SC_MOD();
+
+    BOOL bDark = GetDisplayBackground().GetColor().IsDark();
 
     // Positionsfenster, 3 Buttons, Eingabefenster
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );
@@ -468,6 +470,8 @@ void ScInputWindow::SetOkCancelMode()
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if (!bIsOkCancelMode)
     {
+        BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+
         RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
         RemoveItem( 3 );
         InsertItem( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ), 0, 3 );
@@ -490,6 +494,8 @@ void ScInputWindow::SetSumAssignMode()
     SfxImageManager* pImgMgr = pBindings->GetImageManager();
     if (bIsOkCancelMode)
     {
+        BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+
         // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen
         RemoveItem( 3 );
         RemoveItem( 3 );
@@ -607,6 +613,34 @@ void ScInputWindow::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW ) Resize();
 }
+
+void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        //  update item images
+
+        ScModule*        pScMod  = SC_MOD();
+        SfxImageManager* pImgMgr = pBindings->GetImageManager();
+        BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+        // IMAGE macro uses pScMod, pImgMgr, bDark
+
+        SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
+        if ( bIsOkCancelMode )
+        {
+            SetItemImage( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ) );
+            SetItemImage( SID_INPUT_OK,     IMAGE( SID_INPUT_OK ) );
+        }
+        else
+        {
+            SetItemImage( SID_INPUT_SUM,   IMAGE( SID_INPUT_SUM ) );
+            SetItemImage( SID_INPUT_EQUAL, IMAGE( SID_INPUT_EQUAL ) );
+        }
+    }
+
+    ToolBox::DataChanged( rDCEvt );
+}
+
 //========================================================================
 //                          Eingabefenster
 //========================================================================

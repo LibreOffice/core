@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 15:42:02 $
+ *  last change: $Author: nn $ $Date: 2002-05-30 13:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ public:
     ScInputHandler* GetInputHandler(){ return pInputHdl;}
 
     void            StateChanged( StateChangedType nType );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
 protected:
