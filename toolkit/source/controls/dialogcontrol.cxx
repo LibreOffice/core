@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:43:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 
 #include <map>
 #include <algorithm>
+#include <functional>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
