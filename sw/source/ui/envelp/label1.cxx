@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,6 +1113,8 @@ void SwVisitingCardPage::InitFrameControl()
 
     uno::Sequence<OUString> aNames = _xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();
+    OUString uTitleName( C2U(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
+
     for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
     {
         uno::Any aGroup = _xAutoText->getByName(pGroups[i]);
@@ -1121,7 +1123,7 @@ void SwVisitingCardPage::InitFrameControl()
         if(!xIdxAcc.is() || xIdxAcc->getCount())
         {
             uno::Reference< beans::XPropertySet >  xPrSet(xGroup, uno::UNO_QUERY);
-            uno::Any aTitle = xPrSet->getPropertyValue(C2U(UNO_NAME_TITLE));
+            uno::Any aTitle = xPrSet->getPropertyValue( uTitleName );
             OUString uTitle;
             aTitle >>= uTitle;
             String sGroup(pGroups[i]);
@@ -1278,7 +1280,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     {
         String sFldName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                             "com.sun.star.text.FieldMaster.User." )));
-        OUString uCntName( C2U( UNO_NAME_CONTENT ));
+        OUString uCntName( C2U( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {
             String sCurFldName( sFldName );
