@@ -322,7 +322,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly )
 {
     //return true if a line was created successfully
-    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
+    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
 
     m_pPosHelper->getTransformedClipRect();
     SplineMode eSplineMode(B_SPLINE);//@todo get from model
@@ -391,7 +391,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 {
     //return true if an area was created successfully
 
-    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
+    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
     double zValue = pSeries->m_fLogicZPos - 0.5;
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
@@ -551,37 +551,10 @@ void AreaChart::createShapes()
             //iterate through all series
             for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
             {
-                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, m_xLogicTarget);
+                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xLogicTarget);
 
                 fLogicZ = nZ;
                 (*aSeriesIter)->m_fLogicZPos = fLogicZ;
-
-                //set z order for series group shape
-                {
-                    uno::Reference< beans::XPropertySet > xProp( xSeriesGroupShape_Shapes, uno::UNO_QUERY );
-                    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
-                    if( xProp.is())
-                    {
-                        /*
-                        //@todo
-                        //this was a hack for placing symbols
-                        //a wrong result was that gridlines got in front of the series
-                        //when introducing the symbols there has to be found another way
-                        try
-                        {
-                            uno::Any aAZOrder = xProp->getPropertyValue( C2U( UNO_NAME_MISC_OBJ_ZORDER ) );
-                            sal_Int32 nZOrder=33;
-                            aAZOrder >>= nZOrder;
-                            xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_ZORDER )
-                                , uno::makeAny( sal_Int32(0) ) );
-                        }
-                        catch( uno::Exception& e )
-                        {
-                            e;
-                        }
-                        */
-                    }
-                }
 
                 //collect data point information (logic coordinates, style ):
                 double fLogicX       = (*aSeriesIter)->getX(nIndex);
