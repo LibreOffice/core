@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:27:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #ifndef _SVX_FMSHELL_HXX
 #include "fmshell.hxx"
 #endif
+#ifndef _SVX_FMSHIMP_HXX
+#include "fmshimp.hxx"
+#endif
 
 #ifndef SVX_DBTOOLSCLIENT_HXX
 #include "dbtoolsclient.hxx"
@@ -179,6 +182,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::svxform;
 using namespace ::svx;
@@ -386,20 +390,14 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
 //-----------------------------------------------------------------------
 sal_Bool FmFieldWin::Update(FmFormShell* pShell)
 {
-    // ::com::sun::star::form::ListBox loeschen
     pListBox->Clear();
-    ::rtl::OUString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
-    SetText(aTitle);
+    String aTitle( SVX_RES( RID_STR_FIELDSELECTION ) );
+    SetText( aTitle );
 
-    if (!pShell || !pShell->GetFormView())
+    if (!pShell || !pShell->GetImpl())
         return sal_False;
 
-    SdrPageView* pPageView = pShell->GetFormView()->GetPageViewPvNum(0);
-    if( !pPageView )
-        return sal_False;
-
-    FmFormPage* pPage = PTR_CAST( FmFormPage, pPageView->GetPage() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm      = pPage->GetImpl()->getCurForm();
+    Reference< XForm >  xForm = pShell->GetImpl()->getCurrentForm();
     if (!xForm.is())
         return sal_False;
 
@@ -409,69 +407,78 @@ sal_Bool FmFieldWin::Update(FmFormShell* pShell)
 //-----------------------------------------------------------------------
 sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm)
 {
-    // ListBox loeschen
-    pListBox->Clear();
-    UniString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
-    SetText(aTitle);
-
-    if (!xForm.is())
-        return sal_False;
-
-    Reference< XPreparedStatement >  xStatement;
-    Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
-
-    m_aObjectName   = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
-    m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
-    m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
-
-    // get the connection of the form
-    Reference< XConnection > xConnection = OStaticDataAccessTools().calcConnection(Reference< XRowSet >(xForm, UNO_QUERY), ::comphelper::getProcessServiceFactory());
-    Sequence< ::rtl::OUString> aFieldNames;
-    // get the fields of the object
-    if ( xConnection.is() && m_aObjectName.getLength() )
-        aFieldNames = getFieldNamesByCommandDescriptor( xConnection, m_nObjectType, m_aObjectName );
-
-    // put them into the list
-    const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
-    sal_Int32 nFieldsCount = aFieldNames.getLength();
-    for ( sal_Int32 i = 0; i < nFieldsCount; ++i, ++pFieldNames)
-        pListBox->InsertEntry( * pFieldNames);
-
-    // Prefix setzen
-    UniString  aPrefix;
-    UniString  aPrefixes( SVX_RES(RID_STR_TABWIN_PREFIX) );
-
-    switch (m_nObjectType)
+    try
     {
-        case CommandType::TABLE:
-            aPrefix = aPrefixes.GetToken(0);
-            break;
-        case CommandType::QUERY:
-            aPrefix = aPrefixes.GetToken(1);
-            break;
-        default:
-            aPrefix = aPrefixes.GetToken(2);
-            break;
-    }
+        // ListBox loeschen
+        pListBox->Clear();
+        UniString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
+        SetText(aTitle);
 
-    // an dem PropertySet nach Aenderungen der ControlSource lauschen
-    if (m_pChangeListener)
+        if (!xForm.is())
+            return sal_False;
+
+        Reference< XPreparedStatement >  xStatement;
+        Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
+
+        m_aObjectName   = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
+        m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
+        m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
+
+        // get the connection of the form
+        OStaticDataAccessTools aTools;
+        Reference< XConnection > xConnection = aTools.connectRowset(
+            Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessServiceFactory(), sal_True );
+        Sequence< ::rtl::OUString> aFieldNames;
+        // get the fields of the object
+        if ( xConnection.is() && m_aObjectName.getLength() )
+            aFieldNames = getFieldNamesByCommandDescriptor( xConnection, m_nObjectType, m_aObjectName );
+
+        // put them into the list
+        const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
+        sal_Int32 nFieldsCount = aFieldNames.getLength();
+        for ( sal_Int32 i = 0; i < nFieldsCount; ++i, ++pFieldNames)
+            pListBox->InsertEntry( * pFieldNames);
+
+        // Prefix setzen
+        UniString  aPrefix;
+        UniString  aPrefixes( SVX_RES(RID_STR_TABWIN_PREFIX) );
+
+        switch (m_nObjectType)
+        {
+            case CommandType::TABLE:
+                aPrefix = aPrefixes.GetToken(0);
+                break;
+            case CommandType::QUERY:
+                aPrefix = aPrefixes.GetToken(1);
+                break;
+            default:
+                aPrefix = aPrefixes.GetToken(2);
+                break;
+        }
+
+        // an dem PropertySet nach Aenderungen der ControlSource lauschen
+        if (m_pChangeListener)
+        {
+            m_pChangeListener->dispose();
+            m_pChangeListener->release();
+        }
+        m_pChangeListener = new ::comphelper::OPropertyChangeMultiplexer(this, xSet);
+        m_pChangeListener->acquire();
+        m_pChangeListener->addProperty(FM_PROP_DATASOURCE);
+        m_pChangeListener->addProperty(FM_PROP_COMMAND);
+        m_pChangeListener->addProperty(FM_PROP_COMMANDTYPE);
+
+        // Titel setzen
+        aTitle.AppendAscii(" ");
+        aTitle += aPrefix;
+        aTitle.AppendAscii(" ");
+        aTitle += m_aObjectName.getStr();
+        SetText( aTitle );
+    }
+    catch( const Exception& )
     {
-        m_pChangeListener->dispose();
-        m_pChangeListener->release();
+        DBG_ERROR( "FmTabWin::Update: caught an excepiton!" );
     }
-    m_pChangeListener = new ::comphelper::OPropertyChangeMultiplexer(this, xSet);
-    m_pChangeListener->acquire();
-    m_pChangeListener->addProperty(FM_PROP_DATASOURCE);
-    m_pChangeListener->addProperty(FM_PROP_COMMAND);
-    m_pChangeListener->addProperty(FM_PROP_COMMANDTYPE);
-
-    // Titel setzen
-    aTitle.AppendAscii(" ");
-    aTitle += aPrefix;
-    aTitle.AppendAscii(" ");
-    aTitle += m_aObjectName.getStr();
-    SetText( aTitle );
 
     return sal_True;
 }
