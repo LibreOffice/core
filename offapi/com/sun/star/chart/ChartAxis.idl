@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxis.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 14:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_chart_ChartAxis_idl__
 #define __com_sun_star_chart_ChartAxis_idl__
 
-#ifndef __com_sun_star_drawing_LineShapeDescriptor_idl__
-#include <com/sun/star/drawing/LineShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
 #endif
 
 #ifndef __com_sun_star_style_CharacterProperties_idl__
@@ -96,10 +96,9 @@ service ChartAxis
 {
 
 
-    // DocMerge from xml: service com::sun::star::chart::ChartAxis: service com::sun::star::drawing::LineShapeDescriptor
     /** contains all the drawing and text properties.
      */
-    service com::sun::star::drawing::LineShapeDescriptor;
+    service com::sun::star::drawing::LineProperties;
 
     // DocMerge: empty anyway
     service com::sun::star::style::CharacterProperties;
@@ -282,6 +281,9 @@ service ChartAxis
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/14 12:53:35  mi
     <true></true> -> <TRUE/> and same with FALSE
 
