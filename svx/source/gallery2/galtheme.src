@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:28:00 $
+ *  last change: $Author: tv $ $Date: 2001-10-04 12:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,10 +972,11 @@ String RID_GALLERYSTR_THEME_TROUBLE
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_DUMMY4
+String RID_GALLERYSTR_THEME_SCREENBEANS
 {
-    // !!! Don't translate, please !!!
-    Text = "Dummy 4";
+    Text = "ScreenBeans";
+    Text[ENGLISH] = "ScreenBeans";
+    Text[english_us] = "ScreenBeans";
 };
 
 // -----------------------------------------------------------------------------
