@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-14 17:26:07 $
+ *  last change: $Author: mba $ $Date: 2000-11-22 12:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
 // -------------------------------------------------------------------------------------
-
+IMPL_CREATEINSTANCE( PathService )
 IMPL_CREATEINSTANCE( SvtTextLoader )
 IMPL_CREATEINSTANCE( ExtVCLXToolkit )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
@@ -182,7 +182,7 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), ExtVCLXToolkit_CreateInstance, aServiceNames );
+            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), PathService_CreateInstance, aServiceNames );
         }
 
         if ( xFactory.is() )
