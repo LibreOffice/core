@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:25:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "AntalV" ;
             Text [ danish ] = "Tælv" ;
             Text [ portuguese ] = "Contar" ;
-            Text [ portuguese_brazilian ] = "ContagemA" ;
+            Text [ portuguese_brazilian ] = "Contagem A" ;
             Text[ chinese_simplified ] = "æ•°ç›®2";
             Text[ russian ] = "Êîëè÷åñòâî2";
             Text[ polish ] = "ILOŒÆ2";
@@ -662,6 +662,7 @@ Image RID_SVXBMP_SIZE
         Blue = 0xFFFF ;
     };
 };
+
 
 
 
