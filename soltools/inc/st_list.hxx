@@ -2,9 +2,9 @@
  *
  *  $RCSfile: st_list.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:25:48 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,8 @@ template <class XY>
 DynamicList<XY>::DynamicList( const DynamicList<XY> & i_rList )
     :   ST_List< XY* >(i_rList)
 {
-    for ( typename DynamicList<XY>::iterator it = begin();
-          it != end();
+    for ( typename DynamicList<XY>::iterator it = this->begin();
+          it != DynamicList<XY>::end();
           ++it )
     {
         // Copying the contents the pointers point at:
@@ -317,7 +317,7 @@ DynamicList<XY>::DynamicList( const DynamicList<XY> & i_rList )
 template <class XY>
 DynamicList<XY>::~DynamicList()
 {
-    erase_all();
+    this->erase_all();
 }
 
 template <class XY>
@@ -338,24 +338,24 @@ template <class XY>
 void
 DynamicList<XY>::Insert(unsigned pos, XY * const & elem)
 {
-    if ( pos > len )
+    if ( pos > this->len )
       return;
 
-    checkSize(len+2);
-    memmove( inhalt+pos+1, inhalt+pos, (len-pos) * sizeof(XY*) );
-    inhalt[pos] = elem;
-    len++;
+    checkSize(DynamicList<XY>::len+2);
+    memmove( DynamicList<XY>::inhalt+pos+1, DynamicList<XY>::inhalt+pos, (DynamicList<XY>::len-pos) * sizeof(XY*) );
+    this->inhalt[pos] = elem;
+    this->len++;
 }
 
 template <class XY>
 void
 DynamicList<XY>::Remove( unsigned pos )
 {
-    if (!is_valid_index(pos) )
+    if (!this->is_valid_index(pos) )
         return;
-    len--;
-    delete inhalt[pos];
-    memmove(inhalt+pos, inhalt+pos+1, (len-pos) * sizeof(XY*) );
+    this->len--;
+    delete DynamicList<XY>::inhalt[pos];
+    memmove(DynamicList<XY>::inhalt+pos, DynamicList<XY>::inhalt+pos+1, (DynamicList<XY>::len-pos) * sizeof(XY*) );
 }
 
 
