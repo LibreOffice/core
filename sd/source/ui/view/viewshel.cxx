@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:06:02 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,7 +1610,8 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
 
             pWindow->SetDrawMode( nMode );
             pFrameView->SetDrawMode( nMode );
-            GetView()->ReleaseMasterPagePaintCache();
+// #110094#-7
+//            GetView()->ReleaseMasterPagePaintCache();
             pWindow->Invalidate();
 
             Invalidate();
