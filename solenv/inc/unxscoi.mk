@@ -63,16 +63,16 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=-lXt -lXext -lXmu -lX11 -ldl -lsocket -lm
+STDLIBGUIST=-lXext -lX11 -ldl -lsocket -lm
 STDLIBCUIST=-ldl -lsocket -lm
 .IF "$(PRJNAME)"=="rsc"
-STDLIBGUIMT=-lXt -lXext -lXmu -lX11 $(STATIC) -lpthread $(DYNAMIC) -ldl -lsocket -lm
+STDLIBGUIMT=-lXext -lX11 $(STATIC) -lpthread $(DYNAMIC) -ldl -lsocket -lm
 STDLIBCUIMT=$(STATIC) -lpthread $(DYNAMIC) -ldl -lsocket -lm 
 .ELSE
-STDLIBGUIMT=-lXt -lXext -lXmu -lX11 -lpthread -ldl -lsocket -lm
+STDLIBGUIMT=-lXext -lX11 -lpthread -ldl -lsocket -lm
 STDLIBCUIMT=-lpthread -ldl -lsocket -lm 
 .ENDIF
-#STDSHLGUIMT=-lXt -lXext -lXmu -lX11 -lpthread -ldl -lsocket -lm
+#STDSHLGUIMT=-lXext -lX11 -lpthread -ldl -lsocket -lm
 #STDSHLCUIMT=-lpthread -ldl -lsocket -lm 
 
 STDLIBCPP= -lstdc++

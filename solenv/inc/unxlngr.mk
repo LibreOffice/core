@@ -126,9 +126,9 @@ STDSLOCUI=
 STDLIBCUIST=-ldl -lm -lstlport_gcc
 STDLIBGUIMT=-ldl -lpthread -lm -lstlport_gcc
 STDLIBCUIMT=-ldl -lpthread -lm -lstlport_gcc
-STDLIBGUIST=-lXaw -lXt -lX11 -ldl -lm
+STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -ldl -lpthread -lm -lstlport_gcc
+STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm -lstlport_gcc
 STDSHLCUIMT=-ldl -lpthread -lm -lstlport_gcc
 
 # name of library manager

@@ -3,9 +3,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2001-05-02 15:05:51 $
+#   last change: $Author: pl $ $Date: 2001-10-24 17:21:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -168,11 +168,11 @@ STDSLOCUI=
 
 # libraries for linking applications
 STDLIBCUIST=-lm
-STDLIBGUIMT=-lXaw -lXt -lX11 -lpthread -lm
+STDLIBGUIMT=-lX11 -lpthread -lm
 STDLIBCUIMT=-lpthread -lm
-STDLIBGUIST=-lXaw -lXt -lX11 -lm
+STDLIBGUIST=-lX11 -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -lpthread -lm
+STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
 
 # STLport always needs pthread. This may yield some redundant -lpthread

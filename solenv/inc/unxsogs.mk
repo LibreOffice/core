@@ -78,8 +78,8 @@ STDLIBCUIMT=-lpthread -ldl -lm
 STDSHLGUIMT=-lpthread -lnsl -lsocket -ldl -lm
 STDSHLCUIMT=-lpthread -ldl -lm
 
-STDLIBGUIST+=-lXm -lXt -lX11
-STDLIBGUIMT+=-lXm -lXt -lX11
+STDLIBGUIST+=-lX11
+STDLIBGUIMT+=-lX11
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)

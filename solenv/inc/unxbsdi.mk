@@ -52,7 +52,7 @@ LINKFLAGSDEBUG=
 LINKFLAGSOPT=
 
 _SYSLIBS= -lpthread -lgcc -lc -lm 
-_X11LIBS= -L/usr/X11R6/lib -lXext -lXt -lX11
+_X11LIBS= -L/usr/X11R6/lib -lXext -lX11
 
 STDLIBCPP= -lstdc++
 

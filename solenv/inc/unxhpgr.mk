@@ -61,12 +61,12 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST= -lX11 -lXt -lXmu -lXext -lsec -lcxx -ldld -lm
+STDLIBGUIST= -lX11 -lXext -lsec -lcxx -ldld -lm
 STDLIBCUIST= -lsec -lcxx -ldld -lm
-#STDLIBGUIMT= -lX11 -lXt -lXmu -lXext -lcma -lsec -lcxx -ldld -lc_r -lm
-STDLIBGUIMT= -lX11 -lXt -lXmu -lXext -ldce
+#STDLIBGUIMT= -lX11 -lXext -lcma -lsec -lcxx -ldld -lc_r -lm
+STDLIBGUIMT= -lX11 -lXext -ldce
 STDLIBCUIMT= -lc_r -lgcc -ldce
-#STDSHLGUIMT= -lX11 -lXt -lXmu -lXext -lcma -lsec -lcxx -ldld -lc_r
+#STDSHLGUIMT= -lX11 -lXext -lcma -lsec -lcxx -ldld -lc_r
 STDSHLGUIMT= -lcma -lsec -ldld -lc_r
 STDSHLCUIMT=
 # -L/opt/dce/lib -ldce -lsec -lcxx

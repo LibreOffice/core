@@ -120,11 +120,11 @@ STDSLOCUI=
 
 # libraries for linking applications
 STDLIBCUIST=-ldl -lm
-STDLIBGUIMT=-lXaw -lXt -lX11 -ldl -lpthread -lm
+STDLIBGUIMT=-lX11 -ldl -lpthread -lm
 STDLIBCUIMT=-ldl -lpthread -lm
-STDLIBGUIST=-lXaw -lXt -lX11 -ldl -lm
+STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries 
-STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -ldl -lpthread -lm
+STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc

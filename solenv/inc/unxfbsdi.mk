@@ -61,7 +61,7 @@ LINKVERSIONMAPFLAG=-Wl,--version-script
 STDLIBCPP=-lstdc++
 
 # _SYSLIBS= -L/usr/lib -lm
-# _X11LIBS= -L/usr/X11R6/lib -lXext -lXt -lX11
+# _X11LIBS= -L/usr/X11R6/lib -lXext -lX11
 # _CXXLIBS= -L/usr/lib -lstdc++ -L/usr/local/lib
 
 STDOBJGUI=
@@ -70,10 +70,10 @@ STDOBJCUI=
 STDSLOCUI=
 
 STDLIBCUIST=-lm
-STDLIBGUIST==-lXaw -lXt -lX11 -lm
-STDLIBGUIMT=-pthread -lm -lstlport_gcc
+STDLIBGUIST=-lX11 -lm
+STDLIBGUIMT=-lX11 -lXext -pthread -lm -lstlport_gcc
 STDLIBCUIMT=-pthread -lm -lstlport_gcc
-STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -pthread -lm -lstlport_gcc
+STDSHLGUIMT=-lX11 -lXext -pthread -lm -lstlport_gcc
 STDSHLCUIMT=-pthread -lm -lstlport_gcc
 
 LIBMGR=			ar
