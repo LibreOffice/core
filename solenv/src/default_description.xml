@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name> XXX </module-name>
+    <component-description>
+        <author> automatic generated </author>
+        <name> XXX </name>
+        <description> no description yet. </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++  </language>
+        <status value="under_construction"/>
+        <supported-service> XXX </supported-service>
+    </component-description>
+</module-description>
 
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> automatic generated </Author>
-
-<Name>  XXX </Name>
-
-<Description>
-    no description yet.
-</Description>
-
-<ModuleName>    xxx </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="under_construction"/>
-
-<SupportedService>  xxx </SupportedService>
-
-
-</COMPONENTDESCRIPTION>
