@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WriterSelector.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:15:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,148 +38,128 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XController;
-import com.sun.star.view.XSelectionSupplier;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.text.XTextRange;
-import com.sun.star.text.XTextFrame;
-import com.sun.star.text.XTextContent;
-import com.sun.star.beans.XPropertySet;
-
 
 /** This class gives you information on the selected objects (text range, text
  * frame, or graphics) at an OpenOffice.org Server. The Office must be started in
- * advance using the following command line option:
- * soffice "-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"
+ * advance and you must have selected something (text, graphics, ...)
  */
 public class WriterSelector {
     /**
      * @param args No arguments.
      */
     public static void main(String args[]) {
+        com.sun.star.uno.XComponentContext xContext = null;
+
         try {
-            //the connection string to connect the office
-            String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
-            // It is possible to use a different connection string, passed as argument
-            if ( args.length == 1 ) {
-                sConnectionString = args[0];
+            // bootstrap UNO and get the remote component context. The context can
+            // be used to get the service manager
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+
+            // get the remote office service manager
+            com.sun.star.lang.XMultiComponentFactory xMCF =
+                xContext.getServiceManager();
+
+            // get a new instance of the desktop
+            com.sun.star.frame.XDesktop xDesktop = (com.sun.star.frame.XDesktop)
+                UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class,
+                    xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                                   xContext ) );
+
+            com.sun.star.frame.XComponentLoader xCompLoader =
+                (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+
+            com.sun.star.lang.XComponent xComponent =
+                xCompLoader.loadComponentFromURL("private:factory/swriter",
+                    "_blank", 0, new com.sun.star.beans.PropertyValue[0]);
+            {
+            com.sun.star.text.XTextDocument xDoc =(com.sun.star.text.XTextDocument)
+                UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
+                                          xComponent);
+            xDoc.getText().setString("Please select something in this text and press then \"return\" in the shell where you have started the example.\n");
+
+            // ensure that the document content is optimal visible
+            com.sun.star.frame.XModel xModel =
+                (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XModel.class, xDoc);
+
+            com.sun.star.view.XViewSettingsSupplier xViewSettings =
+                (com.sun.star.view.XViewSettingsSupplier)UnoRuntime.queryInterface(
+                    com.sun.star.view.XViewSettingsSupplier.class, xModel.getCurrentController());
+            xViewSettings.getViewSettings().setPropertyValue(
+                "ZoomType", new Short((short)0));
             }
+            // test document will be closed later
 
-            /* Bootstraps a component context with the jurt base components
-               registered. Component context to be granted to a component for running.
-               Arbitrary values can be retrieved from the context. */
-            XComponentContext xcomponentcontext =
-            com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-            null );
-
-            /* Gets the service manager instance to be used (or null). This method has
-               been added for convenience, because the service manager is a often used
-               object. */
-            XMultiComponentFactory xmulticomponentfactory =
-            xcomponentcontext.getServiceManager();
-
-            /* Creates an instance of the component UnoUrlResolver which
-               supports the services specified by the factory. */
-            Object objectUrlResolver =
-            xmulticomponentfactory.createInstanceWithContext(
-            "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-
-            // Create a new url resolver
-            XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
-            UnoRuntime.queryInterface( XUnoUrlResolver.class,
-            objectUrlResolver );
-
-            // Resolves an object that is specified as follow:
-            // uno:<connection description>;<protocol description>;<initial object name>
-            Object objectInitial = xurlresolver.resolve( sConnectionString );
-
-            // Create a service manager from the initial object
-            xmulticomponentfactory = ( XMultiComponentFactory )
-            UnoRuntime.queryInterface( XMultiComponentFactory.class,
-            objectInitial );
-
-            // Query for the XPropertySet interface.
-            XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
-            UnoRuntime.queryInterface( XPropertySet.class,
-            xmulticomponentfactory );
-
-            // Get the default context from the office server.
-            Object objectDefaultContext =
-            xpropertysetMultiComponentFactory.getPropertyValue(
-            "DefaultContext" );
-
-            // Query for the interface XComponentContext.
-            xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
-            XComponentContext.class, objectDefaultContext );
-
-            // Querying for the interface XDesktop.
-            XDesktop xdesktop = ( XDesktop ) UnoRuntime.queryInterface(
-            XDesktop.class, xmulticomponentfactory.createInstanceWithContext(
-            "com.sun.star.frame.Desktop", xcomponentcontext ) );
+            System.out.println("\nPlease select something in the test document and press then \"return\" to continues the example ...");
+            System.in.read();
 
             // Getting the current frame from the OpenOffice.org Server.
-            XFrame xframe = xdesktop.getCurrentFrame();
+            com.sun.star.frame.XFrame xframe = xDesktop.getCurrentFrame();
 
             // Getting the controller.
-            XController xcontroller = xframe.getController();
+            com.sun.star.frame.XController xController = xframe.getController();
 
-            XSelectionSupplier xselectionsupplier =
-            ( XSelectionSupplier ) UnoRuntime.queryInterface(
-            XSelectionSupplier.class, xcontroller );
+            com.sun.star.view.XSelectionSupplier xSelSupplier =
+                (com.sun.star.view.XSelectionSupplier)UnoRuntime.queryInterface(
+                    com.sun.star.view.XSelectionSupplier.class, xController );
 
-            Object objectSelection = xselectionsupplier.getSelection();
+            Object oSelection = xSelSupplier.getSelection();
 
-            XServiceInfo xserviceinfo = ( XServiceInfo )
-            UnoRuntime.queryInterface( XServiceInfo.class,
-            objectSelection );
+            com.sun.star.lang.XServiceInfo xServInfo =
+                (com.sun.star.lang.XServiceInfo)UnoRuntime.queryInterface(
+                    com.sun.star.lang.XServiceInfo.class, oSelection );
 
-            if ( xserviceinfo.supportsService( "com.sun.star.text.TextRanges" )
-            ) {
-                XIndexAccess xindexaccess = ( XIndexAccess )
-                UnoRuntime.queryInterface(
-                XIndexAccess.class, objectSelection );
+            if ( xServInfo.supportsService("com.sun.star.text.TextRanges") )
+            {
+                com.sun.star.container.XIndexAccess xIndexAccess =
+                    (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+                        com.sun.star.container.XIndexAccess.class, oSelection);
 
-                for ( int intCounter = 0; intCounter < xindexaccess.getCount();
-                intCounter++ ) {
-                    XTextRange xtextrange = ( XTextRange )
-                    UnoRuntime.queryInterface(
-                    XTextRange.class, xindexaccess.getByIndex( intCounter ) );
+                int count = xIndexAccess.getCount();
+                com.sun.star.text.XTextRange xTextRange = null;
+                for ( int i = 0; i < count; i++ ) {
+                    xTextRange = (com.sun.star.text.XTextRange)
+                        UnoRuntime.queryInterface(
+                            com.sun.star.text.XTextRange.class,
+                            xIndexAccess.getByIndex(i));
 
                     System.out.println( "You have selected a text range: \""
-                    + xtextrange.getString() + "\"." );
+                                        + xTextRange.getString() + "\"." );
                 }
             }
 
-            if ( xserviceinfo.supportsService(
-            "com.sun.star.text.TextGraphicObject" )
-            ) {
+            if ( xServInfo.supportsService("com.sun.star.text.TextGraphicObject") )
+            {
                 System.out.println( "You have selected a graphics." );
             }
 
-            if ( xserviceinfo.supportsService(
-            "com.sun.star.text.TextTableCursor" )
-            ) {
+            if ( xServInfo.supportsService("com.sun.star.text.TextTableCursor") )
+            {
                 System.out.println( "You have selected a text table." );
+            }
+
+
+            // close test document
+            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
+                UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
+                                          xComponent );
+
+            if (xCloseable != null ) {
+                xCloseable.close(false);
+            } else
+            {
+                xComponent.dispose();
             }
 
             System.exit(0);
         }
-        catch( Exception exception ) {
-            System.err.println( exception );
+        catch( Exception e ) {
+            e.printStackTrace(System.err);
+            System.exit(1);
         }
     }
 }
