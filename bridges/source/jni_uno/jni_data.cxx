@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:27:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
     auto_ptr< rtl_mem > seq(
@@ -83,15 +83,18 @@ inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
     return seq;
 }
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 void Bridge::map_to_uno(
     JNI_context const & jni,
     void * uno_data, jvalue java_data,
-    typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
+    typelib_TypeDescriptionReference * type,
+    JNI_type_info const * info /* maybe 0 */,
     bool assign, bool out_param,
     bool special_wrapped_integral_types ) const
 {
-    OSL_ASSERT( !out_param || (1 == jni->GetArrayLength( (jarray)java_data.l )) );
+    OSL_ASSERT(
+        !out_param ||
+        (1 == jni->GetArrayLength( (jarray) java_data.l )) );
 
     switch (type->eTypeClass)
     {
@@ -99,54 +102,54 @@ void Bridge::map_to_uno(
         if (out_param)
         {
             jni->GetCharArrayRegion(
-                (jcharArray)java_data.l, 0, 1, (jchar *)uno_data );
+                (jcharArray) java_data.l, 0, 1, (jchar *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jchar *)uno_data = jni->CallCharMethodA(
+            *(jchar *) uno_data = jni->CallCharMethodA(
                 java_data.l, m_jni_info->m_method_Character_charValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jchar *)uno_data = java_data.c;
+            *(jchar *) uno_data = java_data.c;
         }
         break;
     case typelib_TypeClass_BOOLEAN:
         if (out_param)
         {
             jni->GetBooleanArrayRegion(
-                (jbooleanArray)java_data.l, 0, 1, (jboolean *)uno_data );
+                (jbooleanArray) java_data.l, 0, 1, (jboolean *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jboolean *)uno_data = jni->CallBooleanMethodA(
+            *(jboolean *) uno_data = jni->CallBooleanMethodA(
                 java_data.l, m_jni_info->m_method_Boolean_booleanValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jboolean *)uno_data = java_data.z;
+            *(jboolean *) uno_data = java_data.z;
         }
         break;
     case typelib_TypeClass_BYTE:
         if (out_param)
         {
             jni->GetByteArrayRegion(
-                (jbyteArray)java_data.l, 0, 1, (jbyte *)uno_data );
+                (jbyteArray) java_data.l, 0, 1, (jbyte *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jbyte *)uno_data = jni->CallByteMethodA(
+            *(jbyte *) uno_data = jni->CallByteMethodA(
                 java_data.l, m_jni_info->m_method_Byte_byteValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jbyte *)uno_data = java_data.b;
+            *(jbyte *) uno_data = java_data.b;
         }
         break;
     case typelib_TypeClass_SHORT:
@@ -154,18 +157,18 @@ void Bridge::map_to_uno(
         if (out_param)
         {
             jni->GetShortArrayRegion(
-                (jshortArray)java_data.l, 0, 1, (jshort *)uno_data );
+                (jshortArray) java_data.l, 0, 1, (jshort *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jshort *)uno_data = jni->CallShortMethodA(
+            *(jshort *) uno_data = jni->CallShortMethodA(
                 java_data.l, m_jni_info->m_method_Short_shortValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jshort *)uno_data = java_data.s;
+            *(jshort *) uno_data = java_data.s;
         }
         break;
     case typelib_TypeClass_LONG:
@@ -173,18 +176,18 @@ void Bridge::map_to_uno(
         if (out_param)
         {
             jni->GetIntArrayRegion(
-                (jintArray)java_data.l, 0, 1, (jint *)uno_data );
+                (jintArray) java_data.l, 0, 1, (jint *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jint *)uno_data = jni->CallIntMethodA(
+            *(jint *) uno_data = jni->CallIntMethodA(
                 java_data.l, m_jni_info->m_method_Integer_intValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jint *)uno_data = java_data.i;
+            *(jint *) uno_data = java_data.i;
         }
         break;
     case typelib_TypeClass_HYPER:
@@ -192,54 +195,54 @@ void Bridge::map_to_uno(
         if (out_param)
         {
             jni->GetLongArrayRegion(
-                (jlongArray)java_data.l, 0, 1, (jlong *)uno_data );
+                (jlongArray) java_data.l, 0, 1, (jlong *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jlong *)uno_data = jni->CallLongMethodA(
+            *(jlong *) uno_data = jni->CallLongMethodA(
                 java_data.l, m_jni_info->m_method_Long_longValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jlong *)uno_data = java_data.j;
+            *(jlong *) uno_data = java_data.j;
         }
         break;
     case typelib_TypeClass_FLOAT:
         if (out_param)
         {
             jni->GetFloatArrayRegion(
-                (jfloatArray)java_data.l, 0, 1, (jfloat *)uno_data );
+                (jfloatArray) java_data.l, 0, 1, (jfloat *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jfloat *)uno_data = jni->CallFloatMethodA(
+            *(jfloat *) uno_data = jni->CallFloatMethodA(
                 java_data.l, m_jni_info->m_method_Float_floatValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jfloat *)uno_data = java_data.f;
+            *(jfloat *) uno_data = java_data.f;
         }
         break;
     case typelib_TypeClass_DOUBLE:
         if (out_param)
         {
             jni->GetDoubleArrayRegion(
-                (jdoubleArray)java_data.l, 0, 1, (jdouble *)uno_data );
+                (jdoubleArray) java_data.l, 0, 1, (jdouble *) uno_data );
             jni.ensure_no_exception();
         }
         else if (special_wrapped_integral_types)
         {
-            *(jdouble *)uno_data = jni->CallDoubleMethodA(
+            *(jdouble *) uno_data = jni->CallDoubleMethodA(
                 java_data.l, m_jni_info->m_method_Double_doubleValue, 0 );
             jni.ensure_no_exception();
         }
         else
         {
-            *(jdouble *)uno_data = java_data.d;
+            *(jdouble *) uno_data = java_data.d;
         }
         break;
     case typelib_TypeClass_STRING:
@@ -247,7 +250,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -255,7 +259,8 @@ void Bridge::map_to_uno(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -263,7 +268,7 @@ void Bridge::map_to_uno(
         if (! assign)
             *(rtl_uString **)uno_data = 0;
         jstring_to_ustring(
-            jni, (rtl_uString **)uno_data, (jstring)java_data.l );
+            jni, (rtl_uString **)uno_data, (jstring) java_data.l );
         break;
     }
     case typelib_TypeClass_TYPE:
@@ -271,7 +276,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -279,7 +285,8 @@ void Bridge::map_to_uno(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -287,25 +294,31 @@ void Bridge::map_to_uno(
 
         // type name
         JLocalAutoRef jo_type_name(
-            jni, jni->GetObjectField( java_data.l, m_jni_info->m_field_Type__typeName ) );
+            jni, jni->GetObjectField(
+                java_data.l, m_jni_info->m_field_Type__typeName ) );
         if (! jo_type_name.is())
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("] incomplete type object: no type name!") );
+                RTL_CONSTASCII_STRINGPARAM("] incomplete type object: "
+                                           "no type name!") );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
-        OUString type_name( jstring_to_oustring( jni, (jstring)jo_type_name.get() ) );
+        OUString type_name(
+            jstring_to_oustring( jni, (jstring) jo_type_name.get() ) );
         ::com::sun::star::uno::TypeDescription td( type_name );
         if (! td.is())
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
             buf.append( type_name );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -324,7 +337,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -334,59 +348,70 @@ void Bridge::map_to_uno(
         {
             if (assign)
                 uno_any_destruct( pAny, 0 );
-            uno_any_construct( pAny, 0, m_jni_info->m_XInterface_type_info->m_td.get(), 0 );
+            uno_any_construct(
+                pAny, 0, m_jni_info->m_XInterface_type_info->m_td.get(), 0 );
             break;
         }
 
         JLocalAutoRef jo_type( jni );
         JLocalAutoRef jo_wrapped_holder( jni );
 
-        if (JNI_FALSE != jni->IsInstanceOf( java_data.l, m_jni_info->m_class_Any ))
+        if (JNI_FALSE != jni->IsInstanceOf(
+                java_data.l, m_jni_info->m_class_Any ))
         {
             // boxed any
-            jo_type.reset( jni->GetObjectField( java_data.l, m_jni_info->m_field_Any__type ) );
+            jo_type.reset( jni->GetObjectField(
+                               java_data.l, m_jni_info->m_field_Any__type ) );
             if (! jo_type.is())
             {
                 OUStringBuffer buf( 128 );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-                buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+                buf.append(
+                    *reinterpret_cast< OUString const * >( &type->pTypeName ) );
                 buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("] no type set at com.sun.star.uno.Any!") );
+                    RTL_CONSTASCII_STRINGPARAM("] no type set at "
+                                               "com.sun.star.uno.Any!") );
                 buf.append( jni.get_stack_trace() );
                 throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
             // wrapped value
             jo_wrapped_holder.reset(
-                jni->GetObjectField( java_data.l, m_jni_info->m_field_Any__object ) );
+                jni->GetObjectField(
+                    java_data.l, m_jni_info->m_field_Any__object ) );
             java_data.l = jo_wrapped_holder.get();
         }
         else
         {
             // create type out of class
             JLocalAutoRef jo_class( jni, jni->GetObjectClass( java_data.l ) );
-            jo_type.reset( create_type( jni, (jclass)jo_class.get() ) );
+            jo_type.reset( create_type( jni, (jclass) jo_class.get() ) );
 #if OSL_DEBUG_LEVEL > 1
             JLocalAutoRef jo_toString(
                 jni, jni->CallObjectMethodA(
                     java_data.l, m_jni_info->m_method_Object_toString, 0 ) );
             jni.ensure_no_exception();
-            OUString toString( jstring_to_oustring( jni, (jstring)jo_toString.get() ) );
+            OUString toString(
+                jstring_to_oustring( jni, (jstring) jo_toString.get() ) );
 #endif
         }
 
         // get type name
         JLocalAutoRef jo_type_name(
-            jni, jni->GetObjectField( jo_type.get(), m_jni_info->m_field_Type__typeName ) );
+            jni, jni->GetObjectField(
+                jo_type.get(), m_jni_info->m_field_Type__typeName ) );
         jni.ensure_no_exception();
-        OUString type_name( jstring_to_oustring( jni, (jstring)jo_type_name.get() ) );
+        OUString type_name(
+            jstring_to_oustring( jni, (jstring) jo_type_name.get() ) );
 
         ::com::sun::star::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
             buf.append( type_name );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -405,33 +430,33 @@ void Bridge::map_to_uno(
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_CHAR:
-                *(jchar *)&pAny->pReserved = jni->CallCharMethodA(
+                *(jchar *) &pAny->pReserved = jni->CallCharMethodA(
                     java_data.l, m_jni_info->m_method_Character_charValue, 0 );
                 jni.ensure_no_exception();
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_BOOLEAN:
-                *(jboolean *)&pAny->pReserved = jni->CallBooleanMethodA(
+                *(jboolean *) &pAny->pReserved = jni->CallBooleanMethodA(
                     java_data.l, m_jni_info->m_method_Boolean_booleanValue, 0 );
                 jni.ensure_no_exception();
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_BYTE:
-                *(jbyte *)&pAny->pReserved = jni->CallByteMethodA(
+                *(jbyte *) &pAny->pReserved = jni->CallByteMethodA(
                     java_data.l, m_jni_info->m_method_Byte_byteValue, 0 );
                 jni.ensure_no_exception();
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                *(jshort *)&pAny->pReserved = jni->CallShortMethodA(
+                *(jshort *) &pAny->pReserved = jni->CallShortMethodA(
                     java_data.l, m_jni_info->m_method_Short_shortValue, 0 );
                 jni.ensure_no_exception();
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
-                *(jint *)&pAny->pReserved = jni->CallIntMethodA(
+                *(jint *) &pAny->pReserved = jni->CallIntMethodA(
                     java_data.l, m_jni_info->m_method_Integer_intValue, 0 );
                 jni.ensure_no_exception();
                 pAny->pData = &pAny->pReserved;
@@ -440,15 +465,16 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_UNSIGNED_HYPER:
                 if (sizeof (sal_Int64) <= sizeof (void *))
                 {
-                    *(jlong *)&pAny->pReserved = jni->CallLongMethodA(
+                    *(jlong *) &pAny->pReserved = jni->CallLongMethodA(
                         java_data.l, m_jni_info->m_method_Long_longValue, 0 );
                     jni.ensure_no_exception();
                     pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
-                    auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (sal_Int64) ) );
-                    *(jlong *)mem.get() = jni->CallLongMethodA(
+                    auto_ptr< rtl_mem > mem(
+                        rtl_mem::allocate( sizeof (sal_Int64) ) );
+                    *(jlong *) mem.get() = jni->CallLongMethodA(
                         java_data.l, m_jni_info->m_method_Long_longValue, 0 );
                     jni.ensure_no_exception();
                     pAny->pData = mem.release();
@@ -457,15 +483,16 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_FLOAT:
                 if (sizeof (float) <= sizeof (void *))
                 {
-                    *(jfloat *)&pAny->pReserved = jni->CallFloatMethodA(
+                    *(jfloat *) &pAny->pReserved = jni->CallFloatMethodA(
                         java_data.l, m_jni_info->m_method_Float_floatValue, 0 );
                     jni.ensure_no_exception();
                     pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
-                    auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (float) ) );
-                    *(jfloat *)mem.get() = jni->CallFloatMethodA(
+                    auto_ptr< rtl_mem > mem(
+                        rtl_mem::allocate( sizeof (float) ) );
+                    *(jfloat *) mem.get() = jni->CallFloatMethodA(
                         java_data.l, m_jni_info->m_method_Float_floatValue, 0 );
                     jni.ensure_no_exception();
                     pAny->pData = mem.release();
@@ -474,24 +501,31 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_DOUBLE:
                 if (sizeof (double) <= sizeof (void *))
                 {
-                    *(jdouble *)&pAny->pReserved = jni->CallDoubleMethodA(
-                        java_data.l, m_jni_info->m_method_Double_doubleValue, 0 );
+                    *(jdouble *) &pAny->pReserved =
+                        jni->CallDoubleMethodA(
+                            java_data.l,
+                            m_jni_info->m_method_Double_doubleValue, 0 );
                     jni.ensure_no_exception();
                     pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
-                    auto_ptr< rtl_mem > mem( rtl_mem::allocate( sizeof (double) ) );
-                    *(jdouble *)mem.get() = jni->CallDoubleMethodA(
-                        java_data.l, m_jni_info->m_method_Double_doubleValue, 0 );
+                    auto_ptr< rtl_mem > mem(
+                        rtl_mem::allocate( sizeof (double) ) );
+                    *(jdouble *) mem.get() =
+                        jni->CallDoubleMethodA(
+                            java_data.l,
+                            m_jni_info->m_method_Double_doubleValue, 0 );
                     jni.ensure_no_exception();
                     pAny->pData = mem.release();
                 }
                 break;
-            case typelib_TypeClass_STRING: // opt: anies often contain strings; copy string directly
+            case typelib_TypeClass_STRING:
+                // opt: anies often contain strings; copy string directly
                 pAny->pReserved = 0;
                 jstring_to_ustring(
-                    jni, (rtl_uString **)&pAny->pReserved, (jstring)java_data.l );
+                    jni, (rtl_uString **)&pAny->pReserved,
+                    (jstring) java_data.l );
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_TYPE:
@@ -499,14 +533,16 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_SEQUENCE:
             case typelib_TypeClass_INTERFACE:
                 map_to_uno(
-                    jni, &pAny->pReserved, java_data, value_td.get()->pWeakRef, 0,
+                    jni, &pAny->pReserved, java_data,
+                    value_td.get()->pWeakRef, 0,
                     false /* no assign */, false /* no out param */ );
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
             {
-                auto_ptr< rtl_mem > mem( rtl_mem::allocate( value_td.get()->nSize ) );
+                auto_ptr< rtl_mem > mem(
+                    rtl_mem::allocate( value_td.get()->nSize ) );
                 map_to_uno(
                     jni, mem.get(), java_data, value_td.get()->pWeakRef, 0,
                     false /* no assign */, false /* no out param */ );
@@ -518,7 +554,9 @@ void Bridge::map_to_uno(
                 OUStringBuffer buf( 128 );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
                 buf.append( type_name );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported value type of any!") );
+                buf.appendAscii(
+                    RTL_CONSTASCII_STRINGPARAM("] unsupported value type "
+                                               "of any!") );
                 buf.append( jni.get_stack_trace() );
                 throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
@@ -542,7 +580,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -550,13 +589,14 @@ void Bridge::map_to_uno(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
-        *(jint *)uno_data = jni->GetIntField(
+        *(jint *) uno_data = jni->GetIntField(
             java_data.l, m_jni_info->m_field_Enum_m_value );
         break;
     }
@@ -566,7 +606,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -574,7 +615,8 @@ void Bridge::map_to_uno(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -596,7 +638,8 @@ void Bridge::map_to_uno(
             {
                 map_to_uno(
                     jni, uno_data, java_data,
-                    ((typelib_TypeDescription *)comp_td->pBaseTypeDescription)->pWeakRef,
+                    ((typelib_TypeDescription *) comp_td->pBaseTypeDescription)
+                      ->pWeakRef,
                     comp_info->m_base,
                     assign, false /* no out param */ );
             }
@@ -604,52 +647,61 @@ void Bridge::map_to_uno(
             for ( ; nPos < nMembers; ++nPos )
             {
                 void * p = (char *)uno_data + comp_td->pMemberOffsets[ nPos ];
-                typelib_TypeDescriptionReference * member_type = comp_td->ppTypeRefs[ nPos ];
+                typelib_TypeDescriptionReference * member_type =
+                    comp_td->ppTypeRefs[ nPos ];
                 jfieldID field_id = comp_info->m_fields[ nPos ];
                 switch (member_type->eTypeClass)
                 {
                 case typelib_TypeClass_CHAR:
-                    *(jchar *)p = jni->GetCharField( java_data.l, field_id );
+                    *(jchar *) p = jni->GetCharField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_BOOLEAN:
-                    *(jboolean *)p = jni->GetBooleanField( java_data.l, field_id );
+                    *(jboolean *) p =
+                        jni->GetBooleanField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_BYTE:
-                    *(jbyte *)p = jni->GetByteField( java_data.l, field_id );
+                    *(jbyte *) p = jni->GetByteField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_SHORT:
                 case typelib_TypeClass_UNSIGNED_SHORT:
-                    *(jshort *)p = jni->GetShortField( java_data.l, field_id );
+                    *(jshort *) p = jni->GetShortField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_LONG:
                 case typelib_TypeClass_UNSIGNED_LONG:
-                    *(jint *)p = jni->GetIntField( java_data.l, field_id );
+                    *(jint *) p = jni->GetIntField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_HYPER:
                 case typelib_TypeClass_UNSIGNED_HYPER:
-                    *(jlong *)p = jni->GetLongField( java_data.l, field_id );
+                    *(jlong *) p = jni->GetLongField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_FLOAT:
-                    *(jfloat *)p = jni->GetFloatField( java_data.l, field_id );
+                    *(jfloat *) p = jni->GetFloatField( java_data.l, field_id );
                     break;
                 case typelib_TypeClass_DOUBLE:
-                    *(jdouble *)p = jni->GetDoubleField( java_data.l, field_id );
+                    *(jdouble *) p =
+                        jni->GetDoubleField( java_data.l, field_id );
                     break;
                 default:
                 {
                     JLocalAutoRef jo_field( jni );
-                    if (0 == field_id) // special for Message: call Throwable.getMessage()
+                    if (0 == field_id)
                     {
+                        // special for Message: call Throwable.getMessage()
                         OSL_ASSERT(
                             type_equals(
-                                type, m_jni_info->m_Exception_type.getTypeLibType() ) ||
-                            type_equals(
-                                type, m_jni_info->m_RuntimeException_type.getTypeLibType() ) );
+                                type,
+                                m_jni_info->m_Exception_type.getTypeLibType() )
+                            || type_equals(
+                                type,
+                                m_jni_info->m_RuntimeException_type.
+                                getTypeLibType() ) );
                         OSL_ASSERT( 0 == nPos ); // first member
                         // call getMessage()
                         jo_field.reset(
                             jni->CallObjectMethodA(
-                                java_data.l, m_jni_info->m_method_Throwable_getMessage, 0 ) );
+                                java_data.l,
+                                m_jni_info->m_method_Throwable_getMessage, 0 )
+                            );
                         jni.ensure_no_exception();
                         if (! jo_field.is()) // message may be null
                         {
@@ -664,7 +716,9 @@ void Bridge::map_to_uno(
                     }
                     jvalue val;
                     val.l = jo_field.get();
-                    map_to_uno( jni, p, val, member_type, 0, assign, false /* no out param */ );
+                    map_to_uno(
+                        jni, p, val, member_type, 0,
+                        assign, false /* no out param */ );
                     break;
                 }
                 }
@@ -677,14 +731,17 @@ void Bridge::map_to_uno(
                 // cleanup
                 for ( sal_Int32 nCleanup = 0; nCleanup < nPos; ++nCleanup )
                 {
-                    void * p = (char *)uno_data + comp_td->pMemberOffsets[ nCleanup ];
+                    void * p =
+                        (char *)uno_data + comp_td->pMemberOffsets[ nCleanup ];
                     uno_type_destructData(
                         uno_data, comp_td->ppTypeRefs[ nCleanup ], 0 );
                 }
                 if (0 != comp_td->pBaseTypeDescription)
                 {
                     uno_destructData(
-                        uno_data, (typelib_TypeDescription *)comp_td->pBaseTypeDescription, 0 );
+                        uno_data,
+                        (typelib_TypeDescription *) comp_td
+                          ->pBaseTypeDescription, 0 );
                 }
             }
             throw;
@@ -696,7 +753,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -704,7 +762,8 @@ void Bridge::map_to_uno(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.append(
+                *reinterpret_cast< OUString const * >( &type->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -715,67 +774,67 @@ void Bridge::map_to_uno(
             ((typelib_IndirectTypeDescription *)td.get())->pType;
 
         auto_ptr< rtl_mem > seq;
-        sal_Int32 nElements = jni->GetArrayLength( (jarray)java_data.l );
+        sal_Int32 nElements = jni->GetArrayLength( (jarray) java_data.l );
 
         switch (element_type->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
             seq = seq_allocate( nElements, sizeof (sal_Unicode) );
             jni->GetCharArrayRegion(
-                (jcharArray)java_data.l, 0, nElements,
-                (jchar *)((uno_Sequence *)seq.get())->elements );
+                (jcharArray) java_data.l, 0, nElements,
+                (jchar *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BOOLEAN:
             seq = seq_allocate( nElements, sizeof (sal_Bool) );
             jni->GetBooleanArrayRegion(
-                (jbooleanArray)java_data.l, 0, nElements,
-                (jboolean *)((uno_Sequence *)seq.get())->elements );
+                (jbooleanArray) java_data.l, 0, nElements,
+                (jboolean *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_BYTE:
             seq = seq_allocate( nElements, sizeof (sal_Int8) );
             jni->GetByteArrayRegion(
-                (jbyteArray)java_data.l, 0, nElements,
-                (jbyte *)((uno_Sequence *)seq.get())->elements );
+                (jbyteArray) java_data.l, 0, nElements,
+                (jbyte *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
             seq = seq_allocate( nElements, sizeof (sal_Int16) );
             jni->GetShortArrayRegion(
-                (jshortArray)java_data.l, 0, nElements,
-                (jshort *)((uno_Sequence *)seq.get())->elements );
+                (jshortArray) java_data.l, 0, nElements,
+                (jshort *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
             seq = seq_allocate( nElements, sizeof (sal_Int32) );
             jni->GetIntArrayRegion(
-                (jintArray)java_data.l, 0, nElements,
-                (jint *)((uno_Sequence *)seq.get())->elements );
+                (jintArray) java_data.l, 0, nElements,
+                (jint *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             seq = seq_allocate( nElements, sizeof (sal_Int64) );
             jni->GetLongArrayRegion(
-                (jlongArray)java_data.l, 0, nElements,
-                (jlong *)((uno_Sequence *)seq.get())->elements );
+                (jlongArray) java_data.l, 0, nElements,
+                (jlong *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_FLOAT:
             seq = seq_allocate( nElements, sizeof (float) );
             jni->GetFloatArrayRegion(
-                (jfloatArray)java_data.l, 0, nElements,
+                (jfloatArray) java_data.l, 0, nElements,
                 (jfloat *)((uno_Sequence *)seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_DOUBLE:
             seq = seq_allocate( nElements, sizeof (double) );
             jni->GetDoubleArrayRegion(
-                (jdoubleArray)java_data.l, 0, nElements,
-                (jdouble *)((uno_Sequence *)seq.get())->elements );
+                (jdoubleArray) java_data.l, 0, nElements,
+                (jdouble *) ((uno_Sequence *) seq.get())->elements );
             jni.ensure_no_exception();
             break;
         case typelib_TypeClass_STRING:
@@ -795,7 +854,8 @@ void Bridge::map_to_uno(
                 typelib_TypeClass_EXCEPTION == element_type->eTypeClass ||
                 typelib_TypeClass_INTERFACE == element_type->eTypeClass)
             {
-                element_info = m_jni_info->get_type_info( jni, element_td.get() );
+                element_info =
+                    m_jni_info->get_type_info( jni, element_td.get() );
             }
             else
             {
@@ -807,12 +867,14 @@ void Bridge::map_to_uno(
                 try
                 {
                     JLocalAutoRef jo(
-                        jni, jni->GetObjectArrayElement( (jobjectArray)java_data.l, nPos ) );
+                        jni, jni->GetObjectArrayElement(
+                            (jobjectArray) java_data.l, nPos ) );
                     jni.ensure_no_exception();
                     jvalue val;
                     val.l = jo.get();
                     void * p =
-                        ((uno_Sequence *)seq.get())->elements + (nPos * element_td.get()->nSize);
+                        ((uno_Sequence *)seq.get())->elements +
+                        (nPos * element_td.get()->nSize);
                     map_to_uno(
                         jni, p, val, element_td.get()->pWeakRef, element_info,
                         false /* no assign */, false /* no out param */ );
@@ -820,7 +882,8 @@ void Bridge::map_to_uno(
                 catch (...)
                 {
                     // cleanup
-                    for ( sal_Int32 nCleanPos = 0; nCleanPos < nPos; ++nCleanPos )
+                    for ( sal_Int32 nCleanPos = 0;
+                          nCleanPos < nPos; ++nCleanPos )
                     {
                         void * p =
                             ((uno_Sequence *)seq.get())->elements +
@@ -836,9 +899,13 @@ void Bridge::map_to_uno(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element type: ") );
-            buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+            buf.append( *reinterpret_cast< OUString const * >(
+                            &type->pTypeName ) );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element"
+                                           " type: ") );
+            buf.append( *reinterpret_cast< OUString const * >(
+                            &element_type->pTypeName ) );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -854,7 +921,8 @@ void Bridge::map_to_uno(
         JLocalAutoRef jo_out_holder( jni );
         if (out_param)
         {
-            jo_out_holder.reset( jni->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
+            jo_out_holder.reset(
+                jni->GetObjectArrayElement( (jobjectArray) java_data.l, 0 ) );
             jni.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
@@ -898,15 +966,14 @@ void Bridge::map_to_uno(
     }
 }
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+//##############################################################################
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 void Bridge::map_to_java(
     JNI_context const & jni,
     jvalue * java_data, void const * uno_data,
-    typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
+    typelib_TypeDescriptionReference * type,
+    JNI_type_info const * info /* maybe 0 */,
     bool in_param, bool out_param,
     bool special_wrapped_integral_types ) const
 {
@@ -922,7 +989,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetCharArrayRegion(
-                        (jcharArray)jo_ar.get(), 0, 1, (jchar *)uno_data );
+                        (jcharArray) jo_ar.get(), 0, 1, (jchar *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -932,7 +999,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetCharArrayRegion(
-                        (jcharArray)java_data->l, 0, 1, (jchar *)uno_data );
+                        (jcharArray) java_data->l, 0, 1, (jchar *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -940,14 +1007,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.c = *(jchar const *)uno_data;
+            arg.c = *(jchar const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Character, m_jni_info->m_ctor_Character_with_char, &arg );
+                m_jni_info->m_class_Character,
+                m_jni_info->m_ctor_Character_with_char, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->c = *(jchar const *)uno_data;
+            java_data->c = *(jchar const *) uno_data;
         }
         break;
     case typelib_TypeClass_BOOLEAN:
@@ -960,7 +1028,8 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetBooleanArrayRegion(
-                        (jbooleanArray)jo_ar.get(), 0, 1, (jboolean *)uno_data );
+                        (jbooleanArray) jo_ar.get(),
+                        0, 1, (jboolean *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -970,7 +1039,8 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetBooleanArrayRegion(
-                        (jbooleanArray)java_data->l, 0, 1, (jboolean *)uno_data );
+                        (jbooleanArray) java_data->l,
+                        0, 1, (jboolean *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -978,14 +1048,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.z = *(jboolean const *)uno_data;
+            arg.z = *(jboolean const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Boolean, m_jni_info->m_ctor_Boolean_with_boolean, &arg );
+                m_jni_info->m_class_Boolean,
+                m_jni_info->m_ctor_Boolean_with_boolean, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->z = *(jboolean const *)uno_data;
+            java_data->z = *(jboolean const *) uno_data;
         }
         break;
     case typelib_TypeClass_BYTE:
@@ -998,7 +1069,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetByteArrayRegion(
-                        (jbyteArray)jo_ar.get(), 0, 1, (jbyte *)uno_data );
+                        (jbyteArray) jo_ar.get(), 0, 1, (jbyte *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1008,7 +1079,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetByteArrayRegion(
-                        (jbyteArray)java_data->l, 0, 1, (jbyte *)uno_data );
+                        (jbyteArray) java_data->l, 0, 1, (jbyte *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -1016,14 +1087,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.b = *(jbyte const *)uno_data;
+            arg.b = *(jbyte const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Byte, m_jni_info->m_ctor_Byte_with_byte, &arg );
+                m_jni_info->m_class_Byte,
+                m_jni_info->m_ctor_Byte_with_byte, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->b = *(jbyte const *)uno_data;
+            java_data->b = *(jbyte const *) uno_data;
         }
         break;
     case typelib_TypeClass_SHORT:
@@ -1037,7 +1109,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetShortArrayRegion(
-                        (jshortArray)jo_ar.get(), 0, 1, (jshort *)uno_data );
+                        (jshortArray) jo_ar.get(), 0, 1, (jshort *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1047,7 +1119,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetShortArrayRegion(
-                        (jshortArray)java_data->l, 0, 1, (jshort *)uno_data );
+                        (jshortArray) java_data->l, 0, 1, (jshort *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -1055,14 +1127,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.s = *(jshort const *)uno_data;
+            arg.s = *(jshort const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Short, m_jni_info->m_ctor_Short_with_short, &arg );
+                m_jni_info->m_class_Short,
+                m_jni_info->m_ctor_Short_with_short, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->s = *(jshort const *)uno_data;
+            java_data->s = *(jshort const *) uno_data;
         }
         break;
     case typelib_TypeClass_LONG:
@@ -1076,7 +1149,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetIntArrayRegion(
-                        (jintArray)jo_ar.get(), 0, 1, (jint *)uno_data );
+                        (jintArray) jo_ar.get(), 0, 1, (jint *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1086,7 +1159,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetIntArrayRegion(
-                        (jintArray)java_data->l, 0, 1, (jint *)uno_data );
+                        (jintArray) java_data->l, 0, 1, (jint *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -1094,14 +1167,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.i = *(jint const *)uno_data;
+            arg.i = *(jint const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Integer, m_jni_info->m_ctor_Integer_with_int, &arg );
+                m_jni_info->m_class_Integer,
+                m_jni_info->m_ctor_Integer_with_int, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->i = *(jint const *)uno_data;
+            java_data->i = *(jint const *) uno_data;
         }
         break;
     case typelib_TypeClass_HYPER:
@@ -1115,7 +1189,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetLongArrayRegion(
-                        (jlongArray)jo_ar.get(), 0, 1, (jlong *)uno_data );
+                        (jlongArray)jo_ar.get(), 0, 1, (jlong *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1125,7 +1199,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetLongArrayRegion(
-                        (jlongArray)java_data->l, 0, 1, (jlong *)uno_data );
+                        (jlongArray)java_data->l, 0, 1, (jlong *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -1133,14 +1207,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.j = *(jlong const *)uno_data;
+            arg.j = *(jlong const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Long, m_jni_info->m_ctor_Long_with_long, &arg );
+                m_jni_info->m_class_Long,
+                m_jni_info->m_ctor_Long_with_long, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->j = *(jlong const *)uno_data;
+            java_data->j = *(jlong const *) uno_data;
         }
         break;
     case typelib_TypeClass_FLOAT:
@@ -1153,7 +1228,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetFloatArrayRegion(
-                        (jfloatArray)jo_ar.get(), 0, 1, (jfloat *)uno_data );
+                        (jfloatArray) jo_ar.get(), 0, 1, (jfloat *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1163,7 +1238,7 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetFloatArrayRegion(
-                        (jfloatArray)java_data->l, 0, 1, (jfloat *)uno_data );
+                        (jfloatArray) java_data->l, 0, 1, (jfloat *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -1171,14 +1246,15 @@ void Bridge::map_to_java(
         else if (special_wrapped_integral_types)
         {
             jvalue arg;
-            arg.f = *(jfloat const *)uno_data;
+            arg.f = *(jfloat const *) uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Float, m_jni_info->m_ctor_Float_with_float, &arg );
+                m_jni_info->m_class_Float,
+                m_jni_info->m_ctor_Float_with_float, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->f = *(jfloat const *)uno_data;
+            java_data->f = *(jfloat const *) uno_data;
         }
         break;
     case typelib_TypeClass_DOUBLE:
@@ -1191,7 +1267,8 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetDoubleArrayRegion(
-                        (jdoubleArray)jo_ar.get(), 0, 1, (jdouble *)uno_data );
+                        (jdoubleArray) jo_ar.get(),
+                        0, 1, (jdouble *) uno_data );
                     jni.ensure_no_exception();
                 }
                 java_data->l = jo_ar.release();
@@ -1201,7 +1278,8 @@ void Bridge::map_to_java(
                 if (in_param)
                 {
                     jni->SetDoubleArrayRegion(
-                        (jdoubleArray)java_data->l, 0, 1, (jdouble *)uno_data );
+                        (jdoubleArray) java_data->l,
+                        0, 1, (jdouble *) uno_data );
                     jni.ensure_no_exception();
                 }
             }
@@ -1211,12 +1289,13 @@ void Bridge::map_to_java(
             jvalue arg;
             arg.d = *(double const *)uno_data;
             java_data->l = jni->NewObjectA(
-                m_jni_info->m_class_Double, m_jni_info->m_ctor_Double_with_double, &arg );
+                m_jni_info->m_class_Double,
+                m_jni_info->m_ctor_Double_with_double, &arg );
             jni.ensure_no_exception();
         }
         else
         {
-            java_data->d = *(jdouble const *)uno_data;
+            java_data->d = *(jdouble const *) uno_data;
         }
         break;
     case typelib_TypeClass_STRING:
@@ -1226,7 +1305,9 @@ void Bridge::map_to_java(
             JLocalAutoRef jo_in( jni );
             if (in_param)
             {
-                jo_in.reset( ustring_to_jstring( jni, *(rtl_uString * const *)uno_data ) );
+                jo_in.reset(
+                    ustring_to_jstring(
+                        jni, *(rtl_uString * const *) uno_data ) );
             }
             if (0 == java_data->l)
             {
@@ -1237,14 +1318,15 @@ void Bridge::map_to_java(
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_in.get() );
+                    (jobjectArray) java_data->l, 0, jo_in.get() );
                 jni.ensure_no_exception();
             }
         }
         else
         {
             OSL_ASSERT( in_param );
-            java_data->l = ustring_to_jstring( jni, *(rtl_uString * const *)uno_data );
+            java_data->l =
+                ustring_to_jstring( jni, *(rtl_uString * const *) uno_data );
         }
         break;
     }
@@ -1256,7 +1338,10 @@ void Bridge::map_to_java(
             if (in_param)
             {
                 jo_in.reset(
-                    create_type( jni, *(typelib_TypeDescriptionReference * const *)uno_data ) );
+                    create_type(
+                        jni,
+                        *(typelib_TypeDescriptionReference * const *) uno_data )
+                    );
             }
             if (0 == java_data->l)
             {
@@ -1267,7 +1352,7 @@ void Bridge::map_to_java(
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_in.get() );
+                    (jobjectArray) java_data->l, 0, jo_in.get() );
                 jni.ensure_no_exception();
             }
         }
@@ -1275,7 +1360,9 @@ void Bridge::map_to_java(
         {
             OSL_ASSERT( in_param );
             java_data->l =
-                create_type( jni, *(typelib_TypeDescriptionReference * const *)uno_data );
+                create_type(
+                    jni,
+                    *(typelib_TypeDescriptionReference * const *) uno_data );
         }
         break;
     }
@@ -1289,14 +1376,16 @@ void Bridge::map_to_java(
 #if defined BRIDGES_JNI_UNO_FORCE_BOXED_ANY
             if (typelib_TypeClass_VOID == pAny->pType->eTypeClass)
             {
-                jo_any.reset( jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
+                jo_any.reset(
+                    jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
             }
             else
             {
                 jvalue args[ 2 ];
                 map_to_java(
                     jni, &args[ 1 ], pAny->pData, pAny->pType, 0,
-                    true /* in */, false /* no out */, true /* create integral wrappers */ );
+                    true /* in */, false /* no out */,
+                    true /* create integral wrappers */ );
                 jo_any.reset( args[ 1 ].l );
                 // build up com.sun.star.uno.Any
                 JLocalAutoRef jo_type( jni, create_type( jni, pAny->pType ) );
@@ -1311,15 +1400,17 @@ void Bridge::map_to_java(
             switch (pAny->pType->eTypeClass)
             {
             case typelib_TypeClass_VOID:
-                jo_any.reset( jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
+                jo_any.reset(
+                    jni->NewLocalRef( m_jni_info->m_object_Any_VOID ) );
                 break;
             case typelib_TypeClass_UNSIGNED_SHORT:
             {
                 jvalue args[ 2 ];
-                args[ 0 ].s = *(jshort const *)&pAny->pReserved;
+                args[ 0 ].s = *(jshort const *) &pAny->pReserved;
                 JLocalAutoRef jo_val(
                     jni, jni->NewObjectA(
-                        m_jni_info->m_class_Short, m_jni_info->m_ctor_Short_with_short, args ) );
+                        m_jni_info->m_class_Short,
+                        m_jni_info->m_ctor_Short_with_short, args ) );
                 jni.ensure_no_exception();
                 // box up in com.sun.star.uno.Any
                 args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_SHORT;
@@ -1334,10 +1425,11 @@ void Bridge::map_to_java(
             case typelib_TypeClass_UNSIGNED_LONG:
             {
                 jvalue args[ 2 ];
-                args[ 0 ].i = *(jint const *)&pAny->pReserved;
+                args[ 0 ].i = *(jint const *) &pAny->pReserved;
                 JLocalAutoRef jo_val(
                     jni, jni->NewObjectA(
-                        m_jni_info->m_class_Integer, m_jni_info->m_ctor_Integer_with_int, args ) );
+                        m_jni_info->m_class_Integer,
+                        m_jni_info->m_ctor_Integer_with_int, args ) );
                 jni.ensure_no_exception();
                 // box up in com.sun.star.uno.Any
                 args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_LONG;
@@ -1352,10 +1444,11 @@ void Bridge::map_to_java(
             case typelib_TypeClass_UNSIGNED_HYPER:
             {
                 jvalue args[ 2 ];
-                args[ 0 ].j = *(jlong const *)pAny->pData;
+                args[ 0 ].j = *(jlong const *) pAny->pData;
                 JLocalAutoRef jo_val(
                     jni, jni->NewObjectA(
-                        m_jni_info->m_class_Long, m_jni_info->m_ctor_Long_with_long, args ) );
+                        m_jni_info->m_class_Long,
+                        m_jni_info->m_ctor_Long_with_long, args ) );
                 jni.ensure_no_exception();
                 // box up in com.sun.star.uno.Any
                 args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_HYPER;
@@ -1368,7 +1461,8 @@ void Bridge::map_to_java(
                 break;
             }
             case typelib_TypeClass_STRING: // opt strings
-                jo_any.reset( ustring_to_jstring( jni, (rtl_uString *)pAny->pReserved ) );
+                jo_any.reset( ustring_to_jstring(
+                                  jni, (rtl_uString *) pAny->pReserved ) );
                 break;
             case typelib_TypeClass_SEQUENCE:
             {
@@ -1377,18 +1471,22 @@ void Bridge::map_to_java(
                 TypeDescr seq_td( pAny->pType );
                 map_to_java(
                     jni, &java_data, pAny->pData, seq_td.get()->pWeakRef, 0,
-                    true /* in */, false /* no out */, true /* create integral wrappers */ );
+                    true /* in */, false /* no out */,
+                    true /* create integral wrappers */ );
                 jo_any.reset( java_data.l );
 
                 // determine inner element type
                 ::com::sun::star::uno::Type element_type(
                     ((typelib_IndirectTypeDescription *)seq_td.get())->pType );
-                while (typelib_TypeClass_SEQUENCE == element_type.getTypeLibType()->eTypeClass)
+                while (typelib_TypeClass_SEQUENCE ==
+                         element_type.getTypeLibType()->eTypeClass)
                 {
                     TypeDescr element_td( element_type.getTypeLibType() );
                     typelib_typedescriptionreference_assign(
-                        reinterpret_cast< typelib_TypeDescriptionReference ** >( &element_type ),
-                        ((typelib_IndirectTypeDescription *)element_td.get())->pType );
+                        reinterpret_cast< typelib_TypeDescriptionReference ** >(
+                            &element_type ),
+                        ((typelib_IndirectTypeDescription *)element_td.get())
+                          ->pType );
                 }
                 // box up only if unsigned element type
                 switch (element_type.getTypeLibType()->eTypeClass)
@@ -1398,7 +1496,8 @@ void Bridge::map_to_java(
                 case typelib_TypeClass_UNSIGNED_HYPER:
                 {
                     jvalue args[ 2 ];
-                    JLocalAutoRef jo_type( jni, create_type( jni, seq_td.get()->pWeakRef ) );
+                    JLocalAutoRef jo_type(
+                        jni, create_type( jni, seq_td.get()->pWeakRef ) );
                     args[ 0 ].l = jo_type.get();
                     args[ 1 ].l = jo_any.get();
                     jo_any.reset(
@@ -1419,7 +1518,9 @@ void Bridge::map_to_java(
                     if (0 != pUnoI)
                     {
                         jo_any.reset(
-                            map_to_java( jni, pUnoI, m_jni_info->m_XInterface_type_info ) );
+                            map_to_java(
+                                jni, pUnoI,
+                                m_jni_info->m_XInterface_type_info ) );
                     }
                     // else: empty XInterface ref maps to null-ref
                 }
@@ -1449,7 +1550,8 @@ void Bridge::map_to_java(
                 jvalue java_data;
                 map_to_java(
                     jni, &java_data, pAny->pData, pAny->pType, 0,
-                    true /* in */, false /* no out */, true /* create integral wrappers */ );
+                    true /* in */, false /* no out */,
+                    true /* create integral wrappers */ );
                 jo_any.reset( java_data.l );
                 break;
             }
@@ -1468,7 +1570,7 @@ void Bridge::map_to_java(
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_any.get() );
+                    (jobjectArray) java_data->l, 0, jo_any.get() );
                 jni.ensure_no_exception();
             }
         }
@@ -1480,10 +1582,13 @@ void Bridge::map_to_java(
     }
     case typelib_TypeClass_ENUM:
     {
-        OUString const & type_name = *reinterpret_cast< OUString const * >( &type->pTypeName );
+        OUString const & type_name =
+            *reinterpret_cast< OUString const * >( &type->pTypeName );
         OString class_name(
-            OUStringToOString( type_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-        JLocalAutoRef jo_enum_class( jni, find_class( jni, class_name.getStr() ) );
+            OUStringToOString(
+                type_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+        JLocalAutoRef jo_enum_class(
+            jni, find_class( jni, class_name.getStr() ) );
 
         JLocalAutoRef jo_enum( jni );
         if (in_param)
@@ -1495,14 +1600,15 @@ void Bridge::map_to_java(
             sig_buf.append( ';' );
             OString sig( sig_buf.makeStringAndClear() );
             jmethodID method_id = jni->GetStaticMethodID(
-                (jclass)jo_enum_class.get(), "fromInt", sig.getStr() );
+                (jclass) jo_enum_class.get(), "fromInt", sig.getStr() );
             jni.ensure_no_exception();
             OSL_ASSERT( 0 != method_id );
 
             jvalue arg;
-            arg.i = *(jint const *)uno_data;
-            jo_enum.reset( jni->CallStaticObjectMethodA(
-                               (jclass)jo_enum_class.get(), method_id, &arg ) );
+            arg.i = *(jint const *) uno_data;
+            jo_enum.reset(
+                jni->CallStaticObjectMethodA(
+                    (jclass) jo_enum_class.get(), method_id, &arg ) );
             jni.ensure_no_exception();
         }
         if (out_param)
@@ -1510,13 +1616,13 @@ void Bridge::map_to_java(
             if (0 == java_data->l)
             {
                 java_data->l = jni->NewObjectArray(
-                    1, (jclass)jo_enum_class.get(), jo_enum.get() );
+                    1, (jclass) jo_enum_class.get(), jo_enum.get() );
                 jni.ensure_no_exception();
             }
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_enum.get() );
+                    (jobjectArray) java_data->l, 0, jo_enum.get() );
                 jni.ensure_no_exception();
             }
         }
@@ -1543,7 +1649,9 @@ void Bridge::map_to_java(
                     jni, ustring_to_jstring( jni, *(rtl_uString **)uno_data ) );
                 jvalue arg;
                 arg.l = jo_message.get();
-                jo_comp.reset( jni->NewObjectA( comp_info->m_class, comp_info->m_exc_ctor, &arg ) );
+                jo_comp.reset(
+                    jni->NewObjectA(
+                        comp_info->m_class, comp_info->m_exc_ctor, &arg ) );
                 jni.ensure_no_exception();
             }
             else
@@ -1554,61 +1662,75 @@ void Bridge::map_to_java(
 
             for ( JNI_compound_type_info const * linfo = comp_info;
                   0 != linfo;
-                  linfo = static_cast< JNI_compound_type_info const * >( linfo->m_base ) )
+                  linfo = static_cast< JNI_compound_type_info const * >(
+                      linfo->m_base ) )
             {
                 typelib_CompoundTypeDescription * comp_td =
                     (typelib_CompoundTypeDescription *)linfo->m_td.get();
-                typelib_TypeDescriptionReference ** ppMemberTypeRefs = comp_td->ppTypeRefs;
+                typelib_TypeDescriptionReference ** ppMemberTypeRefs =
+                    comp_td->ppTypeRefs;
                 sal_Int32 * pMemberOffsets = comp_td->pMemberOffsets;
                 for ( sal_Int32 nPos = comp_td->nMembers; nPos--; )
                 {
                     jfieldID field_id = linfo->m_fields[ nPos ];
                     if (0 != field_id)
                     {
-                        void const * p = (char const *)uno_data + pMemberOffsets[ nPos ];
-                        typelib_TypeDescriptionReference * member_type = ppMemberTypeRefs[ nPos ];
+                        void const * p =
+                            (char const *)uno_data + pMemberOffsets[ nPos ];
+                        typelib_TypeDescriptionReference * member_type =
+                            ppMemberTypeRefs[ nPos ];
                         switch (member_type->eTypeClass)
                         {
                         case typelib_TypeClass_CHAR:
                             jni->SetCharField(
-                                jo_comp.get(), field_id, *(jchar const *)p );
+                                jo_comp.get(),
+                                field_id, *(jchar const *) p );
                             break;
                         case typelib_TypeClass_BOOLEAN:
                             jni->SetBooleanField(
-                                jo_comp.get(), field_id, *(jboolean const *)p );
+                                jo_comp.get(),
+                                field_id, *(jboolean const *) p );
                             break;
                         case typelib_TypeClass_BYTE:
                             jni->SetByteField(
-                                jo_comp.get(), field_id, *(jbyte const *)p );
+                                jo_comp.get(),
+                                field_id, *(jbyte const *) p );
                             break;
                         case typelib_TypeClass_SHORT:
                         case typelib_TypeClass_UNSIGNED_SHORT:
                             jni->SetShortField(
-                                jo_comp.get(), field_id, *(jshort const *)p );
+                                jo_comp.get(),
+                                field_id, *(jshort const *) p );
                             break;
                         case typelib_TypeClass_LONG:
                         case typelib_TypeClass_UNSIGNED_LONG:
                             jni->SetIntField(
-                                jo_comp.get(), field_id, *(jint const *)p );
+                                jo_comp.get(),
+                                field_id, *(jint const *) p );
                             break;
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
                             jni->SetLongField(
-                                jo_comp.get(), field_id, *(jlong const *)p );
+                                jo_comp.get(),
+                                field_id, *(jlong const *) p );
                             break;
                         case typelib_TypeClass_FLOAT:
                             jni->SetFloatField(
-                                jo_comp.get(), field_id, *(jfloat const *)p );
+                                jo_comp.get(),
+                                field_id, *(jfloat const *) p );
                             break;
                         case typelib_TypeClass_DOUBLE:
                             jni->SetDoubleField(
-                                jo_comp.get(), field_id, *(jdouble const *)p );
+                                jo_comp.get(),
+                                field_id, *(jdouble const *) p );
                             break;
                         case typelib_TypeClass_STRING: // string opt here
                         {
                             JLocalAutoRef jo_string(
-                                jni, ustring_to_jstring( jni, *(rtl_uString * const *)p ) );
-                            jni->SetObjectField( jo_comp.get(), field_id, jo_string.get() );
+                                jni, ustring_to_jstring(
+                                    jni, *(rtl_uString * const *) p ) );
+                            jni->SetObjectField(
+                                jo_comp.get(), field_id, jo_string.get() );
                             break;
                         }
                         default:
@@ -1618,7 +1740,8 @@ void Bridge::map_to_java(
                                 jni, &java_data, p, member_type, 0,
                                 true /* in */, false /* no out */ );
                             JLocalAutoRef jo_obj( jni, java_data.l );
-                            jni->SetObjectField( jo_comp.get(), field_id, jo_obj.get() );
+                            jni->SetObjectField(
+                                jo_comp.get(), field_id, jo_obj.get() );
                             break;
                         }
                         }
@@ -1630,13 +1753,14 @@ void Bridge::map_to_java(
         {
             if (0 == java_data->l)
             {
-                java_data->l = jni->NewObjectArray( 1, comp_info->m_class, jo_comp.get() );
+                java_data->l =
+                    jni->NewObjectArray( 1, comp_info->m_class, jo_comp.get() );
                 jni.ensure_no_exception();
             }
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_comp.get() );
+                    (jobjectArray) java_data->l, 0, jo_comp.get() );
                 jni.ensure_no_exception();
             }
         }
@@ -1646,8 +1770,9 @@ void Bridge::map_to_java(
         }
         break;
     }
-    case typelib_TypeClass_SEQUENCE: // xxx todo: possible opt for pure out sequences
+    case typelib_TypeClass_SEQUENCE:
     {
+        // xxx todo: possible opt for pure out sequences
         JLocalAutoRef jo_ar( jni );
 
         sal_Int32 nElements;
@@ -1674,7 +1799,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetCharArrayRegion(
-                    (jcharArray)jo_ar.get(), 0, nElements, (jchar *)seq->elements );
+                    (jcharArray) jo_ar.get(),
+                    0, nElements, (jchar *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1684,7 +1810,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetBooleanArrayRegion(
-                    (jbooleanArray)jo_ar.get(), 0, nElements, (jboolean *)seq->elements );
+                    (jbooleanArray) jo_ar.get(),
+                    0, nElements, (jboolean *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1694,7 +1821,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetByteArrayRegion(
-                    (jbyteArray)jo_ar.get(), 0, nElements, (jbyte *)seq->elements );
+                    (jbyteArray) jo_ar.get(),
+                    0, nElements, (jbyte *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1705,7 +1833,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetShortArrayRegion(
-                    (jshortArray)jo_ar.get(), 0, nElements, (jshort *)seq->elements );
+                    (jshortArray) jo_ar.get(),
+                    0, nElements, (jshort *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1716,7 +1845,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetIntArrayRegion(
-                    (jintArray)jo_ar.get(), 0, nElements, (jint *)seq->elements );
+                    (jintArray) jo_ar.get(),
+                    0, nElements, (jint *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1727,7 +1857,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetLongArrayRegion(
-                    (jlongArray)jo_ar.get(), 0, nElements, (jlong *)seq->elements );
+                    (jlongArray) jo_ar.get(),
+                    0, nElements, (jlong *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1737,7 +1868,8 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetFloatArrayRegion(
-                    (jfloatArray)jo_ar.get(), 0, nElements, (jfloat *)seq->elements );
+                    (jfloatArray) jo_ar.get(),
+                    0, nElements, (jfloat *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
@@ -1747,27 +1879,33 @@ void Bridge::map_to_java(
             if (0 < nElements)
             {
                 jni->SetDoubleArrayRegion(
-                    (jdoubleArray)jo_ar.get(), 0, nElements, (jdouble *)seq->elements );
+                    (jdoubleArray) jo_ar.get(),
+                    0, nElements, (jdouble *) seq->elements );
                 jni.ensure_no_exception();
             }
             break;
         case typelib_TypeClass_STRING:
-            jo_ar.reset( jni->NewObjectArray( nElements, m_jni_info->m_class_String, 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray(
+                    nElements, m_jni_info->m_class_String, 0 ) );
             jni.ensure_no_exception();
             if (in_param)
             {
-                rtl_uString * const * pp = (rtl_uString * const *)seq->elements;
+                rtl_uString * const * pp =
+                    (rtl_uString * const *) seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
-                    JLocalAutoRef jo_string( jni, ustring_to_jstring( jni, pp[ nPos ] ) );
+                    JLocalAutoRef jo_string(
+                        jni, ustring_to_jstring( jni, pp[ nPos ] ) );
                     jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_string.get() );
+                        (jobjectArray) jo_ar.get(), nPos, jo_string.get() );
                     jni.ensure_no_exception();
                 }
             }
             break;
         case typelib_TypeClass_TYPE:
-            jo_ar.reset( jni->NewObjectArray( nElements, m_jni_info->m_class_Type, 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray( nElements, m_jni_info->m_class_Type, 0 ) );
             jni.ensure_no_exception();
             if (in_param)
             {
@@ -1781,13 +1919,15 @@ void Bridge::map_to_java(
                         true /* in */, false /* no out */ );
                     JLocalAutoRef jo_element( jni, val.l );
                     jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_element.get() );
+                        (jobjectArray) jo_ar.get(), nPos, jo_element.get() );
                     jni.ensure_no_exception();
                 }
             }
             break;
         case typelib_TypeClass_ANY:
-            jo_ar.reset( jni->NewObjectArray( nElements, m_jni_info->m_class_Object, 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray(
+                    nElements, m_jni_info->m_class_Object, 0 ) );
             jni.ensure_no_exception();
             if (in_param)
             {
@@ -1800,7 +1940,7 @@ void Bridge::map_to_java(
                         true /* in */, false /* no out */ );
                     JLocalAutoRef jo_element( jni, val.l );
                     jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_element.get() );
+                        (jobjectArray) jo_ar.get(), nPos, jo_element.get() );
                     jni.ensure_no_exception();
                 }
             }
@@ -1808,14 +1948,18 @@ void Bridge::map_to_java(
         case typelib_TypeClass_ENUM:
         {
             OUString const & element_type_name =
-                *reinterpret_cast< OUString const * >( &element_type->pTypeName );
+                *reinterpret_cast< OUString const * >(
+                    &element_type->pTypeName );
             OString class_name(
                 OUStringToOString(
                     element_type_name.replace( '.', '/' ),
                     RTL_TEXTENCODING_ASCII_US ) );
-            JLocalAutoRef jo_enum_class( jni, find_class( jni, class_name.getStr() ) );
+            JLocalAutoRef jo_enum_class(
+                jni, find_class( jni, class_name.getStr() ) );
 
-            jo_ar.reset( jni->NewObjectArray( nElements, (jclass)jo_enum_class.get(), 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray(
+                    nElements, (jclass) jo_enum_class.get(), 0 ) );
             jni.ensure_no_exception();
 
             if (0 < nElements)
@@ -1826,7 +1970,7 @@ void Bridge::map_to_java(
                 sig_buf.append( class_name );
                 OString sig( sig_buf.makeStringAndClear() );
                 jmethodID method_id = jni->GetStaticMethodID(
-                    (jclass)jo_enum_class.get(), "fromInt", sig.getStr() );
+                    (jclass) jo_enum_class.get(), "fromInt", sig.getStr() );
                 jni.ensure_no_exception();
                 OSL_ASSERT( 0 != method_id );
 
@@ -1837,10 +1981,10 @@ void Bridge::map_to_java(
                     arg.i = p[ nPos ];
                     JLocalAutoRef jo_enum(
                         jni, jni->CallStaticObjectMethodA(
-                            (jclass)jo_enum_class.get(), method_id, &arg ) );
+                            (jclass) jo_enum_class.get(), method_id, &arg ) );
                     jni.ensure_no_exception();
                     jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_enum.get() );
+                        (jobjectArray) jo_ar.get(), nPos, jo_enum.get() );
                     jni.ensure_no_exception();
                 }
             }
@@ -1849,9 +1993,11 @@ void Bridge::map_to_java(
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
         {
-            JNI_type_info const * element_info = m_jni_info->get_type_info( jni, element_type );
+            JNI_type_info const * element_info =
+                m_jni_info->get_type_info( jni, element_type );
 
-            jo_ar.reset( jni->NewObjectArray( nElements, element_info->m_class, 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray( nElements, element_info->m_class, 0 ) );
             jni.ensure_no_exception();
 
             if (0 < nElements)
@@ -1862,11 +2008,12 @@ void Bridge::map_to_java(
                 {
                     jvalue val;
                     map_to_java(
-                        jni, &val, p + (nSize * nPos), element_type, element_info,
+                        jni, &val, p + (nSize * nPos),
+                        element_type, element_info,
                         true /* in */, false /* no out */ );
                     JLocalAutoRef jo_element( jni, val.l );
                     jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_element.get() );
+                        (jobjectArray) jo_ar.get(), nPos, jo_element.get() );
                     jni.ensure_no_exception();
                 }
             }
@@ -1875,17 +2022,21 @@ void Bridge::map_to_java(
         case typelib_TypeClass_SEQUENCE:
         {
             OStringBuffer buf( 64 );
-            JNI_info::append_sig( &buf, element_type, false /* use class XInterface */ );
+            JNI_info::append_sig(
+                &buf, element_type, false /* use class XInterface */ );
             OString class_name( buf.makeStringAndClear() );
-            JLocalAutoRef jo_seq_class( jni, find_class( jni, class_name.getStr() ) );
+            JLocalAutoRef jo_seq_class(
+                jni, find_class( jni, class_name.getStr() ) );
 
-            jo_ar.reset( jni->NewObjectArray( nElements, (jclass)jo_seq_class.get(), 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray(
+                    nElements, (jclass) jo_seq_class.get(), 0 ) );
             jni.ensure_no_exception();
 
             if (0 < nElements)
             {
                 TypeDescr element_td( element_type );
-                uno_Sequence ** elements = (uno_Sequence **)seq->elements;
+                uno_Sequence ** elements = (uno_Sequence **) seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
                     jvalue java_data;
@@ -1894,7 +2045,7 @@ void Bridge::map_to_java(
                         true /* in */, false /* no out */ );
                     JLocalAutoRef jo_seq( jni, java_data.l );
                     jni->SetObjectArrayElement(
-                        (jobjectArray)jo_ar.get(), nPos, jo_seq.get() );
+                        (jobjectArray) jo_ar.get(), nPos, jo_seq.get() );
                     jni.ensure_no_exception();
                 }
             }
@@ -1906,7 +2057,8 @@ void Bridge::map_to_java(
                 static_cast< JNI_interface_type_info const * >(
                     m_jni_info->get_type_info( jni, element_type ) );
 
-            jo_ar.reset( jni->NewObjectArray( nElements, iface_info->m_class, 0 ) );
+            jo_ar.reset(
+                jni->NewObjectArray( nElements, iface_info->m_class, 0 ) );
             jni.ensure_no_exception();
 
             if (0 < nElements)
@@ -1917,9 +2069,11 @@ void Bridge::map_to_java(
                     uno_Interface * pUnoI = pp[ nPos ];
                     if (0 != pUnoI)
                     {
-                        JLocalAutoRef jo_element( jni, map_to_java( jni, pUnoI, iface_info ) );
+                        JLocalAutoRef jo_element(
+                            jni, map_to_java( jni, pUnoI, iface_info ) );
                         jni->SetObjectArrayElement(
-                            (jobjectArray)jo_ar.get(), nPos, jo_element.get() );
+                            (jobjectArray) jo_ar.get(),
+                            nPos, jo_element.get() );
                         jni.ensure_no_exception();
                     }
                 }
@@ -1930,9 +2084,12 @@ void Bridge::map_to_java(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_java():") );
-            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported element type: ") );
-            buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+            buf.append( *reinterpret_cast< OUString const * >(
+                            &type->pTypeName ) );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("] unsupported element type: ") );
+            buf.append( *reinterpret_cast< OUString const * >(
+                            &element_type->pTypeName ) );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -1942,23 +2099,24 @@ void Bridge::map_to_java(
         {
             if (0 == java_data->l)
             {
-                JLocalAutoRef jo_element_class( jni, jni->GetObjectClass( jo_ar.get() ) );
+                JLocalAutoRef jo_element_class(
+                    jni, jni->GetObjectClass( jo_ar.get() ) );
                 if (in_param)
                 {
-                    java_data->l =
-                        jni->NewObjectArray( 1, (jclass)jo_element_class.get(), jo_ar.get() );
+                    java_data->l = jni->NewObjectArray(
+                        1, (jclass) jo_element_class.get(), jo_ar.get() );
                 }
                 else
                 {
-                    java_data->l =
-                        jni->NewObjectArray( 1, (jclass)jo_element_class.get(), 0 );
+                    java_data->l = jni->NewObjectArray(
+                        1, (jclass) jo_element_class.get(), 0 );
                 }
                 jni.ensure_no_exception();
             }
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_ar.get() );
+                    (jobjectArray) java_data->l, 0, jo_ar.get() );
                 jni.ensure_no_exception();
             }
         }
@@ -1989,13 +2147,14 @@ void Bridge::map_to_java(
             {
                 if (0 == info)
                     info = m_jni_info->get_type_info( jni, type );
-                java_data->l = jni->NewObjectArray( 1, info->m_class, jo_iface.get() );
+                java_data->l =
+                    jni->NewObjectArray( 1, info->m_class, jo_iface.get() );
                 jni.ensure_no_exception();
             }
             else
             {
                 jni->SetObjectArrayElement(
-                    (jobjectArray)java_data->l, 0, jo_iface.get() );
+                    (jobjectArray) java_data->l, 0, jo_iface.get() );
                 jni.ensure_no_exception();
             }
         }
