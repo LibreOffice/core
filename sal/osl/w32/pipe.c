@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dic $ $Date: 2001-06-26 13:25:54 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 09:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,12 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                 pPipe->m_Security);
 
             if (pPipe->m_File != INVALID_HANDLE_VALUE)
+            {
+                rtl_uString_release( name );
+                rtl_uString_release( path );
+
                 return pPipe;
+            }
         }
         else
         {
@@ -551,6 +556,9 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
                     /* wait for thread start ups */
                     osl_waitCondition(pPipe->m_ThreadStartUpCond, NULL);
+
+                    rtl_uString_release( name );
+                    rtl_uString_release( path );
 
                     return (pPipe);
                 }
@@ -575,7 +583,12 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
                     NULL)) != INVALID_HANDLE_VALUE)
+            {
+                rtl_uString_release( name );
+                rtl_uString_release( path );
+
                 return (pPipe);
+            }
         }
         else
         {
@@ -595,6 +608,9 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
                     /* wait for creation */
                     osl_acquireSemaphore(pPipe->m_Acception);
+
+                    rtl_uString_release( name );
+                    rtl_uString_release( path );
 
                     return (pPipe);
                 }
