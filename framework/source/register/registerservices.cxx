@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:29 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,10 @@
 #include <uiconfiguration/uicategorydescription.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_SESSIONLISTENER_HXX_
+#include <services/sessionlistener.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -317,6 +321,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::StatusBarFactory                        )
                         COMPONENTINFO( ::framework::UICategoryDescription                   )
                         COMPONENTINFO( ::framework::StatusbarControllerFactory              )
+                        COMPONENTINFO( ::framework::SessionListener                         )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -362,6 +367,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
-                        IFFACTORY( ::framework::StatusbarControllerFactory              )
+                        IFFACTORY( ::framework::StatusbarControllerFactory              )   else
+                        IFFACTORY( ::framework::SessionListener                         )
             )
 
