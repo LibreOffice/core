@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDialog2.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:06:41 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.wizards.ui.event.*;
  */
 public class UnoDialog2 extends UnoDialog implements EventNames {
 
-    protected AbstractListener guiEventListener;
+    public AbstractListener guiEventListener;
 
     /**
      * Override this method to return another listener.
