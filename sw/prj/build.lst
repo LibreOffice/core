@@ -10,9 +10,7 @@ sw	sw\res									get		-	all	sw_res NULL
 sw	sw\win\res								get		-	all	sw_wres NULL
 sw	sw\win\imglst							get		-	all	sw_wimg NULL
 sw	sw\sdi									nmake	-	all	sw_sdi NULL
-sw	sw\source\core\core_1st					nmake	-	all	sw_core1 NULL
-sw	sw\source\core\bastyp					nmake	-	all	sw_bast sw_core1 NULL
-sw	sw\source\ui\ui_1st						nmake	-	all	sw_ui1 sw_sdi NULL
+sw  sw\source\core\bastyp                   nmake   -   all sw_bast NULL
 sw	sw\source\ui\app						nmake	-	all	sw_app sw_sdi NULL
 sw	sw\source\ui\cctrl						nmake	-	all	sw_cctrl NULL
 sw	sw\source\ui\chrdlg						nmake	-	all	sw_chrdl NULL
@@ -59,8 +57,8 @@ sw	sw\source\core\txtnode					nmake	-	all	sw_txtnd NULL
 sw	sw\source\core\undo						nmake	-	all	sw_undo NULL
 sw	sw\source\core\view						nmake	-	all	sw_view NULL
 sw	sw\source\core\unocore					nmake	-	all	sw_uco NULL
-sw	sw\source\filter\filt_1st				nmake	-	all	sw_flt1 sw_sdi NULL
-sw	sw\source\filter\ascii					nmake	-	all	sw_ascii NULL
+sw  sw\source\core\access                   nmake   -   all sw_acc NULL
+sw  sw\source\filter\ascii                  nmake   -   all sw_ascii NULL
 sw	sw\source\filter\basflt					nmake	-	all	sw_bsflt NULL
 sw	sw\source\filter\debug					nmake	-	w	sw_dbugw NULL
 sw	sw\source\filter\debug					nmake	-	u	sw_dbugu NULL
@@ -75,6 +73,6 @@ sw	sw\source\filter\ww1					nmake	-	all	sw_ww1 NULL
 sw	sw\source\filter\ww8					nmake	-	all	sw_ww8 NULL
 sw	sw\source\filter\xml					nmake	-	all	sw_xml NULL
 sw	sw\source\ui							nmake	-	all	sw_ui sw_app sw_cctrl sw_chrdl sw_conf sw_dbui sw_dchdl sw_dcvw sw_dlg sw_envlp sw_fldui sw_fmtui sw_frmdl sw_globd sw_index sw_ling sw_misc sw_rbbar sw_shell sw_table sw_uiuno sw_uivw sw_utlui sw_web sw_wiz sw_wrtsh NULL
-sw	sw\source\core							nmake	-	all	sw_core sw_attr sw_bast sw_crsr sw_dcnd sw_doc sw_draw sw_edit sw_excpt sw_fld sw_frmed sw_grph sw_layo sw_ole sw_para sw_sw3io sw_swg sw_text sw_tox sw_txtnd sw_uco sw_undo sw_view NULL
+sw  sw\source\core                          nmake   -   all sw_core sw_attr sw_bast sw_crsr sw_dcnd sw_doc sw_draw sw_edit sw_excpt sw_fld sw_frmed sw_grph sw_layo sw_ole sw_para sw_sw3io sw_swg sw_text sw_tox sw_txtnd sw_uco sw_undo sw_view sw_acc NULL
 sw	sw\source\filter						nmake	-	all	sw_flt sw_ascii sw_bsflt sw_dbugu.u sw_dbugw.w sw_excel sw_html sw_lotus sw_rtf sw_sw6 sw_w4w sw_wrtr sw_ww1 sw_ww8 sw_xml NULL
 sw	sw\util									nmake	-	all	sw_util sw_core sw_flt sw_sdi sw_ui NULL
