@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 14:03:54 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ public:
  *  Implementierung der GrafikAttribut Methoden vom SwAttrSet
  ******************************************************************************/
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(BOOL bInP) const
     { return (const SwMirrorGrf&)Get( RES_GRFATR_MIRRORGRF,bInP); }
@@ -409,7 +409,7 @@ inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(BOOL bInP) const
  *  Implementierung der GrafikAttribut Methoden vom SwFmt
  ******************************************************************************/
 
-#ifndef MACOSX
+#if ! (defined(MACOSX) && ( __GNUC__ < 3 ) )
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(BOOL bInP) const
     { return aSet.GetMirrorGrf(bInP); }
