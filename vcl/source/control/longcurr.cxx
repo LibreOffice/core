@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void LongCurrencyFormatter::SetValue( BigInt nNewValue )
 {
     SetUserValue( nNewValue );
     mnFieldValue = mnLastValue;
-    ImplGetEmptyFieldValue() = FALSE;
+    SetEmptyFieldValueData( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -518,7 +518,7 @@ BOOL LongCurrencyFormatter::IsValueModified() const
 void LongCurrencyFormatter::SetEmptyValue()
 {
     GetField()->SetText( ImplGetSVEmptyStr() );
-    ImplGetEmptyFieldValue() = TRUE;
+    SetEmptyFieldValueData( TRUE );
 }
 
 // -----------------------------------------------------------------------
