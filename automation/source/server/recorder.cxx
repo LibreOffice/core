@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recorder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:28:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
         VclWindowEvent* pWinEvent = ( VclWindowEvent* ) pEvent;
         Window* pWin = pWinEvent->GetWindow();
         ULONG nEventID = pWinEvent->GetId();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if ( nEventID >= 1001 && nEventID != VCLEVENT_WINDOW_KEYUP )
             nEventID = pWinEvent->GetId();  // Just something to set a breakpoint
         else
@@ -915,7 +915,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
             case C_ButtonDialog:
                 {
                     ButtonDialog* pBD = (ButtonDialog*)pControl;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     m_pDbgWin->AddText( "Working MessBox: " );
                     if (pControl->IsVisible())
                         m_pDbgWin->AddText("*(Visible)\n");

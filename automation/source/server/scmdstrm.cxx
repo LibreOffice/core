@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmdstrm.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:28:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include "svcommstream.hxx"
 #include "rcontrol.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _EDITWIN_HXX
 #include "editwin.hxx"
 #endif
@@ -108,7 +108,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
     USHORT nType;
     USHORT nId;
     Read(nId);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         StatementList::m_pDbgWin->AddText( "Parameter: " );
         StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nId ) );
         StatementList::m_pDbgWin->AddText( " " );
@@ -121,7 +121,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
                 USHORT nNr;
                 Read (nNr );
                 pItem = new SfxUInt16Item(nId,nNr);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "USHORT:" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
 #endif
@@ -132,7 +132,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
                 ULONG nNr;
                 Read (nNr );
                 pItem = new SfxUInt32Item(nId,nNr);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "ULONG:" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
 #endif
@@ -144,7 +144,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
                 Read (aString);
 
                 pItem = new SfxStringItem(nId,aString);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "String:" );
                 StatementList::m_pDbgWin->AddText( aString );
 #endif
@@ -155,7 +155,7 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
                 BOOL bBool;
                 Read (bBool);
                 pItem = new SfxBoolItem(nId,bBool);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "BOOL:" );
                 StatementList::m_pDbgWin->AddText( bBool ? "TRUE" : "FALSE" );
 #endif
@@ -163,12 +163,12 @@ void SCmdStream::Read ( SfxPoolItem *&pItem )
             break;
         default:
             DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif
             break;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         StatementList::m_pDbgWin->AddText( "\n" );
 #endif
 }
@@ -179,7 +179,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
     String aId;
     Read(aId);
     rItem.Name = rtl::OUString( aId );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         StatementList::m_pDbgWin->AddText( "Parameter: " );
         StatementList::m_pDbgWin->AddText( aId );
         StatementList::m_pDbgWin->AddText( " " );
@@ -192,7 +192,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
                 USHORT nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "USHORT:" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt32( nNr ) );
 #endif
@@ -203,7 +203,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
                 ULONG nNr;
                 Read (nNr );
                 rItem.Value <<= nNr;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "ULONG:" );
                 StatementList::m_pDbgWin->AddText( String::CreateFromInt64( nNr ) );
 #endif
@@ -214,7 +214,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
                 String aString;
                 Read (aString);
                 rItem.Value <<= ::rtl::OUString( aString );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "String:" );
                 StatementList::m_pDbgWin->AddText( aString );
 #endif
@@ -225,7 +225,7 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
                 BOOL bBool;
                 Read (bBool);
                 rItem.Value <<= bBool;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 StatementList::m_pDbgWin->AddText( "BOOL:" );
                 StatementList::m_pDbgWin->AddText( bBool ? "TRUE" : "FALSE" );
 #endif
@@ -233,12 +233,12 @@ void SCmdStream::Read ( ::com::sun::star::beans::PropertyValue &rItem )
             break;
         default:
             DBG_ERROR1( "Ungültiger Typ im Stream:%hu", nType );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             StatementList::m_pDbgWin->AddText( "Ungültiger Typ !!!! " );
 #endif
             break;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         StatementList::m_pDbgWin->AddText( "\n" );
 #endif
 }
