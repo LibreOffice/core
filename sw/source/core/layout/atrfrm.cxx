@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-06-07 07:47:43 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 07:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _UNOSETT_HXX
 #include <unosett.hxx>
+#endif
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>
 #endif
 
 #ifndef _COMPHELPER_TYPES_HXX_
@@ -900,10 +903,15 @@ BOOL SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             break;
 
         case MID_PAGEDESC_PAGEDESCNAME:
-            /* geht nicht, weil das Attribut eigentlich nicht den Namen
-             * sondern einen Pointer auf den PageDesc braucht (ist Client davon).
-             * Der Pointer waere aber ueber den Namen nur vom Dokument zu erfragen.
-             */
+            {
+                const SwPageDesc* pDesc = GetPageDesc();
+                if( pDesc )
+                    rVal <<= OUString(
+                        SwXStyleFamilies::GetProgrammaticName(pDesc->GetName(), SFX_STYLE_FAMILY_PAGE));
+                else
+                    rVal.clear();
+            }
+            break;
         default:
             ASSERT( !this, "unknown MemberId" );
             bRet = sal_False;
