@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:55:15 $
+#   last change: $Author: obo $ $Date: 2004-07-09 11:33:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1336,6 +1336,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for the configuration into the product (CustomAc.idt and InstallE.idt)
             my $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecutePkgchk", "82", "msi-pkgchk.exe", "--quiet --shared", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable,"msi-pkgchk.exe", "ExecutePkgchk", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the new custom action for the configuration into the product (CustomAc.idt and InstallE.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteConfigimport", "82", "configimport.exe", "--spool", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable,"configimport.exe", "ExecuteConfigimport", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the quickstarter into the product (CustomAc.idt and InstallE.idt)
             # $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteQuickstart", "82", "install_quickstart.exe", "", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
