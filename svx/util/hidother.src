@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-05 09:53:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,3 +401,5 @@ hidspecial HID_OPTIONS_PATHS_SELECTFOLDER       { HelpID = HID_OPTIONS_PATHS_SEL
 hidspecial HID_GALLERY_NEWTHEME_FINDFILES       { HelpID = HID_GALLERY_NEWTHEME_FINDFILES; };
 hidspecial HID_GALLERY_NEWTHEME_ADDFILES        { HelpID = HID_GALLERY_NEWTHEME_ADDFILES; };
 hidspecial HID_NUMBERINGOPT_SEL_GRF_FROM_FILE   { HelpID = HID_NUMBERINGOPT_SEL_GRF_FROM_FILE; };
+hidspecial HID_REDLINING_VIEW_DG_VIEW_TABLE     { HelpID = HID_REDLINING_VIEW_DG_VIEW_TABLE ; };
+hidspecial HID_REDLINING_VIEW_DG_VIEW_HEADER    { HelpID = HID_REDLINING_VIEW_DG_VIEW_HEADER; };
