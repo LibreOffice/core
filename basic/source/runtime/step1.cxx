@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:37:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "sbintern.hxx"
 #include "iosys.hxx"
 #include "image.hxx"
+#include "sbunoobj.hxx"
 
 #include "segmentc.hxx"
 #pragma SW_SEGMENT_CLASS( SBRUNTIME, SBRUNTIME_CODE )
@@ -258,18 +259,106 @@ void SbiRuntime::StepRETURN( USHORT nOp1 )
 
 // FOR-Variable testen (+Endlabel)
 
+void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
+
 void SbiRuntime::StepTESTFOR( USHORT nOp1 )
 {
     if( !pForStk )
-        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
-    else
     {
-        SbxOperator eOp = ( pForStk->refInc->GetDouble() < 0 ) ? SbxLT : SbxGT;
-        if( pForStk->refVar->Compare( eOp, *pForStk->refEnd ) )
+        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+        return;
+    }
+
+    ForType eForType = pForStk->eForType;
+    bool bEndLoop = false;
+    switch( pForStk->eForType )
+    {
+        case FOR_TO:
         {
-            PopFor();
-            StepJUMP( nOp1 );
+            SbxOperator eOp = ( pForStk->refInc->GetDouble() < 0 ) ? SbxLT : SbxGT;
+            if( pForStk->refVar->Compare( eOp, *pForStk->refEnd ) )
+                bEndLoop = true;
+            break;
         }
+        case FOR_EACH_ARRAY:
+        {
+            SbiForStack* p = pForStk;
+            if( p->pArrayCurIndices == NULL )
+            {
+                bEndLoop = true;
+            }
+            else
+            {
+                SbxDimArray* pArray = (SbxDimArray*)(SbxVariable*)p->refEnd;
+                short nDims = pArray->GetDims();
+
+                // Empty array?
+                if( nDims == 1 && p->pArrayLowerBounds[0] > p->pArrayUpperBounds[0] )
+                {
+                    bEndLoop = true;
+                    break;
+                }
+                SbxVariable* pVal = pArray->Get32( p->pArrayCurIndices );
+                *(p->refVar) = *pVal;
+
+                bool bFoundNext = false;
+                for( short i = 0 ; i < nDims ; i++ )
+                {
+                    if( p->pArrayCurIndices[i] < p->pArrayUpperBounds[i] )
+                    {
+                        bFoundNext = true;
+                        p->pArrayCurIndices[i]++;
+                        for( short j = i - 1 ; j >= 0 ; j-- )
+                            p->pArrayCurIndices[j] = p->pArrayLowerBounds[j];
+                        break;
+                    }
+                }
+                if( !bFoundNext )
+                {
+                    delete[] p->pArrayCurIndices;
+                    p->pArrayCurIndices = NULL;
+                }
+            }
+            break;
+        }
+        case FOR_EACH_COLLECTION:
+        {
+            BasicCollection* pCollection = (BasicCollection*)(SbxVariable*)pForStk->refEnd;
+            SbxArrayRef xItemArray = pCollection->xItemArray;
+            INT32 nCount = xItemArray->Count32();
+            if( pForStk->nCurCollectionIndex < nCount )
+            {
+                SbxVariable* pRes = xItemArray->Get32( pForStk->nCurCollectionIndex );
+                pForStk->nCurCollectionIndex++;
+                (*pForStk->refVar) = *pRes;
+            }
+            else
+            {
+                bEndLoop = true;
+            }
+            break;
+        }
+        case FOR_EACH_XENUMERATION:
+        {
+            SbiForStack* p = pForStk;
+            if( p->xEnumeration->hasMoreElements() )
+            {
+                Any aElem = p->xEnumeration->nextElement();
+                SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+                unoToSbxValue( (SbxVariable*)xVar, aElem );
+                (*pForStk->refVar) = *xVar;
+            }
+            else
+            {
+                bEndLoop = true;
+            }
+            break;
+        }
+    }
+    if( bEndLoop )
+    {
+        PopFor();
+        StepJUMP( nOp1 );
     }
 }
 
