@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 18:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ const rtl::OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32
 
 void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
     const sal_Int32 nLastRow, const sal_Int32 nLastCol,
-    const ScFormatRangeStyles* pCellStyles, const ScDocument* pDoc)
+    const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc)
 {
     sal_uInt16 nPos;
     if (pRowDefaults)
@@ -806,7 +806,18 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable, const 
             bIsAutoStyle = aItr->bIsAutoStyle;
             nValidationIndex = aItr->nValidationIndex;
             nNumberFormat = aItr->nNumberFormat;
-            return (*aItr).nStyleNameIndex;
+            if (((*pRowDefaults)[nRow].nIndex != -1))
+            {
+                if ((*pRowDefaults)[nRow].nIndex == (*aItr).nStyleNameIndex)
+                    return -1;
+                else
+                    return (*aItr).nStyleNameIndex;
+            }
+            else if (((*pColDefaults)[nColumn].nIndex != -1) &&
+                ((*pColDefaults)[nColumn].nIndex == (*aItr).nStyleNameIndex))
+                return -1;
+            else
+                return (*aItr).nStyleNameIndex;
         }
         else
         {

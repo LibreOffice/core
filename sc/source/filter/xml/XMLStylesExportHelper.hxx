@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 18:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ public:
 
     void FillDefaultStyles(const sal_uInt16 nTable,
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
-        const ScFormatRangeStyles* pCellStyles, const ScDocument* pDoc);
+        const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
     const ScMyDefaultStyleList* GetRowDefaults() { return pRowDefaults; }
     const ScMyDefaultStyleList* GetColDefaults() { return pColDefaults; }
@@ -230,11 +230,15 @@ class ScFormatRangeStyles
     ScMyFormatRangeListVec      aTables;
     ScMyOUStringVec             aStyleNames;
     ScMyOUStringVec             aAutoStyleNames;
+    const ScMyDefaultStyleList* pRowDefaults;
+    const ScMyDefaultStyleList* pColDefaults;
 
 public:
     ScFormatRangeStyles();
     ~ScFormatRangeStyles();
 
+    void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
+    void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void AddNewTable(const sal_Int16 nTable);
     sal_Int32 AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle = sal_True);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);

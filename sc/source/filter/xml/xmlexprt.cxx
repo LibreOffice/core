@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 18:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,12 +794,12 @@ void ScXMLExport::WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatCo
     sal_Bool bPrevAutoStyle((*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle);
     for (sal_Int32 i = nColumn + 1; i < nColumn + nRepeatColumns; i++)
     {
-        if (((*pDefaults->GetColDefaults())[nColumn].nIndex != nPrevIndex) ||
-            ((*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle != bPrevAutoStyle))
+        if (((*pDefaults->GetColDefaults())[i].nIndex != nPrevIndex) ||
+            ((*pDefaults->GetColDefaults())[i].bIsAutoStyle != bPrevAutoStyle))
         {
             WriteSingleColumn(nRepeat, nStyleIndex, nPrevIndex, bPrevAutoStyle, bIsVisible);
-            nPrevIndex = (*pDefaults->GetColDefaults())[nColumn].nIndex;
-            bPrevAutoStyle = (*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle;
+            nPrevIndex = (*pDefaults->GetColDefaults())[i].nIndex;
+            bPrevAutoStyle = (*pDefaults->GetColDefaults())[i].bIsAutoStyle;
             nRepeat = 1;
         }
         else
@@ -828,6 +828,7 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
     sal_Int32 nColsRepeated (1);
     rtl::OUString sParent;
     sal_Int32 nIndex;
+    sal_Int32 nPrevColumn(0);
     sal_Bool bPrevIsVisible (sal_True);
     sal_Bool bWasHeader (sal_False);
     sal_Bool bIsHeader (sal_False);
@@ -863,12 +864,13 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
                                 bIsFirst = sal_False;
                                 if (nColumn > 0)
                                 {
-                                    WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
+                                    WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
                                     if (pGroupColumns->IsGroupEnd(nColumn - 1))
                                         pGroupColumns->CloseGroups(nColumn - 1);
                                 }
                                 bPrevIsVisible = bIsVisible;
                                 nPrevIndex = nIndex;
+                                nPrevColumn = nColumn;
                                 nColsRepeated = 1;
                                 bIsFirst = sal_True;
                                 if(pGroupColumns->IsGroupStart(nColumn))
@@ -879,12 +881,13 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
                             }
                             else
                             {
-                                WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
+                                WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
                                 CloseHeaderColumn();
                                 if (pGroupColumns->IsGroupEnd(nColumn - 1))
                                     pGroupColumns->CloseGroups(nColumn - 1);
                                 bPrevIsVisible = bIsVisible;
                                 nPrevIndex = nIndex;
+                                nPrevColumn = nColumn;
                                 nColsRepeated = 1;
                                 bWasHeader = sal_False;
                                 bIsClosed = sal_True;
@@ -904,7 +907,7 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
                         else
                         {
                             bIsFirst = sal_False;
-                            WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
+                            WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
                             if (pGroupColumns->IsGroupEnd(nColumn - 1))
                                 pGroupColumns->CloseGroups(nColumn - 1);
                             if (pGroupColumns->IsGroupStart(nColumn))
@@ -917,13 +920,14 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
                             }
                             bPrevIsVisible = bIsVisible;
                             nPrevIndex = nIndex;
+                            nPrevColumn = nColumn;
                             nColsRepeated = 1;
                         }
                     }
                 }
             }
             //if (nColsRepeated > 1 || bIsFirst)
-                WriteColumn(nColumn - 1, nColsRepeated, nPrevIndex, bPrevIsVisible);
+                WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (!bIsClosed)
                 CloseHeaderColumn();
             if (pGroupColumns->IsGroupEnd(nColumn - 1))
@@ -1410,6 +1414,8 @@ void ScXMLExport::_ExportContent()
                             pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
                         pRowFormatRanges->SetRowDefaults(pDefaults->GetRowDefaults());
                         pRowFormatRanges->SetColDefaults(pDefaults->GetColDefaults());
+                        pCellStyles->SetRowDefaults(pDefaults->GetRowDefaults());
+                        pCellStyles->SetColDefaults(pDefaults->GetColDefaults());
                         ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
                         sal_Bool bIsFirst(sal_True);
                         sal_Int32 nEqualCells(0);
