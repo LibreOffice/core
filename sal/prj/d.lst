@@ -1,0 +1,42 @@
+mkdir: %_DEST%\inc%_EXT%\sal
+mkdir: %_DEST%\inc%_EXT%\osl
+mkdir: %_DEST%\inc%_EXT%\rtl
+
+..\inc\sal\*.h %_DEST%\inc%_EXT%\sal\*.h
+..\inc\osl\*.h %_DEST%\inc%_EXT%\osl\*.h
+..\inc\osl\*.hxx %_DEST%\inc%_EXT%\osl\*.hxx
+..\inc\rtl\*.h %_DEST%\inc%_EXT%\rtl\*.h
+..\inc\rtl\*.hxx %_DEST%\inc%_EXT%\rtl\*.hxx
+..\inc\rtl\ustring %_DEST%\inc%_EXT%\rtl\ustring
+..\inc\systools\*.h %_DEST%\inc%_EXT%\*.h
+..\inc\systools\win32\*.h %_DEST%\inc%_EXT%\*.h
+..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\*.h
+
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+
+..\%__SRC%\lib\sal.lib %_DEST%\lib%_EXT%\sal.lib
+..\%__SRC%\slb\sal.lib %_DEST%\lib%_EXT%\xsal.lib
+..\%__SRC%\lib\asal.lib %_DEST%\lib%_EXT%\asal.lib
+..\%__SRC%\lib\isal.lib %_DEST%\lib%_EXT%\isal.lib
+..\%__SRC%\bin\sal*.dll %_DEST%\bin%_EXT%\sal*.dll
+
+..\%__SRC%\bin\sdaemon.sh %_DEST%\bin%_EXT%\sdaemon.sh
+..\%__SRC%\bin\sdaemon %_DEST%\bin%_EXT%\sdaemon
+..\%__SRC%\bin\sdaemon.exe %_DEST%\bin%_EXT%\sdaemon.exe
+..\%__SRC%\bin\sdaemon.cmd %_DEST%\bin%_EXT%\sdaemon.cmd
+..\version.mk %_DEST%\inc%_EXT%\sal\version.mk
+
+
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
+..\%__SRC%\misc\*.hid %_DEST%\bin%_EXT%\*.hid
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+

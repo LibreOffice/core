@@ -1,0 +1,2769 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tcvtjp6.tab,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+/* ======================================================================= */
+
+/* This file contain the information tables for all japanese charsets: */
+/* SJIS, MS932, APPLE_JAPANESE, EUC_JP */
+
+/* ======================================================================= */
+
+static ImplDBCSToUniLeadTab const aSJISUniLeadTab[256] =
+{
+    { 0x0000,    0,    0, NULL },                               /* 0x00 */
+    { 0x0001,    0,    0, NULL },                               /* 0x01 */
+    { 0x0002,    0,    0, NULL },                               /* 0x02 */
+    { 0x0003,    0,    0, NULL },                               /* 0x03 */
+    { 0x0004,    0,    0, NULL },                               /* 0x04 */
+    { 0x0005,    0,    0, NULL },                               /* 0x05 */
+    { 0x0006,    0,    0, NULL },                               /* 0x06 */
+    { 0x0007,    0,    0, NULL },                               /* 0x07 */
+    { 0x0008,    0,    0, NULL },                               /* 0x08 */
+    { 0x0009,    0,    0, NULL },                               /* 0x09 */
+    { 0x000A,    0,    0, NULL },                               /* 0x0A */
+    { 0x000B,    0,    0, NULL },                               /* 0x0B */
+    { 0x000C,    0,    0, NULL },                               /* 0x0C */
+    { 0x000D,    0,    0, NULL },                               /* 0x0D */
+    { 0x000E,    0,    0, NULL },                               /* 0x0E */
+    { 0x000F,    0,    0, NULL },                               /* 0x0F */
+    { 0x0010,    0,    0, NULL },                               /* 0x10 */
+    { 0x0011,    0,    0, NULL },                               /* 0x11 */
+    { 0x0012,    0,    0, NULL },                               /* 0x12 */
+    { 0x0013,    0,    0, NULL },                               /* 0x13 */
+    { 0x0014,    0,    0, NULL },                               /* 0x14 */
+    { 0x0015,    0,    0, NULL },                               /* 0x15 */
+    { 0x0016,    0,    0, NULL },                               /* 0x16 */
+    { 0x0017,    0,    0, NULL },                               /* 0x17 */
+    { 0x0018,    0,    0, NULL },                               /* 0x18 */
+    { 0x0019,    0,    0, NULL },                               /* 0x19 */
+    { 0x001A,    0,    0, NULL },                               /* 0x1A */
+    { 0x001B,    0,    0, NULL },                               /* 0x1B */
+    { 0x001C,    0,    0, NULL },                               /* 0x1C */
+    { 0x001D,    0,    0, NULL },                               /* 0x1D */
+    { 0x001E,    0,    0, NULL },                               /* 0x1E */
+    { 0x001F,    0,    0, NULL },                               /* 0x1F */
+    { 0x0020,    0,    0, NULL },                               /* 0x20 */
+    { 0x0021,    0,    0, NULL },                               /* 0x21 */
+    { 0x0022,    0,    0, NULL },                               /* 0x22 */
+    { 0x0023,    0,    0, NULL },                               /* 0x23 */
+    { 0x0024,    0,    0, NULL },                               /* 0x24 */
+    { 0x0025,    0,    0, NULL },                               /* 0x25 */
+    { 0x0026,    0,    0, NULL },                               /* 0x26 */
+    { 0x0027,    0,    0, NULL },                               /* 0x27 */
+    { 0x0028,    0,    0, NULL },                               /* 0x28 */
+    { 0x0029,    0,    0, NULL },                               /* 0x29 */
+    { 0x002A,    0,    0, NULL },                               /* 0x2A */
+    { 0x002B,    0,    0, NULL },                               /* 0x2B */
+    { 0x002C,    0,    0, NULL },                               /* 0x2C */
+    { 0x002D,    0,    0, NULL },                               /* 0x2D */
+    { 0x002E,    0,    0, NULL },                               /* 0x2E */
+    { 0x002F,    0,    0, NULL },                               /* 0x2F */
+    { 0x0030,    0,    0, NULL },                               /* 0x30 */
+    { 0x0031,    0,    0, NULL },                               /* 0x31 */
+    { 0x0032,    0,    0, NULL },                               /* 0x32 */
+    { 0x0033,    0,    0, NULL },                               /* 0x33 */
+    { 0x0034,    0,    0, NULL },                               /* 0x34 */
+    { 0x0035,    0,    0, NULL },                               /* 0x35 */
+    { 0x0036,    0,    0, NULL },                               /* 0x36 */
+    { 0x0037,    0,    0, NULL },                               /* 0x37 */
+    { 0x0038,    0,    0, NULL },                               /* 0x38 */
+    { 0x0039,    0,    0, NULL },                               /* 0x39 */
+    { 0x003A,    0,    0, NULL },                               /* 0x3A */
+    { 0x003B,    0,    0, NULL },                               /* 0x3B */
+    { 0x003C,    0,    0, NULL },                               /* 0x3C */
+    { 0x003D,    0,    0, NULL },                               /* 0x3D */
+    { 0x003E,    0,    0, NULL },                               /* 0x3E */
+    { 0x003F,    0,    0, NULL },                               /* 0x3F */
+    { 0x0040,    0,    0, NULL },                               /* 0x40 */
+    { 0x0041,    0,    0, NULL },                               /* 0x41 */
+    { 0x0042,    0,    0, NULL },                               /* 0x42 */
+    { 0x0043,    0,    0, NULL },                               /* 0x43 */
+    { 0x0044,    0,    0, NULL },                               /* 0x44 */
+    { 0x0045,    0,    0, NULL },                               /* 0x45 */
+    { 0x0046,    0,    0, NULL },                               /* 0x46 */
+    { 0x0047,    0,    0, NULL },                               /* 0x47 */
+    { 0x0048,    0,    0, NULL },                               /* 0x48 */
+    { 0x0049,    0,    0, NULL },                               /* 0x49 */
+    { 0x004A,    0,    0, NULL },                               /* 0x4A */
+    { 0x004B,    0,    0, NULL },                               /* 0x4B */
+    { 0x004C,    0,    0, NULL },                               /* 0x4C */
+    { 0x004D,    0,    0, NULL },                               /* 0x4D */
+    { 0x004E,    0,    0, NULL },                               /* 0x4E */
+    { 0x004F,    0,    0, NULL },                               /* 0x4F */
+    { 0x0050,    0,    0, NULL },                               /* 0x50 */
+    { 0x0051,    0,    0, NULL },                               /* 0x51 */
+    { 0x0052,    0,    0, NULL },                               /* 0x52 */
+    { 0x0053,    0,    0, NULL },                               /* 0x53 */
+    { 0x0054,    0,    0, NULL },                               /* 0x54 */
+    { 0x0055,    0,    0, NULL },                               /* 0x55 */
+    { 0x0056,    0,    0, NULL },                               /* 0x56 */
+    { 0x0057,    0,    0, NULL },                               /* 0x57 */
+    { 0x0058,    0,    0, NULL },                               /* 0x58 */
+    { 0x0059,    0,    0, NULL },                               /* 0x59 */
+    { 0x005A,    0,    0, NULL },                               /* 0x5A */
+    { 0x005B,    0,    0, NULL },                               /* 0x5B */
+    { 0x005C,    0,    0, NULL },                               /* 0x5C */ /* is A5 (YEN SIGN), but for compatibiliy with ascii, we use 0x5C (SLASH) like MS CP392 */
+    { 0x005D,    0,    0, NULL },                               /* 0x5D */
+    { 0x005E,    0,    0, NULL },                               /* 0x5E */
+    { 0x005F,    0,    0, NULL },                               /* 0x5F */
+    { 0x0060,    0,    0, NULL },                               /* 0x60 */
+    { 0x0061,    0,    0, NULL },                               /* 0x61 */
+    { 0x0062,    0,    0, NULL },                               /* 0x62 */
+    { 0x0063,    0,    0, NULL },                               /* 0x63 */
+    { 0x0064,    0,    0, NULL },                               /* 0x64 */
+    { 0x0065,    0,    0, NULL },                               /* 0x65 */
+    { 0x0066,    0,    0, NULL },                               /* 0x66 */
+    { 0x0067,    0,    0, NULL },                               /* 0x67 */
+    { 0x0068,    0,    0, NULL },                               /* 0x68 */
+    { 0x0069,    0,    0, NULL },                               /* 0x69 */
+    { 0x006A,    0,    0, NULL },                               /* 0x6A */
+    { 0x006B,    0,    0, NULL },                               /* 0x6B */
+    { 0x006C,    0,    0, NULL },                               /* 0x6C */
+    { 0x006D,    0,    0, NULL },                               /* 0x6D */
+    { 0x006E,    0,    0, NULL },                               /* 0x6E */
+    { 0x006F,    0,    0, NULL },                               /* 0x6F */
+    { 0x0070,    0,    0, NULL },                               /* 0x70 */
+    { 0x0071,    0,    0, NULL },                               /* 0x71 */
+    { 0x0072,    0,    0, NULL },                               /* 0x72 */
+    { 0x0073,    0,    0, NULL },                               /* 0x73 */
+    { 0x0074,    0,    0, NULL },                               /* 0x74 */
+    { 0x0075,    0,    0, NULL },                               /* 0x75 */
+    { 0x0076,    0,    0, NULL },                               /* 0x76 */
+    { 0x0077,    0,    0, NULL },                               /* 0x77 */
+    { 0x0078,    0,    0, NULL },                               /* 0x78 */
+    { 0x0079,    0,    0, NULL },                               /* 0x79 */
+    { 0x007A,    0,    0, NULL },                               /* 0x7A */
+    { 0x007B,    0,    0, NULL },                               /* 0x7B */
+    { 0x007C,    0,    0, NULL },                               /* 0x7C */
+    { 0x007D,    0,    0, NULL },                               /* 0x7D */
+    { 0x007E,    0,    0, NULL },                               /* 0x7E */ /* is 0x0203E (SPACING OVERSCORE), but for compatibiliy with ascii, we use 0x7E (TILDE) like MS CP392 */
+    { 0x007F,    0,    0, NULL },                               /* 0x7F */
+    { 0x005C,    0,    0, NULL },                               /* 0x80 */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_81 },         /* 0x81 */
+    {      0, 0x4F, 0xF1, aImplDBCSToUniTab_SJIS_82 },          /* 0x82 */
+    {      0, 0x40, 0xD6, aImplDBCSToUniTab_SJIS_83 },          /* 0x83 */
+    {      0, 0x40, 0xBF, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x85 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x86 */ /* We convert this as double byte */
+    {      0, 0x40, 0x9C, aImplDBCSToUniTab_MS932_87 },         /* 0x87 */ /* We use the MS table for better MS compatibility */
+    {      0, 0x9F, 0xFC, aImplDBCSToUniTab_SJIS_88 },          /* 0x88 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_89 },          /* 0x89 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8A },          /* 0x8A */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8B },          /* 0x8B */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8C },          /* 0x8C */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8D },          /* 0x8D */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8E },          /* 0x8E */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8F },          /* 0x8F */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_90 },          /* 0x90 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_91 },          /* 0x91 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_92 },          /* 0x92 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_93 },          /* 0x93 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_94 },          /* 0x94 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_95 },          /* 0x95 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_96 },          /* 0x96 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_97 },          /* 0x97 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_98 },          /* 0x98 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_99 },          /* 0x99 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9A },          /* 0x9A */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9B },          /* 0x9B */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9C },          /* 0x9C */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9D },          /* 0x9D */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9E },          /* 0x9E */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9F },          /* 0x9F */
+    { 0x00A0,    0,    0, NULL },                               /* 0xA0 */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    { 0xFF61,    0,    0, NULL },                               /* 0xA1 */
+    { 0xFF62,    0,    0, NULL },                               /* 0xA2 */
+    { 0xFF63,    0,    0, NULL },                               /* 0xA3 */
+    { 0xFF64,    0,    0, NULL },                               /* 0xA4 */
+    { 0xFF65,    0,    0, NULL },                               /* 0xA5 */
+    { 0xFF66,    0,    0, NULL },                               /* 0xA6 */
+    { 0xFF67,    0,    0, NULL },                               /* 0xA7 */
+    { 0xFF68,    0,    0, NULL },                               /* 0xA8 */
+    { 0xFF69,    0,    0, NULL },                               /* 0xA9 */
+    { 0xFF6A,    0,    0, NULL },                               /* 0xAA */
+    { 0xFF6B,    0,    0, NULL },                               /* 0xAB */
+    { 0xFF6C,    0,    0, NULL },                               /* 0xAC */
+    { 0xFF6D,    0,    0, NULL },                               /* 0xAD */
+    { 0xFF6E,    0,    0, NULL },                               /* 0xAE */
+    { 0xFF6F,    0,    0, NULL },                               /* 0xAF */
+    { 0xFF70,    0,    0, NULL },                               /* 0xB0 */
+    { 0xFF71,    0,    0, NULL },                               /* 0xB1 */
+    { 0xFF72,    0,    0, NULL },                               /* 0xB2 */
+    { 0xFF73,    0,    0, NULL },                               /* 0xB3 */
+    { 0xFF74,    0,    0, NULL },                               /* 0xB4 */
+    { 0xFF75,    0,    0, NULL },                               /* 0xB5 */
+    { 0xFF76,    0,    0, NULL },                               /* 0xB6 */
+    { 0xFF77,    0,    0, NULL },                               /* 0xB7 */
+    { 0xFF78,    0,    0, NULL },                               /* 0xB8 */
+    { 0xFF79,    0,    0, NULL },                               /* 0xB9 */
+    { 0xFF7A,    0,    0, NULL },                               /* 0xBA */
+    { 0xFF7B,    0,    0, NULL },                               /* 0xBB */
+    { 0xFF7C,    0,    0, NULL },                               /* 0xBC */
+    { 0xFF7D,    0,    0, NULL },                               /* 0xBD */
+    { 0xFF7E,    0,    0, NULL },                               /* 0xBE */
+    { 0xFF7F,    0,    0, NULL },                               /* 0xBF */
+    { 0xFF80,    0,    0, NULL },                               /* 0xC0 */
+    { 0xFF81,    0,    0, NULL },                               /* 0xC1 */
+    { 0xFF82,    0,    0, NULL },                               /* 0xC2 */
+    { 0xFF83,    0,    0, NULL },                               /* 0xC3 */
+    { 0xFF84,    0,    0, NULL },                               /* 0xC4 */
+    { 0xFF85,    0,    0, NULL },                               /* 0xC5 */
+    { 0xFF86,    0,    0, NULL },                               /* 0xC6 */
+    { 0xFF87,    0,    0, NULL },                               /* 0xC7 */
+    { 0xFF88,    0,    0, NULL },                               /* 0xC8 */
+    { 0xFF89,    0,    0, NULL },                               /* 0xC9 */
+    { 0xFF8A,    0,    0, NULL },                               /* 0xCA */
+    { 0xFF8B,    0,    0, NULL },                               /* 0xCB */
+    { 0xFF8C,    0,    0, NULL },                               /* 0xCC */
+    { 0xFF8D,    0,    0, NULL },                               /* 0xCD */
+    { 0xFF8E,    0,    0, NULL },                               /* 0xCE */
+    { 0xFF8F,    0,    0, NULL },                               /* 0xCF */
+    { 0xFF90,    0,    0, NULL },                               /* 0xD0 */
+    { 0xFF91,    0,    0, NULL },                               /* 0xD1 */
+    { 0xFF92,    0,    0, NULL },                               /* 0xD2 */
+    { 0xFF93,    0,    0, NULL },                               /* 0xD3 */
+    { 0xFF94,    0,    0, NULL },                               /* 0xD4 */
+    { 0xFF95,    0,    0, NULL },                               /* 0xD5 */
+    { 0xFF96,    0,    0, NULL },                               /* 0xD6 */
+    { 0xFF97,    0,    0, NULL },                               /* 0xD7 */
+    { 0xFF98,    0,    0, NULL },                               /* 0xD8 */
+    { 0xFF99,    0,    0, NULL },                               /* 0xD9 */
+    { 0xFF9A,    0,    0, NULL },                               /* 0xDA */
+    { 0xFF9B,    0,    0, NULL },                               /* 0xDB */
+    { 0xFF9C,    0,    0, NULL },                               /* 0xDC */
+    { 0xFF9D,    0,    0, NULL },                               /* 0xDD */
+    { 0xFF9E,    0,    0, NULL },                               /* 0xDE */
+    { 0xFF9F,    0,    0, NULL },                               /* 0xDF */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E0 },          /* 0xE0 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E1 },          /* 0xE1 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E2 },          /* 0xE2 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E3 },          /* 0xE3 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E4 },          /* 0xE4 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E5 },          /* 0xE5 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E6 },          /* 0xE6 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E7 },          /* 0xE7 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E8 },          /* 0xE8 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E9 },          /* 0xE9 */
+    {      0, 0x40, 0xA4, aImplDBCSToUniTab_SJIS_EA },          /* 0xEA */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEB */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEC */ /* We convert this as double byte */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_ED },         /* 0xED */ /* We use the MS table for better MS compatibility */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_EE },         /* 0xEE */ /* We use the MS table for better MS compatibility */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEF */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUC Range */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FA },         /* 0xFA */ /* We use the MS table for better MS compatibility */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FB },         /* 0xFB */ /* We use the MS table for better MS compatibility */
+    {      0, 0x40, 0x4B, aImplDBCSToUniTab_MS932_FC },         /* 0xFC */ /* We use the MS table for better MS compatibility */
+    { 0x00A9,    0,    0, NULL },                               /* 0xFD */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    { 0x2122,    0,    0, NULL },                               /* 0xFE */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    { 0x2026,    0,    0, NULL }                                /* 0xFF */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+};
+
+/* ----------------------------------------------------------------------- */
+
+/* MS932-Tables are used for better microsoft compatibility */
+
+static ImplUniToDBCSHighTab const aSJISDBCSHighTab[256] =
+{
+    { 0x00, 0xF7, aImplUniToDBCSTab_SJIS_00 },                  /* 0x00 */
+    {    1,    0, NULL },                                       /* 0x01 */
+    {    1,    0, NULL },                                       /* 0x02 */
+    { 0x91, 0xC9, aImplUniToDBCSTab_SJIS_03 },                  /* 0x03 */
+    { 0x01, 0x51, aImplUniToDBCSTab_SJIS_04 },                  /* 0x04 */
+    {    1,    0, NULL },                                       /* 0x05 */
+    {    1,    0, NULL },                                       /* 0x06 */
+    {    1,    0, NULL },                                       /* 0x07 */
+    {    1,    0, NULL },                                       /* 0x08 */
+    {    1,    0, NULL },                                       /* 0x09 */
+    {    1,    0, NULL },                                       /* 0x0A */
+    {    1,    0, NULL },                                       /* 0x0B */
+    {    1,    0, NULL },                                       /* 0x0C */
+    {    1,    0, NULL },                                       /* 0x0D */
+    {    1,    0, NULL },                                       /* 0x0E */
+    {    1,    0, NULL },                                       /* 0x0F */
+    {    1,    0, NULL },                                       /* 0x10 */
+    {    1,    0, NULL },                                       /* 0x11 */
+    {    1,    0, NULL },                                       /* 0x12 */
+    {    1,    0, NULL },                                       /* 0x13 */
+    {    1,    0, NULL },                                       /* 0x14 */
+    {    1,    0, NULL },                                       /* 0x15 */
+    {    1,    0, NULL },                                       /* 0x16 */
+    {    1,    0, NULL },                                       /* 0x17 */
+    {    1,    0, NULL },                                       /* 0x18 */
+    {    1,    0, NULL },                                       /* 0x19 */
+    {    1,    0, NULL },                                       /* 0x1A */
+    {    1,    0, NULL },                                       /* 0x1B */
+    {    1,    0, NULL },                                       /* 0x1C */
+    {    1,    0, NULL },                                       /* 0x1D */
+    {    1,    0, NULL },                                       /* 0x1E */
+    {    1,    0, NULL },                                       /* 0x1F */
+    { 0x10, 0x3E, aImplUniToDBCSTab_SJIS_20 },                  /* 0x20 */
+    { 0x03, 0xD4, aImplUniToDBCSTab_MS932_21 },                 /* 0x21 */
+    { 0x00, 0xBF, aImplUniToDBCSTab_MS932_22 },                 /* 0x22 */
+    { 0x12, 0x12, aImplUniToDBCSTab_SJIS_23 },                  /* 0x23 */
+    { 0x60, 0x73, aImplUniToDBCSTab_MS932_24 },                 /* 0x24 */
+    { 0x00, 0xEF, aImplUniToDBCSTab_SJIS_25 },                  /* 0x25 */
+    { 0x05, 0x6F, aImplUniToDBCSTab_SJIS_26 },                  /* 0x26 */
+    {    1,    0, NULL },                                       /* 0x27 */
+    {    1,    0, NULL },                                       /* 0x28 */
+    {    1,    0, NULL },                                       /* 0x29 */
+    {    1,    0, NULL },                                       /* 0x2A */
+    {    1,    0, NULL },                                       /* 0x2B */
+    {    1,    0, NULL },                                       /* 0x2C */
+    {    1,    0, NULL },                                       /* 0x2D */
+    {    1,    0, NULL },                                       /* 0x2E */
+    {    1,    0, NULL },                                       /* 0x2F */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_30 },                  /* 0x30 */
+    {    1,    0, NULL },                                       /* 0x31 */
+    { 0x31, 0xA8, aImplUniToDBCSTab_MS932_32 },                 /* 0x32 */
+    { 0x03, 0xCD, aImplUniToDBCSTab_MS932_33 },                 /* 0x33 */
+    {    1,    0, NULL },                                       /* 0x34 */
+    {    1,    0, NULL },                                       /* 0x35 */
+    {    1,    0, NULL },                                       /* 0x36 */
+    {    1,    0, NULL },                                       /* 0x37 */
+    {    1,    0, NULL },                                       /* 0x38 */
+    {    1,    0, NULL },                                       /* 0x39 */
+    {    1,    0, NULL },                                       /* 0x3A */
+    {    1,    0, NULL },                                       /* 0x3B */
+    {    1,    0, NULL },                                       /* 0x3C */
+    {    1,    0, NULL },                                       /* 0x3D */
+    {    1,    0, NULL },                                       /* 0x3E */
+    {    1,    0, NULL },                                       /* 0x3F */
+    {    1,    0, NULL },                                       /* 0x40 */
+    {    1,    0, NULL },                                       /* 0x41 */
+    {    1,    0, NULL },                                       /* 0x42 */
+    {    1,    0, NULL },                                       /* 0x43 */
+    {    1,    0, NULL },                                       /* 0x44 */
+    {    1,    0, NULL },                                       /* 0x45 */
+    {    1,    0, NULL },                                       /* 0x46 */
+    {    1,    0, NULL },                                       /* 0x47 */
+    {    1,    0, NULL },                                       /* 0x48 */
+    {    1,    0, NULL },                                       /* 0x49 */
+    {    1,    0, NULL },                                       /* 0x4A */
+    {    1,    0, NULL },                                       /* 0x4B */
+    {    1,    0, NULL },                                       /* 0x4C */
+    {    1,    0, NULL },                                       /* 0x4D */
+    { 0x00, 0xFC, aImplUniToDBCSTab_SJIS_4E },                  /* 0x4E */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_4F },                  /* 0x4F */
+    { 0x05, 0xFB, aImplUniToDBCSTab_SJIS_50 },                  /* 0x50 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_51 },                  /* 0x51 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_52 },                  /* 0x52 */
+    { 0x00, 0xFA, aImplUniToDBCSTab_SJIS_53 },                  /* 0x53 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_54 },                  /* 0x54 */
+    { 0x04, 0xFE, aImplUniToDBCSTab_SJIS_55 },                  /* 0x55 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_SJIS_56 },                  /* 0x56 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_SJIS_57 },                  /* 0x57 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_58 },                  /* 0x58 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_59 },                  /* 0x59 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_5A },                  /* 0x5A */
+    { 0x09, 0xFF, aImplUniToDBCSTab_SJIS_5B },                  /* 0x5B */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_5C },                  /* 0x5C */
+    { 0x07, 0xFE, aImplUniToDBCSTab_SJIS_5D },                  /* 0x5D */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_5E },                  /* 0x5E */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_5F },                  /* 0x5F */
+    { 0x0E, 0xFB, aImplUniToDBCSTab_SJIS_60 },                  /* 0x60 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_61 },                  /* 0x61 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_62 },                  /* 0x62 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_SJIS_63 },                  /* 0x63 */
+    { 0x06, 0xFE, aImplUniToDBCSTab_SJIS_64 },                  /* 0x64 */
+    { 0x00, 0xFB, aImplUniToDBCSTab_SJIS_65 },                  /* 0x65 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_66 },                  /* 0x66 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_67 },                  /* 0x67 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_SJIS_68 },                  /* 0x68 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_69 },                  /* 0x69 */
+    { 0x02, 0xFB, aImplUniToDBCSTab_SJIS_6A },                  /* 0x6A */
+    { 0x04, 0xF3, aImplUniToDBCSTab_SJIS_6B },                  /* 0x6B */
+    { 0x08, 0xF3, aImplUniToDBCSTab_SJIS_6C },                  /* 0x6C */
+    { 0x04, 0xFC, aImplUniToDBCSTab_SJIS_6D },                  /* 0x6D */
+    { 0x05, 0xFF, aImplUniToDBCSTab_SJIS_6E },                  /* 0x6E */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_6F },                  /* 0x6F */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_70 },                  /* 0x70 */
+    { 0x04, 0xFF, aImplUniToDBCSTab_SJIS_71 },                  /* 0x71 */
+    { 0x06, 0xFD, aImplUniToDBCSTab_SJIS_72 },                  /* 0x72 */
+    { 0x0A, 0xFE, aImplUniToDBCSTab_SJIS_73 },                  /* 0x73 */
+    { 0x03, 0xF8, aImplUniToDBCSTab_SJIS_74 },                  /* 0x74 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_75 },                  /* 0x75 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_76 },                  /* 0x76 */
+    { 0x01, 0xFC, aImplUniToDBCSTab_SJIS_77 },                  /* 0x77 */
+    { 0x02, 0xFD, aImplUniToDBCSTab_SJIS_78 },                  /* 0x78 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_79 },                  /* 0x79 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_7A },                  /* 0x7A */
+    { 0x02, 0xF7, aImplUniToDBCSTab_SJIS_7B },                  /* 0x7B */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_7C },                  /* 0x7C */
+    { 0x00, 0xFB, aImplUniToDBCSTab_SJIS_7D },                  /* 0x7D */
+    { 0x01, 0x9C, aImplUniToDBCSTab_SJIS_7E },                  /* 0x7E */
+    { 0x36, 0xFC, aImplUniToDBCSTab_SJIS_7F },                  /* 0x7F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_80 },                  /* 0x80 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_SJIS_81 },                  /* 0x81 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_82 },                  /* 0x82 */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_83 },                  /* 0x83 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_SJIS_84 },                  /* 0x84 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_85 },                  /* 0x85 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_SJIS_86 },                  /* 0x86 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_87 },                  /* 0x87 */
+    { 0x05, 0xFE, aImplUniToDBCSTab_SJIS_88 },                  /* 0x88 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_SJIS_89 },                  /* 0x89 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_8A },                  /* 0x8A */
+    { 0x00, 0x9A, aImplUniToDBCSTab_SJIS_8B },                  /* 0x8B */
+    { 0x37, 0xFD, aImplUniToDBCSTab_SJIS_8C },                  /* 0x8C */
+    { 0x04, 0xFF, aImplUniToDBCSTab_SJIS_8D },                  /* 0x8D */
+    { 0x08, 0xFE, aImplUniToDBCSTab_SJIS_8E },                  /* 0x8E */
+    { 0x03, 0xFD, aImplUniToDBCSTab_SJIS_8F },                  /* 0x8F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_90 },                  /* 0x90 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_91 },                  /* 0x91 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_SJIS_92 },                  /* 0x92 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_SJIS_93 },                  /* 0x93 */
+    { 0x03, 0x81, aImplUniToDBCSTab_SJIS_94 },                  /* 0x94 */
+    { 0x77, 0xE5, aImplUniToDBCSTab_SJIS_95 },                  /* 0x95 */
+    { 0x1C, 0xFB, aImplUniToDBCSTab_SJIS_96 },                  /* 0x96 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_97 },                  /* 0x97 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_98 },                  /* 0x98 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_SJIS_99 },                  /* 0x99 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_9A },                  /* 0x9A */
+    { 0x06, 0xF5, aImplUniToDBCSTab_SJIS_9B },                  /* 0x9B */
+    { 0x00, 0xF6, aImplUniToDBCSTab_SJIS_9C },                  /* 0x9C */
+    { 0x03, 0xFD, aImplUniToDBCSTab_SJIS_9D },                  /* 0x9D */
+    { 0x19, 0xFD, aImplUniToDBCSTab_SJIS_9E },                  /* 0x9E */
+    { 0x07, 0xA0, aImplUniToDBCSTab_SJIS_9F },                  /* 0x9F */
+    {    1,    0, NULL },                                       /* 0xA0 */
+    {    1,    0, NULL },                                       /* 0xA1 */
+    {    1,    0, NULL },                                       /* 0xA2 */
+    {    1,    0, NULL },                                       /* 0xA3 */
+    {    1,    0, NULL },                                       /* 0xA4 */
+    {    1,    0, NULL },                                       /* 0xA5 */
+    {    1,    0, NULL },                                       /* 0xA6 */
+    {    1,    0, NULL },                                       /* 0xA7 */
+    {    1,    0, NULL },                                       /* 0xA8 */
+    {    1,    0, NULL },                                       /* 0xA9 */
+    {    1,    0, NULL },                                       /* 0xAA */
+    {    1,    0, NULL },                                       /* 0xAB */
+    {    1,    0, NULL },                                       /* 0xAC */
+    {    1,    0, NULL },                                       /* 0xAD */
+    {    1,    0, NULL },                                       /* 0xAE */
+    {    1,    0, NULL },                                       /* 0xAF */
+    {    1,    0, NULL },                                       /* 0xB0 */
+    {    1,    0, NULL },                                       /* 0xB1 */
+    {    1,    0, NULL },                                       /* 0xB2 */
+    {    1,    0, NULL },                                       /* 0xB3 */
+    {    1,    0, NULL },                                       /* 0xB4 */
+    {    1,    0, NULL },                                       /* 0xB5 */
+    {    1,    0, NULL },                                       /* 0xB6 */
+    {    1,    0, NULL },                                       /* 0xB7 */
+    {    1,    0, NULL },                                       /* 0xB8 */
+    {    1,    0, NULL },                                       /* 0xB9 */
+    {    1,    0, NULL },                                       /* 0xBA */
+    {    1,    0, NULL },                                       /* 0xBB */
+    {    1,    0, NULL },                                       /* 0xBC */
+    {    1,    0, NULL },                                       /* 0xBD */
+    {    1,    0, NULL },                                       /* 0xBE */
+    {    1,    0, NULL },                                       /* 0xBF */
+    {    1,    0, NULL },                                       /* 0xC0 */
+    {    1,    0, NULL },                                       /* 0xC1 */
+    {    1,    0, NULL },                                       /* 0xC2 */
+    {    1,    0, NULL },                                       /* 0xC3 */
+    {    1,    0, NULL },                                       /* 0xC4 */
+    {    1,    0, NULL },                                       /* 0xC5 */
+    {    1,    0, NULL },                                       /* 0xC6 */
+    {    1,    0, NULL },                                       /* 0xC7 */
+    {    1,    0, NULL },                                       /* 0xC8 */
+    {    1,    0, NULL },                                       /* 0xC9 */
+    {    1,    0, NULL },                                       /* 0xCA */
+    {    1,    0, NULL },                                       /* 0xCB */
+    {    1,    0, NULL },                                       /* 0xCC */
+    {    1,    0, NULL },                                       /* 0xCD */
+    {    1,    0, NULL },                                       /* 0xCE */
+    {    1,    0, NULL },                                       /* 0xCF */
+    {    1,    0, NULL },                                       /* 0xD0 */
+    {    1,    0, NULL },                                       /* 0xD1 */
+    {    1,    0, NULL },                                       /* 0xD2 */
+    {    1,    0, NULL },                                       /* 0xD3 */
+    {    1,    0, NULL },                                       /* 0xD4 */
+    {    1,    0, NULL },                                       /* 0xD5 */
+    {    1,    0, NULL },                                       /* 0xD6 */
+    {    1,    0, NULL },                                       /* 0xD7 */
+    {    1,    0, NULL },                                       /* 0xD8 */
+    {    1,    0, NULL },                                       /* 0xD9 */
+    {    1,    0, NULL },                                       /* 0xDA */
+    {    1,    0, NULL },                                       /* 0xDB */
+    {    1,    0, NULL },                                       /* 0xDC */
+    {    1,    0, NULL },                                       /* 0xDD */
+    {    1,    0, NULL },                                       /* 0xDE */
+    {    1,    0, NULL },                                       /* 0xDF */
+    {    1,    0, NULL },                                       /* 0xE0 */
+    {    1,    0, NULL },                                       /* 0xE1 */
+    {    1,    0, NULL },                                       /* 0xE2 */
+    {    1,    0, NULL },                                       /* 0xE3 */
+    {    1,    0, NULL },                                       /* 0xE4 */
+    {    1,    0, NULL },                                       /* 0xE5 */
+    {    1,    0, NULL },                                       /* 0xE6 */
+    {    1,    0, NULL },                                       /* 0xE7 */
+    {    1,    0, NULL },                                       /* 0xE8 */
+    {    1,    0, NULL },                                       /* 0xE9 */
+    {    1,    0, NULL },                                       /* 0xEA */
+    {    1,    0, NULL },                                       /* 0xEB */
+    {    1,    0, NULL },                                       /* 0xEC */
+    {    1,    0, NULL },                                       /* 0xED */
+    {    1,    0, NULL },                                       /* 0xEE */
+    {    1,    0, NULL },                                       /* 0xEF */
+    {    1,    0, NULL },                                       /* 0xF0 */
+    {    1,    0, NULL },                                       /* 0xF1 */
+    {    1,    0, NULL },                                       /* 0xF2 */
+    {    1,    0, NULL },                                       /* 0xF3 */
+    {    1,    0, NULL },                                       /* 0xF4 */
+    {    1,    0, NULL },                                       /* 0xF5 */
+    {    1,    0, NULL },                                       /* 0xF6 */
+    {    1,    0, NULL },                                       /* 0xF7 */
+    {    1,    0, NULL },                                       /* 0xF8 */
+    { 0x29, 0xDC, aImplUniToDBCSTab_MS932_F9 },                 /* 0xF9 */
+    { 0x0E, 0x2D, aImplUniToDBCSTab_MS932_FA },                 /* 0xFA */
+    {    1,    0, NULL },                                       /* 0xFB */
+    {    1,    0, NULL },                                       /* 0xFC */
+    {    1,    0, NULL },                                       /* 0xFD */
+    {    1,    0, NULL },                                       /* 0xFE */
+    { 0x01, 0xE5, aImplUniToDBCSTab_SJIS_FF }                   /* 0xFF */
+};
+
+/* ----------------------------------------------------------------------- */
+
+#define DBCS_EUC_SJIS_COUNT     1
+static ImplDBCSEUCData const aImplSJISDBCSEUCTab[DBCS_EUC_SJIS_COUNT] =
+{
+    /* EUC-Range */
+    /* Lead:    F0-FC */
+    /* Trail:   40-7E, 80-FC */
+    { 0xF0, 0xF9, 0x40, 0x7E, 0x7F, 0xFC, 0, 0, 2, 0xBC, 0xE000, 0xE757 }
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplDBCSConvertData const aImplSJISDBCSCvtData =
+{
+    aSJISUniLeadTab,
+    aSJISDBCSHighTab,
+    0x40, 0xFC,
+    aImplSJISDBCSEUCTab,
+    DBCS_EUC_SJIS_COUNT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData const aImplSJISTextConverterData =
+{
+    &aImplSJISDBCSCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter const aImplSJISTextConverter =
+{
+    &aImplSJISTextConverterData,
+    ImplDBCSToUnicode,
+    ImplUnicodeToDBCS,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData const aImplSJISTextEncodingData =
+{
+    &aImplSJISTextConverter,
+    RTL_TEXTENCODING_SHIFT_JIS,
+    1, 2, 2,
+    128,
+    932,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"shift_jis",
+    RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MULTIBYTE |
+    RTL_TEXTENCODING_INFO_MIME,
+    SCRIPT_JAPANESE
+};
+
+/* ======================================================================= */
+
+static ImplDBCSToUniLeadTab const aMS932UniLeadTab[256] =
+{
+    { 0x0000,    0,    0, NULL },                               /* 0x00 */
+    { 0x0001,    0,    0, NULL },                               /* 0x01 */
+    { 0x0002,    0,    0, NULL },                               /* 0x02 */
+    { 0x0003,    0,    0, NULL },                               /* 0x03 */
+    { 0x0004,    0,    0, NULL },                               /* 0x04 */
+    { 0x0005,    0,    0, NULL },                               /* 0x05 */
+    { 0x0006,    0,    0, NULL },                               /* 0x06 */
+    { 0x0007,    0,    0, NULL },                               /* 0x07 */
+    { 0x0008,    0,    0, NULL },                               /* 0x08 */
+    { 0x0009,    0,    0, NULL },                               /* 0x09 */
+    { 0x000A,    0,    0, NULL },                               /* 0x0A */
+    { 0x000B,    0,    0, NULL },                               /* 0x0B */
+    { 0x000C,    0,    0, NULL },                               /* 0x0C */
+    { 0x000D,    0,    0, NULL },                               /* 0x0D */
+    { 0x000E,    0,    0, NULL },                               /* 0x0E */
+    { 0x000F,    0,    0, NULL },                               /* 0x0F */
+    { 0x0010,    0,    0, NULL },                               /* 0x10 */
+    { 0x0011,    0,    0, NULL },                               /* 0x11 */
+    { 0x0012,    0,    0, NULL },                               /* 0x12 */
+    { 0x0013,    0,    0, NULL },                               /* 0x13 */
+    { 0x0014,    0,    0, NULL },                               /* 0x14 */
+    { 0x0015,    0,    0, NULL },                               /* 0x15 */
+    { 0x0016,    0,    0, NULL },                               /* 0x16 */
+    { 0x0017,    0,    0, NULL },                               /* 0x17 */
+    { 0x0018,    0,    0, NULL },                               /* 0x18 */
+    { 0x0019,    0,    0, NULL },                               /* 0x19 */
+    { 0x001A,    0,    0, NULL },                               /* 0x1A */
+    { 0x001B,    0,    0, NULL },                               /* 0x1B */
+    { 0x001C,    0,    0, NULL },                               /* 0x1C */
+    { 0x001D,    0,    0, NULL },                               /* 0x1D */
+    { 0x001E,    0,    0, NULL },                               /* 0x1E */
+    { 0x001F,    0,    0, NULL },                               /* 0x1F */
+    { 0x0020,    0,    0, NULL },                               /* 0x20 */
+    { 0x0021,    0,    0, NULL },                               /* 0x21 */
+    { 0x0022,    0,    0, NULL },                               /* 0x22 */
+    { 0x0023,    0,    0, NULL },                               /* 0x23 */
+    { 0x0024,    0,    0, NULL },                               /* 0x24 */
+    { 0x0025,    0,    0, NULL },                               /* 0x25 */
+    { 0x0026,    0,    0, NULL },                               /* 0x26 */
+    { 0x0027,    0,    0, NULL },                               /* 0x27 */
+    { 0x0028,    0,    0, NULL },                               /* 0x28 */
+    { 0x0029,    0,    0, NULL },                               /* 0x29 */
+    { 0x002A,    0,    0, NULL },                               /* 0x2A */
+    { 0x002B,    0,    0, NULL },                               /* 0x2B */
+    { 0x002C,    0,    0, NULL },                               /* 0x2C */
+    { 0x002D,    0,    0, NULL },                               /* 0x2D */
+    { 0x002E,    0,    0, NULL },                               /* 0x2E */
+    { 0x002F,    0,    0, NULL },                               /* 0x2F */
+    { 0x0030,    0,    0, NULL },                               /* 0x30 */
+    { 0x0031,    0,    0, NULL },                               /* 0x31 */
+    { 0x0032,    0,    0, NULL },                               /* 0x32 */
+    { 0x0033,    0,    0, NULL },                               /* 0x33 */
+    { 0x0034,    0,    0, NULL },                               /* 0x34 */
+    { 0x0035,    0,    0, NULL },                               /* 0x35 */
+    { 0x0036,    0,    0, NULL },                               /* 0x36 */
+    { 0x0037,    0,    0, NULL },                               /* 0x37 */
+    { 0x0038,    0,    0, NULL },                               /* 0x38 */
+    { 0x0039,    0,    0, NULL },                               /* 0x39 */
+    { 0x003A,    0,    0, NULL },                               /* 0x3A */
+    { 0x003B,    0,    0, NULL },                               /* 0x3B */
+    { 0x003C,    0,    0, NULL },                               /* 0x3C */
+    { 0x003D,    0,    0, NULL },                               /* 0x3D */
+    { 0x003E,    0,    0, NULL },                               /* 0x3E */
+    { 0x003F,    0,    0, NULL },                               /* 0x3F */
+    { 0x0040,    0,    0, NULL },                               /* 0x40 */
+    { 0x0041,    0,    0, NULL },                               /* 0x41 */
+    { 0x0042,    0,    0, NULL },                               /* 0x42 */
+    { 0x0043,    0,    0, NULL },                               /* 0x43 */
+    { 0x0044,    0,    0, NULL },                               /* 0x44 */
+    { 0x0045,    0,    0, NULL },                               /* 0x45 */
+    { 0x0046,    0,    0, NULL },                               /* 0x46 */
+    { 0x0047,    0,    0, NULL },                               /* 0x47 */
+    { 0x0048,    0,    0, NULL },                               /* 0x48 */
+    { 0x0049,    0,    0, NULL },                               /* 0x49 */
+    { 0x004A,    0,    0, NULL },                               /* 0x4A */
+    { 0x004B,    0,    0, NULL },                               /* 0x4B */
+    { 0x004C,    0,    0, NULL },                               /* 0x4C */
+    { 0x004D,    0,    0, NULL },                               /* 0x4D */
+    { 0x004E,    0,    0, NULL },                               /* 0x4E */
+    { 0x004F,    0,    0, NULL },                               /* 0x4F */
+    { 0x0050,    0,    0, NULL },                               /* 0x50 */
+    { 0x0051,    0,    0, NULL },                               /* 0x51 */
+    { 0x0052,    0,    0, NULL },                               /* 0x52 */
+    { 0x0053,    0,    0, NULL },                               /* 0x53 */
+    { 0x0054,    0,    0, NULL },                               /* 0x54 */
+    { 0x0055,    0,    0, NULL },                               /* 0x55 */
+    { 0x0056,    0,    0, NULL },                               /* 0x56 */
+    { 0x0057,    0,    0, NULL },                               /* 0x57 */
+    { 0x0058,    0,    0, NULL },                               /* 0x58 */
+    { 0x0059,    0,    0, NULL },                               /* 0x59 */
+    { 0x005A,    0,    0, NULL },                               /* 0x5A */
+    { 0x005B,    0,    0, NULL },                               /* 0x5B */
+    { 0x005C,    0,    0, NULL },                               /* 0x5C */ /* in SJIS this is A5 (YEN SIGN), but for compatibiliy with ascii, we use 0x5C like MS CP392 */
+    { 0x005D,    0,    0, NULL },                               /* 0x5D */
+    { 0x005E,    0,    0, NULL },                               /* 0x5E */
+    { 0x005F,    0,    0, NULL },                               /* 0x5F */
+    { 0x0060,    0,    0, NULL },                               /* 0x60 */
+    { 0x0061,    0,    0, NULL },                               /* 0x61 */
+    { 0x0062,    0,    0, NULL },                               /* 0x62 */
+    { 0x0063,    0,    0, NULL },                               /* 0x63 */
+    { 0x0064,    0,    0, NULL },                               /* 0x64 */
+    { 0x0065,    0,    0, NULL },                               /* 0x65 */
+    { 0x0066,    0,    0, NULL },                               /* 0x66 */
+    { 0x0067,    0,    0, NULL },                               /* 0x67 */
+    { 0x0068,    0,    0, NULL },                               /* 0x68 */
+    { 0x0069,    0,    0, NULL },                               /* 0x69 */
+    { 0x006A,    0,    0, NULL },                               /* 0x6A */
+    { 0x006B,    0,    0, NULL },                               /* 0x6B */
+    { 0x006C,    0,    0, NULL },                               /* 0x6C */
+    { 0x006D,    0,    0, NULL },                               /* 0x6D */
+    { 0x006E,    0,    0, NULL },                               /* 0x6E */
+    { 0x006F,    0,    0, NULL },                               /* 0x6F */
+    { 0x0070,    0,    0, NULL },                               /* 0x70 */
+    { 0x0071,    0,    0, NULL },                               /* 0x71 */
+    { 0x0072,    0,    0, NULL },                               /* 0x72 */
+    { 0x0073,    0,    0, NULL },                               /* 0x73 */
+    { 0x0074,    0,    0, NULL },                               /* 0x74 */
+    { 0x0075,    0,    0, NULL },                               /* 0x75 */
+    { 0x0076,    0,    0, NULL },                               /* 0x76 */
+    { 0x0077,    0,    0, NULL },                               /* 0x77 */
+    { 0x0078,    0,    0, NULL },                               /* 0x78 */
+    { 0x0079,    0,    0, NULL },                               /* 0x79 */
+    { 0x007A,    0,    0, NULL },                               /* 0x7A */
+    { 0x007B,    0,    0, NULL },                               /* 0x7B */
+    { 0x007C,    0,    0, NULL },                               /* 0x7C */
+    { 0x007D,    0,    0, NULL },                               /* 0x7D */
+    { 0x007E,    0,    0, NULL },                               /* 0x7E */ /* in SJIS this is 0x0203E (SPACING OVERSCORE), but for compatibiliy with ascii, we use 0x7E (TILDE) like MS CP392 */
+    { 0x007F,    0,    0, NULL },                               /* 0x7F */
+    { 0x005C,    0,    0, NULL },                               /* 0x80 */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_81 },         /* 0x81 */
+    {      0, 0x4F, 0xF1, aImplDBCSToUniTab_SJIS_82 },          /* 0x82 */
+    {      0, 0x40, 0xD6, aImplDBCSToUniTab_SJIS_83 },          /* 0x83 */
+    {      0, 0x40, 0xBF, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x85 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x86 */ /* We convert this as double byte */
+    {      0, 0x40, 0x9C, aImplDBCSToUniTab_MS932_87 },         /* 0x87 */
+    {      0, 0x9F, 0xFC, aImplDBCSToUniTab_SJIS_88 },          /* 0x88 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_89 },          /* 0x89 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8A },          /* 0x8A */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8B },          /* 0x8B */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8C },          /* 0x8C */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8D },          /* 0x8D */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8E },          /* 0x8E */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8F },          /* 0x8F */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_90 },          /* 0x90 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_91 },          /* 0x91 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_92 },          /* 0x92 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_93 },          /* 0x93 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_94 },          /* 0x94 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_95 },          /* 0x95 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_96 },          /* 0x96 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_97 },          /* 0x97 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_98 },          /* 0x98 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_99 },          /* 0x99 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9A },          /* 0x9A */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9B },          /* 0x9B */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9C },          /* 0x9C */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9D },          /* 0x9D */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9E },          /* 0x9E */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9F },          /* 0x9F */
+    { 0x00A0,    0,    0, NULL },                               /* 0xA0 */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    { 0xFF61,    0,    0, NULL },                               /* 0xA1 */
+    { 0xFF62,    0,    0, NULL },                               /* 0xA2 */
+    { 0xFF63,    0,    0, NULL },                               /* 0xA3 */
+    { 0xFF64,    0,    0, NULL },                               /* 0xA4 */
+    { 0xFF65,    0,    0, NULL },                               /* 0xA5 */
+    { 0xFF66,    0,    0, NULL },                               /* 0xA6 */
+    { 0xFF67,    0,    0, NULL },                               /* 0xA7 */
+    { 0xFF68,    0,    0, NULL },                               /* 0xA8 */
+    { 0xFF69,    0,    0, NULL },                               /* 0xA9 */
+    { 0xFF6A,    0,    0, NULL },                               /* 0xAA */
+    { 0xFF6B,    0,    0, NULL },                               /* 0xAB */
+    { 0xFF6C,    0,    0, NULL },                               /* 0xAC */
+    { 0xFF6D,    0,    0, NULL },                               /* 0xAD */
+    { 0xFF6E,    0,    0, NULL },                               /* 0xAE */
+    { 0xFF6F,    0,    0, NULL },                               /* 0xAF */
+    { 0xFF70,    0,    0, NULL },                               /* 0xB0 */
+    { 0xFF71,    0,    0, NULL },                               /* 0xB1 */
+    { 0xFF72,    0,    0, NULL },                               /* 0xB2 */
+    { 0xFF73,    0,    0, NULL },                               /* 0xB3 */
+    { 0xFF74,    0,    0, NULL },                               /* 0xB4 */
+    { 0xFF75,    0,    0, NULL },                               /* 0xB5 */
+    { 0xFF76,    0,    0, NULL },                               /* 0xB6 */
+    { 0xFF77,    0,    0, NULL },                               /* 0xB7 */
+    { 0xFF78,    0,    0, NULL },                               /* 0xB8 */
+    { 0xFF79,    0,    0, NULL },                               /* 0xB9 */
+    { 0xFF7A,    0,    0, NULL },                               /* 0xBA */
+    { 0xFF7B,    0,    0, NULL },                               /* 0xBB */
+    { 0xFF7C,    0,    0, NULL },                               /* 0xBC */
+    { 0xFF7D,    0,    0, NULL },                               /* 0xBD */
+    { 0xFF7E,    0,    0, NULL },                               /* 0xBE */
+    { 0xFF7F,    0,    0, NULL },                               /* 0xBF */
+    { 0xFF80,    0,    0, NULL },                               /* 0xC0 */
+    { 0xFF81,    0,    0, NULL },                               /* 0xC1 */
+    { 0xFF82,    0,    0, NULL },                               /* 0xC2 */
+    { 0xFF83,    0,    0, NULL },                               /* 0xC3 */
+    { 0xFF84,    0,    0, NULL },                               /* 0xC4 */
+    { 0xFF85,    0,    0, NULL },                               /* 0xC5 */
+    { 0xFF86,    0,    0, NULL },                               /* 0xC6 */
+    { 0xFF87,    0,    0, NULL },                               /* 0xC7 */
+    { 0xFF88,    0,    0, NULL },                               /* 0xC8 */
+    { 0xFF89,    0,    0, NULL },                               /* 0xC9 */
+    { 0xFF8A,    0,    0, NULL },                               /* 0xCA */
+    { 0xFF8B,    0,    0, NULL },                               /* 0xCB */
+    { 0xFF8C,    0,    0, NULL },                               /* 0xCC */
+    { 0xFF8D,    0,    0, NULL },                               /* 0xCD */
+    { 0xFF8E,    0,    0, NULL },                               /* 0xCE */
+    { 0xFF8F,    0,    0, NULL },                               /* 0xCF */
+    { 0xFF90,    0,    0, NULL },                               /* 0xD0 */
+    { 0xFF91,    0,    0, NULL },                               /* 0xD1 */
+    { 0xFF92,    0,    0, NULL },                               /* 0xD2 */
+    { 0xFF93,    0,    0, NULL },                               /* 0xD3 */
+    { 0xFF94,    0,    0, NULL },                               /* 0xD4 */
+    { 0xFF95,    0,    0, NULL },                               /* 0xD5 */
+    { 0xFF96,    0,    0, NULL },                               /* 0xD6 */
+    { 0xFF97,    0,    0, NULL },                               /* 0xD7 */
+    { 0xFF98,    0,    0, NULL },                               /* 0xD8 */
+    { 0xFF99,    0,    0, NULL },                               /* 0xD9 */
+    { 0xFF9A,    0,    0, NULL },                               /* 0xDA */
+    { 0xFF9B,    0,    0, NULL },                               /* 0xDB */
+    { 0xFF9C,    0,    0, NULL },                               /* 0xDC */
+    { 0xFF9D,    0,    0, NULL },                               /* 0xDD */
+    { 0xFF9E,    0,    0, NULL },                               /* 0xDE */
+    { 0xFF9F,    0,    0, NULL },                               /* 0xDF */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E0 },          /* 0xE0 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E1 },          /* 0xE1 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E2 },          /* 0xE2 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E3 },          /* 0xE3 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E4 },          /* 0xE4 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E5 },          /* 0xE5 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E6 },          /* 0xE6 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E7 },          /* 0xE7 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E8 },          /* 0xE8 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E9 },          /* 0xE9 */
+    {      0, 0x40, 0xA4, aImplDBCSToUniTab_SJIS_EA },          /* 0xEA */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEB */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEC */ /* We convert this as double byte */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_ED },         /* 0xED */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_EE },         /* 0xEE */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEF */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUC Range */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FA },         /* 0xFA */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FB },         /* 0xFB */
+    {      0, 0x40, 0x4B, aImplDBCSToUniTab_MS932_FC },         /* 0xFC */
+    { 0x00A9,    0,    0, NULL },                               /* 0xFD */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    { 0x2122,    0,    0, NULL },                               /* 0xFE */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+    { 0x2026,    0,    0, NULL }                                /* 0xFF */ /* APPLE additons over SJIS, we convert this like apple, because I think, this gives better result, than we take a replacement char */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplUniToDBCSHighTab const aMS932DBCSHighTab[256] =
+{
+    { 0x00, 0xF7, aImplUniToDBCSTab_SJIS_00 },                  /* 0x00 */
+    {    1,    0, NULL },                                       /* 0x01 */
+    {    1,    0, NULL },                                       /* 0x02 */
+    { 0x91, 0xC9, aImplUniToDBCSTab_SJIS_03 },                  /* 0x03 */
+    { 0x01, 0x51, aImplUniToDBCSTab_SJIS_04 },                  /* 0x04 */
+    {    1,    0, NULL },                                       /* 0x05 */
+    {    1,    0, NULL },                                       /* 0x06 */
+    {    1,    0, NULL },                                       /* 0x07 */
+    {    1,    0, NULL },                                       /* 0x08 */
+    {    1,    0, NULL },                                       /* 0x09 */
+    {    1,    0, NULL },                                       /* 0x0A */
+    {    1,    0, NULL },                                       /* 0x0B */
+    {    1,    0, NULL },                                       /* 0x0C */
+    {    1,    0, NULL },                                       /* 0x0D */
+    {    1,    0, NULL },                                       /* 0x0E */
+    {    1,    0, NULL },                                       /* 0x0F */
+    {    1,    0, NULL },                                       /* 0x10 */
+    {    1,    0, NULL },                                       /* 0x11 */
+    {    1,    0, NULL },                                       /* 0x12 */
+    {    1,    0, NULL },                                       /* 0x13 */
+    {    1,    0, NULL },                                       /* 0x14 */
+    {    1,    0, NULL },                                       /* 0x15 */
+    {    1,    0, NULL },                                       /* 0x16 */
+    {    1,    0, NULL },                                       /* 0x17 */
+    {    1,    0, NULL },                                       /* 0x18 */
+    {    1,    0, NULL },                                       /* 0x19 */
+    {    1,    0, NULL },                                       /* 0x1A */
+    {    1,    0, NULL },                                       /* 0x1B */
+    {    1,    0, NULL },                                       /* 0x1C */
+    {    1,    0, NULL },                                       /* 0x1D */
+    {    1,    0, NULL },                                       /* 0x1E */
+    {    1,    0, NULL },                                       /* 0x1F */
+    { 0x10, 0x3E, aImplUniToDBCSTab_SJIS_20 },                  /* 0x20 */
+    { 0x03, 0xD4, aImplUniToDBCSTab_MS932_21 },                 /* 0x21 */
+    { 0x00, 0xBF, aImplUniToDBCSTab_MS932_22 },                 /* 0x22 */
+    { 0x12, 0x12, aImplUniToDBCSTab_SJIS_23 },                  /* 0x23 */
+    { 0x60, 0x73, aImplUniToDBCSTab_MS932_24 },                 /* 0x24 */
+    { 0x00, 0xEF, aImplUniToDBCSTab_SJIS_25 },                  /* 0x25 */
+    { 0x05, 0x6F, aImplUniToDBCSTab_SJIS_26 },                  /* 0x26 */
+    {    1,    0, NULL },                                       /* 0x27 */
+    {    1,    0, NULL },                                       /* 0x28 */
+    {    1,    0, NULL },                                       /* 0x29 */
+    {    1,    0, NULL },                                       /* 0x2A */
+    {    1,    0, NULL },                                       /* 0x2B */
+    {    1,    0, NULL },                                       /* 0x2C */
+    {    1,    0, NULL },                                       /* 0x2D */
+    {    1,    0, NULL },                                       /* 0x2E */
+    {    1,    0, NULL },                                       /* 0x2F */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_30 },                  /* 0x30 */
+    {    1,    0, NULL },                                       /* 0x31 */
+    { 0x31, 0xA8, aImplUniToDBCSTab_MS932_32 },                 /* 0x32 */
+    { 0x03, 0xCD, aImplUniToDBCSTab_MS932_33 },                 /* 0x33 */
+    {    1,    0, NULL },                                       /* 0x34 */
+    {    1,    0, NULL },                                       /* 0x35 */
+    {    1,    0, NULL },                                       /* 0x36 */
+    {    1,    0, NULL },                                       /* 0x37 */
+    {    1,    0, NULL },                                       /* 0x38 */
+    {    1,    0, NULL },                                       /* 0x39 */
+    {    1,    0, NULL },                                       /* 0x3A */
+    {    1,    0, NULL },                                       /* 0x3B */
+    {    1,    0, NULL },                                       /* 0x3C */
+    {    1,    0, NULL },                                       /* 0x3D */
+    {    1,    0, NULL },                                       /* 0x3E */
+    {    1,    0, NULL },                                       /* 0x3F */
+    {    1,    0, NULL },                                       /* 0x40 */
+    {    1,    0, NULL },                                       /* 0x41 */
+    {    1,    0, NULL },                                       /* 0x42 */
+    {    1,    0, NULL },                                       /* 0x43 */
+    {    1,    0, NULL },                                       /* 0x44 */
+    {    1,    0, NULL },                                       /* 0x45 */
+    {    1,    0, NULL },                                       /* 0x46 */
+    {    1,    0, NULL },                                       /* 0x47 */
+    {    1,    0, NULL },                                       /* 0x48 */
+    {    1,    0, NULL },                                       /* 0x49 */
+    {    1,    0, NULL },                                       /* 0x4A */
+    {    1,    0, NULL },                                       /* 0x4B */
+    {    1,    0, NULL },                                       /* 0x4C */
+    {    1,    0, NULL },                                       /* 0x4D */
+    { 0x00, 0xFC, aImplUniToDBCSTab_SJIS_4E },                  /* 0x4E */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_4F },                  /* 0x4F */
+    { 0x05, 0xFB, aImplUniToDBCSTab_SJIS_50 },                  /* 0x50 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_51 },                  /* 0x51 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_52 },                  /* 0x52 */
+    { 0x00, 0xFA, aImplUniToDBCSTab_SJIS_53 },                  /* 0x53 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_54 },                  /* 0x54 */
+    { 0x04, 0xFE, aImplUniToDBCSTab_SJIS_55 },                  /* 0x55 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_SJIS_56 },                  /* 0x56 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_SJIS_57 },                  /* 0x57 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_58 },                  /* 0x58 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_59 },                  /* 0x59 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_5A },                  /* 0x5A */
+    { 0x09, 0xFF, aImplUniToDBCSTab_SJIS_5B },                  /* 0x5B */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_5C },                  /* 0x5C */
+    { 0x07, 0xFE, aImplUniToDBCSTab_SJIS_5D },                  /* 0x5D */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_5E },                  /* 0x5E */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_5F },                  /* 0x5F */
+    { 0x0E, 0xFB, aImplUniToDBCSTab_SJIS_60 },                  /* 0x60 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_61 },                  /* 0x61 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_62 },                  /* 0x62 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_SJIS_63 },                  /* 0x63 */
+    { 0x06, 0xFE, aImplUniToDBCSTab_SJIS_64 },                  /* 0x64 */
+    { 0x00, 0xFB, aImplUniToDBCSTab_SJIS_65 },                  /* 0x65 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_66 },                  /* 0x66 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_67 },                  /* 0x67 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_SJIS_68 },                  /* 0x68 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_69 },                  /* 0x69 */
+    { 0x02, 0xFB, aImplUniToDBCSTab_SJIS_6A },                  /* 0x6A */
+    { 0x04, 0xF3, aImplUniToDBCSTab_SJIS_6B },                  /* 0x6B */
+    { 0x08, 0xF3, aImplUniToDBCSTab_SJIS_6C },                  /* 0x6C */
+    { 0x04, 0xFC, aImplUniToDBCSTab_SJIS_6D },                  /* 0x6D */
+    { 0x05, 0xFF, aImplUniToDBCSTab_SJIS_6E },                  /* 0x6E */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_6F },                  /* 0x6F */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_70 },                  /* 0x70 */
+    { 0x04, 0xFF, aImplUniToDBCSTab_SJIS_71 },                  /* 0x71 */
+    { 0x06, 0xFD, aImplUniToDBCSTab_SJIS_72 },                  /* 0x72 */
+    { 0x0A, 0xFE, aImplUniToDBCSTab_SJIS_73 },                  /* 0x73 */
+    { 0x03, 0xF8, aImplUniToDBCSTab_SJIS_74 },                  /* 0x74 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_75 },                  /* 0x75 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_76 },                  /* 0x76 */
+    { 0x01, 0xFC, aImplUniToDBCSTab_SJIS_77 },                  /* 0x77 */
+    { 0x02, 0xFD, aImplUniToDBCSTab_SJIS_78 },                  /* 0x78 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_79 },                  /* 0x79 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_7A },                  /* 0x7A */
+    { 0x02, 0xF7, aImplUniToDBCSTab_SJIS_7B },                  /* 0x7B */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_7C },                  /* 0x7C */
+    { 0x00, 0xFB, aImplUniToDBCSTab_SJIS_7D },                  /* 0x7D */
+    { 0x01, 0x9C, aImplUniToDBCSTab_SJIS_7E },                  /* 0x7E */
+    { 0x36, 0xFC, aImplUniToDBCSTab_SJIS_7F },                  /* 0x7F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_80 },                  /* 0x80 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_SJIS_81 },                  /* 0x81 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_82 },                  /* 0x82 */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_83 },                  /* 0x83 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_SJIS_84 },                  /* 0x84 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_85 },                  /* 0x85 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_SJIS_86 },                  /* 0x86 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_87 },                  /* 0x87 */
+    { 0x05, 0xFE, aImplUniToDBCSTab_SJIS_88 },                  /* 0x88 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_SJIS_89 },                  /* 0x89 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_8A },                  /* 0x8A */
+    { 0x00, 0x9A, aImplUniToDBCSTab_SJIS_8B },                  /* 0x8B */
+    { 0x37, 0xFD, aImplUniToDBCSTab_SJIS_8C },                  /* 0x8C */
+    { 0x04, 0xFF, aImplUniToDBCSTab_SJIS_8D },                  /* 0x8D */
+    { 0x08, 0xFE, aImplUniToDBCSTab_SJIS_8E },                  /* 0x8E */
+    { 0x03, 0xFD, aImplUniToDBCSTab_SJIS_8F },                  /* 0x8F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_90 },                  /* 0x90 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_91 },                  /* 0x91 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_SJIS_92 },                  /* 0x92 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_SJIS_93 },                  /* 0x93 */
+    { 0x03, 0x81, aImplUniToDBCSTab_SJIS_94 },                  /* 0x94 */
+    { 0x77, 0xE5, aImplUniToDBCSTab_SJIS_95 },                  /* 0x95 */
+    { 0x1C, 0xFB, aImplUniToDBCSTab_SJIS_96 },                  /* 0x96 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_97 },                  /* 0x97 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_98 },                  /* 0x98 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_SJIS_99 },                  /* 0x99 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_9A },                  /* 0x9A */
+    { 0x06, 0xF5, aImplUniToDBCSTab_SJIS_9B },                  /* 0x9B */
+    { 0x00, 0xF6, aImplUniToDBCSTab_SJIS_9C },                  /* 0x9C */
+    { 0x03, 0xFD, aImplUniToDBCSTab_SJIS_9D },                  /* 0x9D */
+    { 0x19, 0xFD, aImplUniToDBCSTab_SJIS_9E },                  /* 0x9E */
+    { 0x07, 0xA0, aImplUniToDBCSTab_SJIS_9F },                  /* 0x9F */
+    {    1,    0, NULL },                                       /* 0xA0 */
+    {    1,    0, NULL },                                       /* 0xA1 */
+    {    1,    0, NULL },                                       /* 0xA2 */
+    {    1,    0, NULL },                                       /* 0xA3 */
+    {    1,    0, NULL },                                       /* 0xA4 */
+    {    1,    0, NULL },                                       /* 0xA5 */
+    {    1,    0, NULL },                                       /* 0xA6 */
+    {    1,    0, NULL },                                       /* 0xA7 */
+    {    1,    0, NULL },                                       /* 0xA8 */
+    {    1,    0, NULL },                                       /* 0xA9 */
+    {    1,    0, NULL },                                       /* 0xAA */
+    {    1,    0, NULL },                                       /* 0xAB */
+    {    1,    0, NULL },                                       /* 0xAC */
+    {    1,    0, NULL },                                       /* 0xAD */
+    {    1,    0, NULL },                                       /* 0xAE */
+    {    1,    0, NULL },                                       /* 0xAF */
+    {    1,    0, NULL },                                       /* 0xB0 */
+    {    1,    0, NULL },                                       /* 0xB1 */
+    {    1,    0, NULL },                                       /* 0xB2 */
+    {    1,    0, NULL },                                       /* 0xB3 */
+    {    1,    0, NULL },                                       /* 0xB4 */
+    {    1,    0, NULL },                                       /* 0xB5 */
+    {    1,    0, NULL },                                       /* 0xB6 */
+    {    1,    0, NULL },                                       /* 0xB7 */
+    {    1,    0, NULL },                                       /* 0xB8 */
+    {    1,    0, NULL },                                       /* 0xB9 */
+    {    1,    0, NULL },                                       /* 0xBA */
+    {    1,    0, NULL },                                       /* 0xBB */
+    {    1,    0, NULL },                                       /* 0xBC */
+    {    1,    0, NULL },                                       /* 0xBD */
+    {    1,    0, NULL },                                       /* 0xBE */
+    {    1,    0, NULL },                                       /* 0xBF */
+    {    1,    0, NULL },                                       /* 0xC0 */
+    {    1,    0, NULL },                                       /* 0xC1 */
+    {    1,    0, NULL },                                       /* 0xC2 */
+    {    1,    0, NULL },                                       /* 0xC3 */
+    {    1,    0, NULL },                                       /* 0xC4 */
+    {    1,    0, NULL },                                       /* 0xC5 */
+    {    1,    0, NULL },                                       /* 0xC6 */
+    {    1,    0, NULL },                                       /* 0xC7 */
+    {    1,    0, NULL },                                       /* 0xC8 */
+    {    1,    0, NULL },                                       /* 0xC9 */
+    {    1,    0, NULL },                                       /* 0xCA */
+    {    1,    0, NULL },                                       /* 0xCB */
+    {    1,    0, NULL },                                       /* 0xCC */
+    {    1,    0, NULL },                                       /* 0xCD */
+    {    1,    0, NULL },                                       /* 0xCE */
+    {    1,    0, NULL },                                       /* 0xCF */
+    {    1,    0, NULL },                                       /* 0xD0 */
+    {    1,    0, NULL },                                       /* 0xD1 */
+    {    1,    0, NULL },                                       /* 0xD2 */
+    {    1,    0, NULL },                                       /* 0xD3 */
+    {    1,    0, NULL },                                       /* 0xD4 */
+    {    1,    0, NULL },                                       /* 0xD5 */
+    {    1,    0, NULL },                                       /* 0xD6 */
+    {    1,    0, NULL },                                       /* 0xD7 */
+    {    1,    0, NULL },                                       /* 0xD8 */
+    {    1,    0, NULL },                                       /* 0xD9 */
+    {    1,    0, NULL },                                       /* 0xDA */
+    {    1,    0, NULL },                                       /* 0xDB */
+    {    1,    0, NULL },                                       /* 0xDC */
+    {    1,    0, NULL },                                       /* 0xDD */
+    {    1,    0, NULL },                                       /* 0xDE */
+    {    1,    0, NULL },                                       /* 0xDF */
+    {    1,    0, NULL },                                       /* 0xE0 */
+    {    1,    0, NULL },                                       /* 0xE1 */
+    {    1,    0, NULL },                                       /* 0xE2 */
+    {    1,    0, NULL },                                       /* 0xE3 */
+    {    1,    0, NULL },                                       /* 0xE4 */
+    {    1,    0, NULL },                                       /* 0xE5 */
+    {    1,    0, NULL },                                       /* 0xE6 */
+    {    1,    0, NULL },                                       /* 0xE7 */
+    {    1,    0, NULL },                                       /* 0xE8 */
+    {    1,    0, NULL },                                       /* 0xE9 */
+    {    1,    0, NULL },                                       /* 0xEA */
+    {    1,    0, NULL },                                       /* 0xEB */
+    {    1,    0, NULL },                                       /* 0xEC */
+    {    1,    0, NULL },                                       /* 0xED */
+    {    1,    0, NULL },                                       /* 0xEE */
+    {    1,    0, NULL },                                       /* 0xEF */
+    {    1,    0, NULL },                                       /* 0xF0 */
+    {    1,    0, NULL },                                       /* 0xF1 */
+    {    1,    0, NULL },                                       /* 0xF2 */
+    {    1,    0, NULL },                                       /* 0xF3 */
+    {    1,    0, NULL },                                       /* 0xF4 */
+    {    1,    0, NULL },                                       /* 0xF5 */
+    {    1,    0, NULL },                                       /* 0xF6 */
+    {    1,    0, NULL },                                       /* 0xF7 */
+    {    1,    0, NULL },                                       /* 0xF8 */
+    { 0x29, 0xDC, aImplUniToDBCSTab_MS932_F9 },                 /* 0xF9 */
+    { 0x0E, 0x2D, aImplUniToDBCSTab_MS932_FA },                 /* 0xFA */
+    {    1,    0, NULL },                                       /* 0xFB */
+    {    1,    0, NULL },                                       /* 0xFC */
+    {    1,    0, NULL },                                       /* 0xFD */
+    {    1,    0, NULL },                                       /* 0xFE */
+    { 0x01, 0xE5, aImplUniToDBCSTab_SJIS_FF }                   /* 0xFF */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplDBCSConvertData const aImplMS932DBCSCvtData =
+{
+    aMS932UniLeadTab,
+    aMS932DBCSHighTab,
+    0x40, 0xFC,
+    aImplSJISDBCSEUCTab,
+    DBCS_EUC_SJIS_COUNT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData const aImplMS932TextConverterData =
+{
+    &aImplMS932DBCSCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter const aImplMS932TextConverter =
+{
+    &aImplMS932TextConverterData,
+    ImplDBCSToUnicode,
+    ImplUnicodeToDBCS,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData const aImplMS932TextEncodingData =
+{
+    &aImplMS932TextConverter,
+    RTL_TEXTENCODING_MS_932,
+    1, 2, 2,
+    128,
+    932,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"shift_jis",
+    RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MULTIBYTE |
+    RTL_TEXTENCODING_INFO_WIN |
+    RTL_TEXTENCODING_INFO_DOS_OS2,
+    SCRIPT_JAPANESE
+};
+
+/* ======================================================================= */
+
+static ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
+{
+    { 0x0000,    0,    0, NULL },                               /* 0x00 */
+    { 0x0001,    0,    0, NULL },                               /* 0x01 */
+    { 0x0002,    0,    0, NULL },                               /* 0x02 */
+    { 0x0003,    0,    0, NULL },                               /* 0x03 */
+    { 0x0004,    0,    0, NULL },                               /* 0x04 */
+    { 0x0005,    0,    0, NULL },                               /* 0x05 */
+    { 0x0006,    0,    0, NULL },                               /* 0x06 */
+    { 0x0007,    0,    0, NULL },                               /* 0x07 */
+    { 0x0008,    0,    0, NULL },                               /* 0x08 */
+    { 0x0009,    0,    0, NULL },                               /* 0x09 */
+    { 0x000A,    0,    0, NULL },                               /* 0x0A */
+    { 0x000B,    0,    0, NULL },                               /* 0x0B */
+    { 0x000C,    0,    0, NULL },                               /* 0x0C */
+    { 0x000D,    0,    0, NULL },                               /* 0x0D */
+    { 0x000E,    0,    0, NULL },                               /* 0x0E */
+    { 0x000F,    0,    0, NULL },                               /* 0x0F */
+    { 0x0010,    0,    0, NULL },                               /* 0x10 */
+    { 0x0011,    0,    0, NULL },                               /* 0x11 */
+    { 0x0012,    0,    0, NULL },                               /* 0x12 */
+    { 0x0013,    0,    0, NULL },                               /* 0x13 */
+    { 0x0014,    0,    0, NULL },                               /* 0x14 */
+    { 0x0015,    0,    0, NULL },                               /* 0x15 */
+    { 0x0016,    0,    0, NULL },                               /* 0x16 */
+    { 0x0017,    0,    0, NULL },                               /* 0x17 */
+    { 0x0018,    0,    0, NULL },                               /* 0x18 */
+    { 0x0019,    0,    0, NULL },                               /* 0x19 */
+    { 0x001A,    0,    0, NULL },                               /* 0x1A */
+    { 0x001B,    0,    0, NULL },                               /* 0x1B */
+    { 0x001C,    0,    0, NULL },                               /* 0x1C */
+    { 0x001D,    0,    0, NULL },                               /* 0x1D */
+    { 0x001E,    0,    0, NULL },                               /* 0x1E */
+    { 0x001F,    0,    0, NULL },                               /* 0x1F */
+    { 0x0020,    0,    0, NULL },                               /* 0x20 */
+    { 0x0021,    0,    0, NULL },                               /* 0x21 */
+    { 0x0022,    0,    0, NULL },                               /* 0x22 */
+    { 0x0023,    0,    0, NULL },                               /* 0x23 */
+    { 0x0024,    0,    0, NULL },                               /* 0x24 */
+    { 0x0025,    0,    0, NULL },                               /* 0x25 */
+    { 0x0026,    0,    0, NULL },                               /* 0x26 */
+    { 0x0027,    0,    0, NULL },                               /* 0x27 */
+    { 0x0028,    0,    0, NULL },                               /* 0x28 */
+    { 0x0029,    0,    0, NULL },                               /* 0x29 */
+    { 0x002A,    0,    0, NULL },                               /* 0x2A */
+    { 0x002B,    0,    0, NULL },                               /* 0x2B */
+    { 0x002C,    0,    0, NULL },                               /* 0x2C */
+    { 0x002D,    0,    0, NULL },                               /* 0x2D */
+    { 0x002E,    0,    0, NULL },                               /* 0x2E */
+    { 0x002F,    0,    0, NULL },                               /* 0x2F */
+    { 0x0030,    0,    0, NULL },                               /* 0x30 */
+    { 0x0031,    0,    0, NULL },                               /* 0x31 */
+    { 0x0032,    0,    0, NULL },                               /* 0x32 */
+    { 0x0033,    0,    0, NULL },                               /* 0x33 */
+    { 0x0034,    0,    0, NULL },                               /* 0x34 */
+    { 0x0035,    0,    0, NULL },                               /* 0x35 */
+    { 0x0036,    0,    0, NULL },                               /* 0x36 */
+    { 0x0037,    0,    0, NULL },                               /* 0x37 */
+    { 0x0038,    0,    0, NULL },                               /* 0x38 */
+    { 0x0039,    0,    0, NULL },                               /* 0x39 */
+    { 0x003A,    0,    0, NULL },                               /* 0x3A */
+    { 0x003B,    0,    0, NULL },                               /* 0x3B */
+    { 0x003C,    0,    0, NULL },                               /* 0x3C */
+    { 0x003D,    0,    0, NULL },                               /* 0x3D */
+    { 0x003E,    0,    0, NULL },                               /* 0x3E */
+    { 0x003F,    0,    0, NULL },                               /* 0x3F */
+    { 0x0040,    0,    0, NULL },                               /* 0x40 */
+    { 0x0041,    0,    0, NULL },                               /* 0x41 */
+    { 0x0042,    0,    0, NULL },                               /* 0x42 */
+    { 0x0043,    0,    0, NULL },                               /* 0x43 */
+    { 0x0044,    0,    0, NULL },                               /* 0x44 */
+    { 0x0045,    0,    0, NULL },                               /* 0x45 */
+    { 0x0046,    0,    0, NULL },                               /* 0x46 */
+    { 0x0047,    0,    0, NULL },                               /* 0x47 */
+    { 0x0048,    0,    0, NULL },                               /* 0x48 */
+    { 0x0049,    0,    0, NULL },                               /* 0x49 */
+    { 0x004A,    0,    0, NULL },                               /* 0x4A */
+    { 0x004B,    0,    0, NULL },                               /* 0x4B */
+    { 0x004C,    0,    0, NULL },                               /* 0x4C */
+    { 0x004D,    0,    0, NULL },                               /* 0x4D */
+    { 0x004E,    0,    0, NULL },                               /* 0x4E */
+    { 0x004F,    0,    0, NULL },                               /* 0x4F */
+    { 0x0050,    0,    0, NULL },                               /* 0x50 */
+    { 0x0051,    0,    0, NULL },                               /* 0x51 */
+    { 0x0052,    0,    0, NULL },                               /* 0x52 */
+    { 0x0053,    0,    0, NULL },                               /* 0x53 */
+    { 0x0054,    0,    0, NULL },                               /* 0x54 */
+    { 0x0055,    0,    0, NULL },                               /* 0x55 */
+    { 0x0056,    0,    0, NULL },                               /* 0x56 */
+    { 0x0057,    0,    0, NULL },                               /* 0x57 */
+    { 0x0058,    0,    0, NULL },                               /* 0x58 */
+    { 0x0059,    0,    0, NULL },                               /* 0x59 */
+    { 0x005A,    0,    0, NULL },                               /* 0x5A */
+    { 0x005B,    0,    0, NULL },                               /* 0x5B */
+    { 0x005C,    0,    0, NULL },                               /* 0x5C */ /* is A5 (YEN SIGN), but for compatibiliy with ascii, we use 0x5C like MS CP392 */
+    { 0x005D,    0,    0, NULL },                               /* 0x5D */
+    { 0x005E,    0,    0, NULL },                               /* 0x5E */
+    { 0x005F,    0,    0, NULL },                               /* 0x5F */
+    { 0x0060,    0,    0, NULL },                               /* 0x60 */
+    { 0x0061,    0,    0, NULL },                               /* 0x61 */
+    { 0x0062,    0,    0, NULL },                               /* 0x62 */
+    { 0x0063,    0,    0, NULL },                               /* 0x63 */
+    { 0x0064,    0,    0, NULL },                               /* 0x64 */
+    { 0x0065,    0,    0, NULL },                               /* 0x65 */
+    { 0x0066,    0,    0, NULL },                               /* 0x66 */
+    { 0x0067,    0,    0, NULL },                               /* 0x67 */
+    { 0x0068,    0,    0, NULL },                               /* 0x68 */
+    { 0x0069,    0,    0, NULL },                               /* 0x69 */
+    { 0x006A,    0,    0, NULL },                               /* 0x6A */
+    { 0x006B,    0,    0, NULL },                               /* 0x6B */
+    { 0x006C,    0,    0, NULL },                               /* 0x6C */
+    { 0x006D,    0,    0, NULL },                               /* 0x6D */
+    { 0x006E,    0,    0, NULL },                               /* 0x6E */
+    { 0x006F,    0,    0, NULL },                               /* 0x6F */
+    { 0x0070,    0,    0, NULL },                               /* 0x70 */
+    { 0x0071,    0,    0, NULL },                               /* 0x71 */
+    { 0x0072,    0,    0, NULL },                               /* 0x72 */
+    { 0x0073,    0,    0, NULL },                               /* 0x73 */
+    { 0x0074,    0,    0, NULL },                               /* 0x74 */
+    { 0x0075,    0,    0, NULL },                               /* 0x75 */
+    { 0x0076,    0,    0, NULL },                               /* 0x76 */
+    { 0x0077,    0,    0, NULL },                               /* 0x77 */
+    { 0x0078,    0,    0, NULL },                               /* 0x78 */
+    { 0x0079,    0,    0, NULL },                               /* 0x79 */
+    { 0x007A,    0,    0, NULL },                               /* 0x7A */
+    { 0x007B,    0,    0, NULL },                               /* 0x7B */
+    { 0x007C,    0,    0, NULL },                               /* 0x7C */
+    { 0x007D,    0,    0, NULL },                               /* 0x7D */
+    { 0x007E,    0,    0, NULL },                               /* 0x7E */ /* in SJIS this is 0x0203E (SPACING OVERSCORE), but for compatibiliy with ascii, we use 0x7E (TILDE) like MS CP392 */
+    { 0x007F,    0,    0, NULL },                               /* 0x7F */
+    { 0x005C,    0,    0, NULL },                               /* 0x80 */ /* APPLE additons over SJIS */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_81 },         /* 0x81 */
+    {      0, 0x4F, 0xF1, aImplDBCSToUniTab_SJIS_82 },          /* 0x82 */
+    {      0, 0x40, 0xD6, aImplDBCSToUniTab_SJIS_83 },          /* 0x83 */
+    {      0, 0x40, 0xBF, aImplDBCSToUniTab_SJIS_84 },          /* 0x84 */
+    {      0, 0x40, 0xF4, aImplDBCSToUniTab_APPLEJAPANESE_85 }, /* 0x85 */
+    {      0, 0x40, 0xD2, aImplDBCSToUniTab_APPLEJAPANESE_86 }, /* 0x86 */
+    {      0, 0x40, 0xFA, aImplDBCSToUniTab_APPLEJAPANESE_87 }, /* 0x87 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_APPLEJAPANESE_88 }, /* 0x88 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_89 },          /* 0x89 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8A },          /* 0x8A */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8B },          /* 0x8B */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8C },          /* 0x8C */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8D },          /* 0x8D */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8E },          /* 0x8E */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_8F },          /* 0x8F */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_90 },          /* 0x90 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_91 },          /* 0x91 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_92 },          /* 0x92 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_93 },          /* 0x93 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_94 },          /* 0x94 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_95 },          /* 0x95 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_96 },          /* 0x96 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_97 },          /* 0x97 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_98 },          /* 0x98 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_99 },          /* 0x99 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9A },          /* 0x9A */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9B },          /* 0x9B */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9C },          /* 0x9C */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9D },          /* 0x9D */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9E },          /* 0x9E */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_9F },          /* 0x9F */
+    { 0x00A0,    0,    0, NULL },                               /* 0xA0 */ /* APPLE additons over SJIS */
+    { 0xFF61,    0,    0, NULL },                               /* 0xA1 */
+    { 0xFF62,    0,    0, NULL },                               /* 0xA2 */
+    { 0xFF63,    0,    0, NULL },                               /* 0xA3 */
+    { 0xFF64,    0,    0, NULL },                               /* 0xA4 */
+    { 0xFF65,    0,    0, NULL },                               /* 0xA5 */
+    { 0xFF66,    0,    0, NULL },                               /* 0xA6 */
+    { 0xFF67,    0,    0, NULL },                               /* 0xA7 */
+    { 0xFF68,    0,    0, NULL },                               /* 0xA8 */
+    { 0xFF69,    0,    0, NULL },                               /* 0xA9 */
+    { 0xFF6A,    0,    0, NULL },                               /* 0xAA */
+    { 0xFF6B,    0,    0, NULL },                               /* 0xAB */
+    { 0xFF6C,    0,    0, NULL },                               /* 0xAC */
+    { 0xFF6D,    0,    0, NULL },                               /* 0xAD */
+    { 0xFF6E,    0,    0, NULL },                               /* 0xAE */
+    { 0xFF6F,    0,    0, NULL },                               /* 0xAF */
+    { 0xFF70,    0,    0, NULL },                               /* 0xB0 */
+    { 0xFF71,    0,    0, NULL },                               /* 0xB1 */
+    { 0xFF72,    0,    0, NULL },                               /* 0xB2 */
+    { 0xFF73,    0,    0, NULL },                               /* 0xB3 */
+    { 0xFF74,    0,    0, NULL },                               /* 0xB4 */
+    { 0xFF75,    0,    0, NULL },                               /* 0xB5 */
+    { 0xFF76,    0,    0, NULL },                               /* 0xB6 */
+    { 0xFF77,    0,    0, NULL },                               /* 0xB7 */
+    { 0xFF78,    0,    0, NULL },                               /* 0xB8 */
+    { 0xFF79,    0,    0, NULL },                               /* 0xB9 */
+    { 0xFF7A,    0,    0, NULL },                               /* 0xBA */
+    { 0xFF7B,    0,    0, NULL },                               /* 0xBB */
+    { 0xFF7C,    0,    0, NULL },                               /* 0xBC */
+    { 0xFF7D,    0,    0, NULL },                               /* 0xBD */
+    { 0xFF7E,    0,    0, NULL },                               /* 0xBE */
+    { 0xFF7F,    0,    0, NULL },                               /* 0xBF */
+    { 0xFF80,    0,    0, NULL },                               /* 0xC0 */
+    { 0xFF81,    0,    0, NULL },                               /* 0xC1 */
+    { 0xFF82,    0,    0, NULL },                               /* 0xC2 */
+    { 0xFF83,    0,    0, NULL },                               /* 0xC3 */
+    { 0xFF84,    0,    0, NULL },                               /* 0xC4 */
+    { 0xFF85,    0,    0, NULL },                               /* 0xC5 */
+    { 0xFF86,    0,    0, NULL },                               /* 0xC6 */
+    { 0xFF87,    0,    0, NULL },                               /* 0xC7 */
+    { 0xFF88,    0,    0, NULL },                               /* 0xC8 */
+    { 0xFF89,    0,    0, NULL },                               /* 0xC9 */
+    { 0xFF8A,    0,    0, NULL },                               /* 0xCA */
+    { 0xFF8B,    0,    0, NULL },                               /* 0xCB */
+    { 0xFF8C,    0,    0, NULL },                               /* 0xCC */
+    { 0xFF8D,    0,    0, NULL },                               /* 0xCD */
+    { 0xFF8E,    0,    0, NULL },                               /* 0xCE */
+    { 0xFF8F,    0,    0, NULL },                               /* 0xCF */
+    { 0xFF90,    0,    0, NULL },                               /* 0xD0 */
+    { 0xFF91,    0,    0, NULL },                               /* 0xD1 */
+    { 0xFF92,    0,    0, NULL },                               /* 0xD2 */
+    { 0xFF93,    0,    0, NULL },                               /* 0xD3 */
+    { 0xFF94,    0,    0, NULL },                               /* 0xD4 */
+    { 0xFF95,    0,    0, NULL },                               /* 0xD5 */
+    { 0xFF96,    0,    0, NULL },                               /* 0xD6 */
+    { 0xFF97,    0,    0, NULL },                               /* 0xD7 */
+    { 0xFF98,    0,    0, NULL },                               /* 0xD8 */
+    { 0xFF99,    0,    0, NULL },                               /* 0xD9 */
+    { 0xFF9A,    0,    0, NULL },                               /* 0xDA */
+    { 0xFF9B,    0,    0, NULL },                               /* 0xDB */
+    { 0xFF9C,    0,    0, NULL },                               /* 0xDC */
+    { 0xFF9D,    0,    0, NULL },                               /* 0xDD */
+    { 0xFF9E,    0,    0, NULL },                               /* 0xDE */
+    { 0xFF9F,    0,    0, NULL },                               /* 0xDF */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E0 },          /* 0xE0 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E1 },          /* 0xE1 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E2 },          /* 0xE2 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E3 },          /* 0xE3 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E4 },          /* 0xE4 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E5 },          /* 0xE5 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E6 },          /* 0xE6 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E7 },          /* 0xE7 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E8 },          /* 0xE8 */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_SJIS_E9 },          /* 0xE9 */
+    {      0, 0x40, 0xA4, aImplDBCSToUniTab_SJIS_EA },          /* 0xEA */
+    {      0, 0x51, 0x7A, aImplDBCSToUniTab_APPLEJAPANESE_EB }, /* 0xEB */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEC */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xED */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEE */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xEF */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF0 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF1 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF2 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF3 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF4 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF5 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF6 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF7 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF8 */ /* EUC Range */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0xF9 */ /* EUC Range */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FA },         /* 0xFA */ /* We use the MS table for better MS compatibility */
+    {      0, 0x40, 0xFC, aImplDBCSToUniTab_MS932_FB },         /* 0xFB */ /* We use the MS table for better MS compatibility */
+    {      0, 0x40, 0x4B, aImplDBCSToUniTab_MS932_FC },         /* 0xFC */ /* We use the MS table for better MS compatibility */
+    { 0x00A9,    0,    0, NULL },                               /* 0xFD */ /* APPLE additons over SJIS */
+    { 0x2122,    0,    0, NULL },                               /* 0xFE */ /* APPLE additons over SJIS */
+    { 0x2026,    0,    0, NULL }                                /* 0xFF */ /* APPLE additons over SJIS */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplUniToDBCSHighTab const aAPPLEJAPANESEDBCSHighTab[256] =
+{
+    { 0x00, 0xF7, aImplUniToDBCSTab_SJIS_00 },                  /* 0x00 */
+    {    1,    0, NULL },                                       /* 0x01 */
+    {    1,    0, NULL },                                       /* 0x02 */
+    { 0x91, 0xC9, aImplUniToDBCSTab_SJIS_03 },                  /* 0x03 */
+    { 0x01, 0x51, aImplUniToDBCSTab_SJIS_04 },                  /* 0x04 */
+    {    1,    0, NULL },                                       /* 0x05 */
+    {    1,    0, NULL },                                       /* 0x06 */
+    {    1,    0, NULL },                                       /* 0x07 */
+    {    1,    0, NULL },                                       /* 0x08 */
+    {    1,    0, NULL },                                       /* 0x09 */
+    {    1,    0, NULL },                                       /* 0x0A */
+    {    1,    0, NULL },                                       /* 0x0B */
+    {    1,    0, NULL },                                       /* 0x0C */
+    {    1,    0, NULL },                                       /* 0x0D */
+    {    1,    0, NULL },                                       /* 0x0E */
+    {    1,    0, NULL },                                       /* 0x0F */
+    {    1,    0, NULL },                                       /* 0x10 */
+    {    1,    0, NULL },                                       /* 0x11 */
+    {    1,    0, NULL },                                       /* 0x12 */
+    {    1,    0, NULL },                                       /* 0x13 */
+    {    1,    0, NULL },                                       /* 0x14 */
+    {    1,    0, NULL },                                       /* 0x15 */
+    {    1,    0, NULL },                                       /* 0x16 */
+    {    1,    0, NULL },                                       /* 0x17 */
+    {    1,    0, NULL },                                       /* 0x18 */
+    {    1,    0, NULL },                                       /* 0x19 */
+    {    1,    0, NULL },                                       /* 0x1A */
+    {    1,    0, NULL },                                       /* 0x1B */
+    {    1,    0, NULL },                                       /* 0x1C */
+    {    1,    0, NULL },                                       /* 0x1D */
+    {    1,    0, NULL },                                       /* 0x1E */
+    {    1,    0, NULL },                                       /* 0x1F */
+    { 0x10, 0x3E, aImplUniToDBCSTab_SJIS_20 },                  /* 0x20 */
+    { 0x03, 0xE9, aImplUniToDBCSTab_APPLEJAPANESE_21 },         /* 0x21 */
+    { 0x00, 0xEF, aImplUniToDBCSTab_APPLEJAPANESE_22 },         /* 0x22 */
+    { 0x12, 0x12, aImplUniToDBCSTab_SJIS_23 },                  /* 0x23 */
+    { 0x60, 0xB5, aImplUniToDBCSTab_APPLEJAPANESE_24 },         /* 0x24 */
+    { 0x00, 0xEF, aImplUniToDBCSTab_SJIS_25 },                  /* 0x25 */
+    { 0x05, 0x6F, aImplUniToDBCSTab_APPLEJAPANESE_26 },         /* 0x26 */
+    { 0x76, 0x7E, aImplUniToDBCSTab_APPLEJAPANESE_27 },         /* 0x27 */
+    {    1,    0, NULL },                                       /* 0x28 */
+    {    1,    0, NULL },                                       /* 0x29 */
+    {    1,    0, NULL },                                       /* 0x2A */
+    {    1,    0, NULL },                                       /* 0x2B */
+    {    1,    0, NULL },                                       /* 0x2C */
+    {    1,    0, NULL },                                       /* 0x2D */
+    {    1,    0, NULL },                                       /* 0x2E */
+    {    1,    0, NULL },                                       /* 0x2F */
+    { 0x00, 0xFE, aImplUniToDBCSTab_APPLEJAPANESE_30 },         /* 0x30 */
+    {    1,    0, NULL },                                       /* 0x31 */
+    { 0x2A, 0xA9, aImplUniToDBCSTab_APPLEJAPANESE_32 },         /* 0x32 */
+    { 0x00, 0xD4, aImplUniToDBCSTab_APPLEJAPANESE_33 },         /* 0x33 */
+    {    1,    0, NULL },                                       /* 0x34 */
+    {    1,    0, NULL },                                       /* 0x35 */
+    {    1,    0, NULL },                                       /* 0x36 */
+    {    1,    0, NULL },                                       /* 0x37 */
+    {    1,    0, NULL },                                       /* 0x38 */
+    {    1,    0, NULL },                                       /* 0x39 */
+    {    1,    0, NULL },                                       /* 0x3A */
+    {    1,    0, NULL },                                       /* 0x3B */
+    {    1,    0, NULL },                                       /* 0x3C */
+    {    1,    0, NULL },                                       /* 0x3D */
+    {    1,    0, NULL },                                       /* 0x3E */
+    {    1,    0, NULL },                                       /* 0x3F */
+    {    1,    0, NULL },                                       /* 0x40 */
+    {    1,    0, NULL },                                       /* 0x41 */
+    {    1,    0, NULL },                                       /* 0x42 */
+    {    1,    0, NULL },                                       /* 0x43 */
+    {    1,    0, NULL },                                       /* 0x44 */
+    {    1,    0, NULL },                                       /* 0x45 */
+    {    1,    0, NULL },                                       /* 0x46 */
+    {    1,    0, NULL },                                       /* 0x47 */
+    {    1,    0, NULL },                                       /* 0x48 */
+    {    1,    0, NULL },                                       /* 0x49 */
+    {    1,    0, NULL },                                       /* 0x4A */
+    {    1,    0, NULL },                                       /* 0x4B */
+    {    1,    0, NULL },                                       /* 0x4C */
+    {    1,    0, NULL },                                       /* 0x4D */
+    { 0x00, 0xFC, aImplUniToDBCSTab_SJIS_4E },                  /* 0x4E */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_4F },                  /* 0x4F */
+    { 0x05, 0xFB, aImplUniToDBCSTab_SJIS_50 },                  /* 0x50 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_51 },                  /* 0x51 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_52 },                  /* 0x52 */
+    { 0x00, 0xFA, aImplUniToDBCSTab_SJIS_53 },                  /* 0x53 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_54 },                  /* 0x54 */
+    { 0x04, 0xFE, aImplUniToDBCSTab_SJIS_55 },                  /* 0x55 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_SJIS_56 },                  /* 0x56 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_SJIS_57 },                  /* 0x57 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_58 },                  /* 0x58 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_59 },                  /* 0x59 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_5A },                  /* 0x5A */
+    { 0x09, 0xFF, aImplUniToDBCSTab_SJIS_5B },                  /* 0x5B */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_5C },                  /* 0x5C */
+    { 0x07, 0xFE, aImplUniToDBCSTab_SJIS_5D },                  /* 0x5D */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_5E },                  /* 0x5E */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_5F },                  /* 0x5F */
+    { 0x0E, 0xFB, aImplUniToDBCSTab_SJIS_60 },                  /* 0x60 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_61 },                  /* 0x61 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_62 },                  /* 0x62 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_SJIS_63 },                  /* 0x63 */
+    { 0x06, 0xFE, aImplUniToDBCSTab_SJIS_64 },                  /* 0x64 */
+    { 0x00, 0xFB, aImplUniToDBCSTab_SJIS_65 },                  /* 0x65 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_66 },                  /* 0x66 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_67 },                  /* 0x67 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_SJIS_68 },                  /* 0x68 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_69 },                  /* 0x69 */
+    { 0x02, 0xFB, aImplUniToDBCSTab_SJIS_6A },                  /* 0x6A */
+    { 0x04, 0xF3, aImplUniToDBCSTab_SJIS_6B },                  /* 0x6B */
+    { 0x08, 0xF3, aImplUniToDBCSTab_SJIS_6C },                  /* 0x6C */
+    { 0x04, 0xFC, aImplUniToDBCSTab_SJIS_6D },                  /* 0x6D */
+    { 0x05, 0xFF, aImplUniToDBCSTab_SJIS_6E },                  /* 0x6E */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_6F },                  /* 0x6F */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_70 },                  /* 0x70 */
+    { 0x04, 0xFF, aImplUniToDBCSTab_SJIS_71 },                  /* 0x71 */
+    { 0x06, 0xFD, aImplUniToDBCSTab_SJIS_72 },                  /* 0x72 */
+    { 0x0A, 0xFE, aImplUniToDBCSTab_SJIS_73 },                  /* 0x73 */
+    { 0x03, 0xF8, aImplUniToDBCSTab_SJIS_74 },                  /* 0x74 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_SJIS_75 },                  /* 0x75 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_76 },                  /* 0x76 */
+    { 0x01, 0xFC, aImplUniToDBCSTab_SJIS_77 },                  /* 0x77 */
+    { 0x02, 0xFD, aImplUniToDBCSTab_SJIS_78 },                  /* 0x78 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_79 },                  /* 0x79 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_7A },                  /* 0x7A */
+    { 0x02, 0xF7, aImplUniToDBCSTab_SJIS_7B },                  /* 0x7B */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_7C },                  /* 0x7C */
+    { 0x00, 0xFB, aImplUniToDBCSTab_SJIS_7D },                  /* 0x7D */
+    { 0x01, 0x9C, aImplUniToDBCSTab_SJIS_7E },                  /* 0x7E */
+    { 0x36, 0xFC, aImplUniToDBCSTab_SJIS_7F },                  /* 0x7F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_80 },                  /* 0x80 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_SJIS_81 },                  /* 0x81 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_82 },                  /* 0x82 */
+    { 0x01, 0xFD, aImplUniToDBCSTab_SJIS_83 },                  /* 0x83 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_SJIS_84 },                  /* 0x84 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_85 },                  /* 0x85 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_SJIS_86 },                  /* 0x86 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_87 },                  /* 0x87 */
+    { 0x05, 0xFE, aImplUniToDBCSTab_SJIS_88 },                  /* 0x88 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_SJIS_89 },                  /* 0x89 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_SJIS_8A },                  /* 0x8A */
+    { 0x00, 0x9A, aImplUniToDBCSTab_SJIS_8B },                  /* 0x8B */
+    { 0x37, 0xFD, aImplUniToDBCSTab_SJIS_8C },                  /* 0x8C */
+    { 0x04, 0xFF, aImplUniToDBCSTab_SJIS_8D },                  /* 0x8D */
+    { 0x08, 0xFE, aImplUniToDBCSTab_SJIS_8E },                  /* 0x8E */
+    { 0x03, 0xFD, aImplUniToDBCSTab_SJIS_8F },                  /* 0x8F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_SJIS_90 },                  /* 0x90 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_SJIS_91 },                  /* 0x91 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_SJIS_92 },                  /* 0x92 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_SJIS_93 },                  /* 0x93 */
+    { 0x03, 0x81, aImplUniToDBCSTab_SJIS_94 },                  /* 0x94 */
+    { 0x77, 0xE5, aImplUniToDBCSTab_SJIS_95 },                  /* 0x95 */
+    { 0x1C, 0xFB, aImplUniToDBCSTab_SJIS_96 },                  /* 0x96 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_SJIS_97 },                  /* 0x97 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_SJIS_98 },                  /* 0x98 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_SJIS_99 },                  /* 0x99 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_SJIS_9A },                  /* 0x9A */
+    { 0x06, 0xF5, aImplUniToDBCSTab_SJIS_9B },                  /* 0x9B */
+    { 0x00, 0xF6, aImplUniToDBCSTab_SJIS_9C },                  /* 0x9C */
+    { 0x03, 0xFD, aImplUniToDBCSTab_SJIS_9D },                  /* 0x9D */
+    { 0x19, 0xFD, aImplUniToDBCSTab_SJIS_9E },                  /* 0x9E */
+    { 0x07, 0xA0, aImplUniToDBCSTab_SJIS_9F },                  /* 0x9F */
+    {    1,    0, NULL },                                       /* 0xA0 */
+    {    1,    0, NULL },                                       /* 0xA1 */
+    {    1,    0, NULL },                                       /* 0xA2 */
+    {    1,    0, NULL },                                       /* 0xA3 */
+    {    1,    0, NULL },                                       /* 0xA4 */
+    {    1,    0, NULL },                                       /* 0xA5 */
+    {    1,    0, NULL },                                       /* 0xA6 */
+    {    1,    0, NULL },                                       /* 0xA7 */
+    {    1,    0, NULL },                                       /* 0xA8 */
+    {    1,    0, NULL },                                       /* 0xA9 */
+    {    1,    0, NULL },                                       /* 0xAA */
+    {    1,    0, NULL },                                       /* 0xAB */
+    {    1,    0, NULL },                                       /* 0xAC */
+    {    1,    0, NULL },                                       /* 0xAD */
+    {    1,    0, NULL },                                       /* 0xAE */
+    {    1,    0, NULL },                                       /* 0xAF */
+    {    1,    0, NULL },                                       /* 0xB0 */
+    {    1,    0, NULL },                                       /* 0xB1 */
+    {    1,    0, NULL },                                       /* 0xB2 */
+    {    1,    0, NULL },                                       /* 0xB3 */
+    {    1,    0, NULL },                                       /* 0xB4 */
+    {    1,    0, NULL },                                       /* 0xB5 */
+    {    1,    0, NULL },                                       /* 0xB6 */
+    {    1,    0, NULL },                                       /* 0xB7 */
+    {    1,    0, NULL },                                       /* 0xB8 */
+    {    1,    0, NULL },                                       /* 0xB9 */
+    {    1,    0, NULL },                                       /* 0xBA */
+    {    1,    0, NULL },                                       /* 0xBB */
+    {    1,    0, NULL },                                       /* 0xBC */
+    {    1,    0, NULL },                                       /* 0xBD */
+    {    1,    0, NULL },                                       /* 0xBE */
+    {    1,    0, NULL },                                       /* 0xBF */
+    {    1,    0, NULL },                                       /* 0xC0 */
+    {    1,    0, NULL },                                       /* 0xC1 */
+    {    1,    0, NULL },                                       /* 0xC2 */
+    {    1,    0, NULL },                                       /* 0xC3 */
+    {    1,    0, NULL },                                       /* 0xC4 */
+    {    1,    0, NULL },                                       /* 0xC5 */
+    {    1,    0, NULL },                                       /* 0xC6 */
+    {    1,    0, NULL },                                       /* 0xC7 */
+    {    1,    0, NULL },                                       /* 0xC8 */
+    {    1,    0, NULL },                                       /* 0xC9 */
+    {    1,    0, NULL },                                       /* 0xCA */
+    {    1,    0, NULL },                                       /* 0xCB */
+    {    1,    0, NULL },                                       /* 0xCC */
+    {    1,    0, NULL },                                       /* 0xCD */
+    {    1,    0, NULL },                                       /* 0xCE */
+    {    1,    0, NULL },                                       /* 0xCF */
+    {    1,    0, NULL },                                       /* 0xD0 */
+    {    1,    0, NULL },                                       /* 0xD1 */
+    {    1,    0, NULL },                                       /* 0xD2 */
+    {    1,    0, NULL },                                       /* 0xD3 */
+    {    1,    0, NULL },                                       /* 0xD4 */
+    {    1,    0, NULL },                                       /* 0xD5 */
+    {    1,    0, NULL },                                       /* 0xD6 */
+    {    1,    0, NULL },                                       /* 0xD7 */
+    {    1,    0, NULL },                                       /* 0xD8 */
+    {    1,    0, NULL },                                       /* 0xD9 */
+    {    1,    0, NULL },                                       /* 0xDA */
+    {    1,    0, NULL },                                       /* 0xDB */
+    {    1,    0, NULL },                                       /* 0xDC */
+    {    1,    0, NULL },                                       /* 0xDD */
+    {    1,    0, NULL },                                       /* 0xDE */
+    {    1,    0, NULL },                                       /* 0xDF */
+    {    1,    0, NULL },                                       /* 0xE0 */
+    {    1,    0, NULL },                                       /* 0xE1 */
+    {    1,    0, NULL },                                       /* 0xE2 */
+    {    1,    0, NULL },                                       /* 0xE3 */
+    {    1,    0, NULL },                                       /* 0xE4 */
+    {    1,    0, NULL },                                       /* 0xE5 */
+    {    1,    0, NULL },                                       /* 0xE6 */
+    {    1,    0, NULL },                                       /* 0xE7 */
+    {    1,    0, NULL },                                       /* 0xE8 */
+    {    1,    0, NULL },                                       /* 0xE9 */
+    {    1,    0, NULL },                                       /* 0xEA */
+    {    1,    0, NULL },                                       /* 0xEB */
+    {    1,    0, NULL },                                       /* 0xEC */
+    {    1,    0, NULL },                                       /* 0xED */
+    {    1,    0, NULL },                                       /* 0xEE */
+    {    1,    0, NULL },                                       /* 0xEF */
+    {    1,    0, NULL },                                       /* 0xF0 */
+    {    1,    0, NULL },                                       /* 0xF1 */
+    {    1,    0, NULL },                                       /* 0xF2 */
+    {    1,    0, NULL },                                       /* 0xF3 */
+    {    1,    0, NULL },                                       /* 0xF4 */
+    {    1,    0, NULL },                                       /* 0xF5 */
+    {    1,    0, NULL },                                       /* 0xF6 */
+    {    1,    0, NULL },                                       /* 0xF7 */
+    {    1,    0, NULL },                                       /* 0xF8 */
+    { 0x29, 0xDC, aImplUniToDBCSTab_MS932_F9 },                 /* 0xF9 */
+    { 0x0E, 0x2D, aImplUniToDBCSTab_MS932_FA },                 /* 0xFA */
+    {    1,    0, NULL },                                       /* 0xFB */
+    {    1,    0, NULL },                                       /* 0xFC */
+    {    1,    0, NULL },                                       /* 0xFD */
+    { 0x30, 0x44, aImplUniToDBCSTab_APPLEJAPANESE_FE },         /* 0xFE */
+    { 0x01, 0xE5, aImplUniToDBCSTab_SJIS_FF }                   /* 0xFF */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
+{
+    aAPPLEJAPANESEUniLeadTab,
+    aAPPLEJAPANESEDBCSHighTab,
+    0x40, 0xFC,
+    aImplSJISDBCSEUCTab,
+    DBCS_EUC_SJIS_COUNT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData const aImplAPPLEJAPANESETextConverterData =
+{
+    &aImplAPPLEJAPANESEDBCSCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter const aImplAPPLEJAPANESETextConverter =
+{
+    &aImplAPPLEJAPANESETextConverterData,
+    ImplDBCSToUnicode,
+    ImplUnicodeToDBCS,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData =
+{
+    &aImplAPPLEJAPANESETextConverter,
+    RTL_TEXTENCODING_APPLE_JAPANESE,
+    1, 2, 2,
+    128,
+    932,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"shift_jis",
+    RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MULTIBYTE |
+    RTL_TEXTENCODING_INFO_MAC,
+    SCRIPT_JAPANESE
+};
+
+/* ======================================================================= */
+
+static ImplDBCSToUniLeadTab const aJIS0208UniLeadTab[128] =
+{
+    {      0,    1,    0, NULL },                               /* 0x00 */
+    {      0,    1,    0, NULL },                               /* 0x01 */
+    {      0,    1,    0, NULL },                               /* 0x02 */
+    {      0,    1,    0, NULL },                               /* 0x03 */
+    {      0,    1,    0, NULL },                               /* 0x04 */
+    {      0,    1,    0, NULL },                               /* 0x05 */
+    {      0,    1,    0, NULL },                               /* 0x06 */
+    {      0,    1,    0, NULL },                               /* 0x07 */
+    {      0,    1,    0, NULL },                               /* 0x08 */
+    {      0,    1,    0, NULL },                               /* 0x09 */
+    {      0,    1,    0, NULL },                               /* 0x0A */
+    {      0,    1,    0, NULL },                               /* 0x0B */
+    {      0,    1,    0, NULL },                               /* 0x0C */
+    {      0,    1,    0, NULL },                               /* 0x0D */
+    {      0,    1,    0, NULL },                               /* 0x0E */
+    {      0,    1,    0, NULL },                               /* 0x0F */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x10 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x11 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x12 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x13 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x14 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x15 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x16 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x17 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x18 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x19 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1A */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1B */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1C */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1D */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1E */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1F */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x20 */ /* We convert this as double byte */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_21 },       /* 0x21 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_22 },       /* 0x22 */
+    {      0, 0x30, 0x7A, aImplDBCSToUniTab_JIS0208_23 },       /* 0x23 */
+    {      0, 0x21, 0x73, aImplDBCSToUniTab_JIS0208_24 },       /* 0x24 */
+    {      0, 0x21, 0x76, aImplDBCSToUniTab_JIS0208_25 },       /* 0x25 */
+    {      0, 0x21, 0x58, aImplDBCSToUniTab_JIS0208_26 },       /* 0x26 */
+    {      0, 0x21, 0x71, aImplDBCSToUniTab_JIS0208_27 },       /* 0x27 */
+    {      0, 0x21, 0x40, aImplDBCSToUniTab_JIS0208_28 },       /* 0x28 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x29 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2A */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2B */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2C */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2D */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2E */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2F */ /* We convert this as double byte */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_30 },       /* 0x30 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_31 },       /* 0x31 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_32 },       /* 0x32 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_33 },       /* 0x33 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_34 },       /* 0x34 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_35 },       /* 0x35 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_36 },       /* 0x36 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_37 },       /* 0x37 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_38 },       /* 0x38 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_39 },       /* 0x39 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_3A },       /* 0x3A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_3B },       /* 0x3B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_3C },       /* 0x3C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_3D },       /* 0x3D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_3E },       /* 0x3E */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_3F },       /* 0x3F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_40 },       /* 0x40 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_41 },       /* 0x41 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_42 },       /* 0x42 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_43 },       /* 0x43 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_44 },       /* 0x44 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_45 },       /* 0x45 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_46 },       /* 0x46 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_47 },       /* 0x47 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_48 },       /* 0x48 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_49 },       /* 0x49 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_4A },       /* 0x4A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_4B },       /* 0x4B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_4C },       /* 0x4C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_4D },       /* 0x4D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_4E },       /* 0x4E */
+    {      0, 0x21, 0x53, aImplDBCSToUniTab_JIS0208_4F },       /* 0x4F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_50 },       /* 0x50 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_51 },       /* 0x51 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_52 },       /* 0x52 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_53 },       /* 0x53 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_54 },       /* 0x54 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_55 },       /* 0x55 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_56 },       /* 0x56 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_57 },       /* 0x57 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_58 },       /* 0x58 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_59 },       /* 0x59 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_5A },       /* 0x5A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_5B },       /* 0x5B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_5C },       /* 0x5C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_5D },       /* 0x5D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_5E },       /* 0x5E */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_5F },       /* 0x5F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_60 },       /* 0x60 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_61 },       /* 0x61 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_62 },       /* 0x62 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_63 },       /* 0x63 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_64 },       /* 0x64 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_65 },       /* 0x65 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_66 },       /* 0x66 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_67 },       /* 0x67 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_68 },       /* 0x68 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_69 },       /* 0x69 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_6A },       /* 0x6A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_6B },       /* 0x6B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_6C },       /* 0x6C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_6D },       /* 0x6D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_6E },       /* 0x6E */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_6F },       /* 0x6F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_70 },       /* 0x70 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_71 },       /* 0x71 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_72 },       /* 0x72 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_73 },       /* 0x73 */
+    {      0, 0x21, 0x26, aImplDBCSToUniTab_JIS0208_74 },       /* 0x74 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x75 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x76 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x77 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x78 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x79 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7A */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7B */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7C */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7D */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7E */ /* We convert this as double byte */
+    {      0,    1,    0, NULL }                                /* 0x7F */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
+{
+    { 0xA2, 0xF7, aImplUniToDBCSTab_JIS0208_00 },               /* 0x00 */
+    {    1,    0, NULL },                                       /* 0x01 */
+    {    1,    0, NULL },                                       /* 0x02 */
+    { 0x91, 0xC9, aImplUniToDBCSTab_JIS0208_03 },               /* 0x03 */
+    { 0x01, 0x51, aImplUniToDBCSTab_JIS0208_04 },               /* 0x04 */
+    {    1,    0, NULL },                                       /* 0x05 */
+    {    1,    0, NULL },                                       /* 0x06 */
+    {    1,    0, NULL },                                       /* 0x07 */
+    {    1,    0, NULL },                                       /* 0x08 */
+    {    1,    0, NULL },                                       /* 0x09 */
+    {    1,    0, NULL },                                       /* 0x0A */
+    {    1,    0, NULL },                                       /* 0x0B */
+    {    1,    0, NULL },                                       /* 0x0C */
+    {    1,    0, NULL },                                       /* 0x0D */
+    {    1,    0, NULL },                                       /* 0x0E */
+    {    1,    0, NULL },                                       /* 0x0F */
+    {    1,    0, NULL },                                       /* 0x10 */
+    {    1,    0, NULL },                                       /* 0x11 */
+    {    1,    0, NULL },                                       /* 0x12 */
+    {    1,    0, NULL },                                       /* 0x13 */
+    {    1,    0, NULL },                                       /* 0x14 */
+    {    1,    0, NULL },                                       /* 0x15 */
+    {    1,    0, NULL },                                       /* 0x16 */
+    {    1,    0, NULL },                                       /* 0x17 */
+    {    1,    0, NULL },                                       /* 0x18 */
+    {    1,    0, NULL },                                       /* 0x19 */
+    {    1,    0, NULL },                                       /* 0x1A */
+    {    1,    0, NULL },                                       /* 0x1B */
+    {    1,    0, NULL },                                       /* 0x1C */
+    {    1,    0, NULL },                                       /* 0x1D */
+    {    1,    0, NULL },                                       /* 0x1E */
+    {    1,    0, NULL },                                       /* 0x1F */
+    { 0x10, 0x3B, aImplUniToDBCSTab_JIS0208_20 },               /* 0x20 */
+    { 0x03, 0xD4, aImplUniToDBCSTab_JIS0208_21 },               /* 0x21 */
+    { 0x00, 0xA5, aImplUniToDBCSTab_JIS0208_22 },               /* 0x22 */
+    { 0x12, 0x12, aImplUniToDBCSTab_JIS0208_23 },               /* 0x23 */
+    {    1,    0, NULL },                                       /* 0x24 */
+    { 0x00, 0xEF, aImplUniToDBCSTab_JIS0208_25 },               /* 0x25 */
+    { 0x05, 0x6F, aImplUniToDBCSTab_JIS0208_26 },               /* 0x26 */
+    {    1,    0, NULL },                                       /* 0x27 */
+    {    1,    0, NULL },                                       /* 0x28 */
+    {    1,    0, NULL },                                       /* 0x29 */
+    {    1,    0, NULL },                                       /* 0x2A */
+    {    1,    0, NULL },                                       /* 0x2B */
+    {    1,    0, NULL },                                       /* 0x2C */
+    {    1,    0, NULL },                                       /* 0x2D */
+    {    1,    0, NULL },                                       /* 0x2E */
+    {    1,    0, NULL },                                       /* 0x2F */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_30 },               /* 0x30 */
+    {    1,    0, NULL },                                       /* 0x31 */
+    {    1,    0, NULL },                                       /* 0x32 */
+    {    1,    0, NULL },                                       /* 0x33 */
+    {    1,    0, NULL },                                       /* 0x34 */
+    {    1,    0, NULL },                                       /* 0x35 */
+    {    1,    0, NULL },                                       /* 0x36 */
+    {    1,    0, NULL },                                       /* 0x37 */
+    {    1,    0, NULL },                                       /* 0x38 */
+    {    1,    0, NULL },                                       /* 0x39 */
+    {    1,    0, NULL },                                       /* 0x3A */
+    {    1,    0, NULL },                                       /* 0x3B */
+    {    1,    0, NULL },                                       /* 0x3C */
+    {    1,    0, NULL },                                       /* 0x3D */
+    {    1,    0, NULL },                                       /* 0x3E */
+    {    1,    0, NULL },                                       /* 0x3F */
+    {    1,    0, NULL },                                       /* 0x40 */
+    {    1,    0, NULL },                                       /* 0x41 */
+    {    1,    0, NULL },                                       /* 0x42 */
+    {    1,    0, NULL },                                       /* 0x43 */
+    {    1,    0, NULL },                                       /* 0x44 */
+    {    1,    0, NULL },                                       /* 0x45 */
+    {    1,    0, NULL },                                       /* 0x46 */
+    {    1,    0, NULL },                                       /* 0x47 */
+    {    1,    0, NULL },                                       /* 0x48 */
+    {    1,    0, NULL },                                       /* 0x49 */
+    {    1,    0, NULL },                                       /* 0x4A */
+    {    1,    0, NULL },                                       /* 0x4B */
+    {    1,    0, NULL },                                       /* 0x4C */
+    {    1,    0, NULL },                                       /* 0x4D */
+    { 0x00, 0xFB, aImplUniToDBCSTab_JIS0208_4E },               /* 0x4E */
+    { 0x01, 0xFE, aImplUniToDBCSTab_JIS0208_4F },               /* 0x4F */
+    { 0x05, 0xFB, aImplUniToDBCSTab_JIS0208_50 },               /* 0x50 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_51 },               /* 0x51 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_52 },               /* 0x52 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_JIS0208_53 },               /* 0x53 */
+    { 0x01, 0xFD, aImplUniToDBCSTab_JIS0208_54 },               /* 0x54 */
+    { 0x04, 0xFE, aImplUniToDBCSTab_JIS0208_55 },               /* 0x55 */
+    { 0x06, 0xFF, aImplUniToDBCSTab_JIS0208_56 },               /* 0x56 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_JIS0208_57 },               /* 0x57 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0208_58 },               /* 0x58 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0208_59 },               /* 0x59 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_JIS0208_5A },               /* 0x5A */
+    { 0x09, 0xFF, aImplUniToDBCSTab_JIS0208_5B },               /* 0x5B */
+    { 0x01, 0xFD, aImplUniToDBCSTab_JIS0208_5C },               /* 0x5C */
+    { 0x07, 0xFE, aImplUniToDBCSTab_JIS0208_5D },               /* 0x5D */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0208_5E },               /* 0x5E */
+    { 0x01, 0xFF, aImplUniToDBCSTab_JIS0208_5F },               /* 0x5F */
+    { 0x0E, 0xFB, aImplUniToDBCSTab_JIS0208_60 },               /* 0x60 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_61 },               /* 0x61 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_62 },               /* 0x62 */
+    { 0x01, 0xFA, aImplUniToDBCSTab_JIS0208_63 },               /* 0x63 */
+    { 0x06, 0xFE, aImplUniToDBCSTab_JIS0208_64 },               /* 0x64 */
+    { 0x00, 0xFB, aImplUniToDBCSTab_JIS0208_65 },               /* 0x65 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0208_66 },               /* 0x66 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_67 },               /* 0x67 */
+    { 0x02, 0xFA, aImplUniToDBCSTab_JIS0208_68 },               /* 0x68 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_69 },               /* 0x69 */
+    { 0x02, 0xFB, aImplUniToDBCSTab_JIS0208_6A },               /* 0x6A */
+    { 0x04, 0xF3, aImplUniToDBCSTab_JIS0208_6B },               /* 0x6B */
+    { 0x08, 0xF3, aImplUniToDBCSTab_JIS0208_6C },               /* 0x6C */
+    { 0x0B, 0xFB, aImplUniToDBCSTab_JIS0208_6D },               /* 0x6D */
+    { 0x05, 0xFF, aImplUniToDBCSTab_JIS0208_6E },               /* 0x6E */
+    { 0x01, 0xFE, aImplUniToDBCSTab_JIS0208_6F },               /* 0x6F */
+    { 0x01, 0xFD, aImplUniToDBCSTab_JIS0208_70 },               /* 0x70 */
+    { 0x09, 0xFF, aImplUniToDBCSTab_JIS0208_71 },               /* 0x71 */
+    { 0x06, 0xFD, aImplUniToDBCSTab_JIS0208_72 },               /* 0x72 */
+    { 0x0A, 0xFE, aImplUniToDBCSTab_JIS0208_73 },               /* 0x73 */
+    { 0x03, 0xF8, aImplUniToDBCSTab_JIS0208_74 },               /* 0x74 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_JIS0208_75 },               /* 0x75 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_JIS0208_76 },               /* 0x76 */
+    { 0x01, 0xFC, aImplUniToDBCSTab_JIS0208_77 },               /* 0x77 */
+    { 0x02, 0xFD, aImplUniToDBCSTab_JIS0208_78 },               /* 0x78 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_JIS0208_79 },               /* 0x79 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_7A },               /* 0x7A */
+    { 0x02, 0xF7, aImplUniToDBCSTab_JIS0208_7B },               /* 0x7B */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_7C },               /* 0x7C */
+    { 0x00, 0xFB, aImplUniToDBCSTab_JIS0208_7D },               /* 0x7D */
+    { 0x01, 0x9C, aImplUniToDBCSTab_JIS0208_7E },               /* 0x7E */
+    { 0x36, 0xFC, aImplUniToDBCSTab_JIS0208_7F },               /* 0x7F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0208_80 },               /* 0x80 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_JIS0208_81 },               /* 0x81 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_JIS0208_82 },               /* 0x82 */
+    { 0x02, 0xFD, aImplUniToDBCSTab_JIS0208_83 },               /* 0x83 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_JIS0208_84 },               /* 0x84 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_85 },               /* 0x85 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_JIS0208_86 },               /* 0x86 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_87 },               /* 0x87 */
+    { 0x05, 0xFE, aImplUniToDBCSTab_JIS0208_88 },               /* 0x88 */
+    { 0x02, 0xF8, aImplUniToDBCSTab_JIS0208_89 },               /* 0x89 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_8A },               /* 0x8A */
+    { 0x00, 0x9A, aImplUniToDBCSTab_JIS0208_8B },               /* 0x8B */
+    { 0x37, 0xFD, aImplUniToDBCSTab_JIS0208_8C },               /* 0x8C */
+    { 0x04, 0xFF, aImplUniToDBCSTab_JIS0208_8D },               /* 0x8D */
+    { 0x08, 0xFE, aImplUniToDBCSTab_JIS0208_8E },               /* 0x8E */
+    { 0x03, 0xFD, aImplUniToDBCSTab_JIS0208_8F },               /* 0x8F */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0208_90 },               /* 0x90 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0208_91 },               /* 0x91 */
+    { 0x0D, 0xFC, aImplUniToDBCSTab_JIS0208_92 },               /* 0x92 */
+    { 0x06, 0xE8, aImplUniToDBCSTab_JIS0208_93 },               /* 0x93 */
+    { 0x03, 0x81, aImplUniToDBCSTab_JIS0208_94 },               /* 0x94 */
+    { 0x77, 0xE5, aImplUniToDBCSTab_JIS0208_95 },               /* 0x95 */
+    { 0x1C, 0xFB, aImplUniToDBCSTab_JIS0208_96 },               /* 0x96 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0208_97 },               /* 0x97 */
+    { 0x01, 0xFE, aImplUniToDBCSTab_JIS0208_98 },               /* 0x98 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_JIS0208_99 },               /* 0x99 */
+    { 0x01, 0xFB, aImplUniToDBCSTab_JIS0208_9A },               /* 0x9A */
+    { 0x06, 0xF5, aImplUniToDBCSTab_JIS0208_9B },               /* 0x9B */
+    { 0x04, 0xF6, aImplUniToDBCSTab_JIS0208_9C },               /* 0x9C */
+    { 0x03, 0xFD, aImplUniToDBCSTab_JIS0208_9D },               /* 0x9D */
+    { 0x19, 0xFD, aImplUniToDBCSTab_JIS0208_9E },               /* 0x9E */
+    { 0x07, 0xA0, aImplUniToDBCSTab_JIS0208_9F },               /* 0x9F */
+    {    1,    0, NULL },                                       /* 0xA0 */
+    {    1,    0, NULL },                                       /* 0xA1 */
+    {    1,    0, NULL },                                       /* 0xA2 */
+    {    1,    0, NULL },                                       /* 0xA3 */
+    {    1,    0, NULL },                                       /* 0xA4 */
+    {    1,    0, NULL },                                       /* 0xA5 */
+    {    1,    0, NULL },                                       /* 0xA6 */
+    {    1,    0, NULL },                                       /* 0xA7 */
+    {    1,    0, NULL },                                       /* 0xA8 */
+    {    1,    0, NULL },                                       /* 0xA9 */
+    {    1,    0, NULL },                                       /* 0xAA */
+    {    1,    0, NULL },                                       /* 0xAB */
+    {    1,    0, NULL },                                       /* 0xAC */
+    {    1,    0, NULL },                                       /* 0xAD */
+    {    1,    0, NULL },                                       /* 0xAE */
+    {    1,    0, NULL },                                       /* 0xAF */
+    {    1,    0, NULL },                                       /* 0xB0 */
+    {    1,    0, NULL },                                       /* 0xB1 */
+    {    1,    0, NULL },                                       /* 0xB2 */
+    {    1,    0, NULL },                                       /* 0xB3 */
+    {    1,    0, NULL },                                       /* 0xB4 */
+    {    1,    0, NULL },                                       /* 0xB5 */
+    {    1,    0, NULL },                                       /* 0xB6 */
+    {    1,    0, NULL },                                       /* 0xB7 */
+    {    1,    0, NULL },                                       /* 0xB8 */
+    {    1,    0, NULL },                                       /* 0xB9 */
+    {    1,    0, NULL },                                       /* 0xBA */
+    {    1,    0, NULL },                                       /* 0xBB */
+    {    1,    0, NULL },                                       /* 0xBC */
+    {    1,    0, NULL },                                       /* 0xBD */
+    {    1,    0, NULL },                                       /* 0xBE */
+    {    1,    0, NULL },                                       /* 0xBF */
+    {    1,    0, NULL },                                       /* 0xC0 */
+    {    1,    0, NULL },                                       /* 0xC1 */
+    {    1,    0, NULL },                                       /* 0xC2 */
+    {    1,    0, NULL },                                       /* 0xC3 */
+    {    1,    0, NULL },                                       /* 0xC4 */
+    {    1,    0, NULL },                                       /* 0xC5 */
+    {    1,    0, NULL },                                       /* 0xC6 */
+    {    1,    0, NULL },                                       /* 0xC7 */
+    {    1,    0, NULL },                                       /* 0xC8 */
+    {    1,    0, NULL },                                       /* 0xC9 */
+    {    1,    0, NULL },                                       /* 0xCA */
+    {    1,    0, NULL },                                       /* 0xCB */
+    {    1,    0, NULL },                                       /* 0xCC */
+    {    1,    0, NULL },                                       /* 0xCD */
+    {    1,    0, NULL },                                       /* 0xCE */
+    {    1,    0, NULL },                                       /* 0xCF */
+    {    1,    0, NULL },                                       /* 0xD0 */
+    {    1,    0, NULL },                                       /* 0xD1 */
+    {    1,    0, NULL },                                       /* 0xD2 */
+    {    1,    0, NULL },                                       /* 0xD3 */
+    {    1,    0, NULL },                                       /* 0xD4 */
+    {    1,    0, NULL },                                       /* 0xD5 */
+    {    1,    0, NULL },                                       /* 0xD6 */
+    {    1,    0, NULL },                                       /* 0xD7 */
+    {    1,    0, NULL },                                       /* 0xD8 */
+    {    1,    0, NULL },                                       /* 0xD9 */
+    {    1,    0, NULL },                                       /* 0xDA */
+    {    1,    0, NULL },                                       /* 0xDB */
+    {    1,    0, NULL },                                       /* 0xDC */
+    {    1,    0, NULL },                                       /* 0xDD */
+    {    1,    0, NULL },                                       /* 0xDE */
+    {    1,    0, NULL },                                       /* 0xDF */
+    {    1,    0, NULL },                                       /* 0xE0 */
+    {    1,    0, NULL },                                       /* 0xE1 */
+    {    1,    0, NULL },                                       /* 0xE2 */
+    {    1,    0, NULL },                                       /* 0xE3 */
+    {    1,    0, NULL },                                       /* 0xE4 */
+    {    1,    0, NULL },                                       /* 0xE5 */
+    {    1,    0, NULL },                                       /* 0xE6 */
+    {    1,    0, NULL },                                       /* 0xE7 */
+    {    1,    0, NULL },                                       /* 0xE8 */
+    {    1,    0, NULL },                                       /* 0xE9 */
+    {    1,    0, NULL },                                       /* 0xEA */
+    {    1,    0, NULL },                                       /* 0xEB */
+    {    1,    0, NULL },                                       /* 0xEC */
+    {    1,    0, NULL },                                       /* 0xED */
+    {    1,    0, NULL },                                       /* 0xEE */
+    {    1,    0, NULL },                                       /* 0xEF */
+    {    1,    0, NULL },                                       /* 0xF0 */
+    {    1,    0, NULL },                                       /* 0xF1 */
+    {    1,    0, NULL },                                       /* 0xF2 */
+    {    1,    0, NULL },                                       /* 0xF3 */
+    {    1,    0, NULL },                                       /* 0xF4 */
+    {    1,    0, NULL },                                       /* 0xF5 */
+    {    1,    0, NULL },                                       /* 0xF6 */
+    {    1,    0, NULL },                                       /* 0xF7 */
+    {    1,    0, NULL },                                       /* 0xF8 */
+    {    1,    0, NULL },                                       /* 0xF9 */
+    {    1,    0, NULL },                                       /* 0xFA */
+    {    1,    0, NULL },                                       /* 0xFB */
+    {    1,    0, NULL },                                       /* 0xFC */
+    {    1,    0, NULL },                                       /* 0xFD */
+    {    1,    0, NULL },                                       /* 0xFE */
+    { 0x01, 0xE5, aImplUniToDBCSTab_JIS0208_FF }                /* 0xFF */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplDBCSToUniLeadTab const aJIS0212UniLeadTab[128] =
+{
+    {      0,    1,    0, NULL },                               /* 0x00 */
+    {      0,    1,    0, NULL },                               /* 0x01 */
+    {      0,    1,    0, NULL },                               /* 0x02 */
+    {      0,    1,    0, NULL },                               /* 0x03 */
+    {      0,    1,    0, NULL },                               /* 0x04 */
+    {      0,    1,    0, NULL },                               /* 0x05 */
+    {      0,    1,    0, NULL },                               /* 0x06 */
+    {      0,    1,    0, NULL },                               /* 0x07 */
+    {      0,    1,    0, NULL },                               /* 0x08 */
+    {      0,    1,    0, NULL },                               /* 0x09 */
+    {      0,    1,    0, NULL },                               /* 0x0A */
+    {      0,    1,    0, NULL },                               /* 0x0B */
+    {      0,    1,    0, NULL },                               /* 0x0C */
+    {      0,    1,    0, NULL },                               /* 0x0D */
+    {      0,    1,    0, NULL },                               /* 0x0E */
+    {      0,    1,    0, NULL },                               /* 0x0F */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x10 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x11 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x12 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x13 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x14 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x15 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x16 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x17 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x18 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x19 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1A */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1B */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1C */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1D */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1E */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x1F */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x20 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x21 */ /* We convert this as double byte */
+    {      0, 0x2F, 0x71, aImplDBCSToUniTab_JIS0212_22 },       /* 0x22 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x23 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x24 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x25 */ /* We convert this as double byte */
+    {      0, 0x61, 0x7C, aImplDBCSToUniTab_JIS0212_26 },       /* 0x26 */
+    {      0, 0x42, 0x7E, aImplDBCSToUniTab_JIS0212_27 },       /* 0x27 */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x28 */ /* We convert this as double byte */
+    {      0, 0x21, 0x50, aImplDBCSToUniTab_JIS0212_29 },       /* 0x29 */
+    {      0, 0x21, 0x77, aImplDBCSToUniTab_JIS0212_2A },       /* 0x2A */
+    {      0, 0x21, 0x77, aImplDBCSToUniTab_JIS0212_2B },       /* 0x2B */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2C */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2D */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2E */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2F */ /* We convert this as double byte */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_30 },       /* 0x30 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_31 },       /* 0x31 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_32 },       /* 0x32 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_33 },       /* 0x33 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_34 },       /* 0x34 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_35 },       /* 0x35 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_36 },       /* 0x36 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_37 },       /* 0x37 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_38 },       /* 0x38 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_39 },       /* 0x39 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_3A },       /* 0x3A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_3B },       /* 0x3B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_3C },       /* 0x3C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_3D },       /* 0x3D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_3E },       /* 0x3E */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_3F },       /* 0x3F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_40 },       /* 0x40 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_41 },       /* 0x41 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_42 },       /* 0x42 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_43 },       /* 0x43 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_44 },       /* 0x44 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_45 },       /* 0x45 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_46 },       /* 0x46 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_47 },       /* 0x47 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_48 },       /* 0x48 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_49 },       /* 0x49 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_4A },       /* 0x4A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_4B },       /* 0x4B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_4C },       /* 0x4C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_4D },       /* 0x4D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_4E },       /* 0x4E */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_4F },       /* 0x4F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_50 },       /* 0x50 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_51 },       /* 0x51 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_52 },       /* 0x52 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_53 },       /* 0x53 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_54 },       /* 0x54 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_55 },       /* 0x55 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_56 },       /* 0x56 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_57 },       /* 0x57 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_58 },       /* 0x58 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_59 },       /* 0x59 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_5A },       /* 0x5A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_5B },       /* 0x5B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_5C },       /* 0x5C */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_5D },       /* 0x5D */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_5E },       /* 0x5E */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_5F },       /* 0x5F */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_60 },       /* 0x60 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_61 },       /* 0x61 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_62 },       /* 0x62 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_63 },       /* 0x63 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_64 },       /* 0x64 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_65 },       /* 0x65 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_66 },       /* 0x66 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_67 },       /* 0x67 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_68 },       /* 0x68 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_69 },       /* 0x69 */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_6A },       /* 0x6A */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_6B },       /* 0x6B */
+    {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0212_6C },       /* 0x6C */
+    {      0, 0x21, 0x63, aImplDBCSToUniTab_JIS0212_6D },       /* 0x6D */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x6E */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x6F */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x70 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x71 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x72 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x73 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x74 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x75 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x76 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x77 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x78 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x79 */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7A */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7B */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7C */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7D */ /* We convert this as double byte */
+    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x7E */ /* We convert this as double byte */
+    {      0,    1,    0, NULL }                                /* 0x7F */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplUniToDBCSHighTab const aJIS0212DBCSHighTab[256] =
+{
+    { 0xA1, 0xFF, aImplUniToDBCSTab_JIS0212_00 },               /* 0x00 */
+    { 0x00, 0xF5, aImplUniToDBCSTab_JIS0212_01 },               /* 0x01 */
+    { 0xC7, 0xDD, aImplUniToDBCSTab_JIS0212_02 },               /* 0x02 */
+    { 0x84, 0xCE, aImplUniToDBCSTab_JIS0212_03 },               /* 0x03 */
+    { 0x02, 0x5F, aImplUniToDBCSTab_JIS0212_04 },               /* 0x04 */
+    {    1,    0, NULL },                                       /* 0x05 */
+    {    1,    0, NULL },                                       /* 0x06 */
+    {    1,    0, NULL },                                       /* 0x07 */
+    {    1,    0, NULL },                                       /* 0x08 */
+    {    1,    0, NULL },                                       /* 0x09 */
+    {    1,    0, NULL },                                       /* 0x0A */
+    {    1,    0, NULL },                                       /* 0x0B */
+    {    1,    0, NULL },                                       /* 0x0C */
+    {    1,    0, NULL },                                       /* 0x0D */
+    {    1,    0, NULL },                                       /* 0x0E */
+    {    1,    0, NULL },                                       /* 0x0F */
+    {    1,    0, NULL },                                       /* 0x10 */
+    {    1,    0, NULL },                                       /* 0x11 */
+    {    1,    0, NULL },                                       /* 0x12 */
+    {    1,    0, NULL },                                       /* 0x13 */
+    {    1,    0, NULL },                                       /* 0x14 */
+    {    1,    0, NULL },                                       /* 0x15 */
+    {    1,    0, NULL },                                       /* 0x16 */
+    {    1,    0, NULL },                                       /* 0x17 */
+    {    1,    0, NULL },                                       /* 0x18 */
+    {    1,    0, NULL },                                       /* 0x19 */
+    {    1,    0, NULL },                                       /* 0x1A */
+    {    1,    0, NULL },                                       /* 0x1B */
+    {    1,    0, NULL },                                       /* 0x1C */
+    {    1,    0, NULL },                                       /* 0x1D */
+    {    1,    0, NULL },                                       /* 0x1E */
+    {    1,    0, NULL },                                       /* 0x1F */
+    {    1,    0, NULL },                                       /* 0x20 */
+    { 0x16, 0x22, aImplUniToDBCSTab_JIS0212_21 },               /* 0x21 */
+    {    1,    0, NULL },                                       /* 0x22 */
+    {    1,    0, NULL },                                       /* 0x23 */
+    {    1,    0, NULL },                                       /* 0x24 */
+    {    1,    0, NULL },                                       /* 0x25 */
+    {    1,    0, NULL },                                       /* 0x26 */
+    {    1,    0, NULL },                                       /* 0x27 */
+    {    1,    0, NULL },                                       /* 0x28 */
+    {    1,    0, NULL },                                       /* 0x29 */
+    {    1,    0, NULL },                                       /* 0x2A */
+    {    1,    0, NULL },                                       /* 0x2B */
+    {    1,    0, NULL },                                       /* 0x2C */
+    {    1,    0, NULL },                                       /* 0x2D */
+    {    1,    0, NULL },                                       /* 0x2E */
+    {    1,    0, NULL },                                       /* 0x2F */
+    {    1,    0, NULL },                                       /* 0x30 */
+    {    1,    0, NULL },                                       /* 0x31 */
+    {    1,    0, NULL },                                       /* 0x32 */
+    {    1,    0, NULL },                                       /* 0x33 */
+    {    1,    0, NULL },                                       /* 0x34 */
+    {    1,    0, NULL },                                       /* 0x35 */
+    {    1,    0, NULL },                                       /* 0x36 */
+    {    1,    0, NULL },                                       /* 0x37 */
+    {    1,    0, NULL },                                       /* 0x38 */
+    {    1,    0, NULL },                                       /* 0x39 */
+    {    1,    0, NULL },                                       /* 0x3A */
+    {    1,    0, NULL },                                       /* 0x3B */
+    {    1,    0, NULL },                                       /* 0x3C */
+    {    1,    0, NULL },                                       /* 0x3D */
+    {    1,    0, NULL },                                       /* 0x3E */
+    {    1,    0, NULL },                                       /* 0x3F */
+    {    1,    0, NULL },                                       /* 0x40 */
+    {    1,    0, NULL },                                       /* 0x41 */
+    {    1,    0, NULL },                                       /* 0x42 */
+    {    1,    0, NULL },                                       /* 0x43 */
+    {    1,    0, NULL },                                       /* 0x44 */
+    {    1,    0, NULL },                                       /* 0x45 */
+    {    1,    0, NULL },                                       /* 0x46 */
+    {    1,    0, NULL },                                       /* 0x47 */
+    {    1,    0, NULL },                                       /* 0x48 */
+    {    1,    0, NULL },                                       /* 0x49 */
+    {    1,    0, NULL },                                       /* 0x4A */
+    {    1,    0, NULL },                                       /* 0x4B */
+    {    1,    0, NULL },                                       /* 0x4C */
+    {    1,    0, NULL },                                       /* 0x4D */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_4E },               /* 0x4E */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0212_4F },               /* 0x4F */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0212_50 },               /* 0x50 */
+    { 0x03, 0xF7, aImplUniToDBCSTab_JIS0212_51 },               /* 0x51 */
+    { 0x01, 0xF7, aImplUniToDBCSTab_JIS0212_52 },               /* 0x52 */
+    { 0x00, 0xF5, aImplUniToDBCSTab_JIS0212_53 },               /* 0x53 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_54 },               /* 0x54 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0212_55 },               /* 0x55 */
+    { 0x05, 0xF7, aImplUniToDBCSTab_JIS0212_56 },               /* 0x56 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_JIS0212_57 },               /* 0x57 */
+    { 0x03, 0xF3, aImplUniToDBCSTab_JIS0212_58 },               /* 0x58 */
+    { 0x05, 0xF7, aImplUniToDBCSTab_JIS0212_59 },               /* 0x59 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_5A },               /* 0x5A */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_5B },               /* 0x5B */
+    { 0x0C, 0xF4, aImplUniToDBCSTab_JIS0212_5C },               /* 0x5C */
+    { 0x01, 0xF9, aImplUniToDBCSTab_JIS0212_5D },               /* 0x5D */
+    { 0x00, 0xEB, aImplUniToDBCSTab_JIS0212_5E },               /* 0x5E */
+    { 0x02, 0xFC, aImplUniToDBCSTab_JIS0212_5F },               /* 0x5F */
+    { 0x07, 0xFD, aImplUniToDBCSTab_JIS0212_60 },               /* 0x60 */
+    { 0x02, 0xEF, aImplUniToDBCSTab_JIS0212_61 },               /* 0x61 */
+    { 0x01, 0xFD, aImplUniToDBCSTab_JIS0212_62 },               /* 0x62 */
+    { 0x03, 0xF9, aImplUniToDBCSTab_JIS0212_63 },               /* 0x63 */
+    { 0x09, 0xFF, aImplUniToDBCSTab_JIS0212_64 },               /* 0x64 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_JIS0212_65 },               /* 0x65 */
+    { 0x00, 0xFB, aImplUniToDBCSTab_JIS0212_66 },               /* 0x66 */
+    { 0x05, 0xF9, aImplUniToDBCSTab_JIS0212_67 },               /* 0x67 */
+    { 0x04, 0xFD, aImplUniToDBCSTab_JIS0212_68 },               /* 0x68 */
+    { 0x06, 0xFE, aImplUniToDBCSTab_JIS0212_69 },               /* 0x69 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_6A },               /* 0x6A */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_6B },               /* 0x6B */
+    { 0x02, 0xF4, aImplUniToDBCSTab_JIS0212_6C },               /* 0x6C */
+    { 0x04, 0xFC, aImplUniToDBCSTab_JIS0212_6D },               /* 0x6D */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_6E },               /* 0x6E */
+    { 0x04, 0xFD, aImplUniToDBCSTab_JIS0212_6F },               /* 0x6F */
+    { 0x00, 0xFA, aImplUniToDBCSTab_JIS0212_70 },               /* 0x70 */
+    { 0x03, 0xFE, aImplUniToDBCSTab_JIS0212_71 },               /* 0x71 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0212_72 },               /* 0x72 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_73 },               /* 0x73 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0212_74 },               /* 0x74 */
+    { 0x06, 0xF9, aImplUniToDBCSTab_JIS0212_75 },               /* 0x75 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_JIS0212_76 },               /* 0x76 */
+    { 0x00, 0xFB, aImplUniToDBCSTab_JIS0212_77 },               /* 0x77 */
+    { 0x05, 0xFF, aImplUniToDBCSTab_JIS0212_78 },               /* 0x78 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_JIS0212_79 },               /* 0x79 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_JIS0212_7A },               /* 0x7A */
+    { 0x07, 0xFE, aImplUniToDBCSTab_JIS0212_7B },               /* 0x7B */
+    { 0x01, 0xF5, aImplUniToDBCSTab_JIS0212_7C },               /* 0x7C */
+    { 0x03, 0xFA, aImplUniToDBCSTab_JIS0212_7D },               /* 0x7D */
+    { 0x00, 0x9E, aImplUniToDBCSTab_JIS0212_7E },               /* 0x7E */
+    { 0x3B, 0xFF, aImplUniToDBCSTab_JIS0212_7F },               /* 0x7F */
+    { 0x07, 0xFE, aImplUniToDBCSTab_JIS0212_80 },               /* 0x80 */
+    { 0x03, 0xFF, aImplUniToDBCSTab_JIS0212_81 },               /* 0x81 */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0212_82 },               /* 0x82 */
+    { 0x00, 0xFC, aImplUniToDBCSTab_JIS0212_83 },               /* 0x83 */
+    { 0x01, 0xFD, aImplUniToDBCSTab_JIS0212_84 },               /* 0x84 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_85 },               /* 0x85 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_86 },               /* 0x86 */
+    { 0x04, 0xFF, aImplUniToDBCSTab_JIS0212_87 },               /* 0x87 */
+    { 0x01, 0xF7, aImplUniToDBCSTab_JIS0212_88 },               /* 0x88 */
+    { 0x01, 0xFF, aImplUniToDBCSTab_JIS0212_89 },               /* 0x89 */
+    { 0x04, 0xFF, aImplUniToDBCSTab_JIS0212_8A },               /* 0x8A */
+    { 0x05, 0x9F, aImplUniToDBCSTab_JIS0212_8B },               /* 0x8B */
+    { 0x38, 0xFF, aImplUniToDBCSTab_JIS0212_8C },               /* 0x8C */
+    { 0x01, 0xFD, aImplUniToDBCSTab_JIS0212_8D },               /* 0x8D */
+    { 0x01, 0xFA, aImplUniToDBCSTab_JIS0212_8E },               /* 0x8E */
+    { 0x00, 0xFE, aImplUniToDBCSTab_JIS0212_8F },               /* 0x8F */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_90 },               /* 0x90 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_91 },               /* 0x91 */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0212_92 },               /* 0x92 */
+    { 0x00, 0xFD, aImplUniToDBCSTab_JIS0212_93 },               /* 0x93 */
+    { 0x01, 0x84, aImplUniToDBCSTab_JIS0212_94 },               /* 0x94 */
+    { 0x78, 0xE6, aImplUniToDBCSTab_JIS0212_95 },               /* 0x95 */
+    { 0x1D, 0xFA, aImplUniToDBCSTab_JIS0212_96 },               /* 0x96 */
+    { 0x02, 0xFA, aImplUniToDBCSTab_JIS0212_97 },               /* 0x97 */
+    { 0x07, 0xF6, aImplUniToDBCSTab_JIS0212_98 },               /* 0x98 */
+    { 0x02, 0xFE, aImplUniToDBCSTab_JIS0212_99 },               /* 0x99 */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_9A },               /* 0x9A */
+    { 0x00, 0xFF, aImplUniToDBCSTab_JIS0212_9B },               /* 0x9B */
+    { 0x00, 0xF9, aImplUniToDBCSTab_JIS0212_9C },               /* 0x9C */
+    { 0x02, 0xFE, aImplUniToDBCSTab_JIS0212_9D },               /* 0x9D */
+    { 0x02, 0xFF, aImplUniToDBCSTab_JIS0212_9E },               /* 0x9E */
+    { 0x02, 0xA5, aImplUniToDBCSTab_JIS0212_9F },               /* 0x9F */
+    {    1,    0, NULL },                                       /* 0xA0 */
+    {    1,    0, NULL },                                       /* 0xA1 */
+    {    1,    0, NULL },                                       /* 0xA2 */
+    {    1,    0, NULL },                                       /* 0xA3 */
+    {    1,    0, NULL },                                       /* 0xA4 */
+    {    1,    0, NULL },                                       /* 0xA5 */
+    {    1,    0, NULL },                                       /* 0xA6 */
+    {    1,    0, NULL },                                       /* 0xA7 */
+    {    1,    0, NULL },                                       /* 0xA8 */
+    {    1,    0, NULL },                                       /* 0xA9 */
+    {    1,    0, NULL },                                       /* 0xAA */
+    {    1,    0, NULL },                                       /* 0xAB */
+    {    1,    0, NULL },                                       /* 0xAC */
+    {    1,    0, NULL },                                       /* 0xAD */
+    {    1,    0, NULL },                                       /* 0xAE */
+    {    1,    0, NULL },                                       /* 0xAF */
+    {    1,    0, NULL },                                       /* 0xB0 */
+    {    1,    0, NULL },                                       /* 0xB1 */
+    {    1,    0, NULL },                                       /* 0xB2 */
+    {    1,    0, NULL },                                       /* 0xB3 */
+    {    1,    0, NULL },                                       /* 0xB4 */
+    {    1,    0, NULL },                                       /* 0xB5 */
+    {    1,    0, NULL },                                       /* 0xB6 */
+    {    1,    0, NULL },                                       /* 0xB7 */
+    {    1,    0, NULL },                                       /* 0xB8 */
+    {    1,    0, NULL },                                       /* 0xB9 */
+    {    1,    0, NULL },                                       /* 0xBA */
+    {    1,    0, NULL },                                       /* 0xBB */
+    {    1,    0, NULL },                                       /* 0xBC */
+    {    1,    0, NULL },                                       /* 0xBD */
+    {    1,    0, NULL },                                       /* 0xBE */
+    {    1,    0, NULL },                                       /* 0xBF */
+    {    1,    0, NULL },                                       /* 0xC0 */
+    {    1,    0, NULL },                                       /* 0xC1 */
+    {    1,    0, NULL },                                       /* 0xC2 */
+    {    1,    0, NULL },                                       /* 0xC3 */
+    {    1,    0, NULL },                                       /* 0xC4 */
+    {    1,    0, NULL },                                       /* 0xC5 */
+    {    1,    0, NULL },                                       /* 0xC6 */
+    {    1,    0, NULL },                                       /* 0xC7 */
+    {    1,    0, NULL },                                       /* 0xC8 */
+    {    1,    0, NULL },                                       /* 0xC9 */
+    {    1,    0, NULL },                                       /* 0xCA */
+    {    1,    0, NULL },                                       /* 0xCB */
+    {    1,    0, NULL },                                       /* 0xCC */
+    {    1,    0, NULL },                                       /* 0xCD */
+    {    1,    0, NULL },                                       /* 0xCE */
+    {    1,    0, NULL },                                       /* 0xCF */
+    {    1,    0, NULL },                                       /* 0xD0 */
+    {    1,    0, NULL },                                       /* 0xD1 */
+    {    1,    0, NULL },                                       /* 0xD2 */
+    {    1,    0, NULL },                                       /* 0xD3 */
+    {    1,    0, NULL },                                       /* 0xD4 */
+    {    1,    0, NULL },                                       /* 0xD5 */
+    {    1,    0, NULL },                                       /* 0xD6 */
+    {    1,    0, NULL },                                       /* 0xD7 */
+    {    1,    0, NULL },                                       /* 0xD8 */
+    {    1,    0, NULL },                                       /* 0xD9 */
+    {    1,    0, NULL },                                       /* 0xDA */
+    {    1,    0, NULL },                                       /* 0xDB */
+    {    1,    0, NULL },                                       /* 0xDC */
+    {    1,    0, NULL },                                       /* 0xDD */
+    {    1,    0, NULL },                                       /* 0xDE */
+    {    1,    0, NULL },                                       /* 0xDF */
+    {    1,    0, NULL },                                       /* 0xE0 */
+    {    1,    0, NULL },                                       /* 0xE1 */
+    {    1,    0, NULL },                                       /* 0xE2 */
+    {    1,    0, NULL },                                       /* 0xE3 */
+    {    1,    0, NULL },                                       /* 0xE4 */
+    {    1,    0, NULL },                                       /* 0xE5 */
+    {    1,    0, NULL },                                       /* 0xE6 */
+    {    1,    0, NULL },                                       /* 0xE7 */
+    {    1,    0, NULL },                                       /* 0xE8 */
+    {    1,    0, NULL },                                       /* 0xE9 */
+    {    1,    0, NULL },                                       /* 0xEA */
+    {    1,    0, NULL },                                       /* 0xEB */
+    {    1,    0, NULL },                                       /* 0xEC */
+    {    1,    0, NULL },                                       /* 0xED */
+    {    1,    0, NULL },                                       /* 0xEE */
+    {    1,    0, NULL },                                       /* 0xEF */
+    {    1,    0, NULL },                                       /* 0xF0 */
+    {    1,    0, NULL },                                       /* 0xF1 */
+    {    1,    0, NULL },                                       /* 0xF2 */
+    {    1,    0, NULL },                                       /* 0xF3 */
+    {    1,    0, NULL },                                       /* 0xF4 */
+    {    1,    0, NULL },                                       /* 0xF5 */
+    {    1,    0, NULL },                                       /* 0xF6 */
+    {    1,    0, NULL },                                       /* 0xF7 */
+    {    1,    0, NULL },                                       /* 0xF8 */
+    {    1,    0, NULL },                                       /* 0xF9 */
+    {    1,    0, NULL },                                       /* 0xFA */
+    {    1,    0, NULL },                                       /* 0xFB */
+    {    1,    0, NULL },                                       /* 0xFC */
+    {    1,    0, NULL },                                       /* 0xFD */
+    {    1,    0, NULL },                                       /* 0xFE */
+    {    1,    0, NULL }                                        /* 0xFF */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplEUCJPConvertData const aImplEUCJPCvtData =
+{
+    aJIS0208UniLeadTab,
+    aJIS0212UniLeadTab,
+    aJIS0208DBCSHighTab,
+    aJIS0212DBCSHighTab
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData const aImplEUCJPTextConverterData =
+{
+    &aImplEUCJPCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter const aImplEUCJPTextConverter =
+{
+    &aImplEUCJPTextConverterData,
+    ImplEUCJPToUnicode,
+    ImplUnicodeToEUCJP,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData const aImplEUCJPTextEncodingData =
+{
+    &aImplEUCJPTextConverter,
+    RTL_TEXTENCODING_EUC_JP,
+    1, 3, 2,
+    128,
+    932,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
+    RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MULTIBYTE |
+    RTL_TEXTENCODING_INFO_MIME,
+    SCRIPT_JAPANESE
+};
+
+/* ======================================================================= */
+
+/* !!! JIS - X Encodings not complete !!! */
+
+static ImplTextConverterData aImplJISX0208TextConverterData =
+{
+    aJIS0208DBCSHighTab,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT,
+};
+
+static ImplTextConverter aImplJISX0208TextConverter =
+{
+    &aImplJISX0208TextConverterData,
+    NULL,
+    ImplUnicodeToJISX0208,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+static ImplTextEncodingData aImplJISX0208TextEncodingData =
+{
+    &aImplJISX0208TextConverter,
+    RTL_TEXTENCODING_JIS_X_0208,
+    2, 2, 2,
+    128,
+    932,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
+    RTL_TEXTENCODING_INFO_MULTIBYTE,
+    SCRIPT_JAPANESE,
+};
+
+/* ======================================================================= */
+
+#define HALFWIDTHKANA_START 0xFF61
+#define HALFWIDTHKANA_END   0xFF9F
+
+static sal_uChar aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
+{
+          0xA1, 0xA2, 0xA3, 0xA4, 0x5A, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF,
+    0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF,
+    0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF,
+    0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
+};
+
+static ImplByteConvertData aImplJISX0201ByteCvtData =
+{
+    NULL,
+    NULL,
+    0, 0,
+    0, 0,
+    aImplJISX0201Tab,
+    NULL,
+    NULL,
+    HALFWIDTHKANA_START, HALFWIDTHKANA_END,
+    0, 0,
+    0
+};
+
+static ImplTextConverterData aImplJISX0201TextConverterData =
+{
+    &aImplJISX0201ByteCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+static ImplTextConverter aImplJISX0201TextConverter =
+{
+    &aImplJISX0201TextConverterData,
+    NULL,
+    ImplUnicodeToChar,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+static ImplTextEncodingData aImplJISX0201TextEncodingData =
+{
+    &aImplJISX0201TextConverter,
+    RTL_TEXTENCODING_JIS_X_0201,
+    1, 1, 1,
+    128,
+    923,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
+    RTL_TEXTENCODING_INFO_MULTIBYTE,
+    SCRIPT_JAPANESE,
+};
+
+/* ======================================================================= */
+
+static ImplTextEncodingData aImplJISX0212TextEncodingData =
+{
+    NULL,
+    RTL_TEXTENCODING_JIS_X_0212,
+    2, 2, 2,
+    128,
+    923,
+    1,
+    (const sal_Char*)"euc-jp",          /* ??? JISX0208.1990-0 */
+    (const sal_Char*)"euc-jp",
+    RTL_TEXTENCODING_INFO_MULTIBYTE,
+    SCRIPT_JAPANESE,
+};

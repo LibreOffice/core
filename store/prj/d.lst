@@ -1,0 +1,8 @@
+mkdir: %_DEST%\inc%_EXT%\store
+..\inc\store\*.h %_DEST%\inc%_EXT%\store\*.h
+..\inc\store\store.hxx %_DEST%\inc%_EXT%\store\store.hxx
+..\inc\store\store.inl %_DEST%\inc%_EXT%\store\store.inl
+..\%__SRC%\lib\istore.lib %_DEST%\lib%_EXT%\istore.lib
+..\%__SRC%\lib\libsto*.* %_DEST%\lib%_EXT%\libsto*.*
+..\%__SRC%\bin\sto*.dll %_DEST%\bin%_EXT%\sto*.dll
+..\version.mk %_DEST%\inc%_EXT%\store\version.mk

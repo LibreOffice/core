@@ -1,0 +1,353 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tcvteas1.tab,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+/* ======================================================================= */
+
+/* This file contain the tables for all 1 byte charsets, for the */
+/* following scripts: asia (Thai, Vietnamese) and other exotic scripts */
+
+/* ======================================================================= */
+
+/* MS-874 */
+/* Windows/Dos Standard CharSet for Thai */
+/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* Convert-Tables: mappings/vendors/micsft/pc/cp874.txt from 04/15/98 Version 2.00 */
+/* Last-Changes from us: */
+
+/* ----------------------------------------------------------------------- */
+
+#define MS874UNI_START                  0x80
+#define MS874UNI_END                    0xFB
+static sal_uInt16 const aImplMS874ToUniTab[MS874UNI_END - MS874UNI_START + 1] =
+{
+/*       0       1       2       3       4       5       6       7 */
+/*       8       9       A       B       C       D       E       F */
+    0x20AC, 0x0081, 0x0082, 0x0083, 0x0084, 0x2026, 0x0086, 0x0087, /* 0x80 */
+    0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F, /* 0x80 */
+    0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
+    0x0098, 0x0099, 0x009A, 0x009B, 0x009C, 0x009D, 0x009E, 0x009F, /* 0x90 */
+    0x00A0, 0x0E01, 0x0E02, 0x0E03, 0x0E04, 0x0E05, 0x0E06, 0x0E07, /* 0xA0 */
+    0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F, /* 0xA0 */
+    0x0E10, 0x0E11, 0x0E12, 0x0E13, 0x0E14, 0x0E15, 0x0E16, 0x0E17, /* 0xB0 */
+    0x0E18, 0x0E19, 0x0E1A, 0x0E1B, 0x0E1C, 0x0E1D, 0x0E1E, 0x0E1F, /* 0xB0 */
+    0x0E20, 0x0E21, 0x0E22, 0x0E23, 0x0E24, 0x0E25, 0x0E26, 0x0E27, /* 0xC0 */
+    0x0E28, 0x0E29, 0x0E2A, 0x0E2B, 0x0E2C, 0x0E2D, 0x0E2E, 0x0E2F, /* 0xC0 */
+    0x0E30, 0x0E31, 0x0E32, 0x0E33, 0x0E34, 0x0E35, 0x0E36, 0x0E37, /* 0xD0 */
+    0x0E38, 0x0E39, 0x0E3A,      0,      0,      0,      0, 0x0E3F, /* 0xD0 */
+    0x0E40, 0x0E41, 0x0E42, 0x0E43, 0x0E44, 0x0E45, 0x0E46, 0x0E47, /* 0xE0 */
+    0x0E48, 0x0E49, 0x0E4A, 0x0E4B, 0x0E4C, 0x0E4D, 0x0E4E, 0x0E4F, /* 0xE0 */
+    0x0E50, 0x0E51, 0x0E52, 0x0E53, 0x0E54, 0x0E55, 0x0E56, 0x0E57, /* 0xF0 */
+    0x0E58, 0x0E59, 0x0E5A, 0x0E5B                                  /* 0xF0 */
+};
+
+/* ----------------------------------------------------------------------- */
+
+#define MS874CHAR_START                 0x0E01
+#define MS874CHAR_END                   0x0E5B
+static sal_uChar const aImplMS874ToCharTab[MS874CHAR_END - MS874CHAR_START + 1] =
+{
+/*     0     1     2     3     4     5     6     7 */
+/*     8     9     A     B     C     D     E     F */
+          0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, /* 0x0E00 */
+    0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, /* 0x0E00 */
+    0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, /* 0x0E10 */
+    0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, /* 0x0E10 */
+    0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, /* 0x0E20 */
+    0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, /* 0x0E20 */
+    0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, /* 0x0E30 */
+    0xD8, 0xD9, 0xDA,    0,    0,    0,    0, 0xDF, /* 0x0E30 */
+    0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, /* 0x0E40 */
+    0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF, /* 0x0E40 */
+    0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, /* 0x0E50 */
+    0xF8, 0xF9, 0xFA, 0xFB                          /* 0x0E50 */
+};
+
+/* ----------------------------------------------------------------------- */
+
+#define MS874TOCHARTABEX_COUNT          10
+static ImplUniCharTabData const aImplMS874ToCharTabEx[MS874TOCHARTABEX_COUNT] =
+{
+  { 0x00A0, 0xA0 },
+  { 0x2013, 0x96 },
+  { 0x2014, 0x97 },
+  { 0x2018, 0x91 },
+  { 0x2019, 0x92 },
+  { 0x201C, 0x93 },
+  { 0x201D, 0x94 },
+  { 0x2022, 0x95 },
+  { 0x2026, 0x85 },
+  { 0x20AC, 0x80 }
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplByteConvertData const aImplMS874ByteCvtData =
+{
+    aImplMS874ToUniTab,
+    NULL,
+    MS874UNI_START, MS874UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
+    aImplMS874ToCharTab,
+    aImpl8090SameToCharTab,
+    aImplMS874ToCharTabEx,
+    MS874CHAR_START, MS874CHAR_END,
+    SAME8090CHAR_START, SAME8090CHAR_END,
+    MS874TOCHARTABEX_COUNT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData const aImplMS874TextConverterData =
+{
+    &aImplMS874ByteCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter const aImplMS874TextConverter =
+{
+    &aImplMS874TextConverterData,
+    ImplCharToUnicode,
+    ImplUnicodeToChar,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData const aImplMS874TextEncodingData =
+{
+    &aImplMS874TextConverter,
+    RTL_TEXTENCODING_MS_874,
+    1, 1, 1,
+    222,
+    874,
+    21,
+    (const sal_Char*)"iso8859-1",       /* ??? */
+    (const sal_Char*)"iso-8859-1",      /* ??? */
+    RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_WIN |
+    RTL_TEXTENCODING_INFO_DOS_OS2,
+    SCRIPT_THAI
+};
+
+/* ======================================================================= */
+
+/* MS-1258 */
+/* Windows Standard CharSet for Vietnamease */
+/* 1-Byte, 0x00-0x7F ASCII ohne Ausnahme */
+/* Convert-Tables: mappings/vendors/micsft/windows/cp1258.txt from 04/15/98 Version 2.01 */
+/* Last-Changes from us: */
+
+/* ----------------------------------------------------------------------- */
+
+#define MS1258UNI_START                 0x80
+#define MS1258UNI_END                   0xFF
+static sal_uInt16 const aImplMS1258ToUniTab[MS1258UNI_END - MS1258UNI_START + 1] =
+{
+/*       0       1       2       3       4       5       6       7 */
+/*       8       9       A       B       C       D       E       F */
+    0x20AC, 0x0081, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021, /* 0x80 */
+    0x02C6, 0x2030, 0x008A, 0x2039, 0x0152, 0x008D, 0x008E, 0x008F, /* 0x80 */
+    0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, /* 0x90 */
+    0x02DC, 0x2122, 0x009A, 0x203A, 0x0153, 0x009D, 0x009E, 0x0178, /* 0x90 */
+    0x00A0, 0x00A1, 0x00A2, 0x00A3, 0x00A4, 0x00A5, 0x00A6, 0x00A7, /* 0xA0 */
+    0x00A8, 0x00A9, 0x00AA, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x00AF, /* 0xA0 */
+    0x00B0, 0x00B1, 0x00B2, 0x00B3, 0x00B4, 0x00B5, 0x00B6, 0x00B7, /* 0xB0 */
+    0x00B8, 0x00B9, 0x00BA, 0x00BB, 0x00BC, 0x00BD, 0x00BE, 0x00BF, /* 0xB0 */
+    0x00C0, 0x00C1, 0x00C2, 0x0102, 0x00C4, 0x00C5, 0x00C6, 0x00C7, /* 0xC0 */
+    0x00C8, 0x00C9, 0x00CA, 0x00CB, 0x0300, 0x00CD, 0x00CE, 0x00CF, /* 0xC0 */
+    0x0110, 0x00D1, 0x0309, 0x00D3, 0x00D4, 0x01A0, 0x00D6, 0x00D7, /* 0xD0 */
+    0x00D8, 0x00D9, 0x00DA, 0x00DB, 0x00DC, 0x01AF, 0x0303, 0x00DF, /* 0xD0 */
+    0x00E0, 0x00E1, 0x00E2, 0x0103, 0x00E4, 0x00E5, 0x00E6, 0x00E7, /* 0xE0 */
+    0x00E8, 0x00E9, 0x00EA, 0x00EB, 0x0301, 0x00ED, 0x00EE, 0x00EF, /* 0xE0 */
+    0x0111, 0x00F1, 0x0323, 0x00F3, 0x00F4, 0x01A1, 0x00F6, 0x00F7, /* 0xF0 */
+    0x00F8, 0x00F9, 0x00FA, 0x00FB, 0x00FC, 0x01B0, 0x20AB, 0x00FF  /* 0xF0 */
+};
+
+/* ----------------------------------------------------------------------- */
+
+#define MS1258CHAR_START                0x00A0
+#define MS1258CHAR_END                  0x00FF
+static sal_uChar const aImplMS1258ToCharTab[MS1258CHAR_END - MS1258CHAR_START + 1] =
+{
+/*     0     1     2     3     4     5     6     7 */
+/*     8     9     A     B     C     D     E     F */
+    0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, /* 0x00A0 */
+    0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, /* 0x00A0 */
+    0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, /* 0x00B0 */
+    0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, /* 0x00B0 */
+    0xC0, 0xC1, 0xC2,    0, 0xC4, 0xC5, 0xC6, 0xC7, /* 0x00C0 */
+    0xC8, 0xC9, 0xCA, 0xCB,    0, 0xCD, 0xCE, 0xCF, /* 0x00C0 */
+       0, 0xD1,    0, 0xD3, 0xD4,    0, 0xD6, 0xD7, /* 0x00D0 */
+    0xD8, 0xD9, 0xDA, 0xDB, 0xDC,    0,    0, 0xDF, /* 0x00D0 */
+    0xE0, 0xE1, 0xE2,    0, 0xE4, 0xE5, 0xE6, 0xE7, /* 0x00E0 */
+    0xE8, 0xE9, 0xEA, 0xEB,    0, 0xED, 0xEE, 0xEF, /* 0x00E0 */
+       0, 0xF1,    0, 0xF3, 0xF4,    0, 0xF6, 0xF7, /* 0x00F0 */
+    0xF8, 0xF9, 0xFA, 0xFB, 0xFC,    0,    0, 0xFF  /* 0x00F0 */
+};
+
+/* ----------------------------------------------------------------------- */
+
+#define MS1258TOCHARTABEX_COUNT         37
+static ImplUniCharTabData const aImplMS1258ToCharTabEx[MS1258TOCHARTABEX_COUNT] =
+{
+  { 0x0102, 0xC3 },
+  { 0x0103, 0xE3 },
+  { 0x0110, 0xD0 },
+  { 0x0111, 0xF0 },
+  { 0x0152, 0x8C },
+  { 0x0153, 0x9C },
+  { 0x0178, 0x9F },
+  { 0x0192, 0x83 },
+  { 0x01A0, 0xD5 },
+  { 0x01A1, 0xF5 },
+  { 0x01AF, 0xDD },
+  { 0x01B0, 0xFD },
+  { 0x02C6, 0x88 },
+  { 0x02DC, 0x98 },
+  { 0x0300, 0xCC },
+  { 0x0301, 0xEC },
+  { 0x0303, 0xDE },
+  { 0x0309, 0xD2 },
+  { 0x0323, 0xF2 },
+  { 0x2013, 0x96 },
+  { 0x2014, 0x97 },
+  { 0x2018, 0x91 },
+  { 0x2019, 0x92 },
+  { 0x201A, 0x82 },
+  { 0x201C, 0x93 },
+  { 0x201D, 0x94 },
+  { 0x201E, 0x84 },
+  { 0x2020, 0x86 },
+  { 0x2021, 0x87 },
+  { 0x2022, 0x95 },
+  { 0x2026, 0x85 },
+  { 0x2030, 0x89 },
+  { 0x2039, 0x8B },
+  { 0x203A, 0x9B },
+  { 0x20AB, 0xFE },
+  { 0x20AC, 0x80 },
+  { 0x2122, 0x99 },
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplByteConvertData const aImplMS1258ByteCvtData =
+{
+    aImplMS1258ToUniTab,
+    NULL,
+    MS1258UNI_START, MS1258UNI_END,
+    NOTABUNI_START, NOTABUNI_END,
+    aImplMS1258ToCharTab,
+    aImpl8090SameToCharTab,
+    aImplMS1258ToCharTabEx,
+    MS1258CHAR_START, MS1258CHAR_END,
+    SAME8090CHAR_START, SAME8090CHAR_END,
+    MS1258TOCHARTABEX_COUNT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverterData const aImplMS1258TextConverterData =
+{
+    &aImplMS1258ByteCvtData,
+    NULL,
+    RTL_UNICODE_CHAR_DEFAULT
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextConverter const aImplMS1258TextConverter =
+{
+    &aImplMS1258TextConverterData,
+    ImplCharToUnicode,
+    ImplUnicodeToChar,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+/* ----------------------------------------------------------------------- */
+
+static ImplTextEncodingData const aImplMS1258TextEncodingData =
+{
+    &aImplMS1258TextConverter,
+    RTL_TEXTENCODING_MS_1258,
+    1, 1, 1,
+    163,
+    0,
+    30,
+    (const sal_Char*)"iso8859-1",       /* ??? */
+    (const sal_Char*)"iso-8859-1",      /* ??? */
+    RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_WIN,
+    SCRIPT_VIETNAMESE
+};
