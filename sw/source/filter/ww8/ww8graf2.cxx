@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:12:26 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,13 +506,13 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     SwFrmFmt* pFlyFmt = 0;
 
     if (!rFileName.Len() && nObjLocFc)      // dann sollte ists ein OLE-Object
-        pFlyFmt = ImportOle( pGraph, &aFlySet );
+        pFlyFmt = ImportOle(pGraph, &aFlySet, &rGrfSet);
 
     if( !pFlyFmt )                          // dann eben als Graphic
     {
 
         pFlyFmt = rDoc.Insert( *pPaM, rFileName, aEmptyStr, pGraph, &aFlySet,
-            &rGrfSet );
+            &rGrfSet);
     }
 
     // Grafik im Rahmen ? ok, Rahmen auf Bildgroesse vergroessern
@@ -728,6 +728,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     aGrSet.Put( aCrop );
                 }
 
+                if (pRecord)
+                    MatchEscherMirrorIntoFlySet(*pRecord, aGrSet);
+
                 // ggfs. altes AttrSet uebernehmen und
                 // horiz. Positionierungs-Relation korrigieren
                 if( pOldFlyFmt )
@@ -750,7 +753,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 else
                 {
                     if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
-                        pRet = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
+                        pRet = InsertOle(*((SdrOle2Obj*)pObject), aAttrSet, aGrSet);
                     else
                     {
                         if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
@@ -759,7 +762,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             const Graphic& rGraph = pGraphObject->GetGraphic();
 
                             if (nObjLocFc)  // is it a OLE-Object?
-                                pRet = ImportOle(&rGraph, &aAttrSet);
+                                pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet);
 
                             if (!pRet)
                             {
