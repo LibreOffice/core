@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_writer.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:27:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "%PRODUCTNAME Writer"
 en-US = "%PRODUCTNAME Writer"
 
 [STR_DESC_MODULE_PRG_WRT]
-de = "Die Textverarbeitung von %PRODUCTNAME bietet Ihnen mächtige Funktionen für die Erstellung Ihrer Schriftstücke."
-en-US = "The word processing functions of %PRODUCTNAME provide you with powerful tools for creating your own documents."
+de = "Erstellen und Bearbeiten von Text und Grafiken in Briefen, Reports, Dokumenten und Web-Seiten mit %PRODUCTNAME Writer."
+en-US = "Create and edit text and graphics in letters, reports, documents and Web pages by using %PRODUCTNAME Writer."
 
 [STR_NAME_MODULE_PRG_WRT_BIN]
 de = "Programmodul"
