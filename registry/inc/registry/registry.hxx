@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
+ *  last change: $Author: kr $ $Date: 2001-05-14 09:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ public:
     /// Default constructor, try to load the registry DLL and initialize the needed api.
     RegistryLoader()
         : ::salhelper::ODynamicLoader<Registry_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION ) ) ),
+              (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME_WITH_VERSION( "reg",  LIBRARY_VERSION ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_INIT_FUNCTION_NAME) ))
         {}
 
