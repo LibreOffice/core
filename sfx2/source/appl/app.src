@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-15 12:52:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-17 20:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ ErrorBox MSG_SIGNAL
     Message [ italian ] = "Nell'applicazione si è verificato un errore inatteso!\nAdesso potete provare, a proprio rischio, di\nsalvare tutti i documenti aperti!\n\nVolete che si provi a salvare il lavoro prima di chiudere l'applicazione?" ;
     Message [ spanish ] = "¡Se ha producido un error inesperado de la aplicación!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n¿Desea guardar su trabajo antes de cerrar la aplicación?" ;
     Message [ french ] = "Erreur d'application inattendue !\nVous pouvez tout de même essayer de \nsauvegarder tous les documents ouverts !\n\nSauvegarder votre travail avant de fermer l'application ?" ;
-    Message [ english_us ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all nopen documents before the program is terminated?" ;
+    Message [ english_us ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all open documents before the program is terminated?" ;
     Message [ portuguese ] = "Surgiu um erro de programa inesperado!\n\nPoderá agora, sob o seu próprio risco, \ntentar guardar todos os documentos abertos.\nTentar guardar o seu trabalho antes que a aplicação seja fechada?" ;
     Message [ portuguese_brazilian ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie k?nen jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
     Message[ chinese_simplified ] = "å‘ç”Ÿäº†ä¸€ä¸ªæ„å¤–çš„ç¨‹åºé”™è¯¯ï¼\næ‚¨ç°åœ¨å¯ä»¥å°è¯•ä¿å­˜æ‰€æœ‰è¢«æ‰“å¼€çš„æ–‡ä»¶ï¼\næ‚¨è¦åœ¨å…³é—­è¿™ä¸ªåº”ç”¨ç¨‹åºä¹‹å‰ä¿å­˜æ‰€æœ‰çš„æ–‡ä»¶å—ï¼Ÿ";
@@ -4014,7 +4014,7 @@ String STR_QUICKSTART_EXIT
 {
     Text = "Schnellstarter beenden" ;
     Text [ English ] = "Exit Quickstarter" ;
-    Text[ english_us ] = "Exit quick launch";
+    Text[ english_us ] = "Exit Quickstarter";
     Text[ portuguese ] = "Terminar início rápido";
     Text[ russian ] = "Âûõîä èç áûñòğîãî çàïóñêà";
     Text[ greek ] = "Exit %PRODUCTNAME QuickStart";
@@ -4039,7 +4039,7 @@ String STR_QUICKSTART_TIP
 {
     Text = "%PRODUCTNAME %PRODUCTVERSION Schnellstarter" ;
     Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter" ;
-    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Quick Launch";
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter";
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION Início rápido";
     Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION Áûñòğûé çàïóñê";
     Text[ greek ] = "%PRODUCTNAME QuickStart active";
@@ -4114,7 +4114,7 @@ String STR_QUICKSTART_PRELAUNCH
 {
     Text = "%PRODUCTNAME beim Systemstart laden" ;
     Text [ English ] = "Load %PRODUCTNAME during system start" ;
-    Text[ english_us ] = "Load %PRODUCTNAME during system start";
+    Text[ english_us ] = "Load %PRODUCTNAME during system start-up";
     Text[ portuguese ] = "Carregar %PRODUCTNAME ao iniciar o sistema";
     Text[ russian ] = "Çàãğóæàòü %PRODUCTNAME âî âğåìÿ çàïóñêà ñèñòåìû";
     Text[ greek ] = "Pre-launch %PRODUCTNAME during system start";
@@ -4163,6 +4163,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
