@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:09:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,11 +354,11 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
                             SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
-                            SDRATTR_START, SDRATTRSET_SHADOW,
-                            SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                            SDRATTR_START, SDRATTR_SHADOW_LAST,
+                            SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
                             // Graphic Attributes
-                            SDRATTR_GRAF_FIRST, SDRATTRSET_GRAF,
+                            SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
                             // 3d Properties
                             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                             // CustomShape properties
