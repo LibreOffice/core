@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:31:51 $
+ *  last change: $Author: ssa $ $Date: 2002-07-24 15:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,34 +252,6 @@ void SalGraphicsLayout::DrawSalLayout( const SalLayout& rLayout)
     SalGraphics::DrawSalLayout( rLayout );
 }
 
-// pre-CTL text methods, deprecated
-/*
-BOOL    SalGraphicsLayout::GetGlyphBoundRect( xub_Unicode cChar, long* pX, long* pY,
-                                           long* pWidth, long* pHeight )
-{
-    return SalGraphics::GetGlyphBoundRect( cChar, pX, pY, pWidth, pHeight ); // ???
-}
-ULONG   SalGraphicsLayout::GetGlyphOutline( xub_Unicode cChar, USHORT** pPolySizes,
-                                         SalPoint** ppPoints, BYTE** ppFlags )
-{
-    return SalGraphics::GetGlyphOutline( cChar, pPolySizes, ppPoints, ppFlags ); // ???
-}
-void    SalGraphicsLayout::DrawText( long nX, long nY,
-                                  const xub_Unicode* pStr, xub_StrLen nLen )
-{
-    if( mnLayout & SAL_LAYOUT_BIDI_RTL )
-        mirror( nX );
-    SalGraphics::DrawText( nX, nY, pStr, nLen );
-}
-void    SalGraphicsLayout::DrawTextArray( long nX, long nY,
-                                       const xub_Unicode* pStr, xub_StrLen nLen,
-                                       const long* pDXAry )
-{
-    if( mnLayout & SAL_LAYOUT_BIDI_RTL )
-        mirror( nX );
-    SalGraphics::DrawTextArray( nX, nY, pStr, nLen, pDXAry );
-}
-*/
 
 void    SalGraphicsLayout::DrawPixel( long nX, long nY )
 {
@@ -334,8 +306,26 @@ void    SalGraphicsLayout::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 }
 void    SalGraphicsLayout::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry )
 {
-    DBG_ASSERT( !(mnLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygon - no mirroring implemented");
-    SalGraphics::DrawPolyPolygon( nPoly, pPoints, pPtAry );
+    if( mnLayout & SAL_LAYOUT_BIDI_RTL )
+    {
+        // TODO: optimize, reduce new/delete calls
+        SalPoint **pPtAry2 = new SalPoint*[nPoly];
+        ULONG i;
+        for(i=0; i<nPoly; i++)
+        {
+            ULONG nPoints = pPoints[i];
+            pPtAry2[i] = new SalPoint[ nPoints ];
+            BOOL bCopied = mirror( nPoints, pPtAry[i], pPtAry2[i] );
+        }
+
+        SalGraphics::DrawPolyPolygon( nPoly, pPoints, (PCONSTSALPOINT*)pPtAry2 );
+
+        for(i=0; i<nPoly; i++)
+            delete [] pPtAry2[i];
+        delete [] pPtAry2;
+    }
+    else
+        SalGraphics::DrawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 sal_Bool SalGraphicsLayout::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
@@ -371,14 +361,19 @@ void    SalGraphicsLayout::CopyArea( long nDestX, long nDestY,
 void    SalGraphicsLayout::CopyBits( const SalTwoRect* pPosAry,
                                   SalGraphics* pSrcGraphics )
 {
-    if( (mnLayout & SAL_LAYOUT_BIDI_RTL) || (pSrcGraphics && pSrcGraphics->GetLayout()) )
+    if( (mnLayout & SAL_LAYOUT_BIDI_RTL) || (pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) ) )
     {
         SalTwoRect pPosAry2 = *pPosAry;
-        if( pSrcGraphics && pSrcGraphics->GetLayout() )
+        if( pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
             mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth );
         if( mnLayout & SAL_LAYOUT_BIDI_RTL )
             mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
         SalGraphics::CopyBits( &pPosAry2, pSrcGraphics );
+        // mirror back
+        if( pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth );
+        if( mnLayout & SAL_LAYOUT_BIDI_RTL )
+            mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
     }
     else
         SalGraphics::CopyBits( pPosAry, pSrcGraphics );
@@ -391,6 +386,7 @@ void    SalGraphicsLayout::DrawBitmap( const SalTwoRect* pPosAry,
         SalTwoRect pPosAry2 = *pPosAry;
         mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
         SalGraphics::DrawBitmap( &pPosAry2, rSalBitmap );
+        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
     }
     else
         SalGraphics::DrawBitmap( pPosAry, rSalBitmap );
@@ -404,6 +400,7 @@ void    SalGraphicsLayout::DrawBitmap( const SalTwoRect* pPosAry,
         SalTwoRect pPosAry2 = *pPosAry;
         mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
         SalGraphics::DrawBitmap( &pPosAry2, rSalBitmap, nTransparentColor );
+        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
     }
     else
         SalGraphics::DrawBitmap( pPosAry, rSalBitmap, nTransparentColor );
@@ -417,6 +414,7 @@ void SalGraphicsLayout::DrawBitmap( const SalTwoRect* pPosAry,
         SalTwoRect pPosAry2 = *pPosAry;
         mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
         SalGraphics::DrawBitmap( &pPosAry2, rSalBitmap, rTransparentBitmap );
+        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
     }
     else
         SalGraphics::DrawBitmap( pPosAry, rSalBitmap, rTransparentBitmap );
@@ -430,6 +428,7 @@ void    SalGraphicsLayout::DrawMask( const SalTwoRect* pPosAry,
         SalTwoRect pPosAry2 = *pPosAry;
         mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
         SalGraphics::DrawMask( &pPosAry2, rSalBitmap, nMaskColor );
+        mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth );
     }
     else
         SalGraphics::DrawMask( pPosAry, rSalBitmap, nMaskColor );
@@ -473,3 +472,31 @@ BOOL    SalGraphicsLayout::DrawEPS( long nX, long nY, long nWidth, long nHeight,
 }
 
 // ----------------------------------------------------------------------------
+// pre-CTL text methods, deprecated
+/*
+BOOL    SalGraphicsLayout::GetGlyphBoundRect( xub_Unicode cChar, long* pX, long* pY,
+                                           long* pWidth, long* pHeight )
+{
+    return SalGraphics::GetGlyphBoundRect( cChar, pX, pY, pWidth, pHeight ); // ???
+}
+ULONG   SalGraphicsLayout::GetGlyphOutline( xub_Unicode cChar, USHORT** pPolySizes,
+                                         SalPoint** ppPoints, BYTE** ppFlags )
+{
+    return SalGraphics::GetGlyphOutline( cChar, pPolySizes, ppPoints, ppFlags ); // ???
+}
+void    SalGraphicsLayout::DrawText( long nX, long nY,
+                                  const xub_Unicode* pStr, xub_StrLen nLen )
+{
+    if( mnLayout & SAL_LAYOUT_BIDI_RTL )
+        mirror( nX );
+    SalGraphics::DrawText( nX, nY, pStr, nLen );
+}
+void    SalGraphicsLayout::DrawTextArray( long nX, long nY,
+                                       const xub_Unicode* pStr, xub_StrLen nLen,
+                                       const long* pDXAry )
+{
+    if( mnLayout & SAL_LAYOUT_BIDI_RTL )
+        mirror( nX );
+    SalGraphics::DrawTextArray( nX, nY, pStr, nLen, pDXAry );
+}
+*/
