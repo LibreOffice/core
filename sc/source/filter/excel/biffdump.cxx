@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,18 @@ static void __AddCellHead( ByteString& r, const UINT16 nC, const UINT16 nR, cons
 }
 
 
+inline static void lcl_AddFlag(
+        ByteString& rString, bool bFlag, const sal_Char* pcTrue = "true", const sal_Char* pcFalse = "false" )
+{
+    rString += (bFlag ? pcTrue : pcFalse);
+}
+
+inline static void lcl_AddOnOff( ByteString& rString, bool bFlag )
+{
+    lcl_AddFlag( rString, bFlag, "on", "off" );
+}
+
+
 
 IdRangeList::~IdRangeList()
 {
@@ -649,159 +661,142 @@ DUMP_ERR::~DUMP_ERR()
 #define ADDRESERVED(mask)       ADDFLAG(mask,"!RESERVED!")
 
 
-UINT16 Biff8RecDumper::DumpXF( XclImpStream& rIn, const sal_Char* pPre )
+UINT16 Biff8RecDumper::DumpXF( XclImpStream& rStrm, const sal_Char* pPre )
 {
-    ByteString      t;
-    const sal_Char* p;
-    UINT16          nW4, nW6, nW8, nW10, nW12, nW14, nW16, nW22;
-    UINT32          nL18;
+    ByteString t;   // "t" needed by macros
 
-    rIn >> nW4 >> nW6 >> nW8 >> nW10 >> nW12 >> nW14 >> nW16 >> nL18 >> nW22;
+    sal_uInt32 nBorder1, nBorder2;
+    sal_uInt16 nFont, nNumFmt, nTypeProt, nAlign, nMiscAttrib, nArea, __nFlags, nTmp;
+    rStrm >> nFont >> nNumFmt >> nTypeProt >> nAlign >> nMiscAttrib >> nBorder1 >> nBorder2 >> nArea;
+    bool bCell = !::get_flag( nTypeProt, EXC_XF_STYLE );
 
+    // XF type/parent
     LINESTART();
-    ADDTEXT( "--4- --6- --8- -10- -12- -14- -16- ---18--- -22-" );
-    PRINT();
-    LINESTART();
-    __AddPureHex( t, nW4 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW6 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW8 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW10 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW12 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW14 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW16 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nL18 );
-    ADDTEXT( "-" );
-    __AddPureHex( t, nW22);
+    ::extract_value( nTmp, nTypeProt, 4, 12 );
+    ADDTEXT( "index=#" );           __AddDec( t, nXFCount++ );
+    ADDTEXT( "   type=" );          lcl_AddFlag( t, bCell, "cell", "style" );
+    ADDTEXT( "   parent-xf=#" );    __AddDec( t, nTmp );
     PRINT();
 
+    // attribute used flags
     LINESTART();
-    if( nW8 & 0x0004 )
-        ADDTEXT( "Style XF" );
+    ::extract_value( __nFlags, nMiscAttrib, 10, 6 );
+    if( !bCell ) __nFlags ^= 0x3F;  // in style XFs a 0 means used
+    ADDTEXT( "used " ); STARTFLAG();
+    ADDFLAG( EXC_XF_DIFF_VALFMT, "numfmt" );
+    ADDFLAG( EXC_XF_DIFF_FONT, "font" );
+    ADDFLAG( EXC_XF_DIFF_ALIGN, "align" );
+    ADDFLAG( EXC_XF_DIFF_BORDER, "border" );
+    ADDFLAG( EXC_XF_DIFF_AREA, "area" );
+    ADDFLAG( EXC_XF_DIFF_PROT, "prot" );
+    PRINT();
+
+    // cell protection/font/number format
+    LINESTART();
+    ADDTEXT( "cell-lock=" );        lcl_AddOnOff( t, ::get_flag( nTypeProt, EXC_XF_LOCKED ) );
+    ADDTEXT( "   hidden=" );        lcl_AddOnOff( t, ::get_flag( nTypeProt, EXC_XF_HIDDEN ) );
+    ADDTEXT( "   font=" );          __AddDec( t, nFont );
+    ADDTEXT( "   num-fmt=" );       __AddDec( t, nNumFmt );
+    PRINT();
+
+    // alignment
+    LINESTART();
+    ::extract_value( nTmp, nAlign, 0, 3 );
+    ADDTEXT( "hor-align=" );        __AddDec( t, nTmp );
+    ADDTEXT( " (" );
+    switch( static_cast< XclHorAlign >( nTmp ) )
+    {
+        case xlHAlignGeneral:       ADDTEXT( "general" );   break;
+        case xlHAlignLeft:          ADDTEXT( "left" );      break;
+        case xlHAlignCenter:        ADDTEXT( "center" );    break;
+        case xlHAlignRight:         ADDTEXT( "right" );     break;
+        case xlHAlignFill:          ADDTEXT( "fill" );      break;
+        case xlHAlignJustify:       ADDTEXT( "justify" );   break;
+        case xlHAlignCenterAcrSel:  ADDTEXT( "center-as" ); break;
+        case xlHAlignDistrib:       ADDTEXT( "distrib" );   break;
+    };
+    ::extract_value( nTmp, nAlign, 4, 3 );
+    ADDTEXT( ")   ver-align=" );    __AddDec( t, nTmp );
+    ADDTEXT( " (" );
+    switch( static_cast< XclVerAlign >( nTmp ) )
+    {
+        case xlVAlignTop:           ADDTEXT( "top" );       break;
+        case xlVAlignCenter:        ADDTEXT( "center" );    break;
+        case xlVAlignBottom:        ADDTEXT( "bottom" );    break;
+        case xlVAlignJustify:       ADDTEXT( "justify" );   break;
+        case xlVAlignDistrib:       ADDTEXT( "distrib" );   break;
+        default:                    ADDTEXT( "!unknown!" );
+    };
+    ADDTEXT( ")   text-wrap=" );    lcl_AddOnOff( t, ::get_flag( nAlign, EXC_XF_WRAPPED ) );
+    PRINT();
+
+    LINESTART();
+    ::extract_value( nTmp, nAlign, 8, 8 );
+    ADDTEXT( "rotation=" );         __AddDec( t, nTmp );
+    ADDTEXT( " (" );
+    if( nTmp < 91 )
+        { __AddDec( t, nTmp ); ADDTEXT( "°" ); }
+    else if( nTmp < 181 )
+        { __AddDec( t, static_cast< sal_Int32 >( 90 - nTmp ) ); ADDTEXT( "°" ); }
+    else if( nTmp == EXC_XF8_STACKED )
+        { ADDTEXT( "stacked" ); }
     else
-        ADDTEXT( "Cell XF " );
-    ADDTEXT( "                               ( #" );
-    __AddDec( t, nXFCount );
-    nXFCount++;
-    ADDTEXT( " )" );
-    PRINT();
-
-    LINESTART();                // pXFD->SetFont( nW4 );
-    ADDTEXT( "Font: " );
-    __AddDec( t, nW4 );
-    PRINT();
-
-    LINESTART();                // pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nW6 ) );
-    ADDTEXT( "Format: " );
-    __AddDec( t, nW6 );
-    PRINT();
-
-    LINESTART();
-    ADDTEXT( "Flags: " );
-    if( nW8 & 0x0001 )      // pXFD->SetLocked( ( BOOL ) ( nW8 & 0x0001 ) );
-        ADDTEXT( " Locked" );
-    if( nW8 & 0x0002 )      // pXFD->SetHidden( ( BOOL ) ( nW8 & 0x0002 ) );
-        ADDTEXT( " Hidden" );
-    if( nW10 & 0x0008 )     // pXFD->SetWrap( EWT_Wrap );
-        ADDTEXT( " Wrap" );
-    if( nW10 & 0x0080 )
-        ADDTEXT( " JustLast" );
-    if( nW12 & 0x0020 )     // pXFD->Merge();
-        ADDTEXT( " Merge" );
-    PRINT();
-
-
-    LINESTART();                // pXFD->SetParent( nW8 >> 4 );
-    ADDTEXT( "Parent: " );
-    __AddDec( t, ( UINT32 ) ( nW8 >> 4 ) );
-    PRINT();
-
-    LINESTART();                // pXFD->SetAlign( ( ExcHorizAlign ) ( nW10 & 0x0007 ) );
-    ADDTEXT( "Alignment: " );
-    switch( nW10 & 0x0007 )
+        { ADDTEXT( "!unknown!" ); }
+    ::extract_value( nTmp, nMiscAttrib, 0, 4 );
+    ADDTEXT( ")   indent=" );       __AddDec( t, nTmp );
+    ADDTEXT( "   shrink=" );        lcl_AddOnOff( t, ::get_flag( nMiscAttrib, EXC_XF_SHRINK ) );
+    ::extract_value( nTmp, nMiscAttrib, 6, 2 );
+    ADDTEXT( "   text-dir=" );      __AddDec( t, nTmp );
+    ADDTEXT( " (" );
+    switch( static_cast< XclTextDirection >( nTmp ) )
     {
-        case 0:     p = "general";                  break;
-        case 1:     p = "left";                     break;
-        case 2:     p = "center";                   break;
-        case 3:     p = "right";                    break;
-        case 4:     p = "fill";                     break;
-        case 5:     p = "justify";                  break;
-        case 6:     p = "center across selection";  break;
-        default:    p = "ERROR";
-    }
-    ADDTEXT( p );
+        case xlTextDirContext:      ADDTEXT( "context" );   break;
+        case xlTextDirLTR:          ADDTEXT( "ltr" );       break;
+        case xlTextDirRTL:          ADDTEXT( "rtl" );       break;
+        default:                    ADDTEXT( "!unknown!" );
+    };
+    ADDTEXT( ")" );
     PRINT();
 
-    LINESTART();                // pXFD->SetAlign( ( ExcVertAlign ) ( ( nW10 & 0x0070 ) >> 4 ) );
-    ADDTEXT( "Vertical Alignment: " );
-    switch( ( nW10 & 0x0070 ) >> 4 )
-    {
-        case 0:     p = "top";                      break;
-        case 1:     p = "center";                   break;
-        case 2:     p = "bottom";                   break;
-        case 3:     p = "justify";                  break;
-        default:    p = "ERROR";
-    }
-    ADDTEXT( p );
-    PRINT();
-
-    LINESTART();                // pXFD->SetTextOrient( ( UINT8 ) ( nW10 >> 8 ) );
-    ADDTEXT( "Rotation: " );
-    __AddDec( t, ( UINT8 ) ( nW10 >> 8 ) );
-    PRINT();
-
-    LINESTART();                // pXFD->SetIndent( nW12 & 0x000F );
-    ADDTEXT( "Indent: " );
-    __AddDec( t, ( UINT32 ) ( nW12 & 0x000F ) );
-    PRINT();
-
-    LINESTART();                // aBorder.nLeftLine = ( BYTE ) nW14 & 0x000F;
-    ADDTEXT( "Left Line:   " );
-    __AddDec( t, ( BYTE ) ( nW14 & 0x000F ) );
-    ADDTEXT( ", c= " );
-    __AddDec( t, ( UINT32 ) ( nW16 & 0x007F ) );            // aBorder.nLeftColor = nW16 & 0x007F;
-    PRINT();
-
-    nW14 >>= 4;
-    LINESTART();                // aBorder.nRightLine = ( BYTE ) nW14 & 0x000F;
-    ADDTEXT( "Right Line:  " );
-    __AddDec( t, ( BYTE ) ( nW14 & 0x000F ) );
-    ADDTEXT( ", c= " );
-    __AddDec( t, ( UINT32 ) ( ( nW16 >> 7 ) & 0x007F ) );   // aBorder.nRightColor = ( nW16 >> 7 ) & 0x007F;
-    PRINT();
-
-    nW14 >>= 4;
-    LINESTART();                // aBorder.nTopLine = ( BYTE ) nW14 & 0x000F;
-    ADDTEXT( "Top Line:    " );
-    __AddDec( t, ( BYTE ) ( nW14 & 0x000F ) );
-    ADDTEXT( ", c= " );
-    __AddDec( t, ( UINT16 ) ( nL18 & 0x007F ) );    // aBorder.nTopColor = ( UINT16 ) ( nL18 & 0x007F );
-    PRINT();
-
-    nW14 >>= 4;
-    LINESTART();                // aBorder.nBottomLine = ( BYTE ) nW14 & 0x000F;
-    ADDTEXT( "Bottom Line: " );
-    __AddDec( t, ( BYTE ) ( nW14 & 0x000F ) );
-    ADDTEXT( ", c= " );
-    __AddDec( t, ( UINT16 ) ( ( nL18 >> 7 ) & 0x007F ) );   // aBorder.nBottomColor = ( UINT16 ) ( ( nL18 >> 7 ) & 0x007F );
-    PRINT();
-
+    // border/area
     LINESTART();
-    ADDTEXT( "Fill Pattern: p=" );
-    __AddDec( t, ( BYTE ) ( nL18 >> 26 ) ); // aFill.nPattern = ( BYTE ) ( nL18 >> 26 );
-    ADDTEXT( "  fc=" );
-    __AddDec( t, ( UINT32 ) ( nW22 & 0x007F ) );                // aFill.nForeColor = nW22 & 0x007F;
-    ADDTEXT( "  bc=" );
-    __AddDec( t, ( UINT32 ) ( ( nW22 & 0x3F80 ) >> 7 ) );       // aFill.nBackColor = ( nW22 & 0x3F80 ) >> 7;
+    ::extract_value( nTmp, nBorder1, 0, 4 );
+    ADDTEXT( "left-line=" );        __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder1, 16, 7 );
+    ADDTEXT( " color=" );           __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder1, 4, 4 );
+    ADDTEXT( "   right-line =" );   __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder1, 23, 7 );
+    ADDTEXT( " color=" );           __AddDec( t, nTmp );
+    PRINT();
+    LINESTART();
+    ::extract_value( nTmp, nBorder1, 8, 4 );
+    ADDTEXT( "top-line =" );        __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder2, 0, 7 );
+    ADDTEXT( " color=" );           __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder1, 12, 4 );
+    ADDTEXT( "   bottom-line=" );   __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder2, 7, 7 );
+    ADDTEXT( " color=" );           __AddDec( t, nTmp );
+    PRINT();
+    LINESTART();
+    ::extract_value( nTmp, nBorder2, 21, 4 );
+    ADDTEXT( "diag-line=" );        __AddDec( t, nTmp );
+    ::extract_value( nTmp, nBorder2, 14, 7 );
+    ADDTEXT( " color=" );           __AddDec( t, nTmp );
+    ADDTEXT( "   diag-tl-to-br=" ); lcl_AddOnOff( t, ::get_flag( nBorder1, 0x40000000UL ) );
+    ADDTEXT( "   diag-bl-to-tr=" ); lcl_AddOnOff( t, ::get_flag( nBorder1, 0x80000000UL ) );
+    PRINT();
+    LINESTART();
+    ::extract_value( nTmp, nBorder2, 26, 6 );
+    ADDTEXT( "area-pattern=" );     __AddDec( t, nTmp );
+    ::extract_value( nTmp, nArea, 0, 7 );
+    ADDTEXT( "   fore-color=" );    __AddDec( t, nTmp );
+    ::extract_value( nTmp, nArea, 7, 7 );
+    ADDTEXT( "   back-color=" );    __AddDec( t, nTmp );
     PRINT();
 
-    return 20;  // Laenge des Recs
+    return 0;
 }
 
 // 16 bit pseudo password
@@ -2987,8 +2982,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                         ADDTEXT( "): " );           __AddDec( t, (UINT16)((nVal >> 10) & 0x003F) );
                         rIn >> nVal;
                         ADDTEXT( "   Colors(" );    __AddHex( t, nVal );
-                        ADDTEXT( "): fg=" );        __AddDec( t, (UINT16)((nVal >> 7) & 0x007F) );
-                        ADDTEXT( " bg=" );          __AddDec( t, (UINT16)(nVal & 0x007F) );
+                        ADDTEXT( "): fg=" );        __AddDec( t, (UINT16)(nVal & 0x007F) );
+                        ADDTEXT( " bg=" );          __AddDec( t, (UINT16)((nVal >> 7) & 0x007F) );
                         PRINT();
                     }
 
@@ -3419,6 +3414,36 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
                 __AddRK( t, rIn.ReadInt32() );
+                PRINT();
+            }
+            break;
+            case 0x0293:        // STYLE
+            {
+                LINESTART();
+                sal_uInt16 nXF;
+                rIn >> nXF;
+                ADDTEXT( "xf-ref=" );           __AddHex( t, nXF );
+                ADDTEXT( " (xf=#" );            __AddDec( t, static_cast< sal_uInt16 >( nXF & EXC_STYLE_XFMASK ) );
+                if( ::get_flag( nXF, EXC_STYLE_BUILTIN ) )
+                {
+                    sal_uInt8 nStyleId, nLevel;
+                    rIn >> nStyleId >> nLevel;
+                    ADDTEXT( " builtin)   style-id=" ); __AddDec( t, nStyleId );
+                    ADDTEXT( " (" );
+                    static const sal_Char* ppcStyles[] = {
+                        "Normal", "RowLevel", "ColLevel", "Comma", "Currency",
+                        "Percent", "Comma_0", "Currency_0" };
+                    if( nStyleId < STATIC_TABLE_SIZE( ppcStyles ) )
+                        ADDTEXT( ppcStyles[ nStyleId ] );
+                    else
+                        ADDTEXT( "!unknown!" );
+                    ADDTEXT( ")   outline-level=" );    __AddDec( t, nLevel );
+                }
+                else
+                {
+                    ADDTEXT( ")   name=" );
+                    AddUNICODEString( t, rIn );
+                }
                 PRINT();
             }
             break;
