@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-08-06 15:14:42 $
+ *  last change: $Author: ama $ $Date: 2001-09-10 10:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,6 +627,8 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
             if(FLY_AT_FLY == aAnchor.GetAnchorId() &&
                                 !pInternalPam->GetNode()->FindFlyStartNode())
                         aAnchor.SetType(FLY_IN_CNTNT);
+            else if(FLY_PAGE == aAnchor.GetAnchorId())
+                aAnchor.SetAnchor(pInternalPam->Start());
         }
         else
             throw uno::RuntimeException();
