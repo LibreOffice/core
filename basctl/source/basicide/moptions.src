@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:24:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 22:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,9 @@ ModalDialog RID_MACROOPTIONS
         Text [ portuguese ] = "Ajuda - Identificação" ;
         Text [ finnish ] = "Ohjetunnus" ;
         Text [ danish ] = "Hjælp-identifikation" ;
-        Text [ french ] = "Identification de l'aide" ;
+        Text [ french ] = "ID de l'aide" ;
         Text [ swedish ] = "Hjälp-identifikation" ;
-        Text [ dutch ] = "Help identificatie" ;
+        Text [ dutch ] = "Help ID" ;
         Text [ spanish ] = "Identificación de ayuda" ;
         Text [ english_us ] = "Help ID" ;
         Text[ chinese_simplified ] = "°ïÖú±êÖ¾";
@@ -235,7 +235,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ russian ] = "Èìÿ ôàéëà ñïğàâêè";
         Text[ polish ] = "Pomoc - Nazwa pliku";
         Text[ japanese ] = "ÍÙÌß‚ÌÌ§²Ù–¼";
-        Text[ chinese_traditional ] = "»¡©úÀÉ®×¦W";
+        Text[ chinese_traditional ] = "»¡©úÀÉ®×¦WºÙ";
         Text[ arabic ] = "ÇÓã ãáİ ÇáãÓÇÚÏÉ";
         Text[ greek ] = "¼íïìá áñ÷åßïõ âïŞèåéáò";
         Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ¸í";
