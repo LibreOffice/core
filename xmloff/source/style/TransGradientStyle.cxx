@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-23 10:05:52 $
+ *  last change: $Author: cl $ $Date: 2002-09-25 16:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,62 +301,67 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
             SvXMLUnitConverter& rUnitConverter =
                 rExport.GetMM100UnitConverter();
 
-            // Name
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
-
             // Style
             if( !rUnitConverter.convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
-                return sal_False;
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
-
-            // Center x/y
-            if( aGradient.Style != awt::GradientStyle_LINEAR &&
-                aGradient.Style != awt::GradientStyle_AXIAL   )
             {
-                rUnitConverter.convertPercent( aOut, aGradient.XOffset );
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
-
-                rUnitConverter.convertPercent( aOut, aGradient.YOffset );
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
+                bRet = sal_False;
             }
-
-
-            Color aColor;
-
-            // Transparency start
-            aColor.SetColor( aGradient.StartColor );
-            sal_Int32 aStartValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
-            rUnitConverter.convertPercent( aOut, aStartValue );
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
-
-            // Transparency end
-            aColor.SetColor( aGradient.EndColor );
-            sal_Int32 aEndValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
-            rUnitConverter.convertPercent( aOut, aEndValue );
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
-
-            // Angle
-            if( aGradient.Style != awt::GradientStyle_RADIAL )
+            else
             {
-                rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
+                // Name
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+
                 aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+
+                // Center x/y
+                if( aGradient.Style != awt::GradientStyle_LINEAR &&
+                    aGradient.Style != awt::GradientStyle_AXIAL   )
+                {
+                    rUnitConverter.convertPercent( aOut, aGradient.XOffset );
+                    aStrValue = aOut.makeStringAndClear();
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
+
+                    rUnitConverter.convertPercent( aOut, aGradient.YOffset );
+                    aStrValue = aOut.makeStringAndClear();
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
+                }
+
+
+                Color aColor;
+
+                // Transparency start
+                aColor.SetColor( aGradient.StartColor );
+                sal_Int32 aStartValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
+                rUnitConverter.convertPercent( aOut, aStartValue );
+                aStrValue = aOut.makeStringAndClear();
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
+
+                // Transparency end
+                aColor.SetColor( aGradient.EndColor );
+                sal_Int32 aEndValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
+                rUnitConverter.convertPercent( aOut, aEndValue );
+                aStrValue = aOut.makeStringAndClear();
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
+
+                // Angle
+                if( aGradient.Style != awt::GradientStyle_RADIAL )
+                {
+                    rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
+                    aStrValue = aOut.makeStringAndClear();
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
+                }
+
+                // Border
+                rUnitConverter.convertPercent( aOut, aGradient.Border );
+                aStrValue = aOut.makeStringAndClear();
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
+
+                // Do Write
+                SvXMLElementExport rElem( rExport,
+                                          XML_NAMESPACE_DRAW, XML_TRANSPARENCY,
+                                          sal_True, sal_False );
             }
-
-            // Border
-            rUnitConverter.convertPercent( aOut, aGradient.Border );
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
-
-            // Do Write
-            SvXMLElementExport rElem( rExport,
-                                      XML_NAMESPACE_DRAW, XML_TRANSPARENCY,
-                                      sal_True, sal_False );
         }
     }
 
