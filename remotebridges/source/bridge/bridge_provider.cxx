@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge_provider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:13:35 $
+ *  last change: $Author: jbu $ $Date: 2001-05-03 06:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace remotebridges_bridge
         }
     }
 
-    static convertToRemoteRuntimeException ( uno_Any **ppException,
+    static void convertToRemoteRuntimeException ( uno_Any **ppException,
                                              const ::rtl::OUString &sMessage,
                                              const Reference< XInterface > &rContext,
                                              Mapping &map )
