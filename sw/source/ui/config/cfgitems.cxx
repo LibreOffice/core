@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:17:17 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ SwDocDisplayItem::SwDocDisplayItem( USHORT nWhich ) :
     bSpace              =
     bNonbreakingSpace   =
     bSoftHyphen         =
-    bHiddenText         =
+    bFldHiddenText      =
+    bCharHiddenText     =
     bManualBreak        =
     bShowHiddenPara     = FALSE;
 
@@ -126,7 +127,8 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT nWhich ) :
     bSpace              = rVOpt.IsBlank(TRUE);
     bNonbreakingSpace   = rVOpt.IsHardBlank();
     bSoftHyphen         = rVOpt.IsSoftHyph();
-    bHiddenText         = rVOpt.IsHidden();
+    bCharHiddenText     = rVOpt.IsShowHiddenChar(TRUE);
+    bFldHiddenText      = rVOpt.IsShowHiddenField();
     bManualBreak        = rVOpt.IsLineBreak(TRUE);
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 
@@ -155,7 +157,8 @@ int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bSpace                == rItem.bSpace              &&
               bNonbreakingSpace     == rItem.bNonbreakingSpace   &&
               bSoftHyphen           == rItem.bSoftHyphen         &&
-              bHiddenText           == rItem.bHiddenText         &&
+              bCharHiddenText       == rItem.bCharHiddenText         &&
+              bFldHiddenText        == rItem.bFldHiddenText         &&
               bManualBreak          == rItem.bManualBreak        &&
               bShowHiddenPara       == rItem.bShowHiddenPara );
 }
@@ -173,7 +176,8 @@ void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
     bSpace              = rDocDisplayItem.bSpace                ;
     bNonbreakingSpace   = rDocDisplayItem.bNonbreakingSpace     ;
     bSoftHyphen         = rDocDisplayItem.bSoftHyphen           ;
-    bHiddenText         = rDocDisplayItem.bHiddenText           ;
+    bCharHiddenText     = rDocDisplayItem.bCharHiddenText           ;
+    bFldHiddenText      = rDocDisplayItem.bFldHiddenText           ;
     bManualBreak        = rDocDisplayItem.bManualBreak          ;
     bShowHiddenPara     = rDocDisplayItem.bShowHiddenPara       ;
 }
@@ -188,7 +192,8 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetBlank      (bSpace             );
     rVOpt.SetHardBlank  (bNonbreakingSpace  );
     rVOpt.SetSoftHyph   (bSoftHyphen        );
-    rVOpt.SetHidden     (bHiddenText        );
+    rVOpt.SetShowHiddenChar(bCharHiddenText );
+    rVOpt.SetShowHiddenField(bFldHiddenText        );
     rVOpt.SetLineBreak  (bManualBreak       );
     rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
