@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 16:17:08 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 16:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ hidspecial HID_IMPGRF_CB_LINK               { HelpID = HID_IMPGRF_CB_LINK; };
 hidspecial HID_IMPGRF_CB_PREVIEW            { HelpID = HID_IMPGRF_CB_PREVIEW; };
 hidspecial HID_INTERFACE_BASIDE_VIEWSH      { HelpID = HID_INTERFACE_BASIDE_VIEWSH; };
 hidspecial HID_POPUP_COLOR                  { HelpID = HID_POPUP_COLOR; };
+hidspecial HID_POPUP_COLOR_CTRL             { HelpID = HID_POPUP_COLOR_CTRL; };
 hidspecial HID_POPUP_BRUSH                  { HelpID = HID_POPUP_BRUSH; };
 hidspecial HID_POPUP_FRAME                  { HelpID = HID_POPUP_FRAME; };
 hidspecial HID_POPUP_LINE                   { HelpID = HID_POPUP_LINE ; };
