@@ -1,0 +1,335 @@
+/*************************************************************************
+ *
+ *  $RCSfile: xformsapi.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:15:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "xformsapi.hxx"
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
+#include <com/sun/star/xforms/XDataTypeRepository.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/xsd/DataTypeClass.hpp>
+
+#include <unotools/processfactory.hxx>
+#include <tools/debug.hxx>
+
+#include <xmltoken.hxx>
+#include <nmspmap.hxx>
+#include <xmlnmspe.hxx>
+#include <xmltkmap.hxx>
+
+using rtl::OUString;
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::Sequence;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::UNO_QUERY_THROW;
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::container::XNameAccess;
+using com::sun::star::lang::XMultiServiceFactory;
+using com::sun::star::xforms::XFormsSupplier;
+using com::sun::star::xforms::XDataTypeRepository;
+using com::sun::star::container::XNameContainer;
+using utl::getProcessServiceFactory;
+using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Any;
+using com::sun::star::uno::Exception;
+
+using namespace com::sun::star;
+using namespace xmloff::token;
+
+Reference<XPropertySet> lcl_createPropertySet( const OUString& rServiceName )
+{
+    Reference<XMultiServiceFactory> xFactory = getProcessServiceFactory();
+    DBG_ASSERT( xFactory.is(), "can't get service factory" );
+
+    Reference<XPropertySet> xModel( xFactory->createInstance( rServiceName ),
+                                    UNO_QUERY_THROW );
+    DBG_ASSERT( xModel.is(), "can't create model" );
+
+    return xModel;
+}
+
+Reference<XPropertySet> lcl_createXFormsModel()
+{
+    return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Model" ) );
+}
+
+Reference<XPropertySet> lcl_createXFormsBinding()
+{
+    return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Binding" ) );
+}
+
+void lcl_addXFormsModel(
+    const Reference<frame::XModel>& xDocument,
+    const Reference<XPropertySet>& xModel )
+{
+    bool bSuccess = false;
+    try
+    {
+        Reference<XFormsSupplier> xSupplier( xDocument, UNO_QUERY );
+        if( xSupplier.is() )
+        {
+            Reference<XNameContainer> xForms = xSupplier->getXForms();
+            if( xForms.is() )
+            {
+                OUString sName;
+                xModel->getPropertyValue( OUSTRING("ID")) >>= sName;
+                xForms->insertByName( sName, makeAny( xModel ) );
+                bSuccess = true;
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        ; // no success!
+    }
+
+    // TODO: implement proper error handling
+    DBG_ASSERT( bSuccess, "can't import model" );
+}
+
+Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
+    Reference<frame::XModel>& xDocument,
+    const rtl::OUString& rBindingID,
+    bool bBinding )
+{
+    // find binding by iterating over all models, and look for the
+    // given binding ID
+
+    Reference<XPropertySet> xRet;
+    try
+    {
+        // get supplier
+        Reference<XFormsSupplier> xSupplier( xDocument, UNO_QUERY );
+        if( xSupplier.is() )
+        {
+            // get XForms models
+            Reference<XNameContainer> xForms = xSupplier->getXForms();
+            if( xForms.is() )
+            {
+                // iterate over all models
+                Sequence<OUString> aNames = xForms->getElementNames();
+                const OUString* pNames = aNames.getConstArray();
+                sal_Int32 nNames = aNames.getLength();
+                for( sal_Int32 n = 0; (n < nNames) && !xRet.is(); n++ )
+                {
+                    Reference<xforms::XModel> xModel(
+                        xForms->getByName( pNames[n] ), UNO_QUERY );
+                    if( xModel.is() )
+                    {
+                        // ask model for bindings
+                        Reference<XNameAccess> xBindings(
+                            bBinding
+                                ? xModel->getBindings()
+                                : xModel->getSubmissions(),
+                            UNO_QUERY_THROW );
+
+                        // finally, ask binding for name
+                        if( xBindings->hasByName( rBindingID ) )
+                            xRet.set( xBindings->getByName( rBindingID ),
+                                      UNO_QUERY );
+                    }
+                }
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        ; // no success!
+    }
+
+    if( ! xRet.is() )
+        ; // TODO: rImport.SetError(...);
+
+    return xRet;
+}
+
+Reference<XPropertySet> lcl_findXFormsBinding(
+    Reference<frame::XModel>& xDocument,
+    const rtl::OUString& rBindingID )
+{
+    return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, true );
+}
+
+Reference<XPropertySet> lcl_findXFormsSubmission(
+    Reference<frame::XModel>& xDocument,
+    const rtl::OUString& rBindingID )
+{
+    return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, false );
+}
+
+void lcl_setValue( Reference<XPropertySet>& xPropertySet,
+                   const OUString& rName,
+                   const Any rAny )
+{
+    xPropertySet->setPropertyValue( rName, rAny );
+}
+
+
+Reference<XPropertySet> lcl_getXFormsModel( const Reference<frame::XModel>& xDoc )
+{
+    Reference<XPropertySet> xRet;
+    try
+    {
+        Reference<XFormsSupplier> xSupplier( xDoc, UNO_QUERY );
+        if( xSupplier.is() )
+        {
+            Reference<XNameContainer> xForms = xSupplier->getXForms();
+            if( xForms.is() )
+            {
+                Sequence<OUString> aNames = xForms->getElementNames();
+                if( aNames.getLength() > 0 )
+                    xRet.set( xForms->getByName( aNames[0] ), UNO_QUERY );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        ; // no success!
+    }
+
+    return xRet;
+}
+
+#define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
+static SvXMLTokenMapEntry aTypes[] =
+{
+    TOKEN_MAP_ENTRY( XSD, STRING  ),
+    TOKEN_MAP_ENTRY( XSD, DECIMAL ),
+    TOKEN_MAP_ENTRY( XSD, DOUBLE ),
+    TOKEN_MAP_ENTRY( XSD, FLOAT ),
+    TOKEN_MAP_ENTRY( XSD, BOOLEAN ),
+    TOKEN_MAP_ENTRY( XSD, ANYURI ),
+    TOKEN_MAP_ENTRY( XSD, DATETIME_XSD ),
+    XML_TOKEN_MAP_END
+};
+
+rtl::OUString lcl_getTypeName(
+    const Reference<XDataTypeRepository>& xRepository,
+    const SvXMLNamespaceMap& rNamespaceMap,
+    const OUString& rXMLName )
+{
+    // translate name into token for local name
+    OUString sLocalName;
+    sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
+    SvXMLTokenMap aMap( aTypes );
+    sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
+
+    OUString sTypeName = rXMLName;
+    if( mnToken != XML_TOK_UNKNOWN )
+    {
+        // we found an XSD name: then get the proper API name for it
+        DBG_ASSERT( xRepository.is(), "can't find type without repository");
+        sal_uInt16 nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
+        switch( mnToken )
+        {
+        case XML_STRING:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
+            break;
+        case XML_ANYURI:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::anyURI;
+            break;
+        case XML_DECIMAL:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::DECIMAL;
+            break;
+        case XML_DOUBLE:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::DOUBLE;
+            break;
+        case XML_FLOAT:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::FLOAT;
+            break;
+        case XML_BOOLEAN:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::BOOLEAN;
+            break;
+        case XML_DATETIME_XSD:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::DATETIME;
+            break;
+
+            /* data types not yet supported:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::DURATION;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::TIME;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::DATE;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gYearMonth;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gYear;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gMonthDay;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gDay;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gMonth;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::hexBinary;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::base64Binary;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::QName;
+            nTypeClass = com::sun::star::xsd::DataTypeClass::NOTATION;
+            */
+        }
+
+        try
+        {
+            sTypeName = xRepository->getBasicDataType(nTypeClass)->getName();
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "exception during type creation" );
+        }
+    }
+    return sTypeName;
+}
