@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Callback.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-04 16:02:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,3 +166,4 @@ public:
 };
 
 #endif //__CALLBACK_H_
+
