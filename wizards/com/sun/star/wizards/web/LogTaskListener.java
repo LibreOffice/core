@@ -8,7 +8,8 @@ package com.sun.star.wizards.web;
 
 import java.io.PrintStream;
 
-import com.sun.star.wizards.ui.event.*;
+import com.sun.star.wizards.ui.event.TaskEvent;
+import com.sun.star.wizards.ui.event.TaskListener;
 
 /**
  * used for debugging.
