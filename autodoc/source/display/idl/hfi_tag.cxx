@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,18 @@ HF_IdlTag::Display_ParameterAtTag( const csi::dsapi::DT_ParameterAtTag & i_rTag 
         << ( StreamLock(100)() << "Parameter " << i_rTag.Title() << c_str );
     PutText_Out( i_rTag.Text() );
 }
+
+void
+HF_IdlTag::Display_SinceAtTag( const csi::dsapi::DT_SinceAtTag & i_rTag )
+{
+    if ( i_rTag.Text().IsEmpty() )
+        return;
+
+    csv_assert( pTitleOut != 0 );
+    *pTitleOut << "Since version";
+    PutText_Out( i_rTag.Text() );
+}
+
 
 
 //********************      HF_IdlShortDocu     *********************/
