@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 13:28:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-08-30 08:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2914,7 +2914,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     BOOL bNoPrev = TRUE, bNoNext = TRUE;
     if (!bNew)
     {
-        const SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
+        SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
 
         if (pFmt)
         {
@@ -2935,7 +2935,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             ::std::vector< String > aThisPageFrames;
             ::std::vector< String > aNextPageFrames;
             ::std::vector< String > aRemainFrames;
-            pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, TRUE,
+            pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, FALSE,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(aPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(sPrevChain.Len())
@@ -2952,7 +2952,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             aRemainFrames.erase(aRemainFrames.begin(), aRemainFrames.end());
 
 
-            pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, FALSE,
+            pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, TRUE,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(aNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(sNextChain.Len())
@@ -3143,7 +3143,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
             sCurrentPrevChain = aPrevLB.GetSelectEntry();
         if(aNextLB.GetSelectEntryPos())
             sCurrentNextChain = aNextLB.GetSelectEntry();
-        const SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
+        SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
         if (pFmt)
         {
             BOOL bNextBox = &aNextLB == pBox;
