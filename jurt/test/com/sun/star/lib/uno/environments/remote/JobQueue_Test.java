@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 17:07:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,170 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-
-import java.util.Vector;
-
-import java.io.IOException;
-import java.io.OutputStream;
-
-
 import com.sun.star.lib.uno.typedesc.TypeDescription;
+import complexlib.ComplexTestCase;
 
-import com.sun.star.uno.IEnvironment;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
+public final class JobQueue_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
+    }
 
+    public String[] getTestMethodNames() {
+        return new String[] { "testThreadLeavesJobQueueOnDispose0",
+                              "testThreadLeavesJobQueueOnDispose5000",
+                              "testThreadLeavesJobQueueOnReply0",
+                              "testThreadLeavesJobQueueOnReply5000",
+                              "testStaticThreadExecutesJobs0",
+                              "testStaticThreadExecutesJobs5000",
+                              "testDynamicThreadExecutesJob",
+                              "testStaticThreadExecutesAsyncs",
+                              "testDynamicThreadExecutesAsyncs" };
+    }
 
-public final class JobQueue_Test {
-    /**
-     * When set to true, enables various debugging output.
-     */
-    private static final boolean DEBUG = false;
+    public void testThreadLeavesJobQueueOnDispose0() throws InterruptedException
+    {
+        testThreadLeavesJobQueueOnDispose(0);
+    }
 
-    static JavaThreadPoolFactory __javaThreadPoolFactory = new JavaThreadPoolFactory();
-    static IReceiver __iReceiver = new MyReceiver();
-    static Object __disposeId = new Object();
-    static TypeDescription __workAt_td = TypeDescription.getTypeDescription(IWorkAt.class);
+    public void testThreadLeavesJobQueueOnDispose5000()
+        throws InterruptedException
+    {
+        testThreadLeavesJobQueueOnDispose(5000);
+    }
+
+    private void testThreadLeavesJobQueueOnDispose(int waitTime)
+        throws InterruptedException
+    {
+        TestThread t = new TestThread(waitTime);
+        t.waitToStart();
+        String msg = "xcxxxxxxxx";
+        t._jobQueue.dispose(t._disposeId, new RuntimeException (msg));
+        t.waitToTerminate();
+        assure("", t._message.equals(msg));
+    }
+
+    public void testThreadLeavesJobQueueOnReply0() throws InterruptedException {
+        testThreadLeavesJobQueueOnReply(0);
+    }
+
+    public void testThreadLeavesJobQueueOnReply5000()
+        throws InterruptedException
+    {
+        testThreadLeavesJobQueueOnReply(5000);
+    }
+
+    private void testThreadLeavesJobQueueOnReply(int waitTime)
+        throws InterruptedException
+    {
+        TestThread t = new TestThread(waitTime);
+        t.waitToStart();
+        // put reply job:
+        t._jobQueue.putJob(
+            new Job(null, __iReceiver,
+                    new TestMessage(true, __workAt_td, "oid", null, null, null,
+                                    null)),
+            null);
+        t.waitToTerminate();
+        assure("", true); // TODO! ???
+    }
+
+    public void testStaticThreadExecutesJobs0() throws InterruptedException {
+        testStaticThreadExecutesJobs(0);
+    }
+
+    public void testStaticThreadExecutesJobs5000() throws InterruptedException {
+        testStaticThreadExecutesJobs(5000);
+    }
+
+    private void testStaticThreadExecutesJobs(int waitTime)
+        throws InterruptedException
+    {
+        TestThread t = new TestThread(waitTime);
+        t.waitToStart();
+        testExecuteJobs(t._jobQueue);
+        t._jobQueue.dispose(t._disposeId,
+                            new RuntimeException("xxxxxxxxxxxxx"));
+        t.waitToTerminate();
+    }
+
+    public void testDynamicThreadExecutesJob() throws InterruptedException {
+        testExecuteJobs(new JobQueue(__javaThreadPoolFactory, new ThreadId(),
+                                     true));
+    }
+
+    public void testStaticThreadExecutesAsyncs() throws InterruptedException {
+        TestThread t = new TestThread();
+        JobQueue async_jobQueue = new JobQueue(__javaThreadPoolFactory,
+                                               t._threadId);
+        assure("", async_jobQueue._ref_count == 1);
+        t._jobQueue = __javaThreadPoolFactory.getJobQueue(t._threadId);
+        assure("", t._jobQueue._ref_count == 1);
+        t.waitToStart();
+        TestWorkAt workAt = new TestWorkAt();
+        testAsyncJobQueue(workAt, async_jobQueue, t._threadId);
+        t._jobQueue.dispose(t._disposeId,
+                            new RuntimeException("xxxxxxxxxxxxx"));
+        t.waitToTerminate();
+        assure("", workAt._async_counter == TestWorkAt.MESSAGES);
+        assure("", workAt._sync_counter == TestWorkAt.MESSAGES);
+    }
+
+    public void testDynamicThreadExecutesAsyncs() throws InterruptedException {
+        ThreadId threadId = new ThreadId();
+        JobQueue async_jobQueue = new JobQueue(__javaThreadPoolFactory,
+                                               threadId);
+        TestWorkAt workAt = new TestWorkAt();
+        testAsyncJobQueue(workAt, async_jobQueue, threadId);
+        assure("", workAt._async_counter == TestWorkAt.MESSAGES);
+        assure("", workAt._sync_counter == TestWorkAt.MESSAGES);
+    }
+
+    private void testExecuteJobs(JobQueue jobQueue) throws InterruptedException
+    {
+        TestWorkAt workAt = new TestWorkAt();
+        testSendRequests(workAt, "increment", jobQueue);
+        synchronized (workAt) {
+            jobQueue.putJob(new Job(workAt, __iReceiver,
+                                    new TestMessage(true, __workAt_td, "oid",
+                                                    null, null, "notifyme",
+                                                    null)), null);
+            while (!workAt._notified) {
+                workAt.wait();
+            }
+        }
+        assure("", workAt._counter == TestWorkAt.MESSAGES);
+    }
+
+    private void testAsyncJobQueue(TestWorkAt workAt, JobQueue async_jobQueue,
+                                   ThreadId threadId)
+        throws InterruptedException
+    {
+        // put slow async calls first, followed by fast sync calls:
+        testSendRequests(workAt, "asyncCall", async_jobQueue);
+        testSendRequests(workAt, "syncCall",
+                         __javaThreadPoolFactory.getJobQueue(threadId));
+        synchronized (workAt) {
+            async_jobQueue._sync_jobQueue.putJob(
+                new Job(workAt, __iReceiver,
+                        new TestMessage(true, __workAt_td, "oid", null, null,
+                                        "notifyme", null)), null);
+            while (!workAt._notified) {
+                workAt.wait();
+            }
+        }
+        assure("", workAt.passedAsyncTest());
+    }
+
+    private void testSendRequests(TestWorkAt workAt, String operation,
+                                  JobQueue jobQueue) {
+        IMessage iMessage = new TestMessage(true, __workAt_td, "oid", null,
+                                            null, operation, null);
+        for (int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
+            Thread.yield(); // force scheduling
+            jobQueue.putJob(new Job(workAt, __iReceiver, iMessage),
+                            new Object());
+        }
+    }
 
     private static final class TestThread extends Thread {
         public final ThreadId _threadId
@@ -148,251 +288,9 @@ public final class JobQueue_Test {
         private static final int STATE_DONE = 2;
     }
 
-
-    private static boolean test_thread_leaves_jobQueue_on_dispose(
-        Vector vector, int waitTime) throws Throwable
-    {
-        System.err.println("\t\ttest_thread_leaves_jobQueue_on_dispose with"
-                           + " enter time: " + waitTime);
-        TestThread t = new TestThread(waitTime);
-        t.waitToStart();
-        String msg = "xcxxxxxxxx";
-        t._jobQueue.dispose(t._disposeId, new RuntimeException (msg));
-        t.waitToTerminate();
-        boolean passed = t._message.equals(msg);
-        if (!passed) {
-            vector.addElement("test_thread_leaves_jobQueue_on_dispose - not"
-                              + " passed: message != " + msg + ", instead: "
-                              + t._message);
-        }
-        System.err.println("\t\tpassed? " + passed);
-        return passed;
-    }
-
-    static boolean test_thread_leaves_jobQueue_on_reply(
-        Vector vector, int waitTime) throws Throwable
-    {
-        System.err.println("\t\ttest_thread_leaves_jobQueue_on_reply: "
-                           + waitTime);
-        TestThread t = new TestThread(waitTime);
-        t.waitToStart();
-        // put reply job
-        t._jobQueue.putJob(
-            new Job(null, __iReceiver,
-                    new MyMessage(true, __workAt_td, "oid", null, null, null,
-                                  null)),
-            null);
-        t.waitToTerminate();
-        boolean passed = true;
-        System.err.println("\t\tpassed? " + passed);
-        return passed;
-    }
-
-    static void test_send_request(WorkAt workAt, String operation, JobQueue jobQueue) throws Throwable {
-        IMessage iMessage = new MyMessage(true, __workAt_td, "oid", null, null, operation, null);
-
-        jobQueue.putJob(new Job(workAt, __iReceiver, iMessage), __disposeId);
-    }
-
-    static void test_send_requests(WorkAt workAt, String operation, JobQueue jobQueue) throws Throwable {
-        IMessage iMessage = new MyMessage(true, __workAt_td, "oid", null, null, operation, null);
-
-        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
-            Thread.yield(); // force scheduling
-            jobQueue.putJob(new Job(workAt, __iReceiver, iMessage), __disposeId);
-        }
-    }
-
-    static boolean test_execute_jobs(Vector vector, JobQueue jobQueue) throws Throwable {
-        boolean passed = true;
-
-        WorkAt workAt = new WorkAt();
-
-        test_send_requests(workAt, "increment", jobQueue);
-
-        synchronized(workAt) {
-            jobQueue.putJob(new Job(workAt, __iReceiver, new MyMessage(true, __workAt_td, "oid", null, null, "notifyme", null)), null);
-
-            while(!workAt._notified)
-                workAt.wait();
-        }
-
-        passed = workAt._counter == WorkAt.MESSAGES;
-        if(!passed)
-            vector.addElement("test_execute_jobs - not passed: workAt._counter == 20, instead:" + workAt._counter);
-
-        return passed;
-    }
-
-    static boolean test_static_thread_executes_jobs(
-        Vector vector, int waitTime) throws Throwable
-    {
-        System.err.println("\t\ttest_static_thread_executes_jobs: " + waitTime);
-        TestThread t = new TestThread(waitTime);
-        t.waitToStart();
-        boolean passed = test_execute_jobs(vector, t._jobQueue);
-        t._jobQueue.dispose(t._disposeId,
-                            new RuntimeException("xxxxxxxxxxxxx"));
-        t.waitToTerminate();
-        System.err.println("\t\tpassed? " + passed);
-        return passed;
-    }
-
-    static boolean test_dynamic_thread_executes_job(Vector vector) throws Throwable {
-        boolean passed = true;
-
-        Object disposeId = new Object();
-
-        System.err.println("\t\ttest_dynamic_thread_executes_job:");
-
-        JobQueue jobQueue = new JobQueue(__javaThreadPoolFactory, new ThreadId(), true);
-        passed = test_execute_jobs(vector, jobQueue);
-
-        System.err.println("\t\tpassed? " + passed);
-
-        return passed;
-    }
-
-    static boolean test_async_jobQueue(Vector vector, WorkAt workAt, JobQueue async_jobQueue, ThreadId threadId) throws Throwable {
-        boolean passed = true;
-
-        // put slow async calls
-        if(DEBUG) System.err.println("\t\t\tputting asyncs:");
-        test_send_requests(workAt, "asyncCall", async_jobQueue);
-
-        // put fast sync calls
-        if(DEBUG) System.err.println("\t\t\tputting syncs:");
-        test_send_requests(workAt, "syncCall", __javaThreadPoolFactory.getJobQueue(threadId));
-
-
-        // wait until all is done
-        synchronized(workAt) {
-            async_jobQueue._sync_jobQueue.putJob(new Job(workAt, __iReceiver, new MyMessage(true, __workAt_td, "oid", null, null, "notifyme", null)), null);
-
-            while(!workAt._notified)
-                workAt.wait();
-        }
-
-        passed = passed && workAt.passedAsyncTest(vector);
-        if(!passed)
-            vector.addElement("workAt did not pass async test (sync overtook async)");
-
-        return passed;
-    }
-
-    static boolean test_static_thread_executes_asyncs(Vector vector)
-        throws Throwable
-    {
-        System.err.println("\t\ttest_static_thread_executes_asyncs:");
-        TestThread t = new TestThread();
-
-        // create an async queue
-        JobQueue async_jobQueue = new JobQueue(__javaThreadPoolFactory,
-                                               t._threadId);
-        boolean tmp_passed = async_jobQueue._ref_count == 1;
-        boolean passed = tmp_passed;
-
-        t._jobQueue = __javaThreadPoolFactory.getJobQueue(t._threadId);
-        tmp_passed = t._jobQueue._ref_count == 1;
-        passed = passed && tmp_passed;
-
-        t.waitToStart();
-
-        WorkAt workAt = new WorkAt();
-
-        tmp_passed = test_async_jobQueue(vector, workAt, async_jobQueue,
-                                         t._threadId);
-        passed = passed && passed;
-
-        t._jobQueue.dispose(t._disposeId,
-                            new RuntimeException("xxxxxxxxxxxxx"));
-        t.waitToTerminate();
-
-        tmp_passed = workAt._async_counter == WorkAt.MESSAGES;
-        passed = passed && tmp_passed;
-
-        tmp_passed = workAt._sync_counter == WorkAt.MESSAGES;
-        passed = passed && tmp_passed;
-
-        System.err.println("\t\tpassed? " + passed);
-        return passed;
-    }
-
-    static boolean test_dynamic_thread_executes_asyncs(Vector vector) throws Throwable {
-        boolean passed = true;
-
-        System.err.println("\t\ttest_dynamic_thread_executes_asyncs:");
-
-
-        ThreadId threadId = new ThreadId();
-        JobQueue async_jobQueue = new JobQueue(__javaThreadPoolFactory, threadId);
-
-        WorkAt workAt = new WorkAt();
-
-        boolean tmp_passed = test_async_jobQueue(vector, workAt, async_jobQueue, threadId);
-        passed = passed && tmp_passed;
-
-        tmp_passed = workAt._async_counter == WorkAt.MESSAGES;
-        if(vector != null && !tmp_passed)
-            vector.addElement("test_dynamic_thread_executes_asyncs - not passed: worAt._async_counter == " + WorkAt.MESSAGES + ", instead:" + workAt._async_counter);
-        passed = passed && tmp_passed;
-
-        tmp_passed = workAt._sync_counter == WorkAt.MESSAGES;
-        if(!tmp_passed)
-            vector.addElement("test_dynamic_thread_executes_asyncs - not passed: worAt._sync_counter == " + WorkAt.MESSAGES + ",instead:" + workAt._sync_counter);
-
-        passed = passed && tmp_passed;
-
-        System.err.println("\t\tpassed? " + passed);
-
-        return passed;
-    }
-
-    static public boolean test(Vector vector) throws Throwable {
-        System.err.println("\tJobQueue test:");
-
-        boolean passed = true;
-
-        boolean tmp_passed = test_thread_leaves_jobQueue_on_dispose(vector, 0);
-        passed = passed && tmp_passed;
-
-          tmp_passed = test_thread_leaves_jobQueue_on_dispose(vector, 5000);
-        passed = passed && tmp_passed;
-
-
-          tmp_passed = test_thread_leaves_jobQueue_on_reply(vector, 0);
-        passed = passed && tmp_passed;
-        tmp_passed = test_thread_leaves_jobQueue_on_reply(vector, 5000);
-        passed = passed && tmp_passed;
-
-          tmp_passed = test_static_thread_executes_jobs(vector, 0);
-        passed = passed && tmp_passed;
-          tmp_passed = test_static_thread_executes_jobs(vector, 5000);
-        passed = passed && tmp_passed;
-
-
-          tmp_passed = test_dynamic_thread_executes_job(vector);
-        passed = passed && tmp_passed;
-
-
-        tmp_passed = test_static_thread_executes_asyncs(vector);
-        passed = passed && tmp_passed;
-
-
-          tmp_passed = test_dynamic_thread_executes_asyncs(vector);
-        passed = passed && tmp_passed;
-
-        System.err.println("\tpassed? " + passed);
-        return passed;
-    }
-
-    static public void main(String args[]) throws Throwable {
-        Vector vector = new Vector();
-        test(vector);
-
-        for(int i = 0; i < vector.size(); ++ i)
-            System.err.println((String)vector.elementAt(i));
-    }
+    private static final JavaThreadPoolFactory __javaThreadPoolFactory
+    = new JavaThreadPoolFactory();
+    private static final IReceiver __iReceiver = new TestReceiver();
+    private static final TypeDescription __workAt_td
+    = TypeDescription.getTypeDescription(TestIWorkAt.class);
 }
-
-
