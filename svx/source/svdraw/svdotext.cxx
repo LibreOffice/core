@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:54:41 $
+ *  last change: $Author: aw $ $Date: 2000-12-13 15:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include "adjitem.hxx"
 #endif
 #include "flditem.hxx"
+
+#ifndef _SVX_XFTOUIT_HXX
+#include "xftouit.hxx"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1017,7 +1021,16 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 //-/                    const SfxItemSet& rSet = GetItemSet();
 //-/                    XTextAttrSetItem aTextSetItem(rSet.GetPool());
 //-/                    aTextSetItem.GetItemSet().Put(rSet);
-                    rXOut.SetTextAttr(GetItemSet());
+
+                    // #78478# to have the outline color in XOutputDevice::ImpDrawFormText(...)
+                    // SetLineAttr(...) needs to be called if the outline item is set
+                    const SfxItemSet& rSet = GetItemSet();
+                    BOOL bFormTextOutline = ((XFormTextOutlineItem&)(rSet.Get(XATTR_FORMTXTOUTLINE))).GetValue();
+
+                    if(bFormTextOutline)
+                        rXOut.SetLineAttr(rSet);
+
+                    rXOut.SetTextAttr(rSet);
 
                     aTPHandler.DrawTextToPath(rXOut); // drucken bei aktivem Textedit fehlt hier
                     rOutliner.Clear();
