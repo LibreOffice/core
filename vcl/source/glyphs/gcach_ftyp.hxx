@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-12 11:35:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,13 +119,34 @@ public:
     int                   GetFontId() const { return mnFontId; }
     void                  SetFontId( int nFontId ) { mnFontId = nFontId; }
 
+    int                   GetGlyphIndex( sal_Unicode cChar ) const;
+    void                  CacheGlyphIndex( sal_Unicode cChar, int nGI ) const;
+
 private:
     ImplFontData    maFontData;
     FtFontFile*     mpFontFile;
     const int       mnFaceNum;
     const int       mnSynthetic;
     int             mnFontId;
+
+    typedef ::std::hash_map<sal_Unicode,int> FIGlyphMap;
+    mutable FIGlyphMap maGlyphMap;
 };
+
+// these two inlines are very important for performance
+
+inline int FtFontInfo::GetGlyphIndex( sal_Unicode cChar ) const
+{
+    FIGlyphMap::const_iterator it = maGlyphMap.find( cChar );
+    if( it != maGlyphMap.end() )
+        return it->second;
+    return -1;
+}
+
+inline void FtFontInfo::CacheGlyphIndex( sal_Unicode cChar, int nGI ) const
+{
+    maGlyphMap[ cChar ] = nGI;
+}
 
 // -----------------------------------------------------------------------
 
