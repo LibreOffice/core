@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-02-20 11:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,26 +94,26 @@ public:
 
     sal_uInt32 fireDropEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDropContext >& context,
-        const sal_Int8 dropAction, const ::com::sun::star::awt::Point& location, const sal_Int8 sourceActions,
+        sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable );
 
     sal_uInt32 fireDragExitEvent();
 
     sal_uInt32 fireDragOverEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& context,
-        const sal_Int8 dropAction, const ::com::sun::star::awt::Point& location, const sal_Int8 sourceActions );
+        sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions );
 
     sal_uInt32 fireDragEnterEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& context,
-        const sal_Int8 dropAction, const ::com::sun::star::awt::Point& location, const sal_Int8 sourceActions,
+        sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& dataFlavor );
 
     sal_uInt32 fireDropActionChangedEvent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext >& context,
-        const sal_Int8 dropAction, const ::com::sun::star::awt::Point& location, const sal_Int8 sourceActions );
+        sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions );
 
     sal_uInt32 fireDragGestureEvent(
-        const sal_Int8 dragAction, const ::com::sun::star::awt::Point& dragOrigin,
+        sal_Int8 dragAction, sal_Int32 dragOriginX, sal_Int32 dragOriginY,
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >& dragSource,
         const ::com::sun::star::uno::Any& triggerEvent );
 

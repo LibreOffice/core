@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-13 13:12:53 $
+ *  last change: $Author: obr $ $Date: 2001-02-20 11:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 {
     MutexGuard aImplGuard( m_aMutex );
 
-    Point location( dtde.Location.X, dtde.Location.Y );
+    Point location( dtde.LocationX, dtde.LocationY );
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
@@ -142,7 +142,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
     throw(RuntimeException)
 {
     MutexGuard aImplGuard( m_aMutex );
-    Point location( dtdee.Location.X, dtdee.Location.Y );
+    Point location( dtdee.LocationX, dtdee.LocationY );
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
@@ -190,7 +190,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 {
     MutexGuard aImplGuard( m_aMutex );
 
-    Point location( dtde.Location.X, dtde.Location.Y );
+    Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
     // find the window that is toplevel for this coordinates
@@ -234,7 +234,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 {
     MutexGuard aImplGuard( m_aMutex );
 
-    Point location( dtde.Location.X, dtde.Location.Y );
+    Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
     // find the window that is toplevel for this coordinates
@@ -320,8 +320,8 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
             Point relLoc = pWindow->ImplFrameToOutput( rLocation );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragEnterEvent( xContext, nDropAction,
-                 ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions, aFlavorList );
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragEnterEvent(
+                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, aFlavorList );
         }
     }
 
@@ -353,8 +353,8 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
             Point relLoc = pWindow->ImplFrameToOutput( rLocation );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragOverEvent( xContext, nDropAction,
-                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions );
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragOverEvent(
+                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions );
         }
     }
 
@@ -410,8 +410,8 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
             Point relLoc = pWindow->ImplFrameToOutput( rLocation );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropActionChangedEvent( xContext, nDropAction,
-                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions );
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropActionChangedEvent(
+                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions );
         }
     }
 
@@ -443,8 +443,8 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
             Point relLoc = pWindow->ImplFrameToOutput( rLocation );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropEvent( xContext, nDropAction,
-                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ), nSourceActions, xTransferable );
+            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropEvent(
+                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
         }
     }
 

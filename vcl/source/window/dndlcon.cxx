@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 16:37:54 $
+ *  last change: $Author: obr $ $Date: 2001-02-20 11:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include<dndlcon.hxx>
 
 using namespace ::cppu;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
@@ -180,7 +179,7 @@ void SAL_CALL DNDListenerContainer::setDefaultActions( sal_Int8 actions )
 //==================================================================================================
 
 sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDropContext >& context,
-    const sal_Int8 dropAction, const Point& location, const sal_Int8 sourceActions,
+    sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
     const Reference< XTransferable >& transferable )
 {
     sal_uInt32 nRet = 0;
@@ -190,9 +189,11 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
 
     if( pContainer && m_bActive )
     {
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions, transferable );
         OInterfaceIteratorHelper aIterator( *pContainer );
+
+        // do not construct the event before you are sure at least one listener is registered
+        DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction,
+            locationX, locationY, sourceActions, transferable );
 
         while (aIterator.hasMoreElements())
         {
@@ -234,9 +235,10 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 
     if( pContainer && m_bActive )
     {
+        OInterfaceIteratorHelper aIterator( *pContainer );
+
         // do not construct the event before you are sure at least one listener is registered
         DropTargetEvent aEvent( static_cast < XDropTarget * > (this), 0 );
-        OInterfaceIteratorHelper aIterator( *pContainer );
 
         while (aIterator.hasMoreElements())
         {
@@ -270,7 +272,7 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
 //==================================================================================================
 
 sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTargetDragContext >& context,
-    const sal_Int8 dropAction, const Point& location, const sal_Int8 sourceActions )
+    sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
 {
     sal_uInt32 nRet = 0;
 
@@ -279,9 +281,11 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
 
     if( pContainer && m_bActive )
     {
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions );
         OInterfaceIteratorHelper aIterator( *pContainer );
+
+        // do not construct the event before you are sure at least one listener is registered
+        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction,
+            locationX, locationY, sourceActions );
 
         while (aIterator.hasMoreElements())
         {
@@ -315,7 +319,8 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
 //==================================================================================================
 
 sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTargetDragContext >& context,
-    const sal_Int8 dropAction, const Point& location, const sal_Int8 sourceActions, const Sequence< DataFlavor >& dataFlavors )
+    sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
+    const Sequence< DataFlavor >& dataFlavors )
 {
     sal_uInt32 nRet = 0;
 
@@ -324,9 +329,11 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
 
     if( pContainer && m_bActive )
     {
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions, dataFlavors );
         OInterfaceIteratorHelper aIterator( *pContainer );
+
+        // do not construct the event before you are sure at least one listener is registered
+        DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction,
+            locationX, locationY, sourceActions, dataFlavors );
 
         while (aIterator.hasMoreElements())
         {
@@ -360,7 +367,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
 //==================================================================================================
 
 sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XDropTargetDragContext >& context,
-    const sal_Int8 dropAction, const Point& location, const sal_Int8 sourceActions )
+    sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions )
 {
     sal_uInt32 nRet = 0;
 
@@ -369,9 +376,11 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
 
     if( pContainer && m_bActive )
     {
-        // do not construct the event before you are sure at least one listener is registered
-        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions );
         OInterfaceIteratorHelper aIterator( *pContainer );
+
+        // do not construct the event before you are sure at least one listener is registered
+        DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction,
+            locationX, locationY, sourceActions );
 
         while (aIterator.hasMoreElements())
         {
@@ -404,8 +413,8 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
 // DNDListenerContainer::fireDragGestureEvent
 //==================================================================================================
 
-sal_uInt32 DNDListenerContainer::fireDragGestureEvent( const sal_Int8 dragAction, const Point& dragOrigin,
-    const Reference< XDragSource >& dragSource, const Any& triggerEvent )
+sal_uInt32 DNDListenerContainer::fireDragGestureEvent( const sal_Int8 dragAction, sal_Int32 dragOriginX,
+    sal_Int32 dragOriginY, const Reference< XDragSource >& dragSource, const Any& triggerEvent )
 {
     sal_uInt32 nRet = 0;
 
@@ -414,9 +423,11 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( const sal_Int8 dragAction
 
     if( pContainer )
     {
-        // do not construct the event before you are sure at least one listener is registered
-        DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction, dragOrigin, dragSource, triggerEvent );
         OInterfaceIteratorHelper aIterator( *pContainer );
+
+        // do not construct the event before you are sure at least one listener is registered
+        DragGestureEvent aEvent( static_cast < XDragGestureRecognizer * > (this), dragAction,
+            dragOriginX, dragOriginY, dragSource, triggerEvent );
 
         while( aIterator.hasMoreElements() )
         {
