@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-23 14:50:31 $
+#   last change: $Author: mh $ $Date: 2001-05-30 13:10:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2133,6 +2133,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(PRJHIDTARGET) \
         $(DO_JS)$(SIGNFORNETSCAPE) \
         $(DO_JS)$(SIGNFOREXPLORER) \
+        $(DO_JS)$(SIGNFORJARSIGNER) \
         $(CONVERTUNIXTEXT) \
         last_target
 
