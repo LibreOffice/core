@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 14:41:21 $
+#   last change: $Author: rt $ $Date: 2004-06-16 10:35:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,22 +65,14 @@
 .EXPORT : CC CXX
 
 # setup INCLUDE variable for use by VC++
-.IF "$(GUI)"=="WNT"
-.IF "$(USE_SHELL)"=="4nt"
+.IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
+INCLUDE!:=$(shell $(WRAPCMD) echo $(SOLARINC) | sed 's/\\stl//g;s/[ \t]*-I/;/g' )
 .ELSE			# "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell echo $(INCLUDE) | sed "s/[ \t]*-I/;/g" )
+INCLUDE!:=$(shell $(WRAPCMD) echo $(SOLARINC) | sed "s/[ \t]*-I/;/g" )
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
-.ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell echo "$(EXT_INCLUDE:s/\stl//)" )
-.ELSE			# "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell echo "$(EXT_INCLUDE)")
-.ENDIF			# "$(EXT_USE_STLPORT)"==""
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 .EXPORT : INCLUDE
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(GUI)$(COM)"=="WNTMSC"
 
 .IF "$(OS)"!="NETBSD"
 .IF "$(OS)"!="FREEBSD"
