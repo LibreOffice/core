@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno3.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-20 11:09:11 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 10:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace comphelper
                 ....
     */
     template <class iface>
-    sal_Bool query_aggregation(const ::com::sun::star::uno::Reference<::com::sun::star::uno::XAggregation>& _rxAggregate, ::com::sun::star::uno::Reference<iface>& _rxOut)
+    sal_Bool query_aggregation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxAggregate, ::com::sun::star::uno::Reference<iface>& _rxOut)
     {
         _rxOut = static_cast<iface*>(NULL);
         if (_rxAggregate.is())
