@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:41:14 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
 
-    rDop.fDontUseHTMLAutoSpacing = !(rWrt.pDoc->IsParaSpaceMax());
+    rDop.fDontUseHTMLAutoSpacing = (rWrt.pDoc->IsParaSpaceMax() != 0);
 
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
@@ -2179,7 +2179,7 @@ void SwWW8Writer::StoreDoc1()
     if (bNeedsFinalPara)
     {
         WriteCR();
-         pPapPlc->AppendFkpEntry(Strm().Tell(), nSprmsLen, pLastSprms);
+        pPapPlc->AppendFkpEntry(Strm().Tell(), nSprmsLen, pLastSprms);
     }
     delete[] pLastSprms;
 
