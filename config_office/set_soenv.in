@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.38 $
-# Date:        $Date: 2005-01-25 12:43:16 $
+# Version:     $Revision: 1.39 $
+# Date:        $Date: 2005-01-25 16:55:07 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $UPD, $SOLARUPD, $WORK_STAMP, $TF_ONE51, $TF_UCB, 
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
@@ -128,6 +128,7 @@ $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
 $STLPORT4       = '@STLPORT4@';     # Location of STLport4
 $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
+$JDK 		= '@JDK@';
 $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
 $CC             = '@CC@';           # C compiler
 $CXX            = '@CXX@';          # C++ compiler
@@ -1015,7 +1016,7 @@ if (($platform eq "$Linux")  || ($platform eq "$NetBSD") ||
    $PATH             .= $ps.$oldPATH;
 
    my @javaBits;
-   if ( $JAVA_HOME ne "" ) {
+   if (( $JAVA_HOME ne "" ) && ( $JDK ne "gcj" )) {
       @javaBits = ( '$JAVA_HOME'.$BIN, 'javac' );
    } else {
       @javaBits = (); 
@@ -1230,33 +1231,34 @@ if ($platform eq "$Linux")
 }
 
 
-   $SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31".
+   	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31".
                      $I.'$JAVA_HOME'.$INCLUDE;
 
-   #include system dependent Java include directory
+	#include system dependent Java include directory
+	if (!($JDK eq "gcj"))
+	{
+   		if ($platform eq "$Solaris")
+   		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
+   		}
+   		elsif  (($platform eq "$Linux") || ($platform eq "$Tru64"))
+   		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
+   		}
+   		elsif ($platform eq "$FreeBSD")
+   		{
+      		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."freebsd";
+      		$SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."bsd";
+   		}
+   		elsif ($platform eq "$NetBSD")
+   		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
+   		}
+   		elsif (($platform eq $Irix) || ($platform eq $Irix64))
+   		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."irix";
+   		}
 
-   if ($platform eq "$Solaris")
-   {  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
-   }
-   elsif  (($platform eq "$Linux") || ($platform eq "$Tru64"))
-   {  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
-   }
-   elsif ($platform eq "$FreeBSD")
-   {
-      $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."freebsd";
-      $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."bsd";
-   }
-   elsif ($platform eq "$NetBSD")
-   {  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
-   }
-   elsif (($platform eq $Irix) || ($platform eq $Irix64))
-   {  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."irix";
-   }
+   		#java threads include path
 
-   #java threads include path
-
-   $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
-
+   		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
+	}
     #The tail, if needed
     if (($platform eq "$Linux") || ($platform eq "$FreeBSD") ||
 	   ($platform eq "$NetBSD"))
@@ -1355,7 +1357,11 @@ ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
 if ( '@JDK@' ne '' )
-{ ToFile( "JDK",             "@JDK@",            "e" );
+{ 
+   ToFile( "JDK",             "@JDK@",           "e" );
+   ToFile( "JAVAINTERPRETER", "@JAVAINTERPRETER@","e" );
+   ToFile( "JAVACOMPILER",    "@JAVACOMPILER@",  "e" );
+   ToFile( "JAVADOC",         "@JAVADOC@",       "e" );
 }
 ToFile( "XSLTPROC",          "@XSLTPROC@",       "e" );
 ToFile( "ANT_HOME",          "@ANT_HOME@",       "e" );
@@ -1679,8 +1685,10 @@ ToFile( "STAR_SSOLARINI",    $STAR_SSOLARINI,    "e" );
 ToFile( "STAR_RESOURCEPATH", $STAR_RESOURCEPATH, "e" );
 ToFile( "STAR_REGISTRY",     $STAR_REGISTRY,     "e" );
 ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
-ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
-ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
+if ( $JDK ne "gcj" ) {
+   ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
+   ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
+}
 if ( $platform eq "$Macosx" )
 {  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
 }
