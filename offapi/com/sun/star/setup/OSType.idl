@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:44 $
+ *  last change: $Author: ok $ $Date: 2000-12-18 15:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,13 @@ enum OSType
     UNIX_HP,
 
     // DocMerge: empty anyway
-    UNIX_SCO
+    UNIX_SCO,
+
+    // DocMerge: empty anyway
+    UNIX_SOLSG,
+
+    // DocMerge: empty anyway
+    UNIX_SOLIG
     };
 }; }; }; };
 
