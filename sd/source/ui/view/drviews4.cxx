@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-05 12:24:51 $
+ *  last change: $Author: aw $ $Date: 2001-09-27 10:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,8 +597,10 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                                 if( (  rCEvt.IsMouseEvent() && pOLV->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOLV->IsCursorAtWrongSpelledWord() ) )
                                 {
-                                    // Popup fuer Online-Spelling
-                                    Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
+                                    // #91457# Popup for Online-Spelling now handled by SdDrawDocShell
+                                    // Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
+                                    Link aLink = LINK(pDocSh, SdDrawDocShell, OnlineSpellCallback);
+
                                     if( !rCEvt.IsMouseEvent() )
                                     {
                                         aPos = pWindow->LogicToPixel( pOLV->GetEditView().GetCursor()->GetPos() );

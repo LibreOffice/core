@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-13 11:22:02 $
+ *  last change: $Author: aw $ $Date: 2001-09-27 10:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1680,8 +1680,10 @@ void __EXPORT SdOutlineViewShell::Command( const CommandEvent& rCEvt, SdWindow* 
 
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
         {
-            // Popup fuer Online-Spelling
-            Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
+            // #91457# Popup for Online-Spelling now handled by SdDrawDocShell
+            // Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
+            Link aLink = LINK(pDocSh, SdDrawDocShell, OnlineSpellCallback);
+
             pOLV->ExecuteSpellPopup(aPos, &aLink);
         }
         else
