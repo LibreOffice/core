@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.23 2003-09-04 08:29:38 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.24 2003-12-16 12:28:57 vg Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2003-09-04 08:29:38 $ $Revision: 1.23 $
+//	$Author: vg $ $Date: 2003-12-16 12:28:57 $ $Revision: 1.24 $
 //
 // Description:
 //
@@ -321,13 +321,13 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Zz][Oo][Nn][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_ZONE); return SQL_TOKEN_ZONE; }
 
-"<"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESS);return LESS;}
-">"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREAT);return GREAT;}
-"="					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_EQUAL);return EQUAL;}
-"<="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESSEQ);return LESSEQ;}
-">="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return GREATEQ;}
-"<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
-"!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
+"<"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESS);return SQL_LESS;}
+">"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREAT);return SQL_GREAT;}
+"="					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_EQUAL);return SQL_EQUAL;}
+"<="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESSEQ);return SQL_LESSEQ;}
+">="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return SQL_GREATEQ;}
+"<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
+"!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
 
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
