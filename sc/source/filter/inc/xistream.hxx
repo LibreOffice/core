@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,7 +450,7 @@ public:
     // *** read/ignore 8-bit-strings, store in String ***
 
     /** Reads nChar byte characters and appends string to rString. */
-    inline void                 AppendRawByteString( String& rString, sal_uInt16 nChars );
+    void                        AppendRawByteString( String& rString, sal_uInt16 nChars );
     /** Reads 8/16 bit string length, character array and appends string to rString. */
     inline void                 AppendByteString( String& rString, bool b16BitLen );
 
@@ -603,11 +603,6 @@ inline void XclImpStream::IgnoreUniString()
 
 
 // ----------------------------------------------------------------------------
-
-inline void XclImpStream::AppendRawByteString( String& rString, sal_uInt16 nChars )
-{
-    AppendRawUniString( rString, nChars, false );
-}
 
 inline void XclImpStream::AppendByteString( String& rString, bool b16BitLen )
 {
