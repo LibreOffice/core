@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:42:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ italian ] = "Trasparenza";
                 Text[ danish ] = "Transparens";
                 Text[ swedish ] = "Transparens";
-                Text[ polish ] = "Przezroczysto?Ê";
+                Text[ polish ] = "PrzezroczystoúÊ";
                 Text[ portuguese_brazilian ] = "Transparence";
                 Text[ japanese ] = "ìßâﬂê´";
                 Text[ korean ] = "≈ı∏Ì";
@@ -241,7 +241,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ finnish ] = "Merkin tehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractËres" ;
-                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffecten" ;
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effects" ;
@@ -445,7 +445,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ finnish ] = "Merkin tehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractËres" ;
-                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffecten" ;
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effects" ;
