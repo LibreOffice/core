@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-22 07:20:56 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 10:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #include "dispatch.hxx"
 #include "openflag.hxx"
 #include "helper.hxx"
+#include "dlgcont.hxx"
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -1938,7 +1939,17 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
     SvStorageRef xStor = rMedium.GetStorage();
     if( xStor.Is() )
     {
-        xStor->SetVersion( rMedium.GetFilter()->GetVersion() );
+        ULONG nVersion = rMedium.GetFilter()->GetVersion();
+        xStor->SetVersion( nVersion );
+
+        // Save dialog container
+        if( nVersion >= 6200 )
+        {
+            SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+            if( pDialogCont )
+                pDialogCont->storeLibrariesToStorage( (SotStorage*)(SvStorage*)xStor );
+        }
+
         const SfxFilter* pFilter = rMedium.GetFilter();
         return SaveAs( xStor );
     }
