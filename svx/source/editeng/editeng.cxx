@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:01:00 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2086,14 +2086,6 @@ sal_Bool __EXPORT EditEngine::SpellNextDocument()
     return sal_False;
 }
 
-EESpellState EditEngine::HasSpellErrors( LanguageType eLang )
-{
-#if SUPD >= 630
-//  DBG_ERROR( "DefaultLanguage not longer supported" );
-#endif
-    return HasSpellErrors();
-}
-
 EESpellState EditEngine::HasSpellErrors()
 {
 #ifdef SVX_LIGHT
@@ -2671,11 +2663,7 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
                 case BS_123:            eNumType = SVX_NUM_ARABIC;              break;
                 default:                eNumType = SVX_NUM_NUMBER_NONE;         break;
             }
-#if SUPD > 622
             pNumberFormat->SetNumberingType( eNumType );
-#else
-            pNumberFormat->SetNumType( eNumType );
-#endif
 
             // Justification
             SvxAdjust eAdjust;
