@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: gt $ $Date: 2001-06-21 12:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class AnalysisAddIn : public cppu::WeakImplHelper5<
 {
 private:
     CSS::lang::Locale           aFuncLoc;
+    CSS::lang::Locale*          pDefLocales;
     FuncDataList*               pFD;
     double*                     pFactDoubles;
     ConvertDataList*            pCDL;
@@ -101,6 +102,9 @@ private:
     ResMgr&                     GetResMgr( void ) THROWDEF_RTE;
     STRING                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
     STRING                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
+    void                        InitDefLocales( void );
+    inline const CSS::lang::Locale& GetLocale( sal_uInt32 nInd );
+    void                        InitData( void );
 public:
                                 AnalysisAddIn();
     virtual                     ~AnalysisAddIn();

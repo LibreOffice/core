@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:48:01 $
+ *  last change: $Author: gt $ $Date: 2001-06-21 12:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,12 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceMa
 ResMgr& AnalysisAddIn::GetResMgr( void ) THROWDEF_RTE
 {
     if( !pResMgr )
-        THROW_RTE;
+    {
+        InitData();     // try to get resource manager
+
+        if( !pResMgr )
+            THROW_RTE;
+    }
 
     return *pResMgr;
 }
@@ -215,20 +220,49 @@ STRING AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
 }
 
 
-AnalysisAddIn::AnalysisAddIn()
+void AnalysisAddIn::InitData( void )
 {
+    if( pResMgr )
+        delete pResMgr;
+
     OString             aModName( "analysis" );
     aModName += OString::valueOf( sal_Int32( SUPD ) );
     pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
                                         ConvertIsoNamesToLanguage( aFuncLoc.Language, aFuncLoc.Country ) );
+
+    if( pFD )
+        delete pFD;
 
     if( pResMgr )
         pFD = new FuncDataList( *pResMgr );
     else
         pFD = NULL;
 
+    if( pDefLocales )
+    {
+        delete pDefLocales;
+        pDefLocales = NULL;
+    }
+}
+
+
+AnalysisAddIn::AnalysisAddIn()
+{
+//  OString             aModName( "analysis" );
+//  aModName += OString::valueOf( sal_Int32( SUPD ) );
+//  pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
+//                                      ConvertIsoNamesToLanguage( aFuncLoc.Language, aFuncLoc.Country ) );
+
+//  if( pResMgr )
+//      pFD = new FuncDataList( *pResMgr );
+//  else
+        pFD = NULL;
+
+    pResMgr = NULL;
+
     pFactDoubles = NULL;
     pCDL = NULL;
+    pDefLocales = NULL;
 }
 
 
@@ -245,6 +279,9 @@ AnalysisAddIn::~AnalysisAddIn()
 
     if( pResMgr )
         delete pResMgr;
+
+    if( pDefLocales )
+        delete pDefLocales;
 }
 
 
@@ -348,6 +385,8 @@ SEQ( STRING ) SAL_CALL AnalysisAddIn::getSupportedServiceNames() THROWDEF_RTE
 void SAL_CALL AnalysisAddIn::setLocale( const lang::Locale& eLocale ) THROWDEF_RTE
 {
     aFuncLoc = eLocale;
+
+    InitData();     // change of locale invalidates resources!
 }
 
 lang::Locale SAL_CALL AnalysisAddIn::getLocale() THROWDEF_RTE
@@ -499,6 +538,35 @@ STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammat
 }
 
 
+static const sal_Char*      pLang[] = { "de", "en" };
+static const sal_Char*      pCoun[] = { "DE", "US" };
+static const sal_uInt32     nNumOfLoc = sizeof( pLang ) / sizeof( sal_Char* );
+
+
+void AnalysisAddIn::InitDefLocales( void )
+{
+    pDefLocales = new CSS::lang::Locale[ nNumOfLoc ];
+
+    for( sal_uInt32 n = 0 ; n < nNumOfLoc ; n++ )
+    {
+        pDefLocales[ n ].Language = STRING::createFromAscii( pLang[ n ] );
+        pDefLocales[ n ].Country = STRING::createFromAscii( pCoun[ n ] );
+    }
+}
+
+
+inline const CSS::lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
+{
+    if( !pDefLocales )
+        InitDefLocales();
+
+    if( nInd < sizeof( pLang ) )
+        return pDefLocales[ nInd ];
+    else
+        return aFuncLoc;
+}
+
+
 SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
     const FuncData*             p = pFD->Get( aProgrammaticName );
@@ -512,13 +580,10 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgr
     SEQofLocName                aRet( nCount );
 
     CSS::sheet::LocalizedName*  pArray = aRet.getArray();
-    CSS::sheet::LocalizedName   aLocName;
-    aLocName.Locale = aFuncLoc;
 
     for( sal_uInt32 n = 0 ; n < nCount ; n++ )
     {
-        aLocName.Name = *r.Get( n );
-        pArray[ n ] = aLocName;
+        pArray[ n ] = CSS::sheet::LocalizedName( GetLocale( n ), *r.Get( n ) );
     }
 
     return aRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: gt $ $Date: 2001-06-21 12:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,17 +710,13 @@ inline const STRING* StringList::Get( sal_uInt32 n ) const
 
 inline void StringList::Append( STRING* p )
 {
-    if( Contains( *p ) )
-        delete p;
-    else
-        MyList::Append( p );
+    MyList::Append( p );
 }
 
 
 inline void StringList::Append( const STRING& r )
 {
-    if( !Contains( r ) )
-        MyList::Append( new STRING( r ) );
+    MyList::Append( new STRING( r ) );
 }
 
 
