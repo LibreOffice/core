@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 12:25:36 $
+ *  last change: $Author: os $ $Date: 2002-10-18 10:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,7 @@ void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)
     delete pRuler_Imp->pTextRTLItem; pRuler_Imp->pTextRTLItem = 0;
     if(pItem)
         pRuler_Imp->pTextRTLItem = new SfxBoolItem(*pItem);
+    SetTextRTL(pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue());
     StartListening_Impl();
   }
 }
@@ -2498,8 +2499,15 @@ void __EXPORT SvxRuler::Click()
         if( bContentProtected ) return;
         const long lPos = GetClickPos();
         if(lPos > Min(GetFirstLineIndent(), GetLeftIndent()) &&
-           lPos < GetRightIndent()) {
-            SvxTabStop aTabStop(ConvertHPosLogic(lPos - GetLeftIndent()),
+           lPos < GetRightIndent())
+        {
+            //convert position in left-to-right text
+            long nTabPos;
+            if(pRuler_Imp->pTextRTLItem && pRuler_Imp->pTextRTLItem->GetValue())
+                nTabPos = GetRightIndent() - lPos;
+            else
+                nTabPos = lPos - GetLeftIndent();
+            SvxTabStop aTabStop(ConvertHPosLogic(nTabPos),
                                 ToAttrTab_Impl(nDefTabType));
             pTabStopItem->Insert(aTabStop);
             UpdateTabs();
