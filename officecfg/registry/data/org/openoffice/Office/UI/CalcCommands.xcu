@@ -855,12 +855,12 @@
                     <value xml:lang="en-US">~Sheet...</value>
                 </prop>
             </node>
-                        <node oor:name=".uno:InsertSheetFromFile" oor:op="replace">
-                                <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="de">Ta~belle aus Datei...</value>
-                                        <value xml:lang="en-US">Shee~t from file...</value>
-                                </prop>
-                        </node>
+            <node oor:name=".uno:InsertSheetFromFile" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Ta~belle aus Datei...</value>
+                    <value xml:lang="en-US">Shee~t From File...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DefineName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Festlegen...</value>
@@ -1530,7 +1530,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Grafik</value>
                     <value xml:lang="en-US">Graph~ic</value>
-
                 </prop>
             </node>
         </node>
