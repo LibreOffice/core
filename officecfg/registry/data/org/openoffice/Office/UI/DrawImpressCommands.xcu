@@ -53,7 +53,7 @@
             </node>
             <node oor:name=".uno:Dia" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Diawechsel</value>
+                    <value xml:lang="de">Folienwechsel</value>
                     <value xml:lang="en-US">SlideTransition</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -62,7 +62,7 @@
             </node>
             <node oor:name=".uno:HideSlide" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Dia anzeigen</value>
+                    <value xml:lang="de">~Folie anzeigen</value>
                     <value xml:lang="en-US">~Show/Hide Slide</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -77,7 +77,7 @@
             </node>
             <node oor:name=".uno:PagesPerRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Dias pro Reihe</value>
+                    <value xml:lang="de">Folien pro Reihe</value>
                     <value xml:lang="en-US">Slides Per Row</value>
                 </prop>
             </node>
@@ -875,7 +875,7 @@
             </node>
             <node oor:name=".uno:DiaEffect" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Diaeffekt</value>
+                    <value xml:lang="de">Folieneffekt</value>
                     <value xml:lang="en-US">Slide Effects</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -969,7 +969,7 @@
             <node oor:name=".uno:DeletePage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Seite ~löschen</value>
-                    <value xml:lang="en-US">D~elete Slide...</value>
+                    <value xml:lang="en-US">D~elete Slide</value>
                 </prop>
             </node>
             <node oor:name=".uno:DeleteLayer" oor:op="replace">
