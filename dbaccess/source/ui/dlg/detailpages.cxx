@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:45:26 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,58 +1389,16 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aLineFormat              (this, ResId(FL_SEPARATOR2))
-        ,m_aHeader                  (this, ResId(CB_HEADER))
-        ,m_aFieldSeparatorLabel     (this, ResId(FT_FIELDSEPARATOR))
-        ,m_aFieldSeparator          (this, ResId(CM_FIELDSEPARATOR))
-        ,m_aTextSeparatorLabel      (this, ResId(FT_TEXTSEPARATOR))
-        ,m_aTextSeparator           (this, ResId(CM_TEXTSEPARATOR))
-        ,m_aDecimalSeparatorLabel   (this, ResId(FT_DECIMALSEPARATOR))
-        ,m_aDecimalSeparator        (this, ResId(CM_DECIMALSEPARATOR))
-        ,m_aThousandsSeparatorLabel (this, ResId(FT_THOUSANDSSEPARATOR))
-        ,m_aThousandsSeparator      (this, ResId(CM_THOUSANDSSEPARATOR))
-        ,m_aSeparator1              (this, ResId(FL_SEPARATOR2))
-        ,m_aExtensionLabel          (this, ResId(FT_EXTENSION))
-        ,m_aExtension               (this, ResId(CM_EXTENSION))
-        ,m_aFieldSeparatorList      (ResId(STR_FIELDSEPARATORLIST))
-        ,m_aTextSeparatorList       (ResId(STR_TEXTSEPARATORLIST))
-        ,m_aTextNone                (ResId(STR_TEXT_FIELD_SEP_NONE))
     {
-        xub_StrLen nCnt = m_aFieldSeparatorList.GetTokenCount( '\t' );
-        xub_StrLen i;
-
-        for( i = 0 ; i < nCnt ; i += 2 )
-            m_aFieldSeparator.InsertEntry( m_aFieldSeparatorList.GetToken( i, '\t' ) );
-
-        nCnt = m_aTextSeparatorList.GetTokenCount( '\t' );
-        for( i=0 ; i<nCnt ; i+=2 )
-            m_aTextSeparator.InsertEntry( m_aTextSeparatorList.GetToken( i, '\t' ) );
-        m_aTextSeparator.InsertEntry(m_aTextNone);
-
-        // set the modify handlers
-        m_aHeader.SetClickHdl(getControlModifiedLink());
-        m_aFieldSeparator.SetUpdateDataHdl(getControlModifiedLink());
-        m_aFieldSeparator.SetSelectHdl(getControlModifiedLink());
-        m_aTextSeparator.SetUpdateDataHdl(getControlModifiedLink());
-        m_aTextSeparator.SetSelectHdl(getControlModifiedLink());
-        m_aExtension.SetSelectHdl(getControlModifiedLink());
-
-        m_aFieldSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aTextSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aDecimalSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aThousandsSeparator.SetModifyHdl(getControlModifiedLink());
-        m_aExtension.SetModifyHdl(getControlModifiedLink());
-
-        m_aExtension.EnableAutocomplete(sal_True, sal_True);
-
-        m_pCharset->SetZOrder(&m_aExtension, WINDOW_ZORDER_BEHIND);
-
+        m_pTextConnectionHelper = new OTextConnectionHelper(this, PAGE_TEXT);
+//      m_pCharset->SetZOrder(&m_aExtension, WINDOW_ZORDER_BEHIND);
         FreeResource();
     }
 
     // -----------------------------------------------------------------------
     OTextDetailsPage::~OTextDetailsPage()
     {
+        DELETEZ(m_pTextConnectionHelper);
     }
 
     // -----------------------------------------------------------------------
@@ -1452,22 +1410,15 @@ namespace dbaui
     void OTextDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
-        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aHeader));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aFieldSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aTextSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aDecimalSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aThousandsSeparator));
-        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aExtension));
+        m_pTextConnectionHelper->fillControls(_rControlList);
+
     }
     // -----------------------------------------------------------------------
     void OTextDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFieldSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aTextSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aDecimalSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aThousandsSeparatorLabel));
-        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aExtensionLabel));
+        m_pTextConnectionHelper->fillWindows(_rControlList);
+
     }
     // -----------------------------------------------------------------------
     void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
@@ -1476,188 +1427,23 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        SFX_ITEMSET_GET(_rSet, pDelItem, SfxStringItem, DSID_FIELDDELIMITER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pStrItem, SfxStringItem, DSID_TEXTDELIMITER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pDecdelItem, SfxStringItem, DSID_DECIMALDELIMITER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pThodelItem, SfxStringItem, DSID_THOUSANDSDELIMITER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pExtensionItem, SfxStringItem, DSID_TEXTFILEEXTENSION, sal_True);
         SFX_ITEMSET_GET(_rSet, pHdrItem, SfxBoolItem, DSID_TEXTFILEHEADER, sal_True);
-
-        if (bValid)
-        {
-            m_aHeader.Check( pHdrItem->GetValue() );
-
-            SetSeparator(m_aFieldSeparator, m_aFieldSeparatorList, pDelItem->GetValue());
-            SetSeparator(m_aTextSeparator, m_aTextSeparatorList, pStrItem->GetValue());
-
-            m_aDecimalSeparator.SetText(pDecdelItem->GetValue());
-            m_aThousandsSeparator.SetText(pThodelItem->GetValue());
-            m_aExtension.SetText(pExtensionItem->GetValue());
-        }
+        m_pTextConnectionHelper->implInitControls(_rSet, _bSaveValue, bValid);
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // -----------------------------------------------------------------------
-    sal_Bool OTextDetailsPage::checkItems()
-    {
-        OLocalResourceAccess aStringResAccess(PAGE_TEXT, RSC_TABPAGE);
-            // for accessing the strings which are local to our own resource block
-
-        String aErrorText;
-        Control* pErrorWin = NULL;
-        //  if (!m_aFieldSeparator.GetText().Len())
-            // bug (#42168) if this line is compiled under OS2 (in a product environent)
-            // -> use a temporary variable
-        String aDelText(m_aFieldSeparator.GetText());
-        if(!aDelText.Len())
-        {   // Kein FeldTrenner
-            aErrorText = String(ResId(STR_DELIMITER_MISSING));
-            aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
-            pErrorWin = &m_aFieldSeparator;
-        }
-        else if (!m_aDecimalSeparator.GetText().Len())
-        {   // kein Decimaltrenner
-            aErrorText = String(ResId(STR_DELIMITER_MISSING));
-            aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
-            pErrorWin = &m_aDecimalSeparator;
-        }
-        else if (m_aTextSeparator.GetText() == m_aFieldSeparator.GetText())
-        {   // Feld und TextTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_DELIMITER_MUST_DIFFER));
-            aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
-            aErrorText.SearchAndReplaceAscii("#2",m_aFieldSeparatorLabel.GetText());
-            pErrorWin = &m_aTextSeparator;
-        }
-        else if (m_aDecimalSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und DecimalTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_DELIMITER_MUST_DIFFER));
-            aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
-            aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
-            pErrorWin = &m_aDecimalSeparator;
-        }
-        else if (m_aFieldSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und FeldTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_DELIMITER_MUST_DIFFER));
-            aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
-            aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
-            pErrorWin = &m_aFieldSeparator;
-        }
-        else if (m_aFieldSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Zehner und FeldTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_DELIMITER_MUST_DIFFER));
-            aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
-            aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
-            pErrorWin = &m_aFieldSeparator;
-        }
-        else if (m_aTextSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und TextTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_DELIMITER_MUST_DIFFER));
-            aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
-            aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
-            pErrorWin = &m_aTextSeparator;
-        }
-        else if (m_aTextSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Zehner und TextTrenner duerfen nicht gleich sein
-            aErrorText = String(ResId(STR_DELIMITER_MUST_DIFFER));
-            aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
-            aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
-            pErrorWin = &m_aTextSeparator;
-        }
-        else if (   (m_aExtension.GetText().Search('*') != STRING_NOTFOUND)
-                ||
-                    (m_aExtension.GetText().Search('?') != STRING_NOTFOUND)
-                )
-        {
-            aErrorText = String(ResId(STR_NO_WILDCARDS));
-            aErrorText.SearchAndReplaceAscii("#1",m_aExtensionLabel.GetText());
-            pErrorWin = &m_aExtension;
-        }
-        else
-            return sal_True;
-
-        ErrorBox(NULL, WB_OK, MnemonicGenerator::EraseAllMnemonicChars( aErrorText)).Execute();
-        pErrorWin->GrabFocus();
-        return 0;
-    }
 
     // -----------------------------------------------------------------------
     sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
-
-        fillString(rSet,&m_aExtension,DSID_TEXTFILEEXTENSION,bChangedSomething);
-        fillBool(rSet,&m_aHeader,DSID_TEXTFILEHEADER,bChangedSomething);
-
-
-        if( m_aFieldSeparator.GetText() != m_aFieldSeparator.GetSavedValue() )
-        {
-            rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
-            bChangedSomething = sal_True;
-        }
-        if( m_aTextSeparator.GetText() != m_aTextSeparator.GetSavedValue() )
-        {
-            rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
-            bChangedSomething = sal_True;
-        }
-
-        if( m_aDecimalSeparator.GetText() != m_aDecimalSeparator.GetSavedValue() )
-        {
-            rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().Copy(0, 1) ) );
-            bChangedSomething = sal_True;
-        }
-        if( m_aThousandsSeparator.GetText() != m_aThousandsSeparator.GetSavedValue() )
-        {
-            rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().Copy(0,1) ) );
-            bChangedSomething = sal_True;
-        }
-
+        bChangedSomething = m_pTextConnectionHelper->FillItemSet(rSet, bChangedSomething);
         return bChangedSomething;
     }
 
-    //------------------------------------------------------------------------
-    String OTextDetailsPage::GetSeparator( const ComboBox& rBox, const String& rList )
+    sal_Bool OTextDetailsPage::checkItems()
     {
-        sal_Unicode nTok = '\t';
-        sal_Int32   nRet(0);
-        xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
-
-        if( nPos == COMBOBOX_ENTRY_NOTFOUND )
-            return rBox.GetText().Copy(0);
-
-        if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
-            return String(
-                static_cast< sal_Unicode >(
-                    rList.GetToken(((nPos*2)+1), nTok ).ToInt32()));
-        // somewhat strange ... translates for instance an "32" into " "
-        return String();
-    }
-
-    //------------------------------------------------------------------------
-    void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, const String& rVal )
-    {
-        char    nTok = '\t';
-        xub_StrLen  nCnt(rList.GetTokenCount( nTok ));
-        xub_StrLen  i;
-
-        for( i=0 ; i<nCnt ; i+=2 )
-        {
-            String  sTVal(
-                static_cast< sal_Unicode >(
-                    rList.GetToken( (i+1), nTok ).ToInt32()));
-
-            if( sTVal == rVal )
-            {
-                rBox.SetText( rList.GetToken( i, nTok ) );
-                break;
-            }
-        }
-
-        if ( i >= nCnt )
-        {
-            if ( &m_aTextSeparator == &rBox && !rVal.Len() )
-                rBox.SetText(m_aTextNone);
-            else
-                rBox.SetText( rVal.Copy(0, 1) );
-        }
+        return m_pTextConnectionHelper->checkItems();
     }
 
     //------------------------------------------------------------------------
