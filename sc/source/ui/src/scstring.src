@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:32:53 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3093,7 +3093,7 @@ String SCSTR_CFG_NAVIPI
     Text[ slovak ] = "Nastavenie sprievodcu";
 };
 
-String SCSTR_MINIMUM
+String SCSTR_VALID_MINIMUM
 {
     Text = "~Minimum" ;
     Text [ ENGLISH ] = "~Minimum" ;
@@ -3124,7 +3124,7 @@ String SCSTR_MINIMUM
     Text[ hindi ] = "~न्यूनतम";
     Text[ slovak ] = "~Minimum";
 };
-String SCSTR_MAXIMUM
+String SCSTR_VALID_MAXIMUM
 {
     Text = "~Maximum" ;
     Text [ ENGLISH ] = "~Maximum" ;
@@ -3155,7 +3155,7 @@ String SCSTR_MAXIMUM
     Text[ hindi ] = "~अधिकतम";
     Text[ slovak ] = "~Maximum";
 };
-String SCSTR_VALUE
+String SCSTR_VALID_VALUE
 {
     Text = "~Wert" ;
     Text [ ENGLISH ] = "~Value" ;
@@ -3185,6 +3185,16 @@ String SCSTR_VALUE
     Text[ hebrew ] = "~Wert";
     Text[ hindi ] = "~मूल्य";
     Text[ slovak ] = "~Hodnota";
+};
+String SCSTR_VALID_RANGE
+{
+    Text = "~Quelle" ;
+    Text[ english_us ] = "~Source" ;
+};
+String SCSTR_VALID_LIST
+{
+    Text = "~Eintr�ge" ;
+    Text[ english_us ] = "~Entries" ;
 };
 
  // fuer Dialoge:
