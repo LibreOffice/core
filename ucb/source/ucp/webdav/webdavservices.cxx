@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,11 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( ::webdav_ucp::ContentProvider::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
+        xFactory = ::webdav_ucp::ContentProvider::createServiceFactory( xSMgr );
+    }
+    else if ( rtl_str_compare( pImplName, "webdav_ucp_ContentProvider" ) == 0 )
+    {
+        // Backward compatibility... :-/
         xFactory = ::webdav_ucp::ContentProvider::createServiceFactory( xSMgr );
     }
 

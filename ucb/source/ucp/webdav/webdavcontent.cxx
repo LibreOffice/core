@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-04 15:26:12 $
+ *  last change: $Author: kso $ $Date: 2001-04-05 09:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ Sequence< Type > SAL_CALL Content::getTypes()
 OUString SAL_CALL Content::getImplementationName()
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( "WebDAV_ucp_Content" );
+    return OUString::createFromAscii( "com.sun.star.comp.ucb.WebDAVContent" );
 }
 
 //=========================================================================

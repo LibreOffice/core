@@ -11,7 +11,7 @@
             Kai Sommerfeld
         </author>
         <name>
-            WebDAVContentProvider
+            com.sun.star.comp.ucb.WebDAVContentProvider
         </name>
         <description>
         This component implements a Content Provider for the Universal
