@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: evtlistenerhlp.hxx,v $
+ *  $RCSfile: evtlistenerhlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 07:59:19 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 07:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,39 +59,27 @@
  *
  ************************************************************************/
 #ifndef COMPHELPER_EVENTLISTENERHELPER_HXX
-#define COMPHELPER_EVENTLISTENERHELPER_HXX
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
-#include <cppuhelper/weakref.hxx>
+#include "comphelper/evtlistenerhlp.hxx"
 #endif
 
-//........................................................................
 namespace comphelper
 {
-//........................................................................
-
-    //==========================================================================
-    //= OCommandsListener
-    // is helper class to avoid a cycle in refcount between the XEventListener
-    // and the member XEventBroadcaster
-    //==========================================================================
-    class OEventListenerHelper : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+    OEventListenerHelper::OEventListenerHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>&
+            _rxListener) : m_xListener(_rxListener)
     {
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XEventListener> m_xListener;
-    public:
-        OEventListenerHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rxListener);
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-    };
-//........................................................................
-}   // namespace comphelper
-//........................................................................
-#endif // COMPHELPER_EVENTLISTENERHELPER_HXX
+    }
+    void SAL_CALL OEventListenerHelper::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> xRef = m_xListener;
+        if(xRef.is())
+            xRef->disposing(Source);
+    }
+}
+
+
+
+
+
+
+
+
