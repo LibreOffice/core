@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.1.1.3 $
+ *  $Revision: 1.1.1.4 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:44:28 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 22:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,10 +1040,10 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ russian ] = "~Óäàëèòü íîìåğ ôàêñà èç âûâîäà";
         Text[ greek ] = "~fax number will be removed from output";
         Text[ dutch ] = "~Faxnummer wordt niet weergegeven";
-        Text[ french ] = "~Le numéro sera supprimé de la sortie de fax";
+        Text[ french ] = "Le numéro de ~fax ne sera pas indiqué.";
         Text[ spanish ] = "El número de fa~x se eliminará de la salida";
         Text[ finnish ] = "~Faxnummer wird aus der Ausgabe entfernt";
-        Text[ italian ] = "~fax number will be removed from output";
+        Text[ italian ] = "Numero di fax eliminato dalla copia";
         Text[ danish ] = "~fax number will be removed from output";
         Text[ swedish ] = "~Faxnummer tas bort från utmatningen";
         Text[ polish ] = "Numer faksu zostanie usuniêty z wyjœcia";
