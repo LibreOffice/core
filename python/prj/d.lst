@@ -44,7 +44,7 @@ mkdir: %_DEST%\lib%_EXT%\python\lib-dynload
 ..\%__SRC%\misc\build\Python-2.2.2\Lib\curses\* %_DEST%\lib%_EXT%\python\curses\*
 ..\%__SRC%\misc\build\Python-2.2.2\Lib\plat-linux2\* %_DEST%\lib%_EXT%\python\plat-linux2\*
 ..\%__SRC%\misc\build\Python-2.2.2\Lib\config\* %_DEST%\lib%_EXT%\python\config\*
-..\%__SRC%\misc\pyversion.mk %_DEST%\inc%_EXT%\pyversion.mk
+..\pyversion.mk %_DEST%\inc%_EXT%\pyversion.mk
 
 #unix ONLY !
 ..\%__SRC%\misc\build\python-inst\include\python2.2\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
