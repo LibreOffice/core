@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-11 16:55:46 $
+ *  last change: $Author: pl $ $Date: 2002-05-31 11:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,15 @@
  *
  ************************************************************************/
 
-#include <string.h>
+#include <cstring>
+#include <unistd.h>
+
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <osl/thread.h>
+#include <osl/profile.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/config.h>
 
@@ -83,7 +87,7 @@ static const ::rtl::OUString& getOfficePath( enum whichOfficePath ePath )
         bOnce = true;
         ::rtl::OUString aIni;
         osl_getExecutableFile( &aIni.pData );
-        aIni = aIni.copy( 0, aIni.lastIndexOf( SAL_PATHDELIMITER )+1 );
+        aIni = aIni.copy( 0, aIni.lastIndexOf( '/' )+1 );
         aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
         ::rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
@@ -150,6 +154,38 @@ const ::rtl::OUString& psp::getFontPath()
         aPath += getOfficePath( psp::UserPath );
         aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/fonts" ) );
         aPath += ::psp::getEnvironmentPath( "SAL_FONTPATH_PRIVATE", (sal_Unicode)';' );
+
+        // append jre/jdk fonts if possible
+        ::rtl::OUString aJavaRc( RTL_CONSTASCII_USTRINGPARAM( "file://" ) );
+        aJavaRc += getOfficePath( psp::UserPath );
+        aJavaRc += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/config/" SAL_CONFIGFILE( "java" ) ) );
+        ::osl::Profile aProfile( aJavaRc );
+        ::rtl::OString aJREpath =
+              aProfile.readString(
+                                  ::rtl::OString( "Java" ),
+                                  ::rtl::OString( "Home" ),
+                                  ::rtl::OString() );
+        if( aJREpath.getLength() > 0 )
+        {
+            ::rtl::OString aTestPath( aJREpath );
+            aTestPath += "/jre/lib/fonts";
+            if( access( aTestPath.getStr(), R_OK ) )
+            {
+                aTestPath = aJREpath;
+                aTestPath += "/lib/fonts";
+                if( access( aTestPath.getStr(), R_OK ) )
+                    aJREpath = ::rtl::OString();
+                else
+                    aJREpath = aTestPath;
+            }
+            else
+                aJREpath = aTestPath;
+            if( aJREpath.getLength() )
+            {
+                aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+                aPath += OStringToOUString( aJREpath, osl_getThreadTextEncoding() );
+            }
+        }
 
 #ifdef DEBUG
         fprintf( stderr, "initalizing font path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
