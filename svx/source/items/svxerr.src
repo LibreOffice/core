@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-24 20:20:06 $
+ *  last change: $Author: tl $ $Date: 2001-08-23 14:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,33 +279,8 @@ Resource RID_SVXERRCODE
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache. : $(ARG1) ist f³r die Pr³fung nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache. : $(ARG1) ist f³r die Pr³fung nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache. */
-        TEXT = "$(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache." ;
-        TEXT [ English ] = "$(ARG1) is not available for spellchecking.\nPlease check your installation and install the desired language." ;
-        Text [ english_us ] = "$(ARG1) is not available for spellchecking.\nPlease check your installation and install the desired language." ;
-        Text [ italian ] = "$(ARG1) non è disponibile per il controllo.\nControllare l'installazione ed installare se necessario la lingua desiderata." ;
-        Text [ spanish ] = "$(ARG1) no disponible para la revisión ortográfica.\n Examine por favor su instalación e instale en caso dado el idioma deseado." ;
-        Text [ french ] = "$(ARG1) n'est pas disponible pour vérification. \nVeuillez vérifier l'installation et installer le cas échéant la langue souhaitée." ;
-        Text [ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal" ;
-        Text [ swedish ] = "$(ARG1) är inte tillgänglig för stavningskontrollen.\nKontrollera installationen och installera eventuellt det önskade språket." ;
-        Text [ danish ] = "$(ARG1) står ikke til rådighed for kontrollen.\nKontroller venligst din installation og installer i givet fald det ønskede sprog." ;
-        Text [ portuguese ] = "$(ARG1) não está disponível para a verificação ortográfica. \nConfira a sua instalação e, se necessário, instale a língua desejada." ;
-        Text [ portuguese_brazilian ] = "$(ARG1) ist f? die Pr?ung nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache." ;
-        Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
-        Text[ russian ] = "$(ARG1) äëÿ ïğîâåğêè íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûê.";
-        Text[ polish ] = "$(ARG1) jest dla sprawdzania pisowni niedostêpny.\nProszê sprawdziæ instalacjê i zainstalowaæ potrzebny jêzyk.";
-        Text[ japanese ] = "$(ARG1)‚Í½ÍßÙÁª¯¸‚Ég—p‚Å‚«‚Ü‚¹‚ñB\n‚²g—p‚ÌÌßÛ¸Ş×Ñ‚Ì²İ½Ä°Ù‚ğÄÁª¯¸‚µ‚ÄAê‡‚É‚æ‚Á‚Ä‚ÍA‚²Šó–]‚ÌŒ¾Œê‚ğ²İ½Ä-Ù‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = "$(ARG1)¤£¦s¦b¡C\n½Ğ±zÀË¬d¦w¸Ë¡M­Y¦³¥²­n½Ğ±z¦w¸Ë©Ò»İªº»y¨¥ª©¥»¡C";
-        Text[ arabic ] = "$(ARG1) ÛíÑ ãÊæİÑÉ ááÊÏŞíŞ ÇáÅãáÇÆí.\nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æŞã ÈÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ.";
-        Text[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
-        Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
-        Text[ greek ] = "$(ARG1) äåí åßíáé äéáèİóéìï ãéá ôïí ïñèïãñáöéêü İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé åãêáôáóôŞóôå áí ÷ñåéáóôåß ôçí ãëşóóá ğïõ åğéèõì? ";
-        Text[ korean ] = "$(ARG1)À»(¸¦) ¸ÂÃã¹ı °Ë»ç¿¡ ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n »ç¿ëÀÚÀÇ ¼³Ä¡¸¦ Á¡°ËÇÑ ´ÙÀ½, ÇÊ¿ä½Ã ¿ä±¸µÇ´Â  ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
-        Text[ turkish ] = "$(ARG1) yazım denetiminde kullanılamıyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "$(ARG1) no disponible para la revisión ortográfica.\n Examine por favor su instalación e instale en caso dado el idioma deseado.";
-        Text[ finnish ] = "$(ARG1) ei ole käytettävissä oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
+        TEXT = "$(ARG1) wird von der Prüfung nicht unterstützt bzw. ist gegenwärtig nicht aktiviert.\nÜberprüfen Sie Ihre Installation und installieren Sie gegebenenfalls das benötigte Sprachmodul\nbzw. aktivieren sie in 'Extras - Optionen -  Spracheinstellungen - Linguistik' das entsprechende Spachmodul." ;
+        TEXT [ English ] = "$(ARG1) is not available or is currently not active.\nPlease check your installation and install the desired language\nor activate in 'Tools - Options - Language Settings - Writing Aids' the desired module." ;
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:27:16 $
+ *  last change: $Author: tl $ $Date: 2001-08-23 14:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,82 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
+
+
+// -----------------------------------------------------------------------
+
+#define SVX_LANG_NEED_CHECK         0
+#define SVX_LANG_OK                 1
+#define SVX_LANG_MISSING            2
+#define SVX_LANG_MISSING_DO_WARN    3
+
+#define SVX_FLAGS_NEW
+
+class LangCheckState
+{
+    SvUShortsSort   aLang;
+    SvUShorts       aState;     // lowerbyte spell values,
+                                // higherbyte hyph values
+
+public:
+    LangCheckState();
+
+    USHORT             GetCount()   { return aLang.Count(); }
+    inline USHORT      GetLanguagePos( USHORT nLang );
+    inline USHORT      GetLanguage( USHORT nPos );
+    inline USHORT      GetState( USHORT nPos );
+    inline void        SetState( USHORT nPos, USHORT nState );
+    inline USHORT      InsertLangState( USHORT nLang, USHORT nState );
+};
+
+LangCheckState::LangCheckState() :
+    aLang   (16, 16),
+    aState  (16, 16)
+{
+}
+
+
+inline USHORT LangCheckState::GetLanguagePos( USHORT nLang )
+{
+    USHORT nPos;
+    BOOL bFound = aLang.Seek_Entry( nLang, &nPos );
+    return bFound ? nPos : 0xFFFF;
+}
+
+inline USHORT LangCheckState::GetLanguage( USHORT nPos )
+{
+    DBG_ASSERT( nPos < aLang.Count(), "index out of range" );
+    return aLang.GetObject( nPos );
+}
+
+inline USHORT LangCheckState::GetState( USHORT nPos )
+{
+    DBG_ASSERT( nPos < aState.Count(), "index out of range" );
+    return aState.GetObject( nPos );
+}
+
+inline void LangCheckState::SetState( USHORT nPos, USHORT nState )
+{
+    DBG_ASSERT( nPos < aState.Count(), "index out of range" );
+    aState.Replace( nState , nPos );
+}
+
+inline USHORT LangCheckState::InsertLangState( USHORT nLang, USHORT nState )
+{
+    DBG_ASSERT( aLang.Count() == aState.Count(), "array length mismatch" );
+    USHORT nPos = aLang.Count();
+    aLang .Insert( nLang,   nPos );
+    aState.Insert( nState , nPos );
+    return nPos;
+}
+
+
+static LangCheckState & GetLangCheckState()
+{
+    static LangCheckState aState;
+    return aState;
+}
+
 /*--------------------------------------------------------------------
  *  Beschreibung: Ctor, die Pruefreihenfolge wird festgelegt
  *
@@ -188,31 +264,16 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 
 // -----------------------------------------------------------------------
 
-#define SVX_LANG_NEED_CHECK         0
-#define SVX_LANG_OK                 1
-#define SVX_LANG_MISSING            2
-#define SVX_LANG_MISSING_DO_WARN    3
-
-#define SVX_FLAGS_NEW
-
-static SvUShortsSort    _aLanguages(16, 16);
-static SvUShorts        _aState(16, 16);    // lowerbyte spell values,
-                                            // higherbyte hyph values
-
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
         Reference< XSpellChecker1 > xSpell, sal_Int16 nLang)
 {
-    DBG_ASSERT( _aLanguages.Count() == _aState.Count(), "inconsistent arrays");
+    LangCheckState &rLCS = GetLangCheckState();
 
-    sal_uInt16 nPos;
-    sal_Bool bFound = _aLanguages.Seek_Entry( nLang, &nPos );
-    sal_uInt16 nVal = bFound ? _aState.GetObject( nPos ) : 0;
+    USHORT nPos = rLCS.GetLanguagePos( nLang );
+    sal_uInt16 nVal = 0xFFFF != nPos ? rLCS.GetState( nPos ) : 0;
 
-    if (!bFound)
-    {
-        _aLanguages.Insert( (sal_uInt16) nLang, nPos );
-        _aState.Insert( nVal , nPos );
-    }
+    if (0xFFFF == nPos)
+        nPos = rLCS.InsertLangState( (sal_uInt16) nLang, nVal );
 
     if (SVX_LANG_NEED_CHECK == (nVal & 0x00FF))
     {
@@ -222,26 +283,22 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
         nVal &= 0xFF00;
         nVal |= nTmpVal;
 
-        _aState.Replace( nVal , nPos );
+        rLCS.SetState( nPos, nVal );
     }
 
-    return (sal_Int16) _aState.GetObject( nPos );
+    return (sal_Int16) nVal;
 }
 
 sal_Int16 SvxSpellWrapper::CheckHyphLang(
         Reference< XHyphenator >  xHyph, sal_Int16 nLang)
 {
-    DBG_ASSERT( _aLanguages.Count() == _aState.Count(), "inconsistent arrays");
+    LangCheckState &rLCS = GetLangCheckState();
 
-    sal_uInt16 nPos;
-    sal_Bool bFound = _aLanguages.Seek_Entry( nLang, &nPos );
-    sal_uInt16 nVal = bFound ? _aState.GetObject( nPos ) : 0;
+    USHORT nPos = rLCS.GetLanguagePos( nLang );
+    sal_uInt16 nVal = 0xFFFF != nPos ? rLCS.GetState( nPos ) : 0;
 
-    if (!bFound)
-    {
-        _aLanguages.Insert( (sal_uInt16) nLang, nPos );
-        _aState.Insert( nVal , nPos );
-    }
+    if (0xFFFF == nPos)
+        nPos = rLCS.InsertLangState( (sal_uInt16) nLang, nVal );
 
     if (SVX_LANG_NEED_CHECK == ((nVal >> 8) & 0x00FF))
     {
@@ -251,10 +308,10 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
         nVal &= 0x00FF;
         nVal |= nTmpVal << 8;
 
-        _aState.Replace( nVal , nPos );
+        rLCS.SetState( nPos, nVal );
     }
 
-    return (sal_Int16) _aState.GetObject( nPos );
+    return (sal_Int16) nVal;
 }
 
 // -----------------------------------------------------------------------
@@ -285,33 +342,6 @@ sal_Bool SvxSpellWrapper::SpellMore()
 
 void SvxSpellWrapper::SpellEnd()
 {   // Bereich ist abgeschlossen, ggf. Aufraeumen
-    DBG_ASSERT( _aLanguages.Count() == _aState.Count(), "inconsistent arrays");
-
-    sal_uInt16 nCount = _aLanguages.Count();
-    for (sal_uInt16 i = 0;  i < nCount;  ++i)
-    {
-        sal_Int16 nLang = (sal_Int16) _aLanguages.GetObject( i );
-        sal_uInt16 nVal = _aState.GetObject( i );
-        sal_uInt16 nTmpSpell = nVal & 0x00FF;
-        sal_uInt16 nTmpHyph  = (nVal >> 8) & 0x00FF;
-
-        if (SVX_LANG_MISSING_DO_WARN == nTmpSpell)
-        {
-            String aErr( ::GetLanguageString( nLang ) );
-            ErrorHandler::HandleError(
-                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
-            nTmpSpell = SVX_LANG_MISSING;
-        }
-        if (SVX_LANG_MISSING_DO_WARN == nTmpHyph)
-        {
-            String aErr( ::GetLanguageString( nLang ) );
-            ErrorHandler::HandleError(
-                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
-            nTmpHyph = SVX_LANG_MISSING;
-        }
-
-        _aState.Replace( (nTmpHyph << 8) | nTmpSpell, i );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -624,6 +654,36 @@ Reference< XDictionary1 >  SvxSpellWrapper::GetAllRightDic() const
 
 sal_Bool SvxSpellWrapper::FindSpellError()
 {
+    // display message boxes for languages not available for
+    // spellchecking or hyphenation
+    LangCheckState &rLCS = GetLangCheckState();
+    sal_uInt16 nCount = rLCS.GetCount();
+    for (sal_uInt16 i = 0;  i < nCount;  ++i)
+    {
+        sal_Int16 nLang = (sal_Int16) rLCS.GetLanguage( i );
+        sal_uInt16 nVal = rLCS.GetState( i );
+        sal_uInt16 nTmpSpell = nVal & 0x00FF;
+        sal_uInt16 nTmpHyph  = (nVal >> 8) & 0x00FF;
+
+        if (SVX_LANG_MISSING_DO_WARN == nTmpSpell)
+        {
+            String aErr( ::GetLanguageString( nLang ) );
+            ErrorHandler::HandleError(
+                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
+            nTmpSpell = SVX_LANG_MISSING;
+        }
+        if (SVX_LANG_MISSING_DO_WARN == nTmpHyph)
+        {
+            String aErr( ::GetLanguageString( nLang ) );
+            ErrorHandler::HandleError(
+                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
+            nTmpHyph = SVX_LANG_MISSING;
+        }
+
+        rLCS.SetState( i, (nTmpHyph << 8) | nTmpSpell );
+    }
+
+
      Reference< XInterface >    xRef;
 
     WAIT_ON();

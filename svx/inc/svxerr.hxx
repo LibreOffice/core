@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: tl $ $Date: 2001-08-23 14:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,9 @@
 
 #define ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS   (1UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_NOTEXISTS)
-#define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    (2UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_NOTEXISTS)
+
+#define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    (2UL | ERRCODE_AREA_SVX)
+
 #define ERRCODE_SVX_LINGU_LINGUNOTEXISTS       (3UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_NOTEXISTS )
 #define ERRCODE_SVX_LINGU_HYPHENNOTEXISTS      (4UL | ERRCODE_AREA_SVX | \
