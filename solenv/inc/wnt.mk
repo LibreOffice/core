@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2001-09-06 10:29:47 $
+#   last change: $Author: hjs $ $Date: 2001-09-13 09:51:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -481,18 +481,18 @@ STDOBJCUI=
 STDSLOCUI=
 .IF "$(DYNAMIC_CRT)"!=""
 STDLIBGUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=$(LIBCMT) kernel32.lib oldnames.lib
+STDLIBCUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
 STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDLIBCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 .ELSE
 STDLIBGUIST=libc.lib kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=libc.lib kernel32.lib oldnames.lib
+STDLIBCUIST=libc.lib kernel32.lib user32.lib oldnames.lib
 STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDLIBCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
-STDSHLCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
 
 LIBMGR=lib $(NOLOGO)
@@ -575,13 +575,13 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 STDLIBGUIST=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lm -lkernel32 -luser32
-STDLIBCUIST=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lm -lkernel32
+STDLIBCUIST=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lm -lkernel32 -luser32
 STDLIBGUIMT=-dynamic -ldl -lm -lmingw32 -lkernel32 -luser32 -lgcc -lmoldname
-STDLIBGUIMT+= -lmsvcrt -lcrtdll
-STDLIBCUIMT=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lpthread -lm -lkernel32
+STDLIBGUIMT+= -lmsvcrt -lcrtdll -luser32
+STDLIBCUIMT=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lpthread -lm -lkernel32 -luser32
 STDSHLGUIMT=-dynamic -ldl -lm -lkernel32 -luser32 -lmingw32 -lgcc
-STDSHLGUIMT+= -lmoldname -lmsvcrt -lcrtdll
-STDSHLCUIMT=-dynamic -ldl -lm -lkernel32
+STDSHLGUIMT+= -lmoldname -lmsvcrt -lcrtdll -luser32
+STDSHLCUIMT=-dynamic -ldl -lm -lkernel32 -luser32
 
 LIBMGR=ar
 LIBFLAGS=-rsu
