@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-21 11:23:24 $
+#   last change: $Author: hjs $ $Date: 2001-02-02 13:54:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,18 +81,6 @@ $(OBJ)$/%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(PCHOBJFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.cxx)
-.ELSE
-.IF "$(COM)"=="WTC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj )  $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx)
-.ELSE
     @+if exist $@ $(RM) /q $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
     @+echo.
@@ -100,9 +88,6 @@ $(OBJ)$/%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx 
 .ELSE
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
-.ENDIF
-.ENDIF
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -122,34 +107,12 @@ $(SLO)$/%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
-.ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.cxx)
-.ELSE
-.IF "$(MDB)" != ""
-    @echo $@
-    @echo "#$*#"
-    @echo "#$/#"
-    @echo $(&:+"\n"))
-.ENDIF
-.IF "$(COM)"=="WTC"
-    @+if exist $@ $(RM) /q $@ >& nul
-
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj )  $(CFLAGSINCXX)$(PWD)$/$*.cxx
-.ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx)
-.ELSE
+.ELSE			# "$(GUI)"=="UNX"
     @+if exist $@ $(RM) /q $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
     @+echo.
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF			# "$(GUI)"=="UNX"
 
 $(SLO)$/%.obj : %.cpp
     @echo ------------------------------
@@ -163,32 +126,10 @@ $(SLO)$/%.obj : %.cpp
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.cpp)
-.ELSE
-.IF "$(MDB)" != ""
-    @echo $@
-    @echo "#$*#"
-    @echo "#$/#"
-    @echo $(&:+"\n"))
-.ENDIF
-.IF "$(COM)"=="WTC"
-    @+if exist $@ $(RM) /q $@ >& nul
-
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj )  $(CFLAGSINCXX)$(PWD)$/$*.cpp
-.ELSE
-.IF "$(COM)"=="BLC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp)
-.ELSE
     @+if exist $@ $(RM) /q $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
     @+echo.
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
-.ENDIF
-.ENDIF
-.ENDIF
 .ENDIF
 
 $(SLO)$/%.obj : $(MISC)$/%.cxx
@@ -203,99 +144,10 @@ $(SLO)$/%.obj : $(MISC)$/%.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $(MISC)$/*.cxx)
-.ELSE
-.IF "$(MDB)" != ""
-    @echo $@
-    @echo "#$*#"
-    @echo "#$/#"
-    @echo $(&:+"\n"))
-.ENDIF
-    @+if exist $@ $(RM) /q $@ >& nul
-.IF "$(COM)"=="WTC"
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU)) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx
-.ELSE
-.IF "$(COM)"=="BLC"
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx)
-.ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
     @+echo.
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
 .ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-
-$(OBJ)$/$(IDLPACKAGE)$/%.obj : $(OUTCXX)$/$(IDLPACKAGE)$/%.cxx
-    @echo ------------------------------
-    @echo Making: $@
-    @+-$(MKDIRHIER) $(OBJ)$/$(IDLPACKAGE)
-.IF "$(GUI)"=="UNX"
-.IF "$(TEST)"!=""
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU) -E  $(CFLAGSINCXX)$(OUTCXX)$(IDLPACKAGE)$/$*.cxx
-.ELSE
-    @$(RM) $@ $(@:s/.obj/.o/)
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU) $(CFLAGSOUTOBJ) $(OBJ)$/$(IDLPACKAGE)$/$*.o $(CFLAGSINCXX)$(OUTCXX)$/$(IDLPACKAGE)$/$*.cxx
-    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
-.ENDIF
-.ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $(OUTCXX)$/$(IDLPACKAGE)$/*.cxx)
-.ELSE
-.IF "$(MDB)" != ""
-    @echo $@
-    @echo "#$*#"
-    @echo "#$/#"
-    @echo $(&:+"\n"))
-.ENDIF
-    @+if exist $@ $(RM) /q $@ >& nul
-.IF "$(COM)"=="WTC"
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU)) $(CFLAGSOUTOBJ)$(OBJ)$/$(IDLPACKAGE)$/$*.obj $(CFLAGSINCXX)$(OUTCXX)$/$(IDLPACKAGE)$/$*.cxx
-.ELSE
-    @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU) $(CFLAGSOUTOBJ)$(OBJ)$/$(IDLPACKAGE)$/$*.obj $(CFLAGSINCXX)$(OUTCXX)$/$(IDLPACKAGE)$/$*.cxx )
-    @+echo.
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU) $(CFLAGSOUTOBJ)$(OBJ)$/$(IDLPACKAGE)$/$*.obj $(CFLAGSINCXX)$(OUTCXX)$/$(IDLPACKAGE)$/$*.cxx )
-.ENDIF
-.ENDIF
-.ENDIF
-
-$(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/%.obj : $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/%.cxx
-    @echo ------------------------------
-    @echo Making: $@
-    @+-$(MKDIRHIER) $(SLO)$(SMARTPRE)$/$(IDLPACKAGE)
-.IF "$(GUI)"=="UNX"
-.IF "$(TEST)"!=""
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) -E  $(CFLAGSINCXX)$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.cxx
-.ELSE
-    @$(RM) $@ $(@:s/.obj/.o/)
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ) $(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.o $(CFLAGSINCXX)$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.cxx
-    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
-.ENDIF
-.ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.cxx)
-.ELSE
-.IF "$(MDB)" != ""
-    @echo $@
-    @echo "#$*#"
-    @echo "#$/#"
-    @echo $(&:+"\n"))
-.ENDIF
-    @+if exist $@ $(RM) /q $@ >& nul
-.IF "$(COM)"=="WTC"
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU)) $(CFLAGSOUTOBJ)$(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.obj $(CFLAGSINCXX)$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.cxx
-.ELSE
-    @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.obj $(CFLAGSINCXX)$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.cxx )
-    @+echo.
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.obj $(CFLAGSINCXX)$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/$*.cxx )
-.ENDIF
-.ENDIF
-.ENDIF
-
 
 $(OBJ)$/%.obj : $(MISC)$/%.cxx
     @echo ------------------------------
@@ -309,29 +161,9 @@ $(OBJ)$/%.obj : $(MISC)$/%.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHOBJFLAGSU) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $(MISC)$/$*.cxx)
-.ELSE
-.IF "$(MDB)" != ""
-    @echo $@
-    @echo "#$*#"
-    @echo "#$/#"
-    @echo $(&:+"\n"))
-.ENDIF
-    @+if exist $@ $(RM) /q $@ >& nul
-.IF "$(COM)"=="WTC"
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU)) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx
-.ELSE
-.IF "$(COM)"=="BLC"
-    $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx)
-.ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
     @+echo.
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
-.ENDIF
-.ENDIF
-.ENDIF
 .ENDIF
 
 $(OBJ)$/%.obj : %.c
@@ -346,14 +178,6 @@ $(OBJ)$/%.obj : %.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.c)
-.ELSE
-.IF "$(COM)"=="WTC"
-    echo $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c
-    $(cc) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ)) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c
-.ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
     @+echo.
 .IF "$(COM)"=="GCC"
@@ -363,8 +187,6 @@ $(OBJ)$/%.obj : %.c
     $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
 .ENDIF
     $(SEMADEBUG)
-.ENDIF
-.ENDIF
 .ENDIF
 
 $(OBJ)$/%.obj : $(MISCX)$/%.c
@@ -409,22 +231,11 @@ $(SLO)$/%.obj : %.c
     $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-.IF "$(COM)"=="WTC"
-    @+if exist $@ $(RM) /q $@ >& nul
-    $(cc) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT)) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c
-    +IF exist $*.err @del $*.err
-.ELSE
-.IF "$(GUI)"=="MAC"
-    @$(RM) $@
-    $(cc) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ) $(shell $(UNIX2MACPATH) $@ $*.c)
-.ELSE
     @+if exist $@ $(RM) /q $@ >& nul
 .IF "$(COM)"=="GCC"
        $(CC) $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
 .ELSE
        $(CC) @$(mktmp $(CFLAGS:s/stl//) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c )
-.ENDIF
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -479,6 +290,104 @@ $(SLO)$/%.obj : %.m
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C files is available for this platform"
 .ENDIF		"$(OS)"=="MACOSX"
+
+# dependencies c / c++
+
+$(MISC)$/s_%.dpcc : %.c
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+
+$(MISC)$/o_%.dpcc : %.c
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+
+$(MISC)$/s_%.dpcc : %.cxx
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+   
+$(MISC)$/o_%.dpcc : %.cxx
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+   
+$(MISC)$/s_%.dpcc : %.cpp
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+   
+$(MISC)$/o_%.dpcc : %.cpp
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+   
+$(MISC)$/s_%.dpcc : $(MISCX)$/%.c
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+   
+$(MISC)$/o_%.dpcc : $(MISCX)$/%.c
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+   
+$(MISC)$/s_%.dpcc : $(MISCX)$/%.cxx
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+   
+$(MISC)$/o_%.dpcc : $(MISCX)$/%.cxx
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+   
+# dependencies objective-c
+
+$(MISC)$/s_%.dpcc : %.m
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+   
+$(MISC)$/o_%.dpcc : %.m
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+   
+$(MISC)$/s_%.dpcc : $(MISCX)$/%.m
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+   
+$(MISC)$/o_%.dpcc : $(MISCX)$/%.m
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC) $(PCHOBJFLAGSU) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+   
+# dependencies script files
+
+$(MISC)$/%.dpcc :
+    @echo ------------------------------
+    @echo Making: $@
+    @+-$(RM) $@ >& $(NULLDEV)
+    @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
+    makedepend -f - -p$(OBJ)$/ -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $@
+
 
 .IF "$(MAKEFILERC)"==""
 $(MISC)$/%.dpc : $(CFILES) $(CXXFILES) $(RCFILES) $(UNOIDLTARGETS) $(SLOFILES) $(OBJFILES)

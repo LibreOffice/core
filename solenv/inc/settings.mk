@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-29 15:36:23 $
+#   last change: $Author: hjs $ $Date: 2001-02-02 13:55:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -813,15 +813,16 @@ BIN=$(OUT)$/bin
 # still without -I here s.a. target.mk INCLUDE
 INC=$(PRJ)$/inc
 INCLOCAL=..$/inc
-.IF "$(PRJINC)"!=""
-INCLOCPRJ=$(PRJINC)$/inc
-.ENDIF
 INCGUI=$(PRJ)$/$(GUIBASE)$/inc
 INCCOM=$(OUT)$/inc
 INCCOMX=$(OUT)$/inc
 INCUNOIDL=$(INCCOM)$/$(PRJNAME)
 I={$(INCLUDE)}
-INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC) $(INCLOCPRJ)
+INCDEPN=. $(INCGUI) $(INCLOCAL) $(INC)
+.IF "$(PRJINC)"!=""
+INCLOCPRJ=$(PRJINC)$/inc
+INCDEPN+=$(INCLOCPRJ)
+.ENDIF
 
 # Resource-Pfad fuer .SRS
 SRS=$(OUT)$/srs
@@ -1057,14 +1058,12 @@ CDEFSDBGUTIL=-DDBG_UTIL
 CDEFSOPT=-DOPTIMIZE
 HDEFS=-D:$(GUI) -D:$(COM)
 
-MKDEP=makedepn
-MKDEPFLAGS=-I:$(INCDEPN:s/ / -I:/)
-#MKDEPALLINC=$(INCLUDE:s/;/ -I/:s/-I/ -I:/)
-MKDEPALLINC=$(SOLARINCLUDES:s/-I/ -I:/)
-MKDEPPREINC=-I:$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
-MKDEPSOLENV=-I:$(SOLARENV)$/inc -I:$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
-MKDEPSOLVER=-I:$(SOLARVERSION)$/$(INPATH)$/inc.$(UPDMINOR) -I:$(SOLARVERSION)$/$(INPATH)$/inc
-MKDEPLOCAL=-I:$(INCCOM)
+MKDEPFLAGS=-I$(INCDEPN:s/ / -I/)
+MKDEPALLINC=$(SOLARINCLUDES:s/-I/ -I/)
+MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
+MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
+MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc.$(UPDMINOR) -I$(SOLARVERSION)$/$(INPATH)$/inc
+MKDEPLOCAL=-I$(INCCOM)
 
 BISON=bison
 YACCFLAGS*=-d -o 
@@ -1346,20 +1345,6 @@ PCHSLOFLAGSC=
 PCHSLOFLAGSU=
 PCHOBJFLAGSC=-Yc -Yd -Fp$(PROJECTPCHTARGET)
 PCHOBJFLAGSU=-Yu -Yd -Fp$(PROJECTPCHTARGET)
-.ENDIF
-.ELSE
-.IF "$(COM)"=="BLC"
-CFLAGS+=-Hu -H=$(PROJECTPCHTARGET)
-PCHOBJFLAGSC=
-PCHSLOFLAGSC=
-PCHOBJFLAGSU=-Hu
-PCHSLOFLAGSU=-Hu
-PCHOBJFLAGSU=
-PCHSLOFLAGSU=
-.ELSE
-.IF "$(COM)" == "ICC"
-CFLAGS+=/Fi$(PROJECTPCHTARGET)
-.ENDIF
 .ENDIF
 .ENDIF
 .ENDIF		# "$(PRJPCH)"!=""
