@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:17:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,11 @@
 #include <com/sun/star/util/Date.hpp>
 #endif
 
-#include "swtypes.hxx"  // fuer aEmptyStr
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+// @@@ #include "swtypes.hxx"   // fuer aEmptyStr
+
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
@@ -197,7 +201,8 @@ SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 struct SwNewDBMgr_Impl;
 class SwConnectionDisposedListener_Impl;
 class AbstractMailMergeDlg;
-class SwNewDBMgr
+
+class SW_DLLPUBLIC SwNewDBMgr
 {
 friend class SwConnectionDisposedListener_Impl;
 
@@ -222,23 +227,25 @@ friend class SwConnectionDisposedListener_Impl;
     SwDSParam*          pMergeData;
     AbstractMailMergeDlg*       pMergeDialog;
     //CHINA001 SwMailMergeDlg*      pMergeDialog;
-    SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
-    SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
+
+    SW_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
+    SW_DLLPRIVATE SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
 
 
-    DECL_LINK( PrtCancelHdl, Button * );
+    SW_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
     // Datensaetze als Text ins Dokument einfuegen
-    void ImportFromConnection( SwWrtShell* pSh);
+    SW_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
 
     // Einzelnen Datensatz als Text ins Dokument einfuegen
-    void ImportDBEntry(SwWrtShell* pSh);
+    SW_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
     // Mischen von Datensaetzen in Felder, dann per email versenden
-    BOOL            MergeMailing(SwWrtShell* pSh);
+    SW_DLLPRIVATE BOOL          MergeMailing(SwWrtShell* pSh);
+
     // Mischen von Datensaetzen in Felder, dann als Datei abspeichern
-    BOOL            MergeMailFiles(SwWrtShell* pSh);
-    BOOL            ToNextRecord(SwDSParam* pParam);
+    SW_DLLPRIVATE BOOL          MergeMailFiles(SwWrtShell* pSh);
+    SW_DLLPRIVATE BOOL          ToNextRecord(SwDSParam* pParam);
 
 public:
     SwNewDBMgr();
