@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:37:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ public:
 
 
 // Aufruf fuer die allg. Reader-Schnittstelle
-ULONG AsciiReader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
+ULONG AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String & )
 {
     if( !pStrm )
     {
