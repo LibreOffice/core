@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 11:14:37 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 12:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
 #endif
 
+    // ----------------------------------------
+    // collect animation informations if needed
+    // ----------------------------------------
+    if( mxAnimationsExporter.is() )
+        mxAnimationsExporter->collect( xShape );
+
     // -------------------------------
     // export shapes name if he has one
     // -------------------------------
@@ -376,12 +382,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             DBG_ERROR( "could not export layer name for shape!" );
         }
     }
-
-    // ----------------------------------------
-    // collect animation informations if needed
-    // ----------------------------------------
-    if( mxAnimationsExporter.is() )
-        mxAnimationsExporter->collect( xShape );
 
     // --------------------
     // export shape element
