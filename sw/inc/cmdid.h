@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 11:43:46 $
+ *  last change: $Author: os $ $Date: 2002-08-06 14:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_PARAM_TABLE_COLS         (FN_PARAM)
 #define FN_PARAM_TABLE_ROWS         (FN_PARAM+1)
+#define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
+#define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
 
 #define FN_PARAM_SEARCH_WORDONLY    (FN_PARAM+5)
 #define FN_PARAM_SEARCH_EXACT       (FN_PARAM+6)

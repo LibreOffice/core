@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-07-31 08:30:25 $
+ *  last change: $Author: os $ $Date: 2002-08-06 14:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #ifndef _ARGS_HXX //autogen
 #include <svtools/args.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
 
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -116,19 +122,41 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer( &rSh );
-
-    USHORT nSlot = rReq.GetSlot();
-    switch(nSlot)
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    BOOL bSelect = FALSE;
+    USHORT nCount = 1;
+    if(pArgs)
     {
-    case FN_CHAR_LEFT_SEL:
-    case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS, FN_CHAR_LEFT_SEL == nSlot, 1, FALSE ); break;
-    case FN_CHAR_RIGHT_SEL:
-    case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, FN_CHAR_RIGHT_SEL == nSlot, 1, FALSE ); break;
-    case FN_LINE_UP_SEL:
-    case FN_LINE_UP:    rSh.Up   ( FN_LINE_UP_SEL == nSlot, 1 ); break;
-    case FN_LINE_DOWN_SEL:
-    case FN_LINE_DOWN:  rSh.Down ( FN_LINE_DOWN_SEL == nSlot, 1 ); break;
-    default:            ASSERT(FALSE, falscher Dispatcher); return;
+        const SfxPoolItem *pItem;
+        if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_COUNT, TRUE, &pItem))
+            nCount = ((const SfxInt16Item *)pItem)->GetValue();
+        if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_SELECTION, TRUE, &pItem))
+            bSelect = ((const SfxBoolItem *)pItem)->GetValue();
+    }
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+            GetView().GetViewFrame()->GetBindings().GetRecorder();
+    if ( xRecorder.is() )
+    {
+        rReq.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nCount) );
+        rReq.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, bSelect) );
+    }
+    USHORT nSlot = rReq.GetSlot();
+    rReq.Done();
+    for( USHORT i = 0; i < nCount; i++ )
+    {
+        switch(nSlot)
+        {
+        case FN_CHAR_LEFT_SEL:
+        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS, (FN_CHAR_LEFT_SEL == nSlot) || bSelect, 1, FALSE ); break;
+        case FN_CHAR_RIGHT_SEL:
+        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, (FN_CHAR_RIGHT_SEL == nSlot)|| bSelect, 1, FALSE ); break;
+        case FN_LINE_UP_SEL:
+        case FN_LINE_UP:    rSh.Up   ( FN_LINE_UP_SEL == nSlot, 1 ); break;
+        case FN_LINE_DOWN_SEL:
+        case FN_LINE_DOWN:  rSh.Down ( FN_LINE_DOWN_SEL == nSlot, 1 ); break;
+        default:            ASSERT(FALSE, falscher Dispatcher); return;
+        }
     }
 }
 

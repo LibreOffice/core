@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:13:37 $
+ *  last change: $Author: os $ $Date: 2002-08-06 14:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 0 );
             rWrtSh.GetAttr( aCoreSet );
             BOOL bSel = rWrtSh.HasSelection();
-            BOOL bSelectionPutted = FALSE;
+            BOOL bSelectionPut = FALSE;
             if(bSel || rWrtSh.IsInWord())
             {
                 if(!bSel)
@@ -644,7 +644,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.SelWrd();
                 }
                 aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
-                bSelectionPutted = TRUE;
+                bSelectionPut = TRUE;
                 if(!bSel)
                 {
                     rWrtSh.Pop(FALSE);
@@ -696,20 +696,30 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 const SfxPoolItem* pItem;
                 BOOL bInsert = FALSE;
+                xub_StrLen nInsert = 0;
 
                 // aus ungeklaerter Ursache ist das alte Item wieder im Set
-                if( !bSelectionPutted && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem) )
+                if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem) )
                 {
                     String sInsert = ((const SfxStringItem*)pItem)->GetValue();
                     bInsert = sInsert.Len() != 0;
                     if(bInsert)
                     {
+                        nInsert = sInsert.Len();
                         rWrtSh.StartAction();
                         rWrtSh.Insert( sInsert );
                         rWrtSh.SetMark();
                         rWrtSh.ExtendSelection(FALSE, sInsert.Len());
+                        SfxRequest aReq( GetView().GetViewFrame(), FN_INSERT_STRING );
+                        aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
+                        aReq.Done();
+                        SfxRequest aReq1( GetView().GetViewFrame(), FN_CHAR_LEFT );
+                        aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
+                        aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, TRUE) );
+                        aReq1.Done();
                     }
                 }
+                aTmpSet.ClearItem(FN_PARAM_SELECTION);
 
                 SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
                 if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
@@ -721,6 +731,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rReq.Done(aTmpSet);
                 if(bInsert)
                 {
+                    SfxRequest aReq1( GetView().GetViewFrame(), FN_CHAR_RIGHT );
+                    aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
+                    aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, FALSE) );
+                    aReq1.Done();
                     rWrtSh.SwapPam();
                     rWrtSh.ClearMark();
                     rWrtSh.DontExpandFmt();

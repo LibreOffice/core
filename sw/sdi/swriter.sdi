@@ -2184,7 +2184,7 @@ SfxBoolItem GoDown FN_LINE_DOWN
 
 //--------------------------------------------------------------------------
 SfxBoolItem GoLeft FN_CHAR_LEFT
-()
+(SfxInt16Item Count FN_PARAM_MOVE_COUNT,SfxBoolItem Select FN_PARAM_MOVE_SELECTION)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -2209,7 +2209,7 @@ SfxBoolItem GoLeft FN_CHAR_LEFT
 
 //--------------------------------------------------------------------------
 SfxBoolItem GoRight FN_CHAR_RIGHT
-()
+(SfxInt16Item Count FN_PARAM_MOVE_COUNT,SfxBoolItem Select FN_PARAM_MOVE_SELECTION)
 [
     /* flags: */
     AutoUpdate = FALSE,
