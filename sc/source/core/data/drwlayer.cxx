@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-31 16:07:45 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2066,9 +2066,9 @@ void __EXPORT ScDrawLayer::SetChanged( FASTBOOL bFlg /* =TRUE */ )
     FmFormModel::SetChanged( bFlg );
 }
 
-SvStream* __EXPORT ScDrawLayer::GetDocumentStream(FASTBOOL& rbDeleteAfterUse) const
+SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
-    rbDeleteAfterUse = FALSE;
+    rStreamInfo.mbDeleteAfterUse = FALSE;
     SvStream* pStream = NULL;
 
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public:
     virtual void    SetChanged( FASTBOOL bFlg = TRUE );
 
     virtual Window* GetCurDocViewWin();
-    virtual SvStream* GetDocumentStream(FASTBOOL& rbDeleteAfterUse) const;
+    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
