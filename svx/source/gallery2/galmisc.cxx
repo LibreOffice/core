@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:44:54 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,9 +294,9 @@ String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
     String aRet;
 
     if( rSvDrawObjURL.GetProtocol() == INET_PROT_PRIV_SOFFICE &&
-        rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).GetTokenCount( '/' ) == 3 )
+        String(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE )).GetTokenCount( '/' ) == 3 )
     {
-        aRet = rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).GetToken( 2, '/' );
+        aRet = String(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE )).GetToken( 2, '/' );
     }
 
     return aRet;
