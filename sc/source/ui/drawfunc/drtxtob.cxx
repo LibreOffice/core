@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 16:58:49 $
+ *  last change: $Author: nn $ $Date: 2001-05-02 15:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svtools/cjkoptions.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -467,6 +468,21 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             }
         }
         rSet.Put(aHLinkItem);
+    }
+
+    if ( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SFX_ITEM_UNKNOWN ||
+         rSet.GetItemState( SID_TRANSLITERATE_FULLWIDTH ) != SFX_ITEM_UNKNOWN ||
+         rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SFX_ITEM_UNKNOWN ||
+         rSet.GetItemState( SID_TRANSLITERATE_KATAGANA ) != SFX_ITEM_UNKNOWN )
+    {
+        SvtCJKOptions aCJKOptions;
+        if (!aCJKOptions.IsChangeCaseMapEnabled())
+        {
+            rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
+            rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
+            rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
+            rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
     }
 }
 

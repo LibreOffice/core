@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 14:47:52 $
+ *  last change: $Author: nn $ $Date: 2001-05-02 15:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include "scitems.hxx"
 
+#include <svtools/cjkoptions.hxx>
 #include <svtools/slstitm.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
@@ -231,6 +232,17 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
                 if ( !bEditable && bOnlyNotBecauseOfMatrix )
                     bNeedEdit = FALSE;
+                break;
+
+            case SID_TRANSLITERATE_HALFWIDTH:
+            case SID_TRANSLITERATE_FULLWIDTH:
+            case SID_TRANSLITERATE_HIRAGANA:
+            case SID_TRANSLITERATE_KATAGANA:
+                {
+                    // SvtCJKOptions is ref-counted - can be constructed every time
+                    SvtCJKOptions aCJKOptions;
+                    bDisable = !aCJKOptions.IsChangeCaseMapEnabled();
+                }
                 break;
         }
         if (!bDisable && bNeedEdit && !bEditable)
