@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:35 $
+ *  last change: $Author: pl $ $Date: 2001-05-09 10:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,13 +1859,27 @@ const ::rtl::OUString& PrintFontManager::getFontFamily( fontID nFontID ) const
 OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
 {
     OString aMetricPath;
-    if( pFont && pFont->m_eType == fonttype::Type1 )
+    if( pFont )
     {
-        Type1FontFile* pPSFont = static_cast< Type1FontFile* >(pFont);
-        ::std::hash_map< int, OString >::const_iterator it = m_aAtomToDir.find( pPSFont->m_nDirectory );
-        aMetricPath = it->second;
-        aMetricPath += "/";
-        aMetricPath += pPSFont->m_aMetricFile;
+        switch( pFont->m_eType )
+        {
+            case fonttype::Type1:
+            {
+                Type1FontFile* pPSFont = static_cast< Type1FontFile* >(pFont);
+                aMetricPath = getDirectory( pPSFont->m_nDirectory );
+                aMetricPath += "/";
+                aMetricPath += pPSFont->m_aMetricFile;
+            }
+            break;
+            case fonttype::Builtin:
+            {
+                BuiltinFont* pBuiltinFont = static_cast< BuiltinFont* >(pFont);
+                aMetricPath = getDirectory( pBuiltinFont->m_nDirectory );
+                aMetricPath += "/";
+                aMetricPath += pBuiltinFont->m_aMetricFile;
+            }
+            break;
+        }
     }
     return aMetricPath;
 }
