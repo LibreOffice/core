@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:57:59 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #include <comcore.hrc>
+#include <headerfooterhelper.hxx>
+
 
 SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,
@@ -77,6 +79,14 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc)
 {
     ASSERT(0 != pDoc, "no document?");
+
+    // The headers/footers from the two SwPageDesc saved by this undo
+    // are still in the main document array. In order to preserve the
+    // absolute indices, we need to move them into the undo nodes
+    // array.
+    SwNodes& rNodes = * const_cast<SwNodes*>( pDoc->GetUndoNds() );
+    saveHeaderFooterNodes( (SwPageDesc&)aOld, rNodes );
+    saveHeaderFooterNodes( (SwPageDesc&)aNew, rNodes );
 }
 
 SwUndoPageDesc::~SwUndoPageDesc()
