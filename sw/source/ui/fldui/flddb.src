@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 14:54:37 $
+ *  last change: $Author: iha $ $Date: 2002-08-09 10:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,13 +91,14 @@ TabPage TP_FLD_DB
         Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "æ¨è€³é´«å‹ºæŸ´é…Œå®Ÿè»¸æ¨é‡ˆ(~T)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
         Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
         Text[ korean ] = "í•„ë“œìœ í˜•(~T)";
         Text[ turkish ] = "Alan tipi";
-        Text[ catalan ] = "~Tipo de campo";
+        Text[ catalan ] = "~Tipus";
+        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
     };
     ListBox LB_DBTYPE
     {
@@ -123,7 +124,7 @@ TabPage TP_FLD_DB
         TEXT = "Bedin~gung" ;
         TEXT [ English ] = "Conditio~n" ;
         TEXT [ norwegian ] = "Vilkår" ;
-        TEXT [ italian ] = "Con~dizione" ;
+        TEXT [ italian ] = "Condizione" ;
         TEXT [ portuguese_brazilian ] = "condi??o" ;
         TEXT [ portuguese ] = "~Condição" ;
         TEXT [ finnish ] = "~Ehto" ;
@@ -141,9 +142,10 @@ TabPage TP_FLD_DB
         TEXT[ chinese_traditional ] = "æ¢ä»¶(~C)";
         TEXT[ arabic ] = "ÇáÔÑØ";
         TEXT[ greek ] = "¼ñïò";
-        TEXT[ korean ] = "ì¡°ê±´)(~C)";
+        TEXT[ korean ] = "ì¡°ê±´(~C)";
         TEXT[ turkish ] = "Koşul";
-        TEXT[ catalan ] = "Con~dición";
+        TEXT[ catalan ] = "Con~dició";
+        TEXT[ thai ] = "à¹€~à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
     };
     Edit ED_DBCONDITION
     {
@@ -180,7 +182,8 @@ TabPage TP_FLD_DB
         TEXT[ greek ] = "Áñéèìüò åããñáöŞò";
         TEXT[ korean ] = "ë°ì´í„° ë ˆì½”ë“œ  ë²ˆí˜¸";
         TEXT[ turkish ] = "Veri kümesi numarası";
-        TEXT[ catalan ] = "Número de registro";
+        TEXT[ catalan ] = "Número de registre";
+        TEXT[ thai ] = "à¹€à¸¥à¸‚à¸£à¸°à¹€à¸šà¸µà¸¢à¸™";
     };
     Edit ED_DBSETNUMBER
     {
@@ -201,7 +204,7 @@ TabPage TP_FLD_DB
         Text [ portuguese_brazilian ] = "Datenbank~auswahl" ;
         Text [ swedish ] = "Datab~asurval" ;
         Text [ danish ] = "Databaseudvalg" ;
-        Text [ italian ] = "Scelta ~database" ;
+        Text [ italian ] = "Scelta database" ;
         Text [ spanish ] = "~Seleccionar base de datos" ;
         Text [ french ] = "~Sélection d'une base de données" ;
         Text [ dutch ] = "Selectie ~database" ;
@@ -215,8 +218,9 @@ TabPage TP_FLD_DB
         Text[ greek ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
         Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì„ íƒ(~E)";
         Text[ turkish ] = "Veritabanı seçimi";
-        Text[ catalan ] = "~Seleccionar base de datos";
+        Text[ catalan ] = "~Selecciona base de dades";
         Text[ finnish ] = "~Tietokantavalinta";
+        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     Control TLB_DBLIST
     {
@@ -238,7 +242,7 @@ TabPage TP_FLD_DB
         Text [ danish ] = "Fra database" ;
         Text [ italian ] = "Dal database" ;
         Text [ spanish ] = "De la base de datos" ;
-        Text [ french ] = "~De la BD" ;
+        Text [ french ] = "De la BD" ;
         Text [ dutch ] = "~Uit database" ;
         Text [ portuguese ] = "~Da base de dados" ;
         Text[ chinese_simplified ] = "ä»æ•°æ®åº“";
@@ -250,13 +254,14 @@ TabPage TP_FLD_DB
         Text[ greek ] = "Áğü âÜóç äåäïìİíùí";
         Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ë¡œë¶€í„°";
         Text[ turkish ] = "Kaynak veritabanı";
-        Text[ catalan ] = "De la base de datos";
+        Text[ catalan ] = "Des de la base de dades";
         Text[ finnish ] = "Tietokannasta";
+        Text[ thai ] = "à¸ˆà¸²à¸à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     RadioButton RB_DBFORMAT
     {
         Pos = MAP_APPFONT ( 94 , 165 ) ;
-        Size = MAP_APPFONT ( 67 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Se~lbst definiert" ;
         Text [ ENGLISH ] = "User defined" ;
         Text [ english_us ] = "User-defined" ;
@@ -265,10 +270,10 @@ TabPage TP_FLD_DB
         Text [ danish ] = "Brugerdefineret" ;
         Text [ italian ] = "Personalizzato" ;
         Text [ spanish ] = "Definido por el usuario" ;
-        Text [ french ] = "Dé~fini par l'utilisateur" ;
+        Text [ french ] = "Défini par l'utilisateur" ;
         Text [ dutch ] = "~Zelf gedefinieerd" ;
         Text [ portuguese ] = "D~efinido pelo utilizador" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨";
+        Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªå®š";
         Text[ russian ] = "Íàñòğîéêè ïîëüçîâàòåëÿ";
         Text[ polish ] = "Zdefiniowane przez u¿ytkownika";
         Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©";
@@ -277,14 +282,15 @@ TabPage TP_FLD_DB
         Text[ greek ] = "Ğñïóáñìïóìİíï";
         Text[ korean ] = "ì‚¬ìš©ì ì •ì˜";
         Text[ turkish ] = "Kullanıcı tanımlı";
-        Text[ catalan ] = "Definido por el usuario";
+        Text[ catalan ] = "Definit per l'usuari";
         Text[ finnish ] = "Käyttäjän määrittämä";
+        Text[ thai ] = "à¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
     };
     ListBox LB_DBNUMFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 163 ) ;
-        Size = MAP_APPFONT ( 83 , 60 ) ;
+        Pos = MAP_APPFONT ( 195 , 163 ) ;
+        Size = MAP_APPFONT ( 53 , 60 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
         DropDown = TRUE ;
@@ -292,8 +298,8 @@ TabPage TP_FLD_DB
     ListBox LB_DBFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 163 ) ;
-        Size = MAP_APPFONT ( 88 , 60 ) ;
+        Pos = MAP_APPFONT ( 195 , 163 ) ;
+        Size = MAP_APPFONT ( 53 , 60 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
         DropDown = TRUE ;
@@ -324,8 +330,9 @@ TabPage TP_FLD_DB
         Text[ greek ] = "ÌïñöŞ";
         Text[ korean ] = "ì„œì‹";
         Text[ turkish ] = "Format";
-        Text[ catalan ] = "Formato";
+        Text[ catalan ] = "Format";
         Text[ finnish ] = "Muoto";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     FixedLine FL_DBFORMAT_VERT
     {
@@ -351,9 +358,20 @@ TabPage TP_FLD_DB
     Text[ greek ] = "ÂÜóç äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤";
     Text[ turkish ] = "Veritabanı";
-    Text[ catalan ] = "Base de datos";
+    Text[ catalan ] = "Base de dades";
     Text[ finnish ] = "Tietokanta";
+    Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
