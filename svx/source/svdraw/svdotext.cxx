@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
+ *  last change: $Author: aw $ $Date: 2002-07-04 15:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,13 +811,21 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
             }
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
         }
-        if (eHAdj==SDRTEXTHORZADJUST_BLOCK)
+
+        // #100801# MinAutoPaperSize needs always to be set completely
+        // when Verical
+        if(IsVerticalWriting())
+        {
+            rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
+        }
+
+        if(SDRTEXTHORZADJUST_BLOCK == eHAdj)
         {
             // #89459#
-            if(IsVerticalWriting())
-                rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
-            else
+            if(!IsVerticalWriting())
+            {
                 rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+            }
         }
     }
 
