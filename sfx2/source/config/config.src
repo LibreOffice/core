@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:54:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModalDialog DLG_MACROQUERY
         Text [ spanish ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ¿Desea que se ejecute esta macro?" ;
         Text [ french ] = "Un événement s'est produit pour lequel une macro a été configurée. Désirez-vous l'exécuter?" ;
         Text [ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?" ;
-        Text [ portuguese ] = "Foi produzido um acontecimento para o qual foi configurada uma macro. Deseja executá-la?" ;
+        Text [ portuguese ] = "Foi produzido um evento para o qual foi configurada uma macro. Deseja executá-la?" ;
         Text[ chinese_simplified ] = "²Ù×÷ÃüÁîÖ±½ÓÀ´×ÔÒ»¸öºê£¬ÄúÒªÖ´ĞĞÕâ¸öºê£¿";
         Text[ russian ] = "Çàïóùåíî ñîáûòèå, äëÿ êîòîğîãî ñêîíôèãóğèğîâàí ìàêğîñ. Âû õîòèòå âûïîëíèòü ıòîò ìàêğîñ?";
         Text[ polish ] = "Zosta³o uruchomione wydarzenie, do którego zosta³o skonfigurowane makro. Czy chcesz wykonaæ to makro?";
