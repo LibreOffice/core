@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-01 11:54:47 $
+ *  last change: $Author: ab $ $Date: 2002-11-01 12:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,13 +802,17 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     {
                         pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
                     }
+                    else
+                    {
+                        SfxAllItemSet Args( SFX_APP()->GetPool() );
+                        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, Args );
+                        SFX_APP()->ExecuteSlot( aRequest );
+                    }
                     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
                     pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                     pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                     if ( pDispatcher )
-                    {
                         pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
-                    }
                     StoreMacroDescription();
                     EndDialog( MACRO_NEW );
                 }
