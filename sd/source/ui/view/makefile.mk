@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-28 13:35:23 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:33:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ EXCEPTIONSFILES=				\
         $(SLO)$/drviews8.obj \
         $(SLO)$/drviewsa.obj \
         $(SLO)$/outlnvsh.obj \
+        $(SLO)$/presvish.obj \
         $(SLO)$/slidvish.obj \
         $(SLO)$/ObjectBarManager.obj
 
@@ -126,12 +127,11 @@ SLOFILES =	\
         $(SLO)$/slidview.obj \
         $(SLO)$/outlnvsh.obj \
         $(SLO)$/outlnvs2.obj \
-        $(SLO)$/presvish.obj \
         $(SLO)$/prvwshll.obj \
+        $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
         $(SLO)$/showview.obj \
-        $(SLO)$/showwin.obj	\
         $(SLO)$/bmcache.obj	\
         $(SLO)$/drbezob.obj	\
         $(SLO)$/drglueob.obj	\
