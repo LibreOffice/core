@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targets.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:40:36 $
+ *  last change: $Author: as $ $Date: 2002-08-13 12:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,10 @@ class TargetCheck
      */
     static sal_Bool isValidTarget( const ::rtl::OUString& sTarget )
     {
-        return (sTarget.indexOf('_') == 0 && TargetCheck::isSpecialTarget(sTarget));
+        sal_Int32 nPosOf_  = sTarget.indexOf('_');
+        sal_Bool  bSpecial = TargetCheck::isSpecialTarget(sTarget);
+
+        return (( nPosOf_ == 0 && bSpecial ) || ( nPosOf_ != 0 && ! bSpecial ));
     }
 };
 
