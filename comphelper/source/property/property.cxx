@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:12:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,7 @@ void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource
     starbeans::Property aDestProp;
     for (sal_Int32 i=0; i<aSourceProps.getLength(); ++i, ++pSourceProps)
     {
-        if  (   xDestProps->hasPropertyByName(pSourceProps->Name)
-            &&  xDestProps->hasPropertyByName(pSourceProps->Name)
-            )
+        if ( xDestProps->hasPropertyByName(pSourceProps->Name) )
         {
             try
             {
