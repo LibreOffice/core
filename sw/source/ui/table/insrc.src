@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:55:44 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ korean ] = "ÀÌÀü(~B)";
         Text[ turkish ] = "ön~üne";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De~lante";
     };
     RadioButton CB_POS_AFTER
     {
@@ -160,6 +161,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ korean ] = "ÀÌÈÄ(~F)";
         Text[ turkish ] = "ar~kasýna";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "de~trás";
     };
     NumericField ED_COUNT
     {
@@ -204,6 +206,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ korean ] = "»ðÀÔ";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar";
     };
     GroupBox GB_POS
     {
@@ -239,6 +242,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ korean ] = "°³¼ö(~A)";
         Text[ turkish ] = "~Adet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cantidad";
     };
     String STR_ROW
     {
@@ -265,6 +269,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Filas";
     };
     String STR_COL
     {
@@ -291,6 +296,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ korean ] = "¿­";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columnas";
     };
     Text[ chinese_simplified ] = "²åÈë";
     Text[ russian ] = "Âñòàâèòü";
@@ -302,4 +308,5 @@ ModalDialog DLG_INS_ROW_COL
     Text[ korean ] = "»ðÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar";
 };
