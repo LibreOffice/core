@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:21:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
         Text[ slovak ] = "~Heslo";
+        Text[ hungarian ] = "~Jelszó";
+        Text[ slovenian ] = "~Geslo";
     };
     Edit ED_OLD_PASSWD
     {
@@ -146,6 +148,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮סיסמה ישנה‬";
         Text[ hindi ] = "पुराना कूटशब्द";
         Text[ slovak ] = "Staré heslo";
+        Text[ hungarian ] = "Régi jelszó";
+        Text[ slovenian ] = "Staro geslo";
     };
     FixedText FT_NEW_PASSWD
     {
@@ -179,6 +183,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "कू~टशब्द";
         Text[ slovak ] = "He~slo";
+        Text[ hungarian ] = "~Jelszó";
+        Text[ slovenian ] = "Ge~slo";
     };
     Edit ED_NEW_PASSWD
     {
@@ -218,6 +224,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮נא לאשר‬";
         Text[ hindi ] = "दृढ़ ~करो";
         Text[ slovak ] = "Potv~rdiť";
+        Text[ hungarian ] = "~Megerősítés";
+        Text[ slovenian ] = "Po~trdi";
     };
     Edit ED_REPEAT_PASSWD
     {
@@ -258,6 +266,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮סיסמה חדשה‬";
         Text[ hindi ] = "नया कूटशब्द";
         Text[ slovak ] = "Nové heslo";
+        Text[ hungarian ] = "Új jelszó";
+        Text[ slovenian ] = "Novo geslo";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -286,7 +296,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ spanish ] = "Contrase�a incorrecta" ;
         Text [ french ] = "Mot de passe incorrect" ;
         Text [ swedish ] = "Ogiltigt l�senord" ;
-        Text [ danish ] = "Ugyldig adgangskode" ;
+        Text [ danish ] = "Forkert adgangskode" ;
         Text [ portuguese ] = "Senha incorrecta" ;
         Text [ portuguese_brazilian ] = "Senha inv�lida" ;
         Text[ chinese_simplified ] = "密码无效";
@@ -306,6 +316,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮סיסמה לא נכונה‬";
         Text[ hindi ] = "अमान्य कूटशब्द";
         Text[ slovak ] = "Neplatné heslo";
+        Text[ hungarian ] = "Érvénytelen jelszó";
+        Text[ slovenian ] = "Neveljavno geslo";
     };
     String STR_ERR_REPEAT_PASSWD
     {
@@ -337,6 +349,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ hebrew ] = "‮הסיסמאות אינן מתאימות‬";
         Text[ hindi ] = "कूटशब्द समान नहीं है";
         Text[ slovak ] = "Heslá sa líšia";
+        Text[ hungarian ] = "A jelszavak nem egyeznek";
+        Text[ slovenian ] = "Gesli se ne ujemata";
     };
     Text [ english_us ] = "Change Password" ;
     Text [ italian ] = "Cambia password" ;
@@ -344,7 +358,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text [ french ] = "Modification du mot de passe" ;
     Text [ dutch ] = "Wachtwoord wijzigen" ;
     Text [ swedish ] = "�ndra l�senord" ;
-    Text [ danish ] = "Rediger adgangskode" ;
+    Text [ danish ] = "Skift adgangskode" ;
     Text [ portuguese_brazilian ] = "Alterar a Senha" ;
     Text [ portuguese ] = "Modificar senha" ;
     Text[ chinese_simplified ] = "更改密码";
@@ -364,8 +378,11 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text[ hebrew ] = "‮שינוי סיסמה‬";
     Text[ hindi ] = "कूटशब्द बदलो";
     Text[ slovak ] = "Zmeniť heslo";
+    Text[ hungarian ] = "Jelszó megváltoztatása";
+    Text[ slovenian ] = "Sprememba gesla";
 };
  // ********************************************************************** EOF
+
 
 
 
