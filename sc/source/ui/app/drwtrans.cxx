@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:42:42 $
+ *  last change: $Author: nn $ $Date: 2002-12-11 16:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,36 @@ ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
     return pObj;
 }
 
+BOOL lcl_HasOnlyControls( SdrModel* pModel )
+{
+    BOOL bOnlyControls = FALSE;         // default if there are no objects
+
+    if ( pModel )
+    {
+        SdrPage* pPage = pModel->GetPage(0);
+        if (pPage)
+        {
+            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObject* pObj = aIter.Next();
+            if ( pObj )
+            {
+                bOnlyControls = TRUE;   // only set if there are any objects at all
+                while ( pObj )
+                {
+                    if (!pObj->ISA(SdrUnoObj))
+                    {
+                        bOnlyControls = FALSE;
+                        break;
+                    }
+                    pObj = aIter.Next();
+                }
+            }
+        }
+    }
+
+    return bOnlyControls;
+}
+
 void ScDrawTransferObj::AddSupportedFormats()
 {
     if ( bGrIsBit )             // single bitmap graphic
@@ -333,8 +363,13 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_DRAWING );
-        AddFormat( SOT_FORMAT_BITMAP );
-        AddFormat( SOT_FORMAT_GDIMETAFILE );
+
+        // #103556# leave out bitmap and metafile if there are only controls
+        if ( !lcl_HasOnlyControls( pModel ) )
+        {
+            AddFormat( SOT_FORMAT_BITMAP );
+            AddFormat( SOT_FORMAT_GDIMETAFILE );
+        }
     }
 
 //  if( pImageMap )
