@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 18:24:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@ File gid_File_Oo_Office_Filter_Math_Pkg
     Styles = (PACKED);
     Dir = gid_Dir_Share_Uno_Packages;
     Name = "fcfg_math.zip";
+End
+
+File gid_File_Oo_Office_Embedding_Math_Pkg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "embedding_math.zip";
 End
 
 File gid_File_Help_Smath_Zip
