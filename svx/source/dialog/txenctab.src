@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:39:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,8 +631,8 @@ ItemList [ language_user1 ] =
         < "��������� (Windows-Johab-1361)"                              ; RTL_TEXTENCODING_KOI8_R           ; > ;
         < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "Eastern Europe (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "Eastern Europe (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "���������� ������� (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "���������� ������� (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "Koreanisch (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Koreanisch (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
@@ -791,7 +791,7 @@ ItemList [ language_user1 ] =
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
         < "Europe de l'Est (ISO-8859-10)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "Europe de l'Est (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Cyrillique (KOI8-U)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Cor�en (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Cor�en (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Cor�en (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -870,7 +870,7 @@ ItemList [ language_user1 ] =
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
         < "Europa oriental (ISO-8859-10)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "Europa oriental (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Cir�lico (KOI8-U)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Coreano (EUC-KR)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Coreano (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -1028,7 +1028,7 @@ ItemList [ language_user1 ] =
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
         < "Europa dell'est (ISO-8859-10)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "Europa dell'est (ISO-8859-13)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Cirillico (KOI8-U)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Coreano (EUC-KR)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Coreano (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -1186,7 +1186,7 @@ ItemList [ language_user1 ] =
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
         < "�steuropa (ISO-8859-10)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "�steuropa (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Kyrillisk (KOI8-U)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Koreansk (EUC-KR)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "Koreansk (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Koreansk (Windows-Johab-1361)"                   ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -1423,7 +1423,7 @@ ItemList [ language_user1 ] =
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
         < "東欧(ISO-8859-10)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "東欧(ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "キリル言語(KOI8-U)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "韓国語(EUC-KR)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "韓国語(ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "韓国語(Windows-Johab-1361)"                   ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -1502,7 +1502,7 @@ ItemList [ language_user1 ] =
         < "유니코드 (UTF-8) "                                   ; RTL_TEXTENCODING_UTF8             ; > ;
         < "동유럽 (ISO-8859-10) "                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "동유럽 (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "키릴 자모 (KOI8-U)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "한국어 (EUC-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "한국어 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "한국어 (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "유니코드"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -1581,7 +1581,7 @@ ItemList [ language_user1 ] =
         < "统一码 (UTF-8)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
         < "东欧 (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "东欧 (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "西里尔语(KOI8-U)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "韩文 (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "韩文 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "韩文 (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "统一码"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -1660,7 +1660,7 @@ ItemList [ language_user1 ] =
         < "統一碼 (UTF-8)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
         < "東歐 (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
         < "東歐 (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "西里爾語 (KOI8-U)"                               ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "韓文 (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "韓文(ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "韓文(Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "統一碼"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
@@ -2031,6 +2031,33 @@ ItemList [ language_user1 ] =
         < "Japonština (Windows-932)"                       ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
         < "Zjednodušená čínština (Windows-936)"            ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
         < "Korejština (Windows-949)"       ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
+        < "Tradiční čínština (Windows-950)"        ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
+        < "Japonština (Shift-JIS)"                     ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
+        < "Zjednodušená čínština (GB-2312)"                    ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
+        < "Zjednodušená čínština (GB-18030)"                           ; RTL_TEXTENCODING_MS_932           ; > ;
+        < "Tradiční čínština (GBT-12345)"          ; RTL_TEXTENCODING_MS_936           ; > ;
+        < "Zjednodušená čínština (GBK/GB-2312-80)"                     ; RTL_TEXTENCODING_MS_949           ; > ;
+        < "Tradiční čínština (BIG5)"           ; RTL_TEXTENCODING_MS_950           ; > ;
+        < "Tradiční čínština (BIG5-HKSCS)"                         ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
+        < "Japonština (EUC-JP)"                ; RTL_TEXTENCODING_GB_2312          ; > ;
+        < "Zjednodušená čínština (EUC-CN)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
+        < "Tradiční čínština (EUC-TW)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
+        < "Japonština (ISO-2022-JP)"           ; RTL_TEXTENCODING_GBK              ; > ;
+        < "Zjednodušená čínština (ISO-2022-CN)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Azbuka (KOI8-R)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "Unicode (UTF-7)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "Unicode (UTF-8)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "Východní Evropa (ISO-8859-10)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "Východní Evropa (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "Korejština (EUC-KR)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "Korejština (ISO-2022-KR)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "Korejština (Windows-Johab-1361)"                                    ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "Unicode"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "Thajsky (ISO-8859-11/TIS-620)"                           ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "Thajsky (Windows-874)"                           ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "Koreanisch (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Koreanisch (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
     };
     ItemList [ hebrew ] =
     {
@@ -2079,6 +2106,34 @@ ItemList [ language_user1 ] =
         < "‮יפנית (Windows-932)‬"                      ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
         < "‮סינית מפושטת (Windows-936)‬"         ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
         < "‮קוריאנית (Windows-949)‬"        ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
+        < "‮סינית מסורתית (Windows-950)‬"       ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
+        < "‮יפנית (Shift-JIS)‬"                        ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
+        < "‮סינית מפושטת (GB-2312)‬"                 ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
+        < "‮סינית מפושטת (GB-18030)‬"                            ; RTL_TEXTENCODING_MS_932           ; > ;
+        < "‮סינית מסורתית (GBT-12345)‬"         ; RTL_TEXTENCODING_MS_936           ; > ;
+        < "‮סינית מפושטת (GBK/GB-2312-80)‬"                      ; RTL_TEXTENCODING_MS_949           ; > ;
+        < "‮סינית מסורתית (Big5)‬"          ; RTL_TEXTENCODING_MS_950           ; > ;
+        < "‮סינית מסורתית (Big5-HKSCS)‬"                            ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
+        < "‮יפנית (EUC-JP)‬"               ; RTL_TEXTENCODING_GB_2312          ; > ;
+        < "‮סינית מפושטת (EUC-CN)‬"               ; RTL_TEXTENCODING_GB_18030         ; > ;
+        < "‮סינית מסורתית (EUC-TW)‬"                ; RTL_TEXTENCODING_GBT_12345        ; > ;
+        < "‮יפנית (ISO-2022-JP)‬"          ; RTL_TEXTENCODING_GBK              ; > ;
+        < "‮סינית מפושטת (ISO-2022-CN)‬"                 ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "‮קירילית (KOI8-R)‬"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "‮יוניקוד (UTF-7)‬"                                ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "‮יוניקוד (UTF-8)‬"                    ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "‮מזרח אירופאית (ISO-8859-10)‬"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "‮מזרח אירופאית (ISO-8859-13)‬"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "‮קוריאנית (EUC-KR)‬"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "‮קוריאנית (ISO-2022-KR)‬"                                ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "‮קוריאנית (Windows-Johab-1361)‬"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "‮יוניקוד‬"                                    ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "‮תאילנדית (ISO-8859-11/TIS-620)‬"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "‮תאילנדית (Windows-874)‬"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "Kyrillisch (KOI8-U)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Koreanisch (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "‮יוניקוד‬"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
     };
     ItemList [ hindi ] =
     {
@@ -2128,8 +2183,91 @@ ItemList [ language_user1 ] =
         < "चैनीस सिम्प्लिफइड (Windows-936)"         ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
         < "कोरियन (Windows-949)"        ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "Západná Európa (Windows-1252/WinLatin 1)"            ; RTL_TEXTENCODING_MS_1252          ; > ;
+        < "Západná Európa (Apple Macintosh)"                 ; RTL_TEXTENCODING_APPLE_ROMAN      ; > ;
+        < "Západná Európa (DOS/OS2-850/Medzinárodné)"          ; RTL_TEXTENCODING_IBM_850          ; > ;
+        < "Západná Európa (DOS/OS2-437/US)"                      ; RTL_TEXTENCODING_IBM_437          ; > ;
+        < "Západná Európa (DOS/OS2-860/Portugalčina)"           ; RTL_TEXTENCODING_IBM_860          ; > ;
+        < "Západná Európa (DOS/OS2-861/Islandčina)"             ; RTL_TEXTENCODING_IBM_861          ; > ;
+        < "Západná Európa  (DOS/OS2-863/Francúzština (Kanadská))" ; RTL_TEXTENCODING_IBM_863          ; > ;
+        < "Západná Európa (DOS/OS2-865/Škandinávia)"               ; RTL_TEXTENCODING_IBM_865          ; > ;
+        < "Západná Európa (ASCII/US)"                            ; RTL_TEXTENCODING_ASCII_US         ; > ;
+        < "Západná Európa (ISO-8859-1)"                          ; RTL_TEXTENCODING_ISO_8859_1       ; > ;
+        < "Východná Európa (ISO-8859-2)"                         ; RTL_TEXTENCODING_ISO_8859_2       ; > ;
+        < "Latin 3 (ISO-8859-3)"                            ; RTL_TEXTENCODING_ISO_8859_3       ; > ;
+        < "Pobaltie (ISO-8859-4)"                           ; RTL_TEXTENCODING_ISO_8859_4       ; > ;
+        < "Azbuka (ISO-8859-5)"                         ; RTL_TEXTENCODING_ISO_8859_5       ; > ;
+        < "Gréčtina (ISO-8859-7)"                             ; RTL_TEXTENCODING_ISO_8859_6       ; > ;
+        < "Turečtina (ISO-8859-9)"                         ; RTL_TEXTENCODING_ISO_8859_7       ; > ;
+        < "Západná Európa (ISO-8859-14)"                         ; RTL_TEXTENCODING_ISO_8859_8       ; > ;
+        < "Západná Európa (ISO-8859-15/EURO)"                            ; RTL_TEXTENCODING_ISO_8859_9       ; > ;
+        < "Gréčtina (DOS/OS2-737)"                        ; RTL_TEXTENCODING_ISO_8859_14      ; > ;
+        < "Pobaltie (DOS/OS2-775)"                  ; RTL_TEXTENCODING_ISO_8859_15      ; > ;
+        < "Východná Európa (DOS/OS2-852)"                        ; RTL_TEXTENCODING_IBM_737          ; > ;
+        < "Azbuka (DOS/OS2-855)"                            ; RTL_TEXTENCODING_IBM_775          ; > ;
+        < "Turečtina (DOS/OS2-857)"                            ; RTL_TEXTENCODING_IBM_852          ; > ;
+        < "Azbuka (DOS/OS2-866/Ruština)"                       ; RTL_TEXTENCODING_IBM_855          ; > ;
+        < "Gréčtina (DOS/OS2-869/Moderná)"                           ; RTL_TEXTENCODING_IBM_857          ; > ;
+        < "Východná Európa (Windows-1250/WinLatin 2)"                            ; RTL_TEXTENCODING_IBM_862          ; > ;
+        < "Azbuka (Windows-1251)"                           ; RTL_TEXTENCODING_IBM_864          ; > ;
+        < "Gréčtina (Windows-1253)"               ; RTL_TEXTENCODING_IBM_866          ; > ;
+        < "Turečtina (Windows-1254)"                   ; RTL_TEXTENCODING_IBM_869          ; > ;
+        < "Pobaltie (Windows-1257)"             ; RTL_TEXTENCODING_MS_1250          ; > ;
+        < "Východná Európa (Apple Macintosh)"                        ; RTL_TEXTENCODING_MS_1251          ; > ;
+        < "Východná Európa (Apple Macintosh/Chorvátčina)"                      ; RTL_TEXTENCODING_MS_1253          ; > ;
+        < "Azbuka (Apple Macintosh)"                            ; RTL_TEXTENCODING_MS_1254          ; > ;
+        < "Gréčtina (Apple Macintosh)"                        ; RTL_TEXTENCODING_MS_1255          ; > ;
+        < "Západná Európa (Apple Macintosh/Islandčina)"                         ; RTL_TEXTENCODING_MS_1256          ; > ;
+        < "Východná Európa (Apple Macintosh/Rumunčina)"                         ; RTL_TEXTENCODING_MS_1257          ; > ;
+        < "Turečtina (Apple Macintosh)"                        ; RTL_TEXTENCODING_APPLE_CENTEURO   ; > ;
+        < "Azbuka (Apple Macintosh/Ukrajinčina)"           ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
+        < "Zjednodušená čínština (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
+        < "Tradičná čínština (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_GREEK      ; > ;
+        < "Japončina (Apple Macintosh)"            ; RTL_TEXTENCODING_APPLE_ICELAND    ; > ;
+        < "Kórejčina (Apple Macintosh)"           ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
+        < "Japončina (Windows-932)"                        ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
+        < "Zjednodušená čínština (Windows-936)"            ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
+        < "Kórejčina (Windows-949)"       ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
+        < "Tradičná čínština (Windows-950)"        ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
+        < "Japončina (Shift-JIS)"                      ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
+        < "Zjednodušená čínština (GB-2312)"                    ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
+        < "Zjednodušená čínština (GB-18030)"                           ; RTL_TEXTENCODING_MS_932           ; > ;
+        < "Tradičná čínština (GBT-12345)"          ; RTL_TEXTENCODING_MS_936           ; > ;
+        < "Zjednodušená čínština (GBK/GB-2312-80)"                     ; RTL_TEXTENCODING_MS_949           ; > ;
+        < "Tradičná čínština (BIG5)"           ; RTL_TEXTENCODING_MS_950           ; > ;
+        < "Tradičná čínština (BIG5-HKSCS)"                         ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
+        < "Japončina (EUC-JP)"             ; RTL_TEXTENCODING_GB_2312          ; > ;
+        < "Zjednodušená čínština (EUC-CN)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
+        < "Tradičná čínština (EUC-TW)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
+        < "Japončina (ISO-2022-JP)"            ; RTL_TEXTENCODING_GBK              ; > ;
+        < "Zjednodušená čínština (ISO-2022-CN)"                    ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Azbuka (KOI8-R)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "Unicode (UTF-7)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "Unicode (UTF-8)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "Východná Európa (ISO-8859-10)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "Východná Európa (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "Kórejčina (EUC-KR)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "Kórejčina (ISO-2022-KR)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "Kórejčina (Windows-Johab-1361)"                                    ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "Unicode"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "Východná Európa (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "Východná Európa (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "Kórejčina (EUC-KR)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "Kórejčina (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "Kórejčina (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thajsky (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thajsky (Windows-874)"                               ; RTL_TEXTENCODING_MS_874           ; > ;
+        < "Azbuka (KOI8-U)"                             ; RTL_TEXTENCODING_KOI8_U           ; > ;
+    };
     };
  // ********************************************************************** EOF
+
+
+
+
 
 
 
