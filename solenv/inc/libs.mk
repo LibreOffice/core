@@ -92,7 +92,7 @@ SWLIB=$(L)$/libswlib.x
 
 .ELSE				# "$(OS)"=="S390"
 
-COMPHELPLIB=-lcomphelp2
+COMPHELPERLIB=-lcomphelp2
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
@@ -284,7 +284,7 @@ SETUPLIB=
 SSCLIB=
 SSLLIB=
 .ELSE				# "$(make_xl)"!=""
-COMPHELPLIB=icomphelp2.lib
+COMPHELPERLIB=icomphelp2.lib
 CONNECTIVITYLIB=connectivity.lib
 LDAPBERLIB=ldapber.lib
 CPPULIB=$(LIBPRE) icppu.lib
