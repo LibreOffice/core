@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleIconChoiceCtrlEntry.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:17:56 $ 
+'*  last change:$Date: 2003-06-11 16:28:40 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -76,7 +76,7 @@ Global closeButton As Object
 
 'Required for ifc.accessibility.XAccessibleText
 Global accText As String
-
+Global readOnly as Boolean
 
 Sub CreateObj()
 
@@ -107,11 +107,14 @@ On Error Goto ErrHndl
     oWin = createUnoService("com.sun.star.awt.Toolkit").getActiveTopWindow()
 
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 22, "Internet")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot,_
+                    com.sun.star.accessibility.AccessibleRole.LABEL, "Internet")
     Out.log(oObj.getImplementationName)
 
-    closeButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Close")
+    closeButton = utils.at_getAccessibleObjectForRole(xRoot, _
+                 com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Close")
     accText = "Internet"
+    readOnly = true
 Exit Sub
 ErrHndl:
     Test.Exception()
