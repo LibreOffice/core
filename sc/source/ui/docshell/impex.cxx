@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
+ *  last change: $Author: er $ $Date: 2001-03-14 14:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,14 @@ class StarBASIC;
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/calendarwrapper.hxx>
+#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#endif
 
 #include "global.hxx"
 #include "docsh.hxx"
@@ -821,8 +829,11 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
 
 
 void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
-                    const String& rStr, BYTE nColFormat, const International& rInter,
-                    const International* pSecondInt )
+                    const String& rStr, BYTE nColFormat,
+                    CollatorWrapper& rCollator,
+                    CalendarWrapper& rCalendar,
+                    CollatorWrapper* pSecondCollator,
+                    CalendarWrapper* pSecondCalendar )
 {
     if ( nColFormat == SC_COL_SKIP || !rStr.Len() || nCol > MAXCOL || nRow > MAXROW )
         return;
@@ -876,6 +887,8 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
         }
         if ( nFound == 3 )              // genau 3 Teile ?
         {
+            using namespace ::com::sun::star;
+            BOOL bSecondCal = FALSE;
             USHORT nDP, nMP, nYP;
             switch ( nColFormat )
             {
@@ -887,32 +900,53 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
             USHORT nDay  = (USHORT) rStr.Copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).ToInt32();
             USHORT nYear = (USHORT) rStr.Copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).ToInt32();
             String aMStr = rStr.Copy( nStart[nMP], nEnd[nMP]+1-nStart[nMP] );
-            USHORT nMonth = (USHORT) aMStr.ToInt32();
+            sal_Int16 nMonth = (sal_Int16) aMStr.ToInt32();
             if (!nMonth)
             {
-                USHORT i;
+                uno::Sequence< i18n::CalendarItem > xMonths;
+                sal_Int32 i, nLen;
                 //  first test all month names from local international
-                for (i=1; i<=12 && !nMonth; i++)
-                    if ( rInter.CompareEqual( aMStr, rInter.GetMonthText(i), INTN_COMPARE_IGNORECASE ) ||
-                         rInter.CompareEqual( aMStr, rInter.GetAbbrevMonthText(i), INTN_COMPARE_IGNORECASE ) )
-                        nMonth = i;
+                xMonths = rCalendar.getMonths();
+                nLen = xMonths.getLength();
+                for (i=0; i<nLen && !nMonth; i++)
+                {
+                    if ( (rCollator.compareString( aMStr, xMonths[i].FullName ) == COMPARE_EQUAL) ||
+                         (rCollator.compareString( aMStr, xMonths[i].AbbrevName ) == COMPARE_EQUAL) )
+                        nMonth = i+1;
+                }
                 //  if none found, then test english month names
-                if ( !nMonth && pSecondInt )
-                    for (i=1; i<=12 && !nMonth; i++)
-                        if ( pSecondInt->CompareEqual( aMStr, pSecondInt->GetMonthText(i), INTN_COMPARE_IGNORECASE ) ||
-                             pSecondInt->CompareEqual( aMStr, pSecondInt->GetAbbrevMonthText(i), INTN_COMPARE_IGNORECASE ) )
-                            nMonth = i;
+                if ( !nMonth && pSecondCalendar && pSecondCollator )
+                {
+                    xMonths = pSecondCalendar->getMonths();
+                    nLen = xMonths.getLength();
+                    for (i=0; i<nLen && !nMonth; i++)
+                    {
+                        if ( (pSecondCollator->compareString( aMStr, xMonths[i].FullName ) == COMPARE_EQUAL) ||
+                             (pSecondCollator->compareString( aMStr, xMonths[i].AbbrevName ) == COMPARE_EQUAL) )
+                        {
+                            nMonth = i+1;
+                            bSecondCal = TRUE;
+                        }
+                    }
+                }
             }
 
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
             if ( nYear < 100 )
                 nYear = pFormatter->ExpandTwoDigitYear( nYear );
 
-            if ( nDay && nMonth && nDay<=31 && nMonth<=12 )
+            CalendarWrapper* pCalendar = (bSecondCal ? pSecondCalendar : &rCalendar);
+            sal_Int16 nNumMonths = pCalendar->getNumberOfMonthsInYear();
+            if ( nDay && nMonth && nDay<=31 && nMonth<=nNumMonths )
             {
-                Date aDate( nDay, nMonth, nYear );
+                --nMonth;
+                pCalendar->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDay );
+                pCalendar->setValue( i18n::CalendarFieldIndex::MONTH, nMonth );
+                pCalendar->setValue( i18n::CalendarFieldIndex::YEAR, nYear );
+//! TODO: validity check if XCalendar supports it
+                DateTime aDateTime( pCalendar->getGregorianDateTime() );
                 Date aNullDate = *pFormatter->GetNullDate();
-                double nValue = aDate - aNullDate;
+                double nValue = aDateTime - aNullDate;
 
                 LanguageType eLatin, eCjk, eCtl;
                 pDoc->GetLanguage( eLatin, eCjk, eCtl );
@@ -983,10 +1017,26 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     pDoc->GetLanguage( eLatin, eCjk, eCtl );
     LanguageType eDocLang = eLatin;                 //! which language for date formats?
 
-    International aInter( eDocLang );               // fuer Datums-Erkennung
-    International* pEnglish = NULL;
+    // For date recognition
+    CollatorWrapper aCollator( pDoc->GetServiceManager() );
+    aCollator.loadDefaultCollator(
+        SvNumberFormatter::ConvertLanguageToLocale( eDocLang ),
+        SC_COLLATOR_IGNORES );
+    CalendarWrapper aCalendar( pDoc->GetServiceManager() );
+    aCalendar.loadDefaultCalendar(
+        SvNumberFormatter::ConvertLanguageToLocale( eDocLang ) );
+    CollatorWrapper* pEnglishCollator = NULL;
+    CalendarWrapper* pEnglishCalendar = NULL;
     if ( eDocLang != LANGUAGE_ENGLISH_US )
-        pEnglish = new International( LANGUAGE_ENGLISH_US );    // for English month names
+    {
+        pEnglishCollator = new CollatorWrapper ( pDoc->GetServiceManager() );
+        pEnglishCollator->loadDefaultCollator(
+            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_ENGLISH_US ),
+            SC_COLLATOR_IGNORES );
+        pEnglishCalendar = new CalendarWrapper ( pDoc->GetServiceManager() );
+        pEnglishCalendar->loadDefaultCalendar(
+            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+    }
 
     String aLine, aCell;
     USHORT i;
@@ -1015,7 +1065,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                     xub_StrLen nStart = pColStart[i];
                     xub_StrLen nNext = ( i+1 < nInfoCount ) ? pColStart[i+1] : nLineLen;
                     aCell = lcl_GetFixed( aLine, nStart, nNext );
-                    lcl_PutString( pDoc, nCol, nRow, nTab, aCell, pColFormat[i], aInter, pEnglish );
+                    lcl_PutString( pDoc, nCol, nRow, nTab, aCell, pColFormat[i],
+                        aCollator, aCalendar, pEnglishCollator, pEnglishCalendar );
                     ++nCol;
                 }
             }
@@ -1041,7 +1092,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
                 }
                 if ( nFmt != SC_COL_SKIP )
                 {
-                    lcl_PutString( pDoc, nCol, nRow, nTab, aCell, nFmt, aInter, pEnglish );
+                    lcl_PutString( pDoc, nCol, nRow, nTab, aCell, nFmt,
+                        aCollator, aCalendar, pEnglishCollator, pEnglishCalendar );
                     ++nCol;
                 }
 
@@ -1061,7 +1113,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     ScColumn::bDoubleAlloc = bOld;
     pDoc->DoColResize( nTab, 0, MAXCOL, 0 );
 
-    delete pEnglish;
+    delete pEnglishCollator;
+    delete pEnglishCalendar;
 
     return TRUE;
 }
@@ -1178,7 +1231,9 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
     BOOL bOk = TRUE;
     BOOL bMyDoc = FALSE;
 
-    International aEnglishInt( LANGUAGE_ENGLISH_US );   // for StringToDouble
+    // US-English separators for StringToDouble
+    sal_Unicode cDecSep = '.';
+    sal_Unicode cGrpSep = ',';
 
     USHORT nStartCol = aRange.aStart.Col();
     USHORT nStartRow = aRange.aStart.Row();
@@ -1255,7 +1310,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             else
                             {
                                 int nErr;
-                                double fVal = SolarMath::StringToDouble( p, aEnglishInt, nErr );
+                                double fVal = SolarMath::StringToDouble( p, cGrpSep, cDecSep, nErr );
                                 pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
                             }
                             break;
