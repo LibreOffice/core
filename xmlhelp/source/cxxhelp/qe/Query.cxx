@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Query.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:07:34 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 16:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ struct CompareQueryHit
 };
 
 
-#include <stl/algorithm>
+#include <algorithm>
 
 
 QueryHit* HitStore::firstBestQueryHit()
