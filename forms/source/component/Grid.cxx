@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:13:50 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
 OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OControlModel(_rxFactory, ::rtl::OUString())
+                    ,FontControlModel( false )
                     ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
                     ,OErrorBroadcaster( OComponentHelper::rBHelper )
                     ,m_aSelectListeners(m_aMutex)
