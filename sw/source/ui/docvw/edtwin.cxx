@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:46:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4199,6 +4199,20 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             String sRecord = rSh.DeleteExtTextInput();
             com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
                     rView.GetViewFrame()->GetBindings().GetRecorder();
+
+            // #102812# convert quotes in IME text
+            // works on the last input character, this is escpecially in Korean text often done
+            // quotes that are inside of the string are not replaced!
+            const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
+            OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+            SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+            if(pACorr &&
+                 ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
+                 ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
+            {
+               rSh.DelLeft();
+               rSh.AutoCorrect( *pACorr, aCh );
+            }
             if ( sRecord.Len() && xRecorder.is() )
             {
                 //Shell ermitteln
