@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:49:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,7 @@ class SwFltShell
     SwFltEndStack aEndStack;
     SwPaM* pPaM;
 //
+    String sBaseURL;
     USHORT nPageDescOffset; // fuers update der pagedescs
     CharSet eSrcCharSet; // charset der quelle
     friend class SwFltControlStack;
@@ -513,7 +514,7 @@ class SwFltShell
     BOOL bProtect;
 
 public:
-    SwFltShell(SwDoc* , SwPaM& , BOOL bNew, ULONG = 0);
+    SwFltShell(SwDoc* , SwPaM& , const String& rBaseURL, BOOL bNew, ULONG = 0);
     ~SwFltShell();
 
     SwDoc& GetDoc()                 { return *aStack.pDoc; }
@@ -661,6 +662,8 @@ public:
     BOOL GetContour();
     BOOL GetCaseKapitaelchen();
     BOOL GetCaseVersalien();
+
+    const String& GetBaseURL() const { return sBaseURL; }
 };
 
 void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
