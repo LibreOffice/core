@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:28:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ SfxTabDialog::~SfxTabDialog()
     delete pUserBtn;
     delete pOutSet;
     delete pExampleSet;
-    delete pRanges;
+    delete [] pRanges;
 }
 
 // -----------------------------------------------------------------------
