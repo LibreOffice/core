@@ -49,6 +49,7 @@
 "OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"HelpText"
 "OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"HelpURL"
 "OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"Printable"
+"OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"ReadOnly#optional"
 "OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"Tabstop"
 "OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"Text"
 "OFileControlModel";"com::sun::star::awt::UnoControlFileControlModel";"TextColor"
