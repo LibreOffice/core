@@ -1,0 +1,42 @@
+    <node oor:name="StarImpress 5.0 Vorlage" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>impress_StarImpress_50_Vorlage</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">StarImpress 5.0 - Szablon</value>
+            <value xml:lang="hu">StarImpress 5.0-sablon</value>
+            <value xml:lang="ja">StarImpress 5.0 テンプレート</value>
+            <value xml:lang="es">StarImpress 5.0 - Plantilla</value>
+            <value xml:lang="tr"> StarImpress 5.0 Şablonu</value>
+            <value xml:lang="ru">StarImpress 5.0 Шаблон</value>
+            <value xml:lang="th">แม่แบบ StarImpress 5.0 </value>
+            <value xml:lang="x-comment">StarImpress 5.0 Vorlage</value>
+            <value xml:lang="ca">Plantilla de l</value>
+            <value xml:lang="el">StarImpress 5.0 - Πρότυπο</value>
+            <value xml:lang="zh-CN">StarImpress 5.0 样式</value>
+            <value xml:lang="pt">StarImpress 5.0 Modelo</value>
+            <value xml:lang="cs">Šablona StarImpress 5.0</value>
+            <value xml:lang="fr">StarImpress 5.0 Modèle</value>
+            <value xml:lang="ar">StarImpress 5.0 قالب</value>
+            <value xml:lang="zh-TW">StarImpress 5.0 樣式</value>
+            <value xml:lang="sl">StarImpress 5.0 Predloga</value>
+            <value xml:lang="fi">StarImpress 5.0 -mallipohja</value>
+            <value xml:lang="hi-IN">StarImpress 5.0 Template</value>
+            <value xml:lang="en-US">StarImpress 5.0 Template</value>
+            <value xml:lang="sk">Šablóna StarImpress 5.0</value>
+            <value xml:lang="he">‮תבנית StarImpress 5.0‬</value>
+            <value xml:lang="sv">StarImpress 5.0 mall</value>
+            <value xml:lang="da">StarImpress 5.0-skabelon</value>
+            <value xml:lang="de">StarImpress 5.0 Vorlage</value>
+            <value xml:lang="ko">StarImpress 5.0 서식 파일</value>
+            <value xml:lang="nl">StarImpress 5.0 Sjabloon</value>
+            <value xml:lang="pt-BR">Modelo StarImpress 5.0 </value>
+            <value xml:lang="it">StarImpress 5.0 Modello</value>
+            <value xml:lang="x-translate">StarImpress 5.0 Vorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+    </node>
