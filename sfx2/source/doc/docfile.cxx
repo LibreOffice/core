@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:58:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,6 @@ void SfxLockBytesHandler_Impl::Handle( ::utl::UcbLockBytesHandler::LoadHandlerIt
     {
         switch( nWhich )
         {
-                break;
             case DATA_AVAILABLE :
                 m_pMedium->DataAvailable_Impl();
                 break;
