@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 17:59:59 $
+ *  last change: $Author: cmc $ $Date: 2002-08-08 09:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,9 +1405,9 @@ void WinwordAnchoring::SetAnchoring( const SwFrmFmt& rFmt, BOOL bBROKEN )
     //must be a problem somewhere.
     if (bBROKEN)
     {
-        if (eHRel = PRTAREA)
+        if (eHRel == PRTAREA)
             eHRel = FRAME;
-        if (eVRel = PRTAREA)
+        if (eVRel == PRTAREA)
             eVRel = FRAME;
     }
 

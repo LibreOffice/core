@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-05 13:31:49 $
+ *  last change: $Author: cmc $ $Date: 2002-08-08 09:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2300,6 +2300,8 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             {
                 eVertRel = REL_PG_PRTAREA;
             }
+            if ((eAnchor == FLY_AT_CNTNT) && (eVertRel == REL_CHAR))
+                eVertRel = PRTAREA;
 
             rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
         }
