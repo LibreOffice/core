@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 08:36:50 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,7 +886,11 @@ void OTableEditorCtrl::CopyRows()
     {
         OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
         Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+#if SUPD<631
+        pData->CopyToClipboard();
+#else
         pData->CopyToClipboard(GetParent());
+#endif
     }
 }
 
@@ -929,7 +933,11 @@ void OTableEditorCtrl::InsertRows( long nRow )
     ::std::vector< OTableRow*> vInsertedUndoRedoRows; // need for undo/redo handling
     //////////////////////////////////////////////////////////////////////
     // get rows from clipboard
+#if SUPD<631
+    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+#else
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
+#endif
     if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
     {
         SotStorageStreamRef aStreamRef;
@@ -1389,7 +1397,11 @@ void OTableEditorCtrl::Copy()
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Paste()
 {
+#if SUPD<631
+    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+#else
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
+#endif
     if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
     {
         if( nPasteEvent )
