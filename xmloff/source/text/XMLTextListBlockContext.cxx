@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListBlockContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,12 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rTxtImp,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
-        sal_Bool bOrd ) :
+        const Reference< xml::sax::XAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rTxtImport( rTxtImp ),
     xParentListBlock( rTxtImp.GetListBlock() ),
     nLevel( 0 ),
     nLevels( 0 ),
-    bOrdered( bOrd ),
     bRestartNumbering( sal_True ),
     bSetDefaults( sal_False ),
     sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
@@ -167,12 +165,15 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 
     if( sStyleName.getLength() && sStyleName != sParentStyleName )
     {
+        OUString sDisplayStyleName(
+                GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                                                 sStyleName ) );
         const Reference < XNameContainer >& rNumStyles =
             rTxtImport.GetNumberingStyles();
-        if( rNumStyles.is() && rNumStyles->hasByName( sStyleName ) )
+        if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
         {
             Reference < XStyle > xStyle;
-            Any aAny = rNumStyles->getByName( sStyleName );
+            Any aAny = rNumStyles->getByName( sDisplayStyleName );
             aAny >>= xStyle;
 
             // If the style has not been used, the restart numbering has
@@ -232,7 +233,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         // Because there is no list style sheet for this style, a default
         // format must be set for any level of this num rule.
         SvxXMLListStyleContext::SetDefaultStyle( xNumRules, nLevel,
-                                                   bOrdered );
+                                                   sal_False );
     }
 
     // Remember this list block.
