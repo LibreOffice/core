@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-20 12:45:23 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 09:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #endif
 
 #include <cppuhelper/bootstrap.hxx>
+#include <tools/urlobj.hxx>
 
 #include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
@@ -318,6 +319,25 @@ void createTemporaryDirectory()
     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aCurrentTempBase, aRet );
     ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
     aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
+    if ( !aTempPath.getLength() )
+    {
+#ifdef WNT
+        INetURLObject aTmp( TempFile::CreateTempName() );
+        aTmp.CutLastName();
+        aTempBaseURL = aTmp.GetMainURL();
+#else
+        aTempBaseURL = ::rtl::OUString::createFromAscii("$(userurl)/temp");
+        aTempBaseURL = aOpt.SubstituteVariable( aTempBaseURL );
+#endif
+        sal_Int32 nIndex = aTempBaseURL.lastIndexOf( '/' );
+        if ( nIndex != aTempBaseURL.getLength()-1 )
+            aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+        aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( DESKTOP_TEMPDIRNAME ));
+        aTempPath = aCurrentTempBase = aTempBaseURL;
+        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aCurrentTempBase, aRet );
+        ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
+        aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
+    }
 
     // set new current temporary directory
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempPath, aRet );
