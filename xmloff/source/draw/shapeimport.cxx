@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
 
     { XML_NAMESPACE_CHART,          sXML_chart,         XML_TOK_GROUP_CHART         },
     { XML_NAMESPACE_DRAW,           sXML_image,         XML_TOK_GROUP_IMAGE         },
-    { XML_NAMESPACE_DR3D,           sXML_3DScene,       XML_TOK_GROUP_3DSCENE       },
+    { XML_NAMESPACE_DR3D,           sXML_scene,     XML_TOK_GROUP_3DSCENE       },
 
     XML_TOKEN_MAP_END
 };
@@ -277,11 +277,11 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
 
 static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           sXML_3DScene,       XML_TOK_3DSCENE_3DSCENE     },
-    { XML_NAMESPACE_DR3D,           sXML_3DCube,        XML_TOK_3DSCENE_3DCUBE      },
-    { XML_NAMESPACE_DR3D,           sXML_3DSphere,      XML_TOK_3DSCENE_3DSPHERE    },
-    { XML_NAMESPACE_DR3D,           sXML_3DLathe,       XML_TOK_3DSCENE_3DLATHE     },
-    { XML_NAMESPACE_DR3D,           sXML_3DExtrude,     XML_TOK_3DSCENE_3DEXTRUDE   },
+    { XML_NAMESPACE_DR3D,           sXML_scene,     XML_TOK_3DSCENE_3DSCENE     },
+    { XML_NAMESPACE_DR3D,           sXML_cube,      XML_TOK_3DSCENE_3DCUBE      },
+    { XML_NAMESPACE_DR3D,           sXML_sphere,    XML_TOK_3DSCENE_3DSPHERE    },
+    { XML_NAMESPACE_DR3D,           sXML_rotate,    XML_TOK_3DSCENE_3DLATHE     },
+    { XML_NAMESPACE_DR3D,           sXML_extrude,   XML_TOK_3DSCENE_3DEXTRUDE   },
     XML_TOKEN_MAP_END
 };
 

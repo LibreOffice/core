@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-12 14:38:12 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aBodyElemTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,   sXML_page,              XML_TOK_BODY_PAGE   },
+    { XML_NAMESPACE_PRESENTATION, sXML_shows,       XML_TOK_BODY_SHOWS  },
     XML_TOKEN_MAP_END
 };
 
@@ -201,6 +202,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
     { XML_NAMESPACE_DRAW,           sXML_style_name,                    XML_TOK_DRAWPAGE_STYLE_NAME         },
     { XML_NAMESPACE_DRAW,           sXML_master_page_name,              XML_TOK_DRAWPAGE_MASTER_PAGE_NAME   },
     { XML_NAMESPACE_PRESENTATION,   sXML_presentation_page_layout_name, XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME   },
+    { XML_NAMESPACE_DRAW,           sXML_id,                            XML_TOK_DRAWPAGE_ID                 },
     XML_TOKEN_MAP_END
 };
 
@@ -650,6 +652,25 @@ SvXMLImportContext *SdXMLImport::CreateScriptContext(
                                     GetModel() );
     return pContext;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLImport::setDrawPageId( sal_Int32 nId, uno::Reference< drawing::XDrawPage > xPage )
+{
+    maDrawPageIds[nId] = xPage;
+}
+
+uno::Reference< drawing::XDrawPage > SdXMLImport::getDrawPageForId( sal_Int32 nId )
+{
+    uno::Reference< drawing::XDrawPage > xPage;
+
+    DrawPageIdMap::iterator aFound( maDrawPageIds.find( nId ) );
+    if( aFound != maDrawPageIds.end() )
+        xPage = (*aFound).second;
+
+    return xPage;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 uno::Reference< xml::sax::XDocumentHandler >

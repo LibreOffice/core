@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-12 14:38:12 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SDXMLIMP_IMPL_HXX
 #define _SDXMLIMP_IMPL_HXX
 
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -101,7 +105,8 @@ enum SdXMLDocElemTokenMap
 
 enum SdXMLBodyElemTokenMap
 {
-    XML_TOK_BODY_PAGE
+    XML_TOK_BODY_PAGE,
+    XML_TOK_BODY_SHOWS
 };
 
 enum SdXMLStylesElemTokenMap
@@ -165,7 +170,8 @@ enum SdXMLDrawPageAttrTokenMap
     XML_TOK_DRAWPAGE_NAME,
     XML_TOK_DRAWPAGE_STYLE_NAME,
     XML_TOK_DRAWPAGE_MASTER_PAGE_NAME,
-    XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME
+    XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME,
+    XML_TOK_DRAWPAGE_ID
 };
 
 enum SdXMLDrawPageElemTokenMap
@@ -181,6 +187,18 @@ enum SdXMLPresentationPlaceholderAttrTokenMap
     XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH,
     XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT
 };
+
+//////////////////////////////////////////////////////////////////////////////
+
+struct SdXMLltXDrawPageId
+{
+  bool operator()(sal_Int32 nId1, sal_Int32 nId2 ) const
+  {
+    return nId1 < nId2;
+  }
+};
+
+typedef std::map< sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >, SdXMLltXDrawPageId > DrawPageIdMap;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -226,6 +244,8 @@ class SdXMLImport: public SvXMLImport
 
     sal_Bool                    mbIsDraw;
     sal_Bool                    mbLoadDoc;
+
+    DrawPageIdMap               maDrawPageIds;
 
 protected:
     // This method is called after the namespace map has been updated, but
@@ -296,6 +316,9 @@ public:
     // import pool defaults. Parameter contains pool defaults read
     // from input data. These data needs to be set at the model.
     void ImportPoolDefaults(const XMLPropStyleContext* pPool);
+
+    void setDrawPageId( sal_Int32 nId, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > );
+    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > getDrawPageForId( sal_Int32 nId );
 };
 
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >

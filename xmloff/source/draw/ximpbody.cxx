@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,20 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include "xmlprmap.hxx"
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
+#endif
+
+#ifndef _XMLOFF_XIMPSHOW_HXX
+#include "ximpshow.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
@@ -120,6 +128,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
+    sal_Int32 nPageId = -1;
+
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -152,13 +162,24 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 maPageLayoutName = sValue;
                 break;
             }
+            case XML_TOK_DRAWPAGE_ID:
+            {
+                sal_Int32 nId;
+                if( SvXMLUnitConverter::convertNumber( nId, sValue ) )
+                    nPageId = nId;
+            }
         }
     }
+
+    uno::Reference< drawing::XDrawPage > xDrawPage(rShapes, uno::UNO_QUERY);
+
+    // set an id?
+    if( nPageId != -1 && xDrawPage.is() )
+        rImport.setDrawPageId( nPageId, xDrawPage );
 
     // set PageName?
     if(maName.getLength())
     {
-        uno::Reference< drawing::XDrawPage > xDrawPage(rShapes, uno::UNO_QUERY);
         if(xDrawPage.is())
         {
             uno::Reference < container::XNamed > xNamed(xDrawPage, uno::UNO_QUERY);
@@ -405,6 +426,10 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
                 }
             }
             break;
+        }
+        case XML_TOK_BODY_SHOWS:
+        {
+            pContext = new SdXMLShowsContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
         }
     }
 

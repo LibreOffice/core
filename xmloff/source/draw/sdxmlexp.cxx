@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmlmetae.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_PRESENTATION_XCUSTOMPRESENTATIONSUPPLIER_HPP_
+#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -251,6 +255,12 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::presentation;
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1669,6 +1679,9 @@ void SdXMLExport::_ExportContent()
             if( maDrawPagesStyleNames[nPageInd].getLength() )
                 AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, maDrawPagesStyleNames[nPageInd]);
 
+            if( IsImpress() )
+                AddAttribute(XML_NAMESPACE_DRAW, sXML_id, OUString::valueOf( sal_Int32( nPageInd + 1 ) ) );
+
             // draw:master-page-name
             uno::Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, uno::UNO_QUERY);
             if(xMasterPageInt.is())
@@ -1693,6 +1706,13 @@ void SdXMLExport::_ExportContent()
             // write page
             SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, sXML_page, sal_True, sal_True);
 
+            // prepare animations exporter if impress
+            if(IsImpress())
+            {
+                UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+                GetShapeExport()->setAnimationsExporter( xAnimExport );
+            }
+
             // write graphic objects on this page (if any)
             uno::Reference< container::XIndexAccess > xShapes(xDrawPage, uno::UNO_QUERY);
             if(xShapes.is() && xShapes->getCount())
@@ -1701,9 +1721,18 @@ void SdXMLExport::_ExportContent()
                 ImpWriteSingleShapeStyleInfos(xShapes);
             }
 
-            // write presentation notes (ONLY if presentation)
+            // write animations and presentation notes (ONLY if presentation)
             if(IsImpress())
             {
+                // animations
+                UniReference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
+                if( xAnimExport.is() )
+                    xAnimExport->export( *this );
+
+                xAnimExport = NULL;
+                GetShapeExport()->setAnimationsExporter( xAnimExport );
+
+                // presentations
                 uno::Reference< presentation::XPresentationPage > xPresPage(xDrawPage, uno::UNO_QUERY);
                 if(xPresPage.is())
                 {
@@ -1720,6 +1749,60 @@ void SdXMLExport::_ExportContent()
                             ImpWriteSingleShapeStyleInfos(xShapes);
                         }
                     }
+                }
+            }
+        }
+    }
+
+    if( IsImpress() )
+    {
+        Reference< XCustomPresentationSupplier > xSup( GetModel(), UNO_QUERY );
+        if( xSup.is() )
+        {
+            Reference< container::XNameContainer > xShows( xSup->getCustomPresentations() );
+            if( xShows.is() )
+            {
+                const OUString sPageNumber( RTL_CONSTASCII_USTRINGPARAM("Number") );
+
+                SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, sXML_shows, sal_True, sal_True);
+
+                Sequence< OUString > aShowNames = xShows->getElementNames();
+                const OUString* pShowNames = aShowNames.getArray();
+                const sal_Int32 nCount = aShowNames.getLength();
+
+                Reference< XIndexContainer > xShow;
+                Reference< XPropertySet > xPageSet;
+                sal_Int32 nPageNumber;
+                OUStringBuffer sTmp;
+
+                for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pShowNames++ )
+                {
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_name, *pShowNames );
+
+                    xShows->getByName( *pShowNames ) >>= xShow;
+                    DBG_ASSERT( xShow.is(), "invalid custom show!" );
+                    if( !xShow.is() )
+                        continue;
+
+                    const sal_Int32 nPageCount = xShow->getCount();
+                    for( sal_Int32 nPage = 0; nPage < nPageCount; nPage++ )
+                    {
+                        xShow->getByIndex( nPage ) >>= xPageSet;
+
+                        if( !xPageSet.is() )
+                            continue;
+
+                        if( xPageSet->getPropertyValue( sPageNumber ) >>= nPageNumber )
+                        {
+                            if( sTmp.getLength() != 0 )
+                                sTmp.append( sal_Unicode( ',' ) );
+                            sTmp.append( nPageNumber );
+                        }
+                    }
+
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pages, sTmp.makeStringAndClear() );
+
+                    SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, sXML_show, sal_True, sal_True);
                 }
             }
         }
@@ -2861,7 +2944,7 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
             case XmlShapeTypeDraw3DCubeObject:
             {
                 // write 3DCube shape
-                SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DCube, sal_True, sal_True);
+                SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_cube, sal_True, sal_True);
 
                 // minEdge
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
@@ -2899,7 +2982,7 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
             case XmlShapeTypeDraw3DSphereObject:
             {
                 // write 3DSphere shape
-                SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DSphere, sal_True, sal_True);
+                SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_sphere, sal_True, sal_True);
 
                 // Center
                 aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
@@ -3032,12 +3115,12 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
                 if(eShapeType == XmlShapeTypeDraw3DLatheObject)
                 {
                     // write 3DLathe shape
-                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DLathe, sal_True, sal_True);
+                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_rotate, sal_True, sal_True);
                 }
                 else
                 {
                     // write 3DExtrude shape
-                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DExtrude, sal_True, sal_True);
+                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_extrude, sal_True, sal_True);
                 }
                 break;
             }
@@ -3401,7 +3484,7 @@ void SdXMLExport::ImpStartWriteGroupShape(SvXMLExport& rExp,
             ImpPrepareExport3DScene(rExp, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
 
             // write 3DScene shape
-            SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DScene, sal_True, sal_True);
+            SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_scene, sal_True, sal_True);
 
             // write 3DSceneLights
             ImpExport3DLamps(rExp, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
@@ -3689,8 +3772,17 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XInde
         uno::Any aAny(xShapes->getByIndex(nShapeId));
         uno::Reference< drawing::XShape > xShape;
 
-        if(aAny >>= xShape)
+        aAny >>= xShape;
+        if(xShape.is())
         {
+            // collect animation informations if needed
+            {
+                UniReference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
+                if( xAnimExport.is() )
+                    xAnimExport->collect( xShape );
+            }
+
+            // check for group or scene shape
             uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
             if(xShapes.is() && xShapes->getCount())
             {
@@ -3720,7 +3812,7 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XInde
                     ImpPrepareExport3DScene(*this, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
 
                     // write 3DScene shape
-                    SvXMLElementExport aOBJ(*this, XML_NAMESPACE_DR3D, sXML_3DScene, sal_True, sal_True);
+                    SvXMLElementExport aOBJ(*this, XML_NAMESPACE_DR3D, sXML_scene, sal_True, sal_True);
 
                     // write 3DSceneLights
                     ImpExport3DLamps(*this, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);

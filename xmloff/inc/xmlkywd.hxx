@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-18 17:03:52 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,9 @@ XML_CONSTASCII_ACTION( sXML_1, "1" );
 XML_CONSTASCII_ACTION( sXML_10, "10" );
 XML_CONSTASCII_ACTION( sXML_2, "2" );
 XML_CONSTASCII_ACTION( sXML_3, "3" );
-XML_CONSTASCII_ACTION( sXML_3DCube, "3dcube" );
-XML_CONSTASCII_ACTION( sXML_3DExtrude, "3dextrude" );
-XML_CONSTASCII_ACTION( sXML_3DLathe, "3dlathe" );
-XML_CONSTASCII_ACTION( sXML_3DPolygon, "3dpolygon" );
-XML_CONSTASCII_ACTION( sXML_3DScene, "scene");
-XML_CONSTASCII_ACTION( sXML_3DSphere, "3dsphere" );
+XML_CONSTASCII_ACTION( sXML_cube, "cube" );
+XML_CONSTASCII_ACTION( sXML_extrude, "extrude" );
+XML_CONSTASCII_ACTION( sXML_scene, "scene");
 XML_CONSTASCII_ACTION( sXML_4, "4" );
 XML_CONSTASCII_ACTION( sXML_5, "5" );
 XML_CONSTASCII_ACTION( sXML_6, "6" );
@@ -1279,6 +1276,7 @@ XML_CONSTASCII_ACTION( sXML_sheet_name, "sheet-name" );
 XML_CONSTASCII_ACTION( sXML_shininess, "shininess" );
 XML_CONSTASCII_ACTION( sXML_short, "short" );
 XML_CONSTASCII_ACTION( sXML_show, "show" );
+XML_CONSTASCII_ACTION( sXML_shows, "shows" );
 XML_CONSTASCII_ACTION( sXML_side_by_side, "side-by-side" );
 XML_CONSTASCII_ACTION( sXML_silver, "silver" );
 XML_CONSTASCII_ACTION( sXML_simple, "simple" );
@@ -1614,4 +1612,56 @@ XML_CONSTASCII_ACTION( sXML_bottom_right, "bottom-right" );
 XML_CONSTASCII_ACTION( sXML_fill_image_ref_point,   "fill-image-ref-point" );
 XML_CONSTASCII_ACTION( sXML_fill_image_ref_point_x, "fill-image-ref-point-x" );
 XML_CONSTASCII_ACTION( sXML_fill_image_ref_point_y, "fill-image-ref-point-y" );
+
+XML_CONSTASCII_ACTION( sXML_from_right, "from-right" );
+XML_CONSTASCII_ACTION( sXML_from_bottom, "from-bottom" );
+XML_CONSTASCII_ACTION( sXML_from_center, "from-center" );
+XML_CONSTASCII_ACTION( sXML_from_upper_left, "from-upper-left" );
+XML_CONSTASCII_ACTION( sXML_from_upper_right, "from-upper-right" );
+XML_CONSTASCII_ACTION( sXML_from_lower_left, "from-lower-left" );
+XML_CONSTASCII_ACTION( sXML_from_lower_right, "from-lower-right" );
+XML_CONSTASCII_ACTION( sXML_to_left, "to-left" );
+XML_CONSTASCII_ACTION( sXML_to_top, "to-top" );
+XML_CONSTASCII_ACTION( sXML_to_right, "to-right" );
+XML_CONSTASCII_ACTION( sXML_to_bottom, "to-bottom" );
+XML_CONSTASCII_ACTION( sXML_to_upper_left, "to-upper-left" );
+XML_CONSTASCII_ACTION( sXML_to_upper_right, "to-upper-right" );
+XML_CONSTASCII_ACTION( sXML_to_lower_right, "to-lower-right" );
+XML_CONSTASCII_ACTION( sXML_to_lower_left, "to-lower-left" );
+XML_CONSTASCII_ACTION( sXML_to_center, "to-center" );
+XML_CONSTASCII_ACTION( sXML_counter_clockwise, "counter-clockwise" );
+
+XML_CONSTASCII_ACTION( sXML_fade, "fade" );
+XML_CONSTASCII_ACTION( sXML_move, "move" );
+XML_CONSTASCII_ACTION( sXML_stripes, "stripes" );
+XML_CONSTASCII_ACTION( sXML_spiral_inward_left, "spiral-inward-left" );
+XML_CONSTASCII_ACTION( sXML_spiral_inward_right, "spiral-inward-right" );
+XML_CONSTASCII_ACTION( sXML_spiral_outward_left, "spiral-outward-left" );
+XML_CONSTASCII_ACTION( sXML_spiral_outward_right, "spiral-outward-right" );
+XML_CONSTASCII_ACTION( sXML_spiral, "spiral" );
+XML_CONSTASCII_ACTION( sXML_spiral_in, "spiral-in" );
+XML_CONSTASCII_ACTION( sXML_spiral_out, "spiral-out" );
+XML_CONSTASCII_ACTION( sXML_wavyline, "wavyline" );
+XML_CONSTASCII_ACTION( sXML_laser, "laser" );
+XML_CONSTASCII_ACTION( sXML_appear, "appear" );
+XML_CONSTASCII_ACTION( sXML_hide, "hide" );
+XML_CONSTASCII_ACTION( sXML_move_short, "move-short" );
+XML_CONSTASCII_ACTION( sXML_checkerboard, "checkerboard" );
+XML_CONSTASCII_ACTION( sXML_stretch, "stretch" );
+
+XML_CONSTASCII_ACTION( sXML_shape_id, "shape-id" );
+XML_CONSTASCII_ACTION( sXML_effect, "effect" );
+XML_CONSTASCII_ACTION( sXML_speed, "speed" );
+XML_CONSTASCII_ACTION( sXML_start_scale, "start-scale" );
+XML_CONSTASCII_ACTION( sXML_show_shape, "show-shape" );
+XML_CONSTASCII_ACTION( sXML_show_text, "show-text" );
+XML_CONSTASCII_ACTION( sXML_hide_shape, "hide-shape" );
+XML_CONSTASCII_ACTION( sXML_hide_text, "hide-text" );
+XML_CONSTASCII_ACTION( sXML_dim, "dim" );
+XML_CONSTASCII_ACTION( sXML_sound, "sound" );
+XML_CONSTASCII_ACTION( sXML_play_full, "play-full" );
+XML_CONSTASCII_ACTION( sXML_path_id, "path-id" );
+
+XML_CONSTASCII_ACTION( sXML_animations, "animations" );
+
 #endif
