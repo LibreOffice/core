@@ -121,6 +121,14 @@ public class Test04 implements StorageTest {
             if ( !m_aTestHelper.copyElementTo( xTempStorage, "SubStorage1", xTempFileStorage ) )
                 return false;
 
+            // if storage is not commited before disposing all the changes will be lost
+            if ( !m_aTestHelper.commitStorage( xTempSubStorage2 ) )
+                return false;
+
+            // a storage must be disposed before moving/removing otherwise the access will be denied
+            if ( !m_aTestHelper.disposeStorage( xTempSubStorage2 ) )
+                return false;
+
             if ( !m_aTestHelper.moveElementTo( xTempStorage, "SubStorage2", xTempFileStorage ) )
                 return false;
 
@@ -210,6 +218,10 @@ public class Test04 implements StorageTest {
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResSubStorage2, "SubStream2", "MediaType2", pBytes2 ) )
+                return false;
+
+            // the storage must be disposed before removing
+            if ( !m_aTestHelper.disposeStorage( xResSubStorage2 ) )
                 return false;
 
             // remove element and check that it was removed completelly

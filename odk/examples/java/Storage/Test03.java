@@ -70,6 +70,9 @@ public class Test03 implements StorageTest {
                                                             ElementModes.ELEMENT_WRITE ) )
                 return false;
 
+            if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
+                return false;
+
             if ( !m_aTestHelper.disposeStorage( xTempSubStorage ) )
                 return false;
 

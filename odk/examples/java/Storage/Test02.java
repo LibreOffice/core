@@ -88,6 +88,7 @@ public class Test02 implements StorageTest {
                 return false;
 
             // dispose used storage to free resources
+            // the substorage dispose will be triggered by this call
             if ( !m_aTestHelper.disposeStorage( xTempStorage ) )
                 return false;
 
