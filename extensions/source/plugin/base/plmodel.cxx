@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plmodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:00 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <plugin/model.hxx>
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -195,7 +194,7 @@ void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                     const Any& rValue )
     throw()
 {
-    if( rValue.getValueTypeClass() == typelib_TypeClass_STRING )
+    if( rValue.getValueTypeClass() == typelib_TypeClass_STRING ) // FIXME wrong type!
 
     {
         if( nHandle == 2 )
