@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:59:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include "excdefs.hxx"
 #endif
 
-class SvStorage;
 class SvNumberFormatter;
 class ScRangeName;
 class ScProgress;
@@ -119,7 +118,6 @@ class XclExpRoot;
 
 struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
-    SvStorage*          pRootStorage;           // THE storage
     double              fRowScale;              //  Spaltenbreiten / Zeilenhoehen
     ScDocument*         pDoc;
     ScRangeName*        pScRangeName;
@@ -139,7 +137,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
-    SvStorage*              pPivotCacheStorage;
     XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
     _ScRangeListTabs*       pPrintRanges;
     _ScRangeListTabs*       pPrintTitles;
