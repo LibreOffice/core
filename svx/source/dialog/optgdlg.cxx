@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 07:50:16 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 12:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,9 +1235,10 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         }
 
         // find out whether the user has a specific locale specified
-        theArgs[0] = makeAny(sUserLocalePath);
+        Sequence< Any > theArgs2(1);
+        theArgs2[0] = makeAny(NamedValue(OUString::createFromAscii("NodePath"), makeAny(sUserLocalePath)));
         theNameAccess = Reference< XNameAccess > (
-            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
             theNameAccess->getByName(sUserLocaleKey) >>= m_sUserLocaleValue;
         // select the user specified locale in the listbox
