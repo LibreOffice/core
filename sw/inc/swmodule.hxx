@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:07:48 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 13:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ class SwAutoFmtOpt;
 class SwChapterNumRules;
 class SwStdFontConfig;
 class SwNavigationConfig;
-class SwDataExchange;
+class SwTransferable;
 class SwToolbarConfigItem;
 class SwAttrPool;
 struct SwDBData;
@@ -131,7 +131,7 @@ class SwModule: public SwModuleDummy , public SfxListener
     SwChapterNumRules*  pChapterNumRules;
     SwStdFontConfig*    pStdFontConfig;
     SwNavigationConfig* pNavigationConfig;
-    SwToolbarConfigItem*pToolbarConfig;     //fÅr gestackte Toolbars, welche
+    SwToolbarConfigItem*pToolbarConfig;     //fuer gestackte Toolbars, welche
     SwToolbarConfigItem*pWebToolbarConfig;  //war sichtbar?
     SwDBConfig*         pDBConfig;
 
@@ -139,9 +139,9 @@ class SwModule: public SwModuleDummy , public SfxListener
 
     SwAttrPool          *pAttrPool;
 
-    // Die aktuelle ::com::sun::star::sdbcx::View wird hier gehalten um nicht ueber
+    // Die aktuelle View wird hier gehalten um nicht ueber
     // GetActiveView arbeiten zu muessen
-    // Die ::com::sun::star::sdbcx::View ist solange gueltig bis Sie im Activate
+    // Die View ist solange gueltig bis Sie im Activate
     // zerstoert oder ausgetauscht wird
     SwView*             pView;
 
@@ -150,9 +150,9 @@ class SwModule: public SwModuleDummy , public SfxListener
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceEventListener >     xLngSvcEvtListener;
+        ::com::sun::star::linguistic2::XLinguServiceEventListener > xLngSvcEvtListener;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::scanner::XScannerManager >                    m_xScannerManager;
+        ::com::sun::star::scanner::XScannerManager >    m_xScannerManager;
 
     sal_Bool                bAuthorInitialised : 1;
     sal_Bool                bEmbeddedLoadSave : 1;
@@ -168,6 +168,10 @@ protected:
     void                InsertLab(SfxRequest&, sal_Bool bLabel);
 
 public:
+    // public Data - used for internal Clipboard / Drag & Drop
+    SwTransferable  *pClipboard, *pDragDrop;
+
+
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE);
 
@@ -182,7 +186,7 @@ public:
 
     virtual SfxModule* Load();
 
-    // ::com::sun::star::sdbcx::View setzen nur fuer internen Gebrauch,
+    // View setzen nur fuer internen Gebrauch,
     // aus techn. Gruenden public
     //
     inline  void        SetView(SwView* pVw) { pView = pVw; }
@@ -229,24 +233,19 @@ public:
     sal_Bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( sal_Bool bFlag )  { bEmbeddedLoadSave = bFlag; }
 
-
-    // Public Data
-    //
-    SwDataExchange*     pClipboard;
-    SwDataExchange*     pDragDrop;
-
-    void ShowDBObj(SwWrtShell& rShell, const SwDBData& rData, sal_Bool bShowError = sal_False);
+    void ShowDBObj( SwWrtShell& rShell, const SwDBData& rData,
+                    sal_Bool bShowError = sal_False );
 
     // Tabellenmodi
-    sal_Bool                IsInsTblFormatNum(sal_Bool bHTML) const;
-    sal_Bool                IsInsTblChangeNumFormat(sal_Bool bHTML) const;
-    sal_Bool                IsInsTblAlignNum(sal_Bool bHTML) const;
+    sal_Bool            IsInsTblFormatNum(sal_Bool bHTML) const;
+    sal_Bool            IsInsTblChangeNumFormat(sal_Bool bHTML) const;
+    sal_Bool            IsInsTblAlignNum(sal_Bool bHTML) const;
 
     // Redlining
-    sal_uInt16              GetRedlineAuthor();
-    sal_uInt16              GetRedlineAuthorCount();
+    sal_uInt16          GetRedlineAuthor();
+    sal_uInt16          GetRedlineAuthorCount();
     const String&       GetRedlineAuthor(sal_uInt16 nPos);
-    sal_uInt16              InsertRedlineAuthor(const String& rAuthor);
+    sal_uInt16          InsertRedlineAuthor(const String& rAuthor);
 
     void                GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
     void                GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
@@ -257,7 +256,7 @@ public:
     const AuthorCharAttr&   GetFormatAuthorAttr() const;
 
     sal_uInt16              GetRedlineMarkPos();
-    const Color&        GetRedlineMarkColor();
+    const Color&            GetRedlineMarkColor();
 
     // returne den definierten DocStat - WordDelimiter
     const String&       GetDocStatWordDelim() const;
@@ -286,14 +285,12 @@ public:
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceEventListener >
             GetLngSvcEvtListener();
-    inline void SetLngSvcEvtListener(
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr);
+    inline void SetLngSvcEvtListener( ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr);
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >
             GetScannerManager() const {return m_xScannerManager;}
-
 };
 
 
