@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: tl $ $Date: 2001-05-07 13:54:27 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 09:58:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
-
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
 UNOTYPES=\
     com.sun.star.linguistic2.DictionaryEvent\
