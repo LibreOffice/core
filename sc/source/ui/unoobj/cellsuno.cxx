@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:53:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,13 +251,15 @@ const SfxItemPropertyMap* lcl_GetCellsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &getCppuType((table::CellOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -273,6 +275,7 @@ const SfxItemPropertyMap* lcl_GetCellsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
@@ -342,13 +345,15 @@ const SfxItemPropertyMap* lcl_GetRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0),   0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &getCppuType((table::CellOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -365,6 +370,7 @@ const SfxItemPropertyMap* lcl_GetRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
@@ -435,6 +441,8 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_FORMLOC),  SC_WID_UNO_FORMLOC, &getCppuType((rtl::OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FORMRT),   SC_WID_UNO_FORMRT,  &getCppuType((table::CellContentType*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
@@ -443,7 +451,7 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &getCppuType((table::CellOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -460,6 +468,7 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
@@ -530,6 +539,8 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
 //      {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), SC_WID_UNO_CELLFILT,&getBooleanCppuType(),                  0, 0 },
@@ -541,7 +552,7 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_OWIDTH),   SC_WID_UNO_OWIDTH,  &getBooleanCppuType(),                  0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &getCppuType((table::CellOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -558,6 +569,7 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
@@ -626,6 +638,8 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),  SC_WID_UNO_CELLHGT, &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
@@ -638,7 +652,7 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_OHEIGHT),  SC_WID_UNO_OHEIGHT, &getBooleanCppuType(),                  0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &getCppuType((table::CellOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -655,6 +669,7 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
@@ -727,6 +742,8 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_COPYBACK), SC_WID_UNO_COPYBACK,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COPYFORM), SC_WID_UNO_COPYFORM,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COPYSTYL), SC_WID_UNO_COPYSTYL,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_ISACTIVE), SC_WID_UNO_ISACTIVE,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
@@ -737,7 +754,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), SC_WID_UNO_LINKDISPNAME,&getCppuType((rtl::OUString*)0),    0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &getCppuType((table::CellOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PAGESTL),  SC_WID_UNO_PAGESTL, &getCppuType((rtl::OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
@@ -758,6 +775,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_SHOWBORD), SC_WID_UNO_SHOWBORD,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,&getCppuType((sal_Int16*)0),           0, 0 },
@@ -1833,10 +1851,10 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
         {
             SfxItemState eState = pPattern->GetItemSet().GetItemState( nItemWhich, FALSE );
 
-            //  if no rotate value is set, look at orientation
-            //! also for a fixed value of 0 (in case orientation is ambiguous)?
-            if ( nItemWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
-                eState = pPattern->GetItemSet().GetItemState( ATTR_ORIENTATION, FALSE );
+//           //  if no rotate value is set, look at orientation
+//           //! also for a fixed value of 0 (in case orientation is ambiguous)?
+//           if ( nItemWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
+//               eState = pPattern->GetItemSet().GetItemState( ATTR_ORIENTATION, FALSE );
 
             if ( nItemWhich == ATTR_VALUE_FORMAT && eState == SFX_ITEM_DEFAULT )
                 eState = pPattern->GetItemSet().GetItemState( ATTR_LANGUAGE_FORMAT, FALSE );
@@ -1928,7 +1946,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
                 //! Bei Items, die mehrere Properties enthalten (z.B. Hintergrund)
                 //! wird hier zuviel zurueckgesetzt
 
-                //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
+//               //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
 
                 USHORT aWIDs[3];
                 aWIDs[0] = nItemWhich;
@@ -2130,28 +2148,33 @@ void lcl_SetCellProperty( const SfxItemPropertyMap& rMap, const uno::Any& rValue
                     if ( nRotVal < 0 )
                         nRotVal += 36000;
 
-                    //  always set rotation value and orientation
-
-                    SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
-                    BOOL bSetOrient = TRUE;
-
-                    SvxCellOrientation eOld = (SvxCellOrientation)
-                        ((const SvxOrientationItem&)rSet.Get(ATTR_ORIENTATION)).
-                            GetValue();
-
-                    // #103272#; don't overwrite stacked orientation
-                    if ( eOld == SVX_ORIENTATION_STACKED )
-                        bSetOrient = FALSE;
-                    else if ( nRotVal == 9000 )
-                        eOrient = SVX_ORIENTATION_BOTTOMTOP;
-                    else if ( nRotVal == 27000 )
-                        eOrient = SVX_ORIENTATION_TOPBOTTOM;
-
                     rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
-                    if (bSetOrient)
+                }
+            }
+            break;
+        case ATTR_STACKED:
+            {
+                table::CellOrientation eOrient;
+                if( rValue >>= eOrient )
+                {
+                    switch( eOrient )
                     {
-                        rSet.Put( SvxOrientationItem( eOrient, ATTR_ORIENTATION ) );
-                        rSecondItemId = ATTR_ORIENTATION;
+                        case table::CellOrientation_STANDARD:
+                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                        break;
+                        case table::CellOrientation_TOPBOTTOM:
+                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
+                            rSecondItemId = ATTR_ROTATE_VALUE;
+                        break;
+                        case table::CellOrientation_BOTTOMTOP:
+                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
+                            rSecondItemId = ATTR_ROTATE_VALUE;
+                        break;
+                        case table::CellOrientation_STACKED:
+                            rSet.Put( SfxBoolItem( ATTR_STACKED, TRUE ) );
+                        break;
                     }
                 }
             }
@@ -2361,24 +2384,11 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                         rAny <<= (sal_Int16)( TwipsToHMM(((const SfxUInt16Item&)
                                         pDataSet->Get(pMap->nWID)).GetValue()) );
                         break;
-                    case ATTR_ROTATE_VALUE:
+                    case ATTR_STACKED:
                         {
-                            //  if value is 0 and orientation topbottom or bottomtop,
-                            //  adjust value
-
-                            sal_Int32 nRotVal = ((const SfxInt32Item&)
-                                        pDataSet->Get(ATTR_ROTATE_VALUE)).GetValue();
-                            if ( nRotVal == 0 )
-                            {
-                                SvxCellOrientation eOrient = (SvxCellOrientation)
-                                        ((const SvxOrientationItem&)pDataSet->Get(ATTR_ORIENTATION)).
-                                            GetValue();
-                                if ( eOrient == SVX_ORIENTATION_BOTTOMTOP )
-                                    nRotVal = 9000;
-                                else if ( eOrient == SVX_ORIENTATION_TOPBOTTOM )
-                                    nRotVal = 27000;
-                            }
-                            rAny <<= nRotVal;
+                            sal_Int32 nRot = ((const SfxInt32Item&)pDataSet->Get(ATTR_ROTATE_VALUE)).GetValue();
+                            BOOL bStacked = ((const SfxBoolItem&)pDataSet->Get(pMap->nWID)).GetValue();
+                            SvxOrientationItem( nRot, bStacked ).QueryValue( rAny );
                         }
                         break;
                     default:
