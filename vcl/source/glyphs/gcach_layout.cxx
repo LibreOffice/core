@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.18 $
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:12:40 $
+ *  $Revision: 1.19 $
+ *  last change: $Author: hdu $ $Date: 2002-12-12 13:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,10 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
         bool bRightToLeft;
         if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
             break;
-        int nGlyphIndex = rFont.GetGlyphIndex( rArgs.mpStr[ nCharPos ] );
+        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+        if( bRightToLeft )
+            cChar = GetMirroredChar( cChar );
+        int nGlyphIndex = rFont.GetGlyphIndex( cChar );
         // update fallback_runs if needed
         if( !nGlyphIndex )
             rArgs.NeedFallback( nCharPos, bRightToLeft );
@@ -461,9 +464,10 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
     // allocate temporary arrays
     int nGlyphCapacity = 3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos ) + 16;
     struct IcuPosition{ float fX, fY; };
-    LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( nGlyphCapacity * sizeof(LEGlyphID) );
-    le_int32* pCharIndices = (le_int32*)alloca( nGlyphCapacity * sizeof(le_int32) );
-    IcuPosition* pGlyphPositions = (IcuPosition*)alloca( (nGlyphCapacity+1) * sizeof(IcuPosition) );
+    const int nAllocSize = sizeof(LEGlyphID) + sizeof(le_int32) + sizeof(IcuPosition);
+    LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( nGlyphCapacity * nAllocSize + sizeof(IcuPosition) );
+    le_int32* pCharIndices = (le_int32*)((char*)pIcuGlyphs + nGlyphCapacity * sizeof(le_int32) );
+    IcuPosition* pGlyphPositions = (IcuPosition*)((char*)pCharIndices + nGlyphCapacity * sizeof(le_int32) );
 
     UErrorCode rcI18n = U_ZERO_ERROR;
     LEErrorCode rcIcu = LE_NO_ERROR;
