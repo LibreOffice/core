@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:19:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 11:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
