@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-27 13:14:54 $
+ *  last change: $Author: hdu $ $Date: 2001-05-02 14:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,22 +1115,35 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
     }
 
     // get XImage
+    bool bOldXErrorEnabled = GetDisplay()->GetXLib()->GetIgnoreXErrors();
     GetDisplay()->GetXLib()->SetIgnoreXErrors( true );
     Display* pDisplay = GetXDisplay();
 
+    XRectangle aXRect;
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-    {
-        XRectangle aXRect;
         XClipBox( pClipRegion_, &aXRect );
-        if( nXmin < aXRect.x )  nXmin = aXRect.x;
-        if( nYmin < aXRect.y )  nYmin = aXRect.y;
-        if( nXmax >= aXRect.x+aXRect.width )    nXmax = aXRect.x + aXRect.width - 1;
-        if( nYmax >= aXRect.y+aXRect.height )   nYmax = aXRect.y + aXRect.height - 1;
+    else
+    {
+        XLIB_Window aDummyWin;
+        unsigned uDummy;
+        int nDummy;
+        unsigned nWidth, nHeight;
+        XGetGeometry( pDisplay, hDrawable_, &aDummyWin,
+            &nDummy, &nDummy, &nWidth, &nHeight, &uDummy, &uDummy );
+        aXRect.x = 0;
+        aXRect.y = 0;
+        aXRect.width = nWidth;
+        aXRect.height = nHeight;
     }
 
-    if( nXmin>nXmax)
+    if( nXmin < aXRect.x )  nXmin = aXRect.x;
+    if( nYmin < aXRect.y )  nYmin = aXRect.y;
+    if( nXmax >= aXRect.x+aXRect.width )    nXmax = aXRect.x + aXRect.width - 1;
+    if( nYmax >= aXRect.y+aXRect.height )   nYmax = aXRect.y + aXRect.height - 1;
+
+    if( nXmin > nXmax )
         return false;
-    if( nYmin>nYmax)
+    if( nYmin > nYmax )
         return false;
     XImage* const pImg = XGetImage( pDisplay, hDrawable_,
         nXmin, nYmin, (nXmax-nXmin+1), (nYmax-nYmin+1), ~0, ZPixmap );
@@ -1220,7 +1233,7 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
         0, 0, nXmin, nYmin, (nXmax - nXmin + 1), (nYmax - nYmin + 1) );
     XDestroyImage( pImg );
 
-    GetDisplay()->GetXLib()->SetIgnoreXErrors( false );
+    GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldXErrorEnabled );
     return true;
 }
 
