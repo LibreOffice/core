@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-03 09:52:35 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 15:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,6 @@ class ScAreaLink;
 class ScContentTree : public SvTreeListBox
 {
     ScNavigatorDlg*     pParentWindow;
-    Bitmap              aExpBmp;
-    Bitmap              aCollBmp;
     ImageList           aEntryImages;
     ImageList           aHCEntryImages;
     SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];

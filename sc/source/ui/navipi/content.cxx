@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-03 09:55:40 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 15:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,6 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 
 ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),
-    aExpBmp         ( ScResId( RID_BMP_EXPAND ) ),
-    aCollBmp        ( ScResId( RID_BMP_COLLAPSE ) ),
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
     aHCEntryImages  ( ScResId( RID_IMAGELIST_H_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
@@ -182,7 +180,7 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     for (i=1; i<SC_CONTENT_COUNT; i++)
         InitRoot(i);
 
-    SetNodeBitmaps( aExpBmp, aCollBmp );
+    SetNodeDefaultImages();
 
     SetDoubleClickHdl( LINK( this, ScContentTree, DoubleClickHdl ) );
 }
