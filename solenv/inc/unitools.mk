@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-29 10:47:56 $
+#   last change: $Author: obo $ $Date: 2004-06-04 02:41:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,3 +151,4 @@ NULLDEV=nul
 .ENDIF
 .ENDIF
 
+EXECTEST = $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
