@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:21:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,9 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const Window *pWindow )
     mbDockable      = TRUE;
     mbLocked        = FALSE;
     mnFloatBits     = WB_BORDER | WB_CLOSEABLE | WB_SIZEABLE | (pWindow->GetStyle() & DOCKWIN_FLOATSTYLES);
+    DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow );
+    if( pDockWin )
+        mnFloatBits = pDockWin->GetFloatStyle();
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
     mbStartDockingEnabled = FALSE;
