@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       const sal_Bool bTempIsSubTable,
                                       const sal_Int32 nSpannedCols) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    bStartFormPage(sal_False)
 {
     if (!bTempIsSubTable)
     {
@@ -222,6 +223,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_FORMS:
         {
             GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
+            bStartFormPage = sal_True;
             pContext = new XMLFormsContext( GetScImport(), nPrefix, rLName);
         }
         break;
@@ -291,7 +293,8 @@ void ScXMLTableContext::EndElement()
     {
         if (GetScImport().GetTables().HasXShapes())
             GetScImport().GetShapeImport()->popGroupAndSort();
-        GetScImport().GetFormImport()->endPage();
+        if (bStartFormPage)
+            GetScImport().GetFormImport()->endPage();
     }
 
     GetScImport().GetTables().DeleteTable();
