@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:40 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,16 +484,16 @@ XclExpStringRef XclExpStringHelper::CreateString(
     return xString;
 }
 
-XclExpStringPtr XclExpStringHelper::CreateString(
+XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const EditTextObject& rEditObj,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    XclExpStringPtr pString;
+    XclExpStringRef pString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
     BOOL bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( TRUE );
     rEE.SetText( rEditObj);
-    pString = lclCreateString( rRoot, rEE, nFlags, nMaxLen, false );
+    pString = lclCreateString( rRoot, rEE, 0, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
     if( !pString->IsEmpty() )
     {
