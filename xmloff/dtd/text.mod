@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.54 2003-04-17 13:16:02 vg Exp $
+	$Id: text.mod,v 1.55 2004-05-17 16:26:59 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -998,6 +998,7 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:index-entry-tab-stop style:leader-char %character; " ">
 <!ATTLIST text:index-entry-tab-stop style:type (left|right) "left">
 <!ATTLIST text:index-entry-tab-stop style:position %length; #IMPLIED>
+<!ATTLIST text:index-entry-tab-stop style:with-tab %boolean; "true">
 
 <!ELEMENT text:index-entry-link-start EMPTY>
 <!ATTLIST text:index-entry-link-start text:style-name %styleName; #IMPLIED>
