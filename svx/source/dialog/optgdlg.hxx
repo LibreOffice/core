@@ -1,0 +1,296 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optgdlg.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:42:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _OFA_OPTGDLG_HXX
+#define _OFA_OPTGDLG_HXX
+
+#ifndef _SV_LSTBOX_HXX //autogen wg. ListBox
+#include <vcl/lstbox.hxx>
+#endif
+#ifndef _SV_GROUP_HXX //autogen wg. FixedLine
+#include <vcl/group.hxx>
+#endif
+#ifndef _SV_FIELD_HXX //autogen wg. NumericField
+#include <vcl/field.hxx>
+#endif
+#ifndef _SV_FIXED_HXX //autogen wg. FixedText
+#include <vcl/fixed.hxx>
+#endif
+#ifndef _SFXTABDLG_HXX
+#include <sfx2/tabdlg.hxx>
+#endif
+#ifndef _SVX_LANGBOX_HXX
+#include <svx/langbox.hxx>
+#endif
+#define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
+
+// class OfaMiscTabPage --------------------------------------------------
+
+class OfaMiscTabPage : public SfxTabPage
+{
+private:
+    FixedLine           aGbTwoFigure;
+    FixedText           aFtInterpret;
+    NumericField        aNfYearValue;
+    FixedText           aFtTo;
+
+    FixedLine           aHelpAgentFL;
+    CheckBox            aHelpAgentCB;
+    FixedText           aHelpAgentTimeFT;
+    NumericField        aHelpAgentTimeED;
+    FixedText           aHelpAgentTimeUnitFT;
+    FixedText           aHelpAgentResetFT;
+    PushButton          aHelpAgentResetBtn;
+
+    FixedLine           aHelpFormattingFL;
+    FixedText           aStyleSheetFT;
+    ListBox             aStyleSheetLB;
+
+    FixedLine           aFileDlgFL;
+    CheckBox            aFileDlgCB;
+
+    FixedLine           aDocStatusFL;
+    CheckBox            aDocStatusCB;
+
+    String              aStrDateInfo;
+
+    DECL_LINK( TwoFigureHdl, NumericField* );
+    DECL_LINK( TwoFigureConfigHdl, NumericField* );
+    DECL_LINK( HelpAgentHdl_Impl, CheckBox* );
+    DECL_LINK( HelpAgentResetHdl_Impl, PushButton* );
+protected:
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+
+public:
+    OfaMiscTabPage( Window* pParent, const SfxItemSet& rSet );
+    ~OfaMiscTabPage();
+
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+};
+
+// class OfaViewTabPage --------------------------------------------------
+
+class OfaViewTabPage : public SfxTabPage
+{
+private:
+    FixedLine       aAppearanceGB;
+    FixedText       aAppearanceFT;
+    ListBox         aAppearanceLB;
+    FixedText       aScalingFT;
+    MetricField     aScalingMF;
+    FixedText       aBigFT;
+    ListBox         aBigLB;
+    CheckBox        aStyleCB;
+#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+    CheckBox        aFontAntiAliasing;
+    FixedText       aAAPointLimitLabel;
+    NumericField    aAAPointLimit;
+    FixedText       aAAPointLimitUnits;
+#endif
+
+    CheckBox        aMouseFollowCB;
+    CheckBox        aFlatTabCtrlCB;
+    CheckBox        aColorTabCtrlCB;
+    CheckBox        aFontShowCB;
+    CheckBox        aShowInactiveItemsCB;
+    CheckBox        aFontHistoryCB;
+    CheckBox        aMenuIconsCB;
+
+    FixedLine       aWorkingSetBox;
+    CheckBox        aDocViewBtn;
+    CheckBox        aOpenWinBtn;
+
+    FixedLine       a3DGB;
+    CheckBox        a3DOpenGLCB;
+    CheckBox        a3DOpenGLFasterCB;
+    CheckBox        a3DDitheringCB;
+    CheckBox        a3DShowFullCB;
+
+    FixedLine       aMouseFL;
+    FixedText       aMousePosFT;
+    ListBox         aMousePosLB;
+    FixedText       aMouseMiddleFT;
+    ListBox         aMouseMiddleLB;
+
+    UINT16          nBigLB_InitialSelection;
+    BOOL            bSfxSymbolsAuto;
+
+    DECL_LINK( OpenGLHdl, CheckBox* );
+#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+    DECL_LINK( OnAntialiasingToggled, void* );
+#endif
+public:
+    OfaViewTabPage( Window* pParent, const SfxItemSet& rSet );
+    ~OfaViewTabPage();
+
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+};
+/* -----------------------------23.11.00 13:04--------------------------------
+
+ ---------------------------------------------------------------------------*/
+//class LanguageConfig_Impl;
+class OfaLanguagesTabPage : public SfxTabPage
+{
+    FixedLine       aUILanguageGB;
+//  FixedText       aUILanguageFT;
+//  SvxLanguageBox  aUILanguageLB;
+    FixedText       aLocaleSettingFT;
+    SvxLanguageBox  aLocaleSettingLB;
+    FixedText       aCurrencyFT;
+    ListBox         aCurrencyLB;
+
+    FixedLine       aLinguLanguageGB;
+    FixedText       aWesternLanguageFT;
+    SvxLanguageBox  aWesternLanguageLB;
+    FixedText       aAsianLanguageFT;
+    SvxLanguageBox  aAsianLanguageLB;
+    FixedText       aComplexLanguageFT;
+    SvxLanguageBox  aComplexLanguageLB;
+    CheckBox        aCurrentDocCB;
+    FixedLine       aAsianSupportFL;
+    CheckBox        aAsianSupportCB;
+    FixedLine       aCTLSupportFL;
+    CheckBox        aCTLSupportCB;
+
+    sal_Bool        m_bOldAsian;
+    sal_Bool        m_bOldCtl;
+//  LanguageConfig_Impl*    pLangConfig;
+
+    DECL_LINK(  SupportHdl, CheckBox* ) ;
+    DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
+
+public:
+    OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );
+    ~OfaLanguagesTabPage();
+
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+};
+/* -----------------------------20.06.01 16:32--------------------------------
+
+ ---------------------------------------------------------------------------*/
+#ifdef WNT
+#else
+#define HELPER_PAGE_COMPLETE
+#endif
+
+struct OfaHelperProgramsTabPage_Impl;
+class OfaHelperProgramsTabPage : public SfxTabPage
+{
+    FixedText       aHelpFI;
+
+    FixedLine       aMailFL;
+    FixedText       aProgramFT;
+    FixedText       aAdditionalMailFT;
+    ListBox         aProfilesLB;
+    Edit            aMailerURLED;
+    PushButton      aMailerURLPB;
+
+    FixedLine       aLinkFL;
+    FixedText       aHTTPFT;
+    Edit            aHTTPED;
+    PushButton      aHTTPPB;
+
+    FixedText       aHTTPSFT;
+    Edit            aHTTPSED;
+    PushButton      aHTTPSPB;
+
+    FixedText       aFTPFT;
+    Edit            aFTPED;
+    PushButton      aFTPPB;
+
+    FixedText       aMailerFT;
+    Edit            aMailerED;
+    PushButton      aMailerPB;
+
+    FixedLine       aDocManagerFL;
+    FixedText       aDocManagerFT;
+    Edit            aDocManagerED;
+    PushButton      aDocManagerPB;
+
+    String          m_sMozilla;
+    String          m_sNetscape;
+    String          m_sDefaultFilterName;
+
+    OfaHelperProgramsTabPage_Impl* pImpl;
+
+    DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
+    DECL_LINK(  ProfileHdl_Impl, ListBox* ) ;
+
+public:
+    OfaHelperProgramsTabPage( Window* pParent, const SfxItemSet& rSet );
+    ~OfaHelperProgramsTabPage();
+
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+};
+#endif // #ifndef _OFA_OPTGDLG_HXX
+
+

@@ -1,0 +1,241 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optgdlg.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:42:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _OFA_OPTGDLG_HRC
+#define _OFA_OPTGDLG_HRC
+
+#include <svtools/controldims.hrc>
+
+// TabPage Sonstiges -----------------------------------------------------
+
+#define GB_TWOFIGURE            20
+#define NF_YEARVALUE            21
+#define FT_TO                   22
+#define FT_INTERPRET            23
+
+#define FL_HELPAGENT            120
+#define CB_HELPAGENT            121
+#define PB_HELPAGENT_RESET      122
+#define FT_HELPAGENT_TIME       123
+#define ED_HELPAGENT_TIME       124
+#define FT_HELPAGENT_RESET      125
+#define FL_HELPFORMATTING       126
+#define FT_STYLESHEET           127
+#define LB_STYLESHEET           128
+
+// defines for positions and sizes
+
+#define WHOLE_WIDTH             248
+#define EDIT_WIDTH              25
+#define UNIT_WIDTH              40
+
+#define COLSPACE                RSC_SP_CTRL_DESC_X
+#define COL0                    6
+#define COL1                    (COL0+6)
+#define COL2                    (COL1+10)
+#define COL3                    (COL2+100)
+#define COL4                    (COL3+COLSPACE)
+#define COL5                    (COL4+EDIT_WIDTH)
+#define COL6                    (COL5+COLSPACE)
+
+#define ROWSPACE                RSC_SP_CTRL_DESC_Y
+#define ROW0                    3
+#define ROW1                    (ROW0+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW2                    (ROW1)
+#define ROW3                    (ROW2+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
+#define ROW4                    (ROW3+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW5                    (ROW4+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW6                    (ROW5+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
+#define ROW7                    (ROW6+RSC_CD_PUSHBUTTON_HEIGHT+ROWSPACE)
+#define ROW8                    (ROW7+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW9                    (ROW8+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW10                   (ROW9+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW11                   (ROW10+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
+#define ROW12                    (ROW11+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+
+#define DIFF(v1,v2)             (v2-v1)
+#define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+#define OFFS_PUSHBUTTON_FIXEDTEXT(base) (base+(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
+
+
+// TabPage Ansicht -------------------------------------------------------
+
+#define GB_3D                   1
+#define CB_3D_OPENGL            2
+#define CB_3D_OPENGL_FASTER     3
+#define CB_3D_DITHERING         4
+#define CB_3D_SHOWFULL          5
+
+#define GB_APPEARANCE           10
+#define FT_APPEARANCE           13
+#define LB_APPEARANCE           14
+#define FT_SCALING              17
+#define MF_SCALING              18
+
+#define FL_MOUSE                20
+#define LB_MOUSEPOS             21
+#define FT_MOUSEPOS             22
+#define FT_MOUSEMIDDLE          23
+#define LB_MOUSEMIDDLE          24
+
+#define CB_MENU_ICONS           30
+//#define CB_BIG                  31
+#define CB_STYLE                32
+#define GB_WORKINGSET           33
+#define BTN_DOCVIEW             34
+#define BTN_OPENWIN             35
+#define LB_BIG                  37
+#define FT_BIG                  38
+
+
+#define CB_MOUSE_FOLLOW         41
+#define CB_FLAT_TAB_CTRL        42
+#define CB_COLOR_TAB_CTRL       43
+#define CB_FONT_SHOW            44
+#define CB_SHOW_INACTIVE        45
+#define CB_FONT_HISTORY         46
+
+#define CB_FONTANTIALIASING     47
+#define NF_AA_POINTLIMIT        48
+#define FT_POINTLIMIT_LABEL     49
+#define FT_POINTLIMIT_UNIT      50
+
+// defines for positions and sizes
+
+#define ROW_LB_APPEARANCE       13
+#define ROW_MF_SCALING          (ROW_LB_APPEARANCE+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_LB_BIG              (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_CB_STYLE            (ROW_LB_BIG+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_CB_FONTANTIALIASING (ROW_CB_STYLE+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_NF_AA_POINTLIMIT    (ROW_CB_FONTANTIALIASING+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_MOUSE_FOLLOW     (ROW_NF_AA_POINTLIMIT+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_CB_FLAT_TAB_CTRL    (ROW_CB_MOUSE_FOLLOW+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_COLOR_TAB_CTRL   (ROW_CB_FLAT_TAB_CTRL+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_FONT_SHOW        (ROW_CB_COLOR_TAB_CTRL+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_SHOW_INACTIVE    (ROW_CB_FONT_SHOW+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_FONT_HISTORY     (ROW_CB_SHOW_INACTIVE+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW_CB_MENU_ICONS       (ROW_CB_FONT_HISTORY+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+
+
+
+// TabPage Languages -------------------------------------------------------
+
+#define GB_UI_LANG              1
+//#define FT_UI_LANG              2
+//#define LB_UI_LANG              3
+#define GB_LINGU_LANG           4
+#define FT_WEST_LANG            5
+#define LB_WEST_LANG            6
+#define FT_ASIAN_LANG           7
+#define LB_ASIAN_LANG           8
+#define FT_COMPLEX_LANG         9
+#define LB_COMPLEX_LANG         10
+#define CB_CURRENT_DOC          11
+#define FL_ASIANSUPPORT         12
+#define CB_ASIANSUPPORT         13
+#define FL_CTLSUPPORT           14
+#define CB_CTLSUPPORT           15
+#define FT_LOCALESETTING        16
+#define LB_LOCALESETTING        17
+#define FT_CURRENCY             18
+#define LB_CURRENCY             19
+
+#define FL_FILEDLG              53
+#define CB_FILEDLG              54
+#define FT_GRAPHICCACHE_UNIT        55
+#define FT_GRAPHICOBJECTCACHE_UNIT  56
+#define FT_GRAPHICOBJECTTIME_UNIT   57
+#define FT_HELPAGENT_TIME_UNIT      58
+#define FL_DOCSTATUS                59
+#define CB_DOCSTATUS                60
+
+//tab page helper programs
+#define FI_HELP                     1
+#define FL_MAIL                     2
+#define STR_MOZILLA_PROGRAM_NAME    3
+#define STR_NETSCAPE_PROGRAM_NAME   4
+#define FT_PROGRAM                  5
+#define FT_ADD_MAIL                 6
+#define LB_PROFILES                 7
+#define ED_MAILERURL                8
+#define PB_MAILERURL                9
+#define FL_LINK                    10
+#define FT_HTTP                    11
+#define ED_HTTP                    12
+#define PB_HTTP                    13
+#define FT_HTTPS                   14
+#define ED_HTTPS                   15
+#define PB_HTTPS                   16
+#define FT_FTP                     17
+#define ED_FTP                     18
+#define PB_FTP                     19
+#define FT_MAILER                  20
+#define ED_MAILER                  21
+#define PB_MAILER                  22
+#define FL_DOCMANAGER              23
+#define FT_DOCMANAGER              24
+#define ED_DOCMANAGER              25
+#define PB_DOCMANAGER              26
+#define STR_DEFAULT_FILENAME       27
+
+#endif // #ifndef _OFA_OPTGDLG_HRC
+
+// ******************************************************************* EOF
+
