@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-29 10:47:32 $
+ *  last change: $Author: bm $ $Date: 2001-06-01 12:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,6 @@ SchXMLExportHelper::SchXMLExportHelper(
     }
 
     mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport );
-    // chain draw properties
-    mxExpPropMapper->ChainExportMapper( XMLShapeExport::CreateShapePropMapper( rExport ));
 
     // register chart auto-style family
     mrAutoStylePool.AddFamily(
