@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:19:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@
 #define STR_DEMO_EXPORT_LIMIT               (RID_APP_START+264)
 #define STR_UNDO_DELETEPAGES                (RID_APP_START+265)
 #define STR_UNDO_INSERTPAGES                (RID_APP_START+266)
-#define STR_ASK_DELETE_PAGE                 (RID_APP_START+267)
+//free (RID_APP_START+267)
 #define STR_ASK_DELETE_LAYER                (RID_APP_START+268)
 #define STR_UNDO_CHANGE_TITLE_AND_LAYOUT    (RID_APP_START+269)
 #define STR_WAV_FILE                        (RID_APP_START+270)
@@ -385,8 +385,8 @@
 #define STR_SOUNDFILE4                      (RID_APP_START+294)
 #define STR_SOUNDFILE5                      (RID_APP_START+295)
 
-#define STR_WARN_DEL_PAGE                   (RID_APP_START+296)
-#define STR_WARN_DEL_SEL_PAGES              (RID_APP_START+297)
+//free (RID_APP_START+296)
+//free (RID_APP_START+297)
 
 #define STR_DEL_SHAPE                       (RID_APP_START+298)
 #define STR_WARN_DEL_SHAPE                  (RID_APP_START+299)
@@ -649,7 +649,7 @@
 
 #define STR_UNDO_APPLY_3D_FAVOURITE         (RID_APP_START+556)
 
-#define STR_WARN_DEL_SEL_PAGE               (RID_APP_START+557)
+//free (RID_APP_START+557)
 
 #define RID_UNDO_DELETE_WARNING             (RID_APP_START+558)
 #define IMG_UNDO_DELETE_WARNING             (RID_APP_START+559)
