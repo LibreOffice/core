@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:09:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,9 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
     DBG_ASSERT( xTunnel.is(), "missing XUnoTunnel for Cursor" );
-    SwXTextCursor* pSwXCursor =
-        (SwXTextCursor*)xTunnel->getSomething(SwXTextCursor::getUnoTunnelId());
-    DBG_ASSERT( NULL != pSwXCursor, "SwXTextCursor missing" );
+    OTextCursorHelper* pSwXCursor =
+        (OTextCursorHelper*)xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId());
+    DBG_ASSERT( NULL != pSwXCursor, "OTextCursorHelper missing" );
     return pSwXCursor->GetDoc();
 }
 
