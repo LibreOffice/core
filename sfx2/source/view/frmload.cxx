@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:21:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
 
     xFrame = rFrame;
 
-    // Achtung: beim Abr�umen der Objekte kann die SfxApp destruiert werden, vorher noch Deinitialize_Impl rufen
+    // Achtung: beim Abraeumen der Objekte kann die SfxApp destruiert werden, vorher noch Deinitialize_Impl rufen
     SfxApplication* pApp = SFX_APP();
 
     // Attention! Because lDescriptor is a copy of rArgs
