@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-19 13:18:33 $
+ *  last change: $Author: dl $ $Date: 2001-06-21 10:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #include "svdotext.hxx"
 #include "svdpagv.hxx"
 #include "fmglob.hxx"
+#include "polysc3d.hxx"
 
 #ifndef SVX_LIGHT
 #include "fmdpage.hxx"
@@ -952,7 +953,7 @@ void SdrObjList::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
     while (nNum<nAnz)
     {
         SdrObject* pObj = GetObj(nNum);
-        if( pObj->ISA( SdrAttrObj ) )
+        if( pObj->ISA( SdrAttrObj ) && !pObj->ISA( E3dPolyScene ) )
             ( (SdrAttrObj*) pObj )->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
         else if( pObj->ISA( SdrObjGroup ) )
             ( (SdrObjGroup*) pObj )->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
