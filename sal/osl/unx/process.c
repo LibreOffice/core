@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 16:58:41 $
+ *  last change: $Author: hro $ $Date: 2001-07-19 12:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 
 /* implemented in file.c */
 extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
+extern oslFileHandle osl_createFileHandleFromFD( int fd );
 
 /******************************************************************************
  *
@@ -127,6 +128,9 @@ typedef struct {
     oslCondition     m_started;
     oslProcessImpl*  m_pProcImpl;
     pthread_mutex_t  m_aMutex;
+    oslFileHandle    *m_pInputWrite;
+    oslFileHandle    *m_pOutputRead;
+    oslFileHandle    *m_pErrorRead;
 } ProcessData;
 
 typedef struct _oslPipeImpl {
@@ -149,7 +153,10 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslSecurity Security,
                                                 sal_Char *pszDirectory,
                                                 sal_Char *pszEnvironments[],
-                                                oslProcess *pProcess);
+                                                oslProcess *pProcess,
+                                                oslFileHandle *pInputWrite,
+                                                oslFileHandle *pOutputRead,
+                                                oslFileHandle *pErrorRead );
 oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
                                         sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
 
@@ -787,6 +794,7 @@ static void ChildStatusProc(void *pData)
     int   channel[2];
     ProcessData  data;
     ProcessData *pdata;
+    int     stdOutput[2] = { -1, -1 }, stdInput[2] = { -1, -1 }, stdError[2] = { -1, -1 };
 
     pdata = (ProcessData *)pData;
 
@@ -799,6 +807,17 @@ static void ChildStatusProc(void *pData)
 
     fcntl(channel[0], F_SETFD, FD_CLOEXEC);
     fcntl(channel[1], F_SETFD, FD_CLOEXEC);
+
+    /* Create redirected IO pipes */
+
+    if ( data.m_pInputWrite )
+        pipe( stdInput );
+
+    if ( data.m_pOutputRead )
+        pipe( stdOutput );
+
+    if ( data.m_pErrorRead )
+        pipe( stdError );
 
     if ((pid = fork()) == 0)
     {
@@ -834,6 +853,37 @@ static void ChildStatusProc(void *pData)
 #endif
             OSL_TRACE("ChildStatusProc : starting '%s'",data.m_pszArgs[0]);
 
+            /* Connect std IO to pipe ends */
+
+            /* Write end of stdInput not used in child process */
+            close( stdInput[1] );
+
+            /* Read end of stdOutput not used in child process */
+            close( stdOutput[0] );
+
+            /* Read end of stdError not used in child process */
+            close( stdError[0] );
+
+            /* Redirect pipe ends to std IO */
+
+            if ( stdInput[0] != STDIN_FILENO )
+            {
+                dup2( stdInput[0], STDIN_FILENO );
+                close( stdInput[0] );
+            }
+
+            if ( stdOutput[1] != STDOUT_FILENO )
+            {
+                dup2( stdOutput[1], STDOUT_FILENO );
+                close( stdOutput[1] );
+            }
+
+            if ( stdError[1] != STDERR_FILENO )
+            {
+                dup2( stdError[1], STDERR_FILENO );
+                close( stdError[1] );
+            }
+
             pid=execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
 
         }
@@ -856,6 +906,11 @@ static void ChildStatusProc(void *pData)
 
         close(channel[1]);
 
+        /* Close unused pipe ends */
+        close( stdInput[0] );
+        close( stdOutput[1] );
+        close( stdError[1] );
+
         while (((i = read(channel[0], &status, sizeof(status))) < 0))
         {
             if (errno != EINTR)
@@ -872,6 +927,12 @@ static void ChildStatusProc(void *pData)
             pdata->m_pProcImpl->m_pid = pid;
             pdata->m_pProcImpl->m_pnext = ChildList;
             ChildList = pdata->m_pProcImpl;
+
+            /* Store used pipe ends in data structure */
+
+            *(pdata->m_pInputWrite) = osl_createFileHandleFromFD( stdInput[1] );
+            *(pdata->m_pOutputRead) = osl_createFileHandleFromFD( stdOutput[0] );
+            *(pdata->m_pErrorRead) = osl_createFileHandleFromFD( stdError[0] );
 
             osl_releaseMutex(ChildListMutex);
 
@@ -919,11 +980,27 @@ static void ChildStatusProc(void *pData)
             osl_setCondition(pdata->m_started);
             pthread_mutex_unlock(&pdata->m_aMutex);
 
+            /* Close pipe ends */
+
+            if ( pdata->m_pInputWrite )
+                *pdata->m_pInputWrite = NULL;
+
+            if ( pdata->m_pOutputRead )
+                *pdata->m_pOutputRead = NULL;
+
+            if ( pdata->m_pErrorRead )
+                *pdata->m_pErrorRead = NULL;
+
+            close( stdInput[1] );
+            close( stdOutput[0] );
+            close( stdError[0] );
         }
     }
 }
 
-oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
+
+oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+                                            rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
                                             sal_uInt32   nArguments,
                                             oslProcessOption Options,
@@ -931,7 +1008,11 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
                                             rtl_uString *ustrWorkDir,
                                             rtl_uString *ustrEnvironment[],
                                             sal_uInt32   nEnvironmentVars,
-                                            oslProcess *pProcess)
+                                            oslProcess *pProcess,
+                                            oslFileHandle   *pInputWrite,
+                                            oslFileHandle   *pOutputRead,
+                                            oslFileHandle   *pErrorRead
+                                            )
 {
 
     oslProcessError Error;
@@ -1003,7 +1084,11 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
                                    Security,
                                    pszWorkDir,
                                    pEnvironment,
-                                   pProcess);
+                                   pProcess,
+                                   pInputWrite,
+                                   pOutputRead,
+                                   pErrorRead
+                                   );
 
     if ( pArguments != 0 )
     {
@@ -1033,13 +1118,46 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
 }
 
 
+oslProcessError SAL_CALL osl_executeProcess(
+                                            rtl_uString *ustrImageName,
+                                            rtl_uString *ustrArguments[],
+                                            sal_uInt32   nArguments,
+                                            oslProcessOption Options,
+                                            oslSecurity Security,
+                                            rtl_uString *ustrWorkDir,
+                                            rtl_uString *ustrEnvironment[],
+                                            sal_uInt32   nEnvironmentVars,
+                                            oslProcess *pProcess
+                                            )
+{
+    return osl_executeProcess_WithRedirectedIO(
+        ustrImageName,
+        ustrArguments,
+        nArguments,
+        Options,
+        Security,
+        ustrWorkDir,
+        ustrEnvironment,
+        nEnvironmentVars,
+        pProcess,
+        NULL,
+        NULL,
+        NULL
+        );
+}
+
+
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
                                                 oslProcessOption Options,
                                                 oslSecurity Security,
                                                 sal_Char *pszDirectory,
                                                 sal_Char *pszEnvironments[],
-                                                oslProcess *pProcess)
+                                                oslProcess *pProcess,
+                                                oslFileHandle   *pInputWrite,
+                                                oslFileHandle   *pOutputRead,
+                                                oslFileHandle   *pErrorRead
+                                                )
 {
     int     i;
     sal_Char    path[PATH_MAX + 1];
@@ -1049,6 +1167,9 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     path[0] = '\0';
 
     memset(&Data,0,sizeof(ProcessData));
+    Data.m_pInputWrite = pInputWrite;
+    Data.m_pOutputRead = pOutputRead;
+    Data.m_pErrorRead = pErrorRead;
 
     pthread_mutex_init(&Data.m_aMutex,0);
 

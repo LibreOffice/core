@@ -46,6 +46,7 @@ UDK_3_0_0 {
         osl_destroyThreadKey;
         osl_enableNonBlockingMode;
         osl_executeProcess;
+        osl_executeProcess_WithRedirectedIO;
         osl_flushProfile;
         osl_freeProcessHandle;
         osl_freeSecurityHandle;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-08 13:59:51 $
+ *  last change: $Author: hro $ $Date: 2001-07-19 12:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ typedef void* oslProcess;
     @param pResource [in] is a NULL terminated array of resources to transmit to the client process.
     @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
     @return osl_Process_E_None if the executable could be started, otherwise an error-code.
+    @see osl_executeProcess_WithRedirectedIO
     @see osl_freeProcessHandle
     @see osl_loginUser
 */
@@ -194,6 +195,46 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
                                             sal_uInt32   nEnvironmentVars,
                                             oslProcess *pProcess);
 
+
+/** Execute a process and redirected child process standard IO
+    @param strImageName [in] denotes the name of the executable to be started.
+    @param strArguments [in] is an array of argument strings.
+    @param nArgument [in] the number of arguments provided.
+    @param Options [in] is a combination of int-constants to describe the mode of execution.
+    @param Security [in] describes a the user and his rights for wich the process is started.
+    @param strDirectory [in] denotes the name of the startup directory.
+    @param strEnviroments [in] is an array of strings wich describes the enviroment to set.
+    Each string has the form "variable=value".
+    @param nEnvironmentVars [in] the number of environment vars to set.
+    @param pResource [in] is a NULL terminated array of resources to transmit to the client process.
+    @param pProcess [out] points to a oslProcess variable, in wich the processhandle is returned.
+    @param pChildInputWrite [out] points to a oslFileHandle variable that receives the handle which can
+    be used to write to child process standard input device. Handle has to be closed with osl_closeFile
+    id no longer used.
+    @param pChildOutputRead [out] points to a oslFileHandle variable that receives the handle which can
+    be used to read from child process standard output device. Handle has to be closed with osl_closeFile
+    id no longer used.
+    @param pChildErrorRead [out] points to a oslFileHandle variable that receives the handle which can
+    be used to read from child process standard error device. Handle has to be closed with osl_closeFile
+    id no longer used.
+    @return osl_Process_E_None if the executable could be started, otherwise an error-code.
+    @see osl_executeProcess
+    @see osl_freeProcessHandle
+    @see osl_loginUser
+    @see osl_closeFile
+*/
+oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(rtl_uString *strImageName,
+                                            rtl_uString *strArguments[],
+                                            sal_uInt32   nArguments,
+                                            oslProcessOption Options,
+                                            oslSecurity Security,
+                                            rtl_uString *strWorkDir,
+                                            rtl_uString *strEnvironment[],
+                                            sal_uInt32   nEnvironmentVars,
+                                            oslProcess *pProcess,
+                                            oslFileHandle *pChildInputWrite,
+                                            oslFileHandle *pChildOutputRead,
+                                            oslFileHandle *pChildErrorRead);
 
 /** Terminate a process
     @param Process [in] the handle of the process to be terminated
