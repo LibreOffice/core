@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2001-09-24 12:37:39 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 11:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #endif
 
 #include <svtools/javaoptions.hxx>
+#include <basic/basmgr.hxx>
+#include <basic/sbuno.hxx>
 
 #pragma hdrstop
 
@@ -125,6 +127,7 @@
 #include "sfxbasecontroller.hxx"
 #include "topfrm.hxx"
 #include "mailmodel.hxx"
+#include "event.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -572,6 +575,26 @@ void SfxViewShell::Activate( BOOL bMDI )
             INetURLObject aObject( SvtPathOptions().GetWorkPath() );
             aObject.setFinalSlash();
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
+        }
+
+        if ( SFX_APP()->IsInBasicCall() )
+        {
+            BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Any aComponent;
+            aComponent <<= xInterface;
+            SbxVariable *pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+            if ( pCompVar )
+            {
+                pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
+            }
+            else
+            {
+                SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
+                xUnoObj->SetFlag( SBX_DONTSTORE );
+                StarBASIC *pBas = pAppMgr->GetLib(0);
+                pBas->Insert( xUnoObj );
+            }
         }
     }
 }
@@ -1220,6 +1243,25 @@ void SfxViewShell::SFX_NOTIFY( SfxBroadcaster& rBC,
             SetPrinter_Impl( new SfxPrinter(pPrinter->GetOptions().Clone()) );
     }
 #endif
+
+    if ( rHint.IsA(TYPE(SfxEventHint)) )
+    {
+        switch ( ((SfxEventHint&)rHint).GetEventId() )
+        {
+            case SFX_EVENT_LOADFINISHED:
+            {
+                if ( GetController().is() )
+                {
+                    SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
+                    SFX_ITEMSET_ARG( pSet, pItem, SfxUsrAnyItem, SID_VIEW_DATA, sal_False );
+                    if ( pItem )
+                        pImp->pController->restoreViewData( pItem->GetValue() );
+                    pSet->ClearItem( SID_VIEW_DATA );
+                }
+                break;
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------------

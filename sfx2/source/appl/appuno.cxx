@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-02 07:26:15 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 11:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    
 static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
 static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
 static const String sModel          = String::CreateFromAscii( "Model" );
-static const String sFrame          = String::CreateFromAscii("Frame");
+static const String sFrame          = String::CreateFromAscii( "Frame" );
+static const String sViewData       = String::CreateFromAscii( "ViewData" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -287,6 +288,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
             else if ( aName == sStatusInd )
                 rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
+
+            else if ( aName == sViewData )
+                rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
 
             else if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
@@ -401,6 +405,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_VIEW_ID ) == SFX_ITEM_SET )
             nItems++;
+        if ( rSet.GetItemState( SID_VIEW_DATA ) == SFX_ITEM_SET )
+            nItems++;
         if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
@@ -450,6 +456,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sStatusInd;
+            pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+        }
+        if ( rSet.GetItemState( SID_VIEW_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sViewData;
             pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_DOCUMENT, sal_False, &pItem ) == SFX_ITEM_SET )
