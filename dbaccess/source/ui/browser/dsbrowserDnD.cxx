@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:08:45 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,8 @@ namespace dbaui
                             Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
                             xComponent->removeEventListener(xEvtL);
                         }
-                        ::comphelper::disposeComponent(pData->xObject);
+                        if ( m_bOwnConnection )
+                            ::comphelper::disposeComponent(pData->xObject);
                     }
 
                     pData->xObject.clear();
