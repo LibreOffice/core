@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2002-06-12 06:36:58 $
+ *  last change: $Author: kz $ $Date: 2002-06-17 09:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1617,7 +1617,7 @@ Window DLG_NAVIGATION_PI
         Text [ french ] = "~Supprimer l'index" ;
         Text [ dutch ] = "~Index opheffen" ;
         Text [ portuguese ] = "~Remover índice" ;
-        Text[ chinese_simplified ] = "åˆ é™¤ç›®å½•(~R)";
+        Text[ chinese_simplified ] = "å–æ¶ˆç›®å½•(~R)";
         Text[ russian ] = "Óáğàòü óêàçàòåëü";
         Text[ polish ] = "Usuñ indeks";
         Text[ japanese ] = "è§£é™¤(~R)";
