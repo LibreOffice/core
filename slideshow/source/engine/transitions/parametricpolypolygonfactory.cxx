@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parametricpolypolygonfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:51:52 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ namespace presentation
                     new BarWipePolyPolygon );
             case BLINDSWIPE:
                 return ParametricPolyPolygonSharedPtr(
-                    new BarWipePolyPolygon( 5 ) );
+                    new BarWipePolyPolygon( 6 ) );
             case BOXWIPE:
                 return ParametricPolyPolygonSharedPtr(
                     new BoxWipe( nSubType == LEFTCENTER ||
