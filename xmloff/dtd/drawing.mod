@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.55 2001-06-01 13:24:17 cl Exp $
+	$Id: drawing.mod,v 1.56 2001-06-10 09:34:01 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -544,6 +544,7 @@
 		text:unordered-list|table:table|chart:chart|
 		draw:a|draw:text-box|draw:image)*)>
 <!ATTLIST draw:text-box %draw-style-name;>
+<!ATTLIST draw:text-box %draw-transform; >
 <!ATTLIST draw:text-box draw:name %string; #IMPLIED>
 <!ATTLIST draw:text-box draw:chain-next-name %string; #IMPLIED>
 
