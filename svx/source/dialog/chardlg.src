@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 16:24:06 $
+ *  last change: $Author: pb $ $Date: 2001-03-19 12:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3032,7 +3032,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 7 , 108  ) ;
-        Size = MAP_APPFONT ( 181 , 55 ) ;
+        Size = MAP_APPFONT ( 181 , 59 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
         Text[ portuguese ] = "Exemplo";
@@ -4033,8 +4033,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     FixedText FT_EFFECTS
     {
-        Pos = MAP_APPFONT( 154, 3 );
-        Size = MAP_APPFONT( 100, 10 );
+        Pos = MAP_APPFONT( 166, 3 );
+        Size = MAP_APPFONT( 88, 10 );
         Text = "~Auszeichnungen";
         Text [ english_us ] = "Effects" ;
         Text[ portuguese ] = "~Efeitos";
@@ -4059,15 +4059,15 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         HelpId = HID_SVXPAGE_CHAR_EFFECTS_CTRL;
         Border = TRUE;
-        Pos = MAP_APPFONT ( 154 , 15  );
-        Size = MAP_APPFONT ( 100 , 69 );
+        Pos = MAP_APPFONT ( 166 , 15  );
+        Size = MAP_APPFONT ( 88 , 69 );
         TabStop = TRUE;
         Hide = TRUE;
     };
     ListBox LB_EFFECTS2
     {
-        Pos = MAP_APPFONT ( 154 , 15  ) ;
-        Size = MAP_APPFONT ( 100 , 56 ) ;
+        Pos = MAP_APPFONT ( 166 , 15  ) ;
+        Size = MAP_APPFONT ( 88 , 56 ) ;
         DropDown = TRUE;
         StringList =
         {
@@ -4085,162 +4085,162 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Title" ; Default ; > ;
             < "Small Capitals" ; Default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapit‰lchen" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "Nenhum(a)" ; Default ; > ;
-        < "Mai˙sculas" ; Default ; > ;
-        < "Min˙sculas" ; Default ; > ;
-        < "Caracteres do tÌtulo" ; Default ; > ;
-        < "Versaletes" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "¡ÂÁ" ; Default ; > ;
-        < "œÓÔËÒÌ˚Â" ; Default ; > ;
-        < "—ÚÓ˜Ì˚Â" ; Default ; > ;
-        < "“ËÚÛÎ¸Ì˚È ¯ËÙÚ" ; Default ; > ;
-        < " ‡ÔËÚÂÎ¸" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < " ·Ì›Ì·" ; Default ; > ;
-        < " Âˆ·Î·ﬂ·" ; Default ; > ;
-        < "–ÂÊÔﬂ ˜·Ò·ÍÙﬁÒÂÚ" ; Default ; > ;
-        < "‘ﬂÙÎÔÚ" ; Default ; > ;
-        < "ÃÈÍÒ‹ ÍÂˆ·Î·ﬂ·" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
-            < "Geen" ; Default ; > ;
-        < "Hoofdletters" ; Default ; > ;
-        < "Kleine letters" ; Default ; > ;
-        < "Titel" ; Default ; > ;
-        < "Klein-kapitaal" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
-            < "Aucun(e)" ; Default ; > ;
-        < "Majuscules" ; Default ; > ;
-        < "Minuscules" ; Default ; > ;
-        < "CaractËres du titre" ; Default ; > ;
-        < "Petites majuscules" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
-            < "Ninguno" ; Default ; > ;
-        < "May˙sculas" ; Default ; > ;
-        < "Min˙sculas" ; Default ; > ;
-        < "TÌtulo" ; Default ; > ;
-        < "Versalitas" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
-            < "Nessuno" ; Default ; > ;
-        < "Maiuscolo" ; Default ; > ;
-        < "Minuscolo" ; Default ; > ;
-        < "Titolo" ; Default ; > ;
-        < "Maiuscoletto" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapit‰lchen" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
-            < "Inga" ; Default ; > ;
-        < "Versaler" ; Default ; > ;
-        < "Gemener" ; Default ; > ;
-        < "Titel" ; Default ; > ;
-        < "Kapit‰ler" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Brak" ; Default ; > ;
-        < "Wersaliki" ; Default ; > ;
-        < "Ma≥e litery" ; Default ; > ;
-        < "Czcionka tytu≥owa" ; Default ; > ;
-        < "Kapitaliki" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapit‰lchen" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Ç»Çµ" ; Default ; > ;
-        < "ëÂï∂éö" ; Default ; > ;
-        < "è¨ï∂éö" ; Default ; > ;
-        < "¿≤ƒŸï∂éö" ; Default ; > ;
-        < "è¨å^ëÂï∂éö" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "æ¯¿Ã" ; Default ; > ;
-        < "¥ÎπÆ¿⁄" ; Default ; > ;
-        < "º“πÆ¿⁄" ; Default ; > ;
-        < "¡¶∏Ò" ; Default ; > ;
-        < "Ω∫∏Ùƒ∏" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "Œﬁ" ; Default ; > ;
-        < "¥Û–¥◊÷ƒ∏" ; Default ; > ;
-        < "–°–¥◊÷ƒ∏" ; Default ; > ;
-        < "±ÍÃ‚◊÷ÃÂ" ; Default ; > ;
-        < "–°∫≈¥Û–¥◊÷ÃÂ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "µL" ; Default ; > ;
-        < "§jºg¶r•¿" ; Default ; > ;
-        < "§pºg¶r•¿" ; Default ; > ;
-        < "º–√D§Â¶r" ; Default ; > ;
-        < "§p´¨§jºg¶r•¿" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapit‰lchen" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "»œÊ‰" ; Default ; > ;
-        < "√Õ—› ﬂ»Ì—…" ; Default ; > ;
-        < "√Õ—› ’€Ì—…" ; Default ; > ;
-        < "Œÿ ⁄‰Ê«‰" ; Default ; > ;
-        < "Õ—› »œ«Ì… √ﬂ»—" ; Default ; > ;
-    };
+        StringList [ language_user1 ] =
+        {
+                < "Keine" ; Default ; > ;
+            < "Versalien" ; Default ; > ;
+            < "Gemeine" ; Default ; > ;
+            < "Titelschrift" ; Default ; > ;
+            < "Kapit‰lchen" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+                < "Nenhum(a)" ; Default ; > ;
+            < "Mai˙sculas" ; Default ; > ;
+            < "Min˙sculas" ; Default ; > ;
+            < "Caracteres do tÌtulo" ; Default ; > ;
+            < "Versaletes" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
+                < "¡ÂÁ" ; Default ; > ;
+            < "œÓÔËÒÌ˚Â" ; Default ; > ;
+            < "—ÚÓ˜Ì˚Â" ; Default ; > ;
+            < "“ËÚÛÎ¸Ì˚È ¯ËÙÚ" ; Default ; > ;
+            < " ‡ÔËÚÂÎ¸" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
+                < " ·Ì›Ì·" ; Default ; > ;
+            < " Âˆ·Î·ﬂ·" ; Default ; > ;
+            < "–ÂÊÔﬂ ˜·Ò·ÍÙﬁÒÂÚ" ; Default ; > ;
+            < "‘ﬂÙÎÔÚ" ; Default ; > ;
+            < "ÃÈÍÒ‹ ÍÂˆ·Î·ﬂ·" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+                < "Geen" ; Default ; > ;
+            < "Hoofdletters" ; Default ; > ;
+            < "Kleine letters" ; Default ; > ;
+            < "Titel" ; Default ; > ;
+            < "Klein-kapitaal" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+                < "Aucun(e)" ; Default ; > ;
+            < "Majuscules" ; Default ; > ;
+            < "Minuscules" ; Default ; > ;
+            < "CaractËres du titre" ; Default ; > ;
+            < "Petites majuscules" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+                < "Ninguno" ; Default ; > ;
+            < "May˙sculas" ; Default ; > ;
+            < "Min˙sculas" ; Default ; > ;
+            < "TÌtulo" ; Default ; > ;
+            < "Versalitas" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+                < "Nessuno" ; Default ; > ;
+            < "Maiuscolo" ; Default ; > ;
+            < "Minuscolo" ; Default ; > ;
+            < "Titolo" ; Default ; > ;
+            < "Maiuscoletto" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+                < "Keine" ; Default ; > ;
+            < "Versalien" ; Default ; > ;
+            < "Gemeine" ; Default ; > ;
+            < "Titelschrift" ; Default ; > ;
+            < "Kapit‰lchen" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+                < "Inga" ; Default ; > ;
+            < "Versaler" ; Default ; > ;
+            < "Gemener" ; Default ; > ;
+            < "Titel" ; Default ; > ;
+            < "Kapit‰ler" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
+                < "Brak" ; Default ; > ;
+            < "Wersaliki" ; Default ; > ;
+            < "Ma≥e litery" ; Default ; > ;
+            < "Czcionka tytu≥owa" ; Default ; > ;
+            < "Kapitaliki" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+                < "Keine" ; Default ; > ;
+            < "Versalien" ; Default ; > ;
+            < "Gemeine" ; Default ; > ;
+            < "Titelschrift" ; Default ; > ;
+            < "Kapit‰lchen" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
+                < "Ç»Çµ" ; Default ; > ;
+            < "ëÂï∂éö" ; Default ; > ;
+            < "è¨ï∂éö" ; Default ; > ;
+            < "¿≤ƒŸï∂éö" ; Default ; > ;
+            < "è¨å^ëÂï∂éö" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
+                < "æ¯¿Ã" ; Default ; > ;
+            < "¥ÎπÆ¿⁄" ; Default ; > ;
+            < "º“πÆ¿⁄" ; Default ; > ;
+            < "¡¶∏Ò" ; Default ; > ;
+            < "Ω∫∏Ùƒ∏" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
+                < "Œﬁ" ; Default ; > ;
+            < "¥Û–¥◊÷ƒ∏" ; Default ; > ;
+            < "–°–¥◊÷ƒ∏" ; Default ; > ;
+            < "±ÍÃ‚◊÷ÃÂ" ; Default ; > ;
+            < "–°∫≈¥Û–¥◊÷ÃÂ" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+                < "µL" ; Default ; > ;
+            < "§jºg¶r•¿" ; Default ; > ;
+            < "§pºg¶r•¿" ; Default ; > ;
+            < "º–√D§Â¶r" ; Default ; > ;
+            < "§p´¨§jºg¶r•¿" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
+                < "Keine" ; Default ; > ;
+            < "Versalien" ; Default ; > ;
+            < "Gemeine" ; Default ; > ;
+            < "Titelschrift" ; Default ; > ;
+            < "Kapit‰lchen" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
+                < "»œÊ‰" ; Default ; > ;
+            < "√Õ—› ﬂ»Ì—…" ; Default ; > ;
+            < "√Õ—› ’€Ì—…" ; Default ; > ;
+            < "Œÿ ⁄‰Ê«‰" ; Default ; > ;
+            < "Õ—› »œ«Ì… √ﬂ»—" ; Default ; > ;
+        };
     };
     FixedText FT_RELIEF
     {
-        Pos = MAP_APPFONT ( 154 , 31  );
-        Size = MAP_APPFONT ( 68 , 8 );
+        Pos = MAP_APPFONT ( 166 , 31  );
+        Size = MAP_APPFONT ( 88 , 8 );
         Text = "~Relief" ;
         Text [ ENGLISH ] = "Relief" ;
     };
     ListBox LB_RELIEF
     {
-        Pos = MAP_APPFONT ( 154 , 43  ) ;
-        Size = MAP_APPFONT ( 100 , 56 ) ;
+        Pos = MAP_APPFONT ( 166 , 43  ) ;
+        Size = MAP_APPFONT ( 88 , 56 ) ;
         DropDown = TRUE;
         StringList =
         {
@@ -4257,8 +4257,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     TriStateBox CB_OUTLINE
     {
-        Pos = MAP_APPFONT ( 154 , 59  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 166 , 59  ) ;
+        Size = MAP_APPFONT ( 88 , 10 ) ;
         Text = "~Kontur" ;
         Text [ english_us ] = "Outline" ;
         Text[ portuguese ] = "~Contorno";
@@ -4281,8 +4281,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     TriStateBox CB_SHADOW
     {
-        Pos = MAP_APPFONT ( 154 , 72  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 166 , 72  ) ;
+        Size = MAP_APPFONT ( 88 , 10 ) ;
         Text = "~Schatten" ;
         Text [ english_us ] = "Shadow" ;
         Text[ portuguese ] = "~Sombras";
@@ -4305,8 +4305,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     CheckBox CB_BLINKING
     {
-        Pos = MAP_APPFONT ( 154 , 85  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 166 , 85  ) ;
+        Size = MAP_APPFONT ( 88 , 10 ) ;
         Hide = TRUE;
         Text = "B~linkend" ;
         Text [ english_us ] = "~Blinking" ;
@@ -4356,7 +4356,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 7 , 108  ) ;
-        Size = MAP_APPFONT ( 246 , 55 ) ;
+        Size = MAP_APPFONT ( 246 , 59 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example";
         Text[ portuguese ] = "Exemplo";
@@ -5177,8 +5177,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "Beispiel" ;
         Text [ english_us ] = "Example" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 137  ) ;
-        Size = MAP_APPFONT ( 248 , 30 ) ;
+        Pos = MAP_APPFONT ( 7 , 137  ) ;
+        Size = MAP_APPFONT ( 246 , 30 ) ;
         Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "œËÏÂ";
         Text[ greek ] = "–·Ò‹‰ÂÈ„Ï·";
@@ -5732,7 +5732,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 7 , 108  ) ;
-        Size = MAP_APPFONT ( 246 , 55 ) ;
+        Size = MAP_APPFONT ( 246 , 59 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example" ;
         Text[ portuguese ] = "Exemplo";
