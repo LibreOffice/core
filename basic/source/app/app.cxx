@@ -2,17 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
-<<<<<<< app.cxx
- *  $Revision: 1.56 $
-=======
- *  $Revision: 1.56 $
->>>>>>> 1.53.36.2
+ *  $Revision: 1.57 $
  *
-<<<<<<< app.cxx
- *  last change: $Author: obo $ $Date: 2004-07-07 10:08:42 $
-=======
- *  last change: $Author: obo $ $Date: 2004-07-07 10:08:42 $
->>>>>>> 1.53.36.2
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,13 +606,13 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 , bIsAutoRun( FALSE )
 , pDisplayHidDlg( NULL )
 , pEditVar ( 0 )
-, bAutoReload( FALSE )
-, bAutoSave( TRUE )
 , pBasic( NULL )
 , pExecutionStatus( NULL )
 , pStatus( NULL )
 , pList( NULL )
 , pWork( NULL )
+, bAutoReload( FALSE )
+, bAutoSave( TRUE )
 , pPrn( NULL )
 {
 
@@ -1934,10 +1926,10 @@ void BasicFrame::SaveLibrary()
 
 String BasicFrame::GenRealString( const String &aResString )
 {
-    xub_StrLen nStart,nGleich,nEnd,nStartPos = 0;
+    xub_StrLen nStart,nGleich = 0,nEnd = 0,nStartPos = 0;
     String aType,aValue,aResult(aResString);
     String aString;
-    xub_StrLen nInsertPos;
+    xub_StrLen nInsertPos = 0;
     BOOL bFound;
     bFound = FALSE;
 
