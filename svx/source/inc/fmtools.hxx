@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:01:44 $
+ *  last change: $Author: fs $ $Date: 2002-10-14 13:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,9 @@ public:
 public:
     FmSlotDispatch(const ::com::sun::star::util::URL& rUrl, sal_Int16 nSlotId, SfxBindings& rBindings);
     virtual ~FmSlotDispatch();
+
+    // force broadcasting the current status
+    void    BroadcastCurrentState( );
 
     // ::com::sun::star::frame::XDispatch
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:49 $
+ *  last change: $Author: fs $ $Date: 2002-10-14 13:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,6 +1671,15 @@ FmSlotDispatch::~FmSlotDispatch()
 }
 
 //------------------------------------------------------------------------------
+void FmSlotDispatch::BroadcastCurrentState( )
+{
+    SfxPoolItem* pCurrentState = NULL;
+    SfxItemState eCurrentState = GetBindings().QueryState( m_nSlot, pCurrentState );
+    NotifyState( eCurrentState, pCurrentState );
+    delete pCurrentState;
+}
+
+//------------------------------------------------------------------------------
 void FmSlotDispatch::dispatch(const  URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw( RuntimeException )
 {
     DBG_ASSERT(aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL, "FmSlotDispatch::dispatch : invalid argument !");
@@ -1695,7 +1704,7 @@ void FmSlotDispatch::NotifyState(SfxItemState eState, const SfxPoolItem* pState,
 void SAL_CALL FmSlotDispatch::addStatusListener( const Reference< ::com::sun::star::frame::XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
     DBG_ASSERT((aURL.Main.getLength() == 0) || (aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL),
-        "FmSlotDispatch::dispatch : invalid argument !");
+        "FmSlotDispatch::addStatusListener: invalid argument !");
     m_aStatusListeners.addInterface( xControl );
 
     // acknowledge the initial status
@@ -1709,7 +1718,7 @@ void SAL_CALL FmSlotDispatch::addStatusListener( const Reference< ::com::sun::st
 void SAL_CALL FmSlotDispatch::removeStatusListener( const Reference< ::com::sun::star::frame::XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
     DBG_ASSERT((aURL.Main.getLength() == 0) || (aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL),
-        "FmSlotDispatch::dispatch : invalid argument !");
+        "FmSlotDispatch::removeStatusListener: invalid argument !");
     m_aStatusListeners.removeInterface( xControl );
 }
 
