@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 15:26:11 $
+ *  last change: $Author: os $ $Date: 2001-01-22 09:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2829,13 +2829,13 @@ void ImportExcel8::PostDocLoad( void )
             OfaFilterOptions*           pFltOpts = OFF_APP()->GetFilterOptions();
             if( pFltOpts )
             {
-                if( pFltOpts->IsMathType2StarMath() )
+                if( pFltOpts->IsMathType2Math() )
                     nOLEImpFlags |= OLE_MATHTYPE_2_STARMATH;
 
-                if( pFltOpts->IsWinWord2StarWriter() )
+                if( pFltOpts->IsWinWord2Writer() )
                     nOLEImpFlags |= OLE_WINWORD_2_STARWRITER;
 
-                if( pFltOpts->IsPowerPoint2StarImpress() )
+                if( pFltOpts->IsPowerPoint2Impress() )
                     nOLEImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
             }
 

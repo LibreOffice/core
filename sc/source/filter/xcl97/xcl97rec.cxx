@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 13:08:38 $
+ *  last change: $Author: os $ $Date: 2001-01-22 09:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1661,16 +1661,16 @@ void XclObjOle::SaveCont( SvStream& rStrm )
                 OfaFilterOptions*       pFltOpts = OFF_APP()->GetFilterOptions();
                 if( pFltOpts )
                 {
-                    if( pFltOpts->IsStarMath2MathType() )
+                    if( pFltOpts->IsMath2MathType() )
                         nFl |= OLE_STARMATH_2_MATHTYPE;
 
-                    if( pFltOpts->IsStarWriter2WinWord() )
+                    if( pFltOpts->IsWriter2WinWord() )
                         nFl |= OLE_STARWRITER_2_WINWORD;
 
-                    if( pFltOpts->IsStarCalc2Excel() )
+                    if( pFltOpts->IsCalc2Excel() )
                         nFl |= OLE_STARCALC_2_EXCEL;
 
-                    if( pFltOpts->IsStarImpress2PowerPoint() )
+                    if( pFltOpts->IsImpress2PowerPoint() )
                         nFl |= OLE_STARIMPRESS_2_POWERPOINT;
                 }
 
