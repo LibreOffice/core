@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleActionImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleAction;
 
 /** The AccessibleActionWrapper maps the calls to the java AccessibleAction interface
  *  to the corresponding methods of the UNO XAccessibleAction interface.
