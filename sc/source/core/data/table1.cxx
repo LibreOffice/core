@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:01:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,7 @@ ScTable::ScTable( ScDocument* pDoc, USHORT nNewTab, const String& rNewName,
     nRepeatStartY( REPEAT_NONE ),
     aPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) ),
     bTableAreaValid( FALSE ),
-    nPrintRangeCount( 0 ),
-    pPrintRanges( NULL ),
+    bPrintEntireSheet( FALSE ),
     pRepeatColRange( NULL ),
     pRepeatRowRange( NULL ),
     nLockCount( 0 ),
@@ -245,7 +244,6 @@ ScTable::~ScTable()
     delete pOutlineTable;
     delete pSearchParam;
     delete pSearchText;
-    delete[] pPrintRanges;
     delete pRepeatColRange;
     delete pRepeatRowRange;
     delete pScenarioRanges;
@@ -1096,39 +1094,38 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHOR
         USHORT nSTab,nETab,nSCol,nSRow,nECol,nERow;
         BOOL bRecalcPages = FALSE;
 
-        if ( pPrintRanges && nPrintRangeCount )
-            for ( i=0; i<nPrintRangeCount; i++ )
-            {
-                nSTab = nETab = pPrintRanges[i].aStart.Tab();
-                nSCol = pPrintRanges[i].aStart.Col();
-                nSRow = pPrintRanges[i].aStart.Row();
-                nECol = pPrintRanges[i].aEnd.Col();
-                nERow = pPrintRanges[i].aEnd.Row();
+        for ( ScRangeVec::iterator aIt = aPrintRanges.begin(), aEnd = aPrintRanges.end(); aIt != aEnd; ++aIt )
+        {
+            nSCol = aIt->aStart.Col();
+            nSRow = aIt->aStart.Row();
+            nECol = aIt->aEnd.Col();
+            nERow = aIt->aEnd.Row();
 
-                if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
-                                          nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                          nDx,nDy,nDz,
-                                          nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
-                {
-                    pPrintRanges[i] = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
-                    bRecalcPages = TRUE;
-                }
+            // do not try to modify sheet index of repeat range
+            if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
+                                      nCol1,nRow1,nTab, nCol2,nRow2,nTab,
+                                      nDx,nDy,0,
+                                      nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
+            {
+                *aIt = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
+                bRecalcPages = TRUE;
             }
+        }
 
         if ( pRepeatColRange )
         {
-            nSTab = nETab = pRepeatColRange->aStart.Tab();
             nSCol = pRepeatColRange->aStart.Col();
             nSRow = pRepeatColRange->aStart.Row();
             nECol = pRepeatColRange->aEnd.Col();
             nERow = pRepeatColRange->aEnd.Row();
 
+            // do not try to modify sheet index of repeat range
             if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
-                                      nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                      nDx,nDy,nDz,
+                                      nCol1,nRow1,nTab, nCol2,nRow2,nTab,
+                                      nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
             {
-                *pRepeatColRange = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
+                *pRepeatColRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
                 bRecalcPages = TRUE;
                 nRepeatStartX = nSCol;  // fuer UpdatePageBreaks
                 nRepeatEndX = nECol;
@@ -1137,18 +1134,18 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHOR
 
         if ( pRepeatRowRange )
         {
-            nSTab = nETab = pRepeatRowRange->aStart.Tab();
             nSCol = pRepeatRowRange->aStart.Col();
             nSRow = pRepeatRowRange->aStart.Row();
             nECol = pRepeatRowRange->aEnd.Col();
             nERow = pRepeatRowRange->aEnd.Row();
 
+            // do not try to modify sheet index of repeat range
             if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
-                                      nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                      nDx,nDy,nDz,
+                                      nCol1,nRow1,nTab, nCol2,nRow2,nTab,
+                                      nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
             {
-                *pRepeatRowRange = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
+                *pRepeatRowRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
                 bRecalcPages = TRUE;
                 nRepeatStartY = nSRow;  // fuer UpdatePageBreaks
                 nRepeatEndY = nERow;
@@ -1346,61 +1343,49 @@ void ScTable::SetRepeatRowRange( const ScRange* pNew )
     SET_PRINTRANGE( pRepeatRowRange, pNew );
 }
 
-// #42845# zeroptimiert
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-void ScTable::SetPrintRangeCount( USHORT nNew )
+void ScTable::ClearPrintRanges()
 {
-    ScRange* pNewRanges;
-    if (nNew)
-        pNewRanges = new ScRange[nNew];
-    else
-        pNewRanges = NULL;
-
-    if ( pPrintRanges && nNew >= nPrintRangeCount )     //  Anzahl vergroessert?
-        for ( USHORT i=0; i<nPrintRangeCount; i++ )     //  (fuer "Hinzufuegen")
-            pNewRanges[i] = pPrintRanges[i];            //  alte Ranges kopieren
-
-    delete[] pPrintRanges;
-    pPrintRanges = pNewRanges;
-    nPrintRangeCount = nNew;
+    aPrintRanges.clear();
+    bPrintEntireSheet = FALSE;
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
 
-void ScTable::SetPrintRange( USHORT nPos, const ScRange& rNew )
+void ScTable::AddPrintRange( const ScRange& rNew )
 {
-    if (nPos < nPrintRangeCount && pPrintRanges)
-        pPrintRanges[nPos] = rNew;
-    else
-        DBG_ERROR("SetPrintRange falsch");
+    bPrintEntireSheet = FALSE;
+    if( aPrintRanges.size() < 0xFFFF )
+        aPrintRanges.push_back( rNew );
+}
+
+void ScTable::SetPrintRange( const ScRange& rNew )
+{
+    ClearPrintRanges();
+    AddPrintRange( rNew );
+}
+
+void ScTable::SetPrintEntireSheet()
+{
+    if( !IsPrintEntireSheet() )
+    {
+        ClearPrintRanges();
+        bPrintEntireSheet = TRUE;
+    }
 }
 
 const ScRange* ScTable::GetPrintRange(USHORT nPos) const
 {
-    if (nPos < nPrintRangeCount && pPrintRanges)
-        return pPrintRanges+nPos;
-    else
-        return NULL;
+    return (nPos < GetPrintRangeCount()) ? &aPrintRanges[ nPos ] : NULL;
 }
 
 void ScTable::FillPrintSaver( ScPrintSaverTab& rSaveTab ) const
 {
-    rSaveTab.SetAreas( nPrintRangeCount, pPrintRanges );
+    rSaveTab.SetAreas( aPrintRanges, bPrintEntireSheet );
     rSaveTab.SetRepeat( pRepeatColRange, pRepeatRowRange );
 }
 
 void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
 {
-    USHORT nNewCount = rSaveTab.GetPrintCount();
-    const ScRange* pNewRanges = rSaveTab.GetPrintRanges();
-
-    SetPrintRangeCount( nNewCount );
-    for (USHORT i=0; i<nNewCount; i++ )
-        SetPrintRange( i, pNewRanges[i] );
-
+    aPrintRanges = rSaveTab.GetPrintRanges();
+    bPrintEntireSheet = rSaveTab.IsEntireSheet();
     SetRepeatColRange( rSaveTab.GetRepeatCol() );
     SetRepeatRowRange( rSaveTab.GetRepeatRow() );
 
