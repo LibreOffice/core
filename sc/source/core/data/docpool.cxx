@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/colritem.hxx>
 #include <svx/crsditem.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/emphitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/itemtype.hxx>
@@ -90,6 +91,7 @@
 #include <svx/shdditem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/svxitems.hrc>
+#include <svx/twolinesitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/wghtitem.hxx>
@@ -111,6 +113,7 @@ USHORT* ScDocumentPool::pVersionMap1 = 0;
 USHORT* ScDocumentPool::pVersionMap2 = 0;
 USHORT* ScDocumentPool::pVersionMap3 = 0;
 USHORT* ScDocumentPool::pVersionMap4 = 0;
+USHORT* ScDocumentPool::pVersionMap5 = 0;
 
 static SfxItemInfo __READONLY_DATA  aItemInfos[] =
 {
@@ -124,6 +127,18 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_SHADOWED,       SFX_ITEM_POOLABLE },    // ATTR_FONT_SHADOWED
     { SID_ATTR_CHAR_COLOR,          SFX_ITEM_POOLABLE },    // ATTR_FONT_COLOR
     { SID_ATTR_CHAR_LANGUAGE,       SFX_ITEM_POOLABLE },    // ATTR_FONT_LANGUAGE
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT            from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_HEIGHT     from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_WEIGHT     from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_POSTURE    from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CJK_FONT_LANGUAGE   from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT            from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_HEIGHT     from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_WEIGHT     from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_TWOLINES       from 614
     { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
     { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          ab 350
     { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_VER_JUSTIFY
@@ -190,11 +205,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
         pSecondary  ( pSecPool )
 {
     Font            aStdFont        = System::GetStandardFont( STDFONT_SWISS );
-    SvxFontItem*    pGlobalFontAttr = new SvxFontItem( aStdFont.GetFamily(),
-                                                       aStdFont.GetName(),
-                                                       aStdFont.GetStyleName(),
-                                                       aStdFont.GetPitch(),
-                                                       aStdFont.GetCharSet() );
+    Font            aCjkFont        = System::GetStandardFont( STDFONT_SWISS );
+    Font            aCtlFont        = System::GetStandardFont( STDFONT_SWISS );
 
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
     SfxItemSet*     pSet = new SfxItemSet( *this, ATTR_PATTERN_START, ATTR_PATTERN_END );
@@ -214,7 +226,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
 
-    ppPoolDefaults[ ATTR_FONT            - ATTR_STARTINDEX ] = pGlobalFontAttr;
+    ppPoolDefaults[ ATTR_FONT            - ATTR_STARTINDEX ] = new SvxFontItem( aStdFont.GetFamily(),
+                                                                    aStdFont.GetName(), aStdFont.GetStyleName(),
+                                                                    aStdFont.GetPitch(), aStdFont.GetCharSet() );
     ppPoolDefaults[ ATTR_FONT_HEIGHT     - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200 );        // 10 pt;
     ppPoolDefaults[ ATTR_FONT_WEIGHT     - ATTR_STARTINDEX ] = new SvxWeightItem;
     ppPoolDefaults[ ATTR_FONT_POSTURE    - ATTR_STARTINDEX ] = new SvxPostureItem;
@@ -224,6 +238,26 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_FONT_SHADOWED   - ATTR_STARTINDEX ] = new SvxShadowedItem;
     ppPoolDefaults[ ATTR_FONT_COLOR      - ATTR_STARTINDEX ] = new SvxColorItem;
     ppPoolDefaults[ ATTR_FONT_LANGUAGE   - ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW), ATTR_FONT_LANGUAGE );
+    ppPoolDefaults[ ATTR_CJK_FONT        - ATTR_STARTINDEX ] = new SvxFontItem( aStdFont.GetFamily(),
+                                                                    aStdFont.GetName(), aStdFont.GetStyleName(),
+                                                                    aStdFont.GetPitch(), aStdFont.GetCharSet(),
+                                                                    ATTR_CJK_FONT );
+    ppPoolDefaults[ ATTR_CJK_FONT_HEIGHT - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_CJK_FONT_HEIGHT );
+    ppPoolDefaults[ ATTR_CJK_FONT_WEIGHT - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT );
+    ppPoolDefaults[ ATTR_CJK_FONT_POSTURE- ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_CJK_FONT_POSTURE );
+    ppPoolDefaults[ ATTR_CJK_FONT_LANGUAGE-ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW),
+                                                                    ATTR_CJK_FONT_LANGUAGE );
+    ppPoolDefaults[ ATTR_CTL_FONT        - ATTR_STARTINDEX ] = new SvxFontItem( aStdFont.GetFamily(),
+                                                                    aStdFont.GetName(), aStdFont.GetStyleName(),
+                                                                    aStdFont.GetPitch(), aStdFont.GetCharSet(),
+                                                                    ATTR_CTL_FONT );
+    ppPoolDefaults[ ATTR_CTL_FONT_HEIGHT - ATTR_STARTINDEX ] = new SvxFontHeightItem( 200, 100, ATTR_CTL_FONT_HEIGHT );
+    ppPoolDefaults[ ATTR_CTL_FONT_WEIGHT - ATTR_STARTINDEX ] = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT );
+    ppPoolDefaults[ ATTR_CTL_FONT_POSTURE- ATTR_STARTINDEX ] = new SvxPostureItem( ITALIC_NONE, ATTR_CTL_FONT_POSTURE );
+    ppPoolDefaults[ ATTR_CTL_FONT_LANGUAGE-ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW),
+                                                                    ATTR_CTL_FONT_LANGUAGE );
+    ppPoolDefaults[ ATTR_FONT_EMPHASISMARK-ATTR_STARTINDEX ] = new SvxEmphasisMarkItem;
+    ppPoolDefaults[ ATTR_FONT_TWOLINES   - ATTR_STARTINDEX ] = new SvxTwoLinesItem;
     ppPoolDefaults[ ATTR_HOR_JUSTIFY     - ATTR_STARTINDEX ] = new SvxHorJustifyItem;
     ppPoolDefaults[ ATTR_INDENT          - ATTR_STARTINDEX ] = new SfxUInt16Item( ATTR_INDENT, 0 );
     ppPoolDefaults[ ATTR_VER_JUSTIFY     - ATTR_STARTINDEX ] = new SvxVerJustifyItem;
@@ -305,6 +339,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     // ATTR_ROTATE_VALUE, ATTR_ROTATE_MODE ab 367
     SetVersionMap( 4, 100, 161, pVersionMap4 );
+
+    // CJK, CTL, EMPHASISMARK, TWOLINES from 614
+    SetVersionMap( 5, 100, 163, pVersionMap5 );
 }
 
 __EXPORT ScDocumentPool::~ScDocumentPool()
@@ -324,7 +361,8 @@ __EXPORT ScDocumentPool::~ScDocumentPool()
 void ScDocumentPool::InitVersionMaps()
 {
     DBG_ASSERT( !pVersionMap1 && !pVersionMap2 &&
-                !pVersionMap3 && !pVersionMap4, "InitVersionMaps mehrfach" );
+                !pVersionMap3 && !pVersionMap4 &&
+                !pVersionMap5, "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -381,13 +419,29 @@ void ScDocumentPool::InitVersionMaps()
     // zwei Eintraege eingefuegt...
     for ( i=nMap4New, j=nMap4Start+nMap4New+2; i < nMap4Count; i++, j++ )
         pVersionMap4[i] = j;
+
+    //  fifth map: CJK..., CTL..., EMPHASISMARK, TWOLINES (12 items) added in 614
+
+    const USHORT nMap5Start = 100;  // ATTR_STARTINDEX
+    const USHORT nMap5End   = 163;  // ATTR_ENDINDEX
+    const USHORT nMap5Count = nMap5End - nMap5Start + 1;
+    const USHORT nMap5New   = 10;   // ATTR_CJK_FONT - ATTR_STARTINDEX
+    pVersionMap5 = new USHORT [ nMap5Count ];
+    for ( i=0, j=nMap5Start; i < nMap5New; i++, j++ )
+        pVersionMap5[i] = j;
+    // 12 entries inserted
+    for ( i=nMap5New, j=nMap5Start+nMap5New+12; i < nMap5Count; i++, j++ )
+        pVersionMap5[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
 {
     DBG_ASSERT( pVersionMap1 && pVersionMap2 &&
-                pVersionMap3 && pVersionMap4, "DeleteVersionMaps ohne Maps" );
+                pVersionMap3 && pVersionMap4 &&
+                pVersionMap5, "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap5;
+    pVersionMap5 = 0;
     delete[] pVersionMap4;
     pVersionMap4 = 0;
     delete[] pVersionMap3;

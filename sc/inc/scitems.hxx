@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scitems.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,69 +107,81 @@
 #define ATTR_FONT_SHADOWED      107
 #define ATTR_FONT_COLOR         108
 #define ATTR_FONT_LANGUAGE      109
-#define ATTR_HOR_JUSTIFY        110
-#define ATTR_INDENT             111
-#define ATTR_VER_JUSTIFY        112
-#define ATTR_ORIENTATION        113
-#define ATTR_ROTATE_VALUE       114
-#define ATTR_ROTATE_MODE        115
-#define ATTR_LINEBREAK          116
-#define ATTR_MARGIN             117
-#define ATTR_MERGE              118
-#define ATTR_MERGE_FLAG         119
-#define ATTR_VALUE_FORMAT       120
-#define ATTR_LANGUAGE_FORMAT    121
-#define ATTR_BACKGROUND         122
-#define ATTR_PROTECTION         123
-#define ATTR_BORDER             124
-#define ATTR_BORDER_INNER       125     // innen, wg. Vorlagen-EditDialog
-#define ATTR_SHADOW             126
-#define ATTR_VALIDDATA          127
-#define ATTR_CONDITIONAL        128
+#define ATTR_CJK_FONT           110
+#define ATTR_CJK_FONT_HEIGHT    111
+#define ATTR_CJK_FONT_WEIGHT    112
+#define ATTR_CJK_FONT_POSTURE   113
+#define ATTR_CJK_FONT_LANGUAGE  114
+#define ATTR_CTL_FONT           115
+#define ATTR_CTL_FONT_HEIGHT    116
+#define ATTR_CTL_FONT_WEIGHT    117
+#define ATTR_CTL_FONT_POSTURE   118
+#define ATTR_CTL_FONT_LANGUAGE  119
+#define ATTR_FONT_EMPHASISMARK  120
+#define ATTR_FONT_TWOLINES      121
+#define ATTR_HOR_JUSTIFY        122
+#define ATTR_INDENT             123
+#define ATTR_VER_JUSTIFY        124
+#define ATTR_ORIENTATION        125
+#define ATTR_ROTATE_VALUE       126
+#define ATTR_ROTATE_MODE        127
+#define ATTR_LINEBREAK          128
+#define ATTR_MARGIN             129
+#define ATTR_MERGE              130
+#define ATTR_MERGE_FLAG         131
+#define ATTR_VALUE_FORMAT       132
+#define ATTR_LANGUAGE_FORMAT    133
+#define ATTR_BACKGROUND         134
+#define ATTR_PROTECTION         135
+#define ATTR_BORDER             136
+#define ATTR_BORDER_INNER       137     // innen, wg. Vorlagen-EditDialog
+#define ATTR_SHADOW             138
+#define ATTR_VALIDDATA          139
+#define ATTR_CONDITIONAL        140
 
-#define ATTR_PATTERN_END        128     // Ende Zellattribut-Pattern
+#define ATTR_PATTERN_END        140     // Ende Zellattribut-Pattern
 
-#define ATTR_PATTERN            129
+#define ATTR_PATTERN            141
                                         // Seitenattribute
-#define ATTR_LRSPACE            130     // Editor: PageDesc-TabPage
-#define ATTR_ULSPACE            131
-#define ATTR_PAGE               132
-#define ATTR_PAGE_PAPERTRAY     133
-#define ATTR_PAGE_PAPERBIN      134
-#define ATTR_PAGE_SIZE          135
-#define ATTR_PAGE_MAXSIZE       136
-#define ATTR_PAGE_HORCENTER     137
-#define ATTR_PAGE_VERCENTER     138
+#define ATTR_LRSPACE            142     // Editor: PageDesc-TabPage
+#define ATTR_ULSPACE            143
+#define ATTR_PAGE               144
+#define ATTR_PAGE_PAPERTRAY     145
+#define ATTR_PAGE_PAPERBIN      146
+#define ATTR_PAGE_SIZE          147
+#define ATTR_PAGE_MAXSIZE       148
+#define ATTR_PAGE_HORCENTER     149
+#define ATTR_PAGE_VERCENTER     150
 
-#define ATTR_PAGE_ON            139     // Editor: Header/Footer-Page
-#define ATTR_PAGE_DYNAMIC       140
-#define ATTR_PAGE_SHARED        141
+#define ATTR_PAGE_ON            151     // Editor: Header/Footer-Page
+#define ATTR_PAGE_DYNAMIC       152
+#define ATTR_PAGE_SHARED        153
 
-#define ATTR_PAGE_NOTES         142     // Editor: Tabelle
-#define ATTR_PAGE_GRID          143
-#define ATTR_PAGE_HEADERS       144
-#define ATTR_PAGE_CHARTS        145
-#define ATTR_PAGE_OBJECTS       146
-#define ATTR_PAGE_DRAWINGS      147
-#define ATTR_PAGE_TOPDOWN       148
-#define ATTR_PAGE_SCALE         149
-#define ATTR_PAGE_SCALETOPAGES  150
-#define ATTR_PAGE_FIRSTPAGENO   151
+#define ATTR_PAGE_NOTES         154     // Editor: Tabelle
+#define ATTR_PAGE_GRID          155
+#define ATTR_PAGE_HEADERS       156
+#define ATTR_PAGE_CHARTS        157
+#define ATTR_PAGE_OBJECTS       158
+#define ATTR_PAGE_DRAWINGS      159
+#define ATTR_PAGE_TOPDOWN       160
+#define ATTR_PAGE_SCALE         161
+#define ATTR_PAGE_SCALETOPAGES  162
+#define ATTR_PAGE_FIRSTPAGENO   163
 
-#define ATTR_PAGE_PRINTAREA     152     // Editor: Druckbereiche
-#define ATTR_PAGE_REPEATROW     153
-#define ATTR_PAGE_REPEATCOL     154
-#define ATTR_PAGE_PRINTTABLES   155
+#define ATTR_PAGE_PRINTAREA     164     // Editor: Druckbereiche
+#define ATTR_PAGE_REPEATROW     165
+#define ATTR_PAGE_REPEATCOL     166
+#define ATTR_PAGE_PRINTTABLES   167
 
-#define ATTR_PAGE_HEADERLEFT    156     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERLEFT    157     // Fusszeilen (links)
-#define ATTR_PAGE_HEADERRIGHT   158     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERRIGHT   159     // Fusszeilen (rechts)
-#define ATTR_PAGE_HEADERSET     160     // die Sets dazu...
-#define ATTR_PAGE_FOOTERSET     161
+#define ATTR_PAGE_HEADERLEFT    168     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERLEFT    169     // Fusszeilen (links)
+#define ATTR_PAGE_HEADERRIGHT   170     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERRIGHT   171     // Fusszeilen (rechts)
+#define ATTR_PAGE_HEADERSET     172     // die Sets dazu...
+#define ATTR_PAGE_FOOTERSET     173
 
-#define ATTR_PAGE_FORMULAS      162
-#define ATTR_PAGE_NULLVALS      163
+#define ATTR_PAGE_FORMULAS      174
+#define ATTR_PAGE_NULLVALS      175
 
 #define ATTR_ENDINDEX           ATTR_PAGE_NULLVALS      // Ende Pool-Range
 
@@ -215,6 +227,8 @@
 #define ITEMID_SHADOWED         ATTR_FONT_SHADOWED
 #define ITEMID_COLOR            ATTR_FONT_COLOR
 #define ITEMID_LANGUAGE         ATTR_FONT_LANGUAGE
+#define ITEMID_EMPHASISMARK     ATTR_FONT_EMPHASISMARK
+#define ITEMID_TWOLINES         ATTR_FONT_TWOLINES
 #define ITEMID_HORJUSTIFY       ATTR_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       ATTR_VER_JUSTIFY
 #define ITEMID_ORIENTATION      ATTR_ORIENTATION
