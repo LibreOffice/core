@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-30 17:21:53 $
+#   last change: $Author: rt $ $Date: 2004-12-16 12:58:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,7 +144,7 @@ avoid_cvs_dir=-x "*CVS*"
 ZIP$(TNR)DIR*=$(ZIPDIR)
 ZIP$(TNR)FLAGS*=$(ZIPFLAGS)
 .IF "$(zip$(TNR)generatedlangs)"!=""
-zip$(TNR)langdirs:=$(alllangiso)
+zip$(TNR)langdirs*=$(alllangiso)
 .ELSE           # "$(zip$(TNR)generatedlangs)"!=""
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip$(TNR)langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
