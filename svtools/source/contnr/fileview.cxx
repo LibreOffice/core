@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-19 10:12:13 $
+ *  last change: $Author: dv $ $Date: 2001-07-20 10:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SV_SOUND_HXX
+#include <vcl/sound.hxx>
+#endif
 
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
@@ -162,6 +165,7 @@ using namespace ::ucb;
 DECLARE_LIST( StringList_Impl, OUString* );
 
 #define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
+#define QUICK_SEARCH_TIMEOUT    2000    // time in mSec before the quicksearch string will be reseted
 
 // structs   -------------------------------------------------------------
 
@@ -184,8 +188,12 @@ struct SortingData_Impl
 class ViewTabListBox_Impl : public SvHeaderTabListBox
 {
 private:
+    ::osl::Mutex            maMutex;
     HeaderBar*              mpHeaderBar;
     SvtFileView_Impl*       mpParent;
+    Timer                   maResetQuickSearch;
+    OUString                maQuickSearchText;
+    sal_uInt32              mnSearchIndex;
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbContextMenuEnabled    : 1;
@@ -195,6 +203,7 @@ private:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
 
     void            DeleteEntries();
+    void            DoQuickSearch( const xub_Unicode& rChar );
 
 public:
                     ViewTabListBox_Impl( Window* pParentWin,
@@ -209,11 +218,13 @@ public:
                                  const XubString& rNewText );
 
     void            ClearAll();
-    void            EnableAutoResize() { mbAutoResize = sal_True; }
-
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
+
+    void            EnableAutoResize() { mbAutoResize = sal_True; }
     void            EnableContextMenu( sal_Bool bEnable ) { mbContextMenuEnabled = bEnable; }
     void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
+
+    DECL_LINK( ResetQuickSearch_Impl, Timer * );
 };
 
 // class SvtFileView_Impl ---------------------------------------------
@@ -262,6 +273,7 @@ public:
     void                    EnableDelete( sal_Bool bEnable ) { mpView->EnableDelete( bEnable ); }
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
+    sal_Bool                SearchNextEntry( sal_uInt32 &nIndex, const OUString& rTitle );
 };
 
 
@@ -336,6 +348,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
 
     mpHeaderBar     ( NULL ),
     mpParent        ( pParent ),
+    mnSearchIndex   ( 0 ),
     mbResizeDisabled( sal_False ),
     mbAutoResize    ( sal_False ),
     mbContextMenuEnabled ( sal_True ),
@@ -369,12 +382,17 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
 
     Show();
     mpHeaderBar->Show();
+
+    maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
+    maResetQuickSearch.SetTimeoutHdl( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
 }
 
 // -----------------------------------------------------------------------
 
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
+    maResetQuickSearch.Stop();
+
     delete mpHeaderBar;
 }
 
@@ -437,6 +455,18 @@ IMPL_LINK( ViewTabListBox_Impl, HeaderEndDrag_Impl, HeaderBar*, pBar )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer*, pTimer )
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    maQuickSearchText = OUString();
+    mnSearchIndex = 0;
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void ViewTabListBox_Impl::Resize()
 {
     SvTabListBox::Resize();
@@ -469,6 +499,11 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
               mbEnableDelete )
     {
         DeleteEntries();
+    }
+    else if ( ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM ) ||
+              ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_ALPHA ) )
+    {
+        DoQuickSearch( rKEvt.GetCharCode() );
     }
     else
         SvHeaderTabListBox::KeyInput( rKEvt );
@@ -551,6 +586,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         {
             if ( ::utl::UCBContentHelper::Kill( aURL ) )
             {
+                delete (SvtContentEntry*)pCurEntry->GetUserData();
                 GetModel()->Remove( pCurEntry );
                 mpParent->EntryRemoved( aURL );
             }
@@ -595,8 +631,47 @@ BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
     return bRet;
 }
 
-// class SvtFileView -----------------------------------------------------
+// -----------------------------------------------------------------------
+void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
+{
+    ::osl::MutexGuard aGuard( maMutex );
 
+    maResetQuickSearch.Stop();
+
+    OUString    aLastText = maQuickSearchText;
+    sal_uInt32  aLastPos = mnSearchIndex;
+    sal_Bool    bFound = sal_False;
+
+    maQuickSearchText += OUString( rChar ).toAsciiLowerCase();
+
+    bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText );
+
+    if ( !bFound && ( aLastText.getLength() == 1 ) &&
+         ( aLastText == OUString( rChar ) ) )
+    {
+        mnSearchIndex = aLastPos + 1;
+        maQuickSearchText = aLastText;
+        bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText );
+    }
+
+    if ( bFound )
+    {
+        SvLBoxEntry* pEntry = GetEntry( mnSearchIndex );
+        SelectAll( FALSE );
+        Select( pEntry );
+        MakeVisible( pEntry );
+    }
+    else
+        Sound::Beep();
+
+    maResetQuickSearch.Start();
+}
+
+
+
+
+// -----------------------------------------------------------------------
+// class SvtFileView -----------------------------------------------------
 // -----------------------------------------------------------------------
 
 SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
@@ -1392,6 +1467,9 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
          ( bAscending == mbAscending ) )
          return;
 
+    // reset the quick search index
+    mpView->ResetQuickSearch_Impl( NULL );
+
     String aEntryURL;
     SvLBoxEntry* pEntry = mpView->GetCurEntry();
     if ( pEntry && pEntry->GetUserData() )
@@ -1615,6 +1693,29 @@ ULONG SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 
     return nPos;
 }
+
+// -----------------------------------------------------------------------
+sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
+                                            const OUString& rTitle )
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    sal_uInt32 nEnd = maContent.size();
+
+    if ( nIndex >= nEnd )
+        return sal_False;
+
+    while ( nIndex < nEnd )
+    {
+        SortingData_Impl* pData = maContent[ nIndex ];
+        if ( rTitle.compareTo( pData->maLowerTitle, rTitle.getLength() ) == 0 )
+            return sal_True;
+        nIndex += 1;
+    }
+
+    return sal_False;
+}
+
 
 
 namespace svtools {
