@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:22:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -139,54 +136,6 @@ namespace pcr
 
     namespace
     {
-#if (_MSC_VER < 1300)
-        using ::com::sun::star::uno::Reference;
-        using ::com::sun::star::uno::XInterface;
-        using ::com::sun::star::uno::UNO_QUERY;
-        using ::com::sun::star::frame::XModel;
-        using ::com::sun::star::drawing::XDrawPage;
-        using ::com::sun::star::container::XChild;
-#endif // _MSC_VER < 1300
-
-        //....................................................................
-
-#if (_MSC_VER < 1300)
-        using ::com::sun::star::uno::Reference;
-        using ::com::sun::star::uno::XInterface;
-        using ::com::sun::star::uno::UNO_QUERY;
-        using ::com::sun::star::frame::XModel;
-        using ::com::sun::star::drawing::XDrawPage;
-        using ::com::sun::star::container::XChild;
-#endif // _MSC_VER < 1300
-
-        template< class TYPE >
-        Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
-        {
-            Reference< TYPE > xTypedNode( _rxModelNode, UNO_QUERY );
-            if ( xTypedNode.is() )
-                return xTypedNode;
-            else
-            {
-                Reference< XChild > xChild( _rxModelNode, UNO_QUERY );
-                if ( xChild.is() )
-                    return getTypedModelNode< TYPE >( xChild->getParent() );
-                else
-                    return NULL;
-            }
-        }
-
-        //....................................................................
-        Reference< XModel > getDocument( const Reference< XInterface >& _rxModelNode )
-        {
-            return getTypedModelNode< XModel >( _rxModelNode );
-        }
-
-        //....................................................................
-        Reference< XDrawPage > getDrawPage( const Reference< XInterface >& _rxModelNode )
-        {
-            return getTypedModelNode< XDrawPage >( _rxModelNode );
-        }
-
         //....................................................................
         struct StringCompare : public ::std::unary_function< ::rtl::OUString, bool >
         {
@@ -222,23 +171,22 @@ namespace pcr
     //= CellBindingHelper
     //========================================================================
     //------------------------------------------------------------------------
-    CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel )
+    CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
     {
         OSL_ENSURE( m_xControlModel.is(), "CellBindingHelper::CellBindingHelper: invalid control model!" );
 
-        m_xDocument = m_xDocument.query( getDocument( m_xControlModel ) );
-        OSL_ENSURE( m_xDocument.is(), "CellBindingHelper::CellBindingHelper: Did not find the spreadsheet document!" );
+        m_xDocument = m_xDocument.query( _rxContextDocument );
+        OSL_ENSURE( m_xDocument.is(), "CellBindingHelper::CellBindingHelper: This is no spreadsheet document!" );
 
         OSL_ENSURE( isSpreadsheetDocumentWhichSupplies( SERVICE_ADDRESS_CONVERSION ),
             "CellBindingHelper::CellBindingHelper: the document cannot convert address representations!" );
     }
 
     //------------------------------------------------------------------------
-    sal_Bool CellBindingHelper::livesInSpreadsheetDocument( const Reference< XPropertySet >& _rxControlModel )
+    sal_Bool CellBindingHelper::isSpreadsheetDocument( const Reference< XModel >& _rxContextDocument )
     {
-        Reference< XSpreadsheetDocument > xDocument( getDocument( _rxControlModel ), UNO_QUERY );
-        return xDocument.is();
+        return Reference< XSpreadsheetDocument >::query( _rxContextDocument ).is();
     }
 
     //------------------------------------------------------------------------
@@ -251,15 +199,16 @@ namespace pcr
         {
             // for determining the draw page, we need the forms collection which
             // the object belongs to. This is the first object up the hierarchy which is
-            // *no* XForm
+            // *no* XForm (and, well, no XGridColumnFactory)
             Reference< XChild > xCheck( m_xControlModel, UNO_QUERY );
-            Reference< XForm > xParentAsForm( xCheck->getParent(), UNO_QUERY );
-            Reference< XGridColumnFactory > xParentAsGrid( xCheck->getParent(), UNO_QUERY );
+            Reference< XForm > xParentAsForm; if ( xCheck.is() ) xParentAsForm = xParentAsForm.query( xCheck->getParent() );
+            Reference< XGridColumnFactory > xParentAsGrid; if ( xCheck.is() ) xParentAsGrid = xParentAsGrid.query( xCheck->getParent() );
+
             while ( ( xParentAsForm.is() || xParentAsGrid.is() ) && xCheck.is() )
             {
                 xCheck = xCheck.query( xCheck->getParent() );
-                xParentAsForm = xParentAsForm.query( xCheck->getParent() );
-                xParentAsGrid = xParentAsGrid.query( xCheck->getParent() );
+                xParentAsForm = xParentAsForm.query( xCheck.is() ? xCheck->getParent() : NULL );
+                xParentAsGrid = xParentAsGrid.query( xCheck.is() ? xCheck->getParent() : NULL );
             }
             Reference< XInterface > xFormsCollection( xCheck.is() ? xCheck->getParent() : NULL );
 
@@ -611,6 +560,24 @@ namespace pcr
             bAllow = isSpreadsheetDocumentWhichSupplies( SERVICE_SHEET_CELL_BINDING );
         }
 
+        // disallow for some types
+        // TODO: shouldn't the XBindableValue supply a list of supported types, and we can distingusih
+        // using this list? The current behavior below is somewhat hackish ...
+        if ( bAllow )
+        {
+            try
+            {
+                sal_Int16 nClassId = FormComponentType::CONTROL;
+                m_xControlModel->getPropertyValue( PROPERTY_CLASSID ) >>= nClassId;
+                if ( ( FormComponentType::DATEFIELD == nClassId ) || ( FormComponentType::TIMEFIELD == nClassId ) )
+                    bAllow = false;
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "CellBindingHelper::isCellBindingAllowed: caught an exception!" );
+                bAllow = false;
+            }
+        }
         return bAllow;
     }
 
