@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:01:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 
 #include "common.h"
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
 #include <com/sun/star/util/XCloseListener.hpp>
@@ -97,7 +97,7 @@ class DocumentHolder :
                         ::com::sun::star::util::XCloseListener,
                           ::com::sun::star::frame::XTerminateListener,
                         ::com::sun::star::util::XModifyListener,
-                        ::drafts::com::sun::star::ui::XDockingAreaAcceptor>
+                        ::com::sun::star::ui::XDockingAreaAcceptor>
 {
 private:
     BOOL                        m_bAllowInPlace;
@@ -132,7 +132,7 @@ private:
     ::com::sun::star::frame::XModel > m_xDocument;
 
     ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::frame::XLayoutManager> m_xLayoutManager;
+    ::com::sun::star::frame::XLayoutManager> m_xLayoutManager;
 
 
     ::com::sun::star::uno::Reference<
