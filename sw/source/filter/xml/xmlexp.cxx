@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:07:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,14 +633,6 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
-
-    sal_Bool bShowHead = pDoc->IsHeadInBrowse();
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
-    pValue[nIndex++].Value.setValue( &bShowHead, ::getBooleanCppuType() );
-
-    sal_Bool bShowFoot =  pDoc->IsFootInBrowse();
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowFooterWhileBrowsing") );
-    pValue[nIndex++].Value.setValue( &bShowFoot, ::getBooleanCppuType() );
 
     sal_Bool bInBrowse =  pDoc->IsBrowseMode();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "InBrowseMode") );
