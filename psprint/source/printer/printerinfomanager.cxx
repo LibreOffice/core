@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:38:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,7 +1238,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername )
     return popen (aShellCommand.getStr(), "w");
 }
 
-int PrinterInfoManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile )
+int PrinterInfoManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
 {
     pclose( pFile );
     return 0; // job id ?
