@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ namespace comphelper
         CPPUTYPE_REFMODEL,          //getCppuType( (Reference< frame::XModel >*)0)
 
         CPPUTYPE_OUSTRINGS,         //getCppuType( (Sequence<OUString>*)0 )
+        CPPUTYPE_REFCOMPONENT,      //getCppuType( (Reference< lang::XComponent >*)0 )
         CPPUTYPE_END
     };
     void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType );
