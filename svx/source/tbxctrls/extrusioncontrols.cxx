@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:17:08 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,6 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirection" )));
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionProjection" )));
-
-//  rBindings.Update( SID_EXTRUSION_DIRECTION );
-//  rBindings.Update( SID_EXTRUSION_PROJECTION );
 }
 
 SfxPopupWindow* ExtrusionDirectionWindow::Clone() const
@@ -220,8 +217,6 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 ExtrusionDirectionWindow::~ExtrusionDirectionWindow()
 {
-//  delete mpDirectionForewarder;
-//  delete mpProjectionForewarder;
     delete mpMenu;
 }
 
@@ -352,8 +347,6 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
                                         mxFrame->getController(), UNO_QUERY ),
                                         aCommand,
                                         aArgs );
-//          pDisp->Execute( SID_EXTRUSION_PROJECTION, SFX_CALLMODE_RECORD, &aItem, 0L , 0L );
-
             implSetProjection( nProjection, true );
         }
     }
@@ -413,7 +406,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
     USHORT nSlotId, USHORT  nId, ToolBox &rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
@@ -763,7 +756,7 @@ ExtrusionDepthControl::ExtrusionDepthControl(
     USHORT nSlotId, USHORT nId, ToolBox &rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
@@ -885,9 +878,6 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" )));
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" )));
-
-//  rBindings.Update( SID_EXTRUSION_LIGHTING_DIRECTION );
-//  rBindings.Update( SID_EXTRUSION_LIGHTING_INTENSITY );
 }
 
 SfxPopupWindow* ExtrusionLightingWindow::Clone() const
@@ -899,8 +889,6 @@ SfxPopupWindow* ExtrusionLightingWindow::Clone() const
 
 ExtrusionLightingWindow::~ExtrusionLightingWindow()
 {
-//  delete mpLightingDirectionForewarder;
-//  delete mpLightingIntensityForewarder;
     delete mpMenu;
 }
 
@@ -1115,7 +1103,7 @@ void ExtrusionLightingWindow::GetFocus (void)
 ExtrusionLightingControl::ExtrusionLightingControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1344,7 +1332,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     USHORT nSlotId, USHORT nId, ToolBox &rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1390,7 +1378,7 @@ ExtrusionColorControl::ExtrusionColorControl(
     USHORT nSlotId, USHORT nId, ToolBox& rTbx )
 : SfxToolBoxControl ( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
     mpBtnUpdater = new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW );
 }
 
