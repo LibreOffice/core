@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:19:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm, bool bAddIn )
     sal_uInt8 nLen;
 
     rStrm >> nFlags >> mnStorageId >> nLen ;
-    rStrm.AppendUniString( maName, nLen );
+    maName = rStrm.ReadUniString( nLen );
 
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
     {
