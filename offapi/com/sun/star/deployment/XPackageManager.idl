@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageManager.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:54:33 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,22 @@
 #if ! defined INCLUDED_com_sun_star_deployment_XPackageManager_idl
 #define INCLUDED_com_sun_star_deployment_XPackageManager_idl
 
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/lang/NoSupportException.idl>
-#include <com/sun/star/deployment/DeploymentException.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/task/XAbortChannel.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#include <com/sun/star/deployment/XPackage.idl>
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
-#include <com/sun/star/deployment/Package.idl>
+#include <com/sun/star/deployment/DeploymentException.idl>
+#include <com/sun/star/deployment/XPackageRegistry.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
 module com { module sun { module star { module deployment {
 
-/** Interface to add or remove an UNO package.
+/** The <type>XPackageManager</type> interface is used to add or remove
+    packages to a specific deployment context.
+    Packages are deployable files, e.g. scripts or UNO components.
     <p>
     Adding an UNO package means that a copy of the package is stored
     with respect to the context of the manager and the package is registered,
@@ -81,67 +87,144 @@ module com { module sun { module star { module deployment {
     Removing an UNO package means that the previously added package is revoked,
     thus deactivated, first and then removed from the context.
     </p>
+    <p>
+    Objects of this interface are created using the
+    <type>XPackageManagerFactory</type> service resp. the singleton
+    <code>
+    /singletons/com.sun.star.deployment.thePackageManagerFactory
+    </code>.
+    </p>
 
+    @see thePackageManagerFactory
     @since #i20304#
 */
-interface XPackageManager : com::sun::star::uno::XInterface
+interface XPackageManager
 {
+    /** interface to notify disposing
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** interface to notify changes of the set of deployed packages of
+        this manager
+    */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+    /** returns the underlying deployment context.
+
+        @return
+                underlying deployment context
+    */
+    string getContext();
+
+    /** gets access to the underlying package registry being used when packages
+        are added or removed.
+
+        @return
+                registry
+    */
+    XPackageRegistry getPackageRegistry();
+
+    /** creates a command channel to be used to asynchronously abort a command.
+
+        @return
+                abort channel
+    */
+    com::sun::star::task::XAbortChannel createAbortChannel();
+
     /** adds an UNO package.
 
-        @param xPackage
-               <type>Package</type> handle, may be null, if no registry present
         @param url
                package URL, must be UCB conform
         @param mediaType
-               media-type of package
+               media-type of package, empty string if to be detected
+        @param xAbortChannel
+               abort channel to asynchronously abort the adding process,
+               or null
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
+               <type>XPackage</type> handle
     */
-    boolean addPackage(
-        [out] XPackage /* service Package */ xPackage,
-        [in] string url,
-        [in] string mediaType,
-        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
+    XPackage addPackage( [in] string url,
+                         [in] string mediaType,
+                         [in] com::sun::star::task::XAbortChannel xAbortChannel,
+                         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 
     /** removes an UNO package.
 
         @param name
-               package name (an URL is NOT allowed!)
+               package name (not URL)
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
         @param xCmdEnv
                command environment for error and progress handling
-        @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
     */
-    boolean removePackage(
-        [in] string name,
-        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
+    void removePackage( [in] string name,
+                        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+                        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 
     /** gets a deployed package.
 
         @param name
                package name (an URL is NOT allowed!)
+        @param xCmdEnv
+               command environment for error and progress handling
         @return
-               <type>Package</type> handle
+               <type>XPackage</type> handle
     */
-    XPackage /* service Package */ getDeployedPackage( [in] string name )
-        raises (com::sun::star::container::NoSuchElementException);
+    XPackage getDeployedPackage(
+        [in] string name,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::lang::IllegalArgumentException);
 
-    /** Expert feature: Tries to repair a deployment context.
+    /** gets all currently deployed packages.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the removing process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+                all currently deployed packages
+    */
+    sequence<XPackage> getDeployedPackages(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** Expert feature: erases the underlying registry cache and reinstalls
+        all previously added packages.  Please keep in mind that all
+        registration status get lost.
         <p>
         Please use this in case of suspected cache inconsistencies only.
         </p>
 
+        @param xAbortChannel
+               abort channel to asynchronously abort the adding process
         @param xCmdEnv
                command environment for error and progress handling
-        @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
     */
-    boolean repair( [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
+    void reinstallDeployedPackages(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 };
 
 }; }; }; };
