@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 13:36:07 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,6 +1041,11 @@ void    SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
     nMinFixDist = nMinTwip;
 }
 
+#define LASTLINEPOS_DEFAULT     0
+#define LASTLINEPOS_LEFT        1
+
+#define LASTLINECOUNT_OLD       3
+#define LASTLINECOUNT_NEW       4
 
 // class SvxParaAlignTabPage ------------------------------------------------
 
@@ -1068,16 +1073,28 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aTextDirectionFT    ( this, ResId( FT_TEXTDIRECTION )),
     aTextDirectionLB    ( this, ResId( LB_TEXTDIRECTION ))
 {
-    SvtLanguageOptions aCJKOptions;
-    if(aCJKOptions.IsAsianTypographyEnabled())
+    SvtLanguageOptions aLangOptions;
+    USHORT nLastLinePos = LASTLINEPOS_DEFAULT;
+
+    if ( aLangOptions.IsAsianTypographyEnabled() || aLangOptions.IsCTLFontEnabled() )
     {
         String sLeft(ResId(ST_LEFTALIGN_ASIAN));
         aLeft.SetText(sLeft);
         aRight.SetText(String(ResId(ST_RIGHTALIGN_ASIAN)));
         sLeft.EraseAllChars( '~' );
-        aLastLineLB.RemoveEntry( 0 );
-        aLastLineLB.InsertEntry( sLeft, 0 );
+
+        if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_OLD )
+        {
+            aLastLineLB.RemoveEntry( 0 );
+            aLastLineLB.InsertEntry( sLeft, 0 );
+        }
+        else
+            nLastLinePos = LASTLINEPOS_LEFT;
     }
+    // remove "Default" or "Left" entry, depends on CJKOptions
+    if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_NEW )
+        aLastLineLB.RemoveEntry( nLastLinePos );
+
     FreeResource();
     Link aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     aLeft.SetClickHdl( aLink );
