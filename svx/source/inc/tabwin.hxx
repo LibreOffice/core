@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 16:25:04 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 15:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ public:
     virtual ~FmFieldWin();
     virtual void Resize();
     virtual sal_Bool Close();
+    virtual void GetFocus();
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-08 08:59:27 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 15:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,15 @@ FmFieldWin::~FmFieldWin()
     delete pListBox;
     delete pData;
     DBG_DTOR(FmFieldWin,NULL);
+}
+
+//-----------------------------------------------------------------------
+void FmFieldWin::GetFocus()
+{
+    if ( pListBox )
+        pListBox->GrabFocus();
+    else
+        SfxFloatingWindow::GetFocus();
 }
 
 //-----------------------------------------------------------------------
