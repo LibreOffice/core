@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskstat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:37:03 $
+ *  last change: $Author: th $ $Date: 2001-07-02 15:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,20 +123,6 @@ BOOL ITaskStatusNotify::MouseMove( USHORT nItemd, const MouseEvent& rMEvt )
 // -----------------------------------------------------------------------
 
 BOOL ITaskStatusNotify::Command( USHORT nItemd, const CommandEvent& rCEvt )
-{
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ITaskStatusNotify::QueryDrop( USHORT nItemd, DropEvent& rDEvt, BOOL& bRet )
-{
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ITaskStatusNotify::Drop( USHORT nItemd, const DropEvent& rDEvt, BOOL& bRet )
 {
     return FALSE;
 }
@@ -510,69 +496,6 @@ void TaskStatusBar::Command( const CommandEvent& rCEvt )
 
     if ( bBaseClass )
         StatusBar::Command( rCEvt );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL TaskStatusBar::QueryDrop( DropEvent& rDEvt )
-{
-    BOOL bFieldRect;
-    BOOL bBaseClass = FALSE;
-    BOOL bRet = FALSE;
-    ImplTaskSBFldItem* pItem = ImplGetFieldItem( rDEvt.GetPosPixel(), bFieldRect );
-
-    ITaskStatusNotify*  pNotify = mpNotify;
-    USHORT              nItemId = 0;
-
-    if ( bFieldRect )
-        nItemId = TASKSTATUSBAR_CLOCKID;
-
-    if ( pItem )
-    {
-        pNotify = pItem->maItem.GetNotifyObject();
-        nItemId = pItem->mnId;
-    }
-
-    if ( pNotify )
-        bBaseClass = pNotify->QueryDrop( nItemId, rDEvt, bRet );
-
-    if ( bBaseClass )
-    {
-        StatusBar::QueryDrop( rDEvt );
-        return TRUE;
-    }
-    else
-        return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL TaskStatusBar::Drop( const DropEvent& rDEvt )
-{
-    BOOL bFieldRect;
-    BOOL bBaseClass = FALSE;
-    BOOL bRet = FALSE;
-    ImplTaskSBFldItem* pItem = ImplGetFieldItem( rDEvt.GetPosPixel(), bFieldRect );
-
-    ITaskStatusNotify*  pNotify = mpNotify;
-    USHORT              nItemId = 0;
-
-    if ( bFieldRect )
-        nItemId = TASKSTATUSBAR_CLOCKID;
-
-    if ( pItem )
-    {
-        pNotify = pItem->maItem.GetNotifyObject();
-        nItemId = pItem->mnId;
-    }
-
-    if ( pNotify )
-        bBaseClass = pNotify->Drop( nItemId, rDEvt, bRet );
-
-    if ( bBaseClass )
-        return StatusBar::Drop( rDEvt );
-    else
-        return bRet;
 }
 
 // -----------------------------------------------------------------------
