@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 14:33:32 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+#endif
+
+#ifndef __SGI_STL_MAP
+#include <map>
 #endif
 
 #ifndef SHELLIO_HXX
@@ -302,6 +306,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
+    ::std::map<USHORT, USHORT> aRuleDuplicates; //map to Duplicated numrules
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
     BitmapPalette* pBmpPal;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,11 @@ USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
     aNumFmt.SetStart(nVal);
     pMyNumRule->Set(nLvl,aNumFmt);
 
-    if (pMyNumRule)
-        nNumId = GetId( *pMyNumRule );
+    nNumId = GetId( *pMyNumRule );
+
+    //Map the old list to our new list
+    aRuleDuplicates[GetId(*pRule)] = nNumId;
+
     return nNumId;
 }
 
@@ -149,7 +152,15 @@ USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
         pThis->pUsedNumTbl->Insert( pR, pUsedNumTbl->Count() );
     }
     SwNumRule* p = (SwNumRule*)&rNumRule;
-    return pUsedNumTbl->GetPos( p );
+    USHORT nRet = pUsedNumTbl->GetPos(p);
+
+    //Is this list now duplicated into a new list which we should use
+    ::std::map<USHORT,USHORT>::const_iterator aResult =
+        aRuleDuplicates.find(nRet);
+    if (aResult != aRuleDuplicates.end())
+        nRet = (*aResult).second;
+
+    return nRet;
 }
 
 void SwWW8Writer::OutListTab()

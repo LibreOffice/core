@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,9 +1367,15 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
         {
             const SvxTabStopItem* pTabStop =
                 (const SvxTabStopItem*)GetFmtAttr(RES_PARATR_TABSTOP);
+
+            const SvxLRSpaceItem* pLR =
+                (const SvxLRSpaceItem*)GetFmtAttr(RES_LR_SPACE);
+
             for (USHORT nI = pTabStop ? pTabStop->Count() : 0; nI--;)
             {
-                if ((*pTabStop)[nI].GetTabPos() >= nPgWidth-nPgRight-nPgLeft)
+                //Give ourselves a leeway of 1 twip.
+                if ((*pTabStop)[nI].GetTabPos() + pLR->GetTxtLeft() + 1
+                    >= nPgWidth-nPgRight-nPgLeft)
                 {
                     pPaM->SetMark();
                     pPaM->GetMark()->nContent-=nDiff;

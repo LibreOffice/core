@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,7 +1482,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                     if( bNew )
                     {
                         if( 0 <= pPaM->GetPoint()->nContent.GetIndex() )
-                            rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                            AppendTxtNode(*pPaM->GetPoint());
 
                         if( pPageDesc )
                             rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
@@ -1504,8 +1504,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         {
             if ((nBreakCode > 1) && bMustHaveBreak)
             {
-                if( 0 <= pPaM->GetPoint()->nContent.GetIndex() )
-                    rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
+                    AppendTxtNode(*pPaM->GetPoint());
 
                 if( pPageDesc )
                     rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
@@ -1617,13 +1617,13 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         WW8ULSpaceData aULData;
         GetPageULData( pSep, nLIdx, FALSE, aULData );
 
-        // dann Header / Footer lesen, falls noch noetig
-        if( nIPara )
-            SetHdFt( pPageDesc, 0, nIPara );
-
         // und uebrige Einstellungen updaten
         // Orientierung, Hoehe, Breite, Vertikale Formatierung
         SetPage1( pPageDesc, rFmt0, pSep, nLIdx, TRUE );
+
+        // dann Header / Footer lesen, falls noch noetig
+        if( nIPara )
+            SetHdFt( pPageDesc, 0, nIPara );
 
         SetPageULSpaceItems( rFmt0, aULData );
         SetDocumentGrid(rFmt0, pSep);
@@ -2671,7 +2671,10 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     }
 
     SwFmtSurround aSur( pFS->eSurround );   // Umfluss
+#if 0
+    //Why did we want this again, there was a good reason :-(
     aSur.SetAnchorOnly( TRUE );
+#endif
 
 //  GoldCut umfliesst inzwischen nur dann auf beiden Seiten, wenn der Fly
 //  schmaler als ca. 1.5cm ist. Also entspricht normales Parallel besser
