@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.31 $
- *  last change: $Author: hr $ $Date: 2004-10-13 08:56:01 $
+ *  $Revision: 1.32 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,9 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
 
 using namespace U_ICU_NAMESPACE;
 
+static const int ICU_DELETED_GLYPH = 0xFFFF;
+static const int ICU_MARKED_GLYPH = 0xFFFE;
+
 // -----------------------------------------------------------------------
 
 class IcuFontFromServerFont
@@ -341,8 +344,18 @@ le_int32 IcuFontFromServerFont::getLeading() const
 void IcuFontFromServerFont::getGlyphAdvance( LEGlyphID nGlyphIndex,
     LEPoint &advance ) const
 {
-    const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nGlyphIndex );
-    advance.fX = rGM.GetCharWidth();
+    if( (nGlyphIndex == ICU_MARKED_GLYPH)
+    ||  (nGlyphIndex == ICU_DELETED_GLYPH) )
+    {
+        // deleted glyph or mark glyph has not advance
+        advance.fX = 0;
+    }
+    else
+    {
+        const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nGlyphIndex );
+        advance.fX = rGM.GetCharWidth();
+    }
+
     advance.fY = 0;
 }
 
@@ -456,9 +469,9 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
         // run ICU layout engine
         // TODO: get enough context, remove extra glyps below
-        int nRunGlyphCount = mpIcuLE->layoutChars( pIcuChars, nMinRunPos,
-            nEndRunPos - nMinRunPos, rArgs.mnLength, bRightToLeft,
-            aNewPos.X(), aNewPos.Y(), rcIcu );
+        int nRawRunGlyphCount = mpIcuLE->layoutChars( pIcuChars,
+            nMinRunPos, nEndRunPos - nMinRunPos, rArgs.mnLength,
+            bRightToLeft, aNewPos.X(), aNewPos.Y(), rcIcu );
         if( LE_FAILURE(rcIcu) )
             return false;
 
@@ -472,11 +485,16 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
         // layout bidi/script runs and export them to a ServerFontLayout
         // convert results to GlyphItems
+        int nFilteredRunGlyphCount = 0;
         const IcuPosition* pPos = pGlyphPositions;
-        for( int i = 0; i < nRunGlyphCount; ++i, ++pPos )
+        for( int i = 0; i < nRawRunGlyphCount; ++i, ++pPos )
         {
-            int nCharPos = pCharIndices[i] + nMinRunPos;
             int nGlyphIndex = pIcuGlyphs[i];
+            if( (nGlyphIndex == ICU_MARKED_GLYPH)
+            ||  (nGlyphIndex == ICU_DELETED_GLYPH) )
+                continue;  // ignore these glyphs
+
+            int nCharPos = pCharIndices[i] + nMinRunPos;
             // when glyph fallback is needed update LayoutArgs
             if( !nGlyphIndex )
             {
@@ -497,9 +515,10 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
             GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
             rLayout.AppendGlyph( aGI );
+            ++nFilteredRunGlyphCount;
         }
         aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
-        nGlyphCount += nRunGlyphCount;
+        nGlyphCount += nFilteredRunGlyphCount;
     }
 
     rLayout.SortGlyphItems();
