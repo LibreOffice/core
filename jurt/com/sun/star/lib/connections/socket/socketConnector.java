@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketConnector.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-28 11:17:52 $
+ *  last change: $Author: kr $ $Date: 2001-04-17 09:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ import com.sun.star.registry.XRegistryKey;
  * <code>sockets</code> for communication.
  * The socketConnector is in general used by the Connector service.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 11:17:52 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-04-17 09:52:17 $
  * @author      Kay Ramme
  * @see         com.sun.star.connections.XAcceptor
  * @see         com.sun.star.connections.XConnector
@@ -145,9 +145,10 @@ public class socketConnector implements XConnector {
 
 
 
-    protected String _description;
-    protected String _hostname     = "0";
-    protected int    _port         = 6001;
+    protected String  _description;
+    protected String  _hostname     = "0";
+    protected int     _port         = 6001;
+    protected Boolean _tcpNoDelay    = null;
 
     /**
      * Connect through the described mechanism to a waiting server.
@@ -206,13 +207,18 @@ public class socketConnector implements XConnector {
                 }
 
                 index = word.indexOf('=');
-                String left = word.substring(0, index).trim();
+                String left = word.substring(0, index).trim().toLowerCase();
                 String right = word.substring(index + 1).trim();
 
                 if(left.equals("host"))
                     _hostname = right;
+
                 else if(left.equals("port"))
                     _port = Integer.parseInt(right);
+
+                else if(left.equals("tcpnodelay"))
+                    _tcpNoDelay = new Boolean(Integer.parseInt(right) == 1);
+
                 else
                     System.err.println(getClass().getName() + ".connect - unknown attribute:" + left);
             }
@@ -223,6 +229,11 @@ public class socketConnector implements XConnector {
         try {
             InetAddress inetAddress = InetAddress.getByName(_hostname);
             Socket socket = new Socket(inetAddress, _port);
+
+            if(_tcpNoDelay != null) { // trilogic: did the user specify something about nagle?
+                if (DEBUG) System.err.println("##### " + getClass().getName() + ".connect - setting tcpNoDelay with " + _tcpNoDelay.booleanValue());
+                socket.setTcpNoDelay(_tcpNoDelay.booleanValue());
+            }
 
             xConnection = new SocketConnection(description, socket);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SocketConnection.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-28 11:17:52 $
+ *  last change: $Author: kr $ $Date: 2001-04-17 09:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>SocketConnector</code> and the <code>SocketAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2000-11-28 11:17:52 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-04-17 09:52:17 $
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.SocketAcceptor
  * @see         com.sun.star.comp.connections.SocketConnector
@@ -119,7 +119,6 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
             + ",peerPort=" + socket.getPort();
 
         _socket = socket;
-        _socket.setTcpNoDelay(true);
         _inputStream = new BufferedInputStream(socket.getInputStream());
         _outputStream = new BufferedOutputStream(socket.getOutputStream());
 
