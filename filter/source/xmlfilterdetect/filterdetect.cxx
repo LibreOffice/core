@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:30:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,8 @@ Reference< com::sun::star::frame::XModel > xModel;
         sal_Int32 nLength;
         ::rtl::OString resultString;
 
-        sal_Int32 location=0;
-
         nLength = aArguments.getLength();
+        sal_Int32 location=nLength;
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
               //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(pValue[i].Name,RTL_TEXTENCODING_ASCII_US).getStr() );
@@ -293,9 +292,14 @@ Reference< com::sun::star::frame::XModel > xModel;
             //sTypeName=::rtl::OUString::createFromAscii("writer_Flat_XML_File");
         }
         else
-           {
-             aArguments[location].Value <<=sTypeName;
+        {
+            if ( location == aArguments.getLength() )
+            {
+                aArguments.realloc(nLength+1);
+                aArguments[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
+            }
 
+            aArguments[location].Value <<=sTypeName;
         }
        // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
 
