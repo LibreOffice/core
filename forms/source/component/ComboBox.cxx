@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:28:20 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _COMPHELPER_DATETIME_HXX_
 #include <comphelper/datetime.hxx>
 #endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
+#endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
@@ -146,7 +149,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::form;
+using namespace ::com::sun::star::form::binding;
 
 //========================================================================
 // class OComboBoxModel
@@ -172,12 +175,22 @@ Sequence<Type> OComboBoxModel::_getTypes()
 StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 3);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_COMBOBOX;
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_COMBOBOX;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_COMBOBOX;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 8 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_COMBOBOX;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_COMBOBOX;
+    *pStoreTo++ = BINDABLE_DATABASE_COMBO_BOX;
+
     return aSupported;
 }
 
@@ -196,7 +209,7 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 DBG_NAME( OComboBoxModel )
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX, sal_True, sal_True )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
                     // use the old control name for compytibility reasons
     ,OEntryListHelper( m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -387,24 +400,17 @@ void OComboBoxModel::fillProperties(
                 Sequence< Property >& _rProps,
                 Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(13)
+    BEGIN_DESCRIBE_PROPERTIES( 6, OBoundControlModel )
         RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
             // we want to "override" this property
 
-        DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
-        DECL_PROP1(NAME,                ::rtl::OUString,            BOUND);
-        DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
         DECL_PROP1(LISTSOURCE,          ::rtl::OUString,            BOUND);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
         DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,               BOUND,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,               BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,          READONLY, TRANSIENT);
         DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,BOUND);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
