@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:19:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "connectivity/FValue.hxx"
+#endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
 #endif
 
 #include <algorithm>
@@ -1570,6 +1573,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         }
 
         sal_Bool bHadError = sal_False;
+        sal_Bool bCharacterConversionError = sal_False;
         Any aSQLError;
         try
         {
@@ -1647,7 +1651,6 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     ByteString aBlock(ByteString::CreateFromInt32(nBlockNo));
                     aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len()), '0' );
                     aStr += aBlock;
-                    aStr.Convert(gsl_getSystemTextEncoding(),getConnection()->getTextEncoding());
                     // Zeichen kopieren:
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
                     memcpy(pData, aStr.GetBuffer(), nLen);
@@ -1655,30 +1658,37 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 default:
                 {
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
-                    ByteString aStr(rRow[nPos]->getValue().getString().getStr(),getConnection()->getTextEncoding());
-                    // Zeichen kopieren:
-                    memcpy(pData, aStr.GetBuffer(), std::min(nLen,(sal_Int32)aStr.Len()));
-                }   break;
+
+                    ::rtl::OUString sStringToWrite( rRow[nPos]->getValue().getString() );
+
+                    // convert the string, using the connection's encoding
+                    ::rtl::OString sEncoded;
+                    DBTypeConversion::convertUnicodeString( sStringToWrite, sEncoded, getConnection()->getTextEncoding() );
+                    memcpy( pData, sEncoded.getStr(), ::std::min( nLen, sEncoded.getLength() ) );
+
+                }
+                break;
             }
         }
-        catch( SQLException& e ) { aSQLError <<= e; bHadError = sal_True; }
+        catch( SQLException& e ) { aSQLError <<= e; bHadError = sal_True; bCharacterConversionError = ( e.ErrorCode == 22018 ); }
         catch ( Exception& ) { bHadError = sal_True; }
 
         if ( bHadError )
         {
             m_pColumns->getByIndex(i) >>= xCol;
-            OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
-            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+            OSL_ENSURE( xCol.is(), "ODbaseTable::UpdateBuffer column is null!" );
+            if ( xCol.is() )
+                xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
-            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
+            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii( "invalid value for column '" );
             sMsg += aColName;
-            sMsg += ::rtl::OUString::createFromAscii("!");
+            sMsg += ::rtl::OUString::createFromAscii("'");
 
             throw SQLException(
                     sMsg,
                     *this,
-                    OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),
-                    1000,
+                    bCharacterConversionError ? ::rtl::OUString::createFromAscii( "22018" ) : OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_HY0000 ),
+                    bCharacterConversionError ? 22018 : 1000,
                     aSQLError
                 );
         }
@@ -1687,6 +1697,143 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
     }
     return sal_True;
 }
+
+// -----------------------------------------------------------------------------
+BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
+{
+    // wird die BlockNr 0 vorgegeben, wird der block ans Ende gehaengt
+    char cChar = 0;
+    BOOL bIsText = TRUE;
+    //  SdbConnection* pConnection = GetConnection();
+
+    ULONG nStreamSize;
+    BYTE nHeader[4];
+
+    ::rtl::OUString sStringToWrite( aVariable.getString() );
+    ::rtl::OString aStr;
+    ULONG nSize = DBTypeConversion::convertUnicodeString( sStringToWrite, aStr, getConnection()->getTextEncoding() );
+
+    // Anhaengen oder ueberschreiben
+    BOOL bAppend = rBlockNr == 0;
+
+    if (!bAppend)
+    {
+        switch (m_aMemoHeader.db_typ)
+        {
+            case MemodBaseIII: // dBase III-Memofeld, endet mit 2 * Ctrl-Z
+                bAppend = nSize > (512 - 2);
+                break;
+            case MemoFoxPro:
+            case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
+            {
+                char sHeader[4];
+                m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
+                m_pMemoStream->SeekRel(4L);
+                m_pMemoStream->Read(sHeader,4);
+
+                ULONG nOldSize;
+                if (m_aMemoHeader.db_typ == MemoFoxPro)
+                    nOldSize = ((((unsigned char)sHeader[0]) * 256 +
+                                 (unsigned char)sHeader[1]) * 256 +
+                                 (unsigned char)sHeader[2]) * 256 +
+                                 (unsigned char)sHeader[3];
+                else
+                    nOldSize = ((((unsigned char)sHeader[3]) * 256 +
+                                 (unsigned char)sHeader[2]) * 256 +
+                                 (unsigned char)sHeader[1]) * 256 +
+                                 (unsigned char)sHeader[0]  - 8;
+
+                // passt die neue Laenge in die belegten Bloecke
+                ULONG nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
+                      nOldUsedBlocks = ((nOldSize + 8) / m_aMemoHeader.db_size) + (((nOldSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0);
+                bAppend = nUsedBlocks > nOldUsedBlocks;
+            }
+        }
+    }
+
+    if (bAppend)
+    {
+        ULONG nStreamSize;
+        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        // letzten block auffuellen
+        rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
+
+        m_pMemoStream->SetStreamSize(rBlockNr * m_aMemoHeader.db_size);
+        m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+    }
+    else
+    {
+        m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
+    }
+
+    switch (m_aMemoHeader.db_typ)
+    {
+        case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
+        {
+            const char cEOF = (char) 0x1a;
+            nSize++;
+
+//          if (pData)
+//          {
+//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
+//          }
+//          else
+//          {
+                m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
+            //  }
+
+            (*m_pMemoStream) << cEOF << cEOF;
+        } break;
+        case MemoFoxPro:
+        case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
+        {
+            (*m_pMemoStream) << (BYTE)0xFF
+                                         << (BYTE)0xFF
+                                         << (BYTE)0x08;
+
+            UINT32 nWriteSize = nSize;
+            if (m_aMemoHeader.db_typ == MemoFoxPro)
+            {
+                (*m_pMemoStream) << (BYTE) 0x01; // ((pData = NULL) ? 0x01 : 0x00);
+                for (int i = 4; i > 0; nWriteSize >>= 8)
+                    nHeader[--i] = (BYTE) (nWriteSize % 256);
+            }
+            else
+            {
+                (*m_pMemoStream) << (BYTE) 0x00;
+                nWriteSize += 8;
+                for (int i = 0; i < 4; nWriteSize >>= 8)
+                    nHeader[i++] = (BYTE) (nWriteSize % 256);
+            }
+
+            m_pMemoStream->Write(nHeader,4);
+//          if (pData)
+//          {
+//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
+//          }
+//          else
+//          {
+                m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
+            //  }
+            m_pMemoStream->Flush();
+        }
+    }
+
+
+    // Schreiben der neuen Blocknummer
+    if (bAppend)
+    {
+        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
+
+        // Schreiben der neuen Blocknummer
+        m_pMemoStream->Seek(0L);
+        (*m_pMemoStream) << m_aMemoHeader.db_next;
+        m_pMemoStream->Flush();
+    }
+    return sal_True;
+}
+
 // -----------------------------------------------------------------------------
 // XAlterTable
 void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
