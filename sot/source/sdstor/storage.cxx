@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:31:39 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,6 +1526,8 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
         nEleMode |= embed::ElementModes::WRITE;
     if ( nMode & STREAM_TRUNC )
         nEleMode |= embed::ElementModes::TRUNCATE;
+    if ( nMode & STREAM_NOCREATE )
+        nEleMode |= embed::ElementModes::NOCREATE;
 
     SvStream* pStream = NULL;
     try
