@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hro $ $Date: 2001-03-13 11:59:41 $
+#   last change: $Author: hro $ $Date: 2001-06-18 14:22:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,7 @@ APP1DEF=    $(MISCX)$/$(TARGET).def
 
 APP1RES=    $(RES)$/desktop.res
 
-APP1ICON=soffice.ico
+APP1ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
 APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET).res
 
@@ -183,7 +183,7 @@ APP2OBJS= \
                 $(OBJ)$/wrappera.obj
 
 APP2RES=    $(RES)$/$(APP2TARGET).res
-APP2ICON=soffice.ico
+APP2ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
 APP2VERINFO=verinfo.rc
 APP2LINKRES=$(MISC)$/$(APP2TARGET).res
 
@@ -203,7 +203,7 @@ APP3OBJS= \
                 $(OBJ)$/lwrapa.obj
 
 APP3RES=    $(RES)$/$(APP3TARGET).res
-APP3ICON=soffice.ico
+APP3ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
 APP3VERINFO=verinfo.rc
 APP3LINKRES=$(MISC)$/$(APP3TARGET).res
 
@@ -224,7 +224,7 @@ APP4OBJS= \
                 $(OBJ)$/rwrapa.obj
 
 APP4RES=    $(RES)$/$(APP4TARGET).res
-APP4ICON=soffice.ico
+APP4ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
 APP4VERINFO=verinfo.rc
 APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 
