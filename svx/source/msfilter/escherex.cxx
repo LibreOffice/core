@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:18:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,26 +176,26 @@
 #ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_hpp_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_hpp_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
@@ -1933,7 +1933,7 @@ sal_Bool EscherPropertyContainer::CreateShadowProperties(
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Int32 GetValueForEnhancedCustomShapeParameter( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, const std::vector< sal_Int32 >& rEquationOrder )
+sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, const std::vector< sal_Int32 >& rEquationOrder )
 {
     sal_Int32 nValue = 0;
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
@@ -1947,30 +1947,30 @@ sal_Int32 GetValueForEnhancedCustomShapeParameter( const drafts::com::sun::star:
 
     switch( rParameter.Type )
     {
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
             nValue = (sal_uInt16)rEquationOrder[ nValue ];
             nValue |= (sal_uInt32)0x80000000;
         }
         break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
         {
 
         }
         break;
 /* not sure if it is allowed to set following values
 (but they are not yet used)
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
 */
     }
     return nValue;
 }
 
-sal_Bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, const drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
+sal_Bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
 {
     sal_Bool bSpecial = sal_False;
     nRetValue = 0;
@@ -1985,33 +1985,33 @@ sal_Bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, co
 
     switch( rParameter.Type )
     {
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
             nRetValue += 3;
             bSpecial = sal_True;
         }
         break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
         {
             nRetValue += 0x100;
             bSpecial = sal_True;
         }
         break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
         {
             nRetValue = 0;
             bSpecial = sal_True;
         }
         break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
         {
             nRetValue = 1;
             bSpecial = sal_True;
         }
         break;
-        case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
+        case com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
         {
 
         }
@@ -2043,8 +2043,8 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 {
                     ::boost::shared_ptr< ExpressionNode > aExpressNode(
                         EnhancedCustomShapeFunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
-                    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, NULL, 0 ) );
-                    if ( aPara.Type != drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
+                    com::sun::star::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, NULL, 0 ) );
+                    if ( aPara.Type != com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
                     {
                         EnhancedCustomShapeEquation aEquation;
                         aEquation.nOperation = 0;
@@ -2225,7 +2225,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fDepth;
                                 double fFraction;
-                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+                                com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
                                 if ( ( rProp.Value >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
                                 {
                                     double fForeDepth = fDepth * fFraction;
@@ -2361,7 +2361,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fExtrusionAngleX;
                                 double fExtrusionAngleY;
-                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAnglePair;
+                                com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAnglePair;
                                 if ( ( rProp.Value >>= aRotateAnglePair ) && ( aRotateAnglePair.First.Value >>= fExtrusionAngleX ) && ( aRotateAnglePair.Second.Value >>= fExtrusionAngleY ) )
                                 {
                                     fExtrusionAngleX *= 65536;
@@ -2391,7 +2391,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fSkewAmount;
                                 double fSkewAngle;
-                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+                                com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
                                 if ( ( rProp.Value >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= fSkewAmount ) && ( aSkewParaPair.Second.Value >>= fSkewAngle ) )
                                 {
                                     AddOpt( DFF_Prop_c3DSkewAmount, (sal_Int32)fSkewAmount );
@@ -2433,7 +2433,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 double fExtrusionOriginX;
                                 double fExtrusionOriginY;
-                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginPair;
+                                com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginPair;
                                 if ( ( rProp.Value >>= aOriginPair ) && ( aOriginPair.First.Value >>= fExtrusionOriginX ) && ( aOriginPair.Second.Value >>= fExtrusionOriginY ) )
                                 {
                                     AddOpt( DFF_Prop_c3DOriginX, (sal_Int32)( fExtrusionOriginX * 65536 ) );
@@ -2568,7 +2568,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 if ( !bIsDefaultObject )
                                 {
-                                    com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                     if ( rProp.Value >>= aCoordinates )
                                     {
                                         // creating the vertices
@@ -2604,7 +2604,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 if ( !bIsDefaultObject )
                                 {
-                                    com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                                     if ( rProp.Value >>= aGluePoints )
                                     {
                                         // creating the vertices
@@ -2646,7 +2646,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 if ( !bIsDefaultObject )
                                 {
-                                    com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
                                     if ( rProp.Value >>= aSegments )
                                     {
                                         // creating seginfo
@@ -2664,80 +2664,80 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 sal_uInt16 nVal = (sal_uInt16)aSegments[ j ].Count;
                                                 switch( aSegments[ j ].Command )
                                                 {
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO : break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO : break;
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
                                                     {
                                                         nVal = 0x4000;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
                                                     {
                                                         nVal |= 0x2000;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
                                                     {
                                                         nVal = 0x6001;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
                                                     {
                                                         nVal = 0x8000;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
                                                     {
                                                         nVal = 0xaa00;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
                                                     {
                                                         nVal = 0xab00;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
                                                     {
                                                         nVal *= 3;
                                                         nVal |= 0xa100;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
                                                     {
                                                         nVal *= 3;
                                                         nVal |= 0xa200;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
                                                     {
                                                         nVal <<= 2;
                                                         nVal |= 0xa300;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARC :
                                                     {
                                                         nVal <<= 2;
                                                         nVal |= 0xa400;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
                                                     {
                                                         nVal <<= 2;
                                                         nVal |= 0xa500;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
                                                     {
                                                         nVal <<= 2;
                                                         nVal |= 0xa600;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
                                                     {
                                                         nVal |= 0xa700;
                                                     }
                                                     break;
-                                                    case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
+                                                    case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
                                                     {
                                                         nVal |= 0xa800;
                                                     }
@@ -2779,7 +2779,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             {
                                 if ( !bIsDefaultObject )
                                 {
-                                    com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
+                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
                                     if ( rProp.Value >>= aPathTextFrames )
                                     {
                                         if ( (sal_uInt16)aPathTextFrames.getLength() )
@@ -2859,14 +2859,14 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rProp.Name.equals( sTextPathMode ) )
                             {
-                                drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
+                                com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
                                 if ( rProp.Value >>= eTextPathMode )
                                 {
                                     nTextPathFlags |= 0x05000000;
                                     nTextPathFlags &=~0x500;    // TextPathMode_NORMAL
-                                    if ( eTextPathMode == drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH )
+                                    if ( eTextPathMode == com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH )
                                         nTextPathFlags |= 0x100;
-                                    else if ( eTextPathMode == drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE )
+                                    else if ( eTextPathMode == com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE )
                                         nTextPathFlags |= 0x500;
                                 }
                             }
@@ -2995,7 +2995,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
                                         if ( rPropVal.Name.equals( sPosition ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
                                             if ( rPropVal.Value >>= aPosition )
                                             {
                                                 GetValueForEnhancedCustomShapeHandleParameter( nXPosition, aPosition.First );
@@ -3031,7 +3031,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sPolar ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPolar;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameterPair aPolar;
                                             if ( rPropVal.Value >>= aPolar )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aPolar.First ) )
@@ -3044,7 +3044,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     /* seems not to be used.
                                         else if ( rPropVal.Name.equals( sMap ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aMap;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameterPair aMap;
                                             if ( rPropVal.Value >>= aMap )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aMap.First ) )
@@ -3060,7 +3060,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                             nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
                                             nYRangeMax = (sal_Int32)0x00b40000; // used feature, so we are defaulting this
 
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                                             if ( rPropVal.Value >>= aRadiusRangeMinimum )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMin, aRadiusRangeMinimum ) )
@@ -3073,7 +3073,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                             nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
                                             nYRangeMax = (sal_Int32)0x00b40000; // used feature, so we are defaulting this
 
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                                             if ( rPropVal.Value >>= aRadiusRangeMaximum )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMax, aRadiusRangeMaximum ) )
@@ -3083,7 +3083,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sRangeXMinimum ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aXRangeMinimum;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameter aXRangeMinimum;
                                             if ( rPropVal.Value >>= aXRangeMinimum )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMin, aXRangeMinimum ) )
@@ -3093,7 +3093,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sRangeXMaximum ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aXRangeMaximum;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameter aXRangeMaximum;
                                             if ( rPropVal.Value >>= aXRangeMaximum )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMax, aXRangeMaximum ) )
@@ -3103,7 +3103,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sRangeYMinimum ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aYRangeMinimum;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameter aYRangeMinimum;
                                             if ( rPropVal.Value >>= aYRangeMinimum )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nYRangeMin, aYRangeMinimum ) )
@@ -3113,7 +3113,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         }
                                         else if ( rPropVal.Name.equals( sRangeYMaximum ) )
                                         {
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aYRangeMaximum;
+                                            com::sun::star::drawing::EnhancedCustomShapeParameter aYRangeMaximum;
                                             if ( rPropVal.Value >>= aYRangeMaximum )
                                             {
                                                 if ( GetValueForEnhancedCustomShapeHandleParameter( nYRangeMax, aYRangeMaximum ) )
@@ -3156,7 +3156,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             }
             if ( pAdjustmentValuesProp )
             {
-                uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+                uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                 if ( pAdjustmentValuesProp->Value >>= aAdjustmentSeq )
                 {
                     if ( bPredefinedHandlesUsed )
@@ -3179,7 +3179,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     sal_Int32 i, nValue, nAdjustmentValues = aAdjustmentSeq.getLength();
                     for ( i = 0; i < nAdjustmentValues; i++ )
                     {
-                        const drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rProp = aAdjustmentSeq[ i ];
+                        const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rProp = aAdjustmentSeq[ i ];
                         if ( rProp.State == beans::PropertyState_DIRECT_VALUE )
                         {
                             sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << i ) ) != 0;
