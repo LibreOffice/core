@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-11 13:18:54 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 16:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     }
 
     // chain text attributes
-    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(rExp));
+    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 
 /*
     // chain form attributes
@@ -670,7 +670,7 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
                                           (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(),
                                           rExport );
     // chain text attributes
-    pResult->ChainExportMapper( XMLTextParagraphExport::CreateCharExtPropMapper( rExport ));
+    pResult->ChainExportMapper( XMLTextParagraphExport::CreateParaExtPropMapper( rExport ));
     return pResult;
 }
 

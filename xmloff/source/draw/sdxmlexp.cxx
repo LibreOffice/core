@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 16:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         mpPropertySetMapper->acquire();
 
         // chain text attributes
-        mpPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(*this));
+        mpPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
         // construct PresPagePropsMapper
         xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
