@@ -19740,3 +19740,16 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?EndMovingParagraphsHdl@Outliner@@AAEJPAUMoveParagraphsInfo@@@Z
 ?LinkStubBeginMovingParagraphsHdl@Outliner@@CAJPAX0@Z
 ?LinkStubEndMovingParagraphsHdl@Outliner@@CAJPAX0@Z
+??0FmSearchConfigItem@svxform@@QAE@XZ
+??0FmSearchParams@svxform@@QAE@XZ
+??1FmSearchConfigItem@svxform@@QAE@XZ
+??1FmSearchParams@svxform@@QAE@XZ
+?getParams@FmSearchConfigItem@svxform@@QBEABUFmSearchParams@2@XZ
+?implTranslateFromConfig@FmSearchConfigItem@svxform@@AAEXXZ
+?implTranslateToConfig@FmSearchConfigItem@svxform@@AAEXXZ
+?isCaseSensitive@FmSearchParams@svxform@@QBEEXZ
+?isIgnoreWidthCJK@FmSearchParams@svxform@@QBEEXZ
+?setCaseSensitive@FmSearchParams@svxform@@QAEXE@Z
+?setIgnoreWidthCJK@FmSearchParams@svxform@@QAEXE@Z
+?setParams@FmSearchConfigItem@svxform@@QAEXABUFmSearchParams@2@@Z
+??0?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAE@ABV01234@@Z
