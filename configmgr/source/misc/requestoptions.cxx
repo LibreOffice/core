@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:26:35 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace configmgr
 {
 // ---------------------------------------------------------------------------
 
+#if 0 // not used any more
     static sal_Int32 getNextCacheID()
     {
         static oslInterlockedCount nNextID = 0;
@@ -90,6 +91,7 @@ namespace configmgr
 
         return static_cast<sal_Int32>(nNewID);
     }
+#endif
 // ---------------------------------------------------------------------------
 
     RequestOptions RequestOptions::forAllLocales()
