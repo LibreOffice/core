@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:24:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-06-08 23:24:54 $ $Revision: 1.18 $
+ // $Author: kz $ $Date: 2001-06-13 23:39:24 $ $Revision: 1.19 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -532,7 +532,7 @@ String RID_PLUGINTOOLBOX
     Text [ portuguese_brazilian ] = "Funktionsleiste f? PlugIns" ;
     Text[ chinese_simplified ] = "Plug-In ¹¦ÄÜÀ¸";
     Text[ russian ] = "Ïàíåëü ôóíêöèé äëÿ Plug-Ins";
-    Text[ polish ] = "Pasek funkcji dla wtyczek Plug-In";
+    Text[ polish ] = "Pasek funkcji wtyczek plug-in";
     Text[ japanese ] = "Ìß×¸Þ²Ý‚ÌÌ§Ý¸¼®ÝÊÞ°";
     Text[ chinese_traditional ] = "Plug-In ¥\\¯à¦C";
     Text[ arabic ] = "ÔÑíØ æÙíÝÉ Plug-Ins";
@@ -1757,6 +1757,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
