@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: os $ $Date: 2001-10-30 09:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,13 +437,13 @@ void SwDBField::Evaluate()
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue, &nFmt);
     if( !( nSubType & SUB_OWN_FMT ) )
         SetFormat( nFmt = pMgr->GetColumnFmt( aTmpData.sDataSource, aTmpData.sCommand,
-                                        aContent, pDocFormatter, GetLanguage() ));
+                                        aColNm, pDocFormatter, GetLanguage() ));
 
     if( DBL_MAX != nValue )
     {
-        sal_Int32 nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aContent);
+        sal_Int32 nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
         if( DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
-                 DataType::TIMESTAMP )
+                 DataType::TIME == DataType::TIMESTAMP )
 
         {
             Date aStandard(1,1,1900);
