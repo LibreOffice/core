@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 07:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,10 @@ namespace dbtools
 {
 //.........................................................................
 
-    using namespace connectivity;
-    using namespace ::com::sun::star::sdbc;
+    using namespace ::connectivity;
+    using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::sdbc;
 
 //==============================================================================
 //= SQLExceptionInfo - encapsulating the type info of an SQLException-derived class
@@ -387,9 +388,17 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
 void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
     throw (::com::sun::star::sdbc::SQLException)
 {
-    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
-    throw ::com::sun::star::sdbc::SQLException(_rMsg, _rxSource, sStatus, 0, ::com::sun::star::uno::Any());
+    throwGenericSQLException(_rMsg, _rxSource, Any());
 }
+
+// -----------------------------------------------------------------------------
+void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
+    throw (SQLException)
+{
+    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
+    throw SQLException(_rMsg, _rxSource, sStatus, 0, _rNextException);
+}
+
 // -----------------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbtools
@@ -399,6 +408,9 @@ void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::st
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/14 11:42:00  oj
+ *  #86528# lower size need
+ *
  *  Revision 1.6  2001/04/19 07:05:17  fs
  *  +throwFunctionSequenceException
  *
