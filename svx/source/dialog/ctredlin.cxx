@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,13 +436,13 @@ void SvxRedlinTable::SetFilterComment(BOOL bFlag)
     bComment=bFlag;
 }
 
-void SvxRedlinTable::SetCommentParams( const SearchParam* pSearchPara )
+void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
 {
     if(pSearchPara!=NULL)
     {
         if(pCommentSearcher!=NULL) delete pCommentSearcher;
 
-        pCommentSearcher=new SearchText(*pSearchPara, Application::GetAppInternational());
+        pCommentSearcher=new utl::TextSearch(*pSearchPara, LANGUAGE_SYSTEM );
     }
 }
 
@@ -1344,8 +1344,8 @@ void SvxTPFilter::DeactivatePage()
 
             pRedlinTable->SetFilterComment(IsComment());
 
-            SearchParam aSearchParam( aEdComment.GetText(),
-                    SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
+            utl::SearchParam aSearchParam( aEdComment.GetText(),
+                    utl::SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
 
             pRedlinTable->SetCommentParams(&aSearchParam);
 
