@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.49 $
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:58:01 $
+ *  $Revision: 1.50 $
+ *  last change: $Author: hdu $ $Date: 2001-07-11 14:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,6 +881,16 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
     ULONG nLength = 0;
     if( FT_IS_SFNT( maFaceFT ) )
         pCmap = mpFontInfo->GetTable( "cmap", &nLength );
+    else if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
+    {
+        // postscript symbol font
+        nRangeCount = 1;
+        if( pCodes )
+        {
+            pCodes[ 0 ] = 0xF020;
+            pCodes[ 1 ] = 0xF100;
+        }
+    }
 
     if( pCmap && GetUShort( pCmap )==0 )
     {
