@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-24 10:51:08 $
+ *  last change: $Author: dbo $ $Date: 2002-04-26 16:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,26 @@ namespace rtl
          */
         inline void getIniName(::rtl::OUString & iniName) const;
 
+        /** Expands a macro using bootstrap variables.
+
+            @param macro    [inout]  The macro to be expanded
+        */
+        inline void expandMacrosFrom( ::rtl::OUString & macro ) const SAL_THROW( () )
+            { rtl_bootstrap_expandMacros_from_handle( _handle, &macro.pData ); }
+
+        /** Expands a macro using default bootstrap variables.
+
+            @param macro    [inout]  The macro to be expanded
+        */
+        static inline void expandMacros( ::rtl::OUString & macro ) SAL_THROW( () )
+            { rtl_bootstrap_expandMacros( &macro.pData ); }
+
+        /** Provides the bootstrap internal handle.
+
+            @return bootstrap handle
+        */
+        inline rtlBootstrapHandle getHandle() const SAL_THROW( () )
+            { return _handle; }
     };
 
     //----------------------------------------------------------------------------
