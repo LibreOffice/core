@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:50:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,33 @@ long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
 static const char cSuffixes[] = "%&!#@$";
 
 MapUnit eEditMapUnit = MAP_100TH_MM;
+
+
+// #108672 Helper functions to get/set text in TextEngine
+// using the stream interface (get/setText() only supports
+// tools Strings limited to 64K).
+::rtl::OUString getTextEngineText( ExtTextEngine* pEngine )
+{
+    SvMemoryStream aMemStream;
+    aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+    aMemStream.SetLineDelimiter( LINEEND_LF );
+    pEngine->Write( aMemStream );
+    ULONG nSize = aMemStream.Tell();
+    ::rtl::OUString aText( (const sal_Char*)aMemStream.GetData(),
+        nSize, RTL_TEXTENCODING_UTF8 );
+    return aText;
+}
+
+void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr )
+{
+    pEngine->SetText( String() );
+    ::rtl::OString aUTF8Str = ::rtl::OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
+    SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
+        STREAM_READ | STREAM_SEEK_TO_BEGIN );
+    aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+    aMemStream.SetLineDelimiter( LINEEND_LF );
+    pEngine->Read( aMemStream );
+}
 
 
 void lcl_GetValues( String& rWatchStr, SbxDimArray* pArray,
@@ -668,27 +695,13 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
     BOOL bChanged = FALSE;
     if ( pEditEngine && pEditEngine->IsModified() )
     {
-        ULONG nLen = pEditEngine->GetTextLen();
-        if ( nLen > 0xFFFb )    // Maximale String-Laenge
+        if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
         {
-            if ( !bQuiet )
-            {
-                String aError( pModulWindow->CreateQualifiedName() );
-                aError += String( RTL_CONSTASCII_USTRINGPARAM( ":\n" ) );
-                aError += String( IDEResId( RID_STR_SOURCETOBIG ) );
-                ErrorBox( this, WB_OK | WB_DEF_OK, aError ).Execute();
-            }
-        }
-        else if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
-        {
-            String aSource( pEditEngine->GetText() );
-            ::rtl::OUString aModule( aSource );
+            ::rtl::OUString aModule = getTextEngineText( pEditEngine );
 
             // update module in basic
             SbModule* pModule = pModulWindow->GetSbModule();
             DBG_ASSERT(pModule, "EditorWindow::SetSourceInBasic: No Module found!");
-            if ( pModule )
-                pModule->SetSource( aSource );
 
             // update module in module window
             pModulWindow->SetModule( aModule );
@@ -730,15 +743,21 @@ void EditorWindow::CreateEditEngine()
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
     bDoSyntaxHighlight = FALSE; // Bei grossen Texten zu langsam...
-    String aSource( pModulWindow->GetModule() );
-    aSource.ConvertLineEnd( LINEEND_LF );
-    USHORT nLines = aSource.GetTokenCount( LINE_SEP );
+    ::rtl::OUString aOUSource( pModulWindow->GetModule() );
+    sal_Int32 nLines = 0;
+    sal_Int32 nIndex = -1;
+    do
+    {
+        nLines++;
+        nIndex = aOUSource.indexOf( LINE_SEP, nIndex+1 );
+    }
+    while ( nIndex >= 0 );
 
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
     // 1 Formatting koennte eingespart werden, aber dann wartet man
     // bei einem langen Sourcecode noch laenger auf den Text...
     pProgress = new ProgressInfo( IDE_DLL()->GetShell()->GetViewFrame()->GetObjectShell(), String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
-    pEditEngine->SetText( aSource );
+    setTextEngineText( pEditEngine, aOUSource );
 
     pEditView->SetStartDocPos( Point( 0, 0 ) );
     pEditView->SetSelection( TextSelection() );
