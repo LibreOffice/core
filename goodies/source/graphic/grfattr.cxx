@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,7 @@ GraphicAttr::~GraphicAttr()
 
 BOOL GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 {
-    return( ( maLogSize == rAttr.maLogSize ) &&
-            ( mfGamma == rAttr.mfGamma ) &&
+    return( ( mfGamma == rAttr.mfGamma ) &&
             ( mnMirrFlags == rAttr.mnMirrFlags ) &&
             ( mnLeftCrop == rAttr.mnLeftCrop ) &&
             ( mnTopCrop == rAttr.mnTopCrop ) &&
@@ -118,9 +117,10 @@ BOOL GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
+    sal_uInt32      nTmp32;
     UINT16          nTmp16;
 
-    rIStm >> rAttr.maLogSize >> rAttr.mfGamma >> rAttr.mnMirrFlags >> rAttr.mnRotate10;
+    rIStm >> nTmp32 >> nTmp32 >> rAttr.mfGamma >> rAttr.mnMirrFlags >> rAttr.mnRotate10;
     rIStm >> rAttr.mnContPercent >> rAttr.mnLumPercent >> rAttr.mnRPercent >> rAttr.mnGPercent >> rAttr.mnBPercent;
     rIStm >> rAttr.mbInvert >> rAttr.mcTransparency >> nTmp16;
     rAttr.meDrawMode = (GraphicDrawMode) nTmp16;
@@ -137,9 +137,10 @@ SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 
 SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 2 );
+    VersionCompat       aCompat( rOStm, STREAM_WRITE, 2 );
+    const sal_uInt32    nTmp32 = 0;
 
-    rOStm << rAttr.maLogSize << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
+    rOStm << nTmp32 << nTmp32 << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
     rOStm << rAttr.mnContPercent << rAttr.mnLumPercent << rAttr.mnRPercent << rAttr.mnGPercent << rAttr.mnBPercent;
     rOStm << rAttr.mbInvert << rAttr.mcTransparency << (UINT16) rAttr.meDrawMode;
     rOStm << rAttr.mnLeftCrop << rAttr.mnTopCrop << rAttr.mnRightCrop << rAttr.mnBottomCrop;

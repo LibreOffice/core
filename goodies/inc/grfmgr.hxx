@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-25 11:14:41 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 15:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ class GraphicAttr
 {
 private:
 
-    Size            maLogSize;
+    long            mnDummy1;
+    long            mnDummy2;
     double          mfGamma;
     ULONG           mnMirrFlags;
     long            mnLeftCrop;
@@ -169,7 +170,7 @@ public:
     long            GetRightCrop() const { return mnRightCrop; }
     long            GetBottomCrop() const { return mnBottomCrop; }
 
-    void            SetRotation( USHORT nRotate10, const Size& rUnrotatedSize ) { mnRotate10 = nRotate10; maLogSize = rUnrotatedSize; }
+    void            SetRotation( USHORT nRotate10 ) { mnRotate10 = nRotate10; }
     USHORT          GetRotation() const { return mnRotate10; }
 
     void            SetLuminance( short nLuminancePercent ) { mnLumPercent = nLuminancePercent; }
@@ -195,8 +196,6 @@ public:
 
     void            SetTransparency( BYTE cTransparency ) { mcTransparency = cTransparency; }
     BYTE            GetTransparency() const { return mcTransparency; }
-
-    const Size&     GetUntransformedSize() const { return maLogSize; }
 
     BOOL            IsSpecialDrawMode() const { return( meDrawMode != GRAPHICDRAWMODE_STANDARD ); }
     BOOL            IsMirrored() const { return( mnMirrFlags != 0UL ); }
@@ -406,8 +405,6 @@ private:
     static void     ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, ULONG nAdjustmentFlags );
     static void     ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, ULONG nAdjustmentFlags );
 
-    static void     ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              const BitmapEx& rBmpEx, const GraphicAttr& rAttr );
     static void     ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               const GDIMetaFile& rMtf, const GraphicAttr& rAttr );
 

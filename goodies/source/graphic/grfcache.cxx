@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/poly.hxx>
 #include "grfcache.hxx"
 
 // -----------
@@ -539,7 +540,18 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
     if( mpMtf )
         GraphicManager::ImplDraw( pOut, rPt, rSz, *mpMtf, maAttr );
     else if( mpBmpEx )
-        GraphicManager::ImplDraw( pOut, rPt, rSz, *mpBmpEx, maAttr );
+    {
+        if( maAttr.IsRotated() )
+        {
+            Polygon aPoly( Rectangle( rPt, rSz ) );
+
+            aPoly.Rotate( rPt, maAttr.GetRotation() % 3600 );
+            const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+            pOut->DrawBitmapEx( aRotBoundRect.TopLeft(), aRotBoundRect.GetSize(), *mpBmpEx );
+        }
+        else
+            pOut->DrawBitmapEx( rPt, rSz, *mpBmpEx );
+    }
 }
 
 // -----------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-22 14:23:18 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,13 +332,28 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
                                        const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
                                        BitmapEx* pBmpEx )
 {
-    const USHORT    nRot10 = rAttr.GetRotation() % 3600;
-    const Point     aOutPtPix( pOut->LogicToPixel( rPt ) );
-    const Size      aOutSzPix( pOut->LogicToPixel( rSz ) );
-    const Size      aUntSzPix( nRot10 ? pOut->LogicToPixel( rAttr.GetUntransformedSize() ) : aOutSzPix );
-    BOOL            bRet = FALSE;
+    USHORT  nRot10 = rAttr.GetRotation() % 3600;
+    Point   aOutPtPix;
+    Size    aOutSzPix;
+    Size    aUnrotatedSzPix( pOut->LogicToPixel( rSz ) );
+    BOOL    bRet = FALSE;
 
-    if( aUntSzPix.Width() && aUntSzPix.Height() )
+    if( nRot10 )
+    {
+        Polygon aPoly( Rectangle( rPt, rSz ) );
+
+        aPoly.Rotate( rPt, nRot10 );
+        const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+        aOutPtPix = pOut->LogicToPixel( aRotBoundRect.TopLeft() );
+        aOutSzPix = pOut->LogicToPixel( aRotBoundRect.GetSize() );
+    }
+    else
+    {
+        aOutPtPix = pOut->LogicToPixel( rPt );
+        aOutSzPix = aUnrotatedSzPix;
+    }
+
+    if( aUnrotatedSzPix.Width() && aUnrotatedSzPix.Height() )
     {
         BitmapEx        aBmpEx( rBmpEx );
         BitmapEx        aOutBmpEx;
@@ -347,8 +362,8 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
         const Size&     rBmpSzPix = rBmpEx.GetSizePixel();
         const long      nW = rBmpSzPix.Width();
         const long      nH = rBmpSzPix.Height();
-        const long      nNewW = aUntSzPix.Width();
-        const long      nNewH = aUntSzPix.Height();
+        const long      nNewW = aUnrotatedSzPix.Width();
+        const long      nNewH = aUnrotatedSzPix.Height();
         const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) ( nW - 1L ) / ( nNewW - 1L ) ) : 0.0;
         const double    fRevScaleY = ( nNewH > 1L ) ? ( (double) ( nH - 1L ) / ( nNewH - 1L ) ) : 0.0;
         double          fTmp;
@@ -413,8 +428,8 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
         }
         else
         {
-            aOutPt = rPt;
-            aOutSz = rSz;
+            aOutPt = pOut->PixelToLogic( aOutPtPix );
+            aOutSz = pOut->PixelToLogic( aOutSzPix );
             nStartX = nStartY = 0;
             nEndX = aOutSzPix.Width() - 1L;
             nEndY = aOutSzPix.Height() - 1L;
@@ -429,7 +444,7 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
             {
                 if( bSimple )
                 {
-                    bRet = ( aOutBmpEx = aBmpEx ).Scale( aUntSzPix );
+                    bRet = ( aOutBmpEx = aBmpEx ).Scale( aUnrotatedSzPix );
 
                     if( bRet )
                         aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
@@ -437,7 +452,7 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
                 else
                 {
                     bRet = ImplCreateRotatedScaled( aBmpEx,
-                                                    nRot10, aOutSzPix, aUntSzPix,
+                                                    nRot10, aOutSzPix, aUnrotatedSzPix,
                                                     pMapIX, pMapFX, pMapIY, pMapFY, nStartX, nEndX, nStartY, nEndY,
                                                     aOutBmpEx );
                 }
@@ -477,13 +492,13 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
         if( bRet )
         {
             if( !pBmpEx )
-                ImplDraw( pOut, aOutPt, aOutSz, aOutBmpEx, rAttr );
+                pOut->DrawBitmapEx( aOutPt, aOutSz, aOutBmpEx );
             else
             {
                 if( !rAttr.IsTransparent() && !aOutBmpEx.IsAlpha() )
                     aOutBmpEx = BitmapEx( aOutBmpEx.GetBitmap().CreateDisplayBitmap( pOut ), aOutBmpEx.GetMask() );
 
-                ImplDraw( pOut, aOutPt, aOutSz, *pBmpEx = aOutBmpEx, rAttr );
+                pOut->DrawBitmapEx( aOutPt, aOutSz, *pBmpEx = aOutBmpEx );
             }
         }
     }
@@ -900,7 +915,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
 // -----------------------------------------------------------------------------
 
 BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
-                                              USHORT nRot10, const Size& rOutSzPix, const Size& rUntSzPix,
+                                              USHORT nRot10, const Size& rOutSzPix, const Size& rUnrotatedSzPix,
                                               long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
                                               long nStartX, long nEndX, long nStartY, long nEndY,
                                               BitmapEx& rOutBmpEx )
@@ -910,14 +925,14 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
     Bitmap              aOutBmp;
     BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
     BitmapWriteAccess*  pWAcc;
-    Polygon             aPoly( Rectangle( aPt, rUntSzPix ) ); aPoly.Rotate( Point(), nRot10 );
+    Polygon             aPoly( Rectangle( aPt, rUnrotatedSzPix ) ); aPoly.Rotate( Point(), nRot10 );
     Rectangle           aNewBound( aPoly.GetBoundRect() );
     const double        fCosAngle = cos( nRot10 * F_PI1800 ), fSinAngle = sin( nRot10 * F_PI1800 );
     double              fTmp;
     const long          nDstW = nEndX - nStartX + 1L;
     const long          nDstH = nEndY - nStartY + 1L;
-    const long          nUnRotW = rUntSzPix.Width();
-    const long          nUnRotH = rUntSzPix.Height();
+    const long          nUnRotW = rUnrotatedSzPix.Width();
+    const long          nUnRotH = rUnrotatedSzPix.Height();
     long*               pCosX = new long[ nDstW ];
     long*               pSinX = new long[ nDstW ];
     long*               pCosY = new long[ nDstH ];
@@ -1449,14 +1464,6 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
     {
         DBG_ERROR( "Missing implementation: Animation-Transparency" );
     }
-}
-
-// -----------------------------------------------------------------------------
-
-void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                               const BitmapEx& rBmpEx, const GraphicAttr& rAttr )
-{
-    pOut->DrawBitmapEx( rPt, rSz, rBmpEx );
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-22 14:22:34 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 15:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,12 +300,25 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
     if( GetType() != GRAPHIC_NONE )
     {
+        Polygon         aClipPoly( Rectangle( rPt, rSz ) );
+        const USHORT    nRot10 = pAttr->GetRotation() % 3600;
+        const Point     aOldOrigin( rPt );
         const Graphic&  rGraphic = GetGraphic();
         const MapMode   aMap100( MAP_100TH_MM );
         Size            aSize100;
         long            nTotalWidth, nTotalHeight;
         long            nNewLeft, nNewTop, nNewRight, nNewBottom;
         double          fScale;
+
+        if( nRot10 )
+        {
+            aClipPoly.Rotate( rPt, nRot10 );
+            bRectClipRegion = FALSE;
+        }
+        else
+            bRectClipRegion = TRUE;
+
+        rClipPolyPoly = aClipPoly;
 
         if( rGraphic.GetPrefMapMode() == MAP_PIXEL )
             aSize100 = pOut->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
@@ -317,9 +330,6 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
         if( aSize100.Width() && aSize100.Height() && nTotalWidth && nTotalHeight )
         {
-            rClipPolyPoly = Polygon( Rectangle( rPt, rSz ) );
-            bRectClipRegion = TRUE;
-
             fScale = (double) aSize100.Width() / nTotalWidth;
             nNewLeft = -FRound( pAttr->GetLeftCrop() * fScale );
             nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
@@ -335,6 +345,15 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
             fScale = (double) rSz.Height() / aSize100.Height();
             rPt.Y() += FRound( nNewTop * fScale );
             rSz.Height() = FRound( ( nNewBottom - nNewTop + 1 ) * fScale );
+
+            if( nRot10 )
+            {
+                Polygon aOriginPoly( 1 );
+
+                aOriginPoly[ 0 ] = rPt;
+                aOriginPoly.Rotate( aOldOrigin, nRot10 );
+                rPt = aOriginPoly[ 0 ];
+            }
 
             bRet = TRUE;
         }
