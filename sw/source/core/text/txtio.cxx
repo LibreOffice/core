@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ sal_Bool IsDbg( const SwTxtFrm *pFrm )
         return sal_False;
 }
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
 
 static void Error()
 {
@@ -1150,6 +1150,6 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 
