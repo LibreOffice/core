@@ -4629,8 +4629,8 @@ $(SHL1IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL1IMPLIBN) \
     -def:$(SHL1DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL1TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL1TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4679,8 +4679,8 @@ $(SHL2IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL2IMPLIBN) \
     -def:$(SHL2DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL2TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL2TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4729,8 +4729,8 @@ $(SHL3IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL3IMPLIBN) \
     -def:$(SHL3DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL3TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL3TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4779,8 +4779,8 @@ $(SHL4IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL4IMPLIBN) \
     -def:$(SHL4DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL4TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL4TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4829,8 +4829,8 @@ $(SHL5IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL5IMPLIBN) \
     -def:$(SHL5DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL5TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL5TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4879,8 +4879,8 @@ $(SHL6IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL6IMPLIBN) \
     -def:$(SHL6DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL6TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL6TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4929,8 +4929,8 @@ $(SHL7IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL7IMPLIBN) \
     -def:$(SHL7DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL7TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL7TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4979,8 +4979,8 @@ $(SHL8IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL8IMPLIBN) \
     -def:$(SHL8DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL8TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL8TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -5029,8 +5029,8 @@ $(SHL9IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL9IMPLIBN) \
     -def:$(SHL9DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL9TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL9TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -5079,8 +5079,8 @@ $(SHL10IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL10IMPLIBN) \
     -def:$(SHL10DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL10TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL10TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"

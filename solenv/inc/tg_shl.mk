@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-03 17:10:37 $
+#   last change: $Author: hjs $ $Date: 2002-05-14 16:23:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -636,8 +636,8 @@ $(SHL$(TNR)IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL$(TNR)IMPLIBN) \
     -def:$(SHL$(TNR)DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    +-if exist $@ $(TOUCH) $@
-    +-if not exist $@ echo rebuild $(SHL$(TNR)TARGETN) to get $@
+    +$(TOUCH) $@
+    +@echo build of $(SHL$(TNR)TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
