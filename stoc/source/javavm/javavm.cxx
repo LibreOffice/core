@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:53:37 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,11 +529,11 @@ void getJavaPropsFromSafetySettings(
             rtl::OUString sVal;
             switch( val)
             {
-            case 0: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unrestricted"));
+            case 0: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"));
                 break;
-            case 1: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+            case 1: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unrestricted"));
                 break;
-            case 2: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"));
+            case 3: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
                 break;
             }
             rtl::OUString sProperty( RTL_CONSTASCII_USTRINGPARAM("appletviewer.security.mode="));
@@ -1220,15 +1220,15 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             {
             case 0:
                 aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "unrestricted"));
+                                                   "host"));
                 break;
             case 1:
                 aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "none"));
+                                                   "unrestricted"));
                 break;
-            case 2:
+            case 3:
                 aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "host"));
+                                                   "none"));
                 break;
             }
         else
