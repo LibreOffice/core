@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFilePickerControlAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:45 $
+ *  last change:$Date: 2003-09-08 11:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.ui.dialogs;
 
-import com.sun.star.ui.dialogs.XFilePickerControlAccess;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 import util.ValueChanger;
 import util.ValueComparer;
+
+import com.sun.star.ui.dialogs.XFilePickerControlAccess;
 
 /**
 * Testing <code>com.sun.star.ui.XFilePickerControlAccess</code>
@@ -128,7 +129,7 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
             result = false ;
         }
 
-        tRes.tested("getValue()", true) ;
+        tRes.tested("getValue()", result) ;
     }
 
     /**
@@ -172,13 +173,11 @@ public class _XFilePickerControlAccess extends MultiMethodTest {
     * Has <b>OK</b> status if no runtime exceptions occured.
     */
     public void _getLabel() {
-        boolean result = true ;
 
         try {
             oldLab = oObj.getLabel(cntlID);
         } catch (Exception e) {
             e.printStackTrace(log) ;
-            result = false ;
         }
 
         tRes.tested("getLabel()", oldLab != null) ;
