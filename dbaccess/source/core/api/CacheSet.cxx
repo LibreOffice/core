@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,15 @@ using namespace ::com::sun::star::io;
 using namespace ::osl;
 
 // -------------------------------------------------------------------------
+::rtl::OUString OCacheSet::getIdentifierQuoteString() const
+{
+    ::rtl::OUString sQuote;
+    Reference<XDatabaseMetaData> xMeta;
+    if ( m_xConnection.is() && (xMeta = m_xConnection->getMetaData()).is() )
+        sQuote = xMeta->getIdentifierQuoteString();
+    return sQuote;
+}
+// -------------------------------------------------------------------------
 void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
 {
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
@@ -138,7 +147,8 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
         else
         {
             Reference< XPreparedStatement> xPrepStmt(m_xDriverSet->getStatement(),UNO_QUERY);
-            m_xConnection = xPrepStmt->getConnection();
+            if ( xPrepStmt.is() )
+                m_xConnection = xPrepStmt->getConnection();
         }
     }
 }
@@ -189,7 +199,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     // set values and column names
     ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
     static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    ::rtl::OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1;
@@ -248,7 +258,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     aSql += ::rtl::OUString::createFromAscii(" SET ");
     // list all cloumns that should be set
     static ::rtl::OUString aPara    = ::rtl::OUString::createFromAscii(" = ?,");
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     sal_Int32 i = 1;
@@ -379,7 +389,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
     // list all cloumns that should be set
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     sal_Int32 i = 1;
