@@ -2,6 +2,7 @@
 ..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\dtd\*.* %_DEST%\bin%_EXT%\*.*
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
