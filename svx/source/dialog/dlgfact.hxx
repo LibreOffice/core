@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:11:37 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,10 @@ public:
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             Window* pParent, BOOL bShowSlots = FALSE );
+
+    virtual VclAbstractDialog* CreateScriptErrorDialog(
+            Window* pParent, ::com::sun::star::uno::Any aException);
+
     virtual VclAbstractDialog*          CreateSvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex = 0 );
 };
 
