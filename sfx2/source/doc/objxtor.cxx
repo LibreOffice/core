@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:23:12 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,16 @@
 #ifndef INCLUDED_SVTOOLS_PRINTWARNINGOPTIONS_HXX
 #include <svtools/printwarningoptions.hxx>
 #endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
+#include <sot/clsids.hxx>
 
 #include "docfac.hxx"
 #include "docfile.hxx"
@@ -977,3 +981,84 @@ SfxObjectShell* SfxObjectShell::GetWorkingDocument()
 {
     return pWorkingDoc;
 }
+
+
+String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
+{
+    //! Remove everything behind name!
+    String aFact( rFact );
+    String aPrefix = String::CreateFromAscii( "private:factory/" );
+    if ( aPrefix.Len() == aFact.Match( aPrefix ) )
+        aFact.Erase( 0, aPrefix.Len() );
+    USHORT nPos = aFact.Search( '?' );
+    String aParam;
+    if ( nPos != STRING_NOTFOUND )
+    {
+        aParam = aFact.Copy( nPos, aFact.Len() );
+        aFact.Erase( nPos, aFact.Len() );
+        aParam.Erase(0,1);
+    }
+
+    aFact.EraseAllChars('4').ToLowerAscii();
+    ::rtl::OUString aServiceName;
+    if ( aFact.EqualsAscii("swriter") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+    }
+    else if ( aFact.EqualsAscii("swriter/web") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
+    }
+    else if ( aFact.EqualsAscii("swriter/globaldocument") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
+    }
+    else if ( aFact.EqualsAscii("scalc") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
+    }
+    else if ( aFact.EqualsAscii("sdraw") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
+    }
+    else if ( aFact.EqualsAscii("simpress") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
+    }
+    else if ( aFact.EqualsAscii("schart") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.chart.ChartDocument");
+    }
+    else if ( aFact.EqualsAscii("smath") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+    }
+
+    return aServiceName;
+}
+
+SfxObjectShell* SfxObjectShell::CreateObjectByFactoryName( const String& rFact, SfxObjectCreateMode eMode )
+{
+    return CreateObject( GetServiceNameFromFactory( rFact ), eMode );
+}
+
+
+SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObjectCreateMode eMode )
+{
+    if ( rServiceName.Len() )
+    {
+        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel > xDoc(
+            ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
+        if ( xDoc.is() )
+        {
+            ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xDoc, UNO_QUERY );
+            ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
+            sal_Int64 nHandle = xObj->getSomething( aSeq );
+            if ( nHandle )
+                return (SfxObjectShell*) (sal_Int32*) nHandle;
+        }
+    }
+
+    return 0;
+}
+
