@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:54:25 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -1540,6 +1543,17 @@ String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
         {
         }
     }
+
+    // --> PB 2004-11-25 #118595# HACK!!! only for SO8 Beta
+    if ( aCmdURL.CompareToAscii( ".uno:HelpSupport" ) == COMPARE_EQUAL )
+    {
+        Any aAny = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+        rtl::OUString sName;
+        aAny >>= sName;
+        if ( sName.equalsAscii( "StarOffice" ) || sName.equalsAscii( "StarSuite" ) )
+            aLabel = rtl::OUString::createFromAscii( "Beta ~Support Forum..." );
+    }
+    // <--
 
     return aLabel;
 }
