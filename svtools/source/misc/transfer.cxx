@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 10:38:02 $
+ *  last change: $Author: dvo $ $Date: 2002-09-11 15:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,6 +1003,9 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
     if( xDragSource.is() )
     {
+        // #102940# call into VCL required SolarMutex
+        const Point aPt( pWindow->GetPointerPosPixel() );
+
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 
         try
@@ -1015,7 +1018,6 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
                 pWindow->ReleaseMouse();
 
             DragGestureEvent    aEvt;
-            const Point         aPt( pWindow->GetPointerPosPixel() );
 
             aEvt.DragAction = DNDConstants::ACTION_COPY;
             aEvt.DragOriginX = aPt.X();
