@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 13:21:21 $
+ *  last change: $Author: os $ $Date: 2002-10-07 14:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1384,6 +1384,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
 
         SfxObjectShellRef aRef( pDocSh );
 
+        SfxObjectShell::HandleFilter( pMed, pDocSh );
         pDocSh->RegisterTransfer( *pMed );
         pMed->DownLoad();   // ggfs. den DownLoad anstossen
         if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
