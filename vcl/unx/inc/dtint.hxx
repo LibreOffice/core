@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:30 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 #ifndef _SV_DTINT_HXX
 #define _SV_DTINT_HXX
 
-#include <cstdio>
-
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -75,7 +73,6 @@
 #include <tools/color.hxx>
 #include <font.hxx>
 
-class SalFrame;
 class SalBitmap;
 class SalDisplay;
 class AllSettings;
@@ -107,12 +104,11 @@ protected:
     DtType              meType;
     Display*            mpDisplay;
     SalDisplay*         mpSalDisplay;
-    SalFrame*           mpSalFrame;
     int                 mnRefCount;
     int                 mnSystemLookCommandProcess;
 
 
-    DtIntegrator( SalFrame* );
+    DtIntegrator();
 
     static DtIntegratorList aIntegratorList;
     static String           aHomeDir;
@@ -129,7 +125,7 @@ protected:
     Font parseFont( const ByteString& );
 
 public:
-    static DtIntegrator* CreateDtIntegrator( SalFrame* );
+    static DtIntegrator* CreateDtIntegrator();
 
     virtual ~DtIntegrator();
 
@@ -137,7 +133,6 @@ public:
     virtual void GetSystemLook( AllSettings& rSettings );
 
     DtType          GetDtType() { return meType; }
-    SalFrame*       GetFrame() { return mpSalFrame; }
     SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
     Display*        GetDisplay() { return mpDisplay; }
 
