@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:37:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,10 +1009,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 
             case SID_PROGFILENAME:
                 rSet.Put( SfxStringItem( SID_PROGFILENAME, Application::GetAppFileName() ) );
-                break;
-
-            case SID_INTERACTIVEMODE:
-                rSet.Put( SfxBoolItem( SID_INTERACTIVEMODE, !IsDispatcherLocked() ) );
                 break;
 
             case SID_ATTR_UNDO_COUNT:
