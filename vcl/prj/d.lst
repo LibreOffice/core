@@ -107,6 +107,7 @@ hedabu: ..\inc\menu.hxx %_DEST%\inc%_EXT%\vcl\menu.hxx
 hedabu: ..\inc\menubtn.hxx %_DEST%\inc%_EXT%\vcl\menubtn.hxx
 hedabu: ..\inc\metaact.hxx %_DEST%\inc%_EXT%\vcl\metaact.hxx
 hedabu: ..\inc\metric.hxx %_DEST%\inc%_EXT%\vcl\metric.hxx
+hedabu: ..\inc\mnemonic.hxx %_DEST%\inc%_EXT%\vcl\mnemonic.hxx
 hedabu: ..\inc\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 hedabu: ..\inc\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 hedabu: ..\inc\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
