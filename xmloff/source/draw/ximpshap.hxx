@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:35:39 $
+ *  last change: $Author: cl $ $Date: 2001-05-14 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,10 +454,7 @@ class SdXMLObjectShapeContext : public SdXMLShapeContext
 {
 private:
     rtl::OUString maCLSID;
-    rtl::OUString maClass;
     rtl::OUString maHref;
-    sal_Bool mbPlaceHolder;
-    sal_Bool mbUserTransformed;
 
 public:
     TYPEINFO();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 07:38:35 $
+ *  last change: $Author: cl $ $Date: 2001-05-14 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,6 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
 
     OUStringBuffer sTmp;
     OUString aName;
-    sal_Bool bBool;
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_layer_set, sal_True, sal_True );
 

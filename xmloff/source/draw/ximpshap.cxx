@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:35:39 $
+ *  last change: $Author: cl $ $Date: 2001-05-14 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ void SdXMLShapeContext::SetStyle()
                     aAny <<= xStyle;
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
                 }
-                catch( uno::Exception& e )
+                catch( uno::Exception& )
                 {
                     DBG_ERROR( "could not find style for shape!" );
                 }
@@ -482,7 +482,7 @@ void SdXMLShapeContext::SetStyle()
 
         } while(0);
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
     }
 }
@@ -1952,8 +1952,7 @@ SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-  mbPlaceHolder( sal_False ), mbUserTransformed( sal_False )
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
 }
 
@@ -2035,23 +2034,6 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class_id)) )
         {
             maCLSID = rValue;
-            return;
-        }
-        break;
-    case XML_NAMESPACE_PRESENTATION:
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class)) )
-        {
-            maClass = rValue;
-            return;
-        }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_placeholder)) )
-        {
-            mbPlaceHolder = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
-            return;
-        }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_user_transformed)) )
-        {
-            mbUserTransformed = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
             return;
         }
         break;
