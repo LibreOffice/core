@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: jl $ $Date: 2000-11-21 15:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfInt64(sal_Char * str, sal_Int64 l, sal_Int16 r
  *          the <code>float</code> argument.
  * @see     java.lang.Float#toString(float)
  */
-#define RTL_STR_MAX_VALUEOFFLOAT    1 /*???*/
+#define RTL_STR_MAX_VALUEOFFLOAT    15
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * str, float f);
 
 /**
@@ -346,7 +346,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * str, float f);
  *          the <code>double</code> argument.
  * @see     java.lang.Double#toString(double)
  */
-#define RTL_STR_MAX_VALUEOFDOUBLE   1/*???*/
+#define RTL_STR_MAX_VALUEOFDOUBLE   25
 sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * str, double d);
 
 
