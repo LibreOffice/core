@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: er $ $Date: 2002-05-31 18:22:54 $
+ *  last change: $Author: er $ $Date: 2002-05-31 18:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,10 +350,13 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
             switch ( eLang )
             {
                 case LANGUAGE_CHINESE_SIMPLIFIED :
+                case LANGUAGE_CHINESE_SINGAPORE :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToCharLower_zh_CN" ) );
                     break;
                 case LANGUAGE_CHINESE_TRADITIONAL :
+                case LANGUAGE_CHINESE_HONGKONG :
+                case LANGUAGE_CHINESE_MACAU :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToCharLower_zh_TW" ) );
                     break;
@@ -387,10 +390,13 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
             switch ( eLang )
             {
                 case LANGUAGE_CHINESE_SIMPLIFIED :
+                case LANGUAGE_CHINESE_SINGAPORE :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToCharUpper_zh_CN" ) );
                     break;
                 case LANGUAGE_CHINESE_TRADITIONAL :
+                case LANGUAGE_CHINESE_HONGKONG :
+                case LANGUAGE_CHINESE_MACAU :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToCharUpper_zh_TW" ) );
                     break;
@@ -416,10 +422,13 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
             switch ( eLang )
             {
                 case LANGUAGE_CHINESE_SIMPLIFIED :
+                case LANGUAGE_CHINESE_SINGAPORE :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToTextLower_zh_CN" ) );
                     break;
                 case LANGUAGE_CHINESE_TRADITIONAL :
+                case LANGUAGE_CHINESE_HONGKONG :
+                case LANGUAGE_CHINESE_MACAU :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToTextLower_zh_TW" ) );
                     break;
@@ -441,10 +450,13 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
             switch ( eLang )
             {
                 case LANGUAGE_CHINESE_SIMPLIFIED :
+                case LANGUAGE_CHINESE_SINGAPORE :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToTextUpper_zh_CN" ) );
                     break;
                 case LANGUAGE_CHINESE_TRADITIONAL :
+                case LANGUAGE_CHINESE_HONGKONG :
+                case LANGUAGE_CHINESE_MACAU :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToTextUpper_zh_TW" ) );
                     break;
@@ -466,10 +478,13 @@ String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
             switch ( eLang )
             {
                 case LANGUAGE_CHINESE_SIMPLIFIED :
+                case LANGUAGE_CHINESE_SINGAPORE :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToTextFullwidth_zh_CN" ) );
                     break;
                 case LANGUAGE_CHINESE_TRADITIONAL :
+                case LANGUAGE_CHINESE_HONGKONG :
+                case LANGUAGE_CHINESE_MACAU :
                     aRet = String( RTL_CONSTASCII_USTRINGPARAM(
                                 "NumToTextFullwidth_zh_TW" ) );
                     break;
