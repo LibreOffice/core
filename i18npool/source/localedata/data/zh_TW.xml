@@ -348,7 +348,7 @@
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ForbiddenCharacters>
-<ForbiddenLineBeginCharacters>!),.:;?]}¢·--'"?¨E...•′�、。〉》」』】〕〞︰︱︳︴︶︸︺︼︾﹀﹂﹄﹏﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝､</ForbiddenLineBeginCharacters>
+<ForbiddenLineBeginCharacters>!),.:;?]}¢·--'"¨•′、。〉》」』】〕〞︰︱︳︴︶︸︺︼︾﹀﹂﹄﹏﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝､</ForbiddenLineBeginCharacters>
 <ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛</ForbiddenLineEndCharacters>
 </ForbiddenCharacters>
 <ReservedWords>

@@ -420,7 +420,7 @@
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ForbiddenCharacters>
-<ForbiddenLineBeginCharacters>:!),.:;?]}¢·ˇˉ―‖々--'"?¨E...•′?、。〉》」』】〕〗〞︰︱︳︴︶︸︺︼︾﹀﹂﹄﹏﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝､～￠ </ForbiddenLineBeginCharacters>
+<ForbiddenLineBeginCharacters>:!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′</ForbiddenLineBeginCharacters>
 <ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛</ForbiddenLineEndCharacters>
 </ForbiddenCharacters>
 <ReservedWords>
