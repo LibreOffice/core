@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:00:01 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@
 #ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -201,6 +204,19 @@ namespace
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode* pParseRoot );
 
+    //------------------------------------------------------------------------------
+    // error messages
+    //------------------------------------------------------------------------------
+    void errorColumnNotFound(OQueryDesignView* _pView, const ::rtl::OUString& _sColumnName)
+    {
+        String sTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+        String sErrorMsg(ModuleRes(STR_COLUMN_UNKNOWN));
+        sErrorMsg.SearchAndReplaceAscii("$column$", _sColumnName );
+
+        OSQLMessageBox( _pView , sTitle, sErrorMsg ).Execute();
+    }
+    //------------------------------------------------------------------------------
+    // "normal" functions
     //------------------------------------------------------------------------------
     void FillOuterJoins(OQueryDesignView* _pView,
                         const ::connectivity::OSQLParseNode* pTableRefList)
@@ -1343,11 +1359,11 @@ namespace
         {
             ::rtl::OUString aCondition;
             OTableFieldDescRef aDragLeft = new OTableFieldDesc();
-            if(SQL_ISRULE(pCondition->getChild(0), column_ref ))
+            if ( SQL_ISRULE(pCondition->getChild(0), column_ref ) )
             {
                 ::rtl::OUString aColumnName;
                 Reference< XConnection> xConnection = pController->getConnection();
-                if(xConnection.is())
+                if ( xConnection.is() )
                 {
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // the international doesn't matter I have a string
@@ -1374,13 +1390,15 @@ namespace
                     _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
                 else
                 {
-                    ErrorBox( _pView, ModuleRes( ERR_QRY_SYNTAX ) ).Execute();
+                    errorColumnNotFound(_pView, aColumnName);
                     nRet = 5;
                 }
             }
             else
             {
-                ErrorBox( _pView, ModuleRes( ERR_QRY_SYNTAX ) ).Execute();
+                String sTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+                String sErrorMsg(ModuleRes(STR_ERR_LIKE_COLUMN));
+                OSQLMessageBox( _pView , sTitle, sErrorMsg ).Execute();
                 nRet = 5;
             }
         }
@@ -1393,7 +1411,7 @@ namespace
             {
                 // parse condition
                 Reference< XConnection> xConnection = pController->getConnection();
-                if(xConnection.is())
+                if ( xConnection.is() )
                 {
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     for(sal_uInt16 i=1;i< pCondition->count();i++)
@@ -1410,6 +1428,7 @@ namespace
                 _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
             else
             {
+                //  errorColumnNotFound(_pView, aColumnName);
                 ErrorBox( _pView, ModuleRes( ERR_QRY_SYNTAX ) ).Execute();
                 nRet = 5;
             }
