@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:37:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "topfrm.hxx"
 
@@ -379,8 +381,8 @@ public:
                         SfxTopViewWin_Impl( SfxTopViewFrame* p,
                                 Window *pParent, WinBits nBits=0 ) :
                             Window( pParent, nBits | WB_BORDER | WB_CLIPCHILDREN ),
-                            pFrame( p ),
-                            bActive( FALSE )
+                            bActive( FALSE ),
+                            pFrame( p )
                         {
                             p->GetFrame()->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
                         }
@@ -911,7 +913,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     }
 
     // Position und Groesse setzen
-    sal_uInt16 nWinMode = pModeItem ? pModeItem->GetValue() : 1;
+    //sal_uInt16 nWinMode = pModeItem ? pModeItem->GetValue() : 1;
     if ( pAreaItem && !pOld )
     {
         Window *pWin = pImp->pWindow;
