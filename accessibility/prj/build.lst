@@ -1,0 +1,8 @@
+ac  accessibility	: offuh unoil
+ac	accessibility                                         	usr1	-	all	ac_mkout NULL
+ac	accessibility\idl\org\openoffice\accessibility\internal	nmake	-	all	ac_idlc NULL
+ac	accessibility\idl\                                    	nmake	-	all	ac_unomakers ac_idlc NULL
+ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	all	ac_ooja ac_unomakers NULL
+ac	accessibility\bridge\source\remote                      nmake   -   all ac_abr  ac_unomakers NULL
+ac	accessibility\bridge\org\openoffice\accessibility   	nmake	-	all	ac_ooa ac_ooja NULL
+
