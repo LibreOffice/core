@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-22 07:25:25 $
+ *  last change: $Author: bm $ $Date: 2003-10-28 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,9 @@ void VLegend::createShapes(
 
 // ----------------------------------------
 
-void VLegend::changePosition( awt::Rectangle & rOutAvailableSpace )
+void VLegend::changePosition(
+    awt::Rectangle & rOutAvailableSpace,
+    const awt::Size & rReferenceSize )
 {
     if(! m_xShape.is())
         return;
@@ -669,12 +671,21 @@ void VLegend::changePosition( awt::Rectangle & rOutAvailableSpace )
 
         helper::LayoutHelper::rotatePoint( aAnchor.EscapeDirection, aOffset.Primary, aOffset.Secondary );
 
+        sal_Int32 nOffsetX = static_cast< sal_Int32 >(
+            aOffset.Primary * rReferenceSize.Width );
+        // the standard angles are in a coordinate system where y goes up, in
+        // the drawing layer y goes down, so negate it
+        sal_Int32 nOffsetY = - static_cast< sal_Int32 >(
+            aOffset.Secondary * rReferenceSize.Height );
+
         awt::Point aPos( static_cast< sal_Int32 >(
-                             rOutAvailableSpace.X + rOutAvailableSpace.Width *
-                             (aAnchor.Alignment.Primary + aOffset.Primary)),
+                             rOutAvailableSpace.X +
+                             rOutAvailableSpace.Width * aAnchor.Alignment.Primary) +
+                             nOffsetX,
                          static_cast< sal_Int32 >(
-                             rOutAvailableSpace.Y + rOutAvailableSpace.Height *
-                             (aAnchor.Alignment.Secondary - aOffset.Secondary)));
+                             rOutAvailableSpace.Y +
+                             rOutAvailableSpace.Height * aAnchor.Alignment.Secondary) +
+                             nOffsetY );
         layout::Alignment aAlignment( helper::LayoutHelper::getStandardAlignmentByAngle(
                                           aAnchor.EscapeDirection ));
 
@@ -698,23 +709,25 @@ void VLegend::changePosition( awt::Rectangle & rOutAvailableSpace )
         {
             case chart2::LegendPosition_LINE_START:
             {
-                sal_Int32 nExtent = m_aBoundRect.X + m_aBoundRect.Width;
+                sal_Int32 nExtent = m_aBoundRect.Width + (m_aBoundRect.X - rOutAvailableSpace.X)
+                    + nOffsetX;
                 rOutAvailableSpace.Width -= nExtent;
                 rOutAvailableSpace.X += nExtent;
             }
             break;
             case chart2::LegendPosition_LINE_END:
-                rOutAvailableSpace.Width = m_aBoundRect.X - rOutAvailableSpace.X;
+                rOutAvailableSpace.Width = (m_aBoundRect.X + nOffsetX) - rOutAvailableSpace.X;
                 break;
             case chart2::LegendPosition_PAGE_START:
             {
-                sal_Int32 nExtent = m_aBoundRect.Y + m_aBoundRect.Height;
+                sal_Int32 nExtent = m_aBoundRect.Height + (m_aBoundRect.Y - rOutAvailableSpace.Y)
+                    + nOffsetY;
                 rOutAvailableSpace.Height -= nExtent;
                 rOutAvailableSpace.Y += nExtent;
             }
             break;
             case chart2::LegendPosition_PAGE_END:
-                rOutAvailableSpace.Height = m_aBoundRect.Y - rOutAvailableSpace.Y;
+                rOutAvailableSpace.Height = (m_aBoundRect.Y + nOffsetY) - rOutAvailableSpace.Y;
                 break;
 
             default:
