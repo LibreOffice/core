@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-04 16:18:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ BOOL SVMain()
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
     Reference<XMultiServiceFactory> xMS;
+
 
     BOOL bInit = InitVCL( xMS );
 
