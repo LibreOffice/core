@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-13 10:34:49 $
+ *  last change: $Author: tl $ $Date: 2000-12-22 12:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef _SVTOOLS_LNGMISC_HXX_
+#include <svtools/lngmisc.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -275,9 +278,12 @@ SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >
 
     FreeResource();
 
-    aReplaceEdit.SetText( rWord );
-    aWordLB.InsertEntry( rWord );
-    aWordLB.SelectEntry( rWord );
+    OUString aTmp( rWord );
+    linguistic::RemoveHyphens( aTmp );
+    linguistic::RemoveControlChars( aTmp );
+    aReplaceEdit.SetText( aTmp );
+    aWordLB.InsertEntry( aTmp );
+    aWordLB.SelectEntry( aTmp );
 
     Init_Impl( nLanguage );
 
