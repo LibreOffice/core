@@ -59,7 +59,9 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
       m_aFile( aUncPath ),
       m_xProvider( m_pMyShell->m_pProvider ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
-      m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
+      m_nMinorErrorCode( TASKHANDLER_NO_ERROR ),
+      m_bInputStreamCalled( false ),
+      m_bOutputStreamCalled( false )
 {
     osl::FileBase::RC err = m_aFile.open( OpenFlag_Read | OpenFlag_Write );
     if(  err != osl::FileBase::E_None )
@@ -97,8 +99,12 @@ sal_Int32 SAL_CALL XStream_impl::getMinorError()
 
 uno::Reference< io::XInputStream > SAL_CALL
 XStream_impl::getInputStream(  )
-  throw( uno::RuntimeException)
+    throw( uno::RuntimeException)
 {
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        m_bInputStreamCalled = true;
+    }
     return uno::Reference< io::XInputStream >( this );
 }
 
@@ -107,6 +113,10 @@ uno::Reference< io::XOutputStream > SAL_CALL
 XStream_impl::getOutputStream(  )
     throw( uno::RuntimeException )
 {
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        m_bOutputStreamCalled = true;
+    }
     return uno::Reference< io::XOutputStream >( this );
 }
 
@@ -239,7 +249,11 @@ XStream_impl::closeInput(
            io::IOException,
            uno::RuntimeException )
 {
-    // closeStream();
+    osl::MutexGuard aGuard( m_aMutex );
+    m_bInputStreamCalled = false;
+
+    if( ! m_bOutputStreamCalled )
+        closeStream();
 }
 
 
@@ -250,7 +264,11 @@ XStream_impl::closeOutput(
            io::IOException,
            uno::RuntimeException )
 {
-    // closeStream();
+    osl::MutexGuard aGuard( m_aMutex );
+    m_bOutputStreamCalled = false;
+
+    if( ! m_bInputStreamCalled )
+        closeStream();
 }
 
 

@@ -1,6 +1,9 @@
 #ifndef _FILSTR_HXX_
 #define _FILSTR_HXX_
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -194,6 +197,9 @@ namespace fileaccess {
 
 
     private:
+
+        osl::Mutex   m_aMutex;
+        bool         m_bInputStreamCalled,m_bOutputStreamCalled;
 
         shell*       m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider > m_xProvider;
