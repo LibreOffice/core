@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:08:20 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,10 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -508,7 +512,26 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 #endif
 
     if ( !pPage )
+    {
         pPage = FindPageFrm();
+        // --> OD 2004-07-02 #i28701# - for at-character and as-character
+        // anchored Writer fly frames additionally invalidate also page frame
+        // its 'anchor character' is on.
+        if ( pPage && pPage->GetUpper() && IsFlyFrm() )
+        {
+            const SwFlyFrm* pFlyFrm = static_cast<const SwFlyFrm*>(this);
+            if ( pFlyFrm->IsAutoPos() || pFlyFrm->IsFlyInCntFrm() )
+            {
+                const SwPageFrm* pPageFrmOfAnchor =
+                        &(const_cast<SwFlyFrm*>(pFlyFrm)->GetPageFrmOfAnchor());
+                if ( pPageFrmOfAnchor != pPage )
+                {
+                    InvalidatePage( pPageFrmOfAnchor );
+                }
+            }
+        }
+        // <--
+    }
 
     if ( pPage && pPage->GetUpper() )
     {
@@ -558,10 +581,12 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
         {
             pRoot->DisallowTurbo();
             if ( pFly )
-            {   if( !pFly->IsLocked() )
+            {
+                if ( !pFly->IsLocked() )
                 {
                     if ( pFly->IsFlyInCntFrm() )
-                    {   pPage->InvalidateFlyInCnt();
+                    {
+                        pPage->InvalidateFlyInCnt();
                         ((SwFlyInCntFrm*)pFly)->InvalidateLayout();
                         pFly->GetAnchorFrm()->InvalidatePage();
                     }
@@ -1733,15 +1758,15 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
         }
         if( ( IsHeaderFrm() || IsFooterFrm() ) && pBoss->GetDrawObjs() )
         {
-            const SwDrawObjs &rObjs = *pBoss->GetDrawObjs();
+            const SwSortedObjs &rObjs = *pBoss->GetDrawObjs();
             ASSERT( pBoss->IsPageFrm(), "Header/Footer out of page?" );
             SwPageFrm *pPage = (SwPageFrm*)pBoss;
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
-                SdrObject *pObj = rObjs[i];
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     ASSERT( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
                     const SwFmtVertOrient &rVert =
                                         pFly->GetFmt()->GetVertOrient();
@@ -1775,38 +1800,89 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
 |*  Letzte Aenderung    MA 24. Mar. 94
 |*
 |*************************************************************************/
+/** method to perform additional actions on an invalidation
+
+    OD 2004-05-19 #i28701#
+
+    @author OD
+*/
+void SwFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
+{
+    // default behaviour is to perform no additional action
+}
+
+/** method to determine, if an invalidation is allowed.
+
+    OD 2004-05-19 #i28701#
+
+    @author OD
+*/
+bool SwFrm::_InvalidationAllowed( const InvalidationType _nInvalid ) const
+{
+    // default behaviour is to allow invalidation
+    return true;
+}
+
 void SwFrm::ImplInvalidateSize()
 {
-    bValidSize = FALSE;
-    if ( IsFlyFrm() )
-        ((SwFlyFrm*)this)->_Invalidate();
-    else
-        InvalidatePage();
+    if ( _InvalidationAllowed( INVALID_SIZE ) )
+    {
+        bValidSize = FALSE;
+        if ( IsFlyFrm() )
+            ((SwFlyFrm*)this)->_Invalidate();
+        else
+            InvalidatePage();
+
+        // OD 2004-05-19 #i28701#
+        _ActionOnInvalidation( INVALID_SIZE );
+    }
 }
 
 void SwFrm::ImplInvalidatePrt()
 {
-    bValidPrtArea = FALSE;
-    if ( IsFlyFrm() )
-        ((SwFlyFrm*)this)->_Invalidate();
-    else
-        InvalidatePage();
+    if ( _InvalidationAllowed( INVALID_PRTAREA ) )
+    {
+        bValidPrtArea = FALSE;
+        if ( IsFlyFrm() )
+            ((SwFlyFrm*)this)->_Invalidate();
+        else
+            InvalidatePage();
+
+        // OD 2004-05-19 #i28701#
+        _ActionOnInvalidation( INVALID_PRTAREA );
+    }
 }
 
 void SwFrm::ImplInvalidatePos()
 {
-    bValidPos = FALSE;
-    if ( IsFlyFrm() )
-        ((SwFlyFrm*)this)->_Invalidate();
-    else
-        InvalidatePage();
+    if ( _InvalidationAllowed( INVALID_POS ) )
+    {
+        bValidPos = FALSE;
+        if ( IsFlyFrm() )
+        {
+            ((SwFlyFrm*)this)->_Invalidate();
+        }
+        else
+        {
+            InvalidatePage();
+        }
+
+        // OD 2004-05-19 #i28701#
+        _ActionOnInvalidation( INVALID_POS );
+    }
 }
 
 void SwFrm::ImplInvalidateLineNum()
 {
-    bValidLineNum = FALSE;
-    ASSERT( IsTxtFrm(), "line numbers are implemented for text only" );
-    InvalidatePage();
+    if ( _InvalidationAllowed( INVALID_LINENUM ) )
+    {
+        bValidLineNum = FALSE;
+        ASSERT( IsTxtFrm(), "line numbers are implemented for text only" );
+        InvalidatePage();
+
+        // OD 2004-05-19 #i28701#
+        _ActionOnInvalidation( INVALID_LINENUM );
+    }
 }
 
 /*************************************************************************
@@ -1877,7 +1953,19 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             if( IsVertical() && !IsReverse() )
                 Frm().Pos().X() -= nDist;
             if ( GetNext() )
+            {
                 GetNext()->InvalidatePos();
+            }
+            // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+            // frame on the next page/column can flow backward (e.g. it was moved forward
+            // due to the positioning of its objects ). Thus, invalivate this next frame,
+            // if document compatibility option 'Consider wrapping style influence on
+            // object positioning' is ON.
+            else if ( GetUpper()->GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+            {
+                InvalidateNextPos();
+            }
+            // <--
         }
         return 0;
     }
@@ -1929,8 +2017,23 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     else
         nReal = nDist;
 
-    if ( !bTst && GetNext() )
-        GetNext()->InvalidatePos();
+    // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+    // frame on the next page/column can flow backward (e.g. it was moved forward
+    // due to the positioning of its objects ). Thus, invalivate this next frame,
+    // if document compatibility option 'Consider wrapping style influence on
+    // object positioning' is ON.
+    if ( !bTst )
+    {
+        if ( GetNext() )
+        {
+            GetNext()->InvalidatePos();
+        }
+        else if ( GetUpper()->GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+        {
+            InvalidateNextPos();
+        }
+    }
+    // <--
 
     return nReal;
 }
@@ -1998,26 +2101,23 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             bool bInvalidate = true;
             const SwRect aRect( Frm() );
             const SwPageFrm* pPage = FindPageFrm();
-            const SwSortDrawObjs* pSorted;
+            const SwSortedObjs* pSorted;
             if( pPage && ( pSorted = pPage->GetSortedObjs() ) )
             {
                 for ( USHORT i = 0; i < pSorted->Count(); ++i )
                 {
-                    const SdrObject *pObj = (*pSorted)[i];
-                    const SwRect aBound( GetBoundRect( pObj ) );
+                    const SwAnchoredObject* pAnchoredObj = (*pSorted)[i];
+                    const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
 
                     if( aBound.Left() > aRect.Right() )
                         continue;
 
                     if( aBound.IsOver( aRect ) )
                     {
-                        const SwFmt* pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
-                        if( SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() )
+                        const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+                        if( SURROUND_THROUGHT != rFmt.GetSurround().GetSurround() )
                         {
-                            const SwFrm* pAnchor = pObj->ISA(SwVirtFlyDrawObj) ?
-                                                   ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchorFrm() :
-                                                   ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchorFrm();
-
+                            const SwFrm* pAnchor = pAnchoredObj->GetAnchorFrm();
                             if ( pAnchor && pAnchor->FindFooterOrHeader() == GetUpper() )
                             {
                                 bInvalidate = false;
@@ -2179,14 +2279,14 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
                             }
                         }
                         pNxt->SetCompletePaint();
-
                     }
                 }
                 // OD 2004-03-17 #i11860#
                 if ( GetIndNext() &&
                      !GetAttrSet()->GetDoc()->IsFormerObjectPositioning() )
                 {
-                    GetIndNext()->InvalidateObjPos();
+                    // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
+                    GetIndNext()->InvalidateObjs( true );
                 }
                 Prepare( PREP_UL_SPACE );   //TxtFrm muss Zeilenabst. korrigieren.
                 rInvFlags |= 0x80;
@@ -2295,6 +2395,9 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
         BFIXHEIGHT = TRUE;
 }
 
+// --> OD 2004-06-29 #i28701#
+TYPEINIT1(SwLayoutFrm,SwFrm);
+// <--
 /*-----------------10.06.99 09:42-------------------
  * SwLayoutFrm::InnerHeight()
  * --------------------------------------------------*/
@@ -2458,7 +2561,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 InvalidatePage( pPage );
             }
             if ( !(GetType() & 0x1823) ) //Tab, Row, FtnCont, Root, Page
-                NotifyFlys();
+                NotifyLowerObjs();
 
             if( IsCellFrm() )
                 InvaPercentLowers( nReal );
@@ -2619,7 +2722,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         }
 
         if ( !(GetType() & 0x1823) ) //Tab, Row, FtnCont, Root, Page
-            NotifyFlys();
+            NotifyLowerObjs();
 
         if( IsCellFrm() )
             InvaPercentLowers( nReal );
@@ -3160,10 +3263,10 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
     ASSERT( pFrm->GetDrawObjs(), "Can't find any Objects" );
     for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
     {
-        SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+        if ( pAnchoredObj->ISA(SwFlyFrm) )
         {
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
             const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
             if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
             {
@@ -3291,20 +3394,21 @@ BOOL lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
 {
     SwFrm *pFrm = pLay->ContainsCntnt();
     while ( pFrm )
-    {   if ( pFrm->IsInTab() )
+    {
+        if ( pFrm->IsInTab() )
             pFrm = pFrm->FindTabFrm();
 
         if ( pFrm->GetDrawObjs() )
         {
-            USHORT nCnt = pFrm->GetDrawObjs()->Count();
+            sal_uInt32 nCnt = pFrm->GetDrawObjs()->Count();
             for ( USHORT i = 0; i < nCnt; ++i )
             {
-                SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                    if( pFly->IsHeightClipped() && (!pFly->IsFlyFreeFrm() ||
-                        ((SwFlyFreeFrm*)pFly)->GetPage() ) )
+                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
+                    if ( pFly->IsHeightClipped() &&
+                         ( !pFly->IsFlyFreeFrm() || pFly->GetPageFrm() ) )
                         return TRUE;
                 }
             }
@@ -3445,11 +3549,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 pCol = (SwLayoutFrm*)pCol->GetNext();
             }
 
-            // OD 14.03.2003 #i11760# - adjust method call <CalcCntnt(..)>:
-            // Set 3rd parameter to true in order to forbid format of follow
-            // during format of text frames. (2nd parameter = default value.)
-            // OD 11.04.2003 #108824# - undo change of fix for #i11760# - allow
-            // follow formatting for text frames.
             ::CalcCntnt( this );
 
             pCol = (SwLayoutFrm*)Lower();
@@ -3589,7 +3688,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     (Frm().*fnRect->fnAddBottom)( nDiff );
                     (this->*fnRect->fnSetYMargins)( nTop, nBorder - nTop );
                     ChgLowersProp( aOldSz );
-                    NotifyFlys();
+                    NotifyLowerObjs();
 
                     //Es muss geeignet invalidiert werden, damit
                     //sich die Frms huebsch ausbalancieren
@@ -3748,13 +3847,13 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
 
 void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, BYTE nInv )
 {
-    SwDrawObjs &rObjs = *pCnt->GetDrawObjs();
+    SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
     for ( USHORT i = 0; i < rObjs.Count(); ++i )
     {
-        SdrObject *pO = rObjs[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        SwAnchoredObject* pAnchoredObj = rObjs[i];
+        if ( pAnchoredObj->ISA(SwFlyFrm) )
         {
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
             if ( pFly->IsFlyInCntFrm() )
             {
                 ::lcl_InvalidateCntnt( pFly->ContainsCntnt(), nInv );
@@ -3780,16 +3879,16 @@ void SwRootFrm::InvalidateAllCntnt( BYTE nInv )
 
         if ( pPage->GetSortedObjs() )
         {
-            const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+            const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
-                SdrObject *pO = rObjs[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    ::lcl_InvalidateCntnt( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->ContainsCntnt(),
-                                         nInv );
-                    if( nInv & INV_DIRECTION )
-                        ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->CheckDirChange();
+                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
+                    ::lcl_InvalidateCntnt( pFly->ContainsCntnt(), nInv );
+                    if ( nInv & INV_DIRECTION )
+                        pFly->CheckDirChange();
                 }
             }
         }
@@ -3826,38 +3925,24 @@ void SwRootFrm::InvalidateAllObjPos()
 
         if ( pPageFrm->GetSortedObjs() )
         {
-            const SwSortDrawObjs& rObjs = *(pPageFrm->GetSortedObjs());
+            const SwSortedObjs& rObjs = *(pPageFrm->GetSortedObjs());
             for ( sal_uInt8 i = 0; i < rObjs.Count(); ++i )
             {
-                SdrObject* pObj = rObjs[i];
-                SwFrmFmt* pObjFmt = ::FindFrmFmt( pObj );
-                ASSERT( pObjFmt,
-                        "<SwRootFrm::InvalidateAllObjPos()> - no format found for connected object" );
-                const SwFmtAnchor& rAnch = pObjFmt->GetAnchor();
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
+                const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
                 if ( rAnch.GetAnchorId() != FLY_AT_CNTNT &&
                      rAnch.GetAnchorId() != FLY_AUTO_CNTNT )
                 {
                     // only to paragraph and to character anchored objects are considered.
                     continue;
                 }
-
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
-                {
-                    // Writer fly frame
-                    // frame position will be invalidated
-                    SwFlyFrm* pFlyFrm =
-                            static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
-                    pFlyFrm->InvalidatePos();
-                }
+                // --> OD 2004-07-07 #i28701# - special invalidation for anchored
+                // objects, whose wrapping style influence has to be considered.
+                if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
+                    pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
                 else
-                {
-                    // OD 2004-04-14 #i26791# - invalidate object position
-                    SwDrawContact* pDrawContact =
-                                static_cast<SwDrawContact*>(GetUserCall(pObj));
-                    ASSERT( pDrawContact,
-                        "<SwRootFrm::InvalidateAllObjPos()> - no contact found for connected object" );
-                    pDrawContact->GetAnchoredObj( pObj )->InvalidateObjPos();
-                }
+                    pAnchoredObj->InvalidateObjPos();
+                // <--
             }
         }
 
