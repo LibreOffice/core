@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 15:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@
 #include "iodlg.hxx"
 #include "inimgr.hxx"
 #include "viewfrm.hxx"
+#include "workwin.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -918,19 +919,25 @@ SfxStatusBarConfigPage::SfxStatusBarConfigPage( Window *pParent, const SfxItemSe
     aLoadButton         ( this, ResId( BTN_LOAD ) ),
     aSaveButton         ( this, ResId( BTN_SAVE ) ),
     aResetButton        ( this, ResId( BTN_RESET   ) ),
-    pMgr( SFX_APP()->GetStatusBarManager() )
+    pMgr( 0 ),
+    bMgrCreated( FALSE )
 {
     FreeResource();
 
-    if ( !pMgr )
-        pMgr = new SfxStatusBarManager( NULL, SfxViewFrame::Current()->GetBindings(), SFX_APP() );
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    while ( pCurrent->GetParentViewFrame_Impl() )
+        pCurrent = pCurrent->GetParentViewFrame_Impl();
 
-    aLoadButton  .SetClickHdl ( LINK( this, SfxStatusBarConfigPage,
-      Load      ) );
-    aSaveButton  .SetClickHdl ( LINK( this, SfxStatusBarConfigPage,
-      Save      ) );
-    aResetButton .SetClickHdl ( LINK( this, SfxStatusBarConfigPage,
-      Default      ) );
+    pMgr = pCurrent->GetFrame()->GetWorkWindow_Impl()->GetStatusBarManager_Impl();
+    if ( !pMgr )
+    {
+        bMgrCreated = TRUE;
+        pMgr = new SfxStatusBarManager( this, pCurrent->GetBindings(), SFX_APP() );
+    }
+
+    aLoadButton  .SetClickHdl ( LINK( this, SfxStatusBarConfigPage, Load      ) );
+    aSaveButton  .SetClickHdl ( LINK( this, SfxStatusBarConfigPage, Save      ) );
+    aResetButton .SetClickHdl ( LINK( this, SfxStatusBarConfigPage, Default      ) );
 
     // aEntriesBox initialisieren
     aEntriesBox.bDefault = pMgr->IsDefault();
@@ -1015,6 +1022,12 @@ void SfxStatusBarConfigPage::ResetConfig()
 
 SfxStatusBarConfigPage::~SfxStatusBarConfigPage()
 {
+    if ( bMgrCreated )
+    {
+        StatusBar *pBar = pMgr->GetStatusBar();
+        delete pMgr;
+    }
+
     ResetConfig();
 }
 

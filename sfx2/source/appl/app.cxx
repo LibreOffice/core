@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:41:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 15:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1766,7 +1766,14 @@ SfxFrame* SfxApplication::GetTargetFrame( const SfxItemSet* pSet, sal_Bool& rbOw
 
 SfxStatusBarManager* SfxApplication::GetStatusBarManager() const
 {
-    return GetWorkWindow_Impl(SfxViewFrame::Current())->GetStatusBarManager_Impl();
+    if ( !pViewFrame )
+        return NULL;
+
+    SfxViewFrame *pTop = pViewFrame;
+    while ( pTop->GetParentViewFrame_Impl() )
+        pTop = pTop->GetParentViewFrame_Impl();
+
+    return pTop->GetFrame()->GetWorkWindow_Impl()->GetStatusBarManager_Impl();
 }
 
 SfxViewFrame* SfxApplication::GetViewFrame()

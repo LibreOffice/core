@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 15:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ private:
     SvUShorts                   aListOfIds;
     SfxStatusBarManager*        pMgr;
     SfxStbInfoArr_Impl*         pArr;
+    BOOL                        bMgrCreated;
 
     DECL_LINK(                  SelectHdl, SvTreeListBox * );
     DECL_LINK(                  Save, Button * );
