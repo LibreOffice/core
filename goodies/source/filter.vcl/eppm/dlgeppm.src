@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:10:41 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ korean ] = "ÆÄÀÏ ¼­½Ä";
         Text[ turkish ] = "Dosya formatý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Formato de archivo";
     };
     RadioButton RB_RAW
     {
@@ -145,6 +146,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ greek ] = "Äõáäéêü";
         Text[ korean ] = "ÀÌÁø(~B)";
         Text[ turkish ] = "Ýkili";
+        Text[ catalan ] = "~Binario";
     };
     RadioButton RB_ASCII
     {
@@ -174,6 +176,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ korean ] = "ÅØ½ºÆ®(~T)";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Texto";
     };
     Text[ italian ] = "Opzioni PPM";
     Text[ portuguese_brazilian ] = "PPM Optionen";
@@ -195,4 +198,5 @@ ModalDialog DLG_EXPORT_EPPM
     Text[ korean ] = "PPM ¿É¼Ç";
     Text[ turkish ] = "PPM seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones PPM ";
 };
