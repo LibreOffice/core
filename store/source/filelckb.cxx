@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mhu $ $Date: 2001-08-09 16:14:51 $
+ *  last change: $Author: mhu $ $Date: 2002-08-17 16:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.8 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.9 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -68,6 +68,9 @@
 #include <sal/macros.h>
 #endif
 
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -96,6 +99,16 @@
 #include <store/types.h>
 #endif
 
+#ifndef INCLUDED_CSTDDEF
+#include <cstddef>
+#define INCLUDED_CSTDDEF
+#endif
+
+#ifndef INCLUDED_CSTRING
+#include <cstring>
+#define INCLUDED_CSTRING
+#endif
+
 using namespace store;
 
 /*========================================================================
@@ -103,6 +116,13 @@ using namespace store;
  * OFileLockBytes internals.
  *
  *======================================================================*/
+/* MSVC 6.0 still has std functions in global namespace */
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#define __STORE_CSTD
+#else
+#define __STORE_CSTD std
+#endif /* _MSC_VER */
+
 #ifdef DEBUG
 #define inline static
 #endif /* DEBUG */
@@ -110,10 +130,9 @@ using namespace store;
 /*
  * __store_memcpy.
  */
-#include <string.h>
-inline void __store_memcpy (void *dst, const void *src, sal_uInt32 n)
+inline void __store_memcpy (void * dst, const void * src, sal_uInt32 n)
 {
-    ::memcpy (dst, src, n);
+    __STORE_CSTD::memcpy (dst, src, n);
 }
 
 /*
@@ -205,8 +224,8 @@ struct OMappingDescriptor_Impl
 
     /** Comparison.
      */
-    inline sal_Bool operator== (const self& rDescr) const;
-    inline sal_Bool operator<= (const self& rDescr) const;
+    inline bool operator== (const self& rDescr) const;
+    inline bool operator<= (const self& rDescr) const;
 
     /** normalize.
      */
@@ -254,7 +273,7 @@ OMappingDescriptor_Impl::operator= (const self& rDescr)
 /*
  * operator==().
  */
-inline sal_Bool
+inline bool
 OMappingDescriptor_Impl::operator== (const self& rDescr) const
 {
     return ((m_nOffset == rDescr.m_nOffset) &&
@@ -264,7 +283,7 @@ OMappingDescriptor_Impl::operator== (const self& rDescr) const
 /*
  * operator<=().
  */
-inline sal_Bool
+inline bool
 OMappingDescriptor_Impl::operator<= (const self& rDescr) const
 {
     return ((m_nOffset == rDescr.m_nOffset) &&
@@ -334,8 +353,8 @@ class OFileLockBytes_Impl
 #ifdef DEBUG
     sal_Char  *m_pszFilename;
 #endif /* DEBUG */
-    sal_Bool   m_bMemmap    : 1;
-    sal_Bool   m_bWriteable : 1;
+    bool       m_bMemmap    : 1;
+    bool       m_bWriteable : 1;
 
     HSTORE     m_hMap;              // OMappingDescriptor (?)
     sal_uInt32 m_nAlignment;        // mapping alignment
@@ -345,10 +364,19 @@ class OFileLockBytes_Impl
     OMappingDescriptor_Impl m_aDescrAny;
 
 public:
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
+    }
+
     OFileLockBytes_Impl (void);
     ~OFileLockBytes_Impl (void);
 
-    sal_Bool isValid (void) const { return (!!m_hFile); }
+    bool isValid (void) const { return (m_hFile != 0); }
 
     storeError close (void);
     storeError create (
