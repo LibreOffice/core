@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-04 08:49:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,19 @@ public:
 
 class SfxRecordingFloat_Impl : public SfxFloatingWindow
 {
-    SfxChildWindow*     pWrapper;
-    SfxToolBoxManager   aTbx;
+    SfxChildWindow*         pWrapper;
+    ToolBox                 aTbx;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xStopRecTbxCtrl;
 public:
                         SfxRecordingFloat_Impl( SfxBindings* pBindings ,
                             SfxChildWindow* pChildWin ,
                             Window* pParent );
+    virtual             ~SfxRecordingFloat_Impl();
     virtual BOOL        Close();
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual void        StateChanged( StateChangedType nStateChange );
+
+    DECL_LINK( Select, ToolBox * );
 };
 
 #endif
