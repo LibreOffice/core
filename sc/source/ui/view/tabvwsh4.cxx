@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:07:38 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1766,6 +1766,10 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
     // #105575#; update only in the first creation of the ViewShell
     pDocSh->SetUpdateEnabled(FALSE);
+
+    SvBorder aBorder;
+    GetBorderSize( aBorder, Size() );
+    SetBorderPixel( aBorder );
 }
 
 //------------------------------------------------------------------
