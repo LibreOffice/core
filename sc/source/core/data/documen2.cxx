@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:40:46 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 09:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
         pLoadedSymbolStringCellList( NULL ),
-        bPastingDrawFromOtherDoc( FALSE )
+        bPastingDrawFromOtherDoc( FALSE ),
+        pCacheFieldEditEngine( NULL )
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
@@ -571,6 +572,8 @@ ScDocument::~ScDocument()
     DeleteColorTable();
     delete pScriptTypeData;
     delete pOtherObjects;
+
+    delete pCacheFieldEditEngine;
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
@@ -1865,7 +1868,33 @@ void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
     *pChangeViewSettings=rNew;
 }
 
+//  ----------------------------------------------------------------------------
 
+ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
+{
+    ScFieldEditEngine* pEditEngine = NULL;
+    if (!pCacheFieldEditEngine)
+    {
+        pEditEngine = new ScFieldEditEngine( GetEnginePool(),
+            GetEditPool(), FALSE );
+    }
+    else
+    {
+        pEditEngine = pCacheFieldEditEngine;
+        pCacheFieldEditEngine = NULL;
+    }
+    return pEditEngine;
+}
 
-
+void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
+{
+    if (!pCacheFieldEditEngine && rpEditEngine)
+    {
+        pCacheFieldEditEngine = rpEditEngine;
+        pCacheFieldEditEngine->Clear();
+    }
+    else
+        delete rpEditEngine;
+    rpEditEngine = NULL;
+}
 

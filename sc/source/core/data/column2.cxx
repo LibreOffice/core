@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 15:41:31 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 09:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,8 +811,8 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
 
             // am Dokument speichern ?
-            ScEditEngineDefaulter* pEngine = new ScFieldEditEngine(
-                pDocument->GetEnginePool(), pDocument->GetEditPool() );
+            ScFieldEditEngine* pEngine = pDocument->CreateFieldEditEngine();
+
             pEngine->SetUpdateMode( FALSE );
             MapMode aOld = pDev->GetMapMode();
             pDev->SetMapMode( aHMMMode );
@@ -822,7 +822,9 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             pEngine->SetKernAsianPunctuation( pDocument->GetAsianKerning() );
             SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
             pPattern->FillEditItemSet( pSet, pCondSet );
-            pEngine->SetDefaults( pSet );
+
+//          no longer needed, are setted with the text (is faster)
+//          pEngine->SetDefaults( pSet );
 
             if ( ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() ) {
 
@@ -860,7 +862,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             {
                 const EditTextObject* pData;
                 ((ScEditCell*)pCell)->GetData(pData);
-                pEngine->SetText(*pData);
+                pEngine->SetTextNewDefaults(*pData, *pSet);
             }
             else
             {
@@ -871,7 +873,10 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                 ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
                                             *pFormatter,
                                             TRUE, rOptions.bFormula, ftCheck );
-                pEngine->SetText(aString);
+                if (aString.Len())
+                    pEngine->SetTextNewDefaults(aString, *pSet);
+                else
+                    pEngine->SetDefaults(pSet);
             }
 
             pEngine->SetUpdateMode( TRUE );
@@ -947,7 +952,8 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                               (long) ( pMargin->GetBottomMargin() * nPPT );
             }
 
-            delete pEngine;
+            pDocument->DisposeFieldEditEngine(pEngine);
+
             pDev->SetMapMode( aOld );
             pDev->SetFont( aOldFont );
         }

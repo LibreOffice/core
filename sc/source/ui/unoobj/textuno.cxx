@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:44:34 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 09:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,10 +956,14 @@ ScCellTextData::~ScCellTextData()
     ScUnoGuard aGuard;      //  needed for EditEngine dtor
 
     if (pDocShell)
+    {
         pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument()->DisposeFieldEditEngine(pEditEngine);
+    }
+    else
+        delete pEditEngine;
 
     delete pForwarder;
-    delete pEditEngine;
 
     delete pOriginalSource;
 }
@@ -977,9 +981,8 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
     {
         if ( pDocShell )
         {
-            const ScDocument* pDoc = pDocShell->GetDocument();
-            pEditEngine = new ScFieldEditEngine( pDoc->GetEnginePool(),
-                pDoc->GetEditPool(), FALSE );
+            ScDocument* pDoc = pDocShell->GetDocument();
+            pEditEngine = pDoc->CreateFieldEditEngine();
         }
         else
         {
@@ -1021,7 +1024,10 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         else
         {
             pDoc->GetInputString( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aText );
-            pEditEngine->SetTextNewDefaults( aText, aDefaults );
+            if (aText.Len())
+                pEditEngine->SetTextNewDefaults( aText, aDefaults );
+            else
+                pEditEngine->SetDefaults(aDefaults);
         }
     }
 
