@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,10 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
 __EXPORT ScPreviewShell::~ScPreviewShell()
 {
+    // #108333#; notify Accessibility that Shell is dying and before destroy all
+    BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );
+    DELETEZ(pAccessibilityBroadcaster);
+
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
     if (pDrawBC)
         EndListening(*pDrawBC);
@@ -232,8 +236,6 @@ __EXPORT ScPreviewShell::~ScPreviewShell()
     delete pHorScroll;
     delete pVerScroll;
     delete pCorner;
-
-    DELETEZ(pAccessibilityBroadcaster);
 
     //  #97612# normal mode of operation is switching back to default view in the same frame,
     //  so there's no need to activate any other window here anymore
