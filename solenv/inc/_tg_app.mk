@@ -1,9 +1,20 @@
 # unroll begin
 
 .IF "$(APP1LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP1LINKTYPEFLAG=$(APPLINK$(APP1LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP1CODETYPE)"=="C"
+APP1LINKER=$(LINKC)
+APP1STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP1LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP1CODETYPE)"=="C"
+APP1LINKER=$(LINK)
+APP1STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP1LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP1CODETYPE)"=="C"
 
 .IF "$(APP1STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -12,6 +23,7 @@ APP1STACKN=$(LINKFLAGSTACK)$(APP1STACK)
 .ELSE
 APP1STACKN=
 .ENDIF
+
 .IF "$(APP1NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP1OBJS+= $(STDOBJVCL)
@@ -52,9 +64,9 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(STDLIB) $(STDLIB1)` \
-    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1)` \
+    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -69,10 +81,10 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -102,8 +114,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP1LINKER) @$(mktmp \
+        $(APP1LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP1BASEX) \
         $(APP1STACKN) \
         -out:$@ \
@@ -114,7 +126,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1OBJS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
-        $(STDLIB) $(STDLIB1) \
+        $(APP1STDLIB) $(STDLIB1) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP1TARGET).lnk
@@ -122,7 +134,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP1TARGET).lst
-        $(LINKFLAGS) \
+        $(APP1LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP1BASEX) \
         $(APP1STACKN) \
         -out:$@ \
@@ -132,10 +144,10 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1OBJS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
-        $(STDLIB) $(STDLIB1))
+        $(APP1STDLIB) $(STDLIB1))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
         +if exist $(MISC)\$(APP1TARGET).lst type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
-        $(LINK) @$(MISC)\$(APP1TARGET).lnk
+        $(APP1LINKER) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP1TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -157,9 +169,20 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 # unroll begin
 
 .IF "$(APP2LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP2LINKTYPEFLAG=$(APPLINK$(APP2LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP2CODETYPE)"=="C"
+APP2LINKER=$(LINKC)
+APP2STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP2LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP2CODETYPE)"=="C"
+APP2LINKER=$(LINK)
+APP2STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP2LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP2CODETYPE)"=="C"
 
 .IF "$(APP2STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -168,6 +191,7 @@ APP2STACKN=$(LINKFLAGSTACK)$(APP2STACK)
 .ELSE
 APP2STACKN=
 .ENDIF
+
 .IF "$(APP2NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP2OBJS+= $(STDOBJVCL)
@@ -208,9 +232,9 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(STDLIB) $(STDLIB2)` \
-    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2)` \
+    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -225,10 +249,10 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -258,8 +282,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP2LINKER) @$(mktmp \
+        $(APP2LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP2BASEX) \
         $(APP2STACKN) \
         -out:$@ \
@@ -270,7 +294,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2OBJS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
-        $(STDLIB) $(STDLIB2) \
+        $(APP2STDLIB) $(STDLIB2) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP2TARGET).lnk
@@ -278,7 +302,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP2TARGET).lst
-        $(LINKFLAGS) \
+        $(APP2LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP2BASEX) \
         $(APP2STACKN) \
         -out:$@ \
@@ -288,10 +312,10 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2OBJS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
-        $(STDLIB) $(STDLIB2))
+        $(APP2STDLIB) $(STDLIB2))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
         +if exist $(MISC)\$(APP2TARGET).lst type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
-        $(LINK) @$(MISC)\$(APP2TARGET).lnk
+        $(APP2LINKER) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP2TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -313,9 +337,20 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 # unroll begin
 
 .IF "$(APP3LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP3LINKTYPEFLAG=$(APPLINK$(APP3LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP3CODETYPE)"=="C"
+APP3LINKER=$(LINKC)
+APP3STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP3LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP3CODETYPE)"=="C"
+APP3LINKER=$(LINK)
+APP3STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP3LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP3CODETYPE)"=="C"
 
 .IF "$(APP3STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -324,6 +359,7 @@ APP3STACKN=$(LINKFLAGSTACK)$(APP3STACK)
 .ELSE
 APP3STACKN=
 .ENDIF
+
 .IF "$(APP3NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP3OBJS+= $(STDOBJVCL)
@@ -364,9 +400,9 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(STDLIB) $(STDLIB3)` \
-    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3)` \
+    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -381,10 +417,10 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -414,8 +450,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP3LINKER) @$(mktmp \
+        $(APP3LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP3BASEX) \
         $(APP3STACKN) \
         -out:$@ \
@@ -426,7 +462,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3OBJS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
-        $(STDLIB) $(STDLIB3) \
+        $(APP3STDLIB) $(STDLIB3) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP3TARGET).lnk
@@ -434,7 +470,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP3TARGET).lst
-        $(LINKFLAGS) \
+        $(APP3LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP3BASEX) \
         $(APP3STACKN) \
         -out:$@ \
@@ -444,10 +480,10 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3OBJS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
-        $(STDLIB) $(STDLIB3))
+        $(APP3STDLIB) $(STDLIB3))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
         +if exist $(MISC)\$(APP3TARGET).lst type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
-        $(LINK) @$(MISC)\$(APP3TARGET).lnk
+        $(APP3LINKER) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP3TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -469,9 +505,20 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 # unroll begin
 
 .IF "$(APP4LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP4LINKTYPEFLAG=$(APPLINK$(APP4LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP4CODETYPE)"=="C"
+APP4LINKER=$(LINKC)
+APP4STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP4LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP4CODETYPE)"=="C"
+APP4LINKER=$(LINK)
+APP4STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP4LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP4CODETYPE)"=="C"
 
 .IF "$(APP4STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -480,6 +527,7 @@ APP4STACKN=$(LINKFLAGSTACK)$(APP4STACK)
 .ELSE
 APP4STACKN=
 .ENDIF
+
 .IF "$(APP4NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP4OBJS+= $(STDOBJVCL)
@@ -520,9 +568,9 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(STDLIB) $(STDLIB4)` \
-    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4)` \
+    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -537,10 +585,10 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -570,8 +618,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP4LINKER) @$(mktmp \
+        $(APP4LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP4BASEX) \
         $(APP4STACKN) \
         -out:$@ \
@@ -582,7 +630,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4OBJS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
-        $(STDLIB) $(STDLIB4) \
+        $(APP4STDLIB) $(STDLIB4) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP4TARGET).lnk
@@ -590,7 +638,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP4TARGET).lst
-        $(LINKFLAGS) \
+        $(APP4LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP4BASEX) \
         $(APP4STACKN) \
         -out:$@ \
@@ -600,10 +648,10 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4OBJS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
-        $(STDLIB) $(STDLIB4))
+        $(APP4STDLIB) $(STDLIB4))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
         +if exist $(MISC)\$(APP4TARGET).lst type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
-        $(LINK) @$(MISC)\$(APP4TARGET).lnk
+        $(APP4LINKER) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP4TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -625,9 +673,20 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 # unroll begin
 
 .IF "$(APP5LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP5LINKTYPEFLAG=$(APPLINK$(APP5LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP5CODETYPE)"=="C"
+APP5LINKER=$(LINKC)
+APP5STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP5LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP5CODETYPE)"=="C"
+APP5LINKER=$(LINK)
+APP5STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP5LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP5CODETYPE)"=="C"
 
 .IF "$(APP5STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -636,6 +695,7 @@ APP5STACKN=$(LINKFLAGSTACK)$(APP5STACK)
 .ELSE
 APP5STACKN=
 .ENDIF
+
 .IF "$(APP5NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP5OBJS+= $(STDOBJVCL)
@@ -676,9 +736,9 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(STDLIB) $(STDLIB5)` \
-    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5)` \
+    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -693,10 +753,10 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -726,8 +786,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP5LINKER) @$(mktmp \
+        $(APP5LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP5BASEX) \
         $(APP5STACKN) \
         -out:$@ \
@@ -738,7 +798,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5OBJS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
-        $(STDLIB) $(STDLIB5) \
+        $(APP5STDLIB) $(STDLIB5) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP5TARGET).lnk
@@ -746,7 +806,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP5TARGET).lst
-        $(LINKFLAGS) \
+        $(APP5LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP5BASEX) \
         $(APP5STACKN) \
         -out:$@ \
@@ -756,10 +816,10 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5OBJS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
-        $(STDLIB) $(STDLIB5))
+        $(APP5STDLIB) $(STDLIB5))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
         +if exist $(MISC)\$(APP5TARGET).lst type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
-        $(LINK) @$(MISC)\$(APP5TARGET).lnk
+        $(APP5LINKER) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP5TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -781,9 +841,20 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 # unroll begin
 
 .IF "$(APP6LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP6LINKTYPEFLAG=$(APPLINK$(APP6LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP6CODETYPE)"=="C"
+APP6LINKER=$(LINKC)
+APP6STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP6LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP6CODETYPE)"=="C"
+APP6LINKER=$(LINK)
+APP6STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP6LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP6CODETYPE)"=="C"
 
 .IF "$(APP6STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -792,6 +863,7 @@ APP6STACKN=$(LINKFLAGSTACK)$(APP6STACK)
 .ELSE
 APP6STACKN=
 .ENDIF
+
 .IF "$(APP6NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP6OBJS+= $(STDOBJVCL)
@@ -832,9 +904,9 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(STDLIB) $(STDLIB6)` \
-    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6)` \
+    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -849,10 +921,10 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -882,8 +954,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP6LINKER) @$(mktmp \
+        $(APP6LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP6BASEX) \
         $(APP6STACKN) \
         -out:$@ \
@@ -894,7 +966,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6OBJS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
-        $(STDLIB) $(STDLIB6) \
+        $(APP6STDLIB) $(STDLIB6) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP6TARGET).lnk
@@ -902,7 +974,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP6TARGET).lst
-        $(LINKFLAGS) \
+        $(APP6LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP6BASEX) \
         $(APP6STACKN) \
         -out:$@ \
@@ -912,10 +984,10 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6OBJS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
-        $(STDLIB) $(STDLIB6))
+        $(APP6STDLIB) $(STDLIB6))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
         +if exist $(MISC)\$(APP6TARGET).lst type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
-        $(LINK) @$(MISC)\$(APP6TARGET).lnk
+        $(APP6LINKER) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP6TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -937,9 +1009,20 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 # unroll begin
 
 .IF "$(APP7LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP7LINKTYPEFLAG=$(APPLINK$(APP7LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP7CODETYPE)"=="C"
+APP7LINKER=$(LINKC)
+APP7STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP7LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP7CODETYPE)"=="C"
+APP7LINKER=$(LINK)
+APP7STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP7LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP7CODETYPE)"=="C"
 
 .IF "$(APP7STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -948,6 +1031,7 @@ APP7STACKN=$(LINKFLAGSTACK)$(APP7STACK)
 .ELSE
 APP7STACKN=
 .ENDIF
+
 .IF "$(APP7NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP7OBJS+= $(STDOBJVCL)
@@ -988,9 +1072,9 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(STDLIB) $(STDLIB7)` \
-    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7)` \
+    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1005,10 +1089,10 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1038,8 +1122,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP7LINKER) @$(mktmp \
+        $(APP7LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP7BASEX) \
         $(APP7STACKN) \
         -out:$@ \
@@ -1050,7 +1134,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7OBJS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
-        $(STDLIB) $(STDLIB7) \
+        $(APP7STDLIB) $(STDLIB7) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP7TARGET).lnk
@@ -1058,7 +1142,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP7TARGET).lst
-        $(LINKFLAGS) \
+        $(APP7LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP7BASEX) \
         $(APP7STACKN) \
         -out:$@ \
@@ -1068,10 +1152,10 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7OBJS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
-        $(STDLIB) $(STDLIB7))
+        $(APP7STDLIB) $(STDLIB7))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
         +if exist $(MISC)\$(APP7TARGET).lst type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
-        $(LINK) @$(MISC)\$(APP7TARGET).lnk
+        $(APP7LINKER) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP7TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -1093,9 +1177,20 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 # unroll begin
 
 .IF "$(APP8LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP8LINKTYPEFLAG=$(APPLINK$(APP8LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP8CODETYPE)"=="C"
+APP8LINKER=$(LINKC)
+APP8STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP8LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP8CODETYPE)"=="C"
+APP8LINKER=$(LINK)
+APP8STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP8LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP8CODETYPE)"=="C"
 
 .IF "$(APP8STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1104,6 +1199,7 @@ APP8STACKN=$(LINKFLAGSTACK)$(APP8STACK)
 .ELSE
 APP8STACKN=
 .ENDIF
+
 .IF "$(APP8NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP8OBJS+= $(STDOBJVCL)
@@ -1144,9 +1240,9 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(STDLIB) $(STDLIB8)` \
-    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8)` \
+    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1161,10 +1257,10 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1194,8 +1290,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP8LINKER) @$(mktmp \
+        $(APP8LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP8BASEX) \
         $(APP8STACKN) \
         -out:$@ \
@@ -1206,7 +1302,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8OBJS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
-        $(STDLIB) $(STDLIB8) \
+        $(APP8STDLIB) $(STDLIB8) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP8TARGET).lnk
@@ -1214,7 +1310,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP8TARGET).lst
-        $(LINKFLAGS) \
+        $(APP8LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP8BASEX) \
         $(APP8STACKN) \
         -out:$@ \
@@ -1224,10 +1320,10 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8OBJS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
-        $(STDLIB) $(STDLIB8))
+        $(APP8STDLIB) $(STDLIB8))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
         +if exist $(MISC)\$(APP8TARGET).lst type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
-        $(LINK) @$(MISC)\$(APP8TARGET).lnk
+        $(APP8LINKER) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP8TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -1249,9 +1345,20 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 # unroll begin
 
 .IF "$(APP9LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP9LINKTYPEFLAG=$(APPLINK$(APP9LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP9CODETYPE)"=="C"
+APP9LINKER=$(LINKC)
+APP9STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP9LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP9CODETYPE)"=="C"
+APP9LINKER=$(LINK)
+APP9STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP9LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP9CODETYPE)"=="C"
 
 .IF "$(APP9STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1260,6 +1367,7 @@ APP9STACKN=$(LINKFLAGSTACK)$(APP9STACK)
 .ELSE
 APP9STACKN=
 .ENDIF
+
 .IF "$(APP9NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP9OBJS+= $(STDOBJVCL)
@@ -1300,9 +1408,9 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(STDLIB) $(STDLIB9)` \
-    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9)` \
+    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1317,10 +1425,10 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1350,8 +1458,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP9LINKER) @$(mktmp \
+        $(APP9LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP9BASEX) \
         $(APP9STACKN) \
         -out:$@ \
@@ -1362,7 +1470,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9OBJS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
-        $(STDLIB) $(STDLIB9) \
+        $(APP9STDLIB) $(STDLIB9) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP9TARGET).lnk
@@ -1370,7 +1478,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP9TARGET).lst
-        $(LINKFLAGS) \
+        $(APP9LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP9BASEX) \
         $(APP9STACKN) \
         -out:$@ \
@@ -1380,10 +1488,10 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9OBJS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
-        $(STDLIB) $(STDLIB9))
+        $(APP9STDLIB) $(STDLIB9))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
         +if exist $(MISC)\$(APP9TARGET).lst type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
-        $(LINK) @$(MISC)\$(APP9TARGET).lnk
+        $(APP9LINKER) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP9TARGET)" == "loader"
     +$(PERL) loader.pl $@
@@ -1405,9 +1513,20 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 # unroll begin
 
 .IF "$(APP10LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP10LINKTYPEFLAG=$(APPLINK$(APP10LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP10CODETYPE)"=="C"
+APP10LINKER=$(LINKC)
+APP10STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP10LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP10CODETYPE)"=="C"
+APP10LINKER=$(LINK)
+APP10STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP10LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP10CODETYPE)"=="C"
 
 .IF "$(APP10STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -1416,6 +1535,7 @@ APP10STACKN=$(LINKFLAGSTACK)$(APP10STACK)
 .ELSE
 APP10STACKN=
 .ENDIF
+
 .IF "$(APP10NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP10OBJS+= $(STDOBJVCL)
@@ -1456,9 +1576,9 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(STDLIB) $(STDLIB10)` \
-    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10)` \
+    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -1473,10 +1593,10 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1506,8 +1626,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP10LINKER) @$(mktmp \
+        $(APP10LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP10BASEX) \
         $(APP10STACKN) \
         -out:$@ \
@@ -1518,7 +1638,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10OBJS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
-        $(STDLIB) $(STDLIB10) \
+        $(APP10STDLIB) $(STDLIB10) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP10TARGET).lnk
@@ -1526,7 +1646,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP10TARGET).lst
-        $(LINKFLAGS) \
+        $(APP10LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP10BASEX) \
         $(APP10STACKN) \
         -out:$@ \
@@ -1536,10 +1656,10 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10OBJS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
-        $(STDLIB) $(STDLIB10))
+        $(APP10STDLIB) $(STDLIB10))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
         +if exist $(MISC)\$(APP10TARGET).lst type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
-        $(LINK) @$(MISC)\$(APP10TARGET).lnk
+        $(APP10LINKER) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP10TARGET)" == "loader"
     +$(PERL) loader.pl $@
