@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:06:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,15 +1536,15 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 }
 
 
-BOOL lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara );
+static BOOL lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara );
 
-BOOL lcl_CheckRow( const _FndLine*& rpFndLine, void* pPara )
+static BOOL lcl_CheckRow( const _FndLine*& rpFndLine, void* pPara )
 {
     ((_FndLine*)rpFndLine)->GetBoxes().ForEach( &lcl_CheckCol, pPara );
     return *(BOOL*)pPara;
 }
 
-BOOL lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara )
+static BOOL lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara )
 {
     if( !rpFndBox->GetBox()->GetSttNd() )
     {
