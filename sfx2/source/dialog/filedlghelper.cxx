@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-23 07:46:51 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <vos/thread.hxx>
+#include <vos/mutex.hxx>
 
 #include <vcl/cvtgrf.hxx>
 
@@ -314,6 +316,7 @@ public:
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 #if SUPD > 639
     mpParent->FileSelectionChanged( aEvent );
 #else
@@ -324,6 +327,7 @@ void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 #if SUPD > 639
     mpParent->DirectoryChanged( aEvent );
 #else
@@ -334,6 +338,7 @@ void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aE
 // ------------------------------------------------------------------------
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 #if SUPD > 639
     return mpParent->HelpRequested( aEvent );
 #else
@@ -344,6 +349,7 @@ OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& a
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 #if SUPD > 639
     mpParent->ControlStateChanged( aEvent );
 #else
@@ -354,6 +360,7 @@ void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent&
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 #if SUPD > 639
     mpParent->DialogSizeChanged();
 #else
@@ -484,6 +491,7 @@ void FileDialogHelper_Impl::handleDialogSizeChanged()
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& Source ) throw ( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     dispose();
 }
 
@@ -698,23 +706,34 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
 
     ErrCode nRet = ERRCODE_NONE;
 
+#if SUPD>639
     sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
-
+#endif
     // non-local?
     if ( INET_PROT_FILE != aURLObj.GetProtocol() )
     {
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ );
 
+#if SUPD>639
         if( pStream )
             nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter, NULL, nFilterImportFlags );
         else
             nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
-
+#else
+        if( pStream )
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, rURL, *pStream, nFilter );
+        else
+            nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
+#endif
         delete pStream;
     }
     else
     {
+#if SUPD>639
         nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
+#else
+        nRet = mpGraphicFilter->ImportGraphic( rGraphic, aURLObj, nFilter );
+#endif
     }
 
     return nRet;
@@ -842,12 +861,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
         break;
+#if SUPD>639
     case FILESAVE_AUTOEXTENSION:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION;
         mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
-
+#endif
     default:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         DBG_ERRORFILE( "FileDialogHelper::ctor with unknown type" );
@@ -895,6 +915,29 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     maPreViewTimer.SetTimeoutHdl( Link() );
 }
 
+#define nMagic (sal_Int16) 0xFFFF
+
+class PickerThread_Impl : public ::vos::OThread
+{
+    Reference < XFilePicker > mxPicker;
+    ::vos::OMutex           maMutex;
+    virtual void SAL_CALL   run();
+    sal_Int16               mnRet;
+public:
+                            PickerThread_Impl( const Reference < XFilePicker >& rPicker )
+                            : mxPicker( rPicker ), mnRet(nMagic) {}
+
+    sal_Int16               GetReturnValue()
+                            { ::vos::OGuard aGuard( maMutex ); return mnRet; }
+};
+
+void SAL_CALL PickerThread_Impl::run()
+{
+    sal_Int16 n = mxPicker->execute();
+    ::vos::OGuard aGuard( maMutex );
+    mnRet = n;
+}
+
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
@@ -910,8 +953,15 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     setDefaultValues();
     enablePasswordBox();
 
-    // show the dialog
-    sal_Int16 nRet = mxFileDlg->execute();
+    PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
+    pThread->create();
+
+    while ( pThread->GetReturnValue() == nMagic )
+        Application::Yield();
+
+    pThread->join();
+    sal_Int16 nRet = pThread->GetReturnValue();
+    delete pThread;
 
     if ( nRet != ExecutableDialogResults::CANCEL )
     {
