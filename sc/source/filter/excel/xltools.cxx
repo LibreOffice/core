@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:48:45 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
+#endif
+#ifndef SC_XLLINK_HXX
+#include "xllink.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
@@ -294,17 +297,27 @@ sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 
 sal_uInt16 XclTools::GetTwipsFromHmm( sal_Int32 nHmm )
 {
-    return GetTwipsFromInch( nHmm / 1000.0 / CM_PER_INCH );
+    return GetTwipsFromInch( static_cast< double >( nHmm ) / 1000.0 / CM_PER_INCH );
 }
 
-double XclTools::GetInchFromTwips( sal_uInt16 nTwips )
+double XclTools::GetInchFromTwips( sal_Int32 nTwips )
 {
     return static_cast< double >( nTwips ) / EXC_TWIPS_PER_INCH;
 }
 
-sal_Int32 XclTools::GetHmmFromTwips( sal_uInt16 nTwips )
+double XclTools::GetInchFromHmm( sal_Int32 nHmm )
 {
-    return static_cast< sal_Int32 >( GetInchFromTwips( nTwips ) * CM_PER_INCH * 1000 );
+    return GetInchFromTwips( GetTwipsFromHmm( nHmm ) );
+}
+
+sal_Int32 XclTools::GetHmmFromInch( double fInches )
+{
+    return static_cast< sal_Int32 >( fInches * CM_PER_INCH * 1000 );
+}
+
+sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
+{
+    return GetHmmFromInch( GetInchFromTwips( nTwips ) );
 }
 
 sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
@@ -437,27 +450,26 @@ static const sal_Char* const ppcDefNames[] =
     "_FilterDatabase"
 };
 
-String XclTools::GetBuiltInName( sal_Unicode nIndex )
+String XclTools::GetXclBuiltInDefName( sal_Unicode nBuiltInIndex )
 {
-    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
-        "XclTools::GetBuiltInName - built-in defined name list modified" );
-
-    String aName( maDefNamePrefix );
-    if( nIndex < STATIC_TABLE_SIZE( ppcDefNames ) )
-        aName.AppendAscii( ppcDefNames[ nIndex ] );
+    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN, \
+        "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
+    String aDefName;
+    if( nBuiltInIndex < STATIC_TABLE_SIZE( ppcDefNames ) )
+        aDefName.AssignAscii( ppcDefNames[ nBuiltInIndex ] );
     else
-        aName.Append( String::CreateFromInt32( nIndex ) );
-    return aName;
+        aDefName = String::CreateFromInt32( nBuiltInIndex );
+    return aDefName;
 }
 
-String XclTools::GetBuiltInName( sal_Unicode nIndex, sal_uInt16 nSheet )
+String XclTools::GetBuiltInDefName( sal_Unicode nBuiltInIndex )
 {
-    return GetBuiltInName( nIndex ).Append( '_' ).Append( String::CreateFromInt32( nSheet ) );
+    return GetXclBuiltInDefName( nBuiltInIndex ).Insert( maDefNamePrefix, 0 );
 }
 
-bool XclTools::IsBuiltInName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex )
+bool XclTools::IsBuiltInDefName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex )
 {
-    String aTestName( GetBuiltInName( nIndex ).Append( '_' ) );
+    String aTestName( GetBuiltInDefName( nIndex ).Append( '_' ) );
     if( !rName.EqualsIgnoreCaseAscii( aTestName, 0, aTestName.Len() ) )
         return false;
     sal_Int32 nTab = rName.Copy( aTestName.Len() ).ToInt32();
@@ -467,6 +479,24 @@ bool XclTools::IsBuiltInName( sal_uInt16& rnSheet, const String& rName, sal_Unic
         return false;
     rnSheet = static_cast< sal_uInt16 >( nTab );
     return true;
+}
+
+bool XclTools::IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInIndex )
+{
+    xub_StrLen nPrefixLen = maDefNamePrefix.Len();
+    if( rDefName.EqualsIgnoreCaseAscii( maDefNamePrefix, 0, nPrefixLen ) )
+    {
+        for( sal_Unicode nIndex = 0; nIndex < EXC_BUILTIN_UNKNOWN; ++nIndex )
+        {
+            String aXclName( GetXclBuiltInDefName( nIndex ) );
+            if( rDefName.EqualsIgnoreCaseAscii( aXclName, nPrefixLen, aXclName.Len() ) )
+            {
+                if( pnBuiltInIndex ) *pnBuiltInIndex = nIndex;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 
@@ -658,19 +688,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
             rStrm.WriteZeroBytes( 8 );
     }
     return rStrm;
-}
-
-
-// Rich-string formatting runs ================================================
-
-XclImpStream& operator>>( XclImpStream& rStrm, XclFormatRun& rRun )
-{
-    return rStrm >> rRun.mnChar >> rRun.mnFontIx;
-}
-
-XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun )
-{
-    return rStrm << rRun.mnChar << rRun.mnFontIx;
 }
 
 
