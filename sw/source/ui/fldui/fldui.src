@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:50:30 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,7 +1365,7 @@ String FLD_STAT_GRF
     TEXT[ chinese_simplified ] = "Í¼ĞÎ";
     TEXT[ russian ] = "Ğèñóíêè";
     TEXT[ polish ] = "Grafiki";
-    TEXT[ japanese ] = "¸Ş×Ì¨¯¸";
+    TEXT[ japanese ] = "}";
     TEXT[ chinese_traditional ] = "¹Ï§Î";
     TEXT[ arabic ] = "ÕæÑ";
     TEXT[ greek ] = "ÃñáöéêÜ";
@@ -2929,7 +2929,7 @@ String FMT_MARK_GRAFIC
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ğèñóíîê";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ greek ] = "Ãñáöéêü";
