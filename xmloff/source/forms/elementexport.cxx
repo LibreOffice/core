@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:11:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,8 +476,11 @@ namespace xmloff
         switch (m_eType)
         {
             case LISTBOX:
-                // a list box description has sub elements: the options
-                exportListSourceAsElements();
+                // don't export the list entries if the are not provided by the user, but obtained implicitly
+                // from other sources
+                // #i26944# - 2004-05-17 - fs@openoffice.org
+                if ( controlHasUserSuppliedListEntries() )
+                    exportListSourceAsElements();
                 break;
             case GRID:
             {   // a grid control requires us to store all columns as sub elements
@@ -491,19 +494,25 @@ namespace xmloff
             {   // a combox box description has sub elements: the items
                 DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
 
-                // get the item list
-                Sequence< ::rtl::OUString > aListItems;
-                m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aListItems;
-                // loop through it and write the sub elements
-                const ::rtl::OUString* pListItems = aListItems.getConstArray();
-                for (sal_Int32 i=0; i<aListItems.getLength(); ++i, ++pListItems)
+                // don't export the list entries if the are not provided by the user, but obtained implicitly
+                // from other sources
+                // #i26944# - 2004-05-17 - fs@openoffice.org
+                if ( controlHasUserSuppliedListEntries() )
                 {
-                    m_rContext.getGlobalContext().ClearAttrList();
-                    AddAttribute(
-                        getCommonControlAttributeNamespace(CCA_LABEL),
-                        getCommonControlAttributeName(CCA_LABEL),
-                        *pListItems);
-                    SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", sal_True, sal_True);
+                    // get the item list
+                    Sequence< ::rtl::OUString > aListItems;
+                    m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aListItems;
+                    // loop through it and write the sub elements
+                    const ::rtl::OUString* pListItems = aListItems.getConstArray();
+                    for (sal_Int32 i=0; i<aListItems.getLength(); ++i, ++pListItems)
+                    {
+                        m_rContext.getGlobalContext().ClearAttrList();
+                        AddAttribute(
+                            getCommonControlAttributeNamespace(CCA_LABEL),
+                            getCommonControlAttributeName(CCA_LABEL),
+                            *pListItems);
+                        SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", sal_True, sal_True);
+                    }
                 }
             }
             break;
@@ -780,10 +789,18 @@ namespace xmloff
 
             // add the atrtributes if necessary and possible
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
-                exportGenericPropertyAttribute(
-                    nCurrentValueAttributeNamespaceKey,
-                    pCurrentValueAttributeName,
-                    pCurrentValuePropertyName);
+            {
+                // don't export the current-value if this value originates from a data binding
+                // #i26944# - 2004-05-17 - fs@openoffice.org
+                if ( controlHasActiveDataBinding() )
+                    exportedProperty( ::rtl::OUString::createFromAscii( pCurrentValuePropertyName ) );
+                else
+                    exportGenericPropertyAttribute(
+                        nCurrentValueAttributeNamespaceKey,
+                        pCurrentValueAttributeName,
+                        pCurrentValuePropertyName
+                    );
+            }
 
             if (pValuePropertyName && (CCA_VALUE & m_nIncludeCommon))
                 exportGenericPropertyAttribute(
@@ -1128,22 +1145,28 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::OUString OControlExport::getScalarListSourceValue() const
+    {
+        ::rtl::OUString sListSource;
+        Any aListSource = m_xProps->getPropertyValue( PROPERTY_LISTSOURCE );
+        if ( !( aListSource >>= sListSource ) )
+        {
+            Sequence< ::rtl::OUString > aListSourceSequence;
+            aListSource >>= aListSourceSequence;
+            if ( aListSourceSequence.getLength() )
+                sListSource = aListSourceSequence[ 0 ];
+        }
+        return sListSource;
+    }
+
+    //---------------------------------------------------------------------
     void OControlExport::exportListSourceAsAttribute()
     {
         // DA_LIST_SOURCE needs some special handling
         DBG_CHECK_PROPERTY_NO_TYPE( PROPERTY_LISTSOURCE );
 
-        ::rtl::OUString sListSource;
-        Any aListSource = m_xProps->getPropertyValue(PROPERTY_LISTSOURCE);
-        if (!(aListSource >>= sListSource))
-        {
-            Sequence< ::rtl::OUString > aListSourceSequence;
-            aListSource >>= aListSourceSequence;
-            if (aListSourceSequence.getLength())
-                sListSource = aListSourceSequence[0];
-        }
-
-        if (sListSource.getLength())
+        ::rtl::OUString sListSource = getScalarListSourceValue();
+        if ( sListSource.getLength() )
         {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
                 getDatabaseAttributeNamespace(DA_LIST_SOURCE),
@@ -1182,7 +1205,7 @@ namespace xmloff
         getSequenceInt16PropertyAsSet(PROPERTY_SELECT_SEQ, aSelection);
         getSequenceInt16PropertyAsSet(PROPERTY_DEFAULT_SELECT_SEQ, aDefaultSelection);
 
-        // the string for "true" and "false"
+        // the string for "true"
         ::rtl::OUString sTrue;
         ::rtl::OUStringBuffer sBuffer;
         m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(sBuffer, sal_True);
@@ -1463,7 +1486,7 @@ namespace xmloff
                     CCA_PRINTABLE | CCA_SIZE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
                 m_nIncludeSpecial = SCA_MULTIPLE;
                 m_nIncludeDatabase = DA_BOUND_COLUMN | DA_DATA_FIELD | DA_LIST_SOURCE_TYPE;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_CLICK   | EA_ON_DBLCLICK;
+                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_CLICK | EA_ON_DBLCLICK;
                 // check if we need to export the ListSource as attribute
                 {
                     // for a list box, if the ListSourceType is VALUE_LIST, no ListSource is stored, but instead
@@ -1673,6 +1696,67 @@ namespace xmloff
         {
             OSL_ENSURE( sal_False, "OControlExport::exportCellListSourceRange: caught an exception!" );
         }
+    }
+
+    //---------------------------------------------------------------------
+    bool OControlExport::controlHasActiveDataBinding() const
+    {
+        try
+        {
+            // currently exchanging the data with a database column?
+            ::rtl::OUString sBoundFieldPropertyName( RTL_CONSTASCII_USTRINGPARAM( "BoundField" ) );
+            if ( m_xPropertyInfo.is() && m_xPropertyInfo->hasPropertyByName( sBoundFieldPropertyName ) )
+            {
+                Reference< XPropertySet > xBoundField;
+                m_xProps->getPropertyValue( sBoundFieldPropertyName ) >>= xBoundField;
+                if ( xBoundField.is() )
+                    return true;
+            }
+
+            // currently exchanging data with an external binding?
+            Reference< XBindableValue > xBindable( m_xProps, UNO_QUERY );
+            if ( xBindable.is() && xBindable->getValueBinding().is() )
+                return true;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
+        }
+
+        return false;
+    }
+
+    //---------------------------------------------------------------------
+    bool OControlExport::controlHasUserSuppliedListEntries() const
+    {
+        try
+        {
+            // an external list source?
+            Reference< XListEntrySink > xEntrySink( m_xProps, UNO_QUERY );
+            if ( xEntrySink.is() && xEntrySink->getListEntrySource().is() )
+                return false;
+
+            if ( m_xPropertyInfo.is() && m_xPropertyInfo->hasPropertyByName( PROPERTY_LISTSOURCETYPE ) )
+            {
+                ListSourceType eListSourceType = ListSourceType_VALUELIST;
+                OSL_VERIFY( m_xProps->getPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eListSourceType );
+                if ( eListSourceType == ListSourceType_VALUELIST )
+                    // for value lists, the list entries as entered by the user are used
+                    return true;
+
+                // for every other type, the list entries are filled with some data obtained
+                // from a database - if and only if the ListSource property is not empty
+                return ( 0 == getScalarListSourceValue().getLength() );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
+        }
+
+        OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
+            // this method should be called for list and combo boxes only
+        return true;
     }
 
     //=====================================================================
