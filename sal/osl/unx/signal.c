@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:53:41 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,87 +324,117 @@ static int ReportCrash( int Signal )
 #ifdef INCLUDE_BACKTRACE
                 char szXMLTempNameBuffer[L_tmpnam];
                 char szStackTempNameBuffer[L_tmpnam];
+
                 void *stackframes[1024];
                 int  iFrame;
                 int  nFrames = backtrace( stackframes, sizeof(stackframes)/sizeof(stackframes[0]));
 
-                pXMLTempName = tmpnam( szXMLTempNameBuffer );
-                pStackTempName = tmpnam( szStackTempNameBuffer );
+                FILE *xmlout, *stackout;
+                int fdxml, fdstk;
 
-                FILE *xmlout = fopen( pXMLTempName, "w" );
-                FILE *stackout = fopen( pStackTempName, "w" );
+                strncpy( szXMLTempNameBuffer, P_tmpdir, sizeof(szXMLTempNameBuffer) );
+                strncat( szXMLTempNameBuffer, "crxmlXXXXXX", sizeof(szXMLTempNameBuffer) );
 
-                fprintf( xmlout, "<errormail:Stack type=\"%s\">\n", STACKTYPE );
+                strncpy( szStackTempNameBuffer, P_tmpdir, sizeof(szStackTempNameBuffer) );
+                strncat( szStackTempNameBuffer, "crstkXXXXXX", sizeof(szStackTempNameBuffer) );
 
-                for ( iFrame = 0; iFrame < nFrames; iFrame++ )
+                fdxml = mkstemp(szXMLTempNameBuffer);
+                fdstk = mkstemp(szStackTempNameBuffer);
+
+                xmlout = fdopen( fdxml , "w" );
+                stackout = fdopen( fdstk , "w" );
+
+                pXMLTempName = szXMLTempNameBuffer;
+                pStackTempName = szStackTempNameBuffer;
+
+
+                if ( xmlout && stackout )
                 {
-                    Dl_info dl_info;
+                    fprintf( xmlout, "<errormail:Stack type=\"%s\">\n", STACKTYPE );
 
-                    /* Don't want to use malloc here */
-                    char buffer[MAX_PATH_LEN];
-                    const char *dli_fname = NULL;
-                    const char *dli_fdir = NULL;
-
-                    memset( &dl_info, 0, sizeof(dl_info) );
-                    if( dladdr( stackframes[iFrame], &dl_info) )
+                    for ( iFrame = 0; iFrame < nFrames; iFrame++ )
                     {
-                        dli_fname = strrchr(  dl_info.dli_fname, '/' );
-                        if ( dli_fname )
-                        {
-                            ++dli_fname;
-                            memcpy( buffer, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
-                            buffer[dli_fname - dl_info.dli_fname] = 0;
-                            dli_fdir = buffer;
-                        }
-                        else
-                            dli_fname = dl_info.dli_fname;
+                        Dl_info dl_info;
+
+                        /* Don't want to use malloc here */
+                        char buffer[MAX_PATH_LEN];
 
                         fprintf( stackout, "0x%x:",
-                                 stackframes[iFrame] );
-
-                        if ( dl_info.dli_fbase && dl_info.dli_fname )
-                        {
-                            fprintf( stackout, " %s + 0x%x",
-                                     dl_info.dli_fname,
-                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
-                                     );
-                        }
-                        else
-                            fprintf( stackout, " ????????" );
-
-                        if ( dl_info.dli_sname && dl_info.dli_saddr )
-                            fprintf( stackout, " (%s + 0x%x)",
-                                     dl_info.dli_sname,
-                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr
-                                     );
-
-                        fprintf( stackout, "\n" );
+                            stackframes[iFrame] );
 
                         fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%x\"",
-                                 iFrame,
-                                 stackframes[iFrame]
-                                 );
+                            iFrame,
+                            stackframes[iFrame]
+                            );
 
-                        if ( dl_info.dli_fbase && dl_info.dli_fname )
-                            fprintf( xmlout, " rel=\"0x%x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
+                        memset( &dl_info, 0, sizeof(dl_info) );
 
-                        if ( dli_fname )
-                            fprintf( xmlout, " name=\"%s\"", dli_fname );
+                        /* dladdr may fail */
+                        if ( dladdr( stackframes[iFrame], &dl_info) )
+                        {
+                            const char *dli_fname = NULL;
+                            const char *dli_fdir = NULL;
 
-                        if ( dli_fdir )
-                            fprintf( xmlout, " path=\"%s\"", dli_fdir );
+                            /* Don't expect that dladdr filled all members of dl_info */
+                            dli_fname = dl_info.dli_fname ? strrchr(  dl_info.dli_fname, '/' ) : NULL;
+                            if ( dli_fname )
+                            {
+                                ++dli_fname;
+                                memcpy( buffer, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
+                                buffer[dli_fname - dl_info.dli_fname] = 0;
+                                dli_fdir = buffer;
+                            }
+                            else
+                                dli_fname = dl_info.dli_fname;
 
-                        if ( dl_info.dli_sname && dl_info.dli_saddr )
-                            fprintf( xmlout, " ordinal=\"%s+0x%x\"", dl_info.dli_sname, (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
+                            if ( dl_info.dli_fbase && dl_info.dli_fname )
+                            {
+                                fprintf( stackout, " %s + 0x%x",
+                                    dl_info.dli_fname,
+                                    (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
+                                    );
 
+                                fprintf( xmlout, " rel=\"0x%x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
+                                if ( dli_fname )
+                                    fprintf( xmlout, " name=\"%s\"", dli_fname );
+
+                                if ( dli_fdir )
+                                    fprintf( xmlout, " path=\"%s\"", dli_fdir );
+                            }
+                            else
+                                fprintf( stackout, " ????????" );
+
+                            if ( dl_info.dli_sname && dl_info.dli_saddr )
+                            {
+                                fprintf( stackout, " (%s + 0x%x)",
+                                    dl_info.dli_sname,
+                                    (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr );
+                                fprintf( xmlout, " ordinal=\"%s+0x%x\"",
+                                    dl_info.dli_sname,
+                                    (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
+                            }
+
+                        }
+                        else /* dladdr failed */
+                        {
+                            fprintf( stackout, " ????????" );
+                        }
+
+                        fprintf( stackout, "\n" );
                         fprintf( xmlout, "/>\n" );
 
                     }
-                    fprintf( xmlout, "</errormail:Stack>\n" );
-                }
 
-                fclose( stackout );
-                fclose( xmlout );
+                    fprintf( xmlout, "</errormail:Stack>\n" );
+
+                    fclose( stackout );
+                    fclose( xmlout );
+                }
+                else
+                {
+                    pXMLTempName = NULL;
+                    pStackTempName = NULL;
+                }
 
 #if defined( LINUX )
                 snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
@@ -448,10 +478,9 @@ static int ReportCrash( int Signal )
 static void PrintStack( int sig )
 {
     void *buffer[MAX_FRAME_COUNT];
+    int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
-
-    int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
 
     if ( size > 0 )
     {
