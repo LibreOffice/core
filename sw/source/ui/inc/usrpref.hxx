@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 11:14:02 $
+ *  last change: $Author: os $ $Date: 2001-01-24 16:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,23 @@ class SwGridConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
+/* -----------------------------19.01.01 13:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwCursorConfig : public utl::ConfigItem
+{
+    SwMasterUsrPref&    rParent;
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    public:
+        SwCursorConfig(SwMasterUsrPref& rParent);
+        ~SwCursorConfig();
+
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+    void                    Load();
+    void                    SetModified(){ConfigItem::SetModified();}
+};
 /* -----------------------------28.09.00 09:45--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -134,10 +151,12 @@ class SwMasterUsrPref : public SwViewOption
     friend class SwContentViewConfig;
     friend class SwLayoutViewConfig;
     friend class SwGridConfig;
+    friend class SwCursorConfig;
 
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
     SwGridConfig        aGridConfig;
+    SwCursorConfig      aCursorConfig;
 
     sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
     sal_Bool    bFldUpdateInCurrDoc;
@@ -157,12 +176,14 @@ public:
             aContentConfig.Commit();
             aLayoutConfig.Commit();
             aGridConfig.Commit();
+            aCursorConfig.Commit();
         }
     void SetModified()
         {
             aContentConfig.SetModified();
             aLayoutConfig.SetModified();
             aGridConfig.SetModified();
+            aCursorConfig.SetModified();
         }
 
     void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 15:27:44 $
+ *  last change: $Author: os $ $Date: 2001-01-24 16:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aContentConfig(bWeb, *this),
     aLayoutConfig(bWeb, *this),
     aGridConfig(bWeb, *this),
+    aCursorConfig(*this),
     bFldUpdateInCurrDoc(sal_False),
     nFldUpdateFlags(0),
     bLinkUpdateInCurrDoc(sal_False),
@@ -126,6 +127,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aContentConfig.Load();
     aLayoutConfig.Load();
     aGridConfig.Load();
+    aCursorConfig.Load();
 }
 /*-- 28.09.00 09:55:32---------------------------------------------------
 
@@ -533,4 +535,108 @@ void SwGridConfig::Load()
         rParent.SetSnapSize(aSnap);
     }
 }
+
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> SwCursorConfig::GetPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "DirectCursor/UseDirectCursor", // 0
+        "DirectCursor/Insert",          // 1
+        "DirectCursor/Color",           // 2
+        "Option/ProtectedArea"          // 3
+    };
+    const int nCount = 4;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = C2U(aPropNames[i]);
+    return aNames;
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
+    ConfigItem(C2U("Office.Writer/Cursor")),
+    rParent(rPar)
+{
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwCursorConfig::~SwCursorConfig()
+{
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwCursorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+{
+    Load();
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwCursorConfig::Commit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        sal_Bool bSet;
+        switch(nProp)
+        {
+            case  0: bSet = rParent.IsShadowCursor();       break;//  "DirectCursor/UseDirectCursor",
+            case  1: pValues[nProp] <<= rParent.GetShdwCrsrColor().GetColor();  break;//  "DirectCursor/Insert",
+            case  2: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode();   break;//  "DirectCursor/Color",
+            case  3: bSet = rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
+        }
+        if(nProp == 0  || nProp == 3 )
+              pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
+    }
+    PutProperties(aNames, aValues);
+}
+/* -----------------------------19.01.01 13:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwCursorConfig::Load()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        Size aSnap(rParent.GetSnapSize());
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                sal_Bool bSet;
+                sal_Int32 nSet;
+                if(nProp == 0 || nProp == 3)
+                    bSet = *(sal_Bool*)pValues[nProp].getValue();
+                else
+                    pValues[nProp] >>= nSet;
+                switch(nProp)
+                {
+                    case  0: rParent.SetShadowCursor(bSet);         break;//  "DirectCursor/UseDirectCursor",
+                    case  1: rParent.SetShdwCrsrColor(nSet);        break;//  "DirectCursor/Insert",
+                    case  2: rParent.SetShdwCrsrFillMode((BYTE)nSet);   break;//  "DirectCursor/Color",
+                    case  3: rParent.SetCursorInProtectedArea(bSet); break;// "Option/ProtectedArea"
+                }
+            }
+        }
+        rParent.SetSnapSize(aSnap);
+    }
+}
+
 
