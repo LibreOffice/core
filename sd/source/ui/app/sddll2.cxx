@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:11:53 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #ifndef _SVX_CLIPBOARDCTL_HXX_
 #include <svx/clipboardctl.hxx>
 #endif
+#ifndef _SVX_EXTRUSION_CONTROLS_HXX
+#include <svx/extrusioncontrols.hxx>
+#endif
 
 #include "sddll.hxx"
 #define _SD_DIACTRL_CXX
@@ -256,6 +259,7 @@ void SdDLL::RegisterControllers()
     SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_TOP_TO_BOTTOM, pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_LEFT_TO_RIGHT, pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_CAPTION_VERTICAL, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_FONTWORK_VERTICAL, pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_TEXT_VERTICAL, pMod);
     SvxVertTextTbxCtrl::RegisterControl(SID_TEXT_FITTOSIZE_VERTICAL, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
@@ -280,4 +284,10 @@ void SdDLL::RegisterControllers()
     SvxUndoRedoControl::RegisterControl( SID_REDO , pMod );
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
+
+    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
+    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
+    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
+    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
+    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 }
