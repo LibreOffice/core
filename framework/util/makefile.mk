@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: as $ $Date: 2001-01-26 08:43:05 $
+#   last change: $Author: as $ $Date: 2001-02-16 12:22:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 SHL1TARGET=		$(FRAMEWORK_TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
 
-SHL1OBJS=		$(SLO)$/registerservices.obj
+SHL1OBJS=		$(SLO)$/registerservices.obj		\
 
 SHL1LIBS=		$(SLB)$/fwk_services.lib			\
                 $(SLB)$/fwk_helper.lib				\
@@ -115,8 +115,11 @@ SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
 SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/frameloaderfactory.obj		\
+                $(SLO)$/filterfactory.obj			\
+                $(SLO)$/typedetection.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/registrycache.obj			\
+                $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/wildcard.obj
 
 SHL2STDLIBS=	$(CPPULIB)							\
