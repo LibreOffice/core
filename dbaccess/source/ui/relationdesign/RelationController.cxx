@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-27 09:38:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
             throw SQLException();
         }
     }
-    else if(!getMetaData()->supportsIntegrityEnhancementFacility())
+    else if(getMetaData().is() && !getMetaData()->supportsIntegrityEnhancementFacility())
     {// check if this database supports relations
 
         setEditable(sal_False);
@@ -584,7 +584,8 @@ void ORelationController::loadTableData(const Any& _aTable)
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName)  const
 {
-    ::comphelper::UStringMixEqual bCase(getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
+    ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
     ::std::vector<OTableWindowData*>::const_iterator aIter = m_vTableData.begin();
     for(;aIter != m_vTableData.end();++aIter)
     {
