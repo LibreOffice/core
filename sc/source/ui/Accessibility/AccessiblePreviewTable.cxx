@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:18 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ScAccessiblePreviewTable::~ScAccessiblePreviewTable()
 
 void SAL_CALL ScAccessiblePreviewTable::disposing()
 {
+    ScUnoGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);

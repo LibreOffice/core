@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:17 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ ScAccessiblePageHeaderArea::~ScAccessiblePageHeaderArea(void)
 
 void SAL_CALL ScAccessiblePageHeaderArea::disposing()
 {
+    ScUnoGuard aGuard;
     if (mpTextHelper)
         DELETEZ(mpTextHelper);
     if (mpEditObj)

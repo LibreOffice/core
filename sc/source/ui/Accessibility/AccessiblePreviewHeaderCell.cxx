@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:17 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ ScAccessiblePreviewHeaderCell::~ScAccessiblePreviewHeaderCell()
 
 void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
 {
+    ScUnoGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);

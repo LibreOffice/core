@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 12:04:24 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ void ScAccessibleContextBase::Init()
 
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
+    ScUnoGuard aGuard;
 //  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
@@ -507,6 +508,7 @@ void SAL_CALL ScAccessibleContextBase::disposing(
     const lang::EventObject& rSource )
         throw (uno::RuntimeException)
 {
+    ScUnoGuard aGuard;
     if (rSource.Source == mxParent)
         dispose();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 15:36:01 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ ScAccessibleCsvControl::~ScAccessibleCsvControl()
 
 void SAL_CALL ScAccessibleCsvControl::disposing()
 {
+    ScUnoGuard aGuard;
     mpControl = NULL;
     ScAccessibleContextBase::disposing();
 }
@@ -1495,6 +1496,7 @@ ScAccessibleCsvCell::~ScAccessibleCsvCell()
 
 void SAL_CALL ScAccessibleCsvCell::disposing()
 {
+    ScUnoGuard aGuard;
     SetEditSource( SvxEditSourcePtr( NULL ) );
     ScAccessibleCsvControl::disposing();
 }

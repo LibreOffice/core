@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ void ScAccessibleDataPilotControl::Init()
 
 void SAL_CALL ScAccessibleDataPilotControl::disposing()
 {
+    ScUnoGuard aGuard;
     mpDPFieldWindow = NULL;
 
     ScAccessibleContextBase::disposing();
@@ -553,6 +554,7 @@ void ScAccessibleDataPilotButton::Init()
 
 void SAL_CALL ScAccessibleDataPilotButton::disposing()
 {
+    ScUnoGuard aGuard;
     mpDPFieldWindow = NULL;
 
     ScAccessibleContextBase::disposing();

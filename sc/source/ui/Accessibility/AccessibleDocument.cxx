@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 11:45:15 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,6 +1320,7 @@ ScAccessibleDocument::~ScAccessibleDocument(void)
 
 void SAL_CALL ScAccessibleDocument::disposing()
 {
+    ScUnoGuard aGuard;
     FreeAccessibleSpreadsheet();
     if (mpViewShell)
     {

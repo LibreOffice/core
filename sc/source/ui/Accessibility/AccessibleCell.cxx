@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-19 07:58:01 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ void ScAccessibleCell::Init()
 
 void SAL_CALL ScAccessibleCell::disposing()
 {
+    ScUnoGuard aGuard;
     // #100593# dispose in AccessibleStaticTextBase
     Dispose();
 

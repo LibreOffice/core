@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-15 10:05:21 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ ScAccessibleTableBase::~ScAccessibleTableBase()
 
 void SAL_CALL ScAccessibleTableBase::disposing()
 {
+    ScUnoGuard aGuard;
     mpDoc = NULL;
 
     ScAccessibleContextBase::disposing();

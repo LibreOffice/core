@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:16 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ ScAccessibleEditObject::~ScAccessibleEditObject()
 
 void SAL_CALL ScAccessibleEditObject::disposing()
 {
+    ScUnoGuard aGuard;
     if (mpTextHelper)
         DELETEZ(mpTextHelper);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 11:45:36 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
 
 void SAL_CALL ScAccessibleSpreadsheet::disposing()
 {
+    ScUnoGuard aGuard;
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);

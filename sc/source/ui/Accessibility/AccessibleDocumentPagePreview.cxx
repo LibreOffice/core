@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:16 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,6 +1430,7 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
 
 void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 {
+    ScUnoGuard aGuard;
     if (mpTable)
     {
         mpTable->release();
