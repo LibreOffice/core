@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:07:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,10 @@ sal_Bool AstService::dump(RegistryKey& rKey)
             break;
         }
     }}
+    OSL_ASSERT(constructors == 0 || !m_defaultConstructor);
+    if (m_defaultConstructor) {
+        constructors = 1;
+    }
     RegistryKey localKey;
     if (rKey.createKey(
             rtl::OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8),
@@ -377,6 +381,12 @@ sal_Bool AstService::dump(RegistryKey& rKey)
             break;
         }
     }}
+    if (m_defaultConstructor) {
+        writer.setMethodData(
+            constructorIndex++, rtl::OUString(), RT_MODE_TWOWAY,
+            rtl::OUString(), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")),
+            0, 0);
+    }
     sal_uInt32 size;
     void const * blob = writer.getBlob(&size);
     if (localKey.setValue(
