@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-16 12:48:48 $
+ *  last change: $Author: pl $ $Date: 2001-11-23 13:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,14 +300,14 @@ Paper SvxPaperInfo::GetSvPaper( const Size &rSize, MapUnit eUnit,
 
     switch ( ePaper )
     {
-        case SVX_PAPER_A3:      eRet = PAPER_A3;
-        case SVX_PAPER_A4:      eRet = PAPER_A4;
-        case SVX_PAPER_A5:      eRet = PAPER_A5;
-        case SVX_PAPER_B4:      eRet = PAPER_B4;
-        case SVX_PAPER_B5:      eRet = PAPER_B5;
-        case SVX_PAPER_LETTER:  eRet = PAPER_LETTER;
-        case SVX_PAPER_LEGAL:   eRet = PAPER_LEGAL;
-        case SVX_PAPER_TABLOID: eRet = PAPER_TABLOID;
+        case SVX_PAPER_A3:      eRet = PAPER_A3;                        break;
+        case SVX_PAPER_A4:      eRet = PAPER_A4;                        break;
+        case SVX_PAPER_A5:      eRet = PAPER_A5;                        break;
+        case SVX_PAPER_B4:      eRet = PAPER_B4;                        break;
+        case SVX_PAPER_B5:      eRet = PAPER_B5;                        break;
+        case SVX_PAPER_LETTER:  eRet = PAPER_LETTER;                    break;
+        case SVX_PAPER_LEGAL:   eRet = PAPER_LEGAL;                     break;
+        case SVX_PAPER_TABLOID: eRet = PAPER_TABLOID;                   break;
     }
 
     return eRet;
