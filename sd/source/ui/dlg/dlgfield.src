@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-19 11:59:07 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 21:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus de camp";
         Text[ finnish ] = "Kentt�tyyppi";
+        Text[ thai ] = "ชนิดเขตข้อมูล";
     };
     RadioButton RBT_FIX
     {
@@ -125,6 +126,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fix";
         Text[ finnish ] = "~Kiinte�";
+        Text[ thai ] = "~คงที่";
     };
     RadioButton RBT_VAR
     {
@@ -154,6 +156,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~variable";
         Text[ finnish ] = "~Muuttuja";
+        Text[ thai ] = "~ตัวแปร";
     };
     ListBox LB_FORMAT
     {
@@ -189,6 +192,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormat";
         Text[ finnish ] = "~Muotoile";
+        Text[ thai ] = "รู~ปแบบ";
     };
     OKButton BTN_OK
     {
@@ -230,5 +234,6 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edita el camp";
     Text[ finnish ] = "Muokkaa kentt��";
+    Text[ thai ] = "แก้ไขเขตข้อมูล";
 };
 
