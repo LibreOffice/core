@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:15:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,18 +980,15 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                     aArgs[nLen].Value <<= xHandler;
                 }
                 xStore->storeAsURL(sPath,aArgs);
-                xComponent->dispose();
+
                 if (pFinalPage != NULL)
                 {
                     if (pFinalPage->IsDatabaseDocumentToBeRegistered())
                         RegisterDataSourceByLocation(sPath);
-                    if (pFinalPage->IsDatabaseDocumentToBeOpened())
-                        OpenDatabaseDocument(sPath);
                 }
                 else
                 {
                     RegisterDataSourceByLocation(sPath);
-                    OpenDatabaseDocument(sPath);
                 }
                 return sal_True;
             }
@@ -1011,8 +1008,16 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
     return sal_False;
 }
-
-
+// -----------------------------------------------------------------------------
+sal_Bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened()
+{
+    return (pFinalPage != NULL) ? pFinalPage->IsDatabaseDocumentToBeOpened() : sal_True;
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted()
+{
+    return (pFinalPage != NULL) && pFinalPage->IsTableWizardToBeStarted();
+}
 //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
@@ -1078,10 +1083,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     short ODbTypeWizDialogSetup::Execute()
     {
         short nResult = ModalDialog::Execute();
-
-        if ( RET_OK == nResult && pFinalPage != NULL && pFinalPage->IsTableWizardToBeStarted() )
-            StartTableWizard();
-
         return nResult;
     }
 
