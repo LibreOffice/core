@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:58 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ namespace pcr
         virtual String                  getPropertyTranslation(sal_Int32 _nId) const = 0;
         virtual sal_Int32               getPropertyHelpId(sal_Int32 _nId) const = 0;
         virtual sal_Int16               getPropertyPos(sal_Int32 _nId) const = 0;
-        virtual sal_Bool                getPropertyMultiFlag(sal_Int32 _nId) const = 0;
         virtual sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const = 0;
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                         getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
