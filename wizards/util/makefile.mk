@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tv $ $Date: 2001-05-17 14:44:42 $
+#   last change: $Author: hjs $ $Date: 2001-06-27 11:51:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,41 +68,21 @@ GEN_HID=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-
-
-.IF "$(depend)" == ""
-all:    \
-    $(SRS)$/hidother.hid    \
-    ALLTAR
-
-#$(SRS)$/hidother.hid: hidother.src
-#.IF "$(GUI)$(CPU)"=="WNTI"
-#	@+copy hidother.src ..$/$(INPATH)$/srs$/hidother.hid
-#.ELSE
-#	@+echo nix
-#.ENDIF
-
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)" =="WNT"
-.IF "$(BUILD_SOSL)"==""
-    @+echo
-    @+echo  NO HIDS!
-    @+echo
-    +mhids hidother.src ..$/$(INPATH)$/srs wizards hidother
-.ENDIF
-.ELSE
-    @echo wnt only
-.ENDIF
-
-
-.ENDIF # no depend
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.IF "$(GUI)"=="WNT"
+.IF "$(BUILD_SOSL)"==""
+
+ALLTAR : $(SRS)$/hidother.hid
+
+.ENDIF
+.ENDIF
+
+$(SRS)$/hidother.hid: hidother.src
+    +mhids hidother.src ..$/$(INPATH)$/srs wizards hidother
 
 
