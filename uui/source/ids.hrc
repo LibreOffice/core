@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:31:50 $
+ *  last change: $Author: sb $ $Date: 2001-08-15 13:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  The UUI Resources
 //
-// $Author: sb $ $Date: 2001-08-07 13:31:50 $ $Revision: 1.5 $
+// $Author: sb $ $Date: 2001-08-15 13:44:03 $ $Revision: 1.6 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -92,6 +92,7 @@
 #define DLG_UUI_PASSWORD (RID_UUI_START + 12)
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL (RID_UUI_START + 13)
 #define STR_ERROR_PASSWORD_WRONG (RID_UUI_START + 14)
+// RID_UUI_START + 15, 16, 17 are misused by syncaccess/source/ui/resids.hrc
 
 //============================================================================
 // errors
