@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-29 13:08:15 $
+ *  last change: $Author: tl $ $Date: 2001-07-03 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,9 +315,6 @@ uno::Sequence< INT16 >
 }
 
 ///////////////////////////////////////////////////////////////////////////
-
-#define SOFT_HYPHEN     SVT_SOFT_HYPHEN
-#define HARD_HYPHEN     SVT_HARD_HYPHEN
 
 
 static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
