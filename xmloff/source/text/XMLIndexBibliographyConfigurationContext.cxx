@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,8 @@ XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationCont
 void XMLIndexBibliographyConfigurationContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -218,8 +218,8 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
     if ((nPrefix == XML_NAMESPACE_TEXT) &&
         rLocalName.equalsAsciiL(sXML_sort_key, sizeof(sXML_sort_key)-1))
     {
-        sal_Int32 nLength = xAttrList->getLength();
-        for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+        sal_Int16 nLength = xAttrList->getLength();
+        for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
         {
             OUString sLocalName;
             sal_uInt16 nPrfx = GetImport().GetNamespaceMap().

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyEntryContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 10:20:33 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,8 @@ void XMLIndexBibliographyEntryContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     // handle both, style name and bibliography info
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,8 @@ void XMLFootnoteImportContext::StartElement(
         rHelper.InsertTextContent(xTextContent);
 
         // process id attribute
-        sal_Int32 nLength = xAttrList->getLength();
-        for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+        sal_Int16 nLength = xAttrList->getLength();
+        for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
         {
             OUString sLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -254,8 +254,8 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
             // little hack: we only care for one attribute of the citation
             //              element. We handle that here, and then return a
             //              default context.
-            sal_Int32 nLength = xAttrList->getLength();
-            for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+            sal_Int16 nLength = xAttrList->getLength();
+            for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
             {
                 OUString sLocalName;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().

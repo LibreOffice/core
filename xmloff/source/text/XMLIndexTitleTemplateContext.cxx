@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTitleTemplateContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@ void XMLIndexTitleTemplateContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     // there's only one attribute: style-name
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,8 +280,8 @@ sal_Bool XMLTextMarkImportContext::FindName(
     sal_Bool bNameOK;
 
     // find name attribute first
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().

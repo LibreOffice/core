@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceDDEImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,8 @@ void XMLSectionSourceDDEImportContext::StartElement(
     OUString sItem;
     sal_Bool bAutomaticUpdate = sal_False;
 
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,8 +251,8 @@ void XMLIndexSourceBaseContext::StartElement(
     SvXMLTokenMap aTokenMap(aIndexSourceTokenMap);
 
     // process attributes
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 i=0; i<nLength; i++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 i=0; i<nLength; i++)
     {
         // map to IndexSourceParamEnum
         OUString sLocalName;

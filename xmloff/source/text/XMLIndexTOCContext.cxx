@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,8 @@ void XMLIndexTOCContext::StartElement(
         }
 
         // find text:style-name attribute and set section style
-        sal_Int32 nCount = xAttrList->getLength();
-        for(sal_Int32 nAttr = 0; nAttr < nCount; nAttr++)
+        sal_Int16 nCount = xAttrList->getLength();
+        for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
         {
             OUString sLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
