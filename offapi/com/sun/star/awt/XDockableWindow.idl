@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDockableWindow.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:19:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XDockableWindow_idl__
+#define __com_sun_star_awt_XDockableWindow_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XDockableWindowListener_idl__
+#include <com/sun/star/awt/XDockableWindowListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the docking interface for a window component.
+
+    <p>A window can either be docked where it resides as a child window in
+        an application frame window or it can be floating where it will
+        reside in its own decorated top level window.
+    </p>
+ */
+interface XDockableWindow : com::sun::star::uno::XInterface
+{
+
+    /** adds a docking listener to the object.
+        only a single listener may be registered at any time.
+     */
+    void addDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    /** removes the specified docking listener from the object.
+     */
+    void removeDockableWindowListener( [in] com::sun::star::awt::XDockableWindowListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    /** enable or disable docking, docking is disabled by default
+
+        @param bEnable
+            <TRUE/> specifies that docking is enabled
+            <FALSE/> specifies that docking is disabled and no
+                <type scope="com::sun::star::awt">XDockableWindowListeners</type> will be called
+     */
+    void enableDocking( [in] boolean bEnable );
+
+    //-------------------------------------------------------------------------
+
+    /** queries the current window state
+        @returns
+            <TRUE/> if the window is floating
+            <FALSE/> if the window is docked
+     */
+    boolean isFloating();
+
+    //-------------------------------------------------------------------------
+
+    /** toggle between floating and docked state
+        @param bFloating
+            specifies the new floating mode:
+            <TRUE/> means floating, <FALSE/> means docked
+     */
+    void setFloatingMode( [in] boolean bFloating );
+
+    //-------------------------------------------------------------------------
+
+    /** prevents the window from being undocked
+        this has no effect if the window is floating
+     */
+    void lock();
+
+    //-------------------------------------------------------------------------
+
+    /** enables undocking
+        this has no effect if the window is floating
+     */
+    void unlock();
+
+    //-------------------------------------------------------------------------
+
+    /** queries the current locking state
+        @returns
+            <TRUE/> if the window is locked
+            <FALSE/> if the window is not locked
+     */
+    boolean isLocked();
+
+    //-------------------------------------------------------------------------
+
+    /** shows the window in a menu like style, i.e. without decoration
+        a special indicator will allow for tearing off the window
+        see <type scope="com::sun::star::awt">XDockableWindowListeners</type> for
+        the corresponding events
+        @param WindowRect
+            specifies the position and size of the popup window in frame coordinates
+     */
+    void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect );
+
+    //-------------------------------------------------------------------------
+
+    /** queries the current popup mode
+        @returns
+            <TRUE/> if the window is in popup mode
+            <FALSE/> if the window is not in popup mode
+     */
+    boolean isInPopupMode();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
