@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:03:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2553,6 +2553,8 @@ String STR_VIEWDESIGN
     Text[ hindi ] = "View Design:";
     Text[ slovak ] = "Návrh pohľadu:";
 };
+
+
 
 
 
