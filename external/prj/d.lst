@@ -79,3 +79,9 @@ mkdir: %_DEST%\inc%_EXT%\external\neon
 ..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
 ..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
 
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
