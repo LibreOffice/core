@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
+ *  last change: $Author: dbo $ $Date: 2000-12-22 09:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace star
 namespace uno
 {
 
+class RuntimeException;
 class XInterface;
 
 /** Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
@@ -263,7 +264,7 @@ public:
         @param rRef another reference
         @param dummy UNO_QUERY or UNO_REF_QUERY to force obvious distinction to other constructors
     */
-    inline Reference( const BaseReference & rRef, __UnoReference_Query ) throw ()
+    inline Reference( const BaseReference & rRef, __UnoReference_Query ) throw (RuntimeException)
         : BaseReference( query( rRef ) )
         {}
     /** Constructor:
@@ -272,7 +273,7 @@ public:
         @param pInterface an interface pointer
         @param dummy UNO_QUERY to force obvious distinction to other constructors
     */
-    inline Reference( XInterface * pInterface, __UnoReference_Query ) throw ()
+    inline Reference( XInterface * pInterface, __UnoReference_Query ) throw (RuntimeException)
         : BaseReference( query( pInterface ) )
         {}
 
@@ -299,13 +300,13 @@ public:
         @param pInterface interface pointer
         @return interface reference of demanded type (may be null)
     */
-    inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface ) throw ();
+    inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface ) throw (RuntimeException);
     /** Queries given interface reference for type <b>interface_type</b>.
         <br>
         @param rRef interface reference
         @return interface reference of demanded type (may be null)
     */
-    inline static Reference< interface_type > SAL_CALL query( const BaseReference & rRef ) throw ()
+    inline static Reference< interface_type > SAL_CALL query( const BaseReference & rRef ) throw (RuntimeException)
         { return query( rRef.get() ); }
 
     /** Cast operatory to Reference< XInterface >:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
+ *  last change: $Author: dbo $ $Date: 2000-12-22 09:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ inline void SAL_CALL cpp_release( void * pCppI ) throw ()
 }
 //==================================================================================================
 inline void * SAL_CALL cpp_queryInterface(
-    void * pCppI, typelib_TypeDescriptionReference * pType ) throw ()
+    void * pCppI, typelib_TypeDescriptionReference * pType )
+    throw (::com::sun::star::uno::RuntimeException)
 {
     if (pCppI)
     {

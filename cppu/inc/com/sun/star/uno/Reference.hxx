@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:22 $
+ *  last change: $Author: dbo $ $Date: 2000-12-22 09:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ inline Reference< interface_type > & Reference< interface_type >::operator = (
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline Reference< interface_type > Reference< interface_type >::query(
-    XInterface * pInterface ) throw ()
+    XInterface * pInterface ) throw (RuntimeException)
 {
     const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
     return Reference< interface_type >( reinterpret_cast< XInterface * >(
