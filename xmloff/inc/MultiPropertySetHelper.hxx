@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-17 16:13:53 $
+ *  last change: $Author: mib $ $Date: 2001-09-05 06:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,36 @@ public:
      */
     inline sal_Bool hasProperty( sal_Int16 nIndex );
 
+    /**
+     * Get a value from the XPropertySet on demand.
+     *
+     * If neither getValues nor getValueOnDemand has been called already
+     * after the last call to resetValues, the values are retrieved
+     * using getValues. Otherwise the value already retrieved is returned.
+     * In case XMultiPropertySet is supported by the XPropertySet and
+     * bTryMult is set, the XMultiPropertySet is used to get the values.
+     *
+     */
+    const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
+                        const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::beans::XPropertySet> &,
+                        sal_Bool bTryMulti = sal_False );
+
+    /**
+     * Get a value from the XMultiPropertySet on demand.
+     *
+     * If neither getValues nor getValueOnDemand has been called already
+     * after the last call to resetValues, the values are retrieved
+     * using getValues. Otherwise the value already retrieved is returned.
+     * In case XMultiPropertySet is supported by the XPropertySet,
+     * XMultiPropertySet is used to get the values.
+     *
+     */
+    const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
+                        const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::beans::XMultiPropertySet> & );
+
+    inline void resetValues() { pValues = 0; }
 };
 
 
