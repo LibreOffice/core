@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:57:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,7 +1509,9 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
     {
         // zunaechst raussuchen welche Column sich geaendert hat
         ::comphelper::InterfaceRef xCurrent;
-        for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
+        sal_Int32 i;
+
+        for ( i = 0; i < m_xColumns->getCount(); i++)
         {
             ::cppu::extractInterface(xCurrent, m_xColumns->getByIndex(i));
             if (evt.Source == xCurrent)
@@ -2797,7 +2799,9 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
         };
         aSupported.realloc(sizeof(sSupported)/sizeof(sSupported[0]));
         ::com::sun::star::util::URL* pSupported = aSupported.getArray();
-        for (sal_uInt16 i=0; i<aSupported.getLength(); ++i, ++pSupported)
+        sal_uInt16 i;
+
+        for ( i = 0; i < aSupported.getLength(); ++i, ++pSupported)
             pSupported->Complete = sSupported[i];
 
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
