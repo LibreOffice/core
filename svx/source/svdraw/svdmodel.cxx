@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:27:30 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,10 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _SDR_PROPERTIES_PROPERTIES_HXX
+#include <svx/sdr/properties/properties.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,7 +368,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     nProgressPercent=0;
     nLoadVersion=0;
     bExtColorTable=FALSE;
-    bChanged=FALSE;
+    mbChanged = sal_False;
     bInfoChanged=FALSE;
     bPagNumsDirty=FALSE;
     bMPgNumsDirty=FALSE;
@@ -868,7 +872,10 @@ void SdrModel::Clear()
     MasterPageListChanged();
 
     pLayerAdmin->ClearLayer();
-    pLayerAdmin->ClearLayerSets();
+
+    //#110094#-10
+    //pLayerAdmin->ClearLayerSets();
+
     //SetChanged();
 }
 
@@ -1567,9 +1574,9 @@ void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, FASTBOOL bN
         rStr += sal_Unicode('%');
 }
 
-void SdrModel::SetChanged(FASTBOOL bFlg)
+void SdrModel::SetChanged(sal_Bool bFlg)
 {
-    bChanged=bFlg;
+    mbChanged = bFlg;
 }
 
 void SdrModel::RecalcPageNums(FASTBOOL bMaster)
@@ -1917,10 +1924,11 @@ void SdrModel::WriteData(SvStream& rOut) const
         rOut << *GetLayerAdmin().GetLayer(i);
     }
 
-    for(i=0; i < GetLayerAdmin().GetLayerSetCount(); i++)
-    {
-        rOut << *GetLayerAdmin().GetLayerSet(i);
-    }
+    //#110094#-10
+    //for(i=0; i < GetLayerAdmin().GetLayerSetCount(); i++)
+    //{
+    //  rOut << *GetLayerAdmin().GetLayerSet(i);
+    //}
 
     for(i=0; i < GetMasterPageCount(); i++)
     {
@@ -2239,14 +2247,14 @@ void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
                     rIn >> *pLay;
                     GetLayerAdmin().InsertLayer(pLay);
                 }
-                else if(aHead.IsID(SdrIOLSetID))
-                {
-                    //SdrLayerSet* pSet=GetLayer().NewLayerSet("");
-                    SdrLayerSet* pSet = new SdrLayerSet; // Layersetdefinition lesen
-
-                    rIn >> *pSet;
-                    GetLayerAdmin().InsertLayerSet(pSet);
-                }
+                //#110094#-10
+                //else if(aHead.IsID(SdrIOLSetID))
+                //{
+                //  //SdrLayerSet* pSet=GetLayer().NewLayerSet("");
+                //  SdrLayerSet* pSet = new SdrLayerSet; // Layersetdefinition lesen
+                //  rIn >> *pSet;
+                //  GetLayerAdmin().InsertLayerSet(pSet);
+                //}
                 else
                 {
                     // aha, das wil keiner. Also ueberlesen.
@@ -2688,10 +2696,14 @@ void SdrModel::PreSave()
         const SdrPage& rPage = *GetMasterPage(a);
         SdrObject* pObj = rPage.GetBackgroundObj();
         if( pObj )
-            pObj->PreSave();
+        {
+            pObj->GetProperties().PreProcessSave();
+        }
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-            rPage.GetObj(b)->PreSave();
+        {
+            rPage.GetObj(b)->GetProperties().PreProcessSave();
+        }
     }
 
     nCnt = GetPageCount();
@@ -2701,10 +2713,14 @@ void SdrModel::PreSave()
         const SdrPage& rPage = *GetPage(a);
         SdrObject* pObj = rPage.GetBackgroundObj();
         if( pObj )
-            pObj->PreSave();
+        {
+            pObj->GetProperties().PreProcessSave();
+        }
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-            rPage.GetObj(b)->PreSave();
+        {
+            rPage.GetObj(b)->GetProperties().PreProcessSave();
+        }
     }
 }
 
@@ -2718,10 +2734,14 @@ void SdrModel::PostSave()
         const SdrPage& rPage = *GetMasterPage(a);
         SdrObject* pObj = rPage.GetBackgroundObj();
         if( pObj )
-            pObj->PostSave();
+        {
+            pObj->GetProperties().PostProcessSave();
+        }
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-            rPage.GetObj(b)->PostSave();
+        {
+            rPage.GetObj(b)->GetProperties().PostProcessSave();
+        }
     }
 
     nCnt = GetPageCount();
@@ -2731,10 +2751,14 @@ void SdrModel::PostSave()
         const SdrPage& rPage = *GetPage(a);
         SdrObject* pObj = rPage.GetBackgroundObj();
         if( pObj )
-            pObj->PostSave();
+        {
+            pObj->GetProperties().PostProcessSave();
+        }
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
-            rPage.GetObj(b)->PostSave();
+        {
+            rPage.GetObj(b)->GetProperties().PostProcessSave();
+        }
     }
 }
 
@@ -2978,33 +3002,97 @@ void SdrModel::MasterPageListChanged()
 
 TYPEINIT1(SdrHint,SfxHint);
 
-SdrHint::SdrHint(const SdrPage& rNewPage)
+SdrHint::SdrHint()
+:   mpPage(0L),
+    mpObj(0L),
+    mpObjList(0L),
+    meHint(HINT_UNKNOWN)
 {
-    aRect=Rectangle(0,0,rNewPage.GetWdt(),rNewPage.GetHgt());
-    pPage=&rNewPage;
-    pObj=NULL;
-    pObjList=&rNewPage;
-    bNeedRepaint=TRUE;
-    eHint=HINT_PAGECHG;
+}
+
+SdrHint::SdrHint(SdrHintKind eNewHint)
+:   mpPage(0L),
+    mpObj(0L),
+    mpObjList(0L),
+    meHint(eNewHint)
+{
+}
+
+SdrHint::SdrHint(const SdrPage& rNewPage)
+:   mpPage(&rNewPage),
+    mpObj(0L),
+    mpObjList(&rNewPage),
+    meHint(HINT_PAGECHG)
+{
+    maRectangle = Rectangle( 0, 0, rNewPage.GetWdt(), rNewPage.GetHgt());
 }
 
 SdrHint::SdrHint(const SdrObject& rNewObj)
+:   mpPage(rNewObj.GetPage()),
+    mpObj(&rNewObj),
+    mpObjList(rNewObj.GetObjList()),
+    meHint(HINT_OBJCHG)
 {
-    aRect=rNewObj.GetBoundRect();
-    pPage=rNewObj.GetPage();
-    pObj=&rNewObj;
-    pObjList=rNewObj.GetObjList();
-    bNeedRepaint=TRUE;
-    eHint=HINT_OBJCHG;
+    maRectangle = rNewObj.GetLastBoundRect();
 }
 
 SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
+:   mpPage(rNewObj.GetPage()),
+    mpObj(&rNewObj),
+    mpObjList(rNewObj.GetObjList()),
+    meHint(HINT_OBJCHG)
 {
-    aRect = rRect;
-    pPage = rNewObj.GetPage();
-    pObj = &rNewObj;
-    pObjList = rNewObj.GetObjList();
-    bNeedRepaint = TRUE;
-    eHint = HINT_OBJCHG;
+    maRectangle = rRect;
 }
+
+void SdrHint::SetPage(const SdrPage* pNewPage)
+{
+    mpPage = pNewPage;
+}
+
+void SdrHint::SetObjList(const SdrObjList* pNewOL)
+{
+    mpObjList = pNewOL;
+}
+
+void SdrHint::SetObject(const SdrObject* pNewObj)
+{
+    mpObj = pNewObj;
+}
+
+void SdrHint::SetKind(SdrHintKind eNewKind)
+{
+    meHint = eNewKind;
+}
+
+void SdrHint::SetRect(const Rectangle& rNewRect)
+{
+    maRectangle = rNewRect;
+}
+
+const SdrPage* SdrHint::GetPage() const
+{
+    return mpPage;
+}
+
+const SdrObjList* SdrHint::GetObjList() const
+{
+    return mpObjList;
+}
+
+const SdrObject* SdrHint::GetObject() const
+{
+    return mpObj;
+}
+
+SdrHintKind SdrHint::GetKind() const
+{
+    return meHint;
+}
+
+const Rectangle& SdrHint::GetRect() const
+{
+    return maRectangle;
+}
+
 // eof
