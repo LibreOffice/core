@@ -30,9 +30,11 @@ Installation instructions:
   
 Converting documents with the servlet:
 ======================================
-1. Browse your web server "http://<your_ip>/conversion/ConverterServlet.html" or
-   open the file "ConverterServlet.html" in your web browser and select a file.
-2. Select a type to convert the file to, and the extension for the converted file.
-3. Press the button. The document will be uploaded to the server, converted and
-   pushed back to the client. Your browser will open a dialog for saving the
-   converted document.
+- In the file "ConverterServlet.html", search for the following line:
+  <form action="http://127.0.0.1:8080/servlet/ConverterServlet" method=post enctype="multipart/form-data">
+  Replace the existing IP address with your intended IP address.
+- Open the file "ConverterServlet.html" in your web browser and select a file,
+  a type to convert the file to, and the extension for the converted file.
+- Press the button. The document will be uploaded to the server, converted and
+  pushed back to the client. Your browser will open a dialog for saving the
+  converted document.
