@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-07-23 14:32:32 $
+#   last change: $Date: 2004-11-17 13:33:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ PACKAGE = complex$/framework$/dochelper
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = WriterHelper.java DialogThread.java
+JAVAFILES       = DialogThread.java WriterHelper.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
