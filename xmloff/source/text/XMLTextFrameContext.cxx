@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
+ *  last change: $Author: mtg $ $Date: 2001-03-09 15:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
-
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
@@ -189,7 +188,8 @@ public:
                                   const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            USHORT nType);
+            sal_uInt16 nType,
+            ParamMap &rParamMap);
     virtual ~XMLTextFrameParam_Impl();
 };
 TYPEINIT1( XMLTextFrameParam_Impl, SvXMLImportContext );
@@ -200,10 +200,12 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16
                                   const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            USHORT nType) :
+            sal_uInt16 nType,
+            ParamMap &rParamMap):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sName, sValue;
+    sal_Bool bFoundValue = sal_False; // to allow empty values
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -213,17 +215,15 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16
         OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
         if ( XML_NAMESPACE_DRAW == nPrefix && aLocalName.equalsAsciiL( sXML_value, sizeof(sXML_value) -1 ) )
-                sValue = rValue;
+        {
+            sValue = rValue;
+            bFoundValue=sal_True;
+        }
         else if ( XML_NAMESPACE_OFFICE == nPrefix && aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name) -1 ) )
-                sName = rValue;
+            sName = rValue;
     }
-    if (sName.getLength() && sValue.getLength())
-    {
-        if (nType == XML_TEXT_FRAME_APPLET)
-            GetImport().GetTextImport()->addParam( sName, sValue, sal_True );
-        else if (nType == XML_TEXT_FRAME_PLUGIN)
-            GetImport().GetTextImport()->addParam( sName, sValue, sal_False );
-    }
+    if (sName.getLength() && bFoundValue )
+        rParamMap[sName] = sValue;
 }
 class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 {
@@ -387,7 +387,6 @@ XMLTextFrameContext::XMLTextFrameContext(
     OUString    sCode;
     OUString    sObject;
     OUString    sArchive;
-    OUString    sOfficeName;
     sal_Bool    bMayScript = sal_False;
     OUString    sMimeType;
 
@@ -577,9 +576,6 @@ XMLTextFrameContext::XMLTextFrameContext(
         case XML_TOK_TEXT_FRAME_ARCHIVE:
             sArchive = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_OFFICE_NAME:
-            sOfficeName = rValue;
-            break;
         case XML_TOK_TEXT_FRAME_MAY_SCRIPT:
             if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( sXML_true ) ) )
                 bMayScript = sal_True;
@@ -592,52 +588,60 @@ XMLTextFrameContext::XMLTextFrameContext(
         }
     }
 
-    if( (XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OLE == nType)
+    if( (XML_TEXT_FRAME_APPLET  == nType || XML_TEXT_FRAME_PLUGIN == nType ||
+         XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OLE    == nType)
         && !sHRef.getLength() )
         return; // no URL: no image or OLE object
 
-    if( XML_TEXT_FRAME_OLE == nType )
+    switch ( nType)
     {
-        OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef, sClassId ) );
-
-        if( sURL.getLength() )
-            xPropSet = GetImport().GetTextImport()->createAndInsertOLEObject(
-                                                        GetImport(), sURL,
-                                                        sClassId, nWidth,
-                                                        nHeight );
-    }
-    else if (XML_TEXT_FRAME_APPLET == nType)
-    {
-        xPropSet = GetImport().GetTextImport()->createApplet(
-                                sCode, sName, bMayScript, sHRef, nWidth, nHeight);
-    }
-    else if (XML_TEXT_FRAME_PLUGIN == nType)
-    {
-        xPropSet = GetImport().GetTextImport()->createPlugin(
-                                sMimeType, sHRef, nWidth, nHeight);
-
-    }
-    else if (XML_TEXT_FRAME_FLOATING_FRAME == nType)
-    {
-        xPropSet = GetImport().GetTextImport()->createFloatingFrame(
-                                sHRef, nWidth, nHeight);
-    }
-    else
-    {
-        Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
-                                                  UNO_QUERY );
-        if( xFactory.is() )
+        case XML_TEXT_FRAME_OLE:
         {
-            OUString sServiceName;
-            switch( nType )
+            OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef, sClassId ) );
+
+            if( sURL.getLength() )
+                xPropSet = GetImport().GetTextImport()->createAndInsertOLEObject(
+                                                            GetImport(), sURL,
+                                                            sClassId, nWidth,
+                                                            nHeight );
+            break;
+        }
+        case XML_TEXT_FRAME_APPLET:
+        {
+            xPropSet = GetImport().GetTextImport()->createApplet(
+                                    sCode, sName, bMayScript, sHRef, nWidth, nHeight);
+            break;
+        }
+        case XML_TEXT_FRAME_PLUGIN:
+        {
+            xPropSet = GetImport().GetTextImport()->createPlugin(
+                                    sMimeType, sHRef, nWidth, nHeight);
+
+            break;
+        }
+        case XML_TEXT_FRAME_FLOATING_FRAME:
+        {
+            xPropSet = GetImport().GetTextImport()->createFloatingFrame(
+                                    sHRef, nWidth, nHeight);
+            break;
+        }
+        default:
+        {
+            Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
+                                                      UNO_QUERY );
+            if( xFactory.is() )
             {
-            case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
-            case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
+                OUString sServiceName;
+                switch( nType )
+                {
+                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
+                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
+                }
+                Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
+                DBG_ASSERT( xIfc.is(), "couldn't create frame" );
+                if( xIfc.is() )
+                    xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
             }
-            Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
-            DBG_ASSERT( xIfc.is(), "couldn't create frame" );
-            if( xIfc.is() )
-                xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
         }
     }
 
@@ -817,14 +821,6 @@ void XMLTextFrameContext::EndElement()
                 xPropSet->setPropertyValue( sAlternativeText, aAny );
             }
         }
-        if ( nType == XML_TEXT_FRAME_APPLET )
-        {
-            GetImport().GetTextImport()->setAlternateText( sDesc, sal_True );
-        }
-        else if ( nType == XML_TEXT_FRAME_PLUGIN )
-        {
-            GetImport().GetTextImport()->setAlternateText( sDesc, sal_False );
-        }
     }
 
     if( xOldTextCursor.is() )
@@ -832,14 +828,8 @@ void XMLTextFrameContext::EndElement()
         GetImport().GetTextImport()->DeleteParagraph();
         GetImport().GetTextImport()->SetCursor( xOldTextCursor );
     }
-    if ( nType == XML_TEXT_FRAME_APPLET )
-    {
-        GetImport().GetTextImport()->endApplet();
-    }
-    else if ( nType == XML_TEXT_FRAME_PLUGIN )
-    {
-        GetImport().GetTextImport()->endPlugin();
-    }
+    if (( nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN ) && xPropSet.is())
+        GetImport().GetTextImport()->endAppletOrPlugin( xPropSet, aParamMap);
 }
 
 SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
@@ -863,9 +853,9 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         {
             pContext = new XMLTextFrameParam_Impl( GetImport(),
                                               nPrefix, rLocalName,
-                                               xAttrList, nType );
+                                               xAttrList, nType, aParamMap );
         }
-        if( xPropSet.is() )
+        else if( xPropSet.is() )
         {
             if( rLocalName.equalsAsciiL( sXML_contour_polygon,
                                          sizeof(sXML_contour_polygon)-1 ) )
