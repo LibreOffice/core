@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 11:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,14 +190,29 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
     ASSERT( pOwnSh->IsFrmSelected(),
         "Kein Rahmen selektiert oder keine Shell, Update nicht moeglich");
 
-    // return wg. BASIC
-    if( !aSet.Count() || !pOwnSh->IsFrmSelected() )
-        return;
+    if( pOwnSh->IsFrmSelected() )
+    {
+        //JP 6.8.2001: set never an invalid anchor into the core.
+        const SfxPoolItem *pGItem, *pItem;
+        if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, FALSE, &pItem ))
+        {
+            SfxItemSet aGetSet( *aSet.GetPool(), RES_ANCHOR, RES_ANCHOR );
+            if( pOwnSh->GetFlyFrmAttr( aGetSet ) && 1 == aGetSet.Count() &&
+                SFX_ITEM_SET == aGetSet.GetItemState( RES_ANCHOR, FALSE, &pGItem )
+                && ((SwFmtAnchor*)pGItem)->GetAnchorId() ==
+                   ((SwFmtAnchor*)pItem)->GetAnchorId() )
+                aSet.ClearItem( RES_ANCHOR );
+        }
 
-    pOwnSh->StartAllAction();
-    pOwnSh->SetFlyFrmAttr( aSet );
-    _UpdateFlyFrm();
-    pOwnSh->EndAllAction();
+        // return wg. BASIC
+        if( aSet.Count() )
+        {
+            pOwnSh->StartAllAction();
+            pOwnSh->SetFlyFrmAttr( aSet );
+            _UpdateFlyFrm();
+            pOwnSh->EndAllAction();
+        }
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -621,6 +636,9 @@ SwFrmValid::SwFrmValid() :
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:37  hr
+    initial import
+
     Revision 1.168  2000/09/18 16:05:33  willem.vandorp
     OpenOffice header added.
 
