@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-10 09:32:50 $
+ *  last change: $Author: mav $ $Date: 2002-07-16 12:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,18 +1385,22 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     // name from the INetURLObject here
     aFullName = aTargetObj.getName( INetURLObject::LAST_SEGMENT, true,
                                     INetURLObject::DECODE_WITH_CHARSET );
+
+    // get access to source file
+    Content aSourceContent;
+    Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+    INetURLObject   aSourceURL( rSourceURL );
+    if( ! Content::create( aSourceURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) )
+        return sal_False;
+
+    // transfer source file
     try
     {
-        TransferInfo aTransferInfo;
-        aTransferInfo.MoveData = sal_False;
-        aTransferInfo.SourceURL = rSourceURL;
-        aTransferInfo.NewTitle = aFullName;
-        aTransferInfo.NameClash = NameClash::RENAME;
-
-        Any aArg = makeAny( aTransferInfo );
-        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_TRANSFER ) );
-
-        aTargetGroup.executeCommand( aCmd, aArg );
+        if( ! aTargetGroup.transferContent( aSourceContent,
+                                                InsertOperation_COPY,
+                                                aFullName,
+                                                NameClash::ERROR ) )
+            return sal_False;
     }
     catch ( ContentCreationException& )
     { return FALSE; }
