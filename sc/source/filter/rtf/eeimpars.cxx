@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:52:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         // MergeRow bereits beim parsen
         if ( nRow <= nOverlapRowMax )
         {
-            while ( pDoc->HasAttrib( nCol, nRow, nTab,
+            while ( nCol <= MAXCOL && pDoc->HasAttrib( nCol, nRow, nTab,
                 nCol, nRow, nTab, HASATTR_OVERLAPPED ) )
             {
                 nCol++;
