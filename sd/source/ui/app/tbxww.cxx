@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-30 09:31:51 $
+ *  last change: $Author: ka $ $Date: 2002-07-31 13:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,10 @@ SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
 
     if( ( eAlign == WINDOWALIGN_TOP ) || ( eAlign == WINDOWALIGN_BOTTOM ) )
     {
-       aTbx.GetToolBox().SetAlign( WINDOWALIGN_LEFT );
-       SetText( String() );
+        if ( aSdResIdWin.GetId() != RID_TEXT )
+            aTbx.GetToolBox().SetAlign( WINDOWALIGN_LEFT );
+
+        SetText( String() );
     }
 
     Size aSize = aTbx.CalcWindowSizePixel();
