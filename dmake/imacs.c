@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: imacs.c,v 1.2 2004-10-22 08:04:58 rt Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -27,7 +27,6 @@
 */
 
 #include "extern.h"
-#include "version.h"
 
 static  void    _set_int_var ANSI((char *, char *, int, int *));
 static  void    _set_string_var ANSI((char *, char *, int, char **));
