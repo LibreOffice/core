@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:25:03 $
+ *  last change: $Author: ama $ $Date: 2001-03-12 09:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _SVX_SHDDITEM_HXX //autogen
 #include <svx/shdditem.hxx>
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
 #endif
 #ifndef _SVX_CNTRITEM_HXX //autogen
 #include <svx/cntritem.hxx>
@@ -332,6 +335,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
         SetAlign( ALIGN_BASELINE );
         SetOutline( pAttrSet->GetContour().GetValue() );
         SetShadow( pAttrSet->GetShadowed().GetValue() );
+        SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
 #ifdef TEST_PROPWIDTH
         //SetPropWidth( pAttrSet->GetPropWidth() );
         if( pAttrSet->GetShadowed().GetValue() )
@@ -496,6 +500,9 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
             TRUE, &pItem ))
             SetShadow( ((SvxShadowedItem*)pItem)->GetValue() );
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_RELIEF,
+            TRUE, &pItem ))
+            SetRelief( (FontRelief)((SvxCharReliefItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
             TRUE, &pItem ))
             SetPropWidth(((SvxShadowedItem*)pItem)->GetValue() ? 50 : 100 );
@@ -640,6 +647,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     SetAlign( ALIGN_BASELINE );
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
+    SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
     SetAutoKern( pAttrSet->GetAutoKern().GetValue() );
     SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
     const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
@@ -754,6 +762,8 @@ SwFont::SwFont( const SwAttrHandler& rAttrHandler )
             rAttrHandler.GetDefault( RES_CHRATR_CONTOUR ) ).GetValue() );
     SetShadow( ( (SvxShadowedItem&)
             rAttrHandler.GetDefault( RES_CHRATR_SHADOWED ) ).GetValue() );
+    SetRelief( (FontRelief)( (SvxCharReliefItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_RELIEF ) ).GetValue() );
     SetAutoKern( ( (SvxAutoKernItem&)
             rAttrHandler.GetDefault( RES_CHRATR_AUTOKERN ) ).GetValue() );
     SetWordLineMode( ( (SvxWordLineModeItem&)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 12:51:11 $
+ *  last change: $Author: ama $ $Date: 2001-03-12 09:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,9 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
         break;
     case RES_CHRATR_SCALEW:
         pNew = new SwTxtCharScaleWidth( (SvxCharScaleWidthItem&)rNew, nStt, nEnd );
+        break;
+    case RES_CHRATR_RELIEF:
+        pNew = new SwTxtAttrEnd( rNew, nStt, nEnd );
         break;
     case RES_TXTATR_REFMARK:
         pNew = nStt == nEnd

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 15:06:18 $
+ *  last change: $Author: ama $ $Date: 2001-03-12 09:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ class SwSubFont : public SvxFont
     inline void SetAutoKern( const BOOL bAutoKern );
     inline void SetWordLineMode( const BOOL bWordLineMode );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
+    inline void SetRelief( const FontRelief eNew );
 
     // Methoden fuer die Hoch-/Tiefstellung
     inline void SetEscapement( const short nNewEsc );
@@ -299,6 +300,7 @@ public:
     inline void SetLanguage( LanguageType eNewLang, const BYTE nWhich );
     inline void SetCharSet( const CharSet eCharSet, const BYTE nWhich );
     inline void SetPitch( const FontPitch ePitch, const BYTE nWhich );
+    inline void SetRelief( const FontRelief eNew );
 
     // Get/Set-Methoden fuer die aktuelle Einstellung
     inline void SetNoHyph( const BOOL bNew );
@@ -735,6 +737,24 @@ inline void SwFont::SetPropWidth( const USHORT nNew )
         aSub[0].SetPropWidth( nNew );
         aSub[1].SetPropWidth( nNew );
         aSub[2].SetPropWidth( nNew );
+    }
+}
+
+// gekapselte SV-Font-Methode
+inline void SwSubFont::SetRelief( const FontRelief eNew )
+{
+    pMagic = 0;
+    Font::SetRelief( eNew );
+}
+
+inline void SwFont::SetRelief( const FontRelief eNew )
+{
+    if( eNew != aSub[0].GetRelief() )
+    {
+        bFntChg = TRUE;
+        aSub[0].SetRelief( eNew );
+        aSub[1].SetRelief( eNew );
+        aSub[2].SetRelief( eNew );
     }
 }
 

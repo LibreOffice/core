@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-08 10:48:11 $
+ *  last change: $Author: ama $ $Date: 2001-03-12 10:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _SVX_KERNITEM_HXX
 #include <svx/kernitem.hxx>
 #endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
+#endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
@@ -157,6 +160,9 @@
  * stack, the top most attribute on the stack is valid. Because some
  * kinds of attributes have to be pushed to the same stacks we map their
  * ids to stack ids
+ * Attention: The first NUM_DEFAULT_VALUES ( defined in swfntcch.hxx == 33 )
+ * are stored in the defaultitem-cache, if you add one, you have to increase
+ * NUM_DEFAULT_VALUES.
  *************************************************************************/
 
 USHORT StackPos[ NUM_OBJECTS ] = {
@@ -196,12 +202,12 @@ USHORT StackPos[ NUM_OBJECTS ] = {
     30, // RES_CHRATR_EMPHASIS_MARK,             // 33
     29, // RES_CHRATR_TWO_LINES,                 // 34
     31, // RES_CHRATR_SCALEW,                    // 35
-     0, // RES_CHRATR_DUMMY5,                    // 36
+    32, // RES_CHRATR_RELIEF,                    // 36
      0, // RES_CHRATR_DUMMY1,                    // 37
      0, // RES_TXTATR_INETFMT                    // 38
      0, // RES_TXTATR_DUMMY4,                    // 39
-    32, // RES_TXTATR_REFMARK,                   // 40
-    33, // RES_TXTATR_TOXMARK,                   // 41
+    33, // RES_TXTATR_REFMARK,                   // 40
+    34, // RES_TXTATR_TOXMARK,                   // 41
      0, // RES_TXTATR_CHARFMT,                   // 42
      0, // RES_TXTATR_DUMMY5,                    // 43
     29, // RES_TXTATR_CJK_RUBY,                  // 44
@@ -326,6 +332,9 @@ void FontChg(const SfxPoolItem* pItem, SwFont& rFnt, sal_Bool bPush )
             break;
         case RES_CHRATR_SCALEW :
             rFnt.SetPropWidth( ((SvxCharScaleWidthItem*)pItem)->GetValue() );
+            break;
+        case RES_CHRATR_RELIEF :
+            rFnt.SetRelief( (FontRelief)((SvxCharReliefItem*)pItem)->GetValue() );
             break;
 
         case RES_CHRATR_ROTATE :
