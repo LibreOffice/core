@@ -28,7 +28,7 @@ public class WebWizard extends WWD_Events{
     public static void main(String args[]) {
 
         String ConnectStr =
-            "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+            "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
         //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
             XMultiServiceFactory xmsf = Desktop.connect(ConnectStr);
