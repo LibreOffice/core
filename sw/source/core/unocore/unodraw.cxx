@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 07:02:43 $
+ *  last change: $Author: os $ $Date: 2001-06-05 08:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,8 +554,15 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         pSvxShape = (SvxShape*)xShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
     }
 
-    if(!pShape)
-        throw uno::RuntimeException();
+    if(!pShape || pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
+    {
+        RuntimeException aExcept;
+        if(pShape)
+            aExcept.Message = C2U("object already inserted");
+        else
+            aExcept.Message = C2U("illegal object");
+        throw aExcept;
+    }
     GetSvxPage()->add(xShape);
 
     uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
@@ -654,6 +661,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
     if(pFmt)
         pFmt->Add(pShape);
+    pShape->m_bDescriptor = sal_False;
 
     delete pPam;
     delete pInternalPam;

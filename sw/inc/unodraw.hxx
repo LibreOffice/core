@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-05-31 10:13:10 $
+ *  last change: $Author: os $ $Date: 2001-06-05 08:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ class SwXShape : public SwXShapeBaseClass,
     friend class SwHTMLImageWatcher;
     friend class SwHTMLParser;
     friend class SwXGroupShape;
+    friend class SwXDrawPage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 xShapeAgg;
     SfxItemPropertySet          aPropSet;
