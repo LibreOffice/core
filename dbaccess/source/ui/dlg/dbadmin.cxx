@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:23:01 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 09:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,8 +692,10 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
             sInitialSelection = *m_aDatasources.begin();
     }
 
-    // TODO : get the initial selection from the configuration
     implSelectDatasource(sInitialSelection);
+
+    GetApplyButton()->Enable(sal_False);
+        // nothing modified 'til now -> now apply
 }
 
 //-------------------------------------------------------------------------
@@ -997,23 +999,23 @@ IMPL_LINK(ODbAdminDialog, OnDatasourceModifed, SfxTabPage*, _pTabPage)
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
 {
-    ::rtl::OUString sNewStringSuggestion = _pTabPage->GetCurrentName();
-
-    // check if there's already an data source with the suggested name
-    ConstStringSetIterator aExistentPos = m_aValidDatasources.find(sNewStringSuggestion);
-        // !! m_aValidDatasources contains _all_ data source names _except_ the currently selected one !!
-
-    sal_Bool bValid = m_aValidDatasources.end() == aExistentPos;
-
-    // the user is not allowed to leave the current data source (or to commit the dialog) as long
-    // as the name is invalid
-    m_aSelector.Enable(bValid && m_aDatasources.isValid());
-    GetOKButton().Enable(bValid);
-    GetApplyButton()->Enable(bValid);
-
-    // if this is the first modification did on this data source, we have to adjust the DS list accordingly
     if (!m_bResetting)
     {
+        ::rtl::OUString sNewStringSuggestion = _pTabPage->GetCurrentName();
+
+        // check if there's already a data source with the suggested name
+        ConstStringSetIterator aExistentPos = m_aValidDatasources.find(sNewStringSuggestion);
+            // !! m_aValidDatasources contains _all_ data source names _except_ the currently selected one !!
+
+        sal_Bool bValid = m_aValidDatasources.end() == aExistentPos;
+
+        // the user is not allowed to leave the current data source (or to commit the dialog) as long
+        // as the name is invalid
+        m_aSelector.Enable(bValid && m_aDatasources.isValid());
+        GetOKButton().Enable(bValid);
+        GetApplyButton()->Enable(bValid);
+
+        // if this is the first modification for this data source, we have to adjust the DS list accordingly
         String sSelected = m_aSelector.getSelected();
         if (!m_aDatasources[sSelected].isModified())
         {   // (we could do it all the time here, but as this link is called every time a single character
@@ -1025,8 +1027,9 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
         // enable the apply button
         GetApplyButton()->Enable(sal_True && bValid);
 
+        return bValid ? 1L : 0L;
     }
-    return bValid ? 1L : 0L;
+    return 1L;
 }
 
 //-------------------------------------------------------------------------
@@ -1843,6 +1846,12 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     // disable the apply button
     GetApplyButton()->Enable(sal_False);
 
+
+    ShowPage(GetCurPageId());
+        // This does the usual ActivatePage, so the pages can save their current status.
+        // This way, next time they're asked what has changed since now and here, they really
+        // can compare with the status they have _now_ (not the one they had before this apply call).
+
     return eResult;
 }
 
@@ -2214,6 +2223,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/01/04 11:23:01  fs
+ *  #81485# +ADO page
+ *
  *  Revision 1.27  2000/12/20 13:28:06  fs
  *  #81761# dis-/enable the apply button the same way as the ok button
  *
