@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-27 18:38:32 $
+ *  last change: $Author: nn $ $Date: 2001-10-25 17:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ struct SvXMLNumFmtEntry
 {
     rtl::OUString   aName;
     sal_uInt32      nKey;
-    sal_Bool        bVolatile;
+    sal_Bool        bRemoveAfterUse;
 
-    SvXMLNumFmtEntry( const rtl::OUString& rN, sal_uInt32 nK, sal_Bool bV ) :
-        aName(rN), nKey(nK), bVolatile(bV) {}
+    SvXMLNumFmtEntry( const rtl::OUString& rN, sal_uInt32 nK, sal_Bool bR ) :
+        aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
 typedef SvXMLNumFmtEntry* SvXMLNumFmtEntryPtr;
@@ -124,7 +124,9 @@ public:
     const SvXMLTokenMap&    GetStyleElemAttrTokenMap();
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
     sal_uInt32              GetKeyForName( const rtl::OUString& rName );
-    void                    AddKey( sal_uInt32 nKey, const rtl::OUString& rName );
+    void                    AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_Bool bRemoveAfterUse );
+    void                    SetUsed( sal_uInt32 nKey );
+    void                    RemoveVolatileFormats();
 };
 
 
@@ -438,11 +440,42 @@ sal_uInt32 SvXMLNumImpData::GetKeyForName( const rtl::OUString& rName )
     return NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
-void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const rtl::OUString& rName )
+void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_Bool bRemoveAfterUse )
 {
-    sal_Bool bVolatile = sal_False;
-    SvXMLNumFmtEntry* pObj = new SvXMLNumFmtEntry( rName, nKey, bVolatile );
+    SvXMLNumFmtEntry* pObj = new SvXMLNumFmtEntry( rName, nKey, bRemoveAfterUse );
     aNameEntries.Insert( pObj, aNameEntries.Count() );
+}
+
+void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )
+{
+    USHORT nCount = aNameEntries.Count();
+    for (USHORT i=0; i<nCount; i++)
+    {
+        SvXMLNumFmtEntry* pObj = aNameEntries[i];
+        if ( pObj->nKey == nKey )
+        {
+            pObj->bRemoveAfterUse = sal_False;      // used -> don't remove
+            break;
+        }
+    }
+}
+
+void SvXMLNumImpData::RemoveVolatileFormats()
+{
+    //  remove temporary (volatile) formats from NumberFormatter
+    //  called at the end of each import (styles and content), so volatile formats
+    //  from styles can't be used in content
+
+    if ( !pFormatter )
+        return;
+
+    USHORT nCount = aNameEntries.Count();
+    for (USHORT i=0; i<nCount; i++)
+    {
+        const SvXMLNumFmtEntry* pObj = aNameEntries[i];
+        if ( pObj->bRemoveAfterUse )
+            pFormatter->DeleteEntry( pObj->nKey );
+    }
 }
 
 const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
@@ -957,7 +990,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bHasLongDoW( FALSE ),
     bHasEra( FALSE ),
     bHasDateTime( FALSE ),
-    bHasMap( sal_False ),
+    bRemoveAfterUse( sal_False ),
     pStyles( &rStyles ),
     nKey(-1)
 {
@@ -1002,7 +1035,10 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                     bTruncate = bAttrBool;
                 break;
             case XML_TOK_STYLE_ATTR_VOLATILE:
-                //! ...
+                //  volatile formats can be removed after importing
+                //  if not used in other styles
+                if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
+                    bRemoveAfterUse = bAttrBool;
                 break;
         }
     }
@@ -1034,7 +1070,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bHasLongDoW( FALSE ),
     bHasEra( FALSE ),
     bHasDateTime( FALSE ),
-    bHasMap( sal_False ),
+    bRemoveAfterUse( sal_False ),
     pStyles( &rStyles ),
     nKey(nTempKey)
 {
@@ -1083,7 +1119,8 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
             break;
         case XML_TOK_STYLE_MAP:
             {
-                bHasMap = sal_True;
+                //  SvXMLNumFmtMapContext::EndElement adds to aMyConditions,
+                //  so there's no need for an extra flag
                 pContext = new SvXMLNumFmtMapContext( GetImport(), nPrfx, rLName,
                                                             *this, xAttrList );
             }
@@ -1098,6 +1135,34 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
 sal_Int32 SvXMLNumFormatContext::GetKey()
 {
     if (nKey > -1)
+    {
+        if (bRemoveAfterUse)
+        {
+            //  format is used -> don't remove
+            bRemoveAfterUse = sal_False;
+            if (pData)
+                pData->SetUsed(nKey);
+
+            //  Add to import's list of keys now - CreateAndInsert didn't add
+            //  the style if bRemoveAfterUse was set.
+            GetImport().AddNumberStyle( nKey, GetName() );
+        }
+        return nKey;
+    }
+    else
+    {
+        // reset bRemoveAfterUse before CreateAndInsert, so AddKey is called without bRemoveAfterUse set
+        bRemoveAfterUse = sal_False;
+        CreateAndInsert(sal_True);
+        return nKey;
+    }
+}
+
+sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
+{
+    //  used for map elements in CreateAndInsert - don't reset bRemoveAfterUse flag
+
+    if (nKey > -1)
         return nKey;
     else
     {
@@ -1108,7 +1173,7 @@ sal_Int32 SvXMLNumFormatContext::GetKey()
 
 void SvXMLNumFormatContext::GetFormat(rtl::OUString& rFormatString, lang::Locale& rLocale)
 {
-    if (bHasMap)
+    if (aMyConditions.size())
     {
         rtl::OUString sFormat;
         lang::Locale aLoc;
@@ -1144,19 +1209,17 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 
         sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-        if (bHasMap)
+        for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
         {
-            for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
+            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
+            if (pStyle)
             {
-                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
-                if (pStyle)
-                {
-                    if ((pStyle->GetKey() > -1))
-                        AddCondition(i);
-                }
+                if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag
+                    AddCondition(i);
             }
         }
+
         aFormatCode.insert( 0, aConditions.makeStringAndClear() );
         OUString sFormat = aFormatCode.makeStringAndClear();
 
@@ -1281,10 +1344,16 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
             nIndex = pFormatter->GetStandardIndex( nFormatLang );
         }
 
-        pData->AddKey( nIndex, GetName() );
+        pData->AddKey( nIndex, GetName(), bRemoveAfterUse );
         nKey = nIndex;
 
-        GetImport().AddNumberStyle( nKey, GetName() );
+        //  Add to import's list of keys (shared between styles and content import)
+        //  only if not volatile - formats are removed from NumberFormatter at the
+        //  end of each import (in SvXMLNumFmtHelper dtor).
+        //  If bRemoveAfterUse is reset later in GetKey, AddNumberStyle is called there.
+
+        if (!bRemoveAfterUse)
+            GetImport().AddNumberStyle( nKey, GetName() );
 
     #if 0
         ByteString aByte( String(sFormatName), gsl_getSystemTextEncoding() );
@@ -1630,6 +1699,9 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
 {
+    //  remove temporary (volatile) formats from NumberFormatter
+    pData->RemoveVolatileFormats();
+
     delete pData;
 }
 
