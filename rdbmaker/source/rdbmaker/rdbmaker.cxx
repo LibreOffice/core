@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 09:39:02 $
+ *  last change: $Author: hro $ $Date: 2001-05-21 15:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ OString getFullNameOfApplicatRdb()
 
         tmpReg += OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb") );
 
-        FileBase::getSystemPathFromNormalizedPath(tmpReg, bootReg);
+        FileBase::getSystemPathFromFileURL(tmpReg, bootReg);
     }
 
     return OUStringToOString(bootReg, RTL_TEXTENCODING_ASCII_US);
