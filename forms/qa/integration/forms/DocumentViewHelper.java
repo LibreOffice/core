@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentViewHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:52:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ class DocumentViewHelper
         @param aInterfaceClass
                 the class of the interface which shall be returned
     */
-    public Object get( Class aInterfaceClass )
+    public Object query( Class aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_controller );
     }
@@ -126,7 +126,7 @@ class DocumentViewHelper
         XDispatch xReturn = null;
 
         // go get the current view
-        XController xController = (XController)get( XController.class );
+        XController xController = (XController)query( XController.class );
         // go get the dispatch provider of it's frame
         XDispatchProvider xProvider = (XDispatchProvider)UnoRuntime.queryInterface(
             XDispatchProvider.class, xController.getFrame() );
@@ -145,24 +145,43 @@ class DocumentViewHelper
     /* ------------------------------------------------------------------ */
     /** retrieves a dispatcher for the given URL, obtained at the current view of the document
     */
-    public XDispatch getDispatcher( String sURL ) throws java.lang.Exception
+    public XDispatch getDispatcher( String url ) throws java.lang.Exception
     {
         URL[] aURL = new URL[] { new URL() };
-        aURL[0].Complete = sURL;
+        aURL[0].Complete = url;
         return getDispatcher( aURL );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** dispatches the given URL into the view, if there's a dispatcher for it
+
+        @return
+            <TRUE/> if the URL was successfully dispatched
+    */
+    public boolean dispatch( String url ) throws java.lang.Exception
+    {
+        URL[] completeURL = new URL[] { new URL() };
+        completeURL[0].Complete = url;
+        XDispatch dispatcher = getDispatcher( completeURL );
+        if ( dispatcher == null )
+            return false;
+
+        PropertyValue[] aDummyArgs = new PropertyValue[] { };
+        dispatcher.dispatch( completeURL[0], aDummyArgs );
+        return true;
     }
 
     /* ------------------------------------------------------------------ */
     /** retrieves a control within the current view of a document
         @param xModel
-            specifies the control model which's control should be located
+            specifies the control model whose control should be located
         @return
             the control tied to the model
     */
     public XControl getControl( XControlModel xModel ) throws com.sun.star.uno.Exception
     {
         // the current view of the document
-        XControlAccess xCtrlAcc = (XControlAccess)get( XControlAccess.class );
+        XControlAccess xCtrlAcc = (XControlAccess)query( XControlAccess.class );
         // delegate the task of looking for the control
         return xCtrlAcc.getControl( xModel );
     }
@@ -186,14 +205,7 @@ class DocumentViewHelper
     */
     protected void toggleFormDesignMode( ) throws java.lang.Exception
     {
-        // get a dispatcher for the toggle URL
-        URL[] aToggleURL = new URL[] { new URL() };
-        aToggleURL[0].Complete = new String( ".uno:SwitchControlDesignMode" );
-        XDispatch xDispatcher = getDispatcher( aToggleURL );
-
-        // dispatch the URL - this will result in toggling the mode
-        PropertyValue[] aDummyArgs = new PropertyValue[] { };
-        xDispatcher.dispatch( aToggleURL[0], aDummyArgs );
+        dispatch( ".uno:SwitchControlDesignMode" );
     }
 
     /* ------------------------------------------------------------------ */
@@ -221,14 +233,14 @@ class DocumentViewHelper
     protected void grabControlFocus( ) throws java.lang.Exception
     {
         // the forms container of our document
-        XIndexContainer xForms = dbfTools.queryXIndexContainer( m_document.getFormComponentTreeRoot( ) );
+        XIndexContainer xForms = dbfTools.queryIndexContainer( m_document.getFormComponentTreeRoot( ) );
         // the first form
-        XIndexContainer xForm = dbfTools.queryXIndexContainer( xForms.getByIndex( 0 ) );
+        XIndexContainer xForm = dbfTools.queryIndexContainer( xForms.getByIndex( 0 ) );
 
         // the first control model which is no FixedText (FixedText's can't have the focus)
         for ( int i = 0; i<xForm.getCount(); ++i )
         {
-            XPropertySet xControlProps = dbfTools.queryXPropertySet( xForm.getByIndex( i ) );
+            XPropertySet xControlProps = dbfTools.queryPropertySet( xForm.getByIndex( i ) );
             if ( FormComponentType.FIXEDTEXT != ((Short)xControlProps.getPropertyValue( "ClassId" )).shortValue() )
             {
                 XControlModel xControlModel = (XControlModel)UnoRuntime.queryInterface(
