@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Date: 2004-01-05 20:36:51 $
+ *  last change: $Date: 2004-11-02 12:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ public class AccessibleMenuItem extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //        at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
 
