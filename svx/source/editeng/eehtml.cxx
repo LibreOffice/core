@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-18 11:26:30 $
+ *  last change: $Author: mt $ $Date: 2002-07-01 14:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,10 @@ void EditHTMLParser::NextToken( int nToken )
     break;
     case HTML_TEXTTOKEN:
     {
-        if ( bInPara || pCurAnchor )
+        if ( !bInPara )
+            StartPara( FALSE );
+
+//        if ( bInPara || pCurAnchor )
         {
             String aText = aToken;
             if ( aText.Len() && ( aText.GetChar( 0 ) == ' ' )
