@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:13:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,10 +1128,10 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         fCount = 0.0;
     sal_Int16 nCount = sal_Int16(fCount);
     sal_Bool bHasTime(sal_False);
-    double fHoursValue;
-    double fMinsValue;
-    double fSecsValue;
-    double f100SecsValue;
+    double fHoursValue = 0;
+    double fMinsValue = 0;
+    double fSecsValue = 0;
+    double f100SecsValue = 0;
     if (fValue > 0.0)
     {
         bHasTime = sal_True;
