@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:46:00 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ ColorData SwWW8ImplReader::GetCol(BYTE nIco)
     return eSwWW8ColA[nIco];
 }
 
-inline short MSRoundTweak(short x)
+inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
 {
 #if 0
     //keep this around in case it turns out to be true. But I don't think so.
@@ -466,9 +466,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     aGrid.SetGridType(eType);
 
     //sep.dyaLinePitch
-    short nLinePitch = rSection.maSep.dyaLinePitch;
+    sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
 
-    aGrid.SetLines(nTextareaHeight/nLinePitch);
+    aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
 
     //It remains to be seen if a base height of 14points and a ruby height of
     //4 points should allow 12point text with ruby of 4pt to fit in single
@@ -476,10 +476,10 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     //So right now this doesn't always work as I think it should
 
     //This seems emperically correct, but might require some future tweaking.
-    short nRubyHeight = nLinePitch*2/9;
-    short nBaseHeight = nLinePitch-nRubyHeight;
-    aGrid.SetBaseHeight(nBaseHeight);
-    aGrid.SetRubyHeight(nRubyHeight);
+    sal_Int32 nRubyHeight = nLinePitch*2/9;
+    sal_Int32 nBaseHeight = nLinePitch-nRubyHeight;
+    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nBaseHeight));
+    aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
     //Get the size of word's default styles font
     UINT32 nRubyWidth=240;
@@ -527,10 +527,10 @@ void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
 }
 
 bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-    USHORT nNettoWidth)
+    sal_uInt32 nNettoWidth)
 {
     //sprmSCcolumns - Anzahl der Spalten - 1
-    USHORT nCols = rSection.NoCols();
+    sal_Int16 nCols = rSection.NoCols();
 
     if (nCols < 2)
         return false;                   // keine oder bloedsinnige Spalten
@@ -538,18 +538,20 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
     SwFmtCol aCol;                      // Erzeuge SwFmtCol
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
-    USHORT nColSpace = rSection.StandardColSeperation();
+    sal_Int32 nColSpace = rSection.StandardColSeperation();
 
     // sprmSLBetween
     if (rSection.maSep.fLBetween)
     {
-        aCol.SetLineAdj( COLADJ_TOP );      // Line
-        aCol.SetLineHeight( 100 );
-        aCol.SetLineColor( Color( COL_BLACK ));
-        aCol.SetLineWidth( 1 );
+        aCol.SetLineAdj(COLADJ_TOP);      // Line
+        aCol.SetLineHeight(100);
+        aCol.SetLineColor(Color(COL_BLACK));
+        aCol.SetLineWidth(1);
     }
 
-    aCol.Init( nCols, nColSpace, nNettoWidth );
+    aCol.Init(nCols, writer_cast<USHORT>(nColSpace),
+        writer_cast<USHORT>(nNettoWidth));
+
     // sprmSFEvenlySpaced
     if (!rSection.maSep.fEvenlySpaced)
     {
@@ -557,17 +559,17 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
         int nIdx = 1;
         for (USHORT i = 0; i < nCols; i++ )
         {
-            SwColumn* pCol = aCol.GetColumns()[ i ];
-            USHORT nLeft = rSection.maSep.rgdxaColumnWidthSpacing[nIdx - 1]/2;
-            USHORT nRight = rSection.maSep.rgdxaColumnWidthSpacing[nIdx + 1]/2;
-            USHORT nWishWidth = rSection.maSep.rgdxaColumnWidthSpacing[nIdx]
+            SwColumn* pCol = aCol.GetColumns()[i];
+            sal_Int32 nLeft = rSection.maSep.rgdxaColumnWidthSpacing[nIdx-1]/2;
+            sal_Int32 nRight = rSection.maSep.rgdxaColumnWidthSpacing[nIdx+1]/2;
+            sal_Int32 nWishWidth = rSection.maSep.rgdxaColumnWidthSpacing[nIdx]
                 + nLeft + nRight;
-            pCol->SetWishWidth(nWishWidth);
-            pCol->SetLeft(nLeft);
-            pCol->SetRight(nRight);
+            pCol->SetWishWidth(writer_cast<USHORT>(nWishWidth));
+            pCol->SetLeft(writer_cast<USHORT>(nLeft));
+            pCol->SetRight(writer_cast<USHORT>(nRight));
             nIdx += 2;
         }
-        aCol.SetWishWidth(nNettoWidth);
+        aCol.SetWishWidth(writer_cast<USHORT>(nNettoWidth));
     }
     rFmt.SetAttr(aCol);
     return true;
@@ -576,9 +578,9 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
 void wwSectionManager::SetLeftRight(wwSection &rSection)
 {
     // 3. LR-Raender
-    short nWWLe = MSRoundTweak(rSection.maSep.dxaLeft);
-    short nWWRi = MSRoundTweak(rSection.maSep.dxaRight);
-    short nWWGu = rSection.maSep.dzaGutter;
+    sal_uInt32 nWWLe = MSRoundTweak(rSection.maSep.dxaLeft);
+    sal_uInt32 nWWRi = MSRoundTweak(rSection.maSep.dxaRight);
+    sal_uInt32 nWWGu = rSection.maSep.dzaGutter;
 
     /*
     fRTLGutter is set if the gutter is on the right, the gutter is otherwise
@@ -635,13 +637,82 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     }
 }
 
+void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const
+{
+    if (!IsBorder(rSection.brc))
+        return;
+
+    SfxItemSet aSet(rFmt.GetAttrSet());
+    short aSizeArray[5]={0};
+    SetFlyBordersShadow(aSet, rSection.brc, &aSizeArray[0]);
+    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
+    SvxULSpaceItem aUL(ItemGet<SvxULSpaceItem>(aSet, RES_UL_SPACE));
+
+    SvxBoxItem aBox(ItemGet<SvxBoxItem>(aSet, RES_BOX));
+
+    if (rSection.maSep.pgbOffsetFrom == 1)
+    {
+        USHORT nDist;
+        if (aBox.GetLeft())
+        {
+            nDist = aBox.GetDistance(BOX_LINE_LEFT);
+            aBox.SetDistance(writer_cast<USHORT>(aLR.GetLeft() - nDist),
+                BOX_LINE_LEFT);
+            aSizeArray[WW8_LEFT] =
+                aSizeArray[WW8_LEFT] - nDist + aBox.GetDistance(BOX_LINE_LEFT);
+        }
+
+        if (aBox.GetRight())
+        {
+            nDist = aBox.GetDistance(BOX_LINE_RIGHT);
+            aBox.SetDistance(writer_cast<USHORT>(aLR.GetRight() - nDist),
+                BOX_LINE_RIGHT);
+            aSizeArray[WW8_RIGHT] =
+                aSizeArray[WW8_RIGHT] - nDist + aBox.GetDistance(BOX_LINE_RIGHT);
+        }
+
+        if (aBox.GetTop())
+        {
+            nDist = aBox.GetDistance(BOX_LINE_TOP);
+            aBox.SetDistance(writer_cast<USHORT>(aUL.GetUpper() - nDist),
+                BOX_LINE_TOP);
+            aSizeArray[WW8_TOP] =
+                aSizeArray[WW8_TOP] - nDist + aBox.GetDistance(BOX_LINE_TOP);
+        }
+
+        if (aBox.GetBottom())
+        {
+            nDist = aBox.GetDistance(BOX_LINE_BOTTOM);
+            aBox.SetDistance(writer_cast<USHORT>(aUL.GetLower() - nDist),
+                BOX_LINE_BOTTOM);
+            aSizeArray[WW8_BOT] =
+                aSizeArray[WW8_BOT] - nDist + aBox.GetDistance(BOX_LINE_BOTTOM);
+        }
+
+        aSet.Put(aBox);
+    }
+
+    if (aBox.GetLeft())
+        aLR.SetLeft(aLR.GetLeft() - aSizeArray[WW8_LEFT]);
+    if (aBox.GetRight())
+        aLR.SetRight(aLR.GetRight() - aSizeArray[WW8_RIGHT]);
+    if (aBox.GetTop())
+        aUL.SetUpper(aUL.GetUpper() - aSizeArray[WW8_TOP]);
+    if (aBox.GetBottom())
+        aUL.SetLower(aUL.GetLower() - aSizeArray[WW8_BOT]);
+
+    aSet.Put(aLR);
+    aSet.Put(aUL);
+    rFmt.SetAttr(aSet);
+}
+
 void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     wwSectionManager::wwULSpaceData& rData)
 {
-    short nWWUp = rSection.maSep.dyaTop;
-    short nWWLo = rSection.maSep.dyaBottom;
-    short nWWHTop = rSection.maSep.dyaHdrTop;
-    short nWWFBot = rSection.maSep.dyaHdrBottom;
+    sal_Int32 nWWUp = rSection.maSep.dyaTop;
+    sal_Int32 nWWLo = rSection.maSep.dyaBottom;
+    sal_uInt32 nWWHTop = rSection.maSep.dyaHdrTop;
+    sal_uInt32 nWWFBot = rSection.maSep.dyaHdrBottom;
 
     /*
     If there is gutter in 97+ and the dop says put it on top then get the
@@ -707,7 +778,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
         {
             pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
-            aHdUL.SetLower(rData.nSwHLo - MM50);
+            aHdUL.SetLower(writer_cast<USHORT>(rData.nSwHLo - MM50));
             pHdFmt->SetAttr(aHdUL);
             pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
@@ -720,14 +791,15 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
         {
             pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
-            aFtUL.SetUpper(rData.nSwFUp - MM50);
+            aFtUL.SetUpper(writer_cast<USHORT>(rData.nSwFUp - MM50));
             pFtFmt->SetAttr(aFtUL);
             pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
         }
     }
 
-    SvxULSpaceItem aUL(rData.nSwUp, rData.nSwLo); // Page-UL setzen
+    SvxULSpaceItem aUL(writer_cast<USHORT>(rData.nSwUp),
+        writer_cast<USHORT>(rData.nSwLo));
     rFmt.SetAttr(aUL);
 }
 
@@ -746,6 +818,8 @@ SwSectionFmt *wwSectionManager::InsertSection(
         aSet.Put( SwFmtFtnAtTxtEnd(FTNEND_ATTXTEND));
     if (0 == mrReader.pWDop->epc)
         aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
+
+    aSection.SetProtect(SectionIsProtected(rSection));
 
     rSection.mpSection = mrReader.rDoc.Insert( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
@@ -812,9 +886,9 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 
             aInfo.SetPaintLineNumbers(true);
 
-            aInfo.SetRestartEachPage(!bRestartLnNumPerSection);
+            aInfo.SetRestartEachPage(rSection.maSep.lnc == 0);
 
-            aInfo.SetPosFromLeft( rSection.maSep.dxaLnn);
+            aInfo.SetPosFromLeft(writer_cast<USHORT>(rSection.maSep.dxaLnn));
 
             //Paint only for every n line
             aInfo.SetCountBy(rSection.maSep.nLnnMod);
@@ -918,6 +992,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     aNewSection.maSep.nfcPgn = ReadBSprm( pSep, (bVer67 ? 147 : 0x300E), 0 );
     if (aNewSection.maSep.nfcPgn > 4)
         aNewSection.maSep.nfcPgn = 0;
+
+    aNewSection.maSep.fUnlocked = ReadBSprm(pSep, (bVer67 ? 139 : 0x3006), 0 );
 
     // sprmSFBiDi
     if (!bVer67)
@@ -1479,9 +1555,9 @@ bool lcl_IsBorder(bool bVer67, const WW8_BRC* pbrc, bool bChkBtwn = false)
                (bChkBtwn && pbrc[WW8_BETW ].aBits1[1]);
 }
 
-bool SwWW8ImplReader::IsBorder(const WW8_BRC* pbrc, bool bChkBtwn)
+bool SwWW8ImplReader::IsBorder(const WW8_BRC* pbrc, bool bChkBtwn) const
 {
-    return lcl_IsBorder( bVer67, pbrc, bChkBtwn );
+    return lcl_IsBorder(bVer67, pbrc, bChkBtwn);
 }
 
 bool WW8_BRC::IsEmpty(bool bVer67) const
@@ -1499,8 +1575,14 @@ bool WW8_BRC::IsZeroed(bool bVer67) const
     return (!(bVer67 ? (aBits1[0] & 0x001f) : aBits1[1]));
 }
 
+#if 0
+// #i20672# we can't properly support between lines so best to ignore
+// them for now
 bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
-    short *pSizeArray, BYTE nSetBorders, bool bChkBtwn)
+    short *pSizeArray, BYTE nSetBorders, bool bChkBtwn) const
+#endif
+bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
+    short *pSizeArray, BYTE nSetBorders) const
 {
     bool bChange = false;
     static const USHORT aIdArr[ 10 ] =
@@ -1536,37 +1618,40 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
             */
             rBox.SetLine( 0, aIdArr[ i+1 ] );
         }
+#if 0
+        // #i20672# we can't properly support between lines so best to ignore
+        // them for now
         else if( 6 == i && bChkBtwn )   // wenn Botton nichts war,
             nEnd += 2;                  // dann ggfs. auch Between befragen
+#endif
     }
     return bChange;
 }
 
 
-bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
-    const WW8_BRC pbrc[4] )
+bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
+    const WW8_BRC pbrc[4]) const
 {
-    bool bRet = ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
-                         : (pbrc[WW8_RIGHT].aBits2[ 1 ] & 0x20 ) ) &&
-                rBox.GetRight();
-    if( bRet )
+    bool bRet = (
+                ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
+                         : (pbrc[WW8_RIGHT].aBits2[ 1 ] & 0x20 ) )
+                && (pSizeArray && pSizeArray[WW8_RIGHT])
+                );
+    if (bRet)
     {
-        rShadow.SetColor( Color( COL_BLACK ));
-
-//          aS.SetWidth( 28 );
-// JP 19.11.98: abhaengig von der Breite der rechten Kante der Box
-        const SvxBorderLine& rLine = *rBox.GetRight();
-        rShadow.SetWidth( ( rLine.GetOutWidth() + rLine.GetInWidth() +
-                        rLine.GetDistance() ) );
-
-        rShadow.SetLocation( SVX_SHADOW_BOTTOMRIGHT );
+        rShadow.SetColor(Color(COL_BLACK));
+        short nVal = pSizeArray[WW8_RIGHT];
+        if (nVal < 0x10)
+            nVal = 0x10;
+        rShadow.SetWidth(nVal);
+        rShadow.SetLocation(SVX_SHADOW_BOTTOMRIGHT);
         bRet = true;
     }
     return bRet;
 }
 
 void SwWW8ImplReader::GetBorderDistance(const WW8_BRC* pbrc,
-    Rectangle& rInnerDist)
+    Rectangle& rInnerDist) const
 {
     // 'dptSpace' is stored in 3 bits of 'Border Code (BRC)'
     if (bVer67)
@@ -1587,19 +1672,19 @@ void SwWW8ImplReader::GetBorderDistance(const WW8_BRC* pbrc,
 
 
 bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
-    const WW8_BRC pbrc[4], short *pSizeArray )
+    const WW8_BRC pbrc[4], short *pSizeArray) const
 {
     bool bShadowed = false;
-    if( IsBorder( pbrc ) )
+    if (IsBorder(pbrc))
     {
         SvxBoxItem aBox;
-        SetBorder( aBox, pbrc, pSizeArray );
+        SetBorder(aBox, pbrc, pSizeArray);
 
         rFlySet.Put( aBox );
 
         // fShadow
         SvxShadowItem aShadow;
-        if( SetShadow( aShadow, aBox, pbrc ))
+        if( SetShadow( aShadow, pSizeArray, pbrc ))
         {
             bShadowed = true;
             rFlySet.Put( aShadow );
@@ -1885,7 +1970,7 @@ bool WW8FlyPara::IsEmpty() const
 }
 
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
-    short nPgLeft, short nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy )
+    sal_uInt32 nPgLeft, sal_uInt32 nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy )
 {
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // Initialisieren
     nNewNettoWidth = MINFLY;                    // Minimum
@@ -1930,7 +2015,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     {
         bAutoWidth = true;
         rIo.maTracer.Log(sw::log::eAutoWidthFrame);
-        nWidth = nNettoWidth = (nPgWidth ? nPgWidth : 2268); // 4 cm
+        nWidth = nNettoWidth =
+            msword_cast<sal_Int16>((nPgWidth ? nPgWidth : 2268)); // 4 cm
     }
     if( nWidth <= MINFLY )
         nWidth = nNettoWidth = MINFLY;              // Minimale Breite
@@ -2266,10 +2352,10 @@ void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
     aDup.Insert(*pPaM->GetPoint());
 }
 
-sal_uInt16 SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
+SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
     const SwPosition &rPos, bool bTableJoin)
 {
-    sal_uInt16 nRetWidth = 0;
+    SwTwips nRetWidth = 0;
     // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
     // die aus Flys rausragen
     WW8DupProperties aDup(rDoc,pCtrlStck);
@@ -2515,7 +2601,7 @@ void SwWW8ImplReader::StopApo()
         */
         SwNodeIndex aPref(pPaM->GetPoint()->nNode, -1);
 
-        sal_uInt16 nNewWidth =
+        SwTwips nNewWidth =
             MoveOutsideFly(pSFlyPara->pFlyFmt, *pSFlyPara->pMainTextPos);
         if (nNewWidth)
             pSFlyPara->BoxUpWidth(nNewWidth);
@@ -3682,26 +3768,7 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
     NewAttr( aLN );
 }
 
-bool sw::util::AdjustTabs(long nDestLeft, long nSrcLeft, SvxTabStopItem &rTStop)
-{
-    bool bChanged = false;
-    if (nDestLeft != nSrcLeft)
-    {
-        for (USHORT nCnt = 0; nCnt < rTStop.Count(); ++nCnt)
-        {
-            SvxTabStop& rTab = const_cast<SvxTabStop&>(rTStop[nCnt]);
-            if (SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
-            {
-                rTab.GetTabPos() += nSrcLeft;
-                rTab.GetTabPos() -= nDestLeft;
-                bChanged = true;
-            }
-        }
-    }
-    return bChanged;
-}
-
-void SwWW8ImplReader::AdjustStyleTabStops(short nLeft, SwWW8StyInf *pWWSty)
+void SwWW8ImplReader::AdjustStyleTabStops(long nLeft, SwWW8StyInf *pWWSty)
 {
     const SfxPoolItem* pTabs=0;
     bool bOnMarginStyle(false);
@@ -3742,7 +3809,7 @@ void SwWW8ImplReader::AdjustStyleTabStops(short nLeft, SwWW8StyInf *pWWSty)
             }
         }
 
-        if (sw::util::AdjustTabs(nLeft, nOldLeft, aTStop))
+        if (sw::util::AdjustTabs(aTStop, nOldLeft, nLeft))
             pWWSty->pFmt->SetAttr(aTStop);
     }
 }
@@ -3956,23 +4023,6 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
     NewAttr( aLSpc );
     if( pSFlyPara )
         pSFlyPara->nLineSpace = nSpaceTw;   // LineSpace fuer Graf-Apos
-#if 0
-    if( ( nWwPre > nSwPre || nWwPost > nSwPost )
-            && !( nIniFlags & WW8FL_NO_IMPLPASP ) )
-    {
-        SvxULSpaceItem aUL( *(const SvxULSpaceItem*)GetFmtAttr( RES_UL_SPACE ));
-        short nDU = aUL.GetUpper() + nWwPre - nSwPre;
-        short nDL = aUL.GetLower() + nWwPost - nSwPost;
-        if( nDU > 0 )
-            aUL.SetUpper( nDU );
-        else
-            nDL += nDU;
-
-        if( nDL > 0 )
-            aUL.SetLower( nDL );
-        NewAttr( aUL );
-    }
-#endif
 }
 
 //#i18519# AutoSpace value depends on Dop fDontUseHTMLAutoSpacing setting
@@ -4277,6 +4327,9 @@ void SwWW8ImplReader::Read_ScaleWidth( USHORT, const BYTE* pData, short nLen )
     else
     {
         sal_uInt16 nVal = SVBT16ToShort( pData );
+        //The number must be between 1 and 600
+        if (nVal < 1 || nVal > 600)
+            nVal = 100;
         NewAttr( SvxCharScaleWidthItem( nVal ) );
     }
 }
@@ -4590,7 +4643,13 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
                 SvxBoxItem aBox;
                 if (pBox)
                     aBox = *pBox;
-                SetBorder(aBox, aBrcs, 0, nBorder, true);
+                short aSizeArray[5]={0};
+#if 0
+                // #i20672# we can't properly support between lines so best to ignore
+                // them for now
+                SetBorder(aBox, aBrcs, &aSizeArray[0], nBorder, true);
+#endif
+                SetBorder(aBox, aBrcs, &aSizeArray[0], nBorder);
 
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
@@ -4603,7 +4662,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
                 NewAttr( aBox );
 
                 SvxShadowItem aS;
-                if( SetShadow( aS, aBox, aBrcs ) )
+                if( SetShadow( aS, &aSizeArray[0], aBrcs ) )
                     NewAttr( aS );
             }
         }
