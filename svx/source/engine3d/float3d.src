@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 13:20:31 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3696,7 +3696,7 @@ String RID_SVXFLOAT3D_FIX_X
     Text[ chinese_traditional ] = "X";
     Text[ turkish ] = "X";
     Text[ arabic ] = "X";
-    Text[ catalan ] = "Nombre";
+    Text[ catalan ] = "X";
     Text[ finnish ] = "X";
     Text[ thai ] = "ตัวเลข";
 };
