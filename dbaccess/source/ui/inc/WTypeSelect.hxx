@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ namespace dbaui
         ::rtl::OUString         m_sAutoIncrementValue;
         sal_Int32               m_nDisplayRow;
         sal_Bool                m_bAutoIncrementEnabled;
+        sal_Bool                m_bDuplicateName;
 
         void                    fillColumnList(sal_uInt32 nRows);
         virtual SvParser*       createReader(sal_Int32 _nRows) = 0;
@@ -178,7 +179,7 @@ namespace dbaui
         virtual ~OWizTypeSelect();
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
-
+        inline void setDuplicateName(sal_Bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 }
 #endif // DBAUI_WIZ_TYPESELECT_HXX
