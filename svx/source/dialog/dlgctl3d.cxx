@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 13:13:51 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 16:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,8 +275,7 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
     {
         SfxItemSet aSet(pModel->GetItemPool(),
             SDRATTR_START,  SDRATTR_END,
-            SID_ATTR_3D_START, SID_ATTR_3D_END,
-            0);
+            0, 0);
         nObjectType = nType;
 
         if( p3DObj )
