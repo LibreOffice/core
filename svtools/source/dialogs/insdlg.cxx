@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:45:10 $
+ *  last change: $Author: rt $ $Date: 2004-10-07 07:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svstdarr.hxx>
 
 //---------------------------------------------
 // this struct conforms to the Microsoft
