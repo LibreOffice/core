@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:46:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <limits.h>
 #include <vector>
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>               // UINTXX
 #endif
@@ -3853,10 +3856,10 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
         {
             rIn.Read( (sal_Char*)pBuf, nLen << 1 );
 
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
             for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf )
                 *pBuf = SWAPSHORT( *pBuf );
-#endif // ifdef __BIGENDIAN
+#endif // ifdef OSL_BIGENDIAN
         }
         else
         {
