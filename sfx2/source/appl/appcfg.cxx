@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 11:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,18 +1543,52 @@ void SfxApplicationClass::Property( ApplicationProperty& rProp )
             break;
             case TT_PR_DISPATCHER:
             {
+                // interface for TestTool
                 SfxDispatcher* pDispatcher = SfxViewFrame::Current()->GetDispatcher();
                 if ( !pDispatcher )
                     pTTProperties->nActualPR = TT_PR_ERR_NODISPATCHER;
                 else
                 {
                     pDispatcher->SetExecuteMode(EXECUTEMODE_DIALOGASYNCHRON);
-                    if ( pDispatcher->ExecuteFunction(
-                            pTTProperties->mnSID, pTTProperties->mppArgs, pTTProperties->mnMode )
-                         == EXECUTE_NO )
-                        pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
+                    if ( pTTProperties->mnSID == SID_NEWDOCDIRECT )
+                    {
+                        pTTProperties->mnSID = SID_OPENDOC;
+                        SfxPoolItem** pArgs = pTTProperties->mppArgs;
+                        SfxAllItemSet aSet( SFX_APP()->GetPool() );
+                        String aFactory = String::CreateFromAscii("private:factory/");
+                        if ( pArgs && *pArgs )
+                        {
+                            for ( SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
+                                aSet.Put( **pArg );
+
+                            SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
+                            if ( pFactoryName )
+                                aFactory += pFactoryName->GetValue();
+                            else
+                                aFactory += String::CreateFromAscii("swriter");
+                        }
+                        else
+                            aFactory += String::CreateFromAscii("swriter");
+
+                        aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
+                        aSet.Put( SfxStringItem( SID_FILE_NAME, aFactory ) );
+                        aSet.ClearItem( SID_NEWDOCDIRECT );
+
+                        if ( pDispatcher->ExecuteFunction( pTTProperties->mnSID, aSet, pTTProperties->mnMode )
+                                    == EXECUTE_NO )
+                            pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
+                        else
+                            pTTProperties->nActualPR = 0;
+                    }
                     else
-                        pTTProperties->nActualPR = 0;
+                    {
+                        if ( pDispatcher->ExecuteFunction(
+                                pTTProperties->mnSID, pTTProperties->mppArgs, pTTProperties->mnMode )
+                            == EXECUTE_NO )
+                            pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
+                        else
+                            pTTProperties->nActualPR = 0;
+                    }
                 }
             }
             break;
