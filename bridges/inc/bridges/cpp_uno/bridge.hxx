@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:23:08 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,25 +329,26 @@ inline void SAL_CALL cppu_Mapping_release( uno_Mapping * pMapping ) SAL_THROW( (
     static_cast< cppu_Mapping * >( pMapping )->pBridge->release();
 }
 //__________________________________________________________________________________________________
-inline cppu_Mapping::cppu_Mapping( cppu_Bridge * pBridge_, uno_MapInterfaceFunc fpMap ) SAL_THROW( () )
-    : pBridge( pBridge_ )
-{
-    uno_Mapping::acquire = cppu_Mapping_acquire;
-    uno_Mapping::release = cppu_Mapping_release;
-    uno_Mapping::mapInterface = fpMap;
-}
-//__________________________________________________________________________________________________
 inline cppu_Bridge::cppu_Bridge(
     uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,
     sal_Bool bExportCpp2Uno_ ) SAL_THROW( () )
     : nRef( 1 )
     , pCppEnv( pCppEnv_ )
     , pUnoEnv( pUnoEnv_ )
-    , aCpp2Uno( this, cppu_Mapping_cpp2uno )
-    , aUno2Cpp( this, cppu_Mapping_uno2cpp )
     , bExportCpp2Uno( bExportCpp2Uno_ )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+
+    aCpp2Uno.pBridge = this;
+    aCpp2Uno.acquire = cppu_Mapping_acquire;
+    aCpp2Uno.release = cppu_Mapping_release;
+    aCpp2Uno.mapInterface = cppu_Mapping_cpp2uno;
+
+    aUno2Cpp.pBridge = this;
+    aUno2Cpp.acquire = cppu_Mapping_acquire;
+    aUno2Cpp.release = cppu_Mapping_release;
+    aUno2Cpp.mapInterface = cppu_Mapping_uno2cpp;
+
     (*((uno_Environment *)pCppEnv)->acquire)( (uno_Environment *)pCppEnv );
     (*((uno_Environment *)pUnoEnv)->acquire)( (uno_Environment *)pUnoEnv );
 }
