@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 09:09:48 $
+ *  last change: $Author: fme $ $Date: 2002-09-24 15:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,8 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
                 pFrm->SetOfst( nNew );
                 pFrm->SetPara( 0 );
                 pFrm->GetFormatted();
-                pFrm->GetShell()->InvalidateWindows( pFrm->Frm() );
+                if( pFrm->Frm().HasArea() )
+                    pFrm->GetShell()->InvalidateWindows( pFrm->Frm() );
                 return sal_True;
             }
         }
