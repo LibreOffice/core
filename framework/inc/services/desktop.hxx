@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 08:39:52 $
+ *  last change: $Author: as $ $Date: 2001-08-01 11:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,22 +426,8 @@ class Desktop   :   // interfaces
         ELoadState                                                      m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         TaskCreator                                                     m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
-        css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;
-
-        // Properties
-/*OBSOLETE
-        sal_Bool                                                        m_bHasBeamer                ;
-        sal_Bool                                                        m_bHasCommonTaskBar         ;
-        sal_Bool                                                        m_bHasDesigner              ;
-        sal_Bool                                                        m_bHasExplorer              ;
-        sal_Bool                                                        m_bHasFunctionBar           ;
-        sal_Bool                                                        m_bHasMacroBar              ;
-        sal_Bool                                                        m_bHasNavigator             ;
-        sal_Bool                                                        m_bHasObjectBar             ;
-        sal_Bool                                                        m_bHasOptionBar             ;
-        sal_Bool                                                        m_bHasStatusBar             ;
-        sal_Bool                                                        m_bHasToolbar               ;
-*/
+        css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;   /// special terminate listener to close pipe and block external requests during/after terminate
+        css::uno::Reference< css::frame::XTerminateListener >           m_xQuickLauncher            ;   /// special terminate listener to block terminate if tray-icon is active
 
 };      //  class Desktop
 

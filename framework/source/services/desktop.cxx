@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 08:40:09 $
+ *  last change: $Author: as $ $Date: 2001-08-01 11:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,46 +411,91 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
     // Attention, Our timer hold a reference to use ... and sometimes (e.g. for headless office mode)
     // he forget this one insteandly during his own instantiation! So we can die during next call.
     // That's why it's agood idea to hold use self alive.
     css::uno::Reference< css::frame::XDesktop > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     // Get other neccessary references.
     css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator = m_xPipeTerminator                          ;
+    css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher  = m_xQuickLauncher                           ;
     css::lang::EventObject                                aEvent          ( static_cast< ::cppu::OWeakObject* >(this) );
+    aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    // Set default return value to TRUE!
-    // Because; if we detect a vetor of a listener or a task say "no" to our close() call ...
-    // we should reset to FALSE.
-    sal_Bool bTerminated = sal_True ;
-    sal_Bool bVeto       = sal_False;
+    // Set default. If a veto occure - break operation and
+    // return "not terminated". Otherwise termination was successfully.
+    sal_Bool bNormalListenerVeto = sal_False;
+    sal_Bool bQuickLaunchVeto    = sal_False;
+    sal_Bool bPipeVeto           = sal_False;
+    sal_Bool bTaskVeto           = sal_False;
 
+    //-------------------------------------------------------------------------------------------------------------
     // Disable our async quit timer ... we terminate ourself!
     // But if termination fail ... don't forget to enable it again!
     // Member is threadsafe himself!
     m_aChildTaskContainer.disableQuitTimer();
 
+    //-------------------------------------------------------------------------------------------------------------
+    // Ask normal terminate listener. They could stop complete terminate AND closing of currently open documents!
     try
     {
-        // Ask normal terminate listener.
         impl_sendQueryTerminationEvent();
-        // If no veto comes (no exception was thrown!)
-        // we should ask our pipe terminator.
-        // He close pipe if no external requests are pending.
-        // Otherwise he throw the veto exception and we don't terminate!
-        if( xPipeTerminator.is() == sal_True )
-        {
-            xPipeTerminator->queryTermination( aEvent );
-        }
     }
     catch( css::frame::TerminationVetoException& )
     {
-        bTerminated = sal_False;
-        bVeto       = sal_True ;
+        bNormalListenerVeto = sal_True;
     }
 
-    if( bVeto == sal_False )
+    //-------------------------------------------------------------------------------------------------------------
+    // If no veto comes we should ask our quicklauncher.
+    // He stop termination of whole office .. but not closing of open tasks!!!
+    if(
+        ( bNormalListenerVeto == sal_False )    &&
+        ( xQuickLauncher.is() == sal_True  )
+      )
+    {
+        try
+        {
+            xQuickLauncher->queryTermination( aEvent );
+        }
+        catch( css::frame::TerminationVetoException& )
+        {
+            bQuickLaunchVeto = sal_True;
+        }
+    }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // If no veto comes from quick launcher ... we should ask our pipe terminator too.
+    // He close pipe if no external requests are pending.
+    // Otherwise he throw the veto exception and we don't terminate AND don't close open tasks!
+    // Attention: If quick launcher exist - ask him before pipe terminator. Otherwise pipe will be closed
+    // quick launcher stop real termination ... but pipe will not reopened! So no further external requests
+    // could come in!!!
+    if(
+        ( bNormalListenerVeto  == sal_False )    &&
+        ( bQuickLaunchVeto     == sal_False )    &&
+        ( xPipeTerminator.is() == sal_True  )
+      )
+    {
+        try
+        {
+            xPipeTerminator->queryTermination( aEvent );
+        }
+        catch( css::frame::TerminationVetoException& )
+        {
+            bPipeVeto = sal_True;
+        }
+    }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // Close tasks only, if no veto exist ... but if veto comes from our quick launcher ...
+    // DO IT! He stop termination - not closing tasks. => It doesn't matter, if bQuickLaunchVeto is true or false.
+    // We close tasks for both cases!
+    if(
+        ( bNormalListenerVeto == sal_False )    &&
+        ( bPipeVeto           == sal_False )
+      )
     {
         // Step over all child tasks and ask they "WOULD YOU DIE?"
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
@@ -462,37 +507,56 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
             // It can be a plugin too, but a plugin is derived from a task ...!
             css::uno::Reference< css::frame::XTask > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
             // Ask task for terminating. If anyone say "NO" ...
-            // ... we must reset ouer default return value to "NO" too!
+            // ... we must reset oer default return value to "NO" too!
             // But we don't break this loop ... we will close all task, which accept it.
-            if( xTask->close() == sal_False )
+            try
             {
-                bTerminated = sal_False;
+                if( xTask->close() == sal_False )
+                {
+                    bTaskVeto = sal_True;
+                }
+            }
+            catch( css::lang::DisposedException& )
+            {
+                // Task already closed by another thread or user ...
+                // It doesn't matter! Because dead is dead is dead ...!
+                // Do nothing and try to close next one.
             }
         }
     }
 
+    //-------------------------------------------------------------------------------------------------------------
     // All listener has no problem with our termination!
     // Send NotifyTermination event to all and return with true.
+    sal_Bool bTerminated =  (
+                                ( bNormalListenerVeto == sal_False )    &&
+                                ( bQuickLaunchVeto    == sal_False )    &&
+                                ( bPipeVeto           == sal_False )    &&
+                                ( bTaskVeto           == sal_False )
+                            );
+    #ifdef ENABLE_ASSERTIONS
+        // "Protect" us against dispose before terminate calls!
+        // see dispose() for further informations.
+        // Follow notify will start shutdown of office and somewhere call dispose() at us ...
+        // Set debug variable BEFORE notify!
+        /* SAFE AREA --------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        m_bIsTerminated = bTerminated;
+        aWriteLock.unlock();
+        /* UNSAFE AREA ------------------------------------------------------------------------------------- */
+    #endif
     if( bTerminated == sal_True )
     {
-        #ifdef ENABLE_ASSERTIONS
-            // "Protect" us against dispose before terminate calls!
-            // see dispose() for further informations.
-            // Follow notify will start shutdown of office and somewhere call dispose() at us ...
-            // Set debug variable BEFORE notify!
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            WriteGuard aWriteLock( m_aLock );
-            m_bIsTerminated = sal_True ;
-            aWriteLock.unlock();
-            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
-        #endif
-
         // Send event to normal listener ...
         impl_sendNotifyTerminationEvent();
-        // ... but don't forget to send it to our special pipe terminator too!
+        // ... but don't forget to send it to our special terminat listener too!
         if( xPipeTerminator.is() == sal_True )
         {
             xPipeTerminator->notifyTermination( aEvent );
+        }
+        if( xQuickLauncher.is() == sal_True )
+        {
+            xQuickLauncher->notifyTermination( aEvent );
         }
     }
     // If somewhere break this terminate operation and we must return FALSE ...
@@ -516,7 +580,9 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     @attention  a)  We know a special terminate listener - the pipe terminator. He is called as last of all terminate
                     listeners. If no request stands in our office pipe - he has no veto. Otherwise
                     he close the pipe and external requests are rejected.
-                b)  May be we dispose our listener during our own dispose methode ... after closing object for
+                b)  Another special listener is our quick launcher. He throw a veto exception, if tray-icon
+                    is still active. But he doesn't block closing of tasks! So we must call him after closing of these ones!
+                c)  May be we dispose our listener during our own dispose methode ... after closing object for
                     real working. They call us back to remove her interfaces from our listener container.
                     So we should allow that by using E_SOFTEXCEPTIONS and suppress rejection of this calls!
 
@@ -541,15 +607,22 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     css::uno::Reference< css::lang::XServiceInfo > xInfo            ( xListener, css::uno::UNO_QUERY );
     if( xInfo.is() == sal_True )
     {
-        if( xInfo->getImplementationName() == IMPLEMENTATIONNAME_PIPETERMINATOR )
+        ::rtl::OUString sImplementationName = xInfo->getImplementationName();
+        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        if( sImplementationName == IMPLEMENTATIONNAME_PIPETERMINATOR )
         {
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            WriteGuard aWriteLock( m_aLock );
             m_xPipeTerminator = xListener;
-            aWriteLock.unlock();
-            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
-            bSpecialListener = sal_True;
+            bSpecialListener  = sal_True ;
         }
+        else
+        if( sImplementationName == IMPLEMENTATIONNAME_QUICKLAUNCHER )
+        {
+            m_xQuickLauncher = xListener;
+            bSpecialListener = sal_True ;
+        }
+        aWriteLock.unlock();
+        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
     }
 
     if( bSpecialListener == sal_False )
@@ -568,7 +641,32 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
+    sal_Bool                                       bSpecialListener = sal_False                       ;
+    css::uno::Reference< css::lang::XServiceInfo > xInfo            ( xListener, css::uno::UNO_QUERY );
+    if( xInfo.is() == sal_True )
+    {
+        ::rtl::OUString sImplementationName = xInfo->getImplementationName();
+        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        if( sImplementationName == IMPLEMENTATIONNAME_PIPETERMINATOR )
+        {
+            m_xPipeTerminator = css::uno::Reference< css::frame::XTerminateListener >();
+            bSpecialListener  = sal_True;
+        }
+        else
+        if( sImplementationName == IMPLEMENTATIONNAME_QUICKLAUNCHER )
+        {
+            m_xQuickLauncher = css::uno::Reference< css::frame::XTerminateListener >();
+            bSpecialListener = sal_True;
+        }
+        aWriteLock.unlock();
+        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+    }
+
+    if( bSpecialListener == sal_False )
+    {
+        m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
+    }
 }
 
 /*-************************************************************************************************************//**
@@ -1268,6 +1366,7 @@ void SAL_CALL Desktop::dispose() throw( css::uno::RuntimeException )
     m_xLastFrame        = css::uno::Reference< css::frame::XFrame >();
     m_xFactory          = css::uno::Reference< css::lang::XMultiServiceFactory >();
     m_xPipeTerminator   = css::uno::Reference< css::frame::XTerminateListener >();
+    m_xQuickLauncher    = css::uno::Reference< css::frame::XTerminateListener >();
 
     // Disable object for further working.
     m_aTransactionManager.setWorkingMode( E_CLOSE );
