@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:10:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,10 @@
 #include <comphelper/uno3.hxx>
 #endif
 
+
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -432,6 +436,10 @@ class SwXTextCursor : public SwXTextCursor_Base,
     CursorType                  eType;
 
     void    DeleteAndInsert(const String& rText);
+
+    DECL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
+                      ::com::sun::star::uno::Reference<
+                      ::com::sun::star::uno::XInterface>* );
 
 protected:
     virtual ~SwXTextCursor();
