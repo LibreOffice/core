@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ String ScPostIt::GetText() const
     return aText;
 }
 
-void ScPostIt::SetEditTextObject( const EditTextObject* pTextObj)
+void ScPostIt::SetEditTextObject( const EditTextObject* pTextObj )
 {
     if(pTextObj && mpDoc)
     {
@@ -328,6 +328,11 @@ Rectangle ScPostIt::MimicOldRectangle(const ScAddress& rPos) const
     return aRect;
 }
 
+void ScPostIt::SetRectangle(const Rectangle& aRect)
+{
+    maRectangle = aRect;
+}
+
 SfxItemSet ScPostIt::DefaultItemSet() const
 {
     SfxItemSet  aCaptionSet( mpDoc->GetNoteItemPool(), SDRATTR_START,  SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0,0);
@@ -397,7 +402,7 @@ void ScPostIt::SetAndApplyItemSet(const SfxItemSet& rItemSet)
     }
 }
 
-void ScPostIt::InsertObject(SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const
+void ScPostIt::InsertObject(SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab, sal_Bool bVisible) const
 {
     SdrPage* pPage = NULL;
     ScDrawLayer* pDrawModel = rDoc.GetDrawLayer();
@@ -419,7 +424,13 @@ void ScPostIt::InsertObject(SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) c
         pPage = pDrawModel->GetPage(nTab);
 
     if(pPage && pObj)
+    {
+        if (!bVisible)
+        {
+            pObj->NbcSetLayer(SC_LAYER_HIDDEN);
+        }
         pPage->InsertObject(pObj);
+    }
 }
 
 void ScPostIt::RemoveObject(SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const
