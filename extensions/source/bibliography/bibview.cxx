@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 11:19:09 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,10 @@ namespace bib
     // -----------------------------------------------------------------------
     BibView::~BibView()
     {
-        m_pGeneralPage->CommitActiveControl();
+        BibGeneralPage* pGeneralPage = m_pGeneralPage;
+        m_pGeneralPage = NULL;
+
+        pGeneralPage->CommitActiveControl();
         Reference< XForm > xForm = m_pDatMan->getForm();
         Reference< XPropertySet > xProps( xForm, UNO_QUERY );
         Reference< sdbc::XResultSetUpdate > xResUpd( xProps, UNO_QUERY );
@@ -158,8 +161,8 @@ namespace bib
         if ( isFormConnected() )
             disconnectForm();
 
-        m_pGeneralPage->RemoveListeners();
-        m_xGeneralPage = 0;
+        pGeneralPage->RemoveListeners();
+        m_xGeneralPage = NULL;
     }
 
     /* -----------------16.11.99 13:13-------------------
@@ -179,7 +182,12 @@ namespace bib
         }
 
         m_xGeneralPage = m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
+
         Resize();
+
+        if( HasFocus() )
+            // "delayed" GetFocus() because GetFocus() is initially called before GeneralPage is created
+            m_pGeneralPage->GrabFocus();
 
         String sErrorString( m_pGeneralPage->GetErrorString() );
         if ( sErrorString.Len() )
@@ -238,6 +246,12 @@ namespace bib
         if ( m_pGeneralPage )
             xReturn = m_pGeneralPage->GetControlContainer();
         return xReturn;
+    }
+
+    void BibView::GetFocus()
+    {
+        if( m_pGeneralPage )
+            m_pGeneralPage->GrabFocus();
     }
 
 //.........................................................................

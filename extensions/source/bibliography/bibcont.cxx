@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,15 @@ using namespace ::rtl;
 #define PROPERTY_FRAME                      1
 
 
-BibWindowContainer::BibWindowContainer( Window* pParent,WinBits nStyle):
-        DockingWindow(pParent,nStyle),
-        pChild(NULL)
+BibWindowContainer::BibWindowContainer( Window* pParent, WinBits nStyle ) :
+        Window( pParent, nStyle ),
+        pChild( NULL )
 {
 }
 
-BibWindowContainer::BibWindowContainer( Window* pParent,Window* pWin, WinBits nStyle):
-        DockingWindow(pParent,nStyle),
-        pChild(pWin)
+BibWindowContainer::BibWindowContainer( Window* pParent,Window* pWin, WinBits nStyle ) :
+        Window( pParent, nStyle ),
+        pChild( pWin )
 {
     if(pChild!=NULL)
     {
@@ -165,21 +165,26 @@ BibBookContainer::BibBookContainer(Window* pParent,BibDataManager* pDtMn, WinBit
 
 BibBookContainer::~BibBookContainer()
 {
-    if ( xTopFrameRef.is() )
+    if( xTopFrameRef.is() )
         xTopFrameRef->dispose();
-    if ( xBottomFrameRef.is() )
+    if( xBottomFrameRef.is() )
         xBottomFrameRef->dispose();
 
     if( pTopWin )
     {
-        DockingWindow* pDel = pTopWin;
+        Window* pDel = pTopWin;
         pTopWin = NULL;         // prevents GetFocus for child while deleting!
         delete pDel;
     }
 
-    if(pBottomWin)
-        delete pBottomWin;
-    CloseBibModul(pBibMod);
+    if( pBottomWin )
+    {
+        Window* pDel = pBottomWin;
+        pBottomWin = NULL;      // prevents GetFocus for child while deleting!
+        delete pDel;
+    }
+
+    CloseBibModul( pBibMod );
 }
 
 void BibBookContainer::Split()
@@ -215,58 +220,41 @@ void BibBookContainer::SetBottomComponentInterface( awt::XWindowPeer* pIFace )
     pBottomWin->SetComponentInterface(pIFace);
 }
 
-/*VCLXWindow*   BibBookContainer::GetTopWindowPeer()
-{
-    return pTopWin->GetWindowPeer();
-}
-*//*void BibBookContainer::SetTopWindowPeer( VCLXWindow* pPeer )
-{
-    pTopWin->SetWindowPeer(pPeer );
-}
-*/
-/*VCLXWindow* BibBookContainer::GetBottomWindowPeer()
-{
-    return pBottomWin->GetWindowPeer();
-}
-*//*void BibBookContainer::SetBottomWindowPeer( VCLXWindow* pPeer )
-{
-    pBottomWin->SetWindowPeer(pPeer );
-}
-*/
-
 void BibBookContainer::CreateTopWin()
 {
-    if ( xTopFrameRef.is() ) xTopFrameRef->dispose();
+    if( xTopFrameRef.is() )
+        xTopFrameRef->dispose();
 
-    if(pTopWin)
+    if( pTopWin )
     {
-        RemoveItem(TOP_WINDOW);
+        RemoveItem( TOP_WINDOW );
         delete pTopWin;
     }
 
-    pTopWin= new DockingWindow(this,0);
+    pTopWin = new Window( this, 0 );
 
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getBeamerSize();
-    InsertItem(TOP_WINDOW, pTopWin, nSize, 0, 0, SWIB_PERCENTSIZE );
+    InsertItem( TOP_WINDOW, pTopWin, nSize, 0, 0, SWIB_PERCENTSIZE );
 
 }
 
 void BibBookContainer::CreateBottomWin()
 {
 
-    if ( xBottomFrameRef.is() ) xBottomFrameRef->dispose();
+    if( xBottomFrameRef.is() )
+        xBottomFrameRef->dispose();
 
-    if(pBottomWin)
+    if( pBottomWin )
     {
-        RemoveItem(BOTTOM_WINDOW);
+        RemoveItem( BOTTOM_WINDOW );
         delete pBottomWin;
     }
 
-    pBottomWin= new DockingWindow(this,0);
+    pBottomWin = new Window( this, 0 );
     BibConfig* pConfig = BibModul::GetConfig();
     long nSize = pConfig->getViewSize();
-    InsertItem(BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SWIB_PERCENTSIZE );
+    InsertItem( BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SWIB_PERCENTSIZE );
 
 }
 
@@ -391,6 +379,6 @@ void BibBookContainer::createBottomFrame(Window* pWin)
 
 void BibBookContainer::GetFocus()
 {
-    if( pTopWin )
-        pTopWin->GrabFocus();
+    if( pBottomWin )
+        pBottomWin->GrabFocus();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _BIB_DATMAN_HXX
 #include "datman.hxx"
 #endif
+#ifndef BIBTOOLS_HXX
+#include "bibtools.hxx"
+#endif
 
 using namespace rtl;
 using namespace ::com::sun::star;
@@ -128,11 +131,31 @@ namespace bib
 
     using namespace ::com::sun::star::uno;
 
+    void HandleTaskPaneList( Window* pWindow, BOOL bAddToList )
+    {
+        Window*             pParent = pWindow->GetParent();
+
+        DBG_ASSERT( pParent, "-GetTaskPaneList(): everybody here should have a parent!" );
+
+        SystemWindow*       pSysWin = pParent->GetSystemWindow();
+        if( pSysWin )
+        {
+            TaskPaneList*   pTaskPaneList = pSysWin->GetTaskPaneList();
+            if( pTaskPaneList )
+            {
+                if( bAddToList )
+                    pTaskPaneList->AddWindow( pWindow );
+                else
+                    pTaskPaneList->RemoveWindow( pWindow );
+            }
+        }
+    }
+
     //=====================================================================
     //= BibGridwin
     //=====================================================================
     class BibGridwin
-                :public DockingWindow
+                :public Window //DockingWindow
     {
     private:
             Reference< awt::XWindow >           m_xGridWin;
@@ -159,15 +182,18 @@ namespace bib
     };
 
     //---------------------------------------------------------------------
-    BibGridwin::BibGridwin( Window* _pParent, WinBits _nStyle )
-        :DockingWindow( _pParent, _nStyle )
+    BibGridwin::BibGridwin( Window* _pParent, WinBits _nStyle ) : Window( _pParent, _nStyle )
     {
         m_xControlContainer = VCLUnoHelper::CreateControlContainer(this);
+
+        AddToTaskPaneList( this );
     }
 
     //---------------------------------------------------------------------
     BibGridwin::~BibGridwin()
     {
+        RemoveFromTaskPaneList( this );
+
         disposeGridWin();
     }
 
@@ -292,7 +318,6 @@ namespace bib
             BibGridwin* pDel = pGridWin;
             pGridWin = NULL;
             pDel->disposeGridWin();
-//          DELETEZ( pGridWin );
             delete pDel;
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,7 @@ namespace bib
 //.........................................................................
 
     // -----------------------------------------------------------------------
-    class BibView
-            :public Window
-            ,public FormControlContainer
+    class BibView : public Window, public FormControlContainer
     {
     private:
         BibDataManager*                                                             m_pDatMan;
@@ -106,21 +104,23 @@ namespace bib
 
     protected:
         // Window overridables
-            virtual void            Resize();
+            virtual void    Resize();
 
         // FormControlContainer
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                    getControlContainer();
+                            getControlContainer();
 
         // XLoadListener equivalents
-            virtual void _loaded( const ::com::sun::star::lang::EventObject& _rEvent );
-            virtual void _reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
+        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent );
+        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent );
 
     public:
-            BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
-            ~BibView();
+                            BibView( Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
+                            ~BibView();
 
-            void    UpdatePages();
+        void                UpdatePages();
+
+        virtual void        GetFocus();
     };
 
 //.........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 12:34:35 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef BIBMOD_HXX
 #include "bibmod.hxx"
+#endif
+#ifndef BIBTOOLS_HXX
+#include "bibtools.hxx"
 #endif
 #ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
 #include "extensio.hrc"
@@ -854,6 +857,22 @@ void BibGeneralPage::disposing(const lang::EventObject& Source) throw( uno::Runt
 {
 }
 
+void BibGeneralPage::GetFocus()
+{
+    Reference< awt::XWindow >*  pxControl = aControls;
+
+    for( int i = FIELD_COUNT ; i ; --i, ++pxControl )
+    {
+        if( pxControl->is() )
+        {
+            ( *pxControl )->setFocus();
+            return;
+        }
+    }
+
+    // fallback
+    aControlParentWin.GrabFocus();
+}
 
 
 

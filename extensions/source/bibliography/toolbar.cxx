@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include "bibbeam.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
+
+#ifndef BIBTOOLS_HXX
+#include "bibtools.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -292,12 +296,14 @@ BibToolBar::BibToolBar(Window* pParent, WinBits nStyle):
     SetItemWindow(TBC_FT_QUERY ,&aFtQuery);
     SetItemWindow(TBC_ED_QUERY ,&aEdQuery);
 
-
+    ::bib::AddToTaskPaneList( this );
 }
 
 BibToolBar::~BibToolBar()
 {
+    ::bib::RemoveFromTaskPaneList( this );
 }
+
 void BibToolBar::InitListener()
 {
     sal_uInt16  nCount=GetItemCount();

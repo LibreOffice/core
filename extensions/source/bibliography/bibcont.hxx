@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-24 11:54:28 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 class BibDataManager;
 
-class BibWindowContainer: public DockingWindow
+class BibWindowContainer: public Window
 {
     private:
         Window*                 pChild;
@@ -103,15 +103,15 @@ class BibBookContainer: public SplitWindow
 {
     private:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xTopFrameRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xBottomFrameRef;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xTopFrameRef;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xBottomFrameRef;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xTopPeerRef;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
         sal_Bool                    bFirstTime;
 
-        DockingWindow*          pTopWin;
-        DockingWindow*          pBottomWin;
+        Window*                 pTopWin;
+        Window*                 pBottomWin;
         BibDataManager*         pDatMan;
         HdlBibModul             pBibMod;
         Timer                   aTimer;
@@ -135,9 +135,8 @@ class BibBookContainer: public SplitWindow
         BibBookContainer(Window* pParent,BibDataManager*, WinBits nStyle = WB_3DLOOK );
         ~BibBookContainer();
 
-        DockingWindow*          GetTopWin() {return pTopWin;}
-        DockingWindow*          GetBottomWin() {return pBottomWin;}
-
+        Window*                 GetTopWin() {return pTopWin;}
+        Window*                 GetBottomWin() {return pBottomWin;}
 
         void                    createTopFrame(const rtl::OUString & rURL );
 

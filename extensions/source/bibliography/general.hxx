@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,114 +116,145 @@ class BibDataManager;
 #define TYPE_COUNT 22
 #define FIELD_COUNT 31
 
-typedef cppu::WeakAggImplHelper1
-<
-    ::com::sun::star::awt::XFocusListener
-> BibGeneralPageBaseClass;
+typedef cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener > BibGeneralPageBaseClass;
 
-class BibGeneralPage:
-                public BibGeneralPageBaseClass,
-                public TabPage
+class BibGeneralPage: public BibGeneralPageBaseClass, public TabPage
 {
-    Window          aControlParentWin;
-    FixedText       aIdentifierFT;
-    FixedText       aAuthTypeFT;
+    Window              aControlParentWin;
+    FixedText           aIdentifierFT;
+    FixedText           aAuthTypeFT;
 
-    FixedText       aAuthorFT;
-    FixedText       aMonthFT;
-    FixedText       aYearFT;
+    FixedText           aAuthorFT;
+    FixedText           aMonthFT;
+    FixedText           aYearFT;
 
-    FixedText       aPublisherFT;
-    FixedText       aISBNFT;
+    FixedText           aPublisherFT;
+    FixedText           aISBNFT;
 
-    FixedText       aAddressFT;
-    FixedText       aAnnoteFT;
-    FixedText       aBooktitleFT;
-    FixedText       aChapterFT;
-    FixedText       aEditionFT;
-    FixedText       aEditorFT;
-    FixedText       aHowpublishedFT;
-    FixedText       aInstitutionFT;
-    FixedText       aJournalFT;
-    FixedText       aNoteFT;
-    FixedText       aNumberFT;
-    FixedText       aOrganizationsFT;
-    FixedText       aPagesFT;
-    FixedText       aSchoolFT;
-    FixedText       aSeriesFT;
-    FixedText       aTitleFT;
-    FixedText       aReportTypeFT;
-    FixedText       aVolumeFT;
-    FixedText       aURLFT;
-    FixedText       aCustom1FT;
-    FixedText       aCustom2FT;
-    FixedText       aCustom3FT;
-    FixedText       aCustom4FT;
-    FixedText       aCustom5FT;
+    FixedText           aAddressFT;
+    FixedText           aAnnoteFT;
+    FixedText           aBooktitleFT;
+    FixedText           aChapterFT;
+    FixedText           aEditionFT;
+    FixedText           aEditorFT;
+    FixedText           aHowpublishedFT;
+    FixedText           aInstitutionFT;
+    FixedText           aJournalFT;
+    FixedText           aNoteFT;
+    FixedText           aNumberFT;
+    FixedText           aOrganizationsFT;
+    FixedText           aPagesFT;
+    FixedText           aSchoolFT;
+    FixedText           aSeriesFT;
+    FixedText           aTitleFT;
+    FixedText           aReportTypeFT;
+    FixedText           aVolumeFT;
+    FixedText           aURLFT;
+    FixedText           aCustom1FT;
+    FixedText           aCustom2FT;
+    FixedText           aCustom3FT;
+    FixedText           aCustom4FT;
+    FixedText           aCustom5FT;
 
-    ScrollBar       aHoriScroll;
-    ScrollBar       aVertScroll;
+    ScrollBar           aHoriScroll;
+    ScrollBar           aVertScroll;
 
-    FixedText*      aFixedTexts[FIELD_COUNT];
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>       aControls[FIELD_COUNT];
+    FixedText*          aFixedTexts[ FIELD_COUNT ];
 
-    Size            aStdSize;
-    Point           aBasePos;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+                        aControls[ FIELD_COUNT ];
 
-    String          aBibTypeArr[TYPE_COUNT];
-    String          sErrorPrefix;
-    String          sTableErrorString;
+    Size                aStdSize;
+    Point               aBasePos;
 
-    String          sTypeColumnName;
+    String              aBibTypeArr[ TYPE_COUNT ];
+    String              sErrorPrefix;
+    String              sTableErrorString;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >    xCtrlContnr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         xFormCtrl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr;
+    String              sTypeColumnName;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >         xCurrentBoundComponent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                        xCtrlContnr;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >         xLBModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
+                        xFormCtrl;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >         xPosListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        xMgr;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >
+                        xCurrentBoundComponent;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >
+                        xLBModel;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >
+                        xPosListener;
 
 
-    BibDataManager*         pDatMan;
+    BibDataManager*     pDatMan;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >        AddXControl(const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+                                AddXControl( const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId );
 
-    void                    AddControlWithError(const rtl::OUString& rColumnName,
-                                    const Point& rPos,  const Size& rSize, String& rErrorString,
-                                    String aColumnUIName, sal_uInt16 nHelpId);
+    void                        AddControlWithError( const rtl::OUString& rColumnName,
+                                        const Point& rPos,  const Size& rSize, String& rErrorString,
+                                        String aColumnUIName, sal_uInt16 nHelpId );
 
-    void                    AdjustScrollbars();
-    DECL_LINK(ScrollHdl, ScrollBar*);
+    void                        AdjustScrollbars();
+
+    DECL_LINK( ScrollHdl, ScrollBar* );
 
 protected:
-    virtual void        Resize();
+    virtual void                Resize();
 
 public:
-        BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
-        virtual ~BibGeneralPage();
+                                BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
+        virtual                 ~BibGeneralPage();
 
-        const String& GetErrorString() const {return sTableErrorString;}
+        inline const String&    GetErrorString() const;
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
-                                GetTypeListBoxModel() const { return xLBModel; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
-                                GetControlContainer() const { return xCtrlContnr; }
+        inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
+                                GetTypeListBoxModel() const;
+        inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
+                                GetControlContainer() const;
 
-        BibDataManager*         GetDataManager() {return pDatMan;}
+        inline BibDataManager*  GetDataManager();
 
         void                    CommitActiveControl();
 
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException );
 
-        void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( com::sun::star::uno::RuntimeException );
-        void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( com::sun::star::uno::RuntimeException );
+        void SAL_CALL           focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
+        void SAL_CALL           focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException );
 
-        void RemoveListeners();
+        void                    RemoveListeners();
+
+        virtual void            GetFocus();
 };
 
+
+inline const String& BibGeneralPage::GetErrorString() const
+{
+    return sTableErrorString;
+}
+
+inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
+    BibGeneralPage::GetTypeListBoxModel() const
+{
+    return xLBModel;
+}
+
+inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&
+    BibGeneralPage::GetControlContainer() const
+{
+    return xCtrlContnr;
+}
+
+inline BibDataManager* BibGeneralPage::GetDataManager()
+{
+    return pDatMan;
+}
 
 #endif
 

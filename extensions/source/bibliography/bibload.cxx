@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,6 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     {
         Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
-        pParentComponent->setVisible(sal_True);
 
         Window* pParent = VCLUnoHelper::GetWindow( aWindow );
 
@@ -489,6 +488,9 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         rFrame->setComponent( xWin, xCtrRef);
         pBeamer->SetXController(xCtrRef);
         //!
+
+        // not earlier because SetFocus() is triggered in setVisible()
+        pParentComponent->setVisible(sal_True);
 
         m_xDatMan->load();
 
