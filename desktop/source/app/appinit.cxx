@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:01:04 $
+ *  last change: $Author: hr $ $Date: 2004-12-10 18:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,6 @@
 #ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
 #include <ucbhelper/configurationkeys.hxx>
 #endif
-#ifndef _Installer_hxx
-#include <setup2/installer.hxx>
-#endif
 
 #include <cppuhelper/bootstrap.hxx>
 #include <tools/urlobj.hxx>
@@ -178,8 +175,6 @@ using namespace ::com::sun::star::ucb;
 
 namespace desktop
 {
-
-char const INSTALLER_INITFILENAME[] = "initialize.ini";
 
 // -----------------------------------------------------------------------------
 
@@ -258,48 +253,6 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     }
 
     return ret;;
-}
-
-sal_Bool Desktop::InitializeInstallation( const OUString& rAppFilename )
-{
-    OUString aAppPath;
-    OUString aFinishInstallation;
-    osl::FileBase::getFileURLFromSystemPath( rAppFilename, aFinishInstallation );
-
-    OUStringBuffer aAppPathBuf( aFinishInstallation.getLength() + sizeof( INSTALLER_INITFILENAME ) );
-
-    sal_Int32 nPos = aFinishInstallation.lastIndexOf( '/' );
-    if ( nPos >= 0 )
-        aAppPathBuf.append( aFinishInstallation.copy( 0, nPos ));
-    else
-        aAppPathBuf.append( aFinishInstallation );
-    aAppPathBuf.appendAscii( "/" );
-    aAppPathBuf.appendAscii( INSTALLER_INITFILENAME );
-    aAppPath = aAppPathBuf.makeStringAndClear();
-
-    osl::DirectoryItem aDI;
-    if( osl::DirectoryItem::get( aAppPath, aDI ) == osl_File_E_None )
-    {
-        // Load initialization code only on demand. This is done if the the 'initialize.ini'
-        // is written next to the executable. After initialization this file is removed.
-        // The implementation disposes the old service manager and creates an new one so we
-        // cannot use a service for InitializeInstallation!!
-        OUString aFuncName( RTL_CONSTASCII_USTRINGPARAM( INSTALLER_INITIALIZEINSTALLATION_CFUNCNAME ));
-        OUString aModulePath = OUString::createFromAscii( SVLIBRARY( "set" ) );
-
-        oslModule aSetupModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
-        if ( aSetupModule )
-        {
-            void* pInitFunc = osl_getSymbol( aSetupModule, aFuncName.pData );
-            if ( pInitFunc )
-                (*(pfunc_InstallerInitializeInstallation)pInitFunc)( rAppFilename.getStr() );
-            osl_unloadModule( aSetupModule );
-        }
-
-        return sal_True;
-    }
-
-    return sal_False;
 }
 
 Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
