@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 07:46:03 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include <memory>
 
-#include <vcl/rc.h>
+#include <tools/rc.h>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 
