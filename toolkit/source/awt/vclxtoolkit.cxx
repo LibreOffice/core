@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:09:51 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,9 +631,6 @@ void SAL_CALL VCLXToolkit::disposing()
             pNewWindow->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
         }
 
-        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
-            pNewWindow->Show();
-
         if ( !pNewComp )
         {
             // Default-Interface
@@ -645,6 +642,9 @@ void SAL_CALL VCLXToolkit::disposing()
             pNewWindow->SetComponentInterface( pNewComp );
             xRef = pNewComp;
         }
+
+        if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
+            pNewWindow->Show();
     }
 
     return xRef;
