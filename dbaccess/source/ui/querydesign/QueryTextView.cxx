@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:03:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,15 +130,14 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
 {
+    DBG_DTOR(OQueryTextView,NULL);
     ::std::auto_ptr<Window> aTemp(m_pEdit);
     m_pEdit = NULL;
-    DBG_DTOR(OQueryTextView,NULL);
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::GetFocus()
 {
-    OSL_ENSURE(m_pEdit,"Edit is null");
-    if(m_pEdit)
+    if ( m_pEdit )
         m_pEdit->GrabFocus();
 }
 // -------------------------------------------------------------------------
