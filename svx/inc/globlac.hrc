@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-02 14:36:11 $
+ *  last change: $Author: pb $ $Date: 2002-11-25 09:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,8 @@
 #define AI_NEWDOCDIRECT             ACC_CODE( SID_NEWDOCDIRECT, KEY_N, FALSE, TRUE, FALSE )
 #define AI_OPENDOC                  ACC_CODE( SID_OPENDOC, KEY_O, FALSE, TRUE, FALSE ) \
                                     ACC_CODE( SID_OPENDOC, KEY_OPEN, FALSE, FALSE, FALSE )
-#define AI_CLOSEWIN                 ACC_CODE( SID_CLOSEWIN, KEY_F4, FALSE, TRUE, FALSE ) \
-                                    ACC_CODE( SID_CLOSEWIN, KEY_W, FALSE, TRUE, FALSE )
+#define AI_CLOSEWIN                 ACC_CODE( SID_CLOSEWIN, KEY_W, FALSE, TRUE, FALSE ) \
+                                    ACC_CODE( SID_CLOSEWIN, KEY_F4, FALSE, TRUE, FALSE )
 #define AI_SAVEDOC                  ACC_CODE( SID_SAVEDOC, KEY_S, FALSE, TRUE, FALSE )
 #define AI_PRINTDOC                 ACC_CODE( SID_PRINTDOC, KEY_P, FALSE, TRUE, FALSE )
 #define AI_QUITAPP                  ACC_CODE( SID_QUITAPP, KEY_Q, FALSE, TRUE, FALSE )
