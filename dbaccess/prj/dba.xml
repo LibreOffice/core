@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE MODULEDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-<MODULEDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink">
-    <ModuleName>dba</ModuleName>
-    <COMPONENTDESCRIPTION>
-        <Author>Frank Schönheit</Author>
-        <Name>com.sun.star.comp.dba.ODatabaseContext</Name>
-        <Description/>
-        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-        <Language>c++</Language>
-        <Status StatusValue="final"/>
-        <SupportedService>com.sun.star.sdb.DatabaseContext</SupportedService>
-        <ServiceDependency>com.sun.star.configuration.ConfigurationProvider</ServiceDependency>
-    </COMPONENTDESCRIPTION>
-    <COMPONENTDESCRIPTION>
-        <Author>Frank Schönheit</Author>
-        <Name>com.sun.star.comp.dba.ODatabaseSource</Name>
-        <Description/>
-        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-        <Language>c++</Language>
-        <Status StatusValue="final"/>
-        <SupportedService>com.sun.star.sdb.DataSource</SupportedService>
-        <ServiceDependency>com.sun.star.sdb.QueryDefinition</ServiceDependency>
-        <ServiceDependency>com.sun.star.sdbc.DriverManager</ServiceDependency>
-        <ServiceDependency>com.sun.star.util.NumberFormatsSupplier</ServiceDependency>
-        <ServiceDependency>com.sun.star.io.ObjectInputStream</ServiceDependency>
-        <ServiceDependency>com.sun.star.io.ObjectOutputStream</ServiceDependency>
-        <ServiceDependency>com.sun.star.configuration.ConfigurationProvider</ServiceDependency>
-    </COMPONENTDESCRIPTION>
-    <COMPONENTDESCRIPTION>
-        <Author>Frank Schönheit</Author>
-        <Name>com.sun.star.comp.dba.OCommandDefinition</Name>
-        <Description/>
-        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-        <Language>c++</Language>
-        <Status StatusValue="final"/>
-        <SupportedService>com.sun.star.sdb.QueryDefinition</SupportedService>
-        <ServiceDependency>com.sun.star.configuration.ConfigurationProvider</ServiceDependency>
-    </COMPONENTDESCRIPTION>
-    <COMPONENTDESCRIPTION>
-        <Author>Ocke Janssen</Author>
-        <Name>com.sun.star.comp.dba.ORowSet</Name>
-        <Description/>
-        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-        <Language>c++</Language>
-        <Status StatusValue="final"/>
-        <SupportedService>com.sun.star.sdb.RowSet</SupportedService>
-        <SupportedService>com.sun.star.sdbc.RowSet</SupportedService>
-        <SupportedService>com.sun.star.sdb.ResultSet</SupportedService>
-        <SupportedService>com.sun.star.sdbcx.ResultSet</SupportedService>
-        <SupportedService>com.sun.star.sdbc.ResultSet</SupportedService>
-        <ServiceDependency>com.sun.star.sdb.DatabaseContext</ServiceDependency>
-        <ServiceDependency>com.sun.star.i18n.LocaleData</ServiceDependency>
-        <ServiceDependency>com.sun.star.util.NumberFormatter</ServiceDependency>
-    </COMPONENTDESCRIPTION>
-</MODULEDESCRIPTION>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>dbaccess</module-name>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dba.ODatabaseContext</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.DatabaseContext</supported-service>
+        <service-dependency>com.sun.star.configuration.ConfigurationProvider</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dba.ODatabaseSource</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.DataSource</supported-service>
+        <service-dependency>com.sun.star.sdb.QueryDefinition</service-dependency>
+        <service-dependency>com.sun.star.sdbc.DriverManager</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatsSupplier</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectInputStream</service-dependency>
+        <service-dependency>com.sun.star.io.ObjectOutputStream</service-dependency>
+        <service-dependency>com.sun.star.configuration.ConfigurationProvider</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dba.OCommandDefinition</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.QueryDefinition</supported-service>
+        <service-dependency>com.sun.star.configuration.ConfigurationProvider</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dba.ORowSet</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.RowSet</supported-service>
+        <supported-service>com.sun.star.sdbc.RowSet</supported-service>
+        <supported-service>com.sun.star.sdb.ResultSet</supported-service>
+        <supported-service>com.sun.star.sdbcx.ResultSet</supported-service>
+        <supported-service>com.sun.star.sdbc.ResultSet</supported-service>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.i18n.LocaleData</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
+</module-description>
