@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:09:44 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ arabic ] = "ΗΣΚΞΟΗγ δγΗΠΜ";
     TEXT[ dutch ] = "Opmaakprofielen toepassen";
     TEXT[ chinese_simplified ] = "ΚΉΣΓΡωΚ½";
-    TEXT[ greek ] = "Εφαρμογή στυλ";
+    TEXT[ greek ] = "Εφαρμογή προτύπων";
     TEXT[ korean ] = "ΐ―Ηό ΐϋΏλ";
     TEXT[ turkish ] = "ήablonlarύ kullan";
     TEXT[ catalan ] = "Aplicar estilos";
