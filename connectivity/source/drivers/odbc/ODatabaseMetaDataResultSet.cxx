@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 16:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr();
 
 
@@ -870,7 +870,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
 
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, pCOL ? SQL_NTS : 0);
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -944,14 +944,14 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr(),
                 *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLColumnPrivileges(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -976,14 +976,14 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr(),
                 *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLColumns(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
 
@@ -1039,14 +1039,14 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr(),
                 *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLProcedureColumns(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
 
@@ -1071,13 +1071,13 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLProcedures(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -1099,13 +1099,13 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLSpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             scope,
                             nullable ? SQL_NULLABLE : SQL_NO_NULLS);
@@ -1136,19 +1136,19 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
     aFKQ = ::rtl::OUStringToOString(connectivity::getString(catalog2),m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = schema ? ::rtl::OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,
+                *pPKO = schema && schema->getLength() ? ::rtl::OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,
                 *pPKN = table   ? (aPKN = ::rtl::OUStringToOString(*table,m_nTextEncoding)).getStr(): NULL,
                 *pFKQ = catalog2.hasValue() && aFKQ.getLength() ? aFKQ.getStr() : NULL,
-                *pFKO = schema2 ? (aFKO = ::rtl::OUStringToOString(*schema2,m_nTextEncoding)).getStr() : NULL,
+                *pFKO = schema2 && schema2->getLength() ? (aFKO = ::rtl::OUStringToOString(*schema2,m_nTextEncoding)).getStr() : NULL,
                 *pFKN = table2  ? (aFKN = ::rtl::OUStringToOString(*table2,m_nTextEncoding)).getStr() : NULL;
 
 
     SQLRETURN nRetcode = N3SQLForeignKeys(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKN, pPKN ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pFKQ, (catalog2.hasValue() && aFKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pFKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pFKO, pFKO ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pFKN, SQL_NTS
                             );
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -1184,13 +1184,13 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLPrimaryKeys(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -1212,13 +1212,13 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLTablePrivileges(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -1241,13 +1241,13 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
+                *pPKO = pSchemaPat && pSchemaPat->getLength() ? aPKO.getStr() : NULL,
                 *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLStatistics(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, SQL_NTS ,
+                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
                             unique,
                             approximate);
