@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:36:10 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ namespace dbaui
         virtual sal_Bool SaveModified(sal_Bool bAskFor = sal_True);
             // save the modified record
 
-        virtual void            onLoadedMenu(const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
+        virtual void            onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
             // a PropertySet corresponding to the cursor field a column is bound to
