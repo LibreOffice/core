@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-10 05:45:38 $
+ *  last change: $Author: pb $ $Date: 2001-08-14 12:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,23 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
 
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
+#include <com/sun/star/frame/XTasksSupplier.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "virtmenu.hxx"
@@ -91,6 +108,10 @@
 #include "viewsh.hxx"
 #include "imgmgr.hxx"
 #include "sfxpicklist.hxx"
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
 
 //=========================================================================
 
@@ -637,34 +658,61 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
         if ( pParent && pSVMenu == pParent->pWindowMenu )
         {
-            PopupMenu* pWindowMenu = pParent->pWindowMenu;
-            sal_uInt16 nPos = pWindowMenu->GetItemPos( START_ITEMID_WINDOWLIST );
-            for ( sal_uInt16 n=nPos; n<pWindowMenu->GetItemCount(); )
-                pWindowMenu->RemoveItem( n );
-            if ( pWindowMenu->GetItemType( pWindowMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
-                pWindowMenu->RemoveItem( pWindowMenu->GetItemCount()-1 );
+            // update window list
+            ::std::vector< ::rtl::OUString > aNewWindowListVector;
+            Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                                            DEFINE_CONST_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
 
-            SfxViewFrame *pView = pBindings->GetDispatcher()->GetFrame();
-            while ( pView->GetParentViewFrame_Impl() )
-                pView = pView->GetParentViewFrame_Impl();
-            SfxFrame *pActive = pView->GetFrame();
+            USHORT  nActiveItemId = 0;
+            USHORT  nItemId = START_ITEMID_WINDOWLIST;
 
-            SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-            if ( rArr.Count() > 0 &&
-                 pWindowMenu->GetItemType( pWindowMenu->GetItemCount()-1 ) != MENUITEM_SEPARATOR )
-                pWindowMenu->InsertSeparator();
-            sal_uInt16 nNo;
-            sal_uInt16 nAllowedMenuSize = END_ITEMID_WINDOWLIST - START_ITEMID_WINDOWLIST;
-            for ( nNo = 0, nPos = 0; ( nPos < nAllowedMenuSize ) && ( nNo < rArr.Count() ); ++nNo )
+            if ( xDesktop.is() )
             {
-                SfxFrame *pFrame = rArr[nNo];
-                if ( pFrame->GetCurrentViewFrame() && pFrame->GetCurrentViewFrame()->IsVisible() )
+                Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+                Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
+                Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
+                while (( xList->hasMoreElements() == sal_True ))
                 {
-                    pWindowMenu->InsertItem( START_ITEMID_WINDOWLIST + nNo,
-                                             pFrame->GetWindow().GetText(), MIB_RADIOCHECK );
-                    if ( pFrame == pActive )
-                        pWindowMenu->CheckItem( START_ITEMID_WINDOWLIST + nNo, sal_True );
-                    nPos++;
+                    Reference< XTask > xTask;
+                    xList->nextElement() >>= xTask;
+                    if ( xTask.is() )
+                    {
+                        Reference< XFrame > xFrame( xTask, UNO_QUERY );
+                        if ( xFrame == xCurrentFrame )
+                            nActiveItemId = nItemId;
+
+                        Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+                        aNewWindowListVector.push_back( pWin->GetText() );
+                        ++nItemId;
+                    }
+                }
+            }
+
+            int nRemoveItemCount = 0;
+            int nItemCount       = pMenu->GetItemCount();
+
+            if ( nItemCount > 0 )
+            {
+                // remove all old window list entries from menu
+                sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_WINDOWLIST );
+                for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
+                    pMenu->RemoveItem( n );
+
+                if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
+                    pMenu->RemoveItem( pMenu->GetItemCount()-1 );
+            }
+
+            if ( aNewWindowListVector.size() > 0 )
+            {
+                // append new window list entries to menu
+                pMenu->InsertSeparator();
+                nItemId = START_ITEMID_WINDOWLIST;
+                for ( sal_uInt32 i = 0; i < aNewWindowListVector.size(); i++ )
+                {
+                    pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MIB_RADIOCHECK );
+                    if ( nItemId == nActiveItemId )
+                        pMenu->CheckItem( nItemId );
+                    ++nItemId;
                 }
             }
         }
