@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:41:49 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,11 @@ namespace connectivity
     public:
         ORefVector() : m_refCount(0) {}
         ORefVector(size_t _st) : ::std::vector< VectorVal > (_st) , m_refCount(0) {}
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
 
         void acquire()
         {
