@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:50:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 
 #define USE_PROPERTY_HELPER
 
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
-#endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
@@ -74,117 +71,6 @@
 #endif
 
 #include <set>
-
-namespace svxform
-{
-    static ::std::set< ::rtl::OUString >& getComposableProperties()
-    {
-        static ::std::set< ::rtl::OUString > aComposableProperties;
-        if ( aComposableProperties.empty() )
-        {
-            aComposableProperties.insert( FM_PROP_NAME );
-            aComposableProperties.insert( FM_PROP_LABEL );
-            aComposableProperties.insert( FM_PROP_CONTROLLABEL );
-            aComposableProperties.insert( FM_PROP_TEXT );
-            aComposableProperties.insert( FM_PROP_MAXTEXTLEN );
-            aComposableProperties.insert( FM_PROP_EDITMASK );
-            aComposableProperties.insert( FM_PROP_LITERALMASK );
-            aComposableProperties.insert( FM_PROP_STRICTFORMAT );
-            aComposableProperties.insert( FM_PROP_ENABLED );
-            aComposableProperties.insert( FM_PROP_READONLY );
-            aComposableProperties.insert( FM_PROP_CONTROLSOURCE );
-            aComposableProperties.insert( FM_PROP_DATASOURCE );
-            aComposableProperties.insert( FM_PROP_COMMAND );
-            aComposableProperties.insert( FM_PROP_COMMANDTYPE );
-            aComposableProperties.insert( FM_PROP_ESCAPE_PROCESSING );
-            aComposableProperties.insert( FM_PROP_FILTER_CRITERIA );
-            aComposableProperties.insert( FM_PROP_SORT );
-            aComposableProperties.insert( FM_PROP_INSERTONLY );
-            aComposableProperties.insert( FM_PROP_INSERTONLY );
-            aComposableProperties.insert( FM_PROP_NAVIGATION );
-            aComposableProperties.insert( FM_PROP_CYCLE );
-            aComposableProperties.insert( FM_PROP_VALUE );
-            aComposableProperties.insert( FM_PROP_VALUEMIN );
-            aComposableProperties.insert( FM_PROP_VALUEMAX );
-            aComposableProperties.insert( FM_PROP_VALUESTEP );
-            aComposableProperties.insert( FM_PROP_DEFAULT_VALUE );
-            aComposableProperties.insert( FM_PROP_DECIMAL_ACCURACY );
-            aComposableProperties.insert( FM_PROP_SHOWTHOUSANDSEP );
-            aComposableProperties.insert( FM_PROP_REFVALUE );
-            aComposableProperties.insert( FM_PROP_CURRENCYSYMBOL );
-            aComposableProperties.insert( FM_PROP_DATE );
-            aComposableProperties.insert( FM_PROP_DATEMIN );
-            aComposableProperties.insert( FM_PROP_DATEMAX );
-            aComposableProperties.insert( FM_PROP_DATEFORMAT );
-            aComposableProperties.insert( FM_PROP_DEFAULT_DATE );
-            aComposableProperties.insert( FM_PROP_TIME );
-            aComposableProperties.insert( FM_PROP_TIMEMIN );
-            aComposableProperties.insert( FM_PROP_TIMEMAX );
-            aComposableProperties.insert( FM_PROP_TIMEFORMAT );
-            aComposableProperties.insert( FM_PROP_DEFAULT_TIME );
-            aComposableProperties.insert( FM_PROP_EFFECTIVE_MIN );
-            aComposableProperties.insert( FM_PROP_EFFECTIVE_MAX );
-            aComposableProperties.insert( FM_PROP_EFFECTIVE_DEFAULT );
-            aComposableProperties.insert( FM_PROP_FORMATKEY );
-            aComposableProperties.insert( FM_PROP_FORMATSSUPPLIER );
-            aComposableProperties.insert( FM_PROP_CLASSID );
-            aComposableProperties.insert( FM_PROP_WIDTH );
-            aComposableProperties.insert( FM_PROP_DEFAULTCONTROL );
-            aComposableProperties.insert( FM_PROP_BOUNDCOLUMN );
-            aComposableProperties.insert( FM_PROP_LISTSOURCETYPE );
-            aComposableProperties.insert( FM_PROP_LISTSOURCE );
-            aComposableProperties.insert( FM_PROP_STRINGITEMLIST );
-            aComposableProperties.insert( FM_PROP_DEFAULT_TEXT );
-            aComposableProperties.insert( FM_PROP_ALIGN );
-            aComposableProperties.insert( FM_PROP_ROWHEIGHT );
-            aComposableProperties.insert( FM_PROP_BACKGROUNDCOLOR );
-            aComposableProperties.insert( FM_PROP_TEXTCOLOR );
-            aComposableProperties.insert( FM_PROP_BORDER );
-            aComposableProperties.insert( FM_PROP_DROPDOWN );
-            aComposableProperties.insert( FM_PROP_LINECOUNT );
-            aComposableProperties.insert( FM_PROP_MULTILINE );
-            aComposableProperties.insert( FM_PROP_SPIN );
-            aComposableProperties.insert( FM_PROP_STATE );
-            aComposableProperties.insert( FM_PROP_TARGET_URL );
-            aComposableProperties.insert( FM_PROP_DEFAULTCHECKED );
-            aComposableProperties.insert( ::rtl::OUString::createFromAscii("DefaultButton") );
-            aComposableProperties.insert( FM_PROP_VALUE_SEQ );
-            aComposableProperties.insert( FM_PROP_SELECT_SEQ );
-            aComposableProperties.insert( FM_PROP_DEFAULT_SELECT_SEQ );
-            aComposableProperties.insert( FM_PROP_TRISTATE );
-            aComposableProperties.insert( FM_PROP_HASNAVIGATION );
-            aComposableProperties.insert( FM_PROP_RECORDMARKER );
-            aComposableProperties.insert( FM_PROP_FILTERPROPOSAL );
-            aComposableProperties.insert( FM_PROP_HELPTEXT );
-            aComposableProperties.insert( FM_PROP_HELPURL );
-            aComposableProperties.insert( FM_PROP_CURSORCOLOR );
-            aComposableProperties.insert( FM_PROP_ALWAYSSHOWCURSOR );
-            aComposableProperties.insert( FM_PROP_DISPLAYSYNCHRON );
-            aComposableProperties.insert( FM_PROP_SCROLLVALUE_MIN );
-            aComposableProperties.insert( FM_PROP_SCROLLVALUE_MAX );
-            aComposableProperties.insert( FM_PROP_DEFAULT_SCROLLVALUE );
-            aComposableProperties.insert( FM_PROP_LINEINCREMENT );
-            aComposableProperties.insert( FM_PROP_BLOCKINCREMENT );
-            aComposableProperties.insert( FM_PROP_ORIENTATION );
-            aComposableProperties.insert( FM_PROP_REPEAT );
-            aComposableProperties.insert( FM_PROP_REPEATDELAY );
-            aComposableProperties.insert( FM_PROP_SYMBOLCOLOR );
-            aComposableProperties.insert( FM_PROP_VISIBILESIZE );
-            aComposableProperties.insert( FM_PROP_SPINVALUE_MIN );
-            aComposableProperties.insert( FM_PROP_SPINVALUE_MAX );
-            aComposableProperties.insert( FM_PROP_DEFAULT_SPINVALUE );
-            aComposableProperties.insert( FM_PROP_SPININCREMENT );
-            aComposableProperties.insert( FM_PROP_LINEENDFORMAT );
-            aComposableProperties.insert( FM_PROP_TOGGLE );
-            aComposableProperties.insert( FM_PROP_FOCUSONCLICK );
-            aComposableProperties.insert( FM_PROP_HIDEINACTIVESELECTION );
-            aComposableProperties.insert( FM_PROP_VISUALEFFECT );
-            aComposableProperties.insert( FM_PROP_BORDERCOLOR );
-            aComposableProperties.insert( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImagePosition" ) ) );
-        }
-        return aComposableProperties;
-    }
-}
 
 namespace svxform
 {
@@ -330,13 +216,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DYNAMIC_CONTROL_BORDER,      "DynamicControlBorder"      );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus" );
     IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover" );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
 
 }   // namespace svxform
-
-//------------------------------------------------------------------------
-bool FmPropertyInfoService::isComposable( const ::rtl::OUString _rName )
-{
-    ::std::set< ::rtl::OUString >& rComposable = ::svxform::getComposableProperties();
-    return ( rComposable.find( _rName ) != rComposable.end() );
-}
 
