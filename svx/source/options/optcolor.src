@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:56:32 $
+ *  last change: $Author: os $ $Date: 2002-08-13 15:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,67 +1337,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
             };
             LB_WN( DRAWGRID, 33 )
 
-            FixedText FT_DRAWDRAWING
-            {
-                FT_POS_SIZE( 34 );
-                Text = "Standard Linienfarbe" ;
-                Text [ ENGLISH ] = "Default drawing color" ;
-                Text[ english_us ] = "Default drawing color (new objects only)";
-                Text[ portuguese ] = "Default drawing color";
-                Text[ russian ] = "Default drawing color";
-                Text[ greek ] = "Default drawing color";
-                Text[ dutch ] = "Default drawing color";
-                Text[ french ] = "Default drawing color";
-                Text[ spanish ] = "Default drawing color";
-                Text[ finnish ] = "Default drawing color";
-                Text[ italian ] = "Default drawing color";
-                Text[ danish ] = "Default drawing color";
-                Text[ swedish ] = "Default drawing color";
-                Text[ polish ] = "Default drawing color";
-                Text[ portuguese_brazilian ] = "Default drawing color";
-                Text[ japanese ] = "Default drawing color";
-                Text[ korean ] = "Default drawing color";
-                Text[ chinese_simplified ] = "Default drawing color";
-                Text[ chinese_traditional ] = "Default drawing color";
-                Text[ turkish ] = "Default drawing color";
-                Text[ arabic ] = "Default drawing color";
-                Text[ catalan ] = "Default drawing color";
-                Text[ thai ] = "Default drawing color";
-            };
-            LB_WN( DRAWDRAWING, 34 )
-
-            FixedText FT_DRAWFILL
-            {
-                FT_POS_SIZE( 35 );
-                Text = "Standard Füllfarbe" ;
-                Text [ ENGLISH ] = "Default fill color" ;
-                Text[ english_us ] = "Default fill color (new objects only)";
-                Text[ portuguese ] = "Default fill color";
-                Text[ russian ] = "Default fill color";
-                Text[ greek ] = "Default fill color";
-                Text[ dutch ] = "Default fill color";
-                Text[ french ] = "Default fill color";
-                Text[ spanish ] = "Default fill color";
-                Text[ finnish ] = "Default fill color";
-                Text[ italian ] = "Default fill color";
-                Text[ danish ] = "Default fill color";
-                Text[ swedish ] = "Default fill color";
-                Text[ polish ] = "Default fill color";
-                Text[ portuguese_brazilian ] = "Default fill color";
-                Text[ japanese ] = "Default fill color";
-                Text[ korean ] = "Default fill color";
-                Text[ chinese_simplified ] = "Default fill color";
-                Text[ chinese_traditional ] = "Default fill color";
-                Text[ turkish ] = "Default fill color";
-                Text[ arabic ] = "Default fill color";
-                Text[ catalan ] = "Default fill color";
-                Text[ thai ] = "Default fill color";
-            };
-            LB_WN( DRAWFILL, 35 )
-
             FixedText FT_BASIC
             {
-                FT_SEP_POS_SIZE( 36 );
+                FT_SEP_POS_SIZE( 34 );
                 Text = "Basic Syntaxhervorhebung" ;
                 Text [ ENGLISH ] = "Basic Syntax Highlighting" ;
                 Text[ language_user1 ] = "EM July 31, 2002: Title of a section";
@@ -1426,7 +1368,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_BASICIDENTIFIER
             {
-                FT_POS_SIZE( 37 );
+                FT_POS_SIZE( 35 );
                 Text = "Bezeichner" ;
                 Text [ ENGLISH ] = "Identifier" ;
                 Text[ english_us ] = "Identifier";
@@ -1451,11 +1393,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Identifier";
                 Text[ thai ] = "Identifier";
             };
-            LB_WN( BASICIDENTIFIER, 37 )
+            LB_WN( BASICIDENTIFIER, 35 )
 
             FixedText FT_BASICCOMMENT
             {
-                FT_POS_SIZE( 38 );
+                FT_POS_SIZE( 36 );
                 Text = "Kommentar" ;
                 Text [ ENGLISH ] = "Comment" ;
                 Text[ english_us ] = "Comment";
@@ -1480,11 +1422,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Comment";
                 Text[ thai ] = "Comment";
             };
-            LB_WN( BASICCOMMENT, 38 )
+            LB_WN( BASICCOMMENT, 36 )
 
             FixedText FT_BASICNUMBER
             {
-                FT_POS_SIZE( 39 );
+                FT_POS_SIZE( 37 );
                 Text = "Zahl" ;
                 Text [ ENGLISH ] = "Number" ;
                 Text[ english_us ] = "Number";
@@ -1509,11 +1451,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Number";
                 Text[ thai ] = "Number";
             };
-            LB_WN( BASICNUMBER, 39 )
+            LB_WN( BASICNUMBER, 37 )
 
             FixedText FT_BASICSTRING
             {
-                FT_POS_SIZE( 40 );
+                FT_POS_SIZE( 38 );
                 Text = "Zeichenkette" ;
                 Text [ ENGLISH ] = "String" ;
                 Text[ english_us ] = "String";
@@ -1538,11 +1480,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "String";
                 Text[ thai ] = "String";
             };
-            LB_WN( BASICSTRING, 40 )
+            LB_WN( BASICSTRING, 38 )
 
             FixedText FT_BASICOPERATOR
             {
-                FT_POS_SIZE( 41 );
+                FT_POS_SIZE( 39 );
                 Text = "Operator" ;
                 Text [ ENGLISH ] = "Operator" ;
                 Text[ english_us ] = "Operator";
@@ -1567,11 +1509,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Operator";
                 Text[ thai ] = "Operator";
             };
-            LB_WN( BASICOPERATOR, 41 )
+            LB_WN( BASICOPERATOR, 39 )
 
             FixedText FT_BASICKEYWORD
             {
-                FT_POS_SIZE( 42 );
+                FT_POS_SIZE( 40 );
                 Text = "Reservierter Ausdruck" ;
                 Text [ ENGLISH ] = "Reserved expression" ;
                 Text[ english_us ] = "Reserved expression";
@@ -1596,11 +1538,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Reserved expression";
                 Text[ thai ] = "Reserved expression";
             };
-            LB_WN( BASICKEYWORD, 42 )
+            LB_WN( BASICKEYWORD, 40 )
 
             FixedText FT_BASICERROR
             {
-                FT_POS_SIZE( 43 );
+                FT_POS_SIZE( 41 );
                 Text = "Fehler" ;
                 Text [ ENGLISH ] = "Error" ;
                 Text[ english_us ] = "Error";
@@ -1625,7 +1567,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Error";
                 Text[ thai ] = "Error";
             };
-            LB_WN( BASICERROR, 43 )
+            LB_WN( BASICERROR, 41 )
 
         };
     };

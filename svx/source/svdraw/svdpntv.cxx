@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-08 09:37:54 $
+ *  last change: $Author: os $ $Date: 2002-08-13 15:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2134,14 +2134,7 @@ const svx::ColorConfig& SdrPaintView::getColorConfig() const
 
 void SdrPaintView::onChangeColorConfig()
 {
-    String aEmpty;
-    SfxItemSet aSet( GetDefaultAttr() );
-    aSet.Put( XFillColorItem( aEmpty, Color( maColorConfig.GetColorValue( svx::DRAWFILL ).nColor ) ) );
-    aSet.Put( XLineColorItem( aEmpty, Color( maColorConfig.GetColorValue( svx::DRAWDRAWING ).nColor ) ) );
-    SetDefaultAttr( aSet, false);
-
     SetGridColor( Color( maColorConfig.GetColorValue( svx::DRAWGRID ).nColor ) );
-
 }
 
 void SdrPaintView::SetGridColor( Color aColor )
