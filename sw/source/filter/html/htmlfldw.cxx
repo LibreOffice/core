@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:53:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,7 +649,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
         // sonst ist es der Script-Inhalt selbst. Da nur noh JavaScript
         // in Feldern landet, muss es sich um JavaSrript handeln ...:)
-        HTMLOutFuncs::OutScript( rWrt.Strm(), aContents, rType, JAVASCRIPT,
+        HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
                                  aURL, 0, 0, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
         if( rHTMLWrt.bLFPossible )
