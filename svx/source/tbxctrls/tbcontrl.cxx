@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-13 10:40:09 $
+ *  last change: $Author: ka $ $Date: 2000-11-15 09:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1615,45 +1615,6 @@ SvxTbxButtonColorUpdater::SvxTbxButtonColorUpdater( USHORT nTbxBtnId,
     DBG_ASSERT( pTbx, "ToolBox not found :-(" );
     Update(nTbxBtnId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
     return;
-/*
-    Pen             aPen = Pen( Color( COL_BLACK ) );
-    Image           theImage( pTbx->GetItemImage( nBtnId ) );
-    VirtualDevice   aVirDev( *pTbx );
-    Point           aNullPnt;
-
-    theBmpSize = theImage.GetSizePixel();
-
-    if ( theBmpSize.Width() <= 16 )
-        theUpdRect = Rectangle( Point(7,7), Size(8,8) );
-    else
-        theUpdRect = Rectangle( Point(15,15), Size(16,16) );
-
-    // grau einf"arben und Bitmap sichern:
-    aVirDev.SetPen( Pen( PEN_NULL ) );
-    aVirDev.SetOutputSizePixel( theBmpSize );
-    aVirDev.SetFillInBrush( Brush( Color( IMAGE_COL_TRANSPARENT ) ) );
-    aVirDev.DrawRect( Rectangle( aNullPnt, theBmpSize ) );
-    aVirDev.DrawImage( aNullPnt, theImage );
-    pBtnBmp = new Bitmap( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-
-    // durchsichtigen Rahmen malen:
-    aVirDev.SetPen( aPen );
-    aVirDev.SetFillInBrush( aCurBrush );
-
-    if ( nDrawMode != TBX_UPDATER_MODE_NONE )
-    {
-        Color aColor = aCurBrush.GetColor();
-        DrawChar( aVirDev, aColor );
-    }
-    else
-        aVirDev.DrawRect( theUpdRect );
-
-    const Bitmap aBmp( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-    aVirDev.DrawPixel( aNullPnt, IMAGE_COL_TRANSPARENT );
-    theImage = Image( aBmp, aVirDev.GetPixel( aNullPnt ) );
-
-    pTbx->SetItemImage( nBtnId, theImage );
- */
 }
 
 // -----------------------------------------------------------------------
@@ -1711,9 +1672,18 @@ void SvxTbxButtonColorUpdater::Update( const Color& rColor )
 
     aCurColor = rColor;
 
-    const Bitmap aBmp( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-    aVirDev.DrawPixel( aNullPnt, IMAGE_COL_TRANSPARENT );
-    Image aNewImage( aBmp, aVirDev.GetPixel( aNullPnt ) );
+    const Bitmap    aBmp( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
+    static Color    aTransparentColor;
+    static sal_Bool bTransparentColorInitialized = sal_False;
+
+    if( !bTransparentColorInitialized )
+    {
+        aVirDev.DrawPixel( aNullPnt, IMAGE_COL_TRANSPARENT );
+        aTransparentColor = aVirDev.GetPixel( aNullPnt );
+        bTransparentColorInitialized = sal_True;
+    }
+
+    Image aNewImage( aBmp, aTransparentColor );
     pTbx->SetItemImage( nBtnId, aNewImage );
 }
 
