@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 07:28:17 $
+ *  last change: $Author: os $ $Date: 2001-04-06 09:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,9 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
 {
     FreeResource();
     aEditArr[0] = &aLeft1ED; aEditArr[1] = &aRight1ED;
-    aEditArr[3] = &aLeft2ED; aEditArr[2] = &aRight2ED;
-    aEditArr[5] = &aLeft2ED; aEditArr[4] = &aRight3ED;
-    aEditArr[7] = &aLeft2ED; aEditArr[6] = &aRight4ED;
+    aEditArr[2] = &aLeft2ED; aEditArr[3] = &aRight2ED;
+    aEditArr[4] = &aLeft3ED; aEditArr[5] = &aRight3ED;
+    aEditArr[6] = &aLeft4ED; aEditArr[7] = &aRight4ED;
 
 
     aApplyPB.SetClickHdl(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
@@ -375,7 +375,7 @@ void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 void SvxRubyDialog::GetText()
 {
     long nLastPos = GetLastPos();
-    for(int i = 0; i < 4; i+=2)
+    for(int i = 0; i < 8; i+=2)
     {
         if(aEditArr[i]->IsEnabled() &&
             (aEditArr[i]->GetText() != aEditArr[i]->GetSavedValue() ||
