@@ -4955,3 +4955,12 @@ _TI2?AVElementExistException@container@star@sun@com@@
 ?StateChanged@SfxTabDialogController@@UAEXGGPBVSfxPoolItem@@@Z
 ?StaticType@SfxTabDialogItem@@SAP6APAXXZXZ
 ?Type@SfxTabDialogItem@@UBEP6APAXXZXZ
+??0?$ImplHelperBase1@VXNameContainer@container@star@sun@com@@@cppu@@QAE@XZ
+??0?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??0?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAE@XZ
+?_M_fill_insert@?$vector@PAXV?$allocator@U?$pair@$$CBVOUString@rtl@@J@_STL@@@_STL@@@_STL@@QAEXPAPAXIABQAX@Z
+?reserve@?$vector@PAXV?$allocator@U?$pair@$$CBVOUString@rtl@@J@_STL@@@_STL@@@_STL@@QAEXI@Z
+??1?$Reference@VXStarBasicLibraryInfo@script@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?matchToBasicManager@SfxScriptLibraryContainer@@AAEXXZ
+?storeLibraries@SfxScriptLibraryContainer@@UAAXE@Z
+?storeLibrariesToStorage@SfxScriptLibraryContainer@@UAAXVSotStorageRef@@@Z
