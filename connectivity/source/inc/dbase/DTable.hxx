@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-27 10:28:51 $
+ *  last change: $Author: oj $ $Date: 2000-12-08 12:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ namespace connectivity
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
+            sal_Bool        m_bWriteableMemo;
+            sal_Bool        m_bValid;       // set to false when this isn't a correct dbase table
 
             void readHeader();
             void fillColumns();
@@ -184,6 +186,7 @@ namespace connectivity
             BOOL DropImpl();
             BOOL CreateImpl();
             String getEntry();
+            sal_Bool isValid() { return m_bValid; }
 
             virtual BOOL InsertRow(file::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);

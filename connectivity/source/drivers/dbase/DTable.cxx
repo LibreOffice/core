@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 12:04:52 $
+ *  last change: $Author: oj $ $Date: 2000-12-08 12:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ void ODbaseTable::readHeader()
         ((m_aHeader.db_kopf - 1) / 32 - 1) <= 0) // anzahl felder
     {
         // Dies ist keine DBase Datei
+        m_bValid = sal_False;
     }
     else
     {
@@ -177,6 +178,7 @@ void ODbaseTable::readHeader()
             case dBaseIIIMemo:
             case dBaseIVMemo:
             case FoxProMemo:
+                m_bValid = sal_True;
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
                 break;
             default:
@@ -192,13 +194,13 @@ void ODbaseTable::fillColumns()
     m_pFileStream->Seek(32L);
 
     // Anzahl Felder:
-    sal_uInt32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
+    sal_Int32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
 
     String aStrFieldName;aStrFieldName.AssignAscii("Column");
     sal_Int32 nFieldCnt = 0;
     ::rtl::OUString aTypeName;
 
-    for (sal_uInt32 i = 0; i < nFieldCount; i++)
+    for (sal_Int32 i = 0; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
         m_pFileStream->Read((char*)&aDBFColumn, sizeof(aDBFColumn));
@@ -273,7 +275,7 @@ void ODbaseTable::fillColumns()
     }
 }
 // -------------------------------------------------------------------------
-ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection) : ODbaseTable_BASE(_pConnection)
+ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection) : ODbaseTable_BASE(_pConnection),m_pMemoStream(NULL),m_bWriteableMemo(sal_False),m_bValid(sal_False)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -294,6 +296,8 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _SchemaName,
                                   _CatalogName)
                 ,m_pMemoStream(NULL)
+                ,m_bWriteableMemo(sal_False)
+                ,m_bValid(sal_False)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -318,53 +322,58 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
     if(m_pFileStream)
     {
         readHeader();
-
-        if (HasMemoFields())
+        if(isValid())
         {
-            // Memo-Dateinamen bilden (.DBT):
-            // nyi: Unschoen fuer Unix und Mac!
 
-            if (m_aHeader.db_typ == FoxProMemo) // foxpro verwendet andere extension
-                aURL.SetExtension(String::CreateFromAscii("fpt"));  // nyi: Gross-/Kleinschreibung bei Unix? Klein ist sicherlich schoener.
-            else
-                aURL.SetExtension(String::CreateFromAscii("dbt"));  // nyi: Gross-/Kleinschreibung bei Unix? Klein ist sicherlich schoener.
+            if (HasMemoFields())
+            {
+                // Memo-Dateinamen bilden (.DBT):
+                // nyi: Unschoen fuer Unix und Mac!
 
-            // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
-            // allerdings koennen keine Updates durchgefuehrt werden
-            // jedoch die Operation wird ausgefuehrt
-            m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-            if (m_pMemoStream)
-                ReadMemoHeader();
-        }
-        fillColumns();
+                if (m_aHeader.db_typ == FoxProMemo) // foxpro verwendet andere extension
+                    aURL.SetExtension(String::CreateFromAscii("fpt"));  // nyi: Gross-/Kleinschreibung bei Unix? Klein ist sicherlich schoener.
+                else
+                    aURL.SetExtension(String::CreateFromAscii("dbt"));  // nyi: Gross-/Kleinschreibung bei Unix? Klein ist sicherlich schoener.
 
-        m_pFileStream->Seek(STREAM_SEEK_TO_END);
-        UINT32 nFileSize = m_pFileStream->Tell();
-        m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+                // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
+                // allerdings koennen keine Updates durchgefuehrt werden
+                // jedoch die Operation wird ausgefuehrt
+                m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+                if (m_bWriteableMemo = !m_pMemoStream)
+                    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+                if (m_pMemoStream)
+                    ReadMemoHeader();
+            }
+            fillColumns();
 
-        // Buffersize abhaengig von der Filegroesse
-        m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
-                                  nFileSize > 100000 ? 16384 :
-                                  nFileSize > 10000 ? 4096 : 1024);
-
-        if (m_pMemoStream)
-        {
-            // Puffer genau auf Laenge eines Satzes stellen
-            m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-            nFileSize = m_pMemoStream->Tell();
-            m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
+            m_pFileStream->Seek(STREAM_SEEK_TO_END);
+            UINT32 nFileSize = m_pFileStream->Tell();
+            m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
             // Buffersize abhaengig von der Filegroesse
-            m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
-                                          nFileSize > 100000 ? 16384 :
-                                          nFileSize > 10000 ? 4096 :
-                                          m_aMemoHeader.db_size);
+            m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
+                                      nFileSize > 100000 ? 16384 :
+                                      nFileSize > 10000 ? 4096 : 1024);
+
+            if (m_pMemoStream)
+            {
+                // Puffer genau auf Laenge eines Satzes stellen
+                m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+                nFileSize = m_pMemoStream->Tell();
+                m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+                // Buffersize abhaengig von der Filegroesse
+                m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
+                                              nFileSize > 100000 ? 16384 :
+                                              nFileSize > 10000 ? 4096 :
+                                              m_aMemoHeader.db_size);
+            }
+
+            AllocBuffer();
+
+            refreshColumns();
+            refreshIndexes();
         }
-
-        AllocBuffer();
-
-        refreshColumns();
-        refreshIndexes();
     }
 }
 //------------------------------------------------------------------
@@ -477,10 +486,16 @@ void ODbaseTable::refreshIndexes()
             {
                 aIndexName = aInfFile.ReadKey(aKeyName);
                 aURL.setName(String(aIndexName,getConnection()->getTextEncoding()));
-                Content aCnt(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-                if (aCnt.isDocument())
+                try
                 {
-                    aVector.push_back(aURL.getBase());
+                    Content aCnt(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+                    if (aCnt.isDocument())
+                    {
+                        aVector.push_back(aURL.getBase());
+                    }
+                }
+                catch(Exception&) // a execption is thrown when no file exists
+                {
                 }
             }
         }
@@ -948,18 +963,23 @@ BOOL ODbaseTable::CreateImpl()
         aURL.setExtension(m_pConnection->getExtension());
 
     Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-
-    if (aContent.isDocument())
+    try
     {
-        // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
-        SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
-
-        if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
+        if (aContent.isDocument())
         {
-            //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
-            return sal_False;
+            // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
+            SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
+
+            if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
+            {
+                //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
+                return sal_False;
+            }
+            delete pFileStream;
         }
-        delete pFileStream;
+    }
+    catch(Exception&) // a execption is thrown when no file exists
+    {
     }
 
     BOOL bMemoFile = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2000-12-08 12:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,11 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
@@ -113,6 +118,11 @@ Reference< XNamed > ODbaseTables::createObject(const ::rtl::OUString& _rName)
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
 
     Reference< XNamed > xRet = pRet;
+    if(!pRet->isValid())
+    {
+        ::comphelper::disposeComponent(xRet);
+        throw SQLException(::rtl::OUString::createFromAscii("Invalid DBase file found!"),m_rParent,_rName,1000,Any());
+    }
 
     return xRet;
 }
