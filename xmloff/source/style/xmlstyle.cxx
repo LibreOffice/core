@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-15 12:12:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this );
             break;
+        case XML_STYLE_FAMILY_CONTROL_ID:
         case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
         case XML_STYLE_FAMILY_TEXT_RUBY:
             pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
@@ -671,7 +672,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XML_STYLE_FAMILY_SD_POOL_ID:
             pStyle = new XMLShapeStyleContext( GetImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
-            break;
     }
 
     return pStyle;
@@ -736,6 +736,10 @@ sal_uInt16 SvXMLStylesContext::GetFamily(
     else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_ruby) ) )
     {
         nFamily = XML_STYLE_FAMILY_TEXT_RUBY;
+    }
+    else if ( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME) ) )
+    {
+        nFamily = XML_STYLE_FAMILY_CONTROL_ID;
     }
 
     return nFamily;
@@ -814,6 +818,9 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
                                     ((SvXMLStylesContext*)this)->GetImport() );
         }
         xMapper = xPageImpPropMapper;
+        break;
+    case XML_STYLE_FAMILY_CONTROL_ID:
+        return const_cast<SvXMLImport&>(GetImport()).GetFormImport()->getStylePropertyMapper();
         break;
     }
 
