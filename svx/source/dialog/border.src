@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:42:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 17:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,13 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpId = HID_BORDER_CTL_PRESETS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Pos = MAP_APPFONT ( 12 , 24 ) ;
         Size = MAP_APPFONT ( 61 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_USERDEF
     {
-        Pos = MAP_APPFONT (12 , 41) ;
+        Pos = MAP_APPFONT (12 , 40) ;
         Size = MAP_APPFONT ( 64, 8) ;
         Text [ de ] = "~Benutzerdefiniert" ;
         Text [ en-US ] = "~User-defined";
@@ -107,15 +107,15 @@ TabPage RID_SVXPAGE_BORDER
     Control WIN_FRAMESEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 61 , 65 ) ;
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 61 , 64 ) ;
         TabStop = TRUE ;
         Text = "Border control";
     };
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( 77 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 104 ) ;
+        Size = MAP_APPFONT ( 4 , 100 ) ;
         Vert = TRUE ;
     };
     FixedLine FL_LINE
@@ -136,12 +136,12 @@ TabPage RID_SVXPAGE_BORDER
     ListBox LB_LINESTYLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 25 ) ;
-        Size = MAP_APPFONT ( 74 , 66 ) ;
+        Pos = MAP_APPFONT ( 88 , 24 ) ;
+        Size = MAP_APPFONT ( 74 , 64 ) ;
     };
     FixedText FT_COLOR
     {
-        Pos = MAP_APPFONT ( 88, 95 ) ;
+        Pos = MAP_APPFONT ( 88, 92 ) ;
         Size = MAP_APPFONT ( 77, 8 ) ;
         Text [ de ] = "~Farbe" ;
         Text [ en-US ] = "~Color";
@@ -149,7 +149,7 @@ TabPage RID_SVXPAGE_BORDER
     ListBox LB_LINECOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 106 ) ;
+        Pos = MAP_APPFONT ( 88 , 102 ) ;
         Size = MAP_APPFONT ( 74 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
@@ -157,7 +157,7 @@ TabPage RID_SVXPAGE_BORDER
     FixedLine FL_SEPARATOR2
     {
         Pos = MAP_APPFONT ( 166 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 104 ) ;
+        Size = MAP_APPFONT ( 4 , 100 ) ;
         Vert = TRUE ;
     };
     FixedText FT_LEFT
@@ -270,7 +270,7 @@ TabPage RID_SVXPAGE_BORDER
 
     FixedText FT_SHADOWPOS
     {
-        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 74 , 8 ) ;
         Text [ de ] = "~Position" ;
         Text [ en-US ] = "~Position" ;
@@ -280,13 +280,13 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpId = HID_BORDER_CTL_SHADOWS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Pos = MAP_APPFONT ( 12 , 136 ) ;
         Size = MAP_APPFONT ( 74 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_SHADOWSIZE
     {
-        Pos = MAP_APPFONT ( 88 , 133 ) ;
+        Pos = MAP_APPFONT ( 88 , 126 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ de ] = "~Distanz" ;
         Text [ en-US ] = "Distan~ce";
@@ -294,7 +294,7 @@ TabPage RID_SVXPAGE_BORDER
     MetricField ED_SHADOWSIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 144 ) ;
+        Pos = MAP_APPFONT ( 88 , 136 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -308,7 +308,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedText FT_SHADOWCOLOR
     {
-        Pos = MAP_APPFONT ( 177 , 133 ) ;
+        Pos = MAP_APPFONT ( 177 , 126 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ de ] = "Far~be" ;
         Text [ en-US ] = "C~olor" ;
@@ -317,14 +317,14 @@ TabPage RID_SVXPAGE_BORDER
     ListBox LB_SHADOWCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 144 ) ;
+        Pos = MAP_APPFONT ( 177 , 136 ) ;
         Size = MAP_APPFONT ( 74 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedLine FL_SHADOW
     {
-        Pos = MAP_APPFONT ( 6 , 123 ) ;
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Schatten" ;
         Text [ en-US ] = "Shadow style" ;
@@ -332,7 +332,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedLine FL_PROPERTIES
     {
-        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Pos = MAP_APPFONT ( 6 , 152 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Hide = TRUE;
         Text [ de ] = "Eigenschaften" ;
@@ -340,10 +340,10 @@ TabPage RID_SVXPAGE_BORDER
     };
     CheckBox  CB_MERGEWITHNEXT
     {
-        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Pos = MAP_APPFONT ( 12 , 162 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Mit dem nächsten Absatz verschmelzen" ;
+        Text [ de ] = "Mit dem nächsten Absatz ~verschmelzen" ;
         Text [ en-US ] = "~Merge with next paragraph" ;
     };
     CheckBox  CB_MERGEADJACENTBORDERS
