@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-22 15:25:55 $
+ *  last change: $Author: dbo $ $Date: 2002-04-26 16:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
     file = pName;
 }
 
-sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
+static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW( () )
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 
@@ -571,7 +571,30 @@ sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue ,
         pBootstrap_Impl = &bootstrap_Impl;
     }
 
-    return rtl_bootstrap_get_from_handle(pBootstrap_Impl, pName, ppValue, pDefault);
+    return pBootstrap_Impl;
+}
+
+sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
+{
+    return rtl_bootstrap_get_from_handle(
+        get_static_bootstrap_handle(), pName, ppValue, pDefault);
+}
+
+void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
+    rtlBootstrapHandle handle, rtl_uString ** macro )
+    SAL_THROW_EXTERN_C()
+{
+    OUString expanded( expandMacros( handle, * reinterpret_cast< OUString const * >( macro ) ) );
+    rtl_uString_assign( macro, expanded.pData );
+}
+
+void SAL_CALL rtl_bootstrap_expandMacros(
+    rtl_uString ** macro )
+    SAL_THROW_EXTERN_C()
+{
+    OUString expanded( expandMacros( get_static_bootstrap_handle(),
+                                     * reinterpret_cast< OUString const * >( macro ) ) );
+    rtl_uString_assign( macro, expanded.pData );
 }
 
 }
