@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:02:26 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
 #endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
@@ -114,6 +117,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <sfx2/app.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
 #endif
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
@@ -168,6 +174,18 @@
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
 #endif
+#include "ofaitem.hxx"
+#ifndef _SVX_HTMLMODE_HXX
+#include "htmlmode.hxx"
+#endif
+
+// for security TP
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#endif
 
 #ifdef UNX
 #include <sys/types.h>
@@ -199,6 +217,7 @@
 #include <osl/file.hxx>
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::sfx2;
@@ -1055,413 +1074,254 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 
 /********************************************************************/
 /*                                                                  */
-/*  SvxScriptingTabPage                                             */
+/*  SvxSecurityTabPage                                             */
 /*                                                                  */
 /********************************************************************/
 
-SvxScriptingTabPage::SvxScriptingTabPage( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_INET_SCRIPTING ), rSet ),
-
-    aGrpScriptingStarBasic  ( this, ResId( GB_STARBASIC ) ),
-    aExecMacroFT            ( this, ResId( FT_EXEC_MACRO ) ),
-    aExecMacroLB            ( this, ResId( LB_EXEC_MACRO ) ),
-    aConfirmCB              ( this, ResId( CB_CONFIRM ) ),
-    aWarningCB              ( this, ResId( CB_WARNING ) ),
-    aPathListFT             ( this, ResId( FT_PATH_LIST ) ),
-    aLbScriptExec           ( this, ResId( LB_SCRIPT_EXEC ) ),
-    aBtnScriptExecDelete    ( this, ResId( PB_SCRIPT_DELETE ) ),
-    aBtnScriptExecDefault   ( this, ResId( PB_SCRIPT_DEFAULT ) ),
-    aNewPathFT              ( this, ResId( FT_NEW_PATH ) ),
-    aEdtScriptExec          ( this, ResId( ED_SCRIPT_EXEC ) ),
-    aBtnScriptExecInsert    ( this, ResId( PB_SCRIPT_INSERT ) ),
-    aHyperlinksFL           ( this, ResId( FL_HYPERLINKS ) ),
-    aHyperlinksFT           ( this, ResId( FT_HYPERLINKS ) ),
-    aHyperlinksLB           ( this, ResId( LB_HYPERLINKS ) ),
-    aJavaFL                 ( this, ResId( FL_JAVA ) ),
-    aJavaEnableCB           ( this, ResId( CB_J_ENABLE ) ),
-    aJavaSecurityCB         ( this, ResId( CB_J_SECURITY ) ),
-    aNetAccessFT            ( this, ResId( FT_NETACCESS ) ),
-    aNetAccessLB            ( this, ResId( LB_NETACCESS ) ),
-    aClassPathFT            ( this, ResId( FT_CLASSPATH ) ),
-    aClassPathED            ( this, ResId( ED_CLASSPATH ) ),
-    aClassPathPB            ( this, ResId( PB_CLASSPATH ) ),
-    aSeparatorFL            ( this, ResId( FL_SEPARATOR ) ),
-    aExecuteGB              ( this, ResId( GB_EXECUTE ) ),
-    aExePlugCB              ( this, ResId( CB_EXECUTE_PLUGINS ) ),
-    aExecAppletsCB          ( this, ResId( CB_EXECUTE_APPLETS ) ),
-
-    aExecMacroFI(       this, ResId( FI_EXECMACRO    )),
-    aConfirmFI(         this, ResId( FI_CONFIRM      )),
-    aWarningFI(         this, ResId( FI_WARNING      )),
-    aScriptExecFI(      this, ResId( FI_SCRIPTEXEC   )),
-    aHyperlinksFI(      this, ResId( FI_HYPERLINKS   )),
-    aJavaEnableFI(      this, ResId( FI_JAVAENABLE   )),
-    aJavaSecurityFI(    this, ResId( FI_JAVASECURITY )),
-    aNetAccessFI(       this, ResId( FI_NETACCESS    )),
-    aClassPathFI(       this, ResId( FI_CLASSPATH    )),
-    aExePlugFI(         this, ResId( FI_EXECPLUG     )),
-    aExecAppletsFI(     this, ResId( FI_EXEAPPLETS  )),
-
-    pJavaOptions            ( new SvtJavaOptions ),
-    pSecurityOptions        ( new SvtSecurityOptions ),
-
-    bROConfirm              ( CFG_READONLY_DEFAULT),
-    bROWarning              ( CFG_READONLY_DEFAULT),
-    bROExecMacro            ( CFG_READONLY_DEFAULT),
-    bROExePlug              ( CFG_READONLY_DEFAULT),
-    bROJavaEnabled          ( CFG_READONLY_DEFAULT),
-    bROJavaSecurity         ( CFG_READONLY_DEFAULT),
-    bROJavaNetAccess        ( CFG_READONLY_DEFAULT),
-    bROJavaUserClassPath    ( CFG_READONLY_DEFAULT),
-    bROJavaExecuteApplets   ( CFG_READONLY_DEFAULT)
+SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet )
+    :SfxTabPage         ( pParent, SVX_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
+    ,maSecOptionsFL     ( this, ResId( FL_SEC_SECOPTIONS ) )
+    ,maSecOptionsFI     ( this, ResId( FI_SEC_SECOPTIONS ) )
+    ,maSaveOrSendDocsCB ( this, ResId( CB_SEC_SAVEORSENDDOCS ) )
+    ,maSignDocsCB       ( this, ResId( CB_SEC_SIGNDOCS ) )
+    ,maPrintDocsCB      ( this, ResId( CB_SEC_PRINTDOCS ) )
+    ,maCreatePdfCB      ( this, ResId( CB_SEC_CREATEPDF ) )
+    ,maRemovePersInfoCB ( this, ResId( CB_SEC_REMOVEPERSINFO ) )
+    ,maRecommPasswdCB   ( this, ResId( CB_SEC_RECOMMPASSWD ) )
+    ,maMacroSecFL       ( this, ResId( FL_SEC_MACROSEC ) )
+    ,maMacroSecFI       ( this, ResId( FI_SEC_MACROSEC ) )
+    ,maMacroSecPB       ( this, ResId( PB_SEC_MACROSEC ) )
+    ,maFilesharingFL    ( this, ResId( FL_SEC_FILESHARING ) )
+    ,maRecommReadOnlyCB ( this, ResId( CB_SEC_RECOMMREADONLY ) )
+    ,maRecordChangesCB  ( this, ResId( CB_SEC_RECORDCHANGES ) )
+    ,maProtectRecordsPB ( this, ResId( PB_SEC_PROTRECORDS ) )
+    ,msProtectRecordsStr(       ResId( STR_SEC_PROTRECORDS ) )
+    ,msUnprotectRecordsStr(     ResId( STR_SEC_UNPROTRECORDS ) )
+    ,mpSecOptions       ( new SvtSecurityOptions )
+    ,meRedlingMode      ( RL_NONE )
 {
     FreeResource();
 
-    aEdtScriptExec.SetModifyHdl( LINK(this, SvxScriptingTabPage, EditHdl_Impl) );
-    aLbScriptExec.SetSelectHdl( LINK(this, SvxScriptingTabPage, LBHdl_Impl) );
+    maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
+    maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
+    maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
 
-    Link aLink( LINK(this, SvxScriptingTabPage, BtnHdl_Impl) );
-    aBtnScriptExecInsert.SetClickHdl( aLink );
-    aBtnScriptExecDelete.SetClickHdl( aLink );
-    aBtnScriptExecDefault.SetClickHdl( aLink );
-
-    aExecMacroLB.SetSelectHdl(LINK( this, SvxScriptingTabPage, RunHdl_Impl ));
-    EditHdl_Impl( NULL );
     ActivatePage( rSet );
-
-#ifdef SOLAR_JAVA
-    aLink = LINK(this, SvxScriptingTabPage, JavaEnableHdl_Impl);
-    aJavaEnableCB.SetClickHdl( aLink );
-    aJavaSecurityCB.SetClickHdl( aLink );
-    aClassPathPB.SetClickHdl( LINK(this, SvxScriptingTabPage, ClassPathHdl_Impl) );
-#endif
 }
 
-/*--------------------------------------------------------------------*/
-SvxScriptingTabPage::~SvxScriptingTabPage()
+SvxSecurityTabPage::~SvxSecurityTabPage()
 {
-    delete pJavaOptions;
-    delete pSecurityOptions;
+    delete mpSecOptions;
 }
-// -----------------------------------------------------------------------
-void SvxScriptingTabPage::EnableJava_Impl( BOOL bEnable, BOOL bOnlySecurity )
+
+IMPL_LINK( SvxSecurityTabPage, AdvancedPBHdl, void*, EMPTYARG )
 {
-    if ( !bOnlySecurity )
+    return 0;
+}
+
+IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
+{
+    Reference< security::XDocumentDigitalSignatures > xD(
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+    if ( xD.is() )
+        xD->manageTrustedSources();
+
+    return 0;
+}
+
+namespace
+{
+    enum RedlineFunc    { RF_ON, RF_PROTECT };
+
+    const SfxBoolItem* ExecuteRecordChangesFunc( SvxSecurityTabPage::RedliningMode _eMode, RedlineFunc _eFunc, BOOL _bVal, Window* _pParent = NULL )
     {
-        aJavaSecurityCB.Enable( bEnable && bROJavaSecurity);
-        aClassPathFT.Enable( bEnable && !bROJavaUserClassPath);
-        aClassPathED.Enable( bEnable && !bROJavaUserClassPath);
-        aClassPathPB.Enable( bEnable && !bROJavaExecuteApplets);
-        aExecAppletsCB.Enable( bEnable && !bROJavaExecuteApplets);
-    }
+        const SfxBoolItem* pRet = NULL;
 
-    bEnable = ( bEnable && aJavaSecurityCB.IsChecked() && !bROJavaNetAccess);
-    aNetAccessFT.Enable( bEnable );
-    aNetAccessLB.Enable( bEnable );
-}
-// -----------------------------------------------------------------------
-IMPL_LINK( SvxScriptingTabPage, JavaEnableHdl_Impl, CheckBox*, pBox )
-{
-    EnableJava_Impl( pBox->IsChecked(), &aJavaSecurityCB == pBox );
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SvxScriptingTabPage, ClassPathHdl_Impl, PushButton*, EMPTYARG )
-{
-    //CHINA001 SvxMultiFileDialog aDlg( this, TRUE );
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
-    {
-        AbstractSvxMultiFileDialog* aDlg = pFact->CreateSvxMultiFileDialog( this, ResId(RID_SVXDLG_MULTIPATH), TRUE );
-        DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-        aDlg->SetClassPathMode(); //CHINA001 aDlg.SetClassPathMode();
-        aDlg->SetPath( aClassPathED.GetText() ); //CHINA001 aDlg.SetPath( aClassPathED.GetText() );
-        if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
+        if( _eMode != SvxSecurityTabPage::RL_NONE )
         {
-            // convert to system path if necessary
-            String sNewPath, sPath = aDlg->GetPath(); //CHINA001 String sNewPath, sPath = aDlg.GetPath();
-            xub_StrLen nCount = sPath.GetTokenCount( CLASSPATH_DELIMITER );
-            for ( USHORT i = 0; i < nCount; ++i )
+            USHORT nSlot;
+            if( _eMode == SvxSecurityTabPage::RL_WRITER )
+                nSlot = ( _eFunc == RF_ON )? FN_REDLINE_ON : FN_REDLINE_PROTECT;
+            else
+                nSlot = ( _eFunc == RF_ON )? FID_CHG_RECORD : SID_CHG_PROTECT;
+
+            // execute
+            SfxViewShell* pViewSh = SfxViewShell::Current();
+            if( pViewSh )
             {
-                String sTmp, sToken = sPath.GetToken( i, CLASSPATH_DELIMITER );
-                if ( ::utl::LocalFileHelper::ConvertURLToSystemPath( sToken, sTmp ) )
-                    sToken = sTmp;
-                if ( sNewPath.Len() > 0 )
-                    sNewPath += CLASSPATH_DELIMITER;
-                sNewPath += sToken;
+                SfxBoolItem aItem( nSlot, _bVal );
+                SfxDispatcher* pDisp = pViewSh->GetDispatcher();
+                if( _pParent )
+                {
+                    OfaPtrItem aParentItem( SID_ATTR_PARENTWINDOW, _pParent );
+                    pRet = static_cast< const SfxBoolItem* >( pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aItem, &aParentItem, 0L ) );
+                }
+                else
+                    pRet = static_cast< const SfxBoolItem* >( pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aItem, 0L ) );
             }
-
-            aClassPathED.SetText( sNewPath );
         }
-        delete aDlg; //add by CHINA001
+
+        return pRet;
     }
-    return 1;
+
+    bool QueryState( USHORT _nSlot, bool& _rValue )
+    {
+        bool bRet = false;
+
+        SfxViewShell* pViewSh = SfxViewShell::Current();
+        if( pViewSh )
+        {
+            const SfxPoolItem* pItem;
+            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
+            bRet = SFX_ITEM_AVAILABLE <= pDisp->QueryState( _nSlot, pItem );
+            if( bRet )
+                _rValue = ( static_cast< const SfxBoolItem* >( pItem ) )->GetValue();
+        }
+
+        return bRet;
+    }
+
+    bool QueryRecordChangesProtectionState( SvxSecurityTabPage::RedliningMode _eMode, bool& _rValue )
+    {
+        bool bRet = false;
+
+        if( _eMode != SvxSecurityTabPage::RL_NONE )
+        {
+            USHORT nSlot = ( _eMode == SvxSecurityTabPage::RL_WRITER )? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
+            bRet = QueryState( nSlot, _rValue );
+        }
+
+        return bRet;
+    }
+
+    bool QueryRecordChangesState( SvxSecurityTabPage::RedliningMode _eMode, bool& _rValue )
+    {
+        bool bRet = false;
+
+        if( _eMode != SvxSecurityTabPage::RL_NONE )
+        {
+            USHORT nSlot = ( _eMode == SvxSecurityTabPage::RL_WRITER )? FN_REDLINE_ON : FID_CHG_RECORD;
+            bRet = QueryState( nSlot, _rValue );
+        }
+
+        return bRet;
+    }
 }
 
-
-/*--------------------------------------------------------------------*/
-
-SfxTabPage* SvxScriptingTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
+IMPL_LINK( SvxSecurityTabPage, RecordChangesCBHdl, void*, EMPTYARG )
 {
-    return new SvxScriptingTabPage(pParent, rAttrSet);
+    const SfxBoolItem* pItem = ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
+
+    CheckRecordChangesState();
+/*  if( pItem )
+        maRecordChangesCB.Check( pItem->GetValue() );
+    else
+        maRecordChangesCB.Disable();        // because now we don't know the state!*/
+
+    return 0;
 }
 
-/*--------------------------------------------------------------------*/
+IMPL_LINK( SvxSecurityTabPage, ProtectRecordsPBHdl, void*, EMPTYARG )
+{
+    bool bProt;
+    QueryRecordChangesProtectionState( meRedlingMode, bProt );
+    const SfxBoolItem* pItem = ExecuteRecordChangesFunc( meRedlingMode, RF_PROTECT, !bProt, this );
+    CheckRecordChangesState();
 
-void SvxScriptingTabPage::ActivatePage( const SfxItemSet& rSet )
+    if ( QueryRecordChangesProtectionState( meRedlingMode, bProt ) )
+    {
+        // RecordChangesCB is enabled if protection is off
+        maRecordChangesCB.Enable( !bProt );
+        // toggle text of button "Protect" <-> "Unprotect"
+        String sNewText = bProt ? msUnprotectRecordsStr : msProtectRecordsStr;
+        maProtectRecordsPB.SetText( sNewText );
+    }
+    return 0;
+}
+
+void SvxSecurityTabPage::CheckRecordChangesState( void )
+{
+    bool bVal;
+    if( QueryRecordChangesState( meRedlingMode, bVal ) )
+    {
+        maRecordChangesCB.Enable();
+        maRecordChangesCB.Check( bVal );
+    }
+    else
+        maRecordChangesCB.Disable();        // because now we don't know the state!
+
+    maProtectRecordsPB.Enable( QueryRecordChangesProtectionState( meRedlingMode, bVal ) );
+}
+
+SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
+{
+    return new SvxSecurityTabPage(pParent, rAttrSet);
+}
+
+void SvxSecurityTabPage::ActivatePage( const SfxItemSet& rSet )
 {
 }
 
-/*--------------------------------------------------------------------*/
-
-int SvxScriptingTabPage::DeactivatePage( SfxItemSet* pSet )
+int SvxSecurityTabPage::DeactivatePage( SfxItemSet* pSet )
 {
-    if ( pSet )
+    if( pSet )
         FillItemSet( *pSet );
     return LEAVE_PAGE;
 }
 
-/*--------------------------------------------------------------------*/
-
-void SvxScriptingTabPage::FillListBox_Impl()
+namespace
 {
-}
-
-/*--------------------------------------------------------------------*/
-
-IMPL_LINK( SvxScriptingTabPage, EditHdl_Impl, Edit*, EMPTYARG )
-
-/*  [Beschreibung]
-
-    ModifyHandler vom Edit. Der 'Hinzuf"ugen'-Button wird nur enabled,
-    wenn der Text im Edit vorhanden ist und nicht nur aus Blanks besteht.
-*/
-
-{
-    String aTxt = aEdtScriptExec.GetText();
-    aTxt.EraseLeadingChars().EraseTrailingChars();
-    aBtnScriptExecInsert.Enable( aTxt.Len() > 0 );
-    return 1L;
-}
-
-/*--------------------------------------------------------------------*/
-
-IMPL_LINK( SvxScriptingTabPage, LBHdl_Impl, ListBox*, EMPTYARG )
-{
-    USHORT nPos = aLbScriptExec.GetSelectEntryPos();
-    aBtnScriptExecDelete.Enable( nPos != LISTBOX_ENTRY_NOTFOUND );
-    return 1L;
-}
-
-/*--------------------------------------------------------------------*/
-
-IMPL_LINK( SvxScriptingTabPage, BtnHdl_Impl, PushButton*, pBtn )
-{
-    if( pBtn == &aBtnScriptExecInsert )
+    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl )
     {
-        // Insert new entry if not found in listbox
-        String aNewEntry = aEdtScriptExec.GetText();
-        aNewEntry.EraseLeadingChars().EraseTrailingChars();
-        INetURLObject aINetObject(aNewEntry, INET_PROT_HTTP);
-        if(INET_PROT_FILE == aINetObject.GetProtocol())
-            aNewEntry = aINetObject.GetFull();
-        else
-            aNewEntry = aINetObject.GetMainURL( INetURLObject::DECODE_TO_IURI );
-        // if it's not a URL of any kind the original string is used again
-        if(!aNewEntry.Len())
-            aNewEntry = aEdtScriptExec.GetText().EraseLeadingChars().EraseTrailingChars();
-        aEdtScriptExec.SetText( aNewEntry );
-        FASTBOOL bFound = !aNewEntry.Len();
+        bool    b = _rOpt.IsOptionEnabled( _eOpt );
+        _rCtrl.Enable( b );
+        return b;
+    }
 
-        if ( !bFound )
+    bool EnableAndSet( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, CheckBox& _rCtrl )
+    {
+        bool    b = Enable( _rOpt, _eOpt, _rCtrl );
+        if( b )
+            _rCtrl.Check( _rOpt.IsOptionSet( _eOpt ) );
+        return b;
+    }
+
+    bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const CheckBox& _rCtrl, bool& _rModfied )
+    {
+        bool    bModified = false;
+        if( _rOpt.IsOptionEnabled( _eOpt ) )
         {
-            for ( USHORT i = 0; i < aLbScriptExec.GetEntryCount(); ++i )
+            bool    bNew = _rCtrl.IsChecked();
+            bModified = _rOpt.IsOptionSet( _eOpt ) != bNew;
+            if( bModified )
             {
-                String aEntry = aLbScriptExec.GetEntry(i);
-
-                if ( aEntry.CompareIgnoreCaseToAscii( aNewEntry ) == COMPARE_EQUAL )
-                {
-                    bFound = TRUE;
-                    break;
-                }
+                _rOpt.SetOption( _eOpt, bNew );
+                _rModfied = true;
             }
         }
 
-        if ( !bFound )
-        {
-            aLbScriptExec.InsertEntry( aNewEntry );
-            aLbScriptExec.SelectEntry( aNewEntry );
-        }
+        return bModified;
     }
-    else if( pBtn == &aBtnScriptExecDelete )
-    {
-        // delete selected entry
-        USHORT nPos = aLbScriptExec.GetSelectEntryPos();
-
-        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        {
-            aLbScriptExec.RemoveEntry( nPos );
-            USHORT nCount = aLbScriptExec.GetEntryCount();
-
-            if ( nCount > 0 )
-            {
-                if ( nPos >= nCount )
-                    nPos = nCount - 1;
-            }
-            aLbScriptExec.SelectEntryPos( nPos );
-        }
-    }
-    else if ( pBtn == &aBtnScriptExecDefault )
-    {
-        // Reset listbox and edit
-
-        aLbScriptExec.Clear();
-        SvtPathOptions aPathOpt;
-
-        String sModule = URIHelper::SmartRelToAbs( aPathOpt.GetModulePath() );
-        INetURLObject aURLObject(sModule);
-        aURLObject.removeSegment();
-        aLbScriptExec.InsertEntry( aURLObject.GetFull() );
-        // #102041# -------------------------------
-        rtl::OUString aString;
-        utl::Bootstrap::locateUserInstallation( aString );
-        UniString aUniString( aString );
-        aUniString.AppendAscii( "/user" );
-        aURLObject = aUniString;
-        aLbScriptExec.InsertEntry( aURLObject.GetFull() );
-        aEdtScriptExec.SetText( String() );
-    }
-    LBHdl_Impl( NULL );
-    EditHdl_Impl( NULL );
-
-    return 1;
 }
 
-/*--------------------------------------------------------------------*/
-
-IMPL_LINK( SvxScriptingTabPage, RunHdl_Impl, ListBox*, pListBox )
+BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& _rSet )
 {
-    sal_Bool bConfirm = sal_False;
-    sal_Bool bWarning = sal_True;
-    switch(pListBox->GetSelectEntryPos())
-    {
-        case 1 : //according to list
-            bConfirm = sal_True;
-        break;
-        case 0: //never
-            bWarning = sal_False;
-        break;
-//        case 2 : //always
-//        break;
-    }
-    if (!bROConfirm)
-        aConfirmCB.Enable(bConfirm);
-    if (!bROWarning)
-        aWarningCB.Enable(bWarning);
-    return 1;
-}
+    bool bModified = false;
 
-/*--------------------------------------------------------------------*/
+    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB, bModified );
+    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB, bModified );
+    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, maPrintDocsCB, bModified );
+    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, maCreatePdfCB, bModified );
+    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, maRemovePersInfoCB, bModified );
+    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, maRecommPasswdCB, bModified );
 
-BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet&)
-{
-    // ggf. neuen Eintrag einf"ugen
-    BtnHdl_Impl( &aBtnScriptExecInsert );
+    // document options
+    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+    if( pCurDocShell )
+    {
+        if( pCurDocShell->HasSecurityOptOpenReadOnly() )
+            pCurDocShell->SetSecurityOptOpenReadOnly( maRecommReadOnlyCB.IsChecked() );
 
-    BOOL bModified = FALSE;
-
-    // Liste fuer Scripting (Execute)
-    if (!bROScriptExec)
-    {
-        Sequence< OUString > aURLs(aLbScriptExec.GetEntryCount());
-        OUString* pURLs = aURLs.getArray();
-        USHORT nCount = aLbScriptExec.GetEntryCount();
-        for( USHORT i = 0; i < nCount; i++ )
-        {
-            String sURL(URIHelper::SmartRelToAbs(aLbScriptExec.GetEntry( i )));
-            pURLs[i] = sURL;
-        }
-
-        if(aURLs != pSecurityOptions->GetSecureURLs())
-            bModified = TRUE;
-
-        if ( bModified )
-        {
-            pSecurityOptions->SetSecureURLs( aURLs );
-        }
-    }
-    if( !bROConfirm && aConfirmCB.GetSavedValue() != aConfirmCB.IsChecked() )
-    {
-        pSecurityOptions->SetConfirmationEnabled(aConfirmCB.IsChecked());
-        bModified = TRUE;
-    }
-    if( !bROWarning && aWarningCB.GetSavedValue() != aWarningCB.IsChecked() )
-    {
-        pSecurityOptions->SetWarningEnabled(aWarningCB.IsChecked());
-        bModified = TRUE;
-    }
-
-    // Scripting
-    if( !bROExecMacro && aExecMacroLB.GetSelectEntryPos() != aExecMacroLB.GetSavedValue())
-    {
-        USHORT nSB = aExecMacroLB.GetSelectEntryPos();
-        pSecurityOptions->SetBasicMode((EBasicSecurityMode) nSB );
-        bModified = TRUE;
-    }
-
-    //  Execute
-    if( !bROExePlug && aExePlugCB.GetSavedValue() != aExePlugCB.IsChecked() )
-    {
-        pSecurityOptions->SetExecutePlugins( aExePlugCB.IsChecked());
-        bModified = TRUE;
-    }
-    // Java
-    sal_Bool bJavaOptionsModified = sal_False;
-    if ( !pJavaOptions->IsReadOnly(SvtJavaOptions::E_ENABLED) && aJavaEnableCB.GetSavedValue() != aJavaEnableCB.IsChecked() )
-    {
-        pJavaOptions->SetEnabled(aJavaEnableCB.IsChecked());
-        bJavaOptionsModified = sal_True;
-    }
-
-    // Applets
-    if ( aExecAppletsCB.IsEnabled() &&
-         aExecAppletsCB.GetSavedValue() != aExecAppletsCB.IsChecked() &&
-         !pJavaOptions->IsReadOnly(SvtJavaOptions::E_EXECUTEAPPLETS) )
-    {
-        pJavaOptions->SetExecuteApplets(aExecAppletsCB.IsChecked());
-        bJavaOptionsModified = sal_True;
-    }
-
-    USHORT nSelPos = aNetAccessLB.GetSelectEntryPos();
-    if( !pJavaOptions->IsReadOnly(SvtJavaOptions::E_NETACCESS) && aNetAccessLB.GetSavedValue() != nSelPos )
-    {
-        pJavaOptions->SetNetAccess(nSelPos);
-        bJavaOptionsModified = sal_True;
-    }
-    if(!pJavaOptions->IsReadOnly(SvtJavaOptions::E_SECURITY) && aJavaSecurityCB.GetSavedValue() != aJavaSecurityCB.IsChecked() )
-    {
-        pJavaOptions->SetSecurity(aJavaSecurityCB.IsChecked() );
-        bJavaOptionsModified = sal_True;
-    }
-    if(!pJavaOptions->IsReadOnly(SvtJavaOptions::E_USERCLASSPATH) && aClassPathED.GetSavedValue() != aClassPathED.GetText() )
-    {
-        String aNewPath = aClassPathED.GetText();
-        aNewPath.EraseLeadingChars().EraseTrailingChars();
-        pJavaOptions->SetUserClassPath(aNewPath);
-        bJavaOptionsModified = sal_True;
-    }
-    if(bJavaOptionsModified)
-        pJavaOptions->Commit();
-
-    // hyperlinks
-    if ( aHyperlinksLB.GetSavedValue() != aHyperlinksLB.GetSelectEntryPos() )
-    {
-        SvtExtendedSecurityOptions::OpenHyperlinkMode eMode =
-            (SvtExtendedSecurityOptions::OpenHyperlinkMode)aHyperlinksLB.GetSelectEntryPos();
-        SvtExtendedSecurityOptions().SetOpenHyperlinkMode( eMode );
     }
 
     return bModified;
@@ -1469,145 +1329,74 @@ BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet&)
 
 /*--------------------------------------------------------------------*/
 
-void SvxScriptingTabPage::Reset( const SfxItemSet& )
+void SvxSecurityTabPage::Reset( const SfxItemSet& _rSet )
 {
-    bROConfirm =    pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_CONFIRMATION);
-    bROWarning =    pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_WARNING);
-    bROScriptExec = pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_SECUREURLS);
-    bROExePlug =    pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_EXECUTEPLUGINS);
-    bROExecMacro =  pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_BASICMODE);
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, maPrintDocsCB );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, maCreatePdfCB );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, maRemovePersInfoCB );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, maRecommPasswdCB );
 
-    // Execute
-    aLbScriptExec.Clear();
-    Sequence< OUString > aURLs = pSecurityOptions->GetSecureURLs( );
-    const OUString* pURLs = aURLs.getConstArray();
-    sal_Int32 nCount = aURLs.getLength();
-
-    for ( sal_Int32 i = 0; i < nCount; i++ )
+    String sNewText = msProtectRecordsStr;
+    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+    if( pCurDocShell )
     {
-        INetURLObject aURL(pURLs[i]);
-        aLbScriptExec.InsertEntry(
-            INET_PROT_FILE == aURL.GetProtocol() ?
-                aURL.GetFull() : aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    }
-    aScriptExecFI.Show(bROScriptExec);
-    aLbScriptExec.Enable(!bROScriptExec);
-    aEdtScriptExec.Enable(!bROScriptExec);
-    aBtnScriptExecDelete.Enable(!bROScriptExec);
-    aBtnScriptExecDefault.Enable(!bROScriptExec);
-    aBtnScriptExecInsert.Enable(!bROScriptExec);
-    aPathListFT.Enable(!bROScriptExec);
-    aNewPathFT.Enable(!bROScriptExec);
+        bool bIsHTMLDoc = false;
+        SfxViewShell* pViewSh = SfxViewShell::Current();
+        if( pViewSh )
+        {
+            const SfxPoolItem* pItem;
+            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
+            if ( SFX_ITEM_AVAILABLE <= pDisp->QueryState( SID_HTML_MODE, pItem ) )
+            {
+                USHORT nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
+                bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );
+            }
+        }
 
-    aWarningCB.Check(pSecurityOptions->IsWarningEnabled());
-    aWarningCB.SaveValue();
-    aWarningCB.Enable(!bROWarning);
-    aWarningFI.Show(bROWarning);
+        sal_Bool bIsReadonly = pCurDocShell->IsReadOnly();
+        if( pCurDocShell->HasSecurityOptOpenReadOnly() && !bIsHTMLDoc )
+        {
+            maRecommReadOnlyCB.Check( pCurDocShell->IsSecurityOptOpenReadOnly() );
+//!         maRecommReadOnlyCB.Enable( !bIsReadonly );
+        }
+        else
+            maRecommReadOnlyCB.Disable();
 
-    aConfirmCB.Check(pSecurityOptions->IsConfirmationEnabled());
-    aConfirmFI.Show(bROConfirm);
-    aConfirmCB.SaveValue();
-    aConfirmCB.Enable(!bROConfirm);
+        bool bVal;
+        if ( QueryRecordChangesState( RL_WRITER, bVal ) && !bIsHTMLDoc )
+            meRedlingMode = RL_WRITER;
+        else if( QueryRecordChangesState( RL_CALC, bVal ) )
+            meRedlingMode = RL_CALC;
+        else
+            meRedlingMode = RL_NONE;
 
-    aExecMacroLB.SelectEntryPos(pSecurityOptions->GetBasicMode());
-    aExecMacroFI.Show(bROExecMacro);
-    aExecMacroLB.Enable(!bROExecMacro);
-    aExecMacroFT.Enable(!bROExecMacro);
-    aExecMacroLB.SaveValue();
-
-    // Execute
-    aExePlugCB.Check(pSecurityOptions->IsExecutePlugins());
-    aExePlugCB.SaveValue();
-    aExePlugCB.Enable(!bROExePlug);
-    aExePlugFI.Show(bROExePlug);
-
-    EditHdl_Impl( NULL );
-    RunHdl_Impl(&aExecMacroLB);
-    LBHdl_Impl( NULL );
-
-    // Java
-    bROJavaEnabled = pJavaOptions->IsReadOnly(SvtJavaOptions::E_ENABLED);
-    bROJavaSecurity = pJavaOptions->IsReadOnly(SvtJavaOptions::E_SECURITY);
-    bROJavaNetAccess = pJavaOptions->IsReadOnly(SvtJavaOptions::E_NETACCESS);
-    bROJavaUserClassPath = pJavaOptions->IsReadOnly(SvtJavaOptions::E_USERCLASSPATH);
-    bROJavaExecuteApplets = pJavaOptions->IsReadOnly(SvtJavaOptions::E_EXECUTEAPPLETS);
-
-    aJavaEnableCB.Check(pJavaOptions->IsEnabled());
-#ifndef SOLAR_JAVA
-    aJavaEnableCB.Check(FALSE);
-    aJavaEnableCB.Enable(FALSE);
-#else
-    aJavaEnableCB.SaveValue();
-    aJavaEnableFI.Show(bROJavaEnabled);
-    aJavaEnableCB.Enable(!bROJavaEnabled);
-#endif
-    EnableJava_Impl( aJavaEnableCB.IsChecked(), FALSE );
-
-    aNetAccessLB.SelectEntryPos((USHORT)pJavaOptions->GetNetAccess());
-    aNetAccessLB.SaveValue();
-    aNetAccessFI.Show(bROJavaNetAccess);
-    aNetAccessLB.Enable(!bROJavaNetAccess);
-
-
-    aJavaSecurityCB.Check(pJavaOptions->IsSecurity());
-    aJavaSecurityCB.SaveValue();
-    aJavaSecurityFI.Show(bROJavaSecurity);
-    aJavaSecurityCB.Enable(!bROJavaSecurity);
-    EnableJava_Impl( ( aJavaEnableCB.IsChecked() && aJavaSecurityCB.IsChecked() ), TRUE );
-
-    aClassPathED.SetText(pJavaOptions->GetUserClassPath());
-    aClassPathED.SaveValue();
-    aClassPathFI.Show(bROJavaUserClassPath);
-    aClassPathED.Enable(!bROJavaUserClassPath);
-    aClassPathPB.Enable(!bROJavaUserClassPath);
-
-    // Execute Applets
-    aExecAppletsCB.Check( pJavaOptions->IsExecuteApplets() );
-    aExecAppletsCB.SaveValue();
-    aExecAppletsFI.Show(bROJavaExecuteApplets);
-    aExecAppletsCB.Enable(!bROJavaExecuteApplets);
-
-    // hyperlinks
-    SvtExtendedSecurityOptions aExtSecurityOptions;
-    SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtSecurityOptions.GetOpenHyperlinkMode();
-    aHyperlinksLB.SelectEntryPos( (USHORT)eMode );
-    aHyperlinksLB.SelectEntryPos( (USHORT)eMode );
-    sal_Bool bROExecuteHyperlinks = aExtSecurityOptions.IsOpenHyperlinkModeReadOnly();
-    aHyperlinksFT.Enable(!bROExecuteHyperlinks);
-    aHyperlinksLB.Enable(!bROExecuteHyperlinks);
-    aHyperlinksFI.Show(bROExecuteHyperlinks);
-    aHyperlinksLB.SaveValue();
-
-    // disable groups if all controls of it are disabled
-    // But use real "enabled" states of the controls - not the readonly values of the configuration!
-    // Because some controls are disabled programmaticly if another control will have a special value ...
-
-    if (!aLbScriptExec.IsEnabled() &&
-        !aEdtScriptExec.IsEnabled() &&
-        !aBtnScriptExecDelete.IsEnabled() &&
-        !aBtnScriptExecDefault.IsEnabled() &&
-        !aBtnScriptExecInsert.IsEnabled() &&
-        !aPathListFT.IsEnabled() &&
-        !aNewPathFT.IsEnabled() &&
-        !aExecMacroLB.IsEnabled() &&
-        !aExecMacroFT.IsEnabled() &&
-        !aWarningCB.IsEnabled() &&
-        !aConfirmCB.IsEnabled())
-    {
-        aGrpScriptingStarBasic.Enable(FALSE);
+        if ( meRedlingMode != RL_NONE )
+        {
+            maRecordChangesCB.Check( bVal );
+            maRecordChangesCB.Enable( !bVal && !bIsReadonly );
+            maProtectRecordsPB.Enable(
+                QueryRecordChangesProtectionState( meRedlingMode, bVal ) && !bIsReadonly );
+            // set the right text
+            if ( bVal )
+                sNewText = msUnprotectRecordsStr;
+        }
+        else
+        {
+            // only Writer and Calc support redlining
+            maRecordChangesCB.Disable();
+            maProtectRecordsPB.Disable();
+        }
     }
     else
-    {
-        aGrpScriptingStarBasic.Enable(TRUE);
+    {   // no doc -> hide document settings
+        maRecommReadOnlyCB.Disable();
+        maRecordChangesCB.Disable();
+        maProtectRecordsPB.Disable();
     }
 
-    aExecuteGB.Enable(aExePlugCB.IsEnabled() ||
-                            aExecAppletsCB.IsEnabled());
-
-    aJavaFL.Enable(aJavaEnableCB.IsEnabled() ||
-                    aNetAccessLB.IsEnabled() ||
-                    aJavaSecurityCB.IsEnabled() ||
-                    aClassPathED.IsEnabled());
+    maProtectRecordsPB.SetText( sNewText );
 }
 
 //added by jmeng begin
