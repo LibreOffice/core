@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-27 12:55:32 $
+ *  last change: $Author: pl $ $Date: 2000-10-19 11:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,13 +163,6 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maEdtFaxNo.SetModifyHdl( aLink );
 
     maRbtAll.Check();
-
-    // Because we have no local print Dialog, or in the other case
-    // the print client and print server must handle this with a
-    // temporaery file and copy the file after printing to the
-    // destionation file name.
-    if ( Application::IsRemoteServer() )
-        maCbxFilePrint.Enable( FALSE );
 }
 
 // -----------------------------------------------------------------------
