@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 08:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 #include "svdlayer.hxx"
 #include "svdio.hxx"
@@ -148,6 +152,55 @@ void SetOfByte::operator|=(const SetOfByte& r2ndSet)
     for (unsigned i=0; i<32; i++) {
         aData[i]|=r2ndSet.aData[i];
     }
+}
+
+/** initialize this set with a uno sequence of sal_Int8
+*/
+void SetOfByte::PutValue( const com::sun::star::uno::Any & rAny )
+{
+    com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    if( rAny >>= aSeq )
+    {
+        sal_Int16 nCount = (sal_Int16)aSeq.getLength();
+        if( nCount > 32 )
+            nCount = 32;
+
+        sal_Int16 nIndex;
+        for( nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            aData[nIndex] = static_cast<BYTE>(aSeq[nIndex]);
+        }
+
+        for( ; nIndex < 32; nIndex++ )
+        {
+            aData[nIndex] = 0;
+        }
+    }
+}
+
+/** returns a uno sequence of sal_Int8
+*/
+void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
+{
+    sal_Int16 nNumBytesSet = 0;
+    sal_Int16 nIndex;
+    for( nIndex = 31; nIndex >= 00; nIndex-- )
+    {
+        if( 0 != aData[nIndex] )
+        {
+            nNumBytesSet = nIndex + 1;
+            break;
+        }
+    }
+
+    com::sun::star::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
+
+    for( nIndex = 0; nIndex < nNumBytesSet; nIndex++ )
+    {
+        aSeq[nIndex] = static_cast<sal_Int8>(aData[nIndex]);
+    }
+
+    rAny <<= aSeq;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
