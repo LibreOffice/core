@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2000-12-07 19:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,13 +604,13 @@ void SchXMLTableHelper::AdjustMax( const SchNumericCellRangeAddress& rAddr,
     else
     {
         DBG_ASSERT( rAddr.nRow1 == rAddr.nRow2, "row indexes should be equal" );
-        if( rAddr.nRow1 > nRows )
+        if( rAddr.nRow1 > nColumns )
             nColumns = rAddr.nRow1;
-        if( rAddr.nRow2 > nRows )
+        if( rAddr.nRow2 > nColumns )
             nColumns = rAddr.nRow2;
-        if( rAddr.nCol1 > nColumns )
+        if( rAddr.nCol1 > nRows )
             nRows = rAddr.nCol1;
-        if( rAddr.nCol2 > nColumns )
+        if( rAddr.nCol2 > nRows )
             nRows = rAddr.nCol2;
     }
 }
