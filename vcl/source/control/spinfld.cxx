@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:35:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,32 +431,28 @@ SpinField::~SpinField()
 
 void SpinField::Up()
 {
-    ImplCallEventListeners( VCLEVENT_SPINFIELD_UP );
-    maUpHdlLink.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_UP, maUpHdlLink, this );
 }
 
 // --------------------------------------------------------------------
 
 void SpinField::Down()
 {
-    ImplCallEventListeners( VCLEVENT_SPINFIELD_DOWN );
-    maDownHdlLink.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_DOWN, maDownHdlLink, this );
 }
 
 // --------------------------------------------------------------------
 
 void SpinField::First()
 {
-    ImplCallEventListeners( VCLEVENT_SPINFIELD_FIRST );
-    maFirstHdlLink.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_FIRST, maFirstHdlLink, this );
 }
 
 // --------------------------------------------------------------------
 
 void SpinField::Last()
 {
-    ImplCallEventListeners( VCLEVENT_SPINFIELD_LAST );
-    maLastHdlLink.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SPINFIELD_LAST, maLastHdlLink, this );
 }
 
 // --------------------------------------------------------------------
@@ -802,7 +798,13 @@ void SpinField::Resize()
         if ( GetStyle() & (WB_SPIN|WB_DROPDOWN) )
         {
             ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
-            aSize.Width() = maUpperRect.Left();
+            if ( maUpperRect.IsEmpty() )
+            {
+                DBG_ASSERT( !maDropDownRect.IsEmpty(), "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
+                aSize.Width() = maDropDownRect.Left();
+            }
+            else
+                aSize.Width() = maUpperRect.Left();
         }
 
         mpEdit->SetSizePixel( aSize );
