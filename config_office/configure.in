@@ -689,7 +689,11 @@ if test -d "$with_stlport4_home"; then
 			if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
 				AC_MSG_RESULT([checked])
 			else
-				AC_MSG_ERROR([STLport4 libraries not found])
+				if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
+					AC_MSG_RESULT([checked])
+				else
+					AC_MSG_ERROR([STLport4 libraries not found])
+				fi
 			fi
 		else
 			if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
