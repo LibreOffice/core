@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 13:43:33 $
+#   last change: $Author: hr $ $Date: 2003-08-07 14:37:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.66 $$"
+LIBSMKREV!:="$$Revision: 1.67 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -213,6 +213,7 @@ PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
 SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
 JVMACCESSLIB = -ljvmaccess$(COMID)
+CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 
 #
 # USED_%NAME%_LIBS
@@ -367,6 +368,7 @@ PKGCHKLIB=$(LIBPRE) ipkgchk.lib
 SYSSHELLLIB=sysshell.lib
 SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
 JVMACCESSLIB = $(LIBPRE) ijvmaccess.lib
+CPPUNITLIB = cppunit.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
