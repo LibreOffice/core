@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-23 12:36:07 $
+ *  last change: $Author: aw $ $Date: 2001-01-23 14:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,8 +197,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         aPos = aFormTextBoundRect.TopRight() + pInfo->rStartPos;
     Color aColor(pInfo->rFont.GetColor());
     xub_StrLen nCnt = pInfo->rText.Len();
-    long nBase = (bIsVertical) ? aPos.X() : aPos.Y();
-    long nLeft = (bIsVertical) ? aPos.Y() : aPos.X();
+    Point aStartPos(aPos);
     SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetItemPool()));
 
     long nHochTief=pInfo->rFont.GetEscapement();
@@ -261,12 +260,12 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         }
 
         if(bIsVertical)
-            aPos.Y() = nLeft + pInfo->pDXArray[i]; // - nSlant;
+            aPos.Y() = aStartPos.Y() + pInfo->pDXArray[i]; // - nSlant;
         else
-            aPos.X() = nLeft + pInfo->pDXArray[i]; // - nSlant;
+            aPos.X() = aStartPos.X() + pInfo->pDXArray[i]; // - nSlant;
     }
 
-    long nLineLen = (bIsVertical) ? aPos.Y()-nLeft : aPos.X()-nLeft;
+    long nLineLen = (bIsVertical) ? aPos.Y() - aStartPos.Y() : aPos.X() - aStartPos.X();
     FontUnderline eUndl=pInfo->rFont.GetUnderline();
     FontStrikeout eStrk=pInfo->rFont.GetStrikeout();
     if (eUndl!=UNDERLINE_NONE) {
@@ -278,10 +277,13 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         XPolyPolygon aXPP;
         if (eUndl!=UNDERLINE_DOTTED) {
             Point aPoint(0,0);
-            XPolygon aXP(Rectangle(aPoint,Point(nLineLen,nDick)));
+            XPolygon aXP(Rectangle(aPoint,bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
             aXPP.Insert(aXP);
             if (bDouble) {
-                aXP.Move(0,nDick+nDist);
+                if(bIsVertical)
+                    aXP.Move(-(nDick+nDist),0);
+                else
+                    aXP.Move(0,nDick+nDist);
                 aXPP.Insert(aXP);
             }
         } else {
@@ -290,10 +292,15 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
             long n=0;
             while (n<=nLineLen) {
                 if (n+nDick>nLineLen) { // ler letzte Dot ggf. etwas schmaler
-                    aXP=XPolygon(Rectangle(Point(n,0),Point(nLineLen,nDick)));
+                    aXP=XPolygon(Rectangle(
+                        bIsVertical ? Point(0,n) : Point(n,0),
+                        bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
                 }
                 aXPP.Insert(aXP);
-                aXP.Move(2*nDick,0);
+                if(bIsVertical)
+                    aXP.Move(0,2*nDick);
+                else
+                    aXP.Move(2*nDick,0);
                 n+=2*nDick;
             }
         }
@@ -302,15 +309,15 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if (bDouble) y-=nDick+nDist;
         y=(y+1)/2;
 
-        aXPP.Move(nLeft,nBase+y-nHochTief);
+        if(bIsVertical)
+            aXPP.Move(aStartPos.X()-(y-nHochTief),aStartPos.Y());
+        else
+            aXPP.Move(aStartPos.X(),aStartPos.Y()+y-nHochTief);
         // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
         SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
-
-//-/        pObj->NbcSetAttributes(aAttrSet,FALSE);
         pObj->SetItemSet(aAttrSet);
-
         pGroup->GetSubList()->InsertObject(pObj);
     }
     if (eStrk!=STRIKEOUT_NONE) {
@@ -321,10 +328,13 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
 
         XPolyPolygon aXPP;
         Point aPoint(0,0);
-        XPolygon aXP(Rectangle(aPoint,Point(nLineLen,nDick)));
+        XPolygon aXP(Rectangle(aPoint,bIsVertical ? Point(nDick,nLineLen) : Point(nLineLen,nDick)));
         aXPP.Insert(aXP);
         if (bDouble) {
-            aXP.Move(0,nDick+nDist);
+            if(bIsVertical)
+                aXP.Move(-(nDick+nDist),0);
+            else
+                aXP.Move(0,nDick+nDist);
             aXPP.Insert(aXP);
         }
 
@@ -333,15 +343,15 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if (!bDouble) y-=(nDick+1)/2;
         else y-=nDick+(nDist+1)/2;
 
-        aXPP.Move(nLeft,nBase+y-nHochTief);
+        if(bIsVertical)
+            aXPP.Move(aStartPos.X()-(y-nHochTief),aStartPos.Y());
+        else
+            aXPP.Move(aStartPos.X(),aStartPos.Y() +y-nHochTief);
         // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
         SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
-
-//-/        pObj->NbcSetAttributes(aAttrSet,FALSE);
         pObj->SetItemSet(aAttrSet);
-
         pGroup->GetSubList()->InsertObject(pObj);
     }
     return 0;
