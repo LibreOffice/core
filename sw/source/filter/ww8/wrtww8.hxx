@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:56 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ public:
     void OutFlyFrms( const SwCntntNode& rNode );
     void AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
                             const Point& rNdTopLeft );
-    void WriteSdrTextObj( const SdrObject& rObj );
+    void WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp);
 
     UINT32 GetSdrOrdNum( const SwFrmFmt& rFmt ) const;
     void CreateEscher();
@@ -840,6 +840,8 @@ public:
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const = 0;
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const = 0;
     virtual void GetItems( WW8Bytes& rItems ) const;
+    void StartURL(const String &rUrl, const String &rTarget);
+    void EndURL();
 };
 
 class WW8WrtStyle

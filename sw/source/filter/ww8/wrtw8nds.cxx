@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 15:55:03 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,28 +794,35 @@ void WW8_SwAttrIter::OutSwFmtRuby(const SwFmtRuby& rRuby, bool bStart)
 void WW8_SwAttrIter::OutSwFmtINetFmt(const SwFmtINetFmt& rINet, bool bStart)
 {
     if( bStart )
-    {
-        INetURLObject aURL( rINet.GetValue() );
-        String sURL( aURL.GetURLNoMark(INetURLObject::DECODE_UNAMBIGUOUS) );
-        String sMark( aURL.GetMark(INetURLObject::DECODE_UNAMBIGUOUS) );
+        StartURL(rINet.GetValue(), rINet.GetTargetFrame());
+    else
+        EndURL();
+}
 
-        sURL = INetURLObject::AbsToRel( sURL, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
-        sURL.Insert(CREATE_CONST_ASC("HYPERLINK \""), 0);
-        sURL += '\"';
+void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
+{
+    INetURLObject aURL(rUrl);
+    String sURL( aURL.GetURLNoMark(INetURLObject::DECODE_UNAMBIGUOUS) );
+    String sMark( aURL.GetMark(INetURLObject::DECODE_UNAMBIGUOUS) );
 
-        if( sMark.Len() )
-            (( sURL.APPEND_CONST_ASC(" \\l \"") ) += sMark) += '\"';
+    sURL = INetURLObject::AbsToRel( sURL, INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DECODE_UNAMBIGUOUS);
+    sURL.Insert(CREATE_CONST_ASC("HYPERLINK \""), 0);
+    sURL += '\"';
 
-        if( rINet.GetTargetFrame().Len() )
-            (sURL.APPEND_CONST_ASC(" \\n ")) += rINet.GetTargetFrame();
+    if (sMark.Len())
+        (( sURL.APPEND_CONST_ASC(" \\l \"") ) += sMark) += '\"';
 
-        rWrt.OutField( 0, 88, sURL,
-                    WRITEFIELD_START | WRITEFIELD_CMD_START );
+    if (rTarget.Len())
+            (sURL.APPEND_CONST_ASC(" \\n ")) += rTarget;
 
-        // write the refence to the "picture" structure
-        ULONG nDataStt = rWrt.pDataStrm->Tell();
-        rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell() );
+
+    rWrt.OutField( 0, 88, sURL,
+                WRITEFIELD_START | WRITEFIELD_CMD_START );
+
+    // write the refence to the "picture" structure
+    ULONG nDataStt = rWrt.pDataStrm->Tell();
+    rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell() );
 
 //I'm leaving this as a define for now for easy removal of this code
 //C.
@@ -823,120 +830,120 @@ void WW8_SwAttrIter::OutSwFmtINetFmt(const SwFmtINetFmt& rINet, bool bStart)
 
 #ifdef WRITE_HYPERLINK_IN_DATA_STREAM
 //WinWord 2000 doesn't write this - so its a temp solution by W97
-        rWrt.WriteChar( 0x01 );
+    rWrt.WriteChar( 0x01 );
 
-        static BYTE aArr1[] = {
-            0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
+    static BYTE aArr1[] = {
+        0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
 
-            0x06, 0x08, 0x01,       // sprmCFData
-            0x55, 0x08, 0x01,       // sprmCFSpec
-            0x02, 0x08, 0x01        // sprmCFFldVanish
-        };
-        BYTE* pDataAdr = aArr1 + 2;
-        Set_UInt32( pDataAdr, nDataStt );
+        0x06, 0x08, 0x01,       // sprmCFData
+        0x55, 0x08, 0x01,       // sprmCFSpec
+        0x02, 0x08, 0x01        // sprmCFFldVanish
+    };
+    BYTE* pDataAdr = aArr1 + 2;
+    Set_UInt32( pDataAdr, nDataStt );
 
-        rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                                    sizeof( aArr1 ), aArr1 );
+    rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+                                sizeof( aArr1 ), aArr1 );
 #endif
 
-        rWrt.OutField( 0, 88, sURL, WRITEFIELD_CMD_END );
+    rWrt.OutField( 0, 88, sURL, WRITEFIELD_CMD_END );
 
 
 #ifdef WRITE_HYPERLINK_IN_DATA_STREAM
-        // now write the picture structur
-        sURL = aURL.GetURLNoMark();
+    // now write the picture structur
+    sURL = aURL.GetURLNoMark();
 
-        bool bAbsolute = true;  //all links end up in the data stream as
-                                //absolute references.
-        INetProtocol aProto = aURL.GetProtocol();
+    bool bAbsolute = true;  //all links end up in the data stream as
+                            //absolute references.
+    INetProtocol aProto = aURL.GetProtocol();
 
-        static BYTE __READONLY_DATA aURLData1[] = {
-            0,0,0,0,        // len of struct
-            0x44,0,         // the start of "next" data
-            0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
-            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
-            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
-            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
-            0,0,0,0,                            // /
+    static BYTE __READONLY_DATA aURLData1[] = {
+        0,0,0,0,        // len of struct
+        0x44,0,         // the start of "next" data
+        0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,                            // /
+    };
+    static BYTE __READONLY_DATA MAGIC_A[] = {
+        // start of "next" data
+        0xD0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
+        0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
+    };
+
+    rWrt.pDataStrm->Write( aURLData1, sizeof(aURLData1) );
+    BYTE nAnchor=0x00;
+    if( sMark.Len() )
+        nAnchor=0x08;
+    rWrt.pDataStrm->Write( &nAnchor, 1 );
+    rWrt.pDataStrm->Write( MAGIC_A, sizeof(MAGIC_A) );
+    SwWW8Writer::WriteLong( *rWrt.pDataStrm, 0x00000002);
+    UINT32 nFlag=0x01;
+    if (bAbsolute) nFlag |= 0x02;
+    if( sMark.Len() ) nFlag |= 0x08;
+    SwWW8Writer::WriteLong( *rWrt.pDataStrm, nFlag );
+
+    if (aProto == INET_PROT_FILE)
+    {
+// version 1 (for a document)
+
+        static BYTE __READONLY_DATA MAGIC_C[] = {
+            0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
+            0x00, 0x00
         };
-        static BYTE __READONLY_DATA MAGIC_A[] = {
-            // start of "next" data
-            0xD0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
+
+        static BYTE __READONLY_DATA MAGIC_D[] = {
+            0xFF, 0xFF, 0xAD, 0xDE, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+
+        sURL = aURL.PathToFileName();
+
+        rWrt.pDataStrm->Write( MAGIC_C, sizeof(MAGIC_C) );
+        SwWW8Writer::WriteLong( *rWrt.pDataStrm, sURL.Len()+1 );
+        SwWW8Writer::WriteString8( *rWrt.pDataStrm, sURL, true,
+                                    RTL_TEXTENCODING_MS_1252 );
+        rWrt.pDataStrm->Write( MAGIC_D, sizeof( MAGIC_D) );
+
+        SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2*sURL.Len()+6);
+        SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2*sURL.Len());
+        SwWW8Writer::WriteShort( *rWrt.pDataStrm, 3 );
+        SwWW8Writer::WriteString16(*rWrt.pDataStrm, sURL, false);
+    }
+    else
+    {
+        // version 2 (simple url)
+        // an write some data to the data stream, but dont ask
+        // what the data mean, except for the URL.
+        // The First piece is the WW8_PIC structure.
+        //
+        static BYTE __READONLY_DATA MAGIC_B[] = {
+            0xE0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
             0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
         };
 
-        rWrt.pDataStrm->Write( aURLData1, sizeof(aURLData1) );
-        BYTE nAnchor=0x00;
-        if( sMark.Len() )
-            nAnchor=0x08;
-        rWrt.pDataStrm->Write( &nAnchor, 1 );
-        rWrt.pDataStrm->Write( MAGIC_A, sizeof(MAGIC_A) );
-        SwWW8Writer::WriteLong( *rWrt.pDataStrm, 0x00000002);
-        UINT32 nFlag=0x01;
-        if (bAbsolute) nFlag |= 0x02;
-        if( sMark.Len() ) nFlag |= 0x08;
-        SwWW8Writer::WriteLong( *rWrt.pDataStrm, nFlag );
-
-        if (aProto == INET_PROT_FILE)
-        {
-// version 1 (for a document)
-
-            static BYTE __READONLY_DATA MAGIC_C[] = {
-                0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
-                0x00, 0x00
-            };
-
-            static BYTE __READONLY_DATA MAGIC_D[] = {
-                0xFF, 0xFF, 0xAD, 0xDE, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-            };
-
-            sURL = aURL.PathToFileName();
-
-            rWrt.pDataStrm->Write( MAGIC_C, sizeof(MAGIC_C) );
-            SwWW8Writer::WriteLong( *rWrt.pDataStrm, sURL.Len()+1 );
-            SwWW8Writer::WriteString8( *rWrt.pDataStrm, sURL, true,
-                                        RTL_TEXTENCODING_MS_1252 );
-            rWrt.pDataStrm->Write( MAGIC_D, sizeof( MAGIC_D) );
-
-            SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2*sURL.Len()+6);
-            SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2*sURL.Len());
-            SwWW8Writer::WriteShort( *rWrt.pDataStrm, 3 );
-            SwWW8Writer::WriteString16(*rWrt.pDataStrm, sURL, false);
-        }
-        else
-        {
-            // version 2 (simple url)
-            // an write some data to the data stream, but dont ask
-            // what the data mean, except for the URL.
-            // The First piece is the WW8_PIC structure.
-            //
-            static BYTE __READONLY_DATA MAGIC_B[] = {
-                0xE0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
-                0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
-            };
-
-            rWrt.pDataStrm->Write( MAGIC_B, sizeof(MAGIC_B) );
-            SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2 * (sURL.Len()+1) );
-            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sURL, true);
-        }
-
-        if( sMark.Len() )
-        {
-            SwWW8Writer::WriteLong( *rWrt.pDataStrm, sMark.Len()+1 );
-            SwWW8Writer::WriteString16( *rWrt.pDataStrm, sMark, true);
-        }
-        SwWW8Writer::WriteLong( *rWrt.pDataStrm, nDataStt,
-            rWrt.pDataStrm->Tell() - nDataStt );
-#endif
-
+        rWrt.pDataStrm->Write( MAGIC_B, sizeof(MAGIC_B) );
+        SwWW8Writer::WriteLong( *rWrt.pDataStrm, 2 * (sURL.Len()+1) );
+        SwWW8Writer::WriteString16( *rWrt.pDataStrm, sURL, true);
     }
-    else
-        rWrt.OutField( 0, 0, aEmptyStr, WRITEFIELD_CLOSE );
+
+    if( sMark.Len() )
+    {
+        SwWW8Writer::WriteLong( *rWrt.pDataStrm, sMark.Len()+1 );
+        SwWW8Writer::WriteString16( *rWrt.pDataStrm, sMark, true);
+    }
+    SwWW8Writer::WriteLong( *rWrt.pDataStrm, nDataStt,
+        rWrt.pDataStrm->Tell() - nDataStt );
+#endif
 }
 
+void WW8_AttrIter::EndURL()
+{
+    rWrt.OutField( 0, 0, aEmptyStr, WRITEFIELD_CLOSE );
+}
 
 void WW8_SwAttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
 {

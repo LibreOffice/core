@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-30 13:17:34 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,19 @@
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
 #endif
-#ifndef _MyEDITENG_HXX
-#include <svx/editeng.hxx>
-#endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
+#endif
+#ifndef _SVX_FLDITEM_HXX
+//miserable hack to get around #98519#
+#define ITEMID_FIELD            EE_FEATURE_FIELD
+#include <svx/flditem.hxx>
+#endif
+
 
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
@@ -684,6 +691,7 @@ private:
     xub_StrLen nTmpSwPos;                   // fuer HasItem()
     rtl_TextEncoding eNdChrSet;
     USHORT nScript;
+    BYTE mnTyp;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
     void SetCharSet(const EECharAttrib& rTxtAttr, bool bStart);
@@ -692,9 +700,11 @@ private:
     WW8_SdrAttrIter(const WW8_SdrAttrIter&);
     WW8_SdrAttrIter& operator=(const WW8_SdrAttrIter&);
 public:
-    WW8_SdrAttrIter( SwWW8Writer& rWr, const EditTextObject& rEditObj );
+    WW8_SdrAttrIter(SwWW8Writer& rWr, const EditTextObject& rEditObj,
+        BYTE nType);
     void NextPara( USHORT nPar );
     void OutParaAttr(bool bCharAttr);
+    void OutEEField(const SfxPoolItem& rHt);
 
     bool IsTxtAttr(xub_StrLen nSwPos);
 
@@ -710,11 +720,11 @@ public:
 };
 
 
-WW8_SdrAttrIter::WW8_SdrAttrIter( SwWW8Writer& rWr,
-                                    const EditTextObject& rEditObj )
+WW8_SdrAttrIter::WW8_SdrAttrIter(SwWW8Writer& rWr,
+    const EditTextObject& rEditObj, BYTE nTyp)
     : WW8_AttrIter( rWr ), pEditObj( &rEditObj ),
     aTxtAtrArr( 0, 4 ), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
-    pEditPool( 0 )
+    pEditPool( 0 ), mnTyp(nTyp)
 {
     NextPara( 0 );
 }
@@ -819,6 +829,25 @@ void WW8_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
     }
 }
 
+void WW8_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
+{
+    const SvxFieldItem &rField = (const SvxFieldItem &)rHt;
+    const SvxFieldData *pFld = rField.GetField();
+    if (pFld && pFld->ISA(SvxURLField))
+    {
+        BYTE nOldTxtTyp = rWrt.nTxtTyp;
+        rWrt.nTxtTyp = mnTyp;
+        const SvxURLField *pURL = (const SvxURLField *)pFld;
+        StartURL(pURL->GetURL(), pURL->GetTargetFrame());
+
+        const String &rStr = pURL->GetRepresentation();
+        rWrt.OutSwString(rStr, 0, rStr.Len(), true, GetNodeCharSet());
+
+        EndURL();
+        rWrt.nTxtTyp = nOldTxtTyp;
+    }
+}
+
 void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
 {
     OutParaAttr(true);
@@ -840,6 +869,11 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
             if (nSwPos >= rHt.nStart && nSwPos < rHt.nEnd)
             {
                 nWhich = rHt.pAttr->Which();
+                if (nWhich == EE_FEATURE_FIELD)
+                {
+                    OutEEField(*rHt.pAttr);
+                    continue;
+                }
                 nSlotId = pSrcPool->GetSlotId(nWhich);
 
                 if (nSlotId && nWhich != nSlotId)
@@ -868,10 +902,17 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
     }
 }
 
-bool WW8_SdrAttrIter::IsTxtAttr(xub_StrLen )
+bool WW8_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
 {
-// so long as the EditEngine has no Attributes, then there is only one
-// position to have
+    for (USHORT i = 0; i < aTxtAtrArr.Count(); ++i)
+    {
+        const EECharAttrib& rHt = aTxtAtrArr[ i ];
+        if (nSwPos >= rHt.nStart && nSwPos < rHt.nEnd)
+        {
+            if (rHt.pAttr->Which() == EE_FEATURE_FIELD)
+                return true;
+        }
+    }
     return false;
 }
 
@@ -962,7 +1003,7 @@ void WW8_SdrAttrIter::OutParaAttr(bool bCharAttr)
     }
 }
 
-void SwWW8Writer::WriteSdrTextObj( const SdrObject& rObj )
+void SwWW8Writer::WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp)
 {
     const SdrTextObj* pTxtObj = PTR_CAST( SdrTextObj, &rObj );
     ASSERT( pTxtObj, "das ist gar kein SdrTextObj!" );
@@ -972,7 +1013,7 @@ void SwWW8Writer::WriteSdrTextObj( const SdrObject& rObj )
     if( pParaObj )
     {
         const EditTextObject& rEditObj = pParaObj->GetTextObject();
-        WW8_SdrAttrIter aAttrIter( *this, rEditObj );
+        WW8_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
 
         USHORT nPara = rEditObj.GetParagraphCount();
         BYTE bNul = 0;
@@ -988,28 +1029,7 @@ void SwWW8Writer::WriteSdrTextObj( const SdrObject& rObj )
             String aStr( rEditObj.GetText( n ));
             xub_StrLen nAktPos = 0;
             xub_StrLen nEnd = aStr.Len();
-            bool bUnicode = true;
             do {
-/*
-                switch( eChrSet )
-                {
-        //      case CHARSET_DONTKNOW:       ????
-                case CHARSET_SYMBOL:
-        //      case CHARSET_WIN_SYMBOL:
-        //      case CHARSET_WIN_WINGDINGS:
-        //      case CHARSET_MAC_DINGBATS:
-        //      case CHARSET_MAC_SYMBOL:
-        //      case CHARSET_ADOBE_SYMBOL:
-        //      case CHARSET_ADOBE_DINGBATS:
-        //      case CHARSET_STAR_STARBATS:
-        //      case CHARSET_STAR_STARMATH:
-                    bUnicode = bWrtWW8 ? true : false;
-                    break;
-                default:
-                    bUnicode = false;
-                    break;
-                }
-*/
                 xub_StrLen nNextAttr = aAttrIter.WhereNext();
                 rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
@@ -1019,7 +1039,7 @@ void SwWW8Writer::WriteSdrTextObj( const SdrObject& rObj )
                 bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
                 if( !bTxtAtr )
                     OutSwString( aStr, nAktPos, nNextAttr - nAktPos,
-                                    bUnicode, eChrSet );
+                                    true, eChrSet );
 
                             // Am Zeilenende werden die Attribute bis ueber das CR
                             // aufgezogen. Ausnahme: Fussnoten am Zeilenende

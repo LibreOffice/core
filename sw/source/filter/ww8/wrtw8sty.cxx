@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:55 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 12:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1711,7 +1711,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
                     rWrt.nTxtTyp = nOldTyp;
                 }
                 else if( rObj.ISA( SdrTextObj ) )
-                    rWrt.WriteSdrTextObj( rObj );
+                    rWrt.WriteSdrTextObj(rObj, nTTyp);
                 else
                 {
                     const SwFrmFmt* pFmt = ::FindFrmFmt( &rObj );
