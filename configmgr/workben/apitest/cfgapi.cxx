@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:15:41 $
+ *  last change: $Author: lla $ $Date: 2000-11-23 14:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ int _cdecl main( int argc, char * argv[] )
             );
         if (!xORB.is())
         {
-            flush(cout);
+            ::flush(cout);
             cerr << "Could not create the service factory !\n\n";
             return 1;
         }
@@ -343,7 +343,7 @@ int _cdecl main( int argc, char * argv[] )
         }
         else
         {
-            sFilePath = enterValue("Enter Filepath: ", "f:/local/611/SRC611/configmgr/workben/local_io",false);
+            sFilePath = enterValue("Enter Filepath: ", "f:/local/613/SRC613/configmgr/workben/local_io",false);
             // sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
             // sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
             cout << endl;
@@ -362,7 +362,7 @@ int _cdecl main( int argc, char * argv[] )
             UNO_QUERY);
         if (!xCfgProvider.is())
         {
-            flush(cout);
+            ::flush(cout);
             cerr << "Could not create the configuration provider !\n\n";
             return 3;
         }
@@ -413,7 +413,7 @@ int _cdecl main( int argc, char * argv[] )
     }
     catch (Exception& e)
     {
-        flush(cout);
+        ::flush(cout);
         cerr << "Caught exception: " << e.Message << endl;
     }
 /*
