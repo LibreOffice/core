@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 07:08:32 $
+ *  last change: $Author: os $ $Date: 2002-09-05 12:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,16 +139,20 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
     {
         long nValue = rNames.GetValue(i);
         sal_Bool bInsert = sal_True;
+        USHORT nPos = LISTBOX_APPEND;
         switch(nValue)
         {
-            case  NumberingType::NUMBER_NONE:   bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING); break;
+            case  NumberingType::NUMBER_NONE:
+                bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING);
+                nPos = 0;
+             break;
             case  NumberingType::CHAR_SPECIAL:  bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
             case  NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
             case  NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
         }
         if(bInsert)
         {
-            USHORT nEntry = InsertEntry(rNames.GetString(i));
+            USHORT nEntry = InsertEntry(rNames.GetString(i), nPos);
             SetEntryData( nEntry, (void*)nValue );
         }
     }
