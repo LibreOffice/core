@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OString.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:43:55 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ using namespace rtl;
 //------------------------------------------------------------------------
 // test classes
 //------------------------------------------------------------------------
-const MAXBUFLENGTH = 255;
+const int MAXBUFLENGTH = 255;
 //------------------------------------------------------------------------
 // helper functions
 //------------------------------------------------------------------------
