@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:23:39 $
+ *  last change: $Author: os $ $Date: 2002-09-09 07:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
         throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     Reference< XDispatch> xResult;
     // create some dispatch ...
     if(m_pView && !aURL.Complete.compareToAscii(cURLStart, 23))
@@ -169,7 +169,7 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
 Sequence< Reference< XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
     const Sequence< DispatchDescriptor >& aDescripts ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     Sequence< Reference< XDispatch> > aReturn(aDescripts.getLength());
     Reference< XDispatch>* pReturn = aReturn.getArray();
     const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
@@ -186,7 +186,7 @@ Sequence< Reference< XDispatch > > SwXDispatchProviderInterceptor::queryDispatch
 Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
         throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     return m_xSlaveDispatcher;
 }
 /*-- 07.11.00 13:25:52---------------------------------------------------
@@ -195,7 +195,7 @@ Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchP
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
     const Reference< XDispatchProvider >& xNewDispatchProvider ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
 /*-- 07.11.00 13:25:52---------------------------------------------------
@@ -204,7 +204,7 @@ void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
 Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
         throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     return m_xMasterDispatcher;
 }
 /*-- 07.11.00 13:25:52---------------------------------------------------
@@ -213,7 +213,7 @@ Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatch
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
     const Reference< XDispatchProvider >& xNewSupplier ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     m_xMasterDispatcher = xNewSupplier;
 }
 /*-- 07.11.00 13:25:53---------------------------------------------------
@@ -222,7 +222,7 @@ void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
 void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
     throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
     {
         m_xIntercepted->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
@@ -261,7 +261,7 @@ sal_Int64 SwXDispatchProviderInterceptor::getSomething(
  ---------------------------------------------------------------------------*/
 void    SwXDispatchProviderInterceptor::Invalidate()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
     {
         m_xIntercepted->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
@@ -481,5 +481,20 @@ void SwXDispatch::disposing( const EventObject& rSource ) throw(RuntimeException
 const sal_Char* SwXDispatch::GetDBChangeURL()
 {
     return cInternalDBChangeNotification;
+}
+/* -----------------------------09.09.2002 08:48------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
+                                                 SwXDispatchProviderInterceptor& rInterceptor) :
+//    aGuard(rInterceptor.m_aMutex) #102295# solar mutex has to be used currently
+    aGuard(Application::GetSolarMutex())
+{
+}
+/* -----------------------------09.09.2002 08:48------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::~DispatchMutexLock_Impl()
+{
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-10-01 13:14:55 $
+ *  last change: $Author: os $ $Date: 2002-09-09 07:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,11 @@
 #include <cppuhelper/implbase3.hxx>
 #endif
 #include <list>
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
+//#ifndef _OSL_MUTEX_HXX_
+//#include <osl/mutex.hxx>
+//#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 class SwView;
@@ -96,7 +99,18 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
     ::com::sun::star::lang::XUnoTunnel
 >
 {
-    ::osl::Mutex                     m_aMutex;
+    class DispatchMutexLock_Impl
+    {
+        //::osl::MutexGuard   aGuard; #102295# solar mutex has to be used currently
+        vos::OGuard         aGuard;
+        DispatchMutexLock_Impl();
+    public:
+        DispatchMutexLock_Impl(SwXDispatchProviderInterceptor&);
+        ~DispatchMutexLock_Impl();
+    };
+    friend class DispatchMutexLock_Impl;
+
+//    ::osl::Mutex                     m_aMutex;#102295# solar mutex has to be used currently
 
     // the component which's dispatches we're intercepting
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
