@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 17:06:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 17:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2763,7 +2763,7 @@ void SdXMLExport::ImpExport3DShape(SdXMLExport& rExp,
 
 void SdXMLExport::ImpExport3DScene(SdXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
@@ -2778,26 +2778,43 @@ void SdXMLExport::ImpExport3DScene(SdXMLExport& rExp,
             // rectangle, prepare parameters
             awt::Point aPoint = xShape->getPosition();
             awt::Size aSize = xShape->getSize();
+            if( pRefPoint )
+            {
+                aPoint.X -= pRefPoint->X;
+                aPoint.Y -= pRefPoint->Y;
+            }
 
             // svg: x
-            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+            if( nFeatures & SEF_EXPORT_X )
+            {
+                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+            }
 
             // svg: y
-            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+            if( nFeatures & SEF_EXPORT_Y )
+            {
+                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+            }
 
             // svg: width
-            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
+            if( nFeatures & SEF_EXPORT_WIDTH )
+            {
+                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
+            }
 
             // svg: height
-            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
+            if( nFeatures & SEF_EXPORT_HEIGHT )
+            {
+                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
+            }
 
             // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
             uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
@@ -3276,7 +3293,7 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XInde
                 if(bIsScene)
                 {
                     // write 3DScene
-                    ImpExport3DScene(*this, xShape, XmlShapeTypeDraw3DSceneObject);
+                    ImpExport3DScene(*this, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
                 }
                 else
                 {
