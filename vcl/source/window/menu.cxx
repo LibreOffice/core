@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:50:48 $
+ *  last change: $Author: ssa $ $Date: 2001-11-29 10:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,21 +448,12 @@ static void ImplSetMenuItemData( MenuItemData* pData, USHORT nPos )
         pData->eType = MENUITEM_STRINGIMAGE;
 }
 
-static ULONG ImplChangeTipTimeout( ULONG nTimeout )
-{
-    AllSettings aAllSettings( Application::GetSettings() );
-    HelpSettings aHelpSettings( aAllSettings.GetHelpSettings() );
-    ULONG nRet = aHelpSettings.GetTipTimeout();
-    aHelpSettings.SetTipTimeout( nTimeout );
-    aAllSettings.SetHelpSettings( aHelpSettings );
-    Application::SetSettings( aAllSettings );
-    return nRet;
-}
-
 static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighlightedItem, const HelpEvent& rHEvt )
 {
     BOOL bDone = FALSE;
     USHORT nId = 0;
+    ImplSVData* pSVData = ImplGetSVData();
+
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
         MenuItemData* pItemData = pMenu->GetItemList()->GetDataFromPos( nHighlightedItem );
@@ -478,10 +469,12 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
         else
         {
-            // give user a chance to read the full filename
-            ULONG oldTimeout = ImplChangeTipTimeout( 60000 );
-            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
-            ImplChangeTipTimeout( oldTimeout );
+            if( pMenu->GetTipHelpText( nId ).Len() )
+            {
+                Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+                // give user a chance to read the full filename
+                pSVData->maHelpData.mbNoHide = TRUE;
+            }
         }
         bDone = TRUE;
     }
@@ -489,10 +482,12 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
     {
         Point aPos = rHEvt.GetMousePosPixel();
         Rectangle aRect( aPos, Size() );
-        // give user a chance to read the full filename
-        ULONG oldTimeout = ImplChangeTipTimeout( 60000 );
-        Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
-        ImplChangeTipTimeout( oldTimeout );
+        if( pMenu->GetTipHelpText( nId ).Len() )
+        {
+            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+            // give user a chance to read the full filename
+            pSVData->maHelpData.mbNoHide = TRUE;
+        }
         bDone = TRUE;
     }
     else if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
