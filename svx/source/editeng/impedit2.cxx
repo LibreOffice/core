@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-20 10:30:25 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 11:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@
 #include <sot/formats.hxx>
 
 #include <unicode/ubidi.h>
+
+#ifdef MACOSX
+// moved from editundo.hxx
+const EPaM& EditUndoRemoveChars::GetEPaM() { return aEPaM; }
+String& EditUndoRemoveChars::GetStr() { return aText; }
+#endif
 
 using namespace ::com::sun::star;
 
