@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:25:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                         pSh->PrintProspect( aOpts, *pProgress );
                 }
                 else
-                    bStartJob = pSh->Prt( aOpts, *pProgress );
+                    bStartJob = pSh->Prt( aOpts, pProgress );
 
                 if ( bBrowse )
                 {
