@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,11 @@ Reference< XNamed > ODbaseColumns::createObject(const ::rtl::OUString& _rName)
 
     //  Reference< XFastPropertySet> xCol(pTable->getColumns()[_rName],UNO_QUERY);
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
+    OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
 
-    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
+    Reference< XNamed > xRet;
+    if(aIter != aCols->end())
+        xRet = Reference< XNamed >(*aIter,UNO_QUERY);
     return xRet;
 }
 
@@ -114,7 +117,8 @@ void SAL_CALL ODbaseColumns::appendByDescriptor( const Reference< XPropertySet >
     ::osl::MutexGuard aGuard(m_rMutex);
     if(!m_pTable->isNew())
         m_pTable->addColumn(descriptor);
-    ODbaseColumns_BASE::appendByDescriptor(descriptor);
+    else
+        ODbaseColumns_BASE::appendByDescriptor(descriptor);
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -122,10 +126,11 @@ void SAL_CALL ODbaseColumns::appendByDescriptor( const Reference< XPropertySet >
 void SAL_CALL ODbaseColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
+
     if(!m_pTable->isNew())
-    {
-    }
-    ODbaseColumns_BASE::dropByName(elementName);
+        m_pTable->dropColumn(findColumn(elementName)-1);
+    else
+        ODbaseColumns_BASE::dropByName(elementName);
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -136,10 +141,9 @@ void SAL_CALL ODbaseColumns::dropByIndex( sal_Int32 index ) throw(SQLException, 
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     if(!m_pTable->isNew())
-    {
-
-    }
-    ODbaseColumns_BASE::dropByIndex(index);
+        m_pTable->dropColumn(index);
+    else
+        ODbaseColumns_BASE::dropByIndex(index);
 }
 // -----------------------------------------------------------------------------
 

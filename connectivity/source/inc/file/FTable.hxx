@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 14:31:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ namespace connectivity
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
             virtual BOOL UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
+            virtual void dropColumn(sal_Int32 _nPos);
 
             ::rtl::OUString SAL_CALL getName() { return m_Name; }
 

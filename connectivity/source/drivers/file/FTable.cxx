@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 07:45:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,5 +250,10 @@ void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::s
 {
 }
 // -----------------------------------------------------------------------------
+void OFileTable::dropColumn(sal_Int32 _nPos)
+{
+}
+// -----------------------------------------------------------------------------
+
 
 

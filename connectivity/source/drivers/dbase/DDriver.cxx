@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDriver.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,24 +128,21 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     ODbaseConnection* pCon = new ODbaseConnection(this);
     pCon->construct(url,info);
-        Reference< XConnection > xCon = pCon;
-        m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    Reference< XConnection > xCon = pCon;
+    m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
-                throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
 {
-    if(!url.compareTo(::rtl::OUString::createFromAscii("sdbc:dbase:"),11))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return !url.compareTo(::rtl::OUString::createFromAscii("sdbc:dbase:"),11);
 }
+// -----------------------------------------------------------------------------
+
 
 

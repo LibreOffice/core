@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 13:03:37 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,11 @@ void ODbaseTable::fillColumns()
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
     m_pFileStream->Seek(32L);
 
-    m_aColumns = new OSQLColumns();
+    if(!m_aColumns.isValid())
+        m_aColumns = new OSQLColumns();
+    else
+        m_aColumns->clear();
+
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
@@ -373,8 +377,8 @@ void ODbaseTable::construct()
             if (m_pMemoStream)
                 ReadMemoHeader();
         }
-        if(!m_aColumns.isValid() || !m_aColumns->size())
-            fillColumns();
+        //  if(!m_pColumns && (!m_aColumns.isValid() || !m_aColumns->size()))
+        fillColumns();
 
         m_pFileStream->Seek(STREAM_SEEK_TO_END);
         UINT32 nFileSize = m_pFileStream->Tell();
@@ -539,8 +543,9 @@ void ODbaseTable::refreshIndexes()
         }
     }
     if(m_pIndexes)
-        delete m_pIndexes;
-    m_pIndexes  = new ODbaseIndexes(this,m_aMutex,aVector);
+        m_pIndexes->reFill(aVector);
+    else
+        m_pIndexes  = new ODbaseIndexes(this,m_aMutex,aVector);
 }
 
 // -------------------------------------------------------------------------
@@ -554,14 +559,14 @@ void SAL_CALL ODbaseTable::disposing(void)
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    Sequence< Type > aRet(aTypes.getLength()-2);
+    Sequence< Type > aRet(aTypes.getLength()-1);
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     sal_Int32 i=0;
     for(;pBegin != pEnd;++pBegin,++i)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
-            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)  ||
+            //  *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)  ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
             aRet.getArray()[i] = *pBegin;
@@ -576,7 +581,7 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
 Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)  ||
-        rType == ::getCppuType((const Reference<XAlterTable>*)0)    ||
+        //  rType == ::getCppuType((const Reference<XAlterTable>*)0)    ||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
@@ -1565,7 +1570,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, co
     Reference<XDataDescriptorFactory> xOldColumn;
     m_pColumns->getByName(colName) >>= xOldColumn;
 
-    alterColumn(m_pColumns->findColumn(colName),descriptor,xOldColumn);
+    alterColumn(m_pColumns->findColumn(colName)-1,descriptor,xOldColumn);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
@@ -1589,9 +1594,13 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     OSL_ENSURE(descriptor.is(),"descriptor can not be null!");
-    OSL_ENSURE(xOldColumn.is(),"xOldColumn can not be null!");
     // creates a copy of the the original column and copy all properties from descriptor in xCopyColumn
-    Reference<XPropertySet> xCopyColumn = xOldColumn->createDataDescriptor();
+    Reference<XPropertySet> xCopyColumn;
+    if(xOldColumn.is())
+        xCopyColumn = xOldColumn->createDataDescriptor();
+    else
+        xCopyColumn = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+
     ::comphelper::copyProperties(descriptor,xCopyColumn);
 
 
@@ -1684,6 +1693,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
     FileClose();
     construct();
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
@@ -1723,6 +1734,8 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
     }
     m_Name = newName;
     construct();
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 // -----------------------------------------------------------------------------
 void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
@@ -1734,7 +1747,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-
+        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
@@ -1746,13 +1759,15 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
                 xCpy = xColumn->createDataDescriptor();
             else
             {
-                xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                xCpy = new OColumn(bCase);
                 ::comphelper::copyProperties(xProp,xCpy);
             }
 
             xAppend->appendByDescriptor(xCpy);
         }
-        xAppend->appendByDescriptor(_xNewColumn);
+        Reference<XPropertySet> xCpy = new OColumn(bCase);
+        ::comphelper::copyProperties(_xNewColumn,xCpy);
+        xAppend->appendByDescriptor(xCpy);
     }
 
     // construct the new table
@@ -1771,6 +1786,59 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     FileClose();
     construct();
+    if(m_pColumns)
+        m_pColumns->refresh();
+}
+// -----------------------------------------------------------------------------
+void ODbaseTable::dropColumn(sal_Int32 _nPos)
+{
+    String sTempName = createTempFile();
+
+    ODbaseTable* pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
+    pNewTable->acquire();
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
+    {
+        Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
+        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        // copy the structure
+        for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
+        {
+            if(_nPos != i)
+            {
+                Reference<XPropertySet> xProp;
+                m_pColumns->getByIndex(i) >>= xProp;
+                Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
+                Reference<XPropertySet> xCpy;
+                if(xColumn.is())
+                    xCpy = xColumn->createDataDescriptor();
+                else
+                {
+                    xCpy = new OColumn(bCase);
+                    ::comphelper::copyProperties(xProp,xCpy);
+                }
+                xAppend->appendByDescriptor(xCpy);
+            }
+        }
+    }
+
+    // construct the new table
+    if(!pNewTable->CreateImpl())
+    {
+        return;
+    }
+    // copy the data
+    copyData(pNewTable);
+    // drop the old table
+    DropImpl();
+    pNewTable->rename(m_Name);
+    // release the temp file
+    pNewTable->release();
+
+
+    FileClose();
+    construct();
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 // -----------------------------------------------------------------------------
 String ODbaseTable::createTempFile()
@@ -1790,26 +1858,7 @@ String ODbaseTable::createTempFile()
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     aURL.SetURL(aTempFile.GetURL());
-//
-//  Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-//  try
-//  {
-//      if (aContent.isDocument())
-//      {
-//          // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
-//          SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
-//
-//          if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
-//          {
-//              //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
-//              return String();
-//          }
-//          delete pFileStream;
-//      }
-//  }
-//  catch(Exception&) // a exception is thrown when no file exists
-//  {
-//  }
+
     String sNewName(aURL.getName());
     sNewName.Erase(sNewName.Len() - sExt.Len());
     return sNewName;
