@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-03 13:53:03 $
+ *  last change: $Author: mh $ $Date: 2002-08-12 14:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,10 +182,39 @@ static int nArgCount = -1;
  *
  *****************************************************************************/
 
+#if defined(MACOSX)
+// Can't access environ and __progname directly when linking two-level.
+static sal_Char *getCmdLine()
+{
+    int i;
+    int len = 0;
+    sal_Char *result;
+    int the_argc = *_NSGetArgc();
+    char **the_argv = *_NSGetArgv();
+
+    for (i = 0; i < the_argc; i++) {
+        len += 1 + strlen(the_argv[i]);
+    }
+
+    result = calloc(len + 1, sizeof(sal_Char));
+    if (result) {
+        sal_Char *dst = result;
+        for (i = 0; i < the_argc; i++) {
+            strcpy(dst, the_argv[i]);
+            dst += 1 + strlen(the_argv[i]);
+        }
+        *dst = '\0';
+        return result;
+    }
+
+    return NULL;
+}
+
+#endif
 
 #if defined(CMD_ARG_PRG) && defined(CMD_ARG_ENV)
 /*
- * mfe: used by FreeBSD, NetBSD, HP-UX, IRIX, MacOS X
+ * mfe: used by FreeBSD, NetBSD, HP-UX, IRIX
  *      (and which other Unix flavours?)
  */
 static sal_Char *getCmdLine()
