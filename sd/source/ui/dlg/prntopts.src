@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:40:32 $
+ *  last change: $Author: vg $ $Date: 2001-06-05 21:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ english_us ] = "Default" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Standard" ;
-        Text [ swedish ] = "Standard" ;
+        Text [ swedish ] = "Standa~rd" ;
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "Standard" ;
         Text [ spanish ] = "Predeterminado" ;
@@ -293,10 +293,10 @@ TabPage TP_PRINT_OPTIONS
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Graustu~fen" ;
         Text [ ENGLISH ] = "Grayscale" ;
-        Text [ english_us ] = "Grayscale" ;
+        Text [ english_us ] = "Gra~yscale" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Graustufen" ;
-        Text [ swedish ] = "Gråskalor" ;
+        Text [ swedish ] = "~Gråskalor" ;
         Text [ danish ] = "Gråtoner" ;
         Text [ italian ] = "Toni di grigio" ;
         Text [ spanish ] = "Escala de grises" ;
@@ -322,10 +322,10 @@ TabPage TP_PRINT_OPTIONS
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Schwarz~weiß" ;
         Text [ ENGLISH ] = "Black & White" ;
-        Text [ english_us ] = "Black & White" ;
+        Text [ english_us ] = "Black & ~white" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Schwarzwei?" ;
-        Text [ swedish ] = "Svartvitt" ;
+        Text [ swedish ] = "Svart~vitt" ;
         Text [ danish ] = "Sort-hvid" ;
         Text [ italian ] = "Bianco e nero" ;
         Text [ spanish ] = "Blanco y negro" ;
@@ -599,7 +599,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ spanish ] = "Páginas como a~zulejos" ;
         Text [ french ] = "Pages en ~mosaïque" ;
         Text [ dutch ] = "Pagina´s betege~len" ;
-        Text [ swedish ] = "Sidor sida ~vid sida" ;
+        Text [ swedish ] = "Si~dor sida vid sida" ;
         Text [ danish ] = "Sider side om side" ;
         Text [ portuguese ] = "Páginas em ~mosaico" ;
         Text [ portuguese_brazilian ] = "Seiten ~kacheln" ;
