@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:25:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ Window WIN_HELP_INDEX
                 Text[ french ] = "Index";
                 Text[ spanish ] = "Õndice";
                 Text[ italian ] = "Indice";
-                Text[ danish ] = "Index";
+                Text[ danish ] = "INDEKS";
                 Text[ swedish ] = "Index";
                 Text[ polish ] = "Indeks";
                 Text[ portuguese_brazilian ] = "Index";
@@ -127,9 +127,10 @@ Window WIN_HELP_INDEX
                 Text[ korean ] = "ªˆ¿Œ";
                 Text[ chinese_simplified ] = "À˜“˝";
                 Text[ chinese_traditional ] = "Ø¡§ﬁ";
-                Text[ turkish ] = "Index";
+                Text[ turkish ] = "›ndis";
                 Text[ arabic ] = "›Â—”";
                 Text[ catalan ] = "Õndice";
+                Text[ finnish ] = "Hakemisto";
             };
             PageItem
             {
@@ -155,6 +156,7 @@ Window WIN_HELP_INDEX
                 Text[ turkish ] = "Search";
                 Text[ arabic ] = "»ÕÀ";
                 Text[ catalan ] = "Buscar";
+                Text[ finnish ] = "Etsi";
             };
         };
     };
@@ -188,6 +190,7 @@ TabPage TP_HELP_INDEX
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
         Text[ catalan ] = "~TÈrmino de b˙squeda";
+        Text[ finnish ] = "~Etsitt‰v‰ termi";
     };
     Edit ED_EXPRESSION
     {
@@ -225,6 +228,7 @@ TabPage TP_HELP_INDEX
         Text[ turkish ] = "~Display";
         Text[ arabic ] = "⁄—÷";
         Text[ catalan ] = "~Visualizar";
+        Text[ finnish ] = "~N‰yt‰";
     };
 };
 
@@ -256,6 +260,7 @@ TabPage TP_HELP_SEARCH
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
         Text[ catalan ] = "~TÈrmino de b˙squeda";
+        Text[ finnish ] = "E~tsitt‰v‰ termi";
     };
     ComboBox ED_SEARCH
     {
@@ -288,6 +293,7 @@ TabPage TP_HELP_SEARCH
         Text[ turkish ] = "Search";
         Text[ arabic ] = "»ÕÀ";
         Text[ catalan ] = "Buscar";
+        Text[ finnish ] = "~Etsi";
     };
     ListBox LB_RESULT
     {
@@ -319,6 +325,7 @@ TabPage TP_HELP_SEARCH
         Text[ turkish ] = "~Display";
         Text[ arabic ] = "⁄—÷";
         Text[ catalan ] = "~Visualizar";
+        Text[ finnish ] = "~N‰yt‰";
     };
     CheckBox CB_SCOPE
     {
@@ -339,11 +346,12 @@ TabPage TP_HELP_SEARCH
         Text[ portuguese_brazilian ] = "~Search headings only";
         Text[ japanese ] = "¿≤ƒŸÇÃÇ›Ç≈åüçı";
         Text[ korean ] = "~Search headings only";
-        Text[ chinese_simplified ] = "~Search headings only";
-        Text[ chinese_traditional ] = "~Search headings only";
+        Text[ chinese_simplified ] = "ΩˆÀ——∞¥Û±ÍÃ‚";
+        Text[ chinese_traditional ] = "∂»∑j¥M§jº–√D";
         Text[ turkish ] = "~Search headings only";
         Text[ arabic ] = "~Search headings only";
         Text[ catalan ] = "~Search headings only";
+        Text[ finnish ] = "~Nur Titel suchen";
     };
 };
 
@@ -400,6 +408,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ turkish ] = "%PRODUCTNAME Help";
     Text[ arabic ] = "%PRODUCTNAME „”«⁄œ…";
     Text[ catalan ] = "%PRODUCTNAME Ayuda";
+    Text[ finnish ] = " Ohjelman %PRODUCTNAME ohje";
 };
 String STR_HELP_BUTTON_INDEX
 {
@@ -412,7 +421,7 @@ String STR_HELP_BUTTON_INDEX
     Text[ french ] = "Index";
     Text[ spanish ] = "Õndice";
     Text[ italian ] = "Indice";
-    Text[ danish ] = "Index";
+    Text[ danish ] = "INDEKS";
     Text[ swedish ] = "Index";
     Text[ polish ] = "Indeks";
     Text[ portuguese_brazilian ] = "Index";
@@ -420,9 +429,10 @@ String STR_HELP_BUTTON_INDEX
     Text[ korean ] = "ªˆ¿Œ";
     Text[ chinese_simplified ] = "À˜“˝";
     Text[ chinese_traditional ] = "Ø¡§ﬁ";
-    Text[ turkish ] = "Index";
+    Text[ turkish ] = "›ndis";
     Text[ arabic ] = "›Â—”";
     Text[ catalan ] = "Õndice";
+    Text[ finnish ] = "Hakemisto";
 };
 String STR_HELP_BUTTON_START
 {
@@ -446,6 +456,7 @@ String STR_HELP_BUTTON_START
     Text[ turkish ] = "Start page";
     Text[ arabic ] = "’›Õ… «·»œ¡";
     Text[ catalan ] = "P·gina de inicio";
+    Text[ finnish ] = "Ensimm‰inen sivu";
 };
 String STR_HELP_BUTTON_PREV
 {
@@ -469,6 +480,7 @@ String STR_HELP_BUTTON_PREV
     Text[ turkish ] = "Backward";
     Text[ arabic ] = "«·’›Õ… «·”«»ﬁ…";
     Text[ catalan ] = "P·gina anterior";
+    Text[ finnish ] = "Edellinen sivu";
 };
 String STR_HELP_BUTTON_NEXT
 {
@@ -492,6 +504,7 @@ String STR_HELP_BUTTON_NEXT
     Text[ turkish ] = "Forward";
     Text[ arabic ] = "«·’›Õ… «· «·Ì…";
     Text[ catalan ] = "P·gina siguiente";
+    Text[ finnish ] = "Seuraava sivu";
 };
 String STR_HELP_BUTTON_PRINT
 {
@@ -515,6 +528,7 @@ String STR_HELP_BUTTON_PRINT
     Text[ turkish ] = "Print";
     Text[ arabic ] = "ÿ»«⁄…";
     Text[ catalan ] = "Imprimir";
+    Text[ finnish ] = "Tulosta";
 };
 
 String STR_HELP_BUTTON_SOURCEVIEW
@@ -541,6 +555,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ korean ] = "HTML º“Ω∫≈ÿΩ∫∆Æ";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ catalan ] = "HTML Source";
+    Text[ finnish ] = "HTML-Quelltext";
 };
 
 String STR_HELP_FIRST_MESSAGE
@@ -560,11 +575,12 @@ String STR_HELP_FIRST_MESSAGE
     Text[ portuguese_brazilian ] = "Help is started...";
     Text[ japanese ] = "ÕŸÃﬂÇäJénÇµÇƒÇ¢Ç‹Ç∑...";
     Text[ korean ] = "Help is started...";
-    Text[ chinese_simplified ] = "Help is started...";
-    Text[ chinese_traditional ] = "Help is started...";
+    Text[ chinese_simplified ] = "’˝‘⁄∆Ù∂Ø∞Ô÷˙π¶ƒ‹...";
+    Text[ chinese_traditional ] = "•ø¶b±“∞ ª°©˙•\\Ø‡...";
     Text[ turkish ] = "Help is started...";
     Text[ arabic ] = "Help is started...";
     Text[ catalan ] = "Help is started...";
+    Text[ finnish ] = "Die Hilfe wird gestartet...";
 };
 
 String STR_HELP_FIRST_HTML
