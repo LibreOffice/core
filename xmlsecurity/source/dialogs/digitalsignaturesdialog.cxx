@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-18 09:14:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             maSignatureHelper.EndMission();
 
             sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
-            if ( nStatus == STATUS_CREATION_SUCCEED )
+            if ( nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
                 uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
                 xTrans->commit();
@@ -392,15 +392,13 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
                 aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
-
-                    // MM : the ouDate and ouTime fields have been replaced with stDateTime (com::sun::star::util::DataTime)
-                    /*
-                aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
-                */
+                // --> PB 2004-10-12 #i20172# String with date and time information
+                aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
 
             // New signatures are not verified, must be valid. Status is INIT.
-            bool bValid = ( rInfo.nStatus == STATUS_VERIFY_SUCCEED ) || ( rInfo.nStatus == STATUS_INIT );
+            bool bValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
+                || ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN );
             if ( bValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
