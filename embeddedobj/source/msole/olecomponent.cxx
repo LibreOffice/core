@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:10:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,7 +1027,7 @@ void OleComponent::SetExtent( const awt::Size& aVisAreaSize, sal_Int64 nAspect )
         // in this case just do nothing
         // Also Visio returns E_FAIL on resize if it is in running state
         // if ( hr != RPC_E_SERVER_DIED )
-        //  throw io::IOException(); // TODO
+        throw io::IOException(); // TODO
     }
 }
 
@@ -1044,10 +1044,9 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
     if ( FAILED( hr ) )
     {
         // TODO/LATER: is it correct?
-        // if there is no appropriate cache, OLE_E_BLANK error code is returned
-        // in this case just return empty size
+        // if there is no appropriate cache for the aspect, OLE_E_BLANK error code is returned
         if ( hr == OLE_E_BLANK )
-            return awt::Size( 0, 0 );
+            throw lang::IllegalArgumentException();
         else
             throw io::IOException(); // TODO
     }
