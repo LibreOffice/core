@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:39:05 $
+ *  last change: $Author: bc $ $Date: 2002-08-16 15:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@
 #define sPathErrorStarDoc_1_    1065
 #define sPathErrorStarDoc_2_    1066
 #define sPathErrorStarDoc_3_    1067
+#define sOverwriteallFiles  1070
+#define sreeditMacro    1071
+#define scouldNotsaveDocument 1072
+#define scouldNotopenDocument 1073
 #define sPathDialogMessage  1080
 #define sDialogTitle 1081
 #define sProgressPage1 1090
@@ -126,6 +130,7 @@
 #define sCreateLogfile          2032
 #define sLogfileHelpText        2033
 #define sLogfileSummary         2034
+#define sshowLogfile            2035
 
 #define sSumInclusiveSubDir     3000
 #define sSumSaveDokumente       3001
@@ -1026,6 +1031,39 @@ String sMorePathsError3
     Text[ thai ] = "ไม่มีไดเร็กทอรี่อยู่";
 };
 
+
+String sOverwriteallFiles
+{
+    Text = "M�chten Sie, dass Dokumente ohne Abfrage �berschrieben werden?";
+    Text[English] = "Do you want to overwrite documents without query";
+    Text[ English_us ] = "Do you want to overwrite documents without query";
+};
+
+
+String sreeditMacro
+{
+    Text = "Dokumentenmakro muss �berarbeitet werden";
+    Text[English] = "Document macro has to be revised";
+    Text[ English_us ] = "Document macro has to be revised";
+};
+
+String scouldNotsaveDocument
+{
+    Text = "Dokument '<1>' konnte nicht gespeichert werden";
+    Text[English] = "Document '<1>' could not be saved";
+    Text[ English_us ] = "Document '<1>' could not be saved";
+};
+
+
+String scouldNotopenDocument
+{
+    Text = "Dokument '<1>' konnte nicht ge�ffnet werden";
+    Text[English] = "Document '<1>' could not be opened";
+    Text[ English_us ] = "Document '<1>' could not be opened";
+};
+
+
+
 String sConvertError1
 {
     Text = "M�chten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
@@ -1785,6 +1823,14 @@ String sLogfileHelpText
     Text[ arabic ] = "A Logfile will be created within your Working Directory";
     Text[ catalan ] = "El fitxer de registre es crear� al directori de treball";
     Text[ thai ] = "แฟ้มลงบันทึกเข้า-ออกจะถูกสร้างในไดเร็กทอรี่การทำงานของคุณ";
+};
+
+
+String sshowLogfile
+{
+    Text = "Logdatei anzeigen";
+    Text[English] = "Show Logfile";
+    Text[ English_us ] = "Show Logfile";
 };
 
 
