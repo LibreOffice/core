@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: jb $ $Date: 2001-10-22 08:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ SetReplaceImpl::SetReplaceImpl(Path::Component const& aName, ElementTreeHolder c
 /// checks, if this represents an actual change
 bool SetReplaceImpl::doIsChange() const
 {
-    return !!(m_aOldTree == m_aNewTree);
+    return !(m_aOldTree == m_aNewTree);
 }
 //-----------------------------------------------------------------------------
 
