@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:53:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,8 @@
 #endif
 
 #include <SwUndoPageDesc.hxx>
+
+using namespace com::sun::star;
 
 static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
                          SwFrmFmt &rFmt2, SfxPrinter *pPrt, BOOL bCheck )
@@ -926,20 +928,21 @@ void SwDoc::PrtOLENotify( BOOL bAll )
                 //schon in der Exclude-Liste steht
                 SvGlobalName aName;
 
-                if ( !pOLENd->GetOLEObj().IsOleRef() )  //Noch nicht geladen
+                svt::EmbeddedObjectRef& xObj = pOLENd->GetOLEObj().GetObject();
+                if ( xObj.is() )
+                    aName = SvGlobalName( xObj->getClassID() );
+                else  //Noch nicht geladen
                 {
                     String sBaseURL( INetURLObject::GetBaseURL() );
                     const SfxMedium *pMedium;
                     if( 0 != (pMedium = GetDocShell()->GetMedium()) &&
                         pMedium->GetName() != sBaseURL )
                         INetURLObject::SetBaseURL( pMedium->GetName() );
-                    SvInfoObjectRef xInfo = GetPersist()->Find( pOLENd->GetOLEObj().GetName() );
-                    if ( xInfo.Is() )   //Muss normalerweise gefunden werden
-                        aName = xInfo->GetClassName();
+
+                    // TODO/LATER: retrieve ClassID of an unloaded object
+                    // aName = ????
                     INetURLObject::SetBaseURL( sBaseURL );
                 }
-                else
-                    aName = pOLENd->GetOLEObj().GetOleRef()->GetClassName();
 
                 BOOL bFound = FALSE;
                 for ( USHORT i = 0;
@@ -954,22 +957,23 @@ void SwDoc::PrtOLENotify( BOOL bAll )
 
                 //Kennen wir nicht, also muss das Objekt geladen werden.
                 //Wenn es keine Benachrichtigung wuenscht
-                SvEmbeddedObjectRef xRef( (SvInPlaceObject*) pOLENd->GetOLEObj().GetOleRef() );
-                if ( xRef ) //Kaputt?
+                if ( xObj.is() )
                 {
+                    //TODO/LATER: needs MiscStatus for ResizeOnPrinterChange
+                    /*
                     if ( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xRef->GetMiscStatus())
                     {
                         if ( pOLENd->GetFrm() )
                         {
-                            xRef->OnDocumentPrinterChanged( pPrt );
-                            pShell->CalcAndSetScale( xRef );//Client erzeugen lassen.
+                            xObj->OnDocumentPrinterChanged( pPrt );
+                            pShell->CalcAndSetScale( xObj );//Client erzeugen lassen.
                         }
                         else
                             pOLENd->SetOLESizeInvalid( TRUE );
                     }
-                    else
+                    else */
                         pGlobalOLEExcludeList->Insert(
-                                new SvGlobalName( xRef->GetClassName()),
+                                new SvGlobalName( aName ),
                                 pGlobalOLEExcludeList->Count() );
                 }
             }
@@ -1138,10 +1142,11 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, pTimer )
 
                 //Kennen wir nicht, also muss das Objekt geladen werden.
                 //Wenn es keine Benachrichtigung wuenscht
-                SvEmbeddedObjectRef xRef( (SvInPlaceObject*)
-                                        pOLENd->GetOLEObj().GetOleRef() );
-                if( xRef ) //Kaputt?
+                svt::EmbeddedObjectRef xObj = pOLENd->GetOLEObj().GetOleRef();
+                if( xObj.is() ) //Kaputt?
                 {
+                    //TODO/LATER: needs MiscStatus for ResizeOnPrinterChange
+                    /*
                     if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE &
                             xRef->GetMiscStatus() )
                     {
@@ -1152,7 +1157,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, pTimer )
                         }
                         else
                             pOLENd->SetOLESizeInvalid( TRUE );
-                    }
+                    }*/
                     // repaint it
                     pOLENd->Modify( &aMsgHint, &aMsgHint );
                 }
