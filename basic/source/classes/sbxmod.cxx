@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gh $ $Date: 2002-07-10 10:54:53 $
+ *  last change: $Author: ab $ $Date: 2002-08-09 10:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,12 +818,24 @@ void SbModule::GlobalRunDeInit( void )
 
 const BYTE* SbModule::FindNextStmnt( const BYTE* p, USHORT& nLine, USHORT& nCol ) const
 {
+    return FindNextStmnt( p, nLine, nCol, FALSE );
+}
+
+const BYTE* SbModule::FindNextStmnt( const BYTE* p, USHORT& nLine, USHORT& nCol,
+    BOOL bFollowJumps, const SbiImage* pImg ) const
+{
     USHORT nPC = (USHORT) ( p - (const BYTE*) pImage->GetCode() );
     while( nPC < pImage->GetCodeSize() )
     {
         SbiOpcode eOp = (SbiOpcode ) ( *p++ );
         nPC++;
-        if( eOp >= SbOP1_START && eOp <= SbOP1_END )
+        if( bFollowJumps && eOp == _JUMP && pImg )
+        {
+            DBG_ASSERT( pImg, "FindNextStmnt: pImg==NULL with FollowJumps option" );
+            USHORT nOp1 = *p++; nOp1 |= *p++ << 8;
+            p = (const BYTE*) pImg->GetCode() + nOp1;
+        }
+        else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
             p += 2, nPC += 2;
         else if( eOp == _STMNT )
         {
