@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mhu $ $Date: 2001-08-15 16:43:31 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 17:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2394,9 +2394,9 @@ shell::getContentEventListeners( const rtl::OUString& aName )
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
-                ContentEventNotifier* not = pointer->cCEL();
-                if( not )
-                    listeners.push_back( not );
+                ContentEventNotifier* notifier = pointer->cCEL();
+                if( notifier )
+                    listeners.push_back( notifier );
                 ++it1;
             }
         }
@@ -2421,9 +2421,9 @@ shell::getContentDeletedEventListeners( const rtl::OUString& aName )
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
-                ContentEventNotifier* not = pointer->cDEL();
-                if( not )
-                    listeners.push_back( not );
+                ContentEventNotifier* notifier = pointer->cDEL();
+                if( notifier )
+                    listeners.push_back( notifier );
                 ++it1;
             }
         }
@@ -2492,9 +2492,9 @@ shell::getPropertySetListeners( const rtl::OUString& aName )
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
-                PropertySetInfoChangeNotifier* not = pointer->cPSL();
-                if( not )
-                    listeners.push_back( not );
+                PropertySetInfoChangeNotifier* notifier = pointer->cPSL();
+                if( notifier )
+                    listeners.push_back( notifier );
                 ++it1;
             }
         }
@@ -2609,9 +2609,9 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
                     while( it1 != listOfNotifiers.end() )
                     {
                         Notifier* pointer = *it1;
-                        ContentEventNotifier* not = pointer->cEXC( aNewName );
-                        if( not )
-                            listeners.push_back( not );
+                        ContentEventNotifier* notifier = pointer->cEXC( aNewName );
+                        if( notifier )
+                            listeners.push_back( notifier );
                         ++it1;
                     }
                 }
@@ -2674,9 +2674,9 @@ shell::getPropertyChangeNotifier( const rtl::OUString& aName )
             while( it1 != listOfNotifiers.end() )
             {
                 Notifier* pointer = *it1;
-                PropertyChangeNotifier* not = pointer->cPCL();
-                if( not )
-                    listeners.push_back( not );
+                PropertyChangeNotifier* notifier = pointer->cPCL();
+                if( notifier )
+                    listeners.push_back( notifier );
                 ++it1;
             }
         }
