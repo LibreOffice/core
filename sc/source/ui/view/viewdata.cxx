@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-13 12:35:02 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/system.hxx>
+#include <tools/solmath.hxx>
 
 #include "viewdata.hxx"
 #include "docoptio.hxx"
@@ -1149,6 +1150,7 @@ void ScViewData::SetTabNo( USHORT nNewTab )
         pTabData[nTabNo] = new ScViewDataTable;
     pThisTab = pTabData[nTabNo];
 
+    CalcPPT();          //  for common column width correction
     RecalcPixPos();     //! nicht immer noetig!
 }
 
@@ -1806,6 +1808,38 @@ void ScViewData::CalcPPT()
     if (pDocShell)
         nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Faktor ist Drucker zu Bildschirm
     nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
+
+    //  #83616# if detective objects are present,
+    //  try to adjust horizontal scale so the most common column width has minimal rounding errors,
+    //  to avoid differences between cell and drawing layer output
+
+    if ( pDoc && pDoc->HasDetectiveObjects(nTabNo) )
+    {
+        USHORT nEndCol = 0;
+        USHORT nDummy = 0;
+        pDoc->GetTableArea( nTabNo, nEndCol, nDummy );
+        if (nEndCol<20)
+            nEndCol = 20;           // same end position as when determining draw scale
+
+        USHORT nTwips = pDoc->GetCommonWidth( nEndCol, nTabNo );
+        if ( nTwips )
+        {
+            double fOriginal = nTwips * nPPTX;
+            if ( fOriginal < nEndCol )
+            {
+                //  if one column is smaller than the column count,
+                //  rounding errors are likely to add up to a whole column.
+
+                double fRounded = SolarMath::ApproxFloor( fOriginal + 0.5 );
+                if ( fRounded > 0.0 )
+                {
+                    double fScale = fRounded / fOriginal + 1E-6;
+                    if ( fScale >= 0.9 && fScale <= 1.1 )
+                        nPPTX *= fScale;
+                }
+            }
+        }
+    }
 }
 
 //------------------------------------------------------------------
