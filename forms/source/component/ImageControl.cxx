@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 14:18:18 $
+ *  last change: $Author: obo $ $Date: 2000-11-14 15:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 
 //.........................................................................
@@ -249,8 +252,8 @@ void OImageControlModel::_propertyChanged( const starbeans::PropertyChangeEvent&
     INetURLObject aURLObj(getString(rEvt.NewValue));
     String aPath = INetURLObject::decode(aURLObj.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
 
-    SvFileStream* pFileStream = ::utl::UcbStreamHelper::CreateStream(aPath, STREAM_READ);
-    sal_Bool bSetNull = !pFileStream->IsOpen();
+    SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream(aPath, STREAM_READ);
+    sal_Bool bSetNull = pFileStream==NULL;
 
     if (!bSetNull)
     {
