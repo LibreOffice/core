@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.122 $
+#   $Revision: 1.123 $
 #
-#   last change: $Author: svesik $ $Date: 2002-08-29 14:01:40 $
+#   last change: $Author: hjs $ $Date: 2002-09-05 14:57:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,8 +191,8 @@ something_wrong_with_objects :
 .IF "$(PRJNAME)"=="vcl"
 .IF "$(REMOTE_BUILD_FLAG)" == ""
 .IF "$(remote)" == ""
-REMOTE_BUILD=do_it_remote
-REMOTE_DEPEND=do_it_remote
+#REMOTE_BUILD=do_it_remote
+#REMOTE_DEPEND=do_it_remote
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
 .ENDIF          # "$(PRJNAME)"=="vcl"
