@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:04:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ public class FilterComponent {
     String LISTBOXFIELDNAME_ACTION_PERFORMED;
     String LISTBOXFIELDNAME_ITEM_CHANGED;
     QueryMetaData oQueryMetaData;
+    int iDateTimeFormat;
     int iDateFormat;
     int iTimeFormat;
     PropertyValue[][] filterconditions;
@@ -257,7 +258,7 @@ public class FilterComponent {
             if (iduplicate[0] != -1) {
                 PropertyValue aduplicatecondition = filterconditions[iduplicate[0]][iduplicate[1]];
                 String smsgDuplicateCondition = getDisplayCondition(sDuplicateCondition, aduplicatecondition, null);
-                SystemDialog.showMessageBox(CurUnoDialog.xMSF, "WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
+                CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
                 CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", new Integer(1), new Integer(2)));
                 return new PropertyValue[][] {
                 };
@@ -389,6 +390,8 @@ public class FilterComponent {
             xNumberFormatsSupplier = _xNumberFormatsSupplier;
             iDateFormat = Desktop.defineNumberFormat(xNumberFormatsSupplier.getNumberFormats(), "YYYY-MM-DD");
             iTimeFormat = Desktop.defineNumberFormat(xNumberFormatsSupplier.getNumberFormats(), "HH:MM:SS");
+//          iDateTimeFormat = Desktop.defineNumberFormat(xNumberFormatsSupplier.getNumberFormats(), "YYYY-MM-DD HH:MM:SS");
+
             xNumberFormatter = Desktop.createNumberFormatter(xMSF, xNumberFormatsSupplier);
         } catch (NotNumericException e) {
         } catch (Exception e) {
