@@ -1,10 +1,10 @@
-#*************************************************************************
+#************************************************************************
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-28 10:51:40 $
+#   last change: $Author: armin $ $Date: 2001-05-29 11:01:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,6 +134,7 @@ RC_SUBDIRS =  \
 	offmgr \
 	offuh \
 	package \
+	padmin \
 	psprint \
 	rdbmaker \
 	readlicense \
@@ -154,13 +155,16 @@ RC_SUBDIRS =  \
 	sd \
 	setup2 \
 	sfx2 \
+	shell \
 	sj2 \
 	so3 \
+	soltools \
 	sot \
 	starmath \
 	stoc \
 	store \
 	svtools \
+	sysui \
 	svx \
 	sw \
 	toolkit \
@@ -179,8 +183,7 @@ RC_SUBDIRS =  \
 	xml2cmp \
 	xmlhelp \
 	xmloff \
-	xmlscript \
-	xprinter
+	xmlscript
 
 # 
 # bootstrap target
@@ -207,7 +210,11 @@ udk_modules :	xml2cmp sal vos store registry idlc udkapi codemaker \
 		jut rdbmaker io bridges cpputools io stoc remotebridges
 
 non_vcl :	udk_modules ucbhelper offuh unoil officecfg UnoControls \
-		rsc sot eventattacher idl transex3 inet
+		rsc sot eventattacher idl transex3 inet package xmlscript \
+		sax eventatatcher xmlhelp fileaccess sysui psprint
+
+frmwrk:		dtrans framework chaos i18n uui xmloff setup2 scptools scp \
+		connectivity 
 
 # 
 # single directory targets for
@@ -222,7 +229,7 @@ basic : xmlscript goodies
 bridges : cppuhelper jurt
 chaos : inet svtools tools store vos sal cppu cppuhelper ucbhelper unotools
 codemaker : udkapi
-comphelper : cppuhelper offuh
+comphelper : cppuhelper offuh tools
 configmgr : unotools
 connectivity : comphelper svtools
 cppu : codemaker
@@ -232,7 +239,7 @@ dbaccess : connectivity offmgr
 desktop : sc sd sw
 drafts : offapi
 dtrans : offapi sal rdbmaker
-eventattacher : cppuhelper offapi
+eventattacher : cppuhelper offapi drafts
 extensions : rdbmaker svx
 fileaccess : tools
 forms : svx
@@ -253,6 +260,7 @@ offapi : udkapi
 offmgr : basctl sch starmath uui
 offuh : codemaker drafts
 package : tools unotools
+padmin : vcl
 psprint : tools unotools
 rdbmaker : cppuhelper
 registry : store salhelper
@@ -261,15 +269,16 @@ ridljar : udkapi
 rsc : tools
 sal : xml2cmp
 salhelper: sal 
-sax : cppuhelper external offapi
+sax : cppuhelper external drafts
 sc : offmgr
-scaddins : cppuhelper
+scaddins : cppuhelper drafts tools
 sch : basctl svx
 scp : scptools
 scptools : setup2
 sd : offmgr sc
 setup2 : automation basic transex3 unoil unzip
-sfx2 : framework idl setup2 xmloff xmlscript
+shell : rdbmaker
+sfx2 : idl setup2 xmloff xmlscript
 sip : sd
 sj2 : sandbox svtools
 so3 : inet sj2
@@ -280,19 +289,21 @@ store : vos
 svtools : toolkit ucbhelper unotools
 svx : lingu linguistic connectivity xmloff sfx2
 sw : connectivity offmgr sd
-testtools : cppuhelper
+sysui : xml2cmp drafts rdbmaker offuh
+testtool : cppuhelper
 toolkit : vcl
 tools : external vos
 transex3 : tools
-ucb : comphelper ucbhelper
-ucbhelper : cppuhelper
-udkapi : idlc
+ucb : comphelper svtools tools ucbhelper
+ucbhelper : cppuhelper offuh drafts
+udkapi: idlc
 unoil : jurt
 unotools : comphelper cppuhelper offuh tools
 uui : svtools
-vcl : rsc sot ucbhelper unotools xprinter psprint
+vcl : rsc sot ucbhelper unotools psprint sysui
 vos : sal
 wizards : offmgr
+xml2cmp : soltools
 xmlhelp : external jut XmlSearch
 xmloff : goodies drafts
 xmlscript : offapi comphelper
