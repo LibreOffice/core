@@ -3,5 +3,6 @@ su	sysui\win32\office\icons				nmake	-	w	su_iconsw NULL
 su	sysui\tools\lngconv				nmake	-	u	su_lngconv NULL
 su	sysui\unix\office 				nmake	-	u	su_iconsu NULL
 su	sysui\unix\office\cde 			nmake	-	u	su_cdezips su_lngconv.u NULL
+su	sysui\unix\office\gnome			nmake	-	u	su_gnomezips su_lngconv.u NULL
 su	sysui\unix\office\scripts       nmake	-	u	su_scripts NULL
 su	sysui\source\win32\QuickStart	nmake	-	w	su_win32_quickstart NULL
