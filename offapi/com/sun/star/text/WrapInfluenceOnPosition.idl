@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WrapInfluenceOnPosition.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:52:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,23 @@ constants WrapInfluenceOnPosition
         /** wrapping style has no influence on the position and the floating screen
             object is successive positioned.
      */
-        const short NONE_SUCCESSIVE_POSITIONED = 1;
+        const short ONCE_SUCCESSIVE = 1;
 
     //-------------------------------------------------------------------------
 
         /** wrapping style has no influence on the position and the floating screen
             object is concurrent positioned.
      */
-        const short NONE_CONCURRENT_POSITIONED = 2;
+        const short ONCE_CONCURRENT = 2;
 
     //-------------------------------------------------------------------------
+
+        /** wrapping style has  influence on the position and the floating screen
+            object is iterative positioned.
+         */
+        const short ITERATIVE = 3;
+
+        //-------------------------------------------------------------------------
 };
 
 //=============================================================================
