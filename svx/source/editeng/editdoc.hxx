@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 13:13:53 $
+ *  last change: $Author: mt $ $Date: 2001-03-21 12:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,30 +217,9 @@ public:
     SfxStyleSheet*  GetStyleSheet() const               { return pStyle; }
     void            SetStyleSheet( SfxStyleSheet* pS );
 
-    inline const SfxPoolItem&   GetItem( USHORT nWhich );
-    inline BOOL                 HasItem( USHORT nWhich );
+    const SfxPoolItem&  GetItem( USHORT nWhich );
+    BOOL                HasItem( USHORT nWhich );
 };
-
-inline const SfxPoolItem& ContentAttribs::GetItem( USHORT nWhich )
-{
-    // Harte Absatzattribute haben Vorrang!
-    SfxItemSet* pTakeFrom = &aAttribSet;
-    if ( pStyle && ( aAttribSet.GetItemState( nWhich, FALSE ) != SFX_ITEM_ON  ) )
-        pTakeFrom = &pStyle->GetItemSet();
-
-    return pTakeFrom->Get( nWhich );
-}
-
-inline BOOL ContentAttribs::HasItem( USHORT nWhich )
-{
-    BOOL bHasItem = FALSE;
-    if ( aAttribSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_ON  )
-        bHasItem = TRUE;
-    else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON )
-        bHasItem = TRUE;
-
-    return bHasItem;
-}
 
 // -------------------------------------------------------------------------
 // class CharAttribList

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 12:31:00 $
+ *  last change: $Author: mt $ $Date: 2001-03-21 12:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,6 +1130,29 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
         }
     }
 }
+
+const SfxPoolItem& ContentAttribs::GetItem( USHORT nWhich )
+{
+    // Harte Absatzattribute haben Vorrang!
+    SfxItemSet* pTakeFrom = &aAttribSet;
+    if ( pStyle && ( aAttribSet.GetItemState( nWhich, FALSE ) != SFX_ITEM_ON  ) )
+        pTakeFrom = &pStyle->GetItemSet();
+
+    return pTakeFrom->Get( nWhich );
+}
+
+BOOL ContentAttribs::HasItem( USHORT nWhich )
+{
+    BOOL bHasItem = FALSE;
+    if ( aAttribSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_ON  )
+        bHasItem = TRUE;
+    else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON )
+        bHasItem = TRUE;
+
+    return bHasItem;
+}
+
+
 
 // ----------------------------------------------------------------------
 //  class ItemList
