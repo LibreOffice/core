@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
+ *  last change: $Author: dvo $ $Date: 2002-06-13 13:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,13 +284,19 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
         SwPosition* pPoint = pCaret->GetPoint();
         if( pNode->GetIndex() == pPoint->nNode.GetIndex() )
         {
-            // Yes, it's us!
-            nRet = GetPortionData().GetAccessiblePosition(
-                pPoint->nContent.GetIndex() );
+            // same node? Then check whether it's also within 'our' part
+            // of the paragraph
+            USHORT nIndex = pPoint->nContent.GetIndex();
+            if( GetPortionData().IsValidCorePosition( nIndex ) )
+            {
+                // Yes, it's us!
+                nRet = GetPortionData().GetAccessiblePosition( nIndex );
 
-            DBG_ASSERT( nRet >= 0, "invalid cursor?" );
-            DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
+                DBG_ASSERT( nRet >= 0, "invalid cursor?" );
+                DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
                                               getLength(), "invalid cursor?" );
+            }
+            // else: in this paragraph, but in different frame
         }
         // else: not in this paragraph
     }
@@ -392,12 +398,12 @@ void SwAccessibleParagraph::GetStates(
     SwPaM* pCaret = GetCrsr();
     const SwTxtNode* pTxtNd = GetTxtNode();
     if( pCaret != 0 && pTxtNd != 0 &&
-        pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() )
+        pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
+        nOldCaretPos != -1)
     {
         Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
             rStateSet.AddState( AccessibleStateType::FOCUSED );
-        ASSERT( -1 != nOldCaretPos, "caret pos invalid" );
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:05:10 $
+ *  last change: $Author: dvo $ $Date: 2002-06-13 13:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,4 +817,11 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     }
 
     return bIsEditable;
+}
+
+sal_Bool SwAccessiblePortionData::IsValidCorePosition( USHORT nPos )
+{
+    // a position is valid its within the model positions that we know
+    return ( aModelPositions[0] <= nPos ) &&
+           ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }

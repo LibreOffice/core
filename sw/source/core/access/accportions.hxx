@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 13:42:53 $
+ *  last change: $Author: dvo $ $Date: 2002-06-13 13:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,13 @@ public:
     ///          that range would be legal
     sal_Bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
                                USHORT& nCoreStart, USHORT& nCoreEnd );
+
+    /// Determine whether this core position is valid for these portions.
+    /// (A paragraph may be split into several frames, e.g. at page
+    ///  boundaries. In this case, only part of a paragraph is represented
+    ///  through this object. This method determines whether one particular
+    ///  position is valid for this object or not.)
+    sal_Bool IsValidCorePosition( USHORT nPos );
 };
 
 
