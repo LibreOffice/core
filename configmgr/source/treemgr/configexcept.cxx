@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configexcept.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: lla $ $Date: 2001-03-07 14:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,12 @@ namespace configmgr
         }
         //---------------------------------------------------------------------
         Exception::Exception(char const* sAsciiMessage)
-        : m_sAsciiMessage()
+        : m_sAsciiMessage(sAsciiMessage)
         {
         }
         //---------------------------------------------------------------------
         Exception::Exception(rtl::OString const& sAsciiMessage)
-        : m_sAsciiMessage()
+        : m_sAsciiMessage(sAsciiMessage)
         {
         }
         //---------------------------------------------------------------------

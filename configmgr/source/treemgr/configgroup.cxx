@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
+ *  last change: $Author: lla $ $Date: 2001-03-07 14:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "nodechange.hxx"
 #include "nodechangeimpl.hxx"
 #include "treeimpl.hxx"
+#include "tracer.hxx"
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -163,7 +164,12 @@ UnoAny GroupUpdater::implValidateValue(NodeRef const& aNode, UnoAny const& aValu
     if (!aValue.hasValue())
     {
         if (!aNode.getAttributes().bNullable)
-            throw ConstraintViolation( "Group Member Update: Node is not nullable !" );
+        {
+            rtl::OString sError("Group Member Update: Node (");
+            sError += OUSTRING2ASCII(aNode.getName().toString());
+            sError += ") is not nullable !";
+            throw ConstraintViolation( sError );
+        }
     }
 
     UnoType aValueType  = aValue.getValueType();

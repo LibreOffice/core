@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 16:09:53 $
+ *  last change: $Author: lla $ $Date: 2001-03-07 14:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ namespace configmgr
             bool bDefaultable   : 1;
 
             Attributes():bWritable(true), bNullable(true), bNotified(true), bConstrained(false), bReplacing(false), bLocalized(false), bDefaultable(false){}
+            //! IMPORTANT: if this defaults are changed, you MUST change also the handling in CmXMLFormater::handleAttributes() and OValueHandler::startElement()
         };
 
         //--------------------------------------------------------------------
