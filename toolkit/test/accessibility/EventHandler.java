@@ -1,6 +1,6 @@
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.uno.UnoRuntime;
 
 import java.io.PrintStream;

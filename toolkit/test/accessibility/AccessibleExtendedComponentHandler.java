@@ -1,6 +1,6 @@
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleExtendedComponent;
 
 
 class AccessibleExtendedComponentHandler

@@ -1,8 +1,8 @@
 
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.accessibility.XAccessibleEditableText;
-import drafts.com.sun.star.accessibility.AccessibleTextType;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.AccessibleTextType;
 
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
@@ -205,6 +205,10 @@ class AccessibleTextHandler extends NodeHandler
             {
                 aNode.addChild (new StringNode (e.toString(), aNode));
             }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                aNode.addChild (new StringNode (e.toString(), aNode));
+            }
         }
 
         return aNode;
@@ -287,6 +291,23 @@ class AccessibleTextHandler extends NodeHandler
     private AccessibleTreeNode getAttributes( XAccessibleText xText,
                                   AccessibleTreeNode aParent)
     {
+        String[] aAttributeList = new String[] {
+            "CharBackColor",
+            "CharColor",
+            "CharEscapement",
+            "CharHeight",
+            "CharPosture",
+            "CharStrikeout",
+            "CharUnderline",
+            "CharWeight",
+            "ParaAdjust",
+            "ParaBottomMargin",
+            "ParaFirstLineIndent",
+            "ParaLeftMargin",
+            "ParaLineSpacing",
+            "ParaRightMargin",
+            "ParaTabStops"};
+
         AccessibleTreeNode aRet;
 
         try
@@ -298,11 +319,19 @@ class AccessibleTextHandler extends NodeHandler
             while( nIndex < nLength )
             {
                 // get attribute run
-                String aPortion = xText.getTextAtIndex(
-                    nIndex, (short)6/*AccessibleTextType.ATTRIBUTE*/ );
+                String aPortion = null;
+                try
+                {
+                    aPortion = xText.getTextAtIndex(
+                        nIndex, AccessibleTextType.ATTRIBUTE_RUN);
+                }
+                catch(com.sun.star.lang.IllegalArgumentException e)
+                {
+                    aPortion = new String ("");
+                }
 
                 // get attributes and make node with attribute children
-                PropertyValue[] aValues = xText.getCharacterAttributes(nIndex);
+                PropertyValue[] aValues = xText.getCharacterAttributes(nIndex, aAttributeList);
                 VectorNode aAttrs = new VectorNode (aPortion, aPortions);
                 for( int i = 0; i < aValues.length; i++ )
                 {

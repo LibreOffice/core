@@ -1,5 +1,5 @@
 import javax.swing.JOptionPane;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleAction;
 
 /**
     Base class for all tree nodes.

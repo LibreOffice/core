@@ -1,9 +1,9 @@
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.AccessibleRelation;
-import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
-import drafts.com.sun.star.accessibility.AccessibleRelationType;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.AccessibleRelation;
+import com.sun.star.accessibility.XAccessibleRelationSet;
+import com.sun.star.accessibility.AccessibleRelationType;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;

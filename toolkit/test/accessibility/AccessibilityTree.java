@@ -1,4 +1,4 @@
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.uno.UnoRuntime;

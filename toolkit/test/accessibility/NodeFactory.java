@@ -1,4 +1,4 @@
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 import java.util.Vector;
 
 /** This singleton class creates nodes for given accessible objects.

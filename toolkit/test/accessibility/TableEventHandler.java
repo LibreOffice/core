@@ -1,7 +1,7 @@
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.AccessibleEventId;
-import drafts.com.sun.star.accessibility.AccessibleTableModelChange;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleEventObject;
+import com.sun.star.accessibility.AccessibleEventId;
+import com.sun.star.accessibility.AccessibleTableModelChange;
 import com.sun.star.uno.UnoRuntime;
 
 import java.io.PrintStream;
@@ -18,7 +18,7 @@ class TableEventHandler
     {
         switch (mnEventId)
         {
-            case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_EVENT:
+            case AccessibleEventId.TABLE_MODEL_CHANGED:
                 AccessibleTableModelChange aModelChange =
                     (AccessibleTableModelChange)maEvent.NewValue;
                 out.println( "Range: StartRow " + aModelChange.FirstRow +

@@ -1,8 +1,8 @@
 
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleTable;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleTable;
+import com.sun.star.accessibility.XAccessible;
 
 
 class AccessibleCellHandler extends NodeHandler

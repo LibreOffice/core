@@ -1,4 +1,4 @@
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleContext;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.awt.XExtendedToolkit;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import javax.swing.event.TreeModelEvent;
@@ -30,6 +30,7 @@ class TopWindowListener
         {
             maModel.lock ();
             int nTopWindowCount = xToolkit.getTopWindowCount();
+            MessageArea.println ("There are " + nTopWindowCount + " top windows.");
             for (int i=0; i<nTopWindowCount; i++)
             {
                 try

@@ -1,6 +1,6 @@
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.AccessibleEventId;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleEventObject;
+import com.sun.star.accessibility.AccessibleEventId;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
@@ -18,7 +18,7 @@ class ContextEventHandler
     {
         switch (mnEventId)
         {
-            case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
+            case AccessibleEventId.STATE_CHANGED:
                 try
                 {
                     int nOldValue = AnyConverter.toInt (maEvent.OldValue);

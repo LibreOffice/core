@@ -7,9 +7,9 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import java.awt.geom.Rectangle2D;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
 
 /** This canvas displays accessible objects graphically.  Each accessible
     object with graphical representation is represented by an
@@ -21,8 +21,11 @@ import drafts.com.sun.star.accessibility.XAccessibleComponent;
 */
 class Canvas
     extends JPanel
-    implements MouseListener, MouseMotionListener, TreeSelectionListener
+    implements MouseListener, MouseMotionListener, TreeSelectionListener//, Scrollable
 {
+    // This constant can be passed to SetZoomMode to always show the whole screen.
+    public static final int WHOLE_SCREEN = -1;
+
     public Canvas ()
     {
         super (true);
@@ -41,6 +44,7 @@ class Canvas
         setShowDescriptions (true);
         setShowNames (true);
         setAntialiasing (true);
+        maLastWidgetSize = new Dimension (0,0);
     }
 
     /** Tell the canvas which tree view to use to highlight accessible
@@ -136,14 +140,12 @@ class Canvas
 
     public boolean getShowNames ()
     {
-        System.out.println ("show names is " + Options.GetBoolean ("ShowNames"));
         return Options.GetBoolean ("ShowNames");
     }
 
     public void setShowNames (boolean bNewValue)
     {
         Options.SetBoolean ("ShowNames", bNewValue);
-        System.out.println ("show names is " + Options.GetBoolean ("ShowNames") + bNewValue);
         repaint ();
     }
 
@@ -169,6 +171,18 @@ class Canvas
         repaint ();
     }
 
+    public void setZoomMode (int nZoomMode)
+    {
+        Options.SetInteger ("ZoomMode", nZoomMode);
+        repaint ();
+    }
+
+    public int getZoomMode ()
+    {
+        return Options.GetInteger ("ZoomMode", WHOLE_SCREEN);
+    }
+
+
     public void paintComponent (Graphics g)
     {
         synchronized (g)
@@ -189,8 +203,8 @@ class Canvas
             // accessible object on the screen.
             Dimension aScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
             Rectangle2D.Double aScreen = new Rectangle2D.Double (
-                mnHOffset * mnScale,
-                mnVOffset * mnScale,
+                mnHOffset,
+                mnVOffset,
                 mnScale*aScreenSize.getWidth(),
                 mnScale*aScreenSize.getHeight());
             // Fill the screen rectangle and draw a frame arround it to increase its visibility.
@@ -231,33 +245,76 @@ class Canvas
     */
     private void setupTransformation ()
     {
-        Dimension aScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension aWidgetSize = getSize();
-        if ((aScreenSize.getWidth() > 0) && (aScreenSize.getHeight() > 0))
+        // Turn off scrollbars when showing the whole screen.  Otherwise show them when needed.
+        JViewport aViewport = (JViewport)getParent();
+        JScrollPane aScrollPane = (JScrollPane)aViewport.getParent();
+        int nZoomMode = getZoomMode();
+        if (nZoomMode == WHOLE_SCREEN)
         {
-            // Calculate the scales that would map the screen onto the
-            // widget in both of the coordinate axes and select the smaller
-            // of the two: it maps the screen onto the widget in both axes
-            // at the same time.
-            double nHScale = (aWidgetSize.getWidth() - 10) / aScreenSize.getWidth();
-            double nVScale = (aWidgetSize.getHeight() - 10) / aScreenSize.getHeight();
-            if (nHScale < nVScale)
-                mnScale = nHScale;
-            else
-                mnScale = nVScale;
-
-            // Calculate offsets that center the scaled screen inside the widget.
-            mnHOffset = (aWidgetSize.getWidth() - mnScale*aScreenSize.getWidth()) / 2.0;
-            mnVOffset = (aWidgetSize.getHeight() - mnScale*aScreenSize.getHeight()) / 2.0;
+            if (aScrollPane.getHorizontalScrollBarPolicy()
+                != JScrollPane.HORIZONTAL_SCROLLBAR_NEVER)
+                aScrollPane.setHorizontalScrollBarPolicy (JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            if (aScrollPane.getVerticalScrollBarPolicy()
+                != JScrollPane.VERTICAL_SCROLLBAR_NEVER)
+                aScrollPane.setVerticalScrollBarPolicy (JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         }
         else
         {
-            // In case of a degenerate (not yet initialized?) screen size
-            // use some meaningless default values.
-            mnScale = 1;
-            mnHOffset = 0;
-            mnVOffset = 0;
+            if (aScrollPane.getHorizontalScrollBarPolicy()
+                != JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)
+                aScrollPane.setHorizontalScrollBarPolicy (JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            if (aScrollPane.getVerticalScrollBarPolicy()
+                != JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
+                aScrollPane.setVerticalScrollBarPolicy (JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         }
+
+        Dimension aScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension aWidgetSize = aViewport.getSize();
+        {
+            if ((aScreenSize.getWidth() > 0) && (aScreenSize.getHeight() > 0))
+            {
+                if (nZoomMode == WHOLE_SCREEN)
+                {
+                    // Calculate the scales that would map the screen onto the
+                    // widget in both of the coordinate axes and select the
+                    // smaller
+                    // of the two: it maps the screen onto the widget in both
+                    // axes at the same time.
+                    double nHScale = (aWidgetSize.getWidth() - 10) / aScreenSize.getWidth();
+                    double nVScale = (aWidgetSize.getHeight() - 10) / aScreenSize.getHeight();
+                    if (nHScale < nVScale)
+                        mnScale = nHScale;
+                    else
+                        mnScale = nVScale;
+                }
+                else
+                {
+                    mnScale = nZoomMode / 100.0;
+                }
+
+                // Calculate offsets that center the scaled screen inside the widget.
+                mnHOffset = (aWidgetSize.getWidth() - mnScale*aScreenSize.getWidth()) / 2.0;
+                mnVOffset = (aWidgetSize.getHeight() - mnScale*aScreenSize.getHeight()) / 2.0;
+                if (mnHOffset < 0)
+                    mnHOffset = 0;
+                if (mnVOffset < 0)
+                    mnVOffset = 0;
+
+                setPreferredSize (new Dimension (
+                    (int)(2*mnHOffset + mnScale * aScreenSize.getWidth()),
+                    (int)(2*mnVOffset + mnScale * aScreenSize.getHeight())));
+                revalidate ();
+            }
+            else
+            {
+                // In case of a degenerate (not yet initialized?) screen size
+                // use some meaningless default values.
+                mnScale = 1;
+                mnHOffset = 0;
+                mnVOffset = 0;
+            }
+        }
+        maLastWidgetSize = aWidgetSize;
     }
 
 
@@ -365,7 +422,6 @@ class Canvas
         }
     }
 
-
     private int
         mnXAnchor,
         mnYAnchor,
@@ -386,4 +442,7 @@ class Canvas
         maBoundingBox;
     private JTree
         maTree;
+    // The size of the widget at the last call of setupTransformation()
+    private Dimension
+        maLastWidgetSize;
 }

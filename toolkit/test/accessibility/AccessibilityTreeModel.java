@@ -7,7 +7,7 @@ import java.util.Vector;
 import java.util.HashMap;
 import java.util.Enumeration;
 
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;

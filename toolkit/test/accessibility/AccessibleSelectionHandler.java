@@ -1,8 +1,8 @@
 
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
 import javax.swing.*;

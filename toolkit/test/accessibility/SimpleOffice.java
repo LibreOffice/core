@@ -35,13 +35,13 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapeDescriptor;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleRelationSet;
+import com.sun.star.accessibility.XAccessibleStateSet;
 
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XExtendedToolkit;
 
 
 /** This class tries to simplify some tasks like loading a document or

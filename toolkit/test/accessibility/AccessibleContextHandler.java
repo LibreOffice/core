@@ -1,6 +1,6 @@
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XIndexAccess;
 import java.util.HashMap;

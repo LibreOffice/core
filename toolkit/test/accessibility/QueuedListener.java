@@ -1,7 +1,7 @@
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 import java.util.LinkedList;
 

@@ -12,7 +12,7 @@ abstract class NodeHandler
 
 
     public abstract NodeHandler createHandler (
-        drafts.com.sun.star.accessibility.XAccessibleContext xContext);
+        com.sun.star.accessibility.XAccessibleContext xContext);
 
     public NodeHandler ()
     {

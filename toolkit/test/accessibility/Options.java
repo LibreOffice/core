@@ -29,15 +29,25 @@ class Options
     static public void SetBoolean (String sName, boolean bValue)
     {
         Instance().setProperty (sName, Boolean.toString(bValue));
-        System.out.println ("setting boolean " + sName + " : "
-            + Instance().getProperty (sName));
     }
 
     static public boolean GetBoolean (String sName)
     {
-        System.out.println ("getting boolean " + sName + " : "
-            + Instance().getProperty (sName) + "->" + Boolean.getBoolean(Instance().getProperty (sName)));
         return Boolean.getBoolean(Instance().getProperty (sName));
+    }
+
+    static public void SetInteger (String sName, int nValue)
+    {
+        Instance().setProperty (sName, Integer.toString(nValue));
+    }
+
+    static public int GetInteger (String sName, int nDefault)
+    {
+        String sValue = Instance().getProperty (sName);
+        if (sValue == null)
+            return nDefault;
+        else
+            return Integer.parseInt (sValue);
     }
 
     public void Load (String sBaseName)

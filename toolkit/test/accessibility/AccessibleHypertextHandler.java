@@ -1,7 +1,7 @@
 
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleHypertext;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleHypertext;
 
 
 class AccessibleHypertextHandler extends AccessibleTreeHandler

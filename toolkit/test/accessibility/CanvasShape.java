@@ -6,13 +6,13 @@ import java.awt.geom.Rectangle2D;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.PropertyChangeEvent;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
-import drafts.com.sun.star.accessibility.AccessibleStateType;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleExtendedComponent;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.AccessibleStateType;
 
 class CanvasShape
 {
@@ -108,8 +108,8 @@ class CanvasShape
             // specified offset and scale.
             Point aLocation = new Point();
             maShape = new Rectangle2D.Double (
-                (maPosition.x  + nXOffset) * nScaleFactor,
-                (maPosition.y  + nYOffset) * nScaleFactor,
+                maPosition.x * nScaleFactor + nXOffset,
+                maPosition.y * nScaleFactor + nYOffset,
                 maSize.width * nScaleFactor,
                 maSize.height * nScaleFactor);
 

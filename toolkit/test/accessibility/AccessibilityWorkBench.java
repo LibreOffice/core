@@ -20,14 +20,14 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.uno.UnoRuntime;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
-import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleExtendedComponent;
+import com.sun.star.accessibility.XAccessibleRelationSet;
+import com.sun.star.accessibility.XAccessibleStateSet;
 
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XExtendedToolkit;
 
 import java.util.Vector;
 import java.awt.*;
@@ -54,9 +54,6 @@ public class AccessibilityWorkBench
     public static void main (String args[])
     {
         int nPortNumber = 5678;
-        String sFileName
-            = "file:///tmp/impress-test-document.sxi";
-        //            = "file:///tmp/draw-test-document.sxd";
 
         for (int i=0; i<args.length; i++)
         {
@@ -66,9 +63,6 @@ public class AccessibilityWorkBench
                 System.out.println ("options:");
                 System.out.println ("   -p <port-number>   Port on which to connect to StarOffice.");
                 System.out.println ("                      Defaults to 5678.");
-                System.out.println ("   -f <file-name-URL> URL of document file which is loaded when");
-                System.out.println ("                      clicking on the Load button.  Don't forget");
-                System.out.println ("                      the file:// prefix!");
                 System.exit (0);
             }
             else if (args[i].equals ("-p"))
@@ -145,11 +139,17 @@ public class AccessibilityWorkBench
         maCanvas = new Canvas ();
         maCanvas.setTree (maAccessibilityTree.getComponent());
         maAccessibilityTree.SetCanvas (maCanvas);
-        maCanvas.setPreferredSize (new Dimension (1000,1000));
+        JScrollPane aScrolledCanvas = new JScrollPane(maCanvas,
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        aScrolledCanvas.getViewport().setBackground (Color.RED);
 
         // Split pane for tree view and canvas.
-        JSplitPane aViewSplitPane = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT,
-                                                    aTreeScrollPane, maCanvas);
+        JSplitPane aViewSplitPane = new JSplitPane (
+            JSplitPane.HORIZONTAL_SPLIT,
+            aTreeScrollPane,
+            aScrolledCanvas
+            );
         aViewSplitPane.setOneTouchExpandable(true);
         aViewSplitPane.setDividerLocation (aTreeScrollPane.getPreferredSize().width);
 
@@ -164,7 +164,6 @@ public class AccessibilityWorkBench
         aSplitPane.setOneTouchExpandable(true);
         addGridElement (aSplitPane, 0,0, 2,1, 3,3,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
 
         // Button bar.
         maButtonBar = new JPanel();
@@ -184,6 +183,7 @@ public class AccessibilityWorkBench
         Options.Instance().Load (msOptionsFileName);
 
         setJMenuBar (CreateMenuBar ());
+        getContentPane().setSize (new Dimension (800,600));
 
         setTitle("Accessibility Workbench " + msVersion);
 
@@ -251,6 +251,35 @@ public class AccessibilityWorkBench
         aItem = new JMenuItem ("Quit");
         aFileMenu.add (aItem);
         aItem.addActionListener (this);
+
+        // View menu.
+        JMenu aViewMenu = new JMenu ("View");
+        maMenuBar.add (aViewMenu);
+        ButtonGroup aGroup = new ButtonGroup ();
+        JRadioButtonMenuItem aRadioButton = new JRadioButtonMenuItem ("Whole Screen");
+        aGroup.add (aRadioButton);
+        aViewMenu.add (aRadioButton);
+        aRadioButton.addActionListener (this);
+        aRadioButton = new JRadioButtonMenuItem ("200%");
+        aGroup.add (aRadioButton);
+        aViewMenu.add (aRadioButton);
+        aRadioButton.addActionListener (this);
+        aRadioButton = new JRadioButtonMenuItem ("100%");
+        aGroup.add (aRadioButton);
+        aViewMenu.add (aRadioButton);
+        aRadioButton.addActionListener (this);
+        aRadioButton = new JRadioButtonMenuItem ("50%");
+        aGroup.add (aRadioButton);
+        aViewMenu.add (aRadioButton);
+        aRadioButton.addActionListener (this);
+        aRadioButton = new JRadioButtonMenuItem ("25%");
+        aGroup.add (aRadioButton);
+        aViewMenu.add (aRadioButton);
+        aRadioButton.addActionListener (this);
+        aRadioButton = new JRadioButtonMenuItem ("10%");
+        aGroup.add (aRadioButton);
+        aViewMenu.add (aRadioButton);
+        aRadioButton.addActionListener (this);
 
         // Options menu.
         JMenu aOptionsMenu = new JMenu ("Options");
@@ -423,6 +452,36 @@ public class AccessibilityWorkBench
         else if (e.getActionCommand().equals ("About"))
         {
             HelpWindow.Instance().loadFile ("about.html");
+        }
+        else if (e.getActionCommand().equals ("Whole Screen"))
+        {
+            maCanvas.setZoomMode (Canvas.WHOLE_SCREEN);
+            Options.Instance().Save (msOptionsFileName);
+        }
+        else if (e.getActionCommand().equals ("200%"))
+        {
+            maCanvas.setZoomMode (200);
+            Options.Instance().Save (msOptionsFileName);
+        }
+        else if (e.getActionCommand().equals ("100%"))
+        {
+            maCanvas.setZoomMode (100);
+            Options.Instance().Save (msOptionsFileName);
+        }
+        else if (e.getActionCommand().equals ("50%"))
+        {
+            maCanvas.setZoomMode (50);
+            Options.Instance().Save (msOptionsFileName);
+        }
+        else if (e.getActionCommand().equals ("25%"))
+        {
+            maCanvas.setZoomMode (25);
+            Options.Instance().Save (msOptionsFileName);
+        }
+        else if (e.getActionCommand().equals ("10%"))
+        {
+            maCanvas.setZoomMode (10);
+            Options.Instance().Save (msOptionsFileName);
         }
         else
         {

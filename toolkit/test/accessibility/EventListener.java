@@ -8,7 +8,7 @@ import java.util.Vector;
 import java.util.HashMap;
 import java.util.Enumeration;
 
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 import com.sun.star.uno.*;
 
 import com.sun.star.uno.UnoRuntime;
@@ -62,50 +62,45 @@ public class EventListener
 
         switch (aEvent.EventId)
         {
-            case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+            case AccessibleEventId.CHILD:
                 aHandler = new ChildEventHandler (aEvent, maTreeModel);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_BOUNDRECT_EVENT:
-            case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
+            case AccessibleEventId.BOUNDRECT_CHANGED:
+            case AccessibleEventId.VISIBLE_DATA_CHANGED:
                 aHandler = new GeometryEventHandler (aEvent, maTreeModel);
                 break;
 
 
-            case AccessibleEventId.ACCESSIBLE_NAME_EVENT:
-            case AccessibleEventId.ACCESSIBLE_DESCRIPTION_EVENT:
-            case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
-            case AccessibleEventId.CONTROLLED_BY_EVENT:
-            case AccessibleEventId.CONTROLLER_FOR_EVENT:
-            case AccessibleEventId.LABEL_FOR_EVENT:
-            case AccessibleEventId.LABELED_BY_EVENT:
-            case AccessibleEventId.MEMBER_OF_EVENT:
-            case AccessibleEventId.ACCESSIBLE_SELECTION_EVENT:
+            case AccessibleEventId.NAME_CHANGED:
+            case AccessibleEventId.DESCRIPTION_CHANGED:
+            case AccessibleEventId.STATE_CHANGED:
+            case AccessibleEventId.SELECTION_CHANGED:
                 aHandler = new ContextEventHandler (aEvent, maTreeModel);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TABLE_CAPTION_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_HEADER_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TABLE_ROW_DESCRIPTION_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TABLE_ROW_HEADER_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TABLE_SUMMARY_EVENT:
+            case AccessibleEventId.TABLE_MODEL_CHANGED:
+            case AccessibleEventId.TABLE_CAPTION_CHANGED:
+            case AccessibleEventId.TABLE_COLUMN_DESCRIPTION_CHANGED:
+            case AccessibleEventId.TABLE_COLUMN_HEADER_CHANGED:
+            case AccessibleEventId.TABLE_ROW_DESCRIPTION_CHANGED:
+            case AccessibleEventId.TABLE_ROW_HEADER_CHANGED:
+            case AccessibleEventId.TABLE_SUMMARY_CHANGED:
                 aHandler = new TableEventHandler (aEvent, maTreeModel);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_ACTION_EVENT:
+            case AccessibleEventId.ACTION_CHANGED:
                 aHandler = new EventHandler (aEvent, maTreeModel);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_HYPERTEXT_EVENT:
+            case AccessibleEventId.HYPERTEXT_CHANGED:
                 aHandler = new EventHandler (aEvent, maTreeModel);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_ACTIVE_DESCENDANT_EVENT:
-            case AccessibleEventId.ACCESSIBLE_CARET_EVENT:
-            case AccessibleEventId.ACCESSIBLE_TEXT_EVENT:
-            case AccessibleEventId.ACCESSIBLE_VALUE_EVENT:
+            case AccessibleEventId.ACTIVE_DESCENDANT_CHANGED:
+            case AccessibleEventId.CARET_CHANGED:
+            case AccessibleEventId.TEXT_CHANGED:
+            case AccessibleEventId.VALUE_CHANGED:
                 aHandler = new EventHandler (aEvent, maTreeModel);
                 break;
 
