@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-26 14:19:42 $
+ *  last change: $Author: ka $ $Date: 2001-11-02 16:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,51 +268,98 @@ SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
 
 SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const
 {
-    SvStream* pRet = 0;
+    SvStream* pRet = NULL;
     SvStorageRef xRoot( pDoc->GetDocStorage() );
     String sDrawStrmNm( String::CreateFromAscii(
                     RTL_CONSTASCII_STRINGPARAM( DRAWING_STREAM_NAME )));
-    if( xRoot.Is() && SVSTREAM_OK == xRoot->GetError() &&
-        xRoot->IsStream( sDrawStrmNm ) )
+
+     if( xRoot.Is() && SVSTREAM_OK == xRoot->GetError() )
     {
-        long nFFVersion = xRoot->GetVersion();
-        ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31 ||
-                nFFVersion == SOFFICE_FILEFORMAT_40 ||
-                nFFVersion == SOFFICE_FILEFORMAT_50,
-                "Am Root-Storage ist keine FF-Version gesetzt!" );
+        if( rInfo.maUserData.Len() &&
+            ( rInfo.maUserData.GetToken( 0, ':' ) ==
+              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
+        {
+            const String aPicturePath( rInfo.maUserData.GetToken( 1, ':' ) );
 
-        // Wenn eine 3.1-Clipboard-ID gesetzt ist, die Fileformat-Version
-        // auf 3.1 setzten.
-        if( SOT_FORMATSTR_ID_STARWRITER_30 == xRoot->GetFormat() &&
-            nFFVersion != SOFFICE_FILEFORMAT_31 )
-        {
-            ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31,
-                    "Fileformat-Version auf 3.1 umgesetzt" );
-            xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_31 );
+            // graphic from picture stream in picture storage in XML package
+            if( aPicturePath.GetTokenCount( '/' ) == 2 )
+            {
+                SvStorageRef    xPictureStorage;
+                const String    aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
+                const String    aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
+
+                if( xRoot->IsContained( aPictureStorageName ) &&
+                    xRoot->IsStorage( aPictureStorageName )  )
+                {
+                    xPictureStorage = xRoot->OpenUCBStorage( aPictureStorageName,
+                                                             STREAM_READ |
+                                                             STREAM_SHARE_DENYWRITE |
+                                                             STREAM_NOCREATE );
+                }
+
+                if( xPictureStorage.Is() &&
+                    xPictureStorage->IsContained( aPictureStreamName ) &&
+                    xPictureStorage->IsStream( aPictureStreamName ) )
+                {
+                    pRet = xPictureStorage->OpenSotStream( aPictureStreamName,
+                                                           STREAM_READ |
+                                                           STREAM_SHARE_DENYWRITE |
+                                                           STREAM_NOCREATE );
+
+                    if( pRet )
+                    {
+                        pRet->SetVersion( xPictureStorage->GetVersion() );
+                        pRet->SetKey( xPictureStorage->GetKey() );
+
+                        rInfo.mbDeleteAfterUse = TRUE;
+                        rInfo.mpStorageRef = new SvStorageRef( xPictureStorage );
+                    }
+                }
+            }
         }
-        else if( ( SOT_FORMATSTR_ID_STARWRITER_40 == xRoot->GetFormat() ||
-                   SOT_FORMATSTR_ID_STARWRITERWEB_40 == xRoot->GetFormat() ||
-                   SOT_FORMATSTR_ID_STARWRITERGLOB_40 == xRoot->GetFormat() ) &&
-                 nFFVersion != SOFFICE_FILEFORMAT_40 )
+        else if( xRoot->IsStream( sDrawStrmNm ) )
         {
-            ASSERT( nFFVersion == SOFFICE_FILEFORMAT_40,
-                    "Fileformat-Version auf 4.0 umgesetzt" );
-            xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_40 );
-        }
-        else if( ( SOT_FORMATSTR_ID_STARWRITER_50 == xRoot->GetFormat() ||
-                   SOT_FORMATSTR_ID_STARWRITERWEB_50 == xRoot->GetFormat() ||
-                   SOT_FORMATSTR_ID_STARWRITERGLOB_50 == xRoot->GetFormat() ) &&
-                 nFFVersion != SOFFICE_FILEFORMAT_50 )
-        {
-            ASSERT( nFFVersion == SOFFICE_FILEFORMAT_50,
-                    "Fileformat-Version auf 4.0 umgesetzt" );
-            xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_50 );
+            long nFFVersion = xRoot->GetVersion();
+            ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31 ||
+                    nFFVersion == SOFFICE_FILEFORMAT_40 ||
+                    nFFVersion == SOFFICE_FILEFORMAT_50,
+                    "Am Root-Storage ist keine FF-Version gesetzt!" );
+
+            // Wenn eine 3.1-Clipboard-ID gesetzt ist, die Fileformat-Version
+            // auf 3.1 setzten.
+            if( SOT_FORMATSTR_ID_STARWRITER_30 == xRoot->GetFormat() &&
+                nFFVersion != SOFFICE_FILEFORMAT_31 )
+            {
+                ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31,
+                        "Fileformat-Version auf 3.1 umgesetzt" );
+                xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_31 );
+            }
+            else if( ( SOT_FORMATSTR_ID_STARWRITER_40 == xRoot->GetFormat() ||
+                       SOT_FORMATSTR_ID_STARWRITERWEB_40 == xRoot->GetFormat() ||
+                       SOT_FORMATSTR_ID_STARWRITERGLOB_40 == xRoot->GetFormat() ) &&
+                     nFFVersion != SOFFICE_FILEFORMAT_40 )
+            {
+                ASSERT( nFFVersion == SOFFICE_FILEFORMAT_40,
+                        "Fileformat-Version auf 4.0 umgesetzt" );
+                xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_40 );
+            }
+            else if( ( SOT_FORMATSTR_ID_STARWRITER_50 == xRoot->GetFormat() ||
+                       SOT_FORMATSTR_ID_STARWRITERWEB_50 == xRoot->GetFormat() ||
+                       SOT_FORMATSTR_ID_STARWRITERGLOB_50 == xRoot->GetFormat() ) &&
+                     nFFVersion != SOFFICE_FILEFORMAT_50 )
+            {
+                ASSERT( nFFVersion == SOFFICE_FILEFORMAT_50,
+                        "Fileformat-Version auf 4.0 umgesetzt" );
+                xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_50 );
+            }
+
+            pRet = xRoot->OpenStream( sDrawStrmNm,
+                        STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
+
+            if( pRet )
+                rInfo.mbDeleteAfterUse = TRUE;
         }
 
-        pRet = xRoot->OpenStream( sDrawStrmNm,
-                    STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
-        if( pRet )
-            rInfo.mbDeleteAfterUse = TRUE;
     }
     return pRet;
 }
