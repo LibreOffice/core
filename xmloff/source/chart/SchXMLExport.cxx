@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-21 12:46:54 $
+ *  last change: $Author: bm $ $Date: 2001-03-22 12:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,10 +1144,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             } // for
 
             // write autostyle for last data point(s) read
-            if( bExportContent &&
-                ! bIsEmpty &&
-                aLastASName.getLength() &&
-                ! aLastASName.equals( aSeriesASName ))
+            if( bExportContent )
             {
                 if( nRepeated > 1 )
                 {
@@ -1155,7 +1152,13 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                                            rtl::OUString::valueOf( (sal_Int64)( nRepeated ) ));
                 }
 
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
+                if( ! bIsEmpty &&
+                    aLastASName.getLength() &&
+                    ! aLastASName.equals( aSeriesASName ))
+                {
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
+                }
+
                 SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
             }
         }
