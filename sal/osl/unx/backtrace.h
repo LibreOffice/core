@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backtrace.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 10:53:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,7 @@
  ************************************************************************/
 
 
- /* Only Solaris */
-#ifdef SOLARIS
+#if defined (SOLARIS) || (FREEBSD)
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,4 +76,4 @@ void backtrace_symbols_fd( void **buffer, int size, int fd );
 } /* extern "C" */
 #endif
 
-#endif /* defined SOLARIS */
+#endif /* defined SOLARIS || FREEBSD */
