@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:50:48 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 08:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,10 @@ class SwRedlineItr
 #ifdef OLD_ATTR_HANDLING
     void _ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg );
 #endif
-    inline sal_Bool LeaveExtend( SwFont& rFnt, xub_StrLen nNew )
-        { return pExt->Leave(rFnt, nNew ); }
     inline short EnterExtend( SwFont& rFnt, xub_StrLen nNew )
         { if( pExt ) return pExt->Enter( rFnt, nNew ); return 0; }
     inline xub_StrLen NextExtend( xub_StrLen nNext )
         { if( pExt ) return pExt->Next( nNext ); return nNext; }
-    inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
 public:
 #ifndef OLD_ATTR_HANDLING
     SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt, SwAttrHandler& rAH,
@@ -165,6 +162,10 @@ public:
     inline sal_Bool ChkSpecialUnderline() const
         { if ( IsOn() ) return _ChkSpecialUnderline(); return sal_False; }
     sal_Bool CheckLine( xub_StrLen nChkStart, xub_StrLen nChkEnd );
+    inline sal_Bool LeaveExtend( SwFont& rFnt, xub_StrLen nNew )
+        { return pExt->Leave(rFnt, nNew ); }
+    inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
+
 };
 
 

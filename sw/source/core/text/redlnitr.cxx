@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:24:09 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 08:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,17 +158,11 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     pAttrSet = &rTxtNode.GetSwAttrSet();
     pHints = rTxtNode.GetpSwpHints();
 
-#ifndef OLD_ATTR_HANDLING
-    // init of attribute stack with current default attributes
-    aAttrHandler.Init( *pAttrSet );
-#endif
-
     delete pFnt;
     if ( rTxtNode.HasSwAttrSet() )
     {
-        // Hier wird noch ein weiterer Cache eingebaut werden,
-        // der ueber ein paar SfxItemSets sucht.
 #ifndef OLD_ATTR_HANDLING
+        aAttrHandler.Init( *pAttrSet );
         pFnt = new SwFont( aAttrHandler );
 #else
         pFnt = new SwFont( pAttrSet );
@@ -180,6 +174,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
 //      SwFontAccess aFontAccess( rTxtNode.GetFmtColl() );
         SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
 //FEATURE::CONDCOLL
+        aAttrHandler.Init( aFontAccess.Get()->GetDefault() );
         pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
     }
 
@@ -364,12 +359,8 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
 {
     short nRet = 0;
     if( ExtOn() )
-    {
-        if( !LeaveExtend( rFnt, nNew ) )
-            return 0; // Abkuerzung: wenn wir innerhalb eines ExtendTextInputs sind
+        return 0; // Abkuerzung: wenn wir innerhalb eines ExtendTextInputs sind
             // kann es keine anderen Attributwechsel (auch nicht durch Redlining) geben
-        ++nRet;
-    }
     if( bShow )
     {
         if( bOn )
