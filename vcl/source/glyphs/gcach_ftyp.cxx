@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.13 $
- *  last change: $Author: hdu $ $Date: 2001-03-07 13:02:11 $
+ *  $Revision: 1.14 $
+ *  last change: $Author: pl $ $Date: 2001-03-07 14:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ void FreetypeManager::ClearFontList( )
 
 FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
 {
-    const FtFontInfo* pFI = (const FtFontInfo*)rFSD.mpFontData->mpSysData;
+    FtFontInfo* pFI = (FtFontInfo*)rFSD.mpFontData->mpSysData;
     if( maFontList.find( pFI ) != maFontList.end() )
     {
         FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, *pFI );
