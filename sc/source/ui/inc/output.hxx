@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:40:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_OUTPUT_HXX
 #define SC_OUTPUT_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
 #endif
@@ -115,22 +119,22 @@ private:
     OutputDevice* pRefDevice;   // printer if used for preview
     OutputDevice* pFmtDevice;   // reference for text formatting
     RowInfo* pRowInfo;          // Info-Block
-    USHORT nArrCount;           // belegte Zeilen im Info-Block
+    SCSIZE nArrCount;           // belegte Zeilen im Info-Block
     ScDocument* pDoc;           // Dokument
-    USHORT nTab;                // Tabelle
+    SCTAB nTab;                 // Tabelle
     long nScrX;                 // Ausgabe Startpos. (Pixel)
     long nScrY;
     long nScrW;                 // Ausgabe Groesse (Pixel)
     long nScrH;
     long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    USHORT nX1;                 // Start-/Endkoordinaten
-    USHORT nY1;                 //  ( incl. versteckte )
-    USHORT nX2;
-    USHORT nY2;
-    USHORT nVisX1;              // Start-/Endkoordinaten
-    USHORT nVisY1;              //  ( sichtbarer Bereich )
-    USHORT nVisX2;
-    USHORT nVisY2;
+    SCCOL nX1;                  // Start-/Endkoordinaten
+    SCROW nY1;                  //  ( incl. versteckte )
+    SCCOL nX2;
+    SCROW nY2;
+    SCCOL nVisX1;               // Start-/Endkoordinaten
+    SCROW nVisY1;               //  ( sichtbarer Bereich )
+    SCCOL nVisX2;
+    SCROW nVisY2;
     ScOutputType eType;         // Bildschirm/Drucker ...
     double nPPTX;               // Pixel per Twips
     double nPPTY;
@@ -146,8 +150,8 @@ private:
     FmFormView* pDrawView;      // SdrView to paint to
 
     BOOL bEditMode;             // InPlace editierte Zelle - nicht ausgeben
-    USHORT nEditCol;
-    USHORT nEditRow;
+    SCCOL nEditCol;
+    SCROW nEditRow;
 
     BOOL bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
     BOOL bSingleGrid;           // beim Gitter bChanged auswerten
@@ -180,15 +184,15 @@ private:
 
                             // private methods
 
-    BOOL            GetMergeOrigin( USHORT nX, USHORT nY, USHORT nArrY,
-                                    USHORT& rOverX, USHORT& rOverY, BOOL bVisRowChanged );
-    BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, USHORT nX, USHORT nY );
-    void            GetVisibleCell( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell*& rpCell );
+    BOOL            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
+                                    SCCOL& rOverX, SCROW& rOverY, BOOL bVisRowChanged );
+    BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
+    void            GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
 
-    BOOL            IsAvailable( USHORT nX, USHORT nY );
-    long            GetAvailableWidth( USHORT nX, USHORT nY, long nNeeded );
-    void            GetOutputArea( USHORT nX, USHORT nArrY, long nPosX, long nPosY,
-                                    USHORT nCellX, USHORT nCellY, long nNeeded,
+    BOOL            IsAvailable( SCCOL nX, SCROW nY );
+    long            GetAvailableWidth( SCCOL nX, SCROW nY, long nNeeded );
+    void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
+                                    SCCOL nCellX, SCROW nCellY, long nNeeded,
                                     const ScPatternAttr& rPattern,
                                     USHORT nHorJustify, BOOL bCellIsValue,
                                     BOOL bBreak, BOOL bOverwrite,
@@ -206,10 +210,10 @@ private:
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
-                                    RowInfo* pNewRowInfo, USHORT nNewCount,
+                                    RowInfo* pNewRowInfo, SCSIZE nNewCount,
                                     ScDocument* pNewDoc,
-                                    USHORT nNewTab, long nNewScrX, long nNewScrY,
-                                    USHORT nNewX1, USHORT nNewY1, USHORT nNewX2, USHORT nNewY2,
+                                    SCTAB nNewTab, long nNewScrX, long nNewScrY,
+                                    SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
                                     const Fraction* pZoomX = NULL,
                                     const Fraction* pZoomY = NULL );
@@ -227,7 +231,7 @@ public:
     void    SetSolidBackground( BOOL bSet )     { bSolidBackground = bSet; }
     void    SetUseStyleColor( BOOL bSet )       { bUseStyleColor = bSet; }
 
-    void    SetEditCell( USHORT nCol, USHORT nRow );
+    void    SetEditCell( SCCOL nCol, SCROW nRow );
     void    SetSyntaxMode( BOOL bNewMode );
     void    SetMetaFileMode( BOOL bNewMode );
     void    SetSingleGrid( BOOL bNewMode );
@@ -256,7 +260,7 @@ public:
     void    DrawRotated(BOOL bPixelToLogic);        // logisch
 
     void    DrawClear();
-    void    DrawPageBorder( USHORT nStartX, USHORT nStartY, USHORT nEndX, USHORT nEndY );
+    void    DrawPageBorder( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY );
 
     // #109985#
     //void  DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY );
@@ -277,17 +281,17 @@ public:
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
     void    DrawMark( Window* pWin );
-    void    DrawRefMark( USHORT nRefStartX, USHORT nRefStartY,
-                         USHORT nRefEndX, USHORT nRefEndY,
+    void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
+                         SCCOL nRefEndX, SCROW nRefEndY,
                          const Color& rColor, BOOL bHandle );
-    void    DrawOneChange( USHORT nRefStartX, USHORT nRefStartY,
-                            USHORT nRefEndX, USHORT nRefEndY,
+    void    DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
+                            SCCOL nRefEndX, SCROW nRefEndY,
                             const Color& rColor, USHORT nType );
     void    DrawChangeTrack();
     void    DrawClipMarks();
 
     void    DrawNoteMarks();
-    void    PrintNoteMarks( const List& rPosList );     // Liste von ScTripeln
+    void    PrintNoteMarks( const List& rPosList );     // Liste of ScAddress
 };
 
 
