@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:38:05 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,18 @@ using namespace ::com::sun::star::lang;
 //**************************************************************
 IMPLEMENT_SERVICE_INFO(java_sql_PreparedStatement,"com.sun.star.sdbcx.JPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
+java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pCon,const ::rtl::OUString& sql )
+    : OStatement_BASE2( pEnv, myObj, _pCon )
+{
+    m_sSqlStatement = sql;
+}
+// -----------------------------------------------------------------------------
 jclass java_sql_PreparedStatement::theClass = 0;
 
 java_sql_PreparedStatement::~java_sql_PreparedStatement()
-{}
+{
+}
+// -----------------------------------------------------------------------------
 
 jclass java_sql_PreparedStatement::getMyClass()
 {

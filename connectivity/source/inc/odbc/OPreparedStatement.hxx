@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:57:34 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,15 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #endif
-//  #include <com/sun/star/sdbc/XClearParameters.hpp>
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 
 namespace connectivity
@@ -130,7 +133,6 @@ namespace connectivity
                             //  corresponding object to
                             //  hold bind information, and
                             //  resulting data.
-            ::rtl::OUString                                                                 m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             sal_Bool                                                                        m_bPrepared;
 

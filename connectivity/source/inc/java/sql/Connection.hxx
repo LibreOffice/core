@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:40:26 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
+#ifndef _CONNECTIVITY_AUTOKEYRETRIEVINGBASE_HXX_
+#include "AutoRetrievingBase.hxx"
+#endif
+
 
 
 namespace connectivity
@@ -97,21 +101,24 @@ namespace connectivity
 
     class java_sql_Connection : public java_sql_Connection_BASE,
                                 public java_lang_Object,
-                                public OSubComponent<java_sql_Connection, java_sql_Connection_BASE>
+                                public OSubComponent<java_sql_Connection, java_sql_Connection_BASE>,
+                                public OAutoRetrievingBase
     {
         friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
 
-        ::osl::Mutex    m_aMutex;
+        ::osl::Mutex        m_aMutex;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
-        OWeakRefArray               m_aStatements;  //  vector containing a list
-                                                    //  of all the Statement objects
-                                                    //  for this Connection
-        java_sql_Driver*            m_pDriver;
+        OWeakRefArray       m_aStatements;  //  vector containing a list
+                                            //  of all the Statement objects
+                                            //  for this Connection
+        java_sql_Driver*    m_pDriver;
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+
+        virtual ~java_sql_Connection();
     public:
         static int TRANSACTION_NONE;
         static int TRANSACTION_READ_COMMITTED;
@@ -120,14 +127,10 @@ namespace connectivity
         static int TRANSACTION_SERIALIZABLE;
 
         static jclass getMyClass();
-        virtual ~java_sql_Connection();
+
         DECLARE_SERVICE_INFO();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Connection( JNIEnv * pEnv, jobject myObj,java_sql_Driver* _pDriver ) :java_sql_Connection_BASE(m_aMutex),
-                    java_lang_Object( pEnv, myObj ),
-                    OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                    m_xMetaData(NULL),
-                    m_pDriver(_pDriver){}
+        java_sql_Connection( JNIEnv * pEnv, jobject myObj,java_sql_Driver* _pDriver,const ::rtl::OUString& _sGeneredStmt,sal_Bool _bGenEnabled );
 
         // OComponentHelper
         virtual void SAL_CALL disposing(void);

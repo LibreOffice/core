@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,OPropertySetHelper(OStatement_BASE::rBHelper)
     ,rBHelper(OStatement_BASE::rBHelper)
     ,m_pConnection(_pConnection)
-    ,m_pConnectionTemp(NULL)
     ,m_pRowStatusArray(0)
     ,m_aStatementHandle(SQL_NULL_HANDLE)
 {
@@ -175,6 +174,7 @@ void SAL_CALL OStatement_Base::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
 
     disposeResultSet();
+    ::comphelper::disposeComponent(m_xGeneratedStatement);
 
     OSL_ENSURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
     if (m_pConnection)
@@ -192,8 +192,6 @@ void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-
-
     dispose_ChildImpl();
     OStatement_Base::disposing();
 }
@@ -205,6 +203,8 @@ void SAL_CALL OStatement_BASE2::release() throw()
 //-----------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
+    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) )
+        return Any();
     Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
@@ -214,11 +214,34 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
+    Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
+    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() )
+    {
+        const Type* pRemoveFrom = ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
+                        ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ));
+        aOldTypes.realloc(aOldTypes.getLength() - 1);
+    }
 
-    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);
 }
 // -------------------------------------------------------------------------
-
+Reference< XResultSet > SAL_CALL OStatement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException)
+{
+    OSL_ENSURE( m_pConnection && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
+    Reference< XResultSet > xRes;
+    if ( m_pConnection )
+    {
+        ::rtl::OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
+        if ( sStmt.getLength() )
+        {
+            ::comphelper::disposeComponent(m_xGeneratedStatement);
+            m_xGeneratedStatement = m_pConnection->createStatement();
+            xRes = m_xGeneratedStatement->executeQuery(sStmt);
+        }
+    }
+    return xRes;
+}
+// -----------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -383,6 +406,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    m_sSqlStatement = sql;
 
 
     ::rtl::OString aSql(::rtl::OUStringToOString(sql,getOwnConnection()->getTextEncoding()));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
+#ifndef _CONNECTIVITY_AUTOKEYRETRIEVINGBASE_HXX_
+#include "AutoRetrievingBase.hxx"
+#endif
+
 
 #include <map>
 
@@ -101,7 +105,8 @@ namespace connectivity
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
         class OConnection : public OConnection_BASE,
-                            public connectivity::OSubComponent<OConnection, OConnection_BASE>
+                            public connectivity::OSubComponent<OConnection, OConnection_BASE>,
+                            public OAutoRetrievingBase
         {
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
@@ -187,13 +192,13 @@ namespace connectivity
             SQLHANDLE       getConnection() { return m_aConnectionHandle; }
 
             // should we use the catalog on filebased databases
-            sal_Bool        isCatalogUsed()                     const { return m_bUseCatalog; }
-            sal_Bool        isParameterSubstitutionEnabled()    const { return m_bParameterSubstitution; }
-            sal_Bool        useOldDateFormat()                  const { return m_bUseOldDateFormat; }
-            SQLHANDLE       getDriverHandle()                   const { return m_pDriverHandleCopy;}
-            ODBCDriver*     getDriver()                         const { return m_pDriver;}
-            ::rtl::OUString getUserName()                       const { return m_sUser; }
-            ::rtl::OUString getURL()                            const { return m_aURL; }
+            inline sal_Bool     isCatalogUsed()                     const { return m_bUseCatalog; }
+            inline sal_Bool     isParameterSubstitutionEnabled()    const { return m_bParameterSubstitution; }
+            inline sal_Bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
+            inline SQLHANDLE        getDriverHandle()               const { return m_pDriverHandleCopy;}
+            inline ODBCDriver*      getDriver()                     const { return m_pDriver;}
+            inline ::rtl::OUString getUserName()                    const { return m_sUser; }
+            inline ::rtl::OUString  getURL()                        const { return m_aURL; }
 
             SQLHANDLE       createStatementHandle();
             // close and free the handle and set it to SQL_NULLHANDLE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 13:33:33 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,9 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     ,m_aTypeInfo(_TypeInfo)
     ,boundParams(NULL)
     ,m_bPrepared(sal_False)
-    ,m_sSqlStatement(sql)
+
 {
+    m_sSqlStatement = sql;
     try
     {
         if(_pConnection->isParameterSubstitutionEnabled())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Driver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:30:26 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,10 @@ namespace connectivity
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+        virtual ~java_sql_Driver();
     public:
         // only available to set the driver
-
         static jclass getMyClass();
-        virtual ~java_sql_Driver();
 
         java_sql_Driver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
         java_sql_Driver( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 14:01:12 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
         throw SQLException(::rtl::OUString::createFromAscii("No Java installed!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
     Reference< XConnection > xRet;
     // first try if the jdbc driver is alraedy registered at the driver manager
+    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
+    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
     try
     {
         if(!object)
@@ -211,6 +213,14 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
                         delete pDrvClass;
                     }
                     break;
+                }
+                else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
+                {
+                    pBegin->Value >>= bAutoRetrievingEnabled;
+                }
+                else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
+                {
+                    pBegin->Value >>= sGeneratedValueStatement;
                 }
             }
         }
@@ -289,7 +299,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     Reference< XConnection > xOut;
-    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this );
+    return out==0 ? 0 : new java_sql_Connection( t.pEnv, out,this,sGeneratedValueStatement,bAutoRetrievingEnabled );
     //  return xOut;
 }
 // -------------------------------------------------------------------------

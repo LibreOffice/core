@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,17 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XGENERATEDRESULTSET_HPP_
+#include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -101,9 +104,7 @@
 #ifndef _CONNECTIVITY_ODBC_OCONNECTION_HXX_
 #include "odbc/OConnection.hxx"
 #endif
-#ifndef _LIST_
 #include <list>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -116,10 +117,11 @@ namespace connectivity
     namespace odbc
     {
 
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable,
+                                                    ::com::sun::star::sdbc::XGeneratedResultSet,
                                                     ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
         class OResultSet;
@@ -134,15 +136,16 @@ namespace connectivity
         {
         ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
         protected:
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>   m_xResultSet;   // The last ResultSet created
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       m_xGeneratedStatement;
             //  for this Statement
 
             ::std::list< ::rtl::OUString>   m_aBatchList;
+            ::rtl::OUString                 m_sSqlStatement;
 
             OConnection*                    m_pConnection;// The owning Connection object
             SQLHANDLE                       m_aStatementHandle;
             SQLUSMALLINT*                   m_pRowStatusArray;
-            OConnection*                    m_pConnectionTemp; // this connection is set when the databsse doesn't support more statements per connection
 
             //using OStatement_BASE::rBHelper;
         protected:
@@ -249,6 +252,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            //XGeneratedResultSet
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // other methods
             SQLHANDLE getConnectionHandle() { return m_pConnection->getConnection(); }

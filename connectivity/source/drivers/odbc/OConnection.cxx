@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 17:10:51 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     const char* pSysDrv     = "SystemDriverSettings";
     const char* pCharSet    = "CharSet";
     const char* pParaName   = "ParameterNameSubstitution";
+    const char* pRetrieving = "IsAutoRetrievingEnabled";
+    const char* pRetriStmt  = "AutoRetrievingStatement";
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
@@ -269,6 +271,18 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
             pBegin->Value >>= bSilent;
         else if(!pBegin->Name.compareToAscii(pParaName))
             pBegin->Value >>= m_bParameterSubstitution;
+        else if(!pBegin->Name.compareToAscii(pRetrieving))
+        {
+            sal_Bool bAutoRetrievingEnabled = sal_False;
+            pBegin->Value >>= bAutoRetrievingEnabled;
+            enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
+        }
+        else if(!pBegin->Name.compareToAscii(pRetriStmt))
+        {
+            ::rtl::OUString sGeneratedValueStatement;
+            pBegin->Value >>= sGeneratedValueStatement;
+            setAutoRetrievingStatement(sGeneratedValueStatement);
+        }
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             pBegin->Value >>= aUID;
