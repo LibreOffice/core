@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XContainer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:21:56 $
+ *  last change:$Date: 2003-12-11 11:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainer;
 import com.sun.star.container.XContainerListener;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
@@ -115,6 +116,7 @@ public class _XContainer extends MultiMethodTest {
     private XNameContainer NC = null ;
     private XControlContainer CC = null ;
     private XNamingService NV = null ;
+    private XNameReplace NR = null ;
     private Object inst = null ;
     private Object inst2 = null ;
 
@@ -126,6 +128,13 @@ public class _XContainer extends MultiMethodTest {
     */
     public void before() throws StatusException {
         _log = log;
+
+        // do this test with a different object
+        Object altObj = tEnv.getObjRelation("XContainer.AlternateObject");
+        if (altObj != null) {
+            oObj = (XContainer)UnoRuntime.queryInterface(XContainer.class, altObj);
+        }
+
         NC = (XNameContainer) UnoRuntime.queryInterface
             (XNameContainer.class, oObj) ;
 
@@ -139,23 +148,28 @@ public class _XContainer extends MultiMethodTest {
                 CC = (XControlContainer) container;
             } else if (container instanceof com.sun.star.uno.XNamingService) {
                 NV = (XNamingService) container;
-            } else {
+            } else if (container instanceof com.sun.star.container.XNameReplace) {
+                NR = (XNameReplace) container;
+                inst2 = tEnv.getObjRelation("XContainer.NewValue");
+                inst = tEnv.getObjRelation("XContainer.ElementName");
+            } else if (container instanceof com.sun.star.container.XNameContainer) {
                 NC = (XNameContainer) container;
             }
         }
 
-
-        if (NC == null && CC == null && NV == null)
+        if (NC == null && CC == null && NV == null && NR == null)
             throw new StatusException(
                 Status.failed("Neither object implements XNameContainer" +
-                    " nore relation 'XContainer.Container' found.")) ;
+                    " nor relation 'XContainer.Container' found.")) ;
 
-        inst = tEnv.getObjRelation("INSTANCE");
+        if (inst == null)
+            inst = tEnv.getObjRelation("INSTANCE");
         if (inst == null) {
             log.println("No INSTANCE ObjRelation!!! ");
             throw new StatusException(Status.failed("No INSTANCE ObjRelation!!!")) ;
         }
-        inst2 = tEnv.getObjRelation("INSTANCE2");
+        if (inst2 == null)
+            inst2 = tEnv.getObjRelation("INSTANCE2");
     }
 
     /**
@@ -193,8 +207,9 @@ public class _XContainer extends MultiMethodTest {
         bResult &= performChanges();
         //we can't replace if the container is XControlContainer
         if (NC != null) bResult &= bElementReplaced;
-        bResult &= bElementRemoved;
-        bResult &= bElementInserted;
+        // we do not remove and insert if the listener is triggered by XNameReplace
+        if (NR == null) bResult &= bElementRemoved;
+        if (NR == null) bResult &= bElementInserted;
 
         if (!bResult) {
             log.println("inserted was " + (bElementInserted ? "" : "NOT")
@@ -245,6 +260,7 @@ public class _XContainer extends MultiMethodTest {
     protected boolean performChanges() {
         if (CC != null) return performChanges2();
         if (NV != null) return performChanges3();
+        if (NR != null) return performChanges4();
         boolean bResult = true;
         try {
             String[] names = NC.getElementNames();
@@ -330,6 +346,43 @@ public class _XContainer extends MultiMethodTest {
             res &= false;
         } catch (Exception e) {
             res &= true;
+        }
+
+        return res;
+    }
+
+    /**
+    * In case no XNameContainer is available, but a XNamingReplace
+    * instead.
+    */
+    protected boolean performChanges4() {
+        boolean res = true;
+        Object newValue = inst2;
+        Object originalValue = null;
+        String name = null;
+
+        try {
+            name = (String)inst;
+        }
+        catch(java.lang.ClassCastException e) {
+            log.write("Expected String as object relations 'XContainer.ElementName'.");
+            e.printStackTrace(log);
+            return false;
+        }
+
+        try {
+            originalValue = NR.getByName(name);
+            NR.replaceByName(name, newValue);
+        } catch (Exception e) {
+            e.printStackTrace(log);
+            res = false;
+        }
+
+        try {
+            NR.replaceByName(name, originalValue);
+        } catch (Exception e) {
+            e.printStackTrace(log);
+            res = false;
         }
 
         return res;
