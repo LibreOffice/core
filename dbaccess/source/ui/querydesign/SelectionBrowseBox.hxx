@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:29 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
+
+namespace connectivity
+{
+    class OSQLParseNode;
+}
 
 namespace dbaui
 {
@@ -263,7 +268,8 @@ namespace dbaui
         Rectangle       GetInvalidRect( sal_uInt16 nColId );
         long            GetRealRow(long nRow) const;
         long            GetBrowseRow(long nRowId) const;
-        sal_Bool        GetFunktionName(String& rFkt);
+        sal_Bool        GetFunctionName(sal_uInt32 _nFunctionTokenId,String& rFkt);
+        void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction);
         void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
         void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
@@ -272,6 +278,88 @@ namespace dbaui
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
 
         void            adjustSelectionMode( sal_Bool _bClickedOntoHeader, sal_Bool _bClickedOntoHandleCol );
+
+        /** save the filed change in save modified
+            @param  _sFieldName
+                The field name inserted by the user.
+            @param  _pEntry
+                The entry which will contain the nescessary entries.
+            @param  _bListAction
+                Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
+            @return
+                <TRUE/> if an error occured otherwise <FALSE/>
+        */
+        sal_Bool        saveField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction);
+
+        /** sets the table window at the _pEntry
+            @param  _pEntry
+                The entry where the window should be set.
+            @param  _sTableName
+                The table name to search for.
+            @return
+                <TRUE/> if the table name was set otherwise <FALSE/>
+        */
+        sal_Bool        fillEntryTable(OTableFieldDescRef& _pEntry,const ::rtl::OUString& _sTableName);
+
+        /** uses the parse node to fill all information into the field
+            @param  _pColumnRef
+                The parse node used to fill the info into the field.
+            @param  _xMetaData
+                Use to parse the node to a string.
+            @param  _pEntry
+                The entry which will contain the nescessary entries.
+            @param  _bListAction
+                Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
+            @return
+                <TRUE/> if an error occured otherwise <FALSE/>
+        */
+        sal_Bool        fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
+                                        OTableFieldDescRef& _pEntry,
+                                        sal_Bool& _bListAction);
+        sal_Bool        fillColumnRef(  const ::rtl::OUString& _sColumnName,
+                                        const ::rtl::OUString& _sTableRange,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
+                                        OTableFieldDescRef& _pEntry,
+                                        sal_Bool& _bListAction);
+
+
+        /** append an undo action for the table field
+            @param  _sOldAlias
+                The old table alias.
+            @param  _sAlias
+                The new alias name.
+            @param  _bListAction
+                Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
+        */
+        void            notifyTableFieldChanged(const String& _sOldAlias,const String& _sAlias,sal_Bool& _bListAction,USHORT _nColumnId);
+
+        /** append an undo action for the function field
+            @param  _sOldFunctionName
+                The old value.
+            @param  _sFunctionName
+                The new function name.
+            @param  _bListAction
+                Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
+        */
+        void            notifyFunctionFieldChanged(const String& _sOldFunctionName,const String& _sFunctionName,sal_Bool& _bListAction,USHORT _nColumnId);
+
+        /** clears the function fields of the submitted entry if it doesn't match the SQL standard and append an undo action.
+            E.q. AGGREGATE functions are only valid when the field name isn't an asterix
+            @param  _sFieldName
+                The field name.
+            @param  _pEntry
+                The entry to be cleared
+            @param  _bListAction
+                When <TRUE/> an list action will be created.
+        */
+        void            clearEntryFunctionField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,USHORT _nColumnId);
+
+        /** remove or insert the necessary function types
+            @param  _pEntry
+                The currently edited entry.
+        */
+        void            setFunctionCell(OTableFieldDescRef& _pEntry);
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX

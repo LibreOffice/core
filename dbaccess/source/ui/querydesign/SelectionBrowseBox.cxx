@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:29 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,28 @@ const String g_strZero = String::CreateFromAscii("0");
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WITDH 70
 
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    sal_Bool isFieldNameAsterix(const ::rtl::OUString& _sFieldName )
+    {
+        sal_Bool bAsterix;
+        if ( !(bAsterix = !(_sFieldName.getLength() && _sFieldName.toChar() != '*')) )
+        {
+            String sName = _sFieldName;
+            xub_StrLen nTokenCount = sName.GetTokenCount('.');
+            if (    (nTokenCount == 2 && sName.GetToken(1,'.').GetChar(0) == '*' )
+                ||  (nTokenCount == 3 && sName.GetToken(2,'.').GetChar(0) == '*' ) )
+            {
+                bAsterix = sal_True;
+            }
+        }
+        return bAsterix;
+    }
+}
+
+
 DBG_NAME(OSelectionBrowseBox);
 //------------------------------------------------------------------------------
 OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
@@ -277,13 +299,13 @@ namespace
 {
     class OSelectionBrwBoxHeader : public ::svt::EditBrowserHeader
     {
-        EditBrowseBox* m_pBrowseBox;
+        OSelectionBrowseBox* m_pBrowseBox;
     protected:
         virtual void Select();
     public:
-        OSelectionBrwBoxHeader(EditBrowseBox* pParent);
+        OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
     };
-    OSelectionBrwBoxHeader::OSelectionBrwBoxHeader(EditBrowseBox* pParent)
+    OSelectionBrwBoxHeader::OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent)
         : ::svt::EditBrowserHeader(pParent,WB_BUTTONSTYLE|WB_DRAG)
         ,m_pBrowseBox(pParent)
     {
@@ -292,6 +314,7 @@ namespace
     void OSelectionBrwBoxHeader::Select()
     {
         EditBrowserHeader::Select();
+        m_pBrowseBox->GrabFocus();
 
         BrowserMode nMode = m_pBrowseBox->GetMode();
         if ( 0 == m_pBrowseBox->GetSelectColumnCount() )
@@ -522,7 +545,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nR
         {
             m_pTableCell->Clear();
             enableControl(pEntry,m_pTableCell);
-            if(pEntry->GetFunctionType() != FKT_CONDITION)
+            if ( !pEntry->isCondition() && !pEntry->isNumeric() )
             {
                 OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
                 if (pTabWinList)
@@ -567,38 +590,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nR
             setTextCellContext(pEntry,pEntry->GetFieldAlias(),HID_QRYDGN_ROW_ALIAS);
             break;
         case BROW_FUNCTION_ROW:
-        {
-            Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-            if(!xConnection.is())
-                break;
-            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-            // Diese Funktionen stehen nur unter CORE zur Verfügung
-            if(xMetaData->supportsCoreSQLGrammar())
-            {
-                if(pEntry->IsGroupBy())
-                {
-                    m_pFunctionCell->SelectEntry(m_pFunctionCell->GetEntry(m_pFunctionCell->GetEntryCount()-1));
-                }
-                else if(m_pFunctionCell->GetEntryPos(String(pEntry->GetFunction())) != COMBOBOX_ENTRY_NOTFOUND)
-                    m_pFunctionCell->SelectEntry(String(pEntry->GetFunction()));
-                else
-                    m_pFunctionCell->SelectEntryPos(0);
-
-                enableControl(pEntry,m_pFunctionCell);
-            }
-            else
-            {
-                // nur COUNT(*) erlaubt
-                if(pEntry->GetField().getLength() && pEntry->GetField().toChar() != '*')
-                    m_pFunctionCell->RemoveEntry(1);
-                else if(m_pFunctionCell->GetEntryCount() < 2)
-                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
-                if(m_pFunctionCell->GetEntryPos(String(pEntry->GetFunction())) != COMBOBOX_ENTRY_NOTFOUND)
-                    m_pFunctionCell->SelectEntry(pEntry->GetFunction());
-                else
-                    m_pFunctionCell->SelectEntryPos(0);
-            }
-        }
+            setFunctionCell(pEntry);
             break;
         default:
         {
@@ -608,15 +600,282 @@ void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nR
     }
     Controller()->ClearModified();
 }
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::notifyTableFieldChanged(const String& _sOldAlias,const String& _sAlias,sal_Bool& _bListAction,USHORT _nColumnId)
+{
+    appendUndoAction(_sOldAlias,_sAlias,BROW_TABLE_ROW,_bListAction);
+    if ( m_bVisibleRow[BROW_TABLE_ROW] )
+        RowModified(GetBrowseRow(BROW_TABLE_ROW), _nColumnId);
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::notifyFunctionFieldChanged(const String& _sOldFunctionName,const String& _sFunctionName,sal_Bool& _bListAction,USHORT _nColumnId)
+{
+    appendUndoAction(_sOldFunctionName,_sFunctionName,BROW_FUNCTION_ROW,_bListAction);
+    if ( !m_bVisibleRow[BROW_FUNCTION_ROW] )
+        SetRowVisible(BROW_FUNCTION_ROW, sal_True);
+    RowModified(GetBrowseRow(BROW_FUNCTION_ROW), _nColumnId);
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::clearEntryFunctionField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,USHORT _nColumnId)
+{
+    if ( isFieldNameAsterix( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy()) )
+    {
+        String sFunctionName;
+        GetFunctionName(SQL_TOKEN_COUNT,sFunctionName);
+        String sOldLocalizedFunctionName = _pEntry->GetFunction();
+        if ( sOldLocalizedFunctionName != sFunctionName || _pEntry->IsGroupBy() )
+        {
+            // append undo action for the function field
+            ::rtl::OUString sOldLocalizedFunctionName = _pEntry->GetFunction();
+            _pEntry->SetFunctionType(FKT_NONE);
+            _pEntry->SetFunction(::rtl::OUString());
+            _pEntry->SetGroupBy(sal_False);
+            notifyFunctionFieldChanged(sOldLocalizedFunctionName,_pEntry->GetFunction(),_bListAction,_nColumnId);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef,const Reference<XDatabaseMetaData>& _xMetaData,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction)
+{
+    OSL_ENSURE(_pColumnRef,"No valid parsenode!");
+    ::rtl::OUString sColumnName,sTableRange;
+    OSQLParseTreeIterator::getColumnRange(_pColumnRef,_xMetaData,sColumnName,sTableRange);
+    return fillColumnRef(sColumnName,sTableRange,_xMetaData,_pEntry,_bListAction);
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,const ::rtl::OUString& _sTableRange,const Reference<XDatabaseMetaData>& _xMetaData,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction)
+{
+    sal_Bool bError = sal_False;
+    ::comphelper::UStringMixEqual bCase(_xMetaData->storesMixedCaseQuotedIdentifiers());
+    // check if the table name is the same
+    if ( _sTableRange.getLength() && (bCase(_pEntry->GetTable(),_sTableRange) || bCase(_pEntry->GetAlias(),_sTableRange)) )
+    { // a table was already inserted and the tables contains that column name
 
+        if ( !_pEntry->GetTabWindow() )
+        { // fill tab window
+            ::rtl::OUString sOldAlias = _pEntry->GetAlias();
+            if ( fillEntryTable(_pEntry,_pEntry->GetTable()) )
+                fillEntryTable(_pEntry,_pEntry->GetAlias()); // only when the first failed
+            if ( !bCase(sOldAlias,_pEntry->GetAlias()) )
+                notifyTableFieldChanged(sOldAlias,_pEntry->GetAlias(),_bListAction,GetCurColumnId());
+        }
+    }
+    // check if the table window
+    OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(_pEntry->GetTabWindow());
+    if ( !pEntryTab ) // no table found with this name so we have to travel through all tables
+    {
+        OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+        if ( pTabWinList )
+        {
+            sal_uInt16 nTabCount = 0;
+            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occured: column not in table window
+            {
+                String sTitle(ModuleRes(STR_STAT_WARNING));
+                String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
+                sErrorMsg.SearchAndReplaceAscii("$name$",_sColumnName);
+                OSQLMessageBox aDlg(this,sTitle,sErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+                aDlg.Execute();
+                bError = sal_True;
+            }
+            else
+            {
+                pEntryTab = static_cast<OQueryTableWindow*>(_pEntry->GetTabWindow());
+                notifyTableFieldChanged(String(),_pEntry->GetAlias(),_bListAction,GetCurColumnId());
+            }
+        }
+    }
+    if ( pEntryTab ) // here we got a valid table
+        _pEntry->SetField(_sColumnName);
+
+    return bError;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction)
+{
+    sal_Bool bError = sal_False;
+
+    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+
+    // first look if the name can be found in our tables
+    sal_uInt16 nTabCount = 0;
+    String sOldAlias = _pEntry->GetAlias();
+    if ( static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sFieldName,_pEntry,nTabCount) )
+    {
+        // append undo action for the alias name
+        _pEntry->SetField(_sFieldName);
+        notifyTableFieldChanged(sOldAlias,_pEntry->GetAlias(),_bListAction,GetCurColumnId());
+        clearEntryFunctionField(_sFieldName,_pEntry,_bListAction,_pEntry->GetColumnId());
+        return bError;
+    }
+
+    ::rtl::OUString sErrorMsg;
+    // second test if the name can be set as select columns in a pseudo statement
+    // we have to look which entries  we should quote
+
+    ::rtl::OUString sSql;
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+    sSql += _sFieldName;
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
+
+    ::connectivity::OSQLParser* pParser = pController->getParser();
+    OSQLParseNode* pParseNode = pParser->parseTree(sErrorMsg, sSql,sal_False);
+
+    if ( pParseNode ) // we got a valid select column
+    {
+        // find what type of column has be inserted
+        ::connectivity::OSQLParseNode* pSelection = pParseNode->getChild(2);
+        if ( SQL_ISRULE(pSelection,selection) ) // we found the asterix
+        {
+            _pEntry->SetField(_sFieldName);
+            clearEntryFunctionField(_sFieldName,_pEntry,_bListAction,_pEntry->GetColumnId());
+        } // travel through the select column parse node
+        else
+        {
+            Reference<XConnection> xConnection = pController->getConnection();
+            if ( !xConnection.is() )
+                return sal_True;
+            Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
+            ::comphelper::UStringMixEqual bCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+
+            OTableFieldDescRef aSelEntry = _pEntry;
+            USHORT nColumnId = aSelEntry->GetColumnId();
+
+            sal_uInt32 nCount = pSelection->count();
+            for (sal_uInt32 i = 0; i < nCount; ++i)
+            {
+                if ( i > 0 ) // may we have to append more than one field
+                {
+                    USHORT nColumnPostion;
+                    aSelEntry = FindFirstFreeCol(nColumnPostion);
+                    if ( !aSelEntry.isValid() )
+                    {
+                        AppendNewCol(1);
+                        aSelEntry = FindFirstFreeCol(nColumnPostion);
+                    }
+                    ++nColumnPostion;
+                    nColumnId = GetColumnId(nColumnPostion);
+                }
+
+                ::connectivity::OSQLParseNode* pChild = pSelection->getChild( i );
+                OSL_ENSURE(SQL_ISRULE(pChild,derived_column), "No derived column found!");
+                // get the column alias
+                ::rtl::OUString sColumnAlias = OSQLParseTreeIterator::getColumnAlias(pChild);
+                if ( sColumnAlias.getLength() ) // we found an as clause
+                {
+                    String sOldAlias = aSelEntry->GetFieldAlias();
+                    aSelEntry->SetFieldAlias( sColumnAlias );
+                    // append undo
+                    appendUndoAction(sOldAlias,aSelEntry->GetFieldAlias(),BROW_COLUMNALIAS_ROW,_bListAction);
+                    if ( m_bVisibleRow[BROW_COLUMNALIAS_ROW] )
+                        RowModified(GetBrowseRow(BROW_COLUMNALIAS_ROW), nColumnId);
+                }
+
+                ::connectivity::OSQLParseNode* pColumnRef = pChild->getChild(0);
+                if ( SQL_ISRULE(pColumnRef,column_ref) ) // we found a valid column name or more column names
+                {
+                    // look if we can find the corresponding table
+                    bError = fillColumnRef(pColumnRef,xMetaData,aSelEntry,_bListAction);
+
+                    // we found a simple column so we must clear the function fields but only when the column name is '*'
+                    // and the function is different to count
+                    clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+                }
+                else // no column, but may be a function or a calculation
+                {
+                    // first check if we have a aggregate function and only a function
+                    if ( SQL_ISRULE(pColumnRef,general_set_fct) )
+                    {
+                        String sLocalizedFunctionName;
+                        if ( GetFunctionName(pColumnRef->getChild(0)->getTokenID(),sLocalizedFunctionName) )
+                        {
+                            String sOldLocalizedFunctionName = aSelEntry->GetFunction();
+                            aSelEntry->SetFunction(sLocalizedFunctionName);
+                            sal_uInt32 nFunCount = pColumnRef->count() - 1;
+                            sal_Int32 nFunctionType = FKT_AGGREGATE;
+                            // may be there exists only one parameter which is a column, fill all information into our fields
+                            if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
+                                bError = fillColumnRef(pColumnRef->getChild(3),xMetaData,aSelEntry,_bListAction);
+                            else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
+                                bError = fillColumnRef(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),::rtl::OUString(),xMetaData,aSelEntry,_bListAction);
+                            else
+                                nFunctionType |= FKT_NUMERIC;
+
+                            // now parse the parameters
+                            ::rtl::OUString sParameters;
+                            for(sal_uInt32 i = 2; i < nFunCount; ++i) // we only want to parse the parameters of the function
+                                pColumnRef->getChild(i)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,sal_False);
+
+                            aSelEntry->SetFunctionType(nFunctionType);
+                            aSelEntry->SetField(sParameters);
+                            if ( aSelEntry->IsGroupBy() )
+                            {
+                                sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                                aSelEntry->SetGroupBy(sal_False);
+                            }
+
+                            // append undo action
+                            notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
+                        }
+                        else
+                            OSL_ENSURE(0,"Unsupported function inserted!");
+
+                    }
+                    else // a calculation has been found ( can be calc and function )
+                    {
+                        // append the whole text as field name
+                        // so we first clear the function field
+                        clearEntryFunctionField(_sFieldName,aSelEntry,_bListAction,nColumnId);
+
+                        // now parse teh hole statement
+                        sal_uInt32 nFunCount = pColumnRef->count();
+                        ::rtl::OUString sParameters;
+                        for(sal_uInt32 i = 0; i < nFunCount; ++i)
+                            pColumnRef->getChild(i)->parseNodeToStr(sParameters,xMetaData,&pParser->getContext(),sal_True,sal_False);
+
+                        ::rtl::OUString sOldAlias = aSelEntry->GetAlias();
+                        aSelEntry->SetAlias(::rtl::OUString());
+
+                        sal_Int32 nNewFunctionType = aSelEntry->GetFunctionType() | FKT_NUMERIC;
+                        aSelEntry->SetFunctionType(nNewFunctionType);
+
+                        aSelEntry->SetField(sParameters);
+                        notifyTableFieldChanged(sOldAlias,aSelEntry->GetAlias(),_bListAction, nColumnId);
+                    }
+                }
+                if ( i > 0 && InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).isEmpty() ) // may we have to append more than one field
+                { // the field could not be isnerted
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
+                    sErrorMsg.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
+                    OSQLMessageBox aDlg(this,sTitle,sErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+                    aDlg.Execute();
+                    bError = sal_True;
+                }
+            }
+        }
+        delete pParseNode;
+    }
+    else // something different which we have to check (may be a select statement)
+    {
+        String sTitle(ModuleRes(STR_STAT_WARNING));
+        String sErrorMsg(ModuleRes(STR_QRY_COLUMN_NOT_FOUND));
+        sErrorMsg.SearchAndReplaceAscii("$name$",_sFieldName);
+        OSQLMessageBox aDlg(this,sTitle,sErrorMsg,WB_OK | WB_DEF_OK,OSQLMessageBox::Warning);
+        aDlg.Execute();
+        bError = sal_True;
+    }
+
+    return bError;
+}
 //------------------------------------------------------------------------------
 sal_Bool OSelectionBrowseBox::SaveModified()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     OTableFieldDescRef pEntry = NULL;
     OQueryController* pController = static_cast<OQueryController*>(getDesignView()->getController());
-    if(getFields().size() > sal_uInt16(GetCurColumnId() - 1))
-        pEntry = getEntry(GetCurColumnId() - 1);
+    USHORT nPos = GetColumnPos(GetCurColumnId());
+    if(getFields().size() > static_cast<USHORT>(nPos - 1))
+        pEntry = getEntry(nPos - 1);
 
     sal_Bool bWasEmpty = pEntry.isValid() ? pEntry->IsEmpty() : sal_False;
     sal_Bool bError         = sal_False;
@@ -661,227 +920,19 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 }
                 else
                 {
-                    sal_Bool bIsPredicate = sal_False;
-                    // wenn das Ergebnis ein Praedikat -> OK
-                    String aTest(aFieldName);
+                    strOldCellContents = pEntry->GetField();
+                    bListAction = sal_True;
+                    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
 
-                    OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
-
-                    if (!pWin && (aFieldName.GetTokenCount('.') == 2))
-                        pWin = static_cast<OQueryTableWindow*>(getDesignView()->getTableView()->GetWindow(aFieldName.GetToken(0, '.')));
-
-                    Reference<XPropertySet> xColumn;
-                    sal_Bool bAsterix = sal_False;
-                    if (pWin)
-                    {
-                        Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
-                        if(xColumns.is())
-                        {
-                            if (aFieldName.GetTokenCount('.') == 2 && xColumns->hasByName(aFieldName.GetToken(1,'.')))  // falls alias.Feld angegeben
-                                ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
-                            else if(xColumns->hasByName(aFieldName))
-                                ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
-                            else if(aFieldName.GetTokenCount('.') == 2 && aFieldName.GetToken(1,'.').GetChar(0) == '*')
-                                bAsterix = sal_True;
-                        }
-                    }
-
-                    if(!xColumn.is() && !bAsterix) // only when text not a column of the table
-                    {
-                        ::rtl::OUString aErrorMsg;
-                        bIsPredicate = sal_True; // #72670#
-                        OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
-
-                        ::connectivity::OSQLParser* pParser = pController->getParser();
-                        OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest,
-                                                                            pController->getNumberFormatter(),
-                                                                            xColumn);
-                        if (pParseNode)
-                        {
-                            bListAction = sal_True;
-                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                            appendUndoAction(pEntry->IsVisible() ? g_strOne : g_strZero,g_strZero,BROW_VIS_ROW);
-
-                            pEntry->SetVisible(sal_False);
-                            bWasEmpty = sal_False; // XXXXX
-                            delete pParseNode;
-                            pEntry->SetFunctionType(FKT_CONDITION);
-                            RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
-                        }
-                        else
-                            pEntry->SetFunctionType(FKT_OTHER);
-                    }
-
-                    xub_StrLen nCount(aFieldName.GetTokenCount('('));
-                    if(nCount < 2 && !bIsPredicate) // keine Funktion
-                    {
-                        if (aFieldName.GetTokenCount('.') == 2) // falls alias.Feld angegeben
-                        {
-                            String sTableAlias(aFieldName.GetToken(0, '.'));
-                            aFieldName = aFieldName.GetToken(1,'.');
-
-                            // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
-                            if(!bListAction)
-                            {
-                                bListAction = sal_True;
-                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                            }
-                            appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
-
-                            pEntry->SetAlias(sTableAlias);
-                            if(m_bVisibleRow[BROW_TABLE_ROW])
-                                RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
-
-                            OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                            if (pTabWinList)
-                            {
-                                OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(sTableAlias);
-                                if(aIter != pTabWinList->end())
-                                {
-                                    OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-                                    if (pEntryTab)
-                                    {
-                                        //  appendUndoAction(pEntry->GetDatabase(),sTableAlias,GetBrowseRow(BROW_TABLE_ROW));
-                                        pEntry->SetDatabase(pEntryTab->GetComposedName());
-                                        pEntry->SetTable(pEntryTab->GetTableName());
-                                        pEntry->SetTabWindow(pEntryTab);
-                                    }
-                                }
-                            }
-                        }
-                        strOldCellContents = pEntry->GetField();
-                        pEntry->SetField(aFieldName);
-                        sNewValue = aFieldName;
-
-                        // Falls nur COUNT(*) erlaubt wird
-                        Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-                        if(!xConnection.is())
-                            break;
-
-                        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-                        if(aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
-                        {
-                            if(!bListAction)
-                            {
-                                bListAction = sal_True;
-                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                            }
-                            appendUndoAction(pEntry->GetFunction(),String(),BROW_FUNCTION_ROW);
-                            pEntry->SetFunction(::rtl::OUString());
-                            m_pFunctionCell->SelectEntryPos(0);
-                            if(!m_bVisibleRow[BROW_FUNCTION_ROW])
-                            {
-                                SetRowVisible(BROW_FUNCTION_ROW, sal_True);
-                            }
-                            RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
-                        }
-                        pEntry->SetFunctionType(FKT_NONE);
-                    }
-                    else
-                    {   // Funktion eingegeben
-                        // m_pFieldCell auf Inhalt der Funktion setzen und pEntry mit ganzem Wert setzen
-                        // BROW_FUNCTION_ROW setzen
-                        strOldCellContents = pEntry->GetField();
-
-                        String aFkt(aFieldName.GetToken(0,'('));
-
-                        if(pEntry->GetFunctionType() != FKT_CONDITION && GetFunktionName(aFkt))
-                        {
-                            // ist Aggregatefuntkion
-                            pEntry->SetFunction(aFkt);
-                            String aParameter(aFieldName.GetToken(1,'('));
-                            aParameter = aParameter.GetToken(aParameter.GetTokenCount()-1,')');
-                            pEntry->SetField(aParameter); // nur die Parameter einf"ugen
-                            pEntry->SetFunctionType(FKT_AGGREGATE);
-                            if (aParameter.GetTokenCount('.') == 2) // falls alias.Feld angegeben
-                            {
-                                String sTableAlias(aParameter.GetToken(0, '.'));
-                                aParameter = aParameter.GetToken(1,'.');
-
-                                // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
-                                if(!bListAction)
-                                {
-                                    bListAction = sal_True;
-                                    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                                }
-                                appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
-                                pEntry->SetAlias(sTableAlias);
-                                if(m_bVisibleRow[BROW_TABLE_ROW])
-                                    RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
-
-                                OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                                if (pTabWinList)
-                                {
-                                    OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(sTableAlias);
-                                    if(aIter != pTabWinList->end())
-                                    {
-                                        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-                                        pEntry->SetDatabase(pEntryTab->GetComposedName());
-                                        pEntry->SetTable(pEntryTab->GetTableName());
-                                        pEntry->SetTabWindow(pEntryTab);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // nur eine Tabelle vorhanden oder der Benutzer hat vergessen diese anzugeben
-                                // also einfach die erst beste nehmen
-                                OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                                if(pTabWinList)
-                                {
-                                    OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(pTabWinList->begin()->second);
-                                    if (pEntryTab)
-                                    {
-                                        pEntry->SetDatabase(pEntryTab->GetComposedName());
-                                        if(!bListAction)
-                                        {
-                                            bListAction = sal_True;
-                                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                                        }
-                                        appendUndoAction(pEntry->GetTable(),pEntryTab->GetTableName(),BROW_TABLE_ROW);
-
-                                        pEntry->SetTable(pEntryTab->GetTableName());
-                                        pEntry->SetAlias(pEntry->GetTable());
-                                        pEntry->SetTabWindow(pEntryTab);
-                                    }
-                                }
-                            }
-
-                            if(!bListAction)
-                            {
-                                bListAction = sal_True;
-                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                            }
-                            appendUndoAction(pEntry->GetFunction(),aFkt,BROW_FUNCTION_ROW);
-                            m_pFieldCell->SetText(aParameter);
-                            m_pFunctionCell->SelectEntry(aFkt);
-                            if(!m_bVisibleRow[BROW_FUNCTION_ROW])
-                                SetRowVisible(BROW_FUNCTION_ROW, sal_True);
-
-
-                            RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
-                            RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
-                        }
-                        else
-                        {
-                            pEntry->SetField(aFieldName);
-                            pEntry->SetAlias(String());
-                            if(!bListAction)
-                            {
-                                bListAction = sal_True;
-                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                            }
-                            appendUndoAction(pEntry->GetTable(),String(),BROW_TABLE_ROW);
-                            pEntry->SetTable(String());
-                            pEntry->SetTabWindow(NULL);
-                            m_pFieldCell->SetText(aFieldName);
-                            m_pFunctionCell->SelectEntryPos(0);
-                            if(m_bVisibleRow[BROW_TABLE_ROW])
-                                RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
-                        }
-                    }
+                    bError = saveField(aFieldName,pEntry,bListAction);
                 }
-                sNewValue = pEntry->GetField();
+                if ( bError )
+                {
+                    sNewValue = aFieldName;
+                    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
+                }
+                else
+                    sNewValue = pEntry->GetField();
                 pController->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
             }
             break;
@@ -890,28 +941,35 @@ sal_Bool OSelectionBrowseBox::SaveModified()
             {
                 String aAliasName = m_pTableCell->GetSelectEntry();
                 strOldCellContents = pEntry->GetAlias();
-                if (m_pTableCell->GetSelectEntryPos() != 0)
-                    pEntry->SetAlias(aAliasName);
-                else
-                    pEntry->SetAlias(String());
-                sNewValue = pEntry->GetAlias();
-
-                // jetzt noch ::com::sun::star::data::Database und Tabelle uebernehmen
-                OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                if (pTabWinList)
+                if ( m_pTableCell->GetSelectEntryPos() != 0 )
                 {
-                    OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(aAliasName);
-                    if(aIter != pTabWinList->end())
+                    pEntry->SetAlias(aAliasName);
+                    // we have to set the table name as well as the table window
+                    OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+                    if (pTabWinList)
                     {
-                        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-                        if (pEntryTab)
+                        OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(aAliasName);
+                        if(aIter != pTabWinList->end())
                         {
-                            pEntry->SetDatabase(pEntryTab->GetComposedName());
-                            pEntry->SetTable(pEntryTab->GetTableName());
-                            pEntry->SetTabWindow(pEntryTab);
+                            OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+                            if (pEntryTab)
+                            {
+                                pEntry->SetDatabase(pEntryTab->GetComposedName());
+                                pEntry->SetTable(pEntryTab->GetTableName());
+                                pEntry->SetTabWindow(pEntryTab);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    pEntry->SetAlias(::rtl::OUString());
+                    pEntry->SetDatabase(::rtl::OUString());
+                    pEntry->SetTable(::rtl::OUString());
+                    pEntry->SetTabWindow(NULL);
+                }
+                sNewValue = pEntry->GetAlias();
+
             }   break;
 
             case BROW_ORDER_ROW:
@@ -939,41 +997,41 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     strOldCellContents = pEntry->GetFunction();
                     sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
-                    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-                    if(!xConnection.is())
-                        break;
-                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // Diese Funktionen stehen nur unter CORE zur Verfügung
-                    sal_uInt16 nFunctionCount =
-                                        xMetaData->supportsCoreSQLGrammar()
-                                                            ?
-                                        m_pFunctionCell->GetEntryCount()-1
-                                                            :
-                                        m_pFunctionCell->GetEntryCount();
-                    if(nPos >= 1 && nPos < nFunctionCount)
+                    String sFunctionName        = m_pFunctionCell->GetEntry(nPos);
+                    String sGroupFunctionName   = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                    sal_Bool bGroupBy = sal_False;
+                    if ( sGroupFunctionName == sFunctionName ) // check if the function name is GROUP
                     {
-                        pEntry->SetFunctionType(FKT_AGGREGATE);
-                        pEntry->SetFunction(m_pFunctionCell->GetEntry(nPos));
-                        pEntry->SetGroupBy(sal_False);
+                        bGroupBy = sal_True;
+
+                        if ( !m_bGroupByUnRelated && !pEntry->IsVisible() )
+                        {
+                            // we have to change the visblie flag, so we must append also an undo action
+                            pEntry->SetVisible(sal_True);
+                            m_pVisibleCell->GetBox().Check();
+                            appendUndoAction(g_strZero,g_strOne,BROW_VIS_ROW,bListAction);
+                            RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
+                        }
+
+                        pEntry->SetFunction(String());
+                        pEntry->SetFunctionType(pEntry->GetFunctionType() & ~FKT_AGGREGATE );
+                    }
+                    else if ( nPos ) // we found an aggregate function
+                    {
+                        pEntry->SetFunctionType(pEntry->GetFunctionType() | FKT_AGGREGATE );
+                        pEntry->SetFunction(sFunctionName);
                     }
                     else
                     {
-                        pEntry->SetFunctionType(FKT_NONE);
-                        if(nPos > 1)
-                        {
-                            pEntry->SetGroupBy(sal_True);
-                            if(!m_bGroupByUnRelated)
-                            {
-                                pEntry->SetVisible(sal_True);
-                                m_pVisibleCell->GetBox().Check();
-                                RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
-                            }
-                        }
-                        else
-                            pEntry->SetGroupBy(sal_False);
+                        sFunctionName = String();
                         pEntry->SetFunction(String());
+                        pEntry->SetFunctionType(pEntry->GetFunctionType() & ~FKT_AGGREGATE );
                     }
-                    sNewValue = pEntry->GetFunction();
+
+                    pEntry->SetGroupBy(bGroupBy);
+
+                    sNewValue = sFunctionName;
                 }
                 break;
             default:
@@ -1080,22 +1138,25 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         {
             // und noch die Undo-Action fuer das Ganze
             appendUndoAction(strOldCellContents,sNewValue,nRow);
-            if(bListAction)
-                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
+
         }
     }
 
     // habe ich Daten in einer FieldDescription gespeichert, die vorher leer war und es nach den Aenderungen nicht mehr ist ?
-    if (pEntry.isValid() && bWasEmpty && !pEntry->IsEmpty() && !bError)
+    if ( pEntry.isValid() && bWasEmpty && !pEntry->IsEmpty() && !bError )
     {
         // Default auf sichtbar
         pEntry->SetVisible(sal_True);
+        appendUndoAction(g_strZero,g_strOne,BROW_VIS_ROW,bListAction);
         RowModified(BROW_VIS_ROW, GetCurColumnId());
 
         // wenn noetig neue freie Spalten anlegen
         USHORT nDummy;
         CheckFreeColumns(nDummy);
     }
+
+    if ( bListAction )
+        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
 
     return pEntry != NULL && !bError;
 }
@@ -1397,7 +1458,7 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
     SetColumnWidth(nColId, nNewWidth);
 
     // der FieldDescription Bescheid sagen
-    OTableFieldDescRef pEntry = getEntry(nColId - 1);
+    OTableFieldDescRef pEntry = getEntry(GetColumnPos(nColId) - 1);
     if (pEntry.isValid())
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
 
@@ -1609,7 +1670,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
             bCase(aAlias,rInfo->GetAlias()) &&
             pEntry->GetFunctionType() == rInfo->GetFunctionType())
         {
-            if((pEntry->GetFunctionType() == FKT_AGGREGATE && rInfo->IsGroupBy()))
+            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
                 pEntry->SetGroupBy(sal_False);
             else
             {
@@ -1623,8 +1684,8 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
 
     if (aIter == getFields().end())
     {
-        OTableFieldDescRef pTmp = InsertField(rInfo, -1, sal_False, sal_False );
-        if((pTmp->GetFunctionType() == FKT_AGGREGATE && rInfo->IsGroupBy())) // das GroupBy wird bereits von rInfo "ubernommen
+        OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
+        if ( (pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy()) ) // das GroupBy wird bereits von rInfo "ubernommen
             pTmp->SetGroupBy(sal_False);
     }
 }
@@ -1651,7 +1712,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
             bCase(aAlias,rInfo->GetAlias()) &&
             pEntry->GetFunctionType() == rInfo->GetFunctionType())
         {
-            if((pEntry->GetFunctionType() == FKT_AGGREGATE && rInfo->IsGroupBy()))
+            if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
                 pEntry->SetGroupBy(sal_False);
             else
             {
@@ -1675,10 +1736,10 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
 
     if (aIter == getFields().end())
     {
-        OTableFieldDescRef pTmp = InsertField(rInfo, -1, sal_False, sal_False );
-        if((pTmp->GetFunctionType() == FKT_AGGREGATE && rInfo->IsGroupBy())) // das GroupBy wird bereits von rInfo "ubernommen
+        OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
+        if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // das GroupBy wird bereits von rInfo "ubernommen
             pTmp->SetGroupBy(sal_False);
-        if(pTmp.isValid())
+        if ( pTmp.isValid() )
         {
             pTmp->SetCriteria( nLevel, rValue);
             if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
@@ -1724,7 +1785,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
 
     if (aIter == getFields().end())
     {
-        OTableFieldDescRef pTmp = InsertField(rInfo, -1, sal_False, sal_False );
+        OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if(pTmp.isValid())
         {
             if(!m_bOrderByUnRelated)
@@ -1762,7 +1823,7 @@ void OSelectionBrowseBox::CellModified()
     {
         case BROW_VIS_ROW:
             {
-                OTableFieldDescRef  pEntry = getEntry(GetCurColumnId() - 1);
+                OTableFieldDescRef  pEntry = getEntry(GetColumnPos(GetCurColumnId()) - 1);
 
                 sal_Bool bOldValue = pEntry->IsVisible();
 
@@ -2011,10 +2072,8 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
 
     OTableFieldDescRef pEntry = getFields()[nPos-1];
     DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
-    if(pEntry->IsEmpty())
+    if ( pEntry->IsEmpty() )
         return String();
-    //if (!pEntry)
-    //  return String();
 
     String aText;
     switch (nRow)
@@ -2044,10 +2103,11 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
             aText = pEntry->GetFieldAlias();
             break;
         case BROW_FUNCTION_ROW:
-            if(pEntry->GetFunctionType() == FKT_AGGREGATE)
-                aText = pEntry->GetFunction();
-            else if(pEntry->IsGroupBy())
+            // we always show the group function at first
+            if ( pEntry->IsGroupBy() )
                 aText = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+            else if ( pEntry->isNumericOrAggreateFunction() )
+                aText = pEntry->GetFunction();
             break;
         default:
             aText = pEntry->GetCriteria(nRow - BROW_CRIT1_ROW);
@@ -2055,36 +2115,44 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
     return aText;
 }
 //------------------------------------------------------------------------------
-sal_Bool OSelectionBrowseBox::GetFunktionName(String& rFkt)
+sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,String& rFkt)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     sal_Bool bErg=sal_True;
     String aText;
-
-    if(rFkt.EqualsIgnoreCaseAscii("AVG"))
-       rFkt = m_pFunctionCell->GetEntry(1);
-    else if(rFkt.EqualsIgnoreCaseAscii("COUNT"))
-       rFkt = m_pFunctionCell->GetEntry(2);
-    else if(rFkt.EqualsIgnoreCaseAscii("MAX"))
-       rFkt = m_pFunctionCell->GetEntry(3);
-    else if(rFkt.EqualsIgnoreCaseAscii("MIN"))
-       rFkt = m_pFunctionCell->GetEntry(4);
-    else if(rFkt.EqualsIgnoreCaseAscii("SUM"))
-       rFkt = m_pFunctionCell->GetEntry(5);
-    else
+    switch(_nFunctionTokenId)
     {
-        xub_StrLen nCount = m_aFunctionStrings.GetTokenCount();
-        for (xub_StrLen i = 0; i < nCount-1; i++) // Gruppierung wird nicht mit gez"ahlt
-        {
-            if(rFkt.EqualsIgnoreCaseAscii(m_aFunctionStrings.GetToken(i)))
+        case SQL_TOKEN_COUNT:
+            rFkt = (m_pFunctionCell->GetEntryCount() < 3) ? m_pFunctionCell->GetEntry(1) : m_pFunctionCell->GetEntry(2);
+            break;
+        case SQL_TOKEN_AVG:
+            rFkt = m_pFunctionCell->GetEntry(1);
+            break;
+        case SQL_TOKEN_MAX:
+            rFkt = m_pFunctionCell->GetEntry(3);
+            break;
+        case SQL_TOKEN_MIN:
+            rFkt = m_pFunctionCell->GetEntry(4);
+            break;
+        case SQL_TOKEN_SUM:
+            rFkt = m_pFunctionCell->GetEntry(5);
+            break;
+        default:
             {
-                rFkt = m_aFunctionStrings.GetToken(i);
-                break;
+                xub_StrLen nCount = m_aFunctionStrings.GetTokenCount();
+                for (xub_StrLen i = 0; i < nCount-1; i++) // Gruppierung wird nicht mit gez"ahlt
+                {
+                    if(rFkt.EqualsIgnoreCaseAscii(m_aFunctionStrings.GetToken(i)))
+                    {
+                        rFkt = m_aFunctionStrings.GetToken(i);
+                        break;
+                    }
+                }
+                if(i == nCount-1)
+                    bErg = sal_False;
             }
-        }
-        if(i == nCount-1)
-            bErg = sal_False;
     }
+
     return bErg;
 }
 //------------------------------------------------------------------------------
@@ -2149,12 +2217,26 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, USHORT nColId, const S
             pEntry->SetFieldAlias(strNewText);
             break;
         case BROW_FUNCTION_ROW:
+        {
+            String sOldFunctionName   = pEntry->GetFunction();
+            String sGroupFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
             pEntry->SetFunction(strNewText);
-            if(m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1).EqualsIgnoreCaseAscii(strNewText))
+            // first reset this two member
+            sal_Int32 nFunctionType = pEntry->GetFunctionType();
+            nFunctionType &= ~FKT_AGGREGATE;
+            pEntry->SetFunctionType(nFunctionType);
+            if ( pEntry->IsGroupBy() && !sGroupFunctionName.EqualsIgnoreCaseAscii(strNewText) )
+                pEntry->SetGroupBy(sal_False);
+
+
+            if ( sGroupFunctionName.EqualsIgnoreCaseAscii(strNewText) )
                 pEntry->SetGroupBy(sal_True);
-            else
-                pEntry->SetFunctionType(FKT_AGGREGATE);
-            break;
+            else if ( strNewText.Len() )
+            {
+                nFunctionType |= FKT_AGGREGATE;
+                pEntry->SetFunctionType(nFunctionType);
+            }
+        }   break;
         default:
             pEntry->SetCriteria(nRow - BROW_CRIT1_ROW, strNewText);
     }
@@ -2307,13 +2389,26 @@ void OSelectionBrowseBox::copy()
     }
 }
 // -----------------------------------------------------------------------------
-void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,long _nRow)
+void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction)
 {
-    if(!_rNewValue.Equals(_rOldValue))
+    if ( !_rNewValue.Equals(_rOldValue) )
+    {
+        if ( !_bListAction )
+        {
+            _bListAction = sal_True;
+            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+        }
+        appendUndoAction(_rOldValue,_rNewValue,_nRow);
+    }
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow)
+{
+    if ( !_rNewValue.Equals(_rOldValue) )
     {
         OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
         pUndoAct->SetCellIndex(_nRow);
-        pUndoAct->SetColumnPosition(GetColumnPos( GetCurColumnId() ));
+        pUndoAct->SetColumnPosition( GetColumnPos(GetCurColumnId()) );
         pUndoAct->SetCellContents(_rOldValue);
         getDesignView()->getController()->addUndoActionAndInvalidate(pUndoAct);
     }
@@ -2351,7 +2446,7 @@ OTableFields& OSelectionBrowseBox::getFields() const
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl)
 {
-    BOOL bEnable = _rEntry->GetFunctionType() != FKT_CONDITION;
+    BOOL bEnable = !_rEntry->isCondition();
     _pControl->Enable(bEnable);
     _pControl->EnableInput(bEnable);
 }
@@ -2433,5 +2528,81 @@ void OSelectionBrowseBox::DeactivateCell(sal_Bool _bUpdate)
             sRetText = EditBrowseBox::GetAccessibleDescription(_eObjType,_nPosition);
     }
     return sRetText;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const ::rtl::OUString& _sTableName)
+{
+    sal_Bool bRet = sal_False;
+    OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+    if (pTabWinList)
+    {
+        OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(_sTableName);
+        if(aIter != pTabWinList->end())
+        {
+            OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+            if (pEntryTab)
+            {
+                _pEntry->SetDatabase(pEntryTab->GetComposedName());
+                _pEntry->SetTable(pEntryTab->GetTableName());
+                _pEntry->SetTabWindow(pEntryTab);
+                bRet = sal_True;
+            }
+        }
+    }
+    return bRet;
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
+{
+    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+    if ( xConnection.is() )
+    {
+        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+
+        // Diese Funktionen stehen nur unter CORE zur Verfügung
+        if ( xMetaData->supportsCoreSQLGrammar() )
+        {
+            // if we have an asterix, no other function than count is allowed
+            m_pFunctionCell->Clear();
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
+            if ( isFieldNameAsterix(_pEntry->GetField()) )
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
+            else
+            {
+                xub_StrLen nCount = m_aFunctionStrings.GetTokenCount();
+                if ( _pEntry->isNumeric() )
+                    --nCount;
+                for (xub_StrLen nIdx = 1; nIdx < nCount; nIdx++)
+                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
+            }
+
+            if ( _pEntry->IsGroupBy() )
+            {
+                OSL_ENSURE(!_pEntry->isNumeric(),"Not allowed to combine group by and numeric values!");
+                m_pFunctionCell->SelectEntry(m_pFunctionCell->GetEntry(m_pFunctionCell->GetEntryCount() - 1));
+            }
+            else if ( m_pFunctionCell->GetEntryPos(String(_pEntry->GetFunction())) != COMBOBOX_ENTRY_NOTFOUND )
+                m_pFunctionCell->SelectEntry(String(_pEntry->GetFunction()));
+            else
+                m_pFunctionCell->SelectEntryPos(0);
+
+            enableControl(_pEntry,m_pFunctionCell);
+        }
+        else
+        {
+            // nur COUNT(*) erlaubt
+            sal_Bool bCountRemoved = sal_False;
+            if ( bCountRemoved = !isFieldNameAsterix(_pEntry->GetField()) )
+                m_pFunctionCell->RemoveEntry(1);
+
+            if ( !bCountRemoved && m_pFunctionCell->GetEntryCount() < 2)
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
+
+            if(m_pFunctionCell->GetEntryPos(String(_pEntry->GetFunction())) != COMBOBOX_ENTRY_NOTFOUND)
+                m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
+            else
+                m_pFunctionCell->SelectEntryPos(0);
+        }
+    }
 }
 // -----------------------------------------------------------------------------
