@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 14:11:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ struct hash< const psp::PPDKey* >
 #include <tools/debug.hxx>
 #include <psprint/strhelper.hxx>
 #include <psprint/helper.hxx>
+#include <cupsmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
@@ -106,13 +107,11 @@ static String aEmptyString;
 void PPDParser::scanPPDDir( const String& rDir )
 {
     static const sal_Char* pSuffixes[] = { "PS", "PPD" };
-    static const int nSuffixLens[] = { 2, 3 };
     const int nSuffixes = sizeof(pSuffixes)/sizeof(pSuffixes[0]);
 
     osl::Directory aDir( rDir );
     aDir.open();
     osl::DirectoryItem aItem;
-    bool bWas = false;
 
     INetURLObject aPPDDir(rDir);
     while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
@@ -277,7 +276,8 @@ const PPDParser* PPDParser::getParser( String aFile )
     static ::osl::Mutex aMutex;
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
 
-    aFile = getPPDFile( aFile );
+    if( aFile.CompareToAscii( "CUPS:", 5 ) != COMPARE_EQUAL )
+        aFile = getPPDFile( aFile );
     if( ! aFile.Len() )
     {
         fprintf( stderr, "Could not get printer PPD file!\n" );
@@ -288,8 +288,21 @@ const PPDParser* PPDParser::getParser( String aFile )
         if( (*it)->m_aFile == aFile )
             return *it;
 
-    PPDParser *pNewParser = new PPDParser( aFile );
-    aAllParsers.push_back( pNewParser );
+    PPDParser* pNewParser = NULL;
+    if( aFile.CompareToAscii( "CUPS:", 5 ) != COMPARE_EQUAL )
+        pNewParser = new PPDParser( aFile );
+    else
+    {
+        PrinterInfoManager& rMgr = PrinterInfoManager::get();
+        if( rMgr.getType() == PrinterInfoManager::CUPS )
+        {
+            pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
+            if( pNewParser )
+                pNewParser->m_aFile = aFile;
+        }
+    }
+    if( pNewParser )
+        aAllParsers.push_back( pNewParser );
     return pNewParser;
 }
 
@@ -306,6 +319,7 @@ void PPDParser::freeAll()
 
 PPDParser::PPDParser( const String& rFile ) :
         m_aFile( rFile ),
+        m_bType42Capable( false ),
         m_pDefaultImageableArea( NULL ),
         m_pImageableAreas( NULL ),
         m_pDefaultPaperDimension( NULL ),
@@ -316,8 +330,7 @@ PPDParser::PPDParser( const String& rFile ) :
         m_pResolutions( NULL ),
         m_pDefaultDuplexType( NULL ),
         m_pDuplexTypes( NULL ),
-        m_pFontList( NULL ),
-        m_bType42Capable( false )
+        m_pFontList( NULL )
 {
     // read in the file
     ::std::list< String > aLines;
@@ -446,16 +459,16 @@ PPDParser::PPDParser( const String& rFile ) :
     DBG_ASSERT( m_pFontList, "Warning: no Font in PPD\n" );
 
     // fill in direct values
-    if( pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ModelName" ) ) ) )
+    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ModelName" ) ) )) )
         m_aPrinterName = pKey->getValue( 0 )->m_aValue;
-    if( pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "NickName" ) ) ) )
+    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "NickName" ) ) )) )
         m_aNickName = pKey->getValue( 0 )->m_aValue;
-    if( pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ColorDevice" ) ) ) )
+    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ColorDevice" ) ) )) )
         m_bColorDevice = pKey->getValue( 0 )->m_aValue.CompareIgnoreCaseToAscii( "true", 4 ) == COMPARE_EQUAL ? true : false;
 
-    if( pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "LanguageLevel" ) ) ) )
+    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "LanguageLevel" ) ) )) )
         m_nLanguageLevel = pKey->getValue( 0 )->m_aValue.ToInt32();
-    if( pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "TTRasterizer" ) ) ) )
+    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "TTRasterizer" ) ) )) )
         m_bType42Capable = pKey->getValue( 0 )->m_aValue.EqualsIgnoreCaseAscii( "Type42" ) ? true : false;
 
 #ifdef MACOSX
@@ -492,7 +505,7 @@ void PPDParser::insertKey( const String& rKey, PPDKey* pKey )
 
 const PPDKey* PPDParser::getKey( int n ) const
 {
-    return (n < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : NULL;
+    return ((unsigned int)n < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : NULL;
 }
 
 const PPDKey* PPDParser::getKey( const String& rKey ) const
@@ -1196,10 +1209,10 @@ const String& PPDParser::getFont( int nFont ) const
 
 PPDKey::PPDKey( const String& rKey ) :
         m_aKey( rKey ),
-        m_bUIOption( false ),
-        m_eUIType( PickOne ),
         m_pDefaultValue( NULL ),
         m_bQueryValue( false ),
+        m_bUIOption( false ),
+        m_eUIType( PickOne ),
         m_nOrderDependency( 100 ),
         m_eSetupType( AnySetup )
 {
@@ -1215,14 +1228,13 @@ PPDKey::~PPDKey()
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
-    return (n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : NULL;
+    return ((unsigned int)n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : NULL;
 }
 
 // -------------------------------------------------------------------
 
 const PPDValue* PPDKey::getValue( const String& rOption ) const
 {
-    const PPDValue* pValue = NULL;
     PPDKey::hash_type::const_iterator it = m_aValues.find( rOption );
     return it != m_aValues.end() ? &it->second : NULL;
 }
@@ -1301,8 +1313,11 @@ const PPDKey* PPDContext::getModifiedKey( int n ) const
 
 void PPDContext::setParser( const PPDParser* pParser )
 {
-    m_aCurrentValues.clear();
-    m_pParser = pParser;
+    if( pParser != m_pParser )
+    {
+        m_aCurrentValues.clear();
+        m_pParser = pParser;
+    }
 }
 
 // -------------------------------------------------------------------
@@ -1541,7 +1556,6 @@ void PPDContext::getUnconstrainedValues( const PPDKey* pKey, ::std::list< const 
 void* PPDContext::getStreamableBuffer( ULONG& rBytes ) const
 {
     rBytes = 0;
-    int i;
     if( ! m_aCurrentValues.size() )
         return NULL;
     ::std::hash_map< const PPDKey*, const PPDValue* >::const_iterator it;
