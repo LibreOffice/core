@@ -1,3 +1,5 @@
+"TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
+"TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
 "TableWindowAccessibility";"com::sun::star::accessibility::XAccessible";"getAccessibleContext()"
 "TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleChildCount()"
 "TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleChild()"
@@ -9,5 +11,3 @@
 "TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleRelationSet()"
 "TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleStateSet()"
 "TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getLocale()"
-"TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
-"TableWindowAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"

@@ -1,3 +1,5 @@
+"ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
+"ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
 "ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessible";"getAccessibleContext()"
 "ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleChildCount()"
 "ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleChild()"
@@ -9,5 +11,3 @@
 "ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleRelationSet()"
 "ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleStateSet()"
 "ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleContext";"getLocale()"
-"ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
-"ConnectionLineAccessibility";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
