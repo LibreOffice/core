@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:42:54 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,8 @@ ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxA
     // #109668# maintain support for old tag on load
     else if (_sElementName.equals(DEPRECATED_TAG_LAYER))
     {
-        OSL_TRACE("Layer starts with invalid root tag \"oor:node\". Use \"oor:component-data\" instead.");
+        logger().warning("Layer starts with invalid root tag \"oor:node\". Use \"oor:component-data\" instead.",
+                         "getNodeType()","configmgr::xml::ElementParser");
         eResult = ElementType::layer;
     }
 
@@ -216,6 +217,7 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
 
             if (bPackage)
             {
+                // TODO: log this
                 OSL_TRACE("configmgr::xml::ElementParser: Found obsolete layer attribute "
                           "oor:context=\"%s\" in component \"%s\".\n",
                           rtl::OUStringToOString(aPackage,RTL_TEXTENCODING_ASCII_US).getStr(),
@@ -362,13 +364,13 @@ ElementInfo::FlagsType ElementParser::getNodeFlags(SaxAttributeList const& xAttr
 }
 // -----------------------------------------------------------------------------
 static
-void badValueType(sal_Char const * _pMsg, OUString const & _sExtra)
+void badValueType(Logger const & logger, sal_Char const * _pMsg, OUString const & _sExtra)
 {
     rtl::OString sMessage( "Configuration XML parser: Bad value type attribute:" );
     sMessage += _pMsg;
     sMessage += rtl::OUStringToOString(_sExtra,RTL_TEXTENCODING_ASCII_US);
 
-    OSL_ENSURE(false, sMessage.getStr());
+    logger.error(sMessage);
 //    throw sax::SAXException(sMessage, NULL, uno::Any());
 }
 // -----------------------------------------------------------------------------
@@ -413,12 +415,12 @@ OUString stripSuffix(OUString const & _sString, OUString const & _sSuffix)
 // -----------------------------------------------------------------------------
 static
 inline
-OUString stripTypeName(OUString const & _sString, OUString const & _sPrefix)
+OUString stripTypeName(Logger const & logger, OUString const & _sString, OUString const & _sPrefix)
 {
     if ( matchNsPrefix(_sString,_sPrefix))
         return stripNsPrefix(_sString, _sPrefix);
 
-    badValueType("Missing expected namespace prefix: ", _sPrefix);
+    badValueType(logger, "Missing expected namespace prefix: ", _sPrefix);
 
     return _sString;
 }
@@ -501,7 +503,7 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
     // valuetype names are either 'xs:<type>' or 'oor:<type>' or 'oor:<type>-list'
     if (matchSuffix(sTypeName,VALUETYPE_LIST_SUFFIX))
     {
-        OUString sBasicName = stripTypeName( stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
+        OUString sBasicName = stripTypeName( mLogger, stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
 
         aType = xmlToListType(sBasicName);
     }
@@ -509,13 +511,13 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
     {
         OUString sPrefix = matchNsPrefix(sTypeName,NS_PREFIX_OOR) ? NS_PREFIX_OOR : NS_PREFIX_XS;
 
-        OUString sBasicName = stripTypeName( sTypeName, sPrefix );
+        OUString sBasicName = stripTypeName( mLogger, sTypeName, sPrefix );
 
         aType = xmlToScalarType(sBasicName);
     }
 
     if (aType == uno::Type())
-        badValueType("Unknown type name: ", sTypeName);
+        badValueType(mLogger,"Unknown type name: ", sTypeName);
 
     return aType;
 }
