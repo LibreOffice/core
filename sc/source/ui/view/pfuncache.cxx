@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfuncache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:03:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,13 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <tools/multisel.hxx>
+
 #include "pfuncache.hxx"
 #include "printfun.hxx"
 #include "docsh.hxx"
 #include "markdata.hxx"
+#include "prevloc.hxx"
 
 //------------------------------------------------------------------------
 
@@ -78,7 +81,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
                                     const ScPrintSelectionStatus& rStatus ) :
     aSelection( rStatus ),
     pDocSh( pD ),
-    nTotalPages( 0 )
+    nTotalPages( 0 ),
+    bLocInitialized( false )
 {
     //  page count uses the stored cell widths for the printer anyway,
     //  so ScPrintFunc with the document's printer can be used to count
@@ -117,6 +121,72 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
 
 ScPrintFuncCache::~ScPrintFuncCache()
 {
+}
+
+void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDev )
+{
+    if ( bLocInitialized )
+        return;                 // initialize only once
+
+    ScRange aRange;
+    const ScRange* pSelRange = NULL;
+    if ( rMark.IsMarked() )
+    {
+        rMark.GetMarkArea( aRange );
+        pSelRange = &aRange;
+    }
+
+    long nRenderer = 0;     // 0-based physical page number across sheets
+    long nTabStart = 0;
+
+    ScDocument* pDoc = pDocSh->GetDocument();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
+    {
+        if ( rMark.GetTableSelect( nTab ) )
+        {
+            ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange );
+            aFunc.SetRenderFlag( TRUE );
+
+            long nDisplayStart = GetDisplayStart( nTab );
+
+            for ( long nPage=0; nPage<nPages[nTab]; nPage++ )
+            {
+                Range aPageRange( nRenderer+1, nRenderer+1 );
+                MultiSelection aPage( aPageRange );
+                aPage.SetTotalRange( Range(0,RANGE_MAX) );
+                aPage.Select( aPageRange );
+
+                ScPreviewLocationData aLocData( pDoc, pDev );
+                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, FALSE, NULL, &aLocData );
+
+                ScRange aCellRange;
+                Rectangle aPixRect;
+                if ( aLocData.GetMainCellRange( aCellRange, aPixRect ) )
+                    aLocations.push_back( ScPrintPageLocation( nRenderer, aCellRange, aPixRect ) );
+
+                ++nRenderer;
+            }
+
+            nTabStart += nPages[nTab];
+        }
+    }
+
+    bLocInitialized = true;
+}
+
+bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const
+{
+    for ( std::vector<ScPrintPageLocation>::const_iterator aIter(aLocations.begin());
+          aIter != aLocations.end(); aIter++ )
+    {
+        if ( aIter->aCellRange.In( rCell ) )
+        {
+            rLocation = *aIter;
+            return true;
+        }
+    }
+    return false;   // not found
 }
 
 BOOL ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
