@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 12:56:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
                 {
                     // obtain the preference list
                     Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
-    #ifdef _DEBUG
+    #if OSL_DEBUG_LEVEL > 0
                     sal_Bool bSuccess =
     #endif
                     aPreferences >>= _rPrecedence;
