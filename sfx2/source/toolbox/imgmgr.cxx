@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,26 @@ ImageList* GetImageList( BOOL bBig, BOOL bHiContrast = FALSE )
     }
 
     return rpList;
+}
+
+//=========================================================================
+
+sal_Int16 SfxImageManager::GetCurrentSymbolSet()
+{
+    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size from the
+        // Application class
+        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+        else
+            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+    }
+
+    return eOptSymbolSet;
 }
 
 //=========================================================================
@@ -740,7 +760,7 @@ BOOL SfxImageManager_Impl::Store(SvStream& rStream)
 //  aBitmapStream << pUserImageList->GetBitmap();
 
     rStream << nVersion
-            << m_aOpt.GetSymbolSet()
+            << SfxImageManager::GetCurrentSymbolSet()
             << Application::GetDefaultDevice()->GetColorCount();
 
     rStream << *m_pUserImageList;
@@ -787,7 +807,7 @@ void SfxImageManager_Impl::MakeDefaultImageList( BOOL bHiContrast )
 {
     USHORT nType=0;
     {
-        switch ( m_aOpt.GetSymbolSet() )
+        switch ( SfxImageManager::GetCurrentSymbolSet() )
         {
             case SFX_SYMBOLS_SMALL:
                 if ( bHiContrast )
@@ -912,7 +932,7 @@ Image SfxImageManager_Impl::GetDefaultImage(USHORT nId, SfxModule* pMod, BOOL bB
 
 Image SfxImageManager_Impl::SeekImage( USHORT nId, SfxModule *pModule, BOOL bHiContrast ) const
 {
-    BOOL bBig = ( m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    BOOL bBig = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
 
     if ( !pModule )
         pModule = SFX_APP()->GetActiveModule();
@@ -965,11 +985,12 @@ SfxImageManager::SfxImageManager( SfxObjectShell* pDoc )
     }
 
     // internal cached data for comparision in callback
-    pData->nSet = pImp->m_aOpt.GetSymbolSet();
+    pData->nSet = SfxImageManager::GetCurrentSymbolSet();
     pData->nOutStyle = pImp->m_aOpt.GetToolboxStyle();
 
     // register callback for changes of SymbolSet or ToolboxStyle
     pImp->m_aOpt.AddListener( LINK( this, SfxImageManager, OptionsChanged_Impl ) );
+    Application::AddEventListener( LINK( this, SfxImageManager, SettingsChanged_Impl ) );
 
 //    SetInternal( TRUE );
     nRef++;
@@ -992,6 +1013,7 @@ SfxImageManager::~SfxImageManager()
 
     DELETEZ( pData->pToolBoxList );
     pImp->m_aOpt.RemoveListener( LINK( this, SfxImageManager, OptionsChanged_Impl ) );
+    Application::RemoveEventListener( LINK( this, SfxImageManager, SettingsChanged_Impl ) );
     if ( pImp != pGlobalConfig || !--nGlobalRef )
         delete pImp;
     delete pData;
@@ -1206,7 +1228,7 @@ Image SfxImageManager::GetImage( USHORT nId, SfxModule *pModule ) const
 
 Image SfxImageManager::GetImage( USHORT nId, BOOL bHiContrast, SfxModule *pModule ) const
 {
-    return pImp->GetImage( nId, pModule, ( pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE ), bHiContrast );
+    return pImp->GetImage( nId, pModule, ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE ), bHiContrast );
 }
 
 Image SfxImageManager::GetImage(USHORT nId, SfxModule* pMod, BOOL bBig ) const
@@ -1228,7 +1250,7 @@ Image SfxImageManager::GetImageFromModule_Impl( USHORT nId, SfxModule *pModule, 
 {
     if ( pModule )
     {
-        ImageList *pList = pModule->GetImageList_Impl(( pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE ), bHiContrast );
+        ImageList *pList = pModule->GetImageList_Impl(( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE ), bHiContrast );
         if ( pList )
             return pList->GetImage( nId );
     }
@@ -1250,7 +1272,7 @@ Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, SfxModule *pModule )
 
 Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, BOOL bHiContrast, SfxModule *pModule )
 {
-    BOOL bBig = ( pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    BOOL bBig = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
     ImageList *pUserImageList = pImp->m_pUserImageList;
     ImageList *pHCUserImageList = pImp->m_pHCUserImageList;
 
@@ -1549,7 +1571,7 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule )
 
 void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule, BOOL bHiContrast )
 {
-    BOOL bBig = pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE;
+    BOOL bBig = ( pData->nSet == SFX_SYMBOLS_LARGE );
 
     if ( !pModule )
         pModule = SFX_APP()->GetActiveModule();
@@ -1651,7 +1673,7 @@ Size SfxImageManager::GetImageSize() const
 IMPL_LINK( SfxImageManager, OptionsChanged_Impl, void*, pVoid )
 {
     SetOutStyle_Impl( pImp->m_aOpt.GetToolboxStyle() );
-    SetSymbolSet_Impl( pImp->m_aOpt.GetSymbolSet() );
+    SetSymbolSet_Impl( SfxImageManager::GetCurrentSymbolSet() );
 
     return 0L;
 }
@@ -1673,6 +1695,16 @@ Image SfxImageManager::GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
 ImageList* SfxImageManager::GetGlobalDefaultImageList( BOOL bBig, BOOL bHiContrast )
 {
     return GetImageList( bBig, bHiContrast );
+}
+
+IMPL_LINK( SfxImageManager, SettingsChanged_Impl, void*, pVoid )
+{
+    // Check if toolbar button size have changed and we have to use system settings
+    sal_Int16 nSymbolSet = SfxImageManager::GetCurrentSymbolSet();
+    if ( pData->nSet != nSymbolSet )
+        SetSymbolSet_Impl( nSymbolSet );
+
+    return 0L;
 }
 
 IMPL_LINK( SfxImageManager, ConfigChanged_Impl, void*, pVoid )
