@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
 
@@ -229,6 +229,21 @@ Dim oShape as Object
 		End If
 	Next n
 End Sub
+
+
+&apos; Destroy all Shapes in Nirwana
+Sub RemoveNirwanaShapes()
+Dim n as Integer
+Dim oControl as Object
+Dim oShape as Object
+	For n = oDrawPage.Count-1 To 0 Step -1
+		oShape = oDrawPage(n)
+		If oShape.Position.Y &lt; -2000 Then
+			oDrawPage.Remove(oShape)
+		End If
+	Next n
+End Sub
+
 
 
 &apos; Note: as Shapes cannot be removed from the DrawPage without destroying

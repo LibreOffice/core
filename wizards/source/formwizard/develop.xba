@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="develop" script:language="StarBasic">REM  *****  BASIC  *****
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="develop" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
 Public oDBShapeList() as Object
@@ -298,6 +298,7 @@ Sub GetLabelDiffHeight(Index as Integer)
 	End If
 End Sub
 
+
 Sub CheckJustifiedPosition()
 Dim nLeftDist as Long
 Dim nRightDist as Long
@@ -520,10 +521,10 @@ Dim i as Integer
 		For i = 0 To MaxIndex
 			oGroupShapeList(i) = CreateUnoService(&quot;com.sun.star.drawing.ShapeCollection&quot;)
 			oGroupShapeList(i).Add(oTCShapeList(i))
-&apos;			Msgbox &quot;Position: &quot; &amp; oDBShapeList(i).Position.X &amp; &quot;;&quot; &amp; oDBShapeList(i).Position.Y
 			oGroupShapeList(i).Add(oDBShapeList(i))
 			oDrawPage.Group(oGroupShapeList(i))
-&apos;			Msgbox &quot;Position: &quot; &amp; oDBShapeList(i).Position.X &amp; &quot;;&quot; &amp; oDBShapeList(i).Position.Y
 		Next i
+	Else
+		RemoveNirwanaShapes()
 	End If
 End Sub</script:module>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
 
 Public DocumentName as String
 Public FormPath as String
@@ -62,9 +62,10 @@ End Sub
 Sub MainWithDefault(Optional DatasourceName as String, Optional oConnection as Object, Optional CommandType as Integer, Optional sContent as String)
 Dim i as Integer
 Dim SelCount as Integer
+Dim RetValue as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
-        bDebug = False
+	bDebug = False
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
@@ -126,7 +127,7 @@ Dim SelCount as Integer
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
 						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
 							SelIndex = IndexInArray(sContent, TableNames()
-							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)		
 						End If
 					End If
 					CurCommandType = CommandType
@@ -157,19 +158,21 @@ Dim SelCount as Integer
 	oProgressBar.Value = 100
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
 	oProgressbar.End
-	DlgFormDB.Execute()
+	RetValue = DlgFormDB.Execute()
 	DlgFormDB.Dispose()
 	If Not IsNull(oDBConnection) Then
 		oDBConnection.Dispose()
 	End If
 	If bDisposeDoc Then
 		oDocument.Dispose()
+	ElseIf RetValue = 0 Then
+		RemoveNirwanaShapes()
 	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then
+	If Err &lt;&gt; 0 Then	
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:
+		LOCERROR:		
 	End If
 End Sub
 
@@ -297,42 +300,45 @@ Sub ToggleDatabasePage(bDoEnable as Boolean)
 End Sub
 
 
-Sub StoreForm()
-Dim bDocIsStored as Boolean
-Dim TypeNames(0,2) as String
-Dim oMasterKey as Object
-Dim oTypes() as Object
-Dim sTargetPath as String
+&apos; This Sub is called from the Procedure &quot;StoreDocument&quot; in the &quot;Tools&quot; Library
+Sub CommitLastDocumentChanges(sTargetPath as String)
+Dim i as Integer	
 Dim sBookmarkName as String
 Dim oDBBookmarks as Object		
 Dim bLinkExists as Boolean
-Dim i as Integer	
 Dim sBaseBookmarkName as String
+	sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
+	sBaseBookmarkName = sBookmarkName
+	oDBBookmarks = oDataSource.GetBookmarks()
+	i = 1
+	Do
+		bLinkExists = oDBBookmarks.HasbyName(sBookmarkName)
+		If bLinkExists Then
+			i = i + 1
+			sBookmarkName = sBaseBookmarkName &amp; &quot;_&quot; &amp; i
+		Else
+			oDBBookmarks.insertByName(sBookmarkName, sTargetPath)
+		End If
+	Loop Until Not bLinkExists
+	bDisposeDoc = False
+	GroupShapesTogether()
+	ToggleDesignMode(oDocument)
+	oDBForm.Reload()
+End Sub
+
+
+Sub StoreForm()
+Dim sTargetPath as String
+Dim TypeNames(0,2) as String
+Dim oMasterKey as Object
+Dim oTypes() as Object
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
 	oTypes() = oMasterKey.Types
 	TypeNames(0,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
 	TypeNames(0,1) = &quot;*.sxw&quot;
 	TypeNames(0,2) = &quot;&quot;
-	sTargetPath = StoreDocument(oDocument, TypeNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath)
+	sTargetPath = StoreDocument(oDocument, TypeNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath, 1)
 	If sTargetPath &lt;&gt; &quot;&quot; Then
-		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
-		sBaseBookmarkName = sBookmarkName
-		oDBBookmarks = oDataSource.GetBookmarks()
-		i = 1
-		Do
-			bLinkExists = oDBBookmarks.HasbyName(sBookmarkName)
-			If bLinkExists Then
-				i = i + 1
-				sBookmarkName = sBaseBookmarkName &amp; &quot;_&quot; &amp; i
-			Else
-				oDBBookmarks.insertByName(sBookmarkName, sTargetPath)
-			End If
-		Loop Until Not bLinkExists
-		bDisposeDoc = False
-		GroupShapesTogether()
-		ToggleDesignMode(oDocument)
-		oDBForm.Reload()
-		oDocument.Store()
 		DlgFormDB.EndExecute()
 	End If
 End Sub

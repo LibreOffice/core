@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
 
 Public oProgressbar as Object
 Public ProgressValue as Integer
@@ -114,7 +114,9 @@ Dim i as Integer
 	oProgressbar = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 	oProgressbar.Start(&quot;&quot;, MaxIndex)
 	If oDBForm.HasbyName(&quot;Grid1&quot;) Then
-		oDBForm.GetByName(&quot;Grid1&quot;).Dispose
+		RemoveShapes()
+&apos;		PrintdbgInfo oDBForm.GetByName(&quot;Grid1&quot;)
+&apos;		oDBForm.GetByName(&quot;Grid1&quot;).Dispose
 	End If
 	ToggleLayoutPage(False)
 	Select Case CurArrangement
@@ -203,11 +205,9 @@ Dim s as Integer
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
 	oModel = oEvent.Source.Model
 	SwitchBorderMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
-
 	If CurArrangement = cTabled Then
 		oGridModel.Border = CurBorderType
 	Else
