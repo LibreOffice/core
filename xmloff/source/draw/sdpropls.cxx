@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:15:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,22 +1224,13 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 break;
 
             case CTF_DASHNAME:
-            case CTF_LINESTARTNAME:
-            case CTF_LINEENDNAME:
             case CTF_FILLGRADIENTNAME:
             case CTF_FILLHATCHNAME:
             case CTF_FILLBITMAPNAME:
-// #85953# take out this case to allow writing empty
-// XML_TRANSPARENCY_NAME entries. This is used to represent
-// disabled FillTransparencyItems.
-//          case CTF_FILLTRANSNAME:
                 {
-                    if( !mbIsInAutoStyles )
-                    {
-                        OUString aStr;
-                        if( (property->maValue >>= aStr) && 0 == aStr.getLength() )
-                            property->mnIndex = -1;
-                    }
+                    OUString aStr;
+                    if( (property->maValue >>= aStr) && 0 == aStr.getLength() )
+                        property->mnIndex = -1;
                 }
                 break;
             case CTF_TEXTANIMATION_BLINKING:
