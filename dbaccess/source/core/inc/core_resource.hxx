@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,10 @@
 
 class SimpleResMgr;
 //.........................................................................
-namespace dba
+namespace dbaccess
 {
 
-#define DBACORE_RESSTRING(id) dba::ResourceManager::loadString(id)
+#define DBACORE_RESSTRING(id) ResourceManager::loadString(id)
 
     //==================================================================
     //= ResourceManager
@@ -102,7 +102,7 @@ namespace dba
     public:
         /** loads the string with the specified resource id from the FormLayer resource file
         */
-        static String loadString(sal_uInt16 _nResId);
+        static ::rtl::OUString loadString(sal_uInt16 _nResId);
     };
 
 //.........................................................................

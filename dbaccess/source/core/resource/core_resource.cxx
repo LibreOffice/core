@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 17:02:20 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #endif
 
 //.........................................................................
-namespace dba
+namespace dbaccess
 {
 
     //==================================================================
@@ -114,9 +114,9 @@ namespace dba
     }
 
     //------------------------------------------------------------------
-    String ResourceManager::loadString(sal_uInt16 _nResId)
+    ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId)
     {
-        String sReturn;
+        ::rtl::OUString sReturn;
 
         ensureImplExists();
         if (m_pImpl)
