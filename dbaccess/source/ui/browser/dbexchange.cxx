@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 12:05:37 $
+ *  last change: $Author: hjs $ $Date: 2001-04-11 07:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ namespace dbaui
 
         m_sCompatibleObjectDescription = sDatasourceName;
         m_sCompatibleObjectDescription  += sSeparator;
-        m_sCompatibleObjectDescription  += bIsStatement ? String() : sDatasourceName;
+        m_sCompatibleObjectDescription  += bIsStatement ? ::rtl::OUString() : sDatasourceName;
         m_sCompatibleObjectDescription  += sSeparator;
         m_sCompatibleObjectDescription  += sObjectKind;
         m_sCompatibleObjectDescription  += sSeparator;
