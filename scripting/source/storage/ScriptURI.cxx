@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:26 $
+ *  last change: $Author: npower $ $Date: 2003-02-12 16:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ScriptURI::~ScriptURI() SAL_THROW( () )
  *
  */
 bool ScriptURI::isValid(  ) {
-    return m_valid;
+    return ( m_valid == sal_True );
 }
 
 /**
@@ -182,7 +182,7 @@ Uri ScriptURI::parseIt()
 {
     sal_Int32 schemaLen = schema.getLength();
     scripting_impl::Uri results;
-
+    results.valid = sal_True;
     //attempt to parse
     // check that it starts script://
     // better check for OBO errors here
@@ -199,7 +199,6 @@ Uri ScriptURI::parseIt()
     {
         // no queries so just set the logical name
         results.logicalName = m_uri.copy( schemaLen );
-        results.valid = sal_True;
         return results;
     }
     results.logicalName = m_uri.copy( schemaLen, len-schemaLen );
