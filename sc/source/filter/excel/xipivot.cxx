@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:02:26 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,11 @@ void XclImpPivotTable::ReadSxdi( XclImpStream& rStrm )
     }
 }
 
+void XclImpPivotTable::ReadSxex( XclImpStream& rStrm )
+{
+    rStrm >> maPTExtInfo;
+}
+
 // ----------------------------------------------------------------------------
 
 void XclImpPivotTable::Apply() const
@@ -772,6 +777,8 @@ void XclImpPivotTable::Apply() const
 
     aSaveData.SetRowGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_ROWGRAND ) );
     aSaveData.SetColumnGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND ) );
+    aSaveData.SetFilterButton( FALSE );
+    aSaveData.SetDrillDown( ::get_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN ) );
 
     // *** fields ***
 
@@ -807,8 +814,11 @@ void XclImpPivotTable::Apply() const
 
     // adjust output range to include the page fields
     ScRange aOutRange( maOutputRange );
-    SCsROW nDecRows = ::std::min< SCsROW >( maOutputRange.aStart.Row(), maPageFields.size() + 2 );
-    aOutRange.aStart.IncRow( -nDecRows );
+    if( !maPageFields.empty() )
+    {
+        SCsROW nDecRows = ::std::min< SCsROW >( maOutputRange.aStart.Row(), maPageFields.size() + 1 );
+        aOutRange.aStart.IncRow( -nDecRows );
+    }
 
     // create the DataPilot
     ScDPObject* pDPObj = new ScDPObject( GetDocPtr() );
@@ -903,6 +913,12 @@ void XclImpPivotTableManager::ReadSxvi( XclImpStream& rStrm )
 {
     if( !maPTableList.Empty() )
         maPTableList.Last()->ReadSxvi( rStrm );
+}
+
+void XclImpPivotTableManager::ReadSxex( XclImpStream& rStrm )
+{
+    if( !maPTableList.Empty() )
+        maPTableList.Last()->ReadSxex( rStrm );
 }
 
 // ----------------------------------------------------------------------------
