@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-20 15:17:22 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 16:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,9 @@ protected:
 
     SvStream&                           mrStm;
 
-    virtual void SAL_CALL               writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData ) { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
-    virtual void SAL_CALL               flush() { mrStm.Flush(); }
-    virtual void SAL_CALL               closeOutput() {}
+    virtual void SAL_CALL               writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
+    virtual void SAL_CALL               flush() throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Flush(); }
+    virtual void SAL_CALL               closeOutput() throw() {}
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:35:29 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 16:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@ public:
     ~SvNumberFormatsSupplierServiceObject();
 
     // XInterface
-    virtual void SAL_CALL acquire() { SvNumberFormatsSupplierObj::acquire(); }
-    virtual void SAL_CALL release() { SvNumberFormatsSupplierObj::release(); }
+    virtual void SAL_CALL acquire() throw() { SvNumberFormatsSupplierObj::acquire(); }
+    virtual void SAL_CALL release() throw() { SvNumberFormatsSupplierObj::release(); }
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException)
         { return SvNumberFormatsSupplierObj::queryInterface(_rType); }
 
