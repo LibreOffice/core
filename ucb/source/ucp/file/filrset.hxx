@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,17 +727,13 @@ namespace fileaccess {
         cppu::OInterfaceContainerHelper*    m_pIsFinalListeners;
 
         com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >       m_xListener;
-        sal_Bool                            m_bStatic, m_bFaked;
+        sal_Bool                            m_bStatic;
 
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
 
         // Methods
         sal_Bool SAL_CALL OneMore( void )
-            throw( com::sun::star::sdbc::SQLException,
-                   com::sun::star::uno::RuntimeException );
-
-        sal_Bool SAL_CALL OneMoreFaked( void )
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException );
 
