@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:14:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #include <tools/config.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/config.h>
+#ifdef SOLAR_JAVA
 #include "jvmaccess/javainfo.hxx"
+#endif // SOLAR_JAVA
 
 using namespace rtl;
 
@@ -263,6 +265,7 @@ const OUString& psp::getFontPath()
             }
         }
 
+#ifdef SOLAR_JAVA
         // if no javarc (e.g. in setup) exists or it failed try the UDK method
         if( ! aJREpath.getLength() )
         {
@@ -299,6 +302,7 @@ const OUString& psp::getFontPath()
                 }
             }
         }
+#endif // SOLAR_JAVA
 
         if( aJREpath.getLength() )
         {
