@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-09 13:43:33 $
+ *  last change: $Author: ssa $ $Date: 2002-09-11 16:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,6 +946,34 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
 {
     Font            aFont;
     String aSearch( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
+
+    // optimize font list for some locales, as long as Andale Sans UI does not support them
+    switch( eLang )
+    {
+        case LANGUAGE_ARABIC:
+        case LANGUAGE_ARABIC_SAUDI_ARABIA:
+        case LANGUAGE_ARABIC_IRAQ:
+        case LANGUAGE_ARABIC_EGYPT:
+        case LANGUAGE_ARABIC_LIBYA:
+        case LANGUAGE_ARABIC_ALGERIA:
+        case LANGUAGE_ARABIC_MOROCCO:
+        case LANGUAGE_ARABIC_TUNISIA:
+        case LANGUAGE_ARABIC_OMAN:
+        case LANGUAGE_ARABIC_YEMEN:
+        case LANGUAGE_ARABIC_SYRIA:
+        case LANGUAGE_ARABIC_JORDAN:
+        case LANGUAGE_ARABIC_LEBANON:
+        case LANGUAGE_ARABIC_KUWAIT:
+        case LANGUAGE_ARABIC_UAE:
+        case LANGUAGE_ARABIC_BAHRAIN:
+        case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_HEBREW:
+            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma;Traditional Arabic;Simplified Arabic;Lucida Bright;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
+            break;
+
+        default:
+            break;
+    }
 
     DefaultFontConfigItem* pDefaults = DefaultFontConfigItem::get();
 
@@ -5568,8 +5596,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     bRightAlign     ^= ((mnTextLayoutMode & TEXT_LAYOUT_DRAWPOS_REVERSED) != 0);
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI
-    static const char* pEnv = getenv( "SAL_RTL_MIRRORTEXT" );
-    bool bRTLWindow = (pEnv && IsRTLEnabled());
+    //static const char* pEnv = getenv( "SAL_RTL_MIRRORTEXT" );
+    bool bRTLWindow = (Application::GetSettings().GetLayoutRTL() && IsRTLEnabled());
     bRightAlign ^= bRTLWindow;
     if( bRightAlign )
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
