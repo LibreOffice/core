@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:37:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,7 +1120,9 @@ BOOL lcl_IsExportNumRule( const SwNumRule& rRule, BYTE* pEnd = 0 )
     ++nEnd;
 
     const SwNumFmt* pNFmt;
-    for( BYTE nLvl = 0; nLvl < nEnd; ++nLvl )
+    BYTE nLvl;
+
+    for( nLvl = 0; nLvl < nEnd; ++nLvl )
         if( SVX_NUM_NUMBER_NONE != ( pNFmt = &rRule.Get( nLvl ))
             ->GetNumberingType() || pNFmt->GetPrefix().Len() ||
             (pNFmt->GetSuffix().Len() && pNFmt->GetSuffix() != aDotStr ))
