@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 15:48:03 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <list>
 #include <tools/string.hxx>
 #include <tools/lang.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
@@ -72,7 +73,8 @@
 namespace desktop
 {
 
-typedef std::list<LanguageType> LangList;
+//typedef std::list<LanguageType> LangList;
+typedef std::list<rtl::OUString> IsoList;
 typedef std::list<String> StrList;
 
 class LanguageSelection;
@@ -81,9 +83,12 @@ class LanguageSelectionDialog : public  ModalDialog
 {
 friend class LanguageSelection;
 private:
+//    LanguageType m_aLanguage;
     FixedText m_aText;
     ListBox m_aListBox;
     OKButton m_aButton;
+    ModalDialog *m_pDialog;
+    IsoList m_isoLanguages;
 
 public:
     LanguageSelectionDialog(ResMgr* pResMgr);
@@ -94,15 +99,18 @@ class LanguageSelection
 {
 private:
 
-    static LangList m_lLanguages;
+    static IsoList m_lLanguages;
 
-    static LanguageType getUserLanguage();
-    static LangList getInstalledLanguages();
-    static StrList getLanguageStrings(const LangList&);
+//    static LangList getInstalledLanguages();
+    static IsoList getInstalledIsoLanguages();
+//    static StrList getLanguageStrings(const LangList&);
+    static StrList getLanguageStrings(const IsoList&);
+    static rtl::OUString getUserLanguage();
 
 public:
     static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
-    static LanguageType getLanguageType();
+//    static LanguageType getLanguageType();
+    static rtl::OUString getLanguageString();
     static void prepareLanguage();
 };
 
