@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 02:41:56 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:14:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,10 @@ PERL*:=call perl5.btm
 RENAME*=ren
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
 TYPE*=type
+TRANSEX*=transex3
+ULFEX*=ulfex
+XMLEX*=xmlex
+XRMEX*=xrmex
 .ENDIF  "$(USE_SHELL)"!="4nt"
 MKDIRHIER=$(MKDIR) 
 SCP_CHECK_TOOL=checkscp.exe
@@ -134,6 +138,10 @@ FIND=find
 LS=ls
 ECHON=echo -n
 ECHONL=echo
+TRANSEX*=transex3
+ULFEX*=ulfex
+XMLEX*=xmlex
+XRMEX*=xrmex
 .ENDIF			# "$(GUI)"=="UNX"
 
 MAKEDEPEND*=$(WRAPCMD) makedepend
