@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-07-17 17:23:23 $
+ *  last change: $Author: er $ $Date: 2002-07-29 15:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         const ScImportOptions*  pOptions,
         const String*           pStrTitle,
         BOOL                    bMultiByte,
-        BOOL                    bOnlyDbtoolsEncodings )
+        BOOL                    bOnlyDbtoolsEncodings,
+        BOOL                    bImport )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
@@ -203,17 +204,17 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     {   //!TODO: Unicode and MultiByte would need work in each filter
         // Think of field lengths in dBase export
         if ( bMultiByte )
-            aLbFont.FillFromDbTextEncodingMap( RTL_TEXTENCODING_INFO_UNICODE );
+            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE );
         else
-            aLbFont.FillFromDbTextEncodingMap( RTL_TEXTENCODING_INFO_UNICODE |
+            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE |
                 RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else if ( !bAscii )
     {   //!TODO: Unicode would need work in each filter
         if ( bMultiByte )
-            aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE );
+            aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
         else
-            aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE |
+            aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
                 RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else
@@ -237,7 +238,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
                 aEdTextSep.SetText( aStr );
         }
         // all encodings allowed, even Unicode
-        aLbFont.FillFromTextEncodingTable();
+        aLbFont.FillFromTextEncodingTable( bImport );
     }
 
     if( bAscii )

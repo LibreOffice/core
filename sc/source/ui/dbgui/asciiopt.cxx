@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:39 $
+ *  last change: $Author: er $ $Date: 2002-07-29 15:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,8 +670,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aEdOther.SetModifyHdl( aSeparatorHdl );
 
     // *** text encoding ListBox ***
-    // all encodings allowed, including Unicode
-    aLbCharSet.FillFromTextEncodingTable();
+    // all encodings allowed, including Unicode, but subsets are excluded
+    aLbCharSet.FillFromTextEncodingTable( TRUE );
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );

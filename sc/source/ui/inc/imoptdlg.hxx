@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-07-17 17:11:23 $
+ *  last change: $Author: er $ $Date: 2002-07-29 15:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ public:
                                     const ScImportOptions*  pOptions = NULL,
                                     const String*           pStrTitle = NULL,
                                     BOOL                    bMultiByte = FALSE,
-                                    BOOL                    bOnlyDbtoolsEncodings = FALSE );
+                                    BOOL                    bOnlyDbtoolsEncodings = FALSE,
+                                    BOOL                    bImport = TRUE );
 
                 ~ScImportOptionsDlg();
 

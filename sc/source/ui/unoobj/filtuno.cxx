@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-07-17 17:15:45 $
+ *  last change: $Author: er $ $Date: 2002-07-29 15:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
         ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL, bAscii,
-                                    &aOptions, &aTitle, bMultiByte, bDBEnc );
+                                    &aOptions, &aTitle, bMultiByte, bDBEnc,
+                                    !bExport );
 
         if ( pDlg->Execute() == RET_OK )
         {
