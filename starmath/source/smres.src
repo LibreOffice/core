@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:43:06 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text [ norwegian ] = "~Borders:" ;
         Text [ italian ] = "~Bordi:" ;
         Text [ portuguese_brazilian ] = "~Bordas:" ;
-        Text [ portuguese ] = "~Contornos:" ;
+        Text [ portuguese ] = "~Limites:" ;
         Text [ finnish ] = "~Reunaviivat:" ;
         Text [ danish ] = "~Grænser:" ;
         Text [ french ] = "~Limites :" ;
@@ -3234,7 +3234,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ swedish ] = "Teckens~til:";
         Text[ dutch ] = "~Type:";
         Text[ spanish ] = "~Estilo:";
-        Text[ english_us ] = "~Type:";
+        Text[ english_us ] = "~Typeface:";
         Text[ chinese_simplified ] = "×ÖÌå£º";
         Text[ chinese_traditional ] = "¦r«¬¡G";
         Text[ russian ] = "~Íà÷åğòàíèå øğèôòà:";
@@ -3376,7 +3376,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ norwegian ] = "~Slett" ;
         Text [ italian ] = "C~ancella" ;
         Text [ portuguese_brazilian ] = "~Apagar" ;
-        Text [ portuguese ] = "Limpar" ;
+        Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "~Slet" ;
         Text [ french ] = "~Supprimer" ;
@@ -4273,11 +4273,11 @@ ErrorBox RID_READSYMBOLERROR
     Message [ dutch ] = "Het symbolenbestand '%FILE%' kan niet worden geladen!" ;
     Message [ spanish ] = "¡No se puede cargar el archivo de símbolos '%FILE%'!" ;
     Message [ english_us ] = "The symbol file '%FILE%' cannot be loaded." ;
-    Message[ chinese_simplified ] = "ÎŞ·¨×°ÔØÍ¼±êÎÄ¼ş'%FILE%' £¡";
+    Message[ chinese_simplified ] = "ÎŞ·¨×°ÈëÍ¼±êÎÄ¼ş'%FILE%' £¡";
     Message[ russian ] = "Çàãğóçèòü ôàéë ñèìâîëîâ '%FILE%' íå óäàåòñÿ !";
     Message[ polish ] = "Pliku symboli '%FILE%' nie mo¿na za³adowaæ!";
     Message[ japanese ] = "'%FILE%' ‹L†Ì§²Ù‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "µLªk¸Ë¸ü¹Ï¥ÜÀÉ®×'%FILE%' ¡I";
+    Message[ chinese_traditional ] = "µLªk¸ü¤J¹Ï¥ÜÀÉ®×'%FILE%' ¡I";
     Message[ arabic ] = "áÇ íãßä ÊÍãíá ãáİ ÇáÑãæÒ '%FILE%'!";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé öüñôùóç ôïõ áñ÷åßïõ óõìâüëùí '%FILE%'!";
     Message[ korean ] = "±âÈ£ ÆÄÀÏ'%FILE%'À» ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù!";
@@ -7223,7 +7223,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ polish ] = "Akcent w prawo";
                 Text[ japanese ] = "±¸¾İÄ‰Eã‚è";
                 Text[ chinese_traditional ] = "¥k¦V­«­µ¦r¥À";
-                Text[ arabic ] = "ÍÑßÉ ÇáÃÍÑİ Åáì Çáíãíä";
+                Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì Çáíãíä";
                 Text[ greek ] = "Ôüíïò ğñïò ôá äåîéÜ";
                 Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ¾Ç¼¾Æ®";
                 Text[ turkish ] = "Sağa vurgu";
@@ -8065,7 +8065,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text = "Operator Klammern" ;
                 Text [ ENGLISH ] = "Operator Brackets" ;
                 Text[ english_us ] = "Operator Brackets";
-                Text[ portuguese ] = "Parêntesis de operador";
+                Text[ portuguese ] = "Parênteses de operador";
                 Text[ russian ] = "Ñêîáêè îïåğàòîğà";
                 Text[ dutch ] = "Operator-haken";
                 Text[ french ] = "Parenthèses d'opérateur";
@@ -8311,7 +8311,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text = "Operator Klammern (skalierbar)" ;
                 Text [ ENGLISH ] = "Operator Brackets" ;
                 Text[ english_us ] = "Operator Brackets (Scalable)";
-                Text[ portuguese ] = "Parêntesis de operador (escalonável)";
+                Text[ portuguese ] = "Parênteses de operador (escalonável)";
                 Text[ russian ] = "Ñêîáêè îïåğàòîğà (èçìåíÿåìûå)";
                 Text[ dutch ] = "Operator-haken";
                 Text[ french ] = "Parenthèses d'opérateur (modifiables graduellement)";
@@ -9714,7 +9714,7 @@ DockingWindow RID_CMDBOXWINDOW
     Text[ russian ] = "Êîìàíäû";
     Text[ polish ] = "Polecenia";
     Text[ japanese ] = "ºÏİÄŞ";
-    Text[ chinese_traditional ] = "©R¥O";
+    Text[ chinese_traditional ] = "«ü¥O";
     Text[ arabic ] = "ÃæÇãÑ";
     Text[ greek ] = "Åíôïëİò";
     Text[ korean ] = "¸í·É";
