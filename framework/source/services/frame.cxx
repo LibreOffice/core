@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-04 17:02:01 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 13:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
+//    LOG_ASSERT2( impl_cp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
     // Look for rejected calls first!
     // It could be that we are called twice ...
     // Use soft exceptions ... because if mode is set to E_INIT our manager don't throw any exception ... otherwise he do it!
@@ -551,8 +551,11 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // Now we can use our indicator factory helper to support XStatusIndicatorFactory interface.
     // We have a valid parent window for it!
     // Initialize helper.
-    OStatusIndicatorFactory* pIndicatorFactoryHelper = new OStatusIndicatorFactory( m_xFactory, m_xContainerWindow );
-    m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
+    if ( m_xContainerWindow.is() )
+    {
+        OStatusIndicatorFactory* pIndicatorFactoryHelper = new OStatusIndicatorFactory( m_xFactory, m_xContainerWindow );
+        m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
+    }
 
     // Change to working mode.
     m_aTransactionManager.setWorkingMode( E_WORK );
