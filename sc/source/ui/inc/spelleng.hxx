@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:52:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #include "editutil.hxx"
 
+#ifndef SC_SELECTIONSTATE_HXX
+#include "selectionstate.hxx"
+#endif
+
 class ScViewData;
 class ScDocShell;
 class ScDocument;
@@ -76,13 +80,8 @@ class ScConversionEngineBase : public ScEditEngineDefaulter
 {
 public:
     explicit                ScConversionEngineBase(
-                                SfxItemPool* pEnginePool,
-                                ScViewData& rViewData,
-                                ScDocument* pUndoDoc,
-                                ScDocument* pRedoDoc,
-                                ESelection* pEdSelection,
-                                SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                bool bCellSelection );
+                                SfxItemPool* pEnginePool, ScViewData& rViewData,
+                                ScDocument* pUndoDoc, ScDocument* pRedoDoc );
 
     virtual                 ~ScConversionEngineBase();
 
@@ -91,6 +90,8 @@ public:
 
     /** Returns true, if at least one cell has been modified. */
     inline bool             IsAnyModified() const { return mbIsAnyModified; }
+    /** Returns true, if the entire document/selection has been finished. */
+    inline bool             IsFinished() const { return mbFinished; }
 
 protected:
     /** Implementation of cell iteration. Finds a cell that needs conversion.
@@ -119,19 +120,19 @@ protected:  // for usage in derived classes
     ScDocument&             mrDoc;
 
 private:
+    ScSelectionState        maSelState;         /// Selection data of the document.
     ScDocument*             mpUndoDoc;          /// Document stores all old cells for UNDO action.
     ScDocument*             mpRedoDoc;          /// Document stores all new cells for REDO action.
-    ESelection*             mpEditSel;          /// Cell selection from edit mode or NULL.
     LanguageType            meCurrLang;         /// Current cell language.
     SCCOL                   mnStartCol;         /// Initial column index.
     SCROW                   mnStartRow;         /// Initial row index.
     SCTAB                   mnStartTab;         /// Initial sheet index.
     SCCOL                   mnCurrCol;          /// Current column index.
     SCROW                   mnCurrRow;          /// Current row index.
-    bool                    mbCellSelect;       /// true = Cell selection; false = Entire sheet.
     bool                    mbIsAnyModified;    /// true = At least one cell has been changed.
     bool                    mbInitialState;     /// true = Not searched for a cell yet.
     bool                    mbWrappedInTable;   /// true = Already restarted at top of the sheet.
+    bool                    mbFinished;         /// true = Entire document/selection finished.
 };
 
 // ============================================================================
@@ -147,9 +148,6 @@ public:
                                 ScViewData& rViewData,
                                 ScDocument* pUndoDoc,
                                 ScDocument* pRedoDoc,
-                                ESelection* pEdSelection,
-                                SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                bool bCellSelection,
                                 XSpellCheckerRef xSpeller );
 
     /** Checks spelling of all cells in the selection or sheet. */
@@ -167,6 +165,10 @@ protected:
     virtual bool            ShowTableWrapDialog();
     /** Show a message box stating that spell checking is finished. */
     virtual void            ShowFinishDialog();
+
+private:
+    /** Returns the spelling dialog if it is open. */
+    Window*                 GetDialogParent();
 };
 
 // ============================================================================
@@ -188,7 +190,7 @@ public:
                                 const Font *pTargetFont,        // target font to be used if language has to be changed
                                 sal_Int32 nOptions,             // misc conversion flags
                                 sal_Bool bIsInteractive         // textconversiob has (specific) dialog that may be raised
-                            );
+                                LanguageType eConvLanguage );
 
     /** Converts all cells in the selection or sheet according to set language. */
     virtual void            ConvertAll( EditView& rEditView );
