@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:03:08 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,26 +110,14 @@ public:
     virtual void notifyHiContrastChanged();
 
     /** fill the table list with the tables belonging to the connection described by the parameters
-        <BR>
-        The given URL is used to obtain a <type scope="com.sun.star.sdbc">Driver</type> object which can
-        handle it. After this, the driver is asked (<type scope="com.sun.star.sdbcx">XDataDefinitionSupplier</type>)
-        for a <type scope="com.sun.star.sdbcx">DatabaseDefinition</type> object for the connection.
-        @param _rConnectionURL
-            the connection URL
-        @param _rProperties
-            additional properties for creating the connection
-        @param _rxCreator
-            will, upon return, contain the XDriver which was used to create the connection
-        @return
-            the connection which was created for the given URL and the given params.
+        @param _xConnection
+            the connection, which must support the service com.sun.star.sdb.Connection
         @throws
             <type scope="com::sun::star::sdbc">SQLException</type> if no connection could be created
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+    void
             UpdateTableList(
-                const   ::rtl::OUString& _rConnectionURL,
-                const   ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxCreator
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
             )   throw(::com::sun::star::sdbc::SQLException);
 
     /** fill the table list with the tables and views determined by the two given containers
