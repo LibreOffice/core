@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 12:57:00 $
+ *  last change: $Author: pl $ $Date: 2002-09-06 10:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ String SV_ACCESSERROR_WRONG_VERSION
 
 String SV_ACCESSERROR_WRONG_VERSION_MSG
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION benötigt eine Java Access Bridge 1.03 oder höher. Bitte installieren Sie die aktuellste Java Access Bridge. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Zugänglichkeitsunterstützung zu starten, oder klicken Sie \"Abbrechen\".";
+    Text = "%PRODUCTNAME %PRODUCTVERSION benötigt eine Java Access Bridge 1.03 oder höher. Bitte installieren Sie die aktuellste Java Access Bridge. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Unterstützung der Zugänglichkeit zu starten, oder klicken Sie \"Abbrechen\".";
     Text [English] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
@@ -203,7 +203,7 @@ String SV_ACCESSERROR_MISSING_BRIDGE
 
 String SV_ACCESSERROR_MISSING_BRIDGE_MSG
 {
-    Text = "Es wurde keine Java Access Bridge gefunden. Bitte installieren Sie eine Java Access Bridge. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Zugänglichkeitsunterstützung zu starten, oder klicken Sie \"Abbrechen\".";
+    Text = "Es wurde keine Java Access Bridge gefunden. Bitte installieren Sie eine Java Access Bridge. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Unterstützung der Zugänglichkeit zu starten, oder klicken Sie \"Abbrechen\".";
     Text [English] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ english_us ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
@@ -257,7 +257,7 @@ String SV_ACCESSERROR_FAULTY_JAVA
 
 String SV_ACCESSERROR_FAULTY_JAVA_MSG
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION hat auf Ihrem System eine fehlerhafte Java Installation gefunden Bitte installieren Sie Java neu, oder führen Sie eine Reparatur durch. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Zugänglichkeitsunterstützung zu starten, oder klicken Sie \"Abbrechen\".";
+    Text = "%PRODUCTNAME %PRODUCTVERSION hat auf Ihrem System eine fehlerhafte Java Installation gefunden Bitte installieren Sie Java neu, oder führen Sie eine Reparatur durch. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Unterstützung der Zugänglichkeit zu starten, oder klicken Sie \"Abbrechen\".";
     Text [English] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
@@ -311,7 +311,7 @@ String SV_ACCESSERROR_MISSING_JAVA
 
 String SV_ACCESSERROR_MISSING_JAVA_MSG
 {
-    Text = "Es wurde keine Java Installation gefunden. Bitte installieren Sie eine Java Version. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Zugänglichkeitsunterstützung zu starten, oder klicken Sie \"Abbrechen\" um den Start zu beenden.";
+    Text = "Es wurde keine Java Installation gefunden. Bitte installieren Sie eine Java Version. Klicken Sie \"Ignorieren\" um %PRODUCTNAME %PRODUCTVERSION ohne Unterstützung der Zugänglichkeit zu starten, oder klicken Sie \"Abbrechen\" um den Start zu beenden.";
     Text [English] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ english_us ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese ] = "No Java installation was found on your system. Please install a version of Java. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
