@@ -30,6 +30,7 @@ Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The
 Public bDisposeDoc as Boolean
 Public bDebug as Boolean
 Public bStartUp as Boolean
+Public bConnectionIsovergiven as Boolean
 
 &apos; The macro can be called in 4 possible scenarios:
 &apos; Scenario 1. No parameters at given
@@ -111,6 +112,7 @@ Dim LocList() as String
 		.lstDatabases.SelectedItems() = Array(0)
 	End With
 	oProgressBar.Value = 60
+	bConnectionIsovergiven = Not IsMissing(oConnection)
 	If Not IsMissing(DataSourceName) Then
 		sDBName = DataSourceName
 		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
@@ -173,7 +175,7 @@ Dim LocList() as String
 	oProgressbar.End
 	RetValue = DlgFormDB.Execute()
 	DlgFormDB.Dispose()
-	If Not IsNull(oDBConnection) Then
+	If ((Not IsNull(oDBConnection)) And (Not bConnectionIsovergiven)) Then
 		oDBConnection.Dispose()
 	End If
 	If bDisposeDoc Then
