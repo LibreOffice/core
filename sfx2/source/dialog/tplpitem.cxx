@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplpitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:44:55 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "tplpitem.hxx"
 
