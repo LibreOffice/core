@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-28 17:01:00 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 13:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "eeitem.hxx"
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include "flditem.hxx"
+#include "svdfield.hxx"
 #include "unofield.hxx"
 #include "unoprov.hxx"
 #include "unotext.hxx"
@@ -193,6 +194,8 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
         return aExtFileFieldPropertyMap_Impl;
     case ID_AUTHORFIELD:
         return aAuthorFieldPropertyMap_Impl;
+    case ID_MEASUREFIELD:
+        return aEmptyPropertyMap_Impl;
 //  case ID_PAGEFIELD:
 //  case ID_PAGESFIELD:
 //  case ID_FILEFIELD:
@@ -218,7 +221,8 @@ static sal_Char* aFieldItemNameMap_Impl[] =
     "Table",
     "ExtTime",
     "ExtFile",
-    "Author"
+    "Author",
+    "Measure"
 };
 
 /* conversion routines */
@@ -360,8 +364,6 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
         DBG_ASSERT(mnServiceId != ID_NOTFOUND, "unknown SvxFieldData! [CL]");
         if(mnServiceId != ID_NOTFOUND)
         {
-            mpPropSet = new SfxItemPropertySet( ImplGetFieldItemPropertyMap(mnServiceId) );
-
             // extract field properties from data class
             switch( mnServiceId )
             {
@@ -406,6 +408,8 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             }
         }
     }
+
+    mpPropSet = new SfxItemPropertySet( ImplGetFieldItemPropertyMap(mnServiceId) );
 }
 
 SvxUnoTextField::~SvxUnoTextField() throw()
@@ -1024,6 +1028,8 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
         return ID_AUTHORFIELD;
     else if( pFieldData->ISA( SvxDateField )    )
         return ID_DATEFIELD;
+    else if( pFieldData->ISA( SdrMeasureField ) )
+        return ID_MEASUREFIELD;
 
     return ID_NOTFOUND;
 }
@@ -1045,7 +1051,8 @@ static const sal_Char* pServiceNames[] =
     "com.sun.star.text.TextField.SheetName",
     "com.sun.star.text.TextField.DateTime",
     "com.sun.star.text.TextField.FileName",
-    "com.sun.star.text.TextField.Author"
+    "com.sun.star.text.TextField.Author",
+    "com.sun.star.text.TextField.Measure"
 };
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
