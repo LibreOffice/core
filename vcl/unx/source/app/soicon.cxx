@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:43:35 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
             }
         }
     }
-    nColors = nColor+1;
+    nColors = nColor;
 
     aPixmap = XCreatePixmap( pDisplay->GetDisplay(),
                                 pDisplay->GetRootWindow(),
