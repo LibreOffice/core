@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 12:52:35 $
+ *  last change: $Author: pb $ $Date: 2000-12-10 14:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,11 +133,16 @@ private:
     CheckBox    aTitleCB;
 
     Size        aMinSize;
+    String      aFactory;
+
+    DECL_LINK(  SearchHdl, PushButton* );
 
 public:
     SearchTabPage_Impl( Window* pParent );
 
     virtual void    Resize();
+
+    void            SetFactory( const String& rFactory ) { aFactory = rFactory; }
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
@@ -158,8 +163,10 @@ private:
     long                nMinWidth;
 
     void                Initialize();
+    void                SetActiveFactory();
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
+    DECL_LINK(          SelectHdl, ListBox* );
 
 public:
     SfxHelpIndexWindow_Impl( Window* pParent );
@@ -168,7 +175,7 @@ public:
     virtual void        Resize();
 
     void                SetDoubleClickHdl( const Link& rLink );
-    void                SetFactory( const String& rFactory ) { pIPage->SetFactory( rFactory ); }
+    void                SetFactory( const String& rFactory, sal_Bool bActive );
     String              GetFactory() const { return pIPage->GetFactory(); }
 };
 
@@ -236,7 +243,7 @@ public:
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
-    void                SetFactory( const String& rFactory ) { pIndexWin->SetFactory( rFactory ); }
+    void                SetFactory( const String& rFactory, sal_Bool bStart );
 };
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX

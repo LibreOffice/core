@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-08 14:07:39 $
+ *  last change: $Author: pb $ $Date: 2000-12-10 14:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ using namespace com::sun::star::ucb;
 #define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
 #define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
 #define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
+#define HELP_SEARCH_TAG         ::rtl::OUString(DEFINE_CONST_UNICODE("/?Query="))
 
 // class ContentTabPage_Impl ---------------------------------------------
 
@@ -351,14 +352,38 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 {
     FreeResource();
 
-    aOperatorBtn.SetSymbol( SYMBOL_SPIN_RIGHT );
+//! aOperatorBtn.SetSymbol( SYMBOL_SPIN_RIGHT );
 
     String aText = aResultFT.GetText();
     aText.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), DEFINE_CONST_UNICODE(" ") );
     aText.SearchAndReplace( DEFINE_CONST_UNICODE("%2"), DEFINE_CONST_UNICODE("0") );
     aResultFT.SetText( aText );
+    aOperatorBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, SearchHdl ) );
 
     aMinSize = GetSizePixel();
+}
+
+IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
+{
+    String aSearchURL( HELP_URL );
+    aSearchURL += aFactory;
+    aSearchURL += String( HELP_SEARCH_TAG );
+    aSearchURL += aSearchED.GetText();
+
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
+    const ::rtl::OUString* pFacs  = aFactories.getConstArray();
+    UINT32 i, nCount = aFactories.getLength();
+    for ( i = 0; i < nCount; ++i )
+    {
+        String aRow( pFacs[i] );
+        String aTitle, aType, aURL;
+        xub_StrLen nIdx = 0;
+        aTitle = aRow.GetToken( 0, '\t', nIdx );
+        aType = aRow.GetToken( 0, '\t', nIdx );
+        aURL = aRow.GetToken( 0, '\t', nIdx );
+        aResultLB.InsertEntry( aTitle );
+    }
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -445,6 +470,9 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     delete pCPage;
     delete pIPage;
     delete pSPage;
+
+    for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
+        delete (String*)(ULONG)aActiveLB.GetEntryData(i);
 }
 
 // -----------------------------------------------------------------------
@@ -462,7 +490,31 @@ void SfxHelpIndexWindow_Impl::Initialize()
         aTitle = aRow.GetToken( 0, '\t', nIdx );
         aType = aRow.GetToken( 0, '\t', nIdx );
         aURL = aRow.GetToken( 0, '\t', nIdx );
-        aActiveLB.InsertEntry( aTitle );
+        aURL.Erase( aURL.Len() - 1 );
+        ::rtl::OUString aTemp( aURL );
+        sal_Int32 nCharPos = aTemp.lastIndexOf( '/' );
+        String* pFactory = new String( aTemp.copy( nCharPos + 1 ) );
+
+        USHORT nPos = aActiveLB.InsertEntry( aTitle );
+        aActiveLB.SetEntryData( nPos, (void*)(ULONG)pFactory );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::SetActiveFactory()
+{
+    DBG_ASSERT( pIPage, "index page not initialized" );
+
+    for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
+    {
+        String* pFactory = (String*)(ULONG)aActiveLB.GetEntryData(i);
+        pFactory->ToLowerAscii();
+        if ( *pFactory == pIPage->GetFactory() )
+        {
+            aActiveLB.SelectEntryPos(i);
+            break;
+        }
     }
 }
 
@@ -501,6 +553,21 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
     }
 
     pTabCtrl->SetTabPage( nId, pPage );
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
+{
+    String* pFactory = (String*)(ULONG)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
+    if ( pFactory )
+    {
+        String aFactory( *pFactory );
+        aFactory.ToLowerAscii();
+        SetFactory( aFactory, sal_False );
+    }
 
     return 0;
 }
@@ -546,6 +613,21 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
     if ( !pIPage )
         pIPage = new IndexTabPage_Impl( &aTabCtrl );
     pIPage->SetDoubleClickHdl( rLink );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActive )
+{
+    if ( !pIPage )
+        pIPage = new IndexTabPage_Impl( &aTabCtrl );
+    pIPage->SetFactory( rFactory );
+    if ( !pSPage )
+        pSPage = new SearchTabPage_Impl( &aTabCtrl );
+    pSPage->SetFactory( rFactory );
+
+    if ( bActive )
+        SetActiveFactory();
 }
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -829,7 +911,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
 
 IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 {
-    SetFactory( pListener->GetFactory() );
+    SetFactory( pListener->GetFactory(), sal_False );
     return 0;
 }
 
@@ -883,5 +965,14 @@ void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::
 {
     xWindow = xWin;
     MakeLayout();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpWindow_Impl::SetFactory( const String& rFactory, sal_Bool bStart )
+{
+    pIndexWin->SetFactory( rFactory, sal_True );
+    if ( bStart )
+        pHelpInterceptor->SetFactory( rFactory );
 }
 
