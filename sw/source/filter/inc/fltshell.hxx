@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:07:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,6 @@ class SwFltControlStack
     ULONG nFieldFlags;
     KeyCode aEmptyKeyCode; // fuer Bookmarks
 
-    BOOL IsAttrOpen(USHORT nAttrId);
-
 protected:
     SwDoc* pDoc;
     BOOL bIsEndStack;
@@ -188,11 +186,9 @@ public:
                  long nHand = LONG_MAX);
 
     void StealAttr(const SwPosition* pPos, USHORT nAttrId = 0);
-    void MoveAttrsToNextNode( const SwNodeIndex& rNdIdx );
     void MarkAllAttrsOld();
     void KillUnlockedAttrs(const SwPosition& pPos);
     SfxPoolItem* GetFmtStackAttr(USHORT nWhich, USHORT * pPos = 0);
-    const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, USHORT nWhich);
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
     void Delete(const SwPaM &rPam);
 
@@ -320,8 +316,6 @@ public:
     {
         bIsEndStack = TRUE;
     }
-
-    void SetBookRef( const String& rName, BOOL bPgRef = FALSE );
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -543,14 +537,12 @@ public:
 
     SwFltShell& AddGraphic( const String& rPicName );
     SwFltShell& AddError( const sal_Char* pErr );
-    SwFltShell& AddLinkedSection( const String& rFileName );
     SwFltShell& EndItem( USHORT nId );
     SwFltShell& SetStyle( USHORT nStyle );
 
     SwFltShell& operator << ( Graphic& );
     SwFltShell& operator << ( SwFltBookmark& aBook );
     void SetBookEnd(long nHandle);
-    SwFltShell& operator << ( const SwFltTOX& );
     SwFltShell& operator << ( const String& );  // Vorsicht: CHARSET_ANSI
     SwFltShell& operator << ( const sal_Unicode );
     SwFltShell& operator << ( const SwField& );
@@ -653,7 +645,6 @@ public:
     BOOL IsFlagSet(SwFltControlStack::Flags no) const
         { return aStack.IsFlagSet(no); }
     void ConvertUStr( String& rInOut );
-    void ConvertLStr( String& rInOut );
     String QuoteStr( const String& rIn );
 // folgende status kann die shell verwalten:
     const SfxPoolItem& GetNodeOrStyAttr(USHORT nWhich)
