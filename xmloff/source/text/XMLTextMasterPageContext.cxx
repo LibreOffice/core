@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2002-05-30 14:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
@@ -202,6 +205,13 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 
     if( bOverwrite || bNew )
     {
+        Reference < XMultiPropertyStates > xMultiStates( xPropSet,
+                                                         UNO_QUERY );
+        OSL_ENSURE( xMultiStates.is(),
+                    "text page style does not support multi property set" );
+        if( xMultiStates.is() )
+            xMultiStates->setAllPropertiesToDefault();
+
         bInsertHeader = bInsertFooter = sal_True;
         bInsertHeaderLeft = bInsertFooterLeft = sal_True;
     }
