@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxWhichIter aIter(rSet);
 
-    const BOOL bCopy = rSh.HasSelection();
+    const BOOL bCopy = rSh.SwCrsrShell::HasSelection();
 
     USHORT nWhich = aIter.FirstWhich();
 
@@ -975,8 +975,20 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                  SEL_DRAWTEXT != eMode &&
                  SEL_BEZIER != eMode )
             {
+                // oj #107754#
+                if ( SID_STYLE_WATERCAN == nSlot )
+                {
+                    SwWrtShell &rSh = GetShell();
+                    const BOOL bLockedView = rSh.IsViewLocked();
+                    rSh.LockView( TRUE );    //lock visible section
+
+                    GetView().GetDocShell()->ExecStyleSheet(rReq);
+
+                    rSh.LockView( bLockedView );
+                }
+                else
                 // wird von der DocShell aufgezeichnet
-                GetView().GetDocShell()->ExecStyleSheet(rReq);
+                    GetView().GetDocShell()->ExecStyleSheet(rReq);
             }
         }
         break;
