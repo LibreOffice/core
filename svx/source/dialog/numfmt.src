@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:35:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Kategória";
     };
     ListBox LB_CATEGORY
     {
@@ -515,6 +516,20 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         < "बूलियन मूल्य" ; Default ; > ;
         < "टेक्स्ट्" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "všetko" ; Default ; > ;
+        < "Definované užívateľom" ; Default ; > ;
+        < "Číslo" ; Default ; > ;
+        < "Percento" ; Default ; > ;
+        < "Mena" ; Default ; > ;
+        < "Dátum" ; Default ; > ;
+        < "Čas" ; Default ; > ;
+        < "Vedecká" ; Default ; > ;
+        < "Zlomok" ; Default ; > ;
+        < "Booleovská hodnota" ; Default ; > ;
+        < "Text" ; Default ; > ;
+    };
     };
     FixedText FT_EDFORMAT
     {
@@ -548,6 +563,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Formátovací kód";
         Text[ hebrew ] = "‮קוד צורה‬";
         Text[ hindi ] = "~रचना कोड्";
+        Text[ slovak ] = "~Formátovací kód";
     };
     Edit ED_FORMAT
     {
@@ -601,6 +617,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮צורה‬";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
 
     ListBox LB_CURRENCY
@@ -718,6 +735,10 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
          < "स्वचालित प्रकार से" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Automaticky" ; Default ; > ;
+    };
     };
 
     Control LB_FORMAT
@@ -761,6 +782,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Desetinná místa";
         Text[ hebrew ] = "‮ספרות עשרוניות‬";
         Text[ hindi ] = "~दशांश स्थान";
+        Text[ slovak ] = "~Desatinné miesta";
     };
     NumericField ED_DECIMALS
     {
@@ -808,6 +830,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Uvozující nuly";
         Text[ hebrew ] = "‮אפסים לפני‬";
         Text[ hindi ] = "आरम्भ का ~शून्य";
+        Text[ slovak ] = "Uvád~zajúce nuly";
     };
     NumericField ED_LEADZEROES
     {
@@ -854,6 +877,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Záporná čísla červeně";
         Text[ hebrew ] = "‮מספרים שליליים באדום‬";
         Text[ hindi ] = "~क्षयराशि संख्याएँ लाल";
+        Text[ slovak ] = "Zápor~né čísla červené";
     };
     CheckBox BTN_THOUSAND
     {
@@ -887,6 +911,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Oddělovač tisíců";
         Text[ hebrew ] = "‮מפריד אלפים‬";
         Text[ hindi ] = "~सहस्र अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač ~tisícok";
     };
     FixedLine FL_OPTIONS
     {
@@ -920,6 +945,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     FixedText FT_LANGUAGE
     {
@@ -953,6 +979,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
+        Text[ slovak ] = "~Jazyk";
     };
     ListBox LB_LANGUAGE
     {
@@ -976,7 +1003,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ french ] = "Format de la so~urce";
         Text[ spanish ] = "Formato de fuente";
         Text[ finnish ] = "~L�hdemuoto";
-        Text[ italian ] = "Formato d'origine";
+        Text[ italian ] = "Formato sorgente";
         Text[ danish ] = "K~ildeformat";
         Text[ swedish ] = "K�~llformat";
         Text[ polish ] = "Format �r�d�owy";
@@ -992,6 +1019,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Formát zdroje";
         Text[ hebrew ] = "‮צורת מקור‬";
         Text[ hindi ] = "मू~ल रचना";
+        Text[ slovak ] = "Formát ~zdroja";
     };
     Window WND_NUMBER_PREVIEW
     {
@@ -1038,6 +1066,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ czech ] = "Přidat";
         QuickHelpText[ hebrew ] = "‮הוספה‬";
         QuickHelpText[ hindi ] = "जोड़ो";
+        QuickHelpText[ slovak ] = "Pridať";
     };
     ImageButton IB_REMOVE
     {
@@ -1076,6 +1105,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ czech ] = "Odstranit";
         QuickHelpText[ hebrew ] = "‮הסרה‬";
         QuickHelpText[ hindi ] = "हटाओ";
+        QuickHelpText[ slovak ] = "Odstrániť";
     };
     ImageButton IB_INFO
     {
@@ -1112,6 +1142,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText[ czech ] = "Upravit komentář";
         QuickHelpText[ hebrew ] = "Kommentar ändern";
         QuickHelpText[ hindi ] = "अपवाद संपादन";
+        QuickHelpText[ slovak ] = "Upraviť komentár";
     };
     ImageList IL_ICON
     {
@@ -1167,6 +1198,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Evropa";
         Text[ hebrew ] = "‮אירופה‬";
         Text[ hindi ] = "यूरोप";
+        Text[ slovak ] = "Európa";
     };
     String STR_AUTO_ENTRY
     {
@@ -1195,6 +1227,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ czech ] = "Automatický";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्वचालित प्रकार से";
+        Text[ slovak ] = "Automaticky";
     };
 
     Text[ chinese_simplified ] = "数字格式";
@@ -1212,8 +1245,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ czech ] = "Formát čísla";
     Text[ hebrew ] = "‮תבנית מספר‬";
     Text[ hindi ] = "संख्या रचना";
+    Text[ slovak ] = "Formát čísla";
 };
  // ********************************************************************** EOF
+
+
 
 
 
