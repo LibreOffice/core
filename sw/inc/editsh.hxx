@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:20:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,8 +966,8 @@ public:
 
     // Schnittstelle fuer die TextInputDaten - ( fuer die Texteingabe
     // von japanischen/chinesischen Zeichen)
-    SwExtTextInput* CreateExtTextInput();
-    String DeleteExtTextInput( SwExtTextInput* pDel = 0, BOOL bInsText = TRUE );
+    SwExtTextInput* CreateExtTextInput(LanguageType eInputLanguage);
+    String DeleteExtTextInput( SwExtTextInput* pDel = 0, BOOL bInsText = TRUE);
 //  SwExtTextInput* GetExtTextInput() const;
     void SetExtTextInputData( const CommandExtTextInputData& );
 
