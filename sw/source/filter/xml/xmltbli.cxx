@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-07 08:36:05 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,16 @@
 #ifndef _CELLATR_HXX
 #include "cellatr.hxx"
 #endif
+#ifndef _SWDDETBL_HXX
+#include "swddetbl.hxx"
+#endif
+#ifndef _DDEFLD_HXX
+#include "ddefld.hxx"
+#endif
 
+#ifndef _LINKMGR_HXX
+#include <so3/linkmgr.hxx>  // for cTokenSeparator
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -167,6 +176,7 @@ enum SwXMLTableElemTokens
     XML_TOK_TABLE_HEADER_ROWS,
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
+    XML_TOK_OFFICE_DDE_SOURCE,
     XML_TOK_TABLE_ELEM_END=XML_TOK_UNKNOWN
 };
 
@@ -180,6 +190,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
             XML_TOK_TABLE_HEADER_ROWS },
     { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS },
     { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW },
+    { XML_NAMESPACE_OFFICE, sXML_dde_source,
+            XML_TOK_OFFICE_DDE_SOURCE },
+
     XML_TOKEN_MAP_END
 };
 
@@ -866,6 +879,200 @@ SvXMLImportContext *SwXMLTableRowsContext_Impl::CreateChildContext(
 
 // ---------------------------------------------------------------------
 
+class SwXMLDDETableContext_Impl : public SvXMLImportContext
+{
+    OUString sConnectionName;
+    OUString sDDEApplication;
+    OUString sDDEItem;
+    OUString sDDETopic;
+    sal_Bool bIsAutomaticUpdate;
+
+public:
+
+    TYPEINFO();
+
+    SwXMLDDETableContext_Impl(
+        SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
+
+    ~SwXMLDDETableContext_Impl();
+
+    virtual void StartElement(
+        const Reference<xml::sax::XAttributeList> & xAttrList);
+
+    OUString& GetConnectionName()   { return sConnectionName; }
+    OUString& GetDDEApplication()   { return sDDEApplication; }
+    OUString& GetDDEItem()          { return sDDEItem; }
+    OUString& GetDDETopic()         { return sDDETopic; }
+    sal_Bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
+};
+
+TYPEINIT1( SwXMLDDETableContext_Impl, SvXMLImportContext );
+
+SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
+    SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName) :
+        SvXMLImportContext(rImport, nPrfx, rLName),
+        sConnectionName(),
+        sDDEApplication(),
+        sDDEItem(),
+        sDDETopic(),
+        bIsAutomaticUpdate(sal_False)
+{
+}
+
+SwXMLDDETableContext_Impl::~SwXMLDDETableContext_Impl()
+{
+}
+
+void SwXMLDDETableContext_Impl::StartElement(
+    const Reference<xml::sax::XAttributeList> & xAttrList)
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        if (XML_NAMESPACE_OFFICE == nPrefix)
+        {
+            if (aLocalName.equalsAsciiL(sXML_dde_application,
+                                        sizeof(sXML_dde_application)-1))
+            {
+                sDDEApplication = rValue;
+            }
+            else if (aLocalName.equalsAsciiL(sXML_dde_topic,
+                                             sizeof(sXML_dde_topic)-1))
+            {
+                sDDETopic = rValue;
+            }
+            else if (aLocalName.equalsAsciiL(sXML_dde_item,
+                                             sizeof(sXML_dde_item)-1))
+            {
+                sDDEItem = rValue;
+            }
+            else if (aLocalName.equalsAsciiL(sXML_name,
+                                             sizeof(sXML_name)-1))
+            {
+                sConnectionName = rValue;
+            }
+            else if (aLocalName.equalsAsciiL(sXML_automatic_update,
+                                             sizeof(sXML_automatic_update)-1))
+            {
+                sal_Bool bTmp;
+                if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+                {
+                    bIsAutomaticUpdate = bTmp;
+                }
+            }
+            // else: unknown attribute
+        }
+        // else: unknown attribute namespace
+    }
+}
+
+// generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
+String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
+{
+    String sPrefixStr(sPrefix);
+
+    if (sPrefixStr.Len() == 0)
+    {
+        sPrefixStr = String('_');
+    }
+//  else if (sPrefixStr.Copy(0, 1).IsAlphaAscii())
+//  {
+//      sPrefixStr.Insert('_', 0);
+//  }
+    // else: name is OK.
+
+    // increase count until we find a name that is not yet taken
+    String sName;
+    sal_Int32 nCount = 0;
+    do
+    {
+        // this is crazy, but just in case all names are taken: exit gracefully
+        if (nCount < 0)
+            return sName;
+
+        nCount++;
+        sName = sPrefixStr;
+        sName += String::CreateFromInt32(nCount);
+
+    }
+    while (NULL != pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName));
+
+    return sName;
+}
+
+// set table properties
+SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
+                                    SwTableNode* pTableNode)
+{
+    // make command string
+    String sCommand(pContext->GetDDEApplication());
+    sCommand += cTokenSeperator;
+    sCommand += String(pContext->GetDDEItem());
+    sCommand += cTokenSeperator;
+    sCommand += String(pContext->GetDDETopic());
+
+    sal_uInt16 nType = pContext->GetIsAutomaticUpdate() ? LINKUPDATE_ALWAYS
+                                                        : LINKUPDATE_ONCALL;
+
+    String sName(pContext->GetConnectionName());
+
+    // field type to be returned
+    SwDDEFieldType* pType = NULL;
+
+    // valid name?
+    if (sName.Len() == 0)
+    {
+        sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
+                                        pTableNode);
+    }
+    else
+    {
+        // check for existing DDE field type with the same name
+        SwDDEFieldType* pOldType = (SwDDEFieldType*)pTableNode->GetDoc()->
+                                                GetFldType(RES_DDEFLD, sName);
+        if (NULL != pOldType)
+        {
+            // same values -> return old type
+            if ( (pOldType->GetCmd() == sCommand) &&
+                 (pOldType->GetType() == nType) )
+            {
+                // same name, same values -> return old type!
+                pType = pOldType;
+            }
+            else
+            {
+                // same name, different values -> think of new name
+                sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
+                                                pTableNode);
+            }
+        }
+        // no old type -> create new one
+    }
+
+    // create new field type (unless we already have one)
+    if (NULL == pType)
+    {
+        // create new field type and return
+        SwDDEFieldType aDDEFieldType(sName, sCommand, nType);
+        pType = (SwDDEFieldType*)pTableNode->
+            GetDoc()->InsertFldType(aDDEFieldType);
+    }
+
+    DBG_ASSERT(NULL != pType, "We really want a SwDDEFieldType here!");
+    return pType;
+}
+
+
+// ---------------------------------------------------------------------
+
 typedef SwXMLTableRow_Impl* SwXMLTableRowPtr;
 SV_DECL_PTRARR_DEL(SwXMLTableRows_Impl,SwXMLTableRowPtr,5,5)
 SV_IMPL_PTRARR(SwXMLTableRows_Impl,SwXMLTableRowPtr)
@@ -894,7 +1101,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     nWidth( 0UL ),
     bFirstSection( sal_True ),
     bRelWidth( sal_True ),
-    bHasHeading( sal_False )
+    bHasHeading( sal_False ),
+    pDDESource(NULL)
 {
     OUString aName;
 
@@ -1009,7 +1217,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     nWidth( 0UL ),
     bFirstSection( sal_False ),
     bRelWidth( sal_True ),
-    bHasHeading( sal_False )
+    bHasHeading( sal_False ),
+    pDDESource(NULL)
 {
 }
 
@@ -1052,6 +1261,17 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
             pContext = new SwXMLTableRowContext_Impl( GetSwImport(), nPrefix,
                                                       rLocalName, xAttrList,
                                                       this );
+        break;
+    case XML_TOK_OFFICE_DDE_SOURCE:
+        // save context for later processing (discard old context, if approp.)
+        if (pDDESource != NULL)
+        {
+            pDDESource->ReleaseRef();
+        }
+        pDDESource = new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
+                                                    rLocalName );
+        pDDESource->AddRef();
+        pContext = pDDESource;
         break;
     }
 
@@ -2055,6 +2275,25 @@ void SwXMLTableContext::MakeTable()
 
     for( sal_uInt16 i=0; i<pRows->Count(); i++ )
         (*pRows)[i]->Dispose();
+
+    // now that table is complete, change into DDE table (if appropriate)
+    if (NULL != pDDESource)
+    {
+        // change existing table into DDE table:
+        // 1) Get DDE field type (get data from dde-source context),
+        SwDDEFieldType* pFldType = lcl_GetDDEFieldType( pDDESource,
+                                                        pTableNode );
+
+        // 2) release the DDE source context,
+        pDDESource->ReleaseRef();
+
+        // 3) create new DDE table, and
+        SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(),
+                                                pFldType, FALSE );
+
+        // 4) set new (DDE)table at node.
+        pTableNode->SetNewTable(pDDETable, FALSE);
+    }
 
     if( pTableNode->GetDoc()->GetRootFrm() )
     {

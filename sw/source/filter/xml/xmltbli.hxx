@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class SwTableBoxFmt;
 class SwTableLineFmt;
 class SwXMLTableCell_Impl;
 class SwXMLTableRows_Impl;
+class SwXMLDDETableContext_Impl;
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
@@ -110,6 +111,8 @@ class SwXMLTableContext : public XMLTextTableContext
     SwTableLineFmt      *pLineFmt;
 
     SvXMLImportContextRef   xParentTable;   // if table ia a sub table
+
+    SwXMLDDETableContext_Impl   *pDDESource;
 
     sal_Bool            bFirstSection : 1;
     sal_Bool            bRelWidth : 1;

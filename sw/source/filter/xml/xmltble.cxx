@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,16 @@
 #endif
 #ifndef _CELLATR_HXX
 #include "cellatr.hxx"
+#endif
+#ifndef _DDEFLD_HXX
+#include "ddefld.hxx"
+#endif
+#ifndef _SWDDETBL_HXX
+#include "swddetbl.hxx"
+#endif
+
+#ifndef _LINKMGR_HXX
+#include <so3/linkmgr.hxx>  // for cTokenSeperator
 #endif
 
 #ifndef _UNOOBJ_HXX
@@ -1045,6 +1055,39 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_table,
                                   sal_True, sal_True );
+
+        // export DDE source (if this is a DDE table)
+        if ( IS_TYPE(SwDDETable, &rTbl) )
+        {
+            // get DDE Field Type (contains the DDE connection)
+            const SwDDEFieldType* pDDEFldType =
+                ((SwDDETable&)rTbl).GetDDEFldType();
+
+            // connection name
+            AddAttribute( XML_NAMESPACE_OFFICE, sXML_name,
+                          pDDEFldType->GetName() );
+
+            // DDE command
+            const String sCmd = pDDEFldType->GetCmd();
+            AddAttribute( XML_NAMESPACE_OFFICE, sXML_dde_application,
+                          sCmd.GetToken(0, cTokenSeperator) );
+            AddAttribute( XML_NAMESPACE_OFFICE, sXML_dde_item,
+                          sCmd.GetToken(1, cTokenSeperator) );
+            AddAttribute( XML_NAMESPACE_OFFICE, sXML_dde_topic,
+                          sCmd.GetToken(2, cTokenSeperator) );
+
+            // auto update
+            if (pDDEFldType->GetType() == LINKUPDATE_ALWAYS)
+            {
+                AddAttributeASCII( XML_NAMESPACE_OFFICE,
+                                   sXML_automatic_update, sXML_true );
+            }
+
+            // DDE source element (always empty)
+            SvXMLElementExport aSource(*this, XML_NAMESPACE_OFFICE,
+                                       sXML_dde_source, sal_True, sal_False);
+        }
+
         ExportTableLines( rTbl.GetTabLines(), rTbl.IsHeadlineRepeat() );
 
         ((SwTable &)rTbl).GetTabLines().ForEach( &lcl_xmltble_ClearName_Line,
