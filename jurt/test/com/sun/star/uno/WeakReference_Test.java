@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WeakReference_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 15:43:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,73 +60,93 @@
  ************************************************************************/
 
 package com.sun.star.uno;
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.WeakReference;
 
+import complexlib.ComplexTestCase;
+import java.util.ArrayList;
+import java.util.Iterator;
+import util.WaitUnreachable;
 
-public class WeakReference_Test
-{
-
-    /** Creates a new instance of WeakReference_Test */
-    public WeakReference_Test()
-    {
+public final class WeakReference_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
     }
 
-    public boolean test()
-    {
-        System.out.println("Testing WeakReference");
-        boolean[] r= new boolean[50];
-        int i= 0;
+    public String[] getTestMethodNames() {
+        return new String[] { "test" };
+    }
 
-        WeakBase aObj1= new WeakBase();
-//        WeakBase aObj2= new WeakBase();
-        WeakReference wr1= new WeakReference(aObj1);
-        WeakReference wr2= new WeakReference(wr1);
+    public void test() {
+        Object o = new MockWeak();
+        WeakReference r1 = new WeakReference(o);
+        WeakReference r2 = new WeakReference(r1);
+        assure("", r1.get() == o);
+        assure("", r2.get() == o);
+        WaitUnreachable u = new WaitUnreachable(o);
+        o = null;
+        u.waitUnreachable();
+        assure("a3", r1.get() == null);
+        assure("a4", r2.get() == null);
+    }
 
-        r[i++]= wr1.get() == aObj1;
-        r[i++]= wr2.get() == aObj1;
-        aObj1= null;
-
-          //        Object obj= ref.get();
-        System.out.println("Wait 5 sec");
-        for(int c= 0; c < 50; c++)
-        {
-            try
-            {
-                Thread.currentThread().sleep(100);
-                System.gc();
-                System.runFinalization();
-            }catch (InterruptedException ie)
-            {
-            }
+    private static final class MockWeak implements XWeak {
+        public XAdapter queryAdapter() {
+            return adapter;
         }
-        r[i++]= wr1.get() == null;
-        r[i++]= wr2.get() == null;
 
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        if (bOk == false)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
-        return bOk;
+        protected void finalize() {
+            adapter.dispose();
+        }
+
+        private static final class Adapter implements XAdapter {
+            public Adapter(Object obj) {
+                ref = new java.lang.ref.WeakReference(obj);
+            }
+
+            public Object queryAdapted() {
+                return ref.get();
+            }
+
+            public void addReference(XReference ref) {
+                synchronized (this) {
+                    if (listeners != null) {
+                        listeners.add(ref);
+                        return;
+                    }
+                }
+                ref.dispose();
+            }
+
+            public synchronized void removeReference(XReference ref) {
+                if (listeners != null) {
+                    listeners.remove(ref);
+                }
+            }
+
+            public void dispose() {
+                ArrayList l;
+                synchronized (this){
+                    l = listeners;
+                    listeners = null;
+                }
+                if (l != null) {
+                    java.lang.RuntimeException ex = null;
+                    for (Iterator i = l.iterator(); i.hasNext();) {
+                        try {
+                            ((XReference) i.next()).dispose();
+                        } catch (java.lang.RuntimeException e) {
+                            ex = e;
+                        }
+                    }
+                    if (ex != null) {
+                        throw ex;
+                    }
+                }
+            }
+
+            private final java.lang.ref.WeakReference ref;
+            private ArrayList listeners = new ArrayList();
+        }
+
+        private final Adapter adapter = new Adapter(this);
     }
-    public static void main(String[] args)
-    {
-        WeakReference_Test test= new WeakReference_Test();
-        boolean r[]= new boolean[50];
-        int i= 0;
-        r[i++]= test.test();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        if (bOk == false)
-            System.out.println("Errors occured!");
-        else
-            System.out.println("No errors.");
-
-    }
-
 }
