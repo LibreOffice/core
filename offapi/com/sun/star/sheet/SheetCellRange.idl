@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:21:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ module com {  module sun {  module star {  module sheet {
     <p>This service is an extension of the CellRange service for use
     in spreadsheet documents.</p>
  */
-service SheetCellRange
+published service SheetCellRange
 {
     //-------------------------------------------------------------------------
 
