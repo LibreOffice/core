@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 17:13:22 $
+ *  last change: $Author: fs $ $Date: 2002-01-21 08:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,6 +1295,9 @@ void FmFilterNavigator::Update(const Reference< ::com::sun::star::container::XIn
     if (xCurrent == m_pModel->GetCurrentController())
         return;
 
+    // stop the selection timer
+    // if a new entry will be selected during the lines below, the timer will be started, again
+    // 21.01.2002 - 96721 - fs@openoffice.org
     if (m_aSelectTimer.IsActive())
         m_aSelectTimer.Stop();
 
