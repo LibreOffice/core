@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:02 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 13:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,12 +94,10 @@ extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 
 //CellStyles
-#define XML_SC_TYPE_CELLBACKCOLOR                   (XML_SC_TYPES_START +  0)
 #define XML_SC_TYPE_CELLPROTECTION                  (XML_SC_TYPES_START +  1)
 #define XML_SC_TYPE_PRINTCONTENT                    (XML_SC_TYPES_START +  2)
 #define XML_SC_TYPE_HORIJUSTIFY                     (XML_SC_TYPES_START +  3)
 #define XML_SC_TYPE_HORIJUSTIFYSOURCE               (XML_SC_TYPES_START +  4)
-#define XML_SC_TYPE_ISCELLBACKGROUNDTRANSPARENT     (XML_SC_TYPES_START +  5)
 #define XML_SC_TYPE_ORIENTATION                     (XML_SC_TYPES_START +  6)
 #define XML_SC_TYPE_ROTATEANGLE                     (XML_SC_TYPES_START +  7)
 #define XML_SC_TYPE_ROTATEREFERENCE                 (XML_SC_TYPES_START +  8)
@@ -133,6 +131,8 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_NUMBERFORMAT                        20
 #define CTF_MAP                                 21
 #define CTF_PARAINDENT                          22
+#define CTF_TEXTBACKCOLOR                       23
+#define CTF_ISTEXTBACKGROUNDTRANSPARENT         24
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
@@ -268,15 +268,6 @@ public:
     virtual ~XMLTableStylesPropertySetMapper();
 };
 
-class XmlScPropHdl_CellBackColor : public XMLPropertyHandler
-{
-public:
-    virtual ~XmlScPropHdl_CellBackColor();
-    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-};
-
 class XmlScPropHdl_CellProtection : public XMLPropertyHandler
 {
 public:
@@ -321,15 +312,6 @@ class XmlScPropHdl_HoriJustifySource : public XMLPropertyHandler
 {
 public:
     virtual ~XmlScPropHdl_HoriJustifySource();
-    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-};
-
-class XmlScPropHdl_IsCellBackgroundTransparent : public XMLPropertyHandler
-{
-public:
-    virtual ~XmlScPropHdl_IsCellBackgroundTransparent();
     virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;

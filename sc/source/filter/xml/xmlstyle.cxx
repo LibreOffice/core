@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:30:15 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 13:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ using namespace com::sun::star;
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
-    { "CellBackColor", XML_NAMESPACE_FO, sXML_background_color, XML_SC_TYPE_CELLBACKCOLOR|MID_FLAG_MULTI_PROPERTY, CTF_CELLBACKCOLOR },
+    { "CellBackColor", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_CELLBACKCOLOR },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_cell_protect, XML_SC_TYPE_CELLPROTECTION|MID_FLAG_MERGE_PROPERTY, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_print_content, XML_SC_TYPE_PRINTCONTENT|MID_FLAG_MERGE_PROPERTY, 0 },
     { "NumberFormat", XML_NAMESPACE_STYLE, sXML_data_style_name, XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_NUMBERFORMAT},
@@ -129,7 +129,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 },
 //  { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY },
 //  { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY_SOURCE },
-    { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_SC_TYPE_ISCELLBACKGROUNDTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISCELLBACKGROUNDTRANSPARENT },
+    { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISCELLBACKGROUNDTRANSPARENT },
     { "IsTextWrapped", XML_NAMESPACE_FO, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
     { "Orientation", XML_NAMESPACE_FO, sXML_direction, XML_SC_TYPE_ORIENTATION, 0 },
     { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE16, 0 },
@@ -156,7 +156,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 
 // CharacterProperties
     { "CharAutoKerning", XML_NAMESPACE_STYLE, sXML_letter_kerning, XML_TYPE_BOOL, 0 },
-    { "CharBackColor", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_COLOR, 0 },
+    { "CharBackColor", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_COLORTRANSPARENT, CTF_TEXTBACKCOLOR },
     { "CharCaseMap", XML_NAMESPACE_FO, sXML_font_variant, XML_TYPE_TEXT_CASEMAP_VAR, 0 },
     { "CharCaseMap", XML_NAMESPACE_FO, sXML_text_transform, XML_TYPE_TEXT_CASEMAP, 0 },
     { "CharColor", XML_NAMESPACE_FO, sXML_color, XML_TYPE_COLOR, 0 },
@@ -181,6 +181,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "CharShadowed",XML_NAMESPACE_FO, sXML_text_shadow, XML_TYPE_TEXT_SHADOWED, 0 },
 //  { "CharStyle", ... },
 //  { "CharBackTransparent", ... },
+    { "CharBackTransparent", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISTEXTBACKGROUNDTRANSPARENT },
     { "CharUnderline", XML_NAMESPACE_STYLE, sXML_text_underline, XML_TYPE_TEXT_UNDERLINE, 0 },
     { "CharWeight", XML_NAMESPACE_FO, sXML_font_weight, XML_TYPE_TEXT_WEIGHT, 0 },
     { "CharWordMode", XML_NAMESPACE_STYLE, sXML_score_spaces, XML_TYPE_NBOOL, 0 },
@@ -466,11 +467,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     {
         switch(nType)
         {
-            case XML_SC_TYPE_CELLBACKCOLOR:
-            {
-                pHdl = new XmlScPropHdl_CellBackColor;
-            }
-            break;
             case XML_SC_TYPE_CELLPROTECTION :
             {
                 pHdl = new XmlScPropHdl_CellProtection;
@@ -497,11 +493,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SC_TYPE_HORIJUSTIFYSOURCE :
             {
                 pHdl = new XmlScPropHdl_HoriJustifySource;
-            }
-            break;
-            case XML_SC_TYPE_ISCELLBACKGROUNDTRANSPARENT :
-            {
-                pHdl = new XmlScPropHdl_IsCellBackgroundTransparent;
             }
             break;
             case XML_SC_TYPE_ORIENTATION :
@@ -549,6 +540,8 @@ void XMLCellStylesPropertySetMapper::ContextFilter(
 {
     XMLPropertyState* pCellBackColor = NULL;
     XMLPropertyState* pIsCellBackgroundTransparent = NULL;
+    XMLPropertyState* pTextBackColor = NULL;
+    XMLPropertyState* pIsTextBackgroundTransparent = NULL;
 
     XMLPropertyState* pPadding = NULL;
     XMLPropertyState* pPadding_Bottom = NULL;
@@ -576,6 +569,8 @@ void XMLCellStylesPropertySetMapper::ContextFilter(
         {
             case CTF_CELLBACKCOLOR:                 pCellBackColor = propertie; break;
             case CTF_ISCELLBACKGROUNDTRANSPARENT:   pIsCellBackgroundTransparent = propertie; break;
+            case CTF_TEXTBACKCOLOR:                 pTextBackColor = propertie; break;
+            case CTF_ISTEXTBACKGROUNDTRANSPARENT:   pIsTextBackgroundTransparent = propertie; break;
             case CTF_ALLPADDING:                    pPadding = propertie; break;
             case CTF_BOTTOMPADDING:                 pPadding_Bottom = propertie; break;
             case CTF_LEFTPADDING:                   pPadding_Left = propertie; break;
@@ -608,6 +603,23 @@ void XMLCellStylesPropertySetMapper::ContextFilter(
             {
                 pIsCellBackgroundTransparent->mnIndex = -1;
                 pIsCellBackgroundTransparent->maValue.clear();
+            }
+        }
+    }
+    if( pTextBackColor && pIsTextBackgroundTransparent )
+    {
+        sal_Bool bTemp;
+        if(pIsTextBackgroundTransparent->maValue >>= bTemp)
+        {
+            if( bTemp )
+            {
+                pTextBackColor->mnIndex = -1;
+                pTextBackColor->maValue.clear();
+            }
+            else
+            {
+                pIsTextBackgroundTransparent->mnIndex = -1;
+                pIsTextBackgroundTransparent->maValue.clear();
             }
         }
     }
@@ -770,59 +782,6 @@ XMLTableStylesPropertySetMapper::XMLTableStylesPropertySetMapper(const XMLProper
 
 XMLTableStylesPropertySetMapper::~XMLTableStylesPropertySetMapper()
 {
-}
-
-XmlScPropHdl_CellBackColor::~XmlScPropHdl_CellBackColor()
-{
-}
-
-sal_Bool XmlScPropHdl_CellBackColor::equals(
-    const ::com::sun::star::uno::Any& r1,
-    const ::com::sun::star::uno::Any& r2 ) const
-{
-    sal_Int32 aCellBackColor1, aCellBackColor2;
-
-    if((r1 >>= aCellBackColor1) && (r2 >>= aCellBackColor2))
-        return (aCellBackColor1 == aCellBackColor2);
-    return sal_False;
-}
-
-sal_Bool XmlScPropHdl_CellBackColor::importXML(
-    const ::rtl::OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    Color aColor;
-    if (rUnitConverter.convertColor(aColor, rStrImpValue))
-    {
-        sal_uInt32 nValue = aColor.GetColor();
-        rValue <<= nValue;
-        bRetval = sal_True;
-    }
-
-    return bRetval;
-}
-
-sal_Bool XmlScPropHdl_CellBackColor::exportXML(
-    ::rtl::OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Int32 nVal;
-    sal_Bool bRetval(sal_False);
-
-    if(rValue >>= nVal)
-    {
-        Color aColor(nVal);
-        rtl::OUStringBuffer sValue;
-        rUnitConverter.convertColor(sValue, aColor);
-        rStrExpValue = sValue.makeStringAndClear();
-        bRetval = sal_True;
-    }
-
-    return bRetval;
 }
 
 XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection()
@@ -1244,64 +1203,6 @@ sal_Bool XmlScPropHdl_HoriJustifySource::exportXML(
         else
         {
             rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_fix));
-            bRetval = sal_True;
-        }
-    }
-
-    return bRetval;
-}
-
-XmlScPropHdl_IsCellBackgroundTransparent::~XmlScPropHdl_IsCellBackgroundTransparent()
-{
-}
-
-sal_Bool XmlScPropHdl_IsCellBackgroundTransparent::equals(
-    const ::com::sun::star::uno::Any& r1,
-    const ::com::sun::star::uno::Any& r2 ) const
-{
-    sal_Bool bIsTransparent1, bIsTransparent2;
-
-    if((r1 >>= bIsTransparent1) && (r2 >>= bIsTransparent2))
-        return (bIsTransparent1 == bIsTransparent2);
-    return sal_False;
-}
-
-sal_Bool XmlScPropHdl_IsCellBackgroundTransparent::importXML(
-    const ::rtl::OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    if (rStrImpValue.compareToAscii(sXML_transparent) == 0)
-    {
-        sal_Bool bTemp = sal_True;
-        rValue <<= bTemp;
-        bRetval = sal_True;
-    }
-    else
-    {
-        sal_Bool bTemp = sal_False;
-        rValue <<= bTemp;
-        bRetval = sal_True;
-    }
-
-    return bRetval;
-}
-
-sal_Bool XmlScPropHdl_IsCellBackgroundTransparent::exportXML(
-    ::rtl::OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-    sal_Bool bTemp;
-    if(rValue >>= bTemp)
-    {
-        if (bTemp)
-        {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_transparent));
             bRetval = sal_True;
         }
     }
