@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 13:37:02 $
+ *  last change: $Author: gt $ $Date: 2002-09-03 10:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "gallery.hrc"
 
 /******************************************************************************/
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 DockingWindow RID_SVXDLG_GALLERYBROWSER
 {
@@ -2252,13 +2254,25 @@ Bitmap RID_SVXBMP_GALLERY_SOUND_7
 Image RID_SVXIMG_GALLERY_VIEW_ICON
 {
     ImageBitmap = Bitmap { File = "galicon.bmp"; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    MASKCOLOR
 };
 
 Image RID_SVXIMG_GALLERY_VIEW_LIST
 {
     ImageBitmap = Bitmap { File = "gallist.bmp"; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_GALLERY_VIEW_ICON_HC
+{
+    ImageBitmap = Bitmap { File = "galicon_h.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_GALLERY_VIEW_LIST_HC
+{
+    ImageBitmap = Bitmap { File = "gallist_h.bmp"; };
+    MASKCOLOR
 };
 
 

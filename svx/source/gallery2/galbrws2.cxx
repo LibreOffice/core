@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 10:29:39 $
+ *  last change: $Author: gt $ $Date: 2002-09-03 10:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,15 +388,10 @@ GalleryBrowser2::~GalleryBrowser2()
 
 void GalleryBrowser2::InitSettings()
 {
-    Image aIconImage( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_ICON ) );
-    Image aListImage( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_LIST ) );
+    BOOL  bHC = GALLERY_DLG_COLOR.IsDark();
+    Image aIconImage( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) );
+    Image aListImage( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) );
     Font  aInfoFont( maInfoBar.GetControlFont() );
-
-    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        aIconImage = aIconImage.GetColorTransformedImage( IMAGECOLORTRANSFORM_HIGHCONTRAST );
-        aListImage = aListImage.GetColorTransformedImage( IMAGECOLORTRANSFORM_HIGHCONTRAST );
-    }
 
     maViewBox.SetItemImage( TBX_ID_ICON, aIconImage );
     maViewBox.SetItemImage( TBX_ID_LIST, aListImage );
