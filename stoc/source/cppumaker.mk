@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cppumaker.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-10 21:40:40 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 20:19:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,4 @@ CPPUMAKERFLAGS = -L
 .ENDIF
 UNOUCROUT=	$(OUT)$/inc$/light
 INCPRE+=	$(OUT)$/inc$/light
-.ENDIF
-
-.IF "$(OS)" == "MACOSX"
-CFLAGS += -Dcomponent_getImplementationEnvironment=lib$(TARGET)component_getImplementationEnvironment \
-      -Dcomponent_writeInfo=lib$(TARGET)component_writeInfo \
-      -Dcomponent_getFactory=lib$(TARGET)component_getFactory \
-      -Dcomponent_getDescriptionFunc=lib$(TARGET)component_getDescriptionFunc
 .ENDIF
