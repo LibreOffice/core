@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:14:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #ifndef _CPPUHELPER_IMPLBASE9_HXX_
 #include <cppuhelper/implbase9.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
-#include <cppuhelper/implbase10.hxx>
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
 #include <com/sun/star/embed/XTransactionListener.hpp>
@@ -217,7 +217,7 @@ typedef ::cppu::ImplHelper9 <   ::com::sun::star::lang::XServiceInfo
                             >   ODatabaseSource_Base;
 
 
-typedef ::cppu::ImplHelper10    <   ::com::sun::star::frame::XModel
+typedef ::cppu::ImplHelper12<   ::com::sun::star::frame::XModel
                             ,   ::com::sun::star::util::XModifiable
                             ,   ::com::sun::star::frame::XStorable
                             ,   ::com::sun::star::view::XPrintable
@@ -226,7 +226,9 @@ typedef ::cppu::ImplHelper10    <   ::com::sun::star::frame::XModel
                             ,   ::com::sun::star::util::XCloseable
                             ,   ::com::sun::star::ui::XUIConfigurationManagerSupplier
                             ,   ::com::sun::star::document::XDocumentSubStorageSupplier
-                            , ::com::sun::star::embed::XTransactionListener
+                            ,   ::com::sun::star::embed::XTransactionListener
+                            ,   ::com::sun::star::document::XEventBroadcaster
+                            ,   ::com::sun::star::document::XEventListener
                             >   ODatabaseSource_OfficeDocument;
 
 
@@ -295,13 +297,12 @@ protected:
     ::cppu::OInterfaceContainerHelper                   m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                   m_aFlushListeners;
+    ::cppu::OInterfaceContainerHelper                   m_aDocEventListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>                   m_xSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>                     m_xCurrentController;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                       m_xStorage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >              m_xDocEventBroadcaster;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
 
     ODatabaseContext*                                   m_pDBContext;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
@@ -484,6 +485,13 @@ public:
     virtual sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setModified( sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException) ;
 
+// ::com::sun::star::document::XEventBroadcaster
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::document::XEventListener
+    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
 // ::com::sun::star::view::XPrintable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aPrinter ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
@@ -562,4 +570,5 @@ protected:
 //........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
+
 
