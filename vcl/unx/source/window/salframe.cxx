@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-18 16:50:56 $
+ *  last change: $Author: pl $ $Date: 2000-11-28 16:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@
 #define SHOWSTATE_MINIMIZED     0
 #define SHOWSTATE_NORMAL        1
 
-// | KeymapStateMask
 #define CLIENT_EVENTS           StructureNotifyMask \
                                 | SubstructureNotifyMask \
                                 | KeyPressMask \
@@ -148,14 +147,6 @@
                                 | VisibilityChangeMask \
                                 | PropertyChangeMask \
                                 | ColormapChangeMask
-
-// | ButtonPressMask | ButtonRelaseMask
-//#define NC_EVENTS             KeyPressMask \
-//                              | KeyReleaseMask \
-//                              | PointerMotionMask \
-//                              | EnterWindowMask \
-//                              | LeaveWindowMask \
-//                              | ExposureMask
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define _GetDrawable()      maFrameData.GetDrawable()
@@ -222,6 +213,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 
     XWMHints Hints;
     Hints.flags = 0;
+    hStackingWindow_ = None;
 
     if( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
     {
@@ -364,6 +356,12 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
              w = pDisplay_->GetScreenSize().Width();
              h = pDisplay_->GetScreenSize().Height();
          }
+        if( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE &&
+            nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+        {
+            w = pDisplay_->GetScreenSize().Width()*2/3;
+            h = pDisplay_->GetScreenSize().Height()*3/4;
+        }
 
         Arg aArgs[10];
         int nArgs=0;
@@ -374,6 +372,8 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                   GetDisplay()->GetColormap().GetXColormap() );     nArgs++;
         XtSetArg( aArgs[nArgs], XtNwidth, w );                      nArgs++;
         XtSetArg( aArgs[nArgs], XtNheight, h );                     nArgs++;
+        XtSetArg( aArgs[nArgs], XtNallowShellResize, True );        nArgs++;
+
         if( mpParent )
             XtSetArg( aArgs[nArgs], XtNtransientFor, mpParent->maFrameData.GetShellWidget() ), nArgs++;
         if( ! ( nStyle_ & ~SAL_FRAME_STYLE_DEFAULT ) )
@@ -428,7 +428,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         }
 
         Hints.flags        |= WindowGroupHint;
-        Hints.window_group  = pDisplay_->GetShellWindow();
+        Hints.window_group  = mpParent ? mpParent->maFrameData.GetShellWindow() : pDisplay_->GetShellWindow();
 
     }
 
@@ -931,6 +931,13 @@ void SalFrameData::SetSize( const Size &rSize )
            int n = 0;
         XtSetArg(args[n], XtNheight, rSize.Height());   n++;
         XtSetArg(args[n], XtNwidth,  rSize.Width());    n++;
+        if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+        {
+            XtSetArg( args[n], XtNminWidth, rSize.Width() );    n++;
+            XtSetArg( args[n], XtNminHeight, rSize.Height() );  n++;
+            XtSetArg( args[n], XtNmaxWidth, rSize.Width() );    n++;
+            XtSetArg( args[n], XtNmaxHeight, rSize.Height() );  n++;
+        }
         XtSetValues( hShell_, args, n );
 
         if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
@@ -981,6 +988,13 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     XtSetArg(args[n], XtNwidth,  values.width);     n++;
     XtSetArg(args[n], XtNx,      values.x);         n++;
     XtSetArg(args[n], XtNy,      values.y);         n++;
+    if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+    {
+        XtSetArg( args[n], XtNminWidth, values.width );     n++;
+        XtSetArg( args[n], XtNminHeight, values.height );   n++;
+        XtSetArg( args[n], XtNmaxWidth, values.width );     n++;
+        XtSetArg( args[n], XtNmaxHeight, values.height );   n++;
+    }
     XtSetValues( hShell_, args, n );
 
     if ( aPosSize_ != rPosSize )
@@ -2137,6 +2151,22 @@ void SalFrameData::RepositionFloatChildren()
     }
 }
 
+void SalFrameData::RepositionChildren()
+{
+    RepositionFloatChildren();
+    int nChild;
+    for( nChild = 0; nChild < maChildren.Count(); nChild++ )
+    {
+        SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
+        XRaiseWindow( GetXDisplay(), pData->GetShellWindow() );
+    }
+    for( nChild = 0; nChild < maChildren.Count(); nChild++ )
+    {
+        SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
+        pData->RepositionChildren();
+    }
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 {
@@ -2156,7 +2186,7 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
     if( pEvent->window == hForeignTopLevelWindow_ )
     {
         // just update the children's positions
-        RepositionFloatChildren();
+        RepositionChildren();
         return 1;
     }
 
@@ -2233,7 +2263,7 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
     aPosSize_.Bottom()  = aPosSize_.Top()  + pEvent->height - 1;
 
     // update children's position
-    RepositionFloatChildren();
+    RepositionChildren();
 
     if( nWidth_ != pEvent->width || nHeight_ != pEvent->height )
     {
@@ -2241,15 +2271,7 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         nHeight_    = pEvent->height;
 
         if( pEvent->window != XtWindow( hComposite_ ) )
-        {
             XtResizeWidget(hComposite_, nWidth_, nHeight_, 0);
-
-            Arg args[4];
-             int n = 0;
-            XtSetArg(args[n], XtNheight, pEvent->height);   n++;
-            XtSetArg(args[n], XtNwidth,  pEvent->width);    n++;
-        //  XtSetValues(hComposite_, args, n);
-        }
         Call( SALEVENT_RESIZE, NULL );
     }
     return 1;
@@ -2264,6 +2286,27 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     unsigned int    nChildren, n;
     BOOL            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
+    static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
+
+    if( hStackingWindow_ == None && ( ! pDisableStackingCheck || ! *pDisableStackingCheck ) )
+    {
+        hStackingWindow_ = hWM_Parent;
+        do
+        {
+            XQueryTree( pDisplay,
+                        hStackingWindow_,
+                        &hRoot,
+                        &hDummy,
+                        &Children,
+                        &nChildren );
+            if( hDummy != hRoot )
+                hStackingWindow_ = hDummy;
+            if( Children )
+                XFree( Children );
+        } while( hDummy != hRoot );
+
+        XSelectInput( pDisplay, hStackingWindow_, StructureNotifyMask );
+    }
 
     if(     hWM_Parent == pDisplay_->GetRootWindow()
         ||  hWM_Parent == hForeignParent_
@@ -2625,6 +2668,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 if( pEvent->xconfigure.window == hForeignParent_ ||
                     pEvent->xconfigure.window == hForeignTopLevelWindow_ )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
+                if( pEvent->xconfigure.window == hStackingWindow_ )
+                    RepositionChildren();
                 break;
         }
     }

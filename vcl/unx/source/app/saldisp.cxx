@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-20 13:47:48 $
+ *  last change: $Author: pl $ $Date: 2000-11-28 16:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2695,18 +2695,24 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
 
     while( pFrame )
     {
-        if( pFrame->maFrameData.GetWindow() == pEvent->xany.window      ||
-            pFrame->maFrameData.GetShellWindow() == pEvent->xany.window )
+        XLIB_Window aDispatchWindow = pEvent->xany.window;
+        if( pFrame->maFrameData.GetWindow() == aDispatchWindow      ||
+            pFrame->maFrameData.GetShellWindow() == aDispatchWindow
+            )
         {
             return pFrame->maFrameData.Dispatch( pEvent );
         }
-        if( pFrame->maFrameData.GetForeignParent() == pEvent->xany.window ||
-            pFrame->maFrameData.GetForeignTopLevelWindow() == pEvent->xany.window )
+        if( pFrame->maFrameData.GetForeignParent() == aDispatchWindow ||
+            pFrame->maFrameData.GetForeignTopLevelWindow() == aDispatchWindow )
         {
             pFrame->maFrameData.Dispatch( pEvent );
             break;
         }
-        pFrame = pFrame->maFrameData.GetNextFrame(); // not allways NULL
+        if( pEvent->type == ConfigureNotify && pEvent->xconfigure.window == pFrame->maFrameData.GetStackingWindow() )
+        {
+            return pFrame->maFrameData.Dispatch( pEvent );
+        }
+        pFrame = pFrame->maFrameData.GetNextFrame();
     }
 
     // dispatch to Xt

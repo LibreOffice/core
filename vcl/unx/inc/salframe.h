@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: pl $ $Date: 2000-11-28 16:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                             //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                               //
 //                                                                             //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $               //
+// $Revision: 1.2 $  $Author: pl $  $Date: 2000-11-28 16:50:00 $               //
 //                                                                             //
 // $Workfile:   salframe.h  $                                                  //
 //  $Modtime:   09 Sep 1997 17:29:12  $                                        //
@@ -134,6 +134,8 @@ class SalFrameData
             Widget          hNoFullscreenShell_;
             Widget          hNoFullscreenComposite_;
             // window to fall back to when no longer in fullscreen mode
+            XLIB_Window     hStackingWindow_;
+            // window to listen for CirculateNotify events
 
             XLIB_Cursor     hCursor_;
             int             nCaptured_;         // is captured
@@ -183,6 +185,7 @@ class SalFrameData
             void            ShowFullScreen( BOOL bFullScreen );
 
             void            RepositionFloatChildren();
+            void            RepositionChildren();
 
             long            HandleKeyEvent      ( XKeyEvent         *pEvent );
             long            HandleMouseEvent    ( XEvent            *pEvent );
@@ -213,6 +216,7 @@ public:
     inline  Widget          GetShellWidget() const { return hShell_; }
     inline  XLIB_Window     GetForeignParent() const { return hForeignParent_; }
     inline  XLIB_Window     GetForeignTopLevelWindow() const { return hForeignTopLevelWindow_; }
+    inline  XLIB_Window     GetStackingWindow() const { return hStackingWindow_; }
     inline  long            ShutDown() const
                 { return pProc_( pInst_, pFrame_, SALEVENT_SHUTDOWN, 0 ); }
     inline  long            Close() const
