@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:05:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@ ModalDialog RID_MACROCHOOSER
         Text[ english_us ] = "Existing macros ~in:";
         Text[ portuguese ] = "Macros ~in ";
         Text[ russian ] = "Macros ~in ";
-        Text[ greek ] = "Macros ~in ";
-        Text[ dutch ] = "Macros ~in ";
+        Text[ greek ] = "������������ ~��� ";
+        Text[ dutch ] = "Macro's ~in ";
         Text[ french ] = "Macros existantes dans :";
         Text[ spanish ] = "Macros existentes ~en:";
         Text[ finnish ] = "Macros ~in ";
         Text[ italian ] = "Macro presenti in:";
-        Text[ danish ] = "Macros ~in ";
+        Text[ danish ] = "Eksisterende makroer ~i:";
         Text[ swedish ] = "Existerande makron ~i:";
         Text[ polish ] = "Macros ~in ";
         Text[ portuguese_brazilian ] = "Macros ~em";
@@ -116,6 +116,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "Vorhandene Makros ~in:";
         Text[ hindi ] = "Existing macros ~in:";
         Text[ slovak ] = "Makrá ~v:";
+        Text[ hungarian ] = "Létező m~akrók:";
+        Text[ slovenian ] = "Obsoječi makri ~v:";
     };
     Control RID_CTRL_MACRO
     {
@@ -166,6 +168,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "~Makroname";
         Text[ hindi ] = "~मॉक्रो नाम";
         Text[ slovak ] = "Názov ~makra";
+        Text[ hungarian ] = "~Makró neve";
+        Text[ slovenian ] = "~Ime makra";
     };
     Edit RID_ED_MACRONAME
     {
@@ -207,6 +211,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "Makro a~us";
         Text[ hindi ] = "~से मॉक्रो";
         Text[ slovak ] = "Makro ~z";
+        Text[ hungarian ] = "Makró ~forrása";
+        Text[ slovenian ] = "Makro ~iz";
     };
     FixedText RID_TXT_SAVEMACRO
     {
@@ -217,13 +223,13 @@ ModalDialog RID_MACROCHOOSER
         Text[ english_us ] = "Save m~acro in";
         Text[ portuguese ] = "Save m~acros in";
         Text[ russian ] = "Save m~acros in";
-        Text[ greek ] = "Save m~acros in";
+        Text[ greek ] = "���������� ������������ ���";
         Text[ dutch ] = "Save m~acros in";
         Text[ french ] = "Enregistrer la macro dans";
         Text[ spanish ] = "Guardar la m~acro en";
         Text[ finnish ] = "Save m~acros in";
         Text[ italian ] = "Registra macro in";
-        Text[ danish ] = "Save m~acros in";
+        Text[ danish ] = "Gem m~akroer i";
         Text[ swedish ] = "S~para makro i";
         Text[ polish ] = "Save m~acros in";
         Text[ portuguese_brazilian ] = "Salvar m~acros em ";
@@ -239,6 +245,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "M~akro speichern in";
         Text[ hindi ] = "Save m~acro in";
         Text[ slovak ] = "Uložiť m~akro do";
+        Text[ hungarian ] = "Ma~kró mentése";
+        Text[ slovenian ] = "Shrani m~akro v";
     };
 
     FixedText RID_TXT_DESCRIPTION
@@ -273,6 +281,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "Be~schreibung";
         Text[ hindi ] = "वि~वरण";
         Text[ slovak ] = "Popi~s";
+        Text[ hungarian ] = "~Leírás";
+        Text[ slovenian ] = "~Opis";
     };
     PushButton RID_PB_RUN
     {
@@ -309,6 +319,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "Aus~führen";
         Text[ hindi ] = "च~लाओ";
         Text[ slovak ] = "Sp~ustiť";
+        Text[ hungarian ] = "F~uttatás";
+        Text[ slovenian ] = "~Zaženi";
     };
     CancelButton RID_PB_CLOSE
     {
@@ -342,6 +354,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
         Text[ slovak ] = "Zavrieť";
+        Text[ hungarian ] = "Bezárás";
+        Text[ slovenian ] = "Zapri";
     };
 
     PushButton RID_PB_ASSIGN
@@ -355,7 +369,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "~Atribuir..." ;
         Text [ portuguese ] = "~Atribuir" ;
         Text [ finnish ] = "M��rit�..." ;
-        Text [ danish ] = "~Tilknyt..." ;
+        Text [ danish ] = "~Tildel..." ;
         Text [ french ] = "~Assigner..." ;
         Text [ swedish ] = "~Tilldela..." ;
         Text [ dutch ] = "~Toewijzen..." ;
@@ -377,6 +391,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "~Zuordnen...";
         Text[ hindi ] = "~निर्दिष्ट करो...";
         Text[ slovak ] = "Prir~adiť...";
+        Text[ hungarian ] = "~Hozzárendelés...";
+        Text[ slovenian ] = "~Dodeli...";
     };
     PushButton RID_PB_EDIT
     {
@@ -411,6 +427,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
         Text[ slovak ] = "~Upraviť";
+        Text[ hungarian ] = "S~zerkesztés";
+        Text[ slovenian ] = "~Uredi";
     };
     PushButton RID_PB_NEWLIB
     {
@@ -421,13 +439,13 @@ ModalDialog RID_MACROCHOOSER
         Text[ english_us ] = "New ~Library";
         Text[ portuguese ] = "New ~libary";
         Text[ russian ] = "New ~libary";
-        Text[ greek ] = "New ~libary";
+        Text[ greek ] = "��� ~����������";
         Text[ dutch ] = "New ~libary";
         Text[ french ] = "Nouv. biblioth�que";
         Text[ spanish ] = "~Biblioteca nueva";
         Text[ finnish ] = "New ~libary";
         Text[ italian ] = "Nuova libreria";
-        Text[ danish ] = "New ~libary";
+        Text[ danish ] = "Nyt ~bibliotek";
         Text[ swedish ] = "Nytt ~bibliotek";
         Text[ polish ] = "New ~libary";
         Text[ portuguese_brazilian ] = "Nova bib~lioteca";
@@ -443,6 +461,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "Neue ~Bibliothek";
         Text[ hindi ] = "New ~Library";
         Text[ slovak ] = "Nová ~Knižnica";
+        Text[ hungarian ] = "Új p~rogramkönyvtár";
+        Text[ slovenian ] = "Nova ~knjižnica";
     };
     PushButton RID_PB_NEWMOD
     {
@@ -453,13 +473,13 @@ ModalDialog RID_MACROCHOOSER
         Text[ english_us ] = "New M~odule";
         Text[ portuguese ] = "New M~odule";
         Text[ russian ] = "New M~odule";
-        Text[ greek ] = "New M~odule";
+        Text[ greek ] = "��� ����. ������";
         Text[ dutch ] = "New M~odule";
         Text[ french ] = "Nouveau module";
         Text[ spanish ] = "M~�dulo nuevo";
         Text[ finnish ] = "New M~odule";
         Text[ italian ] = "Nuovo modulo";
-        Text[ danish ] = "New M~odule";
+        Text[ danish ] = "Nyt ~modul";
         Text[ swedish ] = "Ny m~odul";
         Text[ polish ] = "New M~odule";
         Text[ portuguese_brazilian ] = "N~ovo m�dulo";
@@ -475,6 +495,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "Neues M~odul";
         Text[ hindi ] = "New M~odule";
         Text[ slovak ] = "Nový M~odul";
+        Text[ hungarian ] = "Új m~odul";
+        Text[ slovenian ] = "Nov m~odul";
     };
     PushButton RID_PB_DEL
     {
@@ -510,6 +532,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     PushButton RID_PB_ORG
     {
@@ -522,7 +546,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "~Organizador..." ;
         Text [ portuguese ] = "~Gerir..." ;
         Text [ finnish ] = "~J�rjestelyty�kalu..." ;
-        Text [ danish ] = "~Administrer..." ;
+        Text [ danish ] = "~Administration..." ;
         Text [ french ] = "~G�rer..." ;
         Text [ swedish ] = "~Administrera..." ;
         Text [ dutch ] = "Be~heren..." ;
@@ -543,6 +567,8 @@ ModalDialog RID_MACROCHOOSER
         Text[ hebrew ] = "~Verwalten...";
         Text[ hindi ] = "~व्यवस्थापक...";
         Text[ slovak ] = "~Organizátor...";
+        Text[ hungarian ] = "Szer~vező...";
+        Text[ slovenian ] = "~Organizator...";
     };
     HelpButton RID_PB_HELP
     {
@@ -574,6 +600,8 @@ ModalDialog RID_MACROCHOOSER
     Text[ hebrew ] = "‮הפעלת מאקרו‬";
     Text[ hindi ] = "मॉक्रो";
     Text[ slovak ] = "Makro";
+    Text[ hungarian ] = "Makró";
+    Text[ slovenian ] = "Makro";
 };
 String RID_STR_STDMACRONAME
 {
@@ -605,6 +633,8 @@ String RID_STR_STDMACRONAME
     Text[ hebrew ] = "‮הפעלת מאקרו‬";
     Text[ hindi ] = "मॉक्रो";
     Text[ slovak ] = "Makro";
+    Text[ hungarian ] = "Makró";
+    Text[ slovenian ] = "Makro";
 };
 String RID_STR_BTNDEL
 {
@@ -637,6 +667,8 @@ String RID_STR_BTNDEL
     Text[ hebrew ] = "‮מחיקה‬";
     Text[ hindi ] = "~मिटाओ";
     Text[ slovak ] = "~Zmazať";
+    Text[ hungarian ] = "~Törlés";
+    Text[ slovenian ] = "~Izbriši";
 };
 String RID_STR_BTNNEW
 {
@@ -647,7 +679,7 @@ String RID_STR_BTNNEW
     Text [ portuguese_brazilian ] = "~Novo" ;
     Text [ portuguese ] = "~Novo" ;
     Text [ finnish ] = "~Uusi" ;
-    Text [ danish ] = "~Ny" ;
+    Text [ danish ] = "~Ny(t)" ;
     Text [ french ] = "~Nouveau" ;
     Text [ swedish ] = "~Nytt" ;
     Text [ dutch ] = "~Nieuw" ;
@@ -668,6 +700,8 @@ String RID_STR_BTNNEW
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "~नया";
     Text[ slovak ] = "~Nový";
+    Text[ hungarian ] = "Ú~j";
+    Text[ slovenian ] = "~Nov";
 };
 String RID_STR_CLOSE
 {
@@ -700,6 +734,8 @@ String RID_STR_CLOSE
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "बन्द करो";
     Text[ slovak ] = "Zavrieť";
+    Text[ hungarian ] = "Bezárás";
+    Text[ slovenian ] = "Zapri";
 };
 String RID_STR_CHOOSE
 {
@@ -732,6 +768,8 @@ String RID_STR_CHOOSE
     Text[ hebrew ] = "Auswählen";
     Text[ hindi ] = "चुनो";
     Text[ slovak ] = "Vybrať";
+    Text[ hungarian ] = "Kiválasztás";
+    Text[ slovenian ] = "Izberi";
 };
 String RID_STR_RUN
 {
@@ -764,6 +802,8 @@ String RID_STR_RUN
     Text[ hebrew ] = "Ausführen";
     Text[ hindi ] = "चलाओ";
     Text[ slovak ] = "Spustiť";
+    Text[ hungarian ] = "Futtatás";
+    Text[ slovenian ] = "Zaženi";
 };
 
 String RID_STR_RECORD
@@ -775,7 +815,7 @@ String RID_STR_RECORD
     Text [ portuguese_brazilian ] = "~Salvar" ;
     Text [ portuguese ] = "~Gravar" ;
     Text [ finnish ] = "~Nauhoita" ;
-    Text [ danish ] = "Indspil" ;
+    Text [ danish ] = "~Gem" ;
     Text [ french ] = "Enregistrer" ;
     Text [ swedish ] = "~Spara" ;
     Text [ dutch ] = "~Opnemen" ;
@@ -796,7 +836,12 @@ String RID_STR_RECORD
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "~संचित करो";
     Text[ slovak ] = "~Uložiť";
+    Text[ hungarian ] = "M~entés";
+    Text[ slovenian ] = "~Shrani";
 };
+
+
+
 
 
 
