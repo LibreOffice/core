@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 12:48:50 $
+ *  last change: $Author: od $ $Date: 2002-09-18 10:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,20 +188,8 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
         if( !rSect.IsColLocked() )
             rSect.InvalidateSize();
     }
-#ifndef VERTICAL_LAYOUT
-    Frm().Width( rSect.Frm().Width() );
-    Prt().Width( rSect.Prt().Width() );
-    const SwFmtCol &rCol = rSect.GetFmt()->GetCol();
-    if ( ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() ) && !rSect.IsInFtn() )
-    {
-        const SwFmtCol aOld; //ChgColumns() verlaesst sich darauf, dass auch ein
-                             //Old-Wert hereingereicht wird.
-        ChgColumns( aOld, rCol, IsAnyNoteAtEnd() );
-    }
-#endif
 }
 
-#ifdef VERTICAL_LAYOUT
 void SwSectionFrm::Init()
 {
     ASSERT( GetUpper(), "SwSectionFrm::Init before insertion?!" );
@@ -220,7 +208,6 @@ void SwSectionFrm::Init()
             delete pOld;
     }
 }
-#endif
 
 SwSectionFrm::~SwSectionFrm()
 {
@@ -429,7 +416,6 @@ void SwSectionFrm::_Cut( BOOL bRemove )
         pPrepFrm->Prepare( PREP_FTN );
     if ( pUp )
     {
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( this );
         SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
         if( nFrmHeight > 0 )
@@ -441,18 +427,6 @@ void SwSectionFrm::_Cut( BOOL bRemove )
             }
             pUp->Shrink( nFrmHeight );
         }
-#else
-        if ( Frm().Height() > 0 )
-        {
-            SwTwips nFrmHeight = Frm().Height();
-            if( !bRemove )
-            {
-                Frm().Height( 0 );
-                Prt().Height( 0 );
-            }
-            pUp->Shrink( nFrmHeight, pHeight );
-        }
-#endif
     }
 }
 
@@ -479,9 +453,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     //In den Baum einhaengen.
     SwSectionFrm* pSect = pParent->FindSctFrm();
 
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pParent )
-#endif
     if( pSect && HasToBreak( pSect ) )
     {
         if( pParent->IsColBodyFrm() ) // handelt es sich um einen spaltigen Bereich
@@ -518,18 +490,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             pParent->_InvalidateSize();
 
         InsertGroupBefore( pParent, pSibling, pSect );
-#ifdef VERTICAL_LAYOUT
         (pSect->*fnRect->fnMakePos)( pSect->GetUpper(), pSect->GetPrev(), TRUE);
-#else
-        if( pSect->GetPrev() )
-        {
-            pSect->Frm().Pos() = pSect->GetPrev()->Frm().Pos();
-            pSect->Frm().Pos().Y() += pSect->GetPrev()->Frm().Height();
-        }
-        else
-            pSect->Frm().Pos() = pSect->GetUpper()->Frm().Pos();
-        pSect->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-#endif
         if( !((SwLayoutFrm*)pParent)->Lower() )
         {
             SwSectionFrm::MoveCntntAndDelete( (SwSectionFrm*)pParent, FALSE );
@@ -551,14 +512,9 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             pSibling->InvalidatePage( pPage );
     }
 
-#ifdef VERTICAL_LAYOUT
     SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
     if( nFrmHeight )
         pParent->Grow( nFrmHeight );
-#else
-    if ( Frm().Height() )
-        pParent->Grow( Frm().Height(), pHeight );
-#endif
 
     if ( GetPrev() )
     {
@@ -691,16 +647,10 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
         while( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
             pLay = (SwLayoutFrm*)pLay->Lower();
         pNew->InsertBehind( pSect->GetUpper(), pSect );
-#ifdef VERTICAL_LAYOUT
         if( pNew->IsVertical() )
             pNew->Init();
         SWRECTFN( this )
         (pNew->*fnRect->fnMakePos)( NULL, pSect, TRUE );
-#else
-        pNew->Frm().Pos() = pSect->Frm().Pos();
-        pNew->Frm().Pos().Y() += pSect->Frm().Height();
-        pNew->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-#endif
         ::RestoreCntnt( pSav, pLay, NULL );
         _InvalidateSize();
         if( HasFollow() )
@@ -835,19 +785,8 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
                 // aufnehmen kann,also bauen wir ihn uns.
                 pPrvSct = new SwSectionFrm( *pParent->GetSection() );
                 pPrvSct->InsertBehind( pUp, pPrv );
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( pUp )
                 (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, TRUE );
-#else
-                if( pPrv )
-                {
-                    pPrvSct->Frm().Pos() = pPrv->Frm().Pos();
-                    pPrvSct->Frm().Pos().Y() += pPrv->Frm().Height();
-                }
-                else
-                    pPrvSct->Frm().Pos() = pUp->Frm().Pos();
-                pPrvSct->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-#endif
                 pUp = FIRSTLEAF( pPrvSct );
                 pPrv = NULL;
             }
@@ -880,23 +819,11 @@ void SwSectionFrm::MakeAll()
         ASSERT( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
         if( !bValidPos )
         {
-#ifdef VERTICAL_LAYOUT
             if( GetUpper() )
             {
                 SWRECTFN( GetUpper() )
                 (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), FALSE );
             }
-#else
-            if( GetPrev() )
-            {   aFrm.Pos( GetPrev()->Frm().Pos() );
-                aFrm.Pos().*pVARPOS += GetPrev()->Frm().SSize().*pVARSIZE;
-            }
-            else if( GetUpper() )
-            {
-                aFrm.Pos( GetUpper()->Frm().Pos() );
-                aFrm.Pos() += GetUpper()->Prt().Pos();
-            }
-#endif
         }
         bValidSize = bValidPos = bValidPrtArea = TRUE;
         return;
@@ -1015,14 +942,9 @@ BOOL SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
 {
     if( ToMaximize( TRUE ) )
     {
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( this )
         rMinDiff = (GetUpper()->*fnRect->fnGetPrtBottom)();
         rMinDiff = (Frm().*fnRect->fnBottomDist)( rMinDiff );
-#else
-        rMinDiff = GetUpper()->Frm().Top() + GetUpper()->Prt().Top() +
-                   GetUpper()->Prt().Height() - Frm().Top() - Frm().Height();
-#endif
         return TRUE;
     }
     return FALSE;
@@ -1142,9 +1064,10 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 
 extern BOOL lcl_Apres( SwLayoutFrm* pFirst, SwLayoutFrm* pSecond );
 
+/// OD 18.09.2002 #100522#
+/// perform calculation of content, only if height has changed.
 void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
 {
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
     long nDiff;
     SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
@@ -1198,56 +1121,19 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
         if( nTop > nDiff )
             nTop = nDiff;
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
-#else
-    SwTwips nDeadLine = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
-                        + GetUpper()->Prt().Height();
-    //Vielleicht schafft der Upper ja noch Platz, ein spaltiger Rahmen,
-    //der gerade formatiert wird, wird nicht gefragt
-    if( bGrow && ( !IsInFly() || !GetUpper()->IsColBodyFrm() ||
-                   !FindFlyFrm()->IsLocked() ) )
-    {
-        long nBottom = Frm().Top() + Frm().Height() + ( bMaximize ? 0 : Undersize() );
-        if( nBottom > nDeadLine )
-            nDeadLine += GetUpper()->Grow( nBottom - nDeadLine PHEIGHT );
-    }
-    // Bei maximierten SectionFrms ist das Undersized-Flag ueberfluessig,
-    // aber sonst muss es auch gesetzt werden, wenn die DeadLine genau
-    // erreicht wurde (spaltige Bereiche wachsen nicht ueber die Umgebung
-    // hinaus.
-    SetUndersized( !bMaximize && Frm().Top() + Frm().Height() >= nDeadLine );
-    BOOL bCalc = ( IsUndersized() || bMaximize ) &&
-        ( Frm().Top() + Frm().Height() != nDeadLine ||
-          Prt().Top() > Frm().Height() );
-    if( !bCalc && !bGrow && IsAnyNoteAtEnd() && !IsInFtn() )
-    {
-        SwSectionFrm *pSect = this;
-        BOOL bEmpty = FALSE;
-        SwLayoutFrm* pFtn = IsEndnAtEnd() ?
-            lcl_FindEndnote( pSect, bEmpty, NULL ) : NULL;
-        if( pFtn )
-        {
-            pFtn = pFtn->FindFtnBossFrm();
-            SwFrm* pTmp = FindLastCntnt( FINDMODE_LASTCNT );
-            if( pTmp && lcl_Apres( pFtn, pTmp->FindFtnBossFrm() ) )
-                bCalc = TRUE;
-        }
-        else if( GetFollow() && !GetFollow()->ContainsAny() )
-            bCalc = TRUE;
-    }
-    if( bCalc )
-    {
-        if( nDeadLine < Frm().Top() )  // Wenn wir ganz unterhalb
-            nDeadLine = Frm().Top();  // liegen, keine neg. Hoehe!
-        const Size aOldSz( Prt().SSize() );
-        Frm().Height( nDeadLine - Frm().Top() );
-        if( Prt().Top() > Frm().Height() )
-            Prt().Pos().Y() = Frm().Height();
-        Prt().Height( Frm().Height() - Prt().Top() );
-#endif
+
+        /// OD 18.09.2002 #100522#
+        /// Determine, if height has changed.
+        /// Note: In vertical layout the height equals the width value.
+        bool bHeightChanged = bVert ?
+                            (aOldSz.Width() != Prt().Width()) :
+                            (aOldSz.Height() != Prt().Height());
         // Wir haben zu guter Letzt noch einmal die Hoehe geaendert,
         // dann wird das innere Layout (Columns) kalkuliert und
         // der Inhalt ebenfalls.
-        if( Lower() )
+        /// OD 18.09.2002 #100522#
+        /// calculate content, only if height has changed.
+        if( bHeightChanged && Lower() )
         {
             if( Lower()->IsColumnFrm() )
             {
@@ -1270,7 +1156,6 @@ void SwSectionFrm::SimpleFormat()
         return;
     // ASSERT( pFollow, "SimpleFormat: Follow required" );
     LockJoin();
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
     {
@@ -1289,32 +1174,6 @@ void SwSectionFrm::SimpleFormat()
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
         lcl_ColumnRefresh( this, FALSE );
     }
-#else
-    if( GetPrev() )
-    {
-        aFrm.Pos( GetPrev()->Frm().Pos() );
-        aFrm.Pos().*pVARPOS += GetPrev()->Frm().SSize().*pVARSIZE;
-        bValidPos = TRUE;
-    }
-    else if( GetUpper() )
-    {
-        aFrm.Pos( GetUpper()->Frm().Pos() );
-        aFrm.Pos() += GetUpper()->Prt().Pos();
-        bValidPos = TRUE;
-    }
-    SwTwips nDeadLine = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
-                        + GetUpper()->Prt().Height();
-    if( Frm().Top() + Frm().Height() < nDeadLine )
-    {
-        const Size aOldSz( Prt().SSize() );
-        Frm().Height( nDeadLine - Frm().Top() );
-        Prt().Pos().Y() = CalcUpperSpace();
-        if( Prt().Top() > Frm().Height() )
-            Prt().Pos().Y() = Frm().Height();
-        Prt().Height( Frm().Height() - Prt().Top() );
-        lcl_ColumnRefresh( this, FALSE );
-    }
-#endif
     UnlockJoin();
 }
 
@@ -1337,15 +1196,12 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         bValidSize = bValidPos = bValidPrtArea = TRUE;
         return;
     }
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
-#endif
     if ( !bValidPrtArea )
     {
         PROTOCOL( this, PROT_PRTAREA, 0, 0 )
         bValidPrtArea = TRUE;
         SwTwips nUpper = CalcUpperSpace();
-#ifdef VERTICAL_LAYOUT
         (this->*fnRect->fnSetXMargins)( 0, 0 );
         if( nUpper != (this->*fnRect->fnGetTopMargin)() )
         {
@@ -1355,32 +1211,12 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 pOwn->_InvalidatePos();
         }
         (this->*fnRect->fnSetYMargins)( nUpper, 0 );
-#else
-        aPrt.Left( 0 );
-        aPrt.Width ( aFrm.Width() );
-        if( nUpper != Prt().Top() )
-        {
-            Prt().Pos().Y() = nUpper;
-            bValidSize = FALSE;
-            SwFrm* pOwn = ContainsAny();
-            if( pOwn )
-                pOwn->_InvalidatePos();
-            if( Lower() && !Lower()->GetNext() && Lower()->IsColumnFrm() &&
-                Lower()->Frm().Height() != aFrm.Height() - nUpper )
-                Lower()->_InvalidateSize();
-        }
-        aPrt.Height( aFrm.Height() - nUpper );
-#endif
     }
 
     if ( !bValidSize )
     {
         PROTOCOL_ENTER( this, PROT_SIZE, 0, 0 )
-#ifdef VERTICAL_LAYOUT
         const long nOldHeight = (Frm().*fnRect->fnGetHeight)();
-#else
-        const long nOldHeight = Frm().Height();
-#endif
         BOOL bOldLock = IsColLocked();
         ColLock();
 
@@ -1394,14 +1230,9 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 
         if( GetUpper() )
         {
-#ifdef VERTICAL_LAYOUT
             long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             (aFrm.*fnRect->fnSetWidth)( nWidth );
             (aPrt.*fnRect->fnSetWidth)( nWidth );
-#else
-            aFrm.Width( GetUpper()->Prt().Width() );
-            aPrt.Width ( aFrm.Width() );
-#endif
             _CheckClipping( FALSE, bMaximize );
             bMaximize = ToMaximize( FALSE );
             bValidSize = TRUE;
@@ -1418,11 +1249,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 
         if ( !bMaximize )
         {
-#ifdef VERTICAL_LAYOUT
             SwTwips nRemaining = (this->*fnRect->fnGetTopMargin)(), nDiff;
-#else
-            SwTwips nRemaining = Prt().Top(), nDiff;
-#endif
             SwFrm *pFrm = pLower;
             if( pFrm )
             {
@@ -1437,11 +1264,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                             break;
                     }
                     bMaximize = ToMaximize( FALSE );
-#ifdef VERTICAL_LAYOUT
                     nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
-#else
-                    nRemaining += pFrm->Frm().Height();
-#endif
                 }
                 else
                 {
@@ -1464,7 +1287,6 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 }
             }
 
-#ifdef VERTICAL_LAYOUT
             nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
             if( nDiff < 0)
             {
@@ -1491,33 +1313,6 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 long nTop = (this->*fnRect->fnGetTopMargin)();
                 (Frm().*fnRect->fnAddBottom)( nTmp );
                 (this->*fnRect->fnSetYMargins)( nTop, 0 );
-#else
-            nDiff = Frm().Height() - nRemaining;
-            if( nDiff < 0)
-            {
-                // Nicht groesser als die Umgebung werden
-                SwTwips nDeadLine = GetUpper()->Frm().Top() + GetUpper()->Prt().Bottom();
-                {
-                    long nBottom = Frm().Bottom() - nDiff;
-                    if( nBottom > nDeadLine )
-                    {
-                        nDeadLine += GetUpper()->Grow( nBottom - nDeadLine PHEIGHT, TRUE );
-                        if( nBottom > nDeadLine )
-                            nDiff += nBottom - nDeadLine;
-                        if( nDiff > 0 )
-                            nDiff = 0;
-                    }
-                }
-            }
-            if( nDiff )
-            {
-                //Weil das Grow/Shrink die Groessen nicht direkt
-                //einstellt, sondern indirekt per Invalidate ein Format
-                //ausloesst, muessen die Groessen hier direkt eingestellt
-                //werden.
-                Prt().Height( nRemaining - Prt().Top() );
-                Frm().Height( nRemaining );
-#endif
                 InvalidateNextPos();
                 if( pLower && ( !pLower->IsColumnFrm() || !pLower->GetNext() ) )
                 {
@@ -1558,11 +1353,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             _CheckClipping( TRUE, bMaximize );
         if( !bOldLock )
             ColUnlock();
-#ifdef VERTICAL_LAYOUT
         long nDiff = nOldHeight - (Frm().*fnRect->fnGetHeight)();
-#else
-        long nDiff = nOldHeight - Frm().Height();
-#endif
         if( nDiff > 0 )
         {
             if( !GetNext() )
@@ -1755,14 +1546,9 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             pNew = new SwSectionFrm( *pSect, FALSE );
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
 
-#ifdef VERTICAL_LAYOUT
             pNew->Init();
             SWRECTFN( pNew )
             (pNew->*fnRect->fnMakePos)( pLayLeaf, NULL, TRUE );
-#else
-            pNew->Frm().Pos() = pLayLeaf->Frm().Pos();
-            pNew->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-#endif
 
             // Wenn unser Bereichsframe einen Nachfolger hat, so muss dieser
             // umgehaengt werden hinter den neuen Follow der Bereichsframes.
@@ -1940,20 +1726,9 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
     {
         pNew = new SwSectionFrm( *pSect, TRUE );
         pNew->InsertBefore( pLayLeaf, NULL );
-#ifdef VERTICAL_LAYOUT
         pNew->Init();
         SWRECTFN( pNew )
         (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), TRUE );
-#else
-        if( pNew->GetPrev() )
-        {
-            pNew->Frm().Pos() = pNew->GetPrev()->Frm().Pos();
-            pNew->Frm().Pos().Y() += pNew->GetPrev()->Frm().Height();
-        }
-        else
-            pNew->Frm().Pos() = pLayLeaf->Frm().Pos();
-        pNew->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-#endif
 
         pLayLeaf = FIRSTLEAF( pNew );
         if( !pNew->Lower() )    // einspaltige Bereiche formatieren
@@ -2002,14 +1777,9 @@ SwTwips lcl_DeadLine( const SwFrm* pFrm )
         else
             break;
     }
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pFrm )
     return pUp ? (pUp->*fnRect->fnGetPrtBottom)() :
                  (pFrm->Frm().*fnRect->fnGetBottom)();
-#else
-    return pUp ? pUp->Frm().Top() + pUp->Prt().Top() + pUp->Prt().Height() :
-                 pFrm->Frm().Top() + pFrm->Frm().Height();
-#endif
 }
 
 // SwSectionFrm::Growable(..) prueft, ob der SectionFrm noch wachsen kann,
@@ -2017,14 +1787,11 @@ SwTwips lcl_DeadLine( const SwFrm* pFrm )
 
 BOOL SwSectionFrm::Growable() const
 {
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
     if( (*fnRect->fnYDiff)( lcl_DeadLine( this ),
         (Frm().*fnRect->fnGetBottom)() ) > 0 )
-#else
-    if( Frm().Top() + Frm().Height() < lcl_DeadLine( this ) )
-#endif
         return TRUE;
+
     return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX PHEIGHT, TRUE ) );
 }
 
@@ -2037,7 +1804,6 @@ BOOL SwSectionFrm::Growable() const
 |*
 |*************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
 SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
 {
     if ( !IsColLocked() && !HasFixSize() )
@@ -2046,15 +1812,6 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
         long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
         if( nFrmHeight > 0 && nDist > (LONG_MAX - nFrmHeight) )
             nDist = LONG_MAX - nFrmHeight;
-#else
-SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
-{
-    if ( !IsColLocked() && !HasFixSize( pDirection ) )
-    {
-        if ( Frm().SSize().*pDirection > 0 &&
-             nDist > (LONG_MAX - Frm().SSize().*pDirection) )
-            nDist = LONG_MAX - Frm().SSize().*pDirection;
-#endif
 
         if ( nDist <= 0L )
             return 0L;
@@ -2063,7 +1820,6 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
         if ( !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue() )
         {
-#ifdef VERTICAL_LAYOUT
             SwTwips nGrow;
             if( IsInFtn() )
                 nGrow = 0;
@@ -2073,10 +1829,6 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                 nGrow = (*fnRect->fnYDiff)( nGrow,
                                            (Frm().*fnRect->fnGetBottom)() );
             }
-#else
-            SwTwips nGrow = IsInFtn() ? 0 :
-                lcl_DeadLine( this ) - Frm().Top() - Frm().Height();
-#endif
             SwTwips nSpace = nGrow;
             if( !bInCalcCntnt && nGrow < nDist && GetUpper() )
                 nGrow += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
@@ -2099,11 +1851,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                 if( bInCalcCntnt )
                     _InvalidateSize();
                 else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
-#ifdef VERTICAL_LAYOUT
                          Grow( nGrow - nSpace, FALSE ) )
-#else
-                         Grow( nGrow - nSpace, pDirection, FALSE ) )
-#endif
                     InvalidateSize();
                 else
                 {
@@ -2118,14 +1866,10 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                                         GetUpper()->IsFooterFrm() ) )
                         GetUpper()->InvalidateSize();
                 }
-#ifdef VERTICAL_LAYOUT
                 (Frm().*fnRect->fnAddBottom)( nGrow );
                 long nPrtHeight = (Prt().*fnRect->fnGetHeight)() + nGrow;
                 (Prt().*fnRect->fnSetHeight)( nPrtHeight );
-#else
-                Frm().SSize().*pDirection += nGrow;
-                Prt().SSize().*pDirection += nGrow;
-#endif
+
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {
                     SwFrm* pTmp = Lower();
@@ -2163,15 +1907,9 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
     return 0L;
 }
 
-#ifdef VERTICAL_LAYOUT
 SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
 {
     if ( Lower() && !IsColLocked() && !HasFixSize() )
-#else
-SwTwips SwSectionFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
-{
-    if ( Lower() && !IsColLocked() && !HasFixSize( pDirection ) )
-#endif
     {
         if( ToMaximize( FALSE ) )
         {
@@ -2180,15 +1918,11 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst 
         }
         else
         {
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( this )
             long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
             if ( nDist > nFrmHeight )
                 nDist = nFrmHeight;
-#else
-            if ( nDist > Frm().SSize().*pDirection )
-                nDist = Frm().SSize().*pDirection;
-#endif
+
             if ( Lower()->IsColumnFrm() && Lower()->GetNext() && // FtnAtEnd
                  !GetSection()->GetFmt()->GetBalancedColumns().GetValue() )
             {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
@@ -2206,16 +1940,11 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst 
                     SetCompletePaint();
                     InvalidatePage();
                 }
-#ifdef VERTICAL_LAYOUT
                 (Frm().*fnRect->fnAddBottom)( -nDist );
                 long nPrtHeight = (Prt().*fnRect->fnGetHeight)() - nDist;
                 (Prt().*fnRect->fnSetHeight)( nPrtHeight );
                 const SwTwips nReal = GetUpper()->Shrink( nDist, bTst );
-#else
-                Frm().SSize().*pDirection -= nDist;
-                Prt().SSize().*pDirection -= nDist;
-                const SwTwips nReal = GetUpper()->Shrink( nDist, pDirection, bTst );
-#endif
+
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {
                     SwFrm* pTmp = Lower();
@@ -2692,12 +2421,8 @@ void SwSectionFrm::InvalidateFtnPos()
 long SwSectionFrm::Undersize( BOOL bOverSize )
 {
     bUndersized = FALSE;
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
     long nRet = InnerHeight() - (Prt().*fnRect->fnGetHeight)();
-#else
-    long nRet = InnerHeight() - Prt().Height();
-#endif
     if( nRet > 0 )
         bUndersized = TRUE;
     else if( !bOverSize )
