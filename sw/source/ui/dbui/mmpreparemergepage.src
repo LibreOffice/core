@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmpreparemergepage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:20:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,12 @@
 TabPage DLG_MM_PREPAREMERGE_PAGE
 {
     HelpID = HID_MM_PREPAREMERGEPAGE ;
-    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Size = MAP_APPFONT ( 260 , 230 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Kontrollieren Sie das Dokument und ändern sie es falls notwendig" ;
         Text[ en-US ] = "Preview and edit the document";
@@ -78,7 +78,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
 
     FixedText   FI_PREVIEW
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 28 ) ;
         WordBreak = TRUE;
         Text [ de ] = "Sie sehen jetzt eine Vorschau auf ein Serienbriefdokument. Um eine Vorschau auf weitere Dokumente zu sehen, klicken Sie auf die Pfeile." ;
@@ -86,7 +86,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     FixedText   FT_RECIPIENT
     {
-        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ de ] = "~Empfänger" ;
         Text[ en-US ] = "~Recipient";
@@ -94,7 +94,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
 
     PushButton  PB_FIRST
     {
-        Pos = MAP_APPFONT ( 60 , 50 ) ;
+        Pos = MAP_APPFONT ( 75 , 50 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "|<" ;
         QuickHelpText [de] = "Erster";
@@ -102,7 +102,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_PREV
     {
-        Pos = MAP_APPFONT ( 83 , 50 ) ;
+        Pos = MAP_APPFONT ( 98 , 50 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "<" ;
         QuickHelpText [de] = "Voriger";
@@ -110,7 +110,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     NumericField ED_RECORD
     {
-        Pos = MAP_APPFONT ( 106 , 51 ) ;
+        Pos = MAP_APPFONT ( 121 , 51 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         Border = TRUE ;
         Left = TRUE ;
@@ -122,7 +122,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_NEXT
     {
-        Pos = MAP_APPFONT ( 129 , 50 ) ;
+        Pos = MAP_APPFONT ( 144 , 50 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">" ;
         QuickHelpText [de] = "Nächster";
@@ -130,7 +130,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     PushButton  PB_LAST
     {
-        Pos = MAP_APPFONT ( 152 , 50 ) ;
+        Pos = MAP_APPFONT ( 167 , 50 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">|" ;
         QuickHelpText [de] = "Letzter";
@@ -138,29 +138,29 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     };
     CheckBox CB_EXCLUDE
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Pos = MAP_APPFONT ( 75, 72 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ de ] = "Diesen Empfänger ausschließen" ;
         Text[ en-US ] = "E~xclude this recipient";
     };
     FixedLine   FL_NOTEHEADER
     {
-        Pos = MAP_APPFONT ( 6 , 88 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Dokument bearbeiten" ;
         Text[ en-US ] = "Edit Document";
     };
     FixedText   FI_EDIT
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 248 , 60 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie köönen jetzt das Dokument erstellen oder bearbeiten. Die Veränderungen wirken sich auf alle Serienbriefdokumente aus.\n\nEin Klick auf die Schaltfläche 'Dokument bearbeiten...' schließt vorübergehend den Assistenten. Durch Klicken der 'Zurück zum Seriendruck-Assistenten'-Schaltfläche - sichtbar in einem kleinen Fenster - gelangen Sie zurück zum Assistenten." ;
+        Text [ de ] = "Sie können jetzt das Dokument erstellen oder bearbeiten. Die Veränderungen wirken sich auf alle Serienbriefdokumente aus.\n\nEin Klick auf die Schaltfläche 'Dokument bearbeiten...' schließt vorübergehend den Assistenten. Durch Klicken der 'Zurück zum Seriendruck-Assistenten'-Schaltfläche - sichtbar in einem kleinen Fenster - gelangen Sie zurück zum Assistenten." ;
         Text[ en-US ] = "Write or edit your document now if you have not already done so. The changes will effect all merged documents.\n\nClicking 'Edit Document...' will temporarily reduce the wizard to a small window so you can edit the mail merge document. After editing the document, return to the wizard by clicking 'Return to Mail Merge Wizard' in the small window." ;
     };
     PushButton  PB_EDIT
     {
-        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Pos = MAP_APPFONT ( 90 , 180 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         Text [ de ] = "Dokument bearbeiten..." ;
         Text[ en-US ] = "~Edit Document...";
