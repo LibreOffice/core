@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
+ *  last change: $Author: fs $ $Date: 2001-07-18 14:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2927,6 +2927,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         // set a default title
         setDefaultTitle();
     }
+    InvalidateAll();
 }
 
 // -------------------------------------------------------------------------
