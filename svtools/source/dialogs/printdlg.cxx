@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: pl $ $Date: 2000-09-27 12:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SVTOOLS_FILEDLG_HXX
 #include <filedlg.hxx>
 #endif
+#ifndef _SV_JOBSET_HXX
+#include <vcl/jobset.hxx>
+#endif
 #include <tools/urlobj.hxx>
 #pragma hdrstop
 
@@ -118,7 +121,9 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maBtnOptions    ( this, SvtResId( BTN_OPTIONS ) ),
     maBtnHelp       ( this, SvtResId( BTN_HELP ) ),
     maBtnOK         ( this, SvtResId( BTN_OK ) ),
-    maBtnCancel     ( this, SvtResId( BTN_CANCEL ) )
+    maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
+    maFiFaxNo       ( this, SvtResId( FI_FAXNO ) ),
+    maEdtFaxNo      ( this, SvtResId( EDT_FAXNO ) )
 {
     FreeResource();
 
@@ -155,6 +160,7 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maNumCopies.SetModifyHdl( aLink );
     maCbxCollate.SetClickHdl( aLink );
     maBtnOptions.SetClickHdl( aLink );
+    maEdtFaxNo.SetModifyHdl( aLink );
 
     maRbtAll.Check();
 
@@ -194,6 +200,28 @@ void PrintDialog::ImplSetInfo()
         maFiComment.SetText( aTempStr );
         maFiStatus.SetText( aTempStr );
     }
+
+#ifdef UNX
+    if( pInfo && pInfo->GetLocation().EqualsAscii( "fax_queue" ) )
+    {
+        maFiPrintFile.Show( FALSE );
+        maCbxFilePrint.Show( FALSE );
+        maBtnBrowse.Show( FALSE );
+        maFiFaxNo.Show( TRUE );
+        maEdtFaxNo.Show( TRUE );
+        Printer* pPrinter = mpTempPrinter ? mpTempPrinter : mpPrinter;
+        maEdtFaxNo.SetText( pPrinter->GetJobValue( String::CreateFromAscii( "FAX#" ) ) );
+    }
+    else
+#endif
+    {
+        maFiPrintFile.Show( TRUE );
+        maCbxFilePrint.Show( TRUE );
+        maBtnBrowse.Show( TRUE );
+        maFiFaxNo.Show( FALSE );
+        maEdtFaxNo.Show( FALSE );
+    }
+
 }
 
 // -----------------------------------------------------------------------
@@ -397,6 +425,12 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
     // Edit-Felder (Dateiname, Seiten)
     if ( p == &maEdtPages )
         ImplCheckOK();
+
+    if( p == &maEdtFaxNo )
+    {
+        Printer* pPrinter = mpTempPrinter ? mpTempPrinter : mpPrinter;
+        pPrinter->SetJobValue( String::CreateFromAscii( "FAX#" ), maEdtFaxNo.GetText() );
+    }
 
     // Anzahl Kopien
     BOOL bNumCopies = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: pl $ $Date: 2000-09-27 12:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,19 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 60 , 62 ) ;
         Size = MAP_APPFONT ( 188 , 10 ) ;
+    };
+    FixedText FI_FAXNO
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "Fax Nummer";
+        Text [ ENGLISH ] = "Fax number";
+    };
+    Edit EDT_FAXNO
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 90 , 77 );
+        Size = MAP_APPFONT ( 141 , 12 );
     };
     CheckBox CBX_FILEPRINT
     {
