@@ -40,6 +40,8 @@ SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
     RecordPerSet;
     Asynchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -64,6 +66,8 @@ SfxBoolItem TrackChanges FN_REDLINE_ON
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -2086,56 +2090,6 @@ SwFmtDrop FormatDropcap FN_FORMAT_DROPCAPS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem FormatGroup FN_TOOL_GROUP
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem FormatUngroup FN_TOOL_UNGROUP
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem FrameDialog FN_FORMAT_FRAME_DLG
 ()
 [
@@ -3747,7 +3701,7 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertAnnotation FN_POSTIT
-( SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT, SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR, SvxPostItDateItem Date SID_ATTR_POSTIT_DATE )
+(SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3822,7 +3776,7 @@ SfxVoidItem InsertAuthoritiesEntry FN_INSERT_AUTH_ENTRY_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
-( SfxStringItem Bookmark FN_INSERT_BOOKMARK )
+(SfxStringItem Bookmark FN_INSERT_BOOKMARK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3847,7 +3801,7 @@ SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
-( SfxInt16Item Kind FN_INSERT_BREAK_DLG, SfxStringItem TemplateName FN_PARAM_1, SfxUInt16Item PageNumber FN_PARAM_2)
+(SfxInt16Item Kind FN_INSERT_BREAK_DLG,SfxStringItem TemplateName FN_PARAM_1,SfxUInt16Item PageNumber FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3997,16 +3951,7 @@ SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
 
 //--------------------------------------------------------------------------
 SfxStringItem InsertColumnSection FN_INSERT_COLUMN_SECTION
-(
-SfxUInt16Item Columns SID_ATTR_COLUMNS
-SfxStringItem RegionName FN_PARAM_REGION_NAME,
-SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,
-SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,
-SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,
-SfxStringItem LinkName FN_PARAM_1,
-SfxStringItem FilterName FN_PARAM_2,
-SfxStringItem SubRegion FN_PARAM_3
-)
+(SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4086,7 +4031,7 @@ SfxVoidItem InsertDateField FN_INSERT_FLD_DATE
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
-( SfxStringItem FootnoteAnchorText FN_INSERT_ENDNOTE, SfxStringItem FontName FN_PARAM_1 )
+(SfxStringItem FootnoteAnchorText FN_INSERT_ENDNOTE,SfxStringItem FontName FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4111,7 +4056,7 @@ SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertEnvelope FN_ENVELOP
-( SwEnvItem Envelope FN_ENVELOP, SfxBoolItem NewDocument FN_PARAM_1 )
+(SwEnvItem Envelope FN_ENVELOP,SfxBoolItem NewDocument FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4136,14 +4081,7 @@ SfxVoidItem InsertEnvelope FN_ENVELOP
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertField FN_INSERT_FIELD
-(
-SfxUInt16Item Type FN_PARAM_FIELD_TYPE,
-SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,
-SfxStringItem Name FN_INSERT_FIELD,
-SfxStringItem Content FN_PARAM_FIELD_CONTENT,
-SfxUInt32Item Format FN_PARAM_FIELD_FORMAT
-SfxStringItem Separator FN_PARAM_3;
-)
+(SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,SfxStringItem Name FN_INSERT_FIELD,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT,SfxStringItem Separator FN_PARAM_3)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4250,7 +4188,7 @@ SfxVoidItem InsertFootnoteDialog FN_INSERT_FOOTNOTE_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
-( SfxStringItem NoteAnchorText FN_INSERT_FOOTNOTE, SfxStringItem FontName FN_PARAM_1 )
+(SfxStringItem NoteAnchorText FN_INSERT_FOOTNOTE,SfxStringItem FontName FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4275,9 +4213,7 @@ SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFormula FN_EDIT_FORMULA
-(
-    SfxStringItem Formula FN_EDIT_FORMULA
-)
+(SfxStringItem Formula FN_EDIT_FORMULA)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4302,9 +4238,7 @@ SfxVoidItem InsertFormula FN_EDIT_FORMULA
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFrame FN_INSERT_FRAME
-( SfxUInt16Item AnchorType FN_INSERT_FRAME,
-SfxPointItem Pos FN_PARAM_1,
-SvxSizeItem Size FN_PARAM_2 )
+(SfxUInt16Item AnchorType FN_INSERT_FRAME,SfxPointItem Pos FN_PARAM_1,SvxSizeItem Size FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4385,7 +4319,7 @@ SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertGraphicRuler FN_INSERT_HRULER
-( SfxStringItem GraphicName FN_INSERT_HRULER, SfxBoolItem IsSimpleLine FN_PARAM_1 )
+(SfxStringItem GraphicName FN_INSERT_HRULER,SfxBoolItem IsSimpleLine FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4665,7 +4599,7 @@ SfxImageItem InsertObjCtrl FN_INSERT_OBJ_CTRL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertObject FN_INSERT_OBJECT_DLG
+SfxVoidItem InsertObjectDialog FN_INSERT_OBJECT_DLG
 ()
 [
     /* flags: */
@@ -4766,11 +4700,7 @@ SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
-(
-    SfxStringItem PageStyle FN_INSERT_PAGEFOOTER,
-    SfxBoolItem On  FN_PARAM_1
-)
-
+(SfxStringItem PageStyle FN_INSERT_PAGEFOOTER,SfxBoolItem On FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4798,10 +4728,7 @@ SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
-(
-    SfxStringItem PageStyle FN_INSERT_PAGEHEADER,
-    SfxBoolItem On  FN_PARAM_1
-)
+(SfxStringItem PageStyle FN_INSERT_PAGEHEADER,SfxBoolItem On FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4904,16 +4831,7 @@ SfxVoidItem InsertReferenceField FN_INSERT_REF_FIELD
 
 //--------------------------------------------------------------------------
 SfxStringItem InsertSection FN_INSERT_REGION
-(
-SfxUInt16Item Columns SID_ATTR_COLUMNS,
-SfxStringItem RegionName FN_PARAM_REGION_NAME,
-SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,
-SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,
-SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,
-SfxStringItem LinkName FN_PARAM_1,
-SfxStringItem FilterName FN_PARAM_2,
-SfxStringItem SubRegion FN_PARAM_3
-)
+(SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4988,7 +4906,7 @@ SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertScript FN_JAVAEDIT
-( SfxStringItem Text FN_JAVAEDIT, SfxBoolItem IsURL FN_PARAM_1, SfxStringItem Type FN_PARAM_2 )
+(SfxStringItem Text FN_JAVAEDIT,SfxBoolItem IsURL FN_PARAM_1,SfxStringItem Type FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5038,7 +4956,7 @@ SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertSymbol FN_INSERT_SYMBOL
-( SfxStringItem Symbols FN_INSERT_SYMBOL, SfxStringItem FontName FN_PARAM_1 )
+(SfxStringItem Symbols FN_INSERT_SYMBOL,SfxStringItem FontName FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5063,7 +4981,7 @@ SfxVoidItem InsertSymbol FN_INSERT_SYMBOL
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertTable FN_INSERT_TABLE
-(SfxStringItem TableName FN_INSERT_TABLE, SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN, SfxUInt16Item Rows SID_ATTR_TABLE_ROW, SfxInt32Item Flags FN_PARAM_1, SfxStringItem AutoFormat FN_PARAM_2)
+(SfxStringItem TableName FN_INSERT_TABLE,SfxUInt16Item Columns SID_ATTR_TABLE_COLUMN,SfxUInt16Item Rows SID_ATTR_TABLE_ROW,SfxInt32Item Flags FN_PARAM_1,SfxStringItem AutoFormat FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5691,7 +5609,7 @@ SfxVoidItem LinkDialog FN_EDIT_LINK_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem LoadStyles SID_TEMPLATE_LOAD
-( SfxStringItem FileName SID_TEMPLATE_NAME, SfxInt32Item Flags SID_TEMPLATE_LOAD )
+(SfxStringItem FileName SID_TEMPLATE_NAME,SfxInt32Item Flags SID_TEMPLATE_LOAD)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6010,7 +5928,7 @@ SfxVoidItem NameGroup FN_NAME_GROUP
 
 //--------------------------------------------------------------------------
 SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
-( SfxStringItem FileName FN_NEW_GLOBAL_DOC, SfxStringItem TemplateName SID_TEMPLATE_NAME )
+(SfxStringItem FileName FN_NEW_GLOBAL_DOC,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6035,7 +5953,7 @@ SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
 
 //--------------------------------------------------------------------------
 SfxBoolItem NewHtmlDoc FN_NEW_HTML_DOC
-( SfxStringItem FileName FN_NEW_HTML_DOC, SfxStringItem TemplateName SID_TEMPLATE_NAME )
+(SfxStringItem FileName FN_NEW_HTML_DOC,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6275,15 +6193,15 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
+    Synchron;
 
     ImageRotation = TRUE;
-    ImageReflection = TRUE;
-    Readonly = FALSE,
+        ImageReflection = TRUE;
+        Readonly = FALSE,
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_ENUMERATION;
@@ -6821,6 +6739,8 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -7749,6 +7669,8 @@ SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
     RecordPerSet;
     Synchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7859,7 +7781,7 @@ SfxVoidItem Spelling FN_SPELLING_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
-( SfxInt32Item Amount FN_TABLE_SPLIT_CELLS, SfxBoolItem Horizontal FN_PARAM_1 )
+(SfxInt32Item Amount FN_TABLE_SPLIT_CELLS,SfxBoolItem Horizontal FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9199,7 +9121,9 @@ SfxVoidItem InsertText FN_INSERT_STRING
     GroupId = GID_INSERT;
 ]
 
+//--------------------------------------------------------------------------
 SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9224,32 +9148,9 @@ SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
     GroupId = GID_FORMAT;
 ]
 
-SfxBoolItem NumNewStart FN_NUMBER_NEWSTART
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
-]
-
+//--------------------------------------------------------------------------
 SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9274,7 +9175,9 @@ SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SwFmtLineNumber LineNumber FN_FORMAT_LINENUMBER
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9299,7 +9202,9 @@ SwFmtLineNumber LineNumber FN_FORMAT_LINENUMBER
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9324,7 +9229,9 @@ SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
 SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9348,6 +9255,7 @@ SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
+
 //--------------------------------------------------------------------------
 SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
 ()
@@ -9373,32 +9281,7 @@ SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
     GroupId = GID_NAVIGATOR;
 ]
 
-SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
-]
-
+//--------------------------------------------------------------------------
 SwFmtINetFmt HyperlinkAttributes FN_TXTATR_INET
 
 [
@@ -9427,7 +9310,7 @@ SwFmtINetFmt HyperlinkAttributes FN_TXTATR_INET
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertGlossary FN_INSERT_GLOSSARY
-( SfxStringItem Group FN_INSERT_GLOSSARY, SfxStringItem ShortName FN_PARAM_1 )
+(SfxStringItem Group FN_INSERT_GLOSSARY,SfxStringItem ShortName FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9452,7 +9335,7 @@ SfxVoidItem InsertGlossary FN_INSERT_GLOSSARY
 
 //--------------------------------------------------------------------------
 SfxVoidItem NewGlossary FN_NEW_GLOSSARY
-( SfxStringItem Group FN_NEW_GLOSSARY, SfxStringItem Name FN_PARAM_1, SfxStringItem ShortName FN_PARAM_2 )
+(SfxStringItem Group FN_NEW_GLOSSARY,SfxStringItem Name FN_PARAM_1,SfxStringItem ShortName FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9477,7 +9360,7 @@ SfxVoidItem NewGlossary FN_NEW_GLOSSARY
 
 //--------------------------------------------------------------------------
 SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
-( SfxStringItem Group FN_SET_ACT_GLOSSARY )
+(SfxStringItem Group FN_SET_ACT_GLOSSARY)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9500,8 +9383,9 @@ SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
     GroupId = GID_EDIT;
 ]
 
+//--------------------------------------------------------------------------
 SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
-( SfxStringItem Bookmark FN_DELETE_BOOKMARK )
+(SfxStringItem Bookmark FN_DELETE_BOOKMARK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9523,11 +9407,10 @@ SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
 ]
+
 //--------------------------------------------------------------------------
 SfxVoidItem SetDropCapText FN_DROP_TEXT
-(
-    SfxStringItem DropCapText FN_DROP_TEXT
-)
+(SfxStringItem DropCapText FN_DROP_TEXT)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9552,9 +9435,7 @@ SfxVoidItem SetDropCapText FN_DROP_TEXT
 
 //--------------------------------------------------------------------------
 SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
-(
-    SfxStringItem CharStyleName FN_DROP_CHAR_STYLE_NAME
-)
+(SfxStringItem CharStyleName FN_DROP_CHAR_STYLE_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9569,7 +9450,6 @@ SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
     RecordPerSet;
     Synchron;
 
-
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9577,8 +9457,10 @@ SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
+
 //--------------------------------------------------------------------------
 SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -9602,16 +9484,10 @@ SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
+
 //--------------------------------------------------------------------------
 SfxBoolItem InsertDBField FN_INSERT_DBFIELD
-(
-SfxUInt16Item Type FN_PARAM_FIELD_TYPE,
-SfxStringItem DBName FN_INSERT_DBFIELD,
-SfxStringItem Command FN_PARAM_1,
-SfxStringItem ColumnName FN_PARAM_2,
-SfxInt32Item CommandType FN_PARAM_3,
-SfxStringItem Content FN_PARAM_FIELD_CONTENT,
-SfxUInt32Item Format FN_PARAM_FIELD_FORMAT)
+(SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxStringItem DBName FN_INSERT_DBFIELD,SfxStringItem Command FN_PARAM_1,SfxStringItem ColumnName FN_PARAM_2,SfxInt32Item CommandType FN_PARAM_3,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9621,17 +9497,10 @@ SfxUInt32Item Format FN_PARAM_FIELD_FORMAT)
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    Hidden = FALSE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,

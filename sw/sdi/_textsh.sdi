@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 09:29:32 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 14:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ interface BaseText : Selection
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem InsertLinebreak FN_INSERT_LINEBREAK ( )  // status(final|play)
+    FN_INSERT_LINEBREAK  // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = NoState ;
@@ -319,19 +319,19 @@ interface BaseText : Selection
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem InsertObject SID_INSERT_OBJECT ( )  // status(final|play)
+    SID_INSERT_OBJECT  // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem InsertPlugin SID_INSERT_PLUGIN ( )  // status(final|play)
+    SID_INSERT_PLUGIN  // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem InsertApplet SID_INSERT_APPLET ( )  // status(final|play)
+    SID_INSERT_APPLET  // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
@@ -403,7 +403,7 @@ interface BaseText : Selection
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem DelToEndOfLine FN_DELETE_LINE ( )  // status(final|play)
+    FN_DELETE_LINE  // status(final|play)
     [
         ExecMethod = ExecDelete ;
         StateMethod = NoState ;
@@ -689,13 +689,13 @@ interface BaseText : Selection
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem SortDialog FN_SORTING_DLG ( )  // status(final|play)
+    FN_SORTING_DLG  // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG ( )  // status(final|play)
+    FN_NUMBERING_OUTLINE_DLG   // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtapp.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 14:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ interface StarWriter : Module
         Export = FALSE;
     ]
      // alles ab hier kann weg (Export = FALSE;), wenn die vorangehenden funktionieren
-    SfxBoolItem Ruler FN_RULER // status()
+    FN_RULER // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _basesh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:30:06 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 14:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ interface BaseTextSelection : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SfxVoidItem PageDialog FN_FORMAT_PAGE_DLG ( )  // status(final|play)
+    FN_FORMAT_PAGE_DLG  // status(final|play)
     [
         ExecMethod = ExecDlg ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
@@ -308,7 +308,7 @@ interface BaseTextSelection : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    SID_ATTR_BORDER_OUTER // status()
+        SID_ATTR_BORDER_OUTER // status()
     [
         ExecMethod = Execute ;
         StateMethod = GetBorderState ;
@@ -330,7 +330,7 @@ interface BaseTextSelection : Selection
         ) ;
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
-        NoRecord;
+            NoRecord;
         GroupId = GID_TEMPLATE ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
