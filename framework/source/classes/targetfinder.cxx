@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:40:02 $
+ *  last change: $Author: as $ $Date: 2001-07-04 13:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,12 +190,20 @@ TargetInfo::TargetInfo( const css::uno::Reference< css::frame::XFrame >& xFrame 
         //case E_DESKTOP    :   // Nothing to do .. because: Desktop has no parent, no name ... Use default values!
                                 // But - values for children info is set later ...
         case E_PLUGINFRAME  :
-        case E_TASK         :
+        case E_TASK         :   {
+                                    css::uno::Reference< css::frame::XFrame > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+                                    bParentExist = xParent.is();
+                                    // Desktop has no name! Don't ask parent!
+                                    sFrameName   = xFrame->getName();
+                                }
+                                break;
         case E_FRAME        :   {
                                     css::uno::Reference< css::frame::XFrame > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
                                     bParentExist = xParent.is();
                                     if( xParent.is() == sal_True )
+                                    {
                                         sParentName = xParent->getName();
+                                    }
                                     sFrameName = xFrame->getName();
                                 }
                                 break;
