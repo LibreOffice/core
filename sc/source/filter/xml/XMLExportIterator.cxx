@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-05 12:53:42 $
+ *  last change: $Author: sab $ $Date: 2001-12-06 18:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,11 @@ void ScMyNotEmptyCellsIterator::Clear()
 {
     if (pCellItr)
         delete pCellItr;
-    DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
+    if (!aAnnotations.empty())
+    {
+        DBG_ERROR("not all Annotations saved");
+        aAnnotations.clear();
+    }
     pCellItr = NULL;
     pShapes = NULL;
     pMergedRanges = NULL;
