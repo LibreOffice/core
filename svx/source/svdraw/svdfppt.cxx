@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-09 15:24:22 $
+ *  last change: $Author: sj $ $Date: 2001-04-09 17:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,40 +725,6 @@ SdrEscherImport::~SdrEscherImport()
         delete (PPTOleEntry*)pPtr;
     delete pFonts;
     delete pExtParaProv;
-}
-
-ULONG SdrEscherImport::CountRecords( USHORT nRecId, ULONG nMaxFilePos ) const
-{
-    ULONG nRet=0;
-    ULONG nFPosMerk = rStCtrl.Tell(); // FilePos merken fuer spaetere Restauration
-    DffRecordHeader aHd;
-    do
-    {
-        rStCtrl >> aHd;
-        if ( aHd.nRecType == nRecId )
-            nRet++;
-        aHd.SeekToEndOfRecord( rStCtrl );
-    }
-    while ( rStCtrl.GetError() == 0 && rStCtrl.Tell () < nMaxFilePos );
-    rStCtrl.Seek ( nFPosMerk ); // FilePos restaurieren
-    return nRet;
-}
-
-ULONG SdrEscherImport::CountRecords2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos ) const
-{
-    ULONG nRet = 0;
-    ULONG nFPosMerk = rStCtrl.Tell(); // FilePos merken fuer spaetere Restauration
-    DffRecordHeader aHd;
-    do
-    {
-        rStCtrl >> aHd;
-        if ( aHd.nRecType == nRecId1 || aHd.nRecType == nRecId2 )
-            nRet++;
-        aHd.SeekToEndOfRecord( rStCtrl );
-    }
-    while ( rStCtrl.GetError() == 0 && rStCtrl.Tell() < nMaxFilePos );
-    rStCtrl.Seek( nFPosMerk ); // FilePos restaurieren
-    return nRet;
 }
 
 const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
@@ -2448,40 +2414,6 @@ sal_Bool SdrPowerPointImport::SeekToAktPage( DffRecordHeader* pRecHd ) const
     return bRet;
 }
 
-sal_Bool SdrPowerPointImport::SeekToObj( UINT32 nObjNum, DffRecordHeader* pObjRecHd, DffRecordHeader* pContRecHd ) const
-{
-    sal_Bool bRet = FALSE;
-    ULONG nFPosMerk = rStCtrl.Tell(); // FilePos merken fuer ggf. spaetere Restauration
-    DffRecordHeader aPageHd;
-    if ( SeekToAktPage( &aPageHd ) )
-    {
-        // und nun die Page nach Objekten abklappern
-        ULONG nPageRecEnd = aPageHd.GetRecEndFilePos();
-        DffRecordHeader aPPDrawHd;
-        if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
-        {
-            ULONG nPPDrawEnd = aPPDrawHd.GetRecEndFilePos();
-            DffRecordHeader aEscherF002Hd;
-            if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, nPPDrawEnd, &aEscherF002Hd ) )
-            {
-                ULONG nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
-                DffRecordHeader aEscherObjListHd;
-                if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
-                {
-                    if ( pContRecHd )
-                        *pContRecHd = aEscherObjListHd;
-                    ULONG nEscherObjListEnd = aEscherObjListHd.GetRecEndFilePos();
-                    // und nun die F004er lesen, das erste aber weglassen.
-                    bRet = SeekToRec2( DFF_msofbtSpContainer, DFF_msofbtSpgrContainer, nEscherObjListEnd, pObjRecHd, nObjNum + 1 );
-                }
-            }
-        }
-    }
-    if ( !bRet )
-        rStCtrl.Seek( nFPosMerk ); // FilePos restaurieren
-    return bRet;
-}
-
 USHORT SdrPowerPointImport::GetPageCount( PptPageKind ePageKind ) const
 {
     PptSlidePersistList* pList = GetPageList( ePageKind );
@@ -3141,20 +3073,6 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
     }
     delete pSet;
     return pRet;
-}
-
-ULONG SdrPowerPointImport::GetObjCount() const
-{
-    ULONG nAnz=0;
-    ULONG nFPosMerk = rStCtrl.Tell();   // FilePos merken fuer spaetere Restauration
-    DffRecordHeader aObjContHd;
-    if ( SeekToObj( 0, NULL, &aObjContHd ) )
-    {
-        ULONG nRecEnd = aObjContHd.GetRecEndFilePos();
-        nAnz = CountRecords2( DFF_msofbtSpContainer, DFF_msofbtSpgrContainer, nRecEnd );
-    }
-    rStCtrl.Seek( nFPosMerk ); // FilePos restaurieren
-    return nAnz;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
