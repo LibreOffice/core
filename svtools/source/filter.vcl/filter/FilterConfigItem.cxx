@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-05 20:35:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 13:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
 
 using namespace ::rtl;
 using namespace ::utl                       ;   // getProcessServiceFactory
@@ -89,6 +92,73 @@ using namespace ::com::sun::star::beans     ;   // PropertyValue
 using namespace ::com::sun::star::uno       ;   // Reference
 using namespace ::com::sun::star::util      ;   // XChangesBatch
 using namespace ::com::sun::star::awt       ;   // Size
+using namespace ::com::sun::star::container ;   //
+
+static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const String& rTree )
+{
+    sal_Bool    bAvailable = rTree.Len() != 0;
+    if ( bAvailable )
+    {
+        xub_StrLen  nTokenCount = rTree.GetTokenCount( (sal_Unicode)'/' );
+        xub_StrLen  i = 0;
+
+        if ( rTree.GetChar( 0 ) == (sal_Unicode)'/' )
+            i++;
+
+        Any aAny;
+        aAny <<= (OUString)rTree.GetToken( i++, (sal_Unicode)'/' );
+
+        // creation arguments: nodepath
+        PropertyValue aPathArgument;
+        aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aPathArgument.Value = aAny;
+
+        Sequence< Any > aArguments( 1 );
+        aArguments[ 0 ] <<= aPathArgument;
+
+        Reference< XInterface > xReadAccess;
+        try
+        {
+            xReadAccess = rXCfgProv->createInstanceWithArguments(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                    aArguments );
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+            bAvailable = sal_False;
+        }
+        if ( xReadAccess.is() )
+        {
+            for ( ; bAvailable && ( i < nTokenCount ); i++ )
+            {
+                Reference< XHierarchicalNameAccess > xHierarchicalNameAccess
+                    ( xReadAccess, UNO_QUERY );
+
+                if ( !xHierarchicalNameAccess.is() )
+                    bAvailable = sal_False;
+                else
+                {
+                    String aNode( rTree.GetToken( i, (sal_Unicode)'/' ) );
+                    if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
+                        bAvailable = sal_False;
+                    else
+                    {
+                        Any aAny( xHierarchicalNameAccess->getByHierarchicalName( aNode ) );
+                        try
+                        {
+                            aAny >>= xReadAccess;
+                        }
+                        catch ( ::com::sun::star::uno::Exception& )
+                        {
+                            bAvailable = sal_False;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return bAvailable;
+}
 
 FilterConfigItem::FilterConfigItem( const OUString& rSubTree ) :
     bModified   ( sal_False )
@@ -103,35 +173,38 @@ FilterConfigItem::FilterConfigItem( const OUString& rSubTree ) :
 
     if ( xCfgProv.is() )
     {
-        Any aAny;
-        // creation arguments: nodepath
-        PropertyValue aPathArgument;
-        aAny <<= sTree;
-        aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-        aPathArgument.Value = aAny;
-
-        // creation arguments: commit mode
-        PropertyValue aModeArgument;
-        sal_Bool bAsyncron = sal_True;
-        aAny <<= bAsyncron;
-        aModeArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) );
-        aModeArgument.Value = aAny;
-
-        Sequence< Any > aArguments( 2 );
-        aArguments[ 0 ] <<= aPathArgument;
-        aArguments[ 1 ] <<= aModeArgument;
-
-        try
+        if ( ImpIsTreeAvailable( xCfgProv, String( sTree ) ) )
         {
-            xUpdatableView = xCfgProv->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
-                    aArguments );
-            if ( xUpdatableView.is() )
-                xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );
-        }
-        catch ( ::com::sun::star::uno::Exception& )
-        {
-            DBG_ERROR( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
+            Any aAny;
+            // creation arguments: nodepath
+            PropertyValue aPathArgument;
+            aAny <<= sTree;
+            aPathArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            aPathArgument.Value = aAny;
+
+            // creation arguments: commit mode
+            PropertyValue aModeArgument;
+            sal_Bool bAsyncron = sal_True;
+            aAny <<= bAsyncron;
+            aModeArgument.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) );
+            aModeArgument.Value = aAny;
+
+            Sequence< Any > aArguments( 2 );
+            aArguments[ 0 ] <<= aPathArgument;
+            aArguments[ 1 ] <<= aModeArgument;
+
+            try
+            {
+                xUpdatableView = xCfgProv->createInstanceWithArguments(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                        aArguments );
+                if ( xUpdatableView.is() )
+                    xPropSet = Reference< XPropertySet >( xUpdatableView, UNO_QUERY );
+            }
+            catch ( ::com::sun::star::uno::Exception& )
+            {
+                DBG_ERROR( "FilterConfigItem::FilterConfigItem - Could not access configuration Key" );
+            }
         }
     }
 };
