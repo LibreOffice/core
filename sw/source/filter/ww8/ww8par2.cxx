@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:06:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
 #endif
 
 #ifndef _PAM_HXX
@@ -3006,7 +3009,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     {
         pAktWWCell = &pActBand->pTCs[ nWwCol ];
 
-        // The first paragraph in a cell with upper autospacing has upper spacing set to 0
+       // The first paragraph in a cell with upper autospacing has upper spacing set to 0
         if(pIo->bParaAutoBefore && pIo->bFirstPara && !pIo->pWDop->fDontUseHTMLAutoSpacing)
             pIo->SetUpperSpacing(*pIo->pPaM, 0);
 
@@ -3031,6 +3034,28 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             //            nachzuahmen, braucht NICHT SetTxtFmtCollAndListLevel()
             //            verwendet zu werden.
         }
+
+        // Better to turn Snap to Grid off for all paragraphs in tables
+        if(SwTxtNode *pNd = pIo->pPaM->GetNode()->GetTxtNode())
+        {
+            const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_PARATR_SNAPTOGRID);
+            SvxParaGridItem &rSnapToGrid = (SvxParaGridItem&)(rItm);
+
+            if(rSnapToGrid.GetValue())
+            {
+                SvxParaGridItem aGridItem( rSnapToGrid );
+                aGridItem.SetValue(false);
+
+                SwPosition* pGridPos = pIo->pPaM->GetPoint();
+
+                xub_StrLen nEnd = pGridPos->nContent.GetIndex();
+                pGridPos->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
+                pIo->pCtrlStck->NewAttr(*pGridPos, aGridItem);
+                pGridPos->nContent.Assign(pIo->pPaM->GetCntntNode(), nEnd);
+                pIo->pCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
+            }
+        }
+
         StartMiserableHackForUnsupportedDirection(nWwCol);
     }
     return true;
@@ -3256,6 +3281,34 @@ void WW8TabDesc::AdjustNewBand()
         pBox->ClaimFrmFmt();
 
         SetTabBorders(pBox, j);
+
+        // #i18128# word has only one line between adjoining vertical cells
+        // we have to mimick this in the filter by picking the larger of the
+        // sides and using that one on one side of the line (right)
+        SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrmFmt()), RES_BOX));
+        const SvxBorderLine *pLeftLine = aCurrentBox.GetLine(BOX_LINE_LEFT);
+        int nCurrentRightLineWidth = 0;
+        if(pLeftLine)
+            nCurrentRightLineWidth = pLeftLine->GetInWidth() + pLeftLine->GetOutWidth() + pLeftLine->GetDistance();
+
+        if (i != 0)
+        {
+            SwTableBox* pBox2 = (*pTabBoxes)[i-1];
+            SvxBoxItem aOldBox(sw::util::ItemGet<SvxBoxItem>(*(pBox2->GetFrmFmt()), RES_BOX));
+            const SvxBorderLine *pRightLine = aOldBox.GetLine(BOX_LINE_RIGHT);
+            int nOldBoxRightLineWidth = 0;
+            if(pRightLine)
+                nOldBoxRightLineWidth = pRightLine->GetInWidth() + pRightLine->GetOutWidth() + pRightLine->GetDistance();
+
+            if(nOldBoxRightLineWidth>nCurrentRightLineWidth)
+                aCurrentBox.SetLine(aOldBox.GetLine(BOX_LINE_RIGHT), BOX_LINE_LEFT);
+
+            aOldBox.SetLine(0, BOX_LINE_RIGHT);
+            pBox2->GetFrmFmt()->SetAttr(aOldBox);
+        }
+
+        pBox->GetFrmFmt()->SetAttr(aCurrentBox);
+
         SetTabVertAlign(pBox, j);
         SetTabDirection(pBox, j);
         if( pActBand->pSHDs || pActBand->pNewSHDs)
