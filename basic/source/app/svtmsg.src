@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:06:57 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 21:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1636,5 +1636,6 @@ String S_NO_SCROLLBAR
     Text[ arabic ] = "No status bar at ($Arg1)";
     Text[ catalan ] = "No status bar at ($Arg1)";
 };
+
 
 
