@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:07:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,9 @@ namespace xmloff
             "OElementExport::exportServiceNameAttribute: wrong service name translation!");
 
 #endif
+        sToWriteServiceName =
+            m_rContext.getGlobalContext().GetNamespaceMap().GetQNameByKey(
+                XML_NAMESPACE_OOO, sToWriteServiceName );
 
         // now write this
         AddAttribute(
@@ -1360,7 +1363,14 @@ namespace xmloff
     void OControlExport::implStartElement(const sal_Char* _pName)
     {
         // before we let the base class start it's outer element, we add a wrapper element
-        m_pOuterElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, getOuterXMLElementName(), sal_True, sal_True);
+        const sal_Char *pOuterElementName = getOuterXMLElementName();
+        m_pOuterElement = pOuterElementName
+                               ? new SvXMLElementExport(
+                                        m_rContext.getGlobalContext(),
+                                        XML_NAMESPACE_FORM,
+                                        pOuterElementName, sal_True,
+                                        sal_True)
+                            : 0;
 
         // add the attributes for the inner element
         exportInnerAttributes();
@@ -1375,7 +1385,7 @@ namespace xmloff
         // end the inner element
         OElementExport::implEndElement();
 
-        // end the outer element
+        // end the outer element if it exists
         delete m_pOuterElement;
         m_pOuterElement = NULL;
     }
@@ -1383,7 +1393,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     const sal_Char* OControlExport::getOuterXMLElementName() const
     {
-        return "control";
+        return 0;
     }
 
     //---------------------------------------------------------------------
@@ -1886,6 +1896,9 @@ namespace xmloff
         sal_Int32 nLastSep = sColumnServiceName.lastIndexOf('.');
         OSL_ENSURE(-1 != nLastSep, "OColumnExport::startExportElement: invalid service name!");
         sColumnServiceName = sColumnServiceName.copy(nLastSep + 1);
+        sColumnServiceName =
+            m_rContext.getGlobalContext().GetNamespaceMap().GetQNameByKey(
+                XML_NAMESPACE_OOO, sColumnServiceName );
         // add the attribute
         AddAttribute(getCommonControlAttributeNamespace(CCA_SERVICE_NAME), getCommonControlAttributeName(CCA_SERVICE_NAME), sColumnServiceName);
         // flag the property as "handled"
