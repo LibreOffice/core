@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:08:50 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,6 +1590,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
                             bRestartLayoutProcess = true;
                             break;
                         }
+                        // --> OD 2004-08-25 #i3317# - restart layout process,
+                        // if the position of the anchored object is locked now.
+                        if ( pAnchoredObj->PositionLocked() )
+                        {
+                            bRestartLayoutProcess = true;
+                            break;
+                        }
+                        // <--
 
                         if ( aRect != pAnchoredObj->GetObjRect() )
                         {
@@ -1638,6 +1646,8 @@ void CalcCntnt( SwLayoutFrm *pLay,
                 if ( bRestartLayoutProcess )
                 {
                     pFrm = pLay->ContainsAny();
+                    pAgainObj1 = 0L;
+                    pAgainObj2 = 0L;
                     continue;
                 }
 
@@ -2227,7 +2237,7 @@ void SwLayoutFrm::NotifyLowerObjs()
 void SwFlyFrm::NotifyDrawObj()
 {
     GetVirtDrawObj()->SetRect();
-    GetVirtDrawObj()->_SetRectsDirty();
+    GetVirtDrawObj()->SetRectsDirty();
     GetVirtDrawObj()->SetChanged();
     GetVirtDrawObj()->BroadcastObjectChange();
     if ( GetFmt()->GetSurround().IsContour() )
