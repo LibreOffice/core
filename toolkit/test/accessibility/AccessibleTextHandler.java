@@ -1,5 +1,6 @@
 
 import drafts.com.sun.star.accessibility.XAccessibleText;
+import drafts.com.sun.star.accessibility.XAccessibleEditableText;
 import drafts.com.sun.star.accessibility.AccessibleTextType;
 
 import com.sun.star.awt.Rectangle;
@@ -8,10 +9,23 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
 import java.util.Vector;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JDialog;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JOptionPane;
+import javax.swing.text.JTextComponent;
+
 
 class AccessibleTextHandler extends NodeHandler
 {
-    private XAccessibleText getText( Object aObject )
+    protected XAccessibleText getText( Object aObject )
     {
         XAccessibleText xText =
             (XAccessibleText) UnoRuntime.queryInterface (
@@ -19,9 +33,19 @@ class AccessibleTextHandler extends NodeHandler
         return xText;
     }
 
+    protected XAccessibleEditableText getEditText( Object aObject )
+    {
+        XAccessibleEditableText xText =
+            (XAccessibleEditableText) UnoRuntime.queryInterface (
+                 XAccessibleEditableText.class, aObject);
+        return xText;
+    }
+
+
+
     public int getChildCount(Object aObject)
     {
-        return (getText(aObject) != null) ? 11 : 0;
+        return (getText(aObject) != null) ? 12 : 0;
     }
 
     public Object getChild(Object aObject, int nIndex)
@@ -71,11 +95,26 @@ class AccessibleTextHandler extends NodeHandler
                                             AccessibleTextType.LINE );
                     break;
                 case 10:
+                    aRet = textAtIndexNode( xText, "Attribute",
+                                            (short)6/*AccessibleTextType.ATTRIBUTE*/);
+                    break;
+                case 11:
                     aRet = bounds( xText );
                     break;
             }
         }
         return aRet;
+    }
+
+
+    private String textAtIndexNodeString(
+        int nStart, int nEnd,
+        String sWord, String sBefore, String sBehind)
+    {
+        return "[" + nStart + "," + nEnd + "] "
+            + "\"" + sWord + "\"     \t"
+            + "(" + sBefore + ","
+            + "" + sBehind + ")";
     }
 
     /** Create a text node that lists all strings of a particular text type
@@ -99,15 +138,22 @@ class AccessibleTextHandler extends NodeHandler
                 // make a node as soon as a new one is found; close the last
                 // one at the end
                 String sWord = xText.getTextAtIndex(0, nTextType);
+                String sBefore = xText.getTextBeforeIndex(0, nTextType);
+                String sBehind = xText.getTextBehindIndex(0, nTextType);
                 int nStart = 0;
                 for(int i = 1; i < nLength; i++)
                 {
                     String sTmp = xText.getTextAtIndex(i, nTextType);
-                    if( ! sTmp.equals( sWord ) )
+                    String sTBef = xText.getTextBeforeIndex(i, nTextType);
+                    String sTBeh = xText.getTextBehindIndex(i, nTextType);
+                    if( ! ( sTmp.equals( sWord ) && sTBef.equals( sBefore ) &&
+                            sTBeh.equals( sBehind ) ) )
                     {
-                        aWords.add( "[" + nStart + "," + (i-1) + "] \"" +
-                                       sWord + "\"" );
+                        aWords.add( textAtIndexNodeString(
+                            nStart, i, sWord, sBefore, sBehind) );
                         sWord = sTmp;
+                        sBefore = sTBef;
+                        sBehind = sTBeh;
                         nStart = i;
                     }
 
@@ -118,8 +164,8 @@ class AccessibleTextHandler extends NodeHandler
                         break;
                     }
                 }
-                aWords.add( "[" + nStart + "," + nLength + "] \"" +
-                           sWord + "\"" );
+                aWords.add( textAtIndexNodeString(
+                    nStart, nLength, sWord, sBefore, sBehind) );
             }
             catch( IndexOutOfBoundsException e )
             {
@@ -205,4 +251,292 @@ class AccessibleTextHandler extends NodeHandler
 
         return aBuffer.toString();
     }
+
+
+    static String[] aTextActions =
+        new String[] { "select...", "copy..." };
+    static String[] aEditableTextActions =
+        new String[] { "select...", "copy...",
+                       "cut...", "paste...", "edit..." };
+
+    public String[] getActions(Object aObject)
+    {
+        XAccessibleEditableText xEText = getEditText( aObject );
+
+        return (xEText == null) ? aTextActions : aEditableTextActions;
+    }
+
+    public void performAction(Object aObject, int nIndex)
+    {
+        TextActionDialog aDialog = null;
+
+        XAccessibleText xText = getText( aObject );
+
+        // create proper dialog
+        switch( nIndex )
+        {
+            case 0:
+                aDialog = new TextActionDialog( aObject,
+                                                "Select range:",
+                                                xText.getText(),
+                                                "select" )
+                    {
+                        void action( JTextComponent aText, Object aObject )
+                                throws IndexOutOfBoundsException
+                        {
+                            getText( aObject ).setSelection(
+                                aText.getSelectionStart(),
+                                aText.getSelectionEnd() );
+                        }
+                    };
+                break;
+            case 1:
+                aDialog = new TextActionDialog( aObject,
+                                                "Select range and copy:",
+                                                xText.getText(),
+                                                "copy" )
+                    {
+                        void action( JTextComponent aText, Object aObject )
+                                throws IndexOutOfBoundsException
+                        {
+                            getText( aObject ).copyText(
+                                aText.getSelectionStart(),
+                                aText.getSelectionEnd() );
+                        }
+                    };
+                break;
+            case 2:
+                aDialog = new TextActionDialog( aObject,
+                                                "Select range and cut:",
+                                                xText.getText(),
+                                                "cut" )
+                    {
+                        void action( JTextComponent aText, Object aObject )
+                                throws IndexOutOfBoundsException
+                        {
+                            getEditText( aObject ).cutText(
+                                aText.getSelectionStart(),
+                                aText.getSelectionEnd() );
+                        }
+                    };
+                break;
+            case 3:
+                aDialog = new TextActionDialog( aObject,
+                                                "Place Caret and paste:",
+                                                xText.getText(),
+                                                "paste" )
+                    {
+                        void action( JTextComponent aText, Object aObject )
+                                throws IndexOutOfBoundsException
+                        {
+                            getEditText( aObject ).pasteText(
+                                aText.getCaretPosition() );
+                        }
+                    };
+                break;
+            case 4:
+                aDialog = new TextEditDialog( aObject, "Edit text:",
+                                              xText.getText(), "edit" );
+                break;
+        }
+
+        if( aDialog != null )
+            aDialog.show();
+    }
+
 }
+
+/**
+ * Display a dialog with a text field and a pair of cancel/do-it buttons
+ */
+class TextActionDialog extends JDialog
+    implements ActionListener
+{
+    JTextArea aText;
+    Object aObject;
+    String sName;
+
+    public TextActionDialog( Object aObj,
+                             String sExplanation,
+                             String sText,
+                             String sButtonText )
+    {
+        super( AccessibilityWorkBench.get() );
+
+        aObject = aObj;
+        sName = sButtonText;
+        init( sExplanation, sText, sButtonText );
+    }
+
+    /** build dialog */
+    protected void init( String sExplanation,
+                         String sText,
+                         String sButtonText )
+    {
+        setTitle( sName );
+
+        // vertical stacking of the elements
+        Container aContent = getContentPane();
+        //        aContent.setLayout( new BorderLayout() );
+
+        // label with explanation
+        if( sExplanation.length() > 0 )
+            aContent.add( new JLabel( sExplanation ), BorderLayout.NORTH );
+
+        // the text field
+        aText = new JTextArea();
+        aText.setText( sText );
+        aText.setColumns( 40 );
+        aText.setRows( Math.max( sText.length() / 40, 5 ) );
+        aText.setLineWrap( true );
+        aText.setEditable( false );
+        aContent.add( aText, BorderLayout.CENTER );
+
+        JPanel aButtons = new JPanel();
+        aButtons.setLayout( new FlowLayout() );
+        JButton aActionButton = new JButton( sButtonText );
+        aActionButton.setActionCommand( "Action" );
+        aActionButton.addActionListener( this );
+        aButtons.add( aActionButton );
+        JButton aCancelButton = new JButton( "Cancel" );
+        aCancelButton.setActionCommand( "Cancel" );
+        aCancelButton.addActionListener( this );
+        aButtons.add( aCancelButton );
+
+        // add Panel with buttons
+        aContent.add( aButtons, BorderLayout.SOUTH );
+
+        setSize( aContent.getPreferredSize() );
+    }
+
+    void cancel()
+    {
+        hide();
+        dispose();
+    }
+
+    void action()
+    {
+        try
+        {
+            action( aText, aObject );
+        }
+        catch( IndexOutOfBoundsException e )
+        {
+            JOptionPane.showMessageDialog(
+                AccessibilityWorkBench.get(), "Index out of bounds",
+                sName, JOptionPane.ERROR_MESSAGE);
+        }
+        cancel();
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        String sCommand = e.getActionCommand();
+
+        if( "Cancel".equals( sCommand ) )
+            cancel();
+        else if( "Action".equals( sCommand ) )
+            action();
+    }
+
+
+    /** override this for dialog-specific action */
+    void action( JTextComponent aText, Object aObject )
+        throws IndexOutOfBoundsException
+    {
+    }
+}
+
+
+class TextEditDialog extends TextActionDialog
+{
+    public TextEditDialog( Object aObj,
+                           String sExplanation,
+                           String sText,
+                           String sButtonText )
+    {
+        super( aObj, sExplanation, sText, sButtonText );
+    }
+
+    protected void init( String sExplanation,
+                         String sText,
+                         String sButtonText )
+    {
+        super.init( sExplanation, sText, sButtonText );
+        aText.setEditable( true );
+    }
+
+
+    /** edit the text */
+    void action( JTextComponent aText, Object aObject )
+    {
+        // is this text editable? if not, fudge you and return
+        XAccessibleEditableText xEdit =
+            (XAccessibleEditableText) UnoRuntime.queryInterface (
+                  XAccessibleEditableText.class, aObject);
+        if( xEdit != null )
+            updateText( xEdit, aText.getText() );
+    }
+
+
+    /** update the text */
+    boolean updateText( XAccessibleEditableText xEdit, String sNew )
+    {
+        String sOld = xEdit.getText();
+
+        // false alarm? Early out if no change was done!
+        if( sOld.equals( sNew ) )
+            return false;
+
+        // get the minimum length of both strings
+        int nMinLength = sOld.length();
+        if( sNew.length() < nMinLength )
+            nMinLength = sNew.length();
+
+        // count equal characters from front and end
+        int nFront = 0;
+        while( (nFront < nMinLength) &&
+               (sNew.charAt(nFront) == sOld.charAt(nFront)) )
+            nFront++;
+        int nBack = 0;
+        while( (nBack < nMinLength) &&
+               ( sNew.charAt(sNew.length()-nBack-1) ==
+                 sOld.charAt(sOld.length()-nBack-1)    ) )
+            nBack++;
+        if( nFront + nBack > nMinLength )
+            nBack = nMinLength - nFront;
+
+        // so... the first nFront and the last nBack characters
+        // are the same. Change the others!
+        String sDel = sOld.substring( nFront, sOld.length() - nBack );
+        String sIns = sNew.substring( nFront, sNew.length() - nBack );
+
+        System.out.println("edit text: " +
+                           sOld.substring(0, nFront) +
+                           " [ " + sDel + " -> " + sIns + " ] " +
+                           sOld.substring(sOld.length() - nBack) );
+
+        boolean bRet = false;
+        try
+        {
+            // edit the text, and use
+            // (set|insert|delete|replace)Text as needed
+            if( nFront+nBack == 0 )
+                bRet = xEdit.setText( sIns );
+            else if( sDel.length() == 0 )
+                bRet = xEdit.insertText( sIns, nFront );
+            else if( sIns.length() == 0 )
+                bRet = xEdit.deleteText( nFront, sOld.length()-nBack );
+            else
+                bRet = xEdit.replaceText(nFront, sOld.length()-nBack,sIns);
+        }
+        catch( IndexOutOfBoundsException e )
+        {
+            bRet = false;
+        }
+
+        return bRet;
+    }
+}
+
