@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:20:52 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ hebrew ] = "‮מקור נתונים עבור ספר כתובות‬";
         Text[ hindi ] = "Address Book Source";
         Text[ slovak ] = "Zdroj knihy adries";
+        Text[ hungarian ] = "Címjegyzék-adatforrás";
+        Text[ slovenian ] = "Vir adresarja";
     };
     FixedText FT_DATASOURCE
     {
@@ -168,6 +170,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ hebrew ] = "‮מקור הנתונים‬";
         Text[ hindi ] = "डॉटा मूल";
         Text[ slovak ] = "Zdroj dát";
+        Text[ hungarian ] = "Adatforrás";
+        Text[ slovenian ] = "Vir podatkov";
     };
     ComboBox CB_DATASOURCE
     {
@@ -211,6 +215,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ hebrew ] = "‮ניהול...‬";
         Text[ hindi ] = "~Administrate...";
         Text[ slovak ] = "~Administrovať";
+        Text[ hungarian ] = "~Adminisztráció...";
+        Text[ slovenian ] = "~Skrbništvo...";
     };
     FixedText FT_TABLE
     {
@@ -246,6 +252,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
         Text[ slovak ] = "Tabuľka";
+        Text[ hungarian ] = "Tábla";
+        Text[ slovenian ] = "Tabela";
     };
     ComboBox CB_TABLE
     {
@@ -288,6 +296,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ hebrew ] = "‮השמת ערכים לשדות‬";
         Text[ hindi ] = "Field assignment";
         Text[ slovak ] = "Priradenie polí­";
+        Text[ hungarian ] = "Mező-hozzárendelés";
+        Text[ slovenian ] = "Dodelitev polja";
     };
     Window CT_BORDER
     {
