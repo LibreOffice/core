@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-08 10:09:29 $
+ *  last change: $Author: cmc $ $Date: 2001-03-20 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,13 +1055,9 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
                                        long nEndCp,
                                        BOOL bONLYnPicLocFc )
 {
-    WW8PLCFManResult aRes;
-    SfxItemSet aS( pDrawEditEngine->GetEmptyItemSet() );
-
     nStartCp += nDrawCpO;
     nEndCp   += nDrawCpO;
     WW8ReaderSave aSave(this,nStartCp);
-
 
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext;
@@ -1069,12 +1065,12 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
     USHORT nIstd     = pPlcxMan->GetPapPLCF()->GetIstd();
     USHORT nNextIstd = USHRT_MAX;
 
-    // store the *first* Style's SPRMs
-    InsertTxbxStyAttrs( aS, nIstd );
-
     while( nStart <= nEndCp )
     {
-        // get position of next SPRM
+        SfxItemSet aS( pDrawEditEngine->GetEmptyItemSet() );
+        WW8PLCFManResult aRes;
+        InsertTxbxStyAttrs( aS, nIstd );
+            // get position of next SPRM
         if(    pPlcxMan->Get( &aRes )
             && aRes.pMemPos && aRes.nSprmId )
         {
@@ -1116,8 +1112,10 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
             nEnd = ( nNext < nEndCp ) ? nNext : nEndCp;
             // put the attrs into the doc
             if( aS.Count() )
+            {
                 pDrawEditEngine->QuickSetAttribs( aS,
                     GetESelection( nStart - nStartCp, nEnd - nStartCp ) );
+            }
         }
         nStart = nNext;
     }
@@ -2213,8 +2211,8 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         };
 
 
-        UINT16 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
-        UINT16 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
+        UINT32 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
+        UINT32 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
 
         /*
         #74188#
@@ -2227,8 +2225,8 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             pRecord->nYRelTo = rFSPA.nby;
 
 
-        UINT16 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
-        UINT16 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
+        UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
+        UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
         RndStdIds        eAnchor;
         SwHoriOrient     eHoriOri;
@@ -2986,11 +2984,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.13 2001-03-08 10:09:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.14 2001-03-20 12:44:03 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/03/08 10:09:29  cmc
+      Reformat unreadable code
+
       Revision 1.12  2001/02/27 12:38:09  cmc
       #74920# enable SdrTextObj to FlyFrame conversion for WW6
 
