@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:56:32 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@ struct SwAccessibleEvent_Impl;
 class SwRect;
 class ViewShell;
 
+#define ACC_STATE_EDITABLE 0x01
+#define ACC_STATE_OPAQUE 0x02
+#define ACC_STATE_CARET 0x80
+
+#define ACC_STATE_MASK 0x7F
+
 class SwAccessibleMap
 {
     ::vos::OMutex aMutex;
@@ -98,7 +104,12 @@ class SwAccessibleMap
     sal_Int32 nFootnote;
     sal_Int32 nEndnote;
 
+    static void FireEvent( const SwAccessibleEvent_Impl& rEvent );
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
+
+    void InvalidateCaretPosition(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessible>& rAcc );
 
 public:
 
@@ -130,6 +141,8 @@ public:
 
     void SetCaretContext(
         const ::vos::ORef < SwAccessibleContext >& rCaretContext );
+
+    void InvalidateStates( sal_uInt8 nStates );
 
     void FireEvents();
 };
