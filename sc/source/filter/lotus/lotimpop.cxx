@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:21:05 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ ScFormulaCell *ImportLotus::Formulacell( UINT16 n )
 
 void ImportLotus::Read( String &r )
 {
-    AppendCString( *pIn, r, eQuellChar );
+    ScFilterTools::AppendCString( *pIn, r, eQuellChar );
 }
 
 

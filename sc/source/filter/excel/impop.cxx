@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ void ImportExcel::Externsheet( void )
     BOOL        bSameWorkBook = FALSE;
 
     XclImpHelper::DecodeExternsheetByte( aIn, aFile, aTabName, bSameWorkBook );
-    XclImpHelper::ConvertName( aTabName );
+    ScFilterTools::ConvertName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aFile, aTabName, bSameWorkBook );
 }
 
@@ -580,7 +580,7 @@ void ImportExcel::Name25( void )
 
         // Namen einlesen
         String aName( aIn.ReadRawByteString( eQuellChar, nLenName ) );
-        XclImpHelper::ConvertName( aName );
+        ScFilterTools::ConvertName( aName );
 
         pFormConv->Reset();
         if( nAttr0 & 0x02 )
@@ -624,10 +624,10 @@ void ImportExcel::Name25( void )
 
         if( bBuildIn )
         {// Build-in name
-            aName.AssignAscii( GetBuiltInName( cFirstNameChar ) );
+            aName.AssignAscii( ScFilterTools::GetBuiltInName( cFirstNameChar ) );
         }
         else
-            XclImpHelper::ConvertName( aName );
+            ScFilterTools::ConvertName( aName );
 
         pFormConv->Reset();
         if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
@@ -833,7 +833,7 @@ void ImportExcel::Externname25( void )
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
-        XclImpHelper::ConvertName( aName );
+        ScFilterTools::ConvertName( aName );
         pExcRoot->pExtNameBuff->AddName( aName );
     }
     else if( nOpt & 0x0010 )
@@ -1168,7 +1168,7 @@ void ImportExcel::Boundsheet( void )
         nGrbit = 0x0000;
 
     String aName( aIn.ReadByteString( eQuellChar, FALSE ) );
-    XclImpHelper::ConvertName( aName );
+    ScFilterTools::ConvertName( aName );
 
     *pExcRoot->pTabNameBuff << aName;
 
@@ -1855,11 +1855,11 @@ void ImportExcel::Name34( void )
         bPrintTitles = ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
         bBuildIn = TRUE;
 
-        aName.AssignAscii( GetBuiltInName( cFirstNameChar ) );
+        aName.AssignAscii( ScFilterTools::GetBuiltInName( cFirstNameChar ) );
     }
     else
     {
-        XclImpHelper::ConvertName( aName );
+        ScFilterTools::ConvertName( aName );
 
         bPrintArea = bPrintTitles = bBuildIn = FALSE;
     }

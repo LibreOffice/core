@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:21:05 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 
 #include "root.hxx"
 
-#ifndef _SC_XCLIMPHELPER_HXX
-#include "XclImpHelper.hxx"
+#ifndef _FLTTOOLS_HXX
+#include "flttools.hxx"
 #endif
 
 extern sal_Char*    pAnsi;          // -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
@@ -275,7 +275,7 @@ void OP_NamedRange( SvStream& r, UINT16 n )
 
     String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
-    XclImpHelper::ConvertName( aTmp );
+    ScFilterTools::ConvertName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
 }
@@ -313,7 +313,7 @@ void OP_SymphNamedRange( SvStream& r, UINT16 n )
     DosToSystem( pAnsi );
 
     String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
-    XclImpHelper::ConvertName( aTmp );
+    ScFilterTools::ConvertName( aTmp );
 
     pLotusRoot->pRangeNames->Append( pRange, aTmp );
 }

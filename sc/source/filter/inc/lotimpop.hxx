@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include "imp_op.hxx"
 #include "flttypes.hxx"
+#include "flttools.hxx"
 #include "lotform.hxx"
 #include "lotattr.hxx"
 
@@ -183,12 +184,9 @@ inline void ImportLotus::Read( UINT32& r )
 }
 
 
-extern double ReadLongDouble( SvStream& rStr ); // -> exctools.cxx
-
-
 inline void ImportLotus::Read( double& r )
 {
-    r = ReadLongDouble( *pIn );
+    r = ScFilterTools::ReadLongDouble( *pIn );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:58:45 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,10 +381,10 @@ void Biff8MSDffManager::ProcessClientAnchor2( SvStream& rStr, DffRecordHeader& r
         ScDocument*         pDoc = pExcRoot->pDoc;
 
         Rectangle&          rRect = rD.aChildAnchor;
-        rRect.nLeft     = CalcX( nAnchTab, nAnchCol, p->nX, HMM_PER_TWIPS, pDoc );
-        rRect.nTop      = CalcY( nAnchTab, nAnchRow, p->nY, HMM_PER_TWIPS, pDoc );
-        rRect.nRight    = CalcX( nAnchTab, p->nDCol, p->nDX, HMM_PER_TWIPS, pDoc );
-        rRect.nBottom   = CalcY( nAnchTab, p->nDRow, p->nDY, HMM_PER_TWIPS, pDoc );
+        rRect.nLeft     = XclImpHelper::CalcX( nAnchTab, nAnchCol, p->nX, HMM_PER_TWIPS, pDoc );
+        rRect.nTop      = XclImpHelper::CalcY( nAnchTab, nAnchRow, p->nY, HMM_PER_TWIPS, pDoc );
+        rRect.nRight    = XclImpHelper::CalcX( nAnchTab, p->nDCol, p->nDX, HMM_PER_TWIPS, pDoc );
+        rRect.nBottom   = XclImpHelper::CalcY( nAnchTab, p->nDRow, p->nDY, HMM_PER_TWIPS, pDoc );
 
         rD.bChildAnchor = TRUE;
 
@@ -1062,7 +1062,7 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
                 }
 
                 if( bHasColor )
-                    rStyleItemSet.Put( *rColBuff.GetColor( nCol ) );
+                    rStyleItemSet.Put( *rColBuff.GetColor( (UINT16) nCol ) );
             }
 
             if( nPosL )     // line
@@ -1415,7 +1415,7 @@ void ImportExcel8::Externname( void )
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {
         // external name
-        XclImpHelper::ConvertName( aName );
+        ScFilterTools::ConvertName( aName );
         pExcRoot->pExtNameBuff->AddName( aName );
     }
     else if( nOpt & 0x0010 )
@@ -1634,7 +1634,8 @@ void ImportExcel8::Obj()
         }
 
         aIn.PopPosition();
-        aIn.Ignore( nLenRec );
+        // sometimes the last subrecord has an invalid length -> Min()
+        aIn.Ignore( Min( (ULONG) nLenRec, aIn.GetRecLeft() ) );
     }
 
     bLeadingObjRec = TRUE;
@@ -1723,7 +1724,7 @@ void ImportExcel8::Boundsheet( void )
 
     String aName( aIn.ReadUniString( eQuellChar, nLen ) );
 
-    XclImpHelper::ConvertName( aName );
+    ScFilterTools::ConvertName( aName );
     *pExcRoot->pTabNameBuff << aName;
 
     if( nBdshtTab > 0 )
@@ -1824,7 +1825,7 @@ void ImportExcel8::SXPi( void )
     if( !pCurrPivTab )
         return;
 
-    UINT16  nArrayCnt = aIn.GetRecLen() / 6;        // SXPI contains 6-byte-arrays
+    UINT16  nArrayCnt = (UINT16)(aIn.GetRecLen() / 6);      // SXPI contains 6-byte-arrays
     UINT16  nSXVD;
     UINT16  nSXVI;
     UINT16  nObjID;
@@ -2596,9 +2597,9 @@ void ImportExcel8::Name( void )
     BOOL                bSkip = FALSE;
 
     if( bBuiltIn )
-        aName.AssignAscii( GetBuiltInName( cFirstChar ) );  // built-in name
+        aName.AssignAscii( ScFilterTools::GetBuiltInName( cFirstChar ) );   // built-in name
     else
-        XclImpHelper::ConvertName( aName );
+        ScFilterTools::ConvertName( aName );
 
     pFormConv->Reset();
     if( nOpt & (EXC_NAME_VB | EXC_NAME_BIG) )
@@ -3042,7 +3043,7 @@ void XclImpSupbook::ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rS
 void XclImpSupbook::ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName )
 {
     rStrm.AppendUniString( rTabName, *rExcRoot.pCharset );
-    XclImpHelper::ConvertName( rTabName );
+    ScFilterTools::ConvertName( rTabName );
 }
 
 UINT16 XclImpSupbook::GetScTabNum( UINT16 nTab ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,134 +75,34 @@
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
-#include <vcl/color.hxx>
 #include <vcl/svapp.hxx>
-#include <so3/svstor.hxx>
-
-#include <string.h>
-#include <math.h>
 
 #include "document.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
 #include "globstr.hrc"
 #include "scextopt.hxx"
-#include "olinetab.hxx"
 #include "progress.hxx"
 #include "editutil.hxx"
 #include "addincol.hxx"
 
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
-#endif
-
-#include "imp_op.hxx"
 #include "root.hxx"
+#include "imp_op.hxx"
 #include "xfbuff.hxx"
 #include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excimp8.hxx"
-#include "scerrors.hxx"
 #include "otlnbuff.hxx"
 #include "fltprgrs.hxx"
 #include "excsst.hxx"
-#include "flttools.hxx"
 #include "excrecds.hxx"
 #include "xcl97rec.hxx"
 #include "XclAddInNameTrans.hxx"
 
-#ifndef _SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
-#endif
-#ifndef _SC_XCLEXPPIVOTTABLES_HXX
 #include "XclExpPivotTables.hxx"
-#endif
-
-using namespace com::sun::star;
-
-extern double ReadLongDouble( SvStream& rStr );
 
 // - ALLGEMEINE ----------------------------------------------------------
-
-#ifdef _MSC_VER
-#if _MSC_VER <= 800
-#undef __SIMPLE_FUNC
-#define __SIMPLE_FUNC
-#endif
-#endif
-
-double ReadLongDouble( SvStream& rStr )
-
-#ifdef __SIMPLE_FUNC
-// ========== nur fuer VC 1.5 oder kleiner ===============================
-{
-    long double fRet;
-    rStr.Read( &fRet, 10 );
-    return ( double ) fRet;
-}
-#undef __SIMPLE_FUNC
-#else
-// ========== ausfuehrliche Version fuer'n Rest ==========================
-{
-    register long double    lfDouble = 0.0;
-    register long double    lfFakt = 256.0;
-    BYTE                    pDouble10[ 10 ];
-
-    rStr.Read( pDouble10, 10 );         // Intel-10 in pDouble10
-
-    lfDouble = ( long double ) pDouble10[ 7 ];  // Byte 7
-    lfDouble *= lfFakt;                         // Byte 6
-    lfDouble += ( long double ) pDouble10[ 6 ];
-    lfDouble *= lfFakt;                         // Byte 5
-    lfDouble += ( long double ) pDouble10[ 5 ];
-    lfDouble *= lfFakt;                         // Byte 4
-    lfDouble += ( long double ) pDouble10[ 4 ];
-    lfDouble *= lfFakt;                         // Byte 3
-    lfDouble += ( long double ) pDouble10[ 3 ];
-    lfDouble *= lfFakt;                         // Byte 2
-    lfDouble += ( long double ) pDouble10[ 2 ];
-    lfDouble *= lfFakt;                         // Byte 1
-    lfDouble += ( long double ) pDouble10[ 1 ];
-    lfDouble *= lfFakt;                         // Byte 0
-    lfDouble += ( long double ) pDouble10[ 0 ];
-
-    //  Bei 0.0 sind alle Bits 0, und pow(2.0,-16446) kommt mit dem
-    //  CSet Compiler nicht so gut
-    if( lfDouble != 0.0 )
-    {
-        // Exponent
-        register INT32          nExp;
-        nExp = ( pDouble10[ 9 ] & 0x7F );
-        nExp <<= 8;
-        nExp += pDouble10[ 8 ];
-        nExp -= 16446;
-
-        lfDouble *= pow( 2.0, ( double ) nExp );
-    }
-
-    // Sign
-    if( pDouble10[ 9 ] & 0x80 )
-        lfDouble *= ( long double ) -1.0;
-
-    return ( double ) lfDouble;
-/*
-
-" M a p p i n g - G u i d e "
-
-10-Byte Intel
-
-77777777 77666666 66665555 55555544 44444444 33333333 33222222 22221111 1111110  00000000       x10
-98765432 10987654 32109876 54321098 76543210 98765432 10987654 32109876 54321098 76543210   Bit-# insgesamt
-9      9 8      8 7      7 6      6 5      5 4      4 3      3 2      2 1      1 0      0   Byte-#
-76543210 76543210 76543210 76543210 76543210 76543210 76543210 76543210 76543210 76543210   Bit-# im Byte
-SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM   Gruppe
-01111110 00000000 06665555 55555544 44444444 33333333 33222222 22221111 11111100 00000000       x10
-14321098 76543210 02109876 54321098 76543210 98765432 10987654 32109876 54321098 76543210   Bit in Gruppe
-*/
-}
-
-#endif
-
 
 ScEditEngineDefaulter& RootData::GetEdEng( void )
 {
@@ -880,82 +780,7 @@ void SharedStringTable::Clear( void )
 }
 
 
-
-
-CharSet GetSystemCharSet( void )
-{
-    return gsl_getSystemTextEncoding();
-}
-
-
 //___________________________________________________________________
-
-
-
-long CalcX( const UINT16 nT, const UINT16 nC, const UINT16 nOC, const double f, ScDocument* pD )
-{
-    return ( long ) (
-        ( ( double ) pD->GetColOffset( nC, nT )
-            + ( double ) pD->GetColWidth( nC, nT ) * ( ( double ) nOC / 1024.0 ) )
-        * f );
-}
-
-
-
-
-long CalcY( const UINT16 nT, const UINT16 nR, const UINT16 nOR, const double f, ScDocument* pD )
-{
-    return ( long ) (
-        ( ( double ) pD->GetRowOffset( nR, nT )
-            + ( double ) pD->GetRowHeight( nR, nT ) * ( ( double ) nOR / 256.0 ) )
-        * f );
-}
-
-
-
-BOOL GetExcRKValue( double fValue, INT32& rRKValue )
-{
-    double fFrac, fInt;
-
-    // integer
-    fFrac = modf( fValue, &fInt );
-    if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) ) // 2^29 =  536870912
-    {
-        rRKValue = (INT32) fInt;
-        rRKValue <<= 2;
-        rRKValue |= EXC_RK_INT;
-        return TRUE;
-    }
-
-    // integer/100
-    fFrac = modf( fValue * 100.0, &fInt );
-    if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) )
-    {
-        rRKValue = ( INT32 ) fInt;
-        rRKValue <<= 2;
-        rRKValue |= EXC_RK_INT100;
-        return TRUE;
-    }
-
-    // double
-    return FALSE;
-}
-
-
-
-
-UINT16 GetExcRotation( long nRot )
-{
-    nRot /= 100;
-    if( nRot <= 90 )
-        return (UINT16) nRot;
-    if( nRot < 180 )
-        return (UINT16)(270 - nRot);
-    if( nRot < 270 )
-        return (UINT16)(nRot - 180);
-    return (UINT16)(450 - nRot);
-}
-
 
 
 ExcScenarioCell::ExcScenarioCell( const UINT16 nC, const UINT16 nR ) : nCol( nC ), nRow( nR )
@@ -1104,102 +929,6 @@ void ExcScenarioList::Apply( ScDocument& r )
     }
 }
 
-//_________________________________________________________
-
-String ScGetHexStr( UINT16 nValue )
-{
-    static const sal_Char   pH[] = "0123456789ABCDEF";
-    String                  aStrName;
-
-    aStrName += pH[ nValue >> 12 ];
-    aStrName += pH[ (nValue >> 8) & 0x000F ];
-    aStrName += pH[ (nValue >> 4) & 0x000F ];
-    aStrName += pH[ nValue & 0x000F ];
-
-    return aStrName;
-}
-
-const sal_Char* GetBuiltInName( sal_Unicode nIndex )
-{
-    const sal_Char* pNames[] = {
-        "BuiltIn_Consolidate_Area","BuiltIn_Auto_Open","BuiltIn_Auto_Close",
-        "BuiltIn_Extract","BuiltIn_Database","BuiltIn_Criteria","BuiltIn_Print_Area",
-        "BuiltIn_Print_Titles","BuiltIn_Recorder","BuiltIn_Data_Form",
-        "BuiltIn_Auto_Activate","BuiltIn_Auto_Deactivate","BuiltIn_SheetTitle",
-        "BuiltIn_AutoFilter","BuiltIn_UNKNOWN" };
-
-    if( nIndex < 0x00 || nIndex > EXC_BUILTIN_UNKNOWN )
-        nIndex = EXC_BUILTIN_UNKNOWN;
-
-    return pNames[ nIndex ];
-}
-
-//___________________________________________________________________
-// string operations
-
-ByteString ReadCString( SvStream& rStrm )
-{
-    ByteString  aRet;
-    sal_Char    c;
-
-    rStrm >> c;
-    while( c )
-    {
-        aRet += c;
-        rStrm >> c;
-    }
-
-    return aRet;
-}
-
-String ReadCString( SvStream& rStrm, CharSet eSrc )
-{
-    return String( ReadCString( rStrm ), eSrc );
-}
-
-ByteString ReadCString( SvStream& rStrm, INT32& rBytesLeft )
-{
-    ByteString  aRet;
-    sal_Char    c;
-
-    rStrm >> c;
-    rBytesLeft--;
-    while( c )
-    {
-        aRet += c;
-        rStrm >> c;
-        rBytesLeft--;
-    }
-
-    return aRet;
-}
-
-String ReadCString( SvStream& rStrm, INT32& rBytesLeft, CharSet eSrc )
-{
-    return String( ReadCString( rStrm, rBytesLeft ), eSrc );
-}
-
-void AppendCString( SvStream& rStrm, ByteString& rString )
-{
-    sal_Char    c;
-
-    rStrm >> c;
-    while( c )
-    {
-        rString += c;
-        rStrm >> c;
-    }
-}
-
-void AppendCString( SvStream& rStrm, String& rString, CharSet eSrc )
-{
-    ByteString  aByteString;
-    AppendCString( rStrm, aByteString );
-    rString += String( aByteString, eSrc );
-}
-
-
-
 
 XclAddInNameTranslator::XclAddInNameTranslator( void ) : rAddInColl( *ScGlobal::GetAddInCollection() )
 {
@@ -1232,3 +961,4 @@ String XclAddInNameTranslator::GetXclName( const String& rScName )
     else
         return rScName;
 }
+

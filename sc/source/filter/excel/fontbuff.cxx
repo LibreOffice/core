@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ void FontBuffer::NewFont( UINT16 nHeight, BYTE nAttr0, UINT16 nScript, BYTE nUnd
             eCharSet = RTL_TEXTENCODING_SYMBOL;
             break;
         default:
-            eCharSet = GetSystemCharSet();
+            eCharSet = ScFilterTools::GetSystemCharSet();
     }
 
     FontFamily  eFamily;
@@ -586,7 +586,7 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
         SvxFontItem     aFontItem = pFont->GetFontItem();
 
         if( aFontItem.GetCharSet() == *pExcRoot->pCharset )
-            aFontItem.GetCharSet() = GetSystemCharSet();
+            aFontItem.GetCharSet() = ScFilterTools::GetSystemCharSet();
 
         rItemSet.Put( aFontItem, EE_CHAR_FONTINFO );
 
