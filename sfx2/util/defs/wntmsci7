@@ -7165,3 +7165,5 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?OpenHelpAgent@SfxHelp@@SAXPAVSfxFrame@@K@Z
 ?set@?$Reference@VXStatusListener@frame@star@sun@com@@@uno@star@sun@com@@QAAEPAVXStatusListener@frame@345@@Z
 ??0?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+?setDescription@SfxFolderPicker@@UAAXABVOUString@rtl@@@Z
+?set@?$Reference@VXSimpleMailClientSupplier@system@star@sun@com@@@uno@star@sun@com@@QAAEPAVXSimpleMailClientSupplier@system@345@@Z
