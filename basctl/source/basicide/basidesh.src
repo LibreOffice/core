@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:55:31 $
+ *  last change: $Author: rt $ $Date: 2001-12-19 17:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,9 +430,9 @@ String RID_STR_REPLACELIB
     Text[ greek ] = "'XX' can't be replaced.";
     Text[ dutch ] = "'XX' can't be replaced.";
     Text[ french ] = "Impossible de remplacer 'XX' !";
-    Text[ spanish ] = "'XX' can't be replaced.";
+    Text[ spanish ] = "'XX' no se puede sustituir.";
     Text[ finnish ] = "'XX' can't be replaced.";
-    Text[ italian ] = "'XX' can't be replaced.";
+    Text[ italian ] = "Non � possibile sostituire \"XX\".";
     Text[ danish ] = "'XX' can't be replaced.";
     Text[ swedish ] = "Det g�r inte att ers�tta 'XX'.";
     Text[ polish ] = "'XX' can't be replaced.";
@@ -455,9 +455,9 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ greek ] = "Import of 'XX' not possible.";
     Text[ dutch ] = "Import of 'XX' not possible.";
     Text[ french ] = "Impossible d'ajouter 'XX' !";
-    Text[ spanish ] = "Import of 'XX' not possible.";
+    Text[ spanish ] = "No se puede a�adir 'XX'.";
     Text[ finnish ] = "Import of 'XX' not possible.";
-    Text[ italian ] = "Import of 'XX' not possible.";
+    Text[ italian ] = "Non � possibile importare 'XX'.";
     Text[ danish ] = "Import of 'XX' not possible.";
     Text[ swedish ] = "Det �r inte m�jligt att l�gga till 'XX'.";
     Text[ polish ] = "Import of 'XX' not possible.";
@@ -474,11 +474,51 @@ String RID_STR_NOIMPORT
 {
     Text = "'XX' wurde nicht hinzugef�gt." ;
     Text [ English ] = "'XX' was not imported." ;
+    Text[ english_us ] = "'XX' was not imported.";
+    Text[ portuguese ] = "'XX' was not imported.";
+    Text[ russian ] = "'XX' was not imported.";
+    Text[ greek ] = "'XX' was not imported.";
+    Text[ dutch ] = "'XX' was not imported.";
+    Text[ french ] = "'XX' n'a pas �t� ajout�.";
+    Text[ spanish ] = "'XX' no se a�adi�.";
+    Text[ finnish ] = "'XX' was not imported.";
+    Text[ italian ] = "'XX' non � stato importato.";
+    Text[ danish ] = "'XX' was not imported.";
+    Text[ swedish ] = "'XX' har inte lagts till.";
+    Text[ polish ] = "'XX' was not imported.";
+    Text[ portuguese_brazilian ] = "'XX' was not imported.";
+    Text[ japanese ] = "'XX' はインポートされませんでした。";
+    Text[ korean ] = "'XX' was not imported.";
+    Text[ chinese_simplified ] = "没有增加 'XX' 。";
+    Text[ chinese_traditional ] = "沒有增加 'XX' 。";
+    Text[ turkish ] = "'XX' was not imported.";
+    Text[ arabic ] = "'XX' was not imported.";
+    Text[ catalan ] = "'XX' was not imported.";
 };
 String RID_STR_ENTERPASSWORD
 {
     Text = "Kennwort eingeben f�r 'XX'" ;
     Text [ English ] = "Enter password for 'XX'" ;
+    Text[ english_us ] = "Enter password for 'XX'";
+    Text[ portuguese ] = "Enter password for 'XX'";
+    Text[ russian ] = "Enter password for 'XX'";
+    Text[ greek ] = "Enter password for 'XX'";
+    Text[ dutch ] = "Enter password for 'XX'";
+    Text[ french ] = "Saisie du mot de passe pour 'XX'";
+    Text[ spanish ] = "Introducir contrase�a para 'XX'";
+    Text[ finnish ] = "Enter password for 'XX'";
+    Text[ italian ] = "Digita password per 'XX'";
+    Text[ danish ] = "Enter password for 'XX'";
+    Text[ swedish ] = "Ange l�senord f�r 'XX'";
+    Text[ polish ] = "Enter password for 'XX'";
+    Text[ portuguese_brazilian ] = "Enter password for 'XX'";
+    Text[ japanese ] = "'XX' のパスワードを入力します";
+    Text[ korean ] = "Enter password for 'XX'";
+    Text[ chinese_simplified ] = "为 'XX' 键入密码。";
+    Text[ chinese_traditional ] = "為 'XX' 鍵入密碼";
+    Text[ turkish ] = "Enter password for 'XX'";
+    Text[ arabic ] = "Enter password for 'XX'";
+    Text[ catalan ] = "Enter password for 'XX'";
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
@@ -2942,6 +2982,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
