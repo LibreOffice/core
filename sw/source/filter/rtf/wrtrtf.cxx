@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:18:51 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,12 @@
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
 #endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 #ifndef _SECTION_HXX //autogen
 #include <section.hxx>
 #endif
@@ -228,8 +234,7 @@ SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
 SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
-
-SwRTFWriter::SwRTFWriter( const String& rFltName )
+SwRTFWriter::SwRTFWriter( const String& rFltName ) : eCurrentCharSet(DEF_ENCODING)
 {
     // schreibe Win-RTF-HelpFileFmt
     bWriteHelpFmt = 'W' == rFltName.GetChar( 0 );
@@ -1045,8 +1050,91 @@ bool SwRTFWriter::OutRTFRevTab()
     }
 
     pRedlAuthors->Write(*this);
-
     return true;
+}
+
+//Takashi Ono for CJK
+const rtl::OUString SwRTFWriter::XlateFmtName( const rtl::OUString &rName, SwGetPoolIdFromName eFlags )
+{
+#define RES_NONE RES_POOLCOLL_DOC_END
+
+    static const RES_POOL_COLLFMT_TYPE aArr[]={
+        RES_POOLCOLL_STANDARD, RES_POOLCOLL_HEADLINE1, RES_POOLCOLL_HEADLINE2,
+        RES_POOLCOLL_HEADLINE3, RES_POOLCOLL_HEADLINE4, RES_POOLCOLL_HEADLINE5,
+        RES_POOLCOLL_HEADLINE6, RES_POOLCOLL_HEADLINE7, RES_POOLCOLL_HEADLINE8,
+        RES_POOLCOLL_HEADLINE9,
+
+        RES_POOLCOLL_TOX_IDX1, RES_POOLCOLL_TOX_IDX2, RES_POOLCOLL_TOX_IDX3,
+        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
+        RES_POOLCOLL_TOX_CNTNT1,
+
+        RES_POOLCOLL_TOX_CNTNT2, RES_POOLCOLL_TOX_CNTNT3, RES_POOLCOLL_TOX_CNTNT4,
+        RES_POOLCOLL_TOX_CNTNT5, RES_POOLCOLL_TOX_CNTNT6, RES_POOLCOLL_TOX_CNTNT7,
+        RES_POOLCOLL_TOX_CNTNT8, RES_POOLCOLL_TOX_CNTNT9,
+        RES_POOLCOLL_TEXT_IDENT, RES_POOLCOLL_FOOTNOTE,
+
+        RES_NONE, RES_POOLCOLL_HEADER, RES_POOLCOLL_FOOTER, RES_POOLCOLL_TOX_IDXH,
+        RES_POOLCOLL_LABEL, RES_POOLCOLL_TOX_ILLUSH, RES_POOLCOLL_JAKETADRESS, RES_POOLCOLL_SENDADRESS,
+        RES_NONE, RES_NONE,
+
+        RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_ENDNOTE, RES_POOLCOLL_TOX_AUTHORITIESH, RES_NONE, RES_NONE,
+        RES_POOLCOLL_BUL_LEVEL1, RES_POOLCOLL_BUL_LEVEL1, RES_POOLCOLL_NUM_LEVEL1,
+
+        RES_POOLCOLL_BUL_LEVEL2, RES_POOLCOLL_BUL_LEVEL3, RES_POOLCOLL_BUL_LEVEL4, RES_POOLCOLL_BUL_LEVEL5,
+        RES_POOLCOLL_BUL_LEVEL2, RES_POOLCOLL_BUL_LEVEL3, RES_POOLCOLL_BUL_LEVEL4, RES_POOLCOLL_BUL_LEVEL5,
+        RES_POOLCOLL_NUM_LEVEL2, RES_POOLCOLL_NUM_LEVEL3, RES_POOLCOLL_NUM_LEVEL4, RES_POOLCOLL_NUM_LEVEL5,
+
+        RES_POOLCOLL_DOC_TITEL, RES_NONE, RES_POOLCOLL_SIGNATURE, RES_NONE,
+        RES_POOLCOLL_TEXT, RES_POOLCOLL_TEXT_MOVE, RES_NONE, RES_NONE,
+
+        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL };
+
+    static const sal_Char *stiName[] = {
+        "Normal", "heading 1", "heading 2",
+        "heading 3", "heading 4", "heading 5",
+        "heading 6", "heading 7", "heading 8",
+        "heading 9",
+
+        "index 1", "index 2", "index 3",
+        "index 4", "index 5", "index 6",
+        "index 7", "index 8", "index 9",
+
+        "toc 1", "toc 2", "toc 3",
+        "toc 4", "toc 5", "toc 6",
+        "toc 7", "toc 8", "toc 9",
+        "Normal Indent", "footnote text",
+
+        "annotation text", "header", "footer",  "index heading",
+        "caption", "table of figures", "envelope address", "envelope return",
+        "footnote reference",   "annotation reference",
+
+        "line number", "page number", "endnote reference",  "endnote text", "table of authorities", "macro", "toa heading",
+        "List", "List Bullet", "List Number",
+
+        "List 2", "List 3", "List 4", "List 5",
+        "List Bullet 2", "List Bullet 3", "List Bullet 4", "List Bullet 5",
+        "List Number 2", "List Number 3", "List Number 4", "List Number 5",
+
+        "Title", "Closing", "Signature", "Default Paragraph Font",
+        "Body Text", "Body Text Indent", "List Continue",
+
+        "List Continue 2",  "List Continue 3", "List Continue 4", "List Continue 5", "Message Header", "Subtitle"};
+
+    ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
+            "Style-UEbersetzungstabelle hat falsche Groesse" );
+    ASSERT( ( sizeof( stiName ) / sizeof( *stiName ) == 75 ),
+            "Style-UEbersetzungstabelle hat falsche Groesse" );
+
+    sal_uInt16 idcol = ::SwStyleNameMapper::GetPoolIdFromUIName( rName, eFlags );
+
+    for (int i = 0; i < sizeof( aArr ) / sizeof( *aArr ); i++)
+    {
+        if ( idcol == aArr[i] )
+        {
+        return rtl::OUString::createFromAscii(stiName[i]);
+        }
+    }
+    return ::SwStyleNameMapper::GetProgName( idcol, String() );
 }
 
 void SwRTFWriter::OutRTFStyleTab()
@@ -1107,7 +1195,7 @@ void SwRTFWriter::OutRTFStyleTab()
         }
 
         Strm() << ' ';
-        RTFOutFuncs::Out_String( Strm(), pColl->GetName(), DEF_ENCODING,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pColl->GetName(), GET_POOLID_TXTCOLL ), DEF_ENCODING,
                         bWriteHelpFmt ) << ";}" << SwRTFWriter::sNewLine;
     }
 
@@ -1134,7 +1222,7 @@ void SwRTFWriter::OutRTFStyleTab()
                 }
 
         Strm() << ' ';
-        RTFOutFuncs::Out_String( Strm(), pFmt->GetName(), DEF_ENCODING,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pFmt->GetName(), GET_POOLID_CHRFMT ), DEF_ENCODING,
                     bWriteHelpFmt ) << ";}" << SwRTFWriter::sNewLine;
     }
 
@@ -1475,8 +1563,8 @@ void SwRTFWriter::OutPageDesc()
                 break;
         Strm() << sRTF_PGDSCNXT;
         OutULong( i ) << ' ';
-        RTFOutFuncs::Out_String( Strm(), rPageDesc.GetName(),
-                                DEF_ENCODING, bWriteHelpFmt ) << ";}";
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( rPageDesc.GetName(), GET_POOLID_PAGEDESC ), DEF_ENCODING,
+                    bWriteHelpFmt ) << ";}";
     }
     Strm() << '}' << SwRTFWriter::sNewLine;
     bOutPageDesc = bOutPageDescTbl = FALSE;
