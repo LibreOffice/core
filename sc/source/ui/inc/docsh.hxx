@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:37:19 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ public:
                     TYPEINFO();
 
                     SFX_DECL_INTERFACE(SCID_DOC_SHELL);
-                    SFX_DECL_OBJECTFACTORY_DLL( ScDocShell, SC_DLL() );
+                    SFX_DECL_OBJECTFACTORY( ScDocShell);
 
                     ScDocShell( const ScDocShell& rDocShell );
                     ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
