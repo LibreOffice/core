@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-29 14:42:58 $
+ *  last change: $Author: bm $ $Date: 2002-11-29 16:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,14 @@ service DocumentSettings
     */
     [optional, property] boolean AlignTabStopPosition;
 
-    // Note: This name is not really correct: It should be something
-    // like SaveLinkedDocumentContent (and should ideally be in a
-    // service for "global documents")
     // ------------------------------------------------------------
     /** specifies if the contents of links in the global document
         are saved or not.
+
+        <p>This property applies only for master documents.</p>
+
+        <p><em>Note</em>: This name is a bit misleading, it should be
+        something like <code>SaveLinkedDocumentContent</code>.</p>
     */
     [optional, property] boolean SaveGlobalDocumentLinks;
 };
