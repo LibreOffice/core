@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:03:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2587,7 +2587,14 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
     else
         SbaXDataBrowserController::elementInserted(_rEvent);
 }
-
+// -------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const String& _sName,SvLBoxEntry* _pContainer)
+{
+    return m_pCurrentlyDisplayed
+            &&  getEntryType(m_pCurrentlyDisplayed) == getChildType(_pContainer)
+            &&  m_pTreeView->getListBox()->GetParent(m_pCurrentlyDisplayed) == _pContainer
+            &&  m_pTreeView->getListBox()->GetEntryText(m_pCurrentlyDisplayed) == _sName;
+}
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
@@ -2598,14 +2605,11 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
     // get the top-level representing the removed data source
     // and search for the queries and tables
     SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
-    if (pContainer)
+    if ( pContainer )
     { // a query or table has been removed
         String aName = ::comphelper::getString(_rEvent.Accessor).getStr();
 
-        if  (   m_pCurrentlyDisplayed
-            &&  getEntryType(m_pCurrentlyDisplayed) == getChildType(pContainer)
-            &&  m_pTreeView->getListBox()->GetEntryText(m_pCurrentlyDisplayed) == aName
-            )
+        if ( isCurrentlyDisplayedChanged( aName, pContainer) )
         {   // the element displayed currently has been replaced
 
             // we need to remember the old value
@@ -2705,14 +2709,11 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
-    if (pContainer)
+    if ( pContainer )
     {    // a table or query as been replaced
         String aName = ::comphelper::getString(_rEvent.Accessor).getStr();
 
-        if  (   m_pCurrentlyDisplayed
-            &&  getEntryType(m_pCurrentlyDisplayed) == getChildType(pContainer)
-            &&  m_pTreeView->getListBox()->GetEntryText(m_pCurrentlyDisplayed) == aName
-            )
+        if ( isCurrentlyDisplayedChanged( aName, pContainer) )
         {   // the element displayed currently has been replaced
 
             // we need to remember the old value
