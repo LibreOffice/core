@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:42:19 $
+ *  last change: $Author: os $ $Date: 2001-05-03 13:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,51 +381,15 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Dokument" ;
-        Text [ English ] = "Document" ;
-        Text[ english_us ] = "Document";
-        Text[ portuguese ] = "Documento";
-        Text[ russian ] = "Документ";
-        Text[ greek ] = "Document";
-        Text[ dutch ] = "Document";
-        Text[ french ] = "Document";
-        Text[ spanish ] = "Documento";
-        Text[ italian ] = "Documento";
-        Text[ danish ] = "Document";
-        Text[ swedish ] = "Dokument";
-        Text[ polish ] = "Dokument";
-        Text[ portuguese_brazilian ] = "Document";
-        Text[ japanese ] = "Document";
-        Text[ korean ] = "Document";
-        Text[ chinese_simplified ] = "Document";
-        Text[ chinese_traditional ] = "Document";
-        Text[ turkish ] = "Document";
-        Text[ arabic ] = "Document";
+        Text = "Dokumenttyp" ;
+        Text [ English ] = "Document type" ;
     };
     FixedText FT_FILTER
     {
         Pos = MAP_APPFONT ( 136 , 110 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Dateiformate" ;
-        Text [ English ] = "File formats" ;
-        Text[ english_us ] = "File formats";
-        Text[ portuguese ] = "Formatos de ficheiro";
-        Text[ russian ] = "Форматы файла";
-        Text[ greek ] = "File formats";
-        Text[ dutch ] = "File formats";
-        Text[ french ] = "File formats";
-        Text[ spanish ] = "Formatos de archivo";
-        Text[ italian ] = "Formati file";
-        Text[ danish ] = "File formats";
-        Text[ swedish ] = "Filformat";
-        Text[ polish ] = "Formaty pliku";
-        Text[ portuguese_brazilian ] = "File formats";
-        Text[ japanese ] = "File formats";
-        Text[ korean ] = "File formats";
-        Text[ chinese_simplified ] = "File formats";
-        Text[ chinese_traditional ] = "File formats";
-        Text[ turkish ] = "File formats";
-        Text[ arabic ] = "File formats";
+        Text = "Immer speichern als" ;
+        Text [ English ] = "Always save as" ;
     };
     ListBox LB_APP
     {
@@ -649,6 +613,7 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
+        DropDown = TRUE;
     };
 };
 
