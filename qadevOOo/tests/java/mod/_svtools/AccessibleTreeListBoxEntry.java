@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTreeListBoxEntry.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-11-02 12:07:12 $
+ *  last change:$Date: 2005-03-01 20:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,17 +93,17 @@ import com.sun.star.util.XCloseable;
 /**
  * Test for object that implements the following interfaces :
  * <ul>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleComponent
+ *  <li><code>::com::sun::star::accessibility::XAccessibleComponent
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+ *  <li><code>::com::sun::star::accessibility::XAccessibleEventBroadcaster
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleContext
+ *  <li><code>::com::sun::star::accessibility::XAccessibleContext
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleSelection
+ *  <li><code>::com::sun::star::accessibility::XAccessibleSelection
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleAction
+ *  <li><code>::com::sun::star::accessibility::XAccessibleAction
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleText
+ *  <li><code>::com::sun::star::accessibility::XAccessibleText
  *  </code></li>
  * </ul> <p>
  *
