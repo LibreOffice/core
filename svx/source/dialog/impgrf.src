@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:36:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String RID_SVXSTR_ALL_FILES
     Text[ turkish ] = "<Tüm dosyalar>";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "<Todos los archivos>";
+    Text[ finnish ] = "<Kaikki tiedostot>";
 };
 Resource RID_SVXRES_IMPORTGRAPHIC
 {
@@ -99,7 +100,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "<Tutti i formati>" ;
         Text [ portuguese_brazilian ] = "<Todos os formatos>" ;
         Text [ portuguese ] = "<Todos os formatos>" ;
-        Text [ finnish ] = "<All formats>" ;
+        Text [ finnish ] = "<Kaikki muodot>" ;
         Text [ danish ] = "<Alle formater>" ;
         Text [ french ] = "<Tous les formats>" ;
         Text [ swedish ] = "<Alla format>" ;
@@ -126,7 +127,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "Formato file sconosciuto!" ;
         Text [ portuguese_brazilian ] = "Formato de arquivo desconhecido!" ;
         Text [ portuguese ] = "Formato de ficheiro desconhecido!" ;
-        Text [ finnish ] = "Tuntematon tiedostomuoto!" ;
+        Text [ finnish ] = "Tuntematon tiedostomuoto" ;
         Text [ danish ] = "Ukendt filformat!" ;
         Text [ french ] = "Format de fichier inconnu !" ;
         Text [ swedish ] = "Okänt filformat!" ;
@@ -153,7 +154,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "La cartella '" ;
         Text [ portuguese_brazilian ] = "O diretório" ;
         Text [ portuguese ] = "O directório '" ;
-        Text [ finnish ] = "Hakemistoa '" ;
+        Text [ finnish ] = "Hakemisto '" ;
         Text [ danish ] = "Biblioteket '" ;
         Text [ french ] = "Le répertoire '" ;
         Text [ swedish ] = "Katalogen '" ;
@@ -180,7 +181,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "' non esiste." ;
         Text [ portuguese_brazilian ] = "' não existe." ;
         Text [ portuguese ] = "' não existe." ;
-        Text [ finnish ] = "' ei ole." ;
+        Text [ finnish ] = "' ei ole" ;
         Text [ danish ] = "' findes ikke." ;
         Text [ french ] = "' n'existe pas." ;
         Text [ swedish ] = "' finns inte." ;
@@ -304,7 +305,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ italian ] = "Versione del file grafico non supportata" ;
         TEXT [ portuguese_brazilian ] = "Versão de arquivo gráfico não suportada" ;
         TEXT [ portuguese ] = "Versão do ficheiro gráfico não tem suporte" ;
-        TEXT [ finnish ] = "Ei tukea grafiikkatiedoston versiolle" ;
+        TEXT [ finnish ] = "Grafiikkatiedoston versiota ei tueta" ;
         TEXT [ danish ] = "Grafikfilens version understøttes ikke" ;
         TEXT [ french ] = "Version du fichier graphique non supportée" ;
         TEXT [ swedish ] = "Grafikfilens version stöds inte" ;
@@ -331,7 +332,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ italian ] = "Filtro grafico non trovato" ;
         TEXT [ portuguese_brazilian ] = "Filtro gráfico não encontrado" ;
         TEXT [ portuguese ] = "Filtro gráfico não encontrado" ;
-        TEXT [ finnish ] = "Grafiikkasuodinta ei löydy" ;
+        TEXT [ finnish ] = "Grafiikkasuodatinta ei löytynyt" ;
         TEXT [ danish ] = "Grafikfilter blev ikke fundet" ;
         TEXT [ french ] = "Filtre graphique introuvable" ;
         TEXT [ swedish ] = "Grafikfilter hittades inte" ;
@@ -358,7 +359,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
         TEXT [ portuguese_brazilian ] = "Memória insuficiente para inserir o gráfico" ;
         TEXT [ portuguese ] = "Memória insuficiente para inserir a imagem." ;
-        TEXT [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen" ;
+        TEXT [ finnish ] = "Muisti ei riitä kuvan lisäämiseen" ;
         TEXT [ danish ] = "Ikke tilstrækkelig hukommelse til at indsætte grafik" ;
         TEXT [ french ] = "Mémoire insuffisante pour l'insertion de l'image" ;
         TEXT [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
@@ -385,7 +386,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "~Proprietà..." ;
         Text [ portuguese_brazilian ] = "~Propriedades..." ;
         Text [ portuguese ] = "~Propriedades..." ;
-        Text [ finnish ] = "~Ominaisuudet..." ;
+        Text [ finnish ] = "~Ominaisuudet" ;
         Text [ danish ] = "Egenskaber..." ;
         Text [ french ] = "~Propriétés..." ;
         Text [ swedish ] = "~Egenskaper..." ;
@@ -412,7 +413,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "~Standard" ;
         Text [ portuguese_brazilian ] = "C~asa" ;
         Text [ portuguese ] = "~Padrão" ;
-        Text [ finnish ] = "~Vakio" ;
+        Text [ finnish ] = "Vakio" ;
         Text [ danish ] = "Standard" ;
         Text [ french ] = "~Standard" ;
         Text [ swedish ] = "~Standard" ;
@@ -439,7 +440,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ italian ] = "~Collega" ;
         Text [ portuguese_brazilian ] = "~Ligação" ;
         Text [ portuguese ] = "~Ligar" ;
-        Text [ finnish ] = "~Linkki" ;
+        Text [ finnish ] = "~Linkitä" ;
         Text [ danish ] = "Kæd" ;
         Text [ french ] = "~Lien" ;
         Text [ swedish ] = "Lä~nka" ;
@@ -509,6 +510,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ turkish ] = "Fi~ltre...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Filtro...";
+        Text[ finnish ] = "~Suodata";
     };
 };
  // ********************************************************************** EOF
