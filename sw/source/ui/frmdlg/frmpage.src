@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 12:07:42 $
+ *  last change: $Author: rt $ $Date: 2001-12-21 21:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,7 @@ TabPage TP_FRM_STD
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "~Largh." ;
+        Text [ italian ] = "Larghezza" ;
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
@@ -913,7 +913,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "~Relative" ;
         Text [ dutch ] = "~Relatief" ;
         Text [ english_us ] = "Relat~ive" ;
-        Text [ italian ] = "~Relativo" ;
+        Text [ italian ] = "Relativo" ;
         Text [ spanish ] = "R~elativo" ;
         Text [ french ] = "Relatif" ;
         Text [ swedish ] = "R~elativ" ;
@@ -987,7 +987,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "Re~lative" ;
         Text [ dutch ] = "Re~latief" ;
         Text [ english_us ] = "Re~lative" ;
-        Text [ italian ] = "Re~lativo" ;
+        Text [ italian ] = "Relativo" ;
         Text [ spanish ] = "Rela~tivo" ;
         Text [ french ] = "Relatif" ;
         Text [ swedish ] = "Rel~ativ" ;
@@ -1424,7 +1424,7 @@ TabPage TP_FRM_STD
         Text [ portuguese_brazilian ] = "Auf geraden Seiten ~spiegeln" ;
         Text [ swedish ] = "spe~gelvänt på jämna sidor" ;
         Text [ danish ] = "Spejlvend på lige sider" ;
-        Text [ italian ] = "Rispecchia su pagine ~pari" ;
+        Text [ italian ] = "Rispecchia su pagine pari" ;
         Text [ spanish ] = "Reflejar en ~páginas pares" ;
         Text [ french ] = "En vis-à-vis sur les pages paires" ;
         Text [ dutch ] = "Op even pagina's ~spiegelen" ;
@@ -2535,6 +2535,7 @@ TabPage TP_FRM_ADD
         Text[ catalan ] = "Additional Setting";
     };
 };
+
 
 
 
