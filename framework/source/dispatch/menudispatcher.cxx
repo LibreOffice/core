@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:33:07 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
 #include <vcl/window.hxx>
@@ -252,38 +256,40 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
             OUString aResourceString = aURL.Complete.copy( aResourceURLCommand.getLength() );
 
             int nResIdIndex = aResourceString.indexOf( '/' );
-            if ( nResIdIndex >= 0 )
+            int         nResId      = 0;
+            MenuBar*    pMenuBar    = NULL;
+            ResMgr* pResManager = NULL;
+
+            aGuard.unlock();
+            OGuard aSolarGuard( Application::GetSolarMutex() );
             {
-                int         nResId      = 0;
-                MenuBar*    pMenuBar    = NULL;
-                OUString    aResourceFileName( aResourceString.copy( 0, nResIdIndex ));
-
-                nResId = aResourceString.copy( nResIdIndex+1 ).toInt32();
-
-                aGuard.unlock();
-
-                OGuard aSolarGuard( Application::GetSolarMutex() );
+                // execute not thread safe VCL code
+                if ( nResIdIndex >= 0 )
                 {
-                    // execute not thread safe VCL code
-                    ResMgr* pResManager = new ResMgr( aResourceFileName );
-
-                    ResId   aMenuBarResId( nResId, pResManager );
-                    aMenuBarResId.SetRT( RSC_MENU );
-
-                    if ( pResManager && pResManager->IsAvailable( aMenuBarResId ))
-                        pMenuBar = new MenuBar( aMenuBarResId );
-
-                    delete pResManager;
+                    OUString aResourceFileName( aResourceString.copy( 0, nResIdIndex ) );
+                    pResManager = new ResMgr( aResourceFileName );
                 }
 
-                if ( pMenuBar )
+                nResId = aResourceString.copy( nResIdIndex+1 ).toInt32();
+                ResId aMenuBarResId( nResId, pResManager );
+                aMenuBarResId.SetRT( RSC_MENU );
+
+                if ( Resource::GetResManager()->IsAvailable(aMenuBarResId ) )
                 {
-                    // set new menu bar if there is an old one delete it before!
-                    if ( !impl_setMenuBar( pMenuBar, sal_True ))
-                    {
-                        OGuard aSolarGuard( Application::GetSolarMutex() );
-                        delete pMenuBar;
-                    }
+                    pMenuBar = new MenuBar( aMenuBarResId );
+                    pMenuBar->SetCloserHdl( LINK( this, MenuDispatcher, Close_Impl ) );
+                }
+
+                delete pResManager;
+            }
+
+            if ( pMenuBar )
+            {
+                // set new menu bar if there is an old one delete it before!
+                if ( !impl_setMenuBar( pMenuBar, sal_True ))
+                {
+                    OGuard aSolarGuard( Application::GetSolarMutex() );
+                    delete pMenuBar;
                 }
             }
         }
@@ -430,6 +436,11 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
             }
         }
     }
+    else if ( m_pMenuManager && aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING )
+    {
+        if ( m_pMenuManager )
+            impl_setMenuBar( NULL );
+    }
 }
 
 //*****************************************************************************************************************
@@ -569,6 +580,50 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 
     return sal_False;
 }
+
+IMPL_LINK( MenuDispatcher, Close_Impl, void*, pVoid )
+{
+    css::uno::Reference < css::frame::XFrame > xFrame( m_xOwnerWeak.get(), css::uno::UNO_QUERY );
+    if ( !xFrame.is() )
+        return 0;
+
+    if ( xFrame->getController().is() && !xFrame->getController()->suspend( TRUE ) )
+    {
+        xFrame->getController()->suspend( FALSE );
+        return 0;
+    }
+
+    Window* pContainer = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+    Window* pWindow = new Window( pContainer, WB_BORDER );
+    pWindow->Show();
+    pWindow->SetBackground( Wallpaper( pWindow->GetSettings().GetStyleSettings().GetFaceColor() ) );
+    xFrame->setComponent(  VCLUnoHelper::GetInterface( pWindow ), css::uno::Reference < css::frame::XController >() );
+    pContainer->SetText( Application::GetDisplayName() );
+
+    String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
+    aMenuRes += String::CreateFromInt32(261);
+
+    css::util::URL aURL;
+    aURL.Complete = aMenuRes;
+
+    css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
+                        ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), css::uno::UNO_QUERY );
+    if( xTrans.is() )
+    {
+        // Datei laden
+        xTrans->parseStrict( aURL );
+        Reference< XDispatchProvider >  xProv( xFrame, UNO_QUERY );
+        if ( xProv.is() )
+        {
+            css::uno::Reference < css::frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  ::rtl::OUString::createFromAscii("_menubar"), 12 );
+            if ( aDisp.is() )
+                aDisp->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue>() );
+        }
+    }
+
+    return 0;
+}
+
 
 //_________________________________________________________________________________________________________________
 //  debug methods

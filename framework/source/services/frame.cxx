@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:45:53 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,8 @@
     #include <rtl/strbuf.hxx>
     #endif
 #endif
+
+#include <vcl/menu.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -1233,7 +1235,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         if ( !pWindow )
             pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
 
-        if( pWindow != NULL && isTop() )
+        if( pWindow != NULL && isTop() && m_xController.is() )
         {
             Application::SetDefModalDialogParent( pWindow );
         }
@@ -1518,9 +1520,9 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     // By the way - find out our new "load state" - means if we have a valid component inside.
     /* SAFE { */
     WriteGuard aWriteLock( m_aLock );
-             m_xComponentWindow = xComponentWindow;
-             m_xController      = xController     ;
-             m_bConnected       = (m_xComponentWindow.is() || m_xController.is());
+    m_xComponentWindow = xComponentWindow;
+    m_xController      = xController     ;
+    m_bConnected       = (m_xComponentWindow.is() || m_xController.is());
     sal_Bool bIsConnected       = m_bConnected;
     aWriteLock.unlock();
     /* } SAFE */
@@ -1544,7 +1546,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         /* SOLAR SAFE { */
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
-        if ( pWindow!=NULL && isTop() )
+        if ( pWindow!=NULL && isTop() && xController.is() )
             Application::SetDefModalDialogParent( pWindow );
         aSolarGuard.clear();
         /* } SOLAR SAFE */
@@ -2296,6 +2298,7 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
     // Activate the new active path from here to top.
     if( eState == E_INACTIVE )
     {
+        CheckMenuCloser_Impl();
         setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
         activate();
     }
@@ -2326,6 +2329,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+        CheckMenuCloser_Impl();
         Window* pFocusWindow = Application::GetFocusWindow();
         if  (
                 ( xContainerWindow.is()                                                              ==  sal_True    )   &&
@@ -3335,6 +3339,52 @@ void Frame::implts_checkSuicide()
     }
     catch( css::util::CloseVetoException& )
     {
+    }
+}
+
+void Frame::CheckMenuCloser_Impl()
+{
+    // checks if there is more than one "real" (not help) task window
+    // in this case a close button is inserted into the menubar
+    if ( !getController().is() )
+        // dummy component
+        return;
+
+    css::uno::Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop( getCreator(), css::uno::UNO_QUERY );
+    if ( !xDesktop.is() )
+        // test only for task windows
+        return;
+
+    sal_Bool bLastTask = sal_False;
+    css::uno::Reference < ::com::sun::star::container::XIndexAccess >
+            xList ( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+    sal_Int32 nCount = xList->getCount();
+    if ( nCount<=1 )
+        // only one task
+        bLastTask = sal_True;
+    else if ( nCount==2 )
+    {
+        // if we have to tasks, one can be the help task, that should be ignored
+        for( sal_Int32 i=0; i<nCount; ++i )
+        {
+            css::uno::Reference < ::com::sun::star::frame::XFrame > xTask;
+            ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
+            if ( (aVal>>=xTask) && xTask.is() && xTask->getName().compareToAscii("OFFICE_HELP_TASK") == COMPARE_EQUAL )
+            {
+                // one of the two open tasks was the help task -> ignored
+                bLastTask = sal_True;
+                break;
+            }
+        }
+    }
+
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    Window* pWindow = VCLUnoHelper::GetWindow( getContainerWindow() );
+    if ( pWindow && pWindow->IsSystemWindow() )
+    {
+        MenuBar* pMenu = ((SystemWindow*)pWindow)->GetMenuBar();
+        if ( pMenu )
+            pMenu->ShowCloser(bLastTask);
     }
 }
 
