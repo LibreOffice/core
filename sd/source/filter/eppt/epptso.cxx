@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-21 17:36:15 $
+ *  last change: $Author: sj $ $Date: 2001-01-08 18:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,250 +396,6 @@ sal_uInt32 Collection::GetCount() const
 const String* Collection::GetById( sal_uInt32 nId )
 {
     return (String*) List::GetObject( nId );
-}
-
-// ---------------------------------------------------------------------------------------------
-// bei Rechtecken           bei Ellipsen    bei Polygonen
-//
-// nRule =  0 ->Top         0 ->Top         nRule = Index auf ein (Poly)Polygon Punkt
-//          1 ->Left        2 ->Left
-//          2 ->Bottom      4 ->Bottom
-//          3 ->Right       6 ->Right
-
-
-sal_uInt32 ConnectorListEntry::GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rPoint )
-{
-    sal_uInt16 nCount = rPoly.GetSize();
-    sal_uInt16 nClosest = nCount;
-    double fDist = (sal_uInt32)0xffffffff;
-    while( nCount-- )
-    {
-        double fDistance = hypot( rPoint.X - rPoly[ nCount ].X(), rPoint.Y - rPoly[ nCount ].Y() );
-        if ( fDistance < fDist )
-        {
-            nClosest =  nCount;
-            fDist = fDistance;
-        }
-    }
-    return nClosest;
-};
-
-sal_uInt32 ConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
-{
-    sal_uInt32 nRule = 0;
-
-    ::com::sun::star::uno::Any aAny;
-    ::com::sun::star::awt::Point aRefPoint( ( bFirst ) ? maPointA : maPointB );
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        aXShape( ( bFirst ) ? mXConnectToA : mXConnectToB );
-
-    String aString( (::rtl::OUString)aXShape->getShapeType() );
-    ByteString aType( aString, RTL_TEXTENCODING_UTF8 );
-    aType.Erase( 0, 19 );   // "smart.com.sun.star." entfernen
-    sal_uInt16 nPos = aType.Search( "Shape" );
-    aType.Erase( nPos, 5 );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-        aPropertySet( aXShape, ::com::sun::star::uno::UNO_QUERY );
-
-    if ( aType == "drawing.PolyPolygon" || aType == "drawing.PolyLine" )
-    {
-        if ( aPropertySet.is() )
-        {
-            if ( PropValue::GetPropertyValue( aAny, aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" ) ) ) )
-            {
-                ::com::sun::star::drawing::PointSequenceSequence* pSourcePolyPolygon =
-                    (::com::sun::star::drawing::PointSequenceSequence*)aAny.getValue();
-                sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->getLength();
-                ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
-
-                if ( pOuterSequence )
-                {
-                    sal_Int32 a, b, nIndex = 0;
-                    sal_uInt32 nDistance = 0xffffffff;
-                    for( a = 0; a < nOuterSequenceCount; a++ )
-                    {
-                        ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
-                        if ( pInnerSequence )
-                        {
-                            ::com::sun::star::awt::Point* pArray = pInnerSequence->getArray();
-                            if ( pArray )
-                            {
-                                for ( b = 0; b < pInnerSequence->getLength(); b++, nIndex++, pArray++ )
-                                {
-                                    sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y );
-                                    if ( nDist < nDistance )
-                                    {
-                                        nRule = nIndex;
-                                        nDistance = nDist;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    else if ( ( aType == "drawing.OpenBezier" ) || ( aType == "drawing.OpenFreeHand" ) || ( aType == "drawing.PolyLinePath" )
-        || ( aType == "drawing.ClosedBezier" ) || ( aType == "drawing.ClosedFreeHand" ) || ( aType == "drawing.PolyPolygonPath" ) )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            aPropertySet( aXShape, ::com::sun::star::uno::UNO_QUERY );
-        if ( aPropertySet.is() )
-        {
-            if ( PropValue::GetPropertyValue( aAny, aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygonBezier" ) ) ) )
-            {
-                ::com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon =
-                    (::com::sun::star::drawing::PolyPolygonBezierCoords*)aAny.getValue();
-                sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-
-                // Zeiger auf innere sequences holen
-                ::com::sun::star::drawing::PointSequence* pOuterSequence =
-                    pSourcePolyPolygon->Coordinates.getArray();
-                ::com::sun::star::drawing::FlagSequence*  pOuterFlags =
-                    pSourcePolyPolygon->Flags.getArray();
-
-                if ( pOuterSequence && pOuterFlags )
-                {
-                    sal_Int32 a, b, nIndex = 0;
-                    sal_uInt32 nDistance = 0xffffffff;
-
-                    for ( a = 0; a < nOuterSequenceCount; a++ )
-                    {
-                        ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
-                        ::com::sun::star::drawing::FlagSequence*  pInnerFlags = pOuterFlags++;
-                        if ( pInnerSequence && pInnerFlags )
-                        {
-                            ::com::sun::star::awt::Point* pArray = pInnerSequence->getArray();
-                            ::com::sun::star::drawing::PolygonFlags* pFlags = pInnerFlags->getArray();
-                            if ( pArray && pFlags )
-                            {
-                                for ( b = 0; b < pInnerSequence->getLength(); b++, pArray++ )
-                                {
-                                    PolyFlags ePolyFlags = *( (PolyFlags*)pFlags++ );
-                                    if ( ePolyFlags == POLY_CONTROL )
-                                        continue;
-                                    sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y );
-                                    if ( nDist < nDistance )
-                                    {
-                                        nRule = nIndex;
-                                        nDistance = nDist;
-                                    }
-                                    nIndex++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        ::com::sun::star::awt::Point aPoint( aXShape->getPosition() );
-        ::com::sun::star::awt::Size  aSize( aXShape->getSize() );
-
-        Rectangle   aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-        Point       aCenter( aRect.Center() );
-        Polygon     aPoly( 4 );
-
-        aPoly[ 0 ] = Point( aCenter.X(), aRect.Top() );
-        aPoly[ 1 ] = Point( aRect.Left(), aCenter.Y() );
-        aPoly[ 2 ] = Point( aCenter.X(), aRect.Bottom() );
-        aPoly[ 3 ] = Point( aRect.Right(), aCenter.Y() );
-
-        sal_Int32 nAngle = ( PropValue::GetPropertyValue( aAny,
-            aPropertySet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
-                ? *((sal_Int32*)aAny.getValue() )
-                : 0;
-        if ( nAngle )
-            aPoly.Rotate( aRect.TopLeft(), ( nAngle + 5 ) / 10 );
-        nRule = GetClosestPoint( aPoly, aRefPoint );
-    }
-    if ( aType == "drawing.Ellipse" )
-        nRule <<= 1;    // In PPT hat eine Ellipse 8 Möglichkeiten sich zu connecten
-
-    return nRule;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-SolverContainer::~SolverContainer()
-{
-    for( void* pP = maShapeList.First(); pP; pP = maShapeList.Next() )
-        delete (ShapeListEntry*)pP;
-    for( pP = maConnectorList.First(); pP; pP = maConnectorList.Next() )
-        delete (ConnectorListEntry*)pP;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void SolverContainer::AddShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, sal_uInt32 nId )
-{
-    maShapeList.Insert( new ShapeListEntry( rXShape, nId ), LIST_APPEND );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void SolverContainer::AddConnector( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConnector,
-                                        const ::com::sun::star::awt::Point& rPA,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConA,
-                                        const ::com::sun::star::awt::Point& rPB,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB )
-{
-    maConnectorList.Insert( new ConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ), LIST_APPEND );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-sal_uInt32 SolverContainer::ImplGetId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
-{
-    for ( ShapeListEntry* pPtr = (ShapeListEntry*)maShapeList.First(); pPtr; pPtr = (ShapeListEntry*)maShapeList.Next() )
-    {
-        if ( rXShape == pPtr->aXShape )
-            return ( pPtr->n_EscherId );
-    }
-    return 0;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void SolverContainer::WriteSolver( SvStream* pStrm, PptEscherEx* pPptEscherEx )
-{
-    sal_uInt32 nCount = maConnectorList.Count();
-    if ( nCount )
-    {
-        pPptEscherEx->OpenContainer( ESCHER_SolverContainer, nCount );
-
-        ConnectorRule aConnectorRule;
-        aConnectorRule.nRuleId = 2;
-        for ( ConnectorListEntry* pPtr = (ConnectorListEntry*)maConnectorList.First(); pPtr; pPtr = (ConnectorListEntry*)maConnectorList.Next() )
-        {
-            aConnectorRule.ncptiA = aConnectorRule.ncptiB = 0xffffffff;
-            aConnectorRule.nShapeC = ImplGetId( pPtr->mXConnector );
-            aConnectorRule.nShapeA = ImplGetId( pPtr->mXConnectToA );
-            aConnectorRule.nShapeB = ImplGetId( pPtr->mXConnectToB );
-
-            if ( aConnectorRule.nShapeC )
-            {
-                if ( aConnectorRule.nShapeA )
-                    aConnectorRule.ncptiA = pPtr->GetConnectorRule( TRUE );
-                if ( aConnectorRule.nShapeB )
-                    aConnectorRule.ncptiB = pPtr->GetConnectorRule( FALSE );
-            }
-            pPptEscherEx->AddAtom( 24, ESCHER_ConnectorRule, 1 );
-            *pStrm  << aConnectorRule.nRuleId
-                    << aConnectorRule.nShapeA
-                    << aConnectorRule.nShapeB
-                    << aConnectorRule.nShapeC
-                    << aConnectorRule.ncptiA
-                    << aConnectorRule.ncptiB;
-
-            aConnectorRule.nRuleId += 2;
-        }
-        pPptEscherEx->CloseContainer();   // ESCHER_SolverContainer
-    }
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -4204,7 +3960,7 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
     ImplWriteTextBundle( aPropOpt );                            \
 }
 
-void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
+void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
 {
     sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nGroupLevel, nOlePictureId;
     sal_uInt16  nEffectCount;
@@ -4608,97 +4364,17 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             }
             else if ( mType == "drawing.Connector" )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aShapeA, aShapeB;
-                ::com::sun::star::awt::Point aStartPoint, aEndPoint;
-
-                if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeKind" ) ) ) )
+                sal_uInt16 nSpType, nSpFlags;
+                ::com::sun::star::awt::Rectangle aNewRect;
+                if ( aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) == sal_False )
                     continue;
 
-                ::com::sun::star::drawing::ConnectorType eCt;
-                mAny >>= eCt;
-
-                if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeStartPoint" ) ) ) )
-                    continue;
-                aStartPoint = *(::com::sun::star::awt::Point*)mAny.getValue();
-
-                if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeEndPoint" ) ) ) )
-                    continue;
-                aEndPoint = *(::com::sun::star::awt::Point*)mAny.getValue();
-
-                sal_uInt32 nAdjustValue1, nAdjustValue2, nAdjustValue3;
-                nAdjustValue1 = nAdjustValue2 = nAdjustValue3 = 0x2a30;
-
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeStartConnection" ) ) ) )
-                    mAny >>= aShapeA;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeEndConnection" ) ) ) )
-                    mAny >>= aShapeB;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine1Delta" ) ) ) )
-                {
-                }
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine2Delta" ) ) ) )
-                {
-                }
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine3Delta" ) ) ) )
-                {
-                }
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode1HorzDist" ) ) ) )
-                {
-                }
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode1VertDist" ) ) ) )
-                {
-                }
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode2HorzDist" ) ) ) )
-                {
-                }
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode2VertDist" ) ) ) )
-                {
-                }
-                aSolverContainer.AddConnector( mXShape, aStartPoint, aShapeA, aEndPoint, aShapeB );
-                    ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
                 maRect = ImplMapRectangle( aNewRect );
                 maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
                 maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                sal_uInt32 nFlags = 0xa00;                                  // Flags: Connector | HasSpt
-                if ( maRect.Top() > maRect.Bottom() )
-                    nFlags |= 0x80;                                         // Flags: VertMirror
-                if ( maRect.Left() > maRect.Right() )
-                    nFlags |= 0x40;                                         // Flags: HorzMirror
-
-                Rectangle aJustifiedRect( maRect );
-                aJustifiedRect.Justify();
-
-                switch ( eCt )
-                {
-                    case ::com::sun::star::drawing::ConnectorType_CURVE :
-                    {
-                        ADD_SHAPE( ESCHER_ShpInst_CurvedConnector3, nFlags );
-                        aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
-                        aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
-                        aPropOpt.AddOpt( ESCHER_Prop_adjust2Value, -(sal_Int32)nAdjustValue2 );
-                    }
-                    break;
-
-                    case ::com::sun::star::drawing::ConnectorType_STANDARD :// Connector 2->5
-                    {
-                        ADD_SHAPE( ESCHER_ShpInst_BentConnector3, nFlags );
-                        aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
-                    }
-                    break;
-
-                    default:
-                    case ::com::sun::star::drawing::ConnectorType_LINE :
-                    case ::com::sun::star::drawing::ConnectorType_LINES :   // Connector 2->5
-                    {
-                        nFlags |= 0x100;
-                        ADD_SHAPE( ESCHER_ShpInst_StraightConnector1, nFlags );
-                        aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
-                    }
-                    break;
-                }
-                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
-                mnAngle = 0;
+                ADD_SHAPE( nSpType, nSpFlags );
             }
             else if ( mType == "drawing.Measure" )
             {

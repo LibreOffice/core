@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-21 17:34:57 $
+ *  last change: $Author: sj $ $Date: 2001-01-08 18:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HATCHSTYLE_HPP_
 #include <com/sun/star/drawing/HatchStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
-#include <com/sun/star/drawing/ConnectorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CONNECTIONTYPE_HPP_
-#include <com/sun/star/drawing/ConnectionType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINEENDTYPE_HPP_
 #include <com/sun/star/drawing/LineEndType.hpp>
@@ -500,35 +494,6 @@ struct EPPTHyperlink
         nType       ( nT ){};
 };
 
-
-struct ConnectorRule
-{
-    sal_uInt32  nRuleId;
-    sal_uInt32  nShapeA;        // SPID of shape A
-    sal_uInt32  nShapeB;        // SPID of shape B
-    sal_uInt32  nShapeC;        // SPID of connector shape
-    sal_uInt32  ncptiA;         // Connection site Index of shape A
-    sal_uInt32  ncptiB;         // Connection site Index of shape B
-};
-
-class ShapeListEntry
-{
-
-    friend class SolverContainer;
-
-protected:
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   aXShape;
-    sal_uInt32          n_EscherId;
-
-public:
-            ShapeListEntry( ::com::sun::star::uno::Reference
-                < ::com::sun::star::drawing::XShape > & rShape, sal_uInt32 nId ) :
-                            aXShape     ( rShape ),
-                            n_EscherId  ( nId ) {}
-};
-
-
 enum PPTExOleObjEntryType
 {
     NORMAL_OLE_OBJECT, OCX_CONTROL
@@ -559,58 +524,6 @@ struct TextRuleEntry
         pOut ( NULL ){};
 
     ~TextRuleEntry() { delete pOut; };
-};
-
-class ConnectorListEntry
-{
-
-    friend class SolverContainer;
-
-protected:
-
-    ::com::sun::star::awt::Point            maPointA;
-    ::com::sun::star::awt::Point            maPointB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnector;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToA;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   mXConnectToB;
-
-public:
-
-    sal_uInt32      GetConnectorRule( sal_Bool bFirst );
-
-                    ConnectorListEntry( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rC,
-                                        const ::com::sun::star::awt::Point& rPA,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSA ,
-                                        const ::com::sun::star::awt::Point& rPB,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rSB ) :
-                                            mXConnector ( rC ),
-                                            maPointA    ( rPA ),
-                                            maPointB    ( rPB ),
-                                            mXConnectToA( rSA ),
-                                            mXConnectToB( rSB ) {}
-
-    static sal_uInt32 GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rP );
-};
-
-class SolverContainer
-{
-    List                maShapeList;
-    List                maConnectorList;
-
-    sal_uInt32              ImplGetId( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape );
-
-public:
-    void                AddShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt32 nId );
-    void                AddConnector( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
-                                        const ::com::sun::star::awt::Point& rA,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &,
-                                        const ::com::sun::star::awt::Point& rB,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rConB );
-
-    void                WriteSolver( SvStream*, PptEscherEx* );
-
-                        SolverContainer(){};
-                        ~SolverContainer();
 };
 
 // ------------------------------------------------------------------------
@@ -974,7 +887,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                                             sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBu );
-        void                ImplWritePage( SolverContainer& rSolver, PageType ePageType, sal_Bool bMaster, int nPageNumber = 0 );
+        void                ImplWritePage( EscherSolverContainer& rSolver, PageType ePageType, sal_Bool bMaster, int nPageNumber = 0 );
         sal_Bool            ImplIsAutoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                     sal_Bool bIsGroup, sal_Int32 nAngle, sal_uInt32& nNewShapeType, sal_uInt32& nReplace, List& rAdjustmentList,

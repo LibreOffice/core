@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-20 15:01:45 $
+ *  last change: $Author: sj $ $Date: 2001-01-08 18:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,7 +1164,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
 
     mpStyleSheet->Write( *mpStrm ,mpPptEscherEx );
 
-    SolverContainer aSolverContainer;
+    EscherSolverContainer aSolverContainer;
 
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
@@ -1297,7 +1297,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
 
     ImplWriteBackground( aXBackgroundPropSet );
 
-    aSolverContainer.WriteSolver( mpStrm, mpPptEscherEx );
+    aSolverContainer.WriteSolver( *mpStrm );
 
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
@@ -1342,7 +1342,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     if ( !mXShapes.is() )
         return FALSE;
 
-    SolverContainer aSolverContainer;
+    EscherSolverContainer aSolverContainer;
 
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainNotes, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Notes );
@@ -1370,7 +1370,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     aPropOpt.Commit( *mpStrm );
     mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
 
-    aSolverContainer.WriteSolver( mpStrm, mpPptEscherEx );
+    aSolverContainer.WriteSolver( *mpStrm );
 
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
@@ -1403,7 +1403,7 @@ sal_Bool PPTWriter::ImplCreateTitleMasterPage( int nPageNum )
             << (sal_uInt16)0                // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
             << (sal_uInt16)0;               // padword
 
-    SolverContainer aSolverContainer;
+    EscherSolverContainer aSolverContainer;
 
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
@@ -1415,7 +1415,7 @@ sal_Bool PPTWriter::ImplCreateTitleMasterPage( int nPageNum )
 
     ImplWriteBackground( aXBackgroundPropSet );
 
-    aSolverContainer.WriteSolver( mpStrm, mpPptEscherEx );
+    aSolverContainer.WriteSolver( *mpStrm );
 
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
@@ -1630,7 +1630,7 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 << (sal_uInt8)nSoundRef << (sal_uInt8)0 << (sal_uInt8)0;
     }
 
-    SolverContainer aSolverContainer;
+    EscherSolverContainer aSolverContainer;
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup();
@@ -1656,7 +1656,7 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
         mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
     }
 
-    aSolverContainer.WriteSolver( mpStrm, mpPptEscherEx );
+    aSolverContainer.WriteSolver( *mpStrm );
 
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
@@ -1680,7 +1680,7 @@ sal_Bool PPTWriter::ImplCreateNotes( int nPageNum )
             << (sal_uInt16)3                                        // follow master ....
             << (sal_uInt16)0;
 
-    SolverContainer aSolverContainer;
+    EscherSolverContainer aSolverContainer;
 
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
@@ -1703,7 +1703,7 @@ sal_Bool PPTWriter::ImplCreateNotes( int nPageNum )
     aPropOpt.Commit( *mpStrm );
     mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
 
-    aSolverContainer.WriteSolver( mpStrm, mpPptEscherEx );
+    aSolverContainer.WriteSolver( *mpStrm );
 
     mpPptEscherEx->CloseContainer();    // ESCHER_DgContainer
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
