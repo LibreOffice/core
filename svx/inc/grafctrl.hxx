@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:04:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,15 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // ----------------
 // - TbxImageItem -
 // ----------------
 
-class TbxImageItem : public SfxUInt16Item
+class SVX_DLLPUBLIC TbxImageItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
@@ -90,7 +94,7 @@ public:
 // - SvxGrafFilterToolBoxControl -
 // -------------------------------
 
-class SvxGrafFilterToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxGrafFilterToolBoxControl : public SfxToolBoxControl
 {
 public:
 
@@ -124,7 +128,7 @@ public:
 // - SvxGrafRedToolBoxControl -
 // ----------------------------
 
-class SvxGrafRedToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafRedToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -135,7 +139,7 @@ public:
 // - SvxGrafGreenToolBoxControl -
 // ------------------------------
 
-class SvxGrafGreenToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -146,7 +150,7 @@ public:
 // - SvxGrafBlueToolBoxControl -
 // -----------------------------
 
-class SvxGrafBlueToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -157,7 +161,7 @@ public:
 // - SvxGrafLuminanceToolBoxControl -
 // ----------------------------------
 
-class SvxGrafLuminanceToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -168,7 +172,7 @@ public:
 // - SvxGrafContrastToolBoxControl -
 // ---------------------------------
 
-class SvxGrafContrastToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -179,7 +183,7 @@ public:
 // - SvxGrafGammaToolBoxControl -
 // ------------------------------
 
-class SvxGrafGammaToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -190,7 +194,7 @@ public:
 // - SvxGrafTransparenceToolBoxControl -
 // -------------------------------------
 
-class SvxGrafTransparenceToolBoxControl : public SvxGrafToolBoxControl
+class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -201,7 +205,7 @@ public:
 // - SvxGrafModeToolBoxControl -
 // -----------------------------
 
-class SvxGrafModeToolBoxControl : public SfxToolBoxControl, public SfxListener
+class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public SfxListener
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
@@ -219,7 +223,7 @@ public:
 class SdrView;
 class SfxRequest;
 
-class SvxGrafAttrHelper
+class SVX_DLLPUBLIC SvxGrafAttrHelper
 {
 public:
 
