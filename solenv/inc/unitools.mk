@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-15 16:11:34 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 11:58:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,6 +148,8 @@ FIND=find
 LS=ls
 ECHON=echo -n
 .ENDIF
+
+MAKEDEPEND*=makedepend
 
 RM+=$(RMFLAGS)
 
