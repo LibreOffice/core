@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-07-26 06:09:42 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2907,7 +2907,8 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
     else if(xNameAccess.is())
     {
         uno::Any aObj = xNameAccess->getByName(pCnt->GetName());
-        uno::Reference< uno::XInterface >  xTmp = *(uno::Reference< uno::XInterface > *)aObj.getValue();
+        uno::Reference< uno::XInterface >  xTmp;
+        aObj >>= xTmp;
         uno::Reference< container::XNamed >  xNamed(xTmp, uno::UNO_QUERY);
         SwRenameXNamedDlg aDlg(this, xNamed, xNameAccess);
         if(xSecond.is())
@@ -3138,6 +3139,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/07/26 06:09:42  os
+    #89714# prevent removing of current entry after drag and drop
+
     Revision 1.10  2001/07/04 13:00:06  os
     #75450# restore scroll position
 

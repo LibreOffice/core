@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:33:17 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,10 +334,10 @@ BOOL SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 }
 BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    if(rVal.getValueType() == ::getCppuType((uno::Reference< container::XIndexReplace >*)0) )
+    uno::Reference< container::XIndexReplace> xRulesRef;
+    if(rVal >>= xRulesRef)
     {
-        uno::Reference< container::XIndexReplace>* pxRulesRef = (uno::Reference< container::XIndexReplace>*)rVal.getValue();
-        uno::Reference< lang::XUnoTunnel > xTunnel(*pxRulesRef, uno::UNO_QUERY);
+        uno::Reference< lang::XUnoTunnel > xTunnel(xRulesRef, uno::UNO_QUERY);
         SwXNumberingRules* pSwXRules = xTunnel.is() ? (SwXNumberingRules*)
                     xTunnel->getSomething(SwXNumberingRules::getUnoTunnelId()) : 0;
         if(pSwXRules)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 14:47:05 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,12 +380,11 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
     GetNumberFormatter();
     if(xNumFmtAgg.is())
     {
-        const uno::Type& rProvType = ::getCppuType((Reference<XTypeProvider>*) 0);
+        const uno::Type& rProvType = ::getCppuType((Reference <XTypeProvider>*)0);
         Any aNumProv = xNumFmtAgg->queryAggregation(rProvType);
-        if(aNumProv.getValueType() == rProvType)
+        Reference<XTypeProvider> xNumProv;
+        if(aNumProv >>= xNumProv)
         {
-            Reference<XTypeProvider> xNumProv =
-                *(Reference<XTypeProvider>*)aNumProv.getValue();
             aNumTypes = xNumProv->getTypes();
         }
     }
@@ -484,13 +483,12 @@ void SwXTextDocument::GetNumberFormatter()
         }
         else
         {
-            const uno::Type& rTunnelType = ::getCppuType((Reference< XUnoTunnel > *)0);
+            const uno::Type& rTunnelType = ::getCppuType((Reference <XUnoTunnel>*)0);
             Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
             SvNumberFormatsSupplierObj* pNumFmt = 0;
-            if(aNumTunnel.getValueType() == rTunnelType)
+            Reference< XUnoTunnel > xNumTunnel;
+            if(aNumTunnel >>= xNumTunnel)
             {
-                Reference< XUnoTunnel > xNumTunnel = *(Reference< XUnoTunnel >*)
-                    aNumTunnel.getValue();
                 pNumFmt = (SvNumberFormatsSupplierObj*)
                         xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
 
@@ -596,7 +594,7 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection() throw( RuntimeEx
         if(pView)
         {
             Any aRef = pView->GetUNOObject()->getSelection();
-            xRef = *(Reference< XInterface > *)aRef.getValue();
+            aRef >>= xRef;
         }
     }
     return xRef;
@@ -1299,8 +1297,9 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // Pages-Property
             else if ( rProp.Name == sPages )
             {
-                if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0) )
-                    aReq.AppendItem( SfxStringItem( SID_PRINT_PAGES, *(OUString*)rProp.Value.getValue() ) );
+                OUString sTmp;
+                if ( rProp.Value >>= sTmp )
+                    aReq.AppendItem( SfxStringItem( SID_PRINT_PAGES, sTmp ) );
                 else
                     throw IllegalArgumentException();
             }
@@ -1503,20 +1502,17 @@ void SwXTextDocument::Invalidate()
     bObjectValid = sal_False;
     if(xNumFmtAgg.is())
     {
+        const uno::Type& rTunnelType = ::getCppuType((Reference <XUnoTunnel>*)0);
+        Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
+        SvNumberFormatsSupplierObj* pNumFmt = 0;
+        Reference< XUnoTunnel > xNumTunnel;
+        if(aNumTunnel >>= xNumTunnel)
         {
-            const uno::Type& rTunnelType = ::getCppuType((Reference< XUnoTunnel > *)0);
-            Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
-            SvNumberFormatsSupplierObj* pNumFmt = 0;
-            if(aNumTunnel.getValueType() == rTunnelType)
-            {
-                Reference< XUnoTunnel > xNumTunnel = *(Reference< XUnoTunnel >*)
-                    aNumTunnel.getValue();
-                pNumFmt = (SvNumberFormatsSupplierObj*)
-                        xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-                pNumFmt->SetNumberFormatter(0);
-            }
-            DBG_ASSERT(pNumFmt, "No number formatter available");
+            pNumFmt = (SvNumberFormatsSupplierObj*)
+                    xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+            pNumFmt->SetNumberFormatter(0);
         }
+        DBG_ASSERT(pNumFmt, "No number formatter available");
     }
     InitNewDoc();
     pDocShell = 0;
@@ -1578,13 +1574,12 @@ void    SwXTextDocument::InitNewDoc()
 
     if(xNumFmtAgg.is())
     {
-        const uno::Type& rTunnelType = ::getCppuType((Reference< XUnoTunnel > *)0);
+        const uno::Type& rTunnelType = ::getCppuType((Reference <XUnoTunnel>*)0);
         Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
         SvNumberFormatsSupplierObj* pNumFmt = 0;
-        if(aNumTunnel.getValueType() == rTunnelType)
+        Reference< XUnoTunnel > xNumTunnel;
+        if(aNumTunnel >>= xNumTunnel)
         {
-            Reference< XUnoTunnel > xNumTunnel = *(Reference< XUnoTunnel >*)
-                aNumTunnel.getValue();
             pNumFmt = (SvNumberFormatsSupplierObj*)
                     xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
 
@@ -2610,11 +2605,11 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
             else
             {
                 aRet = xRealAccess->getByName(sParam.Copy(0, sParam.Len() - sSuffix.Len()));
-                Reference< XInterface > * pxInt = (Reference< XInterface > *)aRet.getValue();
-                if(!pxInt)
+                Reference< XInterface > xInt;
+                if(!(aRet >>= xInt))
                     throw RuntimeException();
-                Reference< XPropertySet >  xProp((*pxInt), UNO_QUERY);
-                aRet.setValue(&xProp, ::getCppuType((Reference<XPropertySet>*)0));
+                Reference< XPropertySet >  xProp(xInt, UNO_QUERY);
+                aRet <<= xProp;
                 bFound = sal_True;
             }
         }

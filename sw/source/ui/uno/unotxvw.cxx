@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 14:47:05 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,9 +405,9 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
 sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if(GetView() && aInterface.getValueType().getTypeClass() == uno::TypeClass_INTERFACE)
+    Reference< uno::XInterface >  xInterface;
+    if(GetView() && (aInterface >>= xInterface))
     {
-        Reference< uno::XInterface >  xInterface = *(Reference< uno::XInterface > *)aInterface.getValue();
         SwWrtShell& rSh = GetView()->GetWrtShell();
         SwDoc* pDoc = GetView()->GetDocShell()->GetDoc();
         Reference< lang::XUnoTunnel >  xIfcTunnel(xInterface, uno::UNO_QUERY);
@@ -610,8 +610,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     {
                         Reference< drawing::XShape >  xShapeInt;
                         uno::Any aAny = xShapeColl->getByIndex(i);
-                        if ( aAny.getValueType() == ::getCppuType((Reference<drawing::XShape>*)0))
-                            xShapeInt = *((Reference< drawing::XShape > *) aAny.getValue());
+                        aAny >>= xShapeInt;
                         if (xShapeInt.is())
                         {
                             Reference< lang::XUnoTunnel> xShapeTunnel(xShapeInt, uno::UNO_QUERY);

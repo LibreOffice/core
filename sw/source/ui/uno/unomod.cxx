@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-20 14:36:39 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,8 +761,8 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
         {
-            sal_Int16 nZoom = *(sal_Int16*)rValue.getValue();
-            if(nZoom > 1000 || nZoom < 5)
+            sal_Int16 nZoom;
+            if(!(rValue >>= nZoom) || nZoom > 1000 || nZoom < 5)
                 throw lang::IllegalArgumentException();
             mpViewOption->SetZoom((sal_uInt16)nZoom);
             mbApplyZoom = sal_True;
@@ -770,7 +770,9 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
-            sal_Int16 nZoom = *(sal_Int16*)rValue.getValue();
+            sal_Int16 nZoom;
+            if(!(rValue >>= nZoom))
+                throw IllegalArgumentException();
             SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
             switch(nZoom)
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-13 21:12:30 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,18 +239,16 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                         {
                              form::FormButtonType eButtonType = form::FormButtonType_URL;
                             aTmp = xPropSet->getPropertyValue( C2U("ButtonType") );
-                            if( aTmp.getValueType() == ::getCppuType((form::FormButtonType*)0)
-                                &&  eButtonType == *( form::FormButtonType*)aTmp.getValue())
+                            if( aTmp >>= eButtonType )
                             {
                                 // Label
                                 if(xInfo->hasPropertyByName( C2U("Label") ))
                                 {
                                     aTmp = xPropSet->getPropertyValue( C2U("Label") );
-                                    if( aTmp.getValueType() == ::getCppuType((const OUString*)0) )
+                                    OUString sTmp;
+                                    if( (aTmp >>= sTmp) && sTmp.getLength())
                                     {
-                                        OUString sTmp = *(OUString*)aTmp.getValue();
-                                        if(sTmp.getLength())
-                                            aHLinkItem.SetName(sTmp);
+                                        aHLinkItem.SetName(sTmp);
                                     }
                                 }
 
@@ -258,11 +256,10 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 if(xInfo->hasPropertyByName( C2U("TargetURL" )))
                                 {
                                     aTmp = xPropSet->getPropertyValue( C2U("TargetURL") );
-                                    if( aTmp.getValueType() == ::getCppuType((const OUString*)0))
+                                    OUString sTmp;
+                                    if( (aTmp >>= sTmp) && sTmp.getLength())
                                     {
-                                        OUString sTmp = *(OUString*)aTmp.getValue();
-                                        if(sTmp.getLength())
-                                            aHLinkItem.SetURL(sTmp);
+                                        aHLinkItem.SetURL(sTmp);
                                     }
                                 }
 
@@ -270,11 +267,10 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
                                 if(xInfo->hasPropertyByName( C2U("TargetFrame") ))
                                 {
                                     aTmp = xPropSet->getPropertyValue( C2U("TargetFrame") );
-                                    if( aTmp.getValueType() == ::getCppuType((const OUString*)0))
+                                    OUString sTmp;
+                                    if( (aTmp >>= sTmp) && sTmp.getLength())
                                     {
-                                        OUString sTmp = *(OUString*) aTmp.getValue();
-                                        if(sTmp.getLength())
-                                            aHLinkItem.SetTargetFrame(sTmp);
+                                        aHLinkItem.SetTargetFrame(sTmp);
                                     }
                                 }
                                 aHLinkItem.SetInsertMode(HLINK_BUTTON);
@@ -312,6 +308,9 @@ SwDrawFormShell::~SwDrawFormShell()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/08/13 21:12:30  jp
+      Bug #90815#: Execute - use hasPropertyState
+
       Revision 1.1.1.1  2000/09/18 17:14:46  hr
       initial import
 

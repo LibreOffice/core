@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:50:08 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,25 +246,23 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
                 if(xInfo->hasPropertyByName( C2U("ButtonType") ))
                 {
                     aTmp = xPropSet->getPropertyValue( C2U("ButtonType") );
-                    if( eButtonType == *((form::FormButtonType*)aTmp.getValue()))
+                    form::FormButtonType eTmpButtonType;
+                    aTmp >>= eTmpButtonType;
+                    if( eButtonType == eTmpButtonType)
                     {
                         // Label
                         aTmp = xPropSet->getPropertyValue( C2U("Label") );
-
-                        if( aTmp.getValueType() == ::getCppuType((OUString*)0))
+                        OUString uTmp;
+                        if( (aTmp >>= uTmp) && uTmp.getLength())
                         {
-                            OUString uTmp(*(OUString*)aTmp.getValue());
-                            if(uTmp.getLength())
-                                rDescr = String(uTmp);
+                            rDescr = String(uTmp);
                         }
 
                         // util::URL
                         aTmp = xPropSet->getPropertyValue( C2U("TargetURL") );
-                        if( aTmp.getValueType() == ::getCppuType((const OUString*)0))
+                        if( (aTmp >>= uTmp) && uTmp.getLength())
                         {
-                            OUString uTmp(*(OUString*)aTmp.getValue());
-                            if(uTmp.getLength())
-                                rURL = String(uTmp);
+                            rURL = String(uTmp);
                         }
                         bRet = sal_True;
                     }
@@ -329,6 +327,9 @@ sal_Bool SwWrtShell::SetURLToButton( const String& rURL, const String& rDescr )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/05/11 09:50:08  th
+    rtl-string-changes
+
     Revision 1.1.1.1  2000/09/18 17:14:53  hr
     initial import
 

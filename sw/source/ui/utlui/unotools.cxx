@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-20 09:46:38 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     // now get the model
     uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
     uno::Any aFrame = xPrSet->getPropertyValue(C2U("Frame"));
-    uno::Reference< frame::XFrame >  xFrm = *(uno::Reference< frame::XFrame > *)aFrame.getValue();
+    uno::Reference< frame::XFrame >  xFrm;
+    aFrame >>= xFrm;
     _xController = xFrm->getController();
     if(_xController.is())
     {
@@ -456,16 +457,16 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< style::XStyleFamiliesSupplier >  xSSupp( xDoc, uno::UNO_QUERY);
         uno::Reference< container::XNameAccess >  xStyles = xSSupp->getStyleFamilies();
         uno::Any aPFamily = xStyles->getByName( C2U("PageStyles" ) );
-        uno::Reference< container::XNameContainer >  xPFamily =
-            *(uno::Reference< container::XNameContainer > *)aPFamily.getValue();
-        if( sPageStyle.getLength() )
+        uno::Reference< container::XNameContainer >  xPFamily;
+        if( (aPFamily >>= xPFamily) && sPageStyle.getLength() )
         {
             uno::Any aPStyle = xPFamily->getByName( sPageStyle );
-            uno::Reference< style::XStyle >  xPStyle =
-                *(uno::Reference< style::XStyle > *)aPStyle.getValue();
+            uno::Reference< style::XStyle >  xPStyle;
+            aPStyle >>= xPStyle;
             uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
             uno::Any aSize = xPProp->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SIZE)));
-            awt::Size aPSize = *(awt::Size*)aSize.getValue();
+            awt::Size aPSize;
+            aSize >>= aPSize;
             //TODO: set page width to card width
             aPSize.Width = 10000;
             aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));

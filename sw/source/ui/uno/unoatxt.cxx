@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-31 15:11:03 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,10 +882,11 @@ void SwXAutoTextGroup::setPropertyValue(
     {
         case  WID_GROUP_TITLE:
         {
-            if(aValue.getValueType() != ::getCppuType((OUString*)0))
+            OUString sNewTitle;
+            aValue >>= sNewTitle;
+            if(!sNewTitle.getLength())
                 throw lang::IllegalArgumentException();
-            String sNewTitle = *(OUString*)aValue.getValue();
-            sal_Bool bChanged = sNewTitle != pGlosGroup->GetName();
+            sal_Bool bChanged = !sNewTitle.equals(pGlosGroup->GetName());
             pGlosGroup->SetName(sNewTitle);
             if(bChanged && HasGlossaryList())
                 GetGlossaryList()->ClearGroups();
