@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-25 15:19:45 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 15:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,49 +789,38 @@ void SdDrawView::PresPaint(const Region& rRegion)
              pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_PREVIEW))
         {
             // Schwarzer Hintergrund
-            Point aPos(pWindow->PixelToLogic(Point(0,0)));
-            Size aSize(pWindow->GetOutputSize());
-            Rectangle aRect(aPos, aSize);
-
+            Point       aPos(pWindow->PixelToLogic(Point(0,0)));
+            Size        aSize(pWindow->GetOutputSize());
+            Rectangle   aRect(aPos, aSize);
             const Color aBlack(COL_BLACK);
-            const Color& rOldColor = pWindow->GetFillColor();
-            ULONG nOldDrawMode( pWindow->GetDrawMode() );
+            const Color aOldColor( pWindow->GetFillColor() );
+            const ULONG nOldDrawMode( pWindow->GetDrawMode() );
 
             pWindow->SetDrawMode( DRAWMODE_DEFAULT );
             pWindow->SetFillColor( aBlack );
-            pWindow->DrawRect(aRect);
-            pWindow->SetFillColor( rOldColor );
+
+            pWindow->DrawRect( aRect );
+
+            pWindow->SetFillColor( aOldColor );
             pWindow->SetDrawMode( nOldDrawMode );
         }
 
         // Clipping auf angezeigten Seitenbereich
-        SdPage*     pPage = pDoc->GetSdPage( 0, PK_STANDARD );
-        BOOL        bIsClipRegion = pWindow->IsClipRegion();
-        Region      aOldClipRegion( pWindow->GetClipRegion() );
-        Point       aUpperLeft(pPage->GetLftBorder(), pPage->GetUppBorder());
-        Point       aLowerRight( pPage->GetSize().Width() - pPage->GetRgtBorder(),
-                                pPage->GetSize().Height() - pPage->GetLwrBorder());
-        Rectangle   aClipRect( aUpperLeft, aLowerRight );
-
-        pWindow->SetClipRegion( aClipRect );
-
-        Link            aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
-        SdrPageView*    pPageView = GetPageViewPvNum(0);
+        SdrPageView* pPageView = GetPageViewPvNum( 0 );
 
         if( pPageView )
+        {
+            const Link aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
+
+            pWindow->Push( PUSH_CLIPREGION );
+            pWindow->IntersectClipRegion( pPageView->GetPageRect() );
+
             pPageView->InitRedraw( (USHORT) 0, rRegion, 0, &aPaintProcLink );
 
-        // altes Clipping restaurieren
-        if( bIsClipRegion )
-            pWindow->SetClipRegion( aOldClipRegion );
-        else
-            pWindow->SetClipRegion();
+            pWindow->Pop();
 
-        if ((bLivePresentation && !IsShownXorVisible(pWindow)) ||
-            pSlideShow)
-        {
-            // Selektionsdarstellung einblenden
-            ShowShownXor(pWindow);
+            if( ( bLivePresentation && !IsShownXorVisible( pWindow ) ) || pSlideShow )
+                ShowShownXor( pWindow );
         }
     }
 }

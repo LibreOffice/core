@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:27:58 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 15:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,13 +510,8 @@ void SdOutlineViewShell::ExecCtrl(SfxRequest &rReq)
     {
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
         {
-            if (pFuActual)
-            {
-                pFuActual->ScrollStart();
-                ScrollLines(0, -1);
-                pFuActual->ScrollEnd();
-            }
-            rReq.Done();
+            ExecReq( rReq );
+            break;
         }
         break;
 
@@ -530,28 +525,12 @@ void SdOutlineViewShell::ExecCtrl(SfxRequest &rReq)
         }
         break;
 
-        //#49150# macht auch hier sinn, die Preview Qualitaet zu aendern
         case SID_PREVIEW_QUALITY_COLOR:
         case SID_PREVIEW_QUALITY_GRAYSCALE:
         case SID_PREVIEW_QUALITY_BLACKWHITE:
         case SID_PREVIEW_QUALITY_CONTRAST:
         {
-            ULONG nMode = PREVIEW_DRAWMODE_COLOR;
-
-            switch( nSlot )
-            {
-                case SID_PREVIEW_QUALITY_COLOR: nMode = PREVIEW_DRAWMODE_COLOR; break;
-                case SID_PREVIEW_QUALITY_GRAYSCALE: nMode = PREVIEW_DRAWMODE_GRAYSCALE; break;
-                case SID_PREVIEW_QUALITY_BLACKWHITE: nMode = PREVIEW_DRAWMODE_BLACKWHITE; break;
-                case SID_PREVIEW_QUALITY_CONTRAST: nMode = PREVIEW_DRAWMODE_CONTRAST; break;
-            }
-
-            pFrameView->SetPreviewDrawMode( nMode );
-            SdOptions* pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
-            pOptions->SetPreviewQuality( nMode );
-
-            Invalidate();
-            rReq.Done();
+            ExecReq( rReq );
             break;
         }
 

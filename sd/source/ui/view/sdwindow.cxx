@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:27:58 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 15:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,12 +750,30 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             // den Settings uebernommen werden. Evtl. weitere Daten neu
             // berechnen, da sich auch die Aufloesung hierdurch geaendert
             // haben kann.
-            SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-
             if( pViewShell )
-                pViewShell->Invalidate();
-        }
+            {
+                USHORT nOutputSlot, nPreviewSlot;
 
+                if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+                {
+                    nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
+                    nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+                }
+                else
+                {
+                    nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
+                    nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+                }
+
+                if( pViewShell->GetViewFrame() && pViewShell->GetViewFrame()->GetDispatcher() )
+                {
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+                }
+
+                pViewShell->Invalidate();
+            }
+        }
 
         if ( (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
              ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
