@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change:$Date: 2004-05-03 09:29:19 $
+ *  last change:$Date: 2004-07-23 10:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ public class OfficeProvider implements AppProvider {
      * place: getManager() was called first.
      */
     public boolean disposeManager(lib.TestParameters param) {
+
+
+
         XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
 
         if (msf == null) {
@@ -159,7 +162,7 @@ public class OfficeProvider implements AppProvider {
         if (msf == null) {
             String exc = "";
             boolean isExecutable = false;
-            boolean isAppKnown = cncstr.indexOf("host=localhost") > 0;
+            boolean isAppKnown = ((cncstr.indexOf("host=localhost") > 0) || (cncstr.indexOf("pipe,name=")>0));
             isAppKnown &= !((String) param.get("AppExecutionCommand")).equals(
             "");
 
@@ -210,7 +213,7 @@ public class OfficeProvider implements AppProvider {
 
                 int k = 0;
 
-                while ((k < 11) && (msf == null)) {
+                while ((k < 21) && (msf == null)) {
                     try {
                         Thread.sleep(k * 1000);
                         msf = connect(cncstr);
@@ -550,6 +553,8 @@ public class OfficeProvider implements AppProvider {
         } else {
             sysDir = dir.substring("file://".length());
         }
+
+        sysDir = sysDir.replaceAll("%20", " ");
 
         // append '/' if not there (e.g. linux)
         if (sysDir.charAt(sysDir.length() - 1) != '/') {
