@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2000-09-21 12:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_TEXT_BOUNDARIES                   
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_PROTECTED_SPACES                  (MAP_CHAR_LEN("ShowProtectedSpaces"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_TABLE_BOUNDARIES                  (MAP_CHAR_LEN("ShowTableBoundaries"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_HIDDEN_PARAGRAPHS                 (MAP_CHAR_LEN("ShowHiddenParagraphs"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_INDEX_MARK_BACKGROUND             (MAP_CHAR_LEN("ShowIndexMarkBacground"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_INDEX_MARK_BACKGROUND             (MAP_CHAR_LEN("ShowIndexMarkBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_FOOTNOTE_BACKGROUND               (MAP_CHAR_LEN("ShowFootnoteBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND             (MAP_CHAR_LEN("ShowTextFieldBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_RELATIVE                          (MAP_CHAR_LEN("SizeRelative"));
