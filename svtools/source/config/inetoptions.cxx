@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-22 17:05:51 $
+ *  last change: $Author: sb $ $Date: 2000-12-19 10:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,14 +264,18 @@ SvtInetOptions::Impl::notifyListeners(uno::Sequence< rtl::OUString > const &
                 aEvents(rKeys.getLength());
             sal_Int32 nCount = 0;
             for (sal_Int32 i = 0; i < rKeys.getLength(); ++i)
-                if (rSet.find(rKeys[i]) != aSetEnd)
+            {
+                rtl::OUString
+                    aTheKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "Inet/")));
+                aTheKey += rKeys[i];
+                if (rSet.find(aTheKey) != aSetEnd)
                 {
-                    aEvents[i].PropertyName
-                        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet/"));
-                    aEvents[i].PropertyName += rKeys[i];
-                    aEvents[i].PropertyHandle = -1;
-                    break;
+                    aEvents[nCount].PropertyName = aTheKey;
+                    aEvents[nCount].PropertyHandle = -1;
+                    ++nCount;
                 }
+            }
             if (nCount > 0)
             {
                 aEvents.realloc(nCount);
