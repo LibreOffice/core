@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:39:23 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,8 +276,8 @@ USHORT SwFntObj::GetAscent( const ViewShell *pSh, const OutputDevice *pOut )
     // 1. RefDef == OutDev (common printing, online layout)
     // 2. Prospect/PagePreview pringing
     // 3. PDF export from online layout
-    OutputDevice* pRefDev = 0;
-    if ( ! pSh || ( pRefDev = &pSh->GetRefDev() ) == pOut ||
+    const OutputDevice* pRefDev = pOut;
+    if ( !pSh || ( pRefDev = &pSh->GetRefDev() ) == pOut ||
          ( OUTDEV_PRINTER == pRefDev->GetOutDevType() &&
            OUTDEV_PRINTER == pOut->GetOutDevType() ) ||
          OUTDEV_WINDOW == pRefDev->GetOutDevType() )
@@ -304,7 +304,7 @@ USHORT SwFntObj::GetHeight( const ViewShell *pSh, const OutputDevice *pOut )
     // 1. RefDef == OutDev (common printing, online layout)
     // 2. Prospect/PagePreview pringing
     // 3. PDF export from online layout
-    OutputDevice* pRefDev = 0;
+    const OutputDevice* pRefDev = pOut;
     if ( ! pSh || ( pRefDev = &pSh->GetRefDev() ) == pOut ||
          ( OUTDEV_PRINTER == pRefDev->GetOutDevType() &&
            OUTDEV_PRINTER == pOut->GetOutDevType() ) ||
@@ -688,7 +688,7 @@ void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice *pOut )
     // 1. RefDef == OutDev (common printing, online layout)
     // 2. Prospect/PagePreview pringing
     // 3. PDF export from online layout
-    OutputDevice* pRefDev = 0;
+    const OutputDevice* pRefDev = pOut;
     if ( pSh && ( pRefDev = &pSh->GetRefDev() ) != pOut &&
          ( OUTDEV_PRINTER != pRefDev->GetOutDevType() ||
            OUTDEV_PRINTER != pOut->GetOutDevType() ) &&
