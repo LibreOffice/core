@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:53:10 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "Empfänger";
         Text[ hindi ] = "लेनेवाला";
         Text[ slovak ] = "Príjemca";
+        Text[ hungarian ] = "Címzett";
+        Text[ slovenian ] = "Naslovnik";
     };
     FixedText TXT_ADDR_POS
     {
@@ -135,6 +137,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -170,6 +174,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮משמאל‬";
         Text[ hindi ] = "बायाँ ओर से ";
         Text[ slovak ] = "zľava";
+        Text[ hungarian ] = "Balról";
+        Text[ slovenian ] = "z leve";
     };
     MetricField FLD_ADDR_LEFT
     {
@@ -200,7 +206,7 @@ TabPage TP_ENV_FMT
         Text [ portuguese_brazilian ] = "de cima" ;
         Text [ portuguese ] = "a partir do topo" ;
         Text [ finnish ] = "ylh��lt�" ;
-        Text [ danish ] = "fra oven" ;
+        Text [ danish ] = "fra toppen" ;
         Text [ french ] = "En haut" ;
         Text [ swedish ] = "~uppifr�n" ;
         Text [ dutch ] = "v~anaf boven" ;
@@ -222,6 +228,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮מלמעלה‬";
         Text[ hindi ] = "ऊपर से ";
         Text[ slovak ] = "zhora";
+        Text[ hungarian ] = "Fentről";
+        Text[ slovenian ] = "z vrha";
     };
     MetricField FLD_ADDR_TOP
     {
@@ -272,6 +280,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -307,6 +317,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "संपादन";
         Text[ slovak ] = "Upraviť";
+        Text[ hungarian ] = "Szerkesztés";
+        Text[ slovenian ] = "Uredi";
     };
     FixedLine FL_SENDER
     {
@@ -341,6 +353,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮שולח‬";
         Text[ hindi ] = "भेजनेवाला";
         Text[ slovak ] = "Odosielateľ";
+        Text[ hungarian ] = "Feladó";
+        Text[ slovenian ] = "Pošiljatelj";
     };
     FixedText TXT_SEND_POS
     {
@@ -374,6 +388,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -409,6 +425,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮משמאל‬";
         Text[ hindi ] = "बायाँ ओर से";
         Text[ slovak ] = "zľava";
+        Text[ hungarian ] = "Balról";
+        Text[ slovenian ] = "z leve";
     };
     MetricField FLD_SEND_LEFT
     {
@@ -439,7 +457,7 @@ TabPage TP_ENV_FMT
         Text [ portuguese_brazilian ] = "de cima" ;
         Text [ portuguese ] = "a partir do topo" ;
         Text [ finnish ] = "ylh��lt�" ;
-        Text [ danish ] = "fra oven" ;
+        Text [ danish ] = "fra toppen" ;
         Text [ french ] = "En haut" ;
         Text [ swedish ] = "u~ppifr�n" ;
         Text [ dutch ] = "vanaf ~boven" ;
@@ -461,6 +479,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮מלמעלה‬";
         Text[ hindi ] = "ऊपर से";
         Text[ slovak ] = "zhora";
+        Text[ hungarian ] = "Fentről";
+        Text[ slovenian ] = "z vrha";
     };
     MetricField FLD_SEND_TOP
     {
@@ -511,6 +531,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -546,6 +568,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "संपादन";
         Text[ slovak ] = "Upraviť";
+        Text[ hungarian ] = "Szerkesztés";
+        Text[ slovenian ] = "Uredi";
     };
     FixedLine FL_SIZE
     {
@@ -580,6 +604,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     FixedText TXT_SIZE_FORMAT
     {
@@ -615,6 +641,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "र~चना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "F~ormátum";
+        Text[ slovenian ] = "O~blika";
     };
     ListBox BOX_SIZE_FORMAT
     {
@@ -658,6 +686,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौ~ड़ाई";
         Text[ slovak ] = "~Šírka";
+        Text[ hungarian ] = "S~zélesség";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField FLD_SIZE_WIDTH
     {
@@ -688,7 +718,7 @@ TabPage TP_ENV_FMT
         Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "~Altura" ;
         Text [ finnish ] = "~Korkeus" ;
-        Text [ danish ] = "H~�jde" ;
+        Text [ danish ] = "~H�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "~H�jd" ;
         Text [ dutch ] = "~Hoogte" ;
@@ -710,6 +740,8 @@ TabPage TP_ENV_FMT
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचा~ई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "~Višina";
     };
     MetricField FLD_SIZE_HEIGHT
     {
@@ -750,7 +782,7 @@ Menu MNU_EDIT
             TEXT [ portuguese_brazilian ] = "~Caracter..." ;
             TEXT [ portuguese ] = "~Caracteres..." ;
             TEXT [ finnish ] = "Fo~ntti..." ;
-            TEXT [ danish ] = "Tegn..." ;
+            TEXT [ danish ] = "Te~gn..." ;
             TEXT [ french ] = "~Caract�res..." ;
             TEXT [ swedish ] = "~Tecken..." ;
             TEXT [ dutch ] = "~Teken..." ;
@@ -772,6 +804,8 @@ Menu MNU_EDIT
             TEXT[ hebrew ] = "~Zeichen...";
             TEXT[ hindi ] = "अ~क्षर...";
             TEXT[ slovak ] = "Z~nak...";
+            TEXT[ hungarian ] = "~Karakter...";
+            TEXT[ slovenian ] = "Z~nak...";
         };
         MenuItem
         {
@@ -783,7 +817,7 @@ Menu MNU_EDIT
             TEXT [ portuguese_brazilian ] = "~Par�grafo..." ;
             TEXT [ portuguese ] = "~Par�grafo..." ;
             TEXT [ finnish ] = "Ka~ppale..." ;
-            TEXT [ danish ] = "Afsnit..." ;
+            TEXT [ danish ] = "~Afsnit..." ;
             TEXT [ french ] = "~Paragraphe..." ;
             TEXT [ swedish ] = "~Stycke..." ;
             TEXT [ dutch ] = "~Alinea..." ;
@@ -805,9 +839,13 @@ Menu MNU_EDIT
             TEXT[ hebrew ] = "‮פסקאות...‬";
             TEXT[ hindi ] = "प~रिच्छेद...";
             TEXT[ slovak ] = "Odst~avec...";
+            TEXT[ hungarian ] = "Beke~zdés...";
+            TEXT[ slovenian ] = "Odst~avek...";
         };
     };
 };
+
+
 
 
 
