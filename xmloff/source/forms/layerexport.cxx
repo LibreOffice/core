@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:13:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _XMLOFF_XMLNUMFE_HXX
 #include "xmlnumfe.hxx"
+#endif
+#ifndef _XMLOFF_XFORMSEXPORT_HXX
+#include "xformsexport.hxx"
 #endif
 
 /** === begin UNO includes === **/
@@ -393,6 +396,10 @@ namespace xmloff
             implMoveIterators(_rxDrawPage, sal_False);
         OSL_ENSURE(bPageIsKnown, "OFormLayerXMLExport_Impl::exportForms: exporting a page which has not been examined!");
 
+        // export XForms models
+        exportXForms( m_rContext );
+
+        // export forms collection
         exportCollectionElements(xCollectionIndex);
     }
 
