@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmitems.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 11:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "fmitems.hxx"
 #endif
 
+#include <svxids.hrc>
+
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -76,14 +78,33 @@ TYPEINIT1(FmFormInfoItem, SfxPoolItem);
 //------------------------------------------------------------------------------
 sal_Bool FmFormInfoItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId ) const
 {
-    return sal_False;
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
+    {
+        case MID_POS: rVal <<= aInfo.Pos; break;
+        case MID_COUNT: rVal <<= aInfo.Count; break;
+        case MID_READONLY : rVal <<= aInfo.ReadOnly; break;
+        default: DBG_ERROR("Wrong MemberId"); return sal_False;
+    }
+
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmFormInfoItem::SetValue(const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId )
+sal_Bool FmFormInfoItem::PutValue(const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId )
 {
-    sal_Bool bRet = sal_False;
-    return bRet;
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
+    {
+        case MID_POS: return( rVal >>= aInfo.Pos); break;
+        case MID_COUNT: return( rVal >>= aInfo.Count); break;
+        case MID_READONLY : return( rVal >>= aInfo.ReadOnly); break;
+        default: DBG_ERROR("Wrong MemberId"); return sal_False;
+    }
+
+    return sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -122,18 +143,6 @@ SfxPoolItem* FmFormInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
 // class FmInterfaceItem
 //========================================================================
 TYPEINIT1(FmInterfaceItem, SfxPoolItem);
-
-//------------------------------------------------------------------------------
-sal_Bool FmInterfaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId ) const
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmInterfaceItem::SetValue(const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId )
-{
-    return sal_False;
-}
 
 //------------------------------------------------------------------------------
 int FmInterfaceItem::operator==( const SfxPoolItem& rAttr ) const

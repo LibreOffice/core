@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmitems.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual sal_Bool             QueryValue( ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 ) const;
-    virtual sal_Bool             SetValue( const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 );
+    virtual sal_Bool             PutValue( const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
@@ -137,8 +137,6 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool            QueryValue( ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 ) const;
-    virtual sal_Bool            SetValue( const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
