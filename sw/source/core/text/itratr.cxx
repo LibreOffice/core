@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-22 12:35:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
             Boundary aBndry( pBreakIt->xBreak->getWordBoundary( rTxt, nIdx,
                              pBreakIt->GetLocale( eLang ),
                              WordType::DICTIONARY_WORD, TRUE ) );
-            nStop = aBndry.endPos;
+            nStop = (xub_StrLen)aBndry.endPos;
             if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
                 rArg.NewWord();
             if( nStop == nIdx )
@@ -545,19 +545,11 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
 
 sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
 {
-    sal_Bool bRet = sal_False;
-    OutputDevice *pOut = GetDoc()->GetPrt();
-    if( !pOut )
-        pOut = GetpApp()->GetDefaultDevice();
-    if( pOut )
-    {
-        SwScriptInfo aScriptInfo;
-        SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
-        aIter.SeekAndChg( nBegin, pOut );
-        bRet = aIter.GetFnt()->IsSymbol( GetDoc()->GetRootFrm() ?
+    SwScriptInfo aScriptInfo;
+    SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
+    aIter.Seek( nBegin );
+    return aIter.GetFnt()->IsSymbol( GetDoc()->GetRootFrm() ?
                 GetDoc()->GetRootFrm()->GetCurrShell() : 0 );
-    }
-    return bRet;
 }
 
 class SwMinMaxNodeArgs
@@ -935,20 +927,22 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
 USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     const
 {
-    ViewShell* pSh;
-    OutputDevice* pOut;
+    ViewShell* pSh = NULL;
+    OutputDevice* pOut = NULL;
     GetDoc()->GetEditShell( &pSh );
-    pOut = GetDoc()->GetPrt();
-    if( !pOut || !((Printer*)pOut)->IsValid() )
+
+    if ( pSh )
+        pOut = &pSh->GetRefDev();
+    else
     {
-        if( pSh )
-        {
-            if( 0 == ( pOut = pSh->GetReferenzDevice() ) )
-                pOut = pSh->GetWin();
-        }
-        if( !pOut )
+        //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
+        if ( GetDoc()->IsBrowseMode() ) //?!?!?!?
             pOut = GetpApp()->GetDefaultDevice();
+        else
+            pOut = &GetDoc()->GetRefDev();
     }
+
+    ASSERT( pOut, "GetScalingOfSelectedText without outdev" )
 
     MapMode aOldMap( pOut->GetMapMode() );
     pOut->SetMapMode( MapMode( MAP_TWIP ) );
@@ -971,8 +965,8 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
             // cursor is at left or right border of word
             return 100;
 
-        nStt = aBound.startPos;
-        nEnd = aBound.endPos;
+        nStt = (xub_StrLen)aBound.startPos;
+        nEnd = (xub_StrLen)aBound.endPos;
 
         if ( nStt == nEnd )
             return 100;
@@ -1026,7 +1020,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         // calculate text widths up to cChar
         if ( nStop > nIdx )
         {
-            SwDrawTextInfo aDrawInf( 0, *pOut, 0, GetTxt(), nIdx, nStop - nIdx );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetTxt(), nIdx, nStop - nIdx );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
         }
 
@@ -1043,7 +1037,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         {
             // tab receives width of one space
             XubString sTmp( CH_BLANK );
-            SwDrawTextInfo aDrawInf( 0, *pOut, 0, sTmp, 0, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
             nIdx++;
         }
@@ -1052,7 +1046,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         else if ( cChar == CHAR_HARDBLANK || cChar == CHAR_HARDHYPHEN )
         {
             XubString sTmp( cChar );
-            SwDrawTextInfo aDrawInf( 0, *pOut, 0, sTmp, 0, 1 );
+            SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
             nIdx++;
         }
@@ -1063,7 +1057,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 case RES_TXTATR_FTN :
                 {
                     const XubString aTxt = pHint->GetFtn().GetNumStr();
-                    SwDrawTextInfo aDrawInf( 0, *pOut, 0, aTxt, 0, aTxt.Len() );
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
@@ -1072,7 +1066,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 {
                     SwField *pFld = (SwField*)pHint->GetFld().GetFld();
                     const String aTxt = pFld->GetCntnt( FALSE );
-                    SwDrawTextInfo aDrawInf( 0, *pOut, 0, aTxt, 0, aTxt.Len() );
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
@@ -1125,7 +1119,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     aIter.SeekAndChg( nStt, pOut );
     pOut->SetMapMode( aOldMap );
 
-    SwDrawTextInfo aDrawInf( 0, *pOut, 0, GetTxt(), nStt, 1 );
+    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetTxt(), nStt, 1 );
     return (USHORT)
            ( nWidth ? ((100 * aIter.GetFnt()->_GetTxtSize( aDrawInf ).Height()) / nWidth ) : 0 );
 }
