@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:29:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,8 +892,8 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
     n += 2048;
     char *lpszDriverName = new char[n];
     char *lpszDeviceName = new char[n];
-    strcpy( lpszDriverName, aDriver.GetBuffer() );
-    strcpy( lpszDeviceName, aDevice.GetBuffer() );
+    strncpy( lpszDriverName, aDriver.GetBuffer(), n );
+    strncpy( lpszDeviceName, aDevice.GetBuffer(), n );
     HDC hDC = CreateICA( lpszDriverName,
                          lpszDeviceName,
                          0,
@@ -1372,8 +1372,8 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
     n += 2048;
     char *lpszDriverName = new char[n];
     char *lpszDeviceName = new char[n];
-    strcpy( lpszDriverName, aDriver.GetBuffer() );
-    strcpy( lpszDeviceName, aDevice.GetBuffer() );
+    strncpy( lpszDriverName, aDriver.GetBuffer(), n );
+    strncpy( lpszDeviceName, aDevice.GetBuffer(), n );
     HDC hDC = CreateDCA( lpszDriverName,
                          lpszDeviceName,
                          NULL,
