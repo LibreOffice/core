@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 15:31:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,21 +526,16 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // the logic below is following, if the document seems not to need to be reloaded and the physical name is different
                 // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
-                if ( ( !bNeedsReload &&
-                    ( aMedObj.GetProtocol() == INET_PROT_FILE
-                            && aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT)
-                            && SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                                             aMedObj.GetMainURL( INetURLObject::NO_DECODE ) )
-                      || pMed->IsRemote()
-                    )
-                   ) || pVersionItem )
+                if ( ( !bNeedsReload && ( aMedObj.GetProtocol() == INET_PROT_FILE &&
+                        aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
+                        SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ), aMedObj.GetMainURL( INetURLObject::NO_DECODE ) )
+                      || pMed->IsRemote() ) )
+                   || pVersionItem )
                 {
                     sal_Bool bOK = sal_False;
                     if ( !pVersionItem )
                     {
-                        // Umschalten ohne Reload ist moeglich
-                        // TODO/LATER: the reloading code must be rewritten
-//REMOVE                            pSh->DoHandsOff();
+                        // switching edit mode could be possible without reload
                         if ( pMed->HasStorage_Impl() && pMed->GetStorage() == pSh->GetStorage() )
                         {
                             // TODO/LATER: faster creation of copy
@@ -647,9 +642,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Ansonsten ( lokal und arbeiten auf Kopie ) muss gereloaded
                 // werden.
             }
-            SfxItemSet* pSet = pSh->GetMedium()->GetItemSet();
-            pSet->Put( SfxBoolItem(
-                SID_DOC_READONLY, nOpenMode != SFX_STREAM_READWRITE ) );
+
             rReq.AppendItem( SfxBoolItem( SID_FORCERELOAD, sal_True) );
             rReq.AppendItem( SfxBoolItem( SID_SILENT, sal_True ));
         }
@@ -742,8 +735,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->ClearItem( SID_STREAM );
                     pNewSet->ClearItem( SID_INPUTSTREAM );
                     pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pMedium->GetFilter()->GetName() ) );
-                    if ( !bForEdit )
-                        pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, FALSE ) );
+                    if ( rReq.GetSlot() == SID_EDITDOC || !bForEdit )
+                        // edit mode is switched or reload of readonly document
+                        pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, !bForEdit ) );
+                    else
+                        // Reload of file opened for writing
+                        pNewSet->ClearItem( SID_DOC_READONLY );
                 }
 
                 const SfxObjectFactory* pFactory = 0;
@@ -761,9 +758,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 //pNewMedium = new SfxMedium( aURL, nMode, pMedium->IsDirect(), bUseFilter ? pMedium->GetFilter() : 0, pNewSet );
                 //pNewSet = pNewMedium->GetItemSet();
                 if ( pURLItem )
-                {
                     pNewSet->Put( SfxStringItem( SID_REFERER, pMedium->GetName() ) );
-                }
                 else
                     pNewSet->Put( SfxStringItem( SID_REFERER, String() ) );
 
@@ -793,20 +788,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Altes Dok nicht cachen! Gilt nicht, wenn anderes
                 // Doc geladen wird.
 
-                //const SfxFilter *pSaveFilter = pNewMedium->GetFilter();
-                //SfxItemSet* pSaveItemSet = pNewSet->Clone();
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedReferer, SfxStringItem, SID_REFERER, sal_False);
+
                 if( !pURLItem || pURLItem->GetValue() == xOldObj->GetMedium()->GetName() )
                     xOldObj->Get_Impl()->bForbidCaching = sal_True;
 
-                // Files schliessen, damit wir Reloaden koennen.
-//REMOVE                    if( bHandsOff )
-//REMOVE                        xOldObj->DoHandsOff();
                 const SfxFilter *pOldFilter = pMedium->GetFilter();
                 if( bHandsOff )
                 {
-                    //pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
-                    //pView->GetViewShell()->ReleaseMenuBar_Impl();
-                    //pView->ReleaseObjectShell_Impl( bRestoreView );
                     if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == xOldObj->GetStorage() )
                     {
                         // TODO/LATER: faster creation of copy
@@ -833,59 +823,47 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 DELETEZ( pNewSet );
 
-                // TODO/LATER: failure of Reload must be handled
-                /*
                 if( !xNewObj.Is() )
                 {
-                    pNewMedium =  xLoader->GetMedium();
-                    if( pNewMedium )
-                        pNewMedium->Close();
-
-                    // wieder auf das alte Medium zurueck
-#ifdef DEBUG
-                    const SfxFilter* pOldFilter = xOldObj->GetMedium()->GetFilter();
-#endif
                     if( bHandsOff )
-                        xOldObj->DoSaveCompleted( xOldObj->GetMedium() );
+                    {
+                        // back to old medium
+                        pMedium->ReOpen();
+                        xOldObj->DoSaveCompleted( pMedium );
+                    }
 
-                    // r/o-Doc kann nicht in Editmode geschaltet werden?
+                    // r/o-Doc couldn't be switched to writing mode
                     if ( bForEdit && SID_EDITDOC == rReq.GetSlot() )
                     {
-                        // dem ::com::sun::star::sdbcx::User anbieten, als Vorlage zu oeffnen
+                        // ask user for opening as template
                         QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_OPENASTEMPLATE) );
                         if ( RET_YES == aBox.Execute() )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                            SFX_ITEMSET_ARG( pSaveItemSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
-                            if ( pOptions )
-                                aSet.Put( *pOptions );
-                            SFX_ITEMSET_ARG( pSaveItemSet, pReferer, SfxStringItem, SID_REFERER, sal_False);
-                            if ( pReferer )
-                                aSet.Put( *pReferer );
+                            aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
+                            if ( pSavedOptions )
+                                aSet.Put( *pSavedOptions );
+                            if ( pSavedReferer )
+                                aSet.Put( *pSavedReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                            if( pSaveFilter )
-                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pSaveFilter->GetFilterName() ) );
-
-                            //MI: im selben Frame => er macht gar nix !?!
-                            //SfxFrameItem aFrameItem( SID_DOCFRAME, GetFrame() );
+                            if( pOldFilter )
+                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pOldFilter->GetFilterName() ) );
                             GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                         }
                     }
                     else
                     {
-                        // an error handling should be done here
-                        if ( !pSilentItem || !pSilentItem->GetValue() )
-                            ErrorHandler::HandleError( nLoadError );
+                        // an error handling should be done here?!
+                        // if ( !pSilentItem || !pSilentItem->GetValue() )
+                        //    ErrorHandler::HandleError( nLoadError );
                     }
                 }
-                else*/
+                else
                 {
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
                     UpdateDocument_Impl();
                 }
-
-                //DELETEZ( pSaveItemSet );
 
                 SfxViewFrame* pThis = (SfxViewFrame*)this;
                 sal_Bool bDeleted = aFrames.C40_GETPOS( SfxViewFrame, pThis ) == USHRT_MAX;
@@ -904,24 +882,25 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // RestoreView nur, wenn gleicher Dokumenttyp
                     bRestoreView = sal_False;
 
-                //DELETEZ( pImp->pMenuBar );
-
                 const sal_uInt16 nCount = aFrames.Count();
                 for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
                     SfxViewFrame *pView = aFrames.GetObject( i );
-                    //if( /*!bHandsOff &&*/ this != pView   )
+                    if ( xNewObj.Is() )
                     {
-                        pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
-                        pView->GetViewShell()->ReleaseMenuBar_Impl();
-                        pView->ReleaseObjectShell_Impl( bRestoreView );
-                    }
+                        //if( /*!bHandsOff &&*/ this != pView   )
+                        {
+                            pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
+                            pView->GetViewShell()->ReleaseMenuBar_Impl();
+                            pView->ReleaseObjectShell_Impl( bRestoreView );
+                        }
 
-                    pView->SetRestoreView_Impl( bRestoreView );
-                    //if( pView != this || !xNewObj.Is() )
-                    {
-                        SfxFrame *pFrame = pView->GetFrame();
-                        pFrame->InsertDocument(xNewObj.Is() ? xNewObj : xOldObj );
+                        pView->SetRestoreView_Impl( bRestoreView );
+                        //if( pView != this || !xNewObj.Is() )
+                        {
+                            SfxFrame *pFrame = pView->GetFrame();
+                            pFrame->InsertDocument(xNewObj.Is() ? xNewObj : xOldObj );
+                        }
                     }
 
                     //DELETEZ( pView->pImp->pMenuBar );
@@ -2234,6 +2213,7 @@ void SfxViewFrame::Show()
     // hat oder wenn er keine Component enth"alt
     if ( &GetWindow() == &GetFrame()->GetWindow() || !GetFrame()->HasComponent() )
         GetWindow().Show();
+    GetFrame()->GetWindow().Show();
 
     GetFrame()->GetWindow().Show();
 
