@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:13:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define VCL_LONGCURR_CXX
-
 #include <sot/object.hxx>
 #define _TOOLS_BIGINT
 #include <sot/factory.hxx>
@@ -73,7 +71,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 #include <event.hxx>
