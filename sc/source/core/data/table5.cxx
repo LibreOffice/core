@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:29:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
             for (nX=0; nX<MAXCOL; nX++)
                 pColFlags[nX] &= ~CR_PAGEBREAK;
-            for (nY=0; nY<MAXROW; nY++)
-                pRowFlags[nY] &= ~CR_PAGEBREAK;
+            pRowFlags->AndValue( 0, MAXROW-1, ~CR_PAGEBREAK);
 
             return;
         }
@@ -168,13 +167,12 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     for (nX=0; nX<nStartCol; nX++)
         pColFlags[nX] &= ~CR_PAGEBREAK;
-    for (nY=0; nY<nStartRow; nY++)
-        pRowFlags[nY] &= ~CR_PAGEBREAK;
+    pRowFlags->AndValue( 0, nStartRow-1, ~CR_PAGEBREAK);
 
     if (nStartCol > 0)
         pColFlags[nStartCol] |= CR_PAGEBREAK;           //! AREABREAK
     if (nStartRow > 0)
-        pRowFlags[nStartRow] |= CR_PAGEBREAK;           //! AREABREAK
+        pRowFlags->OrValue( nStartRow, CR_PAGEBREAK);           //! AREABREAK
 
         //  Mittelteil: Breaks verteilen
 
@@ -215,25 +213,31 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     for (nY=nStartRow; nY<=nEndRow; nY++)
     {
         BOOL bStartOfPage = FALSE;
-        long nThisY = ( pRowFlags[nY] & CR_HIDDEN ) ? 0 : pRowHeight[nY];
-        if ( (nSizeY+nThisY > nPageSizeY) || ((pRowFlags[nY] & CR_MANUALBREAK) && !bSkipBreaks) )
+        BYTE nFlags = pRowFlags->GetValue(nY);
+        long nThisY = ( nFlags & CR_HIDDEN ) ? 0 : pRowHeight->GetValue(nY);
+        if ( (nSizeY+nThisY > nPageSizeY) || ((nFlags & CR_MANUALBREAK) && !bSkipBreaks) )
         {
-            pRowFlags[nY] |= CR_PAGEBREAK;
+            pRowFlags->SetValue( nY, nFlags | CR_PAGEBREAK);
             nSizeY = 0;
             bStartOfPage = TRUE;
         }
         else if (nY != nStartRow)
-            pRowFlags[nY] &= ~CR_PAGEBREAK;
+            pRowFlags->SetValue( nY, nFlags & ~CR_PAGEBREAK);
         else
             bStartOfPage = TRUE;
 
         if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
         {
             // subtract size of repeat rows from page size
-            for (SCROW i=nRepeatStartY; i<=nRepeatEndY; i++)
-                nPageSizeY -= ( pRowFlags[i] & CR_HIDDEN ) ? 0 : pRowHeight[i];
-            while (nY<=nRepeatEndY)
-                pRowFlags[++nY] &= ~CR_PAGEBREAK;
+            unsigned long nHeights = pRowFlags->SumCoupledArrayForCondition(
+                    nRepeatStartY, nRepeatEndY, CR_HIDDEN, 0, *pRowHeight);
+#ifdef DBG_UTIL
+            if (nHeights == ::std::numeric_limits<unsigned long>::max())
+                DBG_ERRORFILE("ScTable::UpdatePageBreaks: row heights overflow");
+#endif
+            nPageSizeY -= nHeights;
+            pRowFlags->AndValue( nY, nRepeatEndY, ~CR_PAGEBREAK);
+            nY = nRepeatEndY;
             bRowFound = TRUE;
         }
 
@@ -250,9 +254,9 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     }
     if (nEndRow < MAXROW)
     {
-        pRowFlags[nEndRow+1] |= CR_PAGEBREAK;           //! AREABREAK
-        for (nY=nEndRow+2; nY<=MAXROW; nY++)
-            pRowFlags[nY] &= ~CR_PAGEBREAK;
+        pRowFlags->OrValue( nEndRow+1, CR_PAGEBREAK);           //! AREABREAK
+        if (nEndRow+2 <= MAXROW)
+            pRowFlags->AndValue( nEndRow+2, MAXROW, ~CR_PAGEBREAK);
     }
 }
 
@@ -263,8 +267,7 @@ void ScTable::RemoveManualBreaks()
             pColFlags[nCol] &= ~CR_MANUALBREAK;
 
     if (pRowFlags)
-        for (SCROW nRow = 0; nRow <= MAXROW; nRow++)
-            pRowFlags[nRow] &= ~CR_MANUALBREAK;
+        pRowFlags->AndValue( 0, MAXROW, ~CR_MANUALBREAK);
 }
 
 BOOL ScTable::HasManualBreaks() const
@@ -275,9 +278,8 @@ BOOL ScTable::HasManualBreaks() const
                 return TRUE;
 
     if (pRowFlags)
-        for (SCROW nRow = 0; nRow <= MAXROW; nRow++)
-            if ( pRowFlags[nRow] & CR_MANUALBREAK )
-                return TRUE;
+        if (ValidRow( pRowFlags->GetLastAnyBitAccess( 0, CR_MANUALBREAK)))
+            return TRUE;
 
     return FALSE;
 }
