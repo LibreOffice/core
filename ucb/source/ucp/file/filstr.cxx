@@ -228,9 +228,13 @@ XStream_impl::readBytes(
         throw io::BufferSizeExceededException();
     }
 
-    sal_uInt64 nrc;
-    m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc );
-
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc )
+       != osl::FileBase::E_None)
+    {
+        delete[] buffer;
+        throw io::IOException();
+    }
     aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
     delete[] buffer;
     return ( sal_Int32 ) nrc;
