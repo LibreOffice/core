@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanunx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:19:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ struct SaneHolder
     REF( AWT::XBitmap ) m_xBitmap;
     vos::OMutex         m_aProtector;
     ScanError           m_nError;
+    bool                m_bBusy;
 };
 
 DECLARE_LIST( SaneHolderList, SaneHolder* );
@@ -198,6 +199,7 @@ void ScannerThread::run()
 
     m_pHolder->m_xBitmap = REF( AWT::XBitmap )( aIf, UNO_QUERY );
 
+    m_pHolder->m_bBusy = true;
     if( m_pHolder->m_aSane.IsOpen() )
     {
         int nOption = m_pHolder->m_aSane.GetOptionByName( "preview" );
@@ -214,6 +216,7 @@ void ScannerThread::run()
 
     REF( XInterface ) xXInterface( static_cast< OWeakObject* >( m_pManager ) );
     m_xListener->disposing( com::sun::star::lang::EventObject(xXInterface) );
+    m_pHolder->m_bBusy = false;
 }
 
 // ------------------
@@ -251,6 +254,7 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
     {
         SaneHolder* pSaneHolder = new SaneHolder;
         pSaneHolder->m_nError = ScanError_ScanErrorNone;
+        pSaneHolder->m_bBusy = false;
         if( Sane::IsSane() )
             allSanes.Insert( pSaneHolder );
         else
@@ -284,8 +288,21 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
-    SaneDlg aDlg( NULL, allSanes.GetObject( scanner_context.InternalData )->m_aSane );
-    return (BOOL)aDlg.Execute();
+
+    SaneHolder* pHolder = allSanes.GetObject( scanner_context.InternalData );
+    if( pHolder->m_bBusy )
+        throw ScannerException(
+            ::rtl::OUString::createFromAscii( "Scanner is busy" ),
+            REF( XScannerManager )( this ),
+            ScanError_ScanInProgress
+            );
+
+    pHolder->m_bBusy = true;
+    SaneDlg aDlg( NULL, pHolder->m_aSane );
+    BOOL bRet = (BOOL)aDlg.Execute();
+    pHolder->m_bBusy = false;
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -306,6 +323,13 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
             ScanError_InvalidContext
             );
     SaneHolder* pHolder = allSanes.GetObject( scanner_context.InternalData );
+    if( pHolder->m_bBusy )
+        throw ScannerException(
+            ::rtl::OUString::createFromAscii( "Scanner is busy" ),
+            REF( XScannerManager )( this ),
+            ScanError_ScanInProgress
+            );
+    pHolder->m_bBusy = true;
 
     ScannerThread* pThread = new ScannerThread( pHolder, listener, this );
     pThread->create();
