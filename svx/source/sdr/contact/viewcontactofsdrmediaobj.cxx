@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:04:36 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,6 @@ ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectConta
 {
     return *( new ViewObjectContactOfSdrMediaObj( rObjectContact, *this,
                                                   static_cast< SdrMediaObj& >( GetSdrObject() ).getMediaProperties() ) );
-}
-
-// ------------------------------------------------------------------------------
-
-sal_Bool ViewContactOfSdrMediaObj::SupportsAnimation() const
-{
-    return false;
 }
 
 // ------------------------------------------------------------------------------
