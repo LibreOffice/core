@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 18:19:02 $
+#   last change: $Author: rt $ $Date: 2005-03-29 13:33:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=xmlsecurity
 TARGET=xmlsecurity-mscxsfit
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-TARGETTYPE=CUI
+#TARGETTYPE=CUI
 LIBTARGET=NO
 
 
@@ -92,9 +92,9 @@ SHARE_LIBS =	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
-SHARE_LIBS+= "ixml2.lib" "crypt32.lib" "advapi32.lib" "libxmlsec.lib" "libxmlsec-mscrypto.lib" "xsec_xmlsec.lib"
+SHARE_LIBS+= "libxml2.lib" "crypt32.lib" "advapi32.lib" "libxmlsec.lib" "libxmlsec-mscrypto.lib" "xsec_xmlsec.lib" "xs_comm.lib" "xs_mscrypt.lib"
 .ELSE
-SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "-lxsec_xmlsec"
+SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec1" "-lxmlsec1-nss" "-lxsec_xmlsec" "-lxs_comm" "-lxs_nss"
 .ENDIF
         
 SHARE_OBJS =	\
