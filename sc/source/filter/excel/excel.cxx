@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:28:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
 #endif
@@ -109,8 +106,6 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 #include "exp_op.hxx"
-
-static NAMESPACE_VOS( OMutex )      aSemaphore;
 
 void InitFuncData( BOOL bBiff8 );
 void DeInitFuncData();
@@ -177,7 +172,8 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
                 bHasBook = sal_False;
             break;
             case EIF_BIFF_LE4:
-                eRet = eERR_FORMAT;             //!! correct error code?
+// keep auto-detection for import of external cells (file type detection returns Excel4.0)
+//                eRet = eERR_FORMAT;             //!! correct error code?
             break;
             default:
                 eRet = eERR_FORMAT;             //!! correct error code?
@@ -301,8 +297,6 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
     const sal_Char*             pClipboard;
     const sal_Char*             pClassName;
 
-    aSemaphore.acquire();
-
     if( bBiff8 )
     {
         pWrkBook = pWrkbkNameExcel97;
@@ -364,8 +358,6 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
     }
     else
         eRet = eERR_OPEN;
-
-    aSemaphore.release();
 
     return eRet;
 }
