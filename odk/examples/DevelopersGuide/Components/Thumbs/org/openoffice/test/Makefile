@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:16:01 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:22:14 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -61,11 +61,7 @@ GENURDFILES += $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES2))
 
 CLASSFILES = $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -78,21 +74,21 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	idlc -I. -I../../.. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
+	$(IDLC) -I. -I../../.. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ /UCR $(GENURDFILES)
+	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(OUT_COMP_GEN)/%.java : $(COMPONENT1_RDB)
+$(OUT_COMP_GEN)/%.java : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javamaker -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT1_RDB) $(DKREGISTRYNAME)
+	$(JAVAMAKER) -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
 
 $(CLASSFILES) : $(GENJAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES)
 
 .PHONY: clean
 clean :
-	-$(DEL) $(subst /,$(PS),$(CLASSFILES))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(CLASSFILES)))
