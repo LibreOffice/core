@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:33:34 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -1110,7 +1104,10 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         ULONG nFormat = pCol->GetNumberFormat( pItems[nLo].nRow);
         ScCellFormat::GetInputString( pItems[nLo].pCell, nFormat, aCellStr,
                 rFormatter);
-        if (pCollator->compareString( aCellStr, *rEntry.pStr) != 0)
+        sal_Int32 nTmp = pCollator->compareString( aCellStr, *rEntry.pStr);
+        if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
+                (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
+                (rEntry.eOp == SC_EQUAL && nTmp != 0))
             ++nLo;
     }
     if (!pCol->Search( aParam.nRow2, nHi ) && nHi>0)
