@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:10:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ class SvxConfigEntry
 {
 private:
 
-    // common toolbar properties
+    // common properties
     USHORT                      nId;
     ::rtl::OUString             aHelpText;
     ::rtl::OUString             aLabel;
@@ -307,7 +307,6 @@ public:
             ::com::sun::star::beans::PropertyValue >& rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
-
 
     SvxConfigEntry( USHORT nInitId, const String& rInitStr,
                     const String& rHelpText, bool bPopup = FALSE );
@@ -386,44 +385,6 @@ public:
             ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
 };
 
-class SvxMenuConfigEntry : public SvxConfigEntry
-{
-private:
-
-public:
-
-    SvxMenuConfigEntry(
-        const com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue >& rProperties,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
-
-    ~SvxMenuConfigEntry();
-};
-
-/*
-class SvxToolbarConfigEntry : public SvxConfigEntry
-{
-private:
-
-    bool                        bIsVisible;
-
-public:
-
-    SvxToolbarConfigEntry( USHORT nInitId, const String& rInitStr,
-                    const String& rHelpText, bool bPopup = FALSE )
-        : SvxConfigEntry( nInitId, rInitStr, rHelpText, bPopup )
-    {}
-
-    SvxToolbarConfigEntry( )
-        : SvxConfigEntry( )
-    {}
-
-    void                        SetVisible( bool b ) { bIsVisible = b; }
-    bool                        IsVisible() const { return bIsVisible; }
-};
-*/
-
 class SvxMenuEntriesListBox : public SvTreeListBox
 {
 private:
@@ -450,6 +411,8 @@ public:
         TransferDataContainer&, SvLBoxEntry* );
 
     virtual void        DragFinished( sal_Int8 );
+
+    void                KeyInput( const KeyEvent& rKeyEvent );
 };
 
 class SvxConfigPage : public SfxTabPage
@@ -509,9 +472,8 @@ protected:
         const rtl::OUString& aModuleId,
         bool docConfig ) = 0;
 
-    virtual void    Init() = 0;
-
-    virtual void    UpdateButtonStates() = 0;
+    virtual void            Init() = 0;
+    virtual void            UpdateButtonStates() = 0;
 
     void            PositionContentsListBox();
 
@@ -522,15 +484,13 @@ protected:
     void            AddSubMenusToUI(    const String& rBaseTitle,
                                         SvxConfigEntry* pParentData );
 
-    SvLBoxEntry*    InsertEntryIntoUI(  SvxConfigEntry* pNewEntryData,
+    SvLBoxEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
                                         USHORT nPos = LIST_APPEND );
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
 
     void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = NULL );
-
-    void            MoveEntry(          Button* pButton );
 
 public:
 
@@ -540,11 +500,16 @@ public:
                                  bool bFront = FALSE,
                                  bool bAllowDuplicates = FALSE );
 
+    virtual void    MoveEntry( bool bMoveUp );
+
     bool            MoveEntryData(  SvLBoxEntry* pSourceEntry,
                                     SvLBoxEntry* pTargetEntry );
 
     BOOL            FillItemSet( SfxItemSet& );
     void            Reset( const SfxItemSet& );
+
+    virtual bool    DeleteSelectedContent() = 0;
+    virtual void    DeleteSelectedTopLevel() = 0;
 
     SvxConfigEntry* GetTopLevelSelection()
     {
@@ -565,8 +530,10 @@ private:
     DECL_LINK( AddCommandsHdl, Button * );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
 
-    void        Init();
-    void        UpdateButtonStates();
+    void            Init();
+    void            UpdateButtonStates();
+    bool            DeleteSelectedContent();
+    void            DeleteSelectedTopLevel();
 
 public:
     SvxMenuConfigPage( Window *pParent, const SfxItemSet& rItemSet );
@@ -621,6 +588,8 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     BOOL            m_bHiContrastMode;
     SvxConfigPage*  pPage;
 
+    void            ChangeVisibility( SvLBoxEntry* pEntry );
+
 protected:
 
     virtual void    CheckButtonHdl();
@@ -649,6 +618,8 @@ public:
 
     virtual BOOL    NotifyCopying(
         SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG&);
+
+    void            KeyInput( const KeyEvent& rKeyEvent );
 };
 
 class SvxToolbarConfigPage : public SvxConfigPage
@@ -666,6 +637,8 @@ private:
 
     void            UpdateButtonStates();
     void            Init();
+    bool            DeleteSelectedContent();
+    void            DeleteSelectedTopLevel();
 
 public:
     SvxToolbarConfigPage( Window *pParent, const SfxItemSet& rItemSet );
@@ -674,6 +647,8 @@ public:
     SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
                                              bool bFront = FALSE,
                                              bool bAllowDuplicates = TRUE );
+
+    void            MoveEntry( bool bMoveUp );
 
     SaveInData*     CreateSaveInData(
         const ::com::sun::star::uno::Reference <
