@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:08:40 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 08:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>
@@ -588,16 +591,60 @@ SwDoc* Reader::GetTemplateDoc()
         if( bLoad )
         {
             ClearTemplate();
+            ASSERT( !pTemplate, "Who holds the template doc?" );
 
             SvStorageRef xStor( new SvStorage( aTDir.GetFull(), STREAM_READ ));
-            pTemplate = new SwDoc;
-            pTemplate->AddLink();
+            ULONG nFormat = xStor->GetFormat();
+            long nVersion = SOFFICE_FILEFORMAT_60;
+            switch( nFormat )
+            {
+            case SOT_FORMATSTR_ID_STARWRITER_50:
+            case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
+            case SOT_FORMATSTR_ID_STARWRITERWEB_50:
+                nVersion = SOFFICE_FILEFORMAT_50;
+                break;
+            case SOT_FORMATSTR_ID_STARWRITER_40:
+            case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
+            case SOT_FORMATSTR_ID_STARWRITERWEB_40:
+                nVersion = SOFFICE_FILEFORMAT_40;
+                break;
+            case SOT_FORMATSTR_ID_STARWRITER_30:
+                nVersion = SOFFICE_FILEFORMAT_31;
+                break;
+            }
+            if( nVersion >= SOFFICE_FILEFORMAT_60 )
+            {
+                SwDocShell *pDocSh =
+                    new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
+                SvEmbeddedObjectRef xDocSh = pDocSh;
+                if( pDocSh->DoInitNew( 0 ) )
+                {
+                    pTemplate = pDocSh->GetDoc();
+                    pTemplate->SetOle2Link( Link() );
+                    pTemplate->DoUndo( FALSE );     // always FALSE
+                    pTemplate->SetBrowseMode( bTmplBrowseMode );
 
-            // sicher ist sicher
-            pTemplate->SetBrowseMode( bTmplBrowseMode );
+                    ReadXML->SetOrganizerMode( TRUE );
+                    SwReader aRdr( *xStor, aEmptyStr, pTemplate );
+                    aRdr.Read( *ReadXML );
+                    ReadXML->SetOrganizerMode( FALSE );
 
-            Sw3Io aIO( *pTemplate );
-            aIO.LoadStyles( xStor );
+                    pTemplate->AddLink();
+                }
+            }
+            else
+            {
+                pTemplate = new SwDoc;
+                pTemplate->AddLink();
+
+                // sicher ist sicher
+                pTemplate->SetBrowseMode( bTmplBrowseMode );
+
+                xStor->SetVersion( nVersion );
+
+                Sw3Io aIO( *pTemplate );
+                aIO.LoadStyles( xStor );
+            }
         }
 
         ASSERT( !pTemplate || FStatHelper::IsDocument( aTDir.GetMainURL() ) ||
@@ -1086,6 +1133,9 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/03/06 11:08:40  mib
+      organizer support for XML file format
+
       Revision 1.7  2001/02/08 12:48:41  jp
       remove using statements
 

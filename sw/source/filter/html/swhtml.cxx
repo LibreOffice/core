@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-08 15:14:18 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 08:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,12 +334,25 @@ HTMLReader::HTMLReader()
             String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("internal")) );
     sTemplate += INET_PATH_TOKEN;
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
+    String sTemplateWithoutExt( sTemplate );
 #ifndef MAC_WITHOUT_EXT
-    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".vor") );
+    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
 #endif
 
     SvtPathOptions aOpt;
-    if( aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
+    // 6.0 (extension .stw)
+    BOOL bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+
+#ifndef MAC_WITHOUT_EXT
+    if( !bSet )
+    {
+        // 5.0 (extension .vor)
+        sTemplate = sTemplateWithoutExt;
+        sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".vor") );
+        bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+    }
+#endif
+    if( bSet )
         SetTemplateName( sTemplate );
 #ifndef PRODUCT
     else
@@ -5249,6 +5262,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/08 15:14:18  mib
+      #75662#: Don't add blanks to comments
+
       Revision 1.5  2000/11/20 14:45:26  jp
       UpdateDocState without second parameter
 
