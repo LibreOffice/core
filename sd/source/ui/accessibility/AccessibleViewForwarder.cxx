@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 08:44:42 $
+ *  last change: $Author: af $ $Date: 2002-11-27 12:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,13 @@ Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != NULL);
     OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
-    return pDevice->LogicToPixel (rPoint) + aBBox.TopLeft();
+    if (pDevice != NULL)
+    {
+        Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
+        return pDevice->LogicToPixel (rPoint) + aBBox.TopLeft();
+    }
+    else
+        return Point();
 }
 
 
@@ -160,7 +165,10 @@ Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
 {
     OSL_ASSERT (mpView != NULL);
     OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    return pDevice->LogicToPixel (rSize);
+    if (pDevice != NULL)
+        return pDevice->LogicToPixel (rSize);
+    else
+        return Size();
 }
 
 
@@ -173,8 +181,13 @@ Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
 {
     OSL_ASSERT (mpView != NULL);
     OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
-    return pDevice->PixelToLogic (rPoint - aBBox.TopLeft());
+    if (pDevice != NULL)
+    {
+        Rectangle aBBox (static_cast<Window*>(pDevice)->GetWindowExtentsRelative(NULL));
+        return pDevice->PixelToLogic (rPoint - aBBox.TopLeft());
+    }
+    else
+        return Point();
 }
 
 
@@ -184,7 +197,10 @@ Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 {
     OSL_ASSERT (mpView != NULL);
     OutputDevice* pDevice = mpView->GetWin(mnWindowId);
-    return pDevice->PixelToLogic (rSize);
+    if (pDevice != NULL)
+        return pDevice->PixelToLogic (rSize);
+    else
+        return Size();
 }
 
 
