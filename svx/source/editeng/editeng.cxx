@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:34:30 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,7 +2256,7 @@ void EditEngine::CompleteOnlineSpelling()
         pImpEditEngine->StopOnlineSpellTimer();
         pImpEditEngine->DoOnlineSpelling( 0, sal_True, sal_False );
     }
-#endif SVX_LIGHT
+#endif // SVX_LIGHT
 }
 
 USHORT EditEngine::FindParagraph( long nDocPosY )
