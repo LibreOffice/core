@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:11:02 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 17:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 
 #include <time.h>
 #include <time.hxx>
+
+#if defined(SOLARIS) && defined(__GNUC__)
+extern long altzone;
+#endif
 
 #ifndef WNT
 #ifndef localtime_r
