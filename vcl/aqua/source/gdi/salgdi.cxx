@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.37 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-03 21:28:40 $
+ *  $Revision: 1.38 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-03 22:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1900,12 +1900,15 @@ void SalGraphics::DrawText( long                nX,
 
             if ( aQDStatus == noErr )
             {
-                short        nFirstByte  = 0;
-                short        nByteCount  = nLen;
-                const char  *pTextBuffer = aByteString.GetBuffer();
+                short           nFirstByte     = 0;
+                short           nByteCount     = nLen;
+                const char     *pTextBuffer    = aByteString.GetBuffer();
+                const RGBColor  aFontForeColor = maGraphicsData.maFontColor;
 
                 if ( pTextBuffer != NULL )
                 {
+                    RGBForeColor( &aFontForeColor );
+
                     MoveTo( nX, nY );
 
                     ::MacDrawText( pTextBuffer, nFirstByte, nByteCount );
