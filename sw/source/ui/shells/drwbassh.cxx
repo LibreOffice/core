@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,12 @@
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
-#ifndef _SVX_TRANSFRM_HXX //autogen
-#include <svx/transfrm.hxx>
-#endif
-#ifndef _SVX_LABDLG_HXX //autogen
-#include <svx/labdlg.hxx>
-#endif
+//CHINA001 #ifndef _SVX_TRANSFRM_HXX //autogen
+//CHINA001 #include <svx/transfrm.hxx>
+//CHINA001 #endif
+//#ifndef _SVX_LABDLG_HXX //autogen
+//#include <svx/labdlg.hxx>
+//#endif    delete by CHINA001
 #ifndef _SVX_ANCHORID_HXX //autogen
 #include <svx/anchorid.hxx>
 #endif
@@ -151,9 +151,9 @@
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
-#ifndef _SVX_DLG_NAME_HXX
-#include <svx/dlgname.hxx>
-#endif
+//CHINA001 #ifndef _SVX_DLG_NAME_HXX
+//CHINA001 #include <svx/dlgname.hxx>
+//CHINA001 #endif
 #ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
 #endif
@@ -173,6 +173,9 @@
 #ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
 #endif
+//add header of cui CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 {
@@ -306,7 +309,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     if( rMarkList.GetMark(0) != 0 )
                     {
                         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
-                        SfxTabDialog *pDlg;
+                        //SfxTabDialog *pDlg;       delete for cui CHINA001
+                        SfxAbstractTabDialog *pDlg=NULL; //add CHINA001
                         BOOL bCaption = FALSE;
 
                         // Erlaubte Verankerungen:
@@ -322,10 +326,25 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             bCaption = TRUE;
 
                         if (bCaption)
-                            pDlg = new SvxCaptionTabDialog(NULL, pSdrView, nAllowedAnchors);
+                            //pDlg = new SvxCaptionTabDialog(NULL, pSdrView, nAllowedAnchors);
+                        {//change for cui CHINA001
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            if ( pFact )
+                            {
+                                pDlg = pFact->CreateCaptionDialog( NULL, pSdrView, ResId( RID_SVXDLG_CAPTION ), nAllowedAnchors );
+                                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                            }
+                        }
                         else
-                            pDlg = new SvxTransformTabDialog(NULL, NULL, pSdrView, nAllowedAnchors);
-
+                        {
+                            //CHINA001 SfxTabDialog *pDlg = new SvxTransformTabDialog(NULL, NULL, pSdrView, nAllowedAnchors);
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            if ( pFact )
+                            {
+                                pDlg = pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView,ResId( RID_SVXDLG_TRANSFORM ), nAllowedAnchors );
+                                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                            }
+                        }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
 
                         const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
@@ -381,6 +400,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             pSh->EndAllAction();
                         }
                         delete pDlg;
+
                     }
                 }
             }
@@ -558,7 +578,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             DBG_ASSERT(pObj->ISA(SdrObjGroup),
                 "Object is not a group, graphic or OLE shape")
             sName = pObj->GetName();
-            SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
+            //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, sName, sDesc, ResId(RID_SVXDLG_NAME) );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->SetText(SW_RESSTR(STR_NAME_GROUP_DIALOG));
             // #100286# -------------
             pDlg->SetEditHelpId( HID_FORMAT_NAME_OBJECT_NAME );
@@ -593,7 +617,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 /* -----------------------------27.02.2002 15:27------------------------------
     Checks whether a given name is allowed for a group shape
  ---------------------------------------------------------------------------*/
-IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, SvxNameDialog*, pNameDialog )
+IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNameDialog )
 {
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
