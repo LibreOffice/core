@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:03 $
+ *  last change: $Author: cmc $ $Date: 2002-08-20 14:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
 #endif
 
 #include <string.h>         // memset()
@@ -2407,20 +2410,20 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp( BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
     : nItemSize( nItemSiz ), nFilePos( _nFilePos ), ePLCF( ePl ), nIdx( 0 ),
     maSprmParser(nFibVer)
 {
-    pFkp = new INT32[128]; // 512 Byte
-    BYTE *pScratch=(BYTE *)pFkp;
+    pFCFkp = new INT32[128]; // 512 Byte
+    BYTE *pScratch=(BYTE *)pFCFkp;
 
     long nOldPos = pSt->Tell();
 
     pSt->Seek( nFilePos );
-    pSt->Read( pFkp, 512 );
+    pSt->Read( pFCFkp, 512 );
     nIMax = pScratch[511];
 #ifdef __BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pFkp[nIdx] = SWAPLONG( pFkp[nIdx] );
+        pFCFkp[nIdx] = SWAPLONG( pFCFkp[nIdx] );
 #endif // __BIGENDIAN
 
-    // Pointer auf Offset-Bereich in *pFkp
+    // Pointer auf Offset-Bereich in *pFCFkp
     BYTE* pOfs = pScratch + (nIMax + 1) * 4;
 
     pGrpprl = new WW8Grpprl[nIMax];
@@ -2494,18 +2497,25 @@ WW8PLCFx_Fc_FKP::WW8Fkp::~WW8Fkp()
             delete[] pTmpGrpprl->pData;
     }
     delete[] pGrpprl;
-    delete[] pFkp;
+    delete[] pFCFkp;
+}
+
+void WW8PLCFx_Fc_FKP::WW8Fkp::Reset(WW8_FC nFc)
+{
+    SetIdx(0);
+    if (nFc >= 0 )
+        SeekPos(nFc);
 }
 
 bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
 {
-    if( nFc < pFkp[0] )
+    if( nFc < pFCFkp[0] )
     {
         nIdx = 0;
         return false;       // Nicht gefunden: nPos unterhalb kleinstem Eintrag
     }
     // Search from beginning?
-    if( (1 > nIdx) || (nFc < pFkp[nIdx-1]) )
+    if( (1 > nIdx) || (nFc < pFCFkp[nIdx-1]) )
         nIdx = 1;
 
     long nI   = nIdx ? nIdx : 1;
@@ -2515,7 +2525,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
     {
         for( ; nI <=nEnd; ++nI)
         {                               // Suchen mit um 1 erhoehtem Index
-            if( nFc < pFkp[nI] )
+            if( nFc < pFCFkp[nI] )
             {                           // Position gefunden
                 nIdx = nI - 1;          // nI - 1 ist der richtige Index
                 return true;            // ... und fertig
@@ -2539,8 +2549,8 @@ BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get( WW8_FC& rStart, WW8_FC& rEnd, long& rLen )
         return 0;
     }
 
-    rStart = pFkp[nIdx  ];
-    rEnd   = pFkp[nIdx+1];
+    rStart = pFCFkp[nIdx  ];
+    rEnd   = pFCFkp[nIdx+1];
 
     BYTE* pSprms = GetLenAndIStdAndSprms( rLen );
     return pSprms;
@@ -2604,7 +2614,7 @@ ULONG WW8PLCFx_Fc_FKP::WW8Fkp::GetParaHeight() const
     if( nIdx >= nIMax )
         return 0;
 
-    BYTE *pScratch = (BYTE*)pFkp;
+    BYTE *pScratch = (BYTE*)pFCFkp;
 
     WW8_PHE_Base* pPhe = (WW8_PHE_Base*)( (pScratch + (nIMax + 1) * 4)
                                         + ( nIdx * nItemSize ) + 1 );
@@ -2655,6 +2665,17 @@ void WW8PLCFx::SetIdx2(ULONG )
 {
 }
 
+class SamePos :
+    public std::unary_function<const WW8PLCFx_Fc_FKP::WW8Fkp *, bool>
+{
+private:
+    long mnPo;
+public:
+    SamePos(long nPo) : mnPo(nPo) {};
+    bool operator()(const WW8PLCFx_Fc_FKP::WW8Fkp *pFkp)
+        {return mnPo == pFkp->GetFilePos();}
+};
+
 //-----------------------------------------
 bool WW8PLCFx_Fc_FKP::NewFkp()
 {
@@ -2687,7 +2708,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
     if (!pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ))
     {
-        DELETEZ( pFkp );
+        pFkp = 0;
         return false;                           // PLCF fertig abgearbeitet
     }
     (*pPLCF)++;
@@ -2695,17 +2716,28 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
     nPo <<= 9;                                  // shift als LONG
 
     long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
-    if( nAktFkpFilePos != nPo )
+    if (nAktFkpFilePos == nPo)
+        pFkp->Reset(GetStartFc()); // #79464# //
+    else
     {
-        delete pFkp;
-        pFkp = new WW8Fkp( GetVersion(), pFKPStrm, pDataStrm, nPo,
-            pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc() );
-    }
-    else // #79464# //
-    {
-        pFkp->SetIdx( 0 );
-        if( GetStartFc() >= 0 )
-            pFkp->SeekPos( GetStartFc() );
+        myiter aIter =
+            std::find_if(maFkpCache.begin(), maFkpCache.end(), SamePos(nPo));
+        if (aIter != maFkpCache.end())
+        {
+            pFkp = *aIter;
+            pFkp->Reset(GetStartFc());
+        }
+        else if (pFkp = new WW8Fkp( GetVersion(), pFKPStrm, pDataStrm, nPo,
+            pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc() ))
+        {
+            maFkpCache.push_back(pFkp);
+
+            if (maFkpCache.size() > eMaxCache)
+            {
+                delete maFkpCache.front();
+                maFkpCache.pop_front();
+            }
+        }
     }
 
     SetStartFc( -1 );                                   // Nur das erste Mal
@@ -2733,7 +2765,9 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTblSt,
 
 WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
 {
-    delete pFkp;
+    myiter aEnd = maFkpCache.end();
+    for (myiter aIter = maFkpCache.begin(); aIter != aEnd; ++aIter)
+        delete *aIter;
     delete pPLCF;
     delete pPCDAttrs;
 }
@@ -2741,7 +2775,7 @@ WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
 ULONG WW8PLCFx_Fc_FKP::GetIdx() const
 {
     ULONG u = pPLCF->GetIdx() << 8;
-    if( pFkp )
+    if (pFkp)
         u |= pFkp->GetIdx();
     return u;
 }
@@ -2751,7 +2785,7 @@ void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
     if( !( nIdx & 0xffffff00L ) )
     {
         pPLCF->SetIdx( nIdx >> 8 );
-        DELETEZ( pFkp );
+        pFkp = 0;
     }
     else
     {                                   //Es gab einen Fkp
@@ -2777,8 +2811,8 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
     {
         long nPo = SVBT16ToShort( (BYTE *)pPage );
         nPo <<= 9;                                          // shift als LONG
-        if( nPo != pFkp->GetFilePos() )
-            DELETEZ( pFkp );
+        if (nPo != pFkp->GetFilePos())
+            pFkp = 0;
         else
             pFkp->SeekPos( nFcPos );
     }
@@ -2796,7 +2830,7 @@ WW8_FC WW8PLCFx_Fc_FKP::Where()
     if( nP != LONG_MAX )
         return nP;
 
-    DELETEZ( pFkp );                    // FKP beendet -> hole neuen
+    pFkp = 0;                   // FKP beendet -> hole neuen
     return Where();                     // am einfachsten rekursiv
 }
 

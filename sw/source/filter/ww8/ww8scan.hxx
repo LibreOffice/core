@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:04 $
+ *  last change: $Author: cmc $ $Date: 2002-08-20 14:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
+#ifndef __SGI_STL_LIST
+#include <list>
 #endif
 
 #ifndef _SOLAR_H
@@ -481,7 +484,7 @@ public:
 */
 class WW8PLCFx_Fc_FKP : public WW8PLCFx
 {
-private:
+public:
     class WW8Fkp        // Iterator for Formatted Disk Page
     {
     private:
@@ -495,7 +498,7 @@ private:
 
         WW8Grpprl* pGrpprl; // Pointer of Meta Array (pointing
 
-        WW8_FC* pFkp;       // gesamter Fkp
+        WW8_FC* pFCFkp;     // gesamter Fkp
 
         long nItemSize;     // entweder 1 Byte oder ein komplettes BX
 
@@ -509,12 +512,13 @@ private:
     public:
         WW8Fkp (BYTE nFibVer,SvStream* pFKPStrm,SvStream* pDataStrm,
             long _nFilePos,long nItemSiz,ePLCFT ePl,WW8_FC nStartFc = -1);
+        void Reset(WW8_FC nPos);
         ~WW8Fkp();
         long GetFilePos() const { return nFilePos; }
         ULONG GetIdx() const { return nIdx; }
         void SetIdx( ULONG nI );
         bool SeekPos( long nPos );
-        WW8_FC Where() const { return (nIdx < nIMax) ? pFkp[nIdx] : LONG_MAX; }
+        WW8_FC Where() const { return (nIdx < nIMax) ? pFCFkp[nIdx] : LONG_MAX; }
         WW8Fkp& operator ++( int )
         {
             if( nIdx < nIMax )
@@ -540,11 +544,28 @@ private:
 
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
     };
-
+private:
     SvStream* pFKPStrm;         // Input-File
     SvStream* pDataStrm;        // Input-File
     WW8PLCF* pPLCF;
     WW8Fkp* pFkp;
+
+    /*
+        #100042#
+        Keep a cache of eMaxCache entries of previously seen pFkps, which
+        speeds up considerably table parsing and load save plcfs for what turn
+        out to be small text frames, which frames generally are
+
+        size      : cache hits
+        cache all : 19168 pap, 48 chp
+        == 100    : 19166 pap, 48 chp
+        == 50     : 18918 pap, 48 chp
+        == 10     : 18549 pap, 47 chp
+        == 5      : 18515 pap, 47 chp
+    */
+    typedef std::list<WW8Fkp*>::iterator myiter;
+    std::list<WW8Fkp*> maFkpCache;
+    enum Limits {eMaxCache = 5};
 
     bool NewFkp();
 

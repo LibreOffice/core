@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:58 $
+ *  last change: $Author: cmc $ $Date: 2002-08-20 14:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2315,7 +2315,6 @@ void SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             If we are inside another frame we have to adjust our x and y
             offsets correspondingly by the offsets of the parent
             */
-            const SwFrmFmt *pFmt = pPaM->GetCntntNode()->GetFrmFmt();
             if (pSFlyPara && pSFlyPara->pFlyFmt && !pRecord->bReplaceByFly)
             {
                 SwFlyFrmFmt *pFmt = pSFlyPara->pFlyFmt;
