@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
+ *  last change: $Author: fs $ $Date: 2002-01-29 12:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,9 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     Reference< XResultSet > xResultSet(xMaster, UNO_QUERY);
     Reference< XRowLocate > xCursor(xMaster, UNO_QUERY);
     Reference< XPropertySet > xMasterProps(xMaster, UNO_QUERY);
+
+    setLoadingStarted();
+
     try
     {
         // switch the control to design mode
