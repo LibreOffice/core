@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 09:11:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 11:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ OLEVariant::~OLEVariant()
 OLEVariant::OLEVariant(const ::com::sun::star::util::Date& x )
 {
     VariantInit(this);
-    vt      = VT_R8;
-    dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
+    vt      = VT_DATE;
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::OLEVariant(const ::com::sun::star::util::Time& x )
 {
@@ -176,7 +176,7 @@ OLEVariant::OLEVariant(const ::com::sun::star::util::DateTime& x )
 {
     VariantInit(this);
     vt      = VT_R8;
-    dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::OLEVariant(const float &x)
 {
@@ -264,15 +264,15 @@ VARTYPE OLEVariant::getType() const { return vt; }
 
 OLEVariant::operator ::com::sun::star::util::Date() const
 {
-    return isNull() ? ::com::sun::star::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(date,::com::sun::star::util::Date(30,12,1899));
+    return isNull() ? ::com::sun::star::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(getDate(),::com::sun::star::util::Date(30,12,1899));
 }
 OLEVariant::operator ::com::sun::star::util::Time() const
 {
-    return isNull() ? ::com::sun::star::util::Time() : ::dbtools::DBTypeConversion::toTime(date);
+    return isNull() ? ::com::sun::star::util::Time() : ::dbtools::DBTypeConversion::toTime(getDate());
 }
 OLEVariant::operator ::com::sun::star::util::DateTime()const
 {
-    return isNull() ? ::com::sun::star::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(date,::com::sun::star::util::Date(30,12,1899));
+    return isNull() ? ::com::sun::star::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(getDate(),::com::sun::star::util::Date(30,12,1899));
 }
 
 VARIANT_BOOL OLEVariant::VariantBool(sal_Bool bEinBoolean)
