@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:49:47 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ public:
     BOOL            ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
                                     BOOL bRecord, BOOL bApi );
 
-    BOOL            InsertCells( const ScRange& rRange, InsCellCmd eCmd, BOOL bRecord, BOOL bApi );
+    BOOL            InsertCells( const ScRange& rRange, InsCellCmd eCmd, BOOL bRecord, BOOL bApi,
+                                    BOOL bPartOfPaste = FALSE );
     BOOL            DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecord, BOOL bApi );
 
     BOOL            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,

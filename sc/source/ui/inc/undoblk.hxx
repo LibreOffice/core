@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:25:32 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@ public:
                     TYPEINFO();
                     ScUndoInsertCells( ScDocShell* pNewDocShell,
                                        const ScRange& rRange, InsCellCmd eNewCmd,
-                                       ScDocument* pUndoDocument, ScRefUndoData* pRefData );
+                                       ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                       BOOL bNewPartOfPaste );
     virtual         ~ScUndoInsertCells();
 
     virtual void    Undo();
@@ -99,10 +100,14 @@ public:
 
     virtual String  GetComment() const;
 
+    virtual BOOL    Merge( SfxUndoAction *pNextAction );
+
 private:
     ScRange         aEffRange;
     ULONG           nEndChangeAction;
     InsCellCmd      eCmd;
+    BOOL            bPartOfPaste;
+    SfxUndoAction*  pPasteUndo;
 
     void            DoChange ( const BOOL bUndo );
     void            SetChangeTrack();
@@ -194,6 +199,23 @@ private:
 };
 
 
+struct ScUndoPasteOptions
+{
+    USHORT nFunction;
+    BOOL bSkipEmpty;
+    BOOL bTranspose;
+    BOOL bAsLink;
+    InsCellCmd eMoveMode;
+
+    ScUndoPasteOptions() :
+        nFunction( PASTE_NOFUNC ),
+        bSkipEmpty( FALSE ),
+        bTranspose( FALSE ),
+        bAsLink( FALSE ),
+        eMoveMode( INS_NONE )
+    {}
+};
+
 class ScUndoPaste: public ScBlockUndo
 {
 public:
@@ -205,7 +227,8 @@ public:
                                  ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                                  USHORT nNewFlags,
                                  ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
-                                 BOOL bRedoIsFilled = TRUE );
+                                 BOOL bRedoIsFilled = TRUE,
+                                 const ScUndoPasteOptions* pOptions = NULL );
     virtual         ~ScUndoPaste();
 
     virtual void    Undo();
@@ -225,6 +248,7 @@ private:
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
     BOOL            bRedoFilled;
+    ScUndoPasteOptions aPasteOptions;
 
     void            DoChange( const BOOL bUndo );
     void            SetChangeTrack();

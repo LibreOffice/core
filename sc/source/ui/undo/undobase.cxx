@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:31:27 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 11:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      SfxUndoAction);
 TYPEINIT1(ScMoveUndo,       SfxUndoAction);
+TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
 
 // -----------------------------------------------------------------------
 
@@ -371,5 +372,93 @@ void ScMoveUndo::EndRedo()
 }
 */
 
+// -----------------------------------------------------------------------
+
+ScUndoWrapper::ScUndoWrapper( SfxUndoAction* pUndo ) :
+    pWrappedUndo( pUndo )
+{
+}
+
+ScUndoWrapper::~ScUndoWrapper()
+{
+    delete pWrappedUndo;
+}
+
+void ScUndoWrapper::ForgetWrappedUndo()
+{
+    pWrappedUndo = NULL;    // don't delete in dtor - pointer must be stored outside
+}
+
+String ScUndoWrapper::GetComment() const
+{
+    if (pWrappedUndo)
+        return pWrappedUndo->GetComment();
+    else
+        return String();
+}
+
+String ScUndoWrapper::GetRepeatComment(SfxRepeatTarget& rTarget) const
+{
+    if (pWrappedUndo)
+        return pWrappedUndo->GetRepeatComment(rTarget);
+    else
+        return String();
+}
+
+USHORT ScUndoWrapper::GetId() const
+{
+    if (pWrappedUndo)
+        return pWrappedUndo->GetId();
+    else
+        return 0;
+}
+
+BOOL ScUndoWrapper::IsLinked()
+{
+    if (pWrappedUndo)
+        return pWrappedUndo->IsLinked();
+    else
+        return FALSE;
+}
+
+void ScUndoWrapper::SetLinked( BOOL bIsLinked )
+{
+    if (pWrappedUndo)
+        pWrappedUndo->SetLinked(bIsLinked);
+}
+
+BOOL ScUndoWrapper::Merge( SfxUndoAction* pNextAction )
+{
+    if (pWrappedUndo)
+        return pWrappedUndo->Merge(pNextAction);
+    else
+        return FALSE;
+}
+
+void ScUndoWrapper::Undo()
+{
+    if (pWrappedUndo)
+        pWrappedUndo->Undo();
+}
+
+void ScUndoWrapper::Redo()
+{
+    if (pWrappedUndo)
+        pWrappedUndo->Redo();
+}
+
+void ScUndoWrapper::Repeat(SfxRepeatTarget& rTarget)
+{
+    if (pWrappedUndo)
+        pWrappedUndo->Repeat(rTarget);
+}
+
+BOOL ScUndoWrapper::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    if (pWrappedUndo)
+        return pWrappedUndo->CanRepeat(rTarget);
+    else
+        return FALSE;
+}
 
 

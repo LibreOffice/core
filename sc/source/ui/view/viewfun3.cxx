@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 10:07:34 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,19 +742,16 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     BOOL bInsertCells = ( eMoveMode != INS_NONE && nEndCol <= MAXCOL && nEndRow <= MAXROW );
     if ( bInsertCells )
     {
-        if (bRecord)
-        {
-            String aUndo = ScGlobal::GetRscString( STR_UNDO_PASTE );
-            pUndoMgr->EnterListAction( aUndo, aUndo );
-        }
+        //  #94115# Instead of EnterListAction, the paste undo action is merged into the
+        //  insert action, so Repeat can insert the right cells
 
         MarkRange( aUserRange );            // wird vor CopyFromClip sowieso gesetzt
 
         // #72930# CutMode is reset on insertion of cols/rows but needed again on cell move
         BOOL bCut = pClipDoc->IsCutMode();
-        if (!InsertCells( eMoveMode ))      // kann eingefuegt werden?
+        if (!InsertCells( eMoveMode, bRecord, TRUE ))   // is inserting possible?
         {
-            delete pTransClip;              // abbrechen
+            delete pTransClip;                          // cancel
             pUndoMgr->LeaveListAction();
             return FALSE;
         }
@@ -812,8 +809,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     {
         ErrorMessage(STR_PASTE_FULL);
         delete pTransClip;
-        if ( bInsertCells && bRecord)
-            pUndoMgr->LeaveListAction();
         return FALSE;
     }
 
@@ -825,8 +820,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     {
         ErrorMessage(STR_PROTECTIONERR);
         delete pTransClip;
-        if ( bInsertCells && bRecord)
-            pUndoMgr->LeaveListAction();
         return FALSE;
     }
 
@@ -842,8 +835,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         {       // "Zusammenfassen nicht verschachteln !"
             ErrorMessage(STR_MSSG_PASTEFROMCLIP_1);
             delete pTransClip;
-            if ( bInsertCells && bRecord)
-                pUndoMgr->LeaveListAction();
             return FALSE;
         }
 
@@ -1009,17 +1000,30 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         //  DeleteUnchanged for pUndoData is in ScUndoPaste ctor,
         //  UndoData for redo is made during first undo
 
-        pUndoMgr->AddUndoAction(
-            new ScUndoPaste( pDocSh,
+        ScUndoPasteOptions aOptions;            // store options for repeat
+        aOptions.nFunction  = nFunction;
+        aOptions.bSkipEmpty = bSkipEmpty;
+        aOptions.bTranspose = bTranspose;
+        aOptions.bAsLink    = bAsLink;
+        aOptions.eMoveMode  = eMoveMode;
+
+        SfxUndoAction* pUndo = new ScUndoPaste( pDocSh,
                                 nStartCol, nStartRow, nStartTab,
                                 nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                 pUndoDoc, pRedoDoc, nFlags | nUndoFlags,
                                 pUndoData, NULL, NULL, NULL,
-                                FALSE ) );  // FALSE = Redo-Daten sind nicht kopiert
-    }
+                                FALSE, &aOptions );     // FALSE = Redo data not yet copied
 
-    if ( bInsertCells )
-        pUndoMgr->LeaveListAction();
+        if ( bInsertCells )
+        {
+            //  Merge the paste undo action into the insert action.
+            //  Use ScUndoWrapper so the ScUndoPaste pointer can be stored in the insert action.
+
+            pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), TRUE );
+        }
+        else
+            pUndoMgr->AddUndoAction( pUndo );
+    }
 
     USHORT nPaint = PAINT_GRID;
     if (bColInfo)

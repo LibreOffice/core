@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 15:16:45 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 11:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,13 @@ TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
                                 const ScRange& rRange, InsCellCmd eNewCmd,
-                                ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
+                                ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                BOOL bNewPartOfPaste ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
     aEffRange( rRange ),
-    eCmd( eNewCmd )
+    eCmd( eNewCmd ),
+    bPartOfPaste( bNewPartOfPaste ),
+    pPasteUndo( NULL )
 {
     if (eCmd == INS_INSROWS)            // ganze Zeilen?
     {
@@ -162,11 +165,37 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
 
 __EXPORT ScUndoInsertCells::~ScUndoInsertCells()
 {
+    delete pPasteUndo;
 }
 
 String __EXPORT ScUndoInsertCells::GetComment() const
 {
-    return ScGlobal::GetRscString( STR_UNDO_INSERTCELLS ); // "Einfuegen"
+    return ScGlobal::GetRscString( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
+}
+
+BOOL ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
+{
+    //  If a paste undo action has already been added, append (detective) action there.
+    if ( pPasteUndo )
+        return pPasteUndo->Merge( pNextAction );
+
+    if ( bPartOfPaste && pNextAction->ISA( ScUndoWrapper ) )
+    {
+        ScUndoWrapper* pWrapper = (ScUndoWrapper*)pNextAction;
+        SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
+        if ( pWrappedAction && pWrappedAction->ISA( ScUndoPaste ) )
+        {
+            //  Store paste action if this is part of paste with inserting cells.
+            //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
+
+            pPasteUndo = pWrappedAction;
+            pWrapper->ForgetWrappedUndo();      // pWrapper is deleted by UndoManager
+            return TRUE;
+        }
+    }
+
+    //  Call base class for detective handling
+    return ScMoveUndo::Merge( pNextAction );
 }
 
 void ScUndoInsertCells::SetChangeTrack()
@@ -259,6 +288,9 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
 
 void __EXPORT ScUndoInsertCells::Undo()
 {
+    if ( pPasteUndo )
+        pPasteUndo->Undo();     // undo paste first
+
     WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
     BeginUndo();
     DoChange( TRUE );
@@ -271,12 +303,25 @@ void __EXPORT ScUndoInsertCells::Redo()
     BeginRedo();
     DoChange( FALSE );
     EndRedo();
+
+    if ( pPasteUndo )
+        pPasteUndo->Redo();     // redo paste last
 }
 
 void __EXPORT ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->InsertCells( eCmd, TRUE );
+    {
+        if ( pPasteUndo )
+        {
+            //  #94115# Repeat for paste with inserting cells is handled completely
+            //  by the Paste undo action
+
+            pPasteUndo->Repeat( rTarget );
+        }
+        else
+            ((ScTabViewTarget&)rTarget).GetViewShell()->InsertCells( eCmd, TRUE );
+    }
 }
 
 BOOL __EXPORT ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -746,7 +791,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
                 USHORT nNewFlags,
                 ScRefUndoData* pRefData,
                 void* pFill1, void* pFill2, void* pFill3,
-                BOOL bRedoIsFilled ) :
+                BOOL bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
     ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),
@@ -765,6 +810,9 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
 
     if ( pRefUndoData )
         pRefUndoData->DeleteUnchanged( pDocShell->GetDocument() );
+
+    if ( pOptions )
+        aPasteOptions = *pOptions;      // used only for Repeat
 
     SetChangeTrack();
 }
@@ -931,15 +979,14 @@ void __EXPORT ScUndoPaste::Redo()
 
 void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 {
-//? Extra-Flags sichern ?
-
     if (rTarget.ISA(ScTabViewTarget))
     {
         ScTabViewShell* pViewSh = ((ScTabViewTarget&)rTarget).GetViewShell();
         ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pViewSh->GetActiveWin() );
         if (pOwnClip)
             pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument(),
-                                    PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                                    aPasteOptions.nFunction, aPasteOptions.bSkipEmpty, aPasteOptions.bTranspose,
+                                    aPasteOptions.bAsLink, aPasteOptions.eMoveMode, IDF_NONE,
                                     TRUE );     // allow warning dialog
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:05:50 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,7 +1170,7 @@ BOOL ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
 //------------------------------------------------------------------------
 
 BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
-                                BOOL bRecord, BOOL bApi )
+                                BOOL bRecord, BOOL bApi, BOOL bPartOfPaste )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -1340,7 +1340,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
                 new ScUndoInsertCells( &rDocShell, ScRange(
                                                 nStartCol,nStartRow,nStartTab,
                                                 nEndCol,nEndRow,nEndTab ),
-                                        eCmd, pRefUndoDoc, pUndoData ) );
+                                        eCmd, pRefUndoDoc, pUndoData, bPartOfPaste ) );
         }
 
         if (bNeedRefresh)

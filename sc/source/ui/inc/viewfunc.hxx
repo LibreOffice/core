@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 15:15:38 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ public:
     BOOL            Unprotect( USHORT nTab, const String& rPassword );
 
     void            DeleteCells( DelCellCmd eCmd, BOOL bRecord = TRUE );
-    BOOL            InsertCells( InsCellCmd eCmd, BOOL bRecord = TRUE );
+    BOOL            InsertCells( InsCellCmd eCmd, BOOL bRecord = TRUE, BOOL bPartOfPaste = FALSE );
     void            DeleteMulti( BOOL bRows, BOOL bRecord = TRUE );
 
     void            DeleteContents( USHORT nFlags, BOOL bRecord = TRUE );

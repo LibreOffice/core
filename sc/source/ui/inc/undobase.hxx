@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,31 @@ private:
     void            UndoRef();
 };
 
+//----------------------------------------------------------------------------
+
+class ScUndoWrapper: public SfxUndoAction           // for manual merging of actions
+{
+    SfxUndoAction*  pWrappedUndo;
+
+public:
+                            TYPEINFO();
+                            ScUndoWrapper( SfxUndoAction* pUndo );
+    virtual                 ~ScUndoWrapper();
+
+    SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo; }
+    void                    ForgetWrappedUndo();
+
+    virtual BOOL            IsLinked();
+    virtual void            SetLinked( BOOL bIsLinked );
+    virtual void            Undo();
+    virtual void            Redo();
+    virtual void            Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual String          GetComment() const;
+    virtual String          GetRepeatComment(SfxRepeatTarget&) const;
+    virtual USHORT          GetId() const;
+};
 
 
 #endif

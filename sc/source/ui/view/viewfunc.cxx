@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-05 10:31:03 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 10:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,13 +1524,13 @@ void ScViewFunc::UpdateStyleSheetInUse( SfxStyleSheet* pStyleSheet )
 
 //  Zellen einfuegen - Undo OK
 
-BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord )
+BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord, BOOL bPartOfPaste )
 {
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange))
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
-        BOOL bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, eCmd, bRecord, FALSE );
+        BOOL bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, eCmd, bRecord, FALSE, bPartOfPaste );
         if (bSuccess)
         {
             pDocSh->UpdateOle(GetViewData());
