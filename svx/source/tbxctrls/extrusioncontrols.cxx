@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:18:07 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,10 +666,10 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, pControl )
 
             Any a;
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtrusionDepthDialog.Depth" ));
+            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Depth" ));
             aDepthItem.QueryValue( a );
             aArgs[0].Value = a;
-            aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtrusionDepthDialog.Metric" ));
+            aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ));
             aMetricItem.QueryValue( a );
             aArgs[1].Value = a;
 
