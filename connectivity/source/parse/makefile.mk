@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-06 13:18:41 $
+#   last change: $Author: hjs $ $Date: 2002-04-26 10:33:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,8 @@ EXCEPTIONSFILES =  \
 
 .INCLUDE :  target.mk
 
-$(MISC)$/sqlflex.cxx:	sqlflex.l
+$(MISC)$/%.cxx:	%.l
     +flex -i -8 -PSQLyy -L -o$(MISC)$/sqlflex.cxx sqlflex.l
 
+$(INCCOM)$/sqlbison.hxx : $(YACCTARGET)
+$(EXCEPTIONSFILES) : $(INCCOM)$/sqlbison.hxx
