@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 07:32:36 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,8 @@ void ScDLL::Init()
     SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
     SvxFrameLineColorToolBoxControl ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
-    SvxUndoControl                  ::RegisterControl(SID_UNDO,                 pMod );
-    SvxRedoControl                  ::RegisterControl(SID_REDO,                 pMod );
+    SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
+    SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
     SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);
