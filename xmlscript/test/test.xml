@@ -1,0 +1,35 @@
+<window xmlns="http://openoffice.org/2000/dialog"
+    xmlns:dlg="http://openoffice.org/2000/dialog"
+
+    label="Test-Dialog" height="400" width="400">
+
+<dlg:styles>
+  <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
+  <dlg:style style-id="bla2" background-color="0xff00ff" dlg:text-color="255193873"/>
+  <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>
+</dlg:styles>
+
+    <dlg:bulletinboard xmlns:ns="http://www.fake">
+        <button dlg:id="button1" ns:value="hallo" dlg:left="50" ns:top="50"  width="50" height="50"
+                style-id="bla3"
+                xmlns:ns="http://openoffice.org/2000/dialog"/>
+        <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50"  width="50" height="50"
+                style-id="bla"
+                xmlns:ns="http://openoffice.org/2000/dialog"/>
+        <checkbox id="check1" value="check one" checked="true" left="50" top="150" width="50" height="50"/>
+        <menulist id="list1" multiselection="true" left="150" top="150" width="50" height="50">
+        <menupopup>
+                <menuitem value="item1"/>
+                <menuitem value="item2" selected="true"/>
+                <menuitem value="item3" selected="true"/>
+        </menupopup>
+        </menulist>
+        <combobox id="combo1" value="combotext" left="50" top="250" width="50" height="50" spin-button="true">
+        <menupopup>
+                <menuitem value="Citem1"/>
+                <menuitem value="Citem2" selected="true"/>
+        </menupopup>
+        </combobox>
+    </dlg:bulletinboard>
+
+</window>
