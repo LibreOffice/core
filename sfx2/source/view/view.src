@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:20:19 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 20:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ InfoBox MSG_CANT_CLOSE
     Message [ english_us ] = "The document cannot be closed because a\n print job is being carried out." ;
     Message [ italian ] = "Non è possibile chiudere il documento poiché,\nc'è una stampa in corso." ;
     Message [ spanish ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo." ;
-    Message [ french ] = "Impossible de fermer le document \nparce que l'imprimante est active." ;
+    Message [ french ] = "Impossible de fermer le document :\nl'imprimante est encore active." ;
     Message [ dutch ] = "Het document kan op het moment niet worden gesloten,\ndaarer nog een afdrukopdracht wordt uitgevoerd." ;
     Message [ swedish ] = "Dokumentet kan inte stängas för tillfället\neftersom ett utskriftsuppdrag fortfarande utförs." ;
     Message [ danish ] = "Det er for tiden ikke muligt at afslutte programmet,\nfordi et udskriftsjob udføres." ;
