@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 07:51:18 $
+ *  last change: $Author: dvo $ $Date: 2001-05-14 13:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -241,6 +244,9 @@
 #endif
 #ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
 #include "XMLRedlineExport.hxx"
+#endif
+#ifndef _XMLOFF_MULTIPROPERTYSETHELPER_HXX
+#include "MultiPropertySetHelper.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1309,6 +1315,23 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
     }
 }
 
+static const sal_Char* aParagraphPropertyNames[] =
+{
+    "ParaStyleName",
+    "ParaConditionalStyleName",
+    "ParaChapterNumberingLevel",
+    "TextSection",
+    NULL
+};
+
+enum eParagraphPropertyNamesEnum
+{
+    PARA_STYLE_NAME = 0,
+    PARA_CONDITIONAL_STYLE_NAME = 1,
+    PARA_CHAPTER_NUMERBING_LEVEL = 2,
+    TEXT_SECTION = 3
+};
+
 void XMLTextParagraphExport::exportParagraph(
         const Reference < XTextContent > & rTextContent,
         sal_Bool bAutoStyles, sal_Bool bProgress, sal_Bool bExportParagraph )
@@ -1321,9 +1344,23 @@ void XMLTextParagraphExport::exportParagraph(
             pProgress->SetValue( pProgress->GetValue()+1 );
     }
 
-    Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo =
-        xPropSet->getPropertySetInfo();
+    // get property set or multi property set and initialize helper
+    MultiPropertySetHelper aPropSetHelper(aParagraphPropertyNames);
+    Reference<XMultiPropertySet> xMultiPropSet( rTextContent, UNO_QUERY );
+    Reference<XPropertySet> xPropSet( rTextContent, UNO_QUERY );
+
+    // check for supported properties
+    // TODO: move into calling method
+    if( xMultiPropSet.is() )
+        aPropSetHelper.hasProperties( xMultiPropSet );
+    else
+        aPropSetHelper.hasProperties( xPropSet );
+
+    if( xMultiPropSet.is() )
+        aPropSetHelper.getValues( xMultiPropSet );
+    else
+        aPropSetHelper.getValues( xPropSet );
+
     Any aAny;
 
     if( bExportParagraph )
@@ -1335,9 +1372,9 @@ void XMLTextParagraphExport::exportParagraph(
         else
         {
             OUString sStyle;
-            if( xPropSetInfo->hasPropertyByName( sParaStyleName ) )
+            if( aPropSetHelper.hasProperty( PARA_STYLE_NAME ) )
             {
-                aAny = xPropSet->getPropertyValue( sParaStyleName );
+                aAny = aPropSetHelper.getValue( PARA_STYLE_NAME );
                 aAny >>= sStyle;
             }
 
@@ -1347,10 +1384,10 @@ void XMLTextParagraphExport::exportParagraph(
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_style_name,
                                           sAutoStyle );
 
-            if( xPropSetInfo->hasPropertyByName( sParaConditionalStyleName ) )
+            if( aPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME ) )
             {
                 OUString sCondStyle;
-                aAny = xPropSet->getPropertyValue( sParaConditionalStyleName );
+                aAny = aPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME );
                 aAny >>= sCondStyle;
                 if( sCondStyle != sStyle )
                 {
@@ -1363,9 +1400,9 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            if( xPropSetInfo->hasPropertyByName( sParaChapterNumberingLevel ) )
+            if( aPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME ) )
             {
-                aAny = xPropSet->getPropertyValue( sParaChapterNumberingLevel );
+                aAny = aPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME );
                 aAny >>= nOutlineLevel;
                 if( -1 != nOutlineLevel )
                 {
@@ -1387,9 +1424,9 @@ void XMLTextParagraphExport::exportParagraph(
         xContentEnum = xCEA->createContentEnumeration( sTextContentService );
 
     Reference < XTextSection > xSection;
-    if (xPropSetInfo->hasPropertyByName(sTextSection))
+    if( aPropSetHelper.hasProperty( TEXT_SECTION ) )
     {
-        aAny = xPropSet->getPropertyValue(sTextSection);
+        aAny = aPropSetHelper.getValue( TEXT_SECTION );
         aAny >>= xSection;
     }
 
