@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:05:47 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,12 @@ namespace pcr
                     const ::com::sun::star::uno::Any& _rValue
                 );
 
+        /** retrieves the current <type scope="com.sun.star.beans">PropertyState</type>
+            of a virtual property
+        */
+        ::com::sun::star::beans::PropertyState
+                getVirtualPropertyState( sal_Int32 _nPropId );
+
         /** called to update properties which depend on a given properties's value
         */
         void    updateDependentProperties( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue );
@@ -500,7 +506,7 @@ namespace pcr
         void syncViewToProperty();
 
         // good candidates for (onClicked-)callbacks, again ....
-        void ChangeFontProperty(const ::rtl::OUString& rName);
+        void ChangeFontProperty();
         void ChangeEventProperty(const ::rtl::OUString& rName);
         void ChangeFormatProperty(const ::rtl::OUString& rName, const ::rtl::OUString& rCurVal);
         // and again ...
