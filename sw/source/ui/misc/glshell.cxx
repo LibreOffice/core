@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:36:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,18 +83,15 @@
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
 #endif
 #ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
 #endif
+
+#include <svx/acorrcfg.hxx>
+#include <sfx2/app.hxx>
 
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -189,7 +186,7 @@ void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                 const String& rShortNm, const String& rLongNm )
 {
-    const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
     SwTextBlocks * pBlock = ::GetGlossaries()->GetGroupDoc( rGroupName );
 
     SvxMacro aStart(aEmptyStr, aEmptyStr);
