@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:37:18 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 13:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,7 +1276,10 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
         rToken = maTokenString.copy( mnNextTokenPos,
                                      nTokenEndPos - mnNextTokenPos );
         mnNextTokenPos = nTokenEndPos + 1;
-        if( mnNextTokenPos >= maTokenString.getLength() )
+
+        // if the mnNextTokenPos is at the end of the string, we have
+        // to deliver an empty token
+        if( mnNextTokenPos > maTokenString.getLength() )
             mnNextTokenPos = -1;
     }
     else
