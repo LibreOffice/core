@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:25:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 08:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,8 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
 //------------------------------------------------------------------------------
 IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
 {
-    InvalidateFeature_Impl();
+    if(!OGenericUnoController_BASE::rBHelper.bInDispose)
+        InvalidateFeature_Impl();
     return 0L;
 }
 // -----------------------------------------------------------------------------
