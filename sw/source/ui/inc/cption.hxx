@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:39:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ class SwCaptionDialog : public SvxStandardDialog
         virtual long    PreNotify( NotifyEvent& rNEvt );
     };
 
-//  FixedText    aSampleText;
     FixedText    aTextText;
     Edit         aTextEdit;
     FixedLine    aSettingsFL;
@@ -152,16 +151,16 @@ class SwCaptionDialog : public SvxStandardDialog
 
     String       sNone;
 
-    SwCaptionPreview aPrevWin;
+    SwCaptionPreview    aPrevWin;
 
-    SwView       &rView;    //Suchen per aktive ::com::sun::star::sdbcx::View vermeiden.
-    SwFldMgr     *pMgr;     //Ptr um das include zu sparen
+    SwView       &rView; //Suchen per aktive ::com::sun::star::sdbcx::View vermeiden.
+    SwFldMgr     *pMgr;      //Ptr um das include zu sparen
     sal_uInt16   eType;
 
     String       sCharacterStyle;
+    String       sObjectName;
     bool         bCopyAttributes;
 
-    String          sObjectName;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xNameAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >         xNamed;
 
@@ -172,7 +171,8 @@ class SwCaptionDialog : public SvxStandardDialog
 
     virtual void Apply();
 
-    void DrawSample();
+    void    DrawSample();
+    void    CheckButtonWidth();
 
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );
