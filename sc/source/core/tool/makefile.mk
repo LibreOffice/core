@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 10:37:40 $
+#   last change: $Author: hr $ $Date: 2004-08-02 16:57:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,6 @@ SLOFILES =  \
         $(SLO)$/interpr4.obj \
         $(SLO)$/interpr5.obj \
         $(SLO)$/interpr6.obj \
-        $(SLO)$/linelink.obj \
         $(SLO)$/navicfg.obj \
         $(SLO)$/optutil.obj \
         $(SLO)$/parclass.obj \
@@ -153,7 +152,7 @@ NOOPTFILES= \
         $(SLO)$/interpr2.obj \
         $(SLO)$/interpr4.obj \
         $(SLO)$/token.obj    \
-        $(SLO)$/chartarr.obj 
+        $(SLO)$/chartarr.obj
 .ENDIF
 
 .IF "$(GUI)"=="OS2"
