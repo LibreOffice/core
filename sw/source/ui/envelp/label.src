@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:19:30 $
+ *  last change: $Author: nf $ $Date: 2001-08-28 11:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,25 +91,25 @@
     Text[ catalan ] = "Etiquetas";
 
  #define BUSINESS_CARD_STRING \
-                Text = "Visitenkarten" ;                            \
-                Text [ ENGLISH ] = "Business cards" ;               \
-                Text[ english_us ] = "Business cards";              \
-                Text[ portuguese ] = "Cartões de visita";           \
-                Text[ russian ] = "Âèçèòíûå êàðòî÷êè";              \
-                Text[ greek ] = "Visiting cards";                   \
-                Text[ dutch ] = "Visitekaartjes";                   \
-                Text[ french ] = "Cartes de visite";                \
-                Text[ spanish ] = "Tarjetas de visita";             \
-                Text[ italian ] = "Biglietti da visita";            \
-                Text[ danish ] = "Visitkort";                       \
-                Text[ swedish ] = "Visitkort";                      \
-                Text[ polish ] = "Wizytówki";                       \
-                Text[ portuguese_brazilian ] = "Visiting cards";    \
-                Text[ japanese ] = "–¼Žh";                          \
-                Text[ korean ] = "Visiting cards";                  \
-                Text[ chinese_simplified ] = "ÃûÆ¬";                \
-                Text[ chinese_traditional ] = "¦W¤ù";               \
-                Text[ arabic ] = "ÈØÇÞÇÊ ÇáÒíÇÑÉ";
+    Text = "Visitenkarten" ;                            \
+    Text [ ENGLISH ] = "Business cards" ;               \
+    Text[ english_us ] = "Business cards";              \
+    Text[ portuguese ] = "Cartões de visita";           \
+    Text[ russian ] = "Âèçèòíûå êàðòî÷êè";              \
+    Text[ greek ] = "Visiting cards";                   \
+    Text[ dutch ] = "Visitekaartjes";                   \
+    Text[ french ] = "Cartes de visite";                \
+    Text[ spanish ] = "Tarjetas de visita";             \
+    Text[ italian ] = "Biglietti da visita";            \
+    Text[ danish ] = "Visitkort";                       \
+    Text[ swedish ] = "Visitkort";                      \
+    Text[ polish ] = "Wizytówki";                       \
+    Text[ portuguese_brazilian ] = "Visiting cards";    \
+    Text[ japanese ] = "–¼Žh";                          \
+    Text[ korean ] = "Visiting cards";                  \
+    Text[ chinese_simplified ] = "ÃûÆ¬";                \
+    Text[ chinese_traditional ] = "¦W¤ù";               \
+    Text[ arabic ] = "ÈØÇÞÇÊ ÇáÒíÇÑÉ";
 
  // DLG_LAB ------------------------------------------------------------------
 TabDialog DLG_LAB
