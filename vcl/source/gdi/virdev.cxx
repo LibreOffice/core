@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:29:45 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,22 @@ BOOL VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase )
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+// #i32109#: Fill opaque areas correctly (without relying on
+// fill/linecolor state)
+void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
+{
+    // Set line and fill color to black (->opaque),
+    // fill rect with that (linecolor, too, because of
+    // those pesky missing pixel problems)
+    Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+    SetLineColor( COL_BLACK );
+    SetFillColor( COL_BLACK );
+    DrawRect( rRect );
+    Pop();
 }
 
 // -----------------------------------------------------------------------
