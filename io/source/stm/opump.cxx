@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
+ *  last change: $Author: jbu $ $Date: 2002-07-09 15:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@
 #include <uno/mapping.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <list>
 
 
 using namespace osl;
@@ -104,13 +104,17 @@ namespace io_stm {
         Reference< XConnectable >               m_xSucc;
         Reference< XInputStream >               m_xInput;
         Reference< XOutputStream >              m_xOutput;
-        list< Reference< XStreamListener > >    m_aListeners;
+        OInterfaceContainerHelper               m_cnt;
+        sal_Bool                                m_closeFired;
 
         void run();
         static void static_run( void* pObject );
 
         void close();
-        void fireError( list< Reference< XStreamListener > > & , Any & exception);
+        void fireClose();
+        void fireStarted();
+        void fireTerminated();
+        void fireError( const Any &a );
 
     public:
         Pump();
@@ -127,7 +131,7 @@ namespace io_stm {
         // XActiveDataControl
         virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
         virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
-        virtual void SAL_CALL start() throw();
+        virtual void SAL_CALL start() throw( RuntimeException );
         virtual void SAL_CALL terminate() throw();
 
         // XConnectable
@@ -142,8 +146,9 @@ namespace io_stm {
         virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(  );
     };
 
-Pump::Pump()
-    : m_aThread( NULL )
+Pump::Pump() : m_aThread( 0 ),
+               m_cnt( m_aMutex ),
+               m_closeFired( sal_False )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
@@ -151,21 +156,22 @@ Pump::Pump()
 Pump::~Pump()
 {
     // exit gracefully
-    osl_joinWithThread( m_aThread );
-    osl_destroyThread( m_aThread );
+    if( m_aThread )
+    {
+        osl_joinWithThread( m_aThread );
+        osl_destroyThread( m_aThread );
+    }
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-void Pump::fireError( list< Reference< XStreamListener > > &aList , Any & exception )
+void Pump::fireError( const  Any & exception )
 {
-    list< Reference< XStreamListener > > aLocalListeners = aList;
-    list< Reference< XStreamListener > >::iterator it;
-    for( it = aLocalListeners.begin();
-         it != aLocalListeners.end(); ++it )
+    OInterfaceIteratorHelper iter( m_cnt );
+    while( iter.hasMoreElements() )
     {
         try
         {
-            (*it)->error( exception );
+            static_cast< XStreamListener * > ( iter.next() )->error( exception );
         }
         catch ( RuntimeException &e )
         {
@@ -175,107 +181,26 @@ void Pump::fireError( list< Reference< XStreamListener > > &aList , Any & except
     }
 }
 
-void Pump::close()
+void Pump::fireClose()
 {
-    // close streams and release references
-
-    if( m_xInput.is() )
+    sal_Bool bFire = sal_False;
     {
-        try
+        MutexGuard guard( m_aMutex );
+        if( ! m_closeFired  )
         {
-            m_xInput->closeInput();
+            m_closeFired = sal_True;
+            bFire = sal_True;
         }
-        catch( Exception &e )
-        {
-            // go down calm
-        }
-        m_xInput = Reference< XInputStream >();
     }
-    if( m_xOutput.is() )
+
+    if( bFire )
     {
-        try
-        {
-            m_xOutput->closeOutput();
-        }
-        catch( Exception &e )
-        {
-            // go down calm
-        }
-        m_xOutput = Reference< XOutputStream >();
-    }
-    m_aListeners = list< Reference< XStreamListener > >();
-    m_xSucc = Reference< XConnectable >();
-    m_xPred = Reference< XConnectable >();
-}
-
-void Pump::static_run( void* pObject )
-{
-    ((Pump*)pObject)->run();
-}
-
-void Pump::run()
-{
-    Guard< Mutex > aGuard( m_aMutex );
-
-    try
-    {
-        list< Reference< XStreamListener > >::iterator it;
-        for( it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
-        {
-            (*it)->started();
-        }
-
-        try
-        {
-            if( ! m_xInput.is() )
-            {
-                NotConnectedException exception(
-                    OUString::createFromAscii( "no input stream set" ) , Reference<XInterface>((OWeakObject*)this) );
-                throw exception;
-            }
-            Sequence< sal_Int8 > aData;
-            long nBytes;
-            while( nBytes = m_xInput->readSomeBytes( aData, 65536 ) )
-            {
-                if( ! m_xOutput.is() )
-                {
-                    NotConnectedException exception(
-                        OUString::createFromAscii( "no output stream set" ) , Reference<XInterface>( (OWeakObject*)this) );
-                    throw exception;
-                }
-                m_xOutput->writeBytes( aData );
-                osl_yieldThread();
-            }
-        }
-        catch ( IOException & e )
-        {
-            Any aException;
-            aException <<= e;
-            fireError( m_aListeners , aException );
-        }
-        catch ( RuntimeException & e )
-        {
-            Any aException;
-            aException <<= e;
-            fireError( m_aListeners , aException );
-        }
-        catch ( Exception & e )
-        {
-            Any aException;
-            aException <<= e;
-            fireError( m_aListeners , aException );
-        }
-
-        // listeners may remove themselves when called this way
-        list< Reference< XStreamListener > > aLocalListeners = m_aListeners;
-        close();
-
-        for( it = aLocalListeners.begin();
-             it != aLocalListeners.end(); ++it )
+        OInterfaceIteratorHelper iter( m_cnt );
+        while( iter.hasMoreElements() )
         {
             try
             {
-                (*it)->closed();
+                static_cast< XStreamListener * > ( iter.next() )->closed( );
             }
             catch ( RuntimeException &e )
             {
@@ -284,6 +209,140 @@ void Pump::run()
             }
         }
     }
+}
+
+void Pump::fireStarted()
+{
+    OInterfaceIteratorHelper iter( m_cnt );
+    while( iter.hasMoreElements() )
+    {
+        try
+        {
+            static_cast< XStreamListener * > ( iter.next() )->started( );
+        }
+        catch ( RuntimeException &e )
+        {
+            OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+        }
+    }
+}
+
+void Pump::fireTerminated()
+{
+    OInterfaceIteratorHelper iter( m_cnt );
+    while( iter.hasMoreElements() )
+    {
+        try
+        {
+            static_cast< XStreamListener * > ( iter.next() )->terminated();
+        }
+        catch ( RuntimeException &e )
+        {
+            OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+        }
+    }
+}
+
+
+
+void Pump::close()
+{
+    // close streams and release references
+    Reference< XInputStream > rInput;
+    Reference< XOutputStream > rOutput;
+    {
+        MutexGuard guard( m_aMutex );
+        rInput = m_xInput;
+        m_xInput.clear();
+
+        rOutput = m_xOutput;
+        m_xOutput.clear();
+        m_xSucc.clear();
+        m_xPred.clear();
+    }
+    if( rInput.is() )
+    {
+        try
+        {
+            rInput->closeInput();
+        }
+        catch( Exception &e )
+        {
+            // go down calm
+        }
+    }
+    if( rOutput.is() )
+    {
+        try
+        {
+            rOutput->closeOutput();
+        }
+        catch( Exception &e )
+        {
+            // go down calm
+        }
+    }
+}
+
+void Pump::static_run( void* pObject )
+{
+    ((Pump*)pObject)->run();
+    ((Pump*)pObject)->release();
+}
+
+void Pump::run()
+{
+    try
+    {
+        fireStarted();
+        try
+        {
+            Reference< XInputStream > rInput;
+            Reference< XOutputStream > rOutput;
+            {
+                Guard< Mutex > aGuard( m_aMutex );
+                rInput = m_xInput;
+                rOutput = m_xOutput;
+            }
+
+            if( ! rInput.is() )
+            {
+                NotConnectedException exception(
+                    OUString::createFromAscii( "no input stream set" ) , Reference<XInterface>((OWeakObject*)this) );
+                throw exception;
+            }
+            Sequence< sal_Int8 > aData;
+            long nBytes;
+            while( nBytes = rInput->readSomeBytes( aData, 65536 ) )
+            {
+                if( ! rOutput.is() )
+                {
+                    NotConnectedException exception(
+                        OUString::createFromAscii( "no output stream set" ) , Reference<XInterface>( (OWeakObject*)this) );
+                    throw exception;
+                }
+                rOutput->writeBytes( aData );
+                osl_yieldThread();
+            }
+        }
+        catch ( IOException & e )
+        {
+            fireError( makeAny( e ) );
+        }
+        catch ( RuntimeException & e )
+        {
+            fireError( makeAny( e ) );
+        }
+        catch ( Exception & e )
+        {
+            fireError( makeAny( e ) );
+        }
+
+        close();
+        fireClose();
+    }
     catch ( com::sun::star::uno::Exception &e )
     {
         // we are the last on the stack.
@@ -291,8 +350,6 @@ void Pump::run()
         OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception", sMessage.getStr() );
     }
-
-    release();
 }
 
 // ------------------------------------------------------------
@@ -304,7 +361,6 @@ void Pump::run()
 void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     m_xPred = xPred;
 }
 
@@ -313,7 +369,6 @@ void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw()
 Reference< XConnectable > Pump::getPredecessor() throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     return m_xPred;
 }
 
@@ -322,7 +377,6 @@ Reference< XConnectable > Pump::getPredecessor() throw()
 void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     m_xSucc = xSucc;
 }
 
@@ -331,7 +385,6 @@ void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
 Reference< XConnectable > Pump::getSuccessor() throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     return m_xSucc;
 }
 
@@ -343,59 +396,48 @@ Reference< XConnectable > Pump::getSuccessor() throw()
 
 void Pump::addListener( const Reference< XStreamListener >& xListener ) throw()
 {
-    Guard< Mutex > aGuard( m_aMutex );
-
-    m_aListeners.push_back( xListener );
+    m_cnt.addInterface( xListener );
 }
 
 // ------------------------------------------------------------
 
 void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw()
 {
-    Guard< Mutex > aGuard( m_aMutex );
-
-    m_aListeners.remove( xListener );
+    m_cnt.removeInterface( xListener );
 }
 
 // ------------------------------------------------------------
 
-void Pump::start() throw()
+void Pump::start() throw( RuntimeException )
 {
     Guard< Mutex > aGuard( m_aMutex );
-
-    acquire();
-    m_aThread = osl_createThread(
-        (oslWorkerFunction)Pump::static_run,
-        (void*)this
-        );
+    m_aThread = osl_createSuspendedThread((oslWorkerFunction)Pump::static_run,this);
+    if( m_aThread )
+    {
+        // will be released by OPump::static_run
+        acquire();
+        osl_resumeThread( m_aThread );
+    }
+    else
+    {
+        throw RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pump::start Couldn't create worker thread" )),
+            *this);
+    }
 }
 
 // ------------------------------------------------------------
 
 void Pump::terminate() throw()
 {
-    // abort !
     close();
 
     // wait for the worker to die
-    osl_joinWithThread( m_aThread );
+    if( m_aThread )
+        osl_joinWithThread( m_aThread );
 
-    Guard< Mutex > aGuard( m_aMutex );
-
-    // notify listeners
-    list< Reference< XStreamListener > > aLocalListeners = m_aListeners;
-    for( list< Reference< XStreamListener > >::iterator it = aLocalListeners.begin();
-         it != aLocalListeners.end(); ++it )
-    {
-        try
-        {
-            (*it)->terminated();
-        }
-        catch( RuntimeException & e )
-        {
-            // simply ignore, maybe a bridge has crashed, notfiy other listeners as well
-        }
-    }
+    fireTerminated();
+    fireClose();
 }
 
 // ------------------------------------------------------------
@@ -407,7 +449,6 @@ void Pump::terminate() throw()
 void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     m_xInput = xStream;
     Reference< XConnectable > xConnect( xStream, UNO_QUERY );
     if( xConnect.is() )
@@ -420,7 +461,6 @@ void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw()
 Reference< XInputStream > Pump::getInputStream() throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     return m_xInput;
 }
 
@@ -433,7 +473,6 @@ Reference< XInputStream > Pump::getInputStream() throw()
 void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     m_xOutput = xOut;
     Reference< XConnectable > xConnect( xOut, UNO_QUERY );
     if( xConnect.is() )
@@ -446,7 +485,6 @@ void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw()
 Reference< XOutputStream > Pump::getOutputStream() throw()
 {
     Guard< Mutex > aGuard( m_aMutex );
-
     return m_xOutput;
 }
 
