@@ -553,7 +553,7 @@ SfxVoidItem BackgroundDialog FN_FORMAT_BACKGROUND_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Backspace FN_BACKSPACE
+SfxVoidItem SwBackspace FN_BACKSPACE
 ()
 [
     /* flags: */
@@ -2003,7 +2003,7 @@ SfxVoidItem FootnoteDialog FN_FORMAT_FOOTNOTE_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem FootnoteDialog FN_EDIT_FOOTNOTE
+SfxVoidItem EditFootnote FN_EDIT_FOOTNOTE
 ()
 [
     /* flags: */
@@ -3132,7 +3132,7 @@ SfxBoolItem GotoPrevWrongTableFormula FN_PREV_TBLFML_ERR
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem GoToStart FN_START_TABLE
+SfxVoidItem GoToStartOfTable FN_START_TABLE
 ()
 [
     /* flags: */
@@ -4355,7 +4355,7 @@ SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertFrameInteract FN_INSERT_FRAME_INTERACT_NOCOL
+SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
 ()
 [
     /* flags: */
@@ -6797,7 +6797,7 @@ SfxVoidItem ProtectTraceChangeMode FN_REDLINE_PROTECT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Refresh FN_REFRESH_VIEW
+SfxVoidItem RefreshView FN_REFRESH_VIEW
 ()
 [
     /* flags: */
@@ -7126,7 +7126,7 @@ SfxVoidItem ScrollNextPrev FN_SCROLL_NEXT_PREV
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Select FN_TABLE_SELECT_ALL
+SfxVoidItem SelectTable FN_TABLE_SELECT_ALL
 ()
 [
     /* flags: */
@@ -7794,33 +7794,6 @@ SfxVoidItem SortDialog FN_SORTING_DLG
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DATA;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem Sourceview FN_SOURCEVIEW
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
