@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 13:20:35 $
+#   last change: $Author: tra $ $Date: 2001-05-10 16:04:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,10 +121,10 @@ SHL1STDLIBS=	\
                 advapi32.lib\
                 wsock32.lib\
                 mpr.lib\
-                ole32.lib\
                 shell32.lib\
                 comdlg32.lib\
-                user32.lib
+                user32.lib\
+                ole32.lib
 .ELSE
 SHL1STDLIBS= -ladvapi32 -lwsock32 -lmpr -lole32
 .ENDIF
@@ -187,6 +187,39 @@ DEF1NAME= $(SHL1TARGET)
 .IF "$(GUI)"=="OS2"
 DEF1EXPORT1=SignalHandlerFunction
 .ENDIF
+
+# --- systools ---
+
+.IF "$(GUI)"=="WNT"
+
+TARGET2=w9xucwrp
+SHL2TARGET=$(TARGET2)
+SHL2IMPLIB=i$(TARGET2)
+
+SHL2STDLIBS=\
+            advapi32.lib\
+            comdlg32.lib\
+            kernel32.lib\
+            shell32.lib\
+            user32.lib
+
+SHL2LIBS=\
+        $(SLB)$/advapi9x.lib\
+        $(SLB)$/comdlg9x.lib\
+        $(SLB)$/kernel9x.lib\
+        $(SLB)$/shell9x.lib\
+        $(SLB)$/user9x.lib\
+        $(LB)$/tools32.lib
+
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=$(SHL2TARGET)
+
+DEF2EXPORTFILE=systools.dxp
+
+SHL2DEPN=makefile.mk
+
+.ENDIF
+
 
 # --- tec ---
 
