@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 13:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ public:
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
                                       const ::rtl::OUString& rHRef,
+                                      const ::rtl::OUString& rStyleName,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 13:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
 Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
            SvXMLImport& rImport,
         const OUString& rHRef,
+        const OUString& rStyleName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference < XPropertySet > xPropSet;
@@ -226,6 +227,73 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     SwFrmFmt *pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(),
                                          aObjName, &aItemSet );
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+
+    Rectangle aVisArea( 0, 0, nWidth, nHeight );
+    const XMLPropStyleContext *pStyle = 0;
+    if( rStyleName.getLength() )
+    {
+        pStyle = FindAutoFrameStyle( rStyleName );
+        if( pStyle )
+        {
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                pStyle->GetStyles()
+                      ->GetImportPropertyMapper(pStyle->GetFamily());
+            ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
+            if( xImpPrMap.is() )
+            {
+                UniReference<XMLPropertySetMapper> rPropMapper =
+                xImpPrMap->getPropertySetMapper();
+
+                sal_Int32 nCount = pStyle->GetProperties().size();
+                for( sal_Int32 i=0; i < nCount; i++ )
+                {
+                    const XMLPropertyState& rProp = pStyle->GetProperties()[i];
+                    sal_Int32 nIdx = rProp.mnIndex;
+                    if( -1 == nIdx )
+                        continue;
+
+                    switch( rPropMapper->GetEntryContextId(nIdx) )
+                    {
+                    case CTF_OLE_VIS_AREA_LEFT:
+                        {
+                            sal_Int32 nVal = 0;
+                            rProp.maValue >>= nVal;
+                            aVisArea.setX( nVal );
+                        }
+                        break;
+                    case CTF_OLE_VIS_AREA_TOP:
+                        {
+                            sal_Int32 nVal = 0;
+                            rProp.maValue >>= nVal;
+                            aVisArea.setY( nVal );
+                        }
+                        break;
+                    case CTF_OLE_VIS_AREA_WIDTH:
+                        {
+                            sal_Int32 nVal = 0;
+                            rProp.maValue >>= nVal;
+                            aVisArea.setWidth( nVal );
+                        }
+                        break;
+                    case CTF_OLE_VIS_AREA_HEIGHT:
+                        {
+                            sal_Int32 nVal = 0;
+                            rProp.maValue >>= nVal;
+                            aVisArea.setHeight( nVal );
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    SvInfoObject *pInfo = pDoc->GetPersist()->Find( aObjName );
+    if( pInfo )
+    {
+        SvEmbeddedInfoObject * pEmbed = PTR_CAST(SvEmbeddedInfoObject, pInfo );
+        pEmbed->SetInfoVisArea( aVisArea );
+    }
     return xPropSet;
 }
 
