@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findcoll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:33:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,15 @@
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
-
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
+#endif
 
 //------------------ Methoden der CrsrShell ---------------------------
 
@@ -133,7 +141,14 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
 
     BOOL bSttUndo = pDoc->DoesUndo() && pReplFmtColl;
     if( bSttUndo )
-        pDoc->StartUndo( UNDO_REPLACE );
+    {
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, rFmtColl.GetName());
+        aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
+        aRewriter.AddRule(UNDO_ARG3, pReplFmtColl->GetName());
+
+        pDoc->StartUndo( UIUNDO_REPLACE_STYLE, &aRewriter );
+    }
 
     SwFindParaFmtColl aSwFindParaFmtColl( rFmtColl, pReplFmtColl, *this );
 
@@ -144,7 +159,7 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
         pDoc->SetModified();
 
     if( bSttUndo )
-        pDoc->EndUndo( UNDO_REPLACE );
+        pDoc->EndUndo( UIUNDO_REPLACE_STYLE );
     return nRet;
 }
 
