@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:28:18 $
+ *  last change: $Author: mba $ $Date: 2001-07-18 17:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,10 +729,26 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
     aObj.removeSegment();
     aObj.removeFinalSlash();
 
-    String aFile;
+    // get a list of URLs for all children of rFolder
+    Sequence< ::rtl::OUString > aFiles = GetFolderContents( aObj.GetMainURL( INetURLObject::NO_DECODE ), sal_True );
 
-    // try to find the object
-    return Find( aObj.GetMainURL( INetURLObject::NO_DECODE ), aFileName, aFile );
+    const ::rtl::OUString* pFiles  = aFiles.getConstArray();
+    UINT32 i, nCount = aFiles.getLength();
+    for ( i = 0; i < nCount; ++i )
+    {
+        // get the last name of the URLs and compare it with rName
+        INetURLObject aFileObject( pFiles[i] );
+        ::rtl::OUString aFile = aFileObject.getName(
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
+        if ( aFile == aFileName )
+        {
+            // names match
+            bRet = sal_True;
+            break;
+        }
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
