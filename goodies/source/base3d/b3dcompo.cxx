@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcompo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,20 +145,23 @@ B3dEntity &B3dComplexPolygon::GetFreeEntity()
 
 void B3dComplexPolygon::PostAddVertex(B3dEntity &rVertex)
 {
-    if(pLastVertex)
+    if(pLastVertex && ArePointsEqual(*pLastVertex, rVertex))
     {
-        if(ArePointsEqual(*pLastVertex, rVertex))
-        {
-            aEntityBuffer.Remove();
-            return;
-        }
-        if(!nNewPolyStart)
-        {
-            if(nHighestEdge)
-                TestHighestEdge(rVertex);
-            else
-                nHighestEdge = aEntityBuffer.Count();
-        }
+        aEntityBuffer.Remove();
+        return;
+    }
+
+    // #i27242#
+    // Comparison for finding nHighestEdge has to start with first point. Due
+    // to having this part inside of if(pLastVertex) it always started with the
+    // second point. Thus, in 50% of the cases where the first point of the polygon
+    // is the extreme point, the normal could be wrong.
+    if(!nNewPolyStart)
+    {
+        if(nHighestEdge)
+            TestHighestEdge(rVertex);
+        else
+            nHighestEdge = aEntityBuffer.Count();
     }
 
     // Zeiger auf letzten hinzugefuegten Punkt setzen
