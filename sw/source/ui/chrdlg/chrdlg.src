@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:41:46 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,10 +165,11 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ japanese ] = "Νί°Όή”Τ†‚Ν“K—p‚Ε‚«‚ά‚Ή‚ρB¶Νί°Όή‚Ι‚Ν‹τ”A‰EΝί°Όή‚Ι‚Νο”‚πg—p‚µ‚ά‚·B";
     MESSAGE[ chinese_traditional ] = "µLªk³]©w­¶½X΅C¦b¥ª­¶¥u―ΰ°χ³]©w°ΈΌΖ΅A¦b¥k­¶¥u―ΰ³]©w©_ΌΖ΅C";
     MESSAGE[ arabic ] = "αΗ νγίδ ΕΟΡΗΜ ΓΡήΗγ ΗαΥέΝΗΚ έν ΗαΥέΝΙ ΗαΝΗανΙ. Ϊαμ ΗαΥέΝΗΚ ΗανΣΡμ΅ νΣγΝ ΘΗΣΚΞΟΗγ ΓΡήΗγ ÒζΜνΙ έήΨ΅ ζΪαμ ΗαΥέΝΗΚ Ηανγδμ΅ ΓΡήΗγ έΡΟνΙ έήΨ.";
-    MESSAGE[ greek ] = "Δεν είναι δυνατόν να τοποθετηθεί ο αριθμός σελίδας. Σε αριστερές σελίδες επιτρέπεται η τοποθέτηση μόνο ζυγών αριθμών σελίδας, ενώ σε δεξιέ?";
+    MESSAGE[ greek ] = "Δεν είναι δυνατόν να τοποθετηθεί ο αριθμός σελίδας. Σε αριστερές σελίδες επιτρέπεται η τοποθέτηση μόνο ζυγών αριθμών σελίδας, ενώ σε δεξιέ? ";
     MESSAGE[ korean ] = "ΒΚ ΉψΘ£΄Β Ό³Α¤ΗÒ Όφ Ύψ½ΐ΄Ο΄Ω. Β¦Όφ ΒΚ ΉψΘ£΄Β ΏήΒΚ ΒΚΏ΅ΈΈ »ηΏλµΗ°ν, Θ¦Όφ ΒΚ ΉψΘ£΄Β ΏΐΈ¥ΒΚ ΒΚΏ΅ΈΈ »ηΏλµΛ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Sayfa numarasύ verilemiyor. Sol sayfalarda yalnύzca ηift sayfa numaralarύ, saπ sayfalarda ise yalnύzca tek sayfa numaralarύ kullanύlabilir.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El nϊmero de la pαgina no se puede colocar. En pαginas izquierdas se pueden utilizar solo nϊmeros pares, en las derechas solo impares.";
 };
+
 
