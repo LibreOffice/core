@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:52:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,13 +848,12 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     if(rURL.Len())
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
-        SfxBoolItem aReadOnly(SID_DOC_READONLY, FALSE);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, String::CreateFromAscii("_blank") );
         SfxBoolItem aHidden( SID_HIDDEN, TRUE );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                            &aURL, &aReadOnly, &aHidden, &aReferer, &aTargetFrameName, 0);
+                            &aURL, &aHidden, &aReferer, &aTargetFrameName, 0);
         SfxShell* pShell = pItem ? pItem->GetShell() : 0;
 
         if(pShell)
