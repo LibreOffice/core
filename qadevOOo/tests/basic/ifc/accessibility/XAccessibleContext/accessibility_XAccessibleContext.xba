@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: accessibility_XAccessibleContext.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:27 $ 
+'*  last change:$Date: 2003-10-06 12:43:33 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -150,7 +150,7 @@ On Error Goto ErrHndl
     bOK = true
     oName = oObj.getAccessibleName()
     Out.Log("The name is " + oName)
-    bOK = bOK AND NOT isNull(oName) AND (len(oName) &gt; 0)
+    bOK = bOK AND NOT isNull(oName)
     Test.MethodTested("getAccessibleName()",bOK)
 
 
