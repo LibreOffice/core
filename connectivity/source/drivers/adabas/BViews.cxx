@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 09:49:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,9 +225,10 @@ void SAL_CALL OViews::dropByName( const ::rtl::OUString& elementName ) throw(SQL
         aSchema = elementName.copy(0,nLen);
         aName   = elementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
-        aSql = aSql + ::rtl::OUString::createFromAscii(".");
+        aSql = aSql + sDot;
         aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
         xStmt->execute(aSql);
     }
@@ -253,11 +254,12 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema,sCommand;
+    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+    ::rtl::OUString sSchema,sCommand;
 
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sSchema;
     if(sSchema.getLength())
-        aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
+        aSql += ::dbtools::quoteName(aQuote, sSchema) + sDot;
     else
         descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),makeAny(sSchema = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
 
@@ -275,7 +277,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     if(pTables)
     {
         ::rtl::OUString sName = sSchema;
-        sName += aDot;
+        sName += sDot;
         sName += getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
         pTables->appendNew(sName);
     }

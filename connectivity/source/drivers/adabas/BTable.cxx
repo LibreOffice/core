@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:12:06 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
+#include "adabas/BCatalog.hxx"
+#endif
+
 
 using namespace ::comphelper;
 using namespace connectivity::adabas;
@@ -136,9 +140,6 @@ OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
                 ,m_pConnection(_pConnection)
 {
     construct();
-    refreshColumns();
-    refreshKeys();
-    refreshIndexes();
 }
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshColumns()
@@ -217,13 +218,14 @@ void OAdabasTable::refreshIndexes()
         if(xResult.is())
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+            ::rtl::OUString aName;
+            const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
             ::rtl::OUString sPreviousRoundName;
             while(xResult->next())
             {
                 aName = xRow->getString(5);
                 if(aName.getLength())
-                    aName += aDot;
+                    aName += sDot;
                 aName += xRow->getString(6);
                 if(aName.getLength())
                 {
@@ -284,7 +286,7 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
     {
         ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("RENAME TABLE ");
         ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         ::rtl::OUString aName,aSchema;
         sal_Int32 nLen = newName.indexOf('.');
@@ -370,7 +372,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
             if(!sNewColumnName.equalsIgnoreAsciiCase(colName))
             {
                 const ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
-                const ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
+                const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
                 ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("RENAME COLUMN ") ;
                 sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name);
@@ -426,7 +428,8 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
 ::rtl::OUString SAL_CALL OAdabasTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName = m_SchemaName;
-    sName += ::rtl::OUString::createFromAscii(".");
+    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+    sName += sDot;
     sName += m_Name;
     return sName;
 }
@@ -567,7 +570,7 @@ void OAdabasTable::rollbackTransAction()
 {
     ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
+    const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name)
          + ::rtl::OUString::createFromAscii(" COLUMN ")

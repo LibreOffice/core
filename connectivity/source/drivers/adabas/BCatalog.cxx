@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,13 @@ void OAdabasCatalog::refreshTables()
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+        ::rtl::OUString aName;
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+
         while(xResult->next())
         {
             aName = xRow->getString(2);
-            aName += aDot;
+            aName += sDot;
             aName += xRow->getString(3);
             aVector.push_back(aName);
         }
@@ -144,11 +146,12 @@ void OAdabasCatalog::refreshViews()
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+        ::rtl::OUString aName;
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
         while(xResult->next())
         {
             aName = xRow->getString(1);
-            aName += aDot;
+            aName += sDot;
             aName += xRow->getString(2);
             aVector.push_back(aName);
         }
@@ -195,5 +198,10 @@ void OAdabasCatalog::refreshUsers()
         m_pUsers = new OUsers(*this,m_aMutex,aVector,m_pConnection,this);
 }
 // -------------------------------------------------------------------------
-
+const ::rtl::OUString& OAdabasCatalog::getDot()
+{
+    static const ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
+    return sDot;
+}
+// -----------------------------------------------------------------------------
 

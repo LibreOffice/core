@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
+#include "adabas/BCatalog.hxx"
+#endif
+
 
 using namespace ::comphelper;
 
@@ -157,7 +161,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
@@ -168,7 +172,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         {
             aSql = aSql + aQuote + aName + aQuote
                         + ::rtl::OUString::createFromAscii(" ON ")
-                        + aQuote + m_pTable->getSchema() + aQuote + aDot
+                        + aQuote + m_pTable->getSchema() + aQuote + sDot
                         + aQuote + m_pTable->getTableName() + aQuote
                         + ::rtl::OUString::createFromAscii(" ( ");
 
@@ -190,7 +194,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         }
         else
         {
-            aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
+            aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
@@ -200,7 +204,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 
             xColumns->getByIndex(0) >>= xColProp;
 
-            aSql = aSql + aDot + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
+            aSql = aSql + sDot + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -226,14 +230,14 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         if (aSchema.getLength())
-            (((aSql += aQuote) += aSchema) += aQuote) += aDot;
+            (((aSql += aQuote) += aSchema) += aQuote) += sDot;
 
         (((aSql += aQuote) += aName) += aQuote) += ::rtl::OUString::createFromAscii(" ON ");
 
-        (((aSql += aQuote) += m_pTable->getSchema()) += aQuote) += aDot;
+        (((aSql += aQuote) += m_pTable->getSchema()) += aQuote) += sDot;
         ((aSql += aQuote) += m_pTable->getTableName()) += aQuote;
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 10:05:21 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
+#include "adabas/BCatalog.hxx"
+#endif
+
 
 using namespace ::comphelper;
 
@@ -134,12 +138,13 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
         if(xResult.is())
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString sName,aDot = ::rtl::OUString::createFromAscii(".");
+            ::rtl::OUString sName;
+            const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
             while(xResult->next())
             {
                 sName = xRow->getString(2);
                 if(sName.getLength())
-                    sName += aDot;
+                    sName += sDot;
                 sName += xRow->getString(3);
                 sal_Int32 nUpdateRule = xRow->getInt(10);
                 if(xRow->wasNull())
@@ -194,9 +199,9 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
         if(nKeyType == KeyType::PRIMARY)
         {
             aSql = aSql + ::rtl::OUString::createFromAscii(" ALTER PRIMARY KEY (");
@@ -229,7 +234,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
             aSchema = aRefTable.copy(0,nLen);
             aName   = aRefTable.copy(nLen+1);
             aSql += ::rtl::OUString::createFromAscii(" REFERENCES ")
-                        + aQuote + aSchema + aQuote + aDot + aQuote + aName + aQuote;
+                        + aQuote + aSchema + aQuote + sDot + aQuote + aName + aQuote;
             aSql += ::rtl::OUString::createFromAscii(" (");
 
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -297,12 +302,12 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
         sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
-        aSql += aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
+        aSql += aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
         if(nKeyType == KeyType::PRIMARY)
             aSql += ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
         else

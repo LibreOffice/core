@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:29:53 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ namespace connectivity
             OAdabasConnection*      getConnection()     const { return m_pConnection; }
             sdbcx::OCollection*     getPrivateTables()  const { return m_pTables;}
             sdbcx::OCollection*     getPrivateViews()   const { return m_pViews; }
+
+            static const ::rtl::OUString& getDot();
         };
     }
 }

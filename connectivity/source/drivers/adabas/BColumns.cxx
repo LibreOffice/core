@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:12:06 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _CONNECTIVITY_ADABAS_TABLES_HXX_
 #include "adabas/BTables.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
+#include "adabas/BCatalog.hxx"
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -165,14 +168,14 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         m_pTable->beginTransAction();
         try
         {
             ::rtl::OUString sColumnName;
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColumnName;
-            aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + aDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+            aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
             aSql += ::rtl::OUString::createFromAscii(" ADD (");
             aSql += ::dbtools::quoteName(sQuote,sColumnName);
             aSql += ::rtl::OUString::createFromAscii(" ");
@@ -204,9 +207,9 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + aDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
         aSql += ::dbtools::quoteName(sQuote,elementName);
 
@@ -228,9 +231,9 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + aDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
         aSql += ::dbtools::quoteName(sQuote,m_aElements[index]->first);
 
