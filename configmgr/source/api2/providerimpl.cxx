@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:23:58 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ namespace configmgr
         catch (uno::Exception& e)
         {
             // could not read profile
-            CFG_TRACE_ERROR_NI("Provider bootstrapping: Caught an exception trying to get 'Setup' data: ", OUSTRING2ASCII(e.Message));
+            CFG_TRACE_ERROR_NI("Provider bootstrapping: Caught an exception trying to get 'Setup' data: %s", OUSTRING2ASCII(e.Message));
         }
 
         return true;
