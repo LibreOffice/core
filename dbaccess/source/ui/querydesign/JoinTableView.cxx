@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:24 $
+ *  last change: $Author: oj $ $Date: 2002-10-24 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,6 @@ OJoinTableView::~OJoinTableView()
 
     m_pLastFocusTabWin  = NULL;
     m_pSelectedConn     = NULL;
-    m_aTableMap.clear();
     m_pAccessible = NULL;
 }
 //------------------------------------------------------------------------------
@@ -1651,11 +1650,13 @@ void OJoinTableView::clearLayoutInformation()
     //////////////////////////////////////////////////////////////////////
     // Listen loeschen
     OTableWindowMapIterator aIter = m_aTableMap.begin();
-    for(;aIter != m_aTableMap.end();++aIter)
+    OTableWindowMapIterator aEnd  = m_aTableMap.end();
+    for(;aIter != aEnd;++aIter)
     {
         if ( aIter->second )
             aIter->second->clearListBox();
-        delete aIter->second;
+        ::std::auto_ptr<Window> aTemp(aIter->second);
+        aIter->second = NULL;
     }
 
     m_aTableMap.clear();
