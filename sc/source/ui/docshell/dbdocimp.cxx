@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
-#include <offmgr/sbaitems.hxx>  // SbaSelectionList
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -111,8 +110,6 @@ using namespace com::sun::star;
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 #define SC_DBPROP_SELECTION         "Selection"
 #define SC_DBPROP_CURSOR            "Cursor"
-
-// -----------------------------------------------------------------
 
 // static
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame )
