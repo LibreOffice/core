@@ -511,16 +511,12 @@ End
 
 #endif
 
-#ifdef WNT
-
 File gid_File_Exe_Sbase
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(sbase);
     Styles = (PACKED);
 End
-
-#endif
 
 #ifdef UNX
 
