@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 16:05:04 $
+ *  last change: $Author: mib $ $Date: 2002-05-17 08:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2056,6 +2056,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             SwTblBoxValue aValueItem( pCell->GetValue() );
             pBoxFmt->SetAttr( aValueItem );
         }
+
+        // update cell content depend on the default language
+        pBox->ChgByLanguageSystem();
     }
 
     // restore old modify-lock state
