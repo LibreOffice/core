@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 08:59:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
