@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2003-07-17 16:02:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat )
                 bULF( bULFFormat )
 {
     pLines = new LngLineList( 100, 100 );
-
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
     if ( aEntry.Exists()) {
         SvFileStream aStream( String( sSource, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
@@ -106,26 +105,18 @@ LngParser::~LngParser()
 }
 
 /*****************************************************************************/
-void LngParser::FillInFallbacks( ByteString *Text )
+void LngParser::FillInFallbacks( ByteStringHashMap Text )
 /*****************************************************************************/
 {
-    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-        if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
-            USHORT nFallbackIndex = Export::GetLangIndex(
-                    Export::GetFallbackLanguage( Export::LangId[ i ] ));
+    ByteString sCur;
+    for( long int n = 0; n < aLanguages.size(); n++ ){
+        sCur = aLanguages[ n ];
 
-            if (( nFallbackIndex < LANGUAGES ) && !Text[ i ].Len() && ( i != nFallbackIndex )) {
-                CharSet eSource =
-                    Export::GetCharSet( Export::LangId[ nFallbackIndex ] );
-                CharSet eDest =
-                    Export::GetCharSet( Export::LangId[ i ] );
-
-                ByteString sFallback =
-                    UTF8Converter::ConvertToUTF8( Text[ nFallbackIndex ],
-                        eSource );
-                Text[ i ] =
-                    UTF8Converter::ConvertFromUTF8( sFallback,
-                        eDest );
+        if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
+        //if( !sCur.Equals(ByteString("de")) && !sCur.Equals(ByteString("en-US"))){
+            ByteString sFallbackLang = Export::GetFallbackLanguage( sCur );
+            if( sFallbackLang.Len() ){
+                Text[ sCur ] = Text[ sFallbackLang ];
             }
         }
     }
@@ -137,13 +128,15 @@ BOOL LngParser::CreateSDF(
     const ByteString &rRoot )
 /*****************************************************************************/
 {
+
+    Export::InitLanguages( false );
+    aLanguages = Export::GetLanguages();
     SvFileStream aSDFStream( String( rSDFFile, RTL_TEXTENCODING_ASCII_US ),
         STREAM_STD_WRITE | STREAM_TRUNC );
     if ( !aSDFStream.IsOpen()) {
         nError = SDF_COULD_NOT_OPEN;
     }
     nError = SDF_OK;
-
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
@@ -152,116 +145,91 @@ BOOL LngParser::CreateSDF(
     ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
     ByteString sActFileName(
         sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
-//  sActFileName.ToLowerAscii();
-
     sActFileName.SearchAndReplaceAll( "/", "\\" );
 
-    ULONG nPos = 0;
-    BOOL bGroup = FALSE;
+    ULONG nPos  = 0;
+    BOOL bStart = true;
     ByteString sGroup;
+      ByteStringHashMap Text;
+    ByteString sID;
+    ByteString sLine;
 
-    // seek to next group
-    while ( nPos < pLines->Count() && !bGroup ) {
-        ByteString sLine( *pLines->GetObject( nPos ));
-        sLine.EraseLeadingChars( ' ' );
-        sLine.EraseTrailingChars( ' ' );
-        if (( sLine.GetChar( 0 ) == '[' ) &&
-            ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
-        {
-            sGroup = sLine.GetToken( 1, '[' ).GetToken( 0, ']' );
-            sGroup.EraseLeadingChars( ' ' );
-            sGroup.EraseTrailingChars( ' ' );
-            bGroup = TRUE;
+    while( nPos < pLines->Count() ){
+        sLine = *pLines->GetObject( nPos++ );
+        while( nPos < pLines->Count() && !isNextGroup( sGroup , sLine ) ){
+            ReadLine( sLine , Text );
+            sID = sGroup;
+            sLine = *pLines->GetObject( nPos++ );
+        };
+        if( bStart ){
+            bStart = false;
+            sID = sGroup;
         }
-        nPos ++;
-    }
+        else {
 
-    while ( nPos < pLines->Count()) {
-
-        ByteString Text[ LANGUAGES ];
-        ByteString sID( sGroup );
-
-        // read languages
-        bGroup = FALSE;
-
-        while ( nPos < pLines->Count() && !bGroup ) {
-            ByteString sLine( *pLines->GetObject( nPos ));
-            sLine.EraseLeadingChars( ' ' );
-            sLine.EraseTrailingChars( ' ' );
-            if (( sLine.GetChar( 0 ) == '[' ) &&
-                ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
-            {
-                sGroup = sLine.GetToken( 1, '[' ).GetToken( 0, ']' );
-                sGroup.EraseLeadingChars( ' ' );
-                sGroup.EraseTrailingChars( ' ' );
-                bGroup = TRUE;
-            }
-            else if ( sLine.GetTokenCount( '=' ) > 1 ) {
-                ByteString sLang = sLine.GetToken( 0, '=' );
-                sLang.EraseLeadingChars( ' ' );
-                sLang.EraseTrailingChars( ' ' );
-                if (( sLang.IsNumericAscii() && ( MergeDataFile::GetLangIndex( sLang.ToInt32()) < LANGUAGES )) ||
-                    ( bULF && ( MergeDataFile::GetLangIndex( Export::GetLangByIsoLang( sLang )))))
-                {
-                    // this is a valid text line
-                    ByteString sText = sLine.GetToken( 1, '\"' ).GetToken( 0, '\"' );
-                    USHORT nIndex;
-                    if ( bULF ) {
-                        if ( sLang == "en" )
-                             sLang = "en-US";
-                        nIndex = MergeDataFile::GetLangIndex( Export::GetLangByIsoLang( sLang ));
-                    }
-                    else
-                        nIndex = MergeDataFile::GetLangIndex( sLang.ToInt32());
-                    if ( nIndex != 0xFFFF )
-                        Text[ nIndex ] = sText;
-                }
-            }
-            nPos ++;
-        }
-        BOOL bExport = Text[ GERMAN_INDEX ].Len() &&
-            ( Text[ ENGLISH_INDEX ].Len() || Text[ ENGLISH_US_INDEX ].Len());
-        if ( bExport ) {
-
-            ByteString sTimeStamp( Export::GetTimeStamp());
-
-            FillInFallbacks( Text );
-
-            for ( ULONG i = 0; i < LANGUAGES; i++ ) {
-                if ( LANGUAGE_ALLOWED( i )) {
-                    ByteString sAct = Text[ i ];
-                    if ( !sAct.Len() && i )
-                        sAct = Text[ GERMAN_INDEX ];
-
-                    ByteString sOutput( rPrj ); sOutput += "\t";
-                    if ( rRoot.Len())
-                        sOutput += sActFileName;
-                    sOutput += "\t0\t";
-                    sOutput += "LngText\t";
-                    sOutput += sID; sOutput += "\t\t\t\t0\t";
-                    sOutput += ByteString::CreateFromInt64( Export::LangId[ i ] ); sOutput += "\t";
-                    sOutput += sAct; sOutput += "\t\t\t\t";
-                    sOutput += sTimeStamp;
-
-                    if ( bDBIsUTF8 && !bULF )
-                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
-                    else if ( bULF && !bDBIsUTF8 )
-                        sOutput = UTF8Converter::ConvertFromUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
-
-                    aSDFStream.WriteLine( sOutput );
-                }
-            }
+            WriteSDF( aSDFStream , Text , rSDFFile , rPrj , rRoot , sActFileName , sID );
         }
     }
     aSDFStream.Close();
-    return TRUE;
+    return true;
 }
+
+ void LngParser::WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,
+     const ByteString &rSDFFile, const ByteString &rPrj , const ByteString &rRoot ,
+     const ByteString &sActFileName , const ByteString &sID )
+ {
+    //BOOL bExport = (rText_inout[ ByteString("de") ].Len() > 0) && (rText_inout[ ByteString("en-US") ].Len() > 0);
+    BOOL bExport = true;
+    if ( bExport ) {
+           ByteString sTimeStamp( Export::GetTimeStamp());
+        ByteString sCur;
+        FillInFallbacks( rText_inout );
+        for( long int n = 0; n < aLanguages.size(); n++ ){
+            sCur = aLanguages[ n ];
+            ByteString sAct = rText_inout[ sCur ];
+            if ( !sAct.Len() && sCur.Len() )
+                sAct = rText_inout[ ByteString("de") ];
+            ByteString sOutput( rPrj ); sOutput += "\t";
+            if ( rRoot.Len())
+                sOutput += sActFileName;
+            sOutput += "\t0\t";
+            sOutput += "LngText\t";
+            sOutput += sID; sOutput += "\t\t\t\t0\t";
+            sOutput += sCur; sOutput += "\t";
+            sOutput += sAct; sOutput += "\t\t\t\t";
+            sOutput += sTimeStamp;
+            aSDFStream.WriteLine( sOutput );
+        }
+    }
+ }
+ bool LngParser::isNextGroup( ByteString &sGroup_out , ByteString &sLine_in ){
+    sLine_in.EraseLeadingChars( ' ' );
+    sLine_in.EraseTrailingChars( ' ' );
+    if (( sLine_in.GetChar( 0 ) == '[' ) &&
+            ( sLine_in.GetChar( sLine_in.Len() - 1 ) == ']' )){
+        sGroup_out = sLine_in.GetToken( 1, '[' ).GetToken( 0, ']' );
+        sGroup_out.EraseLeadingChars( ' ' );
+        sGroup_out.EraseTrailingChars( ' ' );
+        return true;
+    }
+    return false;
+ }
+ void LngParser::ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout){
+    //printf("sLine -> '%s'\n",sLine_in.GetBuffer());
+    ByteString sLang = sLine_in.GetToken( 0, '=' );
+    sLang.EraseLeadingChars( ' ' );
+    sLang.EraseTrailingChars( ' ' );
+    ByteString sText = sLine_in.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+    if( sLang.Len() )
+        rText_inout[ sLang ] = sText;
+ }
 
 /*****************************************************************************/
 BOOL LngParser::Merge(
     const ByteString &rSDFFile, const ByteString &rDestinationFile )
 /*****************************************************************************/
 {
+    Export::InitLanguages( true );
     SvFileStream aDestination(
         String( rDestinationFile, RTL_TEXTENCODING_ASCII_US ),
         STREAM_STD_WRITE | STREAM_TRUNC );
@@ -269,8 +237,13 @@ BOOL LngParser::Merge(
         nError = LNG_COULD_NOT_OPEN;
     }
     nError = LNG_OK;
+//    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, BOOL bUTF8 );
 
-    MergeDataFile aMergeDataFile( rSDFFile, FALSE, RTL_TEXTENCODING_MS_1252, bDBIsUTF8 );
+    MergeDataFile aMergeDataFile( rSDFFile, sSource , FALSE, RTL_TEXTENCODING_MS_1252, bDBIsUTF8 );
+    ByteString sTmp( Export::sLanguages );
+    if( sTmp.ToUpperAscii().Equals("ALL") )
+        Export::SetLanguages( aMergeDataFile.GetLanguages() );
+    aLanguages = Export::GetLanguages();
 
     ULONG nPos = 0;
     BOOL bGroup = FALSE;
@@ -293,13 +266,12 @@ BOOL LngParser::Merge(
     }
 
     while ( nPos < pLines->Count()) {
-
-        ByteString Text[ LANGUAGES ];
+        ByteStringHashMap Text;
         ByteString sID( sGroup );
         ULONG nLastLangPos = 0;
 
         ResData  *pResData = new ResData( "", sID );
-        pResData->sResTyp = "lngtext";
+        pResData->sResTyp = "LngText";
         PFormEntrys *pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
 
         // read languages
@@ -333,44 +305,28 @@ BOOL LngParser::Merge(
                 if (( sLanguagesDone.Search( sSearch ) != STRING_NOTFOUND )) {
                     pLines->Remove( nPos );
                 }
-                if ((( sLang.IsNumericAscii() && ( MergeDataFile::GetLangIndex( sLang.ToInt32()) < LANGUAGES )) ||
-                    ( bULF && ( MergeDataFile::GetLangIndex( Export::GetLangByIsoLang( sLang ))))) &&
-                    ( pEntrys ) &&
-                    ( LANGUAGE_ALLOWED( Export::GetLangIndex( sLang.ToInt32()))))
-
+                if( bULF && pEntrys )
                 {
                     // this is a valid text line
                     ByteString sText = sLine.GetToken( 1, '\"' ).GetToken( 0, '\"' );
                     USHORT nIndex;
-                    if ( bULF ) {
-                        if ( sLang == "en" )
-                             sLang = "en-US";
-                        nIndex = MergeDataFile::GetLangIndex( Export::GetLangByIsoLang( sLang ));
-                        if ( sLang == "en-US" )
-                            sLang = "en";
-                    }
-                    else
-                        nIndex = MergeDataFile::GetLangIndex( sLang.ToInt32());
-
-                    if ( nIndex != 0xFFFF ) {
+                    if( sLang.Len() ){
                         ByteString sNewText;
-                        pEntrys->GetText( sNewText, STRING_TYP_TEXT, nIndex, TRUE );
-
-                        if ( bULF )
-                            sNewText = UTF8Converter::ConvertToUTF8( sNewText, Export::GetCharSet( Export::LangId[ nIndex ] ));
+                        pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, TRUE );
+                        //if ( bULF )
+                        //  sNewText = UTF8Converter::ConvertToUTF8( sNewText, Export::GetCharSet( Export::LangId[ nIndex ] ));
 
                         if ( sNewText.Len()) {
                             ByteString *pLine = pLines->GetObject( nPos );
 
-                            if ( sLang.ToInt32() != GERMAN ) {
-
+                            if( !sLang.EqualsIgnoreCaseAscii("de") && !sLang.EqualsIgnoreCaseAscii("en-US") ){
                                 ByteString sText( sLang );
                                 sText += " = \"";
                                 sText += sNewText;
                                 sText += "\"";
                                 *pLine = sText;
                             }
-                            Text[ nIndex ] = sNewText;
+                            Text[ sLang ] = sNewText;
                         }
                     }
                     nLastLangPos = nPos;
@@ -386,23 +342,19 @@ BOOL LngParser::Merge(
             else
                 nPos++;
         }
+        ByteString sCur;
         if ( nLastLangPos ) {
-            for ( USHORT i = 0; i < LANGUAGES; i++ ) {
-                if (( i != GERMAN_INDEX ) && ( !Text[ i ].Len()) && ( pEntrys )) {
-                    ByteString sNewText;
-                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, i, TRUE );
+            for( long int n = 0; n < aLanguages.size(); n++ ){
+                sCur = aLanguages[ n ];
+
+                if( ( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US")) && !Text[ sCur ].Len() && pEntrys ){
+                ByteString sNewText;
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, TRUE );
                     if (( sNewText.Len()) &&
-                        !(( i == COMMENT ) && ( sNewText == "-" )))
+                        !(( sCur.Equals("x-comment") ) && ( sNewText == "-" )))
                     {
                         ByteString sLine;
-                        if ( !bULF && Export::LangId[ i ] < 10 )
-                            sLine += "0";
-                        if ( bULF )
-                            if ( i == ENGLISH_US_INDEX )
-                                sLine += "en";
-                            else sLine += Export::GetIsoLangByIndex( i );
-                        else
-                            sLine += ByteString::CreateFromInt32( Export::LangId[ i ] );
+                        sLine += sCur;
                         sLine += " = \"";
                         sLine += sNewText;
                         sLine += "\"";
