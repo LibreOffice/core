@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-17 11:49:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,13 +451,13 @@ void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::un
 class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
+    // #110680#
     SvxXMLTextExportComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         EditEngine* pEditEngine,
         const ESelection& rSel,
         const ::rtl::OUString& rFileName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler > & xHandler
-        );
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler );
 
     ~SvxXMLTextExportComponent();
 
@@ -474,16 +474,16 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
+// #110680#
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     EditEngine* pEditEngine,
     const ESelection& rSel,
     const ::rtl::OUString& rFileName,
-    const com::sun::star::uno::Reference<
-        com::sun::star::xml::sax::XDocumentHandler > & xHandler
-    )
-    : SvXMLExport( rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
-  mpEditEngine( pEditEngine ),
-  maSelection( rSel )
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
+:   SvXMLExport( xServiceFactory, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
+    mpEditEngine( pEditEngine ),
+    maSelection( rSel )
 {
     SvxEditEngineSource aEditSource( pEditEngine );
 
@@ -554,7 +554,10 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             // export text
             const OUString aName;
-            SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
+
+            // #110680#
+            // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
+            SvxXMLTextExportComponent aExporter( xServiceFactory, &rEditEngine, rSel, aName, xHandler );
 
             aExporter.exportDoc();
 
