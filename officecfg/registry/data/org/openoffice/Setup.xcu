@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:02:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,11 +676,6 @@
             <node oor:name="UI" oor:op="replace">
                 <prop oor:name="IncludedNodes">
                     <value>org.openoffice.Office.UI/ColorScheme</value>
-                </prop>
-            </node>
-            <node oor:name="Views" oor:op="replace">
-                <prop oor:name="IncludedNodes">
-                    <value>org.openoffice.Office.Views</value>
                 </prop>
             </node>
             <node oor:name="Writer" oor:op="replace">
