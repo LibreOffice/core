@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 07:33:33 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef DBAUI_QUERYFILTER_HXX
+#include "queryfilter.hxx"
+#endif
+#ifndef DBAUI_QUERYORDER_HXX
+#include "queryorder.hxx"
 #endif
 
 #define GRID_NAME   "MyOneAndOnlyGrid"
@@ -1625,7 +1631,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                 // we are not in the handle column
                 aReturn.bEnabled = m_pContent->getVclControl()->GetCurColumnId() != 0;
                 // a native statement can't be filtered or sorted
-                aReturn.bEnabled &= m_xParser.is();
+                //  aReturn.bEnabled &= m_xParser.is();
                 break;
 
             case ID_BROWSER_REMOVEFILTER:
@@ -1722,11 +1728,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     if (!SaveModified())
         return;
 
-    // TODO there is no filter dialog yet
-    Reference< ::com::sun::star::data::XDatabaseDialogs >  xDlgs(m_xParser, UNO_QUERY);
-    if (!xDlgs.is())
-        return;
-
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
 
     // no condition for searching
@@ -1745,10 +1746,33 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
     try
     {
-        if (bFilter)
-            xDlgs->executeFilter(xField);
+        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup(xFormSet,UNO_QUERY);
+        Reference< XConnection> xCon;
+        xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xCon;
+        if(bFilter)
+        {
+            DlgFilterCrit aDlg(getContent(),xCon,m_xParser,xSup->getColumns(),xField->getName());
+            String aFilter;
+            if(!aDlg.Execute())
+            {
+                if(bFilter) // reset the filter
+                    m_xParser->setFilter(sOldVal);
+                return; // if so we don't need to actualize the grid
+            }
+            aFilter = aDlg.BuildWherePart();
+        }
         else
-            xDlgs->executeSort(xField);
+        {
+            DlgOrderCrit aDlg(getContent(),xCon,m_xParser,xSup->getColumns());
+            String aOrder;
+            if(!aDlg.Execute())
+            {
+                if(bFilter) // reset the filter
+                    m_xParser->setOrder(sOldVal);
+                return; // if so we don't need to actualize the grid
+            }
+            aDlg.BuildOrderPart();
+        }
     }
     catch(...)
     {
@@ -2132,7 +2156,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             // restore the cursor state
             Reference< XResultSetUpdate >  xCursor(getRowSet(), UNO_QUERY);
             Reference< XPropertySet >  xSet(xCursor, UNO_QUERY);
-            if (::comphelper::getBOOL(xSet->getPropertyValue(PROPERTY_ISNEW)))
+            Any aVal = xSet->getPropertyValue(PROPERTY_ISNEW);
+            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
             {
                 xCursor->moveToInsertRow();
                 // no need to reset the grid model after we moved to the insert row, this is done implicitly by the
