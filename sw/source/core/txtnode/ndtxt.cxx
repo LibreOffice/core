@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:22:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2374,6 +2374,16 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_BREAK, FALSE ) )
         {
             pTmpSet->ClearItem( RES_BREAK );
+            bRemoveFromCache = TRUE;
+        }
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_KEEP, FALSE ) )
+        {
+            pTmpSet->ClearItem( RES_KEEP );
+            bRemoveFromCache = TRUE;
+        }
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, FALSE ) )
+        {
+            pTmpSet->ClearItem( RES_PARATR_SPLIT );
             bRemoveFromCache = TRUE;
         }
         if( !bNext && bRemoveFromCache && IsInCache() )
