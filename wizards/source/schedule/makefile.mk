@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:06:30 $
+#   last change: $Author: tv $ $Date: 2001-04-23 10:02:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,28 +59,32 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..
 
 PRJNAME=wizards
-TARGET=schedule
+TARGET=scheduleall
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE : $(PRJ)$/util$/target.pmk
 
 # --- Files --------------------------------------------------------
 
 #
 # testresource.
 #
-SRS2NAME =		schedule
+SRS2NAME =              schedule
 SRC2FILES=		schedule.src
 RESLIB2SRSFILES= $(SRS)$/schedule.srs
 RESLIB2NAME=	cal
 
+ZIP1TARGET      = $(SCHEDULE_ALL_TARGET)
+ZIP1LIST        = *.xdl *.xba
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:06:31 $
+#   last change: $Author: tv $ $Date: 2001-04-23 10:04:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,17 +70,22 @@ TARGET=template
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE : $(PRJ)$/util$/target.pmk
 
 # --- Files --------------------------------------------------------
 
 #
 # testresource.
 #
-SRS2NAME =		template
+SRS2NAME =              template
 SRC2FILES=		template.src
 RESLIB2SRSFILES= $(SRS)$/template.srs
 RESLIB2NAME=	tpl
 
+ZIP1TARGET      = $(TEMPLATE_ALL_TARGET)
+ZIP1LIST        = *.xdl *.xba
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
