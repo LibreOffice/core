@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-17 12:30:18 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 11:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,13 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
 {
     if (!s_cFormatter)
     {
+        // get the Office's UI locale
+        const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+        // translate
+        LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
         s_cFormatter = new SvNumberFormatter(
             ::comphelper::getProcessServiceFactory(),
-            Application::GetSettings().GetUILanguage());
+            eSysLanguage);
     }
     return s_cFormatter;
 }
