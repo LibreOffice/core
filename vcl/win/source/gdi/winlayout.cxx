@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 11:57:08 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,9 +234,11 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
             ||   (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
                 mbDisableGlyphs = true;
+#if 0 // #110548# more important than #107885# => TODO: better solution
             DWORD nFLI = GetFontLanguageInfo( mhDC );
             if( !(nFLI & GCP_GLYPHSHAPE) )
                 mbDisableGlyphs = true;
+#endif
         }
     }
 
