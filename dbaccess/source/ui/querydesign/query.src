@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:20:09 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ String STR_QUERY_UNDO_TABWINSHOW
     Text [ swedish ] = "Lägg till tabellfönster" ;
     Text [ danish ] = "Tilføj tabelvindue" ;
     Text [ italian ] = "Aggiungi finestra di tabella" ;
-    Text [ spanish ] = "Añadir ventana de tabla" ;
+    Text [ spanish ] = "Añadir una ventana de tabla" ;
     Text [ french ] = "Ajouter une fenêtre de table" ;
     Text [ dutch ] = "Tabelvenster toevoegen" ;
     Text [ portuguese ] = "Adicionar janela de tabela" ;
@@ -198,7 +198,7 @@ String STR_QUERY_UNDO_MOVETABWIN
     Text [ swedish ] = "Flytta tabellfönster" ;
     Text [ danish ] = "Flyt tabelvindue" ;
     Text [ italian ] = "Sposta finestra di tabella" ;
-    Text [ spanish ] = "Desplazar ventana de tabla" ;
+    Text [ spanish ] = "Desplazar una ventana de tabla" ;
     Text [ french ] = "Déplacer la fenêtre de table" ;
     Text [ dutch ] = "Tabelvenster verplaatsen" ;
     Text [ portuguese ] = "Mover janela da tabela" ;
@@ -227,7 +227,7 @@ String STR_QUERY_UNDO_INSERTCONNECTION
     Text [ swedish ] = "Infoga förbindelse" ;
     Text [ danish ] = "Indsæt forbindelse" ;
     Text [ italian ] = "Inserisci collegamento" ;
-    Text [ spanish ] = "Insertar conexión" ;
+    Text [ spanish ] = "Insertar una conexión" ;
     Text [ french ] = "Insérer une jointure" ;
     Text [ dutch ] = "Verbinding invoegen" ;
     Text [ portuguese ] = "Inserir ligação" ;
@@ -257,7 +257,7 @@ String STR_QUERY_UNDO_REMOVECONNECTION
     Text [ swedish ] = "Radera förbindelse" ;
     Text [ danish ] = "Slet forbindelse" ;
     Text [ italian ] = "Termina collegamento" ;
-    Text [ spanish ] = "Eliminar conexión" ;
+    Text [ spanish ] = "Eliminar una conexión" ;
     Text [ french ] = "Supprimer la jointure" ;
     Text [ dutch ] = "Verbinding wissen" ;
     Text [ portuguese ] = "Eliminar ligação" ;
@@ -287,7 +287,7 @@ String STR_QUERY_UNDO_SIZETABWIN
     Text [ swedish ] = "Tabellfönster - ändra storlek" ;
     Text [ danish ] = "Tabelvindue - modificer størrelse" ;
     Text [ italian ] = "Finestra di tabella - cambia dimensione" ;
-    Text [ spanish ] = "Ventana de tabla - Modificar tamaño" ;
+    Text [ spanish ] = "Ventana de tabla - Modificar el tamaño" ;
     Text [ french ] = "Fenêtre de table - modifier la taille" ;
     Text [ dutch ] = "Tabelvenster - Grootte veranderen" ;
     Text [ portuguese ] = "Janela da tabela - modificar tamanho" ;
@@ -317,7 +317,7 @@ String STR_QUERY_UNDO_TABFIELDDELETE
     Text [ swedish ] = "Radera kolumn" ;
     Text [ danish ] = "Slet kolonne" ;
     Text [ italian ] = "Elimina colonna" ;
-    Text [ spanish ] = "Eliminar columna" ;
+    Text [ spanish ] = "Eliminar la columna" ;
     Text [ french ] = "Supprimer la colonne" ;
     Text [ dutch ] = "Kolom wissen" ;
     Text [ portuguese ] = "Eliminar coluna" ;
@@ -349,7 +349,7 @@ String STR_QUERY_UNDO_TABFIELDMOVED
     Text[ greek ] = "Move column";
     Text[ dutch ] = "Move column";
     Text[ french ] = "Déplacer la colonne";
-    Text[ spanish ] = "Desplazar columna";
+    Text[ spanish ] = "Desplazar la columna";
     Text[ finnish ] = "Move column";
     Text[ italian ] = "Muovi colonna";
     Text[ danish ] = "Move column";
@@ -376,7 +376,7 @@ String STR_QUERY_UNDO_TABFIELDCREATE
     Text [ swedish ] = "Lägg till kolumn" ;
     Text [ danish ] = "Tilføj kolonne" ;
     Text [ italian ] = "Aggiungi colonna" ;
-    Text [ spanish ] = "Añadir columna" ;
+    Text [ spanish ] = "Añadir una columna" ;
     Text [ french ] = "Ajouter une colonne" ;
     Text [ dutch ] = "Kolom toevoegen" ;
     Text [ portuguese ] = "Adicionar coluna" ;
@@ -405,7 +405,7 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text[ russian ] = "Íåäîïóñòèìîå âûğàæåíèå. Òàáëèöà '$name$' íå ñóùåñòâóåò.";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
     Text[ french ] = "L'expression n'est pas valide car la table '$name$' n'existe pas !";
-    Text[ spanish ] = "¡La expresión no es válida porque no existe ninguna tabla '$name$'!";
+    Text[ spanish ] = "¡La expresión no es válida porque la tabla '$name$' no existe!";
     Text[ italian ] = "L'espressione non è valida in quanto la tabella '$name$' non esiste !";
     Text[ danish ] = "Udtrykket er ugyldigt, da der ikke findes nogen tabel med navnet '$name$'!";
     Text[ swedish ] = "Uttrycket är ogiltigt eftersom det inte finns någon tabell med namnet '$name$'!";
@@ -435,7 +435,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ russian ] = "Íåïğàâèëüíîå âûğàæåíèå, ïîñêîëüêó èìÿ ïîëÿ '$name$' ïğèñâîèòü íåâîçìîæíî!";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de veldnaam '$name$' niet kan worden herleid !";
     Text[ french ] = "L'expression n'est pas valide car il est impossible d'attribuer le nom de champ '$name$' !";
-    Text[ spanish ] = "¡La expresión no es válida porque no se puede asignar el nombre de campo '$name$'!";
+    Text[ spanish ] = "¡La expresión no es válida porque el nombre de campo '$name$' no se puede asignar!";
     Text[ italian ] = "L'espressione non è valida in quanto non è possibile assegnare il nome di campo '$name$'!";
     Text[ danish ] = "Udtrykket er ugyldigt, da feltnavnet '$name$' ikke kan tildeles!";
     Text[ swedish ] = "Uttrycket är ogiltigt eftersom fältnamnet '$name$' inte kan tilldelas!";
@@ -466,7 +466,7 @@ String RID_STR_TOMUCHTABLES
     Text[ french ] = "La requête contient #num# tables. Or, le type de base de données actif peut traiter au maximum #maxnum# table(s) par instruction !";
     Text[ swedish ] = "Sökningen innehåller #num# tabeller. Men den aktuella databastypen kan bara bearbeta max #maxnum# tabell(er) per sats!";
     Text[ dutch ] = "Query bevat #num# tabellen. Het actuele databastype kan echter maximaal #maxnum# tabel(len) per statement verwerken !";
-    Text[ spanish ] = "La consulta contiene #num# Tablas. ¡El tipo actual de base de datos admite cómo máximo solo #maxnum# tabla(s) por instrucción!";
+    Text[ spanish ] = "La consulta contiene #num# tablas. ¡El tipo actual de base de datos admite cómo máximo  #maxnum# tabla(s) por instrucción!";
     Text[ english_us ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement!";
     Text[ chinese_simplified ] = "æŸ¥è¯¢å«æœ‰ #num# è¡¨æ ¼ã€‚è¿™ä¸ªç±»å‹çš„æ•°æ®åº“åœ¨å¤„ç†ä¸€ä¸ªè¯­å¥æ—¶æœ€å¤šåªèƒ½å¤ŸæŸ¥è¯¢ #maxnum# è¡¨æ ¼ï¼";
     Text[ language_user1 ] = " ";
@@ -495,7 +495,7 @@ String STR_QUERY_UNDO_TABWINDELETE
     Text [ swedish ] = "Radera tabellfönster" ;
     Text [ danish ] = "Slet tabelvindue" ;
     Text [ italian ] = "Elimina finestra di tabella" ;
-    Text [ spanish ] = "Eliminar ventana de tabla" ;
+    Text [ spanish ] = "Eliminar la ventana de tabla" ;
     Text [ french ] = "Supprimer la fenêtre de table" ;
     Text [ dutch ] = "Tabelvenster wissen" ;
     Text [ portuguese ] = "Eliminar janela de tabela" ;
@@ -527,7 +527,7 @@ String STR_QUERY_UNDO_MODIFY_CELL
     Text[ french ] = "Modifier la description des colonnes";
     Text[ swedish ] = "Ändra kolumnbeskrivning";
     Text[ dutch ] = "Kolombeschrijving wijzigen";
-    Text[ spanish ] = "Modificar descripción de columnas";
+    Text[ spanish ] = "Modificar la descripción de las columnas";
     Text[ english_us ] = "Edit Column Description";
     Text[ chinese_simplified ] = "æ›´æ”¹åˆ—æ ‡é¢˜";
     Text[ russian ] = "Èçìåíèòü îïèñàíèå êîëîíêè";
@@ -556,7 +556,7 @@ String STR_QUERY_UNDO_SIZE_COLUMN
     Text[ french ] = "Modifier la largeur des colonnes";
     Text[ swedish ] = "Ändra kolumnbredd";
     Text[ dutch ] = "Kolombreedte wijzigen";
-    Text[ spanish ] = "Modificar ancho de columnas";
+    Text[ spanish ] = "Modificar el ancho de columnas";
     Text[ english_us ] = "Adjust column width";
     Text[ chinese_simplified ] = "æ›´æ”¹åˆ—å®½";
     Text[ russian ] = "Èçìåíèòü øèğèíó êîëîíêè";
@@ -899,7 +899,7 @@ ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
     Message [ swedish ] = "Ett villkor är omöjligt för fält [*]" ;
     Message [ danish ] = "En betingelse for felt [*] er ikke mulig" ;
     Message [ italian ] = "Non è possibile nessuna condizione per il campo [*]" ;
-    Message [ spanish ] = "No es posible una condición para el campo [*]" ;
+    Message [ spanish ] = "No se puede asignar ninguna condición al campo [*]" ;
     Message [ french ] = "Une condition n'est pas applicable au champ [*]" ;
     Message [ dutch ] = "Een voorwaarde voor veld [*] is niet mogelijk" ;
     Message[ chinese_simplified ] = "æ¡ä»¶æ— æ³•ç”¨äºå­—æ®µ [*]";
@@ -1221,7 +1221,7 @@ ErrorBox ERR_QRY_AMB_FIELD
     Message [ french ] = "Nom de champ introuvable ou ambigu" ;
     Message [ swedish ] = "Fältnamn hittades inte eller är inte entydigt" ;
     Message [ dutch ] = "Veldnaam niet gevonden of niet duidelijk" ;
-    Message [ spanish ] = "El nombre del campo no se encontró o no es único" ;
+    Message [ spanish ] = "El nombre del campo no se encontró o es ambiguo" ;
     Message [ english_us ] = "Field name not found or not unique" ;
     Message[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å­—æ®µåç§°æˆ–è€…å­—æ®µåç§°ä¸æ˜ç¡®ã€‚";
     Message[ russian ] = "Èìÿ ïîëÿ íå íàéäåíî èëè îíî íåîäíîçíà÷íî";
@@ -1609,7 +1609,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ greek ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ dutch ] = "De weergave is veranderd.\nWilt u de veranderingen opslaan?";
     Message[ french ] = "Des modifications ont été effectuées dans la vue.\nDoivent-elles être enregistrées ?";
-    Message[ spanish ] = "Se ha modificaco la visualización de la tabla.\n¿Desea guardar las modificaciones?";
+    Message[ spanish ] = "Se ha modificado la visualización de la tabla.\n¿Desea guardar las modificaciones?";
     Message[ finnish ] = "Nykyistä taulukkonäkymää on muutettu.\nHaluatko tallentaa muutokset?";
     Message[ italian ] = "La vista tabelle è stata modificata.\nVolete salvare le modifiche?";
     Message[ danish ] = "Tabelvisningen er blevet ændret.\nSkal ændringerne gemmes?";
@@ -2116,7 +2116,7 @@ String STR_DATASOURCE_DELETED
     Text[ greek ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ dutch ] = "De bijbehorende gegevensbron werd gewist. De desbetreffende gegevens kunnen niet worden opgeslagen.";
     Text[ french ] = "Impossible d'enregistrer les données : la source de données correspondante a été supprimée.";
-    Text[ spanish ] = "Se ha eliminado la fuente de datos. No se pueden guardar datos correspondientes a ella.";
+    Text[ spanish ] = "Se ha eliminado la fuente de datos. Los datos correspondientes no se pueden guardar.";
     Text[ finnish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ italian ] = "La sorgente dati è stata eliminata. Impossibile salvare i dati corrispondenti.";
     Text[ danish ] = "Den tilhørende datakilde er blevet slettet. Det er ikke muligt at gemme data med relation til denne.";
