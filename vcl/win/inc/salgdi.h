@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:58:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,11 +310,7 @@ void    ImplGetLogFontFromFontSelect( HDC hDC,
 // - Defines -
 // -----------
 
-#ifdef WIN
-#define MAX_64KSALPOINTS    ((((USHORT)0xFFFF)-4)/sizeof(POINT))
-#else
 #define MAX_64KSALPOINTS    ((((USHORT)0xFFFF)-8)/sizeof(POINTS))
-#endif
 
 // -----------
 // - Inlines -
