@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 14:38:26 $
+ *  last change: $Author: fs $ $Date: 2001-02-06 10:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2024,8 +2024,11 @@ namespace pcr
                     }
                     break;
 
+                    case PROPERTY_ID_BOUNDCOLUMN:
+                        pProperty->nMinValue = 1;
                     case PROPERTY_ID_TABINDEX:
-                        pProperty->nMinValue = 0;
+                        if (PROPERTY_ID_TABINDEX == nPropId)
+                            pProperty->nMinValue = 0;
                         pProperty->nMaxValue = 0x7FFFFFFF;
                         pProperty->bHaveMinMax = sal_True;
                         break;
@@ -2503,6 +2506,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/02/05 14:38:26  fs
+ *  #83461# no 'not defined' for radio buttons check state
+ *
  *  Revision 1.5  2001/02/05 08:59:02  fs
  *  #83468# SetTables ... correctly retrieve the rowset for combo-/listboxes
  *
