@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:08:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@
 #endif
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
+#endif
+// <--
+// --> OD 2004-10-15 #i26945#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 // <--
 
@@ -1138,7 +1143,7 @@ BOOL SwFlowFrm::IsPrevObjMove() const
         ASSERT( SwFlowFrm::CastFlowFrm( pPre ), "new flowfrm?" );
         if( SwFlowFrm::CastFlowFrm( pPre )->IsAnFollow( this ) )
             return FALSE;
-        SwFrm* pPreUp = pPre->GetUpper();
+        SwLayoutFrm* pPreUp = pPre->GetUpper();
         // Wenn der Upper ein SectionFrm oder die Spalte eines SectionFrms ist,
         // duerfen wir aus diesem durchaus heraushaengen,
         // es muss stattdessen der Upper des SectionFrms beruecksichtigt werden.
@@ -1150,60 +1155,32 @@ BOOL SwFlowFrm::IsPrevObjMove() const
                      pPreUp->GetUpper()->GetUpper()->IsSctFrm() )
                 pPreUp = pPreUp->GetUpper()->GetUpper()->GetUpper();
         }
-        const long nBottom = pPreUp->Frm().Bottom();
-        const long nRight  = pPreUp->Frm().Right();
-        const FASTBOOL bCol = pPreUp->IsColBodyFrm();//ColFrms jetzt mit BodyFrm
+        // --> OD 2004-10-15 #i26945# - re-factoring:
+        // use <GetVertPosOrientFrm()> to determine, if object has followed the
+        // text flow to the next layout frame
         for ( USHORT i = 0; i < pPre->GetDrawObjs()->Count(); ++i )
         {
             // --> OD 2004-07-01 #i28701# - consider changed type of
             // <SwSortedObjs> entries.
             const SwAnchoredObject* pObj = (*pPre->GetDrawObjs())[i];
-            // OD 2004-01-20 #110582# - do not consider hidden fly frames
-            if ( pObj->ISA(SwFlyFrm) &&
-                 rThis.GetUpper()->GetFmt()->GetDoc()->IsVisibleLayerId(
-                                            pObj->GetDrawObj()->GetLayer() ) )
+            // OD 2004-01-20 #110582# - do not consider hidden objects
+            // --> OD 2004-10-15 #i26945# - do not consider object, which
+            // doesn't follow the text flow.
+            if ( pObj->GetFrmFmt().GetDoc()->IsVisibleLayerId(
+                                            pObj->GetDrawObj()->GetLayer() ) &&
+                 pObj->GetFrmFmt().GetFollowTextFlow().GetValue() )
+            // <--
             {
-                const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
-
-                if ( WEIT_WECH != pFly->Frm().Top() && !pFly->IsFlyInCntFrm() )
+                const SwLayoutFrm* pVertPosOrientFrm = pObj->GetVertPosOrientFrm();
+                if ( pVertPosOrientFrm &&
+                     pPreUp != pVertPosOrientFrm &&
+                     !pPreUp->IsAnLower( pVertPosOrientFrm ) )
                 {
-                    if( pObj->GetObjRect().Top() > nBottom )
-                        return TRUE;
-                    if( bCol && pObj->GetObjRect().Left() > nRight )
-                    {
-                        SwFmtHoriOrient aHori( pFly->GetFmt()->GetHoriOrient() );
-                        if( FRAME == aHori.GetRelationOrient() ||
-                            PRTAREA == aHori.GetRelationOrient() ||
-                            REL_CHAR == aHori.GetRelationOrient() ||
-                            REL_FRM_LEFT == aHori.GetRelationOrient() ||
-                            REL_FRM_RIGHT == aHori.GetRelationOrient() )
-                        {
-                            if( HORI_NONE == aHori.GetHoriOrient() )
-                            {
-                                SwTwips nAdd = 0;
-                                switch ( aHori.GetRelationOrient() )
-                                {
-                                    case PRTAREA:
-                                        nAdd = pFly->Prt().Left(); break;
-                                    case REL_FRM_RIGHT:
-                                        nAdd = pFly->Frm().Width(); break;
-                                    case REL_CHAR:
-                                        if( pFly->IsFlyAtCntFrm() )
-                                            nAdd = ((SwFlyAtCntFrm*)pFly)->GetLastCharX();
-                                        break;
-                                }
-                                nAdd += aHori.GetPos();
-                                if( nAdd < pPreUp->Frm().Width() &&
-                                    nAdd + pFly->Frm().Width() > 0 )
-                                    return TRUE;
-                            }
-                            else
-                                return TRUE;
-                        }
-                    }
+                    return TRUE;
                 }
             }
         }
+        // <--
     }
     return FALSE;
 }
