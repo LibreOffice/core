@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:15:03 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,49 @@ package com.sun.star.wizards.web;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.FileNotFoundException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
-import com.sun.star.awt.KeyEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XKeyListener;
+import com.sun.star.awt.WindowClass;
+import com.sun.star.awt.WindowDescriptor;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.frame.FrameSearchFlag;
-import com.sun.star.frame.XController;
+import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.*;
+import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.XCloseable;
+import com.sun.star.wizards.common.ConfigSet;
+import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.document.OfficeDocument;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.ui.event.*;
-import com.sun.star.wizards.web.data.*;
+import com.sun.star.wizards.text.TextDocument;
+import com.sun.star.wizards.ui.DocumentPreview;
+import com.sun.star.wizards.ui.event.DataAware;
+import com.sun.star.wizards.ui.event.ListModelBinder;
+import com.sun.star.wizards.ui.event.RadioDataAware;
+import com.sun.star.wizards.ui.event.SimpleDataAware;
+import com.sun.star.wizards.ui.event.Task;
+import com.sun.star.wizards.ui.event.UnoDataAware;
+import com.sun.star.wizards.web.data.CGContent;
+import com.sun.star.wizards.web.data.CGDocument;
+import com.sun.star.wizards.web.data.CGIconSet;
+import com.sun.star.wizards.web.data.CGPublish;
+import com.sun.star.wizards.web.data.CGSession;
+import com.sun.star.wizards.web.data.CGSessionName;
+import com.sun.star.wizards.web.data.CGSettings;
+import com.sun.star.wizards.web.data.CGStyle;
 
 /**
  * Web Wizard Dialog implementation : Startup.
@@ -189,12 +208,6 @@ public abstract class WWD_Startup extends WWD_General {
      * name in step 7 with the CGSession.cp_Name
      */
     protected UnoDataAware sessionNameDA;
-    /**
-     * I Seperate this one because I need
-     * to call it exclusivly (updateUI()) when
-     * setting the FavIcon URL.
-     */
-    protected UnoDataAware favIconDA;
 
     /**
      * Binds a ListModel to the UnoControlListBox.
@@ -219,8 +232,24 @@ public abstract class WWD_Startup extends WWD_General {
      */
     protected short[] selectedDoc = new short[0];
 
-    protected XFrame myOwnFrame;
+    /**
+     * If ftp proxies are on, ftp is disabled, and
+     * the true/false of the FTP publisher is set to false.
+     * In order to save it correctly when saving the session
+     * at the end, the original loaded value is saved to this variable;
+     */
+    boolean __ftp;
+
+
+    /**
+     * When the wizard starts, a new document opens.
+     * The backgroundDoc memeber contains the TextDocument
+     * instance used for that purpose.
+     */
+    protected XFrame myFrame;
     protected XFrame desktopFrame;
+
+
     /* ******************************************
      *  ****************************************
      *             General Methods
@@ -254,8 +283,10 @@ public abstract class WWD_Startup extends WWD_General {
     public WWD_Startup(XMultiServiceFactory xmsf) throws Exception {
         super(xmsf);
 
-        checkProxies();
+        proxies = getOOProxies();
 
+        String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template","share");
+        String exclamationURL = FileAccess.connectURLs( soTemplateDir, "wizard/bitmap/caution_16.png");
         this.drawNaviBar();
         this.buildStep1();
         this.buildStep2();
@@ -264,18 +295,27 @@ public abstract class WWD_Startup extends WWD_General {
         this.buildStep4();
         this.buildStep5();
         this.buildStep6();
-        this.buildStep7();
+        this.buildStep7(proxies, exclamationURL);
         buildStepX();
 
-        loadSettings();
-        setSaveSessionName();
+
+        desktopFrame = Desktop.getActiveFrame(xMSF);
+        myFrame = OfficeDocument.createNewFrame(xMSF);
+
+        desktopFrame = Desktop.findAFrame(xMSF, myFrame, desktopFrame);
+
+        Object doc = OfficeDocument.createNewDocument( myFrame, "swriter", false, true );
+
+        loadSettings(doc);
+        setSaveSessionName(settings.cp_DefaultSession);
 
         ilLayouts.setListModel(settings.cp_Layouts);
         ilLayouts.create(this);
 
-        checkContent(settings.cp_DefaultSession.cp_Content, new Task("", "", 99999));
+        checkContent(settings.cp_DefaultSession.cp_Content, new Task("", "", 99999), this.xControl );
 
         //saved sessions, styles, combobox save session.
+        // also set the chosen saved session...
         fillLists();
         makeDataAware();
         // change the display to correspond to the current session.
@@ -290,20 +330,6 @@ public abstract class WWD_Startup extends WWD_General {
         }
     }
 
-    /**
-     * if FTP http proxy is set, notify the user.
-     * @throws StoppedByUserException if the user chooses not
-     * to start the wizard.
-     */
-    private void checkProxies() throws Exception {
-        if (getOOProxies()) {
-            boolean b = AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),resources.resErrProxies, ErrorHandler.ERROR_NORMAL_IGNORE);
-            if (!b)
-                throw new StoppedByUserException("OOProxies not allowed");
-            else
-                proxies = true;
-        }
-    }
 
     /**
      * return true if http proxies or other proxies
@@ -332,7 +358,7 @@ public abstract class WWD_Startup extends WWD_General {
      * The combobox text in step 7 will be updated
      * automatically when updateUI() is called.
      */
-    private void setSaveSessionName() {
+    protected void setSaveSessionName(CGSession session) {
         int max = 0;
         int len = resources.resSessionName.length();
         // traverse between the sessions and find the one that
@@ -343,7 +369,7 @@ public abstract class WWD_Startup extends WWD_General {
                 max = max(max, Integer.valueOf(sessionName.substring(len)).intValue());
         }
 
-        settings.cp_DefaultSession.cp_Name = resources.resSessionName + ++max;
+        session.cp_Name = resources.resSessionName + ++max;
 
     }
 
@@ -384,11 +410,13 @@ public abstract class WWD_Startup extends WWD_General {
         DataAware.updateUI(genAware);
         DataAware.updateUI(pubAware);
         sessionNameDA.updateUI();
-        favIconDA.updateUI();
         checkPublish();
     }
 
-
+    private XFrame getFrame(Object model) {
+        XModel xmodel = (XModel)UnoRuntime.queryInterface(XModel.class,model);
+        return xmodel.getCurrentController().getFrame();
+    }
 
     /**
      * create the peer, add roadmap,
@@ -399,16 +427,17 @@ public abstract class WWD_Startup extends WWD_General {
     public void show() {
         try {
 
-            desktopFrame = Desktop.getActiveFrame(xMSF);
 
-            myOwnFrame = OfficeDocument.createNewFrame(xMSF);
+            /* myFrame.initialize(docWindow);
+             * */
 
-            desktopFrame = Desktop.findAFrame(xMSF, myOwnFrame, desktopFrame);
+            //desktopFrame = Desktop.findAFrame(xMSF, myFrame, desktopFrame);
 
+            //XWindow xContainerWindow = myFrame.getContainerWindow();
 
-
-            XWindow xContainerWindow = myOwnFrame.getContainerWindow();
+            XWindow xContainerWindow = myFrame.getComponentWindow();
             XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
+
             createWindowPeer(xWindowPeer);
 
             addRoadmap();
@@ -432,6 +461,7 @@ public abstract class WWD_Startup extends WWD_General {
             stylePreview = new StylePreview(xMSF, settings.workPath);
             stylePreview.refresh(settings.cp_DefaultSession.getStyle(), settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
             dpStylePreview.setDocument(stylePreview.htmlFilename, DocumentPreview.PREVIEW_MODE);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -440,41 +470,102 @@ public abstract class WWD_Startup extends WWD_General {
     /**
      * Loads the web wizard settings from the registry.
      */
-    private void loadSettings() {
+    private void loadSettings(Object document) {
         try {
-            settings = new CGSettings(xMSF);
+            // instanciate
+            String[] settingsResources = new String[] {
+                    resources.resPages,
+                    resources.resSlides,
+                    resources.resCreatedTemplate,
+                    resources.resUpdatedTemplate,
+                    resources.resSizeTemplate
+            };
 
+            settings = new CGSettings(xMSF, settingsResources, document );
+
+            // get configuration view
             Object confRoot = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH, false);
+            // read
             settings.readConfiguration(confRoot, CONFIG_READ_PARAM);
 
             ConfigSet set = settings.cp_DefaultSession.cp_Publishing;
 
+            // now if path variables are used in publisher pathes, they
+            // are getting replaced here...
             for (int i = 0; i<set.getSize(); i++) {
                 CGPublish p =(CGPublish)set.getElementAt(i);
                 p.cp_URL = substitute(p.cp_URL);
             }
 
+            // initialize the settings.
             settings.configure(xMSF);
-            settings.resCreated = resources.resCreatedTemplate;
-            settings.resUpdated = resources.resUpdatedTemplate;
-            settings.resPages = resources.resPages;
-            settings.resSlides = resources.resSlides;
+
+            // set resource needed for web page.
+
+            // sort the styles alphabetically
+            settings.cp_Styles.sort(new StylesComparator());
+
+            prepareSessionLists();
+
+            if (proxies) {
+                __ftp = getPublisher(FTP_PUBLISHER).cp_Publish;
+                getPublisher(FTP_PUBLISHER).cp_Publish = false;
+
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    /**
-     * fills the saved session list, the styles list,
-     * and the save session combo box.
-     */
-    private void fillLists() {
-        ListModelBinder.fillList(lstLoadSettings, settings.cp_SavedSessions.items(), null);
-        ListModelBinder.fillList(lstStyles, settings.cp_Styles.items(), null);
-        ListModelBinder.fillComboBox(cbSaveSettings, settings.cp_SavedSessions.items(), null);
+
+    protected void prepareSessionLists() {
+        // now copy the sessions list...
+        Object[] sessions = settings.cp_SavedSessions.items();
+        settings.savedSessions.clear();
+        for (int i = 0; i< sessions.length; i++)
+            settings.savedSessions.add(i, sessions[i]);
+
+        // add an empty session to the saved session list which apears in step 1
+        CGSessionName sn = new CGSessionName();
+        sn.cp_Name = resources.resSessionNameNone;
+        settings.cp_SavedSessions.add(0, sn);
     }
 
+    /**
+     * fills the saved session list, the styles list,
+     * and save session combo box.
+     * Also set the selected "load" session to the last session
+     * which was saved.
+     */
+    private void fillLists() {
+        // fill the saved session list.
+        ListModelBinder.fillList(lstLoadSettings, settings.cp_SavedSessions.items(), null);
+
+        // set the selected session to load. (step 1)
+        selectSession();
+
+        // fill the styles list.
+        ListModelBinder.fillList(lstStyles, settings.cp_Styles.items(), null);
+
+        // fill the save session combobox (step 7)
+        ListModelBinder.fillComboBox(cbSaveSettings, settings.savedSessions.items(), null);
+
+
+    }
+
+    protected void selectSession() {
+        int selectedSession = 0;
+        if (settings.cp_LastSavedSession != null  && !settings.cp_LastSavedSession.equals("")) {
+
+            Object ses = settings.cp_SavedSessions.getElement( settings.cp_LastSavedSession );
+            if (ses != null) {
+                selectedSession = settings.cp_SavedSessions.getIndexOf(ses);
+            }
+        }
+        Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", new short[] { (short) selectedSession } );
+
+    }
     /**
      * attaches to each ui-data-control (like checkbox, groupbox or
      * textbox, no buttons though), a DataObject's JavaBean Property,
@@ -539,29 +630,16 @@ public abstract class WWD_Startup extends WWD_General {
         genAware.add(UnoDataAware.attachEditControl(settings.cp_DefaultSession.cp_GeneralInfo, "cp_Title", txtSiteTitle, refresh, true));
         genAware.add(UnoDataAware.attachEditControl(settings.cp_DefaultSession.cp_GeneralInfo, "cp_Description", txtSiteDesc, refresh, true));
 
-        //note: FavIcon textbox is handeled seperatly from all other "general properties".
-        try {
-            favIconDA = UnoDataAware.attachEditControl(this, "Icon", txtFavIcon, null, false);
-            MethodInvocation mi1 = new MethodInvocation("removeFavIcon",this,KeyEvent.class);
-            guiEventListener.add("txtFavIcon",EventNames.EVENT_KEY_PRESSED,mi1);
-            ((XWindow)UnoRuntime.queryInterface(XWindow.class,txtFavIcon)).addKeyListener((XKeyListener)guiEventListener);
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        genAware.add(UnoDataAware.attachEditControl(settings.cp_DefaultSession.cp_GeneralInfo, "cp_Keywords", txtSiteKeywords, null, true));
         genAware.add(UnoDataAware.attachDateControl(settings.cp_DefaultSession.cp_GeneralInfo, "CreationDate", dateSiteCreated, refresh, false));
         genAware.add(UnoDataAware.attachDateControl(settings.cp_DefaultSession.cp_GeneralInfo, "UpdateDate", dateSiteUpdate, refresh, false));
-        genAware.add(UnoDataAware.attachNumericControl(settings.cp_DefaultSession.cp_GeneralInfo, "cp_RevisitAfter", txtRevisitAfter, null, true));
         genAware.add(UnoDataAware.attachEditControl(settings.cp_DefaultSession.cp_GeneralInfo, "cp_Email", txtEmail, refresh, true));
         genAware.add(UnoDataAware.attachEditControl(settings.cp_DefaultSession.cp_GeneralInfo, "cp_Copyright", txtCopyright, refresh, true));
 
         //page 7 : publishing
 
-        pubAware(LOCAL_PUBLISHER, chkLocalDir, txtLocalDir);
-        pubAware(FTP_PUBLISHER, chkFTP, txtFTP);
-        pubAware(ZIP_PUBLISHER, chkZip, txtZip);
+        pubAware(LOCAL_PUBLISHER, chkLocalDir, txtLocalDir, false);
+        pubAware(FTP_PUBLISHER, chkFTP, lblFTP ,true );
+        pubAware(ZIP_PUBLISHER, chkZip, txtZip , false );
 
         sessionNameDA = UnoDataAware.attachEditControl(settings.cp_DefaultSession, "cp_Name", cbSaveSettings, null, true);
 
@@ -578,14 +656,17 @@ public abstract class WWD_Startup extends WWD_General {
      * @param checkbox
      * @param textbox
      */
-    private void pubAware(String publish, Object checkbox, Object textbox) {
+    private void pubAware(String publish, Object checkbox, Object textbox, boolean isLabel) {
         Object p = settings.cp_DefaultSession.cp_Publishing.getElement(publish);
         UnoDataAware uda = UnoDataAware.attachCheckBox(p, "cp_Publish", checkbox, checkPublish, true);
         uda.setInverse(true);
 
         uda.disableControls(new Object[] { textbox });
         pubAware.add(uda);
-        pubAware.add(UnoDataAware.attachEditControl(p, "URL", textbox, checkPublish, false));
+        pubAware.add(
+                isLabel ? UnoDataAware.attachLabel(p, "URL", textbox, checkPublish, false )
+                        : UnoDataAware.attachEditControl(p, "URL", textbox, checkPublish, false));
+
     }
 
     /*
@@ -595,7 +676,7 @@ public abstract class WWD_Startup extends WWD_General {
      */
 
     /**
-     * If called when a new session/settings is
+     * Is called when a new session/settings is
      * loaded. <br/>
      * Checks the documents (validate), fills the
      * documents listbox, and changes the
@@ -605,11 +686,11 @@ public abstract class WWD_Startup extends WWD_General {
      * and ??? times for each document in the session.
      *
      */
-    protected void mount(CGSession session, Task task) {
+    protected void mount(CGSession session, Task task, boolean refreshStyle, XControl xC ) {
         /* This checks the documents. If the user
          * chooses to cancel, the session is not loaded.
          */
-        checkContent(session.cp_Content, task);
+        checkContent(session.cp_Content, task, xC);
 
         settings.cp_DefaultSession = session;
 
@@ -630,12 +711,14 @@ public abstract class WWD_Startup extends WWD_General {
 
         sessionNameDA.setDataObject(session, true);
         Helper.setUnoPropertyValue(getModel(chkSaveSettings), "State", new Short((short) 1));
-        favIconDA.updateUI();
         docListDA.updateUI();
 
         task.advance(true);
 
-        refreshStylePreview();
+        if (refreshStyle) {
+            refreshStylePreview();
+            updateIconsetText();
+        }
 
         //updateUI();
     }
@@ -689,13 +772,15 @@ public abstract class WWD_Startup extends WWD_General {
      * displayed, using the Task object to monitor progress.
      * @return true if the document is ok (a file exists in the given url).
      */
-    protected boolean checkDocument(CGDocument doc, Task task) {
+    protected boolean checkDocument(CGDocument doc, Task task, XControl xC) {
         try {
             doc.validate(xMSF, task);
             return true;
         } catch (FileNotFoundException ex) {
 
-            int relocate = SystemDialog.showMessageBox(xMSF, "warningbox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL,"") + "\n \n File not found. Would you like to specify a new file location?");
+            //int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer()
+            //        , "warningbox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL,"") + "\n \n File not found. Would you like to specify a new file location?");
+            int relocate = 1;
 
             if (relocate == 2) {
                 String[] file = getDocAddDialog().callOpenDialog(false, FileAccess.getParentDir(doc.cp_URL));
@@ -703,7 +788,7 @@ public abstract class WWD_Startup extends WWD_General {
                     return false;
                 else {
                     doc.cp_URL = file[0];
-                    return checkDocument(doc, task);
+                    return checkDocument(doc, task, xC );
                 }
             } else
                 return false;
@@ -734,9 +819,9 @@ public abstract class WWD_Startup extends WWD_General {
      * @param content
      * @param task
      */
-    private void checkContent(CGContent content, Task task) {
+    private void checkContent(CGContent content, Task task, XControl xC) {
         for (int i = 0; i < content.cp_Documents.getSize(); i++)
-            if (!checkDocument((CGDocument) content.cp_Documents.getElementAt(i), task))
+            if (!checkDocument((CGDocument) content.cp_Documents.getElementAt(i), task, xC))
                 // I use here 'i--' since, when the document is removed
                 // an index change accures
                 content.cp_Documents.remove(i--);
@@ -772,11 +857,41 @@ public abstract class WWD_Startup extends WWD_General {
         }
     }
 
+    void updateBackgroundText() {
+        String bg = settings.cp_DefaultSession.cp_Design.cp_BackgroundImage;
+        if (bg == null || bg.equals(""))
+            bg = resources.resBackgroundNone;
+        else
+            bg = FileAccess.getPathFilename( getFileAccess().getPath(bg,null));
+
+        Helper.setUnoPropertyValue(getModel(txtBackground),"Label",bg);
+    }
+
+    void updateIconsetText() {
+        String iconset = settings.cp_DefaultSession.cp_Design.cp_IconSet;
+        String iconsetName;
+        if (iconset == null || iconset.equals(""))
+            iconsetName = resources.resIconsetNone;
+        else {
+            CGIconSet is = (CGIconSet)settings.cp_IconSets.getElement(iconset);
+            if (is == null)
+                iconsetName = resources.resIconsetNone;
+            else
+                iconsetName = is.cp_Name;
+        }
+
+        Helper.setUnoPropertyValue(getModel(txtIconset),"Label",iconsetName);
+    }
+
     /**
      * refreshes the style preview.
+     * I also call here "updateBackgroundtext", because always
+     * when the background is changed, this method
+     * has to be called, so I am walking on the safe side here...
      */
     public void refreshStylePreview() {
         try {
+            updateBackgroundText();
             stylePreview.refresh(settings.cp_DefaultSession.getStyle(), settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
             dpStylePreview.reload(xMSF);
         } catch (Exception ex) {
@@ -784,5 +899,21 @@ public abstract class WWD_Startup extends WWD_General {
         }
     }
 
+
+    private class StylesComparator implements Comparator {
+
+        /* (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        public int compare(Object o1, Object o2) {
+            // TODO Auto-generated method stub
+            if (o1 instanceof CGStyle && o2 instanceof CGStyle) {
+                return ((CGStyle)o1).cp_Name.compareTo(
+                        ((CGStyle)o2).cp_Name);
+            }
+            else throw new IllegalArgumentException("Cannot compare objects which are not CGStyle.");
+        }
+
+    }
 
 }
