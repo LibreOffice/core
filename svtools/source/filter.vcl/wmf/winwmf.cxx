@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
+ *  last change: $Author: sj $ $Date: 2001-11-08 17:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ void WMFReader::ImplSetWMFSize( const Size& rSize )
     pOut->SetWinExt( rSize );
 
     // try to calculate size of WMF
-    if( !bWinExtSet && rSize.Width() > 1 && rSize.Height() > 1 )
+    if( !bWinExtSet && rSize.Width() && rSize.Height() )
     {
         const Fraction  aFrac( 1, nUnitsPerInch );
         MapMode         aWMFMap( MAP_INCH, Point(), aFrac, aFrac );
