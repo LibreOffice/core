@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
-Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
+ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
 
     Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(Any(),
@@ -121,7 +121,7 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
     xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(Any(),
             m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),_rName);
 
-    Reference< XNamed > xRet = NULL;
+    ObjectType xRet = NULL;
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -158,14 +158,12 @@ Reference< XPropertySet > OIndexColumns::createEmptyObject()
     return new OIndexColumn(sal_True);
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+ObjectType OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     OIndexColumn* pColumn = new OIndexColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
     ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    return xProp;
 }
 // -----------------------------------------------------------------------------
 void OIndexColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
