@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-10 14:05:28 $
+ *  last change: $Author: jb $ $Date: 2001-04-11 05:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace configmgr
     namespace uno  = css::uno;
     namespace script = css::script;
 
-    namespace localehelper { void getAnyLocale(OUString& _rsString); }
+    namespace localehelper { void getAnyLocale(rtl::OUString& _rsString); }
     /**
        class OOptions is created one time per Configuration[update]Access
        all important options should stored in this class.
