@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
 #include "SingleSelectQueryComposer.hxx"
 #endif
+#ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
+#include "composertools.hxx"
+#endif
 #include <algorithm>
 
 using namespace dbaccess;
@@ -148,30 +151,6 @@ using namespace ::osl;
 using namespace ::utl;
 
 
-namespace
-{
-    struct OrderCreator : public ::std::unary_function< ::rtl::OUString, void>
-    {
-        mutable ::rtl::OUString m_sOrder;
-
-        OrderCreator(){}
-
-        void operator() (const ::rtl::OUString& lhs) const
-        {
-            append(lhs);
-        }
-        void append(const ::rtl::OUString& lhs) const
-        {
-            if ( lhs.getLength() )
-            {
-                if ( m_sOrder.getLength() )
-                    m_sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" , "));
-                m_sOrder += lhs;
-            }
-        }
-    };
-}
-
 DBG_NAME(OQueryComposer)
 // -------------------------------------------------------------------------
 OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
@@ -187,22 +166,19 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
         Reference<XMultiServiceFactory> xFac(_xConnection,UNO_QUERY);
         if ( xFac.is() )
         {
-            m_xAnalyzer.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ),UNO_QUERY);
-            m_xAnalyzerHelper.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ),UNO_QUERY);
+            m_xComposer.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
+            m_xComposerHelper.set( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
         }
         else
         {
-            m_xAnalyzer = new OSingleSelectQueryComposer(_xTableSupplier,_xConnection, _xServiceFactory);
-            m_xAnalyzerHelper = new OSingleSelectQueryComposer(_xTableSupplier,_xConnection, _xServiceFactory);
+            m_xComposer = new OSingleSelectQueryComposer(_xTableSupplier,_xConnection, _xServiceFactory );
+            m_xComposerHelper = new OSingleSelectQueryComposer(_xTableSupplier,_xConnection, _xServiceFactory );
         }
-
-        m_xComposer.set( m_xAnalyzer,UNO_QUERY);
-        m_xComposerHelper.set( m_xAnalyzerHelper,UNO_QUERY);
     }
     catch(Exception)
     {
     }
-    OSL_ENSURE(m_xAnalyzer.is(),"Composer copuld be created!");
+    OSL_ENSURE( m_xComposer.is(), "OQueryComposer::OQueryComposer: Composer copuld be created!" );
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
@@ -212,10 +188,8 @@ OQueryComposer::~OQueryComposer()
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::disposing()
 {
-    m_xComposer = NULL;
-    m_xComposerHelper = NULL;
-    ::comphelper::disposeComponent(m_xAnalyzerHelper);
-    ::comphelper::disposeComponent(m_xAnalyzer);
+    ::comphelper::disposeComponent(m_xComposerHelper);
+    ::comphelper::disposeComponent(m_xComposer);
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::lang::XTypeProvider
@@ -281,9 +255,10 @@ Sequence< ::rtl::OUString > OQueryComposer::getSupportedServiceNames(  ) throw (
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    Reference<XPropertySet> xProp(m_xAnalyzer,UNO_QUERY);
+    Reference<XPropertySet> xProp(m_xComposer,UNO_QUERY);
     ::rtl::OUString sQuery;
-    xProp->getPropertyValue(PROPERTY_ORIGINAL) >>= sQuery;
+    if ( xProp.is() )
+        xProp->getPropertyValue(PROPERTY_ORIGINAL) >>= sQuery;
     return sQuery;
 }
 // -------------------------------------------------------------------------
@@ -293,9 +268,9 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
     ::osl::MutexGuard aGuard( m_aMutex );
     m_aFilters.clear();
-    m_xAnalyzer->setQuery(command);
-    m_sOrgFilter = m_xAnalyzer->getFilter();
-    m_sOrgOrder = m_xAnalyzer->getOrder();
+    m_xComposer->setQuery(command);
+    m_sOrgFilter = m_xComposer->getFilter();
+    m_sOrgOrder = m_xComposer->getOrder();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException)
@@ -304,7 +279,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
     MutexGuard aGuard(m_aMutex);
 
-    return m_xAnalyzer->getQuery();
+    return m_xComposer->getQuery();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getFilter(  ) throw(RuntimeException)
@@ -313,7 +288,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     MutexGuard aGuard(m_aMutex);
     FilterCreator aFilterCreator;
     aFilterCreator = ::std::for_each(m_aFilters.begin(),m_aFilters.end(),aFilterCreator);
-    return aFilterCreator.m_sFilter; // m_xAnalyzer->getFilter();
+    return aFilterCreator.getComposedAndClear();
 }
 // -------------------------------------------------------------------------
 Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilter(  ) throw(RuntimeException)
@@ -321,7 +296,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     MutexGuard aGuard(m_aMutex);
-    return m_xAnalyzer->getStructuredFilter();
+    return m_xComposer->getStructuredFilter();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getOrder(  ) throw(RuntimeException)
@@ -331,7 +306,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
     ::osl::MutexGuard aGuard( m_aMutex );
     OrderCreator aOrderCreator;
     aOrderCreator = ::std::for_each(m_aOrders.begin(),m_aOrders.end(),aOrderCreator);
-    return aOrderCreator.m_sOrder;
+    return aOrderCreator.getComposedAndClear();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column ) throw(SQLException, RuntimeException)
@@ -339,15 +314,15 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_xAnalyzerHelper->setQuery(getQuery());
+    m_xComposerHelper->setQuery(getQuery());
     m_xComposerHelper->setFilter(::rtl::OUString());
     m_xComposerHelper->appendFilterByColumn(column,sal_True);
 
     FilterCreator aFilterCreator;
     aFilterCreator.append(getFilter());
-    aFilterCreator.append(m_xAnalyzerHelper->getFilter());
+    aFilterCreator.append(m_xComposerHelper->getFilter());
 
-    setFilter(aFilterCreator.m_sFilter);
+    setFilter( aFilterCreator.getComposedAndClear() );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException)
@@ -355,15 +330,15 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_xAnalyzerHelper->setQuery(getQuery());
+    m_xComposerHelper->setQuery(getQuery());
     m_xComposerHelper->setOrder(::rtl::OUString());
     m_xComposerHelper->appendOrderByColumn(column,ascending);
 
     OrderCreator aOrderCreator;
     aOrderCreator.append(getOrder());
-    aOrderCreator.append(m_xAnalyzerHelper->getOrder());
+    aOrderCreator.append(m_xComposerHelper->getOrder());
 
-    setOrder(aOrderCreator.m_sOrder);
+    setOrder(aOrderCreator.getComposedAndClear());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(SQLException, RuntimeException)
@@ -379,7 +354,7 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
     if ( filter.getLength() )
         m_aFilters.push_back(filter);
 
-    m_xComposer->setFilter(aFilterCreator.m_sFilter);
+    m_xComposer->setFilter( aFilterCreator.getComposedAndClear() );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQLException, RuntimeException)
@@ -396,7 +371,7 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
     if ( order.getLength() )
         m_aOrders.push_back(order);
 
-    m_xComposer->setOrder(aOrderCreator.m_sOrder);
+    m_xComposer->setOrder(aOrderCreator.getComposedAndClear());
 }
 // -------------------------------------------------------------------------
 // XTablesSupplier
@@ -405,7 +380,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeExc
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return Reference<XTablesSupplier>(m_xAnalyzer,UNO_QUERY)->getTables();
+    return Reference<XTablesSupplier>(m_xComposer,UNO_QUERY)->getTables();
 }
 // -------------------------------------------------------------------------
 // XColumnsSupplier
@@ -414,7 +389,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeEx
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return Reference<XColumnsSupplier>(m_xAnalyzer,UNO_QUERY)->getColumns();
+    return Reference<XColumnsSupplier>(m_xComposer,UNO_QUERY)->getColumns();
 }
 // -------------------------------------------------------------------------
 Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(RuntimeException)
@@ -422,7 +397,7 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(Runti
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    return Reference<XParametersSupplier>(m_xAnalyzer,UNO_QUERY)->getParameters();
+    return Reference<XParametersSupplier>(m_xComposer,UNO_QUERY)->getParameters();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryComposer::acquire() throw()
