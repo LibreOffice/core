@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:24:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,11 @@ static Bitmap ImplConvertBmpEx2Bmp( const MetaAction& rAct )
     if( !pRA )
         return aBmp; // what else should I do?
 
-    Color aWhite( pRA->GetBestPaletteColor( Color( COL_WHITE ) ).operator Color() );
+    Color aWhite( COL_WHITE );
+
+    if( pRA->HasPalette() )
+        aWhite = pRA->GetBestPaletteColor( Color( COL_WHITE ) ).operator Color();
+
     aBmp.ReleaseAccess(pRA);
 
     // did we get true white?
