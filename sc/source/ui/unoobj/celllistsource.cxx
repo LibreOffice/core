@@ -2,9 +2,9 @@
  *
  *  $RCSfile: celllistsource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:20:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ namespace calc
         OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
         Reference< XTextRange > xCellText;
         if ( m_xRange.is() )
-            xCellText = xCellText.query( m_xRange->getCellByPosition( _nRangeRelativeColumn, _nRangeRelativeRow ) );
+            xCellText.set(xCellText.query( m_xRange->getCellByPosition( _nRangeRelativeColumn, _nRangeRelativeRow ) ));
 
         ::rtl::OUString sText;
         if ( xCellText.is() )
@@ -371,7 +371,7 @@ namespace calc
     void OCellListSource::notifyModified()
     {
         EventObject aEvent;
-        aEvent.Source = *this;
+        aEvent.Source.set(*this);
 
         ::cppu::OInterfaceIteratorHelper aIter( m_aListEntryListeners );
         while ( aIter.hasMoreElements() )
@@ -438,27 +438,26 @@ namespace calc
         // determine the range we're bound to
         try
         {
-            // first the sheets collection
-            Reference< XIndexAccess > xSheets;
             if ( m_xDocument.is() )
-                xSheets = xSheets.query( m_xDocument->getSheets( ) );
-            DBG_ASSERT( xSheets.is(), "OCellListSource::initialize: could not retrieve the sheets!" );
-
-            if ( xSheets.is() )
             {
-                // the concrete sheet
-                Reference< XCellRange > xSheet;
-                xSheets->getByIndex( aRangeAddress.Sheet ) >>= xSheet;
-                DBG_ASSERT( xSheet.is(), "OCellListSource::initialize: NULL sheet, but no exception!" );
+                // first the sheets collection
+                Reference< XIndexAccess > xSheets(m_xDocument->getSheets( ), UNO_QUERY);
+                DBG_ASSERT( xSheets.is(), "OCellListSource::initialize: could not retrieve the sheets!" );
 
-                // the concrete cell
-                if ( xSheet.is() )
+                if ( xSheets.is() )
                 {
-                    m_xRange = xSheet->getCellRangeByPosition(
-                        aRangeAddress.StartColumn, aRangeAddress.StartRow,
-                        aRangeAddress.EndColumn, aRangeAddress.EndRow
-                    );
-                    DBG_ASSERT( Reference< XCellRangeAddressable >( m_xRange, UNO_QUERY ).is(), "OCellListSource::initialize: either NULL range, or cell without address access!" );
+                    // the concrete sheet
+                    Reference< XCellRange > xSheet(xSheets->getByIndex( aRangeAddress.Sheet ), UNO_QUERY);
+                    DBG_ASSERT( xSheet.is(), "OCellListSource::initialize: NULL sheet, but no exception!" );
+
+                    // the concrete cell
+                    if ( xSheet.is() )
+                    {
+                        m_xRange.set(xSheet->getCellRangeByPosition(
+                            aRangeAddress.StartColumn, aRangeAddress.StartRow,
+                            aRangeAddress.EndColumn, aRangeAddress.EndRow));
+                        DBG_ASSERT( Reference< XCellRangeAddressable >( m_xRange, UNO_QUERY ).is(), "OCellListSource::initialize: either NULL range, or cell without address access!" );
+                    }
                 }
             }
         }
