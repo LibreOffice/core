@@ -36,6 +36,7 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\misc\*.ldif %_DEST%\pck%_EXT%
 ..\%__SRC%\misc\*.ldf %_DEST%\pck%_EXT%
 ..\%__SRC%\misc\*.conf %_DEST%\pck%_EXT%
+..\%__SRC%\misc\*.map %_DEST%\pck%_EXT%
 
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%
 
