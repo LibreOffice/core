@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:40:58 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         // We have to check the script for fields in order to set the
         // correct nActual value for the font.
-        if( pPor->InFldGrp() && ! pPor->IsFtnPortion() )
+        if( pPor->InFldGrp() )
             ((SwFldPortion*)pPor)->CheckScript( rInf );
 
         if( ! bHasGrid && rInf.HasScriptSpace() &&
@@ -1490,7 +1490,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     SwLinePortion* pFld = GetInfo().GetRest();
     SwFldPortion* pSaveFld = 0;
 
-    if ( pFld && pFld->InFldGrp() && ! pFld->IsFtnPortion() )
+    if ( pFld && pFld->InFldGrp() && !pFld->IsFtnPortion() )
         pSaveFld = new SwFldPortion( *((SwFldPortion*)pFld) );
 
     // for an optimal repaint rectangle, we want to compare fly portions
