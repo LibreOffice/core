@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:03:46 $
+ *  last change: $Author: kso $ $Date: 2002-06-25 09:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,39 +61,48 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Store" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-  <templates>
-    <group oor:name="PropertyValue">
-      <prop oor:name="Handle" oor:type="xs:int">
-        <info>
-          <desc xml:lang="en-US">Numeric property identifier</desc>
-        </info>
-      </prop>
-      <prop oor:name="Attributes" oor:type="xs:int">
-        <info>
-          <desc xml:lang="en-US">Property attributes</desc>
-        </info>
-      </prop>
-      <prop oor:name="Value" oor:type="oor:any">
-        <info>
-          <desc xml:lang="en-US">Property value</desc>
-        </info>
-      </prop>
-      <prop oor:name="State" oor:type="xs:int">
-        <info>
-          <desc xml:lang="en-US">Property state</desc>
-        </info>
-      </prop>
-    </group>
-    <group oor:name="Properties">
-      <set oor:name="Values" oor:node-type="PropertyValue"/>
-    </group>
-  </templates>
-  <component>
-    <set oor:name="ContentProperties" oor:node-type="Properties">
-      <!--Responsible: KSO -->
-      <info>
-        <desc xml:lang="en-US">Stores properties for UCB contents.</desc>
-      </info>
-    </set>
-  </component>
+    <templates>
+        <group oor:name="PropertyValue">
+            <prop oor:name="Handle" oor:type="xs:int">
+                <!-- Responsible: KSO -->
+                <info>
+                    <desc xml:lang="en-US">Numeric property identifier</desc>
+                </info>
+            </prop>
+            <prop oor:name="Attributes" oor:type="xs:int">
+                <!-- Responsible: KSO -->
+                <info>
+                    <desc xml:lang="en-US">Property attributes</desc>
+                </info>
+            </prop>
+            <prop oor:name="Value" oor:type="oor:any">
+                <!-- Responsible: KSO -->
+                <info>
+                    <desc xml:lang="en-US">Property value</desc>
+                </info>
+            </prop>
+            <prop oor:name="State" oor:type="xs:int">
+                <!-- Responsible: KSO -->
+                <info>
+                    <desc xml:lang="en-US">Property state</desc>
+                </info>
+            </prop>
+        </group>
+        <group oor:name="Properties">
+            <set oor:name="Values" oor:node-type="PropertyValue">
+                <!--Responsible: KSO -->
+                <info>
+                    <desc xml:lang="en-US">A set of property values.</desc>
+                </info>
+            </set>
+        </group>
+    </templates>
+    <component>
+        <set oor:name="ContentProperties" oor:node-type="Properties">
+            <!--Responsible: KSO -->
+            <info>
+                <desc xml:lang="en-US">Stores properties for UCB contents.</desc>
+            </info>
+        </set>
+    </component>
 </oor:component-schema>
