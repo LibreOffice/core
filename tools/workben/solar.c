@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solar.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ int CheckGetAccess( Type eT, void* p )
 {
   int b;
   b = -1 != check( (TestFunc)GetAtAddress, eT, p );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
   fprintf( stderr,
            "%s read %s at %p\n",
            (b? "can" : "can not" ), TypeName(eT), p );
@@ -301,7 +301,7 @@ int CheckSetAccess( Type eT, void* p )
 {
   int b;
   b = -1 != check( (TestFunc)SetAtAddress, eT, p );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
   fprintf( stderr,
            "%s write %s at %p\n",
            (b? "can" : "can not" ), TypeName(eT), p );
