@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 13:13:44 $
+ *  last change: $Author: tl $ $Date: 2001-08-29 07:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
                                     // PropertySetHelper interfaces
                                     static_cast< XPropertySet*      > ( this )  ,
                                     static_cast< XMultiPropertySet*     > ( this )  ,
-                                    static_cast< XPropertyState*        > ( this )  ,
+                                    //static_cast< XPropertyState*        > ( this ) ,
                                     // my own interfaces
                                     static_cast< XUnoTunnel*        > ( this )  ,
                                     static_cast< XServiceInfo*  > ( this ) );
