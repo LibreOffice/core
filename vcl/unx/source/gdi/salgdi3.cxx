@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-14 15:57:29 $
+ *  last change: $Author: hdu $ $Date: 2002-12-05 17:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,8 +722,6 @@ GetMaxFontHeight()
 
 bool SalGraphicsData::SetFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-    bFontGC_            = FALSE;
-    aScale_             = Fraction( 1, 1 );
     nFontOrientation_   = pEntry->mnOrientation;
     bFontVertical_      = pEntry->mbVertical;
 
@@ -758,6 +756,8 @@ bool SalGraphicsData::SetFont( const ImplFontSelectData *pEntry, int nFallbackLe
     if( m_pPrinterGfx != NULL )
         return false;
 
+    bFontGC_    = FALSE;
+    aScale_     = Fraction( 1, 1 );
     ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
     if( !pSysFont )
         return false;
@@ -1110,7 +1110,6 @@ bool SalGraphicsData::DrawServerAAForcedString( const ServerFontLayout& rLayout 
         0, 0, nXmin, nYmin, (nXmax - nXmin + 1), (nYmax - nYmin + 1) );
     XDestroyImage( pImg );
 
-
     GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldXErrorEnabled );
     return true;
 }
@@ -1218,9 +1217,6 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
         // TODO: apply asian kerning if requested too
         // but most probably no asian pairs in builtin fonts
-
-        // TODO: find out and reject missing glyphs
-
         int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
         nGlyphIndex |= GF_ISCHAR;
         GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
@@ -1228,7 +1224,6 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     SetOrientation( mrPrinterGfx.GetFontAngle() );
-
     SetUnitsPerPixel( nUnitsPerPixel );
     if( rArgs.mpDXArray )
         ApplyDXArray( rArgs.mpDXArray );
@@ -1455,6 +1450,14 @@ USHORT SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
             nRetVal |= SAL_SETFONT_USEDRAWTEXTARRAY;
         return nRetVal;
     }
+}
+
+// ----------------------------------------------------------------------------
+
+void SalGraphics::RemovingFont( ImplFontData* pFontData )
+{
+    // ImplFontData gets removed => notify all caches
+    GlyphCache::GetInstance().RemoveFont( pFontData );
 }
 
 // ----------------------------------------------------------------------------
