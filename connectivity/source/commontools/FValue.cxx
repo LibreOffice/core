@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-06 12:11:35 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 08:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,14 @@ namespace {
                     break;
                 case DataType::TINYINT:
                     bIsCompatible = (DataType::BIT      == _eType2);
+                    break;
+
+                case DataType::BLOB:
+                case DataType::CLOB:
+                case DataType::OBJECT:
+                    bIsCompatible = (DataType::BLOB     == _eType2)
+                                ||  (DataType::CLOB     == _eType2)
+                                ||  (DataType::OBJECT   == _eType2);
                     break;
 
                 default:
@@ -271,6 +279,11 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 case DataType::LONGVARBINARY:
                     (*this) = getSequence();
                     break;
+                case DataType::BLOB:
+                case DataType::CLOB:
+                case DataType::OBJECT:
+                    (*this) = getAny();
+                    break;
                 default:
                     OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
             }
@@ -333,6 +346,8 @@ void ORowSetValue::free()
                 TRACE_FREE( Sequence_sal_Int8 )
                 m_aValue.m_pValue = NULL;
                 break;
+            case DataType::BLOB:
+            case DataType::CLOB:
             case DataType::OBJECT:
                 delete (Any*)m_aValue.m_pValue;
                 TRACE_FREE( Any )
@@ -672,10 +687,10 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
 {
-    if (DataType::OBJECT != m_eTypeKind && !m_bNull)
+    if (!isStorageCompatible(DataType::OBJECT,m_eTypeKind))
         free();
 
-    if(m_bNull)
+    if ( m_bNull )
     {
         m_aValue.m_pValue = new Any(_rAny);
         TRACE_ALLOC( Any )
@@ -769,6 +784,11 @@ ORowSetValue::operator==(const ORowSetValue& _rRH) const
         case DataType::LONGVARBINARY:
             bRet = sal_False;
             break;
+        case DataType::BLOB:
+        case DataType::CLOB:
+        case DataType::OBJECT:
+            bRet = sal_False;
+            break;
         default:
             OSL_ENSURE(0,"ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
     }
@@ -821,6 +841,8 @@ Any ORowSetValue::makeAny() const
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
                 rValue <<= *(Sequence<sal_Int8>*)m_aValue.m_pValue;
                 break;
+            case DataType::BLOB:
+            case DataType::CLOB:
             case DataType::OBJECT:
                 rValue = getAny();
                 break;
