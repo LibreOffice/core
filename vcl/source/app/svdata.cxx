@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2002-08-27 15:06:31 $
+ *  last change: $Author: obr $ $Date: 2002-10-02 09:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,15 @@
 #ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
 #include <drafts/com/sun/star/awt/XExtendedToolkit.hpp>
 #endif
+#ifndef _COM_SUN_STAR_JAVA_JAVAINITIALIZATIONEXCEPTION_HPP_
+#include <com/sun/star/java/JavaInitializationException.hpp>
+#endif
 
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <stdio.h>
+#include <salsys.hxx>
+#include <svids.hrc>
 
 #pragma hdrstop
 
@@ -340,8 +345,47 @@ bool ImplInitAccessBridge()
                     bSuccess = false;
             }
         }
+
+        catch(::com::sun::star::java::JavaInitializationException exception)
+        {
+            bSuccess = false;
+
+            ResMgr *pResMgr = ImplGetResMgr();
+
+            String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
+            String aMessage(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr));
+
+            ::std::list< String > aButtonList;
+            aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
+
+            ImplShowNativeDialog(aTitle, aMessage, aButtonList);
+        }
+
         catch(::com::sun::star::uno::Exception exception)
         {
+            String aTitle;
+            String aMessage;
+            ResMgr *pResMgr = ImplGetResMgr();
+
+            if( exception.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
+            {
+                aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, pResMgr));
+                aMessage = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE_MSG, pResMgr));
+            }
+            else if( exception.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
+            {
+                aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, pResMgr));
+                aMessage = String(ResId(SV_ACCESSERROR_WRONG_VERSION_MSG, pResMgr));
+            }
+
+            if( aTitle.Len() != 0 )
+            {
+                ::std::list< String > aButtonList;
+                aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
+
+                ImplShowNativeDialog(aTitle, aMessage, aButtonList);
+            }
+
             bSuccess = false;
         }
     }
