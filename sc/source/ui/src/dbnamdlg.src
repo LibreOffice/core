@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:18:23 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text [ danish ] = "Definer database" ;
     Text [ french ] = "Définition d'une plage de base de données" ;
     Text [ swedish ] = "Definiera databasområde" ;
-    Text [ dutch ] = "Database-bereik definiëren" ;
-    Text [ spanish ] = "Definir área de base de datos" ;
+    Text [ dutch ] = "Databasebereik definiëren" ;
+    Text [ spanish ] = "Definir el área de la base de datos" ;
     Text [ english_us ] = "Define Database Range" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
@@ -92,7 +92,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Nome" ;
         Text [ portuguese_brazilian ] = "Nomear" ;
         Text [ portuguese ] = "~Nome" ;
-        Text [ finnish ] = "Ni~mi" ;
+        Text [ finnish ] = "~Nimi" ;
         Text [ danish ] = "~Navn" ;
         Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
@@ -137,7 +137,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ spanish ] = "Área" ;
         Text [ english_us ] = "~Range" ;
         Text[ chinese_simplified ] = "åŒºåŸŸ(~R)";
-        Text[ russian ] = "Îáëàñòü";
+        Text[ russian ] = "Äèàïàçîí";
         Text[ polish ] = "Obszar";
         Text[ japanese ] = "ç¯„å›²(~R)";
         Text[ chinese_traditional ] = "å€åŸŸ(~R)";
@@ -227,7 +227,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Contiene intestazioni colonne" ;
         Text [ portuguese_brazilian ] = "inclui cabe?alhos da coluna" ;
         Text [ portuguese ] = "Incluir ~cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Sisältää sarakeotsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
         Text [ french ] = "En-têtes de colonnes inclus" ;
         Text [ swedish ] = "Innehåller ~kolumnhuvuden" ;
@@ -266,7 +266,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ french ] = "~Insérer/supprimer des cellules" ;
         Text [ dutch ] = "~Cellen invoegen/wissen" ;
         Text[ chinese_simplified ] = "æ’å…¥/åˆ é™¤å•å…ƒæ ¼(~C)";
-        Text[ russian ] = "Âñòàâèòü/óäàëèòü ÿ÷åéêè";
+        Text[ russian ] = "Âñòàâèòü èëè óäàëèòü ÿ÷åéêè";
         Text[ polish ] = "Wstaw/usuñ komórki";
         Text[ japanese ] = "ã‚»ãƒ«ã®æŒ¿å…¥/å‰Šé™¤(~C)";
         Text[ chinese_traditional ] = "æ’å…¥/åˆªé™¤å„²å­˜æ ¼(~C)";
@@ -292,7 +292,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ swedish ] = "Behåll ~formatering" ;
         Text [ danish ] = "Bevar ~formatering" ;
         Text [ italian ] = "~Mantieni formattazione" ;
-        Text [ spanish ] = "Co~nservar formato" ;
+        Text [ spanish ] = "Co~nservar el formato" ;
         Text [ french ] = "Conserver le ~formatage" ;
         Text [ dutch ] = "Opmaak ~behouden" ;
         Text [ portuguese ] = "~Manter formatação" ;
@@ -323,12 +323,12 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ swedish ] = "~Spara inte importerade data" ;
         Text [ danish ] = "Ikke gemme importerede data" ;
         Text [ italian ] = "Non salvare i dati ~importati" ;
-        Text [ spanish ] = "N~o guardar datos importados" ;
+        Text [ spanish ] = "N~o guardar los datos importados" ;
         Text [ french ] = "~Ne pas enregistrer les données importées" ;
         Text [ dutch ] = "~Geïmporteerde gegevens niet opslaan" ;
         Text [ portuguese ] = "~Não guardar dados importados" ;
         Text[ chinese_simplified ] = "ä¸å­˜ç›˜è¾“å…¥çš„æ•°æ®(~I)";
-        Text[ russian ] = "Âíåøíèå äàííûå íå ñîõğàíÿòü";
+        Text[ russian ] = "Íå ñîõğàíÿòü èìïîğòèğîâàííûå äàííûå.";
         Text[ polish ] = "Nie zapisuj importowanych danych";
         Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ã—ãªã„(~I)";
         Text[ chinese_traditional ] = "ä¸å„²å­˜åŒ¯å…¥çš„è³‡æ–™(~I)";
@@ -526,7 +526,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "~Modifica" ;
         Text [ portuguese_brazilian ] = "~Modificar" ;
         Text [ portuguese ] = "~Modificar" ;
-        Text [ finnish ] = "~Muokkaa" ;
+        Text [ finnish ] = "~Muuta" ;
         Text [ danish ] = "Modificer" ;
         Text [ french ] = "Modifier" ;
         Text [ swedish ] = "~Ändra" ;
@@ -574,7 +574,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
     };
     Text[ chinese_simplified ] = "å®šä¹‰æ•°æ®åº“åŒºåŸŸ";
-    Text[ russian ] = "Çàäàòü îáëàñòü áàçû äàííûõ";
+    Text[ russian ] = "Îïğåäåëèòü äèàïàçîí äàííûõ";
     Text[ polish ] = "Zdefiniuj obszar bazy danych";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ç¯„å›²ã®æŒ‡å®š";
     Text[ chinese_traditional ] = "å®šç¾©è³‡æ–™åº«å€åŸŸ";
