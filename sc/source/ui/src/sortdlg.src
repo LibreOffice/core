@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:37:52 $
+ *  last change: $Author: dr $ $Date: 2001-05-18 09:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,19 @@ TabPage RID_SCPAGE_SORT_FIELDS
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_SORT_FIELDS ;
-    Size = MAP_APPFONT ( 208 , 185 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     ListBox LB_SORT1
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 19 ) ;
-        Size = MAP_APPFONT ( 120 , 90 ) ;
+        Size = MAP_APPFONT ( 154 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     RadioButton BTN_UP1
     {
-        Pos = MAP_APPFONT ( 140 , 14 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 14 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "A~ufsteigend" ;
         Text [ ENGLISH ] = "~Ascending" ;
         Text [ norwegian ] = "St~igende" ;
@@ -106,8 +106,8 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_DOWN1
     {
-        Pos = MAP_APPFONT ( 140 , 27 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 28 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "A~bsteigend" ;
         Text [ ENGLISH ] = "~Descending" ;
         Text [ norwegian ] = "~Synkende" ;
@@ -134,12 +134,12 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Descendente";
     };
-    GroupBox GB_SORT1
+    FixedLine FL_SORT1
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 196 , 40 ) ;
-        Text = "Sortieren nach" ;
-        Text [ ENGLISH ] = "Sort by" ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "~Sortieren nach" ;
+        Text [ ENGLISH ] = "S~ort by" ;
         Text [ norwegian ] = "Sortere etter" ;
         Text [ italian ] = "Ordina per" ;
         Text [ portuguese_brazilian ] = "Ordenar por" ;
@@ -166,17 +166,17 @@ TabPage RID_SCPAGE_SORT_FIELDS
     ListBox LB_SORT2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 68 ) ;
-        Size = MAP_APPFONT ( 120 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 154 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     RadioButton BTN_UP2
     {
-        Pos = MAP_APPFONT ( 140 , 63 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 55 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "Au~fsteigend" ;
-        Text [ ENGLISH ] = "Ascend~ing" ;
+        Text [ ENGLISH ] = "A~scending" ;
         Text [ norwegian ] = "Stige~nde" ;
         Text [ italian ] = "Crescente" ;
         Text [ portuguese_brazilian ] = "Ascend~ente" ;
@@ -203,8 +203,8 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_DOWN2
     {
-        Pos = MAP_APPFONT ( 140 , 76 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 69 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "Abstei~gend" ;
         Text [ ENGLISH ] = "D~escending" ;
         Text [ norwegian ] = "S~ynkende" ;
@@ -231,13 +231,13 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D~escendente";
     };
-    GroupBox GB_SORT2
+    FixedLine FL_SORT2
     {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
-        Size = MAP_APPFONT ( 196 , 40 ) ;
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Anschließend nach : Anschlie˜end nach */
-        Text = "Anschließend nach" ;
-        Text [ ENGLISH ] = "Then by" ;
+        Text = "~Anschließend nach" ;
+        Text [ ENGLISH ] = "~Then by" ;
         Text [ norwegian ] = "Og så etter" ;
         Text [ italian ] = "poi per" ;
         Text [ portuguese_brazilian ] = "Em seguida por" ;
@@ -264,17 +264,17 @@ TabPage RID_SCPAGE_SORT_FIELDS
     ListBox LB_SORT3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 117 ) ;
-        Size = MAP_APPFONT ( 120 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 154 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     RadioButton BTN_UP3
     {
-        Pos = MAP_APPFONT ( 140 , 112 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 96 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "Aufs~teigend" ;
-        Text [ ENGLISH ] = "Ascendin~g" ;
+        Text [ ENGLISH ] = "As~cending" ;
         Text [ norwegian ] = "Stigend~e" ;
         Text [ italian ] = "Crescen~te" ;
         Text [ portuguese_brazilian ] = "Ascenden~te" ;
@@ -301,8 +301,8 @@ TabPage RID_SCPAGE_SORT_FIELDS
     };
     RadioButton BTN_DOWN3
     {
-        Pos = MAP_APPFONT ( 140 , 125 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 172 , 110 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "Absteigen~d" ;
         Text [ ENGLISH ] = "De~scending" ;
         Text [ norwegian ] = "Sy~nkende" ;
@@ -329,13 +329,13 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desce~ndente";
     };
-    GroupBox GB_SORT3
+    FixedLine FL_SORT3
     {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
-        Size = MAP_APPFONT ( 196 , 40 ) ;
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Anschließend nach : Anschlie˜end nach */
-        Text = "Anschließend nach" ;
-        Text [ ENGLISH ] = "Then by" ;
+        Text = "A~nschließend nach" ;
+        Text [ ENGLISH ] = "T~hen by" ;
         Text [ norwegian ] = "Og så etter" ;
         Text [ italian ] = "poi per" ;
         Text [ portuguese_brazilian ] = "Em seguida por" ;
@@ -366,11 +366,11 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_SORT_OPTIONS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 208 , 185 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox BTN_CASESENSITIVE
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 6 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Groß-/Kleinschreibung beachten : ~Gro˜-/Kleinschreibung beachten */
         Text = "~Groß-/Kleinschreibung beachten" ;
         Text [ ENGLISH ] = "~Case sensitive" ;
@@ -400,8 +400,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_LABEL
     {
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 20 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Bereich enthält XXköpfe : Bereich enthõlt XXk÷pfe */
         Text = "Bereich enthält XXköpfe" ;
         Text [ ENGLISH ] = "~XX headers" ;
@@ -487,8 +487,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_FORMATS
     {
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Formate einschließen : ~Formate einschlie˜en */
         Text = "~Formate einschließen" ;
         Text [ ENGLISH ] = "Include ~formats" ;
@@ -518,8 +518,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_COPYRESULT
     {
-        Pos = MAP_APPFONT ( 6 , 45 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Sortierergebnis ~ausgeben nach" ;
         Text [ ENGLISH ] = "Result destinat~ion area" ;
         Text [ norwegian ] = "Resultat målområde" ;
@@ -549,7 +549,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     ListBox LB_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 17 , 57 ) ;
+        Pos = MAP_APPFONT ( 23 , 59 ) ;
         Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -558,14 +558,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 57 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Pos = MAP_APPFONT ( 119 , 59 ) ;
+        Size = MAP_APPFONT ( 132 , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox BTN_SORT_USER
     {
-        Pos = MAP_APPFONT ( 6 , 73 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "~Benutzerdefinierte Sortierreihenfolge" ;
         Text [ ENGLISH ] = "~Userdefined sort precedence" ;
         Text [ norwegian ] = "~Brukerdefinert sorteringsrekkefølge " ;
@@ -596,17 +596,17 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 17 , 85 ) ;
-        Size = MAP_APPFONT ( 184 , 90 ) ;
+        Pos = MAP_APPFONT ( 23 , 86 ) ;
+        Size = MAP_APPFONT ( 228 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedLine FL_LANGUAGE
+    FixedText FT_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 6 , 103 ) ;
-        Size = MAP_APPFONT ( 196 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 101 , 8 ) ;
         Text = "S~prache" ;
-        Text [ ENGLISH ] = "Language Settings" ;
+        Text [ ENGLISH ] = "L~anguage" ;
         Text[ english_us ] = "~Language";
         Text[ portuguese ] = "~Língua";
         Text[ russian ] = "ßçûê";
@@ -615,40 +615,47 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ french ] = "~Langue";
         Text[ spanish ] = "I~dioma";
         Text[ italian ] = "~Lingua";
-        Text[ danish ] = "Language Settings";
+        Text[ danish ] = "Language";
         Text[ swedish ] = "S~pråk";
         Text[ polish ] = "Jêzyk";
-        Text[ portuguese_brazilian ] = "Language Settings";
+        Text[ portuguese_brazilian ] = "Language";
         Text[ japanese ] = "Œ¾Œê(~L)";
         Text[ korean ] = "~¾ð¾î ¼¼ÆÃ";
         Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
         Text[ chinese_traditional ] = "»y¨¥(~L)";
-        Text[ turkish ] = "Language Settings";
+        Text[ turkish ] = "Language";
         Text[ arabic ] = "ÇááÛÉ";
-        Text[ catalan ] = "Language Settings";
+        Text[ catalan ] = "Language";
         Text[ finnish ] = "Kieli";
     };
     ListBox LB_LANGUAGE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 17 , 114 ) ;
-        Size = MAP_APPFONT ( 90 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 101 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
+    FixedText FT_ALGORITHM
+    {
+        Pos = MAP_APPFONT ( 119 , 104 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text = "Op~tionen" ;
+        Text [ ENGLISH ] = "O~ptions" ;
+    };
     ListBox LB_ALGORITHM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 114 ) ;
-        Size = MAP_APPFONT ( 90 , 90 ) ;
+        Pos = MAP_APPFONT ( 119 , 115 ) ;
+        Size = MAP_APPFONT ( 132 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedLine FL_DIRECTION
     {
-        Pos = MAP_APPFONT ( 6 , 132 ) ;
-        Size = MAP_APPFONT ( 196 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Richtung" ;
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
@@ -676,8 +683,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     RadioButton BTN_TOP_DOWN
     {
-        Pos = MAP_APPFONT ( 12 , 143 ) ;
-        Size = MAP_APPFONT ( 184 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Von ~oben nach unten (Zeilen sortieren)" ;
         Text [ ENGLISH ] = "~Top to bottom (sort rows)" ;
         Text [ norwegian ] = "~Topp til bunn (sorter rader)" ;
@@ -706,8 +713,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     RadioButton BTN_LEFT_RIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 156 ) ;
-        Size = MAP_APPFONT ( 184 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Von ~links nach rechts (Spalten sortieren)" ;
         Text [ ENGLISH ] = "~Left to right (sort columns)" ;
         Text [ norwegian ] = "~Venstre til høyre (sorter kolonner)" ;
@@ -736,8 +743,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     FixedText FT_AREA_LABEL
     {
-        Pos = MAP_APPFONT ( 6 , 172 ) ;
-        Size = MAP_APPFONT ( 196 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 171 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Datenbereich:" ;
         Text [ ENGLISH ] = "Source data:" ;
         Text [ norwegian ] = "Kildedata:" ;
