@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAware.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:08:18 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public abstract class DataAware {
 
     public void setDataObject(Object obj, boolean updateUI) {
 
-        if (!value.isAssignable(obj.getClass()))
+        if (obj != null && !value.isAssignable(obj.getClass()))
             throw new ClassCastException("can not cast new DataObject to original Class");
 
         dataObject = obj;
