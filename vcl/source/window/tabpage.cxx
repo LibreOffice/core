@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:40:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,10 @@
  *
  ************************************************************************/
 
-#define _SV_TABPAGE_CXX
-
 #include <tools/ref.hxx>
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
