@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,16 +91,15 @@ using namespace ::com::sun::star;
 
 #define INVAL_SEL       0xFFFF
 
-
 USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 {
     USHORT  nSel = INVAL_SEL;
 
-    SvLBoxEntry*    pSel = maCertLB.FirstSelected();
+    SvLBoxEntry* pSel = maCertLB.FirstSelected();
     if( pSel )
-        nSel = ( USHORT ) pSel->GetUserData();
+        nSel = ( sal_Int32 ) pSel->GetUserData();
 
-    return nSel;
+    return (USHORT) nSel;
 }
 
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
