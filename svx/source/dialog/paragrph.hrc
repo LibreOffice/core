@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-15 12:10:47 $
+ *  last change: $Author: sab $ $Date: 2002-11-27 09:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,8 @@
 // ExtendedTabPage ----------------------------------------------------------
 
 #define BTN_HYPHEN                      50
-#define FT_BEFORE                       51
 #define ED_HYPHENBEFORE         52
 #define FT_HYPHENBEFORE         53
-#define FT_AFTER                        54
 #define ED_HYPHENAFTER          55
 #define FT_HYPHENAFTER          56
 #define FL_HYPHEN                       57

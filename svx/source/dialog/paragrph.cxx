@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-23 15:54:20 $
+ *  last change: $Author: sab $ $Date: 2002-11-27 09:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,9 +1628,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     }
     BOOL bEnable = bItemAvailable && bIsHyphen;
     aExtHyphenBeforeBox.Enable(bEnable);
-    aHyphenBeforeLabel.Enable(bEnable);
     aExtHyphenAfterBox.Enable(bEnable);
-    aHyphenAfterLabel.Enable(bEnable);
     aBeforeText.Enable(bEnable);
     aAfterText.Enable(bEnable);
     aMaxHyphenLabel.Enable(bEnable);
@@ -1912,12 +1910,10 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     SfxTabPage( pParent, ResId( RID_SVXPAGE_EXT_PARAGRAPH, DIALOG_MGR() ), rAttr ),
 
     aHyphenBox          ( this, ResId( BTN_HYPHEN ) ),
-    aBeforeText         ( this, ResId( FT_BEFORE ) ),
+    aBeforeText         ( this, ResId( FT_HYPHENBEFORE ) ),
     aExtHyphenBeforeBox ( this, ResId( ED_HYPHENBEFORE ) ),
-    aHyphenBeforeLabel  ( this, ResId( FT_HYPHENBEFORE ) ),
-    aAfterText          ( this, ResId( FT_AFTER ) ),
+    aAfterText          ( this, ResId( FT_HYPHENAFTER ) ),
     aExtHyphenAfterBox  ( this, ResId( ED_HYPHENAFTER ) ),
-    aHyphenAfterLabel   ( this, ResId( FT_HYPHENAFTER ) ),
     aMaxHyphenLabel     ( this, ResId( FT_MAXHYPH ) ),
     aMaxHyphenEdit      ( this, ResId( ED_MAXHYPH ) ),
     aExtFL              ( this, ResId( FL_HYPHEN ) ),
@@ -1989,10 +1985,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
         aHyphenBox           .Enable(FALSE);
         aBeforeText          .Enable(FALSE);
         aExtHyphenBeforeBox  .Enable(FALSE);
-        aHyphenBeforeLabel   .Enable(FALSE);
         aAfterText           .Enable(FALSE);
         aExtHyphenAfterBox   .Enable(FALSE);
-        aHyphenAfterLabel    .Enable(FALSE);
         aMaxHyphenLabel      .Enable(FALSE);
         aMaxHyphenEdit       .Enable(FALSE);
         aExtFL               .Enable(FALSE);
@@ -2128,10 +2122,8 @@ IMPL_LINK( SvxExtParagraphTabPage, HyphenClickHdl_Impl, TriStateBox *, EMPTYARG 
 
     BOOL bEnable = aHyphenBox.GetState() == STATE_CHECK;
     aBeforeText.Enable(bEnable);
-    aHyphenBeforeLabel.Enable(bEnable);
     aExtHyphenBeforeBox.Enable(bEnable);
     aAfterText.Enable(bEnable);
-    aHyphenAfterLabel.Enable(bEnable);
     aExtHyphenAfterBox.Enable(bEnable);
     aMaxHyphenLabel.Enable(bEnable);
     aMaxHyphenEdit.Enable(bEnable);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:01:50 $
+ *  last change: $Author: sab $ $Date: 2002-11-27 09:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,8 +1648,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Size = MAP_APPFONT ( 260 , 185 ) ;
     TriStateBox BTN_HYPHEN
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Auto~matisch" ;
         Text [ dutch ] = "Auto~matisch" ;
         Text [ english_us ] = "A~utomatically" ;
@@ -1674,42 +1674,11 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ finnish ] = "~Automaattisesti";
         Text[ thai ] = "‡∏≠‡∏±~‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
     };
-    FixedText FT_BEFORE
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 16 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
-        Text = "~ab" ;
-        Text [ English ] = "~at" ;
-        Text [ norwegian ] = "~pÂ" ;
-        Text [ italian ] = "a" ;
-        Text [ portuguese_brazilian ] = "~em" ;
-        Text [ portuguese ] = "~mÌn." ;
-        Text [ finnish ] = "~kohteessa" ;
-        Text [ danish ] = "fra" ;
-        Text [ french ] = "min." ;
-        Text [ swedish ] = "~frÂn" ;
-        Text [ dutch ] = "~v.a." ;
-        Text [ spanish ] = "~en" ;
-        Text [ english_us ] = "~at" ;
-        Text[ chinese_simplified ] = "‰ªé(~A)";
-        Text[ russian ] = "Ò";
-        Text[ polish ] = "od";
-        Text[ japanese ] = "Ë°åÊú´„Å´(~A)";
-        Text[ chinese_traditional ] = "Âæû(~A)";
-        Text[ arabic ] = "«» œ«¡ „‰";
-        Text[ greek ] = "~·¸";
-        Text[ korean ] = "Î¨∏ÏûêÏóê Ï†ÅÏö©";
-        Text[ turkish ] = "~asg.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~a";
-        Text[ thai ] = "~‡∏ó‡∏µ‡πà";
-    };
     NumericField ED_HYPHENBEFORE
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 98 , 14 ) ;
+        Pos = MAP_APPFONT ( 21 , 26 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -1724,9 +1693,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_HYPHENBEFORE
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 16 ) ;
-        Size = MAP_APPFONT ( 123 , 8 ) ;
-        Text = "Zeichen am Zeilenende" ;
+        Pos = MAP_APPFONT ( 48 , 29 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
+        Text = "Zeichen am Zeilen~ende" ;
         Text [ ENGLISH ] = "Chars" ;
         Text [ norwegian ] = "Tegn" ;
         Text [ italian ] = "caratteri a fine riga" ;
@@ -1753,42 +1722,11 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "car‡cter al final de la lÌnia";
         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞‡∏ó‡∏µ‡πà‡∏à‡∏∏‡∏î‡∏à‡∏ö‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
-    FixedText FT_AFTER
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 32 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
-        Text = "a~b" ;
-        Text [ English ] = "a~t" ;
-        Text [ norwegian ] = "p~Â" ;
-        Text [ italian ] = "a" ;
-        Text [ portuguese_brazilian ] = "e~m" ;
-        Text [ portuguese ] = "mÌ~n." ;
-        Text [ finnish ] = "~kohteessa" ;
-        Text [ danish ] = "fra" ;
-        Text [ french ] = "min." ;
-        Text [ swedish ] = "f~rÂn" ;
-        Text [ dutch ] = "v.~a." ;
-        Text [ spanish ] = "e~n" ;
-        Text [ english_us ] = "a~t" ;
-        Text[ chinese_simplified ] = "‰ªé(~T)";
-        Text[ russian ] = "Ò";
-        Text[ polish ] = "od";
-        Text[ japanese ] = "Ë°åÈ†≠„Å´(~T)";
-        Text[ chinese_traditional ] = "Âæû(~T)";
-        Text[ arabic ] = "«» œ«¡ „‰";
-        Text[ greek ] = "·¸";
-        Text[ korean ] = "Î¨∏ÏûêÏóê Ï†ÅÏö©";
-        Text[ turkish ] = "a~sg.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~a";
-        Text[ thai ] = "~‡∏ó‡∏µ‡πà";
-    };
     NumericField ED_HYPHENAFTER
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 98 , 30 ) ;
+        Pos = MAP_APPFONT ( 21 , 41 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -1803,9 +1741,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_HYPHENAFTER
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 32 ) ;
-        Size = MAP_APPFONT ( 123 , 8 ) ;
-        Text = "Zeichen am Zeilenanfang" ;
+        Pos = MAP_APPFONT ( 48 , 43 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
+        Text = "Zeichen am Zeilen~anfang" ;
         Text [ ENGLISH ] = "Chars" ;
         Text [ norwegian ] = "Tegn" ;
         Text [ italian ] = "caratteri ad inizio riga" ;
@@ -1834,10 +1772,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     FixedText FT_MAXHYPH
     {
-        Pos = MAP_APPFONT ( 39 , 48 ) ;
-        Size = MAP_APPFONT ( 210 , 8 ) ;
+        Pos = MAP_APPFONT ( 48 , 57 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
         WordBreak = TRUE ;
-        Text = "Maximal aufeinander folgende Tr~ennstellen" ;
+        Text = "Ma~ximal aufeinander folgende Trennstellen" ;
         Text [ ENGLISH ] = "Max. consecutive hyphens" ;
         Text [ norwegian ] = "Maksimalt antall av f¯lgende Bindestreke~r" ;
         Text [ italian ] = "Sillabazioni successive:" ;
@@ -1866,7 +1804,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     NumericField ED_MAXHYPH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Pos = MAP_APPFONT ( 21 , 55 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -1907,7 +1845,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     FixedLine FL_OPTIONS
     {   // is moved one section deeper to not raise unnecessary translations
-        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zus‰tze" ;
         Text [ ENGLISH ] = "Options" ;
@@ -1938,7 +1876,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     FixedLine FL_BREAKS
     {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
+        Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Umbr¸che" ;
         Text [ ENGLISH ] = "Breaks" ;
@@ -1965,7 +1903,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_PAGEBREAK
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
         Text = "~Zulassen" ;
         Text [ ENGLISH ] = "~Enable" ;
@@ -1995,9 +1933,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     FixedText FT_BREAKTYPE
     {
-        Pos = MAP_APPFONT ( 75 , 77 ) ;
-        Size = MAP_APPFONT ( 20 , 10 ) ;
-        Text = "~Typ" ;
+        Pos = MAP_APPFONT ( 75 , 86 ) ;
+        Size = MAP_APPFONT ( 21 , 10 ) ;
+        Text = "T~yp" ;
         Text [ ENGLISH ] = "T~ype" ;
         Text[ english_us ] = "T~ype";
         Text[ portuguese ] = "T~ype";
@@ -2024,7 +1962,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     ListBox LB_BREAKTYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 98 , 75 ) ;
+        Pos = MAP_APPFONT ( 98 , 84 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         DropDown = TRUE ;
         StringList =
@@ -2150,7 +2088,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     FixedText FT_BREAKPOSITION
     {
-        Pos = MAP_APPFONT ( 163 , 77 ) ;
+        Pos = MAP_APPFONT ( 163 , 86 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Right = TRUE;
         Text = "~Position" ;
@@ -2180,7 +2118,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     ListBox LB_BREAKPOSITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 211 , 75 ) ;
+        Pos = MAP_APPFONT ( 211 , 84 ) ;
         Size = MAP_APPFONT ( 40 , 50 ) ;
         DropDown = TRUE ;
         StringList =
@@ -2247,8 +2185,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_PAGECOLL
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT (21 , 91 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT (21 , 100 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "mit Seitenvor~lage" ;
         Text [ ENGLISH ] = "With temp~late" ;
         Text [ norwegian ] = "Med m~al" ;
@@ -2279,14 +2217,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     ListBox LB_PAGECOLL
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 98 , 90 ) ;
+        Pos = MAP_APPFONT ( 98 , 98 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         DropDown = TRUE ;
         Sort = TRUE;
     };
     FixedText FT_PAGENUM
     {
-        Pos = MAP_APPFONT ( 163 , 91 ) ;
+        Pos = MAP_APPFONT ( 163 , 100 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
         Right = TRUE ;
         Text = "Se~itennummer" ;
@@ -2317,7 +2255,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     NumericField ED_PAGENUM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 211 , 90 ) ;
+        Pos = MAP_APPFONT ( 211 , 98 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2330,8 +2268,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_KEEPTOGETHER
     {
-        Pos = MAP_APPFONT ( 12 , 120 ) ;
-        Size = MAP_APPFONT ( 115 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Absatz ni~cht trennen" ;
         Text [ ENGLISH ] = "~Keep together" ;
         Text [ norwegian ] = "~Hold sammen" ;
@@ -2361,8 +2299,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox CB_KEEPTOGETHER
     {
-        Pos = MAP_APPFONT ( 12, 135 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 141 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Abs‰~tze zusammenhalten" ;
         Text [ ENGLISH ] = "Kee~p paragraphs together" ;
         Text [ norwegian ] = "Holde~r avsnittene samlet" ;
@@ -2392,8 +2330,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 150 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 155 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Schuster~jungenregelung" ;
         Text [ ENGLISH ] = "~Orphan control" ;
         Group = TRUE ;
@@ -2424,7 +2362,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 128 , 149 ) ;
+        Pos = MAP_APPFONT ( 134 , 153 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -2439,8 +2377,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 155 , 151 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 161 , 155 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
         Text [ norwegian ] = "Rows" ;
@@ -2471,8 +2409,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 166 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 169 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Hu~renkinderregelung" ;
         Text [ ENGLISH ] = "~Widow control" ;
         Group = TRUE ;
@@ -2503,7 +2441,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 128 , 165 ) ;
+        Pos = MAP_APPFONT ( 134 , 167 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -2518,8 +2456,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 155 , 167 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 161 , 169 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
         Text [ norwegian ] = "Rows" ;
