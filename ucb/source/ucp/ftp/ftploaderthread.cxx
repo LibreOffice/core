@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftploaderthread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:13 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -87,8 +86,18 @@ using namespace ftp;
 extern "C" {
 #endif
 
+    int memory_write_dummy(void *buffer,size_t size,size_t nmemb,void *stream)
+    {
+        return 0;
+    }
+
     void delete_CURL(void *pData)
     {
+        // Otherwise response for QUIT will be sent to already destroyed
+        // MemoryContainer via non-dummy memory_write function.
+        curl_easy_setopt(static_cast<CURL*>(pData),
+                         CURLOPT_HEADERFUNCTION,
+                         memory_write_dummy);
         curl_easy_cleanup(static_cast<CURL*>(pData));
     }
 
