@@ -60,8 +60,8 @@
 
 
 /*Java Uno Helper Classes*/
-import com.sun.star.lib.uno.adapters.XInputStreamToInputStreamAdapter;
-import com.sun.star.lib.uno.adapters.XOutputStreamToOutputStreamAdapter;
+import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
+import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 
 /*StarOffice/Uno Classes*/
 import com.sun.star.lang.XMultiServiceFactory;
@@ -87,6 +87,7 @@ import com.sun.star.xml.XExportFilter;
 /* XMerge Classes */
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
+import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.Convert;
 import org.openoffice.xmerge.ConverterFactory;
 import org.openoffice.xmerge.Document;
@@ -117,6 +118,8 @@ public class XMergeBridge {
     private static XOutputStream xos = null;
     private static XOutputStreamToOutputStreamAdapter adaptedStream=null;
     private static String sFileName=null;
+    private static String offMime=null;
+    private static String sdMime=null;
 
     //private static FileOutputStream adaptedStream =null;
 
@@ -186,14 +189,15 @@ public class XMergeBridge {
     public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
                 com.sun.star.xml.sax.XDocumentHandler xDocHandler,
                 java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
-        /*
+                    /*
         System.out.println("\nFound the Importer!\n");
 
         System.out.println("\n"+msUserData[0]);
         System.out.println("\n"+msUserData[1]);
         System.out.println("\n"+msUserData[2]);
         System.out.println("\n"+msUserData[3]);
-        System.out.println("\n"+xDocHandler);
+        System.out.println("\n"+msUserData[4]);
+        System.out.println("\n"+msUserData[5]);
         */
         sFileName=null;
         String sDirectory = null;
@@ -202,6 +206,8 @@ public class XMergeBridge {
         udJarPath=msUserData[1];
         String udImport =msUserData[2];
         String udExport =msUserData[3];
+        offMime =msUserData[4];
+        sdMime = msUserData[5];
         com.sun.star.io.XInputStream xis=null;
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
 
@@ -237,7 +243,7 @@ public class XMergeBridge {
             xOutStream = (XOutputStream) UnoRuntime.queryInterface(
                         XOutputStream.class , xPipeObj );
 
-        convert (xis,xOutStream,false,udJarPath,sFileName);
+        convert (xis,xOutStream,false,udJarPath,sFileName,offMime,sdMime);
 
         Object xSaxParserObj=xMSF.createInstance("com.sun.star.xml.sax.Parser");
 
@@ -260,14 +266,17 @@ public class XMergeBridge {
 
        public boolean exporter(com.sun.star.beans.PropertyValue[] aSourceData,
                    java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException{
-       /*
+
+                   /*
         System.out.println("\nFound the Exporter!\n");
 
         System.out.println("\n"+msUserData[0]);
         System.out.println("\n"+msUserData[1]);
         System.out.println("\n"+msUserData[2]);
         System.out.println("\n"+msUserData[3]);
-       */
+        System.out.println("\n"+msUserData[4]);
+        System.out.println("\n"+msUserData[5]);
+        */
         sFileName=null;
         String sDirectory = null;
         String sURL=null;
@@ -275,7 +284,8 @@ public class XMergeBridge {
         udJarPath=msUserData[1];
         String udImport =msUserData[2];
         String udExport =msUserData[3];
-
+        offMime =msUserData[4];
+        sdMime = msUserData[5];
 
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
         for  (int  i = 0 ; i < pValue.length; i++)
@@ -326,7 +336,7 @@ public class XMergeBridge {
     public void endDocument()
     {
 
-        convert (xInStream,xos,true,udJarPath,sFileName);
+        convert (xInStream,xos,true,udJarPath,sFileName,offMime,sdMime);
 
     }
 
@@ -349,7 +359,7 @@ public class XMergeBridge {
         str=str.concat(">");
         // System.out.println(str);
         try{
-         xOutStream.writeBytes(str.getBytes());
+         xOutStream.writeBytes(str.getBytes("UTF-8"));
         }
         catch (Exception e){
         System.out.println("\n"+e);
@@ -362,7 +372,7 @@ public class XMergeBridge {
         str="</".concat(str);
         str=str.concat(">");
         try{
-         xOutStream.writeBytes(str.getBytes());
+         xOutStream.writeBytes(str.getBytes("UTF-8"));
 
         }
         catch (Exception e){
@@ -374,7 +384,7 @@ public class XMergeBridge {
     public void characters(String str){
         //System.out.println(str);
         try{
-         xOutStream.writeBytes(str.getBytes());
+         xOutStream.writeBytes(str.getBytes("UTF-8"));
         }
        catch (Exception e){
            System.out.println("\n"+e);
@@ -401,12 +411,11 @@ public class XMergeBridge {
 
 
     public void convert (com.sun.star.io.XInputStream xml,com.sun.star.io.XOutputStream device,
-             boolean convertFromOffice,String pluginUrl,String FileName) throws com.sun.star.uno.RuntimeException {
-        //System.out.println("\nFound the Convert method "+pluginUrl+"   New Xmerge");
+             boolean convertFromOffice,String pluginUrl,String FileName,String offMime,String sdMime) throws com.sun.star.uno.RuntimeException {
+
          String jarName = pluginUrl;
          String name= getFileName(FileName);
 
-         //System.out.println("Filename test = "+ name);
          ConverterInfo converterInfo = null;
          Enumeration ciEnum= null;
 
@@ -414,8 +423,6 @@ public class XMergeBridge {
 
 
          XOutputStreamToOutputStreamAdapter newxos =new XOutputStreamToOutputStreamAdapter(device);
-
-
 
          try{
          ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
@@ -429,28 +436,25 @@ public class XMergeBridge {
          {
 
          try {
+
              //Check to see if jar contains a plugin Impl
-             if (ciEnum.hasMoreElements()) {
-             converterInfo = (ConverterInfo)ciEnum.nextElement();
 
-
-             System.out.println("\nFound the "+converterInfo.getDisplayName()+" Converter\n");
-
-
-
+                 ConverterInfoMgr.addPlugIn(ciEnum);
              ConverterFactory cf = new ConverterFactory();
-             Convert cv = cf.getConverter(converterInfo,false);
+
+             Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),false);
              if (cv == null) {
                  System.out.println("\nNo plug-in exists to convert from <staroffice/sxw> to <specified format> ");
+
              }
-             //System.out.println("\nAdding InputStream " );
+             else
+             {
+                 cv.addInputStream(name,(InputStream)xis,false);
 
-                    cv.addInputStream(name,(InputStream)xis,false);
+                 ConvertData dataOut = cv.convert();
 
-             ConvertData dataOut = cv.convert();
-
-             Enumeration docEnum = dataOut.getDocumentEnumeration();
-             while (docEnum.hasMoreElements()) {
+                 Enumeration docEnum = dataOut.getDocumentEnumeration();
+                 while (docEnum.hasMoreElements()) {
                  Document docOut      = (Document)docEnum.nextElement();
                  String fileName      = docOut.getFileName();
                  docOut.write(newxos);
@@ -458,56 +462,48 @@ public class XMergeBridge {
                  newxos.flush();
                  newxos.close();
 
+                 }
+                 //System.out.println("\n Finished converting");
              }
-
-
-
-             }
+             ConverterInfoMgr.removeByJar(jarName);
 
 
          }
          catch (Exception e) {
              System.out.println("Error:"+e);
-         }
+             }
          }
          else{
 
          try {
               //Check to see if jar contains a plugin Impl
-             if (ciEnum.hasMoreElements()) {
-             converterInfo = (ConverterInfo)ciEnum.nextElement();
 
-             //System.out.println("\nFound the "+converterInfo.getDisplayName()+" Converter\n");
-
+                 ConverterInfoMgr.addPlugIn(ciEnum);
                  ConverterFactory cf = new ConverterFactory();
-             Convert cv = cf.getConverter(converterInfo,true);
+             Convert cv = cf.getConverter(ConverterInfoMgr.findConverterInfo(sdMime,offMime),true);
              if (cv == null) {
                  System.out.println("\nNo plug-in exists to convert to <staroffice/sxw> from <specified format>");
              }
-             cv.addInputStream(name,(InputStream)xis,false);
-             ConvertData dataIn = cv.convert();
-             Enumeration docEnum = dataIn.getDocumentEnumeration();
-             while (docEnum.hasMoreElements()) {
+             else
+             {
+                 cv.addInputStream(name,(InputStream)xis,false);
+                 ConvertData dataIn = cv.convert();
+                 Enumeration docEnum = dataIn.getDocumentEnumeration();
+                 while (docEnum.hasMoreElements()) {
                  OfficeDocument docIn      = (OfficeDocument)docEnum.nextElement();
                  docIn.write(newxos,false);
-
-
+                 }
+                 newxos.write(-1); //EOF character
+                 newxos.flush();
+                 newxos.close();
              }
-             newxos.write(-1); //EOF character
-             newxos.flush();
-             newxos.close();
-
-
-             }
-
+             ConverterInfoMgr.removeByJar(jarName);
          }
          catch (Exception e) {
              System.out.println("Error:"+e);
          }
-         }
 
-         //System.out.println("\nFinished converting\n");
-         //System.out.flush();
+         }
 
      }
 
