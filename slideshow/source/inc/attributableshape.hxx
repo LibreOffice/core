@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributableshape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:13:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,12 @@
 
 #include <animatableshape.hxx>
 #include <shapeattributelayer.hxx>
-
+#include <doctreenodesupplier.hxx>
 
 namespace presentation
 {
     namespace internal
     {
-        class DocTreeNode;
-
         // forward declaration necessary, because methods use AttributableShapeSharedPtr
         class AttributableShape;
 
@@ -149,56 +147,45 @@ namespace presentation
             virtual void setVisibility( bool bVisible ) = 0;
 
 
-            // Sub item attributes
+            // Sub-item handling
             //------------------------------------------------------------------
 
-            /** Query number of tree nodes this shape contains.
+            /** Retrieve interface for DocTreeNode creation.
 
-                The value returned by this method minus one is the
-                maximum value permissible at the
-                getFormattingDocTreeNode/getLogicalDocTreeNode methods.
+                This method provides the caller with a reference to
+                the DocTreeNodeSupplier interface, which can be used
+                to request specific tree nodes for this shape.
              */
-            virtual sal_Int32 getNumberOfTreeNodes() const = 0; // throw ImportFailedException;
+            virtual const DocTreeNodeSupplier& getTreeNodeSupplier() const = 0;
+            virtual DocTreeNodeSupplier&       getTreeNodeSupplier() = 0;
 
-            /** Query a formatted DocTreeNode for this shape.
+            /** Query the subset this shape displays.
 
-                There are two document trees available for shapes:
-                this method returns top level nodes for the formatting
-                tree, which gives information about paragraph and line
-                breaks.
+                This method returns a tree node denoting the subset
+                displayed by this shape. If this shape is not a subset
+                shape, an empty tree node should be returned. If this
+                shape is a subset, and itself has subsetted children,
+                this method might return more than the shape is
+                actually displaying (because a single DocTreeNode is
+                not able to model holes in the range).
              */
-            virtual DocTreeNode getFormattingDocTreeNode( sal_Int32 nIndex ) const = 0; // throw ImportFailedException;
+            virtual DocTreeNode getSubsetNode() const = 0;
 
-            /** Query a logical DocTreeNode for this shape.
+            /** Query a subset Shape, if already existent at this
+                object
 
-                There are two document trees available for shapes:
-                this method returns top level nodes for the logical
-                document tree, which gives information about
-                paragraphs, sentences, words and character cells.
-             */
-            virtual DocTreeNode getLogicalDocTreeNode( sal_Int32 nIndex ) const = 0; // throw ImportFailedException;
-
-            /** Query the current subset in effect.
-
-                This method returns a tree node denoting the currently
-                active subset. If this shape is not a subset shape,
-                an empty tree node should be returned.
-             */
-            virtual DocTreeNode getEffectiveSubset() const = 0;
-
-            /** Query a subset Shape
-
-                This method queries a clone of this Shape, which
-                renders only the selected subset of itself.
+                This method returns a clone of this Shape, which
+                renders only the selected subset of itself, but only
+                if such a subset has been explicitely created before.
 
                 @param rTreeNode
                 A DocTreeNode instance queried from this Shape, which
-                specifies the subset of the Shape to render
+                specifies the subset of the Shape to render.
 
                 @return a NULL Shape pointer, if no subset exists for
                 the given DocTreeNode.
             */
-            virtual AttributableShapeSharedPtr querySubset( const DocTreeNode& rTreeNode ) const = 0;
+            virtual AttributableShapeSharedPtr getSubset( const DocTreeNode& rTreeNode ) const = 0;
 
             /** Create a subset Shape
 
@@ -218,8 +205,8 @@ namespace presentation
                 of times via revokeSubset(), the original shape will
                 resume displaying the subsetted part.
 
-                @attention To maintain integrity, this method should
-                only be called from the LayerManager
+                @attention To maintain view integrity, this method
+                should only be called from the LayerManager
 
                 @param o_rSubset
                 The requested Shape
@@ -240,8 +227,8 @@ namespace presentation
                 subset part will become visible again on the original
                 shape.
 
-                @attention To maintain integrity, this method should
-                only be called from the LayerManager
+                @attention To maintain view integrity, this method
+                should only be called from the LayerManager
 
                 @param rShape
                 The subset to revoke
