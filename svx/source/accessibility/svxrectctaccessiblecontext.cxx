@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,17 @@
 
 #include "svxrectctaccessiblecontext.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
@@ -128,7 +128,7 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 
 #define MAX_NUM_OF_CHILDS   9
@@ -277,14 +277,14 @@ Reference< XAccessibleContext > SAL_CALL SvxRectCtlAccessibleContext::getAccessi
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL SvxRectCtlAccessibleContext::contains( const awt::Point& rPoint ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getBounds()
 //  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAt( const awt::Point& rPoint ) throw( RuntimeException )
+Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
 
@@ -615,7 +615,7 @@ sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const OUString& 
 
 Sequence< OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    const OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleContext" ) );
+    const OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
     return Sequence< OUString >( &sServiceName, 1 );
 }
 
@@ -685,11 +685,11 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccess
     return getAccessibleChild( mnSelectedChild );
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::deselectSelectedAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
+void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
-    OUString    aMessage( RTL_CONSTASCII_USTRINGPARAM( "deselectSelectedAccessibleChild is not possible in this context" ) );
+    OUString    aMessage( RTL_CONSTASCII_USTRINGPARAM( "deselectAccessibleChild is not possible in this context" ) );
 
-    DBG_ASSERT( sal_False, "SvxRectCtlAccessibleContext::deselectSelectedAccessibleChild() is not possible!" );
+    DBG_ASSERT( sal_False, "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
 
     throw lang::IndexOutOfBoundsException( aMessage, *this );   // never possible
 }
@@ -759,7 +759,7 @@ void SvxRectCtlAccessibleContext::setName( const OUString& rName )
     }
 
     const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_NAME_EVENT, aPreVal, aPostVal ) );
+    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::NAME_CHANGED, aPreVal, aPostVal ) );
 }
 
 void SvxRectCtlAccessibleContext::setDescription( const OUString& rDescr )
@@ -775,7 +775,7 @@ void SvxRectCtlAccessibleContext::setDescription( const OUString& rDescr )
     }
 
     const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT, aPreVal, aPostVal ) );
+    CommitChange( AccessibleEventObject( xSource, AccessibleEventId::DESCRIPTION_CHANGED, aPreVal, aPostVal ) );
 }
 
 void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
@@ -912,14 +912,14 @@ Reference< XAccessibleContext> SAL_CALL SvxRectCtlChildAccessibleContext::getAcc
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::contains( const awt::Point& rPoint ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getBounds()
 //  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
-Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleAt( const awt::Point& rPoint ) throw( RuntimeException )
+Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     return Reference< XAccessible >();
 }
@@ -1028,7 +1028,7 @@ sal_Int32 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleIndexInParent(
 
 sal_Int16 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRole( void ) throw( RuntimeException )
 {
-    return AccessibleRole::RADIOBUTTON;
+    return AccessibleRole::RADIO_BUTTON;
 }
 
 OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
@@ -1181,7 +1181,7 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const OUStr
 
 Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
     return Sequence< OUString >( &sServiceName, 1 );
 }
 
@@ -1267,7 +1267,7 @@ void SvxRectCtlChildAccessibleContext::setStateChecked( sal_Bool bChecked )
 
         rMod <<= AccessibleStateType::CHECKED;
 
-        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT, aNew, aOld ) );
+        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::STATE_CHANGED, aNew, aOld ) );
     }
 }
 
