@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Summarizer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:17:09 $
+ *  last change:$Date: 2003-12-11 11:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public class Summarizer {
      * gets the state for a SuperEntry according to its subentries
      */
     public void summarizeUp(DescEntry entry) {
-        if ( ( entry.State != null ) && entry.State != "UNKNOWN") return;
+        if ( ( entry.State != null ) && !entry.State.equals("UNKNOWN")) return;
         int count = entry.SubEntryCount;
         int knownIssues = 0;
         Vector failures = new Vector();
