@@ -8,4 +8,7 @@ pk  setup_native\source\win32\customactions\regpython     nmake   -  w   sn_regp
 pk  setup_native\source\win32\customactions\javafilter    nmake   -  w   sn_javafilter NULL
 pk  setup_native\source\win32\customactions\netframework  nmake   -  w   sn_netframework NULL
 pk  setup_native\source\win32\customactions\quickstarter  nmake   -  w   sn_quickstarter NULL
+pk  setup_native\source\win32\customactions\shellextensions nmake   -  w   sn_shellextensions NULL
+pk  setup_native\source\win32\customactions\indexingfilter nmake   -  w   sn_indexingfilter NULL
 pk  setup_native\source\ulfconv                           nmake   -  all sn_ulfconv NULL
+
