@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ namespace pcr
     #define PROPERTY_ID_DATEMIN              36
     #define PROPERTY_ID_DATEMAX              37
     #define PROPERTY_ID_DATEFORMAT           38
-    #define PROPERTY_ID_DATE_SHOW_CENTURY    39
+        // FREE
     #define PROPERTY_ID_DEFAULT_DATE         40
     #define PROPERTY_ID_TIMEMIN              41
     #define PROPERTY_ID_TIMEMAX              42
@@ -268,6 +268,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.9  2001/06/06 10:37:54  fs
  *  #86837# +PROPERTY_IMAGEALIGN
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_DATEMIN,             PROPERTY_ID_DATEMIN,            sal_True,  String(ModuleRes(RID_STR_DATEMIN)),          nPos++, HID_PROP_DATEMIN,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_DATEMAX,             PROPERTY_ID_DATEMAX,            sal_True,  String(ModuleRes(RID_STR_DATEMAX)),          nPos++, HID_PROP_DATEMAX,                   PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_DATEFORMAT,          PROPERTY_ID_DATEFORMAT,         sal_True,  String(ModuleRes(RID_STR_DATEFORMAT)),       nPos++, HID_PROP_DATEFORMAT,                PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
-                OPropertyInfoImpl(PROPERTY_DATE_SHOW_CENTURY,   PROPERTY_ID_DATE_SHOW_CENTURY,  sal_True,  String(ModuleRes(RID_STR_DATE_SHOW_CENTURY)),nPos++, HID_PROP_DATE_SHOW_CENTURY,         PROP_FORM_VISIBLE|PROP_DIALOG_VISIBLE),
                 OPropertyInfoImpl(PROPERTY_DEFAULT_DATE,        PROPERTY_ID_DEFAULT_DATE,       sal_True,  String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_DEFAULT_DATE,              PROP_FORM_VISIBLE                    ),
 
                 OPropertyInfoImpl(PROPERTY_TIME,                PROPERTY_ID_TIME,               sal_True,  String(ModuleRes(RID_STR_TIME)),             nPos++, HID_PROP_TIME,                                        PROP_DIALOG_VISIBLE),
@@ -514,6 +513,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.13  2001/09/28 14:54:09  tbe
  *  #92258# click handler for Basic Scrollbar
  *

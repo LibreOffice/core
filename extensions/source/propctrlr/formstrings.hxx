@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_DATEFORMAT,             "DateFormat");
     PCR_CONSTASCII_STRING( PROPERTY_DATEMIN,                "DateMin");
     PCR_CONSTASCII_STRING( PROPERTY_DATEMAX,                "DateMax");
-    PCR_CONSTASCII_STRING( PROPERTY_DATE_SHOW_CENTURY,      "DateShowCentury");
     PCR_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,             "TimeFormat");
     PCR_CONSTASCII_STRING( PROPERTY_TIMEMIN,                "TimeMin");
     PCR_CONSTASCII_STRING( PROPERTY_TIMEMAX,                "TimeMax");
@@ -221,6 +220,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.12  2001/08/07 08:46:10  fs
  *  #87690# +ACTIVE_CONNECTION
  *
