@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-17 16:01:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ public:
     DropTarget(const Reference<XMultiServiceFactory>& sf);
     virtual ~DropTarget();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     virtual void SAL_CALL release();
 #endif
     // Overrides WeakComponentImplHelper::disposing which is called by
