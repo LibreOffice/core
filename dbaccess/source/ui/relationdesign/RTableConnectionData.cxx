@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 11:36:08 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 13:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,7 @@ void ORelationTableConnectionData::SetDestWinName( const String& rDestWinName )
 void ORelationTableConnectionData::SetCardinality()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
+    ::osl::MutexGuard aGuard( m_aMutex );
     m_nCardinality = CARDINAL_UNDEFINED;
 
     if( IsSourcePrimKey() )
@@ -303,25 +304,29 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
     USHORT  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
     ::std::vector<Reference<XNameAccess> > vKeyColumns  = ::dbaui::getKeyColumns(_xTable,KeyType::PRIMARY);
-    if ( !vKeyColumns.empty() )
+    if ( vKeyColumns.size() == 1 )
     {
-        OSL_ENSURE(vKeyColumns.size()==1,"There can be only one primary key in a table!");
+//      OSL_ENSURE(vKeyColumns.size()==1,"There can be only one primary key in a table!");
+        Sequence< ::rtl::OUString> aKeyColumns;
         Reference<XNameAccess> xKeyColumns = *vKeyColumns.begin();
-        Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
-        const ::rtl::OUString* pKeyBegin    = aKeyColumns.getConstArray();
-        const ::rtl::OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
-
-        for(;pKeyBegin != pKeyEnd;++pKeyBegin)
+        if ( xKeyColumns.is() )
         {
-            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-            for(;aIter != m_vConnLineData.end();++aIter)
+            aKeyColumns = xKeyColumns->getElementNames();
+            const ::rtl::OUString* pKeyBegin    = aKeyColumns.getConstArray();
+            const ::rtl::OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
+
+            for(;pKeyBegin != pKeyEnd;++pKeyBegin)
             {
-                if( (*aIter)->IsValid() )
-                    ++nValidLinesCount;
-                if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyBegin )
+                OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+                for(;aIter != m_vConnLineData.end();++aIter)
                 {
-                    ++nPrimKeysCount;
-                    break;
+                    if( (*aIter)->IsValid() )
+                        ++nValidLinesCount;
+                    if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyBegin )
+                    {
+                        ++nPrimKeysCount;
+                        break;
+                    }
                 }
             }
         }
@@ -415,29 +420,7 @@ BOOL ORelationTableConnectionData::Update()
         else
             return FALSE;
 
-        if ( m_aConnName.Len() && xKeys.is() )
-        {
-            for(sal_Int32 i=0;i<xKeys->getCount();++i)
-            {
-                Reference< XPropertySet> xKey;
-                xKeys->getByIndex(i) >>= xKey;
-                OSL_ENSURE(xKey.is(),"Key is not valid!");
-                if ( xKey.is() )
-                {
-                    ::rtl::OUString sName;;
-                    xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    if ( sName == ::rtl::OUString(m_aConnName) )
-                    {
-                        Reference< XDrop> xDrop(xKeys,UNO_QUERY);
-                        OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
-                        if ( xDrop.is() )
-                            xDrop->dropByIndex(i);
-                        break;
-                    }
-                }
-            }
-        }
-
+        DropRelation();
         if( !IsConnectionPossible() )
             return FALSE;
     }
@@ -447,6 +430,9 @@ BOOL ORelationTableConnectionData::Update()
     Reference< XIndexAccess> xKeys;
     if ( xSup.is() )
         xKeys = xSup->getKeys();
+
+    if ( !xKeys.is() )
+        return FALSE;
     ////////////////////////////////////////////////////////////
     // Neue Relation erzeugen
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
@@ -456,18 +442,20 @@ BOOL ORelationTableConnectionData::Update()
 
     Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
     OSL_ENSURE(xKey.is(),"Key is null!");
+    if ( xKey.is() )
+    {
+        // build a foreign key name
+        ::rtl::OUString sSourceName;
+        m_xSource->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
+        ::rtl::OUString sKeyName = sSourceName;
+        sKeyName += m_aDestWinName;
 
-    // build a foreign key name
-    ::rtl::OUString sSourceName;
-    m_xSource->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
-    ::rtl::OUString sKeyName = sSourceName;
-    sKeyName += m_aDestWinName;
-
-    xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
-    xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
-    xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(m_aDestWinName)));
-    xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));
-    xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
+        xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
+        xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
+        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(m_aDestWinName)));
+        xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));
+        xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
+    }
 
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
     if ( xColSup.is() )
@@ -475,22 +463,27 @@ BOOL ORelationTableConnectionData::Update()
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);
         Reference<XAppend> xColumnAppend(xColumns,UNO_QUERY);
-
-        OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-        for(;aIter != m_vConnLineData.end();++aIter)
+        if ( xColumnFactory.is() )
         {
-            if((*aIter)->GetSourceFieldName().getLength() && (*aIter)->GetDestFieldName().getLength())
+            OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
+            for(;aIter != m_vConnLineData.end();++aIter)
             {
-                Reference<XPropertySet> xColumn;
-                xColumn = xColumnFactory->createDataDescriptor();
-                xColumn->setPropertyValue(PROPERTY_NAME,makeAny((*aIter)->GetSourceFieldName()));
-                xColumn->setPropertyValue(PROPERTY_RELATEDCOLUMN,makeAny((*aIter)->GetDestFieldName()));
-                xColumnAppend->appendByDescriptor(xColumn);
+                if((*aIter)->GetSourceFieldName().getLength() && (*aIter)->GetDestFieldName().getLength())
+                {
+                    Reference<XPropertySet> xColumn;
+                    xColumn = xColumnFactory->createDataDescriptor();
+                    if ( xColumn.is() )
+                    {
+                        xColumn->setPropertyValue(PROPERTY_NAME,makeAny((*aIter)->GetSourceFieldName()));
+                        xColumn->setPropertyValue(PROPERTY_RELATEDCOLUMN,makeAny((*aIter)->GetDestFieldName()));
+                        xColumnAppend->appendByDescriptor(xColumn);
+                    }
+                }
             }
-        }
 
-        if(xColumns->getElementNames().getLength())
-            xAppend->appendByDescriptor(xKey);
+            if ( xColumns->hasElements() )
+                xAppend->appendByDescriptor(xKey);
+        }
         // to get the key we have to reget it because after append it is no longer valid
     }
 
@@ -501,11 +494,11 @@ BOOL ORelationTableConnectionData::Update()
     {
         xKeys->getByIndex(i) >>= xKey;
         OSL_ENSURE(xKey.is(),"Key is not valid!");
-        if(xKey.is())
+        if ( xKey.is() )
         {
             sal_Int32 nType = 0;
             xKey->getPropertyValue(PROPERTY_TYPE) >>= nType;
-            if(nType == KeyType::FOREIGN)
+            //  if ( nType == KeyType::FOREIGN )
             {
                 ::rtl::OUString sName;
                 xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sName;
@@ -520,10 +513,10 @@ BOOL ORelationTableConnectionData::Update()
         xKey = NULL;
     }
 
-    OSL_ENSURE(xKey.is(),"No key found have insertion!");
+//  OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
     xColSup = Reference<XColumnsSupplier>(xKey,UNO_QUERY);
-    if(xColSup.is())
+    if ( xColSup.is() )
     {
         // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
         OConnectionLineDataVec().swap(m_vConnLineData);
@@ -532,15 +525,17 @@ BOOL ORelationTableConnectionData::Update()
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
         const ::rtl::OUString* pBegin = aNames.getConstArray();
         const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+
+        m_vConnLineData.reserve( aNames.getLength() );
+        Reference<XPropertySet> xColumn;
+        ::rtl::OUString sName,sRelatedColumn;
+
         for(;pBegin != pEnd;++pBegin)
         {
-            Reference<XPropertySet> xColumn;
             xColumns->getByName(*pBegin) >>= xColumn;
-            if (xColumn.is())
+            if ( xColumn.is() )
             {
                 OConnectionLineDataRef pNewData = CreateLineDataObj();
-
-                ::rtl::OUString sName,sRelatedColumn;
 
                 xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
                 xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;

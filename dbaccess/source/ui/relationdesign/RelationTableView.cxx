@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:27:59 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 13:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,9 +312,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
     UINT16 nSourceKeys(0);
     ::std::vector< Reference< XNameAccess> > aPkeys = ::dbaui::getKeyColumns(pSourceWin->GetTable(),KeyType::PRIMARY);
-    if(aPkeys.size())
+    if ( aPkeys.size() == 1 ) // there can be only one. But we can not assert here, that would freeze our office
     {
-        OSL_ENSURE(aPkeys.size()==1,"There can't be more than one pkey!");
         Reference< XNameAccess> xColumns = pSourceWin->GetOriginalColumns();
         if(xColumns.is())
         {
@@ -329,7 +328,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
     }
 
-    if(nSourceKeys>1)
+    if ( nSourceKeys > 1 )
         m_pCurrentlyTabConnData = pTabConnData;
     else
     {

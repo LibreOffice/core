@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:03 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,11 +1504,19 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
         return sal_False;
 
     OTableController* pController = GetView()->getController();
-    Reference<XConnection> xCon = pController->getConnection();
+    try
+    {
+        Reference<XConnection> xCon = pController->getConnection();
 
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
-    if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
-        return sal_False; // no primary keys allowed
+        Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
+        if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
+            return sal_False; // no primary keys allowed
+
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"supportsCoreSQLGrammar");
+    }
 
     Reference<XPropertySet> xTable = pController->getTable();
     //////////////////////////////////////////////////////////////
