@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-06 13:13:02 $
+ *  last change: $Author: af $ $Date: 2002-10-28 09:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,20 @@
 #ifndef _SFXSTBMGR_HXX //autogen
 #include <sfx2/stbmgr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XLAYER_HPP_
+#include <com/sun/star/drawing/XLayer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XLAYERMANAGER_HPP_
+#include <com/sun/star/drawing/XLayerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+
+#include "frmview.hxx"
 
 #include "app.hrc"
 
@@ -119,6 +133,10 @@
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
 #endif
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
+
 
 TYPEINIT0( FuPoor );
 
@@ -548,35 +566,82 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEUP:
         {
-            if(rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if(pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
-                pView->EndTextEdit();
+                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                {
+                    // Without any modifiers the page-up key moves to the
+                    // previous slide.
 
-                // Vorherige Seite
-                bReturn = TRUE;
-                SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-                USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+                    pView->EndTextEdit();
 
-                if (nSdPage > 0)
-                    ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage - 1);
+                    // Previous page.
+                    bReturn = TRUE;
+                    SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                    if (nSdPage > 0)
+                    {
+                        // Switch the page and send events regarding
+                        // deactivation the old page and activating the new one.
+                        SdTabControl* pPageTabControl =
+                            static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendDeactivatePageEvent ();
+                        ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage - 1);
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendActivatePageEvent ();
+                    }
+                }
+                else if (rKEvt.GetKeyCode().IsMod1())
+                    if (static_cast<SdDrawViewShell*>(pViewShell)->GetLayerMode())
+                    {
+                        // With the mod1 (control) modifier and the layer
+                        // modea active pressing page-up moves to the next
+                        // layer.
+                        SwitchLayer (-1);
+                    }
             }
         }
         break;
 
         case KEY_PAGEDOWN:
         {
-            if(rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if(pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
-                pView->EndTextEdit();
-                // Naechste Seite
-                bReturn = TRUE;
-                SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-                USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                if ( ! rKEvt.GetKeyCode().GetAllModifier())
                 {
-                    ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage + 1);
+                    // The page down key without modifiers moves to the next
+                    // slide.
+
+                    pView->EndTextEdit();
+
+                    // Next page.
+                    bReturn = TRUE;
+                    SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                    if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    {
+                        // Switch the page and send events regarding
+                        // deactivation the old page and activating the new one.
+                        SdTabControl* pPageTabControl =
+                            static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendDeactivatePageEvent ();
+                        ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage + 1);
+                        if (pPageTabControl->IsReallyShown())
+                            pPageTabControl->SendActivatePageEvent ();
+                    }
                 }
+                else if (rKEvt.GetKeyCode().IsMod1())
+                    if (static_cast<SdDrawViewShell*>(pViewShell)->GetLayerMode())
+                    {
+                        // With the mod1 (control) modifier and the layer
+                        // mode active pressing page-down moves to the
+                        // previous layer.
+                        SwitchLayer (+1);
+                    }
             }
         }
         break;
@@ -1119,5 +1184,37 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
         rRect = Rectangle(
             Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
             Size(rRect.GetWidth(), rRect.GetWidth()));
+    }
+}
+
+
+
+
+void FuPoor::SwitchLayer (sal_Int32 nOffset)
+{
+    if(pViewShell && pViewShell->ISA(SdDrawViewShell))
+    {
+        SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+
+        // Calculate the new index.
+        sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
+
+        // Make sure the new index lies inside the range of valid indices.
+        if (nIndex < 0)
+            nIndex = 0;
+        else if (nIndex >= pDrawViewShell->GetTabLayerCount ())
+            nIndex = pDrawViewShell->GetTabLayerCount() - 1;
+
+        // Set the new active layer.
+        if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
+        {
+            SdLayerTab* pLayerTabControl =
+                static_cast<SdDrawViewShell*>(pViewShell)->GetLayerTabControl();
+            pLayerTabControl->SendDeactivatePageEvent ();
+
+            pDrawViewShell->SetActiveTabLayerIndex (nIndex);
+
+            pLayerTabControl->SendActivatePageEvent ();
+        }
     }
 }
