@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-06 09:28:08 $
+ *  last change: $Author: jl $ $Date: 2001-11-08 08:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,9 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <bridges/java/jvmcontext.hxx>
 
 #include "jvmargs.hxx"
