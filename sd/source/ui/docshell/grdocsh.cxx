@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:54:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ TYPEINIT1(GraphicDocShell, DrawDocShell);
 SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
+    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 //SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SFXOBJECTSHELL_STD_NORMAL, sdraw, SvGlobalName(SO3_SDRAW_CLASSID_60) )
