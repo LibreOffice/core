@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:53:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,7 @@ extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl();
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl();
 extern "C" void SAL_CALL createRegistryInfo_OTableControl();
 extern "C" void SAL_CALL createRegistryInfo_ORelationControl();
-extern "C" void SAL_CALL createRegistryInfo_ORowsetFilterDialog();
-extern "C" void SAL_CALL createRegistryInfo_ORowsetOrderDialog();
+extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs();
 extern "C" void SAL_CALL createRegistryInfo_ODBApplication();
 extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog();
 extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
@@ -124,8 +123,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OQueryControl();
         createRegistryInfo_OTableControl();
         createRegistryInfo_ORelationControl();
-        createRegistryInfo_ORowsetFilterDialog();
-        createRegistryInfo_ORowsetOrderDialog();
+        createRegistryInfo_ComposerDialogs();
         createRegistryInfo_ODBApplication();
         createRegistryInfo_ODirectSQLDialog();
         createRegistryInfo_OAdvancedSettingsDialog();
