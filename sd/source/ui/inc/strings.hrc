@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-30 15:06:23 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 10:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,6 @@
 #define STR_UNDO_CONVERT_TO_BITMAP          (RID_APP_START+572)
 
 #define STR_PACKNGO_FILEDLG_TITLE           (RID_APP_START+576)
-#define STR_PACKNGO_FILTER                  (RID_APP_START+577)
 
 #define STR_HTMLEXP_ERROR_CREATE_FILE       (RID_APP_START+578)
 #define STR_HTMLEXP_ERROR_OPEN_FILE         (RID_APP_START+579)

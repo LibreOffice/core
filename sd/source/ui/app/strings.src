@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-15 21:58:00 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 10:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12912,31 +12912,6 @@ String STR_PACKNGO_FILEDLG_TITLE
     Text[ turkish ] = "S˝k˝˛t˝r - Farkl˝ kaydet";
     Text[ catalan ] = "Comprimir - Guardar como";
     Text[ finnish ] = "Pakkaa - Tallenna nimell‰";
-};
-String STR_PACKNGO_FILTER
-{
-    Text = "%PRODUCTNAME Impress 5.0 (gepackt) (*.sdp)" ;
-    Text [ ENGLISH ] = "StarOffice Impress 5.0 (packed) (*.sdp)" ;
-    Text [ english_us ] = "%PRODUCTNAME Impress 5.0 (packed) (*.sdp)" ;
-    Text[ portuguese ] = "%PRODUCTNAME Impress 5.0 (comprimido) (*.sdp)";
-    Text[ russian ] = "%PRODUCTNAME Impress 5.0 (ÛÊ‡Ú) (*.sdp)";
-    Text[ greek ] = "%PRODUCTNAME Impress 5.0 (ÛıÏÈÂÛÏ›ÌÔ) (*.sdp)";
-    Text[ dutch ] = "%PRODUCTNAME Impress 5.0 (gecompr) (*.sdp)";
-    Text[ french ] = "%PRODUCTNAME Impress 5.0 (compressÈ) (*.sdp)";
-    Text[ spanish ] = "%PRODUCTNAME Impress 5.0 (comprimido) (*.sdp)";
-    Text[ italian ] = "%PRODUCTNAME Impress 5.0 (compresso) (*.sdp)";
-    Text[ danish ] = "%PRODUCTNAME Impress 5.0 (komprimeret) (*.sdp)";
-    Text[ swedish ] = "%PRODUCTNAME Impress 5.0 (komprimerat) (*.sdp)";
-    Text[ polish ] = "%PRODUCTNAME Impress 5.0 (skompresowany) (*.sdp)";
-    Text[ portuguese_brazilian ] = "Pack & Go  (*.sdp)";
-    Text[ japanese ] = "%PRODUCTNAME Impress 5.0(à≥èk)(*.sdp)";
-    Text[ korean ] = "%PRODUCTNAME Impress 5.0 (æ–√‡µ ) (*.sdp)";
-    Text[ chinese_simplified ] = "%PRODUCTNAME Impress 5.0 (—πÀı)   (*.sdp)";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Impress 5.0 (¿£¡Y) (*.sdp)";
-    Text[ arabic ] = "%PRODUCTNAME Impress 5.0 („÷€Êÿ) (*.sdp)";
-    Text[ turkish ] = "%PRODUCTNAME Impress 5.0 (s˝k˝˛t˝r˝lm˝˛) (*.sdp)";
-    Text[ catalan ] = "%PRODUCTNAME Impress 5.0 (comprimido) (*.sdp)";
-    Text[ finnish ] = "%PRODUCTNAME Impress 5.0 (pakattu) (*.sdp)";
 };
 
 String STR_HTMLEXP_ERROR_CREATE_FILE
