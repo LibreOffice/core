@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:58:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HXX_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
@@ -79,9 +83,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/xoutx.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/ipfrm.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/pseudo.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -518,12 +520,12 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     //  IP deaktivieren
 
     ScClient* pClient = (ScClient*) pViewSh->GetIPClient();
-    if ( pClient && pClient->IsInPlaceActive() )
+    if ( pClient && pClient->IsObjectInPlaceActive() )
     {
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
         bDisableHdl = TRUE;
 
-        pClient->GetProtocol().Reset2Open();
+        pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
         SFX_APP()->SetViewFrame(pViewSh->GetViewFrame());
 
         bDisableHdl = FALSE;
@@ -644,12 +646,12 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     //  Verben anpassen
 
     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-    BOOL bOle = pViewFrame && pViewFrame->ISA(SfxInPlaceFrame);
+    BOOL bOle = pViewSh->GetViewFrame()->GetFrame()->IsInPlace();
     if ( pOle2Obj && !bOle )
     {
-        SvInPlaceObject* pIPObj = pOle2Obj->GetObjRef();
-        if (pIPObj)
-            pViewSh->SetVerbs( &pIPObj->GetVerbList() );
+        uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
+        if (xObj.is())
+            pViewSh->SetVerbs( xObj->getSupportedVerbs() );
         else
         {
             DBG_ERROR("SdrOle2Obj ohne ObjRef");
@@ -838,7 +840,7 @@ FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG n
     if (pViewData)
     {
         SfxInPlaceClient* pClient = pViewData->GetViewShell()->GetIPClient();
-        if ( pClient && pClient->IsInPlaceActive() )
+        if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
     }
 
