@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unicode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 17:12:43 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ public:
     static sal_Int16 SAL_CALL getUnicodeType( const sal_Unicode ch );
     static sal_Bool SAL_CALL isUnicodeScriptType( const sal_Unicode ch, sal_Int16 type);
     static sal_Int16 SAL_CALL getUnicodeScriptType( const sal_Unicode ch, ScriptTypeList *typeList = NULL, sal_Int16 unknownType = 0 );
+    static sal_Unicode SAL_CALL getUnicodeScriptStart(com::sun::star::i18n::UnicodeScript type);
+    static sal_Unicode SAL_CALL getUnicodeScriptEnd(com::sun::star::i18n::UnicodeScript type);
     static sal_uInt8 SAL_CALL getUnicodeDirection( const sal_Unicode ch );
     static sal_Int32 SAL_CALL getCharType( const sal_Unicode ch );
     static sal_Bool SAL_CALL isUpper( const sal_Unicode ch);
