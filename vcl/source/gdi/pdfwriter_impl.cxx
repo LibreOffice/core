@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-28 17:31:39 $
+ *  last change: $Author: pl $ $Date: 2002-10-29 10:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2292,7 +2292,49 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
 
 void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines )
 {
-    if( m_aCurrentPDFState.m_aFont.IsShadow() )
+    FontRelief eRelief = m_aCurrentPDFState.m_aFont.GetRelief();
+    // relief takes precedence over shadow (see outdev3.cxx)
+    if(  eRelief != RELIEF_NONE )
+    {
+        push( PUSH_ALL );
+
+        Color aTextColor = m_aCurrentPDFState.m_aFont.GetColor();
+        Color aTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
+        Color aReliefColor( COL_LIGHTGRAY );
+        if( aTextColor == COL_BLACK )
+            aTextColor = Color( COL_WHITE );
+        if( aTextLineColor == COL_BLACK )
+            aTextLineColor = Color( COL_WHITE );
+        if( aTextColor == COL_WHITE )
+            aReliefColor = Color( COL_BLACK );
+
+        Font aSetFont = m_aCurrentPDFState.m_aFont;
+        aSetFont.SetRelief( RELIEF_NONE );
+        aSetFont.SetShadow( FALSE );
+
+        aSetFont.SetColor( aReliefColor );
+        setTextLineColor( aTextLineColor );
+        setFont( aSetFont );
+        long nOff = 1 + getReferenceDevice()->mnDPIX/300;
+        if( eRelief == RELIEF_ENGRAVED )
+            nOff = -nOff;
+
+        rLayout.DrawOffset() += Point( nOff, nOff );
+        updateGraphicsState();
+        drawLayout( rLayout, rText, bTextLines );
+
+        rLayout.DrawOffset() -= Point( nOff, nOff );
+        setTextLineColor( aTextLineColor );
+        aSetFont.SetColor( aTextColor );
+        setFont( aSetFont );
+        updateGraphicsState();
+        drawLayout( rLayout, rText, bTextLines );
+
+        // clean up the mess
+        pop();
+        return;
+    }
+    else if( m_aCurrentPDFState.m_aFont.IsShadow() )
     {
         Font aSaveFont = m_aCurrentPDFState.m_aFont;
         Color aSaveTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
