@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfontexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:10 $
+ *  last change: $Author: ka $ $Date: 2002-08-16 10:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,19 +216,31 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
 
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs )
 {
-    PolyPolygon     aPolyPoly;
+    ::std::vector< PolyPolygon > aPolyPolys;
 
-    if( rOut.GetTextOutline( aPolyPoly, rGlyphs, 0, 0, 1, sal_False ) )
+    if( rOut.GetTextOutlines( aPolyPolys, rGlyphs, 0, 0, 1, sal_False ) )
     {
-        aPolyPoly.Move( 0, -rOut.GetFontMetric().GetAscent() );
-        aPolyPoly.Scale( 1.0, -1.0 );
-
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", rGlyphs );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( rOut.GetTextWidth( rGlyphs ) ) );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
 
         {
-            SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
+            SvXMLElementExport                      aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
+            ::std::vector< PolyPolygon >::iterator  pIter( aPolyPolys.begin() );
+
+            while( pIter != aPolyPolys.end() )
+            {
+                PolyPolygon& rPolyPoly = *pIter;
+
+                rPolyPoly.Move( 0, -rOut.GetFontMetric().GetAscent() );
+                rPolyPoly.Scale( 1.0, -1.0 );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( rPolyPoly, sal_False ) );
+
+                {
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
+                }
+
+                ++pIter;
+            }
         }
     }
 }
