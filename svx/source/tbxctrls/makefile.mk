@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 13:20:10 $
+#   last change: $Author: kz $ $Date: 2004-08-02 10:07:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ CFLAGS+=-DDG_DLL
 # --- Files --------------------------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/formatpaintbrushctrl.obj\
         $(SLO)$/fontworkgallery.obj\
         $(SLO)$/extrusioncontrols.obj \
         $(SLO)$/colrctrl.obj	\
