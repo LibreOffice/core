@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-25 08:47:35 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 13:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,23 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     pFocusBox(0),
     pPrt(0)
 {
+    // update the SfxDocumentTemplates the manager works with
+    if ( aMgr.GetTemplates() )  // should never fail, but who knows ....
+    {
+        // for this, show a wait cursor (it may take a while)
+        Window* pWaitObjectRange = pDialog ? pDialog->GetParent() : NULL;
+        if ( !pWaitObjectRange )
+            pWaitObjectRange = pDialog;
+
+        WaitObject aWaitCursor( pWaitObjectRange );
+        const_cast< SfxDocumentTemplates* >( aMgr.GetTemplates() )->Update( sal_True /* be smart */ );
+            // this const_cast is a hack - but the alternative would be to
+            // * have a method which returns the templates non-const
+            // * use a new SfxDocumentTemplates instance for the update (knowing that they all share the same
+            //   implementation class)
+            // * always work with an own instance, even if we get only NULL in this ctor
+    }
+
     aLeftLb.SetHelpId( HID_CTL_ORGANIZER_LEFT );
     aRightLb.SetHelpId( HID_CTL_ORGANIZER_RIGHT );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:52:14 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 13:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SFXNEW_HXX
 #include "new.hxx"
+#endif
 
 #ifndef _SV_GDIMTF_HXX //autogen
 #include <vcl/gdimtf.hxx>
@@ -76,8 +78,12 @@
 #ifndef _SVMEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
+#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
+#endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
@@ -85,26 +91,58 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
 
 #include "new.hrc"
+#ifndef _SFX_DOC_HRC
 #include "doc.hrc"
+#endif
+#ifndef _SFX_HRC
 #include "sfx.hrc"
+#endif
 #include "helpid.hrc"
 #include "sfxtypes.hxx"
+#ifndef _SFXAPP_HXX
 #include "app.hxx"
+#endif
+#ifndef _SFXDOCINF_HXX
 #include "docinf.hxx"
+#endif
+#ifndef _SFXVIEWFRM_HXX
 #include "viewfrm.hxx"
+#endif
+#ifndef _SFX_OBJFAC_HXX
 #include "docfac.hxx"
+#endif
+#ifndef _SFX_OBJSH_HXX
 #include "objsh.hxx"
+#endif
 #include "fltfnc.hxx"
+#ifndef _SFXVIEWSH_HXX
 #include "viewsh.hxx"
+#endif
+#ifndef _VIEWFAC_HXX
 #include "viewfac.hxx"
+#endif
+#ifndef _SFX_INTERNO_HXX
 #include "interno.hxx"
+#endif
+#ifndef _SFX_SFXRESID_HXX
 #include "sfxresid.hxx"
+#endif
+#ifndef _SFXDOCFILE_HXX
 #include "docfile.hxx"
+#endif
 #include "preview.hxx"
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
+
 
 //========================================================================
 
@@ -690,6 +728,13 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         aPreviewBtn.Check( rExtra.GetToken( 1 ,'|' ) == 'Y' );
 
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
+
+    // update the template configuration if necessary
+    {
+        WaitObject aWaitCursor( pAntiImplP->GetParent() );
+        aTemplates.Update( sal_True /* be smart */ );
+    }
+    // fill the list boxes
     const USHORT nCount = aTemplates.GetRegionCount();
     if (nCount)
     {
