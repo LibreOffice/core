@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-11 17:00:38 $
+ *  last change: $Author: bm $ $Date: 2001-02-14 17:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,16 @@
  *
  ************************************************************************/
 
+// include PropertyMap.hxx with this define
+// to create the maps
+#ifndef _PROPERTYMAP_HXX_
+#define XML_SCH_CREATE_GLOBAL_MAPS
+#include "PropertyMap.hxx"
+#undef XML_SCH_CREATE_GLOBAL_MAPS
+#endif
+
 #include "XMLChartPropertySetMapper.hxx"
 
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
-#endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
-#endif
-#ifndef _XMLOFF_CONTEXTID_HXX_
-#include "contextid.hxx"
-#endif
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlement.hxx"
-#endif
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include "EnumPropertyHdl.hxx"
 #endif
@@ -105,26 +95,11 @@
 #include "XMLErrorIndicatorPropertyHdl.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
-#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTERRORCATEGORY_HPP_
-#include <com/sun/star/chart/ChartErrorCategory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTERRORINDICATORTYPE_HPP_
-#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTREGRESSIONCURVETYPE_HPP_
-#include <com/sun/star/chart/ChartRegressionCurveType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISMARKS_HPP_
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTDATACAPTION_HPP_
 #include <com/sun/star/chart/ChartDataCaption.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTSOLIDTYPE_HPP_
-#include <com/sun/star/chart/ChartSolidType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTSYMBOLTYPE_HPP_
 #include <com/sun/star/chart/ChartSymbolType.hpp>
@@ -148,162 +123,13 @@
 
 using namespace com::sun::star;
 
-// custom types
-#define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
-#define XML_SCH_TYPE_ERROR_CATEGORY         ( XML_SCH_TYPES_START + 1 )
-#define XML_SCH_TYPE_REGRESSION_TYPE        ( XML_SCH_TYPES_START + 2 )
-#define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
-#define XML_SCH_TYPE_ERROR_INDICATOR_UPPER  ( XML_SCH_TYPES_START + 4 )
-#define XML_SCH_TYPE_ERROR_INDICATOR_LOWER  ( XML_SCH_TYPES_START + 5 )
-
-// context ids
-#define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
-#define XML_SCH_CONTEXT_MIN                         ( XML_SCH_CTF_START + 1 )
-#define XML_SCH_CONTEXT_MAX                         ( XML_SCH_CTF_START + 2 )
-#define XML_SCH_CONTEXT_STEP_MAIN                   ( XML_SCH_CTF_START + 3 )
-#define XML_SCH_CONTEXT_STEP_HELP                   ( XML_SCH_CTF_START + 4 )
-#define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 5 )
-
-#define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER     ( XML_SCH_CTF_START + 10 )
-#define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER     ( XML_SCH_CTF_START + 11 )
-#define XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER     ( XML_SCH_CTF_START + 12 )
-#define XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER     ( XML_SCH_CTF_START + 13 )
-#define XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION       ( XML_SCH_CTF_START + 14 )
-#define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER   ( XML_SCH_CTF_START + 15 )
-#define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT     ( XML_SCH_CTF_START + 16 )
-#define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL   ( XML_SCH_CTF_START + 17 )
-
-#define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
-#define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, XML_SCH_CONTEXT_##c }
-#define MAP_SPECIAL( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
-#define MAP_ENTRY_END { 0,0,0,0 }
-
-const XMLPropertyMapEntry aXMLChartPropMap[] =
-{
-    // chart subtypes
-    MAP_ENTRY( "UpDown", CHART, stock_updown_bars, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Volume", CHART, stock_with_volume, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Dim3D", CHART, three_dimensional, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Deep", CHART, deep, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Lines", CHART, lines, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Percent", CHART, percentage, XML_TYPE_BOOL ),
-    MAP_ENTRY( "SolidType", CHART, solid_type, XML_SCH_TYPE_SOLID_TYPE ),
-    MAP_ENTRY( "SplineType", CHART, splines, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "Stacked", CHART, stacked, XML_TYPE_BOOL ),
-    MAP_CONTEXT( "SymbolType", CHART, symbol, XML_TYPE_NUMBER, USER_SYMBOL ),
-    MAP_ENTRY( "Vertical", CHART, vertical, XML_TYPE_BOOL ),
-    MAP_ENTRY( "NumberOfLines", CHART, lines_used, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "StackedBarsConnected", CHART, connect_bars, XML_TYPE_BOOL ),
-
-    // axis properties
-    MAP_ENTRY( "DisplayLabels", CHART, display_label, XML_TYPE_BOOL ),
-    MAP_SPECIAL( "Marks", CHART, tick_marks_major_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_INNER ),          // convert one constant
-    MAP_SPECIAL( "Marks", CHART, tick_marks_major_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_OUTER ),          // to two bools
-    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_INNER ),      // see above
-    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_OUTER ),
-    MAP_ENTRY( "Logarithmic", CHART, logarithmic, XML_TYPE_BOOL ),
-    MAP_CONTEXT( "Min", CHART, minimum, XML_TYPE_DOUBLE, MIN ),
-    MAP_CONTEXT( "Max", CHART, maximum, XML_TYPE_DOUBLE, MAX ),
-    MAP_CONTEXT( "Origin", CHART, origin, XML_TYPE_DOUBLE, ORIGIN ),
-    MAP_CONTEXT( "StepMain", CHART, interval_major, XML_TYPE_DOUBLE, STEP_MAIN ),
-    MAP_CONTEXT( "StepHelp", CHART, interval_minor, XML_TYPE_DOUBLE, STEP_HELP ),
-    MAP_ENTRY( "GapWidth", CHART, gap_width, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "Overlap", CHART, overlap, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "TextBreak", TEXT, line_break, XML_TYPE_BOOL ),
-    MAP_ENTRY( "ArrangeOrder", CHART, label_arrangement, XML_SCH_TYPE_AXIS_ARRANGEMENT ),
-//  MAP_ENTRY( NUMBERFORMAT )  separate style - use HelperClass
-
-    // statistical properties
-    MAP_ENTRY( "MeanValue", CHART,  mean_value, XML_TYPE_BOOL ),
-    MAP_ENTRY( "ErrorMargin", CHART, error_margin, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "ConstantErrorLow", CHART, error_lower_limit, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "ConstantErrorHigh", CHART, error_upper_limit, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "ErrorIndicator", CHART, error_upper_indicator, XML_SCH_TYPE_ERROR_INDICATOR_UPPER | MID_FLAG_MERGE_PROPERTY ),  // convert one constant
-    MAP_ENTRY( "ErrorIndicator", CHART, error_lower_indicator, XML_SCH_TYPE_ERROR_INDICATOR_LOWER | MID_FLAG_MERGE_PROPERTY ),  // to two bools
-      MAP_ENTRY( "ErrorCategory", CHART, error_category, XML_SCH_TYPE_ERROR_CATEGORY ),
-      MAP_ENTRY( "PercentageError", CHART, error_percentage, XML_TYPE_DOUBLE ),
-      MAP_ENTRY( "RegressionCurves", CHART, regression_type, XML_SCH_TYPE_REGRESSION_TYPE ),
-
-    // series/data-point properties
-    MAP_SPECIAL( "DataCaption", CHART, data_label_number, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_NUMBER ),   // convert one constant
-    MAP_SPECIAL( "DataCaption", CHART, data_label_text, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_TEXT ),       // to 'tristate' and two bools
-    MAP_SPECIAL( "DataCaption", CHART, data_label_symbol, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_SYMBOL ),
-    MAP_ENTRY( "SegmentOffset", CHART, pie_offset, XML_TYPE_NUMBER ),
-
-    // text properties for titles
-    MAP_SPECIAL( "TextRotation", TEXT, rotation_angle, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
-
-    MAP_ENTRY_END
-};
-
-// ----------------------------------------
-// maps for enums to XML attributes
-// ----------------------------------------
-
-SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
-{
-    { sXML_automatic,       chart::ChartAxisArrangeOrderType_AUTO },
-    { sXML_side_by_side,    chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
-    { sXML_stagger_even,    chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
-    { sXML_stagger_odd,     chart::ChartAxisArrangeOrderType_STAGGER_ODD }
-};
-
-SvXMLEnumMapEntry aXMLChartErrorCategoryEnumMap[] =
-{
-    { sXML_none,                chart::ChartErrorCategory_NONE },
-    { sXML_variance,            chart::ChartErrorCategory_VARIANCE },
-    { sXML_standard_deviation,  chart::ChartErrorCategory_STANDARD_DEVIATION },
-    { sXML_percentage,          chart::ChartErrorCategory_PERCENT },
-    { sXML_error_margin,        chart::ChartErrorCategory_ERROR_MARGIN },
-    { sXML_constant,            chart::ChartErrorCategory_CONSTANT_VALUE }
-};
-
-SvXMLEnumMapEntry aXMLChartRegressionCurveTypeEnumMap[] =
-{
-    { sXML_none,        chart::ChartRegressionCurveType_NONE },
-    { sXML_linear,      chart::ChartRegressionCurveType_LINEAR },
-    { sXML_logarithmic, chart::ChartRegressionCurveType_LOGARITHM },
-    { sXML_exponential, chart::ChartRegressionCurveType_EXPONENTIAL },
-    { sXML_polynomial,  chart::ChartRegressionCurveType_POLYNOMIAL },
-    { sXML_power,       chart::ChartRegressionCurveType_POWER }
-};
-
-SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
-{
-    { sXML_cuboid,      chart::ChartSolidType::RECTANGULAR_SOLID },
-    { sXML_cylinder,    chart::ChartSolidType::CYLINDER },
-    { sXML_cone,        chart::ChartSolidType::CONE },
-    { sXML_pyramid,     chart::ChartSolidType::PYRAMID },
-};
-
-// enum maps copied from draw
-SvXMLEnumMapEntry aXMLChartLineStyleEnumMap[] =
-{
-    { sXML_none, drawing::LineStyle_NONE },
-    { sXML_solid, drawing::LineStyle_SOLID },
-    { sXML_dash, drawing::LineStyle_DASH },
-    { NULL, 0 }
-};
-
-SvXMLEnumMapEntry aXMLChartLineJointEnumMap[] =
-{
-    { sXML_none,    drawing::LineJoint_NONE },
-    { sXML_miter,   drawing::LineJoint_MITER },
-    { sXML_round,   drawing::LineJoint_ROUND },
-    { sXML_bevel,   drawing::LineJoint_BEVEL },
-    { sXML_middle,  drawing::LineJoint_MIDDLE },
-    { NULL, 0 }
-};
-
-SvXMLEnumMapEntry aXMLChartFillStyleEnumMap[] =
-{
-    { sXML_none,    drawing::FillStyle_NONE },
-    { sXML_solid,   drawing::FillStyle_SOLID },
-    { sXML_bitmap,  drawing::FillStyle_BITMAP },
-    { sXML_gradient,drawing::FillStyle_GRADIENT },
-    { sXML_hatch,   drawing::FillStyle_HATCH },
-    { NULL, 0 }
-};
+// the following class implementations are in this file:
+//
+// * XMLChartPropHdlFactory
+// * XMLChartPropertySetMapper
+// * XMLChartExportPropertyMapper
+// * XMLChartImportPropertyMapper
+// * SchXMLStyleExport
 
 // ----------------------------------------
 
@@ -345,25 +171,6 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
                 break;
 
-//              case XML_SCH_TYPE_FILLSTYLE:
-//                  pHdl = new XMLEnumPropertyHdl( aXMLChartFillStyleEnumMap, ::getCppuType((const drawing::FillStyle*)0) );
-//                  break;
-
-//              case XML_SCH_TYPE_STROKE:
-//                  pHdl = new XMLEnumPropertyHdl( aXMLChartLineStyleEnumMap, ::getCppuType((const drawing::LineStyle*)0) );
-//                  break;
-
-//              case XML_SCH_TYPE_LINEJOIN:
-//                  pHdl = new XMLEnumPropertyHdl( aXMLChartLineJointEnumMap, ::getCppuType((const drawing::LineJoint*)0) );
-//                  break;
-
-//              case XML_SCH_TYPE_TEXT_CROSSEDOUT:
-//              {
-//                  const rtl::OUString aTrueStr( rtl::OUString::createFromAscii( sXML_crossedout_single ));
-//                  const rtl::OUString aFalseStr( rtl::OUString::createFromAscii( sXML_none ));
-//                  pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
-//                  break;
-//              }
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
@@ -492,7 +299,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     if( nContextId )
     {
         rtl::OUString sAttrName = maPropMapper->GetEntryXMLName( rProperty.mnIndex );
-        sal_Int32 nNameSpace = XML_NAMESPACE_CHART;
+        sal_uInt16 nNameSpace = maPropMapper->GetEntryNameSpace( rProperty.mnIndex );
         rtl::OUStringBuffer sValueBuffer;
         rtl::OUString sValue;
 
