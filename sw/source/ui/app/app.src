@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:06:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     };
     ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
     {
-        Prefix = "sf";
+        Prefix = "sfh";
         STYLE_IMAGE_LISTEF
     };
 };
