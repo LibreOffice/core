@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:10:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 
 #include <swtypes.hxx>
 #include <cmdid.h>
+
+#include <memory>
 
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
@@ -2230,6 +2232,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             OUString aCLSID;
             SvGlobalName aClassName;
             uno::Reference < embed::XEmbeddedObject > xIPObj;
+            std::auto_ptr < comphelper::EmbeddedObjectContainer > pCnt;
             if( (*pCLSID) >>= aCLSID )
             {
                 sal_Bool bInternal = sal_True;
@@ -2240,9 +2243,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     throw aExcept;
                 }
 
-                comphelper::EmbeddedObjectContainer aCnt;
+                pCnt.reset( new comphelper::EmbeddedObjectContainer );
                 ::rtl::OUString aName;
-                xIPObj = aCnt.CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
+                xIPObj = pCnt->CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
             }
             if ( xIPObj.is() )
             {
