@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-08 08:07:25 $
+ *  last change: $Author: bm $ $Date: 2002-11-01 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,7 @@ void SdOutlineViewShell::ExecCtrl(SfxRequest &rReq)
             pOlView->GetOutliner()->UpdateFields();
             UpdatePreview( GetActualPage() );
             rReq.Done();
+            break;
         }
 
         default:
