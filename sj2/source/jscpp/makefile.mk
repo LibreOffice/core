@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-25 14:55:47 $
+#   last change: $Author: obo $ $Date: 2004-06-01 09:13:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,16 +82,17 @@ UNOTYPES= \
 
 CXXFILES=	\
     sjapplet.cxx							\
-    sjapplet_impl.cxx
+    sjapplet_impl.cxx 
 
+
+#.IF "$(GUI)"=="UNX"
+#CXXFILES += widget.cxx
+#.ENDIF
 
 SLOFILES=	\
     $(SLO)$/sjapplet.obj						\
     $(SLO)$/sjapplet_impl.obj
 
-# .IF "$(GUI)"=="WNT"
-# SLOFILES +=	$(SLO)$/sun_awt_windows_package.obj
-# .ENDIF
 
 # --- Targets ------------------------------------------------------
 
