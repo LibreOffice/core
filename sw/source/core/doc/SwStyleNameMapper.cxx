@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:47:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,9 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     {
         case GET_POOLID_TXTCOLL:
         {
+            sal_uInt16 nIndex;
+            sal_uInt16 nId;
+
             pHash = bProgName ? pParaProgMap : pParaUIMap;
             if ( !pHash )
             {
@@ -405,7 +408,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                                            RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN +
                                            RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN );
                 pStrings = bProgName ? &GetTextProgNameArray() : &GetTextUINameArray();
-                for ( sal_uInt16 nIndex = 0, nId = RES_POOLCOLL_TEXT_BEGIN ; nId < RES_POOLCOLL_TEXT_END ; nId++,nIndex++ )
+                for ( nIndex = 0, nId = RES_POOLCOLL_TEXT_BEGIN ; nId < RES_POOLCOLL_TEXT_END ; nId++,nIndex++ )
                     (*pHash)[(*pStrings)[nIndex]] = nId;
                 pStrings = bProgName ? &GetListsProgNameArray() : &GetListsUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_LISTS_BEGIN ; nId < RES_POOLCOLL_LISTS_END ; nId++,nIndex++ )
@@ -435,10 +438,13 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             pHash = bProgName ? pCharProgMap : pCharUIMap;
             if ( !pHash )
             {
+                sal_uInt16 nIndex;
+                sal_uInt16 nId;
+
                 pHash = new NameToIdHash ( RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN +
                                            RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN );
                 pStrings = bProgName ? &GetChrFmtProgNameArray() : &GetChrFmtUINameArray();
-                for ( sal_uInt16 nIndex = 0, nId = RES_POOLCHR_NORMAL_BEGIN ; nId < RES_POOLCHR_NORMAL_END ; nId++,nIndex++ )
+                for ( nIndex = 0, nId = RES_POOLCHR_NORMAL_BEGIN ; nId < RES_POOLCHR_NORMAL_END ; nId++,nIndex++ )
                     (*pHash)[(*pStrings)[nIndex]] = nId;
                 pStrings = bProgName ? &GetHTMLChrFmtProgNameArray() : &GetHTMLChrFmtUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCHR_HTML_BEGIN ; nId < RES_POOLCHR_HTML_END ; nId++,nIndex++ )
@@ -1128,7 +1134,8 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
         RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
         0
     };
-    for (const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
+    const sal_uInt16 * pIds;
+    for ( pIds = nIds; *pIds; ++pIds)
     {
         if (aRes == *rExtraArr[ *pIds ])
         {
@@ -1154,7 +1161,9 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
         RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
         0
     };
-    for (const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
+    const sal_uInt16 * pIds;
+
+    for ( pIds = nIds; *pIds; ++pIds)
     {
         if (aRes == *rExtraArr[ *pIds ])
         {
