@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryHelper.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: kr $ $Date: 2000-09-27 09:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
+
+import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 
 import com.sun.star.registry.XRegistryKey;
+
+import com.sun.star.uno.UnoRuntime;
 
 
 /**
@@ -78,7 +82,7 @@ import com.sun.star.registry.XRegistryKey;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-09-27 09:38:07 $
  * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
@@ -229,8 +233,12 @@ public class FactoryHelper {
                     _parameters[_parameters.length - 1] = null;
                 }
             }
-            else
+            else {
                 instance = createInstance();
+
+                XInitialization xInitialization = (XInitialization)UnoRuntime.queryInterface(XInitialization.class, instance);
+                xInitialization.initialize(args);
+            }
 
             return instance;
         }
