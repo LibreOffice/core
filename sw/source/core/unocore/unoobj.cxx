@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:35:32 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     {
                         sal_Int16 nLevel;
                         aValue >>= nLevel;
-                        sal_Int16 nOldLevel = pTxtNd->GetNum()->GetLevel() & ~NO_NUMLEVEL;
+                        sal_Int16 nOldLevel = pTxtNd->GetNum()->GetRealLevel();
                         if(nLevel < MAXLEVEL && nOldLevel != nLevel)
                         {
                             UnoActionContext aAction(rPam.GetDoc());
@@ -768,10 +768,10 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     {
                         BOOL bIsNumber = *(sal_Bool*) aValue.getValue();
                         SwNodeNum aNum = *pTxtNd->GetNum();
-                        sal_Int16 nOldLevel = aNum.GetLevel() & ~NO_NUMLEVEL;
-                        if(!bIsNumber)
-                            nOldLevel |= NO_NUMLEVEL;
+                        sal_Int16 nOldLevel = aNum.GetRealLevel();
                         aNum.SetLevel(nOldLevel);
+                        if(!bIsNumber)
+                            aNum.SetNoNum(TRUE);
                         pTxtNd->UpdateNum( aNum );
 
                     }
