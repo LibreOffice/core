@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@ class Converter
 
         // Seq<String> => Vector<String>
         static OUStringList                                    convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >&           lSource );
+        static css::uno::Sequence< ::rtl::OUString >           convert_OUStringList2seqOUString( const OUStringList&                                    lSource );
+
+        static css::uno::Sequence< css::beans::PropertyValue > convert_OUStringHash2seqProp    ( const OUStringHash&                                    lSource );
+        static OUStringHash                                    convert_seqProp2OUStringHash    ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
 
         // String <=> tools.DateTime
         static DateTime                                        convert_String2DateTime         ( const ::rtl::OUString&                                 sSource );
