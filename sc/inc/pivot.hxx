@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:59:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-08 09:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,20 +134,17 @@ struct LabelData;
 
 struct PivotField
 {
-    short               nCol;
+    SCsCOL               nCol;
     USHORT              nFuncMask;
     USHORT              nFuncCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            PivotField( short nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
+    explicit            PivotField( SCsCOL nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
 
     bool                operator==( const PivotField& r ) const;
 };
 
 // -----------------------------------------------------------------------
-
-// DR->ER: temporary workaround from CWS fieldoptions, remove
-typedef USHORT SCSIZE;
 
 // implementation still in global2.cxx
 struct ScPivotParam
