@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:23:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,40 +74,36 @@ namespace svt
 {
     class BrowseBoxImpl
     {
-        // member
-        public:
-            typedef ::std::map< sal_Int32,AccessibleBrowseBoxHeaderCell*> THeaderCellMap;
-            struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
+    // member
+    public:
+        typedef ::std::map< sal_Int32,AccessibleBrowseBoxHeaderCell*> THeaderCellMap;
+        struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
+        {
+            inline void operator()(const THeaderCellMap::value_type& _aType)
             {
-                inline void operator()(const THeaderCellMap::value_type& _aType)
-                {
-                    _aType.second->dispose();
-                }
-            };
-
-            AccessibleBrowseBox* m_pAccessible;
-            THeaderCellMap m_aColHeaderCellMap;
-            THeaderCellMap m_aRowHeaderCellMap;
-        public:
-            BrowseBoxImpl() : m_pAccessible(NULL)
-            {
+                _aType.second->dispose();
             }
+        };
+
+    public:
+        AccessibleBrowseBoxAccess*  m_pAccessible;
+        THeaderCellMap              m_aColHeaderCellMap;
+        THeaderCellMap              m_aRowHeaderCellMap;
+
+    public:
+        BrowseBoxImpl() : m_pAccessible(NULL)
+        {
+        }
 
 
-            /** commitTableEvent commit the event at all listeners of the table
-                @param nEventId
-                    the event id
-                @param rNewValue
-                    the new value
-                @param rOldValue
-                    the old value
-            */
-            inline void commitTableEvent(sal_Int16 nEventId,
-                    const ::com::sun::star::uno::Any& rNewValue,
-                    const ::com::sun::star::uno::Any& rOldValue)
-            {
-                m_pAccessible->commitTableEvent(nEventId,rNewValue,rOldValue);
-            }
+        /// @see AccessibleBrowseBox::getHeaderBar
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+            getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType );
+
+        /// @see AccessibleBrowseBox::getTable
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+            getAccessibleTable( );
+
     };
 }
 
