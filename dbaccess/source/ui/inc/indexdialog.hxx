@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 16:24:08 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _DBAUI_INDEXES_HXX_
 #include "indexes.hxx"
 #endif
+#ifndef DBAUI_TOOLBOXHELPER_HXX
+#include "ToolBoxHelper.hxx"
+#endif
 
 //......................................................................
 namespace dbaui
@@ -136,7 +139,8 @@ namespace dbaui
     //==================================================================
     class IndexFieldsControl;
     class OIndexCollection;
-    class DbaIndexDialog : public ModalDialog
+    class DbaIndexDialog :  public ModalDialog,
+                            public OToolBoxHelper
     {
     protected:
         SvtViewOptions          m_aGeometrySettings;
@@ -168,6 +172,21 @@ namespace dbaui
             );
         ~DbaIndexDialog();
 
+        virtual void StateChanged( StateChangedType nStateChange );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+
+        /** will be called whenthe id of the image list is needed.
+            @param  _eBitmapSet
+                <svtools/imgdef.hxx>
+            @param  _bHiContast
+                <TRUE/> when in high contrast mode.
+        */
+        virtual sal_Int16 getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+
+        /** will be called when the controls need to be resized.
+        */
+        virtual void resizeControls(const Size& _rDiff);
+
     protected:
         void fillIndexList();
         void updateToolbox();
@@ -196,6 +215,10 @@ namespace dbaui
         sal_Bool implDropIndex(SvLBoxEntry* _pEntry, sal_Bool _bRemoveFromCollection);
 
         sal_Bool implCheckPlausibility(const ConstIndexesIterator& _rPos);
+
+        /** checks if the controls have to be replaced and moved.
+        */
+        void checkControls();
     };
 
 //......................................................................
@@ -207,6 +230,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/11 16:24:08  fs
+ *  #86788# +m_bEditAgain / #86863# allow a drop without confirmation (mapped from resetting a new index)
+ *
  *  Revision 1.5  2001/05/02 11:45:08  fs
  *  #86434# OnEditIndexAgain
  *
