@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:09:39 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ void SwFntObj::GuessLeading( const ViewShell *pSh, const FontMetric& rMet )
                 if( nDiff > 0 )
                 {
                     ASSERT( nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
-                    nPrtAscent += ( 2 * nDiff ) / 5;
+                    nPrtAscent += (USHORT)(( 2 * nDiff ) / 5);
                 }
             }
         }
@@ -943,7 +943,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            const USHORT i = nWidthPerChar ?
+            const ULONG i = nWidthPerChar ?
                                 ( nWidthPerChar - 1 ) / nGridWidth + 1:
                                 1;
 
@@ -951,7 +951,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             // position of first character, we take the printer position
             long nCharWidth = pKernArray[ 0 ];
-            USHORT nHalfWidth = nWidthPerChar / 2;
+            ULONG nHalfWidth = nWidthPerChar / 2;
 
             long nNextFix;
 
@@ -1809,9 +1809,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             long nWidthPerChar = aTxtSize.Width() / nLn;
 
-            const USHORT i = nWidthPerChar ?
-                                ( nWidthPerChar - 1 ) / nGridWidth + 1:
-                                1;
+            const ULONG i = nWidthPerChar ?
+                            ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                            1;
 
             aTxtSize.Width() = i * nGridWidth * nLn;
 
@@ -1820,8 +1820,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
     }
 
-    BOOL bCompress = rInf.GetKanaComp() && nLn &&
-                     lcl_IsMonoSpaceFont( rInf.GetpOut() );
+    const BOOL bCompress = rInf.GetKanaComp() && nLn &&
+                           rInf.GetFont() &&
+                           SW_CJK == rInf.GetFont()->GetActual() &&
+                           rInf.GetScriptInfo() &&
+                           rInf.GetScriptInfo()->CountCompChg() &&
+                           lcl_IsMonoSpaceFont( rInf.GetpOut() );
+
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
@@ -2031,9 +2036,9 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            USHORT i = nWidthPerChar ?
-                        ( nWidthPerChar - 1 ) / nGridWidth + 1:
-                        1;
+            ULONG i = nWidthPerChar ?
+                      ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                      1;
 
             nWidthPerChar = i * nGridWidth;
 
@@ -2227,8 +2232,12 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {
      ChgFnt( rInf.GetShell(), rInf.GetpOut() );
 
-    BOOL bCompress = SW_CJK==GetActual() && rInf.GetKanaComp() && rInf.GetLen() &&
-                     lcl_IsMonoSpaceFont( rInf.GetpOut() );
+    const BOOL bCompress = rInf.GetKanaComp() && rInf.GetLen() &&
+                           SW_CJK == GetActual() &&
+                           rInf.GetScriptInfo() &&
+                           rInf.GetScriptInfo()->CountCompChg() &&
+                           lcl_IsMonoSpaceFont( rInf.GetpOut() );
+
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
@@ -2252,9 +2261,9 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            const USHORT i = nWidthPerChar ?
-                                ( nWidthPerChar - 1 ) / nGridWidth + 1:
-                                1;
+            const ULONG i = nWidthPerChar ?
+                            ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                            1;
 
             nWidthPerChar = i * nGridWidth;
             long nCurrPos = nWidthPerChar;
