@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-19 15:08:03 $
+ *  last change: $Author: sb $ $Date: 2002-12-10 10:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 extern "C" {
 #endif
 
+// See rtl_TextEncodingInfo.Flags below for documentation on these values:
 #define RTL_TEXTENCODING_INFO_CONTEXT   ((sal_uInt32)0x00000001)
 #define RTL_TEXTENCODING_INFO_ASCII     ((sal_uInt32)0x00000002)
 #define RTL_TEXTENCODING_INFO_UNICODE   ((sal_uInt32)0x00000004)
@@ -115,16 +116,60 @@ typedef struct _rtl_TextEncodingInfo
      */
     sal_uInt8           Reserved;
 
-    /** Any combination of the flags RTL_TEXTENCODING_INFO_CONTEXT (with
-        unknown semantics), RTL_TEXTENCODING_INFO_ASCII (the encoding is a
-        superset of ASCII), RTL_TEXTENCODING_INFO_UNICODE (the encoding's
-        character set is Unicode), RTL_TEXTENCODING_INFO_MULTIBYTE (a
-        multi-byte encoding), RTL_TEXTENCODING_INFO_R2L (an encoding used
-        mainly or exclusively for languages written from right to left),
-        RTL_TEXTENCODING_INFO_7BIT (a 7-bit instead of an 8-bit encoding),
-        RTL_TEXTENCODING_INFO_SYMBOL (an encoding for symbol character sets),
-        and RTL_TEXTENCODING_INFO_MIME (the encoding is registered as a MIME
-        charset).
+    /** Any combination of the RTL_TEXTENCODING_INFO flags.
+
+        RTL_TEXTENCODING_INFO_CONTEXT:  The encoding uses some mechanism (like
+        state-changing byte sequences) to switch between different modes (e.g.,
+        to encode multiple character repertoires within the same byte ranges).
+
+        Even if an encoding does not have the CONTEXT property, interpretation
+        of certain byte values within that encoding can depend on context (e.g.,
+        a certain byte value could be either a single-byte character or a
+        subsequent byte of a multi-byte character).  Likewise, the single shift
+        characters (SS2 and SS3) used by some of the EUC encodings (to denote
+        that the following bytes constitute a character from another character
+        repertoire) do not imply that encodings making use of these characters
+        have the CONTEXT property.  Examples of encodings that do have the
+        CONTEXT property are the ISO-2022 encodings and UTF-7.
+
+        RTL_TEXTENCODING_INFO_ASCII:  The encoding is a superset of ASCII.  More
+        specifically, any appearance of a byte in the range 0x20--7F denotes the
+        corresponding ASCII character (from SPACE to DELETE); in particular,
+        such a byte can not be part of a multi-byte character.
+
+        If an encoding has this property, it is easy to search for occurences of
+        ASCII characters within strings of this encoding---you do not need to
+        keep track whether a byte in the range 0x20--7F really represents an
+        ASCII character or rather is part of some multi-byte character.
+
+        But note that there is no guarantee that mapping between Unicode and the
+        given encoding keeps ASCII characters intact: the mapping from Unicode
+        to the given encoding could map any of U+0020--007F to anything else
+        than 0x20--7F (though this is extremely unlikely) and could map anything
+        outside the range U+0020-007F to 0x20--7F, and the mapping from the
+        given encoding to Unicode could map characters outside the range
+        0x20--7F to U+0020--007F (but it must map the range 0x20--7F to
+        U+0020--007F).
+
+        In principle, the ASCII property is orthogonal to the CONTEXT property.
+        In practice, however, an encoding that has the ASCII property will most
+        likely not also have the CONTEXT property.
+
+        RTL_TEXTENCODING_INFO_UNICODE:  The encoding is based on the Unicode
+        character repertoire.
+
+        RTL_TEXTENCODING_INFO_MULTIBYTE:  A multi-byte encoding.
+
+        RTL_TEXTENCODING_INFO_R2L:  An encoding used mainly or exclusively for
+        languages written from right to left.
+
+        RTL_TEXTENCODING_INFO_7BIT:  A 7-bit instead of an 8-bit encoding.
+
+        RTL_TEXTENCODING_INFO_SYMBOL:  A (generic) encoding for symbol character
+        sets.
+
+        RTL_TEXTENCODING_INFO_MIME:  The encoding is registered as a MIME
+        charset.
      */
     sal_uInt32          Flags;
 } rtl_TextEncodingInfo;
