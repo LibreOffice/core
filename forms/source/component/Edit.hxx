@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-02-20 11:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,10 @@ class OEditModel
     sal_Int16                   m_nKeyType;
     sal_Int16                   m_nMaxLen;
 
-    sal_Bool    m_bWritingFormattedFake;
-        // are we writing something which should be interpreted as formatted upon reading
+    sal_Bool    m_bWritingFormattedFake : 1;
+        // are we writing something which should be interpreted as formatted upon reading?
+    sal_Bool    m_bNumericField : 1;
+        // are we bound to some kind of numeric field?
 
     static sal_Int32            nTextHandle;
 
