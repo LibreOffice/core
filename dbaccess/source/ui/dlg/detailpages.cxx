@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-22 09:05:42 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 15:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,8 +779,7 @@ namespace dbaui
     //= OLDAPDetailsPage
     //========================================================================
     OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs, CBTP_USE_UIDPWD)
-        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
+        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs, 0)
         ,m_aHostname        (this, ResId(FT_HOSTNAME))
         ,m_aETHostname      (this, ResId(ET_HOSTNAME))
         ,m_aBaseDN          (this, ResId(FT_BASEDN))
@@ -1188,6 +1187,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/03/22 09:05:42  oj
+ *  #98142# remove charset for jdbc drivers
+ *
  *  Revision 1.11  2002/03/14 15:14:36  fs
  *  #97788# Big5-HKSCS only when asian languages are enabled
  *
