@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
+#   last change: $Author: rt $ $Date: 2000-10-12 13:34:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,6 @@ SLOFILES =	\
         $(SLO)$/ww8par5.obj \
         $(SLO)$/ww8par6.obj \
         $(SLO)$/ww8glsy.obj \
-        $(SLO)$/msocximp.obj \
         $(SLO)$/ww8scan.obj
 
 EXCEPTIONSFILES =	\
