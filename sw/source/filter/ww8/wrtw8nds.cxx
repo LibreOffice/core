@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:55:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,32 +65,20 @@
 #include "filt_pch.hxx"
 #endif
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
-#ifndef __SGI_STL_UTILITY
 #include <utility>
-#endif
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
-#ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
-#endif
-
-#include <unicode/ubidi.h>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 
-#ifndef _URLOBJ_HXX //autogen wg. INetURLObject
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SVX_BOXITEM_HXX //autogen
+#ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
 #endif
 #ifndef _SVX_CMAPITEM_HXX
@@ -126,9 +114,10 @@
 #ifndef _SVX_TSTPITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
-
+#if 0
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
+#endif
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -233,13 +222,8 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL_
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
-
-#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
-#include <i18nutil/unicode.hxx>
-#endif
-
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
@@ -272,8 +256,6 @@ WW8_AttrIter::~WW8_AttrIter()
     rWrt.pChpIter = pOld;
 }
 
-/*  */
-
 // Die Klasse WW8_SwAttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
 // Dabei werden nur Zeichen-Attribute beachtet; Absatz-Attribute brauchen
 // diese Behandlung nicht.
@@ -289,28 +271,17 @@ class WW8_SwAttrIter : public WW8_AttrIter
 private:
     const SwTxtNode& rNd;
 
-    typedef std::pair<xub_StrLen, sal_Int16> CharSetEntry;
-    std::vector<CharSetEntry> maCharSets;
-    typedef std::vector<CharSetEntry>::iterator mychsiter;
-    mychsiter maCharSetIter;
+    CharRuns maCharRuns;
+    cCharRunIter maCharRunIter;
+
     rtl_TextEncoding meChrSet;
-
-    typedef std::pair<xub_StrLen, sal_uInt16> ScriptEntry;
-    std::vector<ScriptEntry> maScripts;
-    typedef std::vector<ScriptEntry>::iterator mysiter;
-    mysiter maScriptIter;
     sal_uInt16 mnScript;
-
+    bool mbCharIsRTL;
 
     const SwRedline* pCurRedline;
     xub_StrLen nAktSwPos;
     USHORT nCurRedlinePos;
 
-    typedef std::pair<int32_t, bool> DirEntry;
-    std::vector<DirEntry> maDirChanges;
-    typedef std::vector<DirEntry>::const_iterator myciter;
-    myciter maBiDiIter;
-    bool mbCharIsRTL;
     bool mbParaIsRTL;
 
     const SwFmtDrop &mrSwFmtDrop;
@@ -325,7 +296,8 @@ private:
     void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
     void OutSwTOXMark(const SwTOXMark& rAttr, bool bStart);
     void OutSwFmtRuby(const SwFmtRuby& rRuby, bool bStart);
-    sal_Int16 getScriptClass(sal_Unicode cChar) const;
+
+    void IterToCurrent();
 
     //No copying
     WW8_SwAttrIter(const WW8_SwAttrIter&);
@@ -347,6 +319,7 @@ public:
     void OutFlys(xub_StrLen nSwPos);
 
     xub_StrLen WhereNext() const    { return nAktSwPos; }
+    sal_uInt16 GetScript() const { return mnScript; }
     bool IsCharRTL() const { return mbCharIsRTL; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
@@ -388,138 +361,34 @@ public:
     }
 };
 
-sal_Int16 WW8_SwAttrIter::getScriptClass(sal_Unicode cChar) const
+void WW8_SwAttrIter::IterToCurrent()
 {
-    static ScriptTypeList aScripts[] =
-    {
-        { UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
-        { UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
-        { UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
-        { UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
-        { UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
-        { UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
-        { UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
-        { UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
-        { UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
-        { UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
-    };
-
-    return unicode::getUnicodeScriptType(cChar, aScripts,
-        RTL_TEXTENCODING_MS_1252);
+    ASSERT(maCharRuns.begin() != maCharRuns.end(), "Impossible");
+    mnScript = maCharRunIter->mnScript;
+    meChrSet = maCharRunIter->meCharSet;
+    mbCharIsRTL = maCharRunIter->mbRTL;
 }
 
 WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
-    : WW8_AttrIter(rWr), rNd(rTxtNd), pCurRedline(0), nAktSwPos(0),
-    nCurRedlinePos(USHRT_MAX), mbCharIsRTL(false),
+    : WW8_AttrIter(rWr), maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.bWrtWW8)),
+    rNd(rTxtNd), pCurRedline(0), nAktSwPos(0), nCurRedlinePos(USHRT_MAX),
     mrSwFmtDrop(rTxtNd.GetSwAttrSet().GetDrop())
 {
+
     SwPosition aPos(rTxtNd);
     if (FRMDIR_HORI_RIGHT_TOP == rWr.pDoc->GetTextDirection(aPos))
         mbParaIsRTL = true;
     else
         mbParaIsRTL = false;
 
-    const String &rTxt = rTxtNd.GetTxt();
-
-    if (rTxt.Len() && pBreakIt->xBreak.is())
-        mnScript = pBreakIt->xBreak->getScriptType(rTxt, 0);
-    else
-        mnScript = ScriptType::LATIN;
-
-    // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
-    // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
-    // werden.
-    meChrSet = ItemGet<SvxFontItem>(rNd,
-        GetWhichOfScript(RES_CHRATR_FONT, mnScript)).GetCharSet();
-    meChrSet = GetExtendedTextEncoding(meChrSet);
-
-    if (rTxt.Len())
-    {
-        UBiDiDirection eDefaultDir = mbParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
-        UErrorCode nError = U_ZERO_ERROR;
-        UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
-        ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), eDefaultDir, NULL,
-            &nError);
-
-        sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
-        maDirChanges.reserve(nCount);
-
-        int32_t nStart = 0;
-        int32_t nEnd;
-        UBiDiLevel nCurrDir;
-
-        for (sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx)
-        {
-            ubidi_getLogicalRun(pBidi, nStart, &nEnd, &nCurrDir);
-            /*
-            UBiDiLevel is the type of the level values in this BiDi
-            implementation.
-
-            It holds an embedding level and indicates the visual direction by
-            its bit 0 (even/odd value).
-
-            The value for UBIDI_DEFAULT_LTR is even and the one for
-            UBIDI_DEFAULT_RTL is odd
-            */
-            maDirChanges.push_back(DirEntry(nEnd, nCurrDir & 0x1));
-            nStart = nEnd;
-        }
-        ubidi_close(pBidi);
-
-        if (!maDirChanges.empty())
-            mbCharIsRTL = maDirChanges.begin()->second;
-
-        //Split unicode text into plausable 8bit ranges for export to older
-        //non unicode aware format
-        if (!rWrt.bWrtWW8)
-        {
-            xub_StrLen nLen = rTxt.Len();
-            xub_StrLen nPos = 0;
-            while (nPos != nLen)
-            {
-                sal_Int16 ScriptType = getScriptClass(rTxt.GetChar(nPos++));
-                while (
-                        (nPos != nLen) &&
-                        (ScriptType == getScriptClass(rTxt.GetChar(nPos)))
-                      )
-                {
-                    ++nPos;
-                }
-
-                if (maCharSets.empty())
-                    meChrSet = ScriptType;
-
-                maCharSets.push_back(CharSetEntry(nPos, ScriptType));
-            }
-        }
-
-        if (pBreakIt->xBreak.is())
-        {
-            xub_StrLen nLen = rTxt.Len();
-            xub_StrLen nPos = 0;
-            sal_uInt16 nScript = mnScript;
-            while (nPos < nLen)
-            {
-                sal_Int32 nEnd =
-                    pBreakIt->xBreak->endOfScript(rTxt, nPos, nScript);
-                if (nEnd < 0)
-                    break;
-                nPos = writer_cast<xub_StrLen>(nEnd);
-                maScripts.push_back(ScriptEntry(nPos, nScript));
-                nScript = pBreakIt->xBreak->getScriptType(rTxt, nPos);
-            }
-        }
-
-    }
-    maBiDiIter = maDirChanges.begin();
-    maCharSetIter = maCharSets.begin();
-    maScriptIter = maScripts.begin();
+    maCharRunIter = maCharRuns.begin();
+    IterToCurrent();
 
     /*
      #i2916#
      Get list of any graphics which may be anchored from this paragraph.
     */
-    maFlyFrms = sw::util::GetFramesInNode(rWr.maFrames, rNd);
+    maFlyFrms = GetFramesInNode(rWr.maFrames, rNd);
     std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortswflys());
 
 
@@ -542,7 +411,8 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
         SwPosition aPos( rNd, SwIndex( (SwTxtNode*)&rNd ) );
         pCurRedline = rWrt.pDoc->GetRedline( aPos, &nCurRedlinePos );
     }
-    nAktSwPos = SearchNext( 1 );
+
+    nAktSwPos = SearchNext(1);
 }
 
 xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
@@ -626,25 +496,11 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
         }
     }
 
-    if (maBiDiIter != maDirChanges.end())
+    if (maCharRunIter != maCharRuns.end())
     {
-        if (maBiDiIter->first < nMinPos)
-            nMinPos = writer_cast<xub_StrLen>(maBiDiIter->first);
-        mbCharIsRTL = maBiDiIter->second;
-    }
-
-    if (maCharSetIter != maCharSets.end())
-    {
-        if (maCharSetIter->first < nMinPos)
-            nMinPos = maCharSetIter->first;
-        meChrSet = maCharSetIter->second;
-    }
-
-    if (maScriptIter != maScripts.end())
-    {
-        if (maScriptIter->first < nMinPos)
-            nMinPos = maScriptIter->first;
-        mnScript = maScriptIter->second;
+        if (maCharRunIter->mnEndPos < nMinPos)
+            nMinPos = maCharRunIter->mnEndPos;
+        IterToCurrent();
     }
 
     /*
@@ -672,76 +528,97 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
 
     //nMinPos found and not going to change at this point
 
-    if (maBiDiIter != maDirChanges.end())
+    if (maCharRunIter != maCharRuns.end())
     {
-        if (maBiDiIter->first == nMinPos)
-            ++maBiDiIter;
-    }
-
-    if (maCharSetIter != maCharSets.end())
-    {
-        if (maCharSetIter->first == nMinPos)
-            ++maCharSetIter;
-    }
-
-    if (maScriptIter != maScripts.end())
-    {
-        if (maScriptIter->first == nMinPos)
-            ++maScriptIter;
+        if (maCharRunIter->mnEndPos == nMinPos)
+            ++maCharRunIter;
     }
 
     return nMinPos;
 }
 
-void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
+void WW8_SwAttrIter::OutAttr(xub_StrLen nSwPos)
 {
-    sal_uInt16 nFontId = GetWhichOfScript(RES_CHRATR_FONT, mnScript);
-    const SvxFontItem &rParentFont = ItemGet<SvxFontItem>(
-        (const SwTxtFmtColl&)rNd.GetAnyFmtColl(), nFontId);
-    const SvxFontItem *pFont = &rParentFont;
-
-    if (rNd.GetpSwAttrSet())
-    {
-        SfxItemSet aSet(rNd.GetSwAttrSet());
-        const SvxFontItem &rFontInUse = ItemGet<SvxFontItem>(aSet, nFontId);
-        pFont = &rFontInUse;
-        aSet.ClearItem(nFontId);
-        rWrt.Out_SfxItemSet(aSet, false, true, mnScript);
-    }
-
     if (rWrt.bWrtWW8 && IsCharRTL())
     {
         rWrt.InsUInt16(0x85a);
         rWrt.pO->Insert((BYTE)1, rWrt.pO->Count());
     }
 
+    /*
+     Depending on whether text is in CTL/CJK or Western, get the id of that
+     script, the idea is that the font that is actually in use to render this
+     range of text ends up in pFont
+    */
+    sal_uInt16 nFontId = GetWhichOfScript(RES_CHRATR_FONT, GetScript());
+
+    const SvxFontItem &rParentFont = ItemGet<SvxFontItem>(
+        (const SwTxtFmtColl&)rNd.GetAnyFmtColl(), nFontId);
+    const SvxFontItem *pFont = &rParentFont;
+
+    SfxItemSet aExportSet(*rNd.GetSwAttrSet().GetPool(),
+        RES_CHRATR_BEGIN, RES_TXTATR_END - 1);
+
+    //The hard formatting properties that affect the entire paragraph
+    if (rNd.GetpSwAttrSet())
+    {
+        aExportSet.Set(rNd.GetSwAttrSet());
+        const SvxFontItem &rNdFont = ItemGet<SvxFontItem>(aExportSet, nFontId);
+        pFont = &rNdFont;
+        aExportSet.ClearItem(nFontId);
+    }
+
+    //The additional hard formatting properties that affect this range in the
+    //paragraph
+    sw::PoolItems aRangeItems;
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
-        const SwModify* pOldMod = rWrt.pOutFmtNode;
-        rWrt.pOutFmtNode = &rNd;
-
-        rWrt.push_charpropstart(nSwPos);
         for (xub_StrLen i = 0; i < pTxtAttrs->Count(); ++i)
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const xub_StrLen* pEnd = pHt->GetEnd();
 
-            if( pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd )
+            if (pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd)
                         : nSwPos == *pHt->GetStart() )
             {
-                if (rWrt.CollapseScriptsforWordOk(mnScript,
-                    pHt->GetAttr().Which()))
-                {
-                    if (pHt->GetAttr().Which() == nFontId)
-                        pFont = &(item_cast<SvxFontItem>(pHt->GetAttr()));
-                    else
-                        Out(aWW8AttrFnTab, pHt->GetAttr(), rWrt);
-                }
+                sal_uInt16 nWhich = pHt->GetAttr().Which();
+                if (nWhich == nFontId)
+                    pFont = &(item_cast<SvxFontItem>(pHt->GetAttr()));
+                else
+                    aRangeItems[nWhich] = (&(pHt->GetAttr()));
             }
             else if (nSwPos < *pHt->GetStart())
                 break;
         }
-        rWrt.pop_charpropstart();   // HasTextItem nur in dem obigen Bereich erlaubt
+    }
+
+    /*
+     For #i24291# we need to explictly remove any properties from the
+     aExportSet which a SwCharFmt would override, we can't rely on word doing
+     this for us like writer does
+    */
+    const SwFmtCharFmt *pCharFmtItem =
+        HasItem<SwFmtCharFmt>(aRangeItems, RES_TXTATR_CHARFMT);
+    if (pCharFmtItem)
+        ClearOverridesFromSet(*pCharFmtItem, aExportSet);
+
+    sw::PoolItems aExportItems;
+    GetPoolItems(aExportSet, aExportItems);
+
+    sw::cPoolItemIter aEnd = aRangeItems.end();
+    for (sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI)
+        aExportItems[aI->first] = aI->second;
+
+    if (!aExportItems.empty())
+    {
+        const SwModify* pOldMod = rWrt.pOutFmtNode;
+        rWrt.pOutFmtNode = &rNd;
+        rWrt.push_charpropstart(nSwPos);
+
+        rWrt.ExportPoolItemsToCHP(aExportItems, GetScript());
+
+        // HasTextItem nur in dem obigen Bereich erlaubt
+        rWrt.pop_charpropstart();
         rWrt.pOutFmtNode = pOldMod;
     }
 
@@ -754,9 +631,14 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
          If we are a nonunicode aware format then we set the charset we want to
          use for export of this range. If necessary this will generate a pseudo
          font to use for this range.
+
+         So now we are guaranteed to have a font with the correct charset set
+         for WW6/95 which will match the script we have exported this range in,
+         this makes older nonunicode aware versions of word display the correct
+         characters.
         */
         if (!rWrt.bWrtWW8)
-            aFont.GetCharSet() = meChrSet;
+            aFont.GetCharSet() = GetCharSet();
 
         if (rParentFont != aFont)
             Out(aWW8AttrFnTab, aFont, rWrt);
@@ -1015,6 +897,18 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
     {
         sMark = rUrl.Copy(1);
         TruncateBookmark(sMark);
+
+        // i21465 Check for outline references
+        String sSearchableRef( INetURLObject::decode( sMark, INET_HEX_ESCAPE,
+            INetURLObject::DECODE_WITH_CHARSET,
+            RTL_TEXTENCODING_UTF8 ));
+        xub_StrLen nPos = sSearchableRef.SearchBackward( cMarkSeperator );
+
+        String sRefType( sSearchableRef.Copy( nPos+1 ) );
+        sRefType.EraseAllChars();
+
+        if(sRefType.EqualsAscii( pMarkToOutline ) )
+            sMark = sSearchableRef.Copy(0, nPos);
     }
     else
     {
@@ -1646,6 +1540,15 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if (!bTxtAtr && nLen)
         {
             String aSnippet(aAttrIter.GetSnippet(aStr, nAktPos, nLen));
+            if ((rWW8Wrt.nTxtTyp == TXT_EDN || rWW8Wrt.nTxtTyp == TXT_FTN) && nAktPos ==0)
+            {
+                // Insert tab for aesthetic puposes #i24762#
+                if (aSnippet.GetChar(0) != 0x09)
+                {
+                    nLen++;
+                    aSnippet.Insert(0x09,0);
+                }
+            }
             rWW8Wrt.OutSwString(aSnippet, 0, nLen, bUnicode, eChrSet );
         }
 
@@ -1655,29 +1558,53 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             const SwFmtDrop &rSwFmtDrop = aAttrIter.GetSwFmtDrop();
             short nDropLines = rSwFmtDrop.GetLines();
             short nDistance = rSwFmtDrop.GetDistance();
+            int rFontHeight, rDropHeight, rDropDescent;
 
             pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
 
-            rWW8Wrt.InsUInt16( 0x261b );            // Alignment (sprmPPc)
-            rWW8Wrt.pO->Insert( 0x20, rWW8Wrt.pO->Count() );
-
-            rWW8Wrt.InsUInt16( 0x2423 );            // Wrapping (sprmPWr)
-            rWW8Wrt.pO->Insert( 0x02, rWW8Wrt.pO->Count() );
-
-            rWW8Wrt.InsUInt16( 0x442c );            // Dropcap (sprmPDcs)
-            int nDCS = (nDropLines << 3) | 0x01;
-            rWW8Wrt.InsUInt16( nDCS );
-
-            rWW8Wrt.InsUInt16( 0x842F );            // Distance from text (sprmPDxaFromText)
-            rWW8Wrt.InsUInt16( nDistance );
-
-            int rFontHeight, rDropHeight, rDropDescent;
-
-            if(pNd->GetDropSize(rFontHeight, rDropHeight, rDropDescent))
+            if (rWW8Wrt.bWrtWW8)
             {
-                rWW8Wrt.InsUInt16( 0x6412 );            // Line spacing
-                rWW8Wrt.InsUInt16( -rDropHeight );
-                rWW8Wrt.InsUInt16( 0 );
+                rWW8Wrt.InsUInt16( 0x261b );            // Alignment (sprmPPc)
+                rWW8Wrt.pO->Insert( 0x20, rWW8Wrt.pO->Count() );
+
+                rWW8Wrt.InsUInt16( 0x2423 );            // Wrapping (sprmPWr)
+                rWW8Wrt.pO->Insert( 0x02, rWW8Wrt.pO->Count() );
+
+                rWW8Wrt.InsUInt16( 0x442c );            // Dropcap (sprmPDcs)
+                int nDCS = (nDropLines << 3) | 0x01;
+                rWW8Wrt.InsUInt16( nDCS );
+
+                rWW8Wrt.InsUInt16( 0x842F );            // Distance from text (sprmPDxaFromText)
+                rWW8Wrt.InsUInt16( nDistance );
+
+                if (pNd->GetDropSize(rFontHeight, rDropHeight, rDropDescent))
+                {
+                    rWW8Wrt.InsUInt16( 0x6412 );            // Line spacing
+                    rWW8Wrt.InsUInt16( -rDropHeight );
+                    rWW8Wrt.InsUInt16( 0 );
+                }
+            }
+            else
+            {
+                rWW8Wrt.pO->Insert( 29, rWW8Wrt.pO->Count() );    // Alignment (sprmPPc)
+                rWW8Wrt.pO->Insert( 0x20, rWW8Wrt.pO->Count() );
+
+                rWW8Wrt.pO->Insert( 37, rWW8Wrt.pO->Count() );    // Wrapping (sprmPWr)
+                rWW8Wrt.pO->Insert( 0x02, rWW8Wrt.pO->Count() );
+
+                rWW8Wrt.pO->Insert( 46, rWW8Wrt.pO->Count() );    // Dropcap (sprmPDcs)
+                int nDCS = (nDropLines << 3) | 0x01;
+                rWW8Wrt.InsUInt16( nDCS );
+
+                rWW8Wrt.pO->Insert( 49, rWW8Wrt.pO->Count() );      // Distance from text (sprmPDxaFromText)
+                rWW8Wrt.InsUInt16( nDistance );
+
+                if (pNd->GetDropSize(rFontHeight, rDropHeight, rDropDescent))
+                {
+                    rWW8Wrt.pO->Insert( 20, rWW8Wrt.pO->Count() );  // Line spacing
+                    rWW8Wrt.InsUInt16( -rDropHeight );
+                    rWW8Wrt.InsUInt16( 0 );
+                }
             }
 
             rWW8Wrt.WriteCR();
@@ -1686,23 +1613,43 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 pO->GetData() );
             pO->Remove( 0, pO->Count() );
 
-            const SwCharFmt *pSwCharFmt = rSwFmtDrop.GetCharFmt();
-            if(pSwCharFmt)
+            if(pNd->GetDropSize(rFontHeight, rDropHeight, rDropDescent))
             {
-                rWW8Wrt.InsUInt16( 0x4A30 );
-                rWW8Wrt.InsUInt16( rWW8Wrt.GetId( *pSwCharFmt ) );
+                if (rWW8Wrt.bWrtWW8)
+                {
+                    const SwCharFmt *pSwCharFmt = rSwFmtDrop.GetCharFmt();
+                    if(pSwCharFmt)
+                    {
+                        rWW8Wrt.InsUInt16( 0x4A30 );
+                        rWW8Wrt.InsUInt16( rWW8Wrt.GetId( *pSwCharFmt ) );
+                    }
+
+                    rWW8Wrt.InsUInt16( 0x4845 );            // Lower the chars
+                    rWW8Wrt.InsUInt16(-((nDropLines - 1)*rDropDescent) / 10 );
+
+                    rWW8Wrt.InsUInt16( 0x4a43 );            // Font Size
+                    rWW8Wrt.InsUInt16( rFontHeight / 10 );
+                }
+                else
+                {
+                    const SwCharFmt *pSwCharFmt = rSwFmtDrop.GetCharFmt();
+                    if(pSwCharFmt)
+                    {
+                        rWW8Wrt.InsUInt16( 80 );
+                        rWW8Wrt.InsUInt16( rWW8Wrt.GetId( *pSwCharFmt ) );
+                    }
+
+                    rWW8Wrt.pO->Insert(101, rWW8Wrt.pO->Count() );      // Lower the chars
+                    rWW8Wrt.InsUInt16(-((nDropLines - 1)*rDropDescent) / 10 );
+
+                    rWW8Wrt.pO->Insert( 99, rWW8Wrt.pO->Count() );      // Font Size
+                    rWW8Wrt.InsUInt16( rFontHeight / 10 );
+                }
             }
-
-            rWW8Wrt.InsUInt16( 0x4845 );            // Lower the chars
-            rWW8Wrt.InsUInt16(-((nDropLines - 1)*rDropDescent) / 10 );
-
-            rWW8Wrt.InsUInt16( 0x4a43 );            // Font Size
-            rWW8Wrt.InsUInt16( rFontHeight / 10 );
 
             rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
                                             pO->Count(), pO->GetData() );
             pO->Remove( 0, pO->Count() );
-
         }
 
         // Am Zeilenende werden die Attribute bis ueber das CR aufgezogen.
@@ -2024,7 +1971,6 @@ bool CellContainsProblematicGraphic(const SwWriteTableCell *pCell,
 
     bool bHasGraphic = false;
 
-    using namespace sw::util;
     sw::Frames aFrames(GetFramesBetweenNodes(rWr.maFrames, *pStart, *pEnd));
     sw::FrameIter aEnd = aFrames.end();
     for (sw::FrameIter aIter = aFrames.begin(); aIter != aEnd; ++aIter)
