@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:53:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,47 +110,47 @@
 #ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
-#include <drafts/com/sun/star/ui/ItemStyle.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <com/sun/star/ui/ItemStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <com/sun/star/ui/XUIConfiguration.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationListener.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
+#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
+#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENT_HPP_
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
+#include <com/sun/star/ui/XUIElement.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIElementType_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
-#include <drafts/com/sun/star/ui/ImageType.hpp>
+#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <com/sun/star/ui/ImageType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -197,7 +197,6 @@ static const char __FAR_DATA pMenuSeparatorStr[]    = " | ";
 #endif
 
 using rtl::OUString;
-namespace dcss = drafts::com::sun::star;
 namespace css = com::sun::star;
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
@@ -439,14 +438,14 @@ generateCustomMenuURL(
 }
 
 static sal_Int16 theImageType =
-    dcss::ui::ImageType::COLOR_NORMAL |
-    dcss::ui::ImageType::SIZE_DEFAULT;
+    css::ui::ImageType::COLOR_NORMAL |
+    css::ui::ImageType::SIZE_DEFAULT;
 
 void InitImageType()
 {
     theImageType =
-        dcss::ui::ImageType::COLOR_NORMAL |
-        dcss::ui::ImageType::SIZE_DEFAULT;
+        css::ui::ImageType::COLOR_NORMAL |
+        css::ui::ImageType::SIZE_DEFAULT;
 
     sal_Int16 eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
 
@@ -465,14 +464,14 @@ void InitImageType()
 
     if ( eOptSymbolSet != SFX_SYMBOLS_SMALL )
     {
-        theImageType |= dcss::ui::ImageType::SIZE_LARGE;
+        theImageType |= css::ui::ImageType::SIZE_LARGE;
     }
 
     Window* topwin = Application::GetActiveTopWindow();
     if ( topwin != NULL &&
          topwin->GetDisplayBackground().GetColor().IsDark() )
     {
-        theImageType |= dcss::ui::ImageType::COLOR_HIGHCONTRAST;
+        theImageType |= css::ui::ImageType::COLOR_HIGHCONTRAST;
     }
 }
 
@@ -688,7 +687,7 @@ ConvertSvxConfigEntry(
     aPropSeq[0].Value <<= rtl::OUString( pEntry->GetCommand() );
 
     aPropSeq[1].Name = aDescriptorType;
-    aPropSeq[1].Value <<= dcss::ui::ItemType::DEFAULT;
+    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
     // If the name has not been changed and the name is the same as
     // in the default command to label map then the label can be stored
@@ -775,7 +774,7 @@ ConvertToolbarEntry(
     aPropSeq[0].Value <<= rtl::OUString( pEntry->GetCommand() );
 
     aPropSeq[1].Name = aDescriptorType;
-    aPropSeq[1].Value <<= dcss::ui::ItemType::DEFAULT;
+    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
     // If the name has not been changed and the name is the same as
     // in the default command to label map then the label can be stored
@@ -858,7 +857,7 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage()
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager");
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
     static ::rtl::OUString SERVICENAME_DESKTOP       = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"             );
     static ::rtl::OUString MODULEID_STARTMODULE      = ::rtl::OUString::createFromAscii("com.sun.star.frame.StartModule"         );
 
@@ -867,7 +866,7 @@ sal_Bool impl_showKeyConfigTabPage()
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::frame::XFramesSupplier >     xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XFrame >              xFrame  = xDesktop->getActiveFrame();
-        css::uno::Reference< dcss::frame::XModuleManager >     xMM     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager >     xMM     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
 
         if (xMM.is() && xFrame.is())
         {
@@ -958,10 +957,10 @@ void SvxConfigDialog::ActivateTabPage( USHORT nSlotId )
  ******************************************************************************/
 
 // Initialize static variable which holds default XImageManager
-uno::Reference< dcss::ui::XImageManager>* SaveInData::xDefaultImgMgr = NULL;
+uno::Reference< css::ui::XImageManager>* SaveInData::xDefaultImgMgr = NULL;
 
 SaveInData::SaveInData(
-    const uno::Reference< dcss::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
     const OUString& aModuleId,
     bool isDocConfig )
         :
@@ -980,11 +979,11 @@ SaveInData::SaveInData(
     m_aSeparatorSeq.realloc( 1 );
     m_aSeparatorSeq[0].Name  = OUString(
         RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
-    m_aSeparatorSeq[0].Value <<= dcss::ui::ItemType::SEPARATOR_LINE;
+    m_aSeparatorSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
 
     if ( bDocConfig )
     {
-        uno::Reference< dcss::ui::XUIConfigurationPersistence >
+        uno::Reference< css::ui::XUIConfigurationPersistence >
             xDocPersistence( GetConfigManager(), uno::UNO_QUERY );
 
         bReadOnly = xDocPersistence->isReadOnly();
@@ -996,7 +995,7 @@ SaveInData::SaveInData(
     uno::Reference< container::XNameAccess > xNameAccess(
         m_xServiceManager->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "drafts.com.sun.star.frame.UICommandDescription" ) ) ),
+                "com.sun.star.frame.UICommandDescription" ) ) ),
         uno::UNO_QUERY );
 
     if ( xNameAccess.is() )
@@ -1004,7 +1003,7 @@ SaveInData::SaveInData(
 
     if ( !m_xImgMgr.is() )
     {
-        m_xImgMgr = uno::Reference< dcss::ui::XImageManager >(
+        m_xImgMgr = uno::Reference< css::ui::XImageManager >(
             GetConfigManager()->getImageManager(), uno::UNO_QUERY );
     }
 
@@ -1018,7 +1017,7 @@ SaveInData::SaveInData(
 }
 
 uno::Reference< graphic::XGraphic > GetGraphic(
-    const uno::Reference< dcss::ui::XImageManager >& xImageManager,
+    const uno::Reference< css::ui::XImageManager >& xImageManager,
     const OUString& rCommandURL )
 {
     uno::Reference< graphic::XGraphic > result;
@@ -1083,7 +1082,7 @@ bool SaveInData::PersistChanges(
     {
         if ( xManager.is() && !IsReadOnly() )
         {
-            uno::Reference< dcss::ui::XUIConfigurationPersistence >
+            uno::Reference< css::ui::XUIConfigurationPersistence >
                 xConfigPersistence( xManager, uno::UNO_QUERY );
 
             if ( xConfigPersistence->isModified() )
@@ -1111,7 +1110,7 @@ bool SaveInData::PersistChanges(
 MenuSaveInData* MenuSaveInData::pDefaultData = NULL;
 
 MenuSaveInData::MenuSaveInData(
-    const uno::Reference< dcss::ui::XUIConfigurationManager >& cfgmgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& cfgmgr,
     const OUString& aModuleId,
     bool isDocConfig )
     :
@@ -1200,14 +1199,14 @@ bool MenuSaveInData::LoadSubMenus(
         OUString                aLabel;
         bool                    bIsUserDefined = TRUE;
 
-        sal_uInt16 nType( dcss::ui::ItemType::DEFAULT );
+        sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
         bool bItem = GetMenuItemData( xMenuSettings, nIndex,
             aCommandURL, aHelpURL, aLabel, nType, xSubMenu );
 
         if ( bItem )
         {
-            if ( nType == dcss::ui::ItemType::DEFAULT )
+            if ( nType == css::ui::ItemType::DEFAULT )
             {
                 uno::Any a;
                 try
@@ -1685,7 +1684,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
     if ( !bInitialised )
     {
         USHORT nPos = 0;
-        uno::Reference < dcss::ui::XUIConfigurationManager > xCfgMgr;
+        uno::Reference < css::ui::XUIConfigurationManager > xCfgMgr;
 
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
@@ -1698,10 +1697,10 @@ void SvxConfigPage::Reset( const SfxItemSet& )
 
         m_xFrame = xFramesSupplier->getActiveFrame();
 
-        uno::Reference< dcss::frame::XModuleManager > xModuleManager(
+        uno::Reference< css::frame::XModuleManager > xModuleManager(
             xServiceManager->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.frame.ModuleManager" ) ) ),
+                    "com.sun.star.frame.ModuleManager" ) ) ),
             uno::UNO_QUERY );
 
         OUString aModuleId;
@@ -1725,10 +1724,10 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             aTopLevelSeparator.SetText( title );
         }
 
-        uno::Reference< dcss::ui::XModuleUIConfigurationManagerSupplier >
+        uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
             xModuleCfgSupplier( xServiceManager->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
+            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
             uno::UNO_QUERY );
 
         // Set up data for module specific menus
@@ -1767,7 +1766,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             uno::Reference< frame::XModel > xModel( xController->getModel() );
             if ( xModel.is() )
             {
-                uno::Reference< dcss::ui::XUIConfigurationManagerSupplier >
+                uno::Reference< css::ui::XUIConfigurationManagerSupplier >
                     xCfgSupplier( xModel, uno::UNO_QUERY );
 
                 if ( xCfgSupplier.is() )
@@ -1866,7 +1865,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                         if ( xModel.is() )
                         {
                             uno::Reference<
-                                dcss::ui::XUIConfigurationManagerSupplier >
+                                css::ui::XUIConfigurationManagerSupplier >
                                     xCfgSupplier( xModel, uno::UNO_QUERY );
 
                             if ( xCfgSupplier.is() )
@@ -2186,7 +2185,7 @@ SvLBoxEntry* SvxConfigPage::InsertEntryIntoUI(
         }
 
         if ( pNewEntryData->IsPopup() ||
-             pNewEntryData->GetStyle() & dcss::ui::ItemStyle::DROP_DOWN )
+             pNewEntryData->GetStyle() & css::ui::ItemStyle::DROP_DOWN )
         {
             // add new popup painter, it gets destructed by the entry
             pNewEntry->ReplaceItem(
@@ -2737,7 +2736,7 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
-    const uno::Reference< dcss::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
     const OUString& aModuleId,
     bool bDocConfig )
 {
@@ -2976,7 +2975,7 @@ SvxConfigEntry::SvxConfigEntry(
         nStyle( 0 ),
         pEntries( 0 )
 {
-    sal_uInt16 nType( dcss::ui::ItemType::DEFAULT );
+    sal_uInt16 nType( css::ui::ItemType::DEFAULT );
     OUString aHelpURL;
 
     for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
@@ -2999,7 +2998,7 @@ SvxConfigEntry::SvxConfigEntry(
         }
     }
 
-    if ( nType == dcss::ui::ItemType::DEFAULT )
+    if ( nType == css::ui::ItemType::DEFAULT )
     {
         uno::Any a;
         try
@@ -3067,7 +3066,7 @@ SvxConfigEntry::GetProperties(
 
         aPropSeq[0].Name  = OUString(
             RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
-        aPropSeq[0].Value <<= dcss::ui::ItemType::SEPARATOR_LINE;
+        aPropSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
 
         return aPropSeq;
     }
@@ -3090,7 +3089,7 @@ SvxConfigEntry::GetProperties(
     aPropSeq[0].Value <<= rtl::OUString( GetCommand() );
 
     aPropSeq[1].Name = aDescriptorType;
-    aPropSeq[1].Value <<= dcss::ui::ItemType::DEFAULT;
+    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
 
     // If the name has not been changed and the name is the same as
     // in the default command to label map then the label can be stored
@@ -3851,7 +3850,7 @@ void SvxToolbarConfigPage::Init()
 }
 
 SaveInData* SvxToolbarConfigPage::CreateSaveInData(
-    const uno::Reference< dcss::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
     const OUString& aModuleId,
     bool bDocConfig )
 {
@@ -3861,7 +3860,7 @@ SaveInData* SvxToolbarConfigPage::CreateSaveInData(
 
 ToolbarSaveInData::ToolbarSaveInData(
     const uno::Reference <
-        dcss::ui::XUIConfigurationManager >& xCfgMgr,
+        css::ui::XUIConfigurationManager >& xCfgMgr,
     const OUString& aModuleId,
     bool docConfig )
     :
@@ -3875,7 +3874,7 @@ ToolbarSaveInData::ToolbarSaveInData(
     uno::Reference< container::XNameAccess > xPWSS(
         m_xServiceManager->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "drafts.com.sun.star.ui.WindowStateConfiguration" ) ) ),
+                "com.sun.star.ui.WindowStateConfiguration" ) ) ),
         uno::UNO_QUERY );
 
     if ( xPWSS.is() )
@@ -3900,7 +3899,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
     // this code is a temporary hack as the UI is not updating after
     // changing the toolbar style via the API
-    uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+    uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     Window *window = NULL;
 
     uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
@@ -3913,7 +3912,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
     if ( xLayoutManager.is() )
     {
-        uno::Reference< dcss::ui::XUIElement > xUIElement =
+        uno::Reference< css::ui::XUIElement > xUIElement =
             xLayoutManager->getElement( rResourceURL );
 
         // check reference before we call getRealInterface. The layout manager
@@ -4093,7 +4092,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
-                dcss::ui::UIElementType::TOOLBAR );
+                css::ui::UIElementType::TOOLBAR );
 
         for ( sal_Int32 i = 0; i < info.getLength(); i++ )
         {
@@ -4520,14 +4519,14 @@ bool ToolbarSaveInData::LoadToolbar(
         sal_Bool                bIsVisible;
         sal_Int32               nStyle;
 
-        sal_uInt16 nType( dcss::ui::ItemType::DEFAULT );
+        sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
         bool bItem = GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
             aHelpURL, aLabel, nType, bIsVisible, nStyle, xSubMenu );
 
         if ( bItem )
         {
-            if ( nType == dcss::ui::ItemType::DEFAULT )
+            if ( nType == css::ui::ItemType::DEFAULT )
             {
                 uno::Any a;
                 try
@@ -5105,7 +5104,7 @@ IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 *
 *******************************************************************************/
 SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
-    const uno::Reference< dcss::ui::XImageManager >& rXImageManager )
+    const uno::Reference< css::ui::XImageManager >& rXImageManager )
     :
     ModalDialog     ( pWindow, ResId( MD_ICONSELECTOR, DIALOG_MGR() ) ),
     aFtDescription  ( this, ResId( FT_SYMBOLS ) ),
@@ -5121,7 +5120,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     aTbSymbol.SetPageScroll( TRUE );
 
-    bool bLargeIcons = GetImageType() & dcss::ui::ImageType::SIZE_LARGE;
+    bool bLargeIcons = GetImageType() & css::ui::ImageType::SIZE_LARGE;
     m_nExpectedSize = bLargeIcons ? 26 : 16;
 
     if ( m_nExpectedSize != 16 )
