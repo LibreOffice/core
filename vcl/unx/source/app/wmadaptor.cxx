@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 13:29:44 $
+ *  last change: $Author: pl $ $Date: 2001-10-30 16:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
+#endif
+#ifndef _RTL_LOCALE_H_
+#include <rtl/locale.h>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 
 #include <prex.h>
@@ -185,6 +191,7 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "WM_SAVE_YOURSELF", WMAdaptor::WM_SAVE_YOURSELF },
     { "WM_COMMAND", WMAdaptor::WM_COMMAND },
     { "WM_CLIENT_LEADER", WMAdaptor::WM_CLIENT_LEADER },
+    { "WM_LOCALE_NAME", WMAdaptor::WM_LOCALE_NAME },
     { "SAL_QUITEVENT", WMAdaptor::SAL_QUITEVENT },
     { "SAL_USEREVENT", WMAdaptor::SAL_USEREVENT },
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },
@@ -845,22 +852,66 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
 {
     ByteString aTitle( rWMName, osl_getThreadTextEncoding() );
 
+    ::rtl::OString aWMLocale;
+    rtl_Locale* pLocale = NULL;
+    osl_getProcessLocale( &pLocale );
+    if( pLocale )
+    {
+        ::rtl::OUString aLocaleString( pLocale->Language );
+        ::rtl::OUString aCountry( pLocale->Country );
+        ::rtl::OUString aVariant( pLocale->Variant );
+
+        if( aCountry.getLength() )
+        {
+            aLocaleString += ::rtl::OUString::createFromAscii( "_" );
+            aLocaleString += aCountry;
+        }
+        if( aVariant.getLength() )
+        {
+            aLocaleString += ::rtl::OUString::createFromAscii( "." );
+            aLocaleString += aVariant;
+        }
+        aWMLocale = ::rtl::OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
+    }
+    else
+    {
+        static const char* pLang = getenv( "LANG" );
+        aWMLocale = pLang ? pLang : "C";
+    }
+
+    char* pT = const_cast<char*>(aTitle.GetBuffer());
+    XTextProperty aProp;
+    XmbTextListToTextProperty( m_pDisplay,
+                               &pT,
+                               1,
+                               XStdICCTextStyle,
+                               &aProp );
+
     XChangeProperty( m_pDisplay,
                      pFrame->maFrameData.GetShellWindow(),
                      XA_WM_NAME,
-                     XA_STRING,
-                     8,
+                     aProp.encoding,
+                     aProp.format,
                      PropModeReplace,
-                     (unsigned char*)aTitle.GetBuffer(),
-                     aTitle.Len() );
+                     aProp.value,
+                     aProp.nitems );
     XChangeProperty( m_pDisplay,
                      pFrame->maFrameData.GetShellWindow(),
                      XA_WM_ICON_NAME,
+                     aProp.encoding,
+                     aProp.format,
+                     PropModeReplace,
+                     aProp.value,
+                     aProp.nitems );
+    XChangeProperty( m_pDisplay,
+                     pFrame->maFrameData.GetShellWindow(),
+                     m_aWMAtoms[ WM_LOCALE_NAME ],
                      XA_STRING,
                      8,
                      PropModeReplace,
-                     (unsigned char*)aTitle.GetBuffer(),
-                     aTitle.Len() );
+                     (unsigned char*)aWMLocale.getStr(),
+                     aWMLocale.getLength() );
+    XFree( aProp.value );
 }
 
 /*
@@ -999,14 +1050,15 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
                 }
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
-            aPosSize = Rectangle( Point( aPosSize.Left() + pFrame->maFrameData.nLeft_,
-                                         aPosSize.Top()  + pFrame->maFrameData.nTop_ ),
+            const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
+            aPosSize = Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
+                                         aPosSize.Top()  + rGeom.nTopDecoration ),
                                   Size( aPosSize.GetWidth()
-                                        - pFrame->maFrameData.nLeft_
-                                        - pFrame->maFrameData.nRight_,
+                                        - rGeom.nLeftDecoration
+                                        - rGeom.nRightDecoration,
                                         aPosSize.GetHeight()
-                                        - pFrame->maFrameData.nTop_
-                                        - pFrame->maFrameData.nBottom_ )
+                                        - rGeom.nTopDecoration
+                                        - rGeom.nBottomDecoration )
                                   );
             pFrame->maFrameData.SetPosSize( aPosSize );
 
@@ -1106,14 +1158,15 @@ void GnomeWMAdaptor::setGnomeWMState( SalFrame* pFrame ) const
                 }
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
-            aPosSize = Rectangle( Point( aPosSize.Left() + pFrame->maFrameData.nLeft_,
-                                         aPosSize.Top()  + pFrame->maFrameData.nTop_ ),
+            const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
+            aPosSize = Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
+                                         aPosSize.Top()  + rGeom.nTopDecoration ),
                                   Size( aPosSize.GetWidth()
-                                        - pFrame->maFrameData.nLeft_
-                                        - pFrame->maFrameData.nRight_,
+                                        - rGeom.nLeftDecoration
+                                        - rGeom.nRightDecoration,
                                         aPosSize.GetHeight()
-                                        - pFrame->maFrameData.nTop_
-                                        - pFrame->maFrameData.nBottom_ )
+                                        - rGeom.nTopDecoration
+                                        - rGeom.nBottomDecoration )
                                   );
             pFrame->maFrameData.SetPosSize( aPosSize );
 
@@ -1268,28 +1321,26 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
     pFrame->maFrameData.mbMaximizedVert = bVertical;
     pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
 
+    const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
     if( bHorizontal || bVertical )
     {
         const Size& aScreenSize( m_pSalDisplay->GetScreenSize() );
-        Rectangle aTarget( Point( pFrame->maFrameData.nLeft_,
-                                  pFrame->maFrameData.nTop_ ),
-                           Size( aScreenSize.Width() - pFrame->maFrameData.nLeft_ - pFrame->maFrameData.nRight_,
-                                 aScreenSize.Height() - pFrame->maFrameData.nTop_ - pFrame->maFrameData.nBottom_ )
+        Rectangle aTarget( Point( rGeom.nLeftDecoration, rGeom.nTopDecoration ),
+                           Size( aScreenSize.Width() - rGeom.nLeftDecoration - rGeom.nTopDecoration,
+                                 aScreenSize.Height() - rGeom.nTopDecoration - rGeom.nBottomDecoration )
                            );
         if( ! bHorizontal )
         {
             aTarget.SetSize(
                             Size(
                                  pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                                 pFrame->maFrameData.aPosSize_.GetWidth() :
-                                 pFrame->maFrameData.aRestoreFullScreen_.GetWidth(),
+                                 rGeom.nWidth : pFrame->maFrameData.aRestoreFullScreen_.GetWidth(),
                                  aTarget.GetHeight()
                                  )
                             );
             aTarget.Left() =
                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                pFrame->maFrameData.aPosSize_.Left() :
-                pFrame->maFrameData.aRestoreFullScreen_.Left();
+                rGeom.nX : pFrame->maFrameData.aRestoreFullScreen_.Left();
         }
         else if( ! bVertical )
         {
@@ -1297,17 +1348,16 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
                             Size(
                                  aTarget.GetWidth(),
                                  pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                                 pFrame->maFrameData.aPosSize_.GetHeight() :
-                                 pFrame->maFrameData.aRestoreFullScreen_.GetHeight()
+                                 rGeom.nHeight : pFrame->maFrameData.aRestoreFullScreen_.GetHeight()
                                  )
                             );
             aTarget.Top() =
                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                pFrame->maFrameData.aPosSize_.Top() :
-                pFrame->maFrameData.aRestoreFullScreen_.Top();
+                rGeom.nY : pFrame->maFrameData.aRestoreFullScreen_.Top();
         }
         if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
-            pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
+            pFrame->maFrameData.aRestoreFullScreen_ =
+                Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         delete pFrame->maFrameData.pFreeGraphics_;
         pFrame->maFrameData.pFreeGraphics_ = NULL;
 
@@ -1337,8 +1387,8 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
 
         pFrame->maFrameData.SetPosSize( pFrame->maFrameData.aRestoreFullScreen_ );
         pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
-        pFrame->maFrameData.nWidth_             = pFrame->maFrameData.aPosSize_.GetWidth();
-        pFrame->maFrameData.nHeight_            = pFrame->maFrameData.aPosSize_.GetHeight();
+        pFrame->maFrameData.nWidth_             = rGeom.nWidth;
+        pFrame->maFrameData.nHeight_            = rGeom.nHeight;
     }
 }
 
@@ -1399,7 +1449,11 @@ void NetWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVert
         if( !bHorizontal && !bVertical )
             pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
         else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
-            pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
+        {
+            const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
+            pFrame->maFrameData.aRestoreFullScreen_ =
+                Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
+        }
     }
     else
         WMAdaptor::maximizeFrame( pFrame, bHorizontal, bVertical );
@@ -1450,7 +1504,11 @@ void GnomeWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVe
         if( !bHorizontal && !bVertical )
             pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
         else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
-            pFrame->maFrameData.aRestoreFullScreen_ = pFrame->maFrameData.aPosSize_;
+        {
+            const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
+            pFrame->maFrameData.aRestoreFullScreen_ =
+                Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
+        }
     }
     else
         WMAdaptor::maximizeFrame( pFrame, bHorizontal, bVertical );
