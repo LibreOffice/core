@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
+ *  last change: $Author: mt $ $Date: 2001-02-05 10:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,24 +120,24 @@
 
 using namespace ::com::sun::star;
 
-struct ImplPropertyInfo
+struct ImplControlProperty
 {
 private:
     sal_uInt16                  nId;
     ::com::sun::star::uno::Any  aValue;
 
 public:
-    ImplPropertyInfo( const ImplPropertyInfo& rProp ) : aValue( rProp.aValue )
+    ImplControlProperty( const ImplControlProperty& rProp ) : aValue( rProp.aValue )
     {
         nId = rProp.nId;
     }
 
-    ImplPropertyInfo( sal_uInt16 nT )
+    ImplControlProperty( sal_uInt16 nT )
     {
         nId = nT;
     }
 
-    ImplPropertyInfo( sal_uInt16 nT, const ::com::sun::star::uno::Any& rValue ) : aValue( rValue )
+    ImplControlProperty( sal_uInt16 nT, const ::com::sun::star::uno::Any& rValue ) : aValue( rValue )
     {
         nId = nT;
     }
@@ -147,7 +147,7 @@ public:
     void                                SetValue( const ::com::sun::star::uno::Any& rValue )    { aValue = rValue; }
 };
 
-DECLARE_TABLE( ImplPropertyTable, ImplPropertyInfo* );
+DECLARE_TABLE( ImplPropertyTable, ImplControlProperty* );
 
 #define UNOCONTROL_STREAMVERSION    (short)2
 
@@ -215,8 +215,8 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
 
     for ( sal_uInt32 n = rModel.mpData->Count(); n; )
     {
-        ImplPropertyInfo* pProp = rModel.mpData->GetObject( --n );
-        ImplPropertyInfo* pNew = new ImplPropertyInfo( *pProp );
+        ImplControlProperty* pProp = rModel.mpData->GetObject( --n );
+        ImplControlProperty* pNew = new ImplControlProperty( *pProp );
         mpData->Insert( pNew->GetId(), pNew );
     }
 }
@@ -379,7 +379,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
 
 void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault )
 {
-    ImplPropertyInfo* pProp = new ImplPropertyInfo( nPropId, rDefault );
+    ImplControlProperty* pProp = new ImplControlProperty( nPropId, rDefault );
     mpData->Insert( nPropId, pProp );
 }
 
@@ -521,7 +521,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
     sal_uInt32 n;
     for ( n = mpData->Count(); n; )
     {
-        ImplPropertyInfo* pProp = mpData->GetObject( --n );
+        ImplControlProperty* pProp = mpData->GetObject( --n );
         if ( ( ( GetPropertyAttribs( pProp->GetId() ) & ::com::sun::star::beans::PropertyAttribute::TRANSIENT ) == 0 )
             && ( getPropertyState( GetPropertyName( pProp->GetId() ) ) != ::com::sun::star::beans::PropertyState_DEFAULT_VALUE ) )
         {
@@ -539,7 +539,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
         sal_Int32 nPropDataBeginMark = xMark->createMark();
         OutStream->writeLong( 0L ); // DataLen
 
-        ImplPropertyInfo* pProp = aProps.GetObject( n );
+        ImplControlProperty* pProp = aProps.GetObject( n );
         OutStream->writeShort( pProp->GetId() );
 
         sal_Bool bVoid = pProp->GetValue().getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -657,7 +657,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
         xMark->deleteMark(nPropDataBeginMark);
     }
 
-    ImplPropertyInfo* pProp = aProps.Get( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplControlProperty* pProp = aProps.Get( BASEPROPERTY_FONTDESCRIPTOR );
     if ( pProp )
     {
         // Solange wir keinen 5.0-Export haben, muss das alte
@@ -843,7 +843,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            ImplPropertyInfo* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
+                            ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
                             if ( pProp ) // wegen den Defaults...
                             {
                                 pFD = new ::com::sun::star::awt::FontDescriptor;
@@ -864,7 +864,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            ImplPropertyInfo* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
+                            ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
                             if ( pProp ) // wegen den Defaults...
                                 pProp->GetValue() >>= *pFD;
                         }
@@ -881,7 +881,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                          if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            ImplPropertyInfo* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
+                            ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
                             if ( pProp ) // wegen den Defaults...
                                 pProp->GetValue() >>= *pFD;
                         }
@@ -1028,7 +1028,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
 
     // Fehlt: Die gefakten Einzelproperties des FontDescriptors...
 
-    ImplPropertyInfo* pProp = mpData->Get( nPropId );
+    ImplControlProperty* pProp = mpData->Get( nPropId );
     if ( pProp )
     {
         sal_Bool bVoid = rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
@@ -1048,7 +1048,7 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((UnoControlModel*)this)->GetMutex() );
 
-    ImplPropertyInfo* pProp = mpData->Get( nPropId );
+    ImplControlProperty* pProp = mpData->Get( nPropId );
 
     if ( pProp )
         rValue = pProp->GetValue();
@@ -1117,7 +1117,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
 
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
-        ImplPropertyInfo* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
+        ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
         ::com::sun::star::awt::FontDescriptor aFD;
         pProp->GetValue() >>= aFD;
         lcl_ImplMergeFontProperty( aFD, nPropId, rValue );
@@ -1157,7 +1157,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
             {
                 if ( !pFD )
                 {
-                    ImplPropertyInfo* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
+                    ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
                     pFD = new ::com::sun::star::awt::FontDescriptor;
                     pProp->GetValue() >>= *pFD;
                 }
