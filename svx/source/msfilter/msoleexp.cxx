@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-25 11:17:00 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-02 10:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 #include "msoleexp.hxx"
 
+#define CREATE_CONST_ASC(s) String::CreateFromAscii( \
+    RTL_CONSTASCII_STRINGPARAM(s))
+
 void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                                                 SvStorage& rDestStg )
 {
@@ -151,6 +154,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
         rObj.DoSaveAs( &rDestStg );
         rObj.DoSaveCompleted();
     }
+    //We never need this stream: See #99809# and #i2179#
+    rObj.Remove(CREATE_CONST_ASC("\2OlePres000"));
 }
 
 
