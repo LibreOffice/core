@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:02:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,6 @@ class SwNumRule;        // Numerierung
 class SwNodeNum;        // Numerierung
 class SwUndoIds;        // fuer Undo
 class SwTxtFmtColl;
-#ifdef USED
-class SwGrfFmt;
-class SwGrfFmtColl;
-#endif
 class SwGrfNode;
 class SwFlyFrmFmt;
 
@@ -263,13 +259,8 @@ public:
     // versteckte Bereiche, versteckte Absaetze
     BOOL RemoveInvisibleContent();
 
-    // embedded alle lokalen Links (Bereiche/Grafiken)
-    BOOL EmbedAllLinks();
     USHORT GetLinkUpdMode(BOOL bDocSettings = FALSE) const;
     void SetLinkUpdMode( USHORT nMode );
-
-    // verschiebe den Inhalt aller Bereiche an die akt. Cursor-Position
-    long Move();
 
     // kopiere den Inhalt aller Bereiche an die akt. Cursor-Position
     // in die angegebene Shell
@@ -316,9 +307,6 @@ public:
     // returns the language at current cursor position
     USHORT GetCurLang() const;
 
-    // FrameFormate
-    SwFrmFmt* FindFrmFmtByName( const String& rName ) const;
-
     // TABLE
     USHORT GetTblFrmFmtCount( BOOL bUsed = FALSE ) const;
     SwFrmFmt& GetTblFrmFmt(USHORT nFmt, BOOL bUsed = FALSE ) const;
@@ -353,17 +341,6 @@ public:
         SwTxtFmtColl *pDerivedFrom = 0);
     void FillByEx(SwTxtFmtColl*, BOOL bReset = FALSE);
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const;
-#ifdef USED
-    // GRF
-    USHORT GetGrfFmtCollCount() const;
-    SwGrfFmtColl& GetGrfFmtColl( USHORT nGrfFmtColl) const;
-    void DelGrfFmtColl(USHORT nFmt);
-    SwGrfFmtColl* GetCurGrfFmtColl() const;
-    void SetGrfFmtColl(SwGrfFmtColl*);
-    SwGrfFmtColl *MakeGrfFmtColl(const String &rFmtCollName,
-        SwGrfFmtColl *pDerivedFrom = 0);
-    SwGrfFmtColl* FindGrfFmtCollByName( const String& rName ) const;
-#endif
 
         // Gebe die "Auto-Collection" mit der Id zurueck. Existiert
         // sie noch nicht, dann erzuege sie
@@ -372,12 +349,9 @@ public:
     SwFmt* GetFmtFromPool( USHORT nId );
         // returne die geforderte automatische Seiten-Vorlage
     SwPageDesc* GetPageDescFromPool( USHORT nId );
-        // returne die geforderte automatische NumRule
-    SwNumRule* GetNumRuleFromPool( USHORT nId );
 
     // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
     BOOL IsUsed( const SwModify& ) const;
-    BOOL IsUsed( const SwNumRule& ) const;
 
         // returne das geforderte automatische Format
     SwFrmFmt* GetFrmFmtFromPool( USHORT nId )
@@ -397,7 +371,6 @@ public:
 
     void RemoveFldType(USHORT nId, USHORT nResId = USHRT_MAX);
     void RemoveFldType(USHORT nResId, const String& rName);
-    BOOL RenameUserFields(const String& rOldName, const String& rNewName);
 
     void FieldToText( SwFieldType* pType );
 
@@ -418,10 +391,6 @@ public:
     void UpdateExpFlds(BOOL bCloseDB = FALSE);// nur alle ExpressionFelder updaten
     void SetFixFields( BOOL bOnlyTimeDate = FALSE,
                         const DateTime* pNewDateTime = 0 );
-    void LockExpFlds();
-    void UnlockExpFlds();
-    BOOL IsExpFldsLocked() const;
-
     USHORT GetFldUpdateFlags(BOOL bDocSettings = FALSE) const;
     void SetFldUpdateFlags( USHORT eFlags );
 
@@ -455,7 +424,6 @@ public:
     BOOL                UpdateTableOf(const SwTOXBase& rTOX,
                                         const SfxItemSet* pSet = 0);
     const SwTOXBase*    GetCurTOX() const;
-    const SwAttrSet&    GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
     const SwTOXBase*    GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate = FALSE );
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
@@ -465,13 +433,6 @@ public:
     USHORT              GetTOXCount() const;
     const SwTOXBase*    GetTOX( USHORT nPos ) const;
     BOOL                DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes = FALSE );
-    BOOL                DeleteCurTOX();
-
-    String GetUniqueTOXBaseName( const SwTOXType& rType,
-                                const String* pChkStr = 0 ) const;
-
-    BOOL SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
-    void SetTOXBaseProtection(const SwTOXBase& rTOXBase, BOOL bProtect);
 
     // nach einlesen einer Datei alle Verzeichnisse updaten
     void SetUpdateTOX( BOOL bFlag = TRUE );
@@ -589,11 +550,6 @@ public:
     USHORT Repeat( USHORT nCount );
     // wiederholt
     USHORT Redo( USHORT nCnt = 1 );
-#ifdef USED
-    // Aktionen klammern
-    void StartAction();
-    void EndAction();
-#endif
     // fuer alle Sichten auf dieses Dokument
     void StartAllAction();
     void EndAllAction();
@@ -745,8 +701,6 @@ public:
     USHORT GetTblChgMode() const;
     void SetTblChgMode( USHORT eMode );
 
-    // Zellenbreiten ueber Min/Max Berechnung an Tabellenbreite anpassen
-    void OptimizeTblBoxWidthMinMax();
     // Tabelle an der Cursor Position aufsplitten
     BOOL SplitTable( USHORT eMode );
     // Tabellen verbinden
@@ -857,10 +811,6 @@ public:
     BOOL IsAnySectionInDoc( BOOL bChkReadOnly = FALSE,
                             BOOL bChkHidden = FALSE,
                             BOOL BChkTOX = FALSE ) const;
-        // Passwort fuer geschuetzte Bereiche erfragen/setzen
-    void ChgSectionPasswd(
-                const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
-                const SwSection& rSect );
 
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
@@ -897,11 +847,7 @@ public:
     const SvNumberFormatter* GetNumberFormatter() const
     {   return ((SwEditShell*)this)->GetNumberFormatter();  }
 
-    // Extrakt fuellen
-    void Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress );
-
     // Schnitstellen fuers GlobalDokument
-    void SetGlobalDoc( BOOL bFlag = TRUE );
     BOOL IsGlobalDoc() const;
     void SetGlblDocSaveLinks( BOOL bFlag = TRUE );
     BOOL IsGlblDocSaveLinks() const;
@@ -917,12 +863,6 @@ public:
                                 USHORT nFromPos, USHORT nToPos,
                                 USHORT nNewPos );
     BOOL GotoGlobalDocContent( const SwGlblDocContent& rPos );
-    // erzeuge Anhand der vorgebenen Collection Teildokumente
-    // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
-    BOOL GenerateGlobalDoc( const String& rPath,
-                                const SwTxtFmtColl* pSplitColl = 0 );
-    BOOL GenerateHTMLDoc( const String& rPath,
-                                const SwTxtFmtColl* pSplitColl = 0 );
 
     // alles fuers Redlining
     USHORT GetRedlineMode() const;
@@ -931,9 +871,7 @@ public:
     USHORT GetRedlineCount() const;
     const SwRedline& GetRedline( USHORT nPos ) const;
     BOOL AcceptRedline( USHORT nPos );
-    BOOL AcceptRedline();
     BOOL RejectRedline( USHORT nPos );
-    BOOL RejectRedline();
     // suche das Redline zu diesem Data und returne die Pos im Array
     // USHRT_MAX wird returnt, falls nicht vorhanden
     USHORT FindRedlineOfData( const SwRedlineData& ) const;
