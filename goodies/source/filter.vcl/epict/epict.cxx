@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:32:50 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ void PictWriter::WritePoint(const Point & rPoint)
 
 void PictWriter::WriteSize(const Size & rSize)
 {
-    Size aSize = OutputDevice::LogicToLogic( rSize, aSrcMapMode, aTargetMapMode );
+    OutputDevice::LogicToLogic( rSize, aSrcMapMode, aTargetMapMode ); // -Wall is this needed.
     *pPict << ((short)rSize.Height()) << ((short)rSize.Width());
 }
 
@@ -403,7 +403,8 @@ void PictWriter::WriteRectangle(const Rectangle & rRect)
 void PictWriter::WritePolygon(const Polygon & rPoly)
 {
     USHORT nDataSize,i,nSize;
-    short nMinX,nMinY,nMaxX,nMaxY,nx,ny;
+    short nMinX = 0, nMinY = 0, nMaxX = 0, nMaxY = 0;
+    short nx,ny;
     Polygon aPoly(rPoly);
 
     nSize=aPoly.GetSize();
@@ -819,6 +820,7 @@ void PictWriter::WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & r
         case PDM_ERASE:  oc=0x0032; break;
         case PDM_INVERT: oc=0x0033; break;
         case PDM_FILL:   oc=0x0034; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -834,6 +836,7 @@ void PictWriter::WriteOpcode_SameRect(PictDrawingMethod eMethod)
         case PDM_ERASE:  oc=0x003a; break;
         case PDM_INVERT: oc=0x003b; break;
         case PDM_FILL:   oc=0x003c; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
 }
@@ -848,6 +851,7 @@ void PictWriter::WriteOpcode_RRect(PictDrawingMethod eMethod, const Rectangle & 
         case PDM_ERASE:  oc=0x0042; break;
         case PDM_INVERT: oc=0x0043; break;
         case PDM_FILL:   oc=0x0044; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -863,6 +867,7 @@ void PictWriter::WriteOpcode_SameRRect(PictDrawingMethod eMethod)
         case PDM_ERASE:  oc=0x004a; break;
         case PDM_INVERT: oc=0x004b; break;
         case PDM_FILL:   oc=0x004c; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
 }
@@ -877,6 +882,7 @@ void PictWriter::WriteOpcode_Oval(PictDrawingMethod eMethod, const Rectangle & r
         case PDM_ERASE:  oc=0x0052; break;
         case PDM_INVERT: oc=0x0053; break;
         case PDM_FILL:   oc=0x0054; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -892,6 +898,7 @@ void PictWriter::WriteOpcode_SameOval(PictDrawingMethod eMethod)
         case PDM_ERASE:  oc=0x005a; break;
         case PDM_INVERT: oc=0x005b; break;
         case PDM_FILL:   oc=0x005c; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
 }
@@ -907,6 +914,7 @@ void PictWriter::WriteOpcode_Arc(PictDrawingMethod eMethod, const Rectangle & rR
         case PDM_ERASE:  oc=0x0062; break;
         case PDM_INVERT: oc=0x0063; break;
         case PDM_FILL:   oc=0x0064; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -924,6 +932,7 @@ void PictWriter::WriteOpcode_SameArc(PictDrawingMethod eMethod, const Rectangle 
         case PDM_ERASE:  oc=0x006a; break;
         case PDM_INVERT: oc=0x006b; break;
         case PDM_FILL:   oc=0x006c; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteArcAngles(rRect,rStartPt,rEndPt);
@@ -941,6 +950,7 @@ void PictWriter::WriteOpcode_Poly(PictDrawingMethod eMethod, const Polygon & rPo
         case PDM_ERASE:  oc=0x0072; break;
         case PDM_INVERT: oc=0x0073; break;
         case PDM_FILL:   oc=0x0074; break;
+        default:         oc=0;      break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WritePolygon(rPoly);
@@ -955,7 +965,9 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     ULONG   nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
     ULONG   nDstRowPos, nSrcRowBytes, nEqu3, nPos, nDstMapPos;
     USHORT  nBitsPerPixel, nPackType;
-    BYTE    *pComp[4], *pPix, *pTemp, nEquData, nFlagCounterByte, nRed, nGreen, nBlue;
+    BYTE    *pComp[4], *pPix, *pTemp;
+    BYTE    nEquData = 0;
+    BYTE    nFlagCounterByte, nRed, nGreen, nBlue;
 
     SetAttrForPaint();
 
@@ -2326,8 +2338,9 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 
 
 //=============================== fuer Windows ==============================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
