@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:24:55 $
+ *  last change: $Author: kz $ $Date: 2002-01-09 21:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ swedish ] = "E~xakt s�kning";
         Text[ polish ] = "Dok�adne wyszukiwanie";
         Text[ portuguese_brazilian ] = "Igua~lar Caixa";
-        Text[ japanese ] = "完全に同一なものを検索(~T)";
+        Text[ japanese ] = "大文字と小文字を区別する";
         Text[ korean ] = "자세히 찾기(~T)";
         Text[ chinese_simplified ] = "精确搜寻(~T)";
         Text[ chinese_traditional ] = "精確搜尋(~T)";
@@ -1218,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
