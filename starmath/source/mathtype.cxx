@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 16:39:48 $
+ *  last change: $Author: cmc $ $Date: 2001-12-06 14:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,9 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0x222b:
             pC = " int ";
             break;
+        case 0x222c:
+            pC = " iint ";
+            break;
         case 0x2245:
             pC = " simeq ";
             break;
@@ -634,6 +637,15 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0xe083:
             rRet.Append('+');
             bRet=TRUE;
+            break;
+        case 0xe091:
+            pC = " widehat ";
+            break;
+        case 0xe096:
+            pC = " widetilde ";
+            break;
+        case 0xe098:
+            pC = " widevec ";
             break;
         case 0xE421:
             pC = " geslant ";

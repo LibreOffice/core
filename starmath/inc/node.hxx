@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-11 12:33:32 $
+ *  last change: $Author: cmc $ $Date: 2001-12-06 14:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,7 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -340,6 +341,7 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+    void CreateTextFromNode(String &rText);
 };
 
 inline const SmPolygon & SmPolygonNode::GetPolygon() const
@@ -802,6 +804,7 @@ public:
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 

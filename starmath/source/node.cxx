@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-19 11:46:14 $
+ *  last change: $Author: cmc $ $Date: 2001-12-06 14:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2416,16 +2416,51 @@ void SmTextNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmTextNode::CreateTextFromNode(String &rText)
 {
+    BOOL bQuoted=FALSE;
     if (GetToken().eType == TTEXT)
-        rText.Append('\"');
-    else if ((GetToken().eType == TIDENT) &&
-        (GetFontDesc() == FNT_FUNCTION))
     {
-        //Search for existing functions and remove extraenous keyword
-        APPEND(rText,"func ");
+        rText.Append('\"');
+        bQuoted=TRUE;
     }
+    else
+    {
+        SmParser aParseTest;
+        SmNode *pTable = aParseTest.Parse(GetToken().aText);
+        bQuoted=TRUE;
+        if ( (pTable->GetType() == NTABLE) && (pTable->GetNumSubNodes() == 1) )
+        {
+            SmNode *pResult = pTable->GetSubNode(0);
+            if ( (pResult->GetType() == NLINE) &&
+                (pResult->GetNumSubNodes() == 1) )
+            {
+                pResult = pResult->GetSubNode(0);
+                if ( (pResult->GetType() == NEXPRESSION) &&
+                    (pResult->GetNumSubNodes() == 1) )
+                {
+                    pResult = pResult->GetSubNode(0);
+                    if (pResult->GetType() == NTEXT)
+                        bQuoted=FALSE;
+                }
+            }
+        }
+        delete pTable;
+
+        if ((GetToken().eType == TIDENT) && (GetFontDesc() == FNT_FUNCTION))
+        {
+            //Search for existing functions and remove extraenous keyword
+            APPEND(rText,"func ");
+        }
+        else if (bQuoted)
+            APPEND(rText,"italic ");
+
+        if (bQuoted)
+            rText.Append('\"');
+
+    }
+
     rText.Append(GetToken().aText);
-    if (GetToken().eType == TTEXT)
+
+    if (bQuoted)
         rText.Append('\"');
     rText.Append(' ');
 }
@@ -2710,7 +2745,52 @@ void SmMathSymbolNode::CreateTextFromNode(String &rText)
     rText.Append(sStr);
 }
 
+void SmPolygonNode::CreateTextFromNode(String &rText)
+{
+    String sStr;
+    MathType::LookupChar(GetToken().cMathChar, sStr);
+    rText.Append(sStr);
+}
 
+void SmRectangleNode::CreateTextFromNode(String &rText)
+{
+    switch (GetToken().eType)
+    {
+    case TUNDERLINE:
+        APPEND(rText,"underline ");
+        break;
+    case TOVERLINE:
+        APPEND(rText,"overline ");
+        break;
+    case TOVERSTRIKE:
+        APPEND(rText,"overstrike ");
+        break;
+    default:
+        break;
+    }
+}
+
+void SmAttributNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pNode;
+    USHORT  nSize = GetNumSubNodes();
+    DBG_ASSERT(nSize == 2, "Node missing members");
+    rText.Append('{');
+    if (pNode = GetSubNode(0))
+    {
+            pNode->CreateTextFromNode(rText);
+            if (rText.GetChar(rText.Len()-1) == 0xAF)
+                rText.ReplaceAscii(rText.Len()-1,1,"overline ");
+
+    }
+
+    if (nSize == 2)
+        if (pNode = GetSubNode(1))
+            pNode->CreateTextFromNode(rText);
+
+    rText.EraseTrailingChars();
+    APPEND(rText,"} ");
+}
 
 /**************************************************************************/
 
