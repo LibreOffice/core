@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-30 09:27:32 $
+ *  last change: $Author: nf $ $Date: 2001-03-30 09:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
                 nFileFormat = FFORMAT_NEW;
                 fprintf( stdout, "File detection: Version 2.0 detected!\n" );
             }
-
               sTYP = sLine.GetToken( 3, '\t' );
             sGID = sLine.GetToken( 4, '\t' );
             sLID = sLine.GetToken( 5, '\t' );
