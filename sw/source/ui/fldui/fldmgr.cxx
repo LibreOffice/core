@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:10:15 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -157,9 +163,6 @@
 #endif
 #ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
@@ -1932,105 +1935,103 @@ BOOL SwFldMgr::ChooseMacro(const String &rSelMacro)
     }
 
     // choose macro dialog
-    String aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE, sSelMacro);
+    ::rtl::OUString aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE, sSelMacro);
 
-    // aScriptURL has the following format:
-    // vnd.sun.star.script:language=[language],macro=[macro],location=[location]
-    // [language] = StarBasic
-    // [macro] = libname.modulename.macroname
-    // [location] = application|document
-    // e.g. 'vnd.sun.star.script:language=StarBasic,macro=Standard.Module1.Main,location=document'
+    // a scriptURL has the following format:
+    // vnd.sun.star.script:[name]?language=[language]&location=[location]
+    // [name] = [libname].[modulename].[macroname]
+    // [language] = Basic
+    // [location] = application | document
+    // e.g. "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
     //
     // but for the UI we need this format:
     // 'macroname.modulename.libname.[appname|docname]'
 
-    if ( aScriptURL.Len() != 0 )
+    if ( aScriptURL.getLength() != 0 )
     {
-        // parse script URL
-        BOOL bFound;
-        String aValue;
-        INetURLObject aINetScriptURL( aScriptURL );
-
-        // get language
-        String aLanguage;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("language") ), &aValue );
-        if ( bFound )
-            aLanguage = aValue;
-
-        // get macro
-        String aMacro;
-        String aLibName;
-        String aModuleName;
-        String aMacroName;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("macro") ), &aValue );
-        if ( bFound )
+        // parse scriptURL
+        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
+            ::rtl::OUString::createFromAscii( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        if ( xFactory.is() )
         {
-            aMacro = aValue;
-            aLibName    = aMacro.GetToken(0, sal_Unicode('.'));
-            aModuleName = aMacro.GetToken(1, sal_Unicode('.'));
-            aMacroName  = aMacro.GetToken(2, sal_Unicode('.'));
-        }
-
-        // get location
-        String aLocation;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("location") ), &aValue );
-        if ( bFound )
-            aLocation = aValue;
-
-        pSfxApp->EnterBasicCall();
-
-        // find doc shell and basic manager
-        SfxObjectShell* pShell = 0;
-        BasicManager* pBasMgr = 0;
-        if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
-        {
-            // application basic
-            pBasMgr = pSfxApp->GetBasicManager();
-        }
-        else if ( aLocation.EqualsIgnoreCaseAscii( "document" ) )
-        {
-            // document basic
-            SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-            if (pSh)
+            Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+            if ( xUrl.is() )
             {
-                pShell = (SfxObjectShell*)pSh->GetView().GetDocShell();
-                pBasMgr = ( pShell ? pShell->GetBasicManager() : 0 );
-            }
-        }
-        ASSERT(pBasMgr, "SwFldMgr::ChooseMacro: No BasicManager found!");
+                // get name
+                ::rtl::OUString aName = xUrl->getName();
+                sal_Unicode cTok = '.';
+                sal_Int32 nIndex = 0;
+                String aLibName = aName.getToken( 0, cTok, nIndex );
+                String aModuleName;
+                if ( nIndex != -1 )
+                    aModuleName = aName.getToken( 0, cTok, nIndex );
+                String aMacroName;
+                if ( nIndex != -1 )
+                    aMacroName = aName.getToken( 0, cTok, nIndex );
 
-        if ( pBasMgr)
-        {
-            StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
-            ASSERT(pBasic, "SwFldMgr::ChooseMacro: No Basic found!");
+                // get location
+                ::rtl::OUString aLocKey = ::rtl::OUString::createFromAscii( "location" );
+                String aLocation;
+                if ( xUrl->hasParameter( aLocKey ) )
+                    aLocation = xUrl->getParameter( aLocKey );
 
-            if ( pBasic )
-            {
-                SbModule* pModule = pBasic->FindModule( aModuleName );
+                pSfxApp->EnterBasicCall();
 
-                if ( pModule )
+                // find doc shell and basic manager
+                SfxObjectShell* pShell = 0;
+                BasicManager* pBasMgr = 0;
+                if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
                 {
-                    SetMacroModule( pModule );
-
-                    // construct macro path
-                    String aMacroPath( aMacroName );
-                    aMacroPath += '.';
-                    aMacroPath += aModuleName;
-                    aMacroPath += '.';
-                    aMacroPath += aLibName;
-                    aMacroPath += '.';
-
-                    if ( pShell )
-                        aMacroPath += pShell->GetName();
-                    else
-                        aMacroPath += pSfxApp->GetName();
-
-                    SetMacroPath( aMacroPath );
-                    bRet = TRUE;
+                    // application basic
+                    pBasMgr = pSfxApp->GetBasicManager();
                 }
+                else if ( aLocation.EqualsIgnoreCaseAscii( "document" ) )
+                {
+                    // document basic
+                    SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+                    if (pSh)
+                    {
+                        pShell = (SfxObjectShell*)pSh->GetView().GetDocShell();
+                        pBasMgr = ( pShell ? pShell->GetBasicManager() : 0 );
+                    }
+                }
+                ASSERT(pBasMgr, "SwFldMgr::ChooseMacro: No BasicManager found!");
+
+                if ( pBasMgr)
+                {
+                    StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+                    ASSERT(pBasic, "SwFldMgr::ChooseMacro: No Basic found!");
+
+                    if ( pBasic )
+                    {
+                        SbModule* pModule = pBasic->FindModule( aModuleName );
+
+                        if ( pModule )
+                        {
+                            SetMacroModule( pModule );
+
+                            // construct macro path
+                            String aMacroPath( aMacroName );
+                            aMacroPath += '.';
+                            aMacroPath += aModuleName;
+                            aMacroPath += '.';
+                            aMacroPath += aLibName;
+                            aMacroPath += '.';
+
+                            if ( pShell )
+                                aMacroPath += pShell->GetName();
+                            else
+                                aMacroPath += pSfxApp->GetName();
+
+                            SetMacroPath( aMacroPath );
+                            bRet = TRUE;
+                        }
+                    }
+                }
+                pSfxApp->LeaveBasicCall();
             }
         }
-        pSfxApp->LeaveBasicCall();
     }
 
     return bRet;
