@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:29:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,17 @@
 #include <vcl/button.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // Funktionen ------------------------------------------------------------
 
 // returnt einen static Graphic-Filter, wird einmalig angelegt,
 // steht immer zur Verfuegung, DARF NIE geloescht werden!!!!
-GraphicFilter* GetGrfFilter();
+SVX_DLLPUBLIC GraphicFilter* GetGrfFilter();
 //USHORT    FillFilter( GraphicFilter& rFilter );
-int     LoadGraphic( const String& rPath, const String& rFilter,
+SVX_DLLPUBLIC int   LoadGraphic( const String& rPath, const String& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
                      USHORT* pDeterminedFormat = NULL );
