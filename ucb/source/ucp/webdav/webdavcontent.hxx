@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ private:
                            ::com::sun::star::beans::Property >& rProperties,
                           const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
-      void setPropertyValues(
+     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+     setPropertyValues(
                      const ::com::sun::star::uno::Sequence<
                          ::com::sun::star::beans::PropertyValue >& rValues,
                         const ::com::sun::star::uno::Reference<
@@ -179,6 +180,8 @@ private:
       void destroy( sal_Bool bDeletePhysical )
         throw( ::com::sun::star::uno::Exception );
 
+    ::com::sun::star::uno::Any MapDAVException( const DAVException & e,
+                                                sal_Bool bWrite );
     void cancelCommandExecution(
                     const DAVException & e,
                     const ::com::sun::star::uno::Reference<

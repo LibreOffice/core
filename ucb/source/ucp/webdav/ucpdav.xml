@@ -63,6 +63,7 @@
     <type> com.sun.star.io.XInputStream                        </type>
     <type> com.sun.star.io.XOutputStream                       </type>
     <type> com.sun.star.io.XSeekable                           </type>
+    <type> com.sun.star.lang.IllegalAccessException            </type>
     <type> com.sun.star.lang.XComponent                        </type>
     <type> com.sun.star.lang.XMultiServiceFactory              </type>
     <type> com.sun.star.lang.XServiceInfo                      </type>
@@ -80,8 +81,8 @@
     <type> com.sun.star.ucb.ContentCreationException           </type>
     <type> com.sun.star.ucb.ContentInfoAttribute               </type>
     <type> com.sun.star.ucb.InsertCommandArgument              </type>
+    <type> com.sun.star.ucb.InteractiveAugmentedIOException    </type>
     <type> com.sun.star.ucb.InteractiveBadTransferURLException </type>
-    <type> com.sun.star.ucb.InteractiveIOException             </type>
     <type> com.sun.star.ucb.InteractiveNetworkConnectException </type>
     <type> com.sun.star.ucb.InteractiveNetworkGeneralException </type>
     <type> com.sun.star.ucb.InteractiveNetworkReadException    </type>

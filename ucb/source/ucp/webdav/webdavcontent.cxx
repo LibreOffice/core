@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #endif
@@ -93,8 +96,8 @@
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKCONNECTEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
@@ -465,7 +468,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-          setPropertyValues( aProperties, Environment );
+        aRet <<= setPropertyValues( aProperties, Environment );
     }
       else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
@@ -1568,12 +1571,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 }
 
 //=========================================================================
-void Content::setPropertyValues(
+uno::Sequence< uno::Any > Content::setPropertyValues(
                 const uno::Sequence< beans::PropertyValue >& rValues,
                 const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
 {
       osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
+    uno::Sequence< uno::Any > aRet( rValues.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
       sal_Int32 nChanged = 0;
 
@@ -1589,6 +1593,7 @@ void Content::setPropertyValues(
     sal_Bool bDAV = sal_False;
 
     std::vector< ProppatchValue > aProppatchValues;
+    std::vector< sal_Int32 > aProppatchPropsPositions;
 
     uno::Reference< star::ucb::XPersistentPropertySet > xAdditionalPropSet;
       sal_Bool bTriedToGetAdditonalPropSet = sal_False;
@@ -1596,6 +1601,7 @@ void Content::setPropertyValues(
       sal_Bool bExchange = sal_False;
     rtl::OUString aNewTitle;
     rtl::OUString aOldTitle;
+    sal_Int32 nTitlePos = -1;
 
     uno::Reference< beans::XPropertySetInfo > xInfo;
 
@@ -1611,6 +1617,10 @@ void Content::setPropertyValues(
         if ( aTmpProp.Attributes & beans::PropertyAttribute::READONLY )
         {
               // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
             continue;
         }
 
@@ -1622,16 +1632,28 @@ void Content::setPropertyValues(
                         RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -1653,8 +1675,27 @@ void Content::setPropertyValues(
 
                         // new value will be set later...
                         aNewTitle = aNewValue;
+
+                        // remember position within sequence of values (for
+                        // error handling).
+                        nTitlePos = n;
                       }
                 }
+                else
+                {
+                    aRet[ n ] <<= lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Empty title not allowed!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 );
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                    "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
         else
@@ -1669,9 +1710,13 @@ void Content::setPropertyValues(
 
             if ( !xInfo->hasPropertyByName( rValue.Name ) )
             {
-                // Check, whether property exists. Abort otherwise.
+                // Check, whether property exists. Skip otherwise.
                 // PROPPATCH::set would add the property automatically, which
                 // is not allowed for "setPropertyValues" command!
+                aRet[ n ] <<= beans::UnknownPropertyException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is unknown!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
                 continue;
             }
 
@@ -1679,22 +1724,38 @@ void Content::setPropertyValues(
                         RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
             {
                 // Read-only property!
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
             {
                 // Read-only property!
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
             {
                 // Read-only property!
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             {
                 // Read-only property!
                 // (but could be writable, if 'getcontenttype' would be)
+                aRet[ n ] <<= lang::IllegalAccessException(
+                                rtl::OUString::createFromAscii(
+                                    "Property is read-only!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
             else
             {
@@ -1719,6 +1780,10 @@ void Content::setPropertyValues(
                     // Property value will be set on server.
                     ProppatchValue aValue( PROPSET, rValue.Name, rValue.Value );
                     aProppatchValues.push_back( aValue );
+
+                    // remember position within sequence of values (for
+                    // error handling).
+                    aProppatchPropsPositions.push_back( n );
                 }
                 else
                 {
@@ -1751,23 +1816,34 @@ void Content::setPropertyValues(
                                 nChanged++;
                             }
                         }
-                        catch ( beans::UnknownPropertyException )
+                        catch ( beans::UnknownPropertyException const & e )
                         {
+                            aRet[ n ] <<= e;
                         }
-                        catch ( lang::WrappedTargetException )
+                        catch ( lang::WrappedTargetException const & e )
                         {
+                            aRet[ n ] <<= e;
                         }
-                        catch ( beans::PropertyVetoException )
+                        catch ( beans::PropertyVetoException const & e )
                         {
+                            aRet[ n ] <<= e;
                         }
-                        catch ( lang::IllegalArgumentException )
+                        catch ( lang::IllegalArgumentException const & e )
                         {
+                            aRet[ n ] <<= e;
                         }
+                    }
+                    else
+                    {
+                        aRet[ n ] <<= uno::Exception(
+                                rtl::OUString::createFromAscii(
+                                    "No property set for storing the value!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
                     }
                 }
             }
         }
-      }
+    } // for
 
     if ( !m_bTransient && aProppatchValues.size() )
     {
@@ -1793,10 +1869,24 @@ void Content::setPropertyValues(
                 ++it;
             }
         }
-        catch ( DAVException const & )
+        catch ( DAVException const & e )
         {
-              OSL_ENSURE( sal_False,
-                        "Content::setPropertyValues - PROPPATCH failed!" );
+//            OSL_ENSURE( sal_False,
+//                        "Content::setPropertyValues - PROPPATCH failed!" );
+
+            // Note: PROPPATCH either sets ALL property values OR NOTHING.
+
+            std::vector< sal_Int32 >::const_iterator it
+                = aProppatchPropsPositions.begin();
+            std::vector< sal_Int32 >::const_iterator end
+                = aProppatchPropsPositions.end();
+
+            while ( it != end )
+            {
+                // Set error .
+                aRet[ (*it) ] <<= MapDAVException( e, sal_True );
+                ++it;
+            }
         }
     }
 
@@ -1848,12 +1938,20 @@ void Content::setPropertyValues(
             {
                 // Do not set new title!
                 aNewTitle = rtl::OUString();
+
+                // Set error .
+                aRet[ nTitlePos ] <<= uno::Exception(
+                        rtl::OUString::createFromAscii( "Exchange failed!" ),
+                        static_cast< cppu::OWeakObject * >( this ) );
             }
         }
-        catch ( DAVException const & )
+        catch ( DAVException const & e )
         {
             // Do not set new title!
             aNewTitle = rtl::OUString();
+
+            // Set error .
+            aRet[ nTitlePos ] <<= MapDAVException( e, sal_True );
         }
       }
 
@@ -1875,6 +1973,8 @@ void Content::setPropertyValues(
           aChanges.realloc( nChanged );
           notifyPropertiesChange( aChanges );
     }
+
+    return aRet;
 }
 
 //=========================================================================
@@ -2430,11 +2530,7 @@ sal_Bool Content::isFolder(
 }
 
 //=========================================================================
-void Content::cancelCommandExecution(
-                const DAVException & e,
-                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv,
-                sal_Bool bWrite /* = sal_False */ )
-    throw ( uno::Exception )
+uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
 {
     // Map DAVException...
     uno::Any aException;
@@ -2507,24 +2603,34 @@ void Content::cancelCommandExecution(
             break;
 
         case DAVException::DAV_FILE_OPEN:
-            ucbhelper::cancelCommandExecution(
-                                        star::ucb::IOErrorCode_CANT_READ,
-                                        e.getData(),
-                                        xEnv,
-                                        rtl::OUString::createFromAscii(
-                                            "Cannot open file!" ),
-                                        this );
-            // Unreachable!
+        {
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= e.getData();
+
+            aException <<=
+                star::ucb::InteractiveAugmentedIOException(
+                         rtl::OUString::createFromAscii( "Cannot open file!" ),
+                         static_cast< cppu::OWeakObject * >( this ),
+                         task::InteractionClassification_ERROR,
+                         star::ucb::IOErrorCode_CANT_READ,
+                         aArgs );
+            break;
+        }
 
         case DAVException::DAV_FILE_WRITE:
-            ucbhelper::cancelCommandExecution(
-                                        star::ucb::IOErrorCode_CANT_WRITE,
-                                        e.getData(),
-                                        xEnv,
-                                        rtl::OUString::createFromAscii(
+        {
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= e.getData();
+            aException <<=
+                star::ucb::InteractiveAugmentedIOException(
+                         rtl::OUString::createFromAscii(
                                             "Cannot write to file!" ),
-                                        this );
-            // Unreachable!
+                         static_cast< cppu::OWeakObject * >( this ),
+                         task::InteractionClassification_ERROR,
+                         star::ucb::IOErrorCode_CANT_WRITE,
+                         aArgs );
+            break;
+        }
 
         default:
             aException <<=
@@ -2535,5 +2641,17 @@ void Content::cancelCommandExecution(
             break;
     }
 
-    ucbhelper::cancelCommandExecution( aException, xEnv );
+    return aException;
 }
+
+//=========================================================================
+void Content::cancelCommandExecution(
+                const DAVException & e,
+                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv,
+                sal_Bool bWrite /* = sal_False */ )
+    throw ( uno::Exception )
+{
+    ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );
+    // Unreachable
+}
+
