@@ -11,7 +11,7 @@
 <DefaultName>Spain</DefaultName>
 </Country>
 </LC_INFO>
-<LC_CTYPE ref="es_ES">
+<LC_CTYPE ref="es_ES"/>
 <LC_FORMAT>
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
 <FormatCode>DD/MM/YY</FormatCode>
@@ -338,5 +338,5 @@
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
-<LC_OutLineNumberingLevel "en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>

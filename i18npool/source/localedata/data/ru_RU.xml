@@ -221,7 +221,7 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION ref="en_US"/>
-<LC_SEARCH ref="en_US/>
+<LC_SEARCH ref="en_US"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -368,5 +368,5 @@
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
-<LC_OutLineNumberingLevel "en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>
