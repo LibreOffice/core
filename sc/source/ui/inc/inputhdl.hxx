@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: nn $ $Date: 2000-11-28 11:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,8 @@ public:
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
     void            AddRefEntry();
+
+    BOOL            InputCommand( const CommandEvent& rCEvt, BOOL bForce );
 
     void            InsertFunction( const String& rFuncName, BOOL bAddPar = TRUE );
     void            ClearText();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:51:18 $
+ *  last change: $Author: nn $ $Date: 2000-11-28 11:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2539,6 +2539,73 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
             }
 
             DataChanged();              //  ruft auch UpdateParenthesis()
+            InvalidateAttribs();        //! in DataChanged ?
+        }
+    }
+
+    if (pTopView && eMode != SC_INPUT_NONE)
+        SyncViews();
+
+    return bUsed;
+}
+
+BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
+{
+    BOOL bUsed = FALSE;
+
+    if ( bForce || eMode != SC_INPUT_NONE )
+    {
+        HideTip();
+
+        if (bSelIsRef)
+        {
+            RemoveSelection();
+            bSelIsRef = FALSE;
+        }
+
+        UpdateActiveView();
+        BOOL bNewView = DataChanging();
+
+        if (bProtected)                             // cell protected
+            bUsed = TRUE;                           // event is used
+        else                                        // changes allowed
+        {
+            if (bNewView)                           // create new edit view
+            {
+                if (pActiveViewSh)
+                    pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
+                UpdateActiveView();
+                if (eMode==SC_INPUT_NONE)
+                    if (pTableView || pTopView)
+                    {
+                        String aStrLoP;
+                        if (pTableView)
+                        {
+                            pTableView->GetEditEngine()->SetText( aStrLoP );
+                            pTableView->SetSelection( ESelection(0,0, 0,0) );
+                        }
+                        if (pTopView)
+                        {
+                            pTopView->GetEditEngine()->SetText( aStrLoP );
+                            pTopView->SetSelection( ESelection(0,0, 0,0) );
+                        }
+                    }
+                SyncViews();
+            }
+
+            if (pTableView || pTopView)
+            {
+                if (pTableView)
+                    pTableView->Command( rCEvt );
+                if (pTopView)
+                    pTopView->Command( rCEvt );
+
+                bUsed = TRUE;
+
+                //! AutoInput?
+            }
+
+            DataChanged();              //  calls UpdateParenthesis()
             InvalidateAttribs();        //! in DataChanged ?
         }
     }
