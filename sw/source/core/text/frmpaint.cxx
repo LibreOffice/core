@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-17 15:39:28 $
+ *  last change: $Author: fme $ $Date: 2002-01-28 08:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,14 +349,6 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
     Point aStart( nRedX, nY );
     Point aEnd( nRedX, nY + nMax );
 
-#ifdef VERTICAL_LAYOUT
-    if ( pTxtFrm->IsVertical() )
-    {
-        pTxtFrm->SwitchHorizontalToVertical( aStart );
-        pTxtFrm->SwitchHorizontalToVertical( aEnd );
-    }
-#endif
-
     if( !IsClipChg() )
     {
         SwRect aRct( aStart, aEnd );
@@ -373,6 +365,15 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
     }
     const Color aOldCol( pSh->GetOut()->GetLineColor() );
     pSh->GetOut()->SetLineColor( SW_MOD()->GetRedlineMarkColor() );
+
+#ifdef VERTICAL_LAYOUT
+    if ( pTxtFrm->IsVertical() )
+    {
+        pTxtFrm->SwitchHorizontalToVertical( aStart );
+        pTxtFrm->SwitchHorizontalToVertical( aEnd );
+    }
+#endif
+
     pSh->GetOut()->DrawLine( aStart, aEnd );
     pSh->GetOut()->SetLineColor( aOldCol );
 }
