@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:21:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
         m_pPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
 
     m_pPage3EffectLB->Fill();
-    m_pPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
+//  m_pPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
     m_pPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     m_pPage3EffectLB->SetDropDownLineCount( 12 );
 
@@ -1040,9 +1040,10 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
         UINT32 nNewTime = (UINT32)m_pPage3PresTimeTMF->GetTime().GetMSFromTime() / 1000;
         if(bKiosk)
         {
-            pDoc->SetPresEndless(bKiosk);
-            pDoc->SetPresPause( (UINT32)m_pPage3BreakTMF->GetTime().GetMSFromTime() / 1000 );
-            pDoc->SetPresShowLogo( m_pPage3LogoCB->IsChecked() );
+            PresentationSettings& rSettings = pDoc->getPresentationSettings();
+            rSettings.mbEndless = bKiosk;
+            rSettings.mnPauseTimeout = (sal_Int32)m_pPage3BreakTMF->GetTime().GetMSFromTime() / 1000;
+            rSettings.mbShowPauseLogo = m_pPage3LogoCB->IsChecked();
         }
 
         USHORT nPgAbsNum = 0;
@@ -1052,8 +1053,9 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             SdPage* pPage = pDoc->GetSdPage( nPgRelNum, PK_STANDARD );
             if( m_pPage5PageListCT->IsPageChecked(nPgAbsNum) )
             {
-                pPage->SetFadeEffect( m_pPage3EffectLB->GetSelectedEffect() );
-                pPage->SetFadeSpeed( (FadeSpeed)m_pPage3SpeedLB->GetSelectEntryPos() );
+                m_pPage3EffectLB->applySelected(pPage);
+                const sal_uInt16 nPos = m_pPage3SpeedLB->GetSelectEntryPos();
+                pPage->setTransitionDuration( (nPos == 0) ? 3.0 : (nPos == 1) ? 2.0 : 1.0 );
                 if(bKiosk)
                 {
                     pPage->SetPresChange( PRESCHANGE_AUTO );
@@ -1192,7 +1194,21 @@ IMPL_LINK( AssistentDlgImpl, SelectEffectHdl, void*, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
 {
     if(m_bPreview && xDocShell.Is() )
-        m_aPreview.ShowEffect( m_pPage3EffectLB->GetSelectedEffect(), (FadeSpeed)m_pPage3SpeedLB->GetSelectEntryPos() );
+    {
+        SfxObjectShell* pShell = xDocShell;
+        DrawDocShell* pDocShell = dynamic_cast< DrawDocShell * >(pShell);
+        if( pDocShell )
+        {
+            SdDrawDocument* pDoc = pDocShell->GetDoc();
+            if( pDoc )
+            {
+                SdPage* pPage = pDoc->GetSdPage( m_nShowPage, PK_STANDARD );
+                if( pPage )
+                    m_pPage3EffectLB->applySelected(pPage);
+            }
+        }
+        m_aPreview.startPreview();
+    }
     return 0;
 }
 
@@ -1393,7 +1409,6 @@ void AssistentDlgImpl::UpdateUserData()
         SdrObject* pObj;
         SdrObjKind eSdrObjKind;
         String aEmptyString;
-        USHORT nIndex;
 
         sd::PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
         const sd::PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
@@ -1615,7 +1630,9 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
     if ( !xDocShell.Is() || !m_bPreview )
         m_aPreview.SetObjectShell( 0 );
     else
+    {
         m_aPreview.SetObjectShell( xDocShell, m_nShowPage );
+    }
 
     m_bPreviewUpdating = FALSE;
 }
