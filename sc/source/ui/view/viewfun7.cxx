@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:37:27 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 16:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
             pDrawView->AddUndo(new SdrUndoAttrObj(*pPickObj));
             //pDrawView->EndUndo();
 
-            XOBitmap aXOBitmap( XOutBitmap::GetBitmapFromGraphic( rGraphic ) );
+            XOBitmap aXOBitmap( rGraphic.GetBitmap() );
             SfxItemSet aSet( pDrawView->GetModel()->GetItemPool(),
                                 XATTR_FILLSTYLE, XATTR_FILLBITMAP );
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
