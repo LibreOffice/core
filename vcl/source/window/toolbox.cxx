@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:18:34 $
+ *  last change: $Author: sb $ $Date: 2002-08-22 14:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2187,6 +2187,13 @@ void ToolBox::ImplFormat( BOOL bResize )
         while ( pItem )
         {
             pItem->maRect = aEmptyRect;
+
+            // For items not visible, release resources only needed during
+            // painting the items (on Win98, for example, these are system-wide
+            // resources that are easily exhausted, so be nice):
+            pItem->maImage.ClearCaches();
+            pItem->maHighImage.ClearCaches();
+
             pItem = mpItemList->Next();
         }
 
@@ -2473,10 +2480,19 @@ void ToolBox::ImplFormat( BOOL bResize )
 
         // Neu berechnete Rectangles uebertragen
         maPaintRect = aEmptyRect;
+        Rectangle aVisibleRect(Point(0, 0), GetOutputSizePixel());
         pItem = mpItemList->First();
         while ( pItem )
         {
             pItem->maRect = pItem->maCalcRect;
+            if (!pItem->maRect.IsOver(aVisibleRect))
+            {
+                // For items not visible, release resources only needed during
+                // painting the items (on Win98, for example, these are system-
+                // wide resources that are easily exhausted, so be nice):
+                pItem->maImage.ClearCaches();
+                pItem->maHighImage.ClearCaches();
+            }
             pItem = mpItemList->Next();
         }
     }
