@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:49:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ String STR_FILE_NOT_FOUND
     Text[ arabic ] = "ÊÚÐÑ ÇáÚËæÑ Úáì ÇáãáÝ \"%1\" Ýí ÇáãÓÇÑ \"%2\".";
     Text[ turkish ] = "Dosya \"%1\" \"%2\" veri yolunda bulunamadý.";
     Text[ catalan ] = "No se pudo encontrar el archivo \"%1\" en la ruta \"%2\".";
+    Text[ finnish ] = "Tiedostoa %1 hakemistopolusta %2 ei löytynyt.";
 };
 /*************************************************************************
 
@@ -213,6 +214,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ arabic ] = "ÝåÑÓ";
                 Text[ turkish ] = "Dizin";
                 Text[ catalan ] = "Índice";
+                Text[ finnish ] = "Hakemisto";
             };
             PageItem
             {
@@ -240,6 +242,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ turkish ] = "Giriþler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Entradas";
+                Text[ finnish ] = "Merkinnät";
             };
             PageItem
             {
@@ -267,6 +270,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ turkish ] = "Þablonlar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Estilos";
+                Text[ finnish ] = "Tyylit";
             };
             PageItem
             {
@@ -356,6 +360,7 @@ TabDialog DLG_MULTI_TOX
         Text[ arabic ] = "ÝåÑÓ ãÚÑÝ ãä ÞÈá ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanýcý tanýmlý dizin";
         Text[ catalan ] = "Índice del usuario";
+        Text[ finnish ] = "Käyttäjän määrittämä hakemisto";
     };
     CheckBox CB_SHOWEXAMPLE
     {
@@ -381,6 +386,7 @@ TabDialog DLG_MULTI_TOX
         Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizlemeyi görüntüle";
         Text[ catalan ] = "Previsuali~zación";
+        Text[ finnish ] = "Näytä ~esikatselu";
     };
     Text[ english_us ] = "Insert Index";
     Text[ portuguese ] = "Inserir índice";
@@ -419,6 +425,7 @@ TabDialog DLG_MULTI_TOX
     Text[ turkish ] = "Dizin ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar índice";
+    Text[ finnish ] = "Lisää hakemisto";
 };
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
@@ -453,6 +460,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tip~o";
+        Text[ finnish ] = "Tyyppi";
     };
     ListBox         LB_TYPE
     {
@@ -593,7 +601,7 @@ TabPage TP_TOX_SELECT
     StringList [ polish ] =
     {
             < "Spis treœci" ;   TO_CONTENT      ;> ;
-        < "Zestaw hase³" ;  TO_INDEX        ;> ;
+        < "Skorowidz" ;     TO_INDEX        ;> ;
         < "Spis obrazów" ; TO_ILLUSTRATION ;> ;
         < "Spis tabel" ;    TO_TABLE        ;> ;
         < "Zdefiniowane przez u¿ytkownika" ;    TO_USER         ;> ;
@@ -672,13 +680,23 @@ TabPage TP_TOX_SELECT
     };
     StringList [ catalan ] =
     {
-            < "Índice de contenido" ;   TO_AUTHORITIES  ;> ;
-        < "Índice alfabético" ; TO_AUTHORITIES  ;> ;
-        < "Índice de ilustraciones" ;   TO_AUTHORITIES  ;> ;
-        < "Índice de tablas" ;  TO_AUTHORITIES  ;> ;
-        < "Índice del usuario" ;    TO_AUTHORITIES  ;> ;
-        < "Índice de objetos" ; TO_AUTHORITIES  ;> ;
+            < "Índice de contenido" ;   TO_CONTENT      ;> ;
+        < "Índice alfabético" ;     TO_INDEX        ;> ;
+        < "Índice de ilustraciones" ; TO_ILLUSTRATION ;> ;
+        < "Índice de tablas" ;  TO_TABLE        ;> ;
+        < "Índice del usuario" ;    TO_USER         ;> ;
+        < "Índice de objetos" ;     TO_OBJECT       ;> ;
         < "Bibliografía" ;  TO_AUTHORITIES  ;> ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Sisällysluettelo" ;  TO_AUTHORITIES  ;> ;
+        < "Aakkostettu hakemisto" ; TO_AUTHORITIES  ;> ;
+        < "Kuvitushakemisto" ;  TO_AUTHORITIES  ;> ;
+        < "Taulukkohakemisto" ; TO_AUTHORITIES  ;> ;
+        < "Käyttäjän määrittämä" ;  TO_AUTHORITIES  ;> ;
+        < "Objektiluettelo" ;   TO_AUTHORITIES  ;> ;
+        < "Bibliografia" ;  TO_AUTHORITIES  ;> ;
     };
     };
     CheckBox        CB_READONLY
@@ -708,6 +726,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Manüel deðiþikliklere karþý koru";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Protegido contra modificaciones ~manuales";
+        Text[ finnish ] = "Suojattu manuaalisilta muutoksilta";
     };
     FixedText       FT_TITLE
     {
@@ -735,6 +754,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Títu~lo";
+        Text[ finnish ] = "~Otsikko";
     };
     Edit            ED_TITLE
     {
@@ -768,6 +788,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Tip ve baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo y título";
+        Text[ finnish ] = "Tyyppi ja otsikko";
     };
     ListBox         LB_AREA
     {
@@ -882,8 +903,13 @@ TabPage TP_TOX_SELECT
     };
     StringList [ catalan ] =
     {
-            < "Todo el documento" ;                 AREA_CHAPTER        ;> ;
+            < "Todo el documento" ;     AREA_DOCUMENT       ;> ;
         < "Capítulo" ;              AREA_CHAPTER        ;> ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Koko asiakirja" ;                AREA_CHAPTER        ;> ;
+        < "Luku" ;              AREA_CHAPTER        ;> ;
     };
     };
     FixedText       FT_LEVEL
@@ -912,6 +938,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Þu düzeye kadar:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~valuar hasta nivel";
+        Text[ finnish ] = "Arviointitaso";
     };
     NumericField    NF_LEVEL
     {
@@ -953,6 +980,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Þunun için dizin oluþtur:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear í~ndice para";
+        Text[ finnish ] = "Luo hakemisto";
     };
     CheckBox        CB_FROMHEADINGS
     {
@@ -981,6 +1009,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Anahat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Esquema";
+        Text[ finnish ] = "Jäsennys";
     };
     PushButton  PB_CHAPTERDLG
     {
@@ -1015,6 +1044,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Diðer biçimler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Otro~s estilos";
+        Text[ finnish ] = "~Lisätyylit";
     };
     String ST_USER_ADDSTYLE
     {
@@ -1040,6 +1070,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Þablonlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estilos";
+        Text[ finnish ] = "T~yylit";
     };
     PushButton      PB_ADDSTYLES
     {
@@ -1073,6 +1104,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáÝåÑÓ";
         Text[ turkish ] = "Dizin ~iþaretleri";
         Text[ catalan ] = "Mar~cas del índice";
+        Text[ finnish ] = "Hake~mistomerkit";
     };
     RadioButton     RB_FROMCAPTIONS
     {
@@ -1100,6 +1132,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Resim yazýsý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Etiq~uetas";
+        Text[ finnish ] = "Kuvaotsikot";
     };
     FixedText FT_CAPTIONSEQUENCE
     {
@@ -1127,6 +1160,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Categoría";
+        Text[ finnish ] = "Luokka";
     };
     ListBox LB_CAPTIONSEQUENCE
     {
@@ -1161,6 +1195,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Görüntü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visuali~zación";
+        Text[ finnish ] = "Näytä";
     };
     ListBox LB_DISPLAYTYPE
     {
@@ -1300,6 +1335,12 @@ TabPage TP_TOX_SELECT
         < "Categoría y número" ; > ;
         < "Texto de la etiqueta" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Viitteet" ; > ;
+        < "Luokka ja numero" ; > ;
+        < "Kuvateksti" ; > ;
+    };
     };
     RadioButton        RB_FROMOBJECTNAMES
     {
@@ -1327,6 +1368,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Nesne adlarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombres de o~bjeto";
+        Text[ finnish ] = "Objektien nimet";
     };
     GroupBox        GB_CREATEFROM
     {
@@ -1354,6 +1396,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Kaynak";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear de";
+        Text[ finnish ] = "Luo";
     };
     CheckBox        CB_COLLECTSAME
     {
@@ -1380,6 +1423,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÊáÎíÕ ÇáÅÏÎÇáÇÊ ÇáãÊãÇËáÉ";
         Text[ turkish ] = "~Eþ giriþleri birleþtir";
         Text[ catalan ] = "Com~binar entradas idénticas";
+        Text[ finnish ] = "Yhdistä identtiset merkinnät";
     };
     CheckBox        CB_USEFF
     {
@@ -1406,6 +1450,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã p.  Ãæ  pp";
         Text[ turkish ] = "Sonraki ~sayfa ya da sayfalar ile birleþtir";
         Text[ catalan ] = "Combinar entradas con las ~siguiente(s)";
+        Text[ finnish ] = "Yhdistä identtiset merkinnät kirjaimilla p tai ~pp";
     };
     CheckBox CB_USE_DASH
     {
@@ -1432,6 +1477,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã -";
         Text[ turkish ] = "~Birleþme -";
         Text[ catalan ] = "U~nir con -";
+        Text[ finnish ] = "Yhdistä merkinnällä -";
     };
     CheckBox        CB_CASESENSITIVE
     {
@@ -1459,6 +1505,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Büyük/küçük harf duyarlý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mayúsculas/minúsculas";
+        Text[ finnish ] = "Kirjainkoon erottelu";
     };
     CheckBox        CB_INITIALCAPS
     {
@@ -1486,6 +1533,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Giriþleri otomatik olarak büyük harfle baþla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escribir entradas automáticamente en ma~yúsculas";
+        Text[ finnish ] = "Isot kirjaimet merkintöihin automaattisesti";
     };
     CheckBox        CB_KEYASENTRY
     {
@@ -1512,6 +1560,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÇáãÝÊÇÍ ßÅÏÎÇá ãÓÊÞá";
         Text[ turkish ] = "Anahtarlarý ayrý giriþ olarak gir";
         Text[ catalan ] = "~Claves como entradas propias";
+        Text[ finnish ] = "Avainmerkit erillisinä merkintöinä";
     };
     CheckBox    CB_FROMFILE
     {
@@ -1538,6 +1587,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ãáÝ ÝåÑÓ ÃÈÌÏí";
         Text[ turkish ] = "Uyumluluk dosyasý";
         Text[ catalan ] = "~Archivo de concordancia";
+        Text[ finnish ] = "~Konkordanssitiedosto";
     };
     MenuButton  MB_AUTOMARK
     {
@@ -1574,6 +1624,7 @@ TabPage TP_TOX_SELECT
                     Text[ arabic ] = "ÝÊÍ";
                     Text[ turkish ] = "Aç";
                     Text[ catalan ] = "Abrir";
+                    Text[ finnish ] = "Avaa";
                 };
                 MenuItem
                 {
@@ -1599,6 +1650,7 @@ TabPage TP_TOX_SELECT
                     Text[ arabic ] = "ÌÏíÏ...";
                     Text[ turkish ] = "Yeni...";
                     Text[ catalan ] = "~Nuevo...";
+                    Text[ finnish ] = "~Uusi";
                 };
                 MenuItem
                 {
@@ -1624,6 +1676,7 @@ TabPage TP_TOX_SELECT
                     Text[ arabic ] = "ÊÍÑíÑ...";
                     Text[ turkish ] = "Düzenle...";
                     Text[ catalan ] = "~Editar...";
+                    Text[ finnish ] = "~Muokkaa";
                 };
             };
         };
@@ -1646,6 +1699,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ãáÝ";
         Text[ turkish ] = "Dosya";
         Text[ catalan ] = "~Archivo";
+        Text[ finnish ] = "~Tiedosto";
     };
     CheckBox    CB_FROMTABLES
     {
@@ -1673,6 +1727,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Tablolar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tablas";
+        Text[ finnish ] = "Taulukot";
     };
     CheckBox    CB_FROMFRAMES
     {
@@ -1700,6 +1755,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Metin çerçevesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Marco de te~xto";
+        Text[ finnish ] = "Teksti~kehykset";
     };
     CheckBox    CB_FROMGRAPHICS
     {
@@ -1727,6 +1783,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Grafikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imágene~s";
+        Text[ finnish ] = "Kuvat";
     };
     CheckBox        CB_FROMOLE
     {
@@ -1754,6 +1811,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "OLE nesneleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objetos O~LE";
+        Text[ finnish ] = "OLE-objektit";
     };
     CheckBox        CB_LEVELFROMCHAPTER
     {
@@ -1780,6 +1838,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÇÓÊÎÏÇã ãÓÊæì ãä ÇáÝÕá ÇáãÕÏÑí";
         Text[ turkish ] = "Kaynak bölümdeki düzeyi kullan";
         Text[ catalan ] = "Nivel del capítulo orige~n";
+        Text[ finnish ] = "Käytä lähdeluvun tasoa";
     };
 
     GroupBox        GB_IDXOPTIONS
@@ -1808,6 +1867,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
     };
     Control CLB_FROMOBJ
     {
@@ -1998,11 +2058,19 @@ TabPage TP_TOX_SELECT
         };
         ItemList [ catalan ] =
         {
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "Otros objetos OLE";  128;> ;
+        };
+        ItemList [ finnish ] =
+        {
             < "%PRODUCTNAME Math";  128;> ;
             < "%PRODUCTNAME Chart";     128;> ;
-            < "%PRODUCTNAME Calc";  128;> ;
+            < "%PRODUCTNAME! Calc";     128;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
-            < "Otros objetos OLE";  128;> ;
+            < "Muut OLE-objekti";   128;> ;
         };
     };
     };
@@ -2032,6 +2100,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Þu nesnelerden oluþtur:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear de los siguientes objetos";
+        Text[ finnish ] = "Luo seuraavista objekteista";
     };
     CheckBox CB_SEQUENCE
     {
@@ -2059,6 +2128,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Giriþleri numarala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Numerar entradas";
+        Text[ finnish ] = "~Numeromerkinnät";
     };
     FixedText FT_BRACKET
     {
@@ -2086,6 +2156,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Ayraçlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Paréntesis";
+        Text[ finnish ] = "~Sulkeet";
     };
     ListBox LB_BRACKET
     {
@@ -2127,6 +2198,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Giriþ formatlama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formateado de las entradas";
+        Text[ finnish ] = "Merkintöjen muotoilu";
     };
     String ST_AUTOMARK_TYPE
     {
@@ -2151,6 +2223,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ãáÝ ÇáÊÍÏíÏ ááÝåÑÓ ÇáÃÈÌÏí (*.sdi)";
         Text[ turkish ] = "Alfabetik dizin için seçim dosyasý (*.sdi)";
         Text[ catalan ] = "Archivo de marcas para índice alfabético (*.sdi)";
+        Text[ finnish ] = "Aakkostetun hakemiston (*.sdi) luontitiedosto";
     };
 };
 
@@ -2185,6 +2258,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Düzey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ni~vel";
+        Text[ finnish ] = "~Taso";
     };
     Control LB_LEVEL
     {
@@ -2216,6 +2290,7 @@ TabPage TP_TOX_ENTRY
         Text[ arabic ] = "ÇáäæÚ";
         Text[ turkish ] = "Tür";
         Text[ catalan ] = "~Tipo";
+        Text[ finnish ] = "~Tyyppi";
     };
     Window WIN_TOKEN
     {
@@ -2262,6 +2337,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "E#";
             Text[ turkish ] = "B#";
             Text[ catalan ] = "E#";
+            Text[ finnish ] = "E";
         };
         String STR_TOKEN_ENTRY
         {
@@ -2286,6 +2362,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "E";
             Text[ turkish ] = "G";
             Text[ catalan ] = "E";
+            Text[ finnish ] = "loppu";
         };
         String STR_TOKEN_TAB_STOP
         {
@@ -2310,6 +2387,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "T";
             Text[ turkish ] = "T";
             Text[ catalan ] = "T";
+            Text[ finnish ] = "T";
         };
         String STR_TOKEN_TEXT
         {
@@ -2365,6 +2443,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Bh";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "CI";
+            Text[ finnish ] = "CI";
         };
         String STR_TOKEN_LINK_START
         {
@@ -2389,6 +2468,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "LS";
             Text[ turkish ] = "Bb";
             Text[ catalan ] = "HI";
+            Text[ finnish ] = "LS";
         };
         String STR_TOKEN_LINK_END
         {
@@ -2413,6 +2493,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "LE";
             Text[ turkish ] = "Bs";
             Text[ catalan ] = "HF";
+            Text[ finnish ] = "LE";
         };
         String STR_TOKEN_AUTHORITY
         {
@@ -2438,6 +2519,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "A";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "A";
+            Text[ finnish ] = "A";
         };
         String STR_TOKEN_HELP_ENTRY_NO
         {
@@ -2463,6 +2545,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Bölüm numarasý";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Número de capítulo";
+            Text[ finnish ] = "Luvun numero";
         };
         String STR_TOKEN_HELP_ENTRY
         {
@@ -2488,6 +2571,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Giriþ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Entrada";
+            Text[ finnish ] = "Merkintä";
         };
         String STR_TOKEN_HELP_TAB_STOP
         {
@@ -2513,6 +2597,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Sekme";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Tabulación";
+            Text[ finnish ] = "Sarkainkeskeytys";
         };
         String STR_TOKEN_HELP_TEXT
         {
@@ -2538,6 +2623,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Metin";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Texto";
+            Text[ finnish ] = "Teksti";
         };
         String STR_TOKEN_HELP_PAGE_NUMS
         {
@@ -2563,6 +2649,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Sayfa numarasý";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Número de página";
+            Text[ finnish ] = "Sivunumero";
         };
         String STR_TOKEN_HELP_CHAPTER_INFO
         {
@@ -2588,6 +2675,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Bölüm bilgileri";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Información sobre el capítulo";
+            Text[ finnish ] = "Luvun tiedot";
         };
         String STR_TOKEN_HELP_LINK_START
         {
@@ -2613,6 +2701,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Hyperlink baþlangýcý";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Comienzo de hiperenlace";
+            Text[ finnish ] = "Hyperlinkin alku";
         };
         String STR_TOKEN_HELP_LINK_END
         {
@@ -2638,6 +2727,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Hyperlink sonu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Final de hiperenlace";
+            Text[ finnish ] = "Hyperlinkin loppu";
         };
         String STR_TOKEN_HELP_AUTHORITY
         {
@@ -2662,6 +2752,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "ÅÏÎÇá Ýí ÝåÑÓ ÇáãÑÇÌÚ:";
             Text[ turkish ] = "Kaynakça giriþi: ";
             Text[ catalan ] = "Entrada de bibliografía:  ";
+            Text[ finnish ] = "Bibliografiamerkintä: ";
         };
         String STR_CHARSTYLE
         {
@@ -2687,6 +2778,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Karakter þablonu: ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Estilo de carácter:  ";
+            Text[ finnish ] = "Merkin tyyli: ";
         };
     };
     PushButton PB_ALL_LEVELS
@@ -2714,6 +2806,7 @@ TabPage TP_TOX_ENTRY
         Text[ arabic ] = "ßá ÇáãÓÊæíÇÊ";
         Text[ turkish ] = "Tüm düzeyler";
         Text[ catalan ] = "Todos los ~niveles";
+        Text[ finnish ] = "~Kaikki tasot";
     };
     PushButton PB_ENTRYNO
     {
@@ -2741,6 +2834,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Bölüm no.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nú~m. capítulo";
+        Text[ finnish ] = "Luku.";
     };
     PushButton PB_ENTRY
     {
@@ -2768,6 +2862,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Giriþ metni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Te~xto de entrada";
+        Text[ finnish ] = "Merkintäteksti";
     };
     PushButton PB_CHAPTERINFO
     {
@@ -2795,6 +2890,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Bölüm bilgileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Información ~cap.";
+        Text[ finnish ] = "~Luvun tiedot";
     };
     PushButton PB_PAGENO
     {
@@ -2822,6 +2918,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Sayfa no.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nú~m. página";
+        Text[ finnish ] = "Sivunumero.";
     };
     PushButton PB_TAB
     {
@@ -2849,6 +2946,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Sekme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tabulación";
+        Text[ finnish ] = "Sarkainkeskeytys";
     };
     PushButton PB_HYPERLINK
     {
@@ -2876,6 +2974,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Hyperlink";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Hiperenlace";
+        Text[ finnish ] = "~Hyperlinkki";
     };
     ListBox LB_AUTHFIELD
     {
@@ -2911,6 +3010,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "In~sertar";
+        Text[ finnish ] = "~Lisää";
     };
     PushButton PB_AUTHREMOVE
     {
@@ -2938,6 +3038,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     FixedText FT_CHARSTYLE
     {
@@ -2965,6 +3066,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Karakter þablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilo de ~carácter";
+        Text[ finnish ] = "Merkistön tyyli";
     };
     ListBox LB_CHARSTYLE
     {
@@ -2999,6 +3101,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar...";
+        Text[ finnish ] = "~Muokkaa";
     };
     FixedText FT_FILLCHAR
     {
@@ -3026,6 +3129,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Öncü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Carácter de ~relleno";
+        Text[ finnish ] = "Täyttömerkki";
     };
     ComboBox CB_FILLCHAR
     {
@@ -3060,6 +3164,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Bölüm giriþi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~ntrada de capítulo";
+        Text[ finnish ] = "Luvun merkintä";
     };
     ListBox LB_CHAPTERENTRY
     {
@@ -3199,6 +3304,12 @@ TabPage TP_TOX_ENTRY
         < "Solo descripción" ; > ;
         < "Secuencia y descripción" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Vain numeroalue" ; > ;
+        < "Vain kuvaus" ; > ;
+        < "Numeroalue ja kuvaus" ; > ;
+    };
     };
     FixedText FT_TABPOS
     {
@@ -3226,6 +3337,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Sekme konumu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Po~sición de tabulación";
+        Text[ finnish ] = "Sarkainkeskeytyksen sijainti";
     };
     MetricField MF_TABPOS
     {
@@ -3271,6 +3383,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Sað kenar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Al bor~de derecho";
+        Text[ finnish ] = "Oikea ~yläreuna";
     };
     GroupBox GB_ENTRY
     {
@@ -3298,6 +3411,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Yapý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estructura";
+        Text[ finnish ] = "Rakenne";
     };
     CheckBox CB_RELTOSTYLE
     {
@@ -3325,6 +3439,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Paragraf biçimi girintisine göre orantýlý sekme konumu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición relati~va a sangría de estilo de párrafo";
+        Text[ finnish ] = "Suhteessa ~kappaletyylin sisennykseen";
     };
     FixedText FT_MAIN_ENTRY_STYLE
     {
@@ -3352,6 +3467,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Ana giriþler için karakter þablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estilo de caracteres para entradas principales";
+        Text[ finnish ] = "Päämerkintöjen merkistötyyli";
     };
     ListBox LB_MAIN_ENTRY_STYLE
     {
@@ -3387,6 +3503,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Alfabetik ayýrma iþareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador alfa~bético";
+        Text[ finnish ] = "Aakkosrajoitin";
     };
     CheckBox CB_COMMASEPARATED
     {
@@ -3414,6 +3531,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Virgüllerle ayrýlmýþ anahtar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cla~ves separadas por comas";
+        Text[ finnish ] = "Pilkuilla erotettu avainsana";
     };
     GroupBox GB_FORMAT
     {
@@ -3441,6 +3559,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Formatlama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato";
+        Text[ finnish ] = "Muoto";
     };
     RadioButton RB_DOCPOS
     {
@@ -3467,6 +3586,7 @@ TabPage TP_TOX_ENTRY
         Text[ arabic ] = "ÇáãæÖÚ Ýí ÇáãÓÊäÏ ";
         Text[ turkish ] = "Belge konumu ";
         Text[ catalan ] = "P~osición del documento ";
+        Text[ finnish ] = "Asiakirjan ~sijainti";
     };
     RadioButton RB_SORTCONTENT
     {
@@ -3494,6 +3614,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Ýçerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~ontenido";
+        Text[ finnish ] = "~Sisältö";
     };
     GroupBox GB_SORTING
     {
@@ -3521,6 +3642,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Sýralama ölçütü:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordenar según";
+        Text[ finnish ] = "Lajitteluperuste";
     };
     FixedText FT_FIRSTKEY
     {
@@ -3569,6 +3691,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
+        QuickHelpText[ finnish ] = "Nouseva!";
     };
     ImageRadioButton RB_SORTDOWN1
     {
@@ -3603,6 +3726,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
+        QuickHelpText[ finnish ] = "Laskeva!";
     };
     ImageRadioButton RB_SORTUP2
     {
@@ -3638,6 +3762,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
+        QuickHelpText[ finnish ] = "Nouseva!";
     };
     ImageRadioButton RB_SORTDOWN2
     {
@@ -3672,6 +3797,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
+        QuickHelpText[ finnish ] = "Laskeva!";
     };
     ImageRadioButton RB_SORTUP3
     {
@@ -3707,6 +3833,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
+        QuickHelpText[ finnish ] = "Nouseva!";
     };
     ImageRadioButton RB_SORTDOWN3
     {
@@ -3741,6 +3868,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
+        QuickHelpText[ finnish ] = "Laskeva!";
     };
     FixedText FT_SECONDKEY
     {
@@ -3794,6 +3922,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Sýralama anahtarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Criterios de ordenación";
+        Text[ finnish ] = "Lajitteluavaimet";
     };
 
     String STR_NOSORTKEY
@@ -3819,6 +3948,7 @@ TabPage TP_TOX_ENTRY
         Text[ arabic ] = "<ÈÏæä>";
         Text[ turkish ] = "<Yok>";
         Text[ catalan ] = "<Ninguno>";
+        Text[ finnish ] = "<Ei mitään>";
     };
     String STR_NO_CHAR_STYLE
     {
@@ -3844,6 +3974,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "<Yok>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<Ninguno>";
+        Text[ finnish ] = "<Ei mitään>";
     };
     String STR_DELIM
     {
@@ -3869,6 +4000,7 @@ TabPage TP_TOX_ENTRY
         Text[ arabic ] = "Ý";
         Text[ turkish ] = "T";
         Text[ catalan ] = "S";
+        Text[ finnish ] = "S";
     };
 };
 TabPage TP_TOX_STYLES
@@ -3924,7 +4056,7 @@ TabPage TP_TOX_STYLES
         Text [ italian ] = "Mo~delli di paragrafo" ;
         Text [ portuguese_brazilian ] = "~Estilos de parágrafo" ;
         Text [ portuguese ] = "Estilo~s de parágrafo" ;
-        Text [ finnish ] = "~Kappaletyylit" ;
+        Text [ finnish ] = "Kappaletyylit" ;
         Text [ danish ] = "Afsnitstypografier" ;
         Text [ french ] = "~Styles de paragraphe" ;
         Text [ swedish ] = "Styckeformatmallar" ;
@@ -3980,6 +4112,7 @@ TabPage TP_TOX_STYLES
         Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "Standart";
         Text[ catalan ] = "~Predeterminado";
+        Text[ finnish ] = "~Oletusarvo";
     };
     PushButton BT_ASSIGN
     {
@@ -4038,6 +4171,7 @@ TabPage TP_TOX_STYLES
         Text[ turkish ] = "Düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar";
+        Text[ finnish ] = "~Muokkaa";
     };
     GroupBox GB_FORMAT
     {
@@ -4065,6 +4199,7 @@ TabPage TP_TOX_STYLES
         Text[ turkish ] = "Atama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Asignación";
+        Text[ finnish ] = "Määritys";
     };
 };
 ModalDialog DLG_ADD_IDX_STYLES
@@ -4132,6 +4267,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ turkish ] = "Biçimler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estilos";
+        Text[ finnish ] = "T~yylit";
     };
     OKButton PB_OK
     {
@@ -4176,6 +4312,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ turkish ] = "Uygulanmadý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No asignado";
+        Text[ finnish ] = "Ei käytössä";
     };
     Text[ english_us ] = "Assign Styles";
     Text[ portuguese ] = "Aplicar estilos";
@@ -4197,6 +4334,7 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ turkish ] = "Biçim uygula";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar estilos";
+    Text[ finnish ] = "Määritä tyylit";
 };
 /*-----------------------------------------------------------
 
@@ -4258,6 +4396,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
             Text[ turkish ] = "Arama terimi";
             Text[ catalan ] = "Término de búsqueda";
+            Text[ finnish ] = "Etsittävä termi";
         };
         String ST_ALTERNATIVE
         {
@@ -4282,6 +4421,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ÅÏÎÇá ÈÏíá";
             Text[ turkish ] = "Alternatif giriþ";
             Text[ catalan ] = "Entrada alternativa";
+            Text[ finnish ] = "Vaihtoehtoinen merkintä";
         };
         String ST_PRIMKEY
         {
@@ -4306,6 +4446,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ÇáãÝÊÇÍ ÇáÃæá";
             Text[ turkish ] = "1. Anahtar";
             Text[ catalan ] = "1era clave";
+            Text[ finnish ] = "Ensimmäinen avain";
         };
         String ST_SECKEY
         {
@@ -4330,6 +4471,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ÇáãÝÊÇÍ ÇáËÇäí";
             Text[ turkish ] = "2. Anahtar";
             Text[ catalan ] = "2da llave";
+            Text[ finnish ] = "Toinen avain";
         };
         String ST_COMMENT
         {
@@ -4354,6 +4496,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ÊÚáíÞ";
             Text[ turkish ] = "Açýklama";
             Text[ catalan ] = "Comentario";
+            Text[ finnish ] = "Huomautus";
         };
         String ST_CASESENSITIVE
         {
@@ -4378,6 +4521,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ãØÇÈÞÉ ÍÇáÉ ÇáÃÍÑÝ";
             Text[ turkish ] = "Büyük/küçük harf duyarlý";
             Text[ catalan ] = "Coincidencia exacta";
+            Text[ finnish ] = "Sama kirjainkoko";
         };
         String ST_WORDONLY
         {
@@ -4402,6 +4546,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ";
             Text[ turkish ] = "Tam sözcükler";
             Text[ catalan ] = "Palabras completas";
+            Text[ finnish ] = "Vain sana";
         };
         String ST_TRUE
         {
@@ -4426,6 +4571,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "äÚã";
             Text[ turkish ] = "Evet";
             Text[ catalan ] = "Sí";
+            Text[ finnish ] = "Kyllä";
         };
         String ST_FALSE
         {
@@ -4450,6 +4596,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ arabic ] = "áÇ";
             Text[ turkish ] = "Hayýr";
             Text[ catalan ] = "No";
+            Text[ finnish ] = "Ei";
         };
     };
     GroupBox        GB_ENTRIES
@@ -4477,6 +4624,7 @@ ModalDialog DLG_CREATE_AUTOMARK
         Text[ arabic ] = "ÅÏÎÇáÇÊ";
         Text[ turkish ] = "Giriþler";
         Text[ catalan ] = "Entradas";
+        Text[ finnish ] = "Merkinnät";
     };
     Text[ english_us ] = "Edit Concordance File";
     Text[ portuguese ] = "Editar ficheiro de concordância";
@@ -4497,5 +4645,6 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ arabic ] = "ÊÍÑíÑ ãáÝ ÝåÑÓ ÃÈÌÏí";
     Text[ turkish ] = "Uyumluluk dosyasýný düzenle";
     Text[ catalan ] = "Editar archivo de concordancia";
+    Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
 
