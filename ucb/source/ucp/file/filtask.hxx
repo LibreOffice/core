@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-24 13:50:50 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 #define _FILTASK_HXX_
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
+#ifndef INCLUDED_STL_HASH_MAP
 #include <hash_map>
+#define INCLUDED_STL_HASH_MAP
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -80,6 +81,10 @@
 #ifndef  _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _FILERROR_HXX_
+#include "filerror.hxx"
+#endif
+
 
 namespace fileaccess
 {
@@ -97,46 +102,57 @@ namespace fileaccess
     class TaskManager
     {
     protected:
-        // Typ definitions
-        struct equal_sal_Int32
-        {
-            bool operator() ( sal_Int32 a, sal_Int32 b ) const
-            {
-                return a == b;
-            }
-        };
-
 
         class TaskHandling
         {
         private:
-            sal_Bool m_bAbort;
+
+            bool m_bAbort;
+            sal_Int32 m_nErrorCode,m_nMinorCode;
             com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInteractionHandler;
             com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler >     m_xProgressHandler;
             com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
-        public:
-            TaskHandling()
-                : m_xInteractionHandler( 0 ),
-                  m_xProgressHandler( 0 ),
-                  m_xCommandEnvironment( 0 ),
-                  m_bAbort( false )
-            {
 
-            }
+        public:
 
             TaskHandling(
-                const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
+                const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv
+                = com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >( 0 ) )
                 : m_xInteractionHandler( 0 ),
                   m_xProgressHandler( 0 ),
                   m_xCommandEnvironment( xCommandEnv ),
-                  m_bAbort( false )
+                  m_bAbort( false ),
+                  m_nErrorCode( TASKHANDLER_NO_ERROR ),
+                  m_nMinorCode( TASKHANDLER_NO_ERROR )
             {
             }
 
-            void SAL_CALL setAbort()
+            void SAL_CALL abort()
             {
                 m_bAbort = true;
+            }
+
+            bool SAL_CALL isAborted()
+            {
+                return m_bAbort;
+            }
+
+            void SAL_CALL installError( sal_Int32 nErrorCode,
+                                        sal_Int32 nMinorCode = TASKHANDLER_NO_ERROR )
+            {
+                m_nErrorCode = nErrorCode;
+                m_nMinorCode = nMinorCode;
+            }
+
+            sal_Int32 SAL_CALL getInstalledError()
+            {
+                return m_nErrorCode;
+            }
+
+            sal_Int32 SAL_CALL getMinorErrorCode()
+            {
+                return m_nMinorCode;
             }
 
             com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler > SAL_CALL
@@ -157,14 +173,24 @@ namespace fileaccess
                 return m_xInteractionHandler;
             }
 
-        };
+            com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > SAL_CALL
+            getCommandEnvironment()
+            {
+                return m_xCommandEnvironment;
+            }
 
-        typedef std::hash_map< sal_Int32,TaskHandling,std::hash< sal_Int32 >, equal_sal_Int32 > TaskMap;
+        };  // end class TaskHandling
+
+
+        typedef std::hash_map< sal_Int32,TaskHandling,std::hash< sal_Int32 > > TaskMap;
+
 
     private:
+
         vos::OMutex                                                         m_aMutex;
         sal_Int32                                                           m_nCommandId;
         TaskMap                                                             m_aTaskMap;
+
 
     public:
 
@@ -176,15 +202,46 @@ namespace fileaccess
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
             throw( com::sun::star::ucb::CommandAbortedException );
 
-        void SAL_CALL endTask( sal_Int32 CommandId );
         sal_Int32 SAL_CALL getCommandId( void );
         void SAL_CALL abort( sal_Int32 CommandId );
+        bool SAL_CALL isAborted( sal_Int32 CommandId );
+
+
+        /**
+         *  The error code may be one of the error codes defined in
+         *  filerror.hxx.
+         *  The minor code refines the information given in ErrorCode.
+         */
+
+        void SAL_CALL installError( sal_Int32 CommandId,
+                                    sal_Int32 ErrorCode,
+                                    sal_Int32 minorCode = TASKHANDLER_NO_ERROR );
+
+
+//          void SAL_CALL installError( sal_Int32 CommandId,
+//                                      sal_Int32 ErrorCode,
+//                                      rtl::OUString message );
+
+//          void SAL_CALL installError( sal_Int32 CommandId,
+//                                      sal_Int32 ErrorCode,
+//                                      rtl::OUString message );
+
+        /**
+         *  Deinstalls the task and evaluates a possibly set error code.
+         *  "endTask" throws in case an error code is set the corresponding exception.
+         */
+
+        void SAL_CALL endTask( sal_Int32 CommandId );
 
         com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
         getInteractionHandler( sal_Int32 CommandId );
 
         com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler > SAL_CALL
         getProgressHandler( sal_Int32 CommandId );
+
+        com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > SAL_CALL
+        getCommandEnvironment( sal_Int32 CommandId );
+
     };
 
 } // end namespace TaskHandling

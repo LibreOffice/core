@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 11:21:16 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
+#endif
+#ifndef _FILGLOB_HXX_
+#include "filglob.hxx"
 #endif
 #ifndef _FILID_HXX_
 #include "filid.hxx"
@@ -210,17 +213,6 @@ extern "C" void * SAL_CALL component_getFactory(
 /****************************************************************************/
 
 
-oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedURL)
-{
-#ifdef TF_FILEURL
-    /* TODO: If file exist and is a link get link target URL */
-    rtl_uString_assign( pustrResolvedURL, ustrPath );
-#else
-    rtl_uString_assign( pustrResolvedURL, ustrPath );
-#endif
-
-    return osl_File_E_None;
-}
 
 static bool moreLength( const shell::MountPoint& m1, const shell::MountPoint& m2 )
 {

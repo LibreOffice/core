@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-07 07:20:31 $
+#   last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,15 +74,19 @@ UCPFILE_MAJOR=1
 .INCLUDE: sv.mk
 
 SLOFILES=\
-    $(SLO)$/prov.obj     \
-    $(SLO)$/bc.obj       \
-    $(SLO)$/shell.obj    \
-    $(SLO)$/filtask.obj  \
-    $(SLO)$/filrow.obj   \
-    $(SLO)$/filrset.obj  \
-    $(SLO)$/filid.obj    \
-    $(SLO)$/filnot.obj   \
-    $(SLO)$/filprp.obj
+    $(SLO)$/prov.obj      \
+    $(SLO)$/bc.obj        \
+    $(SLO)$/shell.obj     \
+    $(SLO)$/filtask.obj   \
+    $(SLO)$/filrow.obj    \
+    $(SLO)$/filrset.obj   \
+    $(SLO)$/filid.obj     \
+    $(SLO)$/filnot.obj    \
+    $(SLO)$/filprp.obj    \
+    $(SLO)$/filinpstr.obj \
+    $(SLO)$/filstr.obj    \
+    $(SLO)$/filcmd.obj    \
+    $(SLO)$/filglob.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-24 13:50:50 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _FILTASK_HXX_
 #include "filtask.hxx"
 #endif
+#ifndef _FILGLOB_HXX_
+#include "filglob.hxx"
+#endif
 
 /*********************************************************************************/
 /*                                                                               */
@@ -68,9 +71,11 @@
 /*                                                                               */
 /*********************************************************************************/
 
+
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
+
 
 
 TaskManager::TaskManager()
@@ -110,8 +115,13 @@ TaskManager::endTask( sal_Int32 CommandId )
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it == m_aTaskMap.end() )
         return;
-    else
-        m_aTaskMap.erase( it );
+
+    sal_Int32 ErrorCode = it->second.getInstalledError();
+    sal_Int32 MinorCode = it->second.getMinorErrorCode();
+    m_aTaskMap.erase( it );
+
+    if( ErrorCode != TASKHANDLER_NO_ERROR )
+        throw_handler( ErrorCode,MinorCode );
 }
 
 
@@ -124,7 +134,30 @@ TaskManager::abort( sal_Int32 CommandId )
     if( it == m_aTaskMap.end() )
         return;
     else
-        it->second.setAbort();
+        it->second.abort();
+}
+
+
+bool SAL_CALL TaskManager::isAborted( sal_Int32 CommandId )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it == m_aTaskMap.end() || it->second.isAborted() )
+        return false;
+    else
+        return true;
+}
+
+
+
+void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
+                                         sal_Int32 ErrorCode,
+                                         sal_Int32 MinorCode )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it != m_aTaskMap.end() )
+        it->second.installError( ErrorCode,MinorCode );
 }
 
 
@@ -160,4 +193,16 @@ TaskManager::getProgressHandler( sal_Int32 CommandId )
         return uno::Reference< XProgressHandler >( 0 );
     else
         return it->second.getProgressHandler();
+}
+
+
+uno::Reference< XCommandEnvironment > SAL_CALL
+TaskManager::getCommandEnvironment( sal_Int32 CommandId )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it == m_aTaskMap.end() )
+        return uno::Reference< XCommandEnvironment >( 0 );
+    else
+        return it->second.getCommandEnvironment();
 }

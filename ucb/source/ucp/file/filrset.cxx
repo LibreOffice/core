@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,20 +125,29 @@ XResultSet_impl::XResultSet_impl( shell* pMyShell,
       m_nRow( -1 ),
       m_bStatic( false ),
       m_bRowCountFinal( false ),
-      m_nOpenMode( OpenMode )
+      m_nOpenMode( OpenMode ),
+      m_nErrorCode( TASKHANDLER_NO_ERROR ),
+      m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
     m_bFaked = m_pMyShell->m_bFaked && m_aBaseDirectory.compareToAscii( "//./" ) == 0;
     if( m_bFaked )
     {
         m_nIsOpen = true;
     }
-    else if( m_aFolder.open() != osl::FileBase::E_None )
-    {
-        m_nIsOpen = false;
-        m_aFolder.close();
-    }
     else
-        m_nIsOpen = true;
+    {
+        osl::FileBase::RC err = m_aFolder.open();
+        if(  err != osl::FileBase::E_None )
+        {
+            m_nIsOpen = false;
+            m_aFolder.close();
+
+            m_nErrorCode = TASKHANDLING_OPEN_FOR_DIRECTORYLISTING;
+            m_nMinorErrorCode = err;
+        }
+        else
+            m_nIsOpen = true;
+    }
 
     m_pMyShell->registerNotifier( m_aBaseDirectory,this );
 }
@@ -157,9 +166,17 @@ XResultSet_impl::~XResultSet_impl()
 }
 
 
-sal_Bool SAL_CALL XResultSet_impl::CtorSuccess()
+
+sal_Int32 SAL_CALL XResultSet_impl::CtorSuccess()
 {
-    return m_nIsOpen;
+    return m_nErrorCode;
+}
+
+
+
+sal_Int32 SAL_CALL XResultSet_impl::getMinorError()
+{
+    return m_nMinorErrorCode;
 }
 
 

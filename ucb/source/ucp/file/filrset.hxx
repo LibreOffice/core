@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,8 @@ namespace fileaccess {
             return m_aBaseDirectory;
         }
 
-        sal_Bool SAL_CALL CtorSuccess();
+        sal_Int32 SAL_CALL CtorSuccess();
+        sal_Int32 SAL_CALL getMinorError();
 
         // XInterface
         virtual com::sun::star::uno::Any SAL_CALL
@@ -727,6 +728,9 @@ namespace fileaccess {
 
         com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >       m_xListener;
         sal_Bool                            m_bStatic, m_bFaked;
+
+        sal_Int32                                          m_nErrorCode;
+        sal_Int32                                          m_nMinorErrorCode;
 
         // Methods
         sal_Bool SAL_CALL OneMore( void )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-26 14:23:06 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-#ifndef __SGI_STL_STACK
+#ifndef INCLUDED_STL_STACK
 #include <stack>
+#define INCLUDED_STL_STACK
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
@@ -112,10 +113,24 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #endif
-
+#ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
-#include <osl/thread.h>
-
+#endif
+#ifndef _FILERROR_HXX_
+#include "filerror.hxx"
+#endif
+#ifndef _FILGLOB_HXX_
+#include "filglob.hxx"
+#endif
+#ifndef _FILCMD_HXX_
+#include "filcmd.hxx"
+#endif
+#ifndef _FILINPSTR_HXX_
+#include "filinpstr.hxx"
+#endif
+#ifndef _FILSTR_HXX_
+#include "filstr.hxx"
+#endif
 #ifndef _FILRSET_HXX_
 #include "filrset.hxx"
 #endif
@@ -138,9 +153,11 @@
 #include "bc.hxx"
 #endif
 
+
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
+
 
 shell::UnqPathData::UnqPathData()
     : properties( 0 ),
@@ -418,6 +435,11 @@ shell::~shell()
 /*                                                                               */
 /*********************************************************************************/
 
+//
+//  This two methods register and deregister a change listener for the content belonging
+//  to URL aUnqPath
+//
+
 void SAL_CALL
 shell::registerNotifier( const rtl::OUString& aUnqPath, Notifier* pNotifier )
 {
@@ -458,66 +480,17 @@ shell::deregisterNotifier( const rtl::OUString& aUnqPath,Notifier* pNotifier )
 }
 
 
-/*********************************************************************************/
-/*                                                                               */
-/*                     load-Implementation                                       */
-/*                                                                               */
-/*********************************************************************************/
-
-void SAL_CALL
-shell::load( const ContentMap::iterator& it, sal_Bool create )
-{
-    if( ! it->second.properties )
-        it->second.properties = new PropertySet;
-
-    if( ( ! it->second.xS.is() ||
-          ! it->second.xC.is() ||
-          ! it->second.xA.is() )
-        && m_xFileRegistry.is() )
-    {
-
-        uno::Reference< ucb::XPersistentPropertySet > xS = m_xFileRegistry->openPropertySet( it->first,create );
-        if( xS.is() )
-        {
-            uno::Reference< beans::XPropertyContainer > xC( xS,uno::UNO_QUERY );
-            uno::Reference< beans::XPropertyAccess >    xA( xS,uno::UNO_QUERY );
-
-            it->second.xS = xS;
-            it->second.xC = xC;
-            it->second.xA = xA;
-
-            // Now put in all values in the storage in the local hash;
-
-            PropertySet& properties = *(it->second.properties);
-            uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
-
-            for( sal_Int32 i = 0; i < seq.getLength(); ++i )
-            {
-                MyProperty readProp( false,
-                                     seq[i].Name,
-                                     seq[i].Handle,
-                                     seq[i].Type,
-                                     xS->getPropertyValue( seq[i].Name ),
-                                     beans::PropertyState_DIRECT_VALUE,
-                                     seq[i].Attributes );
-                if( properties.find( readProp ) == properties.end() )
-                    properties.insert( readProp );
-            }
-        }
-        else if( create )
-        {
-            // Catastrophic error
-        }
-    }
-}
-
 
 /*********************************************************************************/
 /*                                                                               */
 /*                     de/associate-Implementation                               */
 /*                                                                               */
 /*********************************************************************************/
-
+//
+//  Used to associate and deassociate a new property with
+//  the content belonging to URL UnqPath.
+//  The default value and the the attributes are input
+//
 
 void SAL_CALL
 shell::associate( const rtl::OUString& aUnqPath,
@@ -616,12 +589,16 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 /*                     page-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
+//
+//  Given an xOutputStream, this method writes the content of the file belonging to
+//  URL aUnqPath into the XOutputStream
+//
 
 
 void SAL_CALL shell::page( sal_Int32 CommandId,
                            const rtl::OUString& aUnqPath,
                            const uno::Reference< io::XOutputStream >& xOutputStream )
-    throw( CommandAbortedException )
+    throw()
 {
     uno::Reference< XContentProvider > xProvider( m_pProvider );
     osl::File aFile( aUnqPath );
@@ -630,32 +607,71 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
     if( err != osl::FileBase::E_None )
     {
         aFile.close();
+        installError( CommandId,
+                      TASKHANDLING_OPEN_FILE_FOR_PAGING,
+                      err );
         return;
     }
 
     const sal_uInt64 bfz = 4*1024;
     sal_Int8 BFF[bfz];
     sal_uInt64 nrc;  // Retrieved number of Bytes;
-    sal_Bool no_err;
 
     do
     {
-        no_err = aFile.read( (void*) BFF,bfz,nrc ) == osl::FileBase::E_None;
-        if( no_err )
+        err = aFile.read( (void*) BFF,bfz,nrc );
+        if(  err == osl::FileBase::E_None )
         {
             uno::Sequence< sal_Int8 > seq( BFF, (sal_uInt32)nrc );
-            xOutputStream->writeBytes( seq );
+            try
+            {
+                xOutputStream->writeBytes( seq );
+            }
+            catch( io::NotConnectedException )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NOTCONNECTED_FOR_PAGING );
+                break;
+            }
+            catch( io::BufferSizeExceededException )
+            {
+                installError( CommandId,
+                              TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_PAGING );
+                break;
+            }
+            catch( io::IOException )
+            {
+                installError( CommandId,
+                              TASKHANDLING_IOEXCEPTION_FOR_PAGING );
+                break;
+            }
         }
         else
+        {
+            installError( CommandId,
+                          TASKHANDLING_READING_FILE_FOR_PAGING,
+                          err );
             break;
+        }
     } while( nrc == bfz );
+
 
     aFile.close();
 
-    if( no_err )
+
+    try
+    {
         xOutputStream->closeOutput();
-    else
-        throw CommandAbortedException();
+    }
+    catch( io::NotConnectedException )
+    {
+    }
+    catch( io::BufferSizeExceededException )
+    {
+    }
+    catch( io::IOException )
+    {
+    }
 }
 
 
@@ -664,287 +680,34 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 /*                     open-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-
-
-
-class XInputStream_impl
-    : public cppu::OWeakObject,
-      public io::XInputStream,
-      public io::XSeekable
-{
-public:
-    XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath );
-    virtual ~XInputStream_impl();
-
-    sal_Bool SAL_CALL CtorSuccess();
-
-    virtual uno::Any SAL_CALL
-    queryInterface(
-        const uno::Type& rType )
-        throw( uno::RuntimeException)
-    {
-        uno::Any aRet = cppu::queryInterface( rType,
-                                              SAL_STATIC_CAST( io::XInputStream*,this ),
-                                              SAL_STATIC_CAST( io::XSeekable*,this ) );
-        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
-    virtual void SAL_CALL
-    acquire(
-        void )
-        throw( uno::RuntimeException)
-    {
-        OWeakObject::acquire();
-    }
-
-    virtual void SAL_CALL
-    release(
-        void )
-        throw( uno::RuntimeException )
-    {
-        OWeakObject::release();
-    }
-
-    virtual sal_Int32 SAL_CALL
-    readBytes(
-        uno::Sequence< sal_Int8 >& aData,
-        sal_Int32 nBytesToRead )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException);
-
-    virtual sal_Int32 SAL_CALL
-    readSomeBytes(
-        uno::Sequence< sal_Int8 >& aData,
-        sal_Int32 nMaxBytesToRead )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException);
-
-    virtual void SAL_CALL
-    skipBytes(
-        sal_Int32 nBytesToSkip )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException );
-
-    virtual sal_Int32 SAL_CALL
-    available(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException );
-
-    virtual void SAL_CALL
-    closeInput(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException );
-
-    virtual void SAL_CALL
-    seek(
-        sal_Int64 location )
-        throw( lang::IllegalArgumentException,
-               io::IOException,
-               uno::RuntimeException );
-
-    virtual sal_Int64 SAL_CALL
-    getPosition(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException );
-
-    virtual sal_Int64 SAL_CALL
-    getLength(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException );
-
-private:
-    shell*       m_pMyShell;
-    uno::Reference< XContentProvider > m_xProvider;
-    sal_Bool     m_nIsOpen;
-    osl::File    m_aFile;
-};
-
+//
+//  Given a file URL aUnqPath, this methods returns a XInputStream which reads from the open file.
+//
 
 
 uno::Reference< io::XInputStream > SAL_CALL
 shell::open( sal_Int32 CommandId,
              const rtl::OUString& aUnqPath )
+    throw()
 {
-  XInputStream_impl* xInputStream = new XInputStream_impl( this,aUnqPath );
+    XInputStream_impl* xInputStream = new XInputStream_impl( this,aUnqPath ); // from filinpstr.hxx
 
-  if( ! xInputStream->CtorSuccess() ) {
-    delete xInputStream;
-    xInputStream = 0;
-  }
-  return uno::Reference< io::XInputStream >( xInputStream );
-}
+    sal_Int32 ErrorCode = xInputStream->CtorSuccess();
 
-
-XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
-    : m_pMyShell( pMyShell ),
-      m_aFile( aUncPath ),
-      m_xProvider( pMyShell->m_pProvider )
-{
-    if( m_aFile.open( OpenFlag_Read ) != osl::FileBase::E_None )
+    if( ErrorCode != TASKHANDLER_NO_ERROR )
     {
-        m_nIsOpen = false;
-        m_aFile.close();
+        installError( CommandId,
+                      ErrorCode,
+                      xInputStream->getMinorError() );
+
+        delete xInputStream;
+        xInputStream = 0;
     }
-    else
-        m_nIsOpen = true;
+
+    return uno::Reference< io::XInputStream >( xInputStream );
 }
 
 
-XInputStream_impl::~XInputStream_impl()
-{
-  closeInput();
-}
-
-sal_Bool SAL_CALL XInputStream_impl::CtorSuccess()
-{
-  return m_nIsOpen;
-};
-
-
-sal_Int32 SAL_CALL
-XInputStream_impl::readBytes(
-                 uno::Sequence< sal_Int8 >& aData,
-                 sal_Int32 nBytesToRead )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    if( ! m_nIsOpen ) throw io::IOException();
-
-    aData.realloc(nBytesToRead);
-        //TODO! translate memory exhaustion (if it were detectable...) into
-        // io::BufferSizeExceededException
-
-    sal_uInt64 nrc;
-    m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc );
-
-    // Shrink aData in case we read less than nBytesToRead (XInputStream
-    // documentation does not tell whether this is required, and I do not know
-    // if any code relies on this, so be conservative---SB):
-    if (nrc != nBytesToRead)
-        aData.realloc(sal_Int32(nrc));
-    return ( sal_Int32 ) nrc;
-}
-
-sal_Int32 SAL_CALL
-XInputStream_impl::readSomeBytes(
-    uno::Sequence< sal_Int8 >& aData,
-    sal_Int32 nMaxBytesToRead )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    return readBytes( aData,nMaxBytesToRead );
-}
-
-
-void SAL_CALL
-XInputStream_impl::skipBytes(
-    sal_Int32 nBytesToSkip )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    m_aFile.setPos( osl_Pos_Current, sal_uInt64( nBytesToSkip ) );
-}
-
-
-sal_Int32 SAL_CALL
-XInputStream_impl::available(
-    void )
-    throw( io::NotConnectedException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    return 0;
-}
-
-
-void SAL_CALL
-XInputStream_impl::closeInput(
-    void )
-    throw( io::NotConnectedException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    if( m_nIsOpen )
-    {
-        osl::FileBase::RC err = m_aFile.close();
-        if( err != osl::FileBase::E_None )
-            throw io::IOException();
-        m_nIsOpen = false;
-    }
-}
-
-
-void SAL_CALL
-XInputStream_impl::seek(
-    sal_Int64 location )
-    throw( lang::IllegalArgumentException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    if( location < 0 )
-        throw lang::IllegalArgumentException();
-    if( osl::FileBase::E_None != m_aFile.setPos( Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException();
-}
-
-
-sal_Int64 SAL_CALL
-XInputStream_impl::getPosition(
-    void )
-    throw( io::IOException,
-           uno::RuntimeException )
-{
-    sal_uInt64 uPos;
-    if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException();
-    return sal_Int64( uPos );
-}
-
-sal_Int64 SAL_CALL
-XInputStream_impl::getLength(
-    void )
-    throw( io::IOException,
-           uno::RuntimeException )
-{
-    osl::FileBase::RC   err;
-    sal_uInt64          uCurrentPos, uEndPos;
-
-    err = m_aFile.getPos( uCurrentPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.setPos( Pos_End, 0 );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.getPos( uEndPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.setPos( Pos_Absolut, uCurrentPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-    else
-        return sal_Int64( uEndPos );
-}
 
 
 /*********************************************************************************/
@@ -952,499 +715,27 @@ XInputStream_impl::getLength(
 /*                     open for read/write access-Implementation                 */
 /*                                                                               */
 /*********************************************************************************/
-
-
-
-class XStream_impl
-    : public cppu::OWeakObject,
-      public io::XStream,
-      public io::XSeekable
-{
-public:
-    XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath );
-    sal_Bool SAL_CALL CtorSuccess();
-    virtual ~XStream_impl();
-
-
-    virtual uno::Any SAL_CALL
-    queryInterface(
-        const uno::Type& rType )
-        throw( uno::RuntimeException)
-    {
-        uno::Any aRet = cppu::queryInterface( rType,
-                                              SAL_STATIC_CAST( io::XStream*,this ),
-                                              SAL_STATIC_CAST( io::XSeekable*,this ) );
-        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
-    virtual void SAL_CALL
-    acquire(
-        void )
-        throw( uno::RuntimeException)
-    {
-        OWeakObject::acquire();
-    }
-
-    virtual void SAL_CALL
-    release(
-        void )
-        throw( uno::RuntimeException )
-    {
-        OWeakObject::release();
-    }
-
-    // XStream
-
-    class XInputStreamForStream
-        : public cppu::OWeakObject,
-          public io::XInputStream,
-          public io::XSeekable
-    {
-    public:
-        XInputStreamForStream( XStream_impl* xPtr )
-            : m_xPtr( xPtr ),
-              m_bOpen( true )
-        {
-            m_xPtr->acquire();
-        }
-        ~XInputStreamForStream()
-        {
-            m_xPtr->release();
-        }
-
-        uno::Any SAL_CALL
-        queryInterface(
-            const uno::Type& rType )
-            throw( uno::RuntimeException)
-        {
-            uno::Any aRet = cppu::queryInterface( rType,
-                                                  SAL_STATIC_CAST( io::XInputStream*,this ),
-                                                  SAL_STATIC_CAST( io::XSeekable*,this ) );
-            return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-        }
-
-
-        void SAL_CALL
-        acquire(
-            void )
-            throw( uno::RuntimeException)
-        {
-            OWeakObject::acquire();
-        }
-
-        void SAL_CALL
-        release(
-            void )
-            throw( uno::RuntimeException )
-        {
-            OWeakObject::release();
-        }
-
-        sal_Int32 SAL_CALL
-        readBytes(
-            uno::Sequence< sal_Int8 >& aData,
-            sal_Int32 nBytesToRead )
-            throw( io::NotConnectedException,
-                   io::BufferSizeExceededException,
-                   io::IOException,
-                   uno::RuntimeException)
-        {
-            if( m_bOpen )
-                return m_xPtr->readBytes( aData,nBytesToRead );
-            else
-                throw io::IOException();
-        }
-
-        sal_Int32 SAL_CALL
-        readSomeBytes(
-            uno::Sequence< sal_Int8 >& aData,
-            sal_Int32 nMaxBytesToRead )
-            throw( io::NotConnectedException,
-                   io::BufferSizeExceededException,
-                   io::IOException,
-                   uno::RuntimeException)
-        {
-            if( m_bOpen )
-                return m_xPtr->readSomeBytes( aData,nMaxBytesToRead );
-            else
-                throw io::IOException();
-        }
-
-        void SAL_CALL
-        skipBytes(
-            sal_Int32 nBytesToSkip )
-            throw( io::NotConnectedException,
-                   io::BufferSizeExceededException,
-                   io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                m_xPtr->skipBytes( nBytesToSkip );
-            else
-                throw io::IOException();
-        }
-
-        sal_Int32 SAL_CALL
-        available(
-            void )
-            throw( io::NotConnectedException,
-                   io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                return m_xPtr->available();
-            else
-                return 0;
-        }
-
-        void SAL_CALL
-        closeInput(
-            void )
-            throw( io::NotConnectedException,
-                   io::IOException,
-                   uno::RuntimeException )
-        {
-            m_xPtr->closeInput();
-            m_bOpen = false;
-        }
-
-        void SAL_CALL
-        seek(
-            sal_Int64 location )
-            throw( lang::IllegalArgumentException,
-                   io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                m_xPtr->seek( location );
-            else
-                throw io::IOException();
-        }
-
-        sal_Int64 SAL_CALL
-        getPosition(
-            void )
-            throw( io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                return m_xPtr->getPosition();
-            else
-                throw io::IOException();
-        }
-
-        sal_Int64 SAL_CALL
-        getLength(
-            void )
-            throw( io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                return m_xPtr->getLength();
-            else
-                throw io::IOException();
-        }
-
-
-    private:
-        sal_Bool      m_bOpen;
-        XStream_impl* m_xPtr;
-    };
-
-
-    virtual uno::Reference< io::XInputStream > SAL_CALL
-    getInputStream(  )
-        throw( uno::RuntimeException)
-    {
-        if( ! m_xInputStream.is() )
-        {
-            XInputStreamForStream* p = new XInputStreamForStream( this );
-            m_xInputStream = uno::Reference< io::XInputStream >( p );
-        }
-
-        return m_xInputStream;
-    }
-
-
-
-
-    class XOutputStreamForStream
-        : public cppu::OWeakObject,
-          public io::XOutputStream,
-          public io::XSeekable,
-          public io::XTruncate
-    {
-    public:
-        XOutputStreamForStream( XStream_impl* xPtr )
-            : m_xPtr( xPtr ),
-              m_bOpen( true )
-        {
-            m_xPtr->acquire();
-        }
-        ~XOutputStreamForStream()
-        {
-            m_xPtr->release();
-        }
-
-        // XInterface
-
-        uno::Any SAL_CALL
-        queryInterface(
-            const uno::Type& rType )
-            throw( uno::RuntimeException)
-        {
-            uno::Any aRet = cppu::queryInterface( rType,
-                                                  SAL_STATIC_CAST( io::XOutputStream*,this ),
-                                                  SAL_STATIC_CAST( io::XSeekable*,this ),
-                                                  SAL_STATIC_CAST( io::XTruncate*,this )
-                                                  );
-            return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-        }
-
-
-        void SAL_CALL
-        acquire(
-            void )
-            throw( uno::RuntimeException)
-        {
-            OWeakObject::acquire();
-        }
-
-        void SAL_CALL
-        release(
-            void )
-            throw( uno::RuntimeException )
-        {
-            OWeakObject::release();
-        }
-
-        // XTruncate
-
-        void SAL_CALL truncate( void )
-            throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException )
-        {
-            if ( m_bOpen )
-                m_xPtr->truncate();
-            else
-                throw io::IOException();
-        }
-
-        // XSeekable
-
-        void SAL_CALL
-        seek(
-            sal_Int64 location )
-            throw( lang::IllegalArgumentException,
-                   io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                m_xPtr->seek( location );
-            else
-                throw io::IOException();
-        }
-
-        sal_Int64 SAL_CALL
-        getPosition(
-            void )
-            throw( io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                return m_xPtr->getPosition();
-            else
-                throw io::IOException();
-        }
-
-        sal_Int64 SAL_CALL
-        getLength(
-            void )
-            throw( io::IOException,
-                   uno::RuntimeException )
-        {
-            if( m_bOpen )
-                return m_xPtr->getLength();
-            else
-                throw io::IOException();
-        }
-
-
-        // XOutputStream
-
-        void SAL_CALL
-        writeBytes( const uno::Sequence< sal_Int8 >& aData )
-            throw( io::NotConnectedException,
-                   io::BufferSizeExceededException,
-                   io::IOException,
-                   uno::RuntimeException)
-        {
-            if( m_bOpen )
-                m_xPtr->writeBytes( aData );
-            else
-                throw io::IOException();
-        }
-
-        void SAL_CALL
-        flush(  )
-            throw( io::NotConnectedException,
-                   io::BufferSizeExceededException,
-                   io::IOException,
-                   uno::RuntimeException)
-        {
-            if( m_bOpen )
-                m_xPtr->flush();
-            else
-                throw io::IOException();
-        }
-
-        void SAL_CALL
-        closeOutput(  )
-            throw( io::NotConnectedException,
-                   io::BufferSizeExceededException,
-                   io::IOException,
-                   uno::RuntimeException)
-        {
-            m_xPtr->closeOutput();
-            m_bOpen = false;
-        }
-
-    private:
-        sal_Bool      m_bOpen;
-        XStream_impl* m_xPtr;
-    };
-
-
-
-
-    virtual uno::Reference< io::XOutputStream > SAL_CALL
-    getOutputStream(  )
-        throw( uno::RuntimeException )
-    {
-        if( ! m_xOutputStream.is() )
-        {
-            XOutputStreamForStream* p = new XOutputStreamForStream( this );
-            m_xOutputStream = uno::Reference< io::XOutputStream >( p );
-        }
-
-        return m_xOutputStream;
-    }
-
-
-    // Implementation methods
-
-    sal_Int32 SAL_CALL
-    readBytes(
-        uno::Sequence< sal_Int8 >& aData,
-        sal_Int32 nBytesToRead )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException);
-
-    sal_Int32 SAL_CALL
-    readSomeBytes(
-        uno::Sequence< sal_Int8 >& aData,
-        sal_Int32 nMaxBytesToRead )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException);
-
-    void SAL_CALL
-    writeBytes( const uno::Sequence< sal_Int8 >& aData )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException);
-
-    void SAL_CALL
-    skipBytes(
-        sal_Int32 nBytesToSkip )
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException );
-
-    sal_Int32 SAL_CALL
-    available(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException );
-
-    void SAL_CALL
-    flush()
-        throw( io::NotConnectedException,
-               io::BufferSizeExceededException,
-               io::IOException,
-               uno::RuntimeException);
-
-    void SAL_CALL
-    closeStream(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException );
-
-    void SAL_CALL
-    closeInput(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException );
-
-    void SAL_CALL
-    closeOutput(
-        void )
-        throw( io::NotConnectedException,
-               io::IOException,
-               uno::RuntimeException );
-
-    void SAL_CALL XStream_impl::truncate(void)
-        throw( io::IOException, uno::RuntimeException );
-
-    void SAL_CALL
-    seek(
-        sal_Int64 location )
-        throw( lang::IllegalArgumentException,
-               io::IOException,
-               uno::RuntimeException );
-
-    sal_Int64 SAL_CALL
-    getPosition(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException );
-
-    sal_Int64 SAL_CALL
-    getLength(
-        void )
-        throw( io::IOException,
-               uno::RuntimeException );
-
-private:
-    sal_Bool                           m_bInputStreamClosed;
-    uno::Reference< io::XInputStream > m_xInputStream;
-
-    sal_Bool                            m_bOutputStreamClosed;
-    uno::Reference< io::XOutputStream > m_xOutputStream;
-
-    shell*       m_pMyShell;
-    uno::Reference< XContentProvider > m_xProvider;
-    sal_Bool     m_nIsOpen;
-    osl::File    m_aFile;
-};
-
+//
+//  Given a file URL aUnqPath, this methods returns a XStream which can be used
+//  to read and write from/to the file.
+//
 
 
 uno::Reference< io::XStream > SAL_CALL
 shell::open_rw( sal_Int32 CommandId,
                 const rtl::OUString& aUnqPath )
+    throw()
 {
-    XStream_impl* xStream = new XStream_impl( this,aUnqPath );
+    XStream_impl* xStream = new XStream_impl( this,aUnqPath );  // from filstr.hxx
 
-    if( ! xStream->CtorSuccess() )
+    sal_Int32 ErrorCode = xStream->CtorSuccess();
+
+    if( ErrorCode != TASKHANDLER_NO_ERROR )
     {
+        installError( CommandId,
+                      ErrorCode,
+                      xStream->getMinorError() );
+
         delete xStream;
         xStream = 0;
     }
@@ -1453,248 +744,43 @@ shell::open_rw( sal_Int32 CommandId,
 
 
 
-XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
-    : m_pMyShell( pMyShell ),
-      m_aFile( aUncPath ),
-      m_xProvider( m_pMyShell->m_pProvider ),
-      m_xInputStream( 0 ),
-      m_xOutputStream( 0 ),
-      m_bInputStreamClosed( false ),
-      m_bOutputStreamClosed( false )
+/*********************************************************************************/
+/*                                                                               */
+/*                       ls-Implementation                                       */
+/*                                                                               */
+/*********************************************************************************/
+//
+//  This method returns the result set containing the the children of the directory belonging
+//  to file URL aUnqPath
+//
+
+
+uno::Reference< XDynamicResultSet > SAL_CALL
+shell::ls( sal_Int32 CommandId,
+           const rtl::OUString& aUnqPath,
+           const sal_Int32 OpenMode,
+           const uno::Sequence< beans::Property >& seq,
+           const uno::Sequence< NumberedSortingInfo >& seqSort )
+    throw()
 {
-    if( m_aFile.open( OpenFlag_Read | OpenFlag_Write ) != osl::FileBase::E_None )
+    XResultSet_impl* p = new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort );
+
+    sal_Int32 ErrorCode = p->CtorSuccess();
+
+    if( ErrorCode != TASKHANDLER_NO_ERROR )
     {
-        m_nIsOpen = false;
-        m_aFile.close();
-    }
-    else
-        m_nIsOpen = true;
-}
+        installError( CommandId,
+                      ErrorCode,
+                      p->getMinorError() );
 
-
-XStream_impl::~XStream_impl()
-{
-    closeStream();
-}
-
-sal_Bool SAL_CALL XStream_impl::CtorSuccess()
-{
-    return m_nIsOpen;
-}
-
-
-sal_Int32 SAL_CALL
-XStream_impl::readBytes(
-    uno::Sequence< sal_Int8 >& aData,
-    sal_Int32 nBytesToRead )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    if( ! m_nIsOpen )
-        throw io::IOException();
-
-    sal_Int8 * buffer;
-    try
-    {
-        buffer = new sal_Int8[nBytesToRead];
-    }
-    catch( std::bad_alloc )
-    {
-        if( m_nIsOpen ) m_aFile.close();
-        throw io::BufferSizeExceededException();
+        delete p;
+        p = 0;
     }
 
-    sal_uInt64 nrc;
-    m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc );
-
-    aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
-    delete[] buffer;
-    return ( sal_Int32 ) nrc;
+    return uno::Reference< XDynamicResultSet > ( p );
 }
 
 
-sal_Int32 SAL_CALL
-XStream_impl::readSomeBytes(
-    uno::Sequence< sal_Int8 >& aData,
-    sal_Int32 nMaxBytesToRead )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    return readBytes( aData,nMaxBytesToRead );
-}
-
-
-void SAL_CALL
-XStream_impl::skipBytes(
-    sal_Int32 nBytesToSkip )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    m_aFile.setPos( osl_Pos_Current, sal_uInt64( nBytesToSkip ) );
-}
-
-
-sal_Int32 SAL_CALL
-XStream_impl::available(
-    void )
-    throw( io::NotConnectedException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    return 0;
-}
-
-
-void SAL_CALL
-XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException)
-{
-    sal_Int32 length = aData.getLength();
-    sal_uInt64 nWrittenBytes;
-    if( length )
-    {
-        const sal_Int8* p = aData.getConstArray();
-        m_aFile.write( ((void*)(p)),
-                       sal_uInt64( length ),
-                       nWrittenBytes );
-        if( nWrittenBytes != length )
-        {
-            // DBG_ASSERT( "Write Operation not successful" );
-        }
-    }
-}
-
-
-void SAL_CALL
-XStream_impl::closeStream(
-    void )
-    throw( io::NotConnectedException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    if( m_nIsOpen )
-    {
-        osl::FileBase::RC err = m_aFile.close();
-        if( err != osl::FileBase::E_None ) throw io::IOException();
-        m_nIsOpen = false;
-    }
-}
-
-void SAL_CALL
-XStream_impl::closeInput(
-    void )
-    throw( io::NotConnectedException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    m_bInputStreamClosed = true;
-    // if( m_bInputStreamClosed && m_bOutputStreamClosed )
-    closeStream();
-}
-
-
-void SAL_CALL
-XStream_impl::closeOutput(
-    void )
-    throw( io::NotConnectedException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    m_bOutputStreamClosed = true;
-//  if( m_bInputStreamClosed && m_bOutputStreamClosed )
-    closeStream();
-}
-
-
-//===========================================================================
-// XStream_impl::truncate
-//===========================================================================
-
-void SAL_CALL XStream_impl::truncate(void)
-    throw( io::IOException, uno::RuntimeException )
-{
-    if( osl::FileBase::E_None != m_aFile.setSize(0) )
-        throw io::IOException();
-}
-
-//===========================================================================
-// XStream_impl other interface methods
-//===========================================================================
-
-void SAL_CALL
-XStream_impl::seek(
-    sal_Int64 location )
-    throw( lang::IllegalArgumentException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    if( location < 0 )
-        throw lang::IllegalArgumentException();
-    if( osl::FileBase::E_None != m_aFile.setPos( Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException();
-}
-
-
-sal_Int64 SAL_CALL
-XStream_impl::getPosition(
-    void )
-    throw( io::IOException,
-           uno::RuntimeException )
-{
-    sal_uInt64 uPos;
-    if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException();
-    return sal_Int64( uPos );
-}
-
-sal_Int64 SAL_CALL
-XStream_impl::getLength(
-    void )
-    throw( io::IOException,
-           uno::RuntimeException )
-{
-    osl::FileBase::RC   err;
-    sal_uInt64          uCurrentPos, uEndPos;
-
-    err = m_aFile.getPos( uCurrentPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.setPos( Pos_End, 0 );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.getPos( uEndPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-
-    err = m_aFile.setPos( Pos_Absolut, uCurrentPos );
-    if( err != osl::FileBase::E_None )
-        throw io::IOException();
-    else
-        return sal_Int64( uEndPos );
-
-}
-
-
-void SAL_CALL
-XStream_impl::flush()
-    throw( io::NotConnectedException,
-           io::BufferSizeExceededException,
-           io::IOException,
-           uno::RuntimeException )
-{
-    return;
-}
 
 
 /*********************************************************************************/
@@ -1702,178 +788,19 @@ XStream_impl::flush()
 /*                          info_c implementation                                */
 /*                                                                               */
 /*********************************************************************************/
-
-
-class fileaccess::XCommandInfo_impl
-    : public cppu::OWeakObject,
-      public XCommandInfo
-{
-public:
-
-    XCommandInfo_impl( shell* pMyShell, const rtl::OUString& aUnqPath );
-    virtual ~XCommandInfo_impl();
-
-    // XInterface
-    virtual uno::Any SAL_CALL
-    queryInterface(
-        const uno::Type& aType )
-        throw( uno::RuntimeException);
-
-    virtual void SAL_CALL
-    acquire(
-        void )
-        throw( uno::RuntimeException);
-
-    virtual void SAL_CALL
-    release(
-        void )
-        throw( uno::RuntimeException);
-
-    // XCommandInfo
-
-    virtual uno::Sequence< CommandInfo > SAL_CALL
-    getCommands(
-        void )
-        throw( uno::RuntimeException);
-
-    virtual CommandInfo SAL_CALL
-    getCommandInfoByName(
-        const rtl::OUString& Name )
-        throw( UnsupportedCommandException,
-               uno::RuntimeException);
-
-    virtual CommandInfo SAL_CALL
-    getCommandInfoByHandle(
-        sal_Int32 Handle )
-        throw( UnsupportedCommandException,
-               uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL
-    hasCommandByName(
-        const rtl::OUString& Name )
-        throw( uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL
-    hasCommandByHandle(
-        sal_Int32 Handle )
-        throw( uno::RuntimeException );
-private:
-
-    shell* m_pMyShell;
-    uno::Reference< XContentProvider > m_xProvider;
-};
-
+// Info for commands
 
 uno::Reference< XCommandInfo > SAL_CALL
-shell::info_c( sal_Int32 CommandId, const rtl::OUString& aUnqPath )
+shell::info_c(
+    sal_Int32 CommandId,
+    const rtl::OUString& aUnqPath )
+    throw()
 {
     XCommandInfo_impl* p = new XCommandInfo_impl( this,aUnqPath );
     return uno::Reference< XCommandInfo >( p );
 }
 
 
-XCommandInfo_impl::XCommandInfo_impl( shell* pMyShell,const rtl::OUString& aUnqPath )
-    : m_pMyShell( pMyShell ),
-      m_xProvider( pMyShell->m_pProvider )
-{
-}
-
-XCommandInfo_impl::~XCommandInfo_impl()
-{
-}
-
-
-
-void SAL_CALL
-XCommandInfo_impl::acquire(
-                 void )
-  throw( uno::RuntimeException )
-{
-  OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XCommandInfo_impl::release(
-    void )
-  throw( uno::RuntimeException )
-{
-    OWeakObject::release();
-}
-
-
-uno::Any SAL_CALL
-XCommandInfo_impl::queryInterface(
-                    const uno::Type& rType )
-  throw( uno::RuntimeException )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( XCommandInfo*,this) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-uno::Sequence< CommandInfo > SAL_CALL
-XCommandInfo_impl::getCommands(
-    void )
-    throw( uno::RuntimeException )
-{
-    return m_pMyShell->m_sCommandInfo;
-}
-
-
-CommandInfo SAL_CALL
-XCommandInfo_impl::getCommandInfoByName(
-    const rtl::OUString& aName )
-    throw( UnsupportedCommandException,
-           uno::RuntimeException)
-{
-    for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); i++ )
-        if( m_pMyShell->m_sCommandInfo[i].Name == aName )
-            return m_pMyShell->m_sCommandInfo[i];
-
-    throw UnsupportedCommandException();
-}
-
-
-CommandInfo SAL_CALL
-XCommandInfo_impl::getCommandInfoByHandle(
-    sal_Int32 Handle )
-    throw( UnsupportedCommandException,
-           uno::RuntimeException )
-{
-    for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )
-        if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )
-            return m_pMyShell->m_sCommandInfo[i];
-
-    throw UnsupportedCommandException();
-}
-
-
-sal_Bool SAL_CALL
-XCommandInfo_impl::hasCommandByName(
-    const rtl::OUString& aName )
-    throw( uno::RuntimeException )
-{
-    for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )
-        if( m_pMyShell->m_sCommandInfo[i].Name == aName )
-            return true;
-
-    return false;
-}
-
-
-sal_Bool SAL_CALL
-XCommandInfo_impl::hasCommandByHandle(
-    sal_Int32 Handle )
-    throw( uno::RuntimeException )
-{
-    for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )
-        if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )
-            return true;
-
-    return false;
-}
 
 
 /*********************************************************************************/
@@ -1881,13 +808,12 @@ XCommandInfo_impl::hasCommandByHandle(
 /*                     info_p-Implementation                                     */
 /*                                                                               */
 /*********************************************************************************/
-
-
-
+// Info for the properties
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 shell::info_p( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath )
+    throw()
 {
     vos::OGuard aGuard( m_aMutex );
     XPropertySetInfo_impl* p = new XPropertySetInfo_impl( this,aUnqPath );
@@ -1897,18 +823,21 @@ shell::info_p( sal_Int32 CommandId,
 
 
 
-
-
 /*********************************************************************************/
 /*                                                                               */
 /*                     setv-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
+//
+//  Sets the values of the properties belonging to fileURL aUnqPath
+//
+
 
 void SAL_CALL
 shell::setv( sal_Int32 CommandId,
              const rtl::OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
+    throw()
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -1991,17 +920,17 @@ shell::setv( sal_Int32 CommandId,
 /*                     getv-Implementation                                       */
 /*                                                                               */
 /*********************************************************************************/
-
-
-
-
-
+//
+//  Reads the values of the properties belonging to fileURL aUnqPath;
+//  Returns an XRow object containing the values in the requested order.
+//
 
 
 uno::Reference< sdbc::XRow > SAL_CALL
 shell::getv( sal_Int32 CommandId,
-         const rtl::OUString& aUnqPath,
-         const uno::Sequence< beans::Property >& properties )
+             const rtl::OUString& aUnqPath,
+             const uno::Sequence< beans::Property >& properties )
+    throw()
 {
     uno::Sequence< uno::Any > seq( properties.getLength() );
 
@@ -2038,44 +967,6 @@ shell::getv( sal_Int32 CommandId,
 }
 
 
-
-
-/*********************************************************************************/
-/*                                                                               */
-/*                       ls-Implementation                                       */
-/*                                                                               */
-/*********************************************************************************/
-
-
-
-
-
-
-
-uno::Reference< XDynamicResultSet > SAL_CALL
-shell::ls( sal_Int32 CommandId,
-           const rtl::OUString& aUnqPath,
-           const sal_Int32 OpenMode,
-           const uno::Sequence< beans::Property >& seq,
-           const uno::Sequence< NumberedSortingInfo >& seqSort )
-{
-    XResultSet_impl* p = new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort );
-
-    if( ! p->CtorSuccess() )
-    {
-        delete p; p = 0;
-        // throw CommandAbortedException();
-    }
-
-    return uno::Reference< XDynamicResultSet > ( p );
-}
-
-
-
-
-
-
-
 /********************************************************************************/
 /*                                                                              */
 /*                         transfer-commandos                                   */
@@ -2083,229 +974,64 @@ shell::ls( sal_Int32 CommandId,
 /********************************************************************************/
 
 
+/********************************************************************************/
+/*                                                                              */
+/*                         move-implementation                                  */
+/*                                                                              */
+/********************************************************************************/
+//
+//  Moves the content belonging to fileURL srcUnqPath to fileURL dstUnqPath.
+//
 
-// Returns true if dstUnqPath is a child from srcUnqPath or both are equal
-sal_Bool SAL_CALL isChild( const rtl::OUString& srcUnqPath,
-                           const rtl::OUString& dstUnqPath )
-{
-    static sal_Unicode slash = '/';
-    // Simple lexical comparison
-    sal_Int32 srcL = srcUnqPath.getLength();
-    sal_Int32 dstL = dstUnqPath.getLength();
-
-    return (
-        ( srcUnqPath == dstUnqPath )
-        ||
-        ( ( dstL > srcL )
-          &&
-          ( srcUnqPath.compareTo( dstUnqPath, srcL ) == 0 )
-          &&
-          ( dstUnqPath[ srcL ] == slash ) )
-    );
-}
-
-
-// Changes the prefix in name
-rtl::OUString SAL_CALL newName(
-    const rtl::OUString& aNewPrefix,
-    const rtl::OUString& aOldPrefix,
-    const rtl::OUString& old_Name )
-{
-    sal_Int32 srcL = aOldPrefix.getLength();
-
-    rtl::OUString new_Name = old_Name.copy( srcL );
-    new_Name = ( aNewPrefix + new_Name );
-    return new_Name;
-}
-
-
-rtl::OUString SAL_CALL getTitle( const rtl::OUString& aPath )
-{
-    sal_Unicode slash = '/';
-    sal_Int32 lastIndex = aPath.lastIndexOf( slash );
-    return aPath.copy( lastIndex + 1 );
-}
-
-
-void SAL_CALL
-shell::erasePersistentSet( const rtl::OUString& aUnqPath,
-                           sal_Bool withChilds )
-{
-    if( ! m_xFileRegistry.is() )
-    {
-        VOS_ASSERT( m_xFileRegistry.is() );
-    }
-
-    uno::Sequence< rtl::OUString > seqNames;
-
-    if( withChilds )
-    {
-        uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-        seqNames = xName->getElementNames();
-    }
-
-    sal_Int32 count = withChilds ? seqNames.getLength() : 1;
-
-    rtl::OUString
-        old_Name = aUnqPath;
-
-    for( sal_Int32 j = 0; j < count; ++j )
-    {
-        if( withChilds  && ! ( ::isChild( old_Name,seqNames[j] ) ) )
-            continue;
-
-        if( withChilds )
-        {
-            old_Name = seqNames[j];
-        }
-
-        {
-            // Release possible references
-            vos::OGuard aGuard( m_aMutex );
-            ContentMap::iterator it = m_aContent.find( old_Name );
-            if( it != m_aContent.end() )
-            {
-                it->second.xS = 0;
-                it->second.xC = 0;
-                it->second.xA = 0;
-
-                delete it->second.properties;
-                it->second.properties = 0;
-            }
-        }
-
-        if( m_xFileRegistry.is() )
-            m_xFileRegistry->removePropertySet( old_Name );
-    }
-}
-
-
-
-void SAL_CALL
-shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
-                          const rtl::OUString& dstUnqPath,
-                          sal_Bool withChilds )
-{
-    if( ! m_xFileRegistry.is() )
-    {
-        VOS_ASSERT( m_xFileRegistry.is() );
-    }
-
-    uno::Sequence< rtl::OUString > seqNames;
-
-    if( withChilds )
-    {
-        uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-        seqNames = xName->getElementNames();
-    }
-
-    sal_Int32 count = withChilds ? seqNames.getLength() : 1;
-
-    rtl::OUString
-        old_Name = srcUnqPath,
-        new_Name = dstUnqPath;
-
-    for( sal_Int32 j = 0; j < count; ++j )
-    {
-        if( withChilds  && ! ( ::isChild( srcUnqPath,seqNames[j] ) ) )
-            continue;
-
-        if( withChilds )
-        {
-            old_Name = seqNames[j];
-            new_Name = ::newName( dstUnqPath,srcUnqPath,old_Name );
-        }
-
-        uno::Reference< XPersistentPropertySet > x_src;
-
-        if( m_xFileRegistry.is() )
-        {
-            x_src = m_xFileRegistry->openPropertySet( old_Name,false );
-            m_xFileRegistry->removePropertySet( new_Name );
-        }
-
-        if( x_src.is() )
-        {
-            uno::Sequence< beans::Property > seqProperty =
-                x_src->getPropertySetInfo()->getProperties();
-
-            if( seqProperty.getLength() )
-            {
-                uno::Reference< XPersistentPropertySet >
-                    x_dstS = m_xFileRegistry->openPropertySet( new_Name,true );
-                uno::Reference< beans::XPropertyContainer >
-                    x_dstC( x_dstS,uno::UNO_QUERY );
-
-                for( sal_Int32 i = 0; i < seqProperty.getLength(); ++i )
-                {
-                    x_dstC->addProperty( seqProperty[i].Name,
-                                         seqProperty[i].Attributes,
-                                         x_src->getPropertyValue( seqProperty[i].Name ) );
-                }
-            }
-        }
-    }         // end for( sal_Int...
-}
-
-
-osl::FileBase::RC osl_File_copy( const rtl::OUString& strPath,
-                                 const rtl::OUString& strDestPath,
-                                 sal_Bool test = false )
-{
-    if( test )
-    {
-        osl::DirectoryItem aItem;
-        if( osl::DirectoryItem::get( strDestPath,aItem ) != osl::FileBase:: E_NOENT )
-            return osl::FileBase::E_EXIST;
-    }
-
-    return osl::File::copy( strPath,strDestPath );
-}
-
-
-
-osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
-                                 const rtl::OUString& strDestPath,
-                                 sal_Bool test = false )
-{
-    if( test )
-    {
-        osl::DirectoryItem aItem;
-        if( osl::DirectoryItem::get( strDestPath,aItem ) != osl::FileBase:: E_NOENT )
-            return osl::FileBase::E_EXIST;
-    }
-
-    return osl::File::move( strPath,strDestPath );
-}
-
-
-
-// Moves "srcUnqPath" to "dstUnqPath/NewTitle"
 void SAL_CALL
 shell::move( sal_Int32 CommandId,
              const rtl::OUString srcUnqPath,
              const rtl::OUString dstUnqPathIn,
              const sal_Int32 NameClash )
-    throw( CommandAbortedException )
+    throw()
 {
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
     if( dstUnqPath == srcUnqPath )    // Nothing left to be done
         return;
 
-    // Moving file or folder ?
+
+    // Determine, whether we are moving a file or a folder
+
     osl::DirectoryItem aItem;
-    osl::FileBase::RC err = osl::DirectoryItem::get( srcUnqPath,aItem );
-    if( err )
-        throw CommandAbortedException();
     osl::FileStatus aStatus( FileStatusMask_Type );
-    aItem.getFileStatus( aStatus );
+    osl::FileBase::RC err = osl::DirectoryItem::get( srcUnqPath,aItem );
+
+    if( err != osl::FileBase::E_None )
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCE,
+                      err );
+        return;
+    }
+
+    err = aItem.getFileStatus( aStatus );
+    if( err != osl::FileBase::E_None )
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT,
+                      err );
+        return;
+    }
 
     sal_Bool isDocument;
     if( aStatus.isValid( FileStatusMask_Type ) )
         isDocument = aStatus.getFileType() == osl::FileStatus::Regular;
+    else
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_MOVE_FILETYPE,
+                      err );
+        return;
+    }
 
-    err = osl_File_move( srcUnqPath,dstUnqPath,true );   // Why, the hell, is this not all what has to be done?
+
+    err = osl_File_move( srcUnqPath,dstUnqPath,true );
 
     if( err == osl::FileBase::E_EXIST )
     {
@@ -2389,92 +1115,19 @@ shell::move( sal_Int32 CommandId,
         notifyContentRemoved( getContentEventListeners( aSrcParent ),srcUnqPath );
 
     notifyContentExchanged( getContentExchangedEventListeners( srcUnqPath,dstUnqPath, !isDocument ) );
-
-/*
-  if( aSrcTitle != aDstTitle )
-  {
-  uno::Sequence< beans::PropertyChangeEvent > seq(1);
-  seq[0].PropertyName = Title;
-  seq[0].Further = false;
-  seq[0].PropertyHandle = -1;
-  seq[0].OldValue <<= aSrcTitle;
-  seq[0].NewValue <<= aDstTitle;
-  notifyPropertyChanges( getPropertyChangeNotifier( dstUnqPath ),seq );
-  }
-*/
     erasePersistentSet( srcUnqPath, !isDocument );
 }
 
 
-osl::FileBase::RC SAL_CALL
-shell::copy_recursive( const rtl::OUString& srcUnqPath,
-                       const rtl::OUString& dstUnqPath,
-                       sal_Int32 TypeToCopy,
-                       sal_Bool testExistBeforeCopy )
-{
-    osl::FileBase::RC err;
 
-    if( TypeToCopy == -1 ) // Document
-    {
-        err = osl_File_copy( srcUnqPath,dstUnqPath,testExistBeforeCopy );
-    }
-    else if( TypeToCopy == +1 ) // Folder
-    {
-        osl::Directory aDir( srcUnqPath );
-        aDir.open();
-
-        err = osl::Directory::create( dstUnqPath );
-        osl::FileBase::RC next = err;
-        if( err == osl::FileBase::E_None )
-        {
-#ifdef TF_FILEURL
-            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
-#else
-            sal_Int32 n_Mask = FileStatusMask_FilePath | FileStatusMask_FileName | FileStatusMask_Type;
-#endif
-
-            osl::DirectoryItem aDirItem;
-
-            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
-            {
-                sal_Bool IsDocument;
-                osl::FileStatus aFileStatus( n_Mask );
-                aDirItem.getFileStatus( aFileStatus );
-                if( aFileStatus.isValid( FileStatusMask_Type ) )
-                    IsDocument = aFileStatus.getFileType() == osl::FileStatus::Regular;
-
-                // Getting the information for the next recursive copy
-                sal_Int32 newTypeToCopy = IsDocument ? -1 : +1;
-
-                rtl::OUString newSrcUnqPath;
-#ifdef TF_FILEURL
-                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
-                    newSrcUnqPath = aFileStatus.getFileURL();
-#else
-                if( aFileStatus.isValid( FileStatusMask_FilePath ) )
-                    newSrcUnqPath = aFileStatus.getFilePath();
-#endif
-
-                rtl::OUString newDstUnqPath = dstUnqPath;
-                rtl::OUString tit;
-                if( aFileStatus.isValid( FileStatusMask_FileName ) )
-                    tit = aFileStatus.getFileName();
-                if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString::createFromAscii( "/" );
-                newDstUnqPath += tit;
-
-                if ( newSrcUnqPath != dstUnqPath )
-                    err = copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy,false );
-            }
-
-            if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
-                err = next;
-        }
-        aDir.close();
-    }
-
-    return err;
-}
+/********************************************************************************/
+/*                                                                              */
+/*                         copy-implementation                                  */
+/*                                                                              */
+/********************************************************************************/
+//
+//  Copies the content belonging to fileURL srcUnqPath to fileURL dstUnqPath ( files and directories )
+//
 
 
 void SAL_CALL
@@ -2483,7 +1136,7 @@ shell::copy(
     const rtl::OUString srcUnqPath,
     const rtl::OUString dstUnqPathIn,
     sal_Int32 NameClash )
-    throw( CommandAbortedException )
+    throw()   // throw( CommandAbortedException )
 {
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
@@ -2495,6 +1148,7 @@ shell::copy(
     osl::FileBase::RC err = osl::DirectoryItem::get( srcUnqPath,aItem );
     if( err )
         throw CommandAbortedException();
+
     osl::FileStatus aStatus( FileStatusMask_Type );
     aItem.getFileStatus( aStatus );
 
@@ -2574,12 +1228,22 @@ shell::copy(
 }
 
 
-// Recursive deleting
+
+/********************************************************************************/
+/*                                                                              */
+/*                         remove-implementation                                */
+/*                                                                              */
+/********************************************************************************/
+//
+//  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
+//
+
 
 void SAL_CALL
 shell::remove( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
                sal_Int32 IsWhat )
+    throw()
 {
 #ifdef TF_FILEURL
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FileURL;
@@ -2708,8 +1372,390 @@ shell::remove( sal_Int32 CommandId,
 }
 
 
+/********************************************************************************/
+/*                                                                              */
+/*                         mkdir-implementation                                 */
+/*                                                                              */
+/********************************************************************************/
+//
+//  Creates new directory with given URL, recursively if necessary
+//  Return:: success of operation
+//
+
+sal_Bool SAL_CALL
+shell::mkdir( sal_Int32 CommandId,
+              const rtl::OUString& rUnqPath )
+    throw()
+{
+    rtl::OUString aUnqPath;
+    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+        aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
+    else
+        aUnqPath = rUnqPath;
+
+    osl::FileBase::RC nError = osl::Directory::create( aUnqPath );
+
+    switch ( nError )
+    {
+        case osl::FileBase::E_EXIST:
+            return sal_False;
+        case osl::FileBase::E_None:
+            return sal_True;
+        default:
+            return ensuredir( aUnqPath );
+    }
+}
+
+
+/********************************************************************************/
+/*                                                                              */
+/*                         mkfil-implementation                                 */
+/*                                                                              */
+/********************************************************************************/
+//
+//  Creates new file with given URL.
+//  The content of aInputStream becomes the content of the file
+//  Return:: success of operation
+//
+
+sal_Bool SAL_CALL
+shell::mkfil( sal_Int32 CommandId,
+              const rtl::OUString& aUnqPath,
+              sal_Bool Overwrite,
+              const uno::Reference< io::XInputStream >& aInputStream )
+    throw()
+{
+
+    // return value unimportant
+    write( CommandId,
+           aUnqPath,
+           Overwrite,
+           aInputStream );
+
+    // Always notifications for an insert
+    // Cannot give an error
+
+    rtl::OUString aPrtPath = getParentName( aUnqPath );
+    notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
+
+    return true;
+}
+
+
+/********************************************************************************/
+/*                                                                              */
+/*                         write-implementation                                 */
+/*                                                                              */
+/********************************************************************************/
+//
+//  writes to the file with given URL.
+//  The content of aInputStream becomes the content of the file
+//  Return:: success of operation
+//
+
+void SAL_CALL
+shell::write( sal_Int32 CommandId,
+              const rtl::OUString& aUnqPath,
+              sal_Bool OverWrite,
+              const uno::Reference< io::XInputStream >& aInputStream )
+    throw()
+{
+    // Create parent path, if necessary.
+    if ( ! ensuredir( getParentName( aUnqPath ) ) )
+        return;
+
+    osl::FileBase::RC err;
+    osl::File aFile( aUnqPath );
+
+    if( OverWrite )
+    {
+        err = aFile.open( OpenFlag_Write | OpenFlag_Create );
+
+        if( err != osl::FileBase::E_None )
+        {
+            aFile.close();
+            err = aFile.open( OpenFlag_Write );
+        }
+
+        if( err != osl::FileBase::E_None )
+        {
+            installError( CommandId,
+                          TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
+                          err );
+            return;
+        }
+    }
+    else
+    {
+        err = aFile.open( OpenFlag_Write );
+        if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
+        {
+            aFile.close();
+            return;
+        }
+
+        err = aFile.open( OpenFlag_Write | OpenFlag_Create );
+
+        if( err != osl::FileBase::E_None )
+        {
+            installError( CommandId,
+                          TASKHANDLING_NO_OPEN_FILE_FOR_WRITE,
+                          err );
+            return;
+        }
+    }
+
+    if( aInputStream.is() )
+    {
+        bool bSuccess( true );
+        sal_uInt64 nTotalNumberOfBytes = 0;
+        sal_uInt64 nWrittenBytes;
+        sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
+        uno::Sequence< sal_Int8 > seq( nRequestedBytes );
+
+        do
+        {
+            try
+            {
+                nReadBytes = aInputStream->readBytes( seq,
+                                                      nRequestedBytes );
+            }
+            catch( const io::NotConnectedException& )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NOTCONNECTED_FOR_WRITE );
+                bSuccess = false;
+            }
+            catch( const io::BufferSizeExceededException& )
+            {
+                installError( CommandId,
+                              TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
+                bSuccess = false;
+            }
+            catch( const io::IOException& )
+            {
+                installError( CommandId,
+                              TASKHANDLING_IOEXCEPTION_FOR_WRITE );
+                bSuccess = false;
+            }
+
+            if( ! bSuccess )
+                break;
+
+            if( nReadBytes )
+            {
+                const sal_Int8* p = seq.getConstArray();
+
+                err = aFile.write( ((void*)(p)),
+                                   sal_uInt64( nReadBytes ),
+                                   nWrittenBytes );
+
+                if( err != osl::FileBase::E_None )
+                {
+                    installError( CommandId,
+                                  TASKHANDLING_FILEIOERROR_FOR_WRITE,
+                                  err );
+                    break;
+                }
+
+                nTotalNumberOfBytes += nWrittenBytes;
+            }
+        } while( sal_uInt64( nReadBytes ) == nRequestedBytes );
+
+        aFile.setSize( nTotalNumberOfBytes );
+    }
+
+    aFile.close();
+    return;
+}
+
+
+
+/*********************************************************************************/
+/*                                                                               */
+/*                 insertDefaultProperties-Implementation                        */
+/*                                                                               */
+/*********************************************************************************/
+
+
+void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
+{
+    vos::OGuard aGuard( m_aMutex );
+
+    ContentMap::iterator it =
+        m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
+
+    load( it,false );
+
+    MyProperty ContentTProperty( ContentType );
+
+    PropertySet& properties = *(it->second.properties);
+    sal_Bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
+
+    shell::PropertySet::iterator it1 = m_aDefaultProperties.begin();
+    while( it1 != m_aDefaultProperties.end() )
+    {
+        if( ContentNotDefau && it1->getPropertyName() == ContentType )
+        {
+            // No insertion
+        }
+        else
+            properties.insert( *it1 );
+        ++it1;
+    }
+}
+
+
+
+
+/******************************************************************************/
+/*                                                                            */
+/*                          mapping of file urls                              */
+/*                          to uncpath and vice versa                         */
+/*                                                                            */
+/******************************************************************************/
+
+
+sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& Unq )
+{
+    if( 0 == Url.compareToAscii( "file:///" ) ||
+        0 == Url.compareToAscii( "file://localhost/" ) ||
+        0 == Url.compareToAscii( "file://127.0.0.1/" ) )
+    {
+#ifdef TF_FILEURL
+        Unq = rtl::OUString::createFromAscii( "file:///" );
+#else
+        Unq = rtl::OUString::createFromAscii( "//./" );
+#endif
+        return false;
+    }
+
+#ifdef TF_FILEURL
+    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
+
+    Unq = Url;
+#else
+    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getNormalizedPathFromFileURL( Url,Unq );
+#endif
+
+    sal_Int32 l = Unq.getLength()-1;
+    if( ! err && Unq.getStr()[ l ] == '/' &&
+        Unq.indexOf( '/', RTL_CONSTASCII_LENGTH("//") ) < l )
+        Unq = Unq.copy(0, Unq.getLength() - 1);
+
+    return err;
+}
+
+
+
+sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& Url )
+{
+#ifdef TF_FILEURL
+    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
+
+    Url = Unq;
+
+    return err;
+#else
+    if( Unq.compareToAscii( "//./" ) == 0 )
+    {
+        Url = rtl::OUString::createFromAscii( "file:///" );
+        return false;
+    }
+
+    rtl::OUString aUnq = Unq;
+    if( aUnq[ aUnq.getLength()-1 ] == sal_Unicode( ':' ) && aUnq.getLength() == 6 )
+    {
+        aUnq += rtl::OUString::createFromAscii( "/" );
+    }
+    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getFileURLFromNormalizedPath( aUnq,Url );
+    return err;
+#endif
+}
+
+
+
+// Helper function for public copy
+
+osl::FileBase::RC SAL_CALL
+shell::copy_recursive( const rtl::OUString& srcUnqPath,
+                       const rtl::OUString& dstUnqPath,
+                       sal_Int32 TypeToCopy,
+                       sal_Bool testExistBeforeCopy )
+    throw()
+{
+    osl::FileBase::RC err;
+
+    if( TypeToCopy == -1 ) // Document
+    {
+        err = osl_File_copy( srcUnqPath,dstUnqPath,testExistBeforeCopy );
+    }
+    else if( TypeToCopy == +1 ) // Folder
+    {
+        osl::Directory aDir( srcUnqPath );
+        aDir.open();
+
+        err = osl::Directory::create( dstUnqPath );
+        osl::FileBase::RC next = err;
+        if( err == osl::FileBase::E_None )
+        {
+#ifdef TF_FILEURL
+            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
+#else
+            sal_Int32 n_Mask = FileStatusMask_FilePath | FileStatusMask_FileName | FileStatusMask_Type;
+#endif
+
+            osl::DirectoryItem aDirItem;
+
+            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
+            {
+                sal_Bool IsDocument;
+                osl::FileStatus aFileStatus( n_Mask );
+                aDirItem.getFileStatus( aFileStatus );
+                if( aFileStatus.isValid( FileStatusMask_Type ) )
+                    IsDocument = aFileStatus.getFileType() == osl::FileStatus::Regular;
+
+                // Getting the information for the next recursive copy
+                sal_Int32 newTypeToCopy = IsDocument ? -1 : +1;
+
+                rtl::OUString newSrcUnqPath;
+#ifdef TF_FILEURL
+                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                    newSrcUnqPath = aFileStatus.getFileURL();
+#else
+                if( aFileStatus.isValid( FileStatusMask_FilePath ) )
+                    newSrcUnqPath = aFileStatus.getFilePath();
+#endif
+
+                rtl::OUString newDstUnqPath = dstUnqPath;
+                rtl::OUString tit;
+                if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                    tit = aFileStatus.getFileName();
+                if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
+                    newDstUnqPath += rtl::OUString::createFromAscii( "/" );
+                newDstUnqPath += tit;
+
+                if ( newSrcUnqPath != dstUnqPath )
+                    err = copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy,false );
+            }
+
+            if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
+                err = next;
+        }
+        aDir.close();
+    }
+
+    return err;
+}
+
+
+
+// Helper function for mkfil,mkdir and write
+// Creates whole path
+// returns success of the operation
 
 sal_Bool SAL_CALL shell::ensuredir( const rtl::OUString& rUnqPath )
+    throw()
 {
     rtl::OUString aPath;
 
@@ -2757,260 +1803,12 @@ sal_Bool SAL_CALL shell::ensuredir( const rtl::OUString& rUnqPath )
 
 
 
-sal_Bool SAL_CALL
-shell::mkdir( sal_Int32 CommandId,
-              const rtl::OUString& rUnqPath )
-{
-    rtl::OUString aUnqPath;
-    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
-        aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
-    else
-        aUnqPath = rUnqPath;
 
-    osl::FileBase::RC nError = osl::Directory::create( aUnqPath );
-
-    switch ( nError )
-    {
-    case osl::FileBase::E_EXIST:
-        return sal_False;
-    case osl::FileBase::E_None:
-        return sal_True;
-    default:
-        return ensuredir( aUnqPath );
-    }
-}
-
-
-
-sal_Bool SAL_CALL
-shell::mkfil( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath,
-              sal_Bool Overwrite,
-              const uno::Reference< io::XInputStream >& aInputStream )
-{
-
-    // return value unimportant
-    write( CommandId,
-           aUnqPath,
-           Overwrite,
-           aInputStream );
-
-    // Always notifications for an insert
-    // Cannot give an error
-
-    rtl::OUString aPrtPath = getParentName( aUnqPath );
-    notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
-
-    return true;
-}
-
-
-
-sal_Bool SAL_CALL
-shell::write( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath,
-              sal_Bool OverWrite,
-              const uno::Reference< io::XInputStream >& aInputStream )
-{
-
-    osl::File aFile( aUnqPath );
-
-    sal_Bool bSuccess;
-
-    // Create parent path, if necessary.
-    if ( !ensuredir( getParentName( aUnqPath ) ) )
-        return false;
-
-    if( OverWrite )
-    {
-        bSuccess = osl::FileBase::E_None == aFile.open( OpenFlag_Write | OpenFlag_Create );
-        if( ! bSuccess )
-            bSuccess = osl::FileBase::E_None == aFile.open( OpenFlag_Write );
-    }
-    else
-    {
-        bSuccess = osl::FileBase::E_None == aFile.open( OpenFlag_Write );
-        if( bSuccess )
-        {
-            aFile.close();
-            return true;
-        }
-        else
-        {
-            bSuccess = osl::FileBase::E_None == aFile.open( OpenFlag_Write | OpenFlag_Create );
-        }
-    }
-
-    if( bSuccess && aInputStream.is() )
-    {
-        sal_uInt64 nTotalNumberOfBytes = 0;
-        sal_uInt64 nWrittenBytes;
-        sal_Int32 nReadBytes = 0, nRequestedBytes = 32768;
-        uno::Sequence< sal_Int8 > seq( nRequestedBytes );
-        do
-        {
-            try
-            {
-                nReadBytes = aInputStream->readBytes( seq,
-                                                      nRequestedBytes );
-            }
-            catch( const io::NotConnectedException& )
-            {
-                bSuccess = false;
-            }
-            catch( const io::BufferSizeExceededException& )
-            {
-                bSuccess = false;
-            }
-            catch( const io::IOException& )
-            {
-                bSuccess = false;
-            }
-
-
-            if( bSuccess && nReadBytes )
-            {
-                const sal_Int8* p = seq.getConstArray();
-                aFile.write( ((void*)(p)),
-                             sal_uInt64( nReadBytes ),
-                             nWrittenBytes );
-                nTotalNumberOfBytes += nWrittenBytes;
-                if( nWrittenBytes != nReadBytes )
-                {
-                    // DBG_ASSERT( "Write Operation not successful" );
-                }
-            }
-        } while( bSuccess && sal_uInt64( nReadBytes ) == nRequestedBytes );
-
-        aFile.setSize( nTotalNumberOfBytes );
-    }
-
-//  else
-//      bSuccess = false;
-
-
-    aFile.close();
-
-    return bSuccess;
-}
-
-
-
-/*********************************************************************************/
-/*                                                                               */
-/*                 InsertDefaultProperties-Implementation                        */
-/*                                                                               */
-/*********************************************************************************/
-
-
-void SAL_CALL shell::InsertDefaultProperties( const rtl::OUString& aUnqPath )
-{
-  vos::OGuard aGuard( m_aMutex );
-
-  ContentMap::iterator it =
-      m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
-
-  load( it,false );
-
-  MyProperty ContentTProperty( ContentType );
-
-  PropertySet& properties = *(it->second.properties);
-  sal_Bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
-
-  shell::PropertySet::iterator it1 = m_aDefaultProperties.begin();
-  while( it1 != m_aDefaultProperties.end() )
-  {
-      if( ContentNotDefau && it1->getPropertyName() == ContentType )
-      {
-          // No insertion
-      }
-      else
-          properties.insert( *it1 );
-      ++it1;
-  }
-}
-
-
-void SAL_CALL
-shell::getScheme( rtl::OUString& Scheme )
-{
-  Scheme = rtl::OUString::createFromAscii( "file" );
-}
-
-rtl::OUString SAL_CALL
-shell::getImplementationName_static( void )
-{
-  return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileProvider" );
-}
-
-
-uno::Sequence< rtl::OUString > SAL_CALL
-shell::getSupportedServiceNames_static( void )
-{
-  rtl::OUString Supported = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ;
-  com::sun::star::uno::Sequence< rtl::OUString > Seq( &Supported,1 );
-  return Seq;
-}
-
-
-sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& Unq )
-{
-    if( 0 == Url.compareToAscii( "file:///" ) ||
-        0 == Url.compareToAscii( "file://localhost/" ) ||
-        0 == Url.compareToAscii( "file://127.0.0.1/" ) )
-    {
-#ifdef TF_FILEURL
-        Unq = rtl::OUString::createFromAscii( "file:///" );
-#else
-        Unq = rtl::OUString::createFromAscii( "//./" );
-#endif
-        return false;
-    }
-
-#ifdef TF_FILEURL
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Url,Unq );
-
-    Unq = Url;
-#else
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getNormalizedPathFromFileURL( Url,Unq );
-#endif
-
-    sal_Int32 l = Unq.getLength()-1;
-    if( ! err && Unq.getStr()[ l ] == '/' &&
-        Unq.indexOf( '/', RTL_CONSTASCII_LENGTH("//") ) < l )
-        Unq = Unq.copy(0, Unq.getLength() - 1);
-
-    return err;
-}
-
-sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& Url )
-{
-#ifdef TF_FILEURL
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
-
-    Url = Unq;
-
-    return err;
-#else
-    if( Unq.compareToAscii( "//./" ) == 0 )
-    {
-        Url = rtl::OUString::createFromAscii( "file:///" );
-        return false;
-    }
-
-    rtl::OUString aUnq = Unq;
-    if( aUnq[ aUnq.getLength()-1 ] == sal_Unicode( ':' ) && aUnq.getLength() == 6 )
-    {
-        aUnq += rtl::OUString::createFromAscii( "/" );
-    }
-    sal_Bool err = osl::FileBase::E_None != osl::FileBase::getFileURLFromNormalizedPath( aUnq,Url );
-    return err;
-#endif
-}
-
-
-
-// Privat methods
+//
+//  Given a sequence of properties seq, this method determines the mask
+//  used to instantiate a osl::FileStatus, so that a call to
+//  osl::DirectoryItem::getFileStatus fills the required fields.
+//
 
 
 void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequence< beans::Property >& seq )
@@ -3047,6 +1845,76 @@ void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequen
 
 
 
+/*********************************************************************************/
+/*                                                                               */
+/*                     load-Implementation                                       */
+/*                                                                               */
+/*********************************************************************************/
+//
+//  Load the properties from configuration, if create == true create them.
+//  The Properties are stored under the url belonging to it->first.
+//
+
+void SAL_CALL
+shell::load( const ContentMap::iterator& it, sal_Bool create )
+{
+    if( ! it->second.properties )
+        it->second.properties = new PropertySet;
+
+    if( ( ! it->second.xS.is() ||
+          ! it->second.xC.is() ||
+          ! it->second.xA.is() )
+        && m_xFileRegistry.is() )
+    {
+
+        uno::Reference< ucb::XPersistentPropertySet > xS = m_xFileRegistry->openPropertySet( it->first,create );
+        if( xS.is() )
+        {
+            uno::Reference< beans::XPropertyContainer > xC( xS,uno::UNO_QUERY );
+            uno::Reference< beans::XPropertyAccess >    xA( xS,uno::UNO_QUERY );
+
+            it->second.xS = xS;
+            it->second.xC = xC;
+            it->second.xA = xA;
+
+            // Now put in all values in the storage in the local hash;
+
+            PropertySet& properties = *(it->second.properties);
+            uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
+
+            for( sal_Int32 i = 0; i < seq.getLength(); ++i )
+            {
+                MyProperty readProp( false,
+                                     seq[i].Name,
+                                     seq[i].Handle,
+                                     seq[i].Type,
+                                     xS->getPropertyValue( seq[i].Name ),
+                                     beans::PropertyState_DIRECT_VALUE,
+                                     seq[i].Attributes );
+                if( properties.find( readProp ) == properties.end() )
+                    properties.insert( readProp );
+            }
+        }
+        else if( create )
+        {
+            // Catastrophic error
+        }
+    }
+}
+
+
+
+
+/*********************************************************************************/
+/*                                                                               */
+/*                     commit-Implementation                                     */
+/*                                                                               */
+/*********************************************************************************/
+// Commit inserts the determined properties in the filestatus object into
+// the internal map, so that is possible to determine on a subsequent
+// setting of file properties which properties have changed without filestat
+
+
 void SAL_CALL
 shell::commit( const shell::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
@@ -3057,7 +1925,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     if( it->second.properties == 0 )
     {
         rtl::OUString aPath = it->first;
-        InsertDefaultProperties( aPath );
+        insertDefaultProperties( aPath );
     }
 
     PropertySet& properties = *( it->second.properties );
@@ -3075,64 +1943,64 @@ shell::commit( const shell::ContentMap::iterator& it,
 
         it1 = properties.find( MyProperty( Title ) );
         if( it1 != properties.end() )
-          {
+        {
             it1->setValue( aAny );
         }
     }
 
     if( aFileStatus.isValid( FileStatusMask_Type ) )
-      {
+    {
         sal_Bool isDirectory,isFile;
 
         if( osl::FileStatus::Link == aFileStatus.getFileType() &&
-        aFileStatus.isValid( FileStatusMask_LinkTargetURL ) )
-          {
-        osl::DirectoryItem aDirItem;
-        osl::FileStatus aFileStatus2( FileStatusMask_Type );
-        if( osl::FileBase::E_None == osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(),aDirItem ) &&
-            osl::FileBase::E_None == aDirItem.getFileStatus( aFileStatus2 )    &&
-            aFileStatus2.isValid( FileStatusMask_Type ) )
-          {
-            isDirectory =
-              osl::FileStatus::Volume == aFileStatus2.getFileType() ||
-              osl::FileStatus::Directory == aFileStatus2.getFileType();
-            isFile =
-              osl::FileStatus::Regular == aFileStatus2.getFileType();
-          }
+            aFileStatus.isValid( FileStatusMask_LinkTargetURL ) )
+        {
+            osl::DirectoryItem aDirItem;
+            osl::FileStatus aFileStatus2( FileStatusMask_Type );
+            if( osl::FileBase::E_None == osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(),aDirItem ) &&
+                osl::FileBase::E_None == aDirItem.getFileStatus( aFileStatus2 )    &&
+                aFileStatus2.isValid( FileStatusMask_Type ) )
+            {
+                isDirectory =
+                    osl::FileStatus::Volume == aFileStatus2.getFileType() ||
+                    osl::FileStatus::Directory == aFileStatus2.getFileType();
+                isFile =
+                    osl::FileStatus::Regular == aFileStatus2.getFileType();
+            }
+            else
+            { // extremly ugly, but otherwise default construction of aDirItem and aFileStatus2
+                // before the preciding if
+                isDirectory =
+                    osl::FileStatus::Volume == aFileStatus.getFileType() ||
+                    osl::FileStatus::Directory == aFileStatus.getFileType();
+                isFile =
+                    osl::FileStatus::Regular == aFileStatus.getFileType();
+            }
+        }
         else
-          { // extremly ugly, but otherwise default construction of aDirItem and aFileStatus2
-            // before the preciding if
+        {
             isDirectory =
-              osl::FileStatus::Volume == aFileStatus.getFileType() ||
-              osl::FileStatus::Directory == aFileStatus.getFileType();
+                osl::FileStatus::Volume == aFileStatus.getFileType() ||
+                osl::FileStatus::Directory == aFileStatus.getFileType();
             isFile =
-              osl::FileStatus::Regular == aFileStatus.getFileType();
-          }
-          }
-        else
-          {
-        isDirectory =
-          osl::FileStatus::Volume == aFileStatus.getFileType() ||
-          osl::FileStatus::Directory == aFileStatus.getFileType();
-        isFile =
-          osl::FileStatus::Regular == aFileStatus.getFileType();
-          }
+                osl::FileStatus::Regular == aFileStatus.getFileType();
+        }
 
 
         aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
         if( it1 != properties.end() )
-          {
-        it1->setValue( aAny );
-          }
+        {
+            it1->setValue( aAny );
+        }
 
         aAny <<= isFile;
         it1 = properties.find( MyProperty( IsDocument ) );
         if( it1 != properties.end() )
-          {
-        it1->setValue( aAny );
-          }
-      }
+        {
+            it1->setValue( aAny );
+        }
+    }
 
 
 #ifdef TF_FILEURL
@@ -3184,17 +2052,17 @@ shell::commit( const shell::ContentMap::iterator& it,
 #ifdef TF_FILEURL
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
 #else
-    if( m_bFaked && it->first.compareToAscii( "//./" ) == 0 )
+        if( m_bFaked && it->first.compareToAscii( "//./" ) == 0 )
 #endif
-    {
-        sal_Bool readonly = true;
-        aAny <<= readonly;
-        it1 = properties.find( MyProperty( IsReadOnly ) );
-        if( it1 != properties.end() )
         {
-            it1->setValue( aAny );
+            sal_Bool readonly = true;
+            aAny <<= readonly;
+            it1 = properties.find( MyProperty( IsReadOnly ) );
+            if( it1 != properties.end() )
+            {
+                it1->setValue( aAny );
+            }
         }
-    }
 
     if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
     {
@@ -3253,6 +2121,9 @@ shell::commit( const shell::ContentMap::iterator& it,
 
 
 
+// Special optimized method for getting the properties of a directoryitem, which
+// is returned by osl::DirectoryItem::getNextItem()
+
 
 uno::Reference< sdbc::XRow > SAL_CALL
 shell::getv(
@@ -3279,7 +2150,7 @@ shell::getv(
     aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
     registerNotifier( aUnqPath,pNotifier );
-    InsertDefaultProperties( aUnqPath );
+    insertDefaultProperties( aUnqPath );
     {
         vos::OGuard aGuard( m_aMutex );
         sal_Bool changer = false;
@@ -3308,21 +2179,6 @@ shell::getv(
 
 
 
-
-rtl::OUString
-shell::getParentName( const rtl::OUString& aFileName )
-{
-    sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
-    rtl::OUString aParent = aFileName.copy( 0,lastIndex );
-
-    if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-        aParent += rtl::OUString::createFromAscii( "/" );
-
-    if( 0 == aParent.compareToAscii( "file://" ) )
-        aParent = rtl::OUString::createFromAscii( "file:///" );
-
-    return aParent;
-}
 
 
 
@@ -3513,7 +2369,7 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
             ContentMap::iterator itnames = m_aContent.begin();
             while( itnames != m_aContent.end() )
             {
-                if( ::isChild( aOldPrefix,itnames->first ) )
+                if( isChild( aOldPrefix,itnames->first ) )
                 {
                     oldChildList.push_back( itnames->first );
                 }
@@ -3531,7 +2387,7 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
             if( withChilds )
             {
                 aOldName = oldChildList[j];
-                aNewName = ::newName( aNewPrefix,aOldPrefix,aOldName );
+                aNewName = newName( aNewPrefix,aOldPrefix,aOldName );
             }
 
             shell::ContentMap::iterator itold = m_aContent.find( aOldName );
@@ -3650,92 +2506,164 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
 
 
 
-// Return value: not mounted
 
-oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedURL);
+/********************************************************************************/
+/*                       remove persistent propertyset                          */
+/********************************************************************************/
 
-//----------------------------------------------------------------------------
-//  makeAbsolute Path
-//----------------------------------------------------------------------------
-
-#ifdef TF_FILEURL
-
-static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
+void SAL_CALL
+shell::erasePersistentSet( const rtl::OUString& aUnqPath,
+                           sal_Bool withChilds )
 {
-    sal_Int32   nIndex = 6;
-
-    std::vector< rtl::OUString >    aTokenStack;
-
-    // should no longer happen
-    OSL_ASSERT( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "//./" ), 4 ) );
-
-    if ( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "file://" ), 7 ) )
-        return sal_False;
-
-       aRelPath.getToken( 0, '/', nIndex );
-
-    while ( nIndex >= 0 )
+    if( ! m_xFileRegistry.is() )
     {
-        rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
-
-        if ( aToken.compareToAscii( ".." ) == 0 )
-            aTokenStack.pop_back();
-        else
-            aTokenStack.push_back( aToken );
+        VOS_ASSERT( m_xFileRegistry.is() );
     }
 
+    uno::Sequence< rtl::OUString > seqNames;
 
-    std::vector< rtl::OUString >::iterator it;
-    aAbsPath = rtl::OUString::createFromAscii("file:/");
-
-    for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
+    if( withChilds )
     {
-        aAbsPath += rtl::OUString::createFromAscii( "/" );
-        aAbsPath += *it;
+        uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
+        seqNames = xName->getElementNames();
     }
 
-    return sal_True;
+    sal_Int32 count = withChilds ? seqNames.getLength() : 1;
+
+    rtl::OUString
+        old_Name = aUnqPath;
+
+    for( sal_Int32 j = 0; j < count; ++j )
+    {
+        if( withChilds  && ! ( isChild( old_Name,seqNames[j] ) ) )
+            continue;
+
+        if( withChilds )
+        {
+            old_Name = seqNames[j];
+        }
+
+        {
+            // Release possible references
+            vos::OGuard aGuard( m_aMutex );
+            ContentMap::iterator it = m_aContent.find( old_Name );
+            if( it != m_aContent.end() )
+            {
+                it->second.xS = 0;
+                it->second.xC = 0;
+                it->second.xA = 0;
+
+                delete it->second.properties;
+                it->second.properties = 0;
+            }
+        }
+
+        if( m_xFileRegistry.is() )
+            m_xFileRegistry->removePropertySet( old_Name );
+    }
 }
 
-#else
 
 
-static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
+
+/********************************************************************************/
+/*                       copy persistent propertyset                            */
+/*                       from srcUnqPath to dstUnqPath                          */
+/********************************************************************************/
+
+
+void SAL_CALL
+shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
+                          const rtl::OUString& dstUnqPath,
+                          sal_Bool withChilds )
 {
-    sal_Int32   nIndex = 0;
-
-    std::vector< rtl::OUString >    aTokenStack;
-
-    if ( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "//./" ), 4 ) )
-        return sal_False;
-
-       aRelPath.getToken( 0, '/', nIndex );
-
-    while ( nIndex >= 0 )
+    if( ! m_xFileRegistry.is() )
     {
-        rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
-
-        if ( aToken.compareToAscii( ".." ) == 0 )
-            aTokenStack.pop_back();
-        else
-            aTokenStack.push_back( aToken );
+        VOS_ASSERT( m_xFileRegistry.is() );
     }
 
+    uno::Sequence< rtl::OUString > seqNames;
 
-    std::vector< rtl::OUString >::iterator it;
-    aAbsPath = rtl::OUString::createFromAscii("file:");
-
-    for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
+    if( withChilds )
     {
-        aAbsPath += rtl::OUString::createFromAscii( "/" );
-        aAbsPath += *it;
+        uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
+        seqNames = xName->getElementNames();
     }
 
-    return sal_True;
+    sal_Int32 count = withChilds ? seqNames.getLength() : 1;
+
+    rtl::OUString
+        old_Name = srcUnqPath,
+        new_Name = dstUnqPath;
+
+    for( sal_Int32 j = 0; j < count; ++j )
+    {
+        if( withChilds  && ! ( isChild( srcUnqPath,seqNames[j] ) ) )
+            continue;
+
+        if( withChilds )
+        {
+            old_Name = seqNames[j];
+            new_Name = newName( dstUnqPath,srcUnqPath,old_Name );
+        }
+
+        uno::Reference< XPersistentPropertySet > x_src;
+
+        if( m_xFileRegistry.is() )
+        {
+            x_src = m_xFileRegistry->openPropertySet( old_Name,false );
+            m_xFileRegistry->removePropertySet( new_Name );
+        }
+
+        if( x_src.is() )
+        {
+            uno::Sequence< beans::Property > seqProperty =
+                x_src->getPropertySetInfo()->getProperties();
+
+            if( seqProperty.getLength() )
+            {
+                uno::Reference< XPersistentPropertySet >
+                    x_dstS = m_xFileRegistry->openPropertySet( new_Name,true );
+                uno::Reference< beans::XPropertyContainer >
+                    x_dstC( x_dstS,uno::UNO_QUERY );
+
+                for( sal_Int32 i = 0; i < seqProperty.getLength(); ++i )
+                {
+                    x_dstC->addProperty( seqProperty[i].Name,
+                                         seqProperty[i].Attributes,
+                                         x_src->getPropertyValue( seqProperty[i].Name ) );
+                }
+            }
+        }
+    }         // end for( sal_Int...
 }
 
-#endif
-//----------------------------------------------------------------------------
+
+
+
+/*******************************************************************************/
+/*                                                                             */
+/*                 the functions remapping the path to a physical file,        */
+/*                 if access is allowed by the mount points                    */
+/*                                                                             */
+/*******************************************************************************/
+
+
+shell::MountPoint::MountPoint( const rtl::OUString& aMountPoint,
+                               const rtl::OUString& aDirectory )
+    : m_aMountPoint( aMountPoint ),
+      m_aDirectory( aDirectory )
+{
+    rtl::OUString Title = aMountPoint;
+    sal_Int32 lastIndex = Title.lastIndexOf( sal_Unicode( '/' ) );
+    m_aTitle = Title.copy( lastIndex + 1 );
+}
+
+
+//
+//  Replaces the alias name part of aUnqPath by the physical directory.
+//  Returns true if mapping is successful;
+//
 
 sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
                                           rtl::OUString&        aRedirectedPath )
@@ -3778,6 +2706,14 @@ sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
     return false;
 }
 
+
+
+//
+//  Replaces the physical directory name part corresponding to a given accessible
+//  directory in the mount points by the alias name, defined for that part in
+//  the mount points;
+//  Returns true if mapping is successful;
+//
 
 sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
                                             rtl::OUString&        aRedirectedPath )
@@ -3831,16 +2767,30 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
 }
 
 
-shell::MountPoint::MountPoint( const rtl::OUString& aMountPoint,
-                               const rtl::OUString& aDirectory )
-    : m_aMountPoint( aMountPoint ),
-      m_aDirectory( aDirectory )
+
+/*******************************************************************************/
+/*                                                                             */
+/*                 some misceancellous static functions                        */
+/*                                                                             */
+/*******************************************************************************/
+
+void SAL_CALL
+shell::getScheme( rtl::OUString& Scheme )
 {
-    rtl::OUString Title = aMountPoint;
-    sal_Int32 lastIndex = Title.lastIndexOf( sal_Unicode( '/' ) );
-    m_aTitle = Title.copy( lastIndex + 1 );
+  Scheme = rtl::OUString::createFromAscii( "file" );
+}
+
+rtl::OUString SAL_CALL
+shell::getImplementationName_static( void )
+{
+  return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileProvider" );
 }
 
 
-
-
+uno::Sequence< rtl::OUString > SAL_CALL
+shell::getSupportedServiceNames_static( void )
+{
+  rtl::OUString Supported = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ;
+  com::sun::star::uno::Sequence< rtl::OUString > Seq( &Supported,1 );
+  return Seq;
+}

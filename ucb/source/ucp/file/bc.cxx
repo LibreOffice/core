@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 11:56:42 $
+ *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -119,6 +122,10 @@
 #ifndef _PROV_HXX_
 #include "prov.hxx"
 #endif
+#ifndef _FILERROR_HXX_
+#include "filerror.hxx"
+#endif
+
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -187,7 +194,7 @@ BaseContent::BaseContent( shell* pMyShell,
 {
     m_pMyShell->m_pProvider->acquire();
     m_pMyShell->registerNotifier( m_aUncPath,this );
-    m_pMyShell->InsertDefaultProperties( m_aUncPath );
+    m_pMyShell->insertDefaultProperties( m_aUncPath );
 }
 
 
@@ -384,121 +391,91 @@ BaseContent::execute( const Command& aCommand,
            CommandAbortedException,
            RuntimeException )
 {
-    if( CommandId )
-    {
-        m_pMyShell->startTask( CommandId,
-                               Environment );
-    }
+    m_pMyShell->startTask( CommandId,
+                           Environment );
 
     Any aAny;
-    sal_Bool success = true;   // Hope the best
 
-    try
+    if( ! aCommand.Name.compareToAscii( "getPropertySetInfo" ) )  // No exceptions
     {
-        if( ! aCommand.Name.compareToAscii( "getPropertySetInfo" ) )
-        {
-            aAny <<= getPropertySetInfo( CommandId );
-        }
-        else if( ! aCommand.Name.compareToAscii( "getCommandInfo" ) )
-        {
-            aAny <<= getCommandInfo( CommandId );
-        }
-        else if( ! aCommand.Name.compareToAscii( "setPropertyValues" ) )
-        {
-            Sequence< beans::PropertyValue > sPropertyValues;
+        aAny <<= getPropertySetInfo( CommandId );
+    }
+    else if( ! aCommand.Name.compareToAscii( "getCommandInfo" ) )  // no exceptions
+    {
+        aAny <<= getCommandInfo( CommandId );
+    }
+    else if( ! aCommand.Name.compareToAscii( "setPropertyValues" ) )
+    {
+        Sequence< beans::PropertyValue > sPropertyValues;
 
-            if( ! ( aCommand.Argument >>= sPropertyValues ) )
-                throw CommandAbortedException();
-
+        if( ! ( aCommand.Argument >>= sPropertyValues ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT );
+        else
             setPropertyValues( CommandId,sPropertyValues );
-        }
-        else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
-        {
-            Sequence< beans::Property > ListOfRequestedProperties;
+    }
+    else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
+    {
+        Sequence< beans::Property > ListOfRequestedProperties;
 
-            if( ! ( aCommand.Argument >>= ListOfRequestedProperties ) )
-                throw CommandAbortedException();
-
+        if( ! ( aCommand.Argument >>= ListOfRequestedProperties ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_GETPROPERTYVALUES_ARGUMENT );
+        else
             aAny <<= getPropertyValues( CommandId,
                                         ListOfRequestedProperties );
-        }
-        else if( ! aCommand.Name.compareToAscii( "open" ) )
+    }
+    else if( ! aCommand.Name.compareToAscii( "open" ) )
+    {
+        OpenCommandArgument2 aOpenArgument;
+        if( ! ( aCommand.Argument >>= aOpenArgument ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_OPEN_ARGUMENT );
+        else
         {
-            OpenCommandArgument2 aOpenArgument;
-            OpenCommandArgument  aFalseCommandArgument;
-            if( ! ( aCommand.Argument >>= aOpenArgument ) )
-            {
-                if( ! ( aCommand.Argument >>= aFalseCommandArgument ) )
-                    throw CommandAbortedException();
-
-                if ( ( aFalseCommandArgument.Mode
-                            == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
-                     ( aFalseCommandArgument.Mode
-                             == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
-                {
-                    // Currently unsupported.
-                      throw CommandAbortedException();
-                }
-
-                aOpenArgument.Mode = aFalseCommandArgument.Mode;
-                aOpenArgument.Priority = aFalseCommandArgument.Priority;
-                aOpenArgument.Sink = aFalseCommandArgument.Sink;
-                aOpenArgument.Properties = aFalseCommandArgument.Properties;
-                aOpenArgument.SortingInfo = Sequence< NumberedSortingInfo >( 0 );
-            }
-
             Reference< XDynamicResultSet > result = open( CommandId,aOpenArgument );
             if( result.is() )
                 aAny <<= result;
         }
-        else if( ! aCommand.Name.compareToAscii( "delete" ) )
-        {
-            sal_Bool aDeleteArgument;
-            if( ! ( aCommand.Argument >>= aDeleteArgument ) )
-                throw CommandAbortedException();
+    }
+    else if( ! aCommand.Name.compareToAscii( "delete" ) )
+    {
+        sal_Bool aDeleteArgument;
+        if( ! ( aCommand.Argument >>= aDeleteArgument ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_DELETE_ARGUMENT );
+        else
             deleteContent( CommandId,
                            aDeleteArgument );
-        }
-        else if( ! aCommand.Name.compareToAscii( "transfer" ) )
-        {
-            TransferInfo aTransferInfo;
-            if( ! ( aCommand.Argument >>= aTransferInfo ) )
-                throw CommandAbortedException();
-            transfer( CommandId, aTransferInfo );
-        }
-        else if( ! aCommand.Name.compareToAscii( "insert" ) )
-        {
-            InsertCommandArgument aInsertArgument;
-            if( ! ( aCommand.Argument >>= aInsertArgument ) )
-                throw CommandAbortedException();
-
-            insert( CommandId,aInsertArgument );
-        }
-        else if( ! aCommand.Name.compareToAscii( "update" ) )
-        {
-        }
-        else
-        {
-            success = false;
-        }
-
-        if( CommandId )
-            m_pMyShell->endTask( CommandId );
-
-        if( ! success )
-            throw CommandAbortedException();
-
-        return aAny;
     }
-    catch( ... )
+    else if( ! aCommand.Name.compareToAscii( "transfer" ) )
     {
-        if( CommandId )
-            m_pMyShell->endTask( CommandId );
-        throw;
+        TransferInfo aTransferInfo;
+        if( ! ( aCommand.Argument >>= aTransferInfo ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_TRANSFER_ARGUMENT );
+        else
+            transfer( CommandId, aTransferInfo );
     }
+    else if( ! aCommand.Name.compareToAscii( "insert" ) )
+    {
+        InsertCommandArgument aInsertArgument;
+        if( ! ( aCommand.Argument >>= aInsertArgument ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_INSERT_ARGUMENT );
+        else
+            insert( CommandId,aInsertArgument );
+    }
+    else
+        m_pMyShell->installError( CommandId,
+                                  TASKHANDLER_UNSUPPORTED_COMMAND );
+
+
+    // This is the only function allowed to throw an exception
+    m_pMyShell->endTask( CommandId );
+
+    return aAny;
 }
-
-
 
 
 
@@ -691,15 +668,15 @@ BaseContent::queryCreatableContentsInfo(
     // file
     seq[0].Type       = m_pMyShell->FileContentType;
     seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-                        | ContentInfoAttribute::KIND_DOCUMENT;
+        | ContentInfoAttribute::KIND_DOCUMENT;
 
     Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
-                        rtl::OUString::createFromAscii( "Title" ),
-                        -1,
-                        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-                        beans::PropertyAttribute::MAYBEVOID
-                        | beans::PropertyAttribute::BOUND );
+        rtl::OUString::createFromAscii( "Title" ),
+        -1,
+        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+        beans::PropertyAttribute::MAYBEVOID
+        | beans::PropertyAttribute::BOUND );
     seq[0].Properties = props;
 
     // folder
@@ -762,7 +739,7 @@ BaseContent::createNewContent(
     if( IsDocument )
     {
         // KSO: Why is a document a XContentCreator? This is quite unusual.
-        dstUncPath = m_pMyShell->getParentName( m_aUncPath );
+        dstUncPath = getParentName( m_aUncPath );
     }
     else
         dstUncPath = m_aUncPath;
@@ -811,7 +788,7 @@ BaseContent::getParent(
     void )
     throw( RuntimeException )
 {
-    rtl::OUString ParentUnq = m_pMyShell->getParentName( m_aUncPath );
+    rtl::OUString ParentUnq = getParentName( m_aUncPath );
     rtl::OUString ParentUrl;
 
 
@@ -903,25 +880,23 @@ BaseContent::getPropertyValues(
             const beans::Property& rProp = pProps[ n ];
             Any& rValue = pValues[ n ];
 
-            if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
+            if( rProp.Name.compareToAscii( "ContentType" ) == 0 )
             {
                 rValue <<= m_bFolder ? m_pMyShell->FolderContentType
-                                     : m_pMyShell->FileContentType;
+                    : m_pMyShell->FileContentType;
             }
-            else if ( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
+            else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
             {
                 rValue <<= m_bFolder;
             }
-            else if ( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
+            else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
             {
                 rValue <<= sal_Bool( !m_bFolder );
             }
-//          else
-//              rValue = Any();
         }
 
         return Reference< sdbc::XRow >(
-                                    new XRow_impl( m_pMyShell, aValues ) );
+            new XRow_impl( m_pMyShell, aValues ) );
     }
 
     return m_pMyShell->getv( nMyCommandIdentifier,
@@ -944,13 +919,11 @@ BaseContent::setPropertyValues(
     rtl::OUString Title = rtl::OUString::createFromAscii( "Title" );
     sal_Unicode slash = '/';
 
-
     // Special handling for files which have to be inserted
     if( m_nState & JustInserted )
     {
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
         {
-
             if( Values[i].Name == Title && ! ( m_nState & NameForInsertionSet ) )
             {
                 rtl::OUString NewTitle;
@@ -959,7 +932,11 @@ BaseContent::setPropertyValues(
                     if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
                         m_aUncPath += rtl::OUString::createFromAscii("/");
 
-                    m_aUncPath += NewTitle;
+                    m_aUncPath += rtl::Uri::encode( NewTitle,
+                                                    rtl_UriCharClassPchar,
+                                                    rtl_UriEncodeIgnoreEscapes,
+                                                    RTL_TEXTENCODING_UTF8 );
+
                     m_nState |= NameForInsertionSet;
                 }
             }
@@ -971,8 +948,6 @@ BaseContent::setPropertyValues(
                           m_aUncPath,
                           Values );
 
-
-
         // Special handling Title: Setting Title is equivalent to a renaming of the underlying file
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
         {
@@ -981,28 +956,24 @@ BaseContent::setPropertyValues(
                 rtl::OUString NewTitle;
                 if( Values[i].Value >>= NewTitle  )
                 {
-                    rtl::OUString aDstName = m_pMyShell->getParentName( m_aUncPath );
+                    rtl::OUString aDstName = getParentName( m_aUncPath );
                     if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
                         aDstName += rtl::OUString::createFromAscii("/");
 
-                    aDstName += NewTitle;
+                    aDstName += rtl::Uri::encode( NewTitle,
+                                                  rtl_UriCharClassPchar,
+                                                  rtl_UriEncodeIgnoreEscapes,
+                                                  RTL_TEXTENCODING_UTF8 );
 
-                    try
-                    {
-                        m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also ;
-                                          m_aUncPath,
-                                          aDstName,
-                                          NameClash::KEEP );
-                    }
-                    catch( const CommandAbortedException& )
-                    {
-                    }
+                    m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also;
+                                      m_aUncPath,
+                                      aDstName,
+                                      NameClash::KEEP );
                 }
                 // NameChanges come back trough a ContentEvent
-                //
-                break;
+                break; // only handling Title
             }
-        }
+        } // end for
     }
 }
 
@@ -1012,49 +983,78 @@ Reference< XDynamicResultSet > SAL_CALL
 BaseContent::open(
     sal_Int32 nMyCommandIdentifier,
     const OpenCommandArgument2& aCommandArgument )
-    throw( CommandAbortedException )
+    throw()
 {
-    if( ( m_nState & Deleted ) || ( m_nState & JustInserted ) )
-        return Reference< XDynamicResultSet >();
+    Reference< XDynamicResultSet > retValue( 0 );
 
-
-    Reference< io::XOutputStream > outputStream( aCommandArgument.Sink,UNO_QUERY );
-    if( outputStream.is() )
+    if( ( m_nState & Deleted ) )
     {
-        m_pMyShell->page( nMyCommandIdentifier,
-                          m_aUncPath,
-                          outputStream );
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND );
+    }
+    else if( m_nState & JustInserted )
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND );
+    }
+    else
+    {
+        if( aCommandArgument.Mode == OpenMode::DOCUMENT )
+        {
+            Reference< io::XOutputStream > outputStream( aCommandArgument.Sink,UNO_QUERY );
+            if( outputStream.is() )
+            {
+                m_pMyShell->page( nMyCommandIdentifier,
+                                  m_aUncPath,
+                                  outputStream );
+            }
+
+            Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,UNO_QUERY );
+            if( activeDataSink.is() )
+            {
+                activeDataSink->setInputStream( m_pMyShell->open( nMyCommandIdentifier,
+                                                                  m_aUncPath ) );
+            }
+
+            Reference< io::XActiveDataStreamer > activeDataStreamer( aCommandArgument.Sink,UNO_QUERY );
+            if( activeDataStreamer.is() )
+            {
+                activeDataStreamer->setStream( m_pMyShell->open_rw( nMyCommandIdentifier,
+                                                                    m_aUncPath ) );
+            }
+        }
+        else if ( aCommandArgument.Mode == OpenMode::ALL        ||
+                  aCommandArgument.Mode == OpenMode::FOLDERS    ||
+                  aCommandArgument.Mode == OpenMode::DOCUMENTS )
+        {
+            retValue = m_pMyShell->ls( nMyCommandIdentifier,
+                                       m_aUncPath,
+                                       aCommandArgument.Mode,
+                                       aCommandArgument.Properties,
+                                       aCommandArgument.SortingInfo );
+        }
+        else if(  aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE  ||
+                  aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_WRITE )
+            m_pMyShell->installError( nMyCommandIdentifier,
+                                      TASKHANDLING_UNSUPPORTED_OPEN_MODE );
+        else
+            m_pMyShell->installError( nMyCommandIdentifier,
+                                      TASKHANDLING_UNSUPPORTED_OPEN_MODE );
     }
 
-    Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,UNO_QUERY );
-    if( activeDataSink.is() )
-    {
-        activeDataSink->setInputStream( m_pMyShell->open( nMyCommandIdentifier,
-                                                          m_aUncPath ) );
-    }
-
-
-    Reference< io::XActiveDataStreamer > activeDataStreamer( aCommandArgument.Sink,UNO_QUERY );
-    if( activeDataStreamer.is() )
-    {
-        activeDataStreamer->setStream( m_pMyShell->open_rw( nMyCommandIdentifier,
-                                                            m_aUncPath ) );
-    }
-
-    return m_pMyShell->ls( nMyCommandIdentifier,
-                           m_aUncPath,
-                           aCommandArgument.Mode,
-                           aCommandArgument.Properties,
-                           aCommandArgument.SortingInfo );
+    return retValue;
 }
+
 
 
 void SAL_CALL
 BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
                             sal_Bool bDeleteArgument )
+    throw()
 {
     if( m_nState & Deleted )
         return;
+
     m_pMyShell->remove( nMyCommandIdentifier,
                         m_aUncPath );
 
@@ -1067,7 +1067,8 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                        const TransferInfo& aTransferInfo )
-    throw( CommandAbortedException,InteractiveBadTransferURLException )
+    throw( CommandAbortedException,
+           InteractiveBadTransferURLException )
 {
 
     if( m_nState & Deleted )
@@ -1077,9 +1078,9 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 #ifdef TF_FILEURL
     if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "file:///" ) == 0 )
 #else
-    if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
+        if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
 #endif
-        throw CommandAbortedException();
+            throw CommandAbortedException();
 
 
     rtl::OUString scheme = aTransferInfo.SourceURL.copy( 0,5 );
@@ -1141,18 +1142,18 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 }
 
 
+
+
 void SAL_CALL
 BaseContent::write( sal_Int32 nMyCommandIdentifier,
                     sal_Bool OverWrite,
                     const Reference< io::XInputStream >& aInputStream )
-    throw( CommandAbortedException )
+    throw()
 {
-    sal_Bool err = ! m_pMyShell->write( nMyCommandIdentifier,
-                                        m_aUncPath,
-                                        OverWrite,
-                                        aInputStream );
-    if( err )
-        throw CommandAbortedException() ;
+    m_pMyShell->write( nMyCommandIdentifier,
+                       m_aUncPath,
+                       OverWrite,
+                       aInputStream );
 }
 
 
@@ -1160,7 +1161,7 @@ BaseContent::write( sal_Int32 nMyCommandIdentifier,
 
 void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                                    const InsertCommandArgument& aInsertArgument )
-    throw( CommandAbortedException )
+    throw()
 {
     if( m_nState & FullFeatured )
     {
@@ -1171,65 +1172,79 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
 
     if( ! ( m_nState & JustInserted ) )
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_NOFRESHINSERT_IN_INSERT_COMMAND );
         return;
+    }
 
     // Inserts the content, which has the flag m_bIsFresh
 
-    sal_Bool success = ( m_nState & NameForInsertionSet );
-    if( success )
+    if( ! m_nState & NameForInsertionSet )
     {
-        // Who am I ?
-        sal_Bool bDocument = false;
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_NONAMESET_INSERT_COMMAND );
+        return;
+    }
 
-        try
-        {
-            Sequence< beans::Property > seq(1);
-            seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
-                                        -1,
-                                        getCppuType( static_cast< sal_Bool* >(0) ),
-                                        0 );
-            Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
-            bDocument = xRow->getBoolean( 1 );
+    // Inserting a document or a file?
+    sal_Bool bDocument = false;
 
-            success = !xRow->wasNull();
+    Sequence< beans::Property > seq(1);
+    seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
+                              -1,
+                              getCppuType( static_cast< sal_Bool* >(0) ),
+                              0 );
 
-            VOS_ENSURE( success,
-                        "BaseContent::insert - Property value was null!" );
-        }
-        catch ( sdbc::SQLException const & )
-        {
-            VOS_ENSURE( false,
-                        "BaseContent::insert - Caught SQLException!" );
-            success = false;
-        }
+    Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
 
-        if ( success )
-        {
-            if( bDocument )
-            {
-                success = m_pMyShell->mkfil( nMyCommandIdentifier,
-                                             m_aUncPath,
-                                             aInsertArgument.ReplaceExisting,
-                                             aInsertArgument.Data );
-            }
-            else
-            {
-                success = m_pMyShell->mkdir( nMyCommandIdentifier,
-                                             m_aUncPath );
-            }
-        }
+    bool contentTypeSet = true;  // ?
+    try
+    {
+        bDocument = xRow->getBoolean( 1 );
+        if( xRow->wasNull() )
+            contentTypeSet = false;
+
+    }
+    catch ( sdbc::SQLException const & )
+    {
+        VOS_ENSURE( false,
+                    "BaseContent::insert - Caught SQLException!" );
+        contentTypeSet = false;
+    }
+
+    if( ! contentTypeSet )
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND );
+        return;
+    }
+
+
+    sal_Bool success;
+    if( bDocument )
+    {
+        success = m_pMyShell->mkfil( nMyCommandIdentifier,
+                                     m_aUncPath,
+                                     aInsertArgument.ReplaceExisting,
+                                     aInsertArgument.Data );
+    }
+    else
+    {
+        success = m_pMyShell->mkdir( nMyCommandIdentifier,
+                                     m_aUncPath );
     }
 
     if( ! success )
     {
-        throw CommandAbortedException();
+        return;
     }
 
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUncPath );
     m_xContentIdentifier = Reference< XContentIdentifier >( p );
 
     m_pMyShell->registerNotifier( m_aUncPath,this );
-    m_pMyShell->InsertDefaultProperties( m_aUncPath );
+    m_pMyShell->insertDefaultProperties( m_aUncPath );
 
     vos::OGuard aGuard( m_aMutex );
     m_nState = FullFeatured;
