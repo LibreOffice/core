@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:57:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,8 +230,10 @@ public:
      // OD 2004-04-21 #i26791#
      mpFollowTextFlow( new SwFmtFollowTextFlow( FALSE ) ),
      // OD 2004-05-05 #i28701#
+     // --> OD 2004-10-18 #i35017# - constant name has changed
      pWrapInfluenceOnObjPos( new SwFmtWrapInfluenceOnObjPos(
-                    text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED ) ),
+                            text::WrapInfluenceOnPosition::ONCE_CONCURRENT ) ),
+     // <--
      // --> OD 2004-08-06 #i28749#
      mnPositionLayoutDir( text::PositionLayoutDir::PositionInLayoutDirOfAnchor )
      {}
@@ -359,7 +361,9 @@ public:
         if ( _bCreate && !pWrapInfluenceOnObjPos )
         {
             pWrapInfluenceOnObjPos = new SwFmtWrapInfluenceOnObjPos(
-                    text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED );
+                        // --> OD 2004-10-18 #i35017# - constant name has changed
+                        text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+                        // <--
         }
         return pWrapInfluenceOnObjPos;
     }
