@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-13 16:01:29 $
+ *  last change: $Author: ssa $ $Date: 2002-09-20 15:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2083,6 +2083,9 @@ void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
                 ImplShowCursor();
 
                 ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                // #103511# notify combobox listeners of deselection
+                if( !maSelection && GetParent() && GetParent()->GetType() == WINDOW_COMBOBOX )
+                    ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_COMBOBOX_DESELECT );
             }
         }
     }
