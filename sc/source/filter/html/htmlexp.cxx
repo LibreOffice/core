@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:45:30 $
+ *  last change: $Author: nn $ $Date: 2000-10-13 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,7 +1333,7 @@ BOOL ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
         else
         {
             SfxMedium aMedium( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                FALSE, FALSE );
+                                FALSE );
 
             // temp. File anlegen
     //      aMedium.DownLoad();

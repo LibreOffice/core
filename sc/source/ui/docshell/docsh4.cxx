@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
+ *  last change: $Author: nn $ $Date: 2000-10-13 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
                     if ( nVersion != 0 )
                         pSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
-                    pMed = new SfxMedium( aFileName, STREAM_STD_READ, FALSE, TRUE, pFilter, pSet );
+                    pMed = new SfxMedium( aFileName, STREAM_STD_READ, FALSE, pFilter, pSet );
                 }
                 else
                 {

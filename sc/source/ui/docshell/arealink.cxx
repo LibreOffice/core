@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-10-13 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     if ( aOptions.Len() )
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
-    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, TRUE, pFilter);
+    SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter);
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SvEmbeddedObjectRef aRef = pSrcShell;
