@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mav $ $Date: 2004-10-08 13:33:12 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,14 @@ using ::com::sun::star::frame::XModel;
 
 // Global data ================================================================
 
-XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocument, CharSet eCharSet, bool bExport ) :
+XclRootData::XclRootData( XclBiff eBiff,
+        SfxMedium& rMedium, SotStorageRef xRootStrg, SvStream& rBookStrm,
+        ScDocument& rDoc, CharSet eCharSet, bool bExport ) :
     meBiff( eBiff ),
     mrMedium( rMedium ),
-    mrDoc( rDocument ),
+    mxRootStrg( xRootStrg ),
+    mrBookStrm( rBookStrm ),
+    mrDoc( rDoc ),
     meCharSet( eCharSet ),
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
@@ -261,32 +265,11 @@ const String& XclRoot::QueryPassword() const
     return mrData.maPassw;
 }
 
-SotStorage* XclRoot::GetRootStorage() const
-{
-    if ( !mrData.mrStorage.Is() )
-    {
-        SvStream* pStream = NULL;
-        if ( mrData.mbExport )
-            pStream = GetMedium().GetOutStream();
-        else
-            pStream = GetMedium().GetInStream();
-
-        if ( pStream )
-        {
-            mrData.mrStorage = new SotStorage( pStream, sal_False );
-            if ( mrData.mrStorage->GetError() )
-                mrData.mrStorage = NULL;
-        }
-    }
-
-    return mrData.mrStorage;
-}
-
-SotStorageRef XclRoot::OpenStorage( SotStorage* pStrg, const String& rStrgName ) const
+SotStorageRef XclRoot::OpenStorage( SotStorageRef xStrg, const String& rStrgName ) const
 {
     return mrData.mbExport ?
-        ScfTools::OpenStorageWrite( pStrg, rStrgName ) :
-        ScfTools::OpenStorageRead( pStrg, rStrgName );
+        ScfTools::OpenStorageWrite( xStrg, rStrgName ) :
+        ScfTools::OpenStorageRead( xStrg, rStrgName );
 }
 
 SotStorageRef XclRoot::OpenStorage( const String& rStrgName ) const
@@ -294,11 +277,11 @@ SotStorageRef XclRoot::OpenStorage( const String& rStrgName ) const
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-SotStorageStreamRef XclRoot::OpenStream( SotStorage* pStrg, const String& rStrmName ) const
+SotStorageStreamRef XclRoot::OpenStream( SotStorageRef xStrg, const String& rStrmName ) const
 {
     return mrData.mbExport ?
-        ScfTools::OpenStorageStreamWrite( pStrg, rStrmName ) :
-        ScfTools::OpenStorageStreamRead( pStrg, rStrmName );
+        ScfTools::OpenStorageStreamWrite( xStrg, rStrmName ) :
+        ScfTools::OpenStorageStreamRead( xStrg, rStrmName );
 }
 
 SotStorageStreamRef XclRoot::OpenStream( const String& rStrmName ) const
