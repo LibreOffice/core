@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 13:01:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,8 @@ namespace svxform
         try
         {
             Reference< XModel > xDocument( getDocument( _rxFormComponent.get() ) );
+            if ( !xDocument.is() )
+                return eUnknownDocumentType;
             eType = classifyDocument( xDocument );
         }
         catch( const Exception& )
