@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeConnect.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:35:28 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,40 +38,22 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
-
-// structs, const, ...
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.bridge.XUnoUrlResolver;
-
-// exceptions
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
-
-// interfaces
-import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
 
-// helper
-import com.sun.star.uno.IBridge;
-import com.sun.star.uno.UnoRuntime;
-
-// others
 import java.lang.String;
-
-
 
 
 // __________ Implementation __________
 
 /**
  * support ONE singleton uno connection to an running office installation!
- * Can be used to open/use/close connection to uno environment of an already running office.
- * ctor isn't available from outside. You should call static function "getConnection()"
- * to open or use internal set connection which is created one times only.
+ * Can be used to open/use/close connection to uno environment of an office. If
+ * necessary a new office instance is started.
+ * ctor isn't available from outside. You should call static function
+ * "getConnection()" to open or use internal set connection which is created one
+ * times only.
  *
  * @author      Andreas Schl&uuml;ns
  * @created     7. Februar 2002
@@ -82,17 +64,14 @@ public class OfficeConnect
     // ____________________
 
     /**
-     * At first call we create static connection object and open connection to already runing office - if we can.
+     * At first call we create static connection object and open connection to an
+     * office - anew offic einstance is started if necessary
      * Then - and for all further requests we return these static connection member.
-     *
-     * @param  sHost  host on which office runs
-     * @param  sPort  port on which office can be found
-     * @return        Description of the Returned Value
      */
-    public static synchronized void createConnection(String sHost, String sPort)
+    public static synchronized void createConnection()
     {
         if (maConnection == null)
-            maConnection = new OfficeConnect(sHost, sPort);
+            maConnection = new OfficeConnect();
     }
 
     // ____________________
@@ -105,6 +84,7 @@ public class OfficeConnect
         if(maConnection!=null)
         {
             mxServiceManager=null;
+            mxOfficeContext=null;
             maConnection=null;
         }
     }
@@ -114,50 +94,28 @@ public class OfficeConnect
     /**
      * ctor
      * We try to open the connection in our ctor ... transparently for user.
-     * After it was successfully you will find an internal set member m_xFactory wich
-     * means remote uno service manager of connected office.
+     * After it was successfully you will find an internal set member
+     * m_xRemoteContext wich means remote component context of the connected office.
+     * The context can be used to get the remote service manager from the office.
      * We made it private to support singleton pattern of these implementation.
      * see getConnection() for further informations
-     *
-     * @param  sHost  host on which office runs
-     * @param  sPort  port on which office can be found
      */
-    private OfficeConnect(String sHost, String sPort)
+    private OfficeConnect()
     {
         try
         {
-
-            String sConnectString  = "uno:socket,host=";
-                   sConnectString += sHost;
-                   sConnectString += ",port=";
-                   sConnectString += sPort;
-                   sConnectString += ";urp;";                                 // enable oneway calls
-//                   sConnectString += ";urp,Negotiate=0,ForceSynchronous=1;";    // disable oneway calls
-                   sConnectString += "StarOffice.ServiceManager";
-
-            com.sun.star.lang.XMultiServiceFactory xLocalServiceManager = com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-            com.sun.star.bridge.XUnoUrlResolver xURLResolver = (com.sun.star.bridge.XUnoUrlResolver)UnoRuntime.queryInterface(
-                    com.sun.star.bridge.XUnoUrlResolver.class,
-                    xLocalServiceManager.createInstance("com.sun.star.bridge.UnoUrlResolver"));
-
-            mxServiceManager = (com.sun.star.lang.XMultiServiceFactory)UnoRuntime.queryInterface(
-                    com.sun.star.lang.XMultiServiceFactory.class,
-                    xURLResolver.resolve(sConnectString));
+            // get the remote office context. If necessary a new office
+            // process is started
+            mxOfficeContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+            mxServiceManager = mxOfficeContext.getServiceManager();
         }
-        catch (com.sun.star.uno.RuntimeException exUNO)
+        catch (java.lang.Exception ex)
         {
-            System.out.println("connection failed" + exUNO);
-            System.exit(0);
-        }
-        catch (com.sun.star.uno.Exception exRun)
-        {
-            System.out.println("connection failed" + exRun);
-            System.exit(0);
-        }
-        catch (java.lang.Exception exJava)
-        {
-            System.out.println("connection failed" + exJava);
-            System.exit(0);
+            System.err.println("connection failed" + ex);
+            ex.printStackTrace(System.out);
+            System.exit(1);
+
         }
     }
 
@@ -165,28 +123,32 @@ public class OfficeConnect
 
     /**
      * create uno components inside remote office process
-     * After connection of these proccess to a running office we have access to remote service manager of it.
-     * So we can use it to create all existing services. Use this method to create components by name and
-     * get her interface. Casting of it to right target interface is part of your implementation.
+     * After connection of these proccess to a running office we have access to
+     * remote service manager of it.
+     * So we can use it to create all existing services. Use this method to create
+     * components by name and get her interface. Casting of it to right target
+     * interface is part of your implementation.
      *
-     * @param  aType              describe class type of created service
-     *                            Returned object can be casted directly to this one.
-     *                            Uno query was done by this method automaticly.
+     * @param  aType  describe class type of created service
+     *                Returned object can be casted directly to this one.
+     *                Uno query was done by this method automaticly.
      * @param  sServiceSpecifier  name of service which should be created
-     * @return                    Description of the Returned Value
+     * @return  the new created service object
      */
-    public static synchronized Object createRemoteInstance(Class aType, String sServiceSpecifier)
+    public static synchronized Object createRemoteInstance(
+        Class aType, String sServiceSpecifier)
     {
         Object aResult = null;
         try
         {
-            aResult = UnoRuntime.queryInterface(
-                    aType,
-                    mxServiceManager.createInstance(sServiceSpecifier));
+            aResult = UnoRuntime.queryInterface(aType,
+                    mxServiceManager.createInstanceWithContext(
+                        sServiceSpecifier, mxOfficeContext));
         }
         catch (com.sun.star.uno.Exception ex)
         {
-            System.out.println("Couldn't create Service of type " + sServiceSpecifier + ": " + ex);
+            System.err.println("Couldn't create Service of type "
+                               + sServiceSpecifier + ": " + ex);
             System.exit(0);
         }
         return aResult;
@@ -195,28 +157,29 @@ public class OfficeConnect
     // ____________________
 
     /**
-     * same as "createRemoteInstance()" but supports additional parameter for initializing created object
+     * same as "createRemoteInstance()" but supports additional parameter for
+     * initializing created object
      *
      * @param  lArguments         optional arguments
      *                            They are used to initialize new created service.
      * @param  aType              Description of Parameter
      * @param  sServiceSpecifier  Description of Parameter
-     * @return                    Description of the Returned Value
+     * @return                    the new create service object
      */
-    public static synchronized Object createRemoteInstanceWithArguments(Class aType, String sServiceSpecifier, Any[] lArguments)
+    public static synchronized Object createRemoteInstanceWithArguments(
+        Class aType, String sServiceSpecifier, Any[] lArguments)
     {
         Object aResult = null;
         try
         {
-            aResult = UnoRuntime.queryInterface(
-                    aType,
-                    mxServiceManager.createInstanceWithArguments(
-                    sServiceSpecifier,
-                    lArguments));
+            aResult = UnoRuntime.queryInterface(aType,
+                    mxServiceManager.createInstanceWithArgumentsAndContext(
+                        sServiceSpecifier, lArguments, mxOfficeContext));
         }
         catch (com.sun.star.uno.Exception ex)
         {
-            System.out.println("Couldn't create Service of type " + sServiceSpecifier + ": " + ex);
+            System.err.println("Couldn't create Service of type "
+                               + sServiceSpecifier + ": " + ex);
             System.exit(0);
         }
         return aResult;
@@ -225,11 +188,11 @@ public class OfficeConnect
     // ____________________
 
     /**
-     * returns rmote uno servie manager of singleton office instance
+     * returns remote component context of the connected office
      */
-    public static synchronized com.sun.star.lang.XMultiServiceFactory getSMGR()
+    public static synchronized com.sun.star.uno.XComponentContext getOfficeContext()
     {
-        return mxServiceManager;
+        return mxOfficeContext;
     }
 
     // ____________________
@@ -237,7 +200,12 @@ public class OfficeConnect
     /**
      * member
      */
-    private static OfficeConnect                           maConnection    ;    // singleton connection instance
-    private static com.sun.star.lang.XMultiServiceFactory  mxServiceManager;    // reference to remote service manager of singleton connection object
+    // singleton connection instance
+    private static OfficeConnect maConnection;
+
+    // reference to the office component context
+    private static com.sun.star.uno.XComponentContext  mxOfficeContext;
+    // reference to remote service manager of singleton connection object
+    private static com.sun.star.lang.XMultiComponentFactory  mxServiceManager;
 }
 
