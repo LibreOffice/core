@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClParser.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 12:02:19 $
+ *  last change:$Date: 2003-10-06 12:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ public class ClParser {
         map.setProperty("-cmd","AppExecutionCommand");
         map.setProperty("-o","TestJob");
         map.setProperty("-sce","TestJob");
+        map.setProperty("-aca", "AdditionalConnectionArguments");
         return map;
     }
 
