@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-24 13:21:40 $
+ *  last change: $Author: af $ $Date: 2002-07-25 09:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,65 +193,70 @@ void SdDrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
         pSlideShow->Resize( rSize );
 }
 
-/*************************************************************************
-|*
-|* View-Groesse (und -Position bei OLE) aendern durch Aufruf der
-|* Basisklassenmethode; danach TabControl an die Position des ersten
-|* horizontalen ScrollBars anpassen
-|*
-\************************************************************************/
 
+/** This call is simply delegated to the base class.
+*/
 void SdDrawViewShell::AdjustPosSizePixel(const Point &rNewPos,
                                          const Size &rNewSize)
 {
-    if ( rNewSize.Width() && rNewSize.Height() )
-    {
-        Size aTabSize = aTabControl.GetSizePixel();
+    SdViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
+}
+
+
+
+void SdDrawViewShell::ArrangeGUIElements ()
+{
+    Size aTabSize = aTabControl.GetSizePixel();
+
+    // Retrieve the current size (thickness) of the scroll bars.  That is
+    // the width of the vertical and the height of the horizontal scroll
+    // bar.
+    int nScrollBarSize = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
 #ifdef UNX
-        if( ( aTabSize.Width() == 0 ) || ( aTabSize.Height() ) )
+    if( ( aTabSize.Width() == 0 ) || ( aTabSize.Height() ) )
 #else
-        if ( aTabSize.Width() == 0 )
+    if ( aTabSize.Width() == 0 )
 #endif
-            aTabSize.Width() = TABCONTROL_INITIAL_SIZE;
-        aTabSize.Height() = aScrBarWH.Height();
-        Point aHPos = rNewPos;
-        aHPos.Y() += rNewSize.Height() - aTabSize.Height();
+        aTabSize.Width() = TABCONTROL_INITIAL_SIZE;
+    aTabSize.Height() = aScrBarWH.Height();
+    Point aHPos = aViewPos;
+    aHPos.Y() += aViewSize.Height() - aTabSize.Height();
 
-        Size aBtnSize(aScrBarWH);
-        aPageBtn.SetPosSizePixel(aHPos, aBtnSize);
-        aHPos.X() += aBtnSize.Width();
-        aMasterPageBtn.SetPosSizePixel(aHPos, aBtnSize);
-        aHPos.X() += aBtnSize.Width();
-        aLayerBtn.SetPosSizePixel(aHPos, aBtnSize);
-        aHPos.X() += aBtnSize.Width();
+    Size aBtnSize(aScrBarWH);
+    aPageBtn.SetPosSizePixel(aHPos, aBtnSize);
+    aHPos.X() += aBtnSize.Width();
+    aMasterPageBtn.SetPosSizePixel(aHPos, aBtnSize);
+    aHPos.X() += aBtnSize.Width();
+    aLayerBtn.SetPosSizePixel(aHPos, aBtnSize);
+    aHPos.X() += aBtnSize.Width();
 
-        aTabControl.SetSizePixel(aTabSize);
+    aTabControl.SetSizePixel(aTabSize);
 
-        SdViewShell::AdjustPosSizePixel(rNewPos, rNewSize);
+    SdViewShell::ArrangeGUIElements ();
 
-        aTabSize.Width() = pHScrlArray[0]->GetPosPixel().X() - aHPos.X();
-        if ( aTabSize.Width() < 0 )
-            aTabSize.Width() = 0;
+    aTabSize.Width() = pHScrlArray[0]->GetPosPixel().X() - aHPos.X();
+    if ( aTabSize.Width() < 0 )
+        aTabSize.Width() = 0;
 
-        aTabControl.SetPosSizePixel(aHPos, aTabSize);
-        aLayerTab.SetPosSizePixel(aHPos, aTabSize);
+    aTabControl.SetPosSizePixel(aHPos, aTabSize);
+    aLayerTab.SetPosSizePixel(aHPos, aTabSize);
 
-        SdClient*   pIPClient = (SdClient*)GetIPClient();
-        BOOL bClientActive = FALSE;
-        if ( pIPClient && pIPClient->IsInPlaceActive() )
-            bClientActive = TRUE;
+    SdClient*   pIPClient = (SdClient*)GetIPClient();
+    BOOL bClientActive = FALSE;
+    if ( pIPClient && pIPClient->IsInPlaceActive() )
+        bClientActive = TRUE;
 
-        BOOL bInPlaceActive = pDocSh->GetProtocol().IsInPlaceActive();
+    BOOL bInPlaceActive = pDocSh->GetProtocol().IsInPlaceActive();
 
 //        if ( bZoomOnPage && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-        if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
-        {
-            // bei Split immer erstes Fenster resizen
-            pWindow = pWinArray[0][0];
-            SfxRequest aReq(SID_SIZE_PAGE, 0, pDoc->GetItemPool());
-            ExecuteSlot( aReq );
-        }
+    if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
+    {
+        // bei Split immer erstes Fenster resizen
+        pWindow = pWinArray[0][0];
+        SfxRequest aReq(SID_SIZE_PAGE, 0, pDoc->GetItemPool());
+        ExecuteSlot( aReq );
     }
 }
 
