@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:21:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ TARGET=emser
 LIBTARGET=NO
 USE_DEFFILE=NO
 
-INCPRE+= $(SOLARINCDIR)$/external$/atl 
+INCPRE+= $(ATL_INCLUDE) 
 
 # --- Files --------------------------------------------------------
 
