@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:41:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
@@ -139,29 +142,23 @@ class SfxConfigManager;
 #define SFX_CFGFUNCTION_SCRIPT 9
 #define SFX_CFGGROUP_STYLES  10
 
-typedef ::std::hash_map< ::rtl::OUString                    ,
-                         USHORT                             ,
-                         ::rtl::OUStringHash                ,
-                         ::std::equal_to< ::rtl::OUString > > TCommand2IDMap;
-
-typedef ::std::vector< ::rtl::OUString > TID2CommandMap;
+#define css ::com::sun::star
+#define dcss ::drafts::com::sun::star
 
 struct SfxStyleInfo_Impl
 {
     public:
-    USHORT nId;
+
     ::rtl::OUString sFamily;
     ::rtl::OUString sStyle;
     ::rtl::OUString sCommand;
     ::rtl::OUString sLabel;
 
     SfxStyleInfo_Impl()
-        : nId(0)
     {}
 
     SfxStyleInfo_Impl(const SfxStyleInfo_Impl& rCopy)
     {
-        nId      = rCopy.nId;
         sFamily  = rCopy.sFamily;
         sStyle   = rCopy.sStyle;
         sCommand = rCopy.sCommand;
@@ -171,26 +168,15 @@ struct SfxStyleInfo_Impl
 
 struct SfxStylesInfo_Impl
 {
-    public:
-        static USHORT START_ID_STYLES;
-
     private:
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDoc;
-
-        TID2CommandMap m_lID2Commands;
-        TCommand2IDMap m_lCommand2IDs;
-        USHORT m_nIDPool;
 
     public:
 
         SfxStylesInfo_Impl();
         void setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
-        // return ID of existing command or create a new ID after caching this command as new one
-        USHORT cacheStyle(const ::rtl::OUString& sCommand);
-
-        ::rtl::OUString getStyle(USHORT nID);
         sal_Bool parseStyleCommand(const ::rtl::OUString&   sCommand,
                                          SfxStyleInfo_Impl& aStyle  );
 
@@ -206,6 +192,8 @@ struct SfxGroupInfo_Impl
     USHORT      nOrd;
     void*       pObject;
     BOOL        bWasOpened;
+    String      sCommand;
+    String      sLabel;
 
                 SfxGroupInfo_Impl( USHORT n, USHORT nr, void* pObj = 0 ) :
                     nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(FALSE) {}
@@ -213,7 +201,6 @@ struct SfxGroupInfo_Impl
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
 SV_DECL_PTRARR_DEL(SfxGroupInfoArr_Impl, SfxGroupInfoPtr, 5, 5);
-DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10);
 
 class SfxConfigFunctionListBox_Impl : public SvTreeListBox
 {
@@ -236,6 +223,8 @@ public:
     String                          GetHelpText( SvLBoxEntry *pEntry );
     USHORT                          GetCurId()
                                     { return GetId( FirstSelected() ); }
+    String                          GetCurCommand();
+    String                          GetCurLabel();
     SfxMacroInfo*                   GetMacroInfo();
     void                            FunctionSelected();
     void                            SetStylesInfo(SfxStylesInfo_Impl* pStyles);
@@ -244,11 +233,11 @@ public:
 class SfxSlotPool;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
+    SfxSlotPool* pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
     ULONG                           nMode;
     String                          aScriptType;
-    SfxSlotPool*                    pSlotPool;
     BOOL                            bShowSF; // show Scripting Framework scripts
     BOOL                            bShowBasic; // show Basic scripts
 
@@ -263,10 +252,25 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
 
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
+
+    ::rtl::OUString m_sModuleLongName;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
+    css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
+    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
+
     Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
     ::rtl::OUString xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
+
+    void InitModule();
+    void InitBasic();
+    void InitStyles();
+
+    ::rtl::OUString MapCommand2UIName(const ::rtl::OUString& sCommand);
 
     SfxStylesInfo_Impl*             pStylesInfo;
 
@@ -282,7 +286,9 @@ public:
                                     ~SfxConfigGroupListBox_Impl();
     void                            ClearAll();
 
-    void                            Init( SvStringsDtor *pArr = 0, SfxSlotPool* pSlotPool = 0 );
+    void                            Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
+                                         const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
+                                         const ::rtl::OUString&                                        sModuleLongName);
     void                            SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                                     { pFunctionListBox = pBox; }
     void                            Open( SvLBoxEntry*, BOOL );
@@ -462,7 +468,7 @@ class SfxAcceleratorManager;
 // class SfxAcceleratorConfigListBox *************************************************
 
 class SfxAcceleratorConfigPage;
-class SfxAccCfgTabListBox_Impl : public SfxMenuCfgTabListBox_Impl
+class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {
     SfxAcceleratorConfigPage*   m_pAccelConfigPage;
 
@@ -476,7 +482,7 @@ public:
                                         SfxAcceleratorConfigPage* pAccelConfigPage,
                                         Window *pParent,
                                         const ResId &rResId ) :
-                                    SfxMenuCfgTabListBox_Impl( pParent, rResId ),
+                                     SvTabListBox( pParent, rResId ),
                                     m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
@@ -484,22 +490,33 @@ public:
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
-/* TODO_ACC
-struct AccelInfo_Impl
-{
-    SfxAcceleratorManager*      pMgr;
-    SfxAcceleratorManager*      pChanged;
-    BOOL                        bDefault;
-    BOOL                        bModified;
-};
-*/
-struct AccelBackup
-{
-    AccelBackup( const KeyCode& rKeyCode, USHORT nSlotId ) :
-        aKeyCode( rKeyCode ), nId( nSlotId ) {}
 
-    KeyCode aKeyCode;
-    USHORT  nId;
+struct TAccInfo
+{
+    public:
+
+        TAccInfo(      sal_Int32 nKeyPos ,
+                       sal_Int32 nListPos,
+                 const KeyCode&  aKey    )
+            : m_nKeyPos        (nKeyPos  )
+            , m_nListPos       (nListPos )
+            , m_sCommand       (         )
+            , m_aKey           (aKey     )
+            // its important to set TRUE as default -
+            // because only fix entries will be disabled later ...
+            , m_bIsConfigurable(sal_True )
+        {}
+
+        sal_Bool isConfigured() const
+        {
+            return (m_nKeyPos>-1 && m_nListPos>-1 && m_sCommand.getLength());
+        }
+
+        sal_Int32 m_nKeyPos;
+        sal_Int32 m_nListPos;
+        sal_Bool m_bIsConfigurable;
+        ::rtl::OUString m_sCommand;
+        KeyCode m_aKey;
 };
 
 class SfxAcceleratorConfigPage : public SfxTabPage
@@ -518,30 +535,24 @@ private:
     FixedText                       aFunctionText;
     SfxConfigFunctionListBox_Impl   aFunctionBox;
     FixedText                       aKeyText;
-    ListBox                         aKeyBox;
+    SvTreeListBox                   aKeyBox;
     FixedLine                       aFunctionsGroup;
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
-    std::vector< AccelBackup >      m_aAccelBackup;
     SfxStylesInfo_Impl              m_aStylesInfo;
     sal_Bool                        m_bStylesInfoInitialized;
 
-    USHORTArr                   aConfigCodeArr;
-    USHORTArr                   aConfigAccelArr;
-    USHORTArr                   aAccelArr;
-    USHORTArr                   aKeyArr;
+    css::uno::Reference< css::lang::XMultiServiceFactory >     m_xSMGR;
+    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xGlobal;
+    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xModule;
+    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xAct;
+    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            pSMGR;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > pGlobal; // name it pXXX so the old code can be used without changes ... because a -> operator is used anyway .-)
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > pModule;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > pAct;
-
-/*TODO_ACC
-    AccelInfo_Impl*             pGlobal;
-    AccelInfo_Impl*             pModule;
-    AccelInfo_Impl*             pAct;
-*/
+    ::rtl::OUString m_sModuleLongName;
+    ::rtl::OUString m_sModuleShortName;
+    ::rtl::OUString m_sModuleUIName;
 
     DECL_LINK(                  ChangeHdl, Button * );
     DECL_LINK(                  RemoveHdl, Button * );
@@ -551,25 +562,18 @@ private:
     DECL_LINK(                  Default, PushButton * );
     DECL_LINK(                  RadioHdl, RadioButton* );
 
-    KeyCode                     PosToKeyCode_Config( USHORT nPos ) const;
-    USHORT                      KeyCodeToPos_Config( const KeyCode &rCode ) const;
+    String                      GetLabel4Command(const String& sCommand);
+    void                        InitAccCfg();
+    KeyCode                     MapPosToKeyCode( USHORT nPos ) const;
+    USHORT                      MapKeyCodeToPos( const KeyCode &rCode ) const;
+    String                      GetFunctionName( KeyFuncType eType ) const;
+    css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
 
-    KeyCode                     PosToKeyCode_All( USHORT nPos ) const;
-    USHORT                      KeyCodeToPos_All( const KeyCode& rCode ) const;
-
-    String                      GetFunctionName( KeyFuncType eType )    const;
-
-    void                        Init(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr);
+    void                        Init(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
     void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
 
-    ::rtl::OUString             impl_ID2Command(USHORT nId, SfxSlotPool* pSlotPool);
-    USHORT                      impl_Command2ID(const ::rtl::OUString& sCommand, SfxSlotPool* pSlotPool);
-    void                        impl_appendItem(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr  ,
-                                                      USHORT                                                      nId      ,
-                                                const KeyCode&                                                    aVCLKey  ,
-                                                      SfxSlotPool*                                                pSlotPool);
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
@@ -578,7 +582,9 @@ public:
     virtual void                Reset( const SfxItemSet& );
 
     void                        SelectMacro(const SfxMacroInfoItem*);
-    void                        Apply(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr, BOOL );
+    void                        Apply(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& pAccMgr);
+    void                        CopySource2Target(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xSourceAccMgr,
+                                                  const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xTargetAccMgr);
 };
 
 class SfxConfigDialog : public SfxTabDialog
@@ -663,6 +669,9 @@ public:
     void                        Apply( SfxStatusBarManager*, BOOL );
 };
 */
+
+#undef css
+#undef dcss
 
 #endif
 
