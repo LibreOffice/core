@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-21 13:51:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@ using namespace com::sun::star::lang;
 //------------------------------------------------------------------------
 
 #define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
-#define SMGR_SINGLETON "/singleton/com.sun.star.lang.theServiceManager"
 
 //------------------------------------------------------------------------
 // helper functions
@@ -167,7 +166,6 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {
     Reference< XMultiComponentFactory > xServiceManager = xContext->getServiceManager();
-    m_xContext = xContext;
 
     if ( xServiceManager.is() ) {
         m_xConfigurationProvider = Reference< XMultiServiceFactory > (
@@ -194,18 +192,7 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-#if 0
-    //TODO  Instead of obtaining the component context from the service manager
-    // here, it would be better if the CmdMailSuppl service were instantiated
-    // with a component context, from which it would obtain a service manager:
-    Reference< XComponentContext > xContext(
-        Reference< com::sun::star::beans::XPropertySet >(
-            m_xServiceManager, UNO_QUERY_THROW )->getPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-        UNO_QUERY_THROW );
-    return Reference< XSimpleMailMessage >( new CmdMailMsg( xContext ) );
-#endif
-    return Reference< XSimpleMailMessage >( new CmdMailMsg( m_xContext ) );
+    return Reference< XSimpleMailMessage >( new CmdMailMsg(  ) );
 }
 
 //------------------------------------------------
@@ -357,9 +344,13 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
     {
-        aBuffer.append("--attach \"");
-        aBuffer.append(OUStringToOString(aStringList[n], RTL_TEXTENCODING_UTF8));
-        aBuffer.append("\" ");
+        OUString aSystemPath;
+        if ( FileBase::E_None == FileBase::getSystemPathFromFileURL(aStringList[n], aSystemPath) )
+        {
+            aBuffer.append("--attach \"");
+            aBuffer.append(OUStringToOString(aSystemPath, RTL_TEXTENCODING_UTF8));
+            aBuffer.append("\" ");
+        }
     }
 
     OString cmd = aBuffer.makeStringAndClear();
@@ -369,205 +360,6 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             OUString(RTL_CONSTASCII_USTRINGPARAM( "No mail client configured" )),
             static_cast < XSimpleMailClient * > (this) );
     }
-
-
-#if 0
-    OUString aCommandLine;
-
-                    // create name access to format strings
-                    aProperty.Value = makeAny( aConfigRoot + OUString::createFromAscii( "/FormatStrings" ) );
-                    aArgumentList[0] = makeAny( aProperty );
-
-                    Reference< XNameAccess > xFormatStringAccess =
-                        Reference< XNameAccess > (
-                            m_xConfigurationProvider->createInstanceWithArguments(
-                                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
-                                aArgumentList ),
-                            UNO_QUERY );
-
-                    // create name access to enum delimiters
-                    aProperty.Value = makeAny( aConfigRoot + OUString::createFromAscii( "/EnumDelimiters" ) );
-                    aArgumentList[0] = makeAny( aProperty );
-
-                    Reference< XNameAccess > xDelimiterAccess =
-                        Reference< XNameAccess > (
-                            m_xConfigurationProvider->createInstanceWithArguments(
-                                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
-                                aArgumentList ),
-                            UNO_QUERY );
-
-                    // query for XNameAccess
-                    Reference< XNameAccess > xMessageAccess =
-                        Reference< XNameAccess > ( xSimpleMailMessage, UNO_QUERY );
-
-                    if( xFormatStringAccess.is() && xDelimiterAccess.is() && xMessageAccess.is() )
-                    {
-                        Sequence< OUString > aKeyList = xMessageAccess->getElementNames();
-
-                        OUString aBaseDelimiter, aBaseParameter;
-                        OUString aParameter;
-
-                        // iterate over all mail parts
-                        for( sal_Int32 n = 0, nmax = aKeyList.getLength(); n < nmax; n++ )
-                        {
-                            // first check if the key is also in FormatStrings list
-                            if( xFormatStringAccess->hasByName( aKeyList[n] ) )
-                            {
-                                xFormatStringAccess->getByName( aKeyList[n] ) >>= aParameter;
-
-                                // check if we have something to replace
-                                sal_Int32 nIndex = aParameter.indexOf( OUString::createFromAscii( "%s" ) );
-                                if( nIndex >= 0 )
-                                {
-                                    OUString aReplaceWithString;
-                                    Any aValue = xMessageAccess->getByName( aKeyList[n] );
-
-                                    // handle sequence of string as value
-                                    if( aValue.getValueType() == getCppuType( ( Sequence< OUString > * ) NULL ) )
-                                    {
-                                        Sequence< OUString > aDataList;
-
-                                        aValue >>= aDataList;
-                                        aReplaceWithString = aDataList[0];
-
-                                        // for multiple data we need a delimiter
-                                        if( ( aDataList.getLength() > 1 ) && xDelimiterAccess->hasByName( aKeyList[n] ) )
-                                        {
-                                            OUString aDelimiter;
-                                            xDelimiterAccess->getByName( aKeyList[n] ) >>= aDelimiter;
-
-                                            for( sal_Int32 m = 1, mmax = aDataList.getLength(); m < mmax; m++ )
-                                            {
-                                                aReplaceWithString += aDelimiter;
-                                                aReplaceWithString += aDataList[m];
-                                            }
-                                        }
-                                    }
-
-                                    // handle string as value
-                                    else if( aValue.getValueType() == getCppuType( ( OUString * ) NULL ) )
-                                    {
-                                        aValue >>= aReplaceWithString;
-                                    }
-
-                                    if( aReplaceWithString.getLength() )
-                                        aParameter = aParameter.replaceAt( nIndex, 2, aReplaceWithString );
-                                    else
-                                        aParameter = OUString();
-                                }
-                            }
-
-                            // something to append ?
-                            if( aParameter.getLength() )
-                            {
-                                if( aBaseParameter.getLength() )
-                                {
-                                    // do we have a delimiter for command line
-                                    if( ( 0 == aBaseDelimiter.getLength() ) && xDelimiterAccess->hasByName( aProgramConfig ) )
-                                    {
-                                        xDelimiterAccess->getByName( aProgramConfig ) >>= aBaseDelimiter;
-                                    }
-
-                                    if( aBaseDelimiter.getLength() )
-                                    {
-                                        aBaseParameter += aBaseDelimiter;
-                                        aBaseParameter += aParameter;
-                                    }
-                                }
-                                else
-                                    aBaseParameter = aParameter;
-
-                            }
-                        } // for()
-
-                        xFormatStringAccess->getByName( aProgramConfig ) >>= aCommandLine;
-
-                        // check if we have something to replace
-                        sal_Int32 nIndex = aCommandLine.indexOf( OUString::createFromAscii( "%s" ) );
-                        if( nIndex >= 0 )
-                            aCommandLine = aCommandLine.replaceAt( nIndex, 2, aBaseParameter );
-
-                    }  // xFormatStringAccess.is() && xDelimiterAccess.is() && xMessageAccess()
-
-                    // split up parameters
-                    Sequence< OUString > aArgumentList( 1 );
-                    sal_Int32 nArguments = 1;
-
-                    sal_Bool  bInQuote = sal_False;
-                    sal_Int32 nLastIndex = 0;
-                    const sal_Unicode *pBuffer = aCommandLine.getStr();
-
-                    for( sal_Int32 n = 0, nmax = aCommandLine.getLength(); n < nmax; n++ )
-                    {
-                        if( (sal_Unicode) '"' == pBuffer[n] )
-                        {
-                            bInQuote = !bInQuote;
-                        }
-                        else if( (sal_Unicode) ' ' == pBuffer[n] )
-                        {
-                            if( !bInQuote )
-                            {
-                                // ignore multiple blanks
-                                if( nLastIndex == n )
-                                    nLastIndex++;
-                                else
-                                {
-                                    // seem to have something to split
-                                    aArgumentList.realloc( ++nArguments );
-                                    aArgumentList[nArguments - 2] = aCommandLine.copy( nLastIndex, n - nLastIndex );
-                                    nLastIndex = n + 1;
-                                }
-                            }
-                        }
-                    }
-
-                    aArgumentList[nArguments - 1] = aCommandLine.copy( nLastIndex );
-
-                    oslProcess aProcess;
-                    rtl_uString **pArgumentArray = (rtl_uString **) aArgumentList.getArray();
-
-                    if( osl_Process_E_None == osl_executeProcess( aProgram.pData,
-                        pArgumentArray,
-                        nArguments,
-                        osl_Process_DETACHED | osl_Process_SEARCHPATH,
-                        NULL,
-                        NULL,
-                        NULL,
-                        0,
-#if SUPD < 634
-                        NULL,
-#endif
-                        &aProcess)
-                    )
-                    {
-                        return;
-                    }
-                }
-            }
-        }
-
-        catch( NoSuchElementException e )
-        {
-            OSL_TRACE( "CmdMail: corrupted configuration.\n" );
-            OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        }
-
-        catch( WrappedTargetException e )
-        {
-            OSL_TRACE( "CmdMail: unexspected exception.\n" );
-            OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        }
-
-
-        catch( Exception e )
-        {
-            OSL_TRACE( "CmdMail: unexspected exception.\n" );
-            OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        }
-    }
-
-
-#endif
 }
 
 // -------------------------------------------------
