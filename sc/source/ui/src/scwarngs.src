@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Resource RID_WRNHDLSC
         Text [ spanish ] = "Solo se ha guardado la hoja actual." ;
         Text [ french ] = "Seule la feuille active a été enregistrée." ;
         Text [ dutch ] = "Alleen de actuele tabel werd opgeslagen." ;
-        Text [ swedish ] = "Endast den aktuella tabellen sparades." ;
+        Text [ swedish ] = "Det är bara den aktuella tabellen som har sparats." ;
         Text [ danish ] = "Kun det aktuelle ark blev gemt." ;
         Text [ portuguese_brazilian ] = "Es wurde nur die aktuelle Tabelle gespeichert." ;
         Text [ portuguese ] = "Só foi guardada a tabela activa." ;
@@ -102,7 +102,7 @@ Resource RID_WRNHDLSC
         Text [ italian ] = "È stato superato il numero massimo di righe. Le righe in eccesso non sono state importate!" ;
         Text [ spanish ] = "¡Se ha excedido el número máximo de filas, las filas adicionales no se importaron!" ;
         Text [ french ] = "Le nombre de lignes maximum a été dépassé. Les lignes en surplus n'ont pas été importées !" ;
-        Text [ swedish ] = "Maximala radantalet överskreds. Övertaliga rader blev inte medimporterade!" ;
+        Text [ swedish ] = "Det maximala antalet rader överskreds. Övertaliga rader importerades inte!" ;
         Text [ danish ] = "Det maksimale antal rækker blev overskredet. De overtallige rækker blev ikke importeret!" ;
         Text [ portuguese ] = "O número máximo de linhas foi ultrapassado. As linhas em excesso não foram importadas!" ;
         Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
