@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assertion.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 14:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,14 +158,14 @@
     /*_____________________________________________________________________________________________________________
         LOG_ASSERT( BCONDITION, STEXT )
 
-        Forward assertions to messagebox. (We use OSL_ENSHURE to do this.)
+        Forward assertions to messagebox. (We use OSL_ENSURE to do this.)
         Set LOGTYPE to LOGTYPE_MESSAGEBOX to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
     #if LOGTYPE==LOGTYPE_MESSAGEBOX
 
         #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
-                    OSL_ENSHURE( ( BCONDITION ), STEXT );
+                    OSL_ENSURE( ( BCONDITION ), STEXT );
 
         #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
                     {                                                                                           \
@@ -175,7 +175,7 @@
                         sBuffer.append( "\n\t\""        );                                                      \
                         sBuffer.append( STEXT           );                                                      \
                         sBuffer.append( "\"\n"          );                                                      \
-                        OSL_ENSHURE( !( BCONDITION ), sBuffer.makeStringAndClear().getStr() );                  \
+                        OSL_ENSURE( !( BCONDITION ), sBuffer.makeStringAndClear().getStr() );                   \
                     }
 
     #endif
