@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 12:51:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
     if ( maContext == NULL )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf(stderr, "input context creation failed\n");
 #endif
 
@@ -615,7 +615,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     char pBuf[ 128 ];
     fprintf( stderr, "selected inputmethod style = %s\n",
              GetMethodName(mnPreeditStyle | mnStatusStyle, pBuf, sizeof(pBuf)) );
@@ -666,7 +666,7 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
         maClientData.pFrame->maFrameData.Call (SALEVENT_EXTTEXTINPUT,    (void*)&aTextEvent);
         maClientData.pFrame->maFrameData.Call (SALEVENT_ENDEXTTEXTINPUT, (void*)NULL);
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf(stderr, "CommitKeyEvent without frame\n" );
 #endif
