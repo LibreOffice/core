@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,16 +197,22 @@ service TextDocument
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
+    /// @since #107627#
     [optional] interface com::sun::star::text::XBookmarksSupplier;
 
+    /// @since #107627#
     [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
 
+    /// @since #107627#
     [optional] interface com::sun::star::text::XTextFieldsSupplier;
 
+    /// @since #107627#
     [optional] interface com::sun::star::text::XTextFramesSupplier;
 
+    /// @since #107627#
     [optional] interface com::sun::star::text::XTextSectionsSupplier;
 
+    /// @since #107627#
     [optional] interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
 
@@ -257,11 +263,15 @@ service TextDocument
          *
          *  When no concordance file should be used the string is empty.
          *  Used for text documents only.
+     *
+     *  @since #107627#
          */
         [optional, property] string IndexAutoMarkFileURL;
 
         //-------------------------------------------------------------------------
         /** specifies if change recording is active.
+     *
+     *  @since #107627#
          */
         [optional, property] boolean RecordChanges;
 
@@ -273,6 +283,8 @@ service TextDocument
          *    Oct-12-29 will be interpreted as Oct-12-2029
          *    Oct-12-30 will be interpreted as Oct-12-1930
          *    Oct-12-02 will be interpreted as Oct-12-2002
+     *
+     *  @since #107627#
          */
         [optional, property] short TwoDigitYear;
 };
