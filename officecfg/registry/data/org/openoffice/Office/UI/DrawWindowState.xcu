@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:56:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Lines and Filling</value>
-                    <value xml:lang="en-US">Linie und Füllung</value>
+                    <value xml:lang="en-US">Line and Filling</value>
+                    <value xml:lang="de">Linie und Füllung</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
