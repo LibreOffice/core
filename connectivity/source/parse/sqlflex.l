@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.14 2001-09-27 06:12:35 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.15 2002-01-18 16:41:13 fs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-09-27 06:12:35 $ $Revision: 1.14 $
+//	$Author: fs $ $Date: 2002-01-18 16:41:13 $ $Revision: 1.15 $
 //
 // Description:
 //
@@ -373,12 +373,18 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				{
 					case 0:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+						delete Buffer;
+						Buffer = NULL;
 						return SQL_TOKEN_NAME;											
 					case 1:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+						delete Buffer;
+						Buffer = NULL;
 						return SQL_TOKEN_STRING;
 					case 2:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
+						delete Buffer;
+						Buffer = NULL;
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
 			} 
@@ -417,6 +423,8 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 	}
 	*s = '\0';		 		
 	YY_FATAL_ERROR("Unterminated name string"); 
+	delete Buffer;
+	Buffer = NULL;
 	return SQL_TOKEN_INVALIDSYMBOL;		
 }
 
@@ -577,6 +585,8 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 			}
 		}
 		m_sErrorMessage += aError;
+		delete Buffer;
+		Buffer = NULL;
 	}
 	IN_SQLyyerror = false;
 	YY_FLUSH_BUFFER;
