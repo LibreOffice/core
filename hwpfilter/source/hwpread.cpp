@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpread.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:41:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hwpread.cpp,v 1.1 2003-10-15 14:41:27 dvo Exp $ */
+/* $Id: hwpread.cpp,v 1.2 2005-02-16 18:18:18 vg Exp $ */
 
 #include "precompile.h"
 
@@ -107,10 +107,10 @@ int FieldCode::Read(HWPFile & hwpf)
 {
     ulong size;
     hchar dummy;
-    ulong len1;       // hchar타입의 문자열 테이터 #1의 길이
-    ulong len2;       // hchar타입의 문자열 테이터 #2의 길이
-    ulong len3;       // hchar타입의 문자열 테이터 #3의 길이
-    ulong binlen;   // 임의 형식의 바이너리 데이타 길이
+    ulong len1;       /* hchar타입의 문자열 테이터 #1의 길이 */
+    ulong len2;       /* hchar타입의 문자열 테이터 #2의 길이 */
+    ulong len3;       /* hchar타입의 문자열 테이터 #3의 길이 */
+    ulong binlen;     /* 임의 형식의 바이너리 데이타 길이 */
 
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
@@ -134,9 +134,9 @@ int FieldCode::Read(HWPFile & hwpf)
 
     hwpf.ReadBlock(bin, binlen);
 
-     if( type[0] == 3 && type[1] == 2 ){ // 만든날짜로서 포맷을 생성해야 한다.
+     if( type[0] == 3 && type[1] == 2 ){ /* 만든날짜로서 포맷을 생성해야 한다. */
           DateCode *pDate = new DateCode;
-          for( int i = 0 ;i < len3/2 ; i++ ){
+          for( int i = 0 ;i < (int)(len3/2) ; i++ ){
                 if(str3[i] == 0 ) break;
                 if( i >= DATE_SIZE ) break;
                 pDate->format[i] = str3[i];
@@ -405,46 +405,46 @@ int Picture::Read(HWPFile & hwpf)
     hwpf.AddBox(this);
 
     hwpf.Read4b(&follow_block_size, 1);
-    hwpf.Read2b(&dummy1, 1);                      // 예약 4바이트
+    hwpf.Read2b(&dummy1, 1);                      /* 예약 4바이트 */
     hwpf.Read2b(&dummy2, 1);
 
     style.boxnum = fboxnum++;
      zorder = zindex++;
-    hwpf.Read1b(&style.anchor_type, 1);           // 기준위치
-    hwpf.Read1b(&style.txtflow, 1);               // 그림피함. 0-2(자리차지,투명,어울림)
-    hwpf.Read2b(&style.xpos, 1);                  // 가로위치 : 1 왼쪽, 2오른쪽, 3 가운데, 이외 = 임의
-    hwpf.Read2b(&style.ypos, 1);                  // 세로위치 : 1 위, 2 아래, 3 가운데, 이외 임의
-    hwpf.Read2b(&option, 1);                      // 기타옵션 : 테두리,그림반전,등. bit로 저장.
-    hwpf.Read2b(&ctrl_ch, 1);                     // 항상 11
-    hwpf.Read2b(style.margin, 12);                //여백 : [0-2][] out/in/셀,[][0-3] 왼/오른/위/아래 여백
-    hwpf.Read2b(&box_xs, 1);                      // 박스크기 가로
-    hwpf.Read2b(&box_ys, 1);                      // 세로
-    hwpf.Read2b(&cap_xs, 1);                      // 캡션 크기 가로
-    hwpf.Read2b(&cap_ys, 1);                      // 세로
-    hwpf.Read2b(&style.cap_len, 1);                     // 길이
-    hwpf.Read2b(&xs, 1);                          // 전체 크기(박스 크기 + 캡션 + 여백) 가로
-    hwpf.Read2b(&ys, 1);                          // 세로
-    hwpf.Read2b(&cap_margin, 1);                  // 캡션 여백
-    hwpf.Read1b(&xpos_type, 1);                   //
+    hwpf.Read1b(&style.anchor_type, 1);           /* 기준위치 */
+    hwpf.Read1b(&style.txtflow, 1);               /* 그림피함. 0-2(자리차지,투명,어울림) */
+    hwpf.Read2b(&style.xpos, 1);                  /* 가로위치 : 1 왼쪽, 2오른쪽, 3 가운데, 이외 = 임의 */
+    hwpf.Read2b(&style.ypos, 1);                  /* 세로위치 : 1 위, 2 아래, 3 가운데, 이외 임의 */
+    hwpf.Read2b(&option, 1);                      /* 기타옵션 : 테두리,그림반전,등. bit로 저장. */
+    hwpf.Read2b(&ctrl_ch, 1);                     /* 항상 11 */
+    hwpf.Read2b(style.margin, 12);                /* 여백 : [0-2][] out/in/셀,[][0-3] 왼/오른/위/아래 여백 */
+    hwpf.Read2b(&box_xs, 1);                      /* 박스크기 가로 */
+    hwpf.Read2b(&box_ys, 1);                      /* 세로 */
+    hwpf.Read2b(&cap_xs, 1);                      /* 캡션 크기 가로 */
+    hwpf.Read2b(&cap_ys, 1);                      /* 세로 */
+    hwpf.Read2b(&style.cap_len, 1);               /* 길이 */
+    hwpf.Read2b(&xs, 1);                          /* 전체 크기(박스 크기 + 캡션 + 여백) 가로 */
+    hwpf.Read2b(&ys, 1);                          /* 세로 */
+    hwpf.Read2b(&cap_margin, 1);                  /* 캡션 여백 */
+    hwpf.Read1b(&xpos_type, 1);
     hwpf.Read1b(&ypos_type, 1);
-    hwpf.Read1b(&smart_linesp, 1);                //줄간격 보호 : 0 미보호, 1 보호
+    hwpf.Read1b(&smart_linesp, 1);                /* 줄간격 보호 : 0 미보호, 1 보호 */
     hwpf.Read1b(&reserved1, 1);
-    hwpf.Read2b(&pgx, 1);                         // 실제 계산된 박스 가로
-    hwpf.Read2b(&pgy, 1);                         // 세로
-    hwpf.Read2b(&pgno, 1);                        // 페이지 숫자 : 0부터 시작
-    hwpf.Read2b(&showpg, 1);                      // 박스보여줌
-    hwpf.Read2b(&cap_pos, 1);                     // 캡션위치 0 - 7 메뉴순서.
-    hwpf.Read2b(&num, 1);                         // 박스번호 0부터 시작해서 매긴일련번호
+    hwpf.Read2b(&pgx, 1);                         /* 실제 계산된 박스 가로 */
+    hwpf.Read2b(&pgy, 1);                         /* 세로 */
+    hwpf.Read2b(&pgno, 1);                        /* 페이지 숫자 : 0부터 시작 */
+    hwpf.Read2b(&showpg, 1);                      /* 박스보여줌 */
+    hwpf.Read2b(&cap_pos, 1);                     /* 캡션위치 0 - 7 메뉴순서. */
+    hwpf.Read2b(&num, 1);                         /* 박스번호 0부터 시작해서 매긴일련번호 */
 
-    hwpf.Read1b(&pictype, 1);                     // 그림종류
+    hwpf.Read1b(&pictype, 1);                     /* 그림종류 */
 
-    skip[0] = (short) hwpf.Read2b();              // 그림에서 실제 표시를 시작할 위치 가로
-    skip[1] = (short) hwpf.Read2b();              // 세로
-    scale[0] = (short) hwpf.Read2b();             // 확대비율 : 0 고정, 이외 퍼센트 단위 가로
-    scale[1] = (short) hwpf.Read2b();             // 세로
+    skip[0] = (short) hwpf.Read2b();              /* 그림에서 실제 표시를 시작할 위치 가로 */
+    skip[1] = (short) hwpf.Read2b();              /* 세로 */
+    scale[0] = (short) hwpf.Read2b();             /* 확대비율 : 0 고정, 이외 퍼센트 단위 가로 */
+    scale[1] = (short) hwpf.Read2b();             /* 세로 */
 
-    hwpf.Read1b(picinfo.picun.path, 256);         // 그림파일 이름 : 종류가 Drawing이 아닐때.
-    hwpf.Read1b(reserved3, 9);                    // 밝기/명암/그림효과 등
+    hwpf.Read1b(picinfo.picun.path, 256);         /* 그림파일 이름 : 종류가 Drawing이 아닐때. */
+    hwpf.Read1b(reserved3, 9);                    /* 밝기/명암/그림효과 등 */
 
     UpdateBBox(this);
     if( pictype != PICTYPE_DRAW )
@@ -466,7 +466,7 @@ int Picture::Read(HWPFile & hwpf)
         }
         else
         {
-            if (follow[3] << 24 | follow[2] << 16 | follow[1] << 8 | follow[0] == 0x269)
+            if ((follow[3] << 24 | follow[2] << 16 | follow[1] << 8 | follow[0]) == 0x269)
             {
                 ishyper = true;
             }
@@ -681,7 +681,7 @@ int ShowPageNum::Read(HWPFile & hwpf)
 }
 
 
-// 홀수쪽시작/감추기 (21)
+/* 홀수쪽시작/감추기 (21) */
 PageNumCtrl::PageNumCtrl():HBox(CH_PAGE_NUM_CTRL)
 {
 }
@@ -815,7 +815,7 @@ int Outline::Read(HWPFile & hwpf)
 }
 
 
-// 묶음 빈칸(30)
+/* 묶음 빈칸(30) */
 KeepSpace::KeepSpace():HBox(CH_KEEP_SPACE)
 {
 }
@@ -832,7 +832,7 @@ int KeepSpace::Read(HWPFile & hwpf)
 }
 
 
-// 고정폭 빈칸(31)
+/* 고정폭 빈칸(31) */
 FixedSpace::FixedSpace():HBox(CH_FIXED_SPACE)
 {
 }

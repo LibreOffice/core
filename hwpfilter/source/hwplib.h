@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwplib.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:37:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,12 @@
  *
  ************************************************************************/
 
-/* $Id: hwplib.h,v 1.1 2003-10-15 14:37:17 dvo Exp $ */
+/* $Id: hwplib.h,v 1.2 2005-02-16 18:18:01 vg Exp $ */
 
 #ifndef _HWPLIB_H_
 #define _HWPLIB_H_
 #include "precompile.h"
-//hwp96부터 hunit가 4byte가 되었다.
+/* hwp96부터 hunit가 4byte가 되었다. */
 /**
  * size of hunit is 4 since hwp96 version
  */
@@ -165,11 +165,11 @@ typedef struct
 #define ONE_MILI        (71)
 #define ONE_DOT         (19)
 
-// HWP 3.0 문서 정보
+/* HWP 3.0 문서 정보 */
 
 #define NLanguage       7
 
-// 제어 문자
+/* 제어 문자 */
 /**
  * Control character
  */
