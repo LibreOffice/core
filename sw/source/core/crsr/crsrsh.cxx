@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:22:18 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-03 14:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,6 @@
 #ifndef _FMTEIRO_HXX //autogen
 #include <fmteiro.hxx>
 #endif
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::util;
@@ -804,7 +803,8 @@ void SwCrsrShell::KillPams()
         pCurCrsr->DeleteMark();
         *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
         pCurCrsr->GetPtPos() = pTblCrsr->GetPtPos();
-        delete pTblCrsr, pTblCrsr = 0;
+        delete pTblCrsr;
+        pTblCrsr = 0;
     }
     UpdateCrsr( SwCrsrShell::SCROLLWIN );
 }
@@ -1117,19 +1117,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 {
     SET_CURR_SHELL( this );
 
-#ifdef DEBUG
-// pruefe ob die Indizies auch in den richtigen Nodes angemeldet sind
-{
-    SwShellCrsr* pCmp = (SwShellCrsr*)pCurCrsr;        // sicher den Pointer auf Cursor
-    do {
-        ASSERT( pCmp->GetPoint()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(), "SPoint im falschen Node" );
-        ASSERT( pCmp->GetMark()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(FALSE), "Mark im falschen Node" );
-        FASTBOOL bTst = *pCmp->GetPoint() == *pCmp->GetMark();
-    } while( pCurCrsr != ( pCmp = (SwShellCrsr*)*((SwCursor*)pCmp->GetNext() ) ));
-}
-#endif
+    ClearUpCrsrs();
 
     // erfrage den Count fuer die Start-/End-Actions und ob die Shell
     // ueberhaupt den Focus hat
@@ -2970,9 +2958,94 @@ SwMoveFnCollection* SwCrsrShell::MakeFindRange(
     return pCurCrsr->MakeFindRange( (SwDocPositions)nStt,
                                     (SwDocPositions)nEnd, pPam );
 }
-
 #endif
 
+/**
+   Checks if a position is valid. To be valid the position's node must
+   be a content node and the content must not be unregistered.
 
+   @param aPos the position to check.
+*/
+static bool lcl_PosOk(SwPosition & aPos)
+{
+    bool bResult = true;
+    SwPosition aTmpPos(aPos);
+    aTmpPos.nContent.Assign(0, 0);
 
+    if (aPos.nNode.GetNode().GetCntntNode() == NULL ||
+        aPos.nContent.GetIdxReg() == aTmpPos.nContent.GetIdxReg())
+        bResult = false;
 
+    return bResult;
+}
+
+/**
+   Checks if a PaM is valid. For a PaM to be valid its point must be
+   valid. Additionaly if the PaM has a mark this has to be valid, too.
+
+   @param aPam the PaM to check
+*/
+static bool lcl_CrsrOk(SwPaM & aPam)
+{
+    return lcl_PosOk(*aPam.GetPoint()) && (! aPam.HasMark()
+        || lcl_PosOk(*aPam.GetMark()));
+}
+
+void SwCrsrShell::ClearUpCrsrs()
+{
+    // start of the ring
+    SwPaM * pStartCrsr = GetCrsr();
+    // start loop with second entry of the ring
+    SwPaM * pCrsr = (SwPaM *) pStartCrsr->GetNext();
+    SwPaM * pTmpCrsr;
+    bool bChanged = false;
+
+    /*
+       For all entries in the ring except the start entry delete the
+       entry if it is invalid.
+    */
+    while (pCrsr != pStartCrsr)
+    {
+        pTmpCrsr = (SwPaM *) pCrsr->GetNext();
+
+        if ( ! lcl_CrsrOk(*pCrsr))
+        {
+            delete pCrsr;
+
+            bChanged = true;
+        }
+
+        pCrsr = pTmpCrsr;
+    }
+
+    /*
+      If the start entry of the ring is invalid replace it with a
+      cursor pointing to the beginning of the first content node in
+      the document.
+    */
+    if (! lcl_CrsrOk(*pStartCrsr))
+    {
+        SwNodes & aNodes = GetDoc()->GetNodes();
+        SwNodeIndex aIdx(*(aNodes.GetEndOfContent().StartOfSectionNode()));
+
+        SwNode * pNode = aNodes.GoNext(&aIdx);
+        bool bFound = (pNode != NULL);
+
+        ASSERT(bFound, "no content node found");
+
+        if (bFound)
+        {
+            SwPaM aTmpPam(*pNode);
+            *pStartCrsr = aTmpPam;
+        }
+
+        bChanged = true;
+    }
+
+    /*
+      If at least one of the cursors in the ring have been deleted or
+      replaced, remove the table cursor.
+    */
+    if (pTblCrsr != NULL && bChanged)
+        TblCrsrToCursor();
+}
