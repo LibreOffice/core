@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
                                               xAttrList, *this, nFamily );
             break;
         case XML_STYLE_FAMILY_CONTROL_ID:
-        case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
         case XML_STYLE_FAMILY_TEXT_RUBY:
             pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this, nFamily );
