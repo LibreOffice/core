@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:43:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ private:
     static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
 
 public:
-                        ScHTMLImport( ScDocument* pDoc, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
+                        ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
                         ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)pParser; }
 
