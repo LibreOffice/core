@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,9 @@ void NameToVerCtrl( RSCINST & aVersion, RscTop * pClass,
             aVersion.pClass->
                   GetElement( aVersion, RscId( pClass->GetTypId() ),
                               pClassString, RSCINST(), &aVI );
-            aStr = aVI.pClass->GetVariable( aVI, pHS->Insert( "TEXT" ),
+            aStr = aVI.pClass->GetVariable( aVI, pHS->getID( "TEXT" ),
                                             RSCINST() );
-            aStr.pClass->SetString( aStr, pHS->Get( pClass->GetId() ) );
+            aStr.pClass->SetString( aStr, pHS->getString( pClass->GetId() ).getStr() );
         }
         NameToVerCtrl( aVersion, (RscTop *)pClass->Right(), pClassString );
     }
@@ -254,36 +254,36 @@ void RscTypCont::Init()
     RscTop *    pClassSfxTemplateDialog;
     RscTop *    pClassSfxSlotInfo;
 
-    HASHID      nId;
+    Atom        nId;
 
     aNmTb.SetSort( FALSE );
 {
     /********** C O M P I L E R   T Y P E N ******************************/
-    aNmTb.Put( "LINE",               (USHORT)LINE,           (long)0 );
-    aNmTb.Put( "NOT",                (USHORT)NOT,            (long)0 );
-    aNmTb.Put( "DEFINE",             (USHORT)DEFINE,         (long)0 );
-    aNmTb.Put( "INCLUDE",            (USHORT)INCLUDE,        (long)0 );
-    aNmTb.Put( "DEFAULT",           (USHORT)DEFAULT,         (long)0  );
-    aNmTb.Put( "class",             (USHORT)CLASS,           (long)0  );
-    aNmTb.Put( "extendable",        (USHORT)EXTENDABLE,      (long)0  );
-    aNmTb.Put( "writeifset",        (USHORT)WRITEIFSET,      (long)0  );
+    aNmTb.Put( "LINE",               LINE,           (long)0 );
+    aNmTb.Put( "NOT",                NOT,            (long)0 );
+    aNmTb.Put( "DEFINE",             DEFINE,         (long)0 );
+    aNmTb.Put( "INCLUDE",            INCLUDE,        (long)0 );
+    aNmTb.Put( "DEFAULT",            DEFAULT,        (long)0  );
+    aNmTb.Put( "class",              CLASS,          (long)0  );
+    aNmTb.Put( "extendable",         EXTENDABLE,     (long)0  );
+    aNmTb.Put( "writeifset",         WRITEIFSET,     (long)0  );
 
 /* Werte fuer Aufzaehlungstypen */
-    aNmTb.Put( "TRUE",               (USHORT)BOOLEAN,        (long)TRUE  );
-    aNmTb.Put( "FALSE",              (USHORT)BOOLEAN,        (long)FALSE );
+    aNmTb.Put( "TRUE",               BOOLEAN,        (long)TRUE  );
+    aNmTb.Put( "FALSE",              BOOLEAN,        (long)FALSE );
 
 /* Vordefinierte HilfeId's */
-    aNmTb.Put( "HELP_INDEX",         (USHORT)NUMBER,     HELP_INDEX      );
-    aNmTb.Put( "HELP_HELPONHELP",    (USHORT)NUMBER,     HELP_HELPONHELP );
+    aNmTb.Put( "HELP_INDEX",         NUMBER,     HELP_INDEX      );
+    aNmTb.Put( "HELP_HELPONHELP",    NUMBER,     HELP_HELPONHELP );
 
-    aNmTb.Put( "XSCALE",             (USHORT)XSCALE ,        (long)0     );
-    aNmTb.Put( "YSCALE",             (USHORT)YSCALE ,        (long)0     );
-    aNmTb.Put( "RGB",                (USHORT)RGB    ,        (long)0     );
-    aNmTb.Put( "POSSIZE",            (USHORT)GEOMETRY,       (long)0     );
-    aNmTb.Put( "POS",                (USHORT)POSITION,       (long)0     );
-    aNmTb.Put( "SIZE",               (USHORT)DIMENSION,      (long)0     );
-    aNmTb.Put( "ZoomInOutputSize",   (USHORT)INZOOMOUTPUTSIZE,(long)0    );
-    aNmTb.Put( "FloatingPos",        (USHORT)FLOATINGPOS,    (long)0     );
+    aNmTb.Put( "XSCALE",             XSCALE ,        (long)0     );
+    aNmTb.Put( "YSCALE",             YSCALE ,        (long)0     );
+    aNmTb.Put( "RGB",                RGB    ,        (long)0     );
+    aNmTb.Put( "POSSIZE",            GEOMETRY,       (long)0     );
+    aNmTb.Put( "POS",                POSITION,       (long)0     );
+    aNmTb.Put( "SIZE",               DIMENSION,      (long)0     );
+    aNmTb.Put( "ZoomInOutputSize",   INZOOMOUTPUTSIZE,(long)0    );
+    aNmTb.Put( "FloatingPos",        FLOATINGPOS,    (long)0     );
 }
     /********** B A S I S   T Y P E N ************************************/
 {
@@ -324,113 +324,113 @@ void RscTypCont::Init()
     nWinBitVarId = aNmTb.Put( "_WinBits", VARNAME );
 
     // Windows
-    nBorderId       = pHS->Insert( "WB_BORDER" );
+    nBorderId       = pHS->getID( "WB_BORDER" );
     aWinBits.SetConstant( nBorderId, WB_BORDER );
-    nHideId         = pHS->Insert( "WB_HIDE" );
+    nHideId         = pHS->getID( "WB_HIDE" );
     aWinBits.SetConstant( nHideId, WB_HIDE );
-    nClipChildrenId = pHS->Insert( "WB_CLIPCHILDREN" );
+    nClipChildrenId = pHS->getID( "WB_CLIPCHILDREN" );
     aWinBits.SetConstant( nClipChildrenId, WB_CLIPCHILDREN );
-    nSizeableId     = pHS->Insert( "WB_SIZEABLE" );
+    nSizeableId     = pHS->getID( "WB_SIZEABLE" );
     aWinBits.SetConstant( nSizeableId, WB_SIZEABLE );
-    nMoveableId     = pHS->Insert( "WB_MOVEABLE" );
+    nMoveableId     = pHS->getID( "WB_MOVEABLE" );
     aWinBits.SetConstant( nMoveableId, WB_MOVEABLE );
-    nMinimizeId     = pHS->Insert( "WB_MINABLE" );
+    nMinimizeId     = pHS->getID( "WB_MINABLE" );
     aWinBits.SetConstant( nMinimizeId, 0 /*WB_MINABLE*/ );
-    nMaximizeId     = pHS->Insert( "WB_MAXABLE" );
+    nMaximizeId     = pHS->getID( "WB_MAXABLE" );
     aWinBits.SetConstant( nMaximizeId, 0 /*WB_MAXABLE*/ );
-    nCloseableId    = pHS->Insert( "WB_CLOSEABLE" );
+    nCloseableId    = pHS->getID( "WB_CLOSEABLE" );
     aWinBits.SetConstant( nCloseableId, WB_CLOSEABLE );
-    nAppId          = pHS->Insert( "WB_APP" );
+    nAppId          = pHS->getID( "WB_APP" );
     aWinBits.SetConstant( nAppId, WB_APP );
-    nTabstopId      = pHS->Insert( "WB_TABSTOP" );
+    nTabstopId      = pHS->getID( "WB_TABSTOP" );
     aWinBits.SetConstant( nTabstopId, WB_TABSTOP );
-    nGroupId        = pHS->Insert( "WB_GROUP" );
+    nGroupId        = pHS->getID( "WB_GROUP" );
     aWinBits.SetConstant( nGroupId, WB_GROUP );
-    nSysmodalId     = pHS->Insert( "WB_SYSMODAL" );
+    nSysmodalId     = pHS->getID( "WB_SYSMODAL" );
     aWinBits.SetConstant( nSysmodalId, 0 /*WB_SYSMODAL*/ );
 }
 {
-    nLeftId         = pHS->Insert( "WB_LEFT" );
+    nLeftId         = pHS->getID( "WB_LEFT" );
     aWinBits.SetConstant( nLeftId, WB_LEFT );
-    nCenterId       = pHS->Insert( "WB_CENTER" );
+    nCenterId       = pHS->getID( "WB_CENTER" );
     aWinBits.SetConstant( nCenterId, WB_CENTER );
-    nRightId        = pHS->Insert( "WB_RIGHT" );
+    nRightId        = pHS->getID( "WB_RIGHT" );
     aWinBits.SetConstant( nRightId, WB_RIGHT );
-    nHscrollId      = pHS->Insert( "WB_HSCROLL" );
+    nHscrollId      = pHS->getID( "WB_HSCROLL" );
     aWinBits.SetConstant( nHscrollId, WB_HSCROLL );
-    nVscrollId      = pHS->Insert( "WB_VSCROLL" );
+    nVscrollId      = pHS->getID( "WB_VSCROLL" );
     aWinBits.SetConstant( nVscrollId, WB_VSCROLL );
-    nSortId         = pHS->Insert( "WB_SORT" );
+    nSortId         = pHS->getID( "WB_SORT" );
     aWinBits.SetConstant( nSortId, WB_SORT );
-    nDefaultId          = pHS->Insert( "WB_DEFBUTTON" );
+    nDefaultId          = pHS->getID( "WB_DEFBUTTON" );
     aWinBits.SetConstant( nDefaultId, WB_DEFBUTTON );
-    nRepeatId           = pHS->Insert( "WB_REPEAT" );
+    nRepeatId           = pHS->getID( "WB_REPEAT" );
     aWinBits.SetConstant( nRepeatId, WB_REPEAT );
-    nSVLookId           = pHS->Insert( "WB_SVLOOK" );
+    nSVLookId           = pHS->getID( "WB_SVLOOK" );
     aWinBits.SetConstant( nSVLookId, WB_3DLOOK );
-    nDropDownId         = pHS->Insert( "WB_DROPDOWN" );
+    nDropDownId         = pHS->getID( "WB_DROPDOWN" );
     aWinBits.SetConstant( nDropDownId, WB_DROPDOWN );
-    nPassWordId         = pHS->Insert( "WB_PASSWORD" );
+    nPassWordId         = pHS->getID( "WB_PASSWORD" );
     aWinBits.SetConstant( nPassWordId, WB_PASSWORD );
-    nReadOnlyId         = pHS->Insert( "WB_READONLY" );
+    nReadOnlyId         = pHS->getID( "WB_READONLY" );
     aWinBits.SetConstant( nReadOnlyId, WB_READONLY );
-    nAutoSizeId         = pHS->Insert( "WB_AUTOSIZE" );
+    nAutoSizeId         = pHS->getID( "WB_AUTOSIZE" );
     aWinBits.SetConstant( nAutoSizeId, WB_AUTOSIZE );
-    nSpinId             = pHS->Insert( "WB_SPIN" );
+    nSpinId             = pHS->getID( "WB_SPIN" );
     aWinBits.SetConstant( nSpinId, WB_SPIN );
-    nTabControlId       = pHS->Insert( "WB_DIALOGCONTROL" );
+    nTabControlId       = pHS->getID( "WB_DIALOGCONTROL" );
     aWinBits.SetConstant( nTabControlId, WB_DIALOGCONTROL );
-    nSimpleModeId       = pHS->Insert( "WB_SIMPLEMODE" );
+    nSimpleModeId       = pHS->getID( "WB_SIMPLEMODE" );
     aWinBits.SetConstant( nSimpleModeId, WB_SIMPLEMODE );
-    nDragId             = pHS->Insert( "WB_DRAG" );
+    nDragId             = pHS->getID( "WB_DRAG" );
     aWinBits.SetConstant( nDragId, WB_DRAG );
-    nSaveAsId           = pHS->Insert( "WB_SAVEAS" );
+    nSaveAsId           = pHS->getID( "WB_SAVEAS" );
     aWinBits.SetConstant( nSaveAsId, WB_SAVEAS );
-    nOpenId             = pHS->Insert( "WB_OPEN" );
+    nOpenId             = pHS->getID( "WB_OPEN" );
     aWinBits.SetConstant( nOpenId, WB_OPEN );
-    nScrollId           = pHS->Insert( "WB_SCROLL" );
+    nScrollId           = pHS->getID( "WB_SCROLL" );
     aWinBits.SetConstant( nScrollId, WB_SCROLL );
-    nZoomableId         = pHS->Insert( "WB_ZOOMABLE" );
+    nZoomableId         = pHS->getID( "WB_ZOOMABLE" );
     aWinBits.SetConstant( nZoomableId, WB_ROLLABLE );
-    nHideWhenDeactivateId = pHS->Insert( "WB_HIDEWHENDEACTIVATE" );
+    nHideWhenDeactivateId = pHS->getID( "WB_HIDEWHENDEACTIVATE" );
     aWinBits.SetConstant( nHideWhenDeactivateId, 0 /*WB_HIDEWHENDEACTIVATE*/ );
-    nAutoHScrollId      = pHS->Insert( "WB_AUTOHSCROLL" );
+    nAutoHScrollId      = pHS->getID( "WB_AUTOHSCROLL" );
     aWinBits.SetConstant( nAutoHScrollId, WB_AUTOHSCROLL );
-    nDDExtraWidthId     = pHS->Insert( "WB_DDEXTRAWIDTH" );
+    nDDExtraWidthId     = pHS->getID( "WB_DDEXTRAWIDTH" );
     aWinBits.SetConstant( nDDExtraWidthId, 0 /*WB_DDEXTRAWIDTH*/ );
-    nWordBreakId        = pHS->Insert( "WB_WORDBREAK" );
+    nWordBreakId        = pHS->getID( "WB_WORDBREAK" );
     aWinBits.SetConstant( nWordBreakId, WB_WORDBREAK );
-    nLeftLabelId        = pHS->Insert( "WB_LEFTLABEL" );
+    nLeftLabelId        = pHS->getID( "WB_LEFTLABEL" );
     aWinBits.SetConstant( nLeftLabelId, 0 /*WB_LEFTLABEL*/ );
-    nHasLinesId         = pHS->Insert( "WB_HASLINES" );
+    nHasLinesId         = pHS->getID( "WB_HASLINES" );
     aWinBits.SetConstant( nHasLinesId, WB_HASLINES );
-    nHasButtonsId       = pHS->Insert( "WB_HASBUTTONS" );
+    nHasButtonsId       = pHS->getID( "WB_HASBUTTONS" );
     aWinBits.SetConstant( nHasButtonsId, WB_HASBUTTONS );
-    nRectStyleId        = pHS->Insert( "WB_RECTSTYLE" );
+    nRectStyleId        = pHS->getID( "WB_RECTSTYLE" );
     aWinBits.SetConstant( nRectStyleId, WB_RECTSTYLE );
-    nLineSpacingId      = pHS->Insert( "WB_LINESPACING" );
+    nLineSpacingId      = pHS->getID( "WB_LINESPACING" );
     aWinBits.SetConstant( nLineSpacingId, WB_LINESPACING );
-    nSmallStyleId       = pHS->Insert( "WB_SMALLSTYLE" );
+    nSmallStyleId       = pHS->getID( "WB_SMALLSTYLE" );
     aWinBits.SetConstant( nSmallStyleId, WB_SMALLSTYLE );
-    nEnableResizingId   = pHS->Insert( "WB_ENABLERESIZING" );
+    nEnableResizingId   = pHS->getID( "WB_ENABLERESIZING" );
     aWinBits.SetConstant( nEnableResizingId, 0 /*WB_ENABLERESIZING*/ );
-    nDockableId         = pHS->Insert( "WB_DOCKABLE" );
+    nDockableId         = pHS->getID( "WB_DOCKABLE" );
     aWinBits.SetConstant( nDockableId, WB_DOCKABLE );
-    nScaleId            = pHS->Insert( "WB_SCALE" );
+    nScaleId            = pHS->getID( "WB_SCALE" );
     aWinBits.SetConstant( nScaleId, WB_SCALE );
-    nIgnoreTabId        = pHS->Insert( "WB_IGNORETAB" );
+    nIgnoreTabId        = pHS->getID( "WB_IGNORETAB" );
     aWinBits.SetConstant( nIgnoreTabId, WB_IGNORETAB );
-    nNoSplitDrawId      = pHS->Insert( "WB_NOSPLITDRAW" );
+    nNoSplitDrawId      = pHS->getID( "WB_NOSPLITDRAW" );
     aWinBits.SetConstant( nNoSplitDrawId, WB_NOSPLITDRAW );
-    nTopImageId         = pHS->Insert( "WB_TOPIMAGE" );
+    nTopImageId         = pHS->getID( "WB_TOPIMAGE" );
     aWinBits.SetConstant( nTopImageId, WB_TOPIMAGE );
-    nNoLabelId          = pHS->Insert( "WB_NOLABEL" );
+    nNoLabelId          = pHS->getID( "WB_NOLABEL" );
     aWinBits.SetConstant( nNoLabelId, WB_NOLABEL );
-    nVertId             = pHS->Insert( "WB_VERT" );
+    nVertId             = pHS->getID( "WB_VERT" );
     aWinBits.SetConstant( nVertId, WB_VERT );
-    nSingleLineId       = pHS->Insert( "WB_SINGLELINE" );
+    nSingleLineId       = pHS->getID( "WB_SINGLELINE" );
     aWinBits.SetConstant( nSingleLineId, WB_SINGLELINE );
-    nSysWinId            = pHS->Insert( "WB_SYSTEMWINDOW" );
+    nSysWinId           = pHS->getID( "WB_SYSTEMWINDOW" );
     aWinBits.SetConstant( nSysWinId, WB_SYSTEMWINDOW );
 }
 {
@@ -473,7 +473,7 @@ void RscTypCont::Init()
     pRoot = pClassMgr = InitClassMgr();
 
     /********** V e r s i o n s k o n t r o l l e ************************/
-    aVersion.pClass = new RscClass( pHS->Insert( "VersionControl" ),
+    aVersion.pClass = new RscClass( pHS->getID( "VersionControl" ),
                                     RSC_VERSIONCONTROL, pClassMgr );
     aVersion = aVersion.pClass->Create( NULL, RSCINST() );
 
@@ -486,7 +486,7 @@ void RscTypCont::Init()
 
     /********** S T R I N G L I S T **************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "StringArray" );
+    nId = pHS->getID( "StringArray" );
     pClassStringArray = new RscClass( nId, RSC_STRINGARRAY, pClassMgr );
     pClassStringArray->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
     aNmTb.Put( nId, CLASSNAME, pClassStringArray );
@@ -533,7 +533,7 @@ void RscTypCont::Init()
 
     /********** D I A L O G **********************************************/
     // Klasse anlegen
-    pClassDialog = new RscClass( pHS->Insert( "Dialog" ),
+    pClassDialog = new RscClass( pHS->getID( "Dialog" ),
                                  RSC_DIALOG, pClassSystemWindow );
     pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aBaseLst.Insert( pClassDialog, LIST_APPEND );
@@ -555,7 +555,7 @@ void RscTypCont::Init()
 
     /********** B U T T O N **********************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "Button" );
+    nId = pHS->getID( "Button" );
     pClassButton = new RscClass( nId, RSC_BUTTON, pClassControl );
     pClassButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassButton );
@@ -563,7 +563,7 @@ void RscTypCont::Init()
 
     /********** C H E C K B O X ******************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "CheckBox" );
+    nId = pHS->getID( "CheckBox" );
     pClassCheckBox = new RscClass( nId, RSC_CHECKBOX, pClassButton );
     pClassCheckBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassCheckBox );
@@ -582,7 +582,7 @@ void RscTypCont::Init()
 
     /********** H E L P B U T T O N **************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "HelpButton" );
+    nId = pHS->getID( "HelpButton" );
     pClassHelpButton = new RscClass( nId, RSC_HELPBUTTON,
                                         pClassPushButton );
     pClassHelpButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -591,7 +591,7 @@ void RscTypCont::Init()
 
     /********** O K B U T T O N ******************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "OKButton" );
+    nId = pHS->getID( "OKButton" );
     pClassOKButton = new RscClass( nId, RSC_OKBUTTON,
                                         pClassPushButton );
     pClassOKButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -600,7 +600,7 @@ void RscTypCont::Init()
 
     /********** C A N C E L B U T T O N **********************************/
     // Klasse anlegen
-    nId = pHS->Insert( "CancelButton" );
+    nId = pHS->getID( "CancelButton" );
     pClassCancelButton = new RscClass( nId, RSC_CANCELBUTTON,
                                         pClassPushButton );
     pClassCancelButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -610,7 +610,7 @@ void RscTypCont::Init()
 {
     /********** R A D I O B U T T O N ************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "RadioButton" );
+    nId = pHS->getID( "RadioButton" );
     pClassRadioButton = new RscClass( nId, RSC_RADIOBUTTON, pClassButton );
     pClassRadioButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassRadioButton );
@@ -623,7 +623,7 @@ void RscTypCont::Init()
     pClassRadioButton->SetVariable( nId, &aBool );
 
     /********** I m a g e R a d i o B u t t o n **************************/
-    nId = pHS->Insert( "ImageRadioButton" );
+    nId = pHS->getID( "ImageRadioButton" );
     pClassImageRadioButton = InitClassImageRadioButton( pClassRadioButton,
                                                         pClassImage );
     pRoot->Insert( pClassImageRadioButton );
@@ -677,7 +677,7 @@ void RscTypCont::Init()
 
     /********** G R O U P B O X ******************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "GroupBox" );
+    nId = pHS->getID( "GroupBox" );
     pClassGroupBox = new RscClass( nId, RSC_GROUPBOX, pClassControl );
     pClassGroupBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassGroupBox );
@@ -687,7 +687,7 @@ void RscTypCont::Init()
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );
     pRoot->Insert( pClassKeyCode );
     {
-    pLangClassKeyCode = new RscClassArray( pHS->Insert( "LangKeyCode" ),
+    pLangClassKeyCode = new RscClassArray( pHS->getID( "LangKeyCode" ),
                     RSC_KEYCODE, pClassKeyCode, &aLangType );
     aBaseLst.Insert( pLangClassKeyCode );
     }
@@ -734,7 +734,7 @@ void RscTypCont::Init()
 
     /********** I N F O B O X ********************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "InfoBox" );
+    nId = pHS->getID( "InfoBox" );
     pClassInfoBox = new RscClass( nId, RSC_INFOBOX, pClassMessBox );
     pClassInfoBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassInfoBox );
@@ -742,7 +742,7 @@ void RscTypCont::Init()
 
     /********** W A R N I N G B O X **************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "WarningBox" );
+    nId = pHS->getID( "WarningBox" );
     pClassWarningBox = new RscClass( nId, RSC_WARNINGBOX, pClassMessBox );
     pClassWarningBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassWarningBox );
@@ -750,7 +750,7 @@ void RscTypCont::Init()
 
     /********** E R R O R B O X ******************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "ErrorBox" );
+    nId = pHS->getID( "ErrorBox" );
     pClassErrorBox = new RscClass( nId, RSC_ERRORBOX, pClassMessBox );
     pClassErrorBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassErrorBox );
@@ -758,7 +758,7 @@ void RscTypCont::Init()
 
     /********** Q U E R Y B O X ******************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "QueryBox" );
+    nId = pHS->getID( "QueryBox" );
     pClassQueryBox = new RscClass( nId, RSC_QUERYBOX, pClassMessBox );
     pClassQueryBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassQueryBox );
@@ -775,7 +775,7 @@ void RscTypCont::Init()
 
     /********** S P I N B U T T O N **************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "SpinButton" );
+    nId = pHS->getID( "SpinButton" );
     pClassSpinButton = new RscClass( nId, RSC_SPINBUTTON, pClassControl );
     pClassSpinButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassSpinButton );
@@ -785,7 +785,7 @@ void RscTypCont::Init()
         // Clientvariablen einfuegen
         // Sysmodal
         aBaseLst.Insert(
-            pClient = new RscClient( pHS->Insert( "BOOL" ), RSC_NOTYPE,
+            pClient = new RscClient( pHS->getID( "BOOL" ), RSC_NOTYPE,
                                      &aWinBits, nRepeatId ),
             LIST_APPEND );
         nId = aNmTb.Put( "Repeat", VARNAME );
@@ -818,7 +818,7 @@ void RscTypCont::Init()
     pRoot->Insert( pClassI12 );
     }
     {
-    pLangClassI12 = new RscClassArray( pHS->Insert( "LangInternational" ),
+    pLangClassI12 = new RscClassArray( pHS->getID( "LangInternational" ),
                                        RSC_INTERNATIONAL, pClassI12, &aLangType );
     aBaseLst.Insert( pLangClassI12 );
     }
@@ -980,7 +980,7 @@ void RscTypCont::Init()
 
     /********** T A B P A G E ********************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "TabPage" );
+    nId = pHS->getID( "TabPage" );
     pClassTabPage =
           new RscClass( nId, RSC_TABPAGE, pClassWindow );
     pClassTabPage->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -989,7 +989,7 @@ void RscTypCont::Init()
 
     /********** T A B D I A L O G ****************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "TabDialog" );
+    nId = pHS->getID( "TabDialog" );
     pClassTabDialog =
           new RscClass( nId, RSC_TABDIALOG, pClassModalDialog );
     pClassTabDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -1008,7 +1008,7 @@ void RscTypCont::Init()
 
     /********** F I X E D L I N E ****************************************/
     // Klasse anlegen
-    nId = pHS->Insert( "FixedLine" );
+    nId = pHS->getID( "FixedLine" );
     pClassFixedLine =
           new RscClass( nId, RSC_FIXEDLINE, pClassControl );
     pClassFixedLine->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
@@ -1020,7 +1020,7 @@ void RscTypCont::Init()
 
     /********** S C R O L L B A R B O X **********************************/
     // Klasse anlegen
-    nId = pHS->Insert( "ScrollBarBox" );
+    nId = pHS->getID( "ScrollBarBox" );
     pClassScrollBarBox =
           new RscClass( nId, RSC_SCROLLBARBOX, pClassWindow );
     pClassScrollBarBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
