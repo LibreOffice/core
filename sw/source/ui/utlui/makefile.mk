@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 13:56:59 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:40:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,11 +107,13 @@ SLOFILES =  \
         $(SLO)$/swstbctl.obj \
         $(SLO)$/shdwcrsr.obj \
         $(SLO)$/unotools.obj \
+        $(SLO)$/swrenamexnameddlg.obj	\
         $(SLO)$/zoomctrl.obj
 
 
 EXCEPTIONSFILES= \
-        $(SLO)$/unotools.obj
+        $(SLO)$/unotools.obj	\
+        $(SLO)$/swrenamexnameddlg.obj	
 
 # --- Tagets -------------------------------------------------------
 
