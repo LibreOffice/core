@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:32:06 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,9 @@
 // - FASTIMAGE -
 // -------------
 
-#ifndef REMOTE_APPSERVER
 #if defined WIN || defined WNT || defined OS2
 #undef FASTTRANSPARENT
 extern BOOL bFastTransparent;
-#else
-#undef FASTTRANSPARENT
-#endif
 #else
 #undef FASTTRANSPARENT
 #endif
@@ -433,26 +429,12 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
     {
         const Point aPos( nPos * aSize.Width(), 0 );
 
-#ifndef REMOTE_APPSERVER
 
         if( !aBmpDisp && !!aBmp )
             aBmpDisp = aBmp.CreateDisplayBitmap( pOutDev );
 
         if( !aMaskDisp && !!aMask )
             aMaskDisp = aMask.CreateDisplayBitmap( pOutDev );
-
-#else // REMOTE_APPSERVER
-
-        if( !aBmpDisp && !!aBmp )
-            aBmpDisp = aBmp;
-
-        if( !aMaskDisp && !!aMask )
-            aMaskDisp = aMask;
-
-        if( !aDisaDisp && !!aDisa )
-            aDisaDisp = aDisa;
-
-#endif // REMOTE_APPSERVER
 
         if( !aBmpEx )
             aBmpEx = BitmapEx( aBmpDisp, aMaskDisp );
@@ -484,11 +466,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                 {
                     aDisa = Bitmap( aBmpEx.GetSizePixel(), 1 );
                     ImplUpdateDisaBmp( DISA_ALL );
-#ifndef REMOTE_APPSERVER
                     aDisaDisp = aDisa.CreateDisplayBitmap( pOutDev );
-#else // REMOTE_APPSERVER
-                    aDisaDisp = aDisa;
-#endif // REMOTE_APPSERVER
                 }
 
                 if( !aDisaDisp && !!aDisa )
