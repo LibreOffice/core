@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 17:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ struct XIMArg
     char *value;
 };
 
-#if !defined(LINUX) && !defined(FREEBSD) && !defined(NETBSD) && !defined(MACOSX)
+#if defined(SOLARIS) && !defined(__GNUC__)
 #include <varargs.h>
 #else
 #include <stdarg.h>
@@ -218,10 +218,10 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         * so count the stuff dangling here
      */
 
-#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
-    va_start(variable, res_class);
-#else
+#if defined(SOLARIS) && !defined(__GNUC__)
       va_start(variable);
+#else
+    va_start(variable, res_class);
 #endif
       total_count = XvaCountArgs(variable);
       va_end(variable);
@@ -235,10 +235,10 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         /*
           * now package it up so we can set it along
           */
-#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
-        va_start(variable, res_class);
-#else
+#if defined(SOLARIS) && !defined(__GNUC__)
         va_start(variable);
+#else
+        va_start(variable, res_class);
 #endif
         XvaGetArgs( variable, args );
         va_end(variable);
