@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage RID_SFXPAGE_GENERAL
     Text [ spanish ] = "Datos del usuario" ;
     Text [ french ] = "DonnÈes d'utilisateur" ;
     Text [ dutch ] = "Gebruikersgegevens" ;
-    Text [ portuguese_brazilian ] = "Benutzerdaten" ;
+    Text [ portuguese_brazilian ] = "Dados do Usu·rio" ;
     Text [ portuguese ] = "Dados de utilizador" ;
     Text[ chinese_simplified ] = "‰ΩøÁî®ËÄÖÊï∞ÊçÆ";
     Text[ russian ] = "ƒ‡ÌÌ˚Â ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ";
@@ -111,7 +111,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ english_us ] = "~Company" ;
         Text[ chinese_simplified ] = "ÂÖ¨Âè∏(~C)";
         Text[ russian ] = "Œ„‡ÌËÁ‡ˆËˇ";
-        Text[ polish ] = "Firma";
+        Text[ polish ] = "~Firma";
         Text[ japanese ] = "‰ºöÁ§æÂêç(~C)";
         Text[ chinese_traditional ] = "ÂÖ¨Âè∏(~C)";
         Text[ arabic ] = "«·‘—ﬂ…";
@@ -121,6 +121,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Empresa";
         Text[ thai ] = "~‡∏ö‡∏£‡∏¥‡∏©‡∏±‡∏ó";
+        Text[ czech ] = "Spoleƒçnost";
+        Text[ hebrew ] = "‚ÄÆ◊ó◊ë◊®◊î‚Ä¨";
+        Text[ hindi ] = "~‡§∏‡§Ç‡§∏‡•ç‡§•‡§æ";
     };
     Edit ED_COMPANY
     {
@@ -137,7 +140,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = "~First/Last/Id" ;
         Text [ norwegian ] = "~For/Etter/Id" ;
         Text [ italian ] = "~Nome/Cognome/Iniziali" ;
-        Text [ portuguese_brazilian ] = "~Primeiro/?ltimo" ;
+        Text [ portuguese_brazilian ] = "~Nome / Sobrenome / Iniciais" ;
         Text [ portuguese ] = "~Nome/Apelido/Iniciais" ;
         Text [ finnish ] = "Etu-/suku~nimi/nimikirjaimet" ;
         Text [ danish ] = "F~or-/Efternavn/Initialer" ;
@@ -148,7 +151,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ english_us ] = "First/Last ~name/Initials" ;
         Text[ chinese_simplified ] = "ÂêçÂ≠ó/ÂßìÊ∞è/Áº©ÂÜô(~N)";
         Text[ russian ] = "»Ïˇ/‘‡ÏËÎËˇ/»ÌËˆË‡Î˚";
-        Text[ polish ] = "I~miÍ/Nazwisko/Inicja≥y";
+        Text[ polish ] = "ImiÍ/~nazwisko/inicja≥y";
         Text[ japanese ] = "Âêç/Âßì/„Ç§„Éã„Ç∑„É£„É´(~N)";
         Text[ chinese_traditional ] = "ÂêçÂ≠ó/ÂßìÊ∞è/Á∏ÆÂØ´(~N)";
         Text[ arabic ] = "«·«”„/«”„ «·⁄«∆·…/«·«Œ ’«—";
@@ -158,6 +161,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nom/Cognom/Inicials";
         Text[ thai ] = "~‡∏ä‡∏∑‡πà‡∏≠/‡∏ô‡∏≤‡∏°‡∏™‡∏Å‡∏∏‡∏•/‡∏Ñ‡∏≥‡∏ô‡∏≥‡∏´‡∏ô‡πâ‡∏≤";
+        Text[ czech ] = "Jm√©no/p≈ô√≠jmen√≠/inici√°ly";
+        Text[ hebrew ] = "‚ÄÆ◊©◊ù ◊§◊®◊ò◊ô\\◊©◊ù ◊û◊©◊§◊ó◊î\\◊®◊ê◊©◊ô ◊™◊ô◊ë◊ï◊™‚Ä¨";
+        Text[ hindi ] = "‡§™‡§π‡§ø‡§≤‡§æ/‡§Ö‡§Ç‡§§‡§ø‡§Æ ~‡§®‡§æ‡§Æ/‡§á‡§®‡§ø‡§∂‡•ç‡§Ø‡§≤‡•ç";
     };
     FixedText FT_NAME_RUSS
     {
@@ -172,9 +178,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ dutch ] = "-";
         Text[ french ] = " ";
         Text[ spanish ] = " ";
-        Text[ italian ] = "-";
+        Text[ italian ] = " ";
         Text[ danish ] = " ";
-        Text[ portuguese_brazilian ] = "~Father/First/Last/Id";
+        Text[ portuguese_brazilian ] = " ";
         Text[ japanese ] = " ";
         Text[ korean ] = "Ïù¥Î¶Ñ/ÏÑ±/Ïù¥Î¶Ñ/Î®∏Î¶¨Í∏ÄÏûê";
         Text[ chinese_traditional ] = " ";
@@ -186,6 +192,11 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ arabic ] = " ";
         Text[ catalan ] = "~Nom/Nom del pare/Cognom/DNI";
         Text[ thai ] = " ";
+        Text[ swedish ] = "-";
+        Text[ czech ] = "   ";
+        Text[ hebrew ] = " ";
+        Text[ polish ] = " ";
+        Text[ hindi ] = " ";
     };
     Edit ED_FATHERNAME
     {
@@ -221,7 +232,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = "~Street" ;
         Text [ norwegian ] = "~Gate" ;
         Text [ italian ] = "Via" ;
-        Text [ portuguese_brazilian ] = "~Rua" ;
+        Text [ portuguese_brazilian ] = "~EndereÁo" ;
         Text [ portuguese ] = "~Rua" ;
         Text [ finnish ] = "~Katuosoite" ;
         Text [ danish ] = "~Gade" ;
@@ -232,7 +243,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ english_us ] = "~Street" ;
         Text[ chinese_simplified ] = "Ë°óÈÅì(~S)";
         Text[ russian ] = "”ÎËˆ‡";
-        Text[ polish ] = "Ulica";
+        Text[ polish ] = "~Ulica";
         Text[ japanese ] = "Â∏ÇÁî∫ÊùëÂêçÁï™Âú∞(~S)";
         Text[ chinese_traditional ] = "Ë°óÈÅì(~S)";
         Text[ arabic ] = "«·‘«—⁄";
@@ -242,6 +253,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Carrer";
         Text[ thai ] = "~‡∏ñ‡∏ô‡∏ô";
+        Text[ czech ] = "Ulice";
+        Text[ hebrew ] = "‚ÄÆ◊®◊ó◊ï◊ë‚Ä¨";
+        Text[ hindi ] = "~‡§∏‡§°‡§º‡§ï";
     };
     FixedText FT_STREET_RUSS
     {
@@ -256,12 +270,12 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ dutch ] = "-";
         Text[ french ] = " ";
         Text[ spanish ] = "-";
-        Text[ italian ] = "-";
+        Text[ italian ] = " ";
         Text[ danish ] = " ";
         Text[ swedish ] = "-";
-        Text[ portuguese_brazilian ] = "~Street/Apartmentnumber";
+        Text[ portuguese_brazilian ] = " ";
         Text[ japanese ] = " ";
-        Text[ korean ] = "Í±∞Î¶¨ Ïù¥Î¶Ñ/Í±¥Î¨º Ìò∏Ïàò";
+        Text[ korean ] = "-";
         Text[ chinese_traditional ] = " ";
         Text[ turkish ] = "Cadde/No.";
         Text[ english_us ] = " ";
@@ -271,6 +285,10 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ arabic ] = " ";
         Text[ thai ] = " ";
         Text[ catalan ] = " ";
+        Text[ czech ] = "   ";
+        Text[ hebrew ] = " ";
+        Text[ polish ] = " ";
+        Text[ hindi ] = " ";
     };
     Edit ED_STREET
     {
@@ -302,7 +320,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ danish ] = "Postnr./By";
         Text[ swedish ] = "Postnr/~Ort";
         Text[ polish ] = "Kod pocztowy/MiejscowoúÊ";
-        Text[ portuguese_brazilian ] = "~Zip/City";
+        Text[ portuguese_brazilian ] = "CEP/Cidade";
         Text[ japanese ] = "ÈÉµ‰æøÁï™Âè∑/ÈÉΩÈÅìÂ∫úÁúåÂêç";
         Text[ chinese_simplified ] = "ÈÇÆÁºñ/ÂüéÂ∏Ç";
         Text[ chinese_traditional ] = "ÈÉµÈÅûÂçÄËôü/ÂüéÂ∏Ç";
@@ -314,6 +332,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ catalan ] = "Codi postal/Ciutat";
         Text[ finnish ] = "Postinumero/Toimipaikka";
         Text[ thai ] = "‡∏£‡∏´‡∏±‡∏™‡πÑ‡∏õ‡∏£‡∏©‡∏ì‡∏µ‡∏¢‡πå/‡πÄ‡∏°‡∏∑‡∏≠‡∏á";
+        Text[ czech ] = "PSƒå/Obec";
+        Text[ hebrew ] = "‚ÄÆ◊û◊ô◊ß◊ï◊ì\\◊¢◊ô◊®‚Ä¨";
+        Text[ hindi ] = "Zip/‡§®‡§ó‡§∞";
     };
     Edit ED_PLZ
     {
@@ -361,19 +382,22 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ italian ] = "Paese/Regione";
         Text[ danish ] = "~Land/OmrÂde";
         Text[ swedish ] = "~Land/Region";
-        Text[ polish ] = "PaÒstwo";
-        Text[ portuguese_brazilian ] = "Pa?s/~CEP/Cidade";
+        Text[ polish ] = "Kraj/region";
+        Text[ portuguese_brazilian ] = "PaÌs / Estado";
         Text[ japanese ] = "ÂõΩÂêç";
         Text[ chinese_simplified ] = "ÂõΩÂÆ∂/Âú∞Âå∫";
         Text[ chinese_traditional ] = "ÂúãÂÆ∂/Âú∞ÂçÄ";
         Text[ arabic ] = "«·»·œ";
         Text[ greek ] = "◊˛Ò·";
         Text[ korean ] = "Íµ≠Í∞Ä";
-        Text[ turkish ] = "‹lke";
+        Text[ turkish ] = "‹lke/Bˆlge";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~PaÌs";
         Text[ finnish ] = "Maa/alue";
         Text[ thai ] = "‡∏õ‡∏£‡∏∞‡πÄ‡∏ó‡∏®";
+        Text[ czech ] = "Zemƒõ/region";
+        Text[ hebrew ] = "‚ÄÆ◊û◊ì◊ô◊†◊î\\◊û◊ó◊ï◊ñ‚Ä¨";
+        Text[ hindi ] = "‡§¶‡•á‡§∂";
     };
     Edit ED_COUNTRY
     {
@@ -395,21 +419,24 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "~Titel/Functie" ;
         Text [ swedish ] = "Titel/~Befattning" ;
         Text [ danish ] = "T~itel/Stilling" ;
-        Text [ portuguese_brazilian ] = "~Titel/Position" ;
+        Text [ portuguese_brazilian ] = "~TÌtulo / Cargo" ;
         Text [ portuguese ] = "~TÌtulo/PosiÁ„o" ;
         Text[ chinese_simplified ] = "Â§¥Ë°î/ËÅåÂä°(~T)";
         Text[ russian ] = "«‚‡ÌËÂ/‰ÓÎÊÌÓÒÚ¸";
-        Text[ polish ] = "Tytu≥/Stanowisko";
+        Text[ polish ] = "~Tytu≥/stanowisko";
         Text[ japanese ] = "ËÇ©Êõ∏„Åç/ÈÉ®ÁΩ≤(~T)";
         Text[ chinese_traditional ] = "È†≠Èäú/ËÅ∑Âãô(~T)";
         Text[ arabic ] = "«·„”„Ï «·ÊŸÌ›Ì/«·„—ﬂ“";
         Text[ greek ] = "‘ﬂÙÎÔÚ/»›ÛÁ";
-        Text[ korean ] = "ÏßÅÌï®/ÏßÅÏúÑ(~T)";
+        Text[ korean ] = "ÏßÅÏúÑ/Î∂ÄÏÑú(~T)";
         Text[ turkish ] = "~Unvan/Pozisyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "TÌtol/p~osiciÛ";
         Text[ finnish ] = "~Teht‰v‰/arvo";
         Text[ thai ] = "~‡∏¢‡∏®/‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
+        Text[ czech ] = "Titul/pozice";
+        Text[ hebrew ] = "‚ÄÆ◊™◊ï◊ê◊®\\◊û◊©◊®◊î‚Ä¨";
+        Text[ hindi ] = "~‡§∂‡•Ä‡§∞‡•ç‡§∑‡§ï/‡§∏‡•ç‡§•‡§æ‡§®";
     };
     Edit ED_TITLE
     {
@@ -431,7 +458,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = "Pho~ne (Priv./Co.)" ;
         Text [ norwegian ] = "Tele~fon (Priv./Arbeid.)" ;
         Text [ italian ] = "Te~l. (Priv./Uff.)" ;
-        Text [ portuguese_brazilian ] = "Fo~ne (Priv./Co.)" ;
+        Text [ portuguese_brazilian ] = "Tel. (Res./ Com.)" ;
         Text [ portuguese ] = "Tel. (~part./emprego)" ;
         Text [ finnish ] = "Puh. (koti/tyˆ)" ;
         Text [ danish ] = "Tlf. (p~riv./arb.)" ;
@@ -443,7 +470,7 @@ TabPage RID_SFXPAGE_GENERAL
         LeftLabel = TRUE ;
         Text[ chinese_simplified ] = "ÁîµËØù(ÁßÅ‰∫∫/ÂäûÂÖ¨ÂÆ§)";
         Text[ russian ] = "ƒÓÏ. ÚÂÎ/–‡·. ÚÂÎ.";
-        Text[ polish ] = "Tel. (pryw./s≥uøb.)";
+        Text[ polish ] = "Telefon (dom/praca)";
         Text[ japanese ] = "Tel.(Ëá™ÂÆÖ/‰ºöÁ§æ)";
         Text[ chinese_traditional ] = "ÈõªË©±(ÁßÅ‰∫∫/Ëæ¶ÂÖ¨ÂÆ§)";
         Text[ arabic ] = "«·Â« › („‰“·/⁄„·)";
@@ -453,6 +480,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tel. (particular/feina)";
         Text[ thai ] = "‡πÄ‡∏ö‡∏≠‡∏£‡πå‡πÇ‡∏ó‡∏£‡∏®‡∏±‡∏û‡∏ó‡πå (‡∏ö‡πâ‡∏≤‡∏ô/‡∏ó‡∏µ‡πà‡∏ó‡∏≥‡∏á‡∏≤‡∏ô)";
+        Text[ czech ] = "Tel. (dom≈Ø/do pr√°ce)";
+        Text[ hebrew ] = "‚ÄÆ◊ò◊ú◊§◊ï◊ü (◊ë◊ô◊™\\◊¢◊ë◊ï◊ì◊î)‚Ä¨";
+        Text[ hindi ] = "‡§¶‡•Ç‡§∞‡§≠‡§æ‡§∑ (‡§ò‡§∞/‡§ï‡§æ‡§Æ)";
     };
     Edit ED_TELPRIVAT
     {
@@ -475,7 +505,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = "Fa~x" ;
         Text [ norwegian ] = "~Faks" ;
         Text [ italian ] = "Fa~x/eMail" ;
-        Text [ portuguese_brazilian ] = "Fa~x" ;
+        Text [ portuguese_brazilian ] = "Fa~x / E-mail" ;
         Text [ portuguese ] = "Fa~x/e-mail" ;
         Text [ finnish ] = "~Faksi tai s‰hkˆposti" ;
         Text [ danish ] = "Fax/E-mail" ;
@@ -486,7 +516,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ english_us ] = "Fa~x / E-mail" ;
         Text[ chinese_simplified ] = "‰º†Áúü/ÁîµÂ≠êÈÇÆ‰ª∂(~X)";
         Text[ russian ] = "‘‡ÍÒ/›ÎÂÍÚÓÌÌ‡ˇ ÔÓ˜Ú‡";
-        Text[ polish ] = "Faks/e-mail";
+        Text[ polish ] = "Fa~ks/e-mail";
         Text[ japanese ] = "Fa~x/E-mail";
         Text[ chinese_traditional ] = "ÂÇ≥Áúü/ÈõªÂ≠êÈÉµ‰ª∂(~X)";
         Text[ arabic ] = "›«ﬂ”/»—Ìœ ≈·ﬂ —Ê‰Ì";
@@ -496,6 +526,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fa~x/Correu electrÚnic";
         Text[ thai ] = "‡πÇ‡∏ó‡∏£~‡∏™‡∏≤‡∏£ /‡∏≠‡∏µ‡πÄ‡∏°‡∏•‡πå";
+        Text[ czech ] = "Fax / E-mail";
+        Text[ hebrew ] = "‚ÄÆ◊§◊ß◊°\\◊ì◊ï◊ê◊® ◊ê'‚Ä¨";
+        Text[ hindi ] = "‡§´‡§º‡•â~‡§ï‡•ç‡§∏ / ‡§á-‡§Æ‡•á‡§á‡§≤";
     };
     Edit ED_FAX
     {
@@ -517,7 +550,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = " Address " ;
         Text [ norwegian ] = " Adresse " ;
         Text [ italian ] = "Indirizzo " ;
-        Text [ portuguese_brazilian ] = "Endere?o " ;
+        Text [ portuguese_brazilian ] = "EndereÁo " ;
         Text [ portuguese ] = "EndereÁo" ;
         Text [ finnish ] = "Osoite " ;
         Text [ danish ] = " Adresse " ;
@@ -534,10 +567,13 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ arabic ] = "«·⁄‰Ê«‰ ";
         Text[ greek ] = "ƒÈÂ˝ËıÌÛÁ ";
         Text[ korean ] = "Ï£ºÏÜå ";
-        Text[ turkish ] = "Adres ";
+        Text[ turkish ] = "Adres";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "  DirecciÛ ";
         Text[ thai ] = "‡∏ó‡∏µ‡πà‡∏≠‡∏¢‡∏π‡πà ";
+        Text[ czech ] = "Adresa ";
+        Text[ hebrew ] = "‚ÄÆ◊õ◊™◊ï◊ë◊™ ‚Ä¨";
+        Text[ hindi ] = "‡§™‡§§‡§æ ";
     };
     CheckBox CB_USEDATA
     {
@@ -553,7 +589,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ spanish ] = "Usar ~datos para las propiedades del documento" ;
         Text [ swedish ] = "Anv‰nd ~data fˆr dokumentegenskaperna" ;
         Text [ portuguese ] = "Usar ~dados para as propriedades do documento" ;
-        Text[ portuguese_brazilian ] = "~Daten f? Dokumenteigenschaften verwenden";
+        Text[ portuguese_brazilian ] = "Usar os dados para as propriedades do documento";
         Text[ danish ] = "Brug data for dokumentegenskaber";
         Text[ chinese_simplified ] = "‰ΩøÁî®ÊñáÊ°£Â±ûÊÄßÁöÑÊï∞ÊçÆ";
         Text[ russian ] = "»ÒÔÓÎ¸ÁÓ‚‡Ú¸ ‰‡ÌÌ˚Â ‰Îˇ Ò‚ÓÈÒÚ‚ ‰ÓÍÛÏÂÌÚ‡";
@@ -568,6 +604,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ catalan ] = "Utilitza les dades de les propietats del document";
         Text[ finnish ] = "K‰yt‰ asiakirjan ominaisuustietoja";
         Text[ thai ] = "‡πÉ‡∏ä‡πâ‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥‡∏Ç‡∏≠‡∏á‡πÄ‡∏≠‡∏Å‡∏™‡∏≤‡∏£";
+        Text[ czech ] = "Pou≈æ√≠t √∫daje pro vlastnosti souboru";
+        Text[ hebrew ] = "‚ÄÆ◊î◊¢◊ë◊®◊î ◊ê◊ï◊ò◊ï◊û◊ò◊ô◊™ ◊©◊ú ◊î◊§◊®◊ò◊ô◊ù ◊ú◊û◊ê◊§◊ô◊ô◊†◊ô◊ù ◊©◊ú ◊û◊°◊û◊õ◊ô ◊î◊û◊©◊™◊û◊©‚Ä¨";
+        Text[ hindi ] = "‡§≤‡•á‡§ñ‡§™‡§§‡•ç‡§∞ ‡§∏‡•ç‡§µ‡§≠‡§æ‡§µ‡•ã‡§Ç ‡§ï‡•á‡§≤‡§ø‡§è ‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡§æ ‡§â‡§™‡§Ø‡•ã‡§ó ‡§ï‡§∞‡•ã";
     };
 
      // extra Resourcen f"ur die amerikanische Postadresse
@@ -584,8 +623,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ italian ] = "Locali‡/Provincia/C.A.P.";
         Text[ danish ] = "By/Land/Postnummer";
         Text[ swedish ] = "~Ort/Land/Postnr";
-        Text[ polish ] = "Ulica/WojewÛdztwo/Kod pocztowy";
-        Text[ portuguese_brazilian ] = "Staat/PLZ/~L.";
+        Text[ polish ] = "MiejscowoúÊ/wojewÛdztwo/kod pocztowy";
+        Text[ portuguese_brazilian ] = "Cidade / Estado / CEP";
         Text[ japanese ] = "ÈÉΩÈÅìÂ∫úÁúåÂêç/Â∑ûÂêç/ÈÉµ‰æøÁï™Âè∑";
         Text[ chinese_simplified ] = "Ë°óÈÅì/ÂõΩÂÆ∂/ÈÇÆÁºñ";
         Text[ chinese_traditional ] = "Ë°óÈÅì/ÂúãÂÆ∂/ÈÉµÈÅûÂçÄËôü";
@@ -597,6 +636,9 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ catalan ] = "Ciutat/Comarca/Codi postal";
         Text[ finnish ] = "Postitoimipaikka/osavaltio/postinumero";
         Text[ thai ] = "‡πÄ‡∏°‡∏∑‡∏≠‡∏á/‡∏£‡∏±‡∏ê/‡∏£‡∏´‡∏±‡∏™‡πÑ‡∏õ‡∏£‡∏©‡∏ì‡∏µ‡∏¢‡πå";
+        Text[ czech ] = "Obec/St√°t/PSƒå";
+        Text[ hebrew ] = "‚ÄÆ◊¢◊ô◊®\\◊û◊ó◊ï◊ñ\\◊û◊ô◊ß◊ï◊ì‚Ä¨";
+        Text[ hindi ] = "‡§®‡§ó‡§∞/‡§∞‡§æ‡§ú‡•ç‡§Ø/Zip";
     };
     String STR_QUERY_REG
     {
@@ -611,19 +653,22 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ italian ] = "Vi preghiamo di osservare che il codice di registrazione si basa sull'indirizzo (via, C.A.P. e citt‡) specificato. Fino alla registrazione questi dati non potranno essere cambiati. Volete cambiarli adesso?";
         Text[ danish ] = "VÊr opmÊrksom pÂ, at gade, postnummer og by anvendes til beregning af registreringsn¯glen. Indtil registreringen kan disse brugerdata ikke Êndres.  Vil du Êndre disse brugerdata?";
         Text[ swedish ] = "Observera att gatu- och postadress anv‰nds fˆr ber‰kningen av registreringsnyckeln. Fram till registreringen kan anv‰ndardata inte ‰ndras. Vill du ‰ndra de h‰r anv‰ndardata nu?";
-        Text[ polish ] = "Naleøy uwzglÍdniÊ, øe podanie nazwy ulicy, kodu pocztowego i miejscowoúci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji danych tych nie bÍdzie moøna zmieniÊ. Czy chcesz je zmieniÊ teraz?";
-        Text[ portuguese_brazilian ] = "Bitte beachten Sie, da? Stra?e, Postleitzahl und Ort f? die Berechnung des Registrierungsschl?sels herangezogen werden. Bis zur Registrierung k?nen diese Benutzerdaten nicht mehr ge?ndert werden.  Wollen Sie diese Benutzerdaten jetzt noch ?ndern?";
+        Text[ polish ] = "Nazwa ulicy, kod pocztowy i miejscowoúÊ sπ uøywane do wygenerowania klucza rejestracyjnego. Danych tych nie bÍdzie moøna zmieniÊ aø do chwili rejestracji. Czy chcesz je zmieniÊ teraz?";
+        Text[ portuguese_brazilian ] = "Note que a rua, CEP e cidade ser„o usados para calcular seu cÛdigo de registro. Estes dados n„o poder„o ser alterados atÈ que seja efetuado seu registro. Deseja alterar seus dados agora?";
         Text[ japanese ] = "Â∏ÇÁî∫ÊùëÂêç„ÄÅÈÉµ‰æøÁï™Âè∑„ÄÅÈÉΩÈÅìÂ∫úÁúåÂêç„ÅØÁôªÈå≤„Ç≠„Éº„ÇíÁô∫Ë°å„Åô„ÇãÊâã„Åå„Åã„Çä„Å®„Å™„Çä„Åæ„Åô„ÄÇÁôªÈå≤„ÅåÊ∏à„ÇÄ„Åæ„Åß„ÅØ„É¶„Éº„Ç∂„Éº„Éá„Éº„Çø„ÅØÂ§âÊõ¥„Åß„Åç„Åæ„Åõ„Çì„ÄÇ„Åì„ÅÆ„É¶„Éº„Ç∂„Éº„Éá„Éº„Çø„Çí‰ªäÂ§âÊõ¥„Åó„Åæ„Åô„ÅãÔºü";
         Text[ chinese_simplified ] = "ËØ∑Ê≥®ÊÑèÔºöË°óÈÅìÔºåÈÇÆÁºñÂíåÂüéÂ∏ÇÊòØÁî®Êù•ÁîüÊàêÊ≥®ÂÜåÂØÜÁ†ÅÁöÑÊï∞ÊçÆ„ÄÇÂú®Ê≠£ÂºèÊ≥®ÂÜåÂâçÊÇ®‰∏çËÉΩÂÜçÊõ¥ÊîπËøô‰∫õ‰ΩøÁî®ËÄÖËµÑÊñô„ÄÇÊÇ®Áé∞Âú®Ë¶ÅÊõ¥ÊîπËøô‰∫õ‰ΩøÁî®ËÄÖËµÑÊñôÂêóÔºü";
         Text[ chinese_traditional ] = "Ë´ãË®ªÊÑèÊÇ®Ëº∏ÂÖ•ÁöÑË°óÈÅìÂèäÂüéÂ∏ÇÁ≠âË≥áÊñôÊòØÁî®‰æÜÁî¢ÁîüË®ªÂÜäÈçµÁ¢º„ÄÇÊ≠£ÂºèË®ªÂÜäÊôÇÊÇ®‰∏çËÉΩ‰øÆÊîπÈÄô‰∫õ‰ΩøÁî®ËÄÖË≥áÊñô„ÄÇÊÇ®ÁèæÂú®Ë¶Å‰øÆÊîπÈÄô‰∫õ‰ΩøÁî®ËÄÖË≥áÊñôÔºü";
         Text[ arabic ] = "«·—Ã«¡ „·«ÕŸ… √‰ «·»Ì«‰«  «·Œ«’… »«·‘«—⁄ Ê«·—„“ «·»—ÌœÌ Ê«·„œÌ‰…  œŒ· ÷„‰ «·»Ì«‰«  «··«“„… ·≈‰‘«¡ „› «Õ «· ”ÃÌ·. ·« Ì„ﬂ‰ﬂ  €ÌÌ— »Ì«‰«  «·„";
         Text[ greek ] = "–·Ò·Í·Î˛ ÒÔÛ›ÓÙÂ ¸ÙÈ Á Ô‰¸Ú, Ô ‘. . Í·È Á ¸ÎÁ ˜ÒÁÛÈÏÔÔÈÔ˝ÌÙ·È „È· ÙÔÌ ‰ÁÏÈÔıÒ„ﬂ· ÙÔı ÍÎÂÈ‰ÈÔ˝ ‰ﬁÎ˘ÛÁÚ. ∏˘Ú ÙÁÌ ‰ﬁÎ˘ÛÁ ‰ÂÌ Ë· ÏÔÒ›ÛÂÙÂ Ì· ? ";
-        Text[ korean ] = "Ï£ºÏÜåÎÇò Ïö∞Ìé∏Î≤àÌò∏ Îì±ÏùÄ Îì±Î°ù ÌÇ§ ÏÉùÏÑ±Ïóê Ïù¥Ïö©ÎêúÎã§Îäî ÏÇ¨Ïã§ÏùÑ Î™ÖÏã¨ÌïòÏã≠ÏãúÏò§. Îì±Î°ùÏù¥ ÏôÑÎ£åÎê† ÎïåÍπåÏßÄÎäî Ïù¥ ÏÇ¨Ïö©Ïûê Îç∞Ïù¥ÌÑ∞Î•º Îçî Ïù¥ÏÉÅ Î∞îÍøÄ Ïàò ÏóÜÏäµÎãàÎã§. ÏßÄÍ∏àÏù¥ÎùºÎèÑ Ïù¥ ÏÇ¨Ïö©Ïûê Îç∞Ïù¥ÌÑ∞Î•º Î≥ÄÍ≤ΩÌïòÍ≤†ÏäµÎãàÍπå?";
-        Text[ turkish ] = "Cadde, posta kodu ve ˛ehir bilgilerinin kay˝t kodunun olu˛turulmas˝ iÁin kullan˝ld˝˝n˝ dikkate al˝n. Kay˝t yap˝lana kadar bu kullan˝c˝ verileri dei˛tirilemez. Kullan˝c˝ verilerini ˛imdi dei˛tirmek istiyor musunuz?";
+        Text[ korean ] = "Ï£ºÏÜåÎÇò Ïö∞Ìé∏Î≤àÌò∏ Îì±ÏùÄ Îì±Î°ù ÌÇ§ ÏÉùÏÑ±Ïóê Ïù¥Ïö©ÎêúÎã§Îäî ÏÇ¨Ïã§ÏùÑ Î™ÖÏã¨ÌïòÏã≠ÏãúÏò§. Îì±Î°ùÏù¥ ÏôÑÎ£åÎê† ÎïåÍπåÏßÄÎäî Ïù¥ ÏÇ¨Ïö©Ïûê Îç∞Ïù¥ÌÑ∞Î•º Îçî Ïù¥ÏÉÅ Î∞îÍøÄ Ïàò ÏóÜÏäµÎãàÎã§. ÏßÄÍ∏àÏù¥ÎùºÎèÑ Ïù¥ ÏÇ¨Ïö©Ïûê Îç∞Ïù¥ÌÑ∞Î•º ÏàòÏ†ïÌïòÏãúÍ≤†ÏäµÎãàÍπå?";
+        Text[ turkish ] = "Sokak, postakodu ve ˛ehir verilerinin kay˝t anahtar˝ olu˛turumunda kullan˝laca˝n˝ unutmay˝n. Kay˝t i˛lemleri tamamlanan˝ncaya kadar kullan˝c˝ bilgilerinizi dei˛tiremezsiniz. ﬁimdi kullan˝c˝ bilgilerinizi dei˛tirmek ister misiniz? ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Observeu que el carrer, el codi postal i la ciutat s'utilitzen per generar la clau de registre. Les dades de l'usuari no es poden modificar fins que s'hagi efectuat correctament el registre. Voleu modificar les dades personals ara?";
         Text[ finnish ] = "Katuosoite-, postinumero- ja postitoimipaikkatietoja k‰ytet‰‰n rekisterˆintiavaimen luonnissa. Et voi muuttaa k‰ytt‰j‰tietoja rekisterˆinnin j‰lkeen. Haluatko muuttaa k‰ytt‰j‰tietoja nyt?";
         Text[ thai ] = "‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å‡∏ß‡πà‡∏≤‡∏ñ‡∏ô‡∏ô, ‡∏£‡∏´‡∏±‡∏™‡πÑ‡∏õ‡∏£‡∏©‡∏ì‡∏µ‡∏¢‡πå‡πÅ‡∏•‡∏∞‡πÄ‡∏°‡∏∑‡∏≠‡∏á‡∏ñ‡∏π‡∏Å‡πÉ‡∏ä‡πâ‡πÄ‡∏û‡∏∑‡πà‡∏≠‡∏™‡∏£‡πâ‡∏≤‡∏á‡∏Å‡∏∏‡∏ç‡πÅ‡∏à‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô  ‡∏Ñ‡∏∏‡∏ì‡∏à‡∏∞‡πÑ‡∏°‡πà‡∏™‡∏≤‡∏°‡∏≤‡∏£‡∏ñ‡πÄ‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ‡πÑ‡∏î‡πâ‡∏≠‡∏µ‡∏Å‡∏à‡∏ô‡∏Å‡∏ß‡πà‡∏≤‡∏Å‡∏≤‡∏£‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô‡∏ô‡∏±‡πâ‡∏ô‡∏à‡∏∞‡∏™‡∏≥‡πÄ‡∏£‡πá‡∏à  ‡∏Ñ‡∏∏‡∏ì‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡∏î‡∏±‡∏î‡πÅ‡∏õ‡∏•‡∏á‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ‡∏ï‡∏≠‡∏ô‡∏ô‡∏µ‡πâ‡∏´‡∏£‡∏∑‡∏≠‡πÑ‡∏°‡πà?";
+        Text[ czech ] = "V≈°imnƒõte si, ≈æe PSƒå a obec budou pou≈æity pro vygenerov√°n√≠ registraƒçn√≠ho kl√≠ƒçe. Nebudete moci znovu zmƒõnit √∫daje o u≈æivateli, dokud neprobƒõhne registrace. P≈ôejete si nyn√≠ zmƒõnit √∫daje o u≈æivateli?";
+        Text[ hebrew ] = "‚ÄÆ◊©◊ô◊û◊ï ◊ú◊ë ◊©◊®◊ó◊ï◊ë, ◊û◊ô◊ß◊ï◊ì ◊ï◊¢◊ô◊® ◊î◊ù ◊û◊û◊®◊õ◊ô◊ë◊ô◊ï ◊©◊ú ◊û◊§◊™◊ó ◊î◊î◊®◊©◊û◊î. ◊ú◊ê ◊†◊ô◊™◊ü ◊ú◊©◊†◊ï◊™ ◊§◊®◊ò◊ô◊ù ◊ê◊ú◊ï ◊¢◊ì ◊ú◊ê◊ó◊® ◊°◊ô◊ï◊ù ◊î◊î◊®◊©◊û◊î. ◊î◊ê◊ù ◊ê◊õ◊ü ◊ú◊©◊†◊ï◊™ ◊ê◊™ ◊î◊§◊®◊ò◊ô◊ù ◊¢◊õ◊©◊ô◊ï?‚Ä¨";
+        Text[ hindi ] = "‡§∏‡§°‡§º‡§ï, Zip ‡§ï‡•ã‡§°‡•ç ‡§î‡§∞ ‡§®‡§ó‡§∞ ‡§ï‡•ã ‡§∞‡§ú‡§ø‡§∏‡•ç‡§ü‡§∞‡•Ä ‡§ï‡•Ä ‡§â‡§§‡•ç‡§™‡§®‡•ç‡§® ‡§ï‡§∞‡§®‡•á ‡§ï‡•á‡§≤‡§ø‡§è ‡§â‡§™‡§Ø‡•ã‡§ó ‡§ï‡§ø‡§Ø‡§æ ‡§ú‡§æ‡§è‡§ó‡§æ ‡•§ ‡§∞‡§ú‡§ø‡§∏‡•ç‡§ü‡§∞‡•Ä ‡§ï‡§æ‡§∞‡•ç‡§Ø ‡§∏‡§´‡§º‡§≤ ‡§π‡•ã‡§®‡•á ‡§§‡§ï, ‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§ï‡§æ ‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•ã ‡§¨‡§¶‡§≤ ‡§®‡§π‡•Ä‡§Ç ‡§∏‡§ï‡§§‡•á ‡§π‡•à ‡•§ ‡§Ü‡§™ ‡§Ö‡§≠‡•Ä ‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§ï‡§æ ‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•ã ‡§¨‡§¶‡§≤‡§®‡§æ ‡§ö‡§æ‡§π‡§§‡•á ‡§π‡•à?";
     };
     Text[ chinese_traditional ] = "‰ΩøÁî®ËÄÖË≥áÊñô";
     Text[ arabic ] = "»Ì«‰«  «·„” Œœ„";
@@ -634,6 +679,9 @@ TabPage RID_SFXPAGE_GENERAL
     Text[ catalan ] = "Dades de l'usuari";
     Text[ finnish ] = "K‰ytt‰j‰n tiedot";
     Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
+    Text[ czech ] = "√ödaje o u≈æivateli";
+    Text[ hebrew ] = "‚ÄÆ◊§◊®◊ò◊ô ◊î◊û◊©◊™◊û◊©‚Ä¨";
+    Text[ hindi ] = "‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§°‡§º‡•â‡§ü‡§æ";
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------
@@ -651,11 +699,11 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ spanish ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirar· el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los prÛximos 30 dÌas.\nEl formulario de registro lo encuentra en el men˙ Ayuda - Registro...\nøDesea realmente modificar los datos de usuario?" ;
     Message [ swedish ] = "Du har ‰ndrat dina anv‰ndardata.\nT‰nk pÂ att din nuvarande registrering lˆper ut i och med detta.\nDu behˆver en ny registreringsnyckel som mÂste matas in inom de n‰rmaste 30 dagarna.\nRegistreringsformul‰ret hittar du under menyn Hj‰lp - Registrering...\nVill du verkligen ‰ndra dina anv‰ndardata?" ;
     Message [ portuguese ] = "Modificou os dados de utilizador.\nN„o se esqueÁa de que o seu registo expirar·.\nPor esta raz„o necessitar· de um novo cÛdigo de registo dentro do prazo de 30 dias.\nEncontrar· o formul·rio de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
-    Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten ge?ndert.\nBitte bedenken Sie, da? dadurch die Registrierung verf?llt.\nSie ben?igen einen neuen Registrierungsschl?sel, der innerhalb der n?chsten 30 Tage eingegeben werden mu?.\nDas Registrierungsformular finden Sie im Men?Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ?ndern?";
+    Message[ portuguese_brazilian ] = "Os dados do usu·rio foram alterados.\nNote que, se vocÍ continuar, seu cÛdigo de registro se tornar· inv·lido.\nNeste caso, vocÍ precisar· obter um novo cÛdigo de registro no prazo de 30 dias.\nVocÍ pode encontrar o formul·rio de registro no menu Ajuda - Registro...\nDeseja realmente alterar seus dados de usu·rio?";
     Message[ danish ] = "Du har Êndret brugerdataene.\nBemÊrk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsn¯gle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen HjÊlp - Registrering...\nEr du sikker pÂ, at du vil Êndre brugerdataene?";
     Message[ chinese_simplified ] = "ÊÇ®Â∑≤ÁªèÊõ¥Êîπ‰∫Ü‰ΩøÁî®ËÄÖÊï∞ÊçÆ„ÄÇ\nËøôÊ†∑ÊÇ®ÁöÑÊ≥®ÂÜåÂ∞±‰ºöÊó†Êïà„ÄÇ\nÊÇ®ÂøÖÈ°ªÂú®‰ªäÂêé30Â§©‰πãÂÜÖËæìÂÖ•‰∏Ä‰∏™Êñ∞ÁöÑÊ≥®ÂÜåÂØÜÁ†Å„ÄÇ\nÊÇ®ËÉΩÂ§üÂú®ËèúÂçï\"Â∏ÆÂä© - Ê≥®ÂÜå...\"Â§ÑÊâæÂà∞Ê≥®ÂÜåË°®Âçï„ÄÇ\nÊÇ®ÁúüË¶ÅÊõ¥Êîπ‰ΩøÁî®ËÄÖËµÑÊñôÔºü";
     Message[ russian ] = "¬˚ ËÁÏÂÌËÎË ‰‡ÌÌ˚Â ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ.\n»Á-Á‡ ˝ÚÓ„Ó ‚˚ ÛÚ‡ÚËÚÂ ÒÚ‡ÚÛÒ Á‡Â„ËÒÚËÓ‚‡ÌÌÓ„Ó ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ.\n¬‡Ï ÔÓÌ‡‰Ó·ËÚÒˇ ÌÓ‚˚È Â„ËÒÚ‡ˆËÓÌÌ˚È ÍÎ˛˜, ÍÓÚÓ˚È ÌÂÓ·ıÓ‰ËÏÓ ·Û‰ÂÚ ‚‚ÂÒÚË ‚ ÚÂ˜ÂÌËÂ 30 ‰ÌÂÈ.\n–Â„ËÒÚ‡ˆËÓÌÌÛ˛ ÙÓÏÛ ‚˚ Ì‡È‰ÂÚÂ ‚ ÏÂÌ˛ —Ô‡‚Í‡ - –Â„ËÒÚ‡ˆËˇ...\n»ÁÏÂÌËÚ¸ ‰‡ÌÌ˚Â ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ, ÌÂÒÏÓÚˇ Ì‡ ˝ÚÓ?";
-    Message[ polish ] = "Zmieniono dane uøytkownika.\nNaleøy uwzglÍdniÊ, øe przez to traci waønoúÊ rejestracja.\nWymagany bÍdzie nowy klucz rejestracyjny, ktÛry naleøy wprowadziÊ w ciπgu nastÍpnych 30 dni.\nFormularz rejestracyjny znajduje siÍ w menu Pomoc - Rejestracja...\nCzy na pewno zmieniÊ dane uøytkownika?";
+    Message[ polish ] = "Zmieniono dane uøytkownika.\nNaleøy wziπÊ pod uwagÍ, øe (jeúli operacja bÍdzie kontynuowana) klucz rejestracyjny utraci waønoúÊ.\nBÍdzie potrzebny nowy klucz rejestracyjny, ktÛry naleøy wprowadziÊ w ciπgu nastÍpnych 30 dni.\nFormularz rejestracyjny moøna wywo≥aÊ za pomocπ polecenia Rejestracja z menu Pomoc.\nCzy na pewno zmieniÊ dane uøytkownika?";
     Message[ japanese ] = "„É¶„Éº„Ç∂„Éº„Éá„Éº„Çø„ÅåÂ§âÊõ¥„Åï„Çå„Åæ„Åó„Åü„ÄÇ\n„Åù„ÅÆ„Åü„ÇÅÁôªÈå≤„ÅåÂ§±Âäπ„Åô„Çã„ÅÆ„ÅØÂÖç„Çå„Åæ„Åõ„Çì„ÄÇ\nÊñ∞„Åó„ÅÑÁôªÈå≤„Ç≠„Éº„ÅåÂøÖË¶Å„Å®„Å™„ÇäÔΩ§„Åù„Çå„Çí30Êó•‰ª•ÂÜÖ„Å´Ê∏à„Åæ„Åï„Å™„Åë„Çå„Å∞„Å™„Çä„Åæ„Åõ„Çì„ÄÇ\nÁôªÈå≤Áî®Á¥ô„ÅØ[„É°„Éã„É•„Éº„Éò„É´„Éó/ÁôªÈå≤...]„Å´„ÅÇ„Çä„Åæ„Åô„ÄÇ\n„É¶„Éº„Ç∂„Éº„Éá„Éº„Çø„ÇíÊú¨ÂΩì„Å´Â§âÊõ¥„Åó„Åæ„Åô„Åã?";
     Message[ chinese_traditional ] = "ÊÇ®Â∑≤Á∂ìËÆäÊõ¥‰ΩøÁî®ËÄÖË≥áÊñô„ÄÇ\nÈÄôÊ®£ÊÇ®ÁöÑË®ªÂÜäÂ∞±ÊúÉÁÑ°Êïà„ÄÇ\nÊÇ®ÈúÄË¶Å‰∏ÄÂÄãÊñ∞ÁöÑÔπê‰∏îÂøÖÈ†àÂú®30Â§©‰πãÂÖßËº∏ÂÖ•ÁöÑË®ªÂÜäÂØÜÈçµÁ¢º„ÄÇ\nÊÇ®ËÉΩÂ§†Âú®ÂäüËÉΩË°®Ë™™ÊòéÔºåË®ªÂÜä‰πã‰∏ãÊâæÂà∞Ë®ªÂÜäË°®Ê†º„ÄÇ\nÁúüË¶Å‰øÆÊîπ‰ΩøÁî®ËÄÖË≥áÊñôÔºü";
     Message[ arabic ] = "·ﬁœ ﬁ„  » ⁄œÌ· »Ì«‰«  «·„” Œœ„.\n«·—Ã«¡ „·«ÕŸ… √‰ Â–« «· ⁄œÌ· ”Ê› ÌÃ⁄· «· ”ÃÌ· €Ì— ’«·Õ.\n”Ê›  Õ «Ã ≈·Ï „› «Õ  ”ÃÌ· ÃœÌœ° ÌÃ» ≈œŒ«·Â Œ·«· «·À·«ÀÌ‰ ÌÊ„« «·ﬁ«œ„Ì‰.\nÌ„ﬂ‰ﬂ «·Õ’Ê· ⁄·Ï «” „«—… «· ”ÃÌ· ›Ì ﬁ«∆„… \"„”«⁄œ…\"  Õ  \" ”ÃÌ·\"...\nÂ·  —Ìœ »«· √ﬂÌœ  €ÌÌ— »Ì«‰«  «·„” Œœ„ø";
@@ -666,6 +714,9 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ catalan ] = "s'han modificat Les dades de l'usuari ";
     Message[ finnish ] = "K‰ytt‰j‰tietoja on muutettu.\nJos jatkat, rekisterˆintiavain ei ole en‰‰ kelvollinen.\nUusi rekisterˆintiavain on hankittava 30 p‰iv‰n kuluessa.\nRekisterˆintilomake lˆytyy valikosta Ohje - Rekisterˆinti.\nHaluatko todella muuttaa k‰ytt‰j‰tietoja?";
     Message[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ‡πÑ‡∏î‡πâ‡∏ñ‡∏π‡∏Å‡πÄ‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡πÑ‡∏õ\n‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å‡∏ß‡πà‡∏≤ ‡∏ñ‡πâ‡∏≤‡∏Ñ‡∏∏‡∏ì‡∏ó‡∏≥‡∏ï‡πà‡∏≠ ‡∏Å‡∏∏‡∏ç‡πÅ‡∏à‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô‡∏à‡∏∞‡πÉ‡∏ä‡πâ‡πÑ‡∏°‡πà‡πÑ‡∏î‡πâ\n‡πÄ‡∏ô‡∏∑‡πà‡∏≠‡∏á‡∏à‡∏≤‡∏Å‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡∏Å‡∏∏‡∏ç‡πÅ‡∏à‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô‡πÉ‡∏´‡∏°‡πà‡∏†‡∏≤‡∏¢‡πÉ‡∏ô  30 ‡∏ß‡∏±‡∏ô\n‡∏Ñ‡∏∏‡∏ì‡∏™‡∏≤‡∏°‡∏≤‡∏£‡∏ñ‡∏´‡∏≤‡πÅ‡∏ö‡∏ö‡∏ü‡∏≠‡∏£‡πå‡∏°‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô‡πÉ‡∏ô‡πÄ‡∏°‡∏ô‡∏π‡∏™‡πà‡∏ß‡∏ô‡∏ä‡πà‡∏ß‡∏¢‡πÄ‡∏´‡∏•‡∏∑‡∏≠ - ‡∏•‡∏á‡∏ó‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô...\n‡∏Ñ‡∏∏‡∏ì‡∏ï‡πâ‡∏≠‡∏á‡πÄ‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ‡∏´‡∏£‡∏∑‡∏≠‡πÑ‡∏°‡πà?";
+    Message[ czech ] = "√ödaje o u≈æivateli byly zmƒõnƒõny.\nV≈°imnƒõte si, ≈æe pokud budete pokraƒçovat, registrace se stane neplatnou.\nTud√≠≈æ bude pot≈ôeba nov√° registrace bƒõhem n√°sleduj√≠c√≠ch 30 dn≈Ø.\nRegistraƒçn√≠ formul√°≈ô najdete v menu 'N√°povƒõda - Registrace...'\nOpravdu chcete zmƒõnit sv√© √∫daje?";
+    Message[ hebrew ] = "‚ÄÆ◊§◊®◊ò◊ô ◊î◊û◊©◊™◊û◊© ◊©◊ï◊†◊ï.\n◊ê◊ù ◊û◊û◊©◊ô◊õ◊ô◊ù, ◊û◊§◊™◊ó ◊î◊î◊®◊©◊û◊î ◊ú◊ê ◊ô◊™◊ê◊ô◊ù ◊ú◊†◊™◊ï◊†◊ô◊ù ◊î◊ó◊ì◊©◊ô◊ù\n◊ï◊ô◊ì◊®◊© ◊û◊§◊™◊ó ◊ó◊ì◊© ◊ú◊ê◊ó◊® ◊©◊ú◊ï◊©◊ô◊ù ◊ô◊ï◊ù.\n◊ò◊ï◊§◊° ◊î◊î◊®◊©◊û◊î ◊†◊û◊¶◊ê ◊™◊ó◊™ '◊¢◊ñ◊®◊î' > '◊î◊®◊©◊û◊î'...\n◊î◊ê◊ù ◊ê◊õ◊ü ◊ú◊©◊†◊ï◊™ ◊ê◊™ ◊§◊®◊ò◊ô ◊î◊û◊©◊™◊û◊©?‚Ä¨";
+    Message[ hindi ] = "‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•ã ‡§™‡§∞‡§ø‡§µ‡§∞‡•ç‡§§‡§® ‡§ï‡§ø‡§Ø‡§æ ‡§π‡•à ‡•§ \n‡§Ö‡§ó‡§∞ ‡§Ü‡§™ ‡§ú‡§æ‡§∞‡•Ä ‡§∞‡§ñ‡•á‡§Ç‡§ó‡•á ‡§§‡•ã, ‡§∞‡§ú‡§ø‡§∏‡•ç‡§ü‡§∞‡•Ä ‡§ï‡•Ä ‡§Ö‡§Æ‡§æ‡§®‡•ç‡§Ø ‡§π‡•ã ‡§ú‡§æ‡§è‡§ó‡§æ ‡•§\n‡§á‡§∏‡§≤‡§ø‡§è, 30 ‡§¶‡§ø‡§®‡•ã‡§Ç ‡§ï‡•á ‡§Ö‡§Ç‡§¶‡§∞ ‡§è‡§ï ‡§®‡§Ø‡§æ ‡§∞‡§ú‡§ø‡§∏‡•ç‡§ü‡§∞‡•Ä ‡§ï‡•Ä ‡§ö‡§æ‡§π‡§ø‡§è ‡•§\n‡§Ü‡§™ ‡§∞‡§ú‡§ø‡§∏‡•ç‡§ü‡§∞‡•Ä ‡§´‡§º‡•â‡§∞‡•ç‡§Æ‡•ç ‡§ï‡•ã ‡§∏‡§π‡§æ‡§Ø‡§§‡§æ - ‡§∞‡§ú‡§ø‡§∏‡•ç‡§ü‡§∞‡•Ä... ‡§Æ‡•á‡§Ç ‡§¶‡•á‡§ñ ‡§∏‡§ï‡§§‡•á ‡§π‡•à ‡•§\n‡§Ü‡§™ ‡§∏‡§ö‡§Æ‡•Å‡§ö ‡§Æ‡•á‡§Ç ‡§â‡§™‡§≠‡•ã‡§ï‡•ç‡§§‡§æ ‡§ï‡§æ ‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•ã ‡§¨‡§¶‡§≤‡§®‡§æ ‡§ö‡§æ‡§π‡§§‡•á ‡§π‡•à?";
 };
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
@@ -722,13 +773,13 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
     ItemList [ portuguese_brazilian ] =
     {
-        < "Millimeter" ; FUNIT_MM ; > ;
-        < "Zentimeter" ; FUNIT_CM ; > ;
-        < "Meter" ; FUNIT_M ; > ;
-        < "Kilometer" ; FUNIT_KM ; > ;
-        < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fu?" ; FUNIT_FOOT ; > ;
-        < "Meilen" ; FUNIT_MILE ; > ;
+        < "MilÌmetro" ; FUNIT_MM ; > ;
+        < "CentÌmetro" ; FUNIT_CM ; > ;
+        < "Metro" ; FUNIT_M ; > ;
+        < "Quilometro" ; FUNIT_KM ; > ;
+        < "Polegada" ; FUNIT_INCH ; > ;
+        < "PÈ" ; FUNIT_FOOT ; > ;
+        < "Milhas" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Ponto" ; FUNIT_POINT ; > ;
     };
@@ -862,7 +913,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Stopa" ; FUNIT_FOOT ; > ;
         < "Mile" ; FUNIT_MILE ; > ;
         < "Cycero" ; FUNIT_PICA ; > ;
-        < "Point" ; FUNIT_POINT ; > ;
+        < "Punkt" ; FUNIT_POINT ; > ;
     };
     ItemList [ japanese ] =
     {
@@ -879,7 +930,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     ItemList [ chinese_traditional ] =
     {
         < "ÊØ´Á±≥" ; FUNIT_MM ; > ;
-        < "ÂéòÁ±≥" ; FUNIT_CM ; > ;
+        < "ÂÖ¨ÂàÜ" ; FUNIT_CM ; > ;
         < "Á±≥" ; FUNIT_M ; > ;
         < "ÂÖ¨Èáå" ; FUNIT_KM ; > ;
         < "Ëã±Âêã" ; FUNIT_INCH ; > ;
@@ -931,7 +982,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Metre" ; FUNIT_M ; > ;
         < "Kilometre" ; FUNIT_KM ; > ;
         < "›nÁ" ; FUNIT_INCH ; > ;
-        < "Ft" ; FUNIT_FOOT ; > ;
+        < "Ayak" ; FUNIT_FOOT ; > ;
         < "Mil" ; FUNIT_MILE ; > ;
         < "Pika" ; FUNIT_PICA ; > ;
         < "Nokta" ; FUNIT_POINT ; > ;
@@ -972,9 +1023,58 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "‡∏û‡∏¥‡∏Ñ‡∏≤" ; FUNIT_PICA ; > ;
         < "‡∏û‡πâ‡∏≠‡∏¢‡∏ó‡πå" ; FUNIT_POINT ; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "Milimetr" ; FUNIT_MM ; > ;
+        < "Centimetr" ; FUNIT_CM ; > ;
+        < "Metr" ; FUNIT_M ; > ;
+        < "Kilometr" ; FUNIT_KM ; > ;
+        < "Palec" ; FUNIT_INCH ; > ;
+        < "Stopa" ; FUNIT_FOOT ; > ;
+        < "M√≠le" ; FUNIT_MILE ; > ;
+        < "Pika" ; FUNIT_PICA ; > ;
+        < "Bod" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‚ÄÆ◊û◊ô◊ú◊ô◊û◊ò◊®‚Ä¨" ; FUNIT_MM ; > ;
+        < "‚ÄÆ◊°◊†◊ò◊ô◊û◊ò◊®‚Ä¨" ; FUNIT_CM ; > ;
+        < "‚ÄÆ◊û◊ò◊®‚Ä¨" ; FUNIT_M ; > ;
+        < "‚ÄÆ◊ß◊ô◊ú◊ï◊û◊ò◊®‚Ä¨" ; FUNIT_KM ; > ;
+        < "‚ÄÆ◊ê◊ô◊†◊¶'‚Ä¨" ; FUNIT_INCH ; > ;
+        < "‚ÄÆ◊®◊í◊ú‚Ä¨" ; FUNIT_FOOT ; > ;
+        < "‚ÄÆ◊û◊ô◊ú‚Ä¨" ; FUNIT_MILE ; > ;
+        < "‚ÄÆ◊§◊ô◊ß◊î‚Ä¨" ; FUNIT_PICA ; > ;
+        < "‚ÄÆ◊†◊ß◊ï◊ì◊î‚Ä¨" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "‡§Æ‡§ø‡§≤‡•ç‡§≤‡§ø‡§Æ‡•Ä‡§ü‡§∞" ; FUNIT_MM ; > ;
+        < "‡§∏‡•á‡§Ç‡§ü‡§ø‡§Æ‡•Ä‡§ü‡§∞" ; FUNIT_CM ; > ;
+        < "‡§Æ‡•Ä‡§ü‡§∞" ; FUNIT_M ; > ;
+        < "‡§ï‡§ø‡§≤‡•ã‡§Æ‡•Ä‡§ü‡§∞" ; FUNIT_KM ; > ;
+        < "‡§á‡§Ç‡§ö" ; FUNIT_INCH ; > ;
+        < "‡§´‡§º‡•Ç‡§ü‡•ç" ; FUNIT_FOOT ; > ;
+        < "‡§Æ‡§á‡§≤‡•ç‡§∏" ; FUNIT_MILE ; > ;
+        < "‡§™‡§ø‡§ï‡§æ" ; FUNIT_PICA ; > ;
+        < "‡§¨‡§ø‡§®‡•ç‡§¶‡•Å" ; FUNIT_POINT ; > ;
+    };
     };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
