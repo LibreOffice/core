@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:48:15 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,27 +91,19 @@ SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
 
 void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
-    BasicEntry* pUser = (BasicEntry*)pEntry->GetUserData();
-    if ( ( pUser->GetType() == OBJTYPE_SUBOBJ ) ||
-         ( pUser->GetType() == OBJTYPE_OBJECT ) )
+    BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
+    SfxObjectShell* pShell( aDesc.GetShell() );
+    LibraryLocation eLocation( aDesc.GetLocation() );
+    BasicEntryType eType( aDesc.GetType() );
+
+    if ( eType == OBJ_TYPE_SHELL )
     {
-        // don't expand dialogs and controls (sbx dialogs removed)
-        /*
-        SbxObject* pObj = FindObject( pEntry );
-        DBG_ASSERT( pObj, "RequestingChilds: Kein gueltiges Objekt");
-        if ( pObj )
-            ScanSbxObject( pObj, pEntry );
-        */
+        ImpCreateLibEntries( pEntry, pShell, eLocation );
     }
-    else if ( pUser->GetType() == OBJTYPE_LIB )
+    else if ( eType == OBJ_TYPE_LIBRARY )
     {
-        String aLibName = GetEntryText( pEntry );
+        String aLibName( aDesc.GetLibName() );
         ::rtl::OUString aOULibName( aLibName );
-        SvLBoxEntry* pParent = GetParent( pEntry );
-        pUser = (BasicEntry*)pParent->GetUserData();
-        DBG_ASSERT( pUser->GetType() == OBJTYPE_BASICMANAGER, "BasicManager?" );
-        BasicManager* pBasMgr = ((BasicManagerEntry*)pUser)->GetBasicManager();
-        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
 
         // check password
         BOOL bOK = TRUE;
@@ -161,7 +153,10 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
                 ImpCreateLibSubEntries( pEntry, pShell, aLibName );
 
                 // exchange image
-                setEntryBitmap(pEntry, IMGID_LIB);
+                bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
+                Image aImage( IDEResId( bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB ) );
+                Image aImageHC( IDEResId( bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC ) );
+                SetEntryBitmaps( pEntry, aImage, aImageHC );
             }
             else
             {
@@ -172,8 +167,6 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     else
         DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
 }
-
-
 
 void __EXPORT BasicTreeListBox::ExpandedHdl()
 {
@@ -192,41 +185,20 @@ void __EXPORT BasicTreeListBox::ExpandedHdl()
     }
 }
 
-
-
-void BasicTreeListBox::ScanAllBasics()
+void BasicTreeListBox::ScanAllEntries()
 {
-    ScanBasic( SFX_APP()->GetBasicManager(), Application::GetAppName() );
+    ScanEntry( 0, LIBRARY_LOCATION_USER );
+    ScanEntry( 0, LIBRARY_LOCATION_SHARE );
     SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
     while ( pDocShell )
     {
-        if ( !pDocShell->ISA(BasicDocShell) )
-        {
-            // Nur, wenn es ein dazugehoeriges Fenster gibt, damit nicht die
-            // Gecachten Docs, die nicht sichtbar sind ( Remot-Dokumente )
-            BasicManager* pBasMgr = pDocShell->GetBasicManager();
-            if ( ( pBasMgr != SFX_APP()->GetBasicManager() ) && ( SfxViewFrame::GetFirst( pDocShell ) ) )
-                ScanBasic( pBasMgr, pDocShell->GetTitle( SFX_TITLE_FILENAME ) );
-        }
+        // only if there's a corresponding window (not for remote documents)
+        if ( SfxViewFrame::GetFirst( pDocShell ) && !pDocShell->ISA( BasicDocShell ) )
+            ScanEntry( pDocShell, LIBRARY_LOCATION_DOCUMENT );
+
         pDocShell = SfxObjectShell::GetNext( *pDocShell );
     }
 }
-
-/*
-void BasicTreeListBox::ExpandTree( BasicManager* pBasMgr )
-{
-    ULONG nRootPos = 0;
-    SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
-    // Falsch:
-    while ( pRootEntry && (((BasicEntry*)pRootEntry->GetUserData())->GetType() != OBJTYPE_BASICMANAGER ) )
-        pRootEntry = GetEntry( ++nRootPos );
-
-    if ( pRootEntry )
-        ExpandTree( pRootEntry );
-}
-*/
-
-
 
 void BasicTreeListBox::ExpandTree( SvLBoxEntry* pRootEntry )
 {
@@ -239,25 +211,11 @@ void BasicTreeListBox::ExpandTree( SvLBoxEntry* pRootEntry )
     {
         // Nur die mit Childs, sonst waere ChildsOnDemand ueberfluessig
         if ( !IsEntryProtected( pLibEntry ) && GetChildCount( pLibEntry ) )
-        {
             Expand( pLibEntry );
 
-            // Im ObjectDlg nicht alles expandieren...
-            if ( !( nMode & BROWSEMODE_PROPS )  )
-            {
-                SvLBoxEntry* pModOrObjEntry = FirstChild( pLibEntry );
-                while ( pModOrObjEntry )
-                {
-                    Expand( pModOrObjEntry );
-                    pModOrObjEntry = NextSibling( pModOrObjEntry );
-                }
-            }
-        }
         pLibEntry = NextSibling( pLibEntry );
     }
 }
-
-
 
 void BasicTreeListBox::ExpandAllTrees()
 {
@@ -270,84 +228,13 @@ void BasicTreeListBox::ExpandAllTrees()
     }
 }
 
-
-
-BYTE BasicTreeListBox::GetSelectedType()
-{
-    SvLBoxEntry* pEntry = GetCurEntry();
-
-    if ( !pEntry )
-        return 0;
-
-    USHORT nDepth = GetModel()->GetDepth( pEntry );
-    if ( nDepth == 0 )
-        return OBJTYPE_BASICMANAGER;
-    else if ( nDepth == 1 )
-        return OBJTYPE_LIB;
-
-    return ((BasicEntry*)pEntry->GetUserData())->GetType();
-}
-
-
-
-BasicManager* BasicTreeListBox::GetSelectedSbx( String& rLib, String& rModOrObj, String& rSubOrPropOrSObj )
-{
-    // Methode kann eigentlich weg, wenn nicht mehr in den Apps !!!
-    // Die sollten dann auch direkt mit FindMethod() arbeiten!
-    String aTmpStr;
-    return GetSelectedSbx( rLib, rModOrObj, rSubOrPropOrSObj, aTmpStr );
-}
-
-
-
-
-BasicManager* BasicTreeListBox::GetSelectedSbx( String& rLib, String& rModOrObj, String& rSubOrPropOrSObj, String& rPropOrSubInSObj )
-{
-    SvLBoxEntry* pCurEntry = GetCurEntry();
-    return GetSbx( pCurEntry, rLib, rModOrObj, rSubOrPropOrSObj, rPropOrSubInSObj );
-}
-
-
-
-BasicManager* BasicTreeListBox::GetSbx( SvLBoxEntry* pEntry, String& rLib, String& rModOrObj, String& rSubOrPropOrSObj, String& rPropOrSubInSObj )
-{
-    rLib.Erase();
-    rModOrObj.Erase();
-    rSubOrPropOrSObj.Erase();
-    rPropOrSubInSObj.Erase();
-    BasicManager* pBasMgr = 0;
-
-    while ( pEntry )
-    {
-        USHORT nDepth = GetModel()->GetDepth( pEntry );
-        switch ( nDepth )
-        {
-            case 4: rPropOrSubInSObj = GetEntryText( pEntry );
-                    break;
-            case 3: rSubOrPropOrSObj = GetEntryText( pEntry );
-                    break;
-            case 2: rModOrObj = GetEntryText( pEntry );
-                    break;
-            case 1: rLib = GetEntryText( pEntry );
-                    break;
-            case 0: pBasMgr = ((BasicManagerEntry*)pEntry->GetUserData())->GetBasicManager();
-                    break;
-        }
-        pEntry = GetParent( pEntry );
-    }
-    return pBasMgr;
-}
-
-
-
-
 SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 {
     if ( !pEntry )
         return 0;
 
     String aLib, aModOrObj, aSubOrPropOrSObj, aPropOrSubInSObj;
-    BasicManager* pBasMgr = 0;
+    SfxObjectShell* pShell = 0;
     EntryArray aEntries;
 
     while ( pEntry )
@@ -358,19 +245,22 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             case 4:
             case 3:
             case 2:
-            case 1: {
-                        aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
-                        break;
-                    }
-            case 0: pBasMgr = ((BasicManagerEntry*)pEntry->GetUserData())->GetBasicManager();
-                    break;
+            case 1:
+            {
+                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+            }
+            break;
+            case 0:
+            {
+                pShell = ((BasicShellEntry*)pEntry->GetUserData())->GetShell();
+            }
+            break;
         }
         pEntry = GetParent( pEntry );
     }
 
-    DBG_ASSERT( pBasMgr, "Fuer den Eintrag keinen BasicManager gefunden!" );
     SbxVariable* pVar = 0;
-    if ( pBasMgr && aEntries.Count() )
+    if ( aEntries.Count() )
     {
         for ( USHORT n = 0; n < aEntries.Count(); n++ )
         {
@@ -382,45 +272,36 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
             switch ( pBE->GetType() )
             {
-                case OBJTYPE_LIB:
+                case OBJ_TYPE_LIBRARY:
                 {
-                    pVar = pBasMgr->GetLib( aName );
+                    BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+                    if ( pBasMgr )
+                        pVar = pBasMgr->GetLib( aName );
                 }
                 break;
-                case OBJTYPE_MODULE:
+                case OBJ_TYPE_MODULE:
                 {
                     DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
                     pVar = ((StarBASIC*)pVar)->FindModule( aName );
                 }
                 break;
-                case OBJTYPE_METHOD:
-                //case OBJTYPE_METHODINOBJ:     // sbx dialogs removed
+                case OBJ_TYPE_METHOD:
                 {
                     DBG_ASSERT( pVar && ( (pVar->IsA( TYPE(SbModule) )) || (pVar->IsA( TYPE(SbxObject) )) ), "FindVariable: Ungueltiges Modul/Objekt" );
                     pVar = ((SbxObject*)pVar)->GetMethods()->Find( aName, SbxCLASS_METHOD );
                 }
                 break;
-                case OBJTYPE_OBJECT:
-                case OBJTYPE_SUBOBJ:
+                case OBJ_TYPE_DIALOG:
                 {
                     // sbx dialogs removed
-                    /*
-                    DBG_ASSERT( pVar && pVar->IsA( TYPE(SbxObject) ), "FindVariable: Ungueltiges Objekt" );
-                    pVar = ((SbxObject*)pVar)->GetObjects()->Find( aName, SbxCLASS_OBJECT );
-                    */
                 }
                 break;
-                case OBJTYPE_PROPERTY:
+                default:
                 {
-                    // sbx dialogs removed
-                    /*
-                    DBG_ASSERT( pVar && pVar->IsA( TYPE(SbxObject) ), "FindVariable: Ungueltiges Objekt(Property)" );
-                    pVar = ((SbxObject*)pVar)->GetProperties()->Find( aName, SbxCLASS_PROPERTY );
-                    */
+                    DBG_ERROR( "FindVariable: Unbekannter Typ!" );
+                    pVar = 0;
                 }
                 break;
-                default:    DBG_ERROR( "FindVariable: Unbekannter Typ!" );
-                            pVar = 0;
             }
             if ( !pVar )
                 break;
@@ -430,18 +311,18 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
     return pVar;
 }
 
-SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
+BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
 {
     SfxObjectShell* pShell = 0;
+    LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
     String aLibName;
     String aName;
     String aMethodName;
-    USHORT nType = BASICIDE_TYPE_UNKNOWN;
+    BasicEntryType eType = OBJ_TYPE_UNKNOWN;
 
     if ( !pEntry )
-        return SbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aName, aMethodName, nType );
+        return BasicEntryDescriptor( pShell, eLocation, aLibName, aName, aMethodName, eType );
 
-    BasicManager* pBasMgr = 0;
     EntryArray aEntries;
 
     while ( pEntry )
@@ -452,25 +333,27 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
             case 4:
             case 3:
             case 2:
-            case 1: {
-                        aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
-                        break;
-                    }
-            case 0: pBasMgr = ((BasicManagerEntry*)pEntry->GetUserData())->GetBasicManager();
-                    break;
+            case 1:
+            {
+                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+            }
+            break;
+            case 0:
+            {
+                BasicShellEntry* pBasicShellEntry = (BasicShellEntry*)pEntry->GetUserData();
+                if ( pBasicShellEntry )
+                {
+                    pShell = pBasicShellEntry->GetShell();
+                    eLocation = pBasicShellEntry->GetLocation();
+                    eType = OBJ_TYPE_SHELL;
+                }
+            }
+            break;
         }
         pEntry = GetParent( pEntry );
     }
 
-    DBG_ASSERT( pBasMgr, "Fuer den Eintrag keinen BasicManager gefunden!" );
-
-    if ( pBasMgr )
-    {
-        pShell = BasicIDE::FindDocShell( pBasMgr );
-        nType = BASICIDE_TYPE_SHELL;
-    }
-
-    if ( pBasMgr && aEntries.Count() )
+    if ( aEntries.Count() )
     {
         for ( USHORT n = 0; n < aEntries.Count(); n++ )
         {
@@ -481,63 +364,124 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
 
             switch ( pBE->GetType() )
             {
-                case OBJTYPE_LIB:
+                case OBJ_TYPE_LIBRARY:
                 {
                     aLibName = GetEntryText( pLE );
-                    nType = BASICIDE_TYPE_LIBRARY;
+                    eType = pBE->GetType();
                 }
                 break;
-                case OBJTYPE_MODULE:
+                case OBJ_TYPE_MODULE:
                 {
                     aName = GetEntryText( pLE );
-                    nType = BASICIDE_TYPE_MODULE;
+                    eType = pBE->GetType();
                 }
                 break;
-                case OBJTYPE_METHOD:
+                case OBJ_TYPE_METHOD:
                 {
                     aMethodName = GetEntryText( pLE );
-                    nType = BASICIDE_TYPE_METHOD;
+                    eType = pBE->GetType();
                 }
                 break;
-                case OBJTYPE_OBJECT:
+                case OBJ_TYPE_DIALOG:
                 {
                     aName = GetEntryText( pLE );
-                    nType = BASICIDE_TYPE_DIALOG;
+                    eType = pBE->GetType();
                 }
                 break;
-                default:    DBG_ERROR( "GetSbxItem: Unbekannter Typ!" );
-                            nType = BASICIDE_TYPE_UNKNOWN;
+                default:
+                {
+                    DBG_ERROR( "GetEntryDescriptor: Unbekannter Typ!" );
+                    eType = OBJ_TYPE_UNKNOWN;
+                }
+                break;
             }
 
-            if ( nType == BASICIDE_TYPE_UNKNOWN )
+            if ( eType == OBJ_TYPE_UNKNOWN )
                 break;
         }
     }
 
-    return SbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aName, aMethodName, nType );
+    return BasicEntryDescriptor( pShell, eLocation, aLibName, aName, aMethodName, eType );
 }
 
-
-
-SbxObject* BasicTreeListBox::FindObject( SvLBoxEntry* pEntry )
+USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
 {
-    SbxVariable* pVar = FindVariable( pEntry );
-    if ( pVar && pVar->IsA( TYPE(SbxObject) ) )
-        return (SbxObject*)pVar;
-    return 0;
+    USHORT nType = OBJ_TYPE_UNKNOWN;
+
+    switch ( eType )
+    {
+        case OBJ_TYPE_SHELL:
+        {
+            nType = BASICIDE_TYPE_SHELL;
+        }
+        break;
+        case OBJ_TYPE_LIBRARY:
+        {
+            nType = BASICIDE_TYPE_LIBRARY;
+        }
+        break;
+        case OBJ_TYPE_MODULE:
+        {
+            nType = BASICIDE_TYPE_MODULE;
+        }
+        break;
+        case OBJ_TYPE_DIALOG:
+        {
+            nType = BASICIDE_TYPE_DIALOG;
+        }
+        break;
+        case OBJ_TYPE_METHOD:
+        {
+            nType = BASICIDE_TYPE_METHOD;
+        }
+        break;
+    }
+
+    return nType;
 }
 
-
-
-SbMethod* BasicTreeListBox::FindMethod( SvLBoxEntry* pEntry )
+bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
 {
-    SbxVariable* pVar = FindVariable( pEntry );
-    if ( pVar && pVar->IsA( TYPE(SbMethod) ) )
-        return (SbMethod*)pVar;
-    return 0;
+    bool bIsValid = false;
+
+    BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
+    SfxObjectShell* pShell( aDesc.GetShell() );
+    String aLibName( aDesc.GetLibName() );
+    String aName( aDesc.GetName() );
+    String aMethodName( aDesc.GetMethodName() );
+    BasicEntryType eType( aDesc.GetType() );
+
+    switch ( eType )
+    {
+        case OBJ_TYPE_SHELL:
+        {
+            bIsValid = BasicIDE::HasShell( pShell );
+        }
+        break;
+        case OBJ_TYPE_LIBRARY:
+        {
+            bIsValid = BasicIDE::HasModuleLibrary( pShell, aLibName ) || BasicIDE::HasDialogLibrary( pShell, aLibName );
+        }
+        break;
+        case OBJ_TYPE_MODULE:
+        {
+            bIsValid = BasicIDE::HasModule( pShell, aLibName, aName );
+        }
+        break;
+        case OBJ_TYPE_DIALOG:
+        {
+            bIsValid = BasicIDE::HasDialog( pShell, aLibName, aName );
+        }
+        break;
+        case OBJ_TYPE_METHOD:
+        {
+            bIsValid = BasicIDE::HasMethod( pShell, aLibName, aName, aMethodName );
+        }
+        break;
+    }
+
+    return bIsValid;
 }
-
-
 
 SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
 {
@@ -547,35 +491,20 @@ SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
     return 0;
 }
 
-
-
-SvLBoxEntry* BasicTreeListBox::FindLibEntry( StarBASIC* pLib )
+SvLBoxEntry* BasicTreeListBox::FindRootEntry( SfxObjectShell* pShell, LibraryLocation eLocation )
 {
-    if ( !pLib )
-        return 0;
-
     ULONG nRootPos = 0;
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
-        BasicManager* pBasMgr = ((BasicManagerEntry*)pRootEntry->GetUserData())->GetBasicManager();
-        DBG_ASSERT( pBasMgr, "Kein BasicManager?" );
-        SvLBoxEntry* pLibEntry = FirstChild( pRootEntry );
-        while ( pLibEntry )
-        {
-            DBG_ASSERT( (((BasicEntry*)pLibEntry->GetUserData())->GetType() == OBJTYPE_LIB ), "Kein Libeintrag?" );
-            StarBASIC* pL = pBasMgr->GetLib( GetEntryText( pLibEntry ) );
-            if ( pL == pLib )
-                return pLibEntry;
-
-            pLibEntry = NextSibling( pLibEntry );
-        }
+        DBG_ASSERT( (((BasicEntry*)pRootEntry->GetUserData())->GetType() == OBJ_TYPE_SHELL ), "Kein Shelleintrag?" );
+        BasicShellEntry* pBasicShellEntry = (BasicShellEntry*)pRootEntry->GetUserData();
+        if ( pBasicShellEntry && pBasicShellEntry->GetShell() == pShell && pBasicShellEntry->GetLocation() == eLocation )
+            return pRootEntry;
         pRootEntry = GetEntry( ++nRootPos );
     }
     return 0;
 }
-
-
 
 String CreateMgrAndLibStr( const String& rMgrName, const String& rLibName )
 {
@@ -584,32 +513,4 @@ String CreateMgrAndLibStr( const String& rMgrName, const String& rLibName )
     aName += String( RTL_CONSTASCII_USTRINGPARAM( "]." ) );
     aName += rLibName;
     return aName;
-}
-
-
-
-String GetMgrFromMgrAndLib( const String& rMgrAndLib )
-{
-    // Format: [XXXXXX].Lib
-    DBG_ASSERT( rMgrAndLib.GetTokenCount( '.' ) >= 2, "BasMgrAndLib ungueltig! (.)" );
-    DBG_ASSERT( rMgrAndLib.GetTokenCount( ']' ) >= 2, "BasMgrAndLib ungueltig! (])" );
-    String aLib( rMgrAndLib.GetToken(
-            rMgrAndLib.GetTokenCount( '.' ) - 1, '.' ) );
-    String aBasMgrAndLib( rMgrAndLib );
-    aBasMgrAndLib.Erase( aBasMgrAndLib.Len() - ( aLib.Len() + 1 ) );
-    DBG_ASSERT( ( aBasMgrAndLib.Len() > 2 ) && ( aBasMgrAndLib.GetChar( 0 ) == '[' ) && ( aBasMgrAndLib.GetChar( aBasMgrAndLib.Len() - 1 ) == ']' ), "BasMgrAndLib ungueltig! ([...])" );
-    String aBasMgr( aBasMgrAndLib, 1, (USHORT)(aBasMgrAndLib.Len()-2) );
-    return aBasMgr;
-}
-
-
-
-String GetLibFromMgrAndLib( const String& rMgrAndLib )
-{
-    // Format: [XXXXXX].Lib
-    DBG_ASSERT( rMgrAndLib.GetTokenCount( '.' ) >= 2, "BasMgrAndLib ungueltig! (.)" );
-    DBG_ASSERT( rMgrAndLib.GetTokenCount( ']' ) >= 2, "BasMgrAndLib ungueltig! (])" );
-    String aLib( rMgrAndLib.GetToken(
-            rMgrAndLib.GetTokenCount( '.' ) - 1, '.' ) );
-    return aLib;
 }
