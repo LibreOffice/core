@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:40:59 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,8 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             const sal_Bool bOldViewLock = pWrtShell->IsViewLocked();
             pWrtShell->LockView( sal_True );
             pWrtShell->Push();
-            Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt) );
+            SwRect aToFill;
+            Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt, aToFill) );
             if ( xAlt.is() )
             {
                 bRet = sal_True;
@@ -839,7 +840,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 SwSpellPopup aPopup( pWrtShell, xAlt );
                 aPopup.Execute(
                 pEditWin,
-                rPt);
+                aToFill.SVRect());
             }
 
             pWrtShell->Pop( sal_False );
