@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentContext.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-23 14:30:57 $
+ *  last change: $Author: dbo $ $Date: 2001-11-28 17:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ class Disposer implements XEventListener
 public class ComponentContext implements XComponentContext, XComponent
 {
     private static final boolean DEBUG = false;
+    private static final String SMGR_NAME = "/singletons/com.sun.star.lang.theServiceManager";
+    private static final String TDMGR_NAME = "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
     private Hashtable m_table;
     private XComponentContext m_xDelegate;
@@ -112,7 +114,7 @@ public class ComponentContext implements XComponentContext, XComponent
         m_xSMgr = null;
         m_bDisposeSMgr = false;
 
-        Object o = table.get( "com.sun.star.lang.theServiceManager" );
+        Object o = table.get( SMGR_NAME );
         if (o != null)
         {
             if (o instanceof ComponentContextEntry)
@@ -266,7 +268,7 @@ public class ComponentContext implements XComponentContext, XComponent
         while (keys.hasMoreElements())
         {
             String name = (String)keys.nextElement();
-            if (! name.equals( "com.sun.star.lang.theServiceManager" ))
+            if (! name.equals( SMGR_NAME ))
             {
                 XComponent xComp;
 
@@ -284,7 +286,7 @@ public class ComponentContext implements XComponentContext, XComponent
 
                 if (xComp != null)
                 {
-                    if (name.equals( "com.sun.star.reflection.theTypeDescriptionManager" ))
+                    if (name.equals( TDMGR_NAME ))
                     {
                         tdmgr = xComp;
                     }
