@@ -1,0 +1,164 @@
+/*************************************************************************
+ *
+ *  $RCSfile: BindableDataAwareControlModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:36:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_binding_BindableDataAwareControlModel_idl__
+#define __com_sun_star_form_binding_BindableDataAwareControlModel_idl__
+
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__
+#include <com/sun/star/form/DataAwareControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_binding_BindableControlModel_idl__
+#include <com/sun/star/form/binding/BindableControlModel.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module binding {
+
+//=============================================================================
+
+/** is a specialization of the <type scope="com::sun::star::form">DataAwareControlModel</type>
+    which additionally supports binding to external value suppliers.
+
+    <p>Control models usually have some kind of value property, which reflects the very current
+    content of the controls associated with this model. For instance, for an
+    <type scope="com::sun::star::form::component">TextField</type>, this would be the
+    <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property of the base
+    service. Similarily, a <type scope="com::sun::star::form::component">CheckBox</type> has
+    a property <member scope="com::sun::star::awt">UnoControlCheckBoxModel::State</member>, which
+    reflects the current check state.</p>
+
+    <p>Usual <type scope="com::sun::star::form">DataAwareControlModel</type>s can be bound to
+    a column of a <type scope="com::sun::star::form::component">DataForm</type>, and exchange
+    their content with such a column.<br/>
+    In particular, when the <type scope="com::sun::star::form::component">DataForm</type>
+    is moved to a different record, then the bound control model is updated with the value of
+    it's column in this particular row.<br/>
+    On the other hand, when any change in the control model (e.g. resulting from a user entering
+    data in a control associated with the control model) is committed
+    (<member scope="com::sun::star::form">XBoundComponent::commit</member>), then the actual
+    data of the control model is written into the associated
+    <type scope="com::sun::star::form::component">DataForm</type> column.</p>
+
+    <p><type>BindableDataAwareControlModel</type>'s additionally support an alternative value
+    binding, which forces them to exchange their value with another foreign instance.
+    In some sense, they are an abstraction of the data aware control models, which only
+    support a specialized, hard-coded value binding (namely the binding to a
+    <type scope="com::sun::star::form::component">DataForm</type> column).</p>
+
+    <p>For this, they provide the <type>XBindableValue</type> interface which allows to
+    set an external component to exchange the value with.</p>
+
+    <p>The following rules apply when a data aware control model is bound to an external value binding:
+        <ul><li><b>Priority</b><br/>
+                External value bindings overrule any active SQL-column binding. If an external
+                component is bound to a control model which currently has an active SQL binding,
+                this SQL binding is suspended, until the external binding is revoked.
+            </li>
+            <li><b>Activation</b><br/>
+                An external value binding becomes effective as soon as it is set. This is a
+                difference to SQL bindings, which only are effective when the parent form
+                of the control model is loaded (<type scope="com::sun::star::form">XLoadable</type>).
+            </li>
+            <li><b>Immediacy</b><br/>
+                When a <type>BindableDataAwareControlModel</type> is bound to an external value,
+                then every change in the control model's value is <em>immediately</em> reflected
+                in the external binding. This is a difference to SQL bindings of most
+                <type scope="com::sun::star::form">DataAwareControlModel</type>'s, where changes
+                in the control model's value are only propagated to the bound column upon explicit
+                request via <member scope="com::sun::star::form">XBoundComponent::commit</member>.
+            </li>
+            <li><b>Cloning</b><br/>
+                <type scope="com::sun::star::form">FormControlModel</type>s support cloning themself
+                via the <type scope="com::sun::star::util">XCloneable</type> interface which they
+                inherit from the <type scope="com::sun::star::awt">UnoControlModel</type> service.</br>
+                When a <type>BindableDataAwareControlModel</type> is cloned while it has an active
+                external value binding, then the clone is also bound to the same binding instance.
+            </li>
+        </ul>
+    </p>
+
+    <p>When a <type>BindableDataAwareControlModel</type> is being bound to an external value,
+    using <member>XBindableValue::setValueBinding</member>,
+    then the control model (it's value property, respectively) and the external value are
+    initially synchronized by setting the external value (<member>XValueBinding::getValue</member>)
+    at the control model.</p>
+
+*/
+service BindableDataAwareControlModel
+{
+    /** specifies the functionality for binding the control model to a
+        column of an SQL <type scope="com::sun::star::form::component">DataForm</type>.
+    */
+    service com::sun::star::form::DataAwareControlModel;
+
+    /** specifies the functionality for <em>alternatively</em> binding the control model
+        to an external value.
+    */
+    service BindableControlModel;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
