@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HelperCollections.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:39:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace dbaccess
         OPrivateColumns_Base::disposing();
     }
     // -------------------------------------------------------------------------
-    Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
+    connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
         if ( m_aColumns.isValid() )
         {
@@ -107,21 +107,21 @@ namespace dbaccess
                 aIter = findRealName(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
 
             if(aIter != m_aColumns->end())
-                return Reference< XNamed >(*aIter,UNO_QUERY);
+                return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
 
             OSL_ENSURE(0,"Column not found in collection!");
         }
         return NULL;
     }
     // -------------------------------------------------------------------------
-    Reference< XNamed > OPrivateTables::createObject(const ::rtl::OUString& _rName)
+    connectivity::sdbcx::ObjectType OPrivateTables::createObject(const ::rtl::OUString& _rName)
     {
         if ( !m_aTables.empty() )
         {
             OSQLTables::iterator aIter = m_aTables.find(_rName);
             OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
             OSL_ENSURE(aIter->second.is(),"Table is null!");
-            return Reference< XNamed >(m_aTables.find(_rName)->second,UNO_QUERY);
+            return connectivity::sdbcx::ObjectType(m_aTables.find(_rName)->second,UNO_QUERY);
         }
         return NULL;
     }

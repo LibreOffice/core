@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HelperCollections.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:39:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace dbaccess
     {
         ::vos::ORef< ::connectivity::OSQLColumns>   m_aColumns;
     protected:
-        virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
+        virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
         virtual Reference< XPropertySet > createEmptyObject()
         {
@@ -123,7 +123,7 @@ namespace dbaccess
     {
         OSQLTables  m_aTables;
     protected:
-        virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
+        virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
         virtual Reference< XPropertySet > createEmptyObject()
         {
