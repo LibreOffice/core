@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeclass.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,13 +105,13 @@ typedef enum _typelib_TypeClass
     typelib_TypeClass_TYPEDEF = 16,
     /** type class of struct */
     typelib_TypeClass_STRUCT = 17,
-    /** type class of union */
+    /** type class of union (not implemented) */
     typelib_TypeClass_UNION = 18,
     /** type class of exception */
     typelib_TypeClass_EXCEPTION = 19,
     /** type class of sequence */
     typelib_TypeClass_SEQUENCE = 20,
-    /** type class of array */
+    /** type class of array (not implemented) */
     typelib_TypeClass_ARRAY = 21,
     /** type class of interface */
     typelib_TypeClass_INTERFACE = 22,
@@ -123,8 +123,16 @@ typedef enum _typelib_TypeClass
     typelib_TypeClass_INTERFACE_METHOD = 25,
     /** type class of interface attribute */
     typelib_TypeClass_INTERFACE_ATTRIBUTE = 26,
-    /** type class of unknown */
+    /** type class of unknown type */
     typelib_TypeClass_UNKNOWN = 27,
+    /** type class of properties */
+    typelib_TypeClass_PROPERTY = 28,
+    /** type class of constants */
+    typelib_TypeClass_CONSTANT = 29,
+    /** type class of constants groups */
+    typelib_TypeClass_CONSTANTS = 30,
+    /** type class of singletons */
+    typelib_TypeClass_SINGLETON = 31,
     /** fixing enum size */
     typelib_TypeClass_MAKE_FIXED_SIZE = SAL_MAX_ENUM
 } typelib_TypeClass;

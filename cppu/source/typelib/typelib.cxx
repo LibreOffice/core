@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:11:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,9 +1224,9 @@ extern "C" void SAL_CALL typelib_typedescription_release(
     typelib_TypeDescription * pTD )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT(pTD->nRefCount > 0);
-
-    if( ! ::osl_decrementInterlockedCount( &pTD->nRefCount ) )
+    sal_Int32 ref = ::osl_decrementInterlockedCount( &pTD->nRefCount );
+    OSL_ASSERT(ref >= 0);
+    if (0 == ref)
     {
         if( reallyWeak( pTD->eTypeClass ) )
         {
@@ -1686,10 +1686,29 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
         typelib_typedescriptionreference_release( pTDR );
     }
 
-    if( !*ppRet )
+    if (0 == *ppRet)
     {
-        // on demand access
-        aInit.callChain( ppRet, pName );
+        // check for sequence
+        OUString const & name = *reinterpret_cast< OUString const * >( &pName );
+        if (2 < name.getLength() && '[' == name[ 0 ])
+        {
+            OUString element_name( name.copy( 2 ) );
+            typelib_TypeDescription * element_td = 0;
+            typelib_typedescription_getByName( &element_td, element_name.pData );
+            if (0 != element_td)
+            {
+                typelib_typedescription_new(
+                    ppRet, typelib_TypeClass_SEQUENCE, pName, element_td->pWeakRef, 0, 0 );
+                // register?
+                typelib_typedescription_release( element_td );
+            }
+        }
+        if (0 == *ppRet)
+        {
+            // on demand access
+            aInit.callChain( ppRet, pName );
+        }
+
         if( *ppRet )
         {
             // typedescription found

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: dbo $ $Date: 2002-04-24 13:43:27 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:55:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,6 +147,7 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.lang.XServiceInfo \
         -Tcom.sun.star.lang.XEventListener \
         -Tcom.sun.star.lang.XTypeProvider \
+        -Tcom.sun.star.lang.DisposedException \
         -Tcom.sun.star.registry.XSimpleRegistry \
         -Tcom.sun.star.registry.XRegistryKey \
         -Tcom.sun.star.loader.XImplementationLoader \
@@ -163,8 +164,7 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.beans.XPropertySet \
         -Tcom.sun.star.reflection.XIdlClassProvider \
         -Tcom.sun.star.container.XHierarchicalNameAccess \
-         -Tcom.sun.star.uno.XCurrentContext \
-         -Tcom.sun.star.lang.DisposedException
+         -Tcom.sun.star.uno.XCurrentContext
 
 $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?

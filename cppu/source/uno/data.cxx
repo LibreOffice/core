@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-23 10:40:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #   pragma pack(8)
 #endif
 
-#if defined(__GNUC__) && defined(LINUX) && defined(INTEL)
+#if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && defined(INTEL)
 #define MAX_ALIGNMENT_4
 #endif
 
@@ -365,7 +365,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
 #ifdef CPPU_ASSERTIONS
-#if defined(__GNUC__) && defined(LINUX) && (defined(INTEL) || defined(POWERPC) || defined(X86_64))
+#if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
 #define BINTEST_VERIFYSIZE( s, n ) \
     fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
