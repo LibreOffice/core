@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-22 16:28:39 $
+ *  last change: $Author: nf $ $Date: 2001-09-20 15:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,8 @@ Star::Star()
 /*****************************************************************************/
 Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
-                : nStarMode( nMode )
+                : nStarMode( nMode ),
+                sFileName( aFileName )
 {
     Read( aFileName );
 }
@@ -521,9 +522,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
-    String sSrcRoot;
     if ( pSourceRoot )
-        sSrcRoot = String::CreateFromAscii( pSourceRoot );
+        sSourceRoot = String::CreateFromAscii( pSourceRoot );
 
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
@@ -556,8 +556,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
-                    if ( sSrcRoot.Len()) {
-                        aEntry = DirEntry( sSrcRoot );
+                    if ( sSourceRoot.Len()) {
+                        aEntry = DirEntry( sSourceRoot );
                         bOk = TRUE;
                     }
                     else {
@@ -580,7 +580,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                         sPath = "projects";
                         GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
                         if ( pProjectsKey ) {
-                            if ( !sSrcRoot.Len()) {
+                            if ( !sSourceRoot.Len()) {
                                 sPath = rVersion;
                                 sPath += "/settings/PATH";
                                 GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
@@ -595,6 +595,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
@@ -1037,6 +1038,7 @@ ByteString Star::GetPrjName( DirEntry &aPath )
 StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
 {
+    sFileName = aFileName;
     Read ( aFileName, bReadComments, nMode );
 }
 
@@ -1049,13 +1051,12 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 
 /*****************************************************************************/
 StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bLocal, const char *pSourceRoot )
+    BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
-    String sSrcRoot;
     if ( pSourceRoot )
-        sSrcRoot = String::CreateFromAscii( pSourceRoot );
+        sSourceRoot = String::CreateFromAscii( pSourceRoot );
 
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
@@ -1072,7 +1073,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
         }
         String sFileName( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
-        Read( sFileName );
+        Read( sFileName, bReadComments );
     }
     else {
         SolarFileList *pFileList = new SolarFileList();
@@ -1088,8 +1089,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
-                    if ( sSrcRoot.Len()) {
-                        aEntry = DirEntry( sSrcRoot );
+                    if ( sSourceRoot.Len()) {
+                        aEntry = DirEntry( sSourceRoot );
                         bOk = TRUE;
                     }
                     else {
@@ -1112,7 +1113,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                         sPath = "projects";
                         GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
                         if ( pProjectsKey ) {
-                            if ( !sSrcRoot.Len()) {
+                            if ( !sSourceRoot.Len()) {
                                 sPath = rVersion;
                                 sPath += "/settings/PATH";
                                 GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
@@ -1127,6 +1128,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
@@ -1153,7 +1155,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                 }
             }
         }
-        Read( pFileList );
+        Read( pFileList, bReadComments );
     }
 }
 
@@ -1168,6 +1170,8 @@ void StarWriter::CleanUp()
 USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 /*****************************************************************************/
 {
+    sFileName = aFileName;
+
     nStarMode = nMode;
 
     ByteString aString;
@@ -1321,6 +1325,8 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 USHORT StarWriter::Write( String aFileName )
 /*****************************************************************************/
 {
+    sFileName = aFileName;
+
     SvFileStream aFileStream;
 
     aFileStream.Open( aFileName, STREAM_WRITE | STREAM_TRUNC);
@@ -1344,6 +1350,8 @@ USHORT StarWriter::Write( String aFileName )
 USHORT StarWriter::WriteMultiple( String rSourceRoot )
 /*****************************************************************************/
 {
+    sSourceRoot = rSourceRoot;
+
     if ( Count() > 0 )
     {
         String sPrjDir( String::CreateFromAscii( "prj" ));
