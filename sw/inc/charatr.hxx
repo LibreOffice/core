@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 12:25:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ inline const SvxFontHeightItem         &SwAttrSet::GetCTLSize(BOOL bInP) const
 inline const SvxPropSizeItem     &SwAttrSet::GetPropSize(BOOL bInP) const
     {   return (const SvxPropSizeItem&)Get( RES_CHRATR_PROPORTIONALFONTSIZE,bInP); }
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SvxFontItem         &SwAttrSet::GetFont(BOOL bInP) const
     {   return (const SvxFontItem&)Get( RES_CHRATR_FONT,bInP); }
@@ -176,7 +176,7 @@ inline const SvxFontHeightItem             &SwFmt::GetSize(BOOL bInP) const
     {   return aSet.GetSize(bInP); }
 inline const SvxPropSizeItem         &SwFmt::GetPropSize(BOOL bInP) const
     {   return aSet.GetPropSize(bInP); }
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SvxFontItem             &SwFmt::GetFont(BOOL bInP) const
     {   return aSet.GetFont(bInP); }
