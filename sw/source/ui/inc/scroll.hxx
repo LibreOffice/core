@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scroll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ public:
     void    Hide() { Show( FALSE ); }
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     BOOL    IsVisible(BOOL bReal = FALSE) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
-    void    SetUpdateMode( BOOL bUpdate );
         // Aenderung der Dokumentgroesse
     void    DocSzChgd(const Size &rNewSize);
         // Aenderung des sichtbaren Bereiches
@@ -92,9 +91,6 @@ public:
 
     void    SetAuto(BOOL bSet);
     BOOL    IsAuto() { return bAuto;}
-
-    //Bewegungen des Thumbs abklemmen
-    void    EnableThumbPos( BOOL bEnable, const SwRect &rVisArea );
 
     SwScrollbar(Window *pParent, int bHori = TRUE );
     ~SwScrollbar();
