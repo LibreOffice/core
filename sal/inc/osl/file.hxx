@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2002-01-10 10:32:21 $
+ *  last change: $Author: hro $ $Date: 2002-01-15 08:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ public:
         return _aStatus.ustrFileName ? ::rtl::OUString(_aStatus.ustrFileName) : ::rtl::OUString();
     }
 
-    /** @return the file path in UNC notation if this information is valid,
+    /** @returns the file path in URL notation if this information is valid,
      an empty string otherwise.
     */
 
@@ -712,7 +712,7 @@ public:
 
     /** C'tor
 
-      @param  strPath [in] The full qualified path of the file in UNC notation.
+      @param  strPath [in] The full qualified URL of the file.
       The path delimiter is '/'. Relative paths are not allowed.
      */
 
@@ -980,8 +980,8 @@ public:
 
     /** Copies a file to a new destination. Copies only files not directories. No assumptions should
      be made about preserving attributes or file time.
-     @param strPath [in] Full qualified UNC path of the source file.
-     @param strDestPath [in] Full qualified UNC path of the destination file. A directory is
+     @param strPath [in] Full qualified URL of the source file.
+     @param strDestPath [in] Full qualified URL of the destination file. A directory is
      NOT a valid destination file !
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
@@ -1003,8 +1003,8 @@ public:
 
     /** Moves a file or directory to a new destination or renames it. File time and attributes
      are preserved.
-     @param strPath [in] Full qualified UNC path of the source file.
-     @param strDestPath [in] Full qualified UNC path of the destination file. An existing directory
+     @param strPath [in] Full qualified URL of the source file.
+     @param strDestPath [in] Full qualified URL of the destination file. An existing directory
      is NOT a valid destination !
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
@@ -1025,7 +1025,7 @@ public:
 
     /** Removes (erases) a regular file.
 
-     @param strPath [in] Full qualified UNC path of the directory.
+     @param strPath [in] Full qualified URL of the directory.
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
      E_NOMEM        not enough memory for allocating structures <br>
@@ -1260,7 +1260,7 @@ public:
 
     /** C'tor
 
-      @param  strPath [in] The full qualified path of the directory in UNC notation.
+      @param  strPath [in] The full qualified URL of the directory.
       The path delimiter is '/'. Relative paths are not allowed.
      */
 
@@ -1375,7 +1375,7 @@ public:
      function <code>File::getStatus</code> should be called to determine if the type is
      <code>Type_Volume</code>.
 
-     @param strDirectory [in]   Full qualified UNC path to the volume
+     @param strDirectory [in]   Full qualified URL to the volume
      @param rInfo [out] On success it receives information about the volume.
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_NOMEM        not enough memory for allocating structures <br>
@@ -1405,7 +1405,7 @@ public:
 
     /** Creates a directory.
 
-     @param   strPath [in]  Full qualified UNC path of the directory to create.
+     @param   strPath [in]  Full qualified URL of the directory to create.
      @return E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
      E_NOMEM        not enough memory for allocating structures <br>
@@ -1436,7 +1436,7 @@ public:
 
     /** Removes an empty directory.
 
-     @param   strPath [in]   Full qualified UNC path of the empty directory to remove.
+     @param   strPath [in]   Full qualified URL of the empty directory to remove.
      @return  E_None on success otherwise one of the following errorcodes:<p>
      E_INVAL        the format of the parameters was not valid<br>
      E_NOMEM        not enough memory for allocating structures <br>
