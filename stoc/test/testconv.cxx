@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:14:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,23 +704,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
 }
 
 
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#ifdef MACOSX
-#define DLL_POSTFIX     ".dylib"
-#else
-#define DLL_POSTFIX     ".so"
-#endif
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+int SAL_CALL main( int argc, char * argv[] )
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString::createFromAscii("stoctest.rdb") ) );
 
@@ -730,11 +714,8 @@ int __cdecl main( int argc, char * argv[] )
             xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-        OUString aLibName( OUString::createFromAscii( REG_PREFIX ) );
-        aLibName += OUString::createFromAscii("tcv");
-#ifndef OS2
-        aLibName += OUString::createFromAscii( DLL_POSTFIX );
-#endif
+        OUString aLibName(
+            RTL_CONSTASCII_USTRINGPARAM("typeconverter.uno" SAL_DLLEXTENSION) );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
             aLibName, Reference< XSimpleRegistry >() );
