@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:53:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,8 @@ class SwRTFParser : public SvxRTFParser
     SwFltRedline *pRedlineInsert;
     SwFltRedline *pRedlineDelete;
 
+    String sBaseURL;
+
     USHORT nAktPageDesc, nAktFirstPageDesc;
     USHORT nAktBox;         // akt. Box
     USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
@@ -485,10 +487,13 @@ protected:
     void SkipPageDescTbl();
     bool IsBorderToken(int nToken);
 
+    const String& GetBaseURL() const { return sBaseURL;}
+
     virtual ~SwRTFParser();
 
 public:
     SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+                        const String& rBaseURL,
                         int bReadNewDoc = TRUE );
 
     virtual SvParserState CallParser(); // Aufruf des Parsers
