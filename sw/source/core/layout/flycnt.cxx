@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2002-08-26 16:13:58 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 12:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,8 @@ void SwFlyAtCntFrm::MakeAll()
         //Jetzt Stufe 3: einfach ein globales Flag und schon flaggen sie sich
         //selbst.
             bSetCompletePaintOnInvalidate = TRUE;
+            sal_Bool bLockedAnchor =
+                static_cast<const SwTxtFrm*>( GetAnchor() )->IsAnyJoinLocked();
             {
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
@@ -421,13 +423,17 @@ void SwFlyAtCntFrm::MakeAll()
             }
             SwOszControl aOszCntrl( this );
 
-            if( GetAnchor()->IsInSct() )
+            if( !bLockedAnchor )
             {
-                SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
-                pSct->Calc();
+                if( GetAnchor()->IsInSct() )
+                {
+                    SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
+                    pSct->Calc();
+                }
+
+                GetAnchor()->Calc();
             }
 
-            GetAnchor()->Calc();
             SwFrm* pFooter = GetAnchor()->FindFooterOrHeader();
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
@@ -445,13 +451,17 @@ void SwFlyAtCntFrm::MakeAll()
                 SwFlyFreeFrm::MakeAll();
                 BOOL bPosChg = aOldPos != Frm().Pos();
 #endif
-                if( GetAnchor()->IsInSct() )
+                if( !bLockedAnchor )
                 {
-                    SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
-                    pSct->Calc();
+                    if( GetAnchor()->IsInSct() )
+                    {
+                        SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
+                        pSct->Calc();
+                    }
+
+                    GetAnchor()->Calc();
                 }
 
-                GetAnchor()->Calc();
 #ifdef VERTICAL_LAYOUT
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() ||
 #else
@@ -497,11 +507,13 @@ void SwFlyAtCntFrm::MakeAll()
 
                 _InvalidatePos();
                 SwFlyFreeFrm::MakeAll();
-                GetAnchor()->Calc();
+                if( !bLockedAnchor )
+                    GetAnchor()->Calc();
                 if ( !GetValidPosFlag() )
                 {
                     SwFlyFreeFrm::MakeAll();
-                    GetAnchor()->Calc();
+                    if( !bLockedAnchor )
+                        GetAnchor()->Calc();
                 }
                 //Osz auf jeden fall zum Stehen bringen.
                 bValidPos = bValidSize = bValidPrtArea = TRUE;
@@ -1414,6 +1426,10 @@ void DeepCalc( const SwFrm *pFrm )
     if( pFrm->IsSctFrm() ||
         ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
         return;
+    const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
+    if( pFlow && pFlow->IsAnyJoinLocked() )
+        return;
+
     USHORT nCnt = 0;
 
     FASTBOOL bContinue = FALSE;

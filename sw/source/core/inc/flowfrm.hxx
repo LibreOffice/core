@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 12:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ protected:
     BOOL bCntntLock :1; //  "       "        " : content locked
     BOOL bOwnFtnNum :1; //  "       "        " : special numbering of footnotes
     BOOL bFtnLock   :1; //  "       "        " : ftn, don't leave this section bwd
+    BOOL bFlyLock   :1; //  Stop positioning of at-character flyframes
 
     //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
     inline BOOL IsFwdMoveAllowed();
@@ -175,7 +176,8 @@ public:
                  SwFlowFrm *FindMaster();
     inline const SwFlowFrm *FindMaster() const;
 
-    BOOL IsJoinLocked() const { return bLockJoin; }
+    sal_Bool IsJoinLocked() const { return bLockJoin; }
+    sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
     BOOL IsFtnAtEnd() const { return bFtnAtEnd; }
     BOOL IsEndnAtEnd() const { return bEndnAtEnd;   }
     BOOL IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
@@ -183,6 +185,7 @@ public:
 
     BOOL IsPageBreak( BOOL bAct ) const;
     BOOL IsColBreak( BOOL bAct ) const;
+    sal_Bool HasLockedFollow() const;
 
     BOOL HasParaSpaceAtPages( BOOL bSct ) const;
     SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
@@ -192,6 +195,8 @@ public:
 
     void SetFtnLock( BOOL bNew ){ bFtnLock = bNew; }
     BOOL IsFtnLock() const {    return bFtnLock; }
+    void SetFlyLock( BOOL bNew ){ bFlyLock = bNew; }
+    BOOL IsFlyLock() const {    return bFlyLock; }
     void SetOwnFtnNum( BOOL bNew ){ bOwnFtnNum = bNew; }
     BOOL IsOwnFtnNum() const {  return bOwnFtnNum; }
     void SetCntntLock( BOOL bNew ){ bCntntLock = bNew; }

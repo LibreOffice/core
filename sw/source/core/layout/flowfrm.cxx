@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 15:51:31 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 12:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,28 @@ SwFlowFrm::SwFlowFrm( SwFrm &rFrm ) :
     rThis( rFrm ),
     pFollow( 0 )
 {
-    bLockJoin = bIsFollow = bCntntLock = bOwnFtnNum = bFtnLock = FALSE;
+    bLockJoin = bIsFollow = bCntntLock = bOwnFtnNum =
+        bFtnLock = bFlyLock = FALSE;
+}
+
+
+/*************************************************************************
+|*
+|*  SwFlowFrm::IsFollowLocked()
+|*     return TRUE if any follow has the JoinLocked flag
+|*
+|*************************************************************************/
+
+sal_Bool SwFlowFrm::HasLockedFollow() const
+{
+    const SwFlowFrm* pFrm = GetFollow();
+    while( pFrm )
+    {
+        if( pFrm->IsJoinLocked() )
+            return sal_True;
+        pFrm = pFrm->GetFollow();
+    }
+    return sal_False;
 }
 
 /*************************************************************************

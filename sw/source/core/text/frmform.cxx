@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-02 15:38:44 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 12:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2240,7 +2240,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             MSHORT nRepAdd = 0;
             SwDrawObjs *pObjs;
             SwTxtFrm *pMaster = IsFollow() ? FindMaster() : this;
-            if( pMaster )
+            if( pMaster && !pMaster->IsFlyLock() )
             {
                 if ( 0 != (pObjs = pMaster->GetDrawObjs()) )
                 {

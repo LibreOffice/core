@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-26 07:53:12 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 12:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,6 +1123,8 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 |*
 |*************************************************************************/
 
+#define STOP_FLY_FORMAT 10
+
 inline void ValidateSz( SwFrm *pFrm )
 {
     if ( pFrm )
@@ -1157,6 +1159,7 @@ void SwCntntFrm::MakeAll()
     }
 
     LockJoin();
+    long nFormatCount = 0;
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
 #ifndef PRODUCT
@@ -1349,6 +1352,9 @@ void SwCntntFrm::MakeAll()
         }
         if ( !bValidSize )
         {   bValidSize = bFormatted = TRUE;
+            ++nFormatCount;
+            if( nFormatCount > STOP_FLY_FORMAT )
+                SetFlyLock( TRUE );
             Format();
         }
         //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
@@ -1689,6 +1695,7 @@ void SwCntntFrm::MakeAll()
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
     delete pNotify;
+    SetFlyLock( FALSE );
 }
 
 /*************************************************************************
