@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-15 11:46:07 $
+ *  last change: $Author: kso $ $Date: 2002-04-09 11:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,8 +398,26 @@ public:
       *
       * @param  rPropertyName is the name of the property for that the
       *         value shall be set.
+      * @return an any containing:
+      *         - No value indicates, that the property value was set
+      *           successfully.
+      *         - com::sun::star::beans::UnknownPropertyException indicates,
+      *           that the property is not known to the content implementation.
+      *         - com::sun::star::beans::IllegalTypeException indicates, that
+      *           the data type of the property value is not acceptable.
+      *         - com::sun::star::lang::IllegalAccessException indicates, that
+      *           the property is constant.
+      *         - com::sun::star::lang::IllegalArgumentException indicates,
+      *           that the property value is not acceptable. For instance,
+      *           setting an empty title may be illegal.
+      *         - Any other execption derived from
+      *           com::sun::star::uno::Exception indicates, that the value was
+      *           not set successfully. For example, this can be a
+      *           com::sun:star::ucb::InteractiveAugmentedIOException
+      *           transporting the error code
+      *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
       */
-    void
+    ::com::sun::star::uno::Any
     setPropertyValue( const rtl::OUString& rPropertyName,
                       const ::com::sun::star::uno::Any& rValue )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -410,8 +428,26 @@ public:
       *
       * @param  nPropertyHande is the handle of the property for that the
       *         value shall be set.
+      * @return an any containing:
+      *         - No value indicates, that the property value was set
+      *           successfully.
+      *         - com::sun::star::beans::UnknownPropertyException indicates,
+      *           that the property is not known to the content implementation.
+      *         - com::sun::star::beans::IllegalTypeException indicates, that
+      *           the data type of the property value is not acceptable.
+      *         - com::sun::star::lang::IllegalAccessException indicates, that
+      *           the property is constant.
+      *         - com::sun::star::lang::IllegalArgumentException indicates,
+      *           that the property value is not acceptable. For instance,
+      *           setting an empty title may be illegal.
+      *         - Any other execption derived from
+      *           com::sun::star::uno::Exception indicates, that the value was
+      *           not set successfully. For example, this can be a
+      *           com::sun:star::ucb::InteractiveAugmentedIOException
+      *           transporting the error code
+      *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
       */
-    void
+    ::com::sun::star::uno::Any
     setPropertyValue( const sal_Int32 nPropertyHandle,
                       const ::com::sun::star::uno::Any& rValue )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -476,8 +512,32 @@ public:
       *
       * @param  rPropertyNames is a sequence of names of properties for
       *         that values shall be set.
+      * @return a sequence of any's which has exactly the same number
+      *         of elements as the number of properties to set. Every
+      *         sequence element contains the status for a property. The
+      *         first sequence elements corresponds to the first element in
+      *         the sequence of property names and so on.
+      *
+      *         An any containing:
+      *         - No value indicates, that the property value was set
+      *           successfully.
+      *         - com::sun::star::beans::UnknownPropertyException indicates,
+      *           that the property is not known to the content implementation.
+      *         - com::sun::star::beans::IllegalTypeException indicates, that
+      *           the data type of the property value is not acceptable.
+      *         - com::sun::star::lang::IllegalAccessException indicates, that
+      *           the property is constant.
+      *         - com::sun::star::lang::IllegalArgumentException indicates,
+      *           that the property value is not acceptable. For instance,
+      *           setting an empty title may be illegal.
+      *         - Any other execption derived from
+      *           com::sun::star::uno::Exception indicates, that the value was
+      *           not set successfully. For example, this can be a
+      *           com::sun:star::ucb::InteractiveAugmentedIOException
+      *           transporting the error code
+      *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
       */
-    void
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 rtl::OUString >& rPropertyNames,
                        const ::com::sun::star::uno::Sequence<
@@ -490,8 +550,32 @@ public:
       *
       * @param  nPropertyHandles is a sequence of handles of properties for
       *         that values shall be set.
+      * @return a sequence of any's which has exactly the same number
+      *         of elements as the number of properties to set. Every
+      *         sequence element contains the status for a property. The
+      *         first sequence elements corresponds to the first element in
+      *         the sequence of property names and so on.
+      *
+      *         An any containing:
+      *         - No value indicates, that the property value was set
+      *           successfully.
+      *         - com::sun::star::beans::UnknownPropertyException indicates,
+      *           that the property is not known to the content implementation.
+      *         - com::sun::star::beans::IllegalTypeException indicates, that
+      *           the data type of the property value is not acceptable.
+      *         - com::sun::star::lang::IllegalAccessException indicates, that
+      *           the property is constant.
+      *         - com::sun::star::lang::IllegalArgumentException indicates,
+      *           that the property value is not acceptable. For instance,
+      *           setting an empty title may be illegal.
+      *         - Any other execption derived from
+      *           com::sun::star::uno::Exception indicates, that the value was
+      *           not set successfully. For example, this can be a
+      *           com::sun:star::ucb::InteractiveAugmentedIOException
+      *           transporting the error code
+      *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
       */
-    void
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 sal_Int32 >& nPropertyHandles,
                        const ::com::sun::star::uno::Sequence<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-11 18:06:05 $
+ *  last change: $Author: kso $ $Date: 2002-04-09 11:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ Any Content::getPropertyValue( sal_Int32 nPropertyHandle )
 }
 
 //=========================================================================
-void Content::setPropertyValue( const rtl::OUString& rName,
+Any Content::setPropertyValue( const rtl::OUString& rName,
                                   const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -617,11 +617,12 @@ void Content::setPropertyValue( const rtl::OUString& rName,
     Sequence< Any > aValues( 1 );
     aValues.getArray()[ 0 ] = rValue;
 
-    setPropertyValues( aNames, aValues );
+    Sequence< Any > aErrors = setPropertyValues( aNames, aValues );
+    return aErrors.getConstArray()[ 0 ];
 }
 
 //=========================================================================
-void Content::setPropertyValue( const sal_Int32 nPropertyHandle,
+Any Content::setPropertyValue( const sal_Int32 nPropertyHandle,
                                   const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -631,7 +632,8 @@ void Content::setPropertyValue( const sal_Int32 nPropertyHandle,
     Sequence< Any > aValues( 1 );
     aValues.getArray()[ 0 ] = rValue;
 
-    setPropertyValues( aHandles, aValues );
+    Sequence< Any > aErrors = setPropertyValues( aHandles, aValues );
+    return aErrors.getConstArray()[ 0 ];
 }
 
 //=========================================================================
@@ -743,7 +745,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
 }
 
 //=========================================================================
-void Content::setPropertyValues(
+Sequence< Any > Content::setPropertyValues(
                             const Sequence< rtl::OUString >& rPropertyNames,
                                const Sequence< Any >& rValues )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -783,11 +785,15 @@ void Content::setPropertyValues(
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
-    m_xImpl->executeCommand( aCommand );
+    Any aResult = m_xImpl->executeCommand( aCommand );
+
+    Sequence< Any > aErrors;
+    aResult >>= aErrors;
+    return aErrors;
 }
 
 //=========================================================================
-void Content::setPropertyValues(
+Sequence< Any > Content::setPropertyValues(
                             const Sequence< sal_Int32 >& nPropertyHandles,
                                const Sequence< Any >& rValues )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -827,7 +833,11 @@ void Content::setPropertyValues(
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
-    m_xImpl->executeCommand( aCommand );
+    Any aResult = m_xImpl->executeCommand( aCommand );
+
+    Sequence< Any > aErrors;
+    aResult >>= aErrors;
+    return aErrors;
 }
 
 //=========================================================================
