@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:50:33 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "FT~P";
         Text[ polish ] = "~FTP";
         Text[ portuguese_brazilian ] = "~FTP";
-        Text[ japanese ] = "FTP(~F)";
-        Text[ korean ] = "FTP";
+        Text[ japanese ] = "~FTP";
+        Text[ korean ] = "~FTP";
         Text[ chinese_simplified ] = "~FTP";
         Text[ chinese_traditional ] = "~FTP";
         Text[ arabic ] = "FT~P";
@@ -179,8 +179,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "T~elnet";
         Text[ polish ] = "~Telnet";
         Text[ portuguese_brazilian ] = "~Telnet";
-        Text[ japanese ] = "Telnet(~T)";
-        Text[ korean ] = "Telnet(~T)";
+        Text[ japanese ] = "~Telnet";
+        Text[ korean ] = "~Telnet";
         Text[ chinese_simplified ] = "~Telnet";
         Text[ chinese_traditional ] = "~Telnet";
         Text[ arabic ] = "T~elnet";
@@ -205,9 +205,9 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ polish ] = "Cel";
         Text[ portuguese_brazilian ] = "T~arget";
         Text[ japanese ] = "À°¹Þ¯Ä(~A)";
-        Text[ korean ] = "Å¸°Ù";
+        Text[ korean ] = "Å¸°Ù(~A)";
         Text[ chinese_simplified ] = "Ä¿±ê(~A)";
-        Text[ chinese_traditional ] = "¥Ø¼Ð";
+        Text[ chinese_traditional ] = "¥Ø¼Ð(~A)";
         Text[ arabic ] = "ÇáåÏÝ";
         Text[ turkish ] = "~Hedef";
     };
@@ -600,10 +600,10 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
-        Text[ chinese_traditional ] = "¤å¦r(~K)";
+        Text[ japanese ] = "•¶Žš—ñ(~X)";
+        Text[ korean ] = "ÅØ½ºÆ®(~X)";
+        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~X)";
+        Text[ chinese_traditional ] = "¤å¦r(~X)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ turkish ] = "~Baðlantý adý";
     };
@@ -739,7 +739,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ polish ] = "~e-mail";
         Text[ portuguese_brazilian ] = "~EMail";
         Text[ japanese ] = "~E-mail";
-        Text[ korean ] = "E-mail(~E)";
+        Text[ korean ] = "~E-mail";
         Text[ chinese_simplified ] = "µç×ÓÓÊ¼þ(~E)";
         Text[ chinese_traditional ] = "¹q¤l¶l¥ó(~E)";
         Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
@@ -1077,10 +1077,10 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
-        Text[ chinese_traditional ] = "¤å¦r(~K)";
+        Text[ japanese ] = "•¶Žš—ñ(~X)";
+        Text[ korean ] = "ÅØ½ºÆ®(~X)";
+        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~X)";
+        Text[ chinese_traditional ] = "¤å¦r(~X)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ turkish ] = "~Baðlantý adý";
     };
@@ -1316,10 +1316,10 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "Må~l";
         Text[ polish ] = "Cel";
         Text[ portuguese_brazilian ] = "~Target";
-        Text[ japanese ] = "À°¹Þ¯Ä(~T)";
-        Text[ korean ] = "Å¸°Ù";
-        Text[ chinese_simplified ] = "Ä¿±ê(~T)";
-        Text[ chinese_traditional ] = "¥Ø¼Ð(~T)";
+        Text[ japanese ] = "À°¹Þ¯Ä(~E)";
+        Text[ korean ] = "Å¸°Ù(~E)";
+        Text[ chinese_simplified ] = "Ä¿±ê(~E)";
+        Text[ chinese_traditional ] = "¥Ø¼Ð(~E)";
         Text[ arabic ] = "ÇáåÏÝ";
         Text[ turkish ] = "~Hedef";
     };
@@ -1630,10 +1630,10 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
-        Text[ chinese_traditional ] = "¤å¦r(~K)";
+        Text[ japanese ] = "•¶Žš—ñ(~X)";
+        Text[ korean ] = "ÅØ½ºÆ®(~X)";
+        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~X)";
+        Text[ chinese_traditional ] = "¤å¦r(~X)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ turkish ] = "~Baðlantý adý";
     };
@@ -1836,10 +1836,10 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "~Fil";
         Text[ polish ] = "Plik";
         Text[ portuguese_brazilian ] = "~Path";
-        Text[ japanese ] = "Ì§²Ù(~P)";
+        Text[ japanese ] = "Ì§²Ù(~F)";
         Text[ korean ] = "ÆÄÀÏ(~F)";
-        Text[ chinese_simplified ] = "ÎÄ¼þ(~P)";
-        Text[ chinese_traditional ] = "ÀÉ®×(~P)";
+        Text[ chinese_simplified ] = "ÎÄ¼þ(~F)";
+        Text[ chinese_traditional ] = "ÀÉ®×(~F)";
         Text[ arabic ] = "ãáÝ";
         Text[ turkish ] = "~Dosya";
     };
@@ -2133,10 +2133,10 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
-        Text[ chinese_traditional ] = "¤å¦r(~K)";
+        Text[ japanese ] = "•¶Žš—ñ(~X)";
+        Text[ korean ] = "ÅØ½ºÆ®(~X)";
+        Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~X)";
+        Text[ chinese_traditional ] = "¤å¦r(~X)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ turkish ] = "~Baðlantý adý";
     };
