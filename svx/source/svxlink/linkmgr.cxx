@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:04:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ sfx2::SvLinkSourceRef SvxLinkManager::CreateObj( sfx2::SvBaseLink * pLink )
     {
     case OBJECT_CLIENT_FILE:
     case OBJECT_CLIENT_GRF:
+    case OBJECT_CLIENT_OLE:
         return new SvFileObject;
 
     case OBJECT_INTERN:
@@ -194,6 +195,7 @@ BOOL SvxLinkManager::GetDisplayNames( const sfx2::SvBaseLink* pBaseLink,
         {
         case OBJECT_CLIENT_FILE:
         case OBJECT_CLIENT_GRF:
+        case OBJECT_CLIENT_OLE:
             {
                 USHORT nPos = 0;
                 String sFile( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
@@ -207,12 +209,14 @@ BOOL SvxLinkManager::GetDisplayNames( const sfx2::SvBaseLink* pBaseLink,
                     *pFilter = sLNm.Copy( nPos );
 
                 if( pType )
+                {
+                    sal_uInt16 nObjType = pBaseLink->GetObjType();
                     *pType = String( ResId(
-                                OBJECT_CLIENT_FILE == pBaseLink->GetObjType()
+                                ( OBJECT_CLIENT_FILE == nObjType || OBJECT_CLIENT_OLE == nObjType )
                                         ? RID_SVXSTR_FILELINK
                                         : RID_SVXSTR_GRAFIKLINK
                                         , DIALOG_MGR() ));
-
+                }
                 bRet = TRUE;
             }
             break;
