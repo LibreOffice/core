@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:19:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,12 @@ Attribute::Compare( const char *p, int nLen )
 const rtl::OString&
 Attribute::GetKey ()
 {
+    static rtl::OString aEmptyStr;
+
     if (mpKeyName != NULL)
         return *mpKeyName;
     if (mnLength == NULL)
-        return rtl::OString();
+        return aEmptyStr;
 
     sal_Char* pBuffer = (sal_Char*)alloca (mnLength);
 
