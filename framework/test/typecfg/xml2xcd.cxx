@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2xcd.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-23 13:31:03 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,25 +126,56 @@
 #include <vcl/msgbox.hxx>
 
 //_________________________________________________________________________________________________________________
-//  const
+//  namespace
 //_________________________________________________________________________________________________________________
 
+using namespace ::framework ;
+
 //_________________________________________________________________________________________________________________
-//  namespace
+//  const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
 //  defines
 //_________________________________________________________________________________________________________________
 
-#define PREFIX_TYPES            "t"
-#define PREFIX_FILTERS          "f"
-#define PREFIX_DETECTORS        "d"
-#define PREFIX_LOADERS          "l"
+#define PREFIX_TYPES                "t"
+#define PREFIX_FILTERS              "f"
+#define PREFIX_DETECTORS            "d"
+#define PREFIX_LOADERS              "l"
+
+#define ARGUMENT_FILENAME           DECLARE_ASCII("-fi=")           // argument for filename                <filename in system notation>
+#define ARGUMENT_WRITEABLE          DECLARE_ASCII("-wr=")           // argument for "writeable"             [true|false]
+#define ARGUMENT_VERSION_INPUT      DECLARE_ASCII("-vi=")           // argument for file version to read    [1|2|3]
+#define ARGUMENT_VERSION_OUTPUT     DECLARE_ASCII("-vo=")           // argument for file version to read    [1|2|3]
+#define ARGUMENTLENGTH              4                               // All arguments should have the same lenght ... it's better to detect it!
+#define ARGUMENTFOUND               0                               // OUString::compareTo returns 0 if searched string match given one
+#define WRITEABLE_ON                DECLARE_ASCII("true" )
+#define WRITEABLE_OFF               DECLARE_ASCII("false")
 
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
+
+/*-***************************************************************************************************************/
+struct AppMember
+{
+        FilterCache*                pFilterCache          ;
+        StringHash                  aOldFilterNamesHash   ;
+        ::rtl::OUString             sXCDFileName          ;
+        sal_Bool                    bWriteable            ;
+        sal_Int32                   nVersionInput         ;
+        sal_Int32                   nVersionOutput        ;
+
+        sal_Int32                   nOriginalTypes        ;
+        sal_Int32                   nOriginalFilters      ;
+        sal_Int32                   nOriginalDetectors    ;
+        sal_Int32                   nOriginalLoaders      ;
+        sal_Int32                   nWrittenTypes         ;
+        sal_Int32                   nWrittenFilters       ;
+        sal_Int32                   nWrittenDetectors     ;
+        sal_Int32                   nWrittenLoaders       ;
+};
 
 /*-***************************************************************************************************************/
 class XCDGenerator : public Application
@@ -157,39 +188,32 @@ class XCDGenerator : public Application
     //*************************************************************************************************************
     private:
 
-        void            impl_parseCommandLine           (                                                                           );
-        void            impl_generateXCD                (   const   sal_Char*                   sFileName                           ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+        void            impl_printCopyright             (                                                                           );
+        void            impl_printSyntax                (                                                                           );
+        void            impl_parseCommandLine           (           AppMember&                  rMember                             );
+        void            impl_generateXCD                (   const   ::rtl::OUString&            sFileName                           ,
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateCopyright          (           ::rtl::OUStringBuffer&      sXCD                                );
         void            impl_generateTypeTemplate       (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateFilterTemplate     (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateDetectorTemplate   (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateLoaderTemplate     (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateFilterFlagTemplate (           ::rtl::OUStringBuffer&      sXCD                                ,
                                                             const   ::rtl::OUString&            sName                               ,
                                                                     sal_Int32                   nValue                              ,
                                                             const   ::rtl::OString&             sDescription = ::rtl::OString()     );
         void            impl_generateTypeSet            (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateFilterSet          (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateDetectorSet        (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateLoaderSet          (           ::rtl::OUStringBuffer&      sXCD                                ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateDefaults           (           ::rtl::OUStringBuffer&      sXCD                                );
         void            impl_generateIntProperty        (           ::rtl::OUStringBuffer&      sXCD                                ,
                                                             const   ::rtl::OUString&            sName                               ,
@@ -206,24 +230,19 @@ class XCDGenerator : public Application
         void            impl_generateStringListProperty (           ::rtl::OUStringBuffer&      sXCD                                ,
                                                             const   ::rtl::OUString&            sName                               ,
                                                             const   ::framework::StringList&    lValue                              ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                                    sal_Bool                    bWriteable                          );
         void            impl_generateUINamesProperty    (           ::rtl::OUStringBuffer&      sXCD                                ,
                                                             const   ::rtl::OUString&            sName                               ,
-                                                            const   ::framework::StringHash&    lUINames                            ,
-                                                                    sal_Bool                    bWriteable                          ,
-                                                                    sal_Unicode                 cSeperator                          );
+                                                            const   StringHash&                 lUINames                            ,
+                                                                    sal_Bool                    bWriteable                          );
         ::rtl::OUString impl_filterSpecialSigns         (   const   ::rtl::OUString&            sValue                              );
-
-        void            impl_initFilterHashNew2Old      (           ::framework::StringHash&    aHash                               );
+        sal_Unicode     impl_defineSeperator            (   const   ::framework::StringList&    lList                               );
+        void            impl_initFilterHashNew2Old      (           StringHash&                 aHash                               );
         ::rtl::OUString impl_getOldFilterName           (   const   ::rtl::OUString&            sNewName                            );
-        void            impl_defineSeperator            (   const   ::framework::StringList&    lList                               ,
-                                                                    sal_Unicode&                cSeperator                          );
 
     //*************************************************************************************************************
     private:
-        ::framework::FilterCache*   m_pData           ;
-        ::framework::StringHash     m_aFilterNamesHash;
+        AppMember       m_aData;
 
 };  //  class XCDGenerator
 
@@ -236,70 +255,174 @@ XCDGenerator gGenerator;
 //*****************************************************************************************************************
 void XCDGenerator::Main()
 {
+    // Must be :-)
+    impl_printCopyright();
+
     // Init global servicemanager and set it.
     // It's neccessary for other services ... e.g. configuration.
-    ::framework::ServiceManager aManager;
+    ServiceManager aManager;
     ::comphelper::setProcessServiceFactory( aManager.getGlobalUNOServiceManager() );
 
     // Get optional commands from command line.
-//    impl_parseCommandLine();
+    impl_parseCommandLine( m_aData );
 
     // initialize converter table to match new to old filter names!
-    impl_initFilterHashNew2Old( m_aFilterNamesHash );
+    if( m_aData.nVersionOutput >= 3 )
+    {
+        impl_initFilterHashNew2Old( m_aData.aOldFilterNamesHash );
+    }
 
     // Create access to current set filter configuration.
     // Attention: Please use it for a full fat office installation only!!
     //            We need an installation with ALL filters.
     // Member m_pData is used in some impl-methods directly ...
-    m_pData = new ::framework::FilterCache;
+    m_aData.pFilterCache = new FilterCache( m_aData.nVersionInput );
+
+    // Get some statistic informations of current filled filter cache ... (e.g. count of current activae filters)
+    // because we need it to check if all filters are converted and written to disk.
+    // May be it's possible to lose some of them during convertion!!!
+    m_aData.nOriginalTypes     = m_aData.pFilterCache->getAllTypeNames().getLength()     ;
+    m_aData.nOriginalFilters   = m_aData.pFilterCache->getAllFilterNames().getLength()   ;
+    m_aData.nOriginalDetectors = m_aData.pFilterCache->getAllDetectorNames().getLength() ;
+    m_aData.nOriginalLoaders   = m_aData.pFilterCache->getAllLoaderNames().getLength()   ;
 
     // Start generation of xcd file.
-    sal_Char*   sFileName  = "TypeDetection_new2.xcd" ;
-    sal_Bool    bWriteable = sal_True                 ;
-    sal_Unicode cSeperator = ','                      ;
-    impl_generateXCD( sFileName, bWriteable, cSeperator );
+    impl_generateXCD( m_aData.sXCDFileName, m_aData.bWriteable );
+
+    // Warn programmer if some items couldn't written to file!
+    LOG_ASSERT2( m_aData.nOriginalTypes    != m_aData.nWrittenTypes    , "XCDGenerator::Main()", "Generated xcd file could be invalid ... because I miss some types!"     )
+    LOG_ASSERT2( m_aData.nOriginalFilters  != m_aData.nWrittenFilters  , "XCDGenerator::Main()", "Generated xcd file could be invalid ... because I miss some filters!"   )
+    LOG_ASSERT2( m_aData.nOriginalDetectors!= m_aData.nWrittenDetectors, "XCDGenerator::Main()", "Generated xcd file could be invalid ... because I miss some detectors!" )
+    LOG_ASSERT2( m_aData.nOriginalLoaders  != m_aData.nWrittenLoaders  , "XCDGenerator::Main()", "Generated xcd file could be invalid ... because I miss some loaders!"   )
 
     // Free memory.
-    delete m_pData;
-    m_pData = NULL;
+    delete m_aData.pFilterCache;
+    m_aData.pFilterCache = NULL;
+}
+
+/*-************************************************************************************************************//**
+    @short      print some info messages to stderr
+    @descr      We must show an copyright or help for using this file.
+                This two methods do that.
+
+    @seealso    -
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*************************************************************************************************************/
+void XCDGenerator::impl_printCopyright()
+{
+    fprintf( stderr, "\n(c) Copyright by Sun microsystems, 2001\n" );
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_parseCommandLine()
+void XCDGenerator::impl_printSyntax()
+{
+    fprintf( stderr, "\nusing: xml2xcd -fi=<outputfile> -vi=<version input> -vo=<version output> [-wr=<true|false>]\n\n"    );
+    fprintf( stderr, "\tneccessary parameters:\n"                                                                           );
+    fprintf( stderr, "\t\t-fi=<outputfile>\tname of output file in system notation\n"                                       );
+    fprintf( stderr, "\t\t-vi=<version input>\tformat version of input xml file\n"                                          );
+    fprintf( stderr, "\t\t-vo=<version output>\tformat version of generated xcd file\n\n"                                   );
+    fprintf( stderr, "\toptional parameters:\n"                                                                             );
+    fprintf( stderr, "\t\t-wr=<true|false>\tconfig items should be writeable ... [true|false]\n"                            );
+}
+
+/*-************************************************************************************************************//**
+    @short      analyze command line arguments
+    @descr      Created binary accept different command line arguments. These parameters
+                regulate creation of xcd file. Follow arguments are supported:
+                    "-fi=<filename of xcd>"
+                    "-wr=<writeable>[true|false]"
+                    "-vi=<version of input file>[1|2|3]"
+                    "-vo=<version of output file>[1|2|3]"
+
+    @seealso    -
+
+    @param      "rMember", reference to struct of global application member to fill arguments in it
+    @return     right filled member struct or unchanged struct if an error occure!
+
+    @onerror    We do nothing - or warn programmer!
+*//*-*************************************************************************************************************/
+void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
 {
     ::vos::OStartupInfo aInfo                                   ;
     ::rtl::OUString     sArgument                               ;
     sal_Int32           nArgument   = 0                         ;
     sal_Int32           nCount      = aInfo.getCommandArgCount();
+    sal_Int32           nMinCount   = 0                         ;
 
     while( nArgument<nCount )
     {
         aInfo.getCommandArg( nArgument, sArgument );
-/*
-        if( sArgument == ARGUMENT_GENERATE_CFGVIEW )
+
+        //_____________________________________________________________________________________________________
+        // look for "-f=<file name of xcd>"
+        if( sArgument.compareTo( ARGUMENT_FILENAME, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
-            m_eMode = E_GENERATE_CFGVIEW;
-            break;
+            rMember.sXCDFileName = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            ++nMinCount;
         }
         else
-        if( sArgument == ARGUMENT_CHECK_FILTERREGISTRATION )
+        //_____________________________________________________________________________________________________
+        // look for "-w=<writeable>"
+        if( sArgument.compareTo( ARGUMENT_WRITEABLE, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
-            m_eMode = E_CHECK_FILTERREGISTRATION;
-            break;
+            ::rtl::OUString sWriteable = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            if( sWriteable == WRITEABLE_ON )
+            {
+                rMember.bWriteable = sal_True;
+            }
+            else
+            {
+                rMember.bWriteable = sal_False;
+            }
         }
-        else
-        if( sArgument == ARGUMENT_GENERATE_TYPEDETECTION_XCD )
+        //_____________________________________________________________________________________________________
+        // look for "-vi=<version of input file>"
+        if( sArgument.compareTo( ARGUMENT_VERSION_INPUT, ARGUMENTLENGTH ) == ARGUMENTFOUND )
         {
-            m_eMode = E_GENERATE_TYPEDETECTION_XCD;
-            break;
+            ::rtl::OUString sVersion = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            rMember.nVersionInput = sVersion.toInt32();
+            ++nMinCount;
         }
-*/
+        //_____________________________________________________________________________________________________
+        // look for "-vo=<version of output file>"
+        if( sArgument.compareTo( ARGUMENT_VERSION_OUTPUT, ARGUMENTLENGTH ) == ARGUMENTFOUND )
+        {
+            ::rtl::OUString sVersion = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
+            rMember.nVersionOutput = sVersion.toInt32();
+            ++nMinCount;
+        }
+
         ++nArgument;
+    }
+
+    // Show help if user don't call us right!
+    if( nMinCount != 3 )
+    {
+        impl_printSyntax();
+        exit(-1);
     }
 }
 
-//*****************************************************************************************************************
-void XCDGenerator::impl_generateXCD( const sal_Char* sFileName, sal_Bool bWriteable, sal_Unicode cSeperator )
+/*-************************************************************************************************************//**
+    @short      regulate generation of complete xcd file
+    @descr      This method is the toppest one and implement the global structure of generated xcd file.
+                We create a unicode string buffer for complete xcd file in memory ...
+                use different helper methods to fill it ...
+                and write it to disk at the end of this method!
+
+    @seealso    -
+
+    @param      "sFileName" , name of generated xcd file
+    @param      "bWriteable", make config properties writeable or not
+    @return     -
+
+    @onerror    -
+*//*-*************************************************************************************************************/
+void XCDGenerator::impl_generateXCD( const ::rtl::OUString& sFileName, sal_Bool bWriteable )
 {
     // A complete TypeDetection.xcd needs ~ 1.3 ... 1.5 MB!
     ::rtl::OUStringBuffer  sXCD( 1500000 );
@@ -309,26 +432,26 @@ void XCDGenerator::impl_generateXCD( const sal_Char* sFileName, sal_Bool bWritea
     sXCD.appendAscii( "<!DOCTYPE schema:component SYSTEM \"../../../../schema/schema.description.dtd\">\n"                                                                                                                                                                                                                                  );
     sXCD.appendAscii( "<schema:component cfg:name=\"TypeDetection\" cfg:package=\"org.openoffice.Office\" xml:lang=\"en-US\" xmlns:schema=\"http://openoffice.org/2000/registry/schema/description\" xmlns:default=\"http://openoffice.org/2000/registry/schema/default\" xmlns:cfg=\"http://openoffice.org/2000/registry/instance\">\n"    );
     sXCD.appendAscii( "\t<schema:templates>\n"                                                                                                                                                                                                                                                                                              );
-    sXCD.appendAscii( "\n\n\n<!-- PLEASE DON'T CHANGE TEMPLATES OR FILE FORMAT BY HAND! USE \"TYPECFG.EXE\" TO DO THAT. CONTACT andreas.schluens@germany.sun.com FOR FURTHER INFORMATIONS. THANKS. -->\n\n\n"                                                                                                                               );
+    sXCD.appendAscii( "\n\n\n<!-- PLEASE DON'T CHANGE TEMPLATES OR FILE FORMAT BY HAND! USE \"XML2XCD.EXE\" TO DO THAT. CONTACT andreas.schluens@germany.sun.com FOR FURTHER INFORMATIONS. THANKS. -->\n\n\n"                                                                                                                               );
 
-    impl_generateTypeTemplate       ( sXCD, bWriteable, cSeperator  );
-    impl_generateFilterTemplate     ( sXCD, bWriteable, cSeperator  );
-    impl_generateDetectorTemplate   ( sXCD, bWriteable, cSeperator  );
-    impl_generateLoaderTemplate     ( sXCD, bWriteable, cSeperator  );
+    impl_generateTypeTemplate       ( sXCD, bWriteable  );
+    impl_generateFilterTemplate     ( sXCD, bWriteable  );
+    impl_generateDetectorTemplate   ( sXCD, bWriteable  );
+    impl_generateLoaderTemplate     ( sXCD, bWriteable  );
 
     sXCD.appendAscii( "\t</schema:templates>\n"                     );
     sXCD.appendAscii( "<schema:schema cfg:localized=\"false\">\n"   );
 
-    impl_generateTypeSet            ( sXCD, bWriteable, cSeperator  );
-    impl_generateFilterSet          ( sXCD, bWriteable, cSeperator  );
-    impl_generateDetectorSet        ( sXCD, bWriteable, cSeperator  );
-    impl_generateLoaderSet          ( sXCD, bWriteable, cSeperator  );
-    impl_generateDefaults           ( sXCD                          );
+    impl_generateTypeSet            ( sXCD, bWriteable  );
+    impl_generateFilterSet          ( sXCD, bWriteable  );
+    impl_generateDetectorSet        ( sXCD, bWriteable  );
+    impl_generateLoaderSet          ( sXCD, bWriteable  );
+    impl_generateDefaults           ( sXCD              );
 
-    sXCD.appendAscii( "\t</schema:schema>\n"                        );
-    sXCD.appendAscii( "</schema:component>\n"                       );
+    sXCD.appendAscii( "\t</schema:schema>\n"  );
+    sXCD.appendAscii( "</schema:component>\n" );
 
-    WRITE_LOGFILE( sFileName, U2B(sXCD.makeStringAndClear()) )
+    WRITE_LOGFILE( U2B(sFileName), U2B(sXCD.makeStringAndClear()) )
 }
 
 //*****************************************************************************************************************
@@ -387,9 +510,13 @@ void XCDGenerator::impl_generateCopyright( ::rtl::OUStringBuffer& sXCD )
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateTypeTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateTypeTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+{
+//_________________________________________________________________________________________________________________
+if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
 {
     sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Type\">\n"                                                                                                                                                                  );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Preferred\" cfg:type=\"boolean\" cfg:writable=\""                                                                                                                         );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
@@ -397,36 +524,42 @@ void XCDGenerator::impl_generateTypeTemplate( ::rtl::OUStringBuffer& sXCD, sal_B
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                      );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of this type</schema:description>\n"                                                                                                           );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"MediaType\" cfg:type=\"string\" cfg:writable=\""                                                                                                                          );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the mime type </schema:description>\n"                                                                                                                           );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"ClipboardFormat\" cfg:type=\"string\" cfg:writable=\""                                                                                                                    );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the clipboard format name</schema:description>\n"                                                                                                                );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"URLPattern\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                                                                  );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the patterns used for URLS. This type is only relevant for HTTP, FTP etc. and is used for internal URL formats like private:factory etc.</schema:description>\n" );
+    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the patterns used for URLs. This type is only relevant for HTTP, FTP etc. and is used for internal URL formats like private:factory etc.</schema:description>\n" );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Extensions\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                                                                  );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the possible file extensions.</schema:description>\n"                                                                                                            );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"DocumentIconID\" cfg:type=\"int\" cfg:writable=\""                                                                                                                        );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
@@ -434,13 +567,41 @@ void XCDGenerator::impl_generateTypeTemplate( ::rtl::OUStringBuffer& sXCD, sal_B
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
     sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                                                                                );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
     sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                   );
+}
+//_________________________________________________________________________________________________________________
+else if( m_aData.nVersionOutput==3 )
+{
+    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Type\">\n"                                                                                                                                                                  );
+
+    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                      );
+    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
+    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                        );
+    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of this type</schema:description>\n"                                                                                                           );
+    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                               );
+    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                         );
+    sXCD.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
+    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Containes all data of a type as an own formated string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
+    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
+    sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
+    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );
+
+    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                   );
+}
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
+{
+//_________________________________________________________________________________________________________________
+if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
 {
     sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Filter\">\n"                                                                                                            );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Installed\" cfg:type=\"boolean\" cfg:writable=\""                                                                     );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
@@ -448,7 +609,9 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                        );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-/*
+
+    if( m_aData.nVersionOutput==2 )
+    {
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Order\" cfg:type=\"int\" cfg:writable=\""                                                                             );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
@@ -456,37 +619,36 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
-*/
-    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Name\" cfg:type=\"string\" cfg:writable=\""                                                                           );
-    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
-    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
-    sXCD.appendAscii( "\t\t\t\t\t<schema:description>internal name of filter ... fix; not localized!</schema:description>\n"                                                );
-    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
-    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+    }
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                  );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"   );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Type\" cfg:type=\"string\" cfg:writable=\""                                                                           );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the relative type key name of the filter, e.g. Type/T1</schema:description>\n"                               );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"DocumentService\" cfg:type=\"string\" cfg:writable=\""                                                                );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the name of the UNO service to implement the document.</schema:description>\n"                               );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"FilterService\" cfg:type=\"string\" cfg:writable=\""                                                                  );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the name of the UNO service for importing the document.</schema:description>\n"                              );
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Flags\" cfg:type=\"int\" cfg:writable=\""                                                                             );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
@@ -494,7 +656,6 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t\t<schema:type-info>\n"                                                                                                                        );
     sXCD.appendAscii( "\t\t\t\t\t<schema:value-names>\n"                                                                                                                    );
-
     impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_IMPORT            , FILTERFLAG_IMPORT                                                                             );
     impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_EXPORT            , FILTERFLAG_EXPORT                                                                             );
     impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_TEMPLATE          , FILTERFLAG_TEMPLATE                                                                           );
@@ -513,12 +674,12 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_PACKED            , FILTERFLAG_PACKED                                                                             );
     impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_SILENTEXPORT      , FILTERFLAG_SILENTEXPORT                                                                       );
     impl_generateFilterFlagTemplate( sXCD, FILTERFLAGNAME_PREFERED          , FILTERFLAG_PREFERED                                                                           );
-
     sXCD.appendAscii( "\t\t\t\t\t</schema:value-names>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t\t\t<schema:constraints xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"/>\n"                                                                    );
     sXCD.appendAscii( "\t\t\t\t</schema:type-info>\n"                                                                                                                       );
     sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UserData\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""                                                );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                    );
@@ -526,6 +687,7 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t\t<default:data/>\n"                                                                                                                           );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"FileFormatVersion\" cfg:type=\"int\" cfg:writable=\""                                                                 );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<!--This should be removed to UserData later-->\n"                                                                                           );
@@ -534,6 +696,7 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                   );
     sXCD.appendAscii( "\t\t\t\t<default:data>0</default:data>\n"                                                                                                            );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"TemplateName\" cfg:type=\"string\" cfg:writable=\""                                                                   );
     sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                     );
     sXCD.appendAscii( "\t\t\t\t<!--This should be removed to UserData later-->\n"                                                                                           );
@@ -541,7 +704,38 @@ void XCDGenerator::impl_generateFilterTemplate( ::rtl::OUStringBuffer& sXCD, sal
     sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the template used for importing the file with the specified filter.</schema:description>\n"                  );
     sXCD.appendAscii( "\t\t\t\t\t</schema:documentation>\n"                                                                                                                 );
     sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                             );
+
     sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                               );
+//_________________________________________________________________________________________________________________
+}
+else if( m_aData.nVersionOutput==3 )
+{
+    sXCD.appendAscii( "\t\t<schema:group cfg:name=\"Filter\">\n"                                                                                                                                                                    );
+
+    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Installed\" cfg:type=\"boolean\" cfg:writable=\""                                                                                                                             );
+    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                             );
+    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
+    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Make it possible to enable or disable filter by setup!</schema:description>\n"                                                                                                 );
+    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
+    sXCD.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                                );
+    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
+
+    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                                                                          );
+    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                             );
+    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
+    sXCD.appendAscii( "\t\t\t\t\t<schema:description>Specifies the external name of the filter which is displayed at the user interface (dialog).</schema:description>\n"                                                           );
+    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
+    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
+
+    sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                                   );
+    sXCD.appendAscii( bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                             );
+    sXCD.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                                                                                                                            );
+    sXCD.appendAscii( "\t\t\t\t\t<schema:description>All data of filter written in own format. {Order, OldName, Type, DocumentService, FilterService, Flags, UserData, FilteFormatVersion, TemplateName}</schema:description>\n"    );
+    sXCD.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                           );
+    sXCD.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                     );
+
+    sXCD.appendAscii( "\t\t</schema:group>\n"                                                                                                                                                                                       );
+}
 }
 
 //*****************************************************************************************************************
@@ -567,7 +761,7 @@ void XCDGenerator::impl_generateFilterFlagTemplate( ::rtl::OUStringBuffer& sXCD,
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateDetectorTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateDetectorTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
 {
     sXCD.appendAscii( "\t\t<schema:group cfg:name=\"DetectService\">\n"                                                             );
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
@@ -580,7 +774,7 @@ void XCDGenerator::impl_generateDetectorTemplate( ::rtl::OUStringBuffer& sXCD, s
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateLoaderTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateLoaderTemplate( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
 {
     sXCD.appendAscii( "\t\t<schema:group cfg:name=\"FrameLoader\">\n"                                                                                                       );
     sXCD.appendAscii( "\t\t\t<schema:value cfg:name=\"UIName\" cfg:type=\"string\" cfg:localized=\"true\" cfg:writable=\""                                                  );
@@ -599,9 +793,9 @@ void XCDGenerator::impl_generateLoaderTemplate( ::rtl::OUStringBuffer& sXCD, sal
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateTypeSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateTypeSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
 {
-    if( m_pData->hasTypes() == sal_False )
+    if( m_aData.pFilterCache->hasTypes() == sal_False )
     {
         // generate empty set!
         sXCD.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\"/>\n" );
@@ -612,29 +806,58 @@ void XCDGenerator::impl_generateTypeSet( ::rtl::OUStringBuffer& sXCD, sal_Bool b
         // open set
         sXCD.appendAscii( "\t<schema:set cfg:name=\"Types\" cfg:element-type=\"Type\">\n" );
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_pData->getAllTypeNames();
-        sal_Int32                             nCount = lNames.getLength()        ;
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
         {
-            ::rtl::OUString         sName = lNames[nItem]            ;
-            ::framework::FileType   aItem = m_pData->getType( sName );
+            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllTypeNames();
+            sal_Int32                             nCount = lNames.getLength()                     ;
+            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            {
+                ::rtl::OUString sName = lNames[nItem]                         ;
+                FileType        aItem = m_aData.pFilterCache->getType( sName );
 
-            // open set entry by using name
-            sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
-            sXCD.append     ( sName                             );
-            sXCD.appendAscii( "\">\n"                           );
+                ++m_aData.nWrittenTypes;
 
-            // write properties
-            impl_generateBoolProperty       ( sXCD, SUBKEY_PREFERRED        , aItem.bPreferred          , bWriteable                );
-            impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME           , aItem.lUINames            , bWriteable, cSeperator    );
-            impl_generateStringProperty     ( sXCD, SUBKEY_MEDIATYPE        , aItem.sMediaType          , bWriteable                );
-            impl_generateStringProperty     ( sXCD, SUBKEY_CLIPBOARDFORMAT  , aItem.sClipboardFormat    , bWriteable                );
-            impl_generateStringListProperty ( sXCD, SUBKEY_URLPATTERN       , aItem.lURLPattern         , bWriteable, cSeperator    );
-            impl_generateStringListProperty ( sXCD, SUBKEY_EXTENSIONS       , aItem.lExtensions         , bWriteable, cSeperator    );
-            impl_generateIntProperty        ( sXCD, SUBKEY_DOCUMENTICONID   , aItem.nDocumentIconID     , bWriteable                );
+                // open set entry by using name
+                sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
+                sXCD.append     ( sName                             );
+                sXCD.appendAscii( "\">\n"                           );
 
-            // close set node
-            sXCD.appendAscii( "\t\t</default:group>\n" );
+                // write properties
+                impl_generateBoolProperty       ( sXCD, SUBKEY_PREFERRED        , aItem.bPreferred          , bWriteable );
+                impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME           , aItem.lUINames            , bWriteable );
+                impl_generateStringProperty     ( sXCD, SUBKEY_MEDIATYPE        , aItem.sMediaType          , bWriteable );
+                impl_generateStringProperty     ( sXCD, SUBKEY_CLIPBOARDFORMAT  , aItem.sClipboardFormat    , bWriteable );
+                impl_generateStringListProperty ( sXCD, SUBKEY_URLPATTERN       , aItem.lURLPattern         , bWriteable );
+                impl_generateStringListProperty ( sXCD, SUBKEY_EXTENSIONS       , aItem.lExtensions         , bWriteable );
+                impl_generateIntProperty        ( sXCD, SUBKEY_DOCUMENTICONID   , aItem.nDocumentIconID     , bWriteable );
+
+                // close set node
+                sXCD.appendAscii( "\t\t</default:group>\n" );
+            }
+        }
+        else if( m_aData.nVersionOutput==3 )
+        {
+            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllTypeNames();
+            sal_Int32                             nCount = lNames.getLength()                     ;
+            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            {
+                ::rtl::OUString sName = lNames[nItem]                         ;
+                FileType        aItem = m_aData.pFilterCache->getType( sName );
+
+                ++m_aData.nWrittenTypes;
+
+                // open set entry by using name
+                sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
+                sXCD.append     ( sName                             );
+                sXCD.appendAscii( "\">\n"                           );
+
+                // write properties
+                impl_generateUINamesProperty( sXCD, SUBKEY_UINAME, aItem.lUINames                          , bWriteable );
+                impl_generateStringProperty ( sXCD, SUBKEY_DATA  , FilterCFGAccess::encodeTypeData( aItem ), bWriteable );
+
+                // close set node
+                sXCD.appendAscii( "\t\t</default:group>\n" );
+            }
         }
 
         // close set
@@ -643,9 +866,9 @@ void XCDGenerator::impl_generateTypeSet( ::rtl::OUStringBuffer& sXCD, sal_Bool b
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateFilterSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateFilterSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
 {
-    if( m_pData->hasFilters() == sal_False )
+    if( m_aData.pFilterCache->hasFilters() == sal_False )
     {
         // write empty filter set.
         sXCD.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\"/>\n" );
@@ -655,41 +878,73 @@ void XCDGenerator::impl_generateFilterSet( ::rtl::OUStringBuffer& sXCD, sal_Bool
         // open set
         sXCD.appendAscii( "\t<schema:set cfg:name=\"Filters\" cfg:element-type=\"Filter\">\n" );
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_pData->getAllFilterNames();
-        sal_Int32                             nCount = lNames.getLength()          ;
-        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        if( m_aData.nVersionOutput==1 || m_aData.nVersionOutput==2 )
         {
-            ::rtl::OUString     sNewName;
-            ::rtl::OUString     sOldName;
+            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllFilterNames();
+            sal_Int32                             nCount = lNames.getLength()                       ;
+            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            {
+                Filter aItem = m_aData.pFilterCache->getFilter( lNames[nItem] );
 
-            sNewName = lNames[nItem];
-            sOldName = impl_getOldFilterName  ( sNewName );
-            sOldName = impl_filterSpecialSigns( sOldName );
+                ++m_aData.nWrittenFilters;
 
-            ::framework::Filter aItem = m_pData->getFilter( sNewName );
+                // open set node by using name
+                sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
+                sXCD.append     ( lNames[nItem]                     );
+                sXCD.appendAscii( "\">\n"                           );
 
-            // open set node by using name
-            sXCD.appendAscii( "\t\t<default:group cfg:name=\""                            );
-            sXCD.append     ( ::framework::FilterCFGAccess::decodeFilterName( sOldName )  );
-            sXCD.appendAscii( "\">\n"                                                     );
+                // write properties
+                // Attention:
+                // We generate "Installed=false" for all entries ... because it's the default for all filters.
+                // You must work with a full office installation and change this to "true" in generated XML file!!!
+                impl_generateBoolProperty       ( sXCD, SUBKEY_INSTALLED        , sal_False               , bWriteable  );
+                impl_generateIntProperty        ( sXCD, SUBKEY_ORDER            , aItem.nOrder            , bWriteable  );
+                impl_generateStringProperty     ( sXCD, SUBKEY_TYPE             , aItem.sType             , bWriteable  );
+                impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME           , aItem.lUINames          , bWriteable  );
+                impl_generateStringProperty     ( sXCD, SUBKEY_DOCUMENTSERVICE  , aItem.sDocumentService  , bWriteable  );
+                impl_generateStringProperty     ( sXCD, SUBKEY_FILTERSERVICE    , aItem.sFilterService    , bWriteable  );
+                impl_generateIntProperty        ( sXCD, SUBKEY_FLAGS            , aItem.nFlags            , bWriteable  );
+                impl_generateStringListProperty ( sXCD, SUBKEY_USERDATA         , aItem.lUserData         , bWriteable  );
+                impl_generateIntProperty        ( sXCD, SUBKEY_FILEFORMATVERSION, aItem.nFileFormatVersion, bWriteable  );
+                impl_generateStringProperty     ( sXCD, SUBKEY_TEMPLATENAME     , aItem.sTemplateName     , bWriteable  );
 
-            // write properties
-            // Attention:
-            // We generate "Installed=false" for all entries ... because it's the default for all filters.
-            // You must work with a full office installation and change this to "true" in generated XML file!!!
-            impl_generateBoolProperty       ( sXCD, SUBKEY_INSTALLED        , sal_False               , bWriteable                );
-            impl_generateIntProperty        ( sXCD, SUBKEY_ORDER            , aItem.nOrder            , bWriteable                );
-            impl_generateStringProperty     ( sXCD, SUBKEY_TYPE             , aItem.sType             , bWriteable                );
-            impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME           , aItem.lUINames          , bWriteable, cSeperator    );
-            impl_generateStringProperty     ( sXCD, SUBKEY_DOCUMENTSERVICE  , aItem.sDocumentService  , bWriteable                );
-            impl_generateStringProperty     ( sXCD, SUBKEY_FILTERSERVICE    , aItem.sFilterService    , bWriteable                );
-            impl_generateIntProperty        ( sXCD, SUBKEY_FLAGS            , aItem.nFlags            , bWriteable                );
-            impl_generateStringListProperty ( sXCD, SUBKEY_USERDATA         , aItem.lUserData         , bWriteable, cSeperator    );
-            impl_generateIntProperty        ( sXCD, SUBKEY_FILEFORMATVERSION, aItem.nFileFormatVersion, bWriteable                );
-            impl_generateStringProperty     ( sXCD, SUBKEY_TEMPLATENAME     , aItem.sTemplateName     , bWriteable                );
+                // close set node
+                sXCD.appendAscii( "\t\t</default:group>\n" );
+            }
+        }
+        else if( m_aData.nVersionOutput==3 )
+        {
+            css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllFilterNames();
+            sal_Int32                             nCount = lNames.getLength()                       ;
+            for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+            {
+                ::rtl::OUString     sNewName;
+                ::rtl::OUString     sOldName;
 
-            // close set node
-            sXCD.appendAscii( "\t\t</default:group>\n" );
+                sNewName = lNames[nItem];
+                sOldName = impl_getOldFilterName  ( sNewName );
+                sOldName = impl_filterSpecialSigns( sOldName );
+
+                Filter aItem = m_aData.pFilterCache->getFilter( sNewName );
+
+                ++m_aData.nWrittenFilters;
+
+                // open set node by using name
+                sXCD.appendAscii( "\t\t<default:group cfg:name=\""               );
+                sXCD.append     ( FilterCFGAccess::encodeFilterName( sOldName )  );
+                sXCD.appendAscii( "\">\n"                                        );
+
+                // write properties
+                // Attention:
+                // We generate "Installed=false" for all entries ... because it's the default for all filters.
+                // You must work with a full office installation and change this to "true" in generated XML file!!!
+                impl_generateBoolProperty   ( sXCD, SUBKEY_INSTALLED, sal_False                                 , bWriteable  );
+                impl_generateUINamesProperty( sXCD, SUBKEY_UINAME   , aItem.lUINames                            , bWriteable  );
+                impl_generateStringProperty ( sXCD, SUBKEY_DATA     , FilterCFGAccess::encodeFilterData( aItem ), bWriteable  );
+
+                // close set node
+                sXCD.appendAscii( "\t\t</default:group>\n" );
+            }
         }
 
         // close set
@@ -698,9 +953,9 @@ void XCDGenerator::impl_generateFilterSet( ::rtl::OUStringBuffer& sXCD, sal_Bool
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
 {
-    if( m_pData->hasDetectors() == sal_False )
+    if( m_aData.pFilterCache->hasDetectors() == sal_False )
     {
         // write empty detector set!
         sXCD.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\"/>\n" );
@@ -710,12 +965,14 @@ void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bo
         // open set
         sXCD.appendAscii( "\t<schema:set cfg:name=\"DetectServices\" cfg:element-type=\"DetectService\">\n" );
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_pData->getAllDetectorNames();
-        sal_Int32                             nCount = lNames.getLength()            ;
+        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllDetectorNames();
+        sal_Int32                             nCount = lNames.getLength()                         ;
         for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
         {
-            ::rtl::OUString         sName = lNames[nItem]                ;
-            ::framework::Detector   aItem = m_pData->getDetector( sName );
+            ::rtl::OUString sName = lNames[nItem]                             ;
+            Detector        aItem = m_aData.pFilterCache->getDetector( sName );
+
+            ++m_aData.nWrittenDetectors;
 
             // open set node by using name
             sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
@@ -723,7 +980,7 @@ void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bo
             sXCD.appendAscii( "\">\n"                           );
 
             // write properties
-            impl_generateStringListProperty ( sXCD, SUBKEY_TYPES, aItem.lTypes, bWriteable, cSeperator );
+            impl_generateStringListProperty ( sXCD, SUBKEY_TYPES, aItem.lTypes, bWriteable );
 
             // close set node
             sXCD.appendAscii( "\t\t</default:group>\n" );
@@ -735,9 +992,9 @@ void XCDGenerator::impl_generateDetectorSet( ::rtl::OUStringBuffer& sXCD, sal_Bo
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateLoaderSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable, sal_Unicode cSeperator )
+void XCDGenerator::impl_generateLoaderSet( ::rtl::OUStringBuffer& sXCD, sal_Bool bWriteable )
 {
-    if( m_pData->hasLoaders() == sal_False )
+    if( m_aData.pFilterCache->hasLoaders() == sal_False )
     {
         // write empty loader set!
         sXCD.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\"/>\n" );
@@ -747,12 +1004,14 @@ void XCDGenerator::impl_generateLoaderSet( ::rtl::OUStringBuffer& sXCD, sal_Bool
         // open set
         sXCD.appendAscii( "\t<schema:set cfg:name=\"FrameLoaders\" cfg:element-type=\"FrameLoader\">\n" );
 
-        css::uno::Sequence< ::rtl::OUString > lNames = m_pData->getAllLoaderNames();
-        sal_Int32                             nCount = lNames.getLength()          ;
+        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllLoaderNames();
+        sal_Int32                             nCount = lNames.getLength()                       ;
         for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
         {
-            ::rtl::OUString      sName = lNames[nItem]              ;
-            ::framework::Loader  aItem = m_pData->getLoader( sName );
+            ::rtl::OUString sName = lNames[nItem]                           ;
+            Loader          aItem = m_aData.pFilterCache->getLoader( sName );
+
+            ++m_aData.nWrittenLoaders;
 
             // open set node by using name
             sXCD.appendAscii( "\t\t<default:group cfg:name=\""  );
@@ -760,8 +1019,8 @@ void XCDGenerator::impl_generateLoaderSet( ::rtl::OUStringBuffer& sXCD, sal_Bool
             sXCD.appendAscii( "\">\n"                           );
 
             // write properties
-            impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME   , aItem.lUINames  , bWriteable, cSeperator );
-            impl_generateStringListProperty ( sXCD, SUBKEY_TYPES    , aItem.lTypes    , bWriteable, cSeperator );
+            impl_generateUINamesProperty    ( sXCD, SUBKEY_UINAME, aItem.lUINames, bWriteable );
+            impl_generateStringListProperty ( sXCD, SUBKEY_TYPES , aItem.lTypes  , bWriteable );
 
             // close set node
             sXCD.appendAscii( "\t\t</default:group>\n" );
@@ -781,14 +1040,14 @@ void XCDGenerator::impl_generateDefaults( ::rtl::OUStringBuffer& sXCD )
     // write generic loader
     sXCD.appendAscii( "\t\t<schema:value cfg:name=\"FrameLoader\" cfg:type=\"string\">\n"   );
     sXCD.appendAscii( "\t\t\t<default:data>"                                                );
-    sXCD.append     ( m_pData->getDefaultLoader()                                           );
+    sXCD.append     ( m_aData.pFilterCache->getDefaultLoader()                              );
     sXCD.appendAscii( "</default:data>\n"                                                   );
     sXCD.appendAscii( "\t\t</schema:value>\n"                                               );
 
     // write default detector
     sXCD.appendAscii( "\t\t<schema:value cfg:name=\"DetectService\" cfg:type=\"string\">\n" );
     sXCD.appendAscii( "\t\t\t<default:data>"                                                );
-    sXCD.append     ( m_pData->getDefaultDetector()                                         );
+    sXCD.append     ( m_aData.pFilterCache->getDefaultDetector()                            );
     sXCD.appendAscii( "</default:data>\n"                                                   );
     sXCD.appendAscii( "\t\t</schema:value>\n"                                               );
 
@@ -849,82 +1108,16 @@ void XCDGenerator::impl_generateStringProperty(         ::rtl::OUStringBuffer& s
 }
 
 //*****************************************************************************************************************
-// Step over all elements of list to find one seperator, which isn't used for any value in list.
-// We return an empty string if list contains no elements - because we must disable writing of
-// "... cfg:seperator="<seperatorvalue> ..."
-// => Otherwise we get a Sequence< OUString > with one empty element from configuration!!!
-void XCDGenerator::impl_defineSeperator( const ::framework::StringList& lList, sal_Unicode& cSeperator )
-{
-    static cSeperator1 = ',';
-    static cSeperator2 = ';';
-    static cSeperator3 = '+';
-    static cSeperator4 = '-';
-    static cSeperator5 = '*';
-
-    // Start with first seperator.
-    // Step over all list items.
-    // If one item contains this seperator - try next one!
-    // If no new one avaliable (5 tests failed!) - show an error message for user.
-    // => File will be wrong then!
-    // If seperator was changed start search during list again ... because
-    // new seperator could exist at already compared elements!
-
-             cSeperator = cSeperator1;
-    sal_Bool bOK        = sal_False  ;
-
-    while( bOK == sal_False )
-    {
-        for( ::framework::ConstStringListIterator pItem=lList.begin(); pItem!=lList.end(); ++pItem )
-        {
-            if( pItem->indexOf( cSeperator, 0 ) != -1 )
-            {
-                if( cSeperator == cSeperator1 )
-                {
-                    cSeperator = cSeperator2;
-                }
-                else
-                if( cSeperator == cSeperator2 )
-                {
-                    cSeperator = cSeperator3;
-                }
-                else
-                if( cSeperator == cSeperator3 )
-                {
-                    cSeperator = cSeperator4;
-                }
-                else
-                if( cSeperator == cSeperator4 )
-                {
-                    cSeperator = cSeperator5;
-                }
-                else
-                if( cSeperator == cSeperator5 )
-                {
-                    LOG_ERROR( "XCDGenerator::impl_defineSeperator()", "Can't find seperator for given list! Generated XCD file will be wrong!" )
-                }
-                pItem = lList.end();
-            }
-            else
-            {
-                pItem = lList.end();
-                bOK   = sal_True;
-            }
-        }
-    }
-}
-
-//*****************************************************************************************************************
 void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffer&      sXCD        ,
                                                     const   ::rtl::OUString&            sName       ,
                                                     const   ::framework::StringList&    lValue      ,
-                                                            sal_Bool                    bWriteable  ,
-                                                            sal_Unicode                 cSeperator  )
+                                                            sal_Bool                    bWriteable  )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                );
     sXCD.append     ( sName                                             );
     sXCD.appendAscii( "\" cfg:type=\"string\" cfg:derivedBy=\"list\""   );
 
-    impl_defineSeperator( lValue, cSeperator );
+    sal_Unicode cSeperator = impl_defineSeperator( lValue );
     if( cSeperator != ' ' )
     {
         sXCD.appendAscii( " cfg:separator=\""  );
@@ -941,7 +1134,7 @@ void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffe
     if( nCount > 0 )
     {
         sXCD.appendAscii( ">\n\t\t\t\t<default:data>"   );
-        for( ::framework::ConstStringListIterator pEntry=lValue.begin(); pEntry!=lValue.end(); ++pEntry )
+        for( ConstStringListIterator pEntry=lValue.begin(); pEntry!=lValue.end(); ++pEntry )
         {
             sXCD.append( *pEntry );
             if( nPosition < nCount )
@@ -963,9 +1156,8 @@ void XCDGenerator::impl_generateStringListProperty(         ::rtl::OUStringBuffe
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&      sXCD        ,
                                                 const   ::rtl::OUString&            sName       ,
-                                                const   ::framework::StringHash&    lUINames    ,
-                                                          sal_Bool                  bWriteable  ,
-                                                        sal_Unicode                 cSeperator  )
+                                                const   StringHash&                 lUINames    ,
+                                                        sal_Bool                    bWriteable  )
 {
     sXCD.appendAscii( "\t\t\t<default:value cfg:name=\""                                );
     sXCD.append     ( sName                                                             );
@@ -975,13 +1167,42 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
     if( lUINames.size() > 0 )
     {
         sXCD.appendAscii( ">\n" );
-        for( ::framework::ConstStringHashIterator pUIName=lUINames.begin(); pUIName!=lUINames.end(); ++pUIName )
+
+        // Search for localized values, which doesn't need full localized set ...
+        // because all values for all locales are the same!
+        sal_Bool                   bDifferent  = sal_False       ;
+        ConstStringHashIterator    pUIName     = lUINames.begin();
+        ::rtl::OUString            sUIName     = pUIName->second ;
+        while( pUIName!=lUINames.end() )
         {
-            sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""       );
-            sXCD.append     ( pUIName->first                            );
-            sXCD.appendAscii( "\">"                                     );
-            sXCD.append     ( impl_filterSpecialSigns( pUIName->second ));
-            sXCD.appendAscii( "</default:data>\n"                       );
+            if( sUIName != pUIName->second )
+            {
+                bDifferent = sal_True;
+                break;
+            }
+            ++pUIName;
+        }
+
+        // Generate full localized set, if some values are realy loclaized.
+        if( bDifferent == sal_True )
+        {
+            for( ConstStringHashIterator pUIName=lUINames.begin(); pUIName!=lUINames.end(); ++pUIName )
+            {
+                sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""       );
+                sXCD.append     ( pUIName->first                            );
+                sXCD.appendAscii( "\">"                                     );
+                sXCD.append     ( impl_filterSpecialSigns( pUIName->second ));
+                sXCD.appendAscii( "</default:data>\n"                       );
+            }
+        }
+        // Generate ONE entry as default for our configuration if all localized values are equal!
+        else
+        {
+            sXCD.appendAscii( "\t\t\t\t<default:data xml:lang=\""                                       );
+            sXCD.appendAscii( "en-US"                                                                   );
+            sXCD.appendAscii( "\">"                                                                     );
+            sXCD.append     ( impl_filterSpecialSigns( lUINames.find(DECLARE_ASCII("en-US"))->second )  );
+            sXCD.appendAscii( "</default:data>\n"                                                       );
         }
         sXCD.appendAscii( "\t\t\t</default:value>\n" );
     }
@@ -1031,7 +1252,89 @@ void XCDGenerator::impl_generateUINamesProperty(        ::rtl::OUStringBuffer&  
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_initFilterHashNew2Old( ::framework::StringHash& aHash )
+// Step over all elements of list to find one seperator, which isn't used for any value in list.
+// We return an empty string if list contains no elements - because we must disable writing of
+// "... cfg:seperator="<seperatorvalue> ..."
+// => Otherwise we get a Sequence< OUString > with one empty element from configuration!!!
+sal_Unicode XCDGenerator::impl_defineSeperator( const ::framework::StringList& lList )
+{
+    static cSeperator1 = ' ';
+    static cSeperator2 = ';';
+    static cSeperator3 = '+';
+    static cSeperator4 = '-';
+    static cSeperator5 = '*';
+
+    // Start with first seperator.
+    // Step over all list items.
+    // If one item contains this seperator - try next one!
+    // If no new one avaliable (5 tests failed!) - show an error message for user.
+    // => File will be wrong then!
+    // If seperator was changed start search during list again ... because
+    // new seperator could exist at already compared elements!
+
+    sal_Unicode             cSeperator = cSeperator1  ;
+    sal_Bool                bOK        = sal_False    ;
+    ConstStringListIterator pItem      = lList.begin();
+
+    while( bOK == sal_False )
+    {
+        if( pItem == lList.end() )
+        {
+            bOK = sal_True;
+        }
+        else
+        {
+            while( pItem!=lList.end() )
+            {
+                if( pItem->indexOf( cSeperator, 0 ) != -1 )
+                {
+                    if( cSeperator == cSeperator1 )
+                    {
+                        cSeperator = cSeperator2;
+                        pItem      = lList.begin();
+                        break;
+                    }
+                    else
+                    if( cSeperator == cSeperator2 )
+                    {
+                        cSeperator = cSeperator3;
+                        pItem      = lList.begin();
+                        break;
+                    }
+                    else
+                    if( cSeperator == cSeperator3 )
+                    {
+                        cSeperator = cSeperator4;
+                        pItem      = lList.begin();
+                        break;
+                    }
+                    else
+                    if( cSeperator == cSeperator4 )
+                    {
+                        cSeperator = cSeperator5;
+                        pItem      = lList.begin();
+                        break;
+                    }
+                    else
+                    if( cSeperator == cSeperator5 )
+                    {
+                        LOG_ERROR( "XCDGenerator::impl_defineSeperator()", "Can't find seperator for given list! Generated XCD file will be wrong!" )
+                        exit(-1);
+                    }
+                }
+                else
+                {
+                    ++pItem;
+                }
+            }
+        }
+    }
+
+    return cSeperator;
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_initFilterHashNew2Old( StringHash& aHash )
 {
     // key = new filter name, value = old name
     aHash[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_StarOffice_XML_Writer"))]    =   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter: StarOffice XML (Writer)"));
@@ -1299,20 +1602,15 @@ void XCDGenerator::impl_initFilterHashNew2Old( ::framework::StringHash& aHash )
 //*****************************************************************************************************************
 ::rtl::OUString XCDGenerator::impl_getOldFilterName( const ::rtl::OUString& sNewName )
 {
-/*
     ::rtl::OUString sOldName;
-    ::framework::ConstStringHashIterator pEntry = m_aFilterNamesHash.find(sNewName);
-    if( pEntry==m_aFilterNamesHash.end() )
+    ConstStringHashIterator pEntry = m_aData.aOldFilterNamesHash.find(sNewName);
+    if( pEntry==m_aData.aOldFilterNamesHash.end() )
     {
-//        sOldName  = DECLARE_ASCII("BLUBBER_");
-//        sOldName += sNewName;
         sOldName = sNewName;
     }
     else
     {
-        sOldName = m_aFilterNamesHash[sNewName];
+        sOldName = m_aData.aOldFilterNamesHash[sNewName];
     }
     return sOldName;
-*/
-    return sNewName;
 }
