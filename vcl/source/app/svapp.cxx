@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-23 06:44:59 $
+ *  last change: $Author: cd $ $Date: 2000-10-26 05:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,7 @@ static void ImplRemoteDispatch( BOOL bWait )
     ImplSVData* pSVData = ImplGetSVData();
 
     // Yield-Semaphore freigeben
+    BOOL bMainThread = TRUE;
     ULONG nAcquireCount;
     ULONG i;
     if ( pSVData->maAppData.mpSolarMutex->GetThreadId() ==
@@ -528,7 +529,10 @@ static void ImplRemoteDispatch( BOOL bWait )
             pSVData->maAppData.mpSolarMutex->release();
     }
     else
+    {
+        bMainThread = FALSE;
         nAcquireCount = 0;
+    }
 
     RmEvent* pEvent = pSVData->mpRmEventQueue->GetNextEvent( bWait );
 
@@ -540,7 +544,16 @@ static void ImplRemoteDispatch( BOOL bWait )
     }
 
     if ( pEvent )
-        ImplDispatchEvent( (ExtRmEvent*)pEvent );
+    {
+        if ( !bMainThread )
+        {
+            pSVData->maAppData.mpSolarMutex->acquire();
+            ImplDispatchEvent( (ExtRmEvent*)pEvent );
+            pSVData->maAppData.mpSolarMutex->release();
+        }
+        else
+            ImplDispatchEvent( (ExtRmEvent*)pEvent );
+    }
     else
         ::vos::OThread::yield();
 }
