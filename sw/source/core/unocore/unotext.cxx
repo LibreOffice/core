@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:14:05 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,12 +1166,12 @@ sal_Int16 SwXText::ComparePositions(
                 const SwPosition *pStart2 = 0;
 
                 if(pRange1)
-                    pStart1 = pRange1->GetBookmark() ? &pRange1->GetBookmark()->GetPos() : 0;
+                    pStart1 = pRange1->GetBookmark() ? pRange1->GetBookmark()->Start() : 0;
                 else
                     pStart1 = pCursor1->GetPaM() ? pCursor1->GetPaM()->Start() : 0;
 
                 if(pRange2)
-                    pStart2 = pRange2->GetBookmark() ? &pRange2->GetBookmark()->GetPos() : 0;
+                    pStart2 = pRange2->GetBookmark() ? pRange2->GetBookmark()->Start() : 0;
                 else
                     pStart2 = pCursor2->GetPaM() ? pCursor2->GetPaM()->Start() : 0;
 
