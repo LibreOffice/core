@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-29 16:23:36 $
+ *  last change: $Author: os $ $Date: 2002-11-05 08:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,21 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     }
                     aRule.Set( i, aFmt );
                 }
-                UnoActionContext aAction(rPam.GetDoc());
-                rPam.GetDoc()->SetNumRule( rPam, aRule );
+                UnoActionContext aAction(pDoc);
+
+                if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
+                {
+                    pDoc->StartUndo( UNDO_START );
+                    SwPamRanges aRangeArr( rPam );
+                    SwPaM aPam( *rPam.GetPoint() );
+                    for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+                        pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule );
+                    pDoc->EndUndo( UNDO_END );
+                }
+                else
+                    pDoc->SetNumRule( rPam, aRule );
+
+
             }
             else if(pSwNum->GetCreatedNumRuleName().Len())
             {
