@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:23:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,20 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ chinese_traditional ] = "篩選器名稱";
         Text[ slovak ] = "Názov filtra";
         Text[ portuguese_brazilian ] = "Nome do filtro";
+        Text[ greek ] = "Filter name";
+        Text[ dutch ] = "Filter name";
+        Text[ finnish ] = "Filter name";
+        Text[ czech ] = "Název filtru";
+        Text[ danish ] = "Filter name";
+        Text[ arabic ] = "Filter name";
+        Text[ hebrew ] = "Filter name";
+        Text[ catalan ] = "Filter name";
+        Text[ hindi ] = "Filter name";
+        Text[ portuguese ] = "Filter name";
+        Text[ russian ] = "Filter name";
+        Text[ polish ] = "Filter name";
+        Text[ turkish ] = "Filter name";
+        Text[ thai ] = "Filter name";
     };
 
     Edit ED_XML_FILTER_NAME
@@ -146,6 +160,8 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ catalan ] = "Aplicaci�";
         Text[ thai ] = "โปรแกรมประยุกต์";
         Text[ slovak ] = "Aplikácia";
+        Text[ danish ] = "Application";
+        Text[ hindi ] = "कार्यक्रम";
     };
 
     ComboBox CB_XML_APPLICATION
@@ -177,6 +193,20 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ chinese_traditional ] = "檔案類型名稱";
         Text[ slovak ] = "Názov\ntypu súboru";
         Text[ portuguese_brazilian ] = "Nome \nTipo de arquivo";
+        Text[ greek ] = "Name of\nfile type";
+        Text[ dutch ] = "Name of\nfile type";
+        Text[ finnish ] = "Name of\nfile type";
+        Text[ czech ] = "Jméno\ntypu souboru";
+        Text[ danish ] = "Name of\nfile type";
+        Text[ arabic ] = "Name of\nfile type";
+        Text[ hebrew ] = "Name of\nfile type";
+        Text[ catalan ] = "Name of\nfile type";
+        Text[ hindi ] = "Name of\nfile type";
+        Text[ portuguese ] = "Name of\nfile type";
+        Text[ russian ] = "Name of\nfile type";
+        Text[ polish ] = "Name of\nfile type";
+        Text[ turkish ] = "Name of\nfile type";
+        Text[ thai ] = "Name of\nfile type";
     };
 
     Edit ED_XML_INTERFACE_NAME
@@ -205,6 +235,20 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ chinese_traditional ] = "檔案副檔名";
         Text[ slovak ] = "Prípona k súboru";
         Text[ portuguese_brazilian ] = "Extens�o do arquivo";
+        Text[ greek ] = "File extension";
+        Text[ dutch ] = "File extension";
+        Text[ finnish ] = "File extension";
+        Text[ czech ] = "Přípona souboru";
+        Text[ danish ] = "File extension";
+        Text[ arabic ] = "File extension";
+        Text[ hebrew ] = "File extension";
+        Text[ catalan ] = "File extension";
+        Text[ hindi ] = "File extension";
+        Text[ portuguese ] = "File extension";
+        Text[ russian ] = "File extension";
+        Text[ polish ] = "File extension";
+        Text[ turkish ] = "File extension";
+        Text[ thai ] = "File extension";
     };
 
     Edit ED_XML_EXTENSION
@@ -246,6 +290,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ catalan ] = "Comentaris";
         Text[ thai ] = "ข้อคิดเห็น";
         Text[ slovak ] = "Poznámky";
+        Text[ hindi ] = "अपवाद";
     };
 
     MultiLineEdit ED_XML_DESCRIPTION
@@ -277,7 +322,12 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     Text[ catalan ] = "Continguts";
     Text[ thai ] = "ทั่วไป";
     Text[ slovak ] = "Všeobecné";
+    Text[ danish ] = "General";
+    Text[ hindi ] = "सामान्य";
+    Text[ turkish ] = "General";
 };
+
+
 
 
 
