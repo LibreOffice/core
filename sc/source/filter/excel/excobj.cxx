@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:24:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
 
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
@@ -127,20 +119,17 @@
 #include "chartarr.hxx"
 #include "editutil.hxx"
 
-#include "imp_op.hxx"
-
-#ifndef SC_XILINK_HXX
-#include "xilink.hxx"
-#endif
 #ifndef SC_XLESCHER_HXX
 #include "xlescher.hxx"
-#endif
-#ifndef SC_XCLIMPCHARTS_HXX
-#include "XclImpCharts.hxx"
 #endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
+#endif
+
+#include "imp_op.hxx"
 
 using namespace com::sun::star;
 
