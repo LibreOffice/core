@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:32:17 $
+ *  last change: $Author: nn $ $Date: 2000-12-19 19:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2271,7 +2271,12 @@ void ScTabView::ActivateView( BOOL bActivate, BOOL bFirst )
 
         if (!bRefMode)
         {
-            pScMod->InputEnterHandler();
+            //pScMod->InputEnterHandler();
+
+            //  #80843# pass view to GetInputHdl, this view may not be current anymore
+            ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
+            if (pHdl)
+                pHdl->EnterHandler();
         }
     }
     pTabControl->ActivateView(bActivate);
