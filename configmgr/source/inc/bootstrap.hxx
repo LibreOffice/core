@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-18 16:13:30 $
+ *  last change: $Author: jb $ $Date: 2001-05-22 07:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ namespace configmgr
     public:
         enum Origin
         {
+            SO_NOT_SET,
             SO_UNKNOWN,
             SO_FALLBACK,
             SO_INIFILE,
@@ -141,19 +142,23 @@ namespace configmgr
         typedef OString Name;
 
         // a single setting
-        struct Setting
+        class Setting
         {
-            uno::Any        aValue;
-            Origin          eOrigin;
+            uno::Any        m_aValue;
+            Origin          m_eOrigin;
+        public:
+            Setting() : m_aValue(), m_eOrigin(SO_NOT_SET) { }
+            Setting(const OUString& _rValue, Origin _eOrigin) : m_aValue(uno::makeAny(_rValue)), m_eOrigin(_eOrigin) { }
+            Setting(const sal_Int32 _nValue, Origin _eOrigin) : m_aValue(uno::makeAny(_nValue)), m_eOrigin(_eOrigin) { }
+            Setting(const uno::Any& _rValue, Origin _eOrigin) : m_aValue(_rValue), m_eOrigin(_eOrigin) { }
 
-            Setting() : aValue(), eOrigin(SO_UNKNOWN) { }
-            Setting(const OUString& _rValue, Origin _eOrigin) : aValue(uno::makeAny(_rValue)), eOrigin(_eOrigin) { }
-            Setting(const sal_Int32 _nValue, Origin _eOrigin) : aValue(uno::makeAny(_nValue)), eOrigin(_eOrigin) { }
-            Setting(const uno::Any& _rValue, Origin _eOrigin) : aValue(_rValue), eOrigin(_eOrigin) { }
 
+            uno::Any    value()  const { return m_aValue; }
+            Origin      origin() const { return m_eOrigin; };
 
-            uno::Any    value()  const { return aValue; }
-            Origin      origin() const { return eOrigin; };
+            OUString        toString() const;
+            sal_Int32       toInt32() const;
+            sal_Bool        toBool() const;
         };
     protected:
         typedef std::map< Name, Setting > SettingsImpl;
@@ -179,6 +184,8 @@ namespace configmgr
 
         // check setting existence
         sal_Bool        haveSetting(Name const& _pName) const;
+        Origin          getOrigin(Name const& _pName) const;
+
         void            putSetting(Name const&  _pName, const Setting& _rSetting);
         void            clearSetting(Name const& _pName);
 
@@ -298,7 +305,8 @@ namespace configmgr
         /** @return <TRUE/> if the setting exists and is a valid path
         */
         sal_Bool isValidPathSetting(Settings::Name const& _pSetting) const;
-        sal_Bool implPutPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin);
+        sal_Bool implPutSystemPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin);
+        sal_Bool implNormalizePathSetting(Settings::Name const& _pSetting);
 
         // translate old settings, which exist for compatiblity only, into new ones
         void implTranslateCompatibilitySettings();
