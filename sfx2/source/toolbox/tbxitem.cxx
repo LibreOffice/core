@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:46:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -235,10 +232,13 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     {
         // Get tunnel from model to retrieve the SfxObjectShell pointer from it
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xModel, UNO_QUERY );
-        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
-        sal_Int64 nHandle = xObj->getSomething( aSeq );
-        if ( nHandle )
-            pObjShell = (SfxObjectShell*) (sal_Int32*) nHandle;
+        if ( xObj.is() )
+        {
+            ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
+            sal_Int64 nHandle = xObj->getSomething( aSeq );
+            if ( nHandle )
+                pObjShell = (SfxObjectShell*) (sal_Int32*) nHandle;
+        }
     }
 
     SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : NULL;
@@ -448,11 +448,11 @@ void SfxToolBoxControl::Dispatch(
     if ( rProvider.is() )
     {
         ::com::sun::star::util::URL aTargetURL;
-        Reference< XURLTransformer > xURLTransformer( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
         aTargetURL.Complete = rCommand;
-        xURLTransformer->parseStrict( aTargetURL );
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                          UNO_QUERY );
+        xTrans->parseStrict( aTargetURL );
 
         Reference < XDispatch > xDispatch = rProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )
@@ -465,18 +465,15 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
     Reference < XController > xController;
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( m_xFrame.is() )
-        xController = m_xFrame->getController();
+    if ( getFrameInterface().is() )
+        xController = getFrameInterface()->getController();
 
     Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
     if ( xProvider.is() )
     {
         ::com::sun::star::util::URL aTargetURL;
-        Reference< XURLTransformer > xURLTransformer( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
         aTargetURL.Complete = aCommand;
-        xURLTransformer->parseStrict( aTargetURL );
+        getURLTransformer()->parseStrict( aTargetURL );
 
         Reference < XDispatch > xDispatch = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )
@@ -517,8 +514,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
     Reference < XController > xController;
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( m_xFrame.is() )
-        xController = m_xFrame->getController();
+    if ( getFrameInterface().is() )
+        xController = getFrameInterface()->getController();
 
     Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
     if ( xProvider.is() )
@@ -721,7 +718,7 @@ throw (::com::sun::star::uno::RuntimeException)
         xUIElement = xLayoutManager->getElement( aSubToolBarResName );
         if ( xUIElement.is() )
         {
-            Reference< ::com::sun::star::awt::XWindow > xParent = m_xFrame->getContainerWindow();
+            Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
 
             Window* pParent = VCLUnoHelper::GetWindow( xParent );
             xLayoutManager->hideElement( aSubToolBarResName );
@@ -786,7 +783,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
 
         if ( xUIElement.is() )
         {
-            Reference< ::com::sun::star::awt::XWindow > xParent = m_xFrame->getContainerWindow();
+            Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
 
             Window* pParent = VCLUnoHelper::GetWindow( xParent );
 
@@ -1579,15 +1576,12 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
     {
         URL                            aTargetURL;
         Reference< XDispatch >         xDispatch;
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+        Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
 
         if ( xDispatchProvider.is() )
         {
             aTargetURL.Complete = aLastURL;
-            Reference < XURLTransformer > xTrans( m_xServiceManager->createInstance(
-                                                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
-                                                UNO_QUERY );
-            xTrans->parseStrict( aTargetURL );
+            getURLTransformer()->parseStrict( aTargetURL );
 
             ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
             if ( pMenu )
@@ -1782,7 +1776,7 @@ void SfxAddonsToolBoxControl_Impl::RefreshMenuImages( Menu* pSVMenu )
 {
     framework::AddonsOptions    aAddonOptions;
 
-    Reference<com::sun::star::frame::XFrame> aXFrame( m_xFrame );
+    Reference<com::sun::star::frame::XFrame> aXFrame( getFrameInterface() );
     USHORT nCount = pSVMenu->GetItemCount();
     for ( USHORT nPos = 0; nPos < nCount; nPos++ )
     {
@@ -1854,7 +1848,7 @@ void SfxAddonsToolBoxControl_Impl::Select( BOOL bMod1 )
 
     if ( !pMenu )
     {
-        Reference< com::sun::star::frame::XFrame > aXFrame( m_xFrame );
+        Reference< com::sun::star::frame::XFrame > aXFrame( getFrameInterface() );
         pMenu = framework::AddonMenuManager::CreateAddonMenu( aXFrame );
         RefreshMenuImages( pMenu );
     }
@@ -1979,15 +1973,12 @@ void SfxReloadToolBoxControl_Impl::Select( USHORT nModifier )
 {
     URL                            aTargetURL;
     Reference< XDispatch >         xDispatch;
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
 
     if ( xDispatchProvider.is() )
     {
         aTargetURL.Complete = m_aCommandURL;
-        Reference < XURLTransformer > xTrans( m_xServiceManager->createInstance(
-                                                rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
-                                            UNO_QUERY );
-        xTrans->parseStrict( aTargetURL );
+        getURLTransformer()->parseStrict( aTargetURL );
         xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Reload" ));
