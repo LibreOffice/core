@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-25 06:36:06 $
+ *  last change: $Author: kso $ $Date: 2000-10-26 09:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,14 +284,13 @@ void ContentProviderImplHelper::addContent(
     vos::OGuard aGuard( m_aMutex );
 
     const OUString aURL( pContent->getIdentifier()->getContentIdentifier() );
-
-#ifdef _DEBUG
     Contents::const_iterator it = m_pImpl->m_aContents.find( aURL );
-    VOS_ENSURE( it == m_pImpl->m_aContents.end(),
-                "ContentProviderImplHelper::addContent - Already registered!" );
-#endif
-
-    m_pImpl->m_aContents[ aURL ] = pContent;
+    if ( it == m_pImpl->m_aContents.end() )
+        m_pImpl->m_aContents[ aURL ] = pContent;
+    else
+        VOS_ENSURE( (*it).second == pContent,
+                    "ContentProviderImplHelper::addContent - "
+                    "Another content already registered for this URL!" );
 }
 
 //=========================================================================
