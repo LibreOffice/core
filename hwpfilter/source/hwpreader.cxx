@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpreader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2003-11-24 17:45:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-12 08:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4173,8 +4173,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                           bIsRotate = sal_True;
                      }
                      if( bIsRotate == sal_True ){
-                         drawobj->extent.w = (int)sqrt(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y));
-                         drawobj->extent.h = (int)sqrt(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y));
+                         drawobj->extent.w = (int)sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y)));
+                         drawobj->extent.h = (int)sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y)));
                          padd(ascii("draw:transform"), sXML_CDATA, trans);
                      }
             }
