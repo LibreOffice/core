@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-23 09:58:22 $
+ *  last change: $Author: mmi $ $Date: 2004-08-05 07:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,27 @@ char* getCurrentProfilePath( )
 
 #endif
 
+bool nsscrypto_initialize( const char* token ) {
+    static char initialized = 0 ;
+
+    //PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
+    if( !initialized ) {
+        PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
+
+        if( NSS_Init( token ) != SECSuccess )
+            return false ;
+
+        initialized = 1 ;
+    }
+
+    return true ;
+}
+
+void nsscrypto_finalize() {
+    PK11_LogoutAll();
+    NSS_Shutdown();
+}
+
 bool getMozillaCurrentProfile(rtl::OUString& profilePath);
 
 SEInitializer_NssImpl::SEInitializer_NssImpl(
@@ -252,21 +273,28 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
 
     /* Initialize NSPR and NSS */
-    PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
+    /* Replaced with new methods by AF. ----
+    //PR_Init( PR_SYSTEM_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
+    PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
     if (NSS_Init(sCertDir.getStr()) != SECSuccess )
     {
         PK11_LogoutAll();
         return NULL;
     }
+    ----*/
+    if( !nsscrypto_initialize( sCertDir.getStr() ) )
+        return NULL ;
+    else
+        atexit( nsscrypto_finalize ) ;
 
     pCertHandle = CERT_GetDefaultCertDB() ;
     pSlot = PK11_GetInternalKeySlot() ;
 
     if (pSlot == NULL)
     {
-        PK11_LogoutAll();
-        NSS_Shutdown();
+    //  PK11_LogoutAll();
+    //  NSS_Shutdown();
         return NULL;
     }
 
@@ -274,8 +302,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     if( pSymKey == NULL )
     {
         PK11_FreeSlot( pSlot ) ;
-        PK11_LogoutAll();
-        NSS_Shutdown();
+    //  PK11_LogoutAll();
+    //  NSS_Shutdown();
         return NULL;
     }
 
@@ -288,8 +316,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         {
             PK11_FreeSymKey( pSymKey ) ;
             PK11_FreeSlot( pSlot ) ;
-            PK11_LogoutAll();
-            NSS_Shutdown();
+        //  PK11_LogoutAll();
+        //  NSS_Shutdown();
             return NULL;
         }
 
@@ -299,8 +327,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         {
             PK11_FreeSymKey( pSymKey ) ;
             PK11_FreeSlot( pSlot ) ;
-            PK11_LogoutAll();
-            NSS_Shutdown();
+        //  PK11_LogoutAll();
+        //  NSS_Shutdown();
             return NULL;
         }
 
@@ -309,8 +337,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         {
             PK11_FreeSymKey( pSymKey ) ;
             PK11_FreeSlot( pSlot ) ;
-            PK11_LogoutAll();
-            NSS_Shutdown();
+        //  PK11_LogoutAll();
+        //  NSS_Shutdown();
             return NULL;
         }
 
@@ -329,8 +357,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx( mxMSF->createInstance ( sSecyrutyContext ), cssu::UNO_QUERY );
         if( !xSecCtx.is() )
         {
-            PK11_LogoutAll();
-            NSS_Shutdown();
+        //  PK11_LogoutAll();
+        //  NSS_Shutdown();
             return NULL;
         }
 
@@ -349,8 +377,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             PK11_FreeSlot( pSlot ) ;
         }
 
-        PK11_LogoutAll();
-        NSS_Shutdown();
+    //  PK11_LogoutAll();
+    //  NSS_Shutdown();
         return NULL;
     }
 }
@@ -363,8 +391,8 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const cssu::Reference<
      * is destructed, so here no free process for the security context
      * is needed.
      */
-    PK11_LogoutAll();
-    NSS_Shutdown();
+    //PK11_LogoutAll();
+    //NSS_Shutdown();
 }
 
 rtl::OUString SEInitializer_NssImpl_getImplementationName ()
