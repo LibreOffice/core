@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TColumnsHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:51:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ OColumnsHelper::~OColumnsHelper()
 }
 // -----------------------------------------------------------------------------
 
-Reference< XNamed > OColumnsHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(m_pTable,"NO Table set. Error!");
     Reference<XConnection> xConnection = m_pTable->getConnection();
@@ -173,7 +173,7 @@ Reference< XNamed > OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     }
 
 
-    Reference< XNamed > xRet(::dbtools::createSDBCXColumn(  m_pTable,
+    sdbcx::ObjectType xRet(::dbtools::createSDBCXColumn(    m_pTable,
                                                             xConnection,
                                                             _rName,
                                                             isCaseSensitive(),
@@ -196,13 +196,11 @@ Reference< XPropertySet > OColumnsHelper::createEmptyObject()
     return new OColumn(sal_True);
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OColumnsHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OColumnsHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     Reference<XPropertySet> xProp = createEmptyObject();
     ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    return xProp;
 }
 // -----------------------------------------------------------------------------
 // XAppend
