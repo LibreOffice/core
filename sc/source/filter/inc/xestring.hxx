@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:45:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,8 @@ public:
 
     /** Returns the current string flags field to export. */
     sal_uInt8           GetFlagField() const;
+    /** Returns the byte count the header will take on export. */
+    sal_uInt32          GetHeaderSize() const;
     /** Returns the byte count the character buffer will take on export. */
     sal_uInt32          GetBufferSize() const;
     /** Returns the byte count the whole string will take on export. */
@@ -264,8 +266,12 @@ public:
     /** Writes the complete Unicode string. */
     void                Write( XclExpStream& rStrm ) const;
 
-    /** Writes the raw character buffer to memory (8-bit or 16-bit little-endian) */
-    void                WriteBuffer( void* pDest ) const;
+    /** Writes the string header to memory. */
+    void                WriteHeaderToMem( sal_uInt8* pnMem ) const;
+    /** Writes the raw character buffer to memory (8-bit or 16-bit little-endian). */
+    void                WriteBufferToMem( sal_uInt8* pnMem ) const;
+    /** Writes the entire string to memory. */
+    void                WriteToMem( sal_uInt8* pnMem ) const;
 
     // ------------------------------------------------------------------------
 private:
