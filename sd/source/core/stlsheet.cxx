@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-12 16:35:30 $
+ *  last change: $Author: dl $ $Date: 2001-06-08 10:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ SfxItemSet& __EXPORT SdStyleSheet::GetItemSet()
 
                                          SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
                                          SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_HORZADJUST,
-                                         SDRATTR_TEXT_ANIKIND,          SDRATTR_TEXT_ANIAMOUNT,
+                                         SDRATTR_TEXT_ANIKIND,          SDRATTR_TEXT_CONTOURFRAME,
                                          SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
                                          SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,
 
@@ -250,7 +250,7 @@ SfxItemSet& __EXPORT SdStyleSheet::GetItemSet()
 
                                              SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
                                              SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_HORZADJUST,
-                                             SDRATTR_TEXT_ANIKIND,          SDRATTR_TEXT_ANIAMOUNT,
+                                             SDRATTR_TEXT_ANIKIND,          SDRATTR_TEXT_CONTOURFRAME,
                                              SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
                                              SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,
 
