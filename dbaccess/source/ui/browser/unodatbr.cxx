@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 07:32:17 $
+ *  last change: $Author: oj $ $Date: 2002-07-08 08:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1533,6 +1533,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
 
     try
     {
+        sal_Bool bHandled = sal_False;
         switch (nId)
         {
             case ID_BROWSER_DOCUMENT_DATASOURCE:
@@ -1720,7 +1721,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 
         case ID_BROWSER_REFRESH_REBUILD:
         {
-            if (!SaveData(sal_True, sal_False))   // may be SaveModified( ) call
+            if ( !SaveModified() )
                 // nothing to do
                 break;
 

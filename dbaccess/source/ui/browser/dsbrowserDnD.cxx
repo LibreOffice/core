@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-11 12:28:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-08 08:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,8 +656,10 @@ namespace dbaui
                 _rPasteData[daDataSource]       >>= sSrcDataSourceName;
                 _rPasteData[daCommand]          >>= sCommand;
                 _rPasteData[daConnection]       >>= xSrcConnection;
-                _rPasteData[daSelection]        >>= aSelection;
-                _rPasteData[daCursor]           >>= xSrcRs;
+                if ( _rPasteData.has(daSelection) )
+                    _rPasteData[daSelection]    >>= aSelection;
+                if ( _rPasteData.has(daCursor) )
+                    _rPasteData[daCursor]       >>= xSrcRs;
 
                 // get the source connection
                 sal_Bool bDispose = sal_False;
@@ -670,6 +672,7 @@ namespace dbaui
                     bDispose = sal_True;
                 }
                 Reference<XNameAccess> xNameAccess;
+                sal_Bool bTable = sal_True;
                 switch(nCommandType)
                 {
                     case CommandType::TABLE:
@@ -683,8 +686,9 @@ namespace dbaui
                     case CommandType::QUERY:
                         {
                             Reference<XQueriesSupplier> xSup(xSrcConnection,UNO_QUERY);
-                            if(xSup.is())
+                            if ( xSup.is() )
                                 xNameAccess = xSup->getQueries();
+                            bTable = sal_False;
                         }
                         break;
                 }
@@ -693,14 +697,22 @@ namespace dbaui
                 if ( xNameAccess.is() && xNameAccess->hasByName( sCommand ) )
                 {
                     Reference<XPropertySet> xSourceObject;
+
                     xNameAccess->getByName( sCommand ) >>= xSourceObject;
+                    sal_Bool bIsView = sal_False;
+                    if ( bTable ) // we only have to check if this table has as type VIEW
+                    {
+                        static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
+                        bIsView = ::comphelper::getString(xSourceObject->getPropertyValue(PROPERTY_TYPE)) == sVIEW;
+                    }
+
                     OCopyTableWizard aWizard(getView(),
                                              xSourceObject,
                                              xSrcConnection,
                                              xDestConnection,
                                              getNumberFormatter(),
                                              getORB());
-                    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+                    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, bIsView,OCopyTableWizard::WIZARD_DEF_DATA);
                     OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
                     OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
                     OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
@@ -1349,6 +1361,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.48  2002/06/11 12:28:27  fs
+ *  #65293# correct an error which came in in the merge ->1.43
+ *
  *  Revision 1.47  2002/05/29 11:36:54  oj
  *  #96792# new methods for pasting tables
  *
