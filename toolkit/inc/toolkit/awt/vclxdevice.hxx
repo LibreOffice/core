@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxdevice.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:38:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
 #define _TOOLKIT_AWT_VCLXDEVICE_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
@@ -91,7 +94,7 @@ class VirtualDevice;
 // For using nDummy, no incompatible update, add a BOOL bCreatedWithToolkitMember later...
 #define FLAGS_CREATEDWITHTOOLKIT    0x00000001
 
-class VCLXDevice :  public ::com::sun::star::awt::XDevice,
+class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
                     public ::cppu::OWeakObject
