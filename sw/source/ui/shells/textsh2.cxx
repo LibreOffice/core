@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:32:45 $
+ *  last change: $Author: os $ $Date: 2000-12-05 12:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,9 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
             }
             delete pDlg;
         }
+        Reference <XComponent> xComp(xConnection, UNO_QUERY);
+        if(xComp.is())
+            xComp->dispose();
     }
 
     delete pString;
