@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(SQLHANDLE _pStatementHand
                         ,m_aStatementHandle(_pStatementHandle)
                         ,m_bEOF(sal_False)
                         ,m_nTextEncoding(_nTextEncoding)
+                        ,m_bFreeHandle(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value

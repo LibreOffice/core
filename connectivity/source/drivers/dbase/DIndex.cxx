@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 13:57:18 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     , m_pTable(_pTable)
     ,m_pFileStream(NULL)
+    ,m_bUnique(sal_False)
 {
     m_aHeader.db_maxkeys = m_aHeader.db_maxkeys = m_aHeader.db_keylen = m_aHeader.db_pagecount = m_aHeader.db_rootpage = 0;
     m_aHeader.db_name[0] = '\0';
@@ -163,6 +164,7 @@ ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
     , m_aHeader(_rHeader)
     , m_pTable(_pTable)
     ,m_pFileStream(NULL)
+    ,m_bUnique(sal_False)
 {
     construct();
 }
