@@ -1,64 +1,6 @@
-/*************************************************************************
- *
- *  $RCSfile: dmake.c,v $
- *
- *  $Revision: 1.3 $
- *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:02:10 $
- *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
- *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
- *
- ************************************************************************/
-/*
+/* $RCSfile: dmake.c,v $
+-- $Revision: 1.4 $
+-- last change: $Author: rt $ $Date: 2004-09-08 16:05:19 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -75,7 +17,7 @@
 --  -C file     - duplicate console output to file (MSDOS only)
 --  -K file     - .KEEP_STATE file
 --  -#dbug_string   - dump out debugging info, see below
---  -v{dfimt}   - verbose, print what we are doing, as we do it.
+--  -v{cdfimrtw}    - verbose, print what we are doing, as we do it.
 --
 --   options: (can be catenated, ie -irn == -i -r -n)
 --
@@ -144,12 +86,12 @@
 #define USAGE \
 "Usage:\n%s [-P#] [-{f|K} file] [-{w|W} target ...] [macro[!][[*][+][:]]=value ...]\n"
 #define USAGE2 \
-"%s [-v{cdfimtw}] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
+"%s [-v{cdfimrtw}] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
 #else
 #define USAGE \
 "Usage:\n%s [-P#] [-{f|C|K} file] [-{w|W} target ...] [macro[!][[*][+][:]]=value ...]\n"
 #define USAGE2 \
-"%s [-v{cdfimtw}] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
+"%s [-v{cdfimrtw}] [-ABcdeEghiknpqrsStTuVxX] [target ...]\n"
 #endif
 
 /* We don't use va_end at all, so define it out so that it doesn't produce
@@ -318,12 +260,22 @@ char **argv;
           case 'f': Verbose |= V_FILE_IO;   break;
           case 'i': Verbose |= V_INFER;     break;
           case 'm': Verbose |= V_MAKE;      break;
+                  case 'r': Verbose |= V_FORCEECHO; break;
           case 't': Verbose |= V_LEAVE_TMP; break;
                   case 'w': Verbose |= V_WARNALL;   break;
 
           default: Usage(TRUE); break;
            }
            if( !Verbose ) Verbose = V_ALL;
+               if( Verbose & V_FORCEECHO ) {
+                 HASHPTR hp;
+                 /* This cleans the .SILENT setting */
+                 hp = Def_macro(".SILENT", "", M_EXPANDED);
+                 /* This overrides the bitmask for further occurences, it */
+                 /* is set already by Create_macro_vars() and has to be   */
+                 /* cleaned. See _set_bit_var() definition in imacs.c.    */
+                 hp->MV_MASK  = A_DEFAULT;
+               }
            break;
 
         case 'P':
@@ -841,12 +793,14 @@ int eflag;
    puts("    -K file    - use file as the .KEEP_STATE file");
    puts("    -w target  - show what you would do if 'target' were out of date");
    puts("    -W target  - rebuild pretending that 'target' is out of date");
-   puts("    -v{cdfimtw}- verbose, indicate what we are doing, (-v => -vcdfimtw)");
+   puts("    -v{cdfimrtw} - verbose, indicate what we are doing, (-v => -vcdfimrtw)");
    puts("                   c => dump directory cache info only" );
    puts("                   d => dump change of directory info only" );
    puts("                   f => dump file open/close info only" );
    puts("                   i => dump inference information only" );
    puts("                   m => dump make of target information only" );
+   puts("                   r => Force output of recipe lines and warnings," );
+   puts("                        overrides -s" );
    puts("                   t => keep temporary files when done" );
    puts("                   w => issue non-essential warnings\n" );
 
