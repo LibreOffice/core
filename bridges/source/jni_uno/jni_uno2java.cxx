@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:50:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include <sal/alloca.h>
+
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -169,24 +171,13 @@ void Bridge::handle_java_exc(
 
 //______________________________________________________________________________
 void Bridge::call_java(
-    jobject javaI, JNI_interface_type_info const * info, sal_Int32 function_pos,
+    jobject javaI, typelib_InterfaceTypeDescription * iface_td,
+    sal_Int32 local_member_index, sal_Int32 function_pos_offset,
     typelib_TypeDescriptionReference * return_type,
     typelib_MethodParameter * params, sal_Int32 nParams,
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const
 {
-    // determine exact interface type info
-    while (0 != info->m_base)
-    {
-        typelib_InterfaceTypeDescription * base_td =
-            (typelib_InterfaceTypeDescription *)info->m_base->m_td.get();
-        sal_Int32 base_functions = base_td->nMapFunctionIndexToMemberIndex;
-        if (function_pos >= base_functions)
-        {
-            function_pos -= base_functions;
-            break;
-        }
-        info = static_cast< JNI_interface_type_info const * >( info->m_base );
-    }
+    OSL_ASSERT( function_pos_offset == 0 || function_pos_offset == 1 );
 
     JNI_guarded_context jni(
         m_jni_info, reinterpret_cast< ::jvmaccess::VirtualMachine * >(
@@ -225,6 +216,25 @@ void Bridge::call_java(
         }
     }
 
+    sal_Int32 base_members = iface_td->nAllMembers - iface_td->nMembers;
+    OSL_ASSERT( base_members < iface_td->nAllMembers );
+    sal_Int32 base_members_function_pos =
+        iface_td->pMapMemberIndexToFunctionIndex[ base_members ];
+    sal_Int32 member_pos = base_members + local_member_index;
+    OSL_ENSURE(
+        member_pos < iface_td->nAllMembers, "### member pos out of range!" );
+    sal_Int32 function_pos =
+        iface_td->pMapMemberIndexToFunctionIndex[ member_pos ]
+        + function_pos_offset;
+    OSL_ENSURE(
+        function_pos >= base_members_function_pos
+        && function_pos < iface_td->nMapFunctionIndexToMemberIndex,
+        "### illegal function index!" );
+    function_pos -= base_members_function_pos;
+
+    JNI_interface_type_info const * info =
+        static_cast< JNI_interface_type_info const * >(
+            m_jni_info->get_type_info( jni, &iface_td->aBase ) );
     jmethodID method_id = info->m_methods[ function_pos ];
 
 #if OSL_DEBUG_LEVEL > 1
@@ -619,35 +629,33 @@ void SAL_CALL UNO_proxy_dispatch(
         {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-            sal_Int32 member_pos =
+            typelib_InterfaceAttributeTypeDescription const * attrib_td =
                 reinterpret_cast<
-                  typelib_InterfaceMemberTypeDescription const * >(
-                      member_td )->nPosition;
-            typelib_InterfaceTypeDescription * iface_td =
-                reinterpret_cast< typelib_InterfaceTypeDescription * >(
-                    that->m_type_info->m_td.get() );
-            OSL_ENSURE(
-                member_pos < iface_td->nAllMembers,
-                "### member pos out of range!" );
-            sal_Int32 function_pos =
-                iface_td->pMapMemberIndexToFunctionIndex[ member_pos ];
-            OSL_ENSURE(
-                function_pos < iface_td->nMapFunctionIndexToMemberIndex,
-                "### illegal function index!" );
+                typelib_InterfaceAttributeTypeDescription const * >(
+                    member_td );
+            com::sun::star::uno::TypeDescription attrib_holder;
+            while ( attrib_td->pBaseRef != 0 ) {
+                attrib_holder = com::sun::star::uno::TypeDescription(
+                    attrib_td->pBaseRef );
+                OSL_ASSERT(
+                    attrib_holder.get()->eTypeClass
+                    == typelib_TypeClass_INTERFACE_ATTRIBUTE );
+                attrib_td = reinterpret_cast<
+                    typelib_InterfaceAttributeTypeDescription * >(
+                        attrib_holder.get() );
+            }
+            typelib_InterfaceTypeDescription * iface_td = attrib_td->pInterface;
 
             if (0 == uno_ret) // is setter method
             {
                 typelib_MethodParameter param;
-                param.pTypeRef =
-                    reinterpret_cast<
-                      typelib_InterfaceAttributeTypeDescription const * >(
-                          member_td )->pAttributeTypeRef;
+                param.pTypeRef = attrib_td->pAttributeTypeRef;
                 param.bIn = sal_True;
                 param.bOut = sal_False;
 
                 bridge->call_java(
-                    that->m_javaI, that->m_type_info,
-                    function_pos +1, // get, then set method
+                    that->m_javaI, iface_td,
+                    attrib_td->nIndex, 1, // get, then set method
                     bridge->m_jni_info->m_void_type.getTypeLibType(),
                     &param, 1,
                     0, uno_args, uno_exc );
@@ -655,10 +663,8 @@ void SAL_CALL UNO_proxy_dispatch(
             else // is getter method
             {
                 bridge->call_java(
-                    that->m_javaI, that->m_type_info, function_pos,
-                    reinterpret_cast<
-                      typelib_InterfaceAttributeTypeDescription const * >(
-                          member_td )->pAttributeTypeRef,
+                    that->m_javaI, iface_td, attrib_td->nIndex, 0,
+                    attrib_td->pAttributeTypeRef,
                     0, 0, // no params
                     uno_ret, 0, uno_exc );
             }
@@ -666,24 +672,24 @@ void SAL_CALL UNO_proxy_dispatch(
         }
         case typelib_TypeClass_INTERFACE_METHOD:
         {
-            sal_Int32 member_pos =
+            typelib_InterfaceMethodTypeDescription const * method_td =
                 reinterpret_cast<
-                  typelib_InterfaceMemberTypeDescription const * >(
-                      member_td )->nPosition;
-            typelib_InterfaceTypeDescription const * iface_td =
-                reinterpret_cast<
-                  typelib_InterfaceTypeDescription const * >(
-                      that->m_type_info->m_td.get() );
-            OSL_ENSURE(
-                member_pos < iface_td->nAllMembers,
-                "### member pos out of range!" );
-            sal_Int32 function_pos =
-                iface_td->pMapMemberIndexToFunctionIndex[ member_pos ];
-            OSL_ENSURE(
-                function_pos < iface_td->nMapFunctionIndexToMemberIndex,
-                "### illegal function index!" );
+                typelib_InterfaceMethodTypeDescription const * >(
+                    member_td );
+            com::sun::star::uno::TypeDescription method_holder;
+            while ( method_td->pBaseRef != 0 ) {
+                method_holder = com::sun::star::uno::TypeDescription(
+                    method_td->pBaseRef );
+                OSL_ASSERT(
+                    method_holder.get()->eTypeClass
+                    == typelib_TypeClass_INTERFACE_METHOD );
+                method_td = reinterpret_cast<
+                    typelib_InterfaceMethodTypeDescription * >(
+                        method_holder.get() );
+            }
+            typelib_InterfaceTypeDescription * iface_td = method_td->pInterface;
 
-            switch (function_pos)
+            switch ( method_td->aBase.nPosition )
             {
             case 0: // queryInterface()
             {
@@ -792,16 +798,12 @@ void SAL_CALL UNO_proxy_dispatch(
                 *uno_exc = 0;
                 break;
             default: // arbitrary method call
-            {
-                typelib_InterfaceMethodTypeDescription * method_td =
-                    (typelib_InterfaceMethodTypeDescription *)member_td;
                 bridge->call_java(
-                    that->m_javaI, that->m_type_info, function_pos,
+                    that->m_javaI, iface_td, method_td->nIndex, 0,
                     method_td->pReturnTypeRef,
                     method_td->pParams, method_td->nParams,
                     uno_ret, uno_args, uno_exc );
                 break;
-            }
             }
             break;
         }
