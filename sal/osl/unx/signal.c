@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 13:40:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,15 +478,21 @@ static int ReportCrash( int Signal )
 static void PrintStack( int sig )
 {
     void *buffer[MAX_FRAME_COUNT];
+#ifndef MACOSX
     int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
+#endif
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
+#ifdef MACOSX
+    fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
+#else
     if ( size > 0 )
     {
         fputs( "Stack:\n", stderr );
         backtrace_symbols_fd( buffer, size, fileno(stderr) );
     }
+#endif
 }
 
 static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
