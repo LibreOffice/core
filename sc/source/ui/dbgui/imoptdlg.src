@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:19:16 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 13:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,17 +100,18 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ swedish ] = "~Fältavgränsare" ;
         Text [ finnish ] = "~Kentän erotin" ;
         Text [ english_us ] = "~Field delimiter" ;
-        Text[ chinese_simplified ] = "×Ö¶Î·Ö¸ô·û(~F)";
+        Text[ chinese_simplified ] = "å­—æ®µåˆ†éš”ç¬¦(~F)";
         Text[ russian ] = "Ğàçäåëèòåëü ïîëÿ";
         Text[ polish ] = "Separator pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì‹æØ‚è‹L†(~F)";
-        Text[ chinese_traditional ] = "Äæ¦ì¤À¹j²Å(~F)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åŒºåˆ‡ã‚Šè¨˜å·(~F)";
+        Text[ chinese_traditional ] = "æ¬„ä½åˆ†éš”ç¬¦(~F)";
         Text[ arabic ] = "İÇÕá ÇáÍŞá";
         Text[ greek ] = "Äéá÷ùñéóôéêü ğåäßùí";
-        Text[ korean ] = "ÇÊµå ±¸ºĞÀÚ(~F)";
+        Text[ korean ] = "í•„ë“œ êµ¬ë¶„ ê¸°í˜¸(~F)";
         Text[ turkish ] = "~Ayırma işareti";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Separador de campos";
+        Text[ catalan ] = "~Delimitador de camp";
+        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™à¹€~à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     ComboBox ED_FIELDSEP
     {
@@ -135,17 +136,18 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ swedish ] = "~Textavgränsare" ;
         Text [ finnish ] = "~Tekstin erottimet" ;
         Text [ english_us ] = "~Text delimiter" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö·Ö¸ô·û(~T)";
+        Text[ chinese_simplified ] = "æ–‡å­—åˆ†éš”ç¬¦(~T)";
         Text[ russian ] = "Ğàçäåëèòåëü òåêñòà";
         Text[ polish ] = "Separator tekstu";
-        Text[ japanese ] = "Ã·½Ä‚Ì‹æØ‚è‹L†(~T)";
-        Text[ chinese_traditional ] = "¤å¦r¤À¹j²Å(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®åŒºåˆ‡ã‚Šè¨˜å·(~T)";
+        Text[ chinese_traditional ] = "æ–‡å­—åˆ†éš”ç¬¦(~T)";
         Text[ arabic ] = "İÇÕá ÇáäÕ";
         Text[ greek ] = "Äéá÷ùñéóôéêü êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ºĞ¸®ÀÚ(~T)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ êµ¬ë¶„ ê¸°í˜¸(~T)";
         Text[ turkish ] = "~Metin ayırma işa.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~eparador de texto";
+        Text[ catalan ] = "~Delimitador de text";
+        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     ComboBox ED_TEXTSEP
     {
@@ -170,17 +172,18 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ swedish ] = "~Teckenuppsättning" ;
         Text [ finnish ] = "~Merkistö" ;
         Text [ english_us ] = "~Character set" ;
-        Text[ chinese_simplified ] = "×ÖÌå(~C)";
+        Text[ chinese_simplified ] = "å­—ç¬¦é›†(~C)";
         Text[ russian ] = "Íàáîğ çíàêîâ";
         Text[ polish ] = "Zbiór znaków";
-        Text[ japanese ] = "•¶š—ñ(~C)";
-        Text[ chinese_traditional ] = "¦r«¬(~C)";
+        Text[ japanese ] = "æ–‡å­—åˆ—(~C)";
+        Text[ chinese_traditional ] = "å­—å‹(~C)";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
         Text[ greek ] = "~Óåô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚÁıÇÕ(~C)";
+        Text[ korean ] = "ë¬¸ìì§‘í•©(~C)";
         Text[ turkish ] = "~Karakter kümesi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "J~uego de caracteres";
+        Text[ catalan ] = "~Joc de caràcters";
+        Text[ thai ] = "à¸Šà¸¸à¸”~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     ListBox DDLB_FONT
     {
@@ -215,17 +218,27 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ swedish ] = "Fältalternativ" ;
         Text [ finnish ] = "Kentän asetukset" ;
         Text [ english_us ] = "Field options" ;
-        Text[ chinese_simplified ] = "×Ö¶ÎÑ¡Ïî";
+        Text[ chinese_simplified ] = "å­—æ®µé€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû ïîëÿ";
         Text[ polish ] = "Opcje pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚ÌµÌß¼®İ";
-        Text[ chinese_traditional ] = "Äæ¦ì¿ï¶µ";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "æ¬„ä½é¸é …";
         Text[ arabic ] = "ÎíÇÑÇÊ ÇáÍŞá";
         Text[ greek ] = "Åğéëïãİò ğåäßïõ";
-        Text[ korean ] = "ÇÊµå ¿É¼Ç";
+        Text[ korean ] = "í•„ë“œ ì˜µì…˜";
         Text[ turkish ] = "Alan seçenekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones de campo";
+        Text[ catalan ] = "Opcions de camp";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    };
+    CheckBox CB_FIXEDWIDTH
+    {
+        Pos = MAP_APPFONT( 12, 70 );
+        Size = MAP_APPFONT( 172, 10 );
+        Hide = TRUE;
+        Text = "Feste Text~breite";
+        Text[ english ] = "Fixed text ~width";
+        Text[ english_us ] = "Fixed text ~width";
     };
     OKButton BTN_OK
     {
@@ -243,21 +256,17 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Pos = MAP_APPFONT ( 202 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "ÊäÈëÎÄ¼ş";
+    Text[ chinese_simplified ] = "è¾“å…¥æ–‡ä»¶";
     Text[ russian ] = "Èìïîğò ôàéëà";
     Text[ polish ] = "Importuj plik";
-    Text[ japanese ] = "Ì§²Ù‚Ì²İÎß°Ä";
-    Text[ chinese_traditional ] = "¶×¤JÀÉ®×";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ";
+    Text[ chinese_traditional ] = "åŒ¯å…¥æª”æ¡ˆ";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ãáİ";
     Text[ greek ] = "ÅéóáãùãŞ áñ÷åßïõ";
-    Text[ korean ] = "ÆÄÀÏ °¡Á®¿À±â";
+    Text[ korean ] = "íŒŒì¼ ê°€ì ¸ì˜¤ê¸°";
     Text[ turkish ] = "Dosyayı içe aktar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Importar archivo";
+    Text[ catalan ] = "Importa el fitxer";
+    Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²à¹à¸Ÿà¹‰à¸¡";
 };
-
-
-
-
-
 

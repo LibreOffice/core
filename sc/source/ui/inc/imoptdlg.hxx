@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-08-14 10:19:32 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 13:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class ScImportOptionsDlg : public ModalDialog
 {
 public:
                 ScImportOptionsDlg( Window*                 pParent,
-                                    BOOL                    bAsciiImport = TRUE,
+                                    BOOL                    bAscii = TRUE,
                                     const ScImportOptions*  pOptions = NULL,
                                     const String*           pStrTitle = NULL,
                                     BOOL                    bMultiByte = FALSE,
@@ -117,6 +117,7 @@ private:
     ComboBox            aEdFieldSep;
     FixedText           aFtTextSep;
     ComboBox            aEdTextSep;
+    CheckBox            aCbFixed;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
@@ -126,6 +127,8 @@ private:
 
 private:
     USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
+
+    DECL_LINK( FixedWidthHdl, CheckBox* );
 };
 
 //------------------------------------------------------------------------
@@ -134,23 +137,24 @@ class ScImportOptions
 {
 public:
         ScImportOptions()
-            : nFieldSepCode(0),nTextSepCode(0),eCharSet(RTL_TEXTENCODING_DONTKNOW)
+            : nFieldSepCode(0),nTextSepCode(0),eCharSet(RTL_TEXTENCODING_DONTKNOW),bFixedWidth(FALSE)
         {}
         ScImportOptions( const String& rStr );
 
         ScImportOptions( USHORT nFieldSep, USHORT nTextSep, const String& rStr )
-            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),aStrFont(rStr)
+            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),aStrFont(rStr),bFixedWidth(FALSE)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
         ScImportOptions( USHORT nFieldSep, USHORT nTextSep, rtl_TextEncoding nEnc )
-            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep)
+            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),bFixedWidth(FALSE)
         { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
             : nFieldSepCode (rCpy.nFieldSepCode),
               nTextSepCode  (rCpy.nTextSepCode),
               aStrFont      (rCpy.aStrFont),
-              eCharSet      (rCpy.eCharSet)
+              eCharSet      (rCpy.eCharSet),
+              bFixedWidth   (rCpy.bFixedWidth)
         {}
 
     ScImportOptions& operator=( const ScImportOptions& rCpy )
@@ -159,6 +163,7 @@ public:
                             nTextSepCode  = rCpy.nTextSepCode;
                             aStrFont      = rCpy.aStrFont;
                             eCharSet      = rCpy.eCharSet;
+                            bFixedWidth   = rCpy.bFixedWidth;
                             return *this;
                         }
 
@@ -168,7 +173,8 @@ public:
                                    nFieldSepCode == rCmp.nFieldSepCode
                                 && nTextSepCode  == rCmp.nTextSepCode
                                 && eCharSet      == rCmp.eCharSet
-                                && aStrFont      == rCmp.aStrFont;
+                                && aStrFont      == rCmp.aStrFont
+                                && bFixedWidth   == rCmp.bFixedWidth;
                         }
     String  BuildString() const;
 
@@ -178,6 +184,7 @@ public:
     USHORT  nTextSepCode;
     String  aStrFont;
     CharSet eCharSet;
+    BOOL    bFixedWidth;
 };
 
 

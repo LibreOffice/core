@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-08-14 10:16:43 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+
+static const sal_Char pStrFix[] = "FIX";
 
 //========================================================================
 // ScDelimiterTable
@@ -152,12 +154,13 @@ String ScDelimiterTable::GetDelimiter( USHORT nCode ) const
 // ScImportOptionsDlg
 //========================================================================
 
-ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
-                                        BOOL                    bAsciiImport,
-                                        const ScImportOptions*  pOptions,
-                                        const String*           pStrTitle,
-                                        BOOL                    bMultiByte,
-                                        BOOL                    bOnlyDbtoolsEncodings )
+ScImportOptionsDlg::ScImportOptionsDlg(
+        Window*                 pParent,
+        BOOL                    bAscii,
+        const ScImportOptions*  pOptions,
+        const String*           pStrTitle,
+        BOOL                    bMultiByte,
+        BOOL                    bOnlyDbtoolsEncodings )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
@@ -168,8 +171,9 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
         aFtFont     ( this, ScResId( FT_FONT ) ),
-        aLbFont     ( this, ScResId( bAsciiImport ? DDLB_FONT : LB_FONT ) ),
-        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) )
+        aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
+        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
+        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -204,7 +208,7 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
             aLbFont.FillFromDbTextEncodingMap( RTL_TEXTENCODING_INFO_UNICODE |
                 RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
-    else if ( !bAsciiImport )
+    else if ( !bAscii )
     {   //!TODO: Unicode would need work in each filter
         if ( bMultiByte )
             aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE );
@@ -235,14 +239,27 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         // all encodings allowed, even Unicode
         aLbFont.FillFromTextEncodingTable();
     }
-    if ( !bAsciiImport )
+
+    if( bAscii )
+    {
+        Size aWinSize( GetSizePixel() );
+        aWinSize.Height() = aCbFixed.GetPosPixel().Y() + aCbFixed.GetSizePixel().Height();
+        Size aDiffSize( LogicToPixel( Size( 0, 6 ), MapMode( MAP_APPFONT ) ) );
+        aWinSize.Height() += aDiffSize.Height();
+        SetSizePixel( aWinSize );
+        aCbFixed.Show();
+        aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
+        aCbFixed.Check( FALSE );
+    }
+    else
     {
         aFlFieldOpt.SetText( aFtFont.GetText() );
         aFtFieldSep.Hide();
-        aFtTextSep .Hide();
-        aFtFont    .Hide();
+        aFtTextSep.Hide();
+        aFtFont.Hide();
         aEdFieldSep.Hide();
-        aEdTextSep .Hide();
+        aEdTextSep.Hide();
+        aCbFixed.Hide();
         aLbFont.GrabFocus();
     }
 
@@ -270,10 +287,11 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
     rOptions.SetTextEncoding( aLbFont.GetSelectTextEncoding() );
 
-    if ( aFtFieldSep.IsEnabled() )
+    if ( aCbFixed.IsVisible() )
     {
         rOptions.nFieldSepCode = GetCodeFromCombo( aEdFieldSep );
         rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
+        rOptions.bFixedWidth = aCbFixed.IsChecked();
     }
 }
 
@@ -306,15 +324,37 @@ USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 }
 
 //------------------------------------------------------------------------
+
+IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
+{
+    if( pCheckBox == &aCbFixed )
+    {
+        BOOL bEnable = !aCbFixed.IsChecked();
+        aFtFieldSep.Enable( bEnable );
+        aEdFieldSep.Enable( bEnable );
+        aFtTextSep.Enable( bEnable );
+        aEdTextSep.Enable( bEnable );
+    }
+    return 0;
+}
+
+
+//------------------------------------------------------------------------
 //  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
 //  darum ab Version 336 Komma stattdessen
 
 
 ScImportOptions::ScImportOptions( const String& rStr )
 {
+    bFixedWidth = FALSE;
+    nFieldSepCode = 0;
     if ( rStr.GetTokenCount(',') >= 3 )
     {
-        nFieldSepCode = (USHORT) rStr.GetToken(0,',').ToInt32();
+        String aToken( rStr.GetToken( 0, ',' ) );
+        if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
+            bFixedWidth = TRUE;
+        else
+            nFieldSepCode = (USHORT) aToken.ToInt32();
         nTextSepCode  = (USHORT) rStr.GetToken(1,',').ToInt32();
         aStrFont      = rStr.GetToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
@@ -327,7 +367,10 @@ String ScImportOptions::BuildString() const
 {
     String  aResult;
 
-    aResult += String::CreateFromInt32(nFieldSepCode);
+    if( bFixedWidth )
+        aResult.AppendAscii( pStrFix );
+    else
+        aResult += String::CreateFromInt32(nFieldSepCode);
     aResult += ',';
     aResult += String::CreateFromInt32(nTextSepCode);
     aResult += ',';

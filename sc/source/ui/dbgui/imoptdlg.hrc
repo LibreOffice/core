@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-31 12:58:23 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 13:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,4 +73,5 @@
 #define DDLB_FONT       9
 #define LB_FONT         10
 #define FL_FIELDOPT     11
+#define CB_FIXEDWIDTH   12
 
