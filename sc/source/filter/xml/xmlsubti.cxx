@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:53:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,20 +313,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                     }
                                 }
                         }
-                        if (nCurrentSheet > 0 && sStyleName.getLength())
-                        {
-                            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-                            if (xProperties.is())
-                            {
-                                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
-                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                    XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
-                                if (pStyle)
-                                    pStyle->FillPropertySet(xProperties);
-                            }
-                        }
-                        else
-                            rImport.SetFirstTableStyle(sStyleName);
+                        rImport.SetTableStyle(sStyleName);
                     }
 
                 }
