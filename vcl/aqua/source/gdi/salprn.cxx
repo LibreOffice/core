@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ static BOOL ImplUpdateSalJobSetup( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
     LONG            nRet;
     LONG            nSysJobSize;
-    HWND            hWnd = 0;
+    VCLWINDOW           hWnd = 0;
     DWORD           nMode = DM_OUT_BUFFER;
     ULONG           nDriverDataLen = 0;
     SalDriverData*  pOutBuffer = NULL;
@@ -797,7 +797,7 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
 // -----------------------------------------------------------------------
 
-static HDC ImplCreateSalPrnIC( SalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
+static VCLVIEW ImplCreateSalPrnIC( SalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
 {
 #ifdef WIN
     LPDEVMODE pDevMode;
@@ -806,7 +806,7 @@ static HDC ImplCreateSalPrnIC( SalInfoPrinter* pPrinter, ImplJobSetup* pSetupDat
     else
         pDevMode = NULL;
 // !!! UNICODE - NT Optimierung !!!
-    HDC hDC = CreateICA( ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDriverName, TRUE ).GetBuffer(),
+    VCLVIEW hDC = CreateICA( ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDriverName, TRUE ).GetBuffer(),
                          ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
                          0,
                          (LPDEVMODE)pDevMode );
@@ -818,7 +818,7 @@ static HDC ImplCreateSalPrnIC( SalInfoPrinter* pPrinter, ImplJobSetup* pSetupDat
 
 // -----------------------------------------------------------------------
 
-static SalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
+static SalGraphics* ImplCreateSalPrnGraphics( VCLVIEW hDC )
 {
     SalGraphics* pGraphics = new SalGraphics;
     pGraphics->maGraphicsData.mhDC      = hDC;
@@ -835,7 +835,7 @@ static SalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
 
 static BOOL ImplUpdateSalPrnIC( SalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
 {
-    HDC hNewDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
+    VCLVIEW hNewDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
     if ( !hNewDC )
         return FALSE;
 
@@ -869,7 +869,7 @@ SalInfoPrinter* SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     // die Member gesetzt sind, da diese in dieser Routine abgefragt werden)
     ImplTestSalJobSetup( pPrinter, pSetupData, TRUE );
 
-    HDC hDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
+    VCLVIEW hDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
     if ( !hDC )
     {
         delete pPrinter;
@@ -1065,7 +1065,7 @@ void SalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& rPageOffX, long& rPageOffY,
                                   long& rPageWidth, long& rPageHeight )
 {
-    HDC hDC = maPrinterData.mhDC;
+    VCLVIEW hDC = maPrinterData.mhDC;
 
 #ifdef WIN
     rOutWidth   = GetDeviceCaps( hDC, HORZRES );
@@ -1096,7 +1096,7 @@ void SalInstance::DestroyPrinter( SalPrinter* pPrinter )
 
 // =======================================================================
 
-WIN_BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
+WIN_BOOL CALLBACK SalPrintAbortProc( VCLVIEW hPrnDC, int /* nError */ )
 {
     SalData*    pSalData = GetSalData();
     SalPrinter* pPrinter;
@@ -1191,7 +1191,7 @@ SalPrinter::~SalPrinter()
     SalData* pSalData = GetSalData();
 
     // DC freigeben, wenn er noch durch ein AbortJob existiert
-    HDC hDC = maPrinterData.mhDC;
+    VCLVIEW hDC = maPrinterData.mhDC;
     if ( hDC )
     {
         if ( maPrinterData.mpGraphics )
@@ -1245,7 +1245,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
         pDevMode = NULL;
 
 // !!! UNICODE - NT Optimierung !!!
-    HDC hDC = CreateDCA( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDriverName, TRUE ).GetBuffer(),
+    VCLVIEW hDC = CreateDCA( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDriverName, TRUE ).GetBuffer(),
                          ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
                          0,
                          (LPDEVMODEA)pDevMode );
@@ -1335,7 +1335,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
 
 BOOL SalPrinter::EndJob()
 {
-    HDC hDC = maPrinterData.mhDC;
+    VCLVIEW hDC = maPrinterData.mhDC;
     if ( hDC )
     {
         if ( maPrinterData.mpGraphics )
@@ -1361,7 +1361,7 @@ BOOL SalPrinter::AbortJob()
     maPrinterData.mbAbort = TRUE;
 
     // Abort asyncron ausloesen
-    HDC hDC = maPrinterData.mhDC;
+    VCLVIEW hDC = maPrinterData.mhDC;
     if ( hDC )
     {
         SalData* pSalData = GetSalData();
@@ -1376,7 +1376,7 @@ BOOL SalPrinter::AbortJob()
 
 // -----------------------------------------------------------------------
 
-void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
+void ImplSalPrinterAbortJobAsync( VCLVIEW hPrnDC )
 {
     SalData*    pSalData = GetSalData();
     SalPrinter* pPrinter = pSalData->mpFirstPrinter;
@@ -1393,7 +1393,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
     // Wenn Printer noch existiert, dann den Job abbrechen
     if ( pPrinter )
     {
-        HDC hDC = pPrinter->maPrinterData.mhDC;
+        VCLVIEW hDC = pPrinter->maPrinterData.mhDC;
         if ( hDC )
         {
             if ( pPrinter->maPrinterData.mpGraphics )
@@ -1415,7 +1415,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
 
 SalGraphics* SalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData )
 {
-    HDC hDC = maPrinterData.mhDC;
+    VCLVIEW hDC = maPrinterData.mhDC;
 #ifdef WIN
     if ( pSetupData && pSetupData->mpDriverData && bNewJobData )
     {
@@ -1458,7 +1458,7 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData )
 
 BOOL SalPrinter::EndPage()
 {
-    HDC hDC = maPrinterData.mhDC;
+    VCLVIEW hDC = maPrinterData.mhDC;
     if ( hDC && maPrinterData.mpGraphics )
     {
         ImplSalDeInitGraphics( &(maPrinterData.mpGraphics->maGraphicsData) );

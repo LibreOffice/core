@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public:
     ByteString              maDriverNameA;          // printer driver name
     ByteString              maDeviceNameA;          // printer device name
     ByteString              maPortNameA;            // printer port name
-    HDC                     mhDC;                   // printer hdc
+    VCLVIEW                     mhDC;                   // printer hdc
     BOOL                    mbGraphics;             // is Graphics used
     BOOL                    mbAnsi;
 };
@@ -134,7 +134,7 @@ public:
     SalGraphics*            mpGraphics;             // current Printer graphics
     SalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
     SalPrinter*             mpNextPrinter;          // next printing printer
-    HDC                     mhDC;                   // printer hdc
+    VCLVIEW                     mhDC;                   // printer hdc
     ULONG                   mnError;                // Error Code
     ULONG                   mnCopies;               // Kopien
     BOOL                    mbCollate;              // Sortierte Kopien

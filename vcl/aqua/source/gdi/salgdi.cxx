@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,12 +206,12 @@ void ImplInitSalGDI()
 #endif
 
     // DC-Cache aufbauen
-    pSalData->mpHDCCache = new HDCCache[ CACHESIZE_HDC ];
-    memset( pSalData->mpHDCCache, 0, CACHESIZE_HDC * sizeof( HDCCache ) );
+    pSalData->mpVCLVIEWCache = new VCLVIEWCache[ CACHESIZE_VCLVIEW ];
+    memset( pSalData->mpVCLVIEWCache, 0, CACHESIZE_VCLVIEW * sizeof( VCLVIEWCache ) );
 
 #ifdef WIN
     // Nur bei 256 Farben Displays, die Paletten unterstuetzen
-    HDC hDC = GetDC( 0 );
+    VCLVIEW hDC = GetDC( 0 );
     int nBitsPixel = GetDeviceCaps( hDC, BITSPIXEL );
     int nPlanes = GetDeviceCaps( hDC, PLANES );
     int nRasterCaps = GetDeviceCaps( hDC, RASTERCAPS );
@@ -220,7 +220,7 @@ void ImplInitSalGDI()
     if ( (nBitCount > 8) && (nBitCount < 24) )
     {
         // test, if we have to dither
-        HDC         hMemDC = ::CreateCompatibleDC( hDC );
+        VCLVIEW         hMemDC = ::CreateCompatibleDC( hDC );
         HBITMAP     hMemBmp = ::CreateCompatibleBitmap( hDC, 8, 8 );
         HBITMAP     hBmpOld = (HBITMAP) ::SelectObject( hMemDC, hMemBmp );
         HBRUSH      hMemBrush = ::CreateSolidBrush( PALETTERGB( 175, 171, 169 ) );
@@ -383,8 +383,8 @@ void ImplFreeSalGDI()
         pSalData->mh50Bmp = 0;
     }
 
-    ImplClearHDCCache( pSalData );
-    delete[] pSalData->mpHDCCache;
+    ImplClearVCLVIEWCache( pSalData );
+    delete[] pSalData->mpVCLVIEWCache;
 
     // Ditherpalette loeschen, wenn vorhanden
     if ( pSalData->mhDitherPal )
@@ -587,15 +587,15 @@ void ImplSalDeInitGraphics( SalGraphicsData* pData )
 
 // =======================================================================
 
-HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp )
+VCLVIEW ImplGetCachedDC( ULONG nID, HBITMAP hBmp )
 {
     SalData*    pSalData = GetSalData();
-    HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
+    VCLVIEWCache*   pC = &pSalData->mpVCLVIEWCache[ nID ];
 
 #ifdef WIN
     if( !pC->mhDC )
     {
-        HDC hDC = GetDC( 0 );
+        VCLVIEW hDC = GetDC( 0 );
 
         // neuen DC mit DefaultBitmap anlegen
         pC->mhDC = CreateCompatibleDC( hDC );
@@ -606,7 +606,7 @@ HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp )
             RealizePalette( pC->mhDC );
         }
 
-        pC->mhSelBmp = CreateCompatibleBitmap( hDC, CACHED_HDC_DEFEXT, CACHED_HDC_DEFEXT );
+        pC->mhSelBmp = CreateCompatibleBitmap( hDC, CACHED_VCLVIEW_DEFEXT, CACHED_VCLVIEW_DEFEXT );
         pC->mhDefBmp = (HBITMAP) SelectObject( pC->mhDC, pC->mhSelBmp );
 
         ReleaseDC( 0, hDC );
@@ -626,7 +626,7 @@ HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp )
 void ImplReleaseCachedDC( ULONG nID )
 {
     SalData*    pSalData = GetSalData();
-    HDCCache*   pC = &pSalData->mpHDCCache[ nID ];
+    VCLVIEWCache*   pC = &pSalData->mpVCLVIEWCache[ nID ];
 
 #ifdef WIN
     if ( pC->mhActBmp )
@@ -636,11 +636,11 @@ void ImplReleaseCachedDC( ULONG nID )
 
 // =======================================================================
 
-void ImplClearHDCCache( SalData* pData )
+void ImplClearVCLVIEWCache( SalData* pData )
 {
-    for( ULONG i = 0; i < CACHESIZE_HDC; i++ )
+    for( ULONG i = 0; i < CACHESIZE_VCLVIEW; i++ )
     {
-        HDCCache* pC = &pData->mpHDCCache[ i ];
+        VCLVIEWCache* pC = &pData->mpVCLVIEWCache[ i ];
 
 #ifdef WIN
         if( pC->mhDC )

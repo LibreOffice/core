@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-31 22:21:51 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,13 +108,14 @@
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
-
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
 #endif
-
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_VCLAPPLICATION_H
+#include <VCLApplication.h>
 #endif
 
 // =======================================================================
@@ -136,8 +137,8 @@ void SalAbort( const XubString& rErrorText )
 
 // =======================================================================
 
-LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+LRESULT CALLBACK SalComWndProcA( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+LRESULT CALLBACK SalComWndProcW( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
 // =======================================================================
 
@@ -477,10 +478,10 @@ SalInstance* CreateSalInstance()
     pSalData->mnAppThreadId = GetCurrentThreadId();
 #endif
 
+#ifdef WIN
     // register frame class
     if ( !pSalData->mhPrevInst )
     {
-#ifdef WIN
         WNDCLASSEXA aWndClassEx;
         aWndClassEx.cbSize          = sizeof( aWndClassEx );
         aWndClassEx.style           = CS_OWNDC;
@@ -508,10 +509,10 @@ SalInstance* CreateSalInstance()
         aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEA;
         if ( !RegisterClassExA( &aWndClassEx ) )
             return NULL;
-#endif
     }
+#endif
 
-    HWND hComWnd;
+    VCLWINDOW hComWnd;
 #ifdef WIN
     hComWnd = CreateWindowExA( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEA,
                                "", WS_POPUP, 0, 0, 0, 0, 0, 0,
@@ -527,7 +528,6 @@ SalInstance* CreateSalInstance()
 
     // init instance (only one instance in this version !!!)
     pSalData->mpFirstInstance   = pInst;
-    pInst->maInstData.mhInst    = pSalData->mhInst;
     pInst->maInstData.mhComWnd  = hComWnd;
 
     // init static GDI Data
@@ -622,81 +622,19 @@ static void ImplSalDispatchMessage( MSG *pMsg )
 
 // -----------------------------------------------------------------------
 
-#ifdef WIN
-void ImplSalYield( BOOL bWait )
-{
-    MSG aMsg;
-
-    if ( bWait )
-    {
-        if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
-        {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
-        }
-    }
-    else
-    {
-        if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
-        {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
-        }
-    }
-}
-#endif
-
-// -----------------------------------------------------------------------
-
 void SalInstance::Yield( BOOL bWait )
 {
-    SalYieldMutex*  pYieldMutex = maInstData.mpSalYieldMutex;
-    SalData*        pSalData = GetSalData();
-#ifdef WIN
-    DWORD           nCurThreadId = GetCurrentThreadId();
-    ULONG           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
-    ULONG           n = nCount;
-    while ( n )
-    {
-        pYieldMutex->release();
-        n--;
-    }
-    if ( pSalData->mnAppThreadId != nCurThreadId )
-    {
-        ImplSendMessage( maInstData.mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
-        n = nCount;
-        while ( n )
-        {
-            pYieldMutex->acquire();
-            n--;
-        }
-    }
-    else
-    {
-        ImplSalYield( bWait );
-
-        n = nCount;
-        while ( n )
-        {
-            ImplSalYieldMutexAcquireWithWait();
-            n--;
-        }
-    }
-#else
-    // Try to get an event from the event queue. If an event is available,
-    // dispatch it. Note that if bWait is true, we will wait indefinitely
-    // for the next event if no event is pending in the queue.
-    MSG aMsg = NSApp_nextEvent( bWait );
-    if ( aMsg )
-    {
-        NSApp_sendEvent( aMsg );
-    }
-#endif
+    // Start the event queue. Note that VCLApplication_run() will not return until
+    // the application shuts down. On other platforms, this function returns
+    // after each event is pulled off the event queue and dispatched.
+    // Instead, we have enter this method only once and let VCLApplication_run do
+    // all of the pulling and dispatching of events.
+    VCLApplication_run();
 }
 
 // -----------------------------------------------------------------------
 
-LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+LRESULT CALLBACK SalComWndProc( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
 
@@ -704,7 +642,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
     switch ( nMsg )
     {
         case SAL_MSG_PRINTABORTJOB:
-            ImplSalPrinterAbortJobAsync( (HDC)wParam );
+            ImplSalPrinterAbortJobAsync( (VCLVIEW)wParam );
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
@@ -727,7 +665,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEFRAME:
-            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (ULONG)wParam );
+            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (VCLWINDOW)lParam, (ULONG)wParam );
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYFRAME:
@@ -757,7 +695,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 }
 
 #ifdef WIN
-LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalComWndProcA( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -771,7 +709,7 @@ LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 #endif
 
 #ifdef WIN
-LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalComWndProcW( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -891,13 +829,13 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
      // Stub code: Mac OS X does not support child windows so return NULL until
     // we figure how to implement a good substitute for a child window
-    HWND hWndParent;
+    VCLWINDOW hWndParent;
     if( pParent )
         hWndParent = pParent->maFrameData.mhWnd;
     else
         hWndParent = NULL;
 
-    pFrame->maFrameData.mhWnd = NSWindow_new( nSalFrameStyle, hWndParent );
+    pFrame->maFrameData.mhWnd = VCLWindow_new( nSalFrameStyle, hWndParent );
 
     return pFrame;
 }
@@ -906,7 +844,7 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
 void SalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    NSWindow_release( pFrame->maFrameData.mhWnd );
+    VCLWindow_release( pFrame->maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------

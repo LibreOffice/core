@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-31 22:21:51 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #ifndef _SV_SALVD_HXX
 #include <salvd.hxx>
 #endif
-
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
 #endif
@@ -113,6 +112,9 @@
 #endif
 #ifndef _SV_KEYCOES_HXX
 #include <keycodes.hxx>
+#endif
+#ifndef _SV_VCLWINDOW_H
+#include <VCLWindow.h>
 #endif
 
 // =======================================================================
@@ -168,11 +170,11 @@ static void ImplSaveFrameState( SalFrame* pFrame )
 // =======================================================================
 
 SalFrame* ImplSalCreateFrame( SalInstance* pInst,
-                              HWND hWndParent, ULONG nSalFrameStyle )
+                              VCLWINDOW hWndParent, ULONG nSalFrameStyle )
 {
     SalFrame*   pFrame = new SalFrame;
 #ifdef WIN
-    HWND        hWnd;
+    VCLWINDOW       hWnd;
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
     BOOL        bSaveBits = FALSE;
@@ -270,7 +272,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     ImplSaveFrameState( pFrame );
     pFrame->maFrameData.mbDefPos = TRUE;
 
-    // CreateHDC in the main thread
+    // CreateVCLVIEW in the main thread
     pFrame->ReleaseGraphics( pFrame->GetGraphics() );
 #endif
 
@@ -446,7 +448,7 @@ static UINT ImplSalGetWheelScrollLines()
 {
     UINT nScrLines = 0;
 #ifdef WIN
-    HWND hWndMsWheel = WIN_FindWindow( MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE );
+    VCLWINDOW hWndMsWheel = WIN_FindWindow( MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE );
     if ( hWndMsWheel )
     {
         UINT nGetScrollLinesMsgId = RegisterWindowMessage( MSH_SCROLL_LINES );
@@ -642,12 +644,12 @@ SalGraphics* SalFrame::GetGraphics()
 
     if ( !maFrameData.mpGraphics )
     {
-        HDC hDC = NSWindow_contentView( maFrameData.mhWnd );
-        if ( hDC )
+        VCLVIEW hView = VCLWindow_contentView( maFrameData.mhWnd );
+        if ( hView )
         {
             SalData* pSalData = GetSalData();
             maFrameData.mpGraphics = new SalGraphics;
-            maFrameData.mpGraphics->maGraphicsData.mhDC      = hDC;
+            maFrameData.mpGraphics->maGraphicsData.mhDC      = hView;
             maFrameData.mpGraphics->maGraphicsData.mhWnd     = maFrameData.mhWnd;
             maFrameData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
@@ -656,8 +658,8 @@ SalGraphics* SalFrame::GetGraphics()
 #ifdef WIN
             if ( pSalData->mhDitherPal )
             {
-                maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
-                RealizePalette( hDC );
+                maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( hView, pSalData->mhDitherPal, TRUE );
+                RealizePalette( hView );
             }
             ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
 #endif
@@ -713,7 +715,7 @@ void SalFrame::SetIcon( USHORT nIcon )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalShow( HWND hWnd, BOOL bVisible )
+static void ImplSalShow( VCLWINDOW hWnd, BOOL bVisible )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -731,7 +733,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
         if ( pFrame->maFrameData.mbPresentation )
         {
 #ifdef WIN
-            HWND hWndParent = ::GetParent( hWnd );
+            VCLWINDOW hWndParent = ::GetParent( hWnd );
             if ( hWndParent )
                 SetForegroundWindow( hWndParent );
             SetForegroundWindow( hWnd );
@@ -784,9 +786,9 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
 void SalFrame::Show( BOOL bVisible )
 {
     if ( bVisible )
-        NSWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
+        VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
     else
-        NSWindow_close( maFrameData.mhWnd );
+        VCLWindow_close( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------
@@ -1116,18 +1118,18 @@ void SalFrame::StartPresentation( BOOL bStart )
 void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 {
 #ifdef WIN
-    HWND hWnd;
+    VCLWINDOW hWnd;
     if ( bOnTop )
-        hWnd = HWND_TOPMOST;
+        hWnd = VCLWINDOW_TOPMOST;
     else
-        hWnd = HWND_NOTOPMOST;
+        hWnd = VCLWINDOW_NOTOPMOST;
     SetWindowPos( maFrameData.mhWnd, hWnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE );
 #endif
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplSalToTop( HWND hWnd, USHORT nFlags )
+static void ImplSalToTop( VCLWINDOW hWnd, USHORT nFlags )
 {
 #ifdef WIN
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
@@ -1379,7 +1381,7 @@ void SalFrame::UpdateExtTextInputArea()
 void SalFrame::EndExtTextInput( USHORT nFlags )
 {
 #ifdef WIN
-    HWND hWnd = maFrameData.mhWnd;
+    VCLWINDOW hWnd = maFrameData.mhWnd;
     HIMC hIMC = ImmGetContext( hWnd );
     if ( hIMC )
     {
@@ -2022,7 +2024,7 @@ void SalFrame::SetCallback( void* pInst, SALFRAMEPROC pProc )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
+static long ImplHandleMouseMsg( VCLWINDOW hWnd, UINT nMsg,
     WPARAM wParam, LPARAM lParam )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
@@ -2171,7 +2173,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleMouseActivateMsg( HWND hWnd )
+static long ImplHandleMouseActivateMsg( VCLWINDOW hWnd )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -2191,7 +2193,7 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleWheelMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static long ImplHandleWheelMsg( VCLWINDOW hWnd, WPARAM wParam, LPARAM lParam )
 {
     ImplSalYieldMutexAcquireWithWait();
 
@@ -2337,7 +2339,7 @@ static sal_Unicode ImplGetCharCode( SalFrame* pFrame, WPARAM nCharCode )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
+static long ImplHandleKeyMsg( VCLWINDOW hWnd, UINT nMsg,
     WPARAM wParam, LPARAM lParam )
 {
 #ifdef WIN
@@ -2365,7 +2367,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     // Wir restaurieren den Background-Modus bei jeder Texteingabe,
     // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
     if ( pFrame->maFrameData.mpGraphics &&
-         pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC )
+        pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC )
         SetBkMode( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC, TRANSPARENT );
 
     // determine modifiers
@@ -2541,7 +2543,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
 // -----------------------------------------------------------------------
 
-long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
+long ImplHandleSalObjKeyMsg( VCLWINDOW hWnd, UINT nMsg,
     WPARAM wParam, LPARAM lParam )
 {
 #ifdef WIN
@@ -2601,7 +2603,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
 
 // -----------------------------------------------------------------------
 
-long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+long ImplHandleSalObjSysCharMsg( VCLWINDOW hWnd, WPARAM wParam, LPARAM lParam )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -2647,7 +2649,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandlePaintMsg( HWND hWnd )
+static void ImplHandlePaintMsg( VCLWINDOW hWnd )
 {
     // Clip-Region muss zurueckgesetzt werden, da wir sonst kein
     // ordentliches Bounding-Rectangle bekommen
@@ -2717,7 +2719,7 @@ static void ImplHandlePaintMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
+static void ImplHandlePaintMsg2( VCLWINDOW hWnd, RECT* pRect )
 {
     // Paint
     if ( ImplSalYieldMutexTryToAcquire() )
@@ -2744,7 +2746,7 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleMoveMsg( HWND hWnd )
+static void ImplHandleMoveMsg( VCLWINDOW hWnd )
 {
     if ( ImplSalYieldMutexTryToAcquire() )
     {
@@ -2780,7 +2782,7 @@ static void ImplHandleMoveMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplCallSizeHdl( HWND hWnd )
+static void ImplCallSizeHdl( VCLWINDOW hWnd )
 {
     // Da Windows diese Messages auch senden kann, muss hier auch die
     // Solar-Semaphore beruecksichtigt werden
@@ -2808,7 +2810,7 @@ static void ImplCallSizeHdl( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static void ImplHandleSizeMsg( VCLWINDOW hWnd, WPARAM wParam, LPARAM lParam )
 {
 #ifdef WIN
     if ( (wParam != SIZE_MAXSHOW) && (wParam != SIZE_MAXHIDE) )
@@ -2829,7 +2831,7 @@ static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleFocusMsg( HWND hWnd )
+static void ImplHandleFocusMsg( VCLWINDOW hWnd )
 {
 #ifdef WIN
     if ( ImplSalYieldMutexTryToAcquire() )
@@ -2861,7 +2863,7 @@ static void ImplHandleFocusMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleCloseMsg( HWND hWnd )
+static void ImplHandleCloseMsg( VCLWINDOW hWnd )
 {
     if ( ImplSalYieldMutexTryToAcquire() )
     {
@@ -2882,7 +2884,7 @@ static void ImplHandleCloseMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleShutDownMsg( HWND hWnd )
+static long ImplHandleShutDownMsg( VCLWINDOW hWnd )
 {
     ImplSalYieldMutexAcquireWithWait();
     long        nRet = 0;
@@ -2898,7 +2900,7 @@ static long ImplHandleShutDownMsg( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
+static void ImplHandleSettingsChangeMsg( VCLWINDOW hWnd, UINT nMsg,
     WPARAM wParam, LPARAM lParam )
 {
 #ifdef WIN
@@ -2959,7 +2961,7 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
+static void ImplHandleUserEvent( VCLWINDOW hWnd, LPARAM lParam )
 {
     ImplSalYieldMutexAcquireWithWait();
     SalFrame* pFrame = GetWindowPtr( hWnd );
@@ -2973,7 +2975,7 @@ static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleForcePalette( HWND hWnd )
+static void ImplHandleForcePalette( VCLWINDOW hWnd )
 {
     SalData*    pSalData = GetSalData();
     HPALETTE    hPal = pSalData->mhDitherPal;
@@ -3012,7 +3014,7 @@ static void ImplHandleForcePalette( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static LRESULT ImplHandlePalette( BOOL bFrame, HWND hWnd, UINT nMsg,
+static LRESULT ImplHandlePalette( BOOL bFrame, VCLWINDOW hWnd, UINT nMsg,
     WPARAM wParam, LPARAM lParam, int& rDef )
 {
     SalData*    pSalData = GetSalData();
@@ -3026,7 +3028,7 @@ static LRESULT ImplHandlePalette( BOOL bFrame, HWND hWnd, UINT nMsg,
 #ifdef WIN
     if ( (nMsg == WM_PALETTECHANGED) || (nMsg == SAL_MSG_POSTPALCHANGED) )
     {
-        if ( (HWND)wParam == hWnd )
+        if ( (VCLWINDOW)wParam == hWnd )
             return 0;
     }
 
@@ -3046,7 +3048,7 @@ static LRESULT ImplHandlePalette( BOOL bFrame, HWND hWnd, UINT nMsg,
     SalVirtualDevice*   pTempVD;
     SalFrame*           pTempFrame;
     SalGraphics*        pGraphics;
-    HDC                 hDC;
+    VCLVIEW                 hDC;
     HPALETTE            hOldPal;
     UINT                nCols;
     BOOL                bStdDC;
@@ -3166,7 +3168,7 @@ static LRESULT ImplHandlePalette( BOOL bFrame, HWND hWnd, UINT nMsg,
 
 // -----------------------------------------------------------------------
 
-static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
+static int ImplHandleMinMax( VCLWINDOW hWnd, LPARAM lParam )
 {
     int bRet = FALSE;
 
@@ -3215,7 +3217,7 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static int ImplHandleSysCommand( VCLWINDOW hWnd, WPARAM wParam, LPARAM lParam )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -3275,7 +3277,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
         else
         {
             // Testen, ob ein SysChild den Focus hat
-            HWND hFocusWnd = ::GetFocus();
+            VCLWINDOW hFocusWnd = ::GetFocus();
             if ( hFocusWnd && ImplFindSalObject( hFocusWnd ) )
             {
                 char cKeyCode = (char)(unsigned char)LOWORD( lParam );
@@ -3321,7 +3323,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static void ImplHandleInputLangChange( VCLWINDOW hWnd, WPARAM wParam, LPARAM lParam )
 {
     ImplSalYieldMutexAcquireWithWait();
 
@@ -3330,7 +3332,7 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
     if ( pFrame && pFrame->maFrameData.mbIME && pFrame->maFrameData.mhDefIMEContext )
     {
 #ifdef WIN
-        HWND    hWnd = pFrame->maFrameData.mhWnd;
+        VCLWINDOW   hWnd = pFrame->maFrameData.mhWnd;
         HKL     hKL = (HKL)lParam;
         UINT    nImeProps = ImmGetProperty( hKL, IGP_PROPERTY );
 
@@ -3345,7 +3347,7 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplHandleIMEStartComposition( HWND hWnd )
+static BOOL ImplHandleIMEStartComposition( VCLWINDOW hWnd )
 {
     BOOL bDef = TRUE;
 
@@ -3398,7 +3400,7 @@ static BOOL ImplHandleIMEStartComposition( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
+static BOOL ImplHandleIMEComposition( VCLWINDOW hWnd, LPARAM lParam )
 {
     BOOL bDef = TRUE;
 #ifdef WIN
@@ -3528,7 +3530,7 @@ static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplHandleIMEEndComposition( HWND hWnd )
+static BOOL ImplHandleIMEEndComposition( VCLWINDOW hWnd )
 {
     BOOL bDef = TRUE;
 
@@ -3559,7 +3561,7 @@ static BOOL ImplHandleIMEEndComposition( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
+static void ImplHandleIMENotify( VCLWINDOW hWnd, WPARAM wParam )
 {
     if ( wParam == (WPARAM)IMN_OPENCANDIDATE )
     {
@@ -3574,7 +3576,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
             pFrame->maFrameData.mbCandidateMode = TRUE;
             ImplHandleIMEComposition( hWnd, GCS_CURSORPOS );
 
-            HWND hWnd = pFrame->maFrameData.mhWnd;
+            VCLWINDOW hWnd = pFrame->maFrameData.mhWnd;
             HIMC hIMC = ImmGetContext( hWnd );
             if ( hIMC )
             {
@@ -3667,7 +3669,7 @@ void SalTestMouseLeave()
 
 // -----------------------------------------------------------------------
 
-static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam,
+static int ImplSalWheelMousePos( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam,
     LPARAM lParam, LRESULT& rResult )
 {
 #ifdef WIN
@@ -3677,8 +3679,8 @@ static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam,
     aScreenPt.y = (short)HIWORD( lParam );
     // Child-Fenster suchen, welches an der entsprechenden
     // Position liegt
-    HWND hChildWnd;
-    HWND hWheelWnd = hWnd;
+    VCLWINDOW hChildWnd;
+    VCLWINDOW hWheelWnd = hWnd;
     do
     {
         hChildWnd = hWheelWnd;
@@ -3700,7 +3702,7 @@ static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam,
 
 // -----------------------------------------------------------------------
 
-LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+LRESULT CALLBACK SalFrameWndProc( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT     nRet = 0;
 #ifdef WIN
@@ -3715,7 +3717,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
         SalFrame* pFrame = (SalFrame*)pStruct->lpCreateParams;
         SetWindowPtr( hWnd, pFrame );
-        // HWND schon hier setzen, da schon auf den Instanzdaten
+        // VCLWINDOW schon hier setzen, da schon auf den Instanzdaten
         // gearbeitet werden kann, wenn Messages waehrend
         // CreateWindow() gesendet werden
         pFrame->maFrameData.mhWnd = hWnd;
@@ -3931,7 +3933,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = !ImplHandleWheelMsg( hWnd, MAKEWPARAM( nKeyState, (WORD)wParam ), lParam );
             if ( rDef )
             {
-                HWND hWheelWnd = ::GetFocus();
+                VCLWINDOW hWheelWnd = ::GetFocus();
                 if ( hWheelWnd && (hWheelWnd != hWnd) )
                 {
                     nRet = ImplSendMessage( hWheelWnd, nMsg, wParam, lParam );
@@ -3949,7 +3951,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 }
 
 #ifdef WIN
-LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalFrameWndProcA( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -3960,7 +3962,7 @@ LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 #endif
 
 #ifdef WIN
-LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalFrameWndProcW( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -3972,7 +3974,7 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 
 // -----------------------------------------------------------------------
 
-BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
+BOOL ImplHandleGlobalMsg( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
 {
 #ifdef WIN
     // Hier verarbeiten wir alle Messages, die fuer alle Frame-Fenster gelten,

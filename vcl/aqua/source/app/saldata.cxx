@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 // =======================================================================
 
 #ifdef WIN
-LONG ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong )
+LONG ImplSetWindowLong( VCLWINDOW hWnd, int nIndex, DWORD dwNewLong )
 {
         return SetWindowLongA( hWnd, nIndex, dwNewLong );
 }
@@ -209,7 +209,7 @@ LONG ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong )
 // -----------------------------------------------------------------------
 
 #ifdef WIN
-LONG ImplGetWindowLong( HWND hWnd, int nIndex )
+LONG ImplGetWindowLong( VCLWINDOW hWnd, int nIndex )
 {
         return GetWindowLongA( hWnd, nIndex );
 }
@@ -218,7 +218,7 @@ LONG ImplGetWindowLong( HWND hWnd, int nIndex )
 // -----------------------------------------------------------------------
 
 #ifdef WIN
-WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+WIN_BOOL ImplPostMessage( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
         return PostMessageA( hWnd, nMsg, wParam, lParam );
 }
@@ -227,7 +227,7 @@ WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 // -----------------------------------------------------------------------
 
 #ifdef WIN
-WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+WIN_BOOL ImplSendMessage( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
         return SendMessageA( hWnd, nMsg, wParam, lParam );
 }
@@ -236,7 +236,7 @@ WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 // -----------------------------------------------------------------------
 
 #ifdef WIN
-WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
+WIN_BOOL ImplGetMessage( LPMSG lpMsg, VCLWINDOW hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
         return GetMessageA( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
 }
@@ -245,7 +245,7 @@ WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFi
 // -----------------------------------------------------------------------
 
 #ifdef WIN
-WIN_BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
+WIN_BOOL ImplPeekMessage( LPMSG lpMsg, VCLWINDOW hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
         return PeekMessageA( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }

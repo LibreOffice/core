@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@
 class SalObjectData
 {
 public:
-    HWND                    mhWnd;                  // Window handle
-    HWND                    mhWndChild;             // Child Window handle
-    HWND                    mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
+    VCLWINDOW                   mhWnd;                  // Window handle
+    VCLWINDOW                   mhWndChild;             // Child Window handle
+    VCLWINDOW                   mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
     SystemChildData         maSysData;              // SystemEnvData
 #ifdef WIN
     RGNDATA*                mpClipRgnData;          // ClipRegion-Data

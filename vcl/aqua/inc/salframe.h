@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-31 22:21:50 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,11 @@
 #include <sv.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-// Instantiate a native NSWindow.
-HWND NSWindow_new( ULONG nSalFrameStyle, HWND hParentWindow );
-
-// Get NSWindow contentView
-HDC NSWindow_contentView( HWND hWindow );
-
-// Display NSWindow
-NSWindow_makeKeyAndOrderFront( HWND hWindow );
-
-// Hide NSWindow
-NSWindow_close( HWND hWindow );
-
-// Release a native NSWindow
-void NSWindow_release( HWND hWindow );
+#ifndef _SV_VCLWINDOW_H
+#include <VCLWindow.h>
+#endif
 
 #ifdef __cplusplus
-}
 
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
@@ -99,7 +83,7 @@ void NSWindow_release( HWND hWindow );
 class SalFrameData
 {
 public:
-    HWND                    mhWnd;                  // Window handle
+    VCLWINDOW                   mhWnd;                  // Window handle
     HCURSOR                 mhCursor;               // cursor handle
     HIMC                    mhDefIMEContext;        // default IME-Context
     SalGraphics*            mpGraphics;             // current frame graphics

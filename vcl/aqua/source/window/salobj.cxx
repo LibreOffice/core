@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,13 @@
 
 // =======================================================================
 
-static BOOL ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
+static BOOL ImplIsSysWindowOrChild( VCLWINDOW hWndParent, VCLWINDOW hWndChild )
 {
     if ( hWndParent == hWndChild )
         return TRUE;
 
 #ifdef WIN
-    HWND hTempWnd = ::GetParent( hWndChild );
+    VCLWINDOW hTempWnd = ::GetParent( hWndChild );
     while ( hTempWnd )
     {
         // Ab nicht Child-Fenstern hoeren wir auf zu suchen
@@ -112,7 +112,7 @@ static BOOL ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 
 // -----------------------------------------------------------------------
 
-SalObject* ImplFindSalObject( HWND hWndChild )
+SalObject* ImplFindSalObject( VCLWINDOW hWndChild )
 {
     SalData*    pSalData = GetSalData();
     SalObject*  pObject = pSalData->mpFirstObject;
@@ -129,7 +129,7 @@ SalObject* ImplFindSalObject( HWND hWndChild )
 
 // -----------------------------------------------------------------------
 
-SalFrame* ImplFindSalObjectFrame( HWND hWnd )
+SalFrame* ImplFindSalObjectFrame( VCLWINDOW hWnd )
 {
     SalFrame* pFrame = NULL;
     SalObject* pObject = ImplFindSalObject( hWnd );
@@ -137,7 +137,7 @@ SalFrame* ImplFindSalObjectFrame( HWND hWnd )
     {
 #ifdef WIN
         // Dazugehoerenden Frame suchen
-        HWND hWnd = ::GetParent( pObject->maObjectData.mhWnd );
+        VCLWINDOW hWnd = ::GetParent( pObject->maObjectData.mhWnd );
         pFrame = GetSalData()->mpFirstFrame;
         while ( pFrame )
         {
@@ -189,11 +189,11 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
         else if ( pData->message == WM_KILLFOCUS )
         {
             pObject = ImplFindSalObject( pData->hwnd );
-            if ( pObject && !ImplFindSalObject( (HWND)pData->wParam ) )
+            if ( pObject && !ImplFindSalObject( (VCLWINDOW)pData->wParam ) )
             {
                 // LoseFocus nur rufen, wenn wirklich kein ChildFenster
                 // den Focus bekommt
-                if ( !pData->wParam || !ImplFindSalObject( (HWND)pData->wParam ) )
+                if ( !pData->wParam || !ImplFindSalObject( (VCLWINDOW)pData->wParam ) )
                 {
                     if ( ImplSalYieldMutexTryToAcquire() )
                     {
@@ -205,7 +205,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                         ImplPostMessage( pObject->maObjectData.mhWnd, SALOBJ_MSG_POSTFOCUS, 0, 0 );
                 }
                 else
-                    pObject->maObjectData.mhLastFocusWnd = (HWND)pData->wParam;
+                    pObject->maObjectData.mhLastFocusWnd = (VCLWINDOW)pData->wParam;
             }
         }
     }
@@ -336,7 +336,7 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 
 // =======================================================================
 
-LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+LRESULT CALLBACK SalSysObjWndProc( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     SalObject*  pSysObj;
     LRESULT     nRet = 0;
@@ -394,7 +394,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             if ( ImplSalYieldMutexTryToAcquire() )
             {
                 pSysObj = GetSalObjWindowPtr( hWnd );
-                HWND    hFocusWnd = ::GetFocus();
+                VCLWINDOW   hFocusWnd = ::GetFocus();
                 USHORT nEvent;
                 if ( hFocusWnd && ImplIsSysWindowOrChild( hWnd, hFocusWnd ) )
                     nEvent = SALOBJ_EVENT_GETFOCUS;
@@ -411,7 +411,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 
         case WM_SIZE:
             {
-            HWND hWndChild = GetWindow( hWnd, GW_CHILD );
+            VCLWINDOW hWndChild = GetWindow( hWnd, GW_CHILD );
             if ( hWndChild )
             {
                 SetWindowPos( hWndChild,
@@ -430,7 +430,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
             pSysObj = (SalObject*)pStruct->lpCreateParams;
             SetSalObjWindowPtr( hWnd, pSysObj );
-            // HWND schon hier setzen, da schon auf den Instanzdaten
+            // VCLWINDOW schon hier setzen, da schon auf den Instanzdaten
             // gearbeitet werden kann, wenn Messages waehrend
             // CreateWindow() gesendet werden
             pSysObj->maObjectData.mhWnd = hWnd;
@@ -444,7 +444,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 }
 
 #ifdef WIN
-LRESULT CALLBACK SalSysObjWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalSysObjWndProcA( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -455,7 +455,7 @@ LRESULT CALLBACK SalSysObjWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
 #endif
 
 #ifdef WIN
-LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalSysObjWndProcW( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -467,7 +467,7 @@ LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
 
 // -----------------------------------------------------------------------
 
-LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+LRESULT CALLBACK SalSysObjChildWndProc( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
 
@@ -494,7 +494,7 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 }
 
 #ifdef WIN
-LRESULT CALLBACK SalSysObjChildWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalSysObjChildWndProcA( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -505,7 +505,7 @@ LRESULT CALLBACK SalSysObjChildWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 #endif
 
 #ifdef WIN
-LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalSysObjChildWndProcW( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -563,8 +563,8 @@ SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent )
     {
 #ifdef WIN
         SalObject* pObject = new SalObject;
-        HWND        hWnd;
-        HWND        hWndChild = 0;
+        VCLWINDOW       hWnd;
+        VCLWINDOW       hWndChild = 0;
         hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "", WS_CHILD, 0, 0, 0, 0, pParent->maFrameData.mhWnd, 0, pInst->maInstData.mhInst, (void*)pObject );
         if ( hWnd )
         {
@@ -649,7 +649,7 @@ SalObject::~SalObject()
     if ( maObjectData.mpStdClipRgnData )
         delete maObjectData.mpStdClipRgnData;
 
-    HWND hWndParent = ::GetParent( maObjectData.mhWnd );
+    VCLWINDOW hWndParent = ::GetParent( maObjectData.mhWnd );
 
     if ( maObjectData.mhWndChild )
         DestroyWindow( maObjectData.mhWndChild );

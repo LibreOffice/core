@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ void SalTimer::SetCallback( SALTIMERPROC pProc )
 
 // -----------------------------------------------------------------------
 
-void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
+void CALLBACK SalTimerProc( VCLWINDOW, UINT, UINT, DWORD )
 {
     SalData* pSalData = GetSalData();
 

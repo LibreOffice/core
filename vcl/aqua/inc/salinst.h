@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-29 06:29:57 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,26 +66,11 @@
 #include <sv.h>
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-// Instantialize application's global GUI objects
-void NSApp_init();
-
-// Release applications's global GUI objects
-void NSApp_release();
-
-// Get next event from the application event queue. If there are no events in
-// the queue and bWait is true, wait for next event to be posted to the queue.
-// Otherwise, return immediately.
-MSG NSApp_nextEvent( BOOL bWait );
-
-// Dispatch events
-void NSApp_sendEvent( MSG hMsg );
+#ifndef _SV_VCLWINDOW_H
+#include <VCLWindow.h>
+#endif
 
 #ifdef __cplusplus
-}
 
 #ifdef _VOS_NO_NAMESPACE
 class OMutex;
@@ -104,8 +89,7 @@ class SalObject;
 class SalInstanceData
 {
 public:
-    HINSTANCE           mhInst;                 // Instance Handle
-    HWND                mhComWnd;               // window, for communication (between threads and the main thread)
+    VCLWINDOW           mhComWnd;               // window, for communication (between threads and the main thread)
     void*               mpFilterInst;
     void*               mpFilterCallback;
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
@@ -121,10 +105,10 @@ public:
 // - Prototypen -
 // --------------
 
-SalFrame* ImplSalCreateFrame( SalInstance* pInst, HWND hWndParent, ULONG nSalFrameStyle );
+SalFrame* ImplSalCreateFrame( SalInstance* pInst, VCLWINDOW hWndParent, ULONG nSalFrameStyle );
 SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent );
 void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
-void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
+void ImplSalPrinterAbortJobAsync( VCLVIEW hPrnDC );
 
 #endif // __cplusplus
 

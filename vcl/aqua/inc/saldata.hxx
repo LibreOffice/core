@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-29 06:29:57 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class SalFrame;
 class SalVirtualDevice;
 class SalPrinter;
 class Font;
-struct HDCCache;
+struct VCLVIEWCache;
 
 // --------------------
 // - Standard-Defines -
@@ -98,8 +98,6 @@ struct HDCCache;
 
 struct SalData
 {
-    HINSTANCE               mhInst;                 // default instance handle
-    HINSTANCE               mhPrevInst;             // previous instance handle
     int                     mnCmdShow;              // default frame show style
     // Erst hier koennen Daten kompatible eingefuegt werden, da die
     // oberen Daten in salmain.cxx modifiziert werden
@@ -115,14 +113,14 @@ struct SalData
     UINT                    mnTimerId;              // windows timer id
     SALTIMERPROC            mpTimerProc;            // timer callback proc
     HHOOK                   mhSalObjMsgHook;        // hook um SalObject relevante Message mitzubekommen
-    HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
+    VCLWINDOW                   mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
     SalInstance*            mpFirstInstance;        // pointer of first instance
     SalFrame*               mpFirstFrame;           // pointer of first frame
     SalObject*              mpFirstObject;          // pointer of first object window
     SalVirtualDevice*       mpFirstVD;              // first VirDev
     SalPrinter*             mpFirstPrinter;         // first printing printer
-    HDCCache*               mpHDCCache;             // Cache for three DC's
+    VCLVIEWCache*               mpVCLVIEWCache;             // Cache for three DC's
     HBITMAP                 mh50Bmp;                // 50% Bitmap
     HBRUSH                  mh50Brush;              // 50% Brush
     COLORREF                maStockPenColorAry[MAX_STOCKPEN];
@@ -137,7 +135,6 @@ struct SalData
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
     WIN_BOOL                mbScrSvrEnabled;        // ScreenSaver enabled
     int                     mnSageStatus;           // Status der Sage-DLL (DISABLE_AGENT == nicht vorhanden)
-    HINSTANCE               mhSageInst;             // Instance-Handle zur Sage-DLL
     SysAgt_Enable_PROC      mpSageEnableProc;       // Funktion zum deaktivieren des Systemagenten
 };
 
@@ -151,7 +148,6 @@ inline SalData* GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 
 struct SalShlData
 {
-    HINSTANCE               mhInst;                 // Instance of SAL-DLL
     UINT                    mnVKAdd;                // VK-Code von KEY_ADD
     UINT                    mnVKSubtract;           // VK-Code von KEY_SUBTRACT
     UINT                    mnVKMultiply;           // VK-Code von KEY_MULTIPLY
@@ -171,23 +167,23 @@ extern SalShlData aSalShlData;
 // - GDICache -
 // ------------
 
-#define CACHESIZE_HDC       3
-#define CACHED_HDC_1        0
-#define CACHED_HDC_2        1
-#define CACHED_HDC_DRAW     2
-#define CACHED_HDC_DEFEXT   64
+#define CACHESIZE_VCLVIEW       3
+#define CACHED_VCLVIEW_1        0
+#define CACHED_VCLVIEW_2        1
+#define CACHED_VCLVIEW_DRAW     2
+#define CACHED_VCLVIEW_DEFEXT   64
 
-struct HDCCache
+struct VCLVIEWCache
 {
-    HDC         mhDC;
+    VCLVIEW         mhDC;
     HPALETTE    mhDefPal;
     HBITMAP     mhDefBmp;
     HBITMAP     mhSelBmp;
     HBITMAP     mhActBmp;
 };
 
-void ImplClearHDCCache( SalData* pData );
-HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp = 0 );
+void ImplClearVCLVIEWCache( SalData* pData );
+VCLVIEW ImplGetCachedDC( ULONG nID, HBITMAP hBmp = 0 );
 void ImplReleaseCachedDC( ULONG nID );
 
 // ------------------------------------------------------
@@ -212,17 +208,17 @@ void ImplSalYieldMutexRelease();
 ULONG ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( ULONG nCount );
 
-LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT nId, DWORD nTime );
+LRESULT CALLBACK SalFrameWndProcA( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+LRESULT CALLBACK SalFrameWndProcW( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+void    CALLBACK SalTimerProc( VCLWINDOW hWnd, UINT nMsg, UINT nId, DWORD nTime );
 
 void SalTestMouseLeave();
 
-long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
-BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
+long ImplHandleSalObjKeyMsg( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+long ImplHandleSalObjSysCharMsg( VCLWINDOW hWnd, WPARAM wParam, LPARAM lParam );
+BOOL ImplHandleGlobalMsg( VCLWINDOW hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
-SalObject* ImplFindSalObject( HWND hWndChild );
+SalObject* ImplFindSalObject( VCLWINDOW hWndChild );
 #ifdef WIN
 BOOL ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
@@ -318,23 +314,23 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 // A/W-Wrapper
 #ifdef WIN
-LONG        ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong );
-LONG        ImplGetWindowLong( HWND hWnd, int nIndex );
-WIN_BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-WIN_BOOL    ImplSendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-WIN_BOOL    ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax );
-WIN_BOOL    ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg );
+LONG        ImplSetWindowLong( VCLWINDOW hWnd, int nIndex, DWORD dwNewLong );
+LONG        ImplGetWindowLong( VCLWINDOW hWnd, int nIndex );
+WIN_BOOL    ImplPostMessage( VCLWINDOW hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+WIN_BOOL    ImplSendMessage( VCLWINDOW hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+WIN_BOOL    ImplGetMessage( LPMSG lpMsg, VCLWINDOW hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax );
+WIN_BOOL    ImplPeekMessage( LPMSG lpMsg, VCLWINDOW hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg );
 LONG        ImplDispatchMessage( const MSG *pMsg );
 #endif
 
-inline void SetWindowPtr( HWND hWnd, SalFrame* pThis )
+inline void SetWindowPtr( VCLWINDOW hWnd, SalFrame* pThis )
 {
 #ifdef WIN
     ImplSetWindowLong( hWnd, SAL_FRAME_THIS, (LONG)pThis );
 #endif
 }
 
-inline SalFrame* GetWindowPtr( HWND hWnd )
+inline SalFrame* GetWindowPtr( VCLWINDOW hWnd )
 {
 #ifdef WIN
     return (SalFrame*)ImplGetWindowLong( hWnd, SAL_FRAME_THIS );
@@ -343,14 +339,14 @@ inline SalFrame* GetWindowPtr( HWND hWnd )
 #endif
 }
 
-inline void SetSalObjWindowPtr( HWND hWnd, SalObject* pThis )
+inline void SetSalObjWindowPtr( VCLWINDOW hWnd, SalObject* pThis )
 {
 #ifdef WIN
     ImplSetWindowLong( hWnd, SAL_OBJECT_THIS, (LONG)pThis );
 #endif
 }
 
-inline SalObject* GetSalObjWindowPtr( HWND hWnd )
+inline SalObject* GetSalObjWindowPtr( VCLWINDOW hWnd )
 {
 #ifdef WIN
     return (SalObject*)ImplGetWindowLong( hWnd, SAL_OBJECT_THIS );

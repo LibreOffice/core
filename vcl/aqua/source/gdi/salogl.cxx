@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,10 @@
 // - Additional typedefs for init.
 // -------------------------------
 
-typedef HGLRC   ( *OGLFncCreateContext )( HDC hDC );
+typedef HGLRC   ( *OGLFncCreateContext )( VCLVIEW hDC );
 typedef BOOL    ( *OGLFncDeleteContext )( HGLRC hContext );
 typedef HGLRC   ( *OGLFncGetCurrentContext )( void );
-typedef void    ( *OGLFncMakeCurrent )( HDC hDC, HGLRC hContext  );
+typedef void    ( *OGLFncMakeCurrent )( VCLVIEW hDC, HGLRC hContext  );
 
 // ------------
 // - Lib-Name -
@@ -105,12 +105,11 @@ if( !pImplOpenWGLFnc##FncName ) bRet = FALSE;
 // -----------------
 
 // Members
-static HINSTANCE    hImplOGLLib;
 HGLRC               SalOpenGL::mhOGLContext = 0;
-HDC                 SalOpenGL::mhOGLLastDC = 0;
+VCLVIEW             SalOpenGL::mhOGLLastDC = 0;
 ULONG               SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
 
-#ifdef
+#ifdef WIN
 INIT_OGLFNC_WGL( CreateContext );
 INIT_OGLFNC_WGL( DeleteContext );
 INIT_OGLFNC_WGL( GetCurrentContext );
@@ -122,7 +121,7 @@ INIT_OGLFNC_WGL( MakeCurrent );
 // -----------
 
 #ifdef WIN
-LRESULT CALLBACK OpenGLWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
+LRESULT CALLBACK OpenGLWndProc( VCLWINDOW hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
     return DefWindowProc( hWnd, nMsg, nPar1, nPar2 );
 }
@@ -187,7 +186,7 @@ BOOL SalOpenGL::Create()
                      (mhOGLContext = pImplOpenWGLFncCreateContext( mhOGLLastDC )) != 0 )
                 {
                     WNDCLASS    aWc;
-                    HWND        hDummyWnd;
+                    VCLWINDOW       hDummyWnd;
 
                     SaveDC( mhOGLLastDC );
                     SelectClipRgn( mhOGLLastDC, NULL );
@@ -201,7 +200,7 @@ BOOL SalOpenGL::Create()
                     aWc.lpfnWndProc = OpenGLWndProc;
                     aWc.lpszClassName = "OpenGLWnd";
                     RegisterClass( &aWc );
-                    hDummyWnd = CreateWindow( aWc.lpszClassName, NULL, WS_OVERLAPPED, 0, -50, 1, 1, HWND_DESKTOP, NULL, aWc.hInstance, 0 );
+                    hDummyWnd = CreateWindow( aWc.lpszClassName, NULL, WS_OVERLAPPED, 0, -50, 1, 1, VCLWINDOW_DESKTOP, NULL, aWc.hInstance, 0 );
                     ShowWindow( hDummyWnd, SW_SHOW );
                     DestroyWindow( hDummyWnd );
                     UnregisterClass( aWc.lpszClassName, aWc.hInstance );
@@ -247,7 +246,7 @@ void* SalOpenGL::GetOGLFnc( const char* pFncName )
 // ------------------------------------------------------------------------
 
 #ifdef WIN
-typedef BOOL (WINAPI *MyFuncType)(HDC, HGLRC);
+typedef BOOL (WINAPI *MyFuncType)(VCLVIEW, HGLRC);
 #endif
 
 void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
@@ -279,7 +278,7 @@ void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
         if ( nIndex && SetPixelFormat( pGraphics->maGraphicsData.mhDC, nIndex, &pfd ) )
         {
             WNDCLASS    aWc;
-            HWND        hDummyWnd;
+            VCLWINDOW       hDummyWnd;
 
             pImplOpenWGLFncDeleteContext( mhOGLContext );
             mhOGLLastDC = pGraphics->maGraphicsData.mhDC;
@@ -295,7 +294,7 @@ void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
             aWc.lpfnWndProc = OpenGLWndProc;
             aWc.lpszClassName = "OpenGLWnd";
             RegisterClass( &aWc );
-            hDummyWnd = CreateWindow( aWc.lpszClassName, NULL, WS_OVERLAPPED, 0, -50, 1, 1, HWND_DESKTOP, NULL, aWc.hInstance, 0 );
+            hDummyWnd = CreateWindow( aWc.lpszClassName, NULL, WS_OVERLAPPED, 0, -50, 1, 1, VCLWINDOW_DESKTOP, NULL, aWc.hInstance, 0 );
             ShowWindow( hDummyWnd, SW_SHOW );
             DestroyWindow( hDummyWnd );
             UnregisterClass( aWc.lpszClassName, aWc.hInstance );
@@ -323,14 +322,14 @@ BOOL SalOpenGL::ImplInitLib()
 
 void SalOpenGL::ImplFreeLib()
 {
+#ifdef WIN
     if ( hImplOGLLib )
     {
-#ifdef WIN
         FreeLibrary( hImplOGLLib );
-#endif
         hImplOGLLib = NULL;
         mnOGLState = OGL_STATE_UNLOADED;
     }
+#endif
 }
 
 // ------------------------------------------------------------------------

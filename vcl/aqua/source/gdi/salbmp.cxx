@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 #ifdef WIN
         PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( rSalBmp.mhDIB );
         PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
-        HDC                 hDC  = pGraphics->maGraphicsData.mhDC;
+        VCLVIEW                 hDC  = pGraphics->maGraphicsData.mhDC;
         HBITMAP             hNewDDB;
         BITMAP              aDDBInfo;
         PBYTE               pBits = (PBYTE) pBI + *(DWORD*) pBI +
@@ -282,7 +282,7 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 #ifdef WIN
             PBITMAPINFO pBI = (PBITMAPINFO) GlobalLock( mhDIB );
             const int   nLines = (int) rSalBmp.maSize.Height();
-            HDC         hDC = GetDC( 0 );
+            VCLVIEW         hDC = GetDC( 0 );
             PBYTE       pBits = (PBYTE) pBI + *(DWORD*) pBI +
                                 ImplGetDIBColorCount( mhDIB ) * sizeof( RGBQUAD );
             SalData*    pSalData = GetSalData();
@@ -444,9 +444,9 @@ HANDLE SalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, BOOL bDIB )
         // Destination-Bitmap erzeugen
         if ( hCopy = CreateBitmapIndirect( &aBmp ) )
         {
-            HDC     hBmpDC = CreateCompatibleDC( 0 );
+            VCLVIEW     hBmpDC = CreateCompatibleDC( 0 );
             HBITMAP hBmpOld = (HBITMAP) SelectObject( hBmpDC, hHdl );
-            HDC     hCopyDC = CreateCompatibleDC( hBmpDC );
+            VCLVIEW     hCopyDC = CreateCompatibleDC( hBmpDC );
             HBITMAP hCopyOld = (HBITMAP) SelectObject( hCopyDC, hCopy );
 
             BitBlt( hCopyDC, 0, 0, aBmp.bmWidth, aBmp.bmHeight, hBmpDC, 0, 0, SRCCOPY );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:25 $
+ *  last change: $Author: pluby $ $Date: 2000-11-01 03:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <sv.h>
 #endif
 
+#ifndef _SV_VCLWINDOW_H
+#include <VCLWindow.h>
+#endif
+
 // -----------
 // - Defines -
 // -----------
@@ -80,8 +84,8 @@
 class SalGraphicsData
 {
 public:
-    HDC                     mhDC;               // HDC
-    HWND                    mhWnd;              // Window-Handle, when Window-Graphics
+    VCLVIEW                     mhDC;               // VCLVIEW
+    VCLWINDOW                   mhWnd;              // Window-Handle, when Window-Graphics
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
     HFONT                   mhFont;             // Font
