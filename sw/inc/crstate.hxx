@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:04:39 $
+ *  last change: $Author: ama $ $Date: 2001-01-30 09:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@ struct SwFillCrsrPos
 struct Sw2LinesPos
 {
     SwRect aLine;           // Position and size of the line
-    SwRect aPortion;        // Position and size of the (2line) portion
+    SwRect aPortion;        // Position and size of the multi portion
+    BYTE nMultiType;        // Multiportion type 0 = 90 degrees rotation,
+                            // type 1 = 270 degrees rotation; 2 = TwoLines
 };
 
 // CrsrTravelling-Staties (fuer GetCrsrOfst)
