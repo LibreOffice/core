@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycomposer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:42:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,7 +583,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyComposer::updateDependentProperties( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater )
+    void SAL_CALL PropertyComposer::actuatingPropertyChanged( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool _bFirstTimeInit )
     {
         // ask all handlers which expressed interest in this particular property, and "compose" their
         // commands for the UIUpdater
@@ -603,7 +603,7 @@ namespace pcr
             {
                 if ( m_pInfoService->getPropertyId( *loopProps ) == _nActuatingPropId )
                 {
-                    (*loop)->updateDependentProperties( _nActuatingPropId, _rNewValue, _rOldValue, &aComposedUpdate );
+                    (*loop)->actuatingPropertyChanged( _nActuatingPropId, _rNewValue, _rOldValue, &aComposedUpdate, _bFirstTimeInit );
                     break;
                 }
             }
