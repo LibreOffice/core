@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:26:24 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ QueryBox DLG_WRAP
     MESSAGE[ czech ] = "Přejete si pokračovat v kontrole od začátku dokumentu?";
     MESSAGE[ hebrew ] = "Überprüfung am Anfang des Dokumentes fortsetzen?";
     MESSAGE[ hindi ] = "लेखपत्र के प्रारंभ से जाँच को जारी रखना चाहते है?";
+    MESSAGE[ slovak ] = "Prajete si pokračovať v kontrole od začiatku dokumentu?";
 };
 QueryBox DLG_BODY
 {
@@ -148,6 +149,7 @@ QueryBox DLG_BODY
     MESSAGE[ czech ] = "Přejete si zkontrolovat hlavní text?";
     MESSAGE[ hebrew ] = "Wollen Sie den Haupttext prüfen?";
     MESSAGE[ hindi ] = "मुख्य टेक्स्ट् में जाँच करना चाहते है?";
+    MESSAGE[ slovak ] = "Prajete si  skontrolovať hlavný text?";
 };
 QueryBox DLG_PRT_FIELDNAME
 {
@@ -181,6 +183,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE[ czech ] = "Je zaškrtnuta volba Zobrazit pole.\nChcete vytisknout dokument s názvy polí?";
     MESSAGE[ hebrew ] = "Option Feldname anzeigen ist aktiviert.\nWollen Sie das Dokument mit Feldnamen drucken?";
     MESSAGE[ hindi ] = "दिखाव क्षेत्र आज्ञों का विकल्प को चिह्नित किया है ।\nआप लेखपत्र को क्षेत्र नामों के सहित छपाई करना चाहते है ?";
+    MESSAGE[ slovak ] = "Je zaškrtnutá voľba Zobraziť pole.\nChcete vytlačiť dokument s názvami polí?";
 };
 QueryBox DLG_SPECIAL
 {
@@ -214,6 +217,7 @@ QueryBox DLG_SPECIAL
     MESSAGE[ czech ] = "Přejete si zkontrolovat speciální oblasti?";
     MESSAGE[ hebrew ] = "Sonderbereiche prüfen?";
     MESSAGE[ hindi ] = "विशेष क्षेत्रों में जाँच करना चाहते है?";
+    MESSAGE[ slovak ] = "Prajete si skontrolovať špeciálne oblasti?";
 };
 QueryBox DLG_THESAURUS
 {
@@ -247,6 +251,7 @@ QueryBox DLG_THESAURUS
     MESSAGE[ czech ] = "Toto slovo se objevuje v seznamu slov, kterým se chcete vyhnout. Spustit slovník synonym?";
     MESSAGE[ hebrew ] = "Dieses Wort sollten Sie vermeiden! Thesaurus starten?";
     MESSAGE[ hindi ] = "इस शब्द उन शब्दों की सूची में है जिसको आप त्यागना चाहते है ! शब्दकोश प्रारंभ करना है?";
+    MESSAGE[ slovak ] = "Toto slovo sa objavuje v zozname slov, ktorým sa chcete vyhnúť. Spustiť slovník synoným?";
 };
 QueryBox DLG_SPECIAL_FORCED
 {
@@ -280,6 +285,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE[ czech ] = "Kontrola speciálních oblastí je vypnuta. Přesto zkontrolovat?";
     MESSAGE[ hebrew ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?";
     MESSAGE[ hindi ] = "विशेष क्षेत्रों की जाँच को निष्क्रिय किया है । फिर भी जाँच करना चाहते है?";
+    MESSAGE[ slovak ] = "Kontrola špeciálnych oblastí je vypnutá. Skontrolovať napriek tomu?";
 };
 QueryBox MSG_SEARCH_END
 {
@@ -313,6 +319,7 @@ QueryBox MSG_SEARCH_END
     Message[ czech ] = "%PRODUCTNAME Writer hledal až do konce dokumentu. Chcete pokračovat na začátku?";
     Message[ hebrew ] = "%PRODUCTNAME Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?";
     Message[ hindi ] = "%PRODUCTNAME लेखक लेखपत्र का अंत तक खोज किया । आप खोज को प्रारंभ से जारी रखना चाहते है ?";
+    Message[ slovak ] = "%PRODUCTNAME Writer hľadal až do konca dokumentu. Chcete pokračovať na začiatku?";
 };
 QueryBox MSG_SEARCH_START
 {
@@ -346,6 +353,7 @@ QueryBox MSG_SEARCH_START
     Message[ czech ] = "%PRODUCTNAME Writer hledal až na začátek dokumentu. Chcete pokračovat na konci?";
     Message[ hebrew ] = "%PRODUCTNAME Writer hat bis zum Anfang des Dokumentes gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?";
     Message[ hindi ] = "%PRODUCTNAME लेखक लेखपत्र का प्रारंभ तक खोज किया । आप खोज को अंत से जारी रखना चाहते है ?";
+    Message[ slovak ] = "%PRODUCTNAME Writer hľadal až na začiatok dokumentu. Chcete pokračovať na konci?";
 };
 InfoBox MSG_NO_MERGE_ENTRY
 {
@@ -376,6 +384,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message[ czech ] = "Není možné sloučit soubory.";
     Message[ hebrew ] = "Es konnte nichts zusammengeführt werden.";
     Message[ hindi ] = "लेखपत्रों को नहीं मिला सकते है ।";
+    Message[ slovak ] = "Nie je možné zlúčiť súbory.";
 };
 InfoBox MSG_ERR_INSERT_GLOS
 {
@@ -407,6 +416,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ czech ] = "Automatický text nelze vytvořit.";
     MESSAGE[ hebrew ] = "AutoText konnte nicht angelegt werden.";
     MESSAGE[ hindi ] = "स्वचालित टेक्स्ट् को उत्पन्न नहीं कर सकते है ।";
+    MESSAGE[ slovak ] = "Automatický text nie je možné vytvoriť";
 };
 InfoBox MSG_ERR_SRCSTREAM
 {
@@ -437,6 +447,7 @@ InfoBox MSG_ERR_SRCSTREAM
     Message[ czech ] = "Zdroj není možné načíst.";
     Message[ hebrew ] = "Der Quelltext kann nicht geladen werden.";
     Message[ hindi ] = "मूल को लोड़ नहीं कर सकते है ।";
+    Message[ slovak ] = "Zdroj nie je možné načítať.";
 };
 InfoBox MSG_ERR_NO_FAX
 {
@@ -467,6 +478,7 @@ InfoBox MSG_ERR_NO_FAX
     Message[ czech ] = "V nastavení Nástroje/Volby/%1/Tisk nebyla určena faxová tiskárna.";
     Message[ hebrew ] = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt.";
     Message[ hindi ] = "औज़ार/विकल्प/%1/छपाई के नीचे कोई फॉक्स मुद्रक को निर्धार नहीं किया है ।";
+    Message[ slovak ] = "V nastavení Nástroje/Možnosti/%1/Tlač nebola určená faxová tlačiareň.";
 };
 String STR_WEBOPTIONS
 {
@@ -496,6 +508,7 @@ String STR_WEBOPTIONS
     TEXT[ czech ] = "HTML dokument";
     TEXT[ hebrew ] = "‮מסמך LMTH‬";
     TEXT[ hindi ] = "HTML लेखपत्र";
+    TEXT[ slovak ] = "HTML dokument";
 };
 String STR_TEXTOPTIONS
 {
@@ -525,6 +538,7 @@ String STR_TEXTOPTIONS
     TEXT[ czech ] = "Textový dokument";
     TEXT[ hebrew ] = "‮מסמך‬";
     TEXT[ hindi ] = "टेक्स्ट् लेखपत्र";
+    TEXT[ slovak ] = "Textový dokument";
 };
 InfoBox MSG_NOT_FOUND
 {
@@ -556,6 +570,7 @@ InfoBox MSG_NOT_FOUND
     Message[ czech ] = "Hledané klíčové slovo nenalezeno.";
     Message[ hebrew ] = "Suchbegriff nicht gefunden.";
     Message[ hindi ] = "खोज की नहीं मिला ।";
+    Message[ slovak ] = "Hľadané kľúčové slovo nenájdené";
 };
 InfoBox MSG_INDEX_OVERFLOW
 {
@@ -587,6 +602,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message[ czech ] = "nalezeno.";
     Message[ hebrew ] = " gefunden.";
     Message[ hindi ] = "मिला  ।";
+    Message[ slovak ] = "nájdené.";
 };
 InfoBox MSG_SCAN_NOSOURCE
 {
@@ -617,6 +633,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message[ czech ] = "Zdroj není určen.";
     Message[ hebrew ] = "Quelle nicht gesetzt.";
     Message[ hindi ] = "मूल को निर्दिष्ट नहीं किया है ।";
+    Message[ slovak ] = "Zdroj nie je určený";
 };
 String STR_NOGLOS1
 {
@@ -648,6 +665,7 @@ String STR_NOGLOS1
     TEXT[ czech ] = "Automatický text pro zkratku '";
     TEXT[ hebrew ] = "AutoText zum Kürzel '";
     TEXT[ hindi ] = "सरल विधि केलिए स्वचालित टेक्स्ट् '";
+    TEXT[ slovak ] = "Automatický text pre skratku '";
 };
 String STR_NOGLOS2
 {
@@ -683,6 +701,7 @@ String STR_NOGLOS2
     TEXT[ czech ] = "' nenalezen.";
     TEXT[ hebrew ] = "' nicht gefunden.";
     TEXT[ hindi ] = "' नहीं मिला ।";
+    TEXT[ slovak ] = "' nenájdený.";
 };
 String STR_NUM_LEVEL
 {
@@ -713,6 +732,7 @@ String STR_NUM_LEVEL
     Text[ czech ] = "Úroveň ";
     Text[ hebrew ] = "Ebene";
     Text[ hindi ] = "स्तर";
+    Text[ slovak ] = "Úroveň ";
 };
 String STR_ERROR_NOLANG
 {
@@ -744,6 +764,7 @@ String STR_ERROR_NOLANG
     TEXT[ czech ] = "Není zvolen jazyk kontrolované oblasti.";
     TEXT[ hebrew ] = "Im geprüften Bereich ist keine Sprache eingestellt.";
     TEXT[ hindi ] = "प्रमाणित की हुयी विभाग में कोई भाषा को नहीं चुना ।";
+    TEXT[ slovak ] = "Nie je zvolený jazyk kontrolovanej oblasti.";
 };
 String STR_EDIT_FOOTNOTE
 {
@@ -775,6 +796,7 @@ String STR_EDIT_FOOTNOTE
     TEXT[ czech ] = "Upravit poznámku pod čarou";
     TEXT[ hebrew ] = "Fußnote bearbeiten";
     TEXT[ hindi ] = "पृष्ठ के नीचे की टीका का संपादन";
+    TEXT[ slovak ] = "Upraviť poznámku pod čiarou";
 };
 String STR_NB_REPLACED
 {
@@ -806,6 +828,7 @@ String STR_NB_REPLACED
     Text[ czech ] = "Hledané klíčové slovo bylo XX-krát nahrazeno.";
     Text[ hebrew ] = "Suchbegriff XXmal ersetzt.";
     Text[ hindi ] = "खोज की को XX बार प्रतिस्थापित किया ।";
+    Text[ slovak ] = "Hľadané kľúčové slovo bolo nahradené XX-krát.";
 };
 String RID_TOOLS_TOOLBOX
 {
@@ -836,6 +859,7 @@ String RID_TOOLS_TOOLBOX
     Text[ czech ] = "Hlavní panel nástrojů";
     Text[ hebrew ] = "‮סרגל ראשי‬";
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
+    Text[ slovak ] = "Hlavný panel nástrojov";
 };
 String STR_SRCVIEW_ROW
 {
@@ -867,6 +891,7 @@ String STR_SRCVIEW_ROW
     Text[ czech ] = "Řádek ";
     Text[ hebrew ] = "Zeile";
     Text[ hindi ] = "पंक्ति";
+    Text[ slovak ] = "Riadok ";
 };
 String STR_SRCVIEW_COL
 {
@@ -898,6 +923,7 @@ String STR_SRCVIEW_COL
     Text[ czech ] = "Sloupec ";
     Text[ hebrew ] = "Spalte";
     Text[ hindi ] = "स्तंभ ";
+    Text[ slovak ] = "Stĺpec ";
 };
 String STR_PRINT_TITLE
 {
@@ -928,6 +954,7 @@ String STR_PRINT_TITLE
     Text[ czech ] = "Tisk vybraných částí";
     Text[ hebrew ] = "Drucken der Selektion";
     Text[ hindi ] = "छपाई चुनाव ";
+    Text[ slovak ] = "Tlač vybraných častí­";
 };
 String STR_PRINT_MSG
 {
@@ -958,6 +985,7 @@ String STR_PRINT_MSG
     Text[ czech ] = "Chcete vytisknout pouze výběr nebo celý dokument?";
     Text[ hebrew ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?";
     Text[ hindi ] = "आप चुनाव का अथवा सम्पूर्ण लेखपत्र का छपाई करना चाहते है?";
+    Text[ slovak ] = "Chcete vytlačiť len výber alebo celý dokument?";
 };
 String STR_PRINT_ALL
 {
@@ -988,6 +1016,7 @@ String STR_PRINT_ALL
     Text[ czech ] = "Vše";
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "सब";
+    Text[ slovak ] = "Všetko";
 };
 String STR_PRINT_SELECTION
 {
@@ -1018,6 +1047,7 @@ String STR_PRINT_SELECTION
     Text[ czech ] = "Výběr";
     Text[ hebrew ] = "‮מבחר‬";
     Text[ hindi ] = "चुनाव";
+    Text[ slovak ] = "Výber";
 };
 String STR_READONLY_SEL
 {
@@ -1048,6 +1078,7 @@ String STR_READONLY_SEL
     TEXT[ czech ] = "pouze ke čtení";
     TEXT[ hebrew ] = "‮קריאה בלבד‬";
     TEXT[ hindi ] = "केवल पढ़ने केलिए";
+    TEXT[ slovak ] = "len na čítanie";
 };
 String STR_SAVEAS_SRC
 {
@@ -1078,6 +1109,7 @@ String STR_SAVEAS_SRC
     Text[ czech ] = "Exportovat zdroj...";
     Text[ hebrew ] = "Q~uelltext exportieren...";
     Text[ hindi ] = "~मूल को निर्यात करो...";
+    Text[ slovak ] = "~Exportovať zdroj...";
 };
 String MN_SRCVIEW_POPUPMENU
 {
@@ -1108,6 +1140,7 @@ String MN_SRCVIEW_POPUPMENU
     Text[ czech ] = "Zdrojový HTML text";
     Text[ hebrew ] = "HTML‮קוד ‬";
     Text[ hindi ] = "HTML मूल";
+    Text[ slovak ] = "Zdrojový HTML text";
 };
 
 ToolBox RID_TOOLS_TOOLBOX
@@ -1311,9 +1344,12 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ czech ] = "Zdrojový HTML text";
             Text[ hebrew ] = "HTML‮קוד ‬";
             Text[ hindi ] = "HTML मूल";
+            Text[ slovak ] = "Zdrojový HTML text";
         };
     };
 };
+
+
 
 
 
