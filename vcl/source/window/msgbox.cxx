@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-24 10:55:41 $
+ *  last change: $Author: dr $ $Date: 2002-11-22 14:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,7 @@ void MessBox::ImplPosControls()
         mpCheckBox->Check( mbCheck );
         mpCheckBox->SetText( maCheckBoxText );
         mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
+        mpCheckBox->SetHelpId( GetHelpId() );   // DR: Check box and dialog have same HID
 
         // align checkbox with message text
         Size aSize = mpCheckBox->CalcMinimumSize( aMinCheckboxSize.Width() );
