@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swurl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 13:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@ class UniString;
 class ViewShell;
 
 #define URLLOAD_NOFILTER            0x0000
-#define URLLOAD_DOWNLOADFILTER      0x0001
-#define URLLOAD_CHOOSEFILTER        0x0002
 #define URLLOAD_NEWVIEW             0x8000
 
 

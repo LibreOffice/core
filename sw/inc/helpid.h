@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 14:35:13 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 13:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,8 +423,6 @@
 #define HID_MN_RSC_END              (HID_BASE + 640)
 #define HID_MN_CALC_ROUND           (HID_BASE + 641)
 
-#define HID_MN_READONLY_DOWNLOAD                (HID_BASE + 643)
-#define HID_MN_READONLY_CREATEGRAPHIKLINK       (HID_BASE + 644)
 #define HID_MN_READONLY_SAVEGRAPHIC             (HID_BASE + 645)
 #define HID_MN_READONLY_GRAPHICTOGALLERY        (HID_BASE + 646)
 #define HID_MN_READONLY_TOGALLERYLINK           (HID_BASE + 647)
