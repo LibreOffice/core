@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include "rcontrol.hxx"
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _EDITWIN_HXX
 #include "editwin.hxx"
 #endif
@@ -121,7 +121,7 @@ BOOL StatementList::bDying = FALSE;
 BOOL StatementList::bExecuting = FALSE;
 StatementList *StatementList::pCurrentProfileStatement = NULL;
 USHORT StatementList::nControlType = CONST_CTTreeListBox;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 EditWindow *StatementList::m_pDbgWin;
 #endif
 
@@ -166,7 +166,7 @@ void StatementList::InitProfile()
         if ( pProfiler->IsProfilingPerCommand() || pProfiler->IsPartitioning() )
             pProfiler->StartProfileInterval( pCurrentProfileStatement != this );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement != NULL && pCurrentProfileStatement != this )
             pRet->GenReturn( RET_ProfileInfo, 0, CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
 #endif
@@ -193,7 +193,7 @@ void StatementList::SendProfile( String aText )
         if ( pProfiler->IsAutoProfiling() )
             pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetAutoProfiling() );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement == NULL )
             pRet->GenReturn( RET_ProfileInfo, 0, CUniString("SendProfile ohne InitProfile\n") );
 #endif
@@ -239,7 +239,7 @@ void StatementList::Advance()
 
 StatementList::~StatementList()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Deleting \n" );
 #endif
     DBG_ASSERT(!bReadingCommands,"Deleting commands while reading them!");
@@ -551,7 +551,7 @@ Window* StatementList::GetActive( WindowType nRT, BOOL MaybeBase )
 
 BOOL SearchFadeSplitWin::IsWinOK( Window *pWin )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if ( pWin->GetType() == WINDOW_SPLITWINDOW )
     {
         BOOL bResult;
@@ -790,7 +790,7 @@ UniString StatementList::Tree(Window *pBase, int Indent)
 
 String StatementList::ClientTree(Window *pBase, int Indent)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define WRITE(Text) m_pDbgWin->AddText(Text); aReturn += Text
 #define WRITEc(Text) m_pDbgWin->AddText(Text); aReturn.AppendAscii(Text)
 #else
@@ -887,12 +887,12 @@ BOOL StatementList::CheckWindowWait()
 
     if ( pWindowWaitPointer )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Waiting for Window to close ... " );
 #endif
         if ( WinPtrValid(pWindowWaitPointer) && IS_WINP_CLOSING(pWindowWaitPointer) )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             m_pDbgWin->AddText( String::CreateFromInt64( nWindowWaitUId ).AppendAscii(" Still Open. RType=") );
             m_pDbgWin->AddText( String::CreateFromInt32( pWindowWaitPointer->GetType() ).AppendAscii("\n") );
 #endif
@@ -900,7 +900,7 @@ BOOL StatementList::CheckWindowWait()
             // Ist die Zeit schonn abgelaufen?
             if ( StartTime + Time(0,0,10) < Time() )    // 10 Sekunden reichen wohl
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );
 #endif
                 pWindowWaitPointer->SetHelpId(nWindowWaitOldHelpId);
@@ -916,7 +916,7 @@ BOOL StatementList::CheckWindowWait()
         }
         pWindowWaitPointer = NULL;
         nWindowWaitUId = 0;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Closed, Going on.\n" );
 #endif
     }
