@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
+ *  last change: $Author: os $ $Date: 2002-05-06 10:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,7 +1414,7 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     ImageList& rImgLst = rStyleSettings.GetHighContrastMode() ?
-                aContentImageList : aContentImageListH;
+                aContentImageListH : aContentImageList;
 
     aContentToolBox.SetItemImage( FN_DROP_REGION,
                                     rImgLst.GetImage(nId));
