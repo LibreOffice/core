@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 12:46:15 $
+ *  last change: $Author: pb $ $Date: 2001-08-20 13:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,54 +147,56 @@ class SfxDialogExecutor_Impl
 */
 
 {
+private:
     SfxViewShell*           _pViewSh;
     PrintDialog*            _pParent;
     SfxItemSet*             _pOptions;
-    BOOL                    _bModified;
+    sal_Bool                _bModified;
+    sal_Bool                _bHelpDisabled;
 
-private:
     DECL_LINK( Execute, void * );
 
 public:
-            SfxDialogExecutor_Impl( SfxViewShell* pViewSh,
-                        PrintDialog* pParent );
-            ~SfxDialogExecutor_Impl()
-            { delete _pOptions; }
+            SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent );
+            ~SfxDialogExecutor_Impl() { delete _pOptions; }
 
-    Link                GetLink() const
-            { return LINK( this, SfxDialogExecutor_Impl, Execute); }
-
-    const SfxItemSet*   GetOptions() const
-            { return _pOptions; }
+    Link                GetLink() const { return LINK( this, SfxDialogExecutor_Impl, Execute); }
+    const SfxItemSet*   GetOptions() const { return _pOptions; }
+    void                DisableHelp() { _bHelpDisabled = sal_True; }
 };
 
 //--------------------------------------------------------------------
 
-SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell *pViewSh,
-                        PrintDialog* pParent )
-:   _pViewSh( pViewSh ),
-    _pParent( pParent ),
-    _pOptions( 0 )
+SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrintDialog* pParent ) :
+
+    _pViewSh        ( pViewSh ),
+    _pParent        ( pParent ),
+    _pOptions       ( NULL ),
+    _bModified      ( sal_False ),
+    _bHelpDisabled  ( sal_False )
+
 {
 }
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, pVoidCaller )
+IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
 {
     // Options lokal merken
     if ( !_pOptions )
-    _pOptions = ((SfxPrinter*)_pParent->GetPrinter())->GetOptions().Clone();
+        _pOptions = ( (SfxPrinter*)_pParent->GetPrinter() )->GetOptions().Clone();
 
     // Dialog ausf"uhren
-    SfxPrintOptionsDialog *pDlg =
-        new SfxPrintOptionsDialog( _pParent, _pViewSh, _pOptions );
+    SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( _pParent, _pViewSh, _pOptions );
+    if ( _bHelpDisabled )
+        pDlg->DisableHelp();
     if ( pDlg->Execute() == RET_OK )
     {
         delete _pOptions;
-    _pOptions = pDlg->GetOptions().Clone();
+        _pOptions = pDlg->GetOptions().Clone();
     }
     delete pDlg;
+
     return 0;
 }
 
@@ -219,13 +221,11 @@ BOOL UseStandardPrinter_Impl( Window *pParent, SfxPrinter *pDocPrinter )
     const SfxItemSet *pDocOptions = &pDocPrinter->GetOptions();
     if ( pDocOptions )
     {
-        USHORT nWhich =
-                pDocOptions->GetPool()->GetWhich(SID_PRINTER_NOTFOUND_WARN);
-    const SfxBoolItem *pBoolItem = 0;
-    pDocPrinter->GetOptions().GetItemState( nWhich, FALSE,
-        (const SfxPoolItem**) &pBoolItem );
+        USHORT nWhich = pDocOptions->GetPool()->GetWhich(SID_PRINTER_NOTFOUND_WARN);
+        const SfxBoolItem* pBoolItem = NULL;
+        pDocPrinter->GetOptions().GetItemState( nWhich, FALSE, (const SfxPoolItem**) &pBoolItem );
         if ( pBoolItem )
-        bWarn = pBoolItem->GetValue();
+            bWarn = pBoolItem->GetValue();
     }
 
 /*
@@ -488,6 +488,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 if ( pImp->bHasPrintOptions )
                 {
                     pExecutor = new SfxDialogExecutor_Impl( this, pPrintDlg );
+                    if ( bPrintOnHelp )
+                        pExecutor->DisableHelp();
                     pPrintDlg->SetOptionsHdl( pExecutor->GetLink() );
                     pPrintDlg->ShowOptionsButton();
                 }

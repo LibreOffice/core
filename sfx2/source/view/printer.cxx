@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-07-30 11:13:57 $
+ *  last change: $Author: pb $ $Date: 2001-08-20 13:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,20 @@ struct SfxPrinter_Impl
 };
 
 #define FONTS() pImpl->mpFonts
+
+struct SfxPrintOptDlg_Impl
+{
+#if SUPD <= 640
+    HelpButton*     mpHelpBtn;
+#endif
+    sal_Bool        mbHelpDisabled;
+
+    SfxPrintOptDlg_Impl() :
+#if SUPD <= 640
+        mpHelpBtn       ( NULL ),
+#endif
+        mbHelpDisabled  ( sal_False ) {}
+};
 
 //--------------------------------------------------------------------
 
@@ -538,15 +552,24 @@ BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentOb
 
 SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
                                               SfxViewShell *pViewShell,
-                                              const SfxItemSet *pSet ):
+                                              const SfxItemSet *pSet ) :
+
     ModalDialog( pParent, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-    aOkBtn( this ),
-    aCancelBtn( this ),
-    pViewSh( pViewShell ),
-    pOptions( pSet->Clone() ),
-    pPage( 0 )
+
+    aOkBtn      ( this ),
+    aCancelBtn  ( this ),
+#if SUPD > 640
+    aHelpBtn    ( this ),
+#endif
+    pDlgImpl    ( new SfxPrintOptDlg_Impl ),
+    pViewSh     ( pViewShell ),
+    pOptions    ( pSet->Clone() ),
+    pPage       ( NULL )
+
 {
-    pHelpBtn = new HelpButton(this);
+#if SUPD <= 640
+    pDlgImpl->mpHelpBtn = new HelpButton( this );
+#endif
     SetText( SfxResId( STR_PRINT_OPTIONS_TITLE ) );
 
     // TabPage einh"angen
@@ -565,25 +588,37 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
         aOutSz.Height() = 90;
     SetOutputSizePixel( aOutSz );
 
-    // Buttons positionieren
-    aOkBtn.SetPosSizePixel( Point( aOutSz.Width()-102, 6 ), Size( 96, 24 ) );
-#ifdef MAC
-    aCancelBtn.SetPosSizePixel( Point( aOutSz.Width()-102, 37 ), Size( 96, 24 ) );
-    pHelpBtn->SetPosSizePixel( Point( aOutSz.Width()-102, 64 ), Size( 96, 24 ) );
+    // set position and size of the buttons
+    Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
+    Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    Point aBtnPos( aOutSz.Width() - aBtnSz.Width() - a6Sz.Width(), a6Sz.Height() );
+    aOkBtn.SetPosSizePixel( aBtnPos, aBtnSz );
+    aBtnPos.Y() += aBtnSz.Height() + ( a6Sz.Height() / 2 );
+    aCancelBtn.SetPosSizePixel( aBtnPos, aBtnSz );
+    aBtnPos.Y() += aBtnSz.Height() + a6Sz.Height();
+#if SUPD > 640
+    aHelpBtn.SetPosSizePixel( aBtnPos, aBtnSz );
 #else
-    aCancelBtn.SetPosSizePixel( Point( aOutSz.Width()-102, 33 ), Size( 96, 24 ) );
-    pHelpBtn->SetPosSizePixel( Point( aOutSz.Width()-102, 60 ), Size( 96, 24 ) );
+    pDlgImpl->mpHelpBtn->SetPosSizePixel( aBtnPos, aBtnSz );
 #endif
+
     aCancelBtn.Show();
     aOkBtn.Show();
-    pHelpBtn->Show();
+#if SUPD > 640
+    aHelpBtn.Show();
+#else
+    pDlgImpl->mpHelpBtn->Show();
+#endif
 }
 
 //--------------------------------------------------------------------
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
-    delete pHelpBtn;
+#if SUPD <= 640
+    delete pDlgImpl->mpHelpBtn;
+#endif
+    delete pDlgImpl;
     delete pPage;
     delete pOptions;
 }
@@ -600,4 +635,27 @@ short SfxPrintOptionsDialog::Execute()
     return nRet;
 }
 
+//--------------------------------------------------------------------
+
+long SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        if ( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F1 && pDlgImpl->mbHelpDisabled )
+            return 1; // help disabled -> <F1> does nothing
+    }
+
+    return ModalDialog::Notify( rNEvt );
+}
+
+//--------------------------------------------------------------------
+
+void SfxPrintOptionsDialog::DisableHelp()
+{
+    pDlgImpl->mbHelpDisabled = sal_True;
+
+#if SUPD <= 640
+    pDlgImpl->mpHelpBtn->Disable();
+#endif
+}
 
