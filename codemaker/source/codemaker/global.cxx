@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:10:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,10 @@ OString getTempDir(const OString& sFileName)
 {
     sal_Int32 index = 0;
 #ifdef SAL_UNX
-    if ((index=sFileName.indexOf('/')) > 0)
+    if ((index=sFileName.lastIndexOf('/')) > 0)
         return sFileName.copy(0, index);
 #else
-    if ((index=sFileName.indexOf('\\')) > 0)
+    if ((index=sFileName.lastIndexOf('\\')) > 0)
         return sFileName.copy(0, index);
 #endif
     return ".";
