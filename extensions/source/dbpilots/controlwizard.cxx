@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 16:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-11-02 14:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
 #endif
+#ifndef _CONNECTIVITY_CONNCLEANUP_HXX_
+#include <connectivity/conncleanup.hxx>
+#endif
 
 //.........................................................................
 namespace dbp
@@ -146,6 +149,7 @@ namespace dbp
     using namespace ::com::sun::star::task;
     using namespace ::svt;
     using namespace ::comphelper;
+    using namespace ::dbtools;
 
     //=====================================================================
     //= OAccessRegulator
@@ -548,7 +552,11 @@ namespace dbp
 
             disposeComponent(xOldConn);
 
-            m_aContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection"), makeAny(_rxConn));
+            // set the new connection
+            // for this, use a AutoDisposer (so the conn is cleaned up when the form dies or get's another connection)
+            Reference< XRowSet > xFormRowSet( m_aContext.xForm, UNO_QUERY );
+            OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer( xFormRowSet, _rxConn );
+            Reference< XPropertyChangeListener > xEnsureDelete( pAutoDispose );
         }
         catch(const Exception&)
         {
@@ -800,6 +808,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/30 16:46:47  fs
+ *  #86714# functionality for displaying the form data source in a wizard page
+ *
  *  Revision 1.5  2001/04/03 12:42:48  fs
  *  #85223# get-/setFormConnection
  *
