@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.8 $
+#*  $Revision: 1.9 $
 #*
-#*  last change: $Author: er $ $Date: 2002-06-03 13:33:52 $
+#*  last change: $Author: khong $ $Date: 2002-08-03 00:51:58 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -195,6 +195,7 @@ DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 DEFLIB2NAME=	$(SHL2TARGET)
+SHL2STDLIBS=	-l$(SHL1TARGET)
 SHL2OBJS=	\
     $(SLO)$/localedata_de_DE.obj	\
     $(SLO)$/localedata_fr_FR.obj	\
@@ -241,6 +242,7 @@ DEF3DEPN=	$(MISC)$/$(SHL3TARGET).flt
 SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=	$(SHL3TARGET)
 DEFLIB3NAME=	$(SHL3TARGET)
+SHL3STDLIBS=	-l$(SHL1TARGET)
 SHL3OBJS= \
     $(SLO)$/localedata_es_AR.obj \
     $(SLO)$/localedata_es_BO.obj \
@@ -272,6 +274,7 @@ DEF4DEPN=	$(MISC)$/$(SHL4TARGET).flt
 SHL4DEF=	$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=	$(SHL4TARGET)
 DEFLIB4NAME=	$(SHL4TARGET)
+SHL4STDLIBS=	-l$(SHL1TARGET)
 SHL4OBJS= \
     $(SLO)$/localedata_af_ZA.obj \
     $(SLO)$/localedata_ar_EG.obj \
