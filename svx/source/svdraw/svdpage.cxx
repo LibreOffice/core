@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-13 12:33:10 $
+ *  last change: $Author: aw $ $Date: 2001-02-14 16:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,50 +761,50 @@ FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                                 bOk=pObj->Paint(rXOut,rInfoRec);
 
 //////////////////////////////////////////////////////////////////////////////
-
-    Vector2D aTRScale;
-    double fTRShear;
-    double fTRRotate;
-    Vector2D aTRTranslate;
-    Matrix3D aOrigMat;
-    XPolyPolygon aTRPolyPolygon;
-
-    BOOL bIsPath = pObj->TRGetBaseGeometry(aOrigMat, aTRPolyPolygon);
-    aOrigMat.DecomposeAndCorrect(aTRScale, fTRShear, fTRRotate, aTRTranslate);
-    Vector2D aVectorTranslate;
-    aVectorTranslate.X() = FRound(aTRTranslate.X());
-    aVectorTranslate.Y() = FRound(aTRTranslate.Y());
-
-    Point aPoint(aVectorTranslate.X(), aVectorTranslate.Y());
-    Rectangle aTRBaseRect(
-        aPoint,
-        Size(FRound(aTRScale.X()), FRound(aTRScale.Y())));
-
-    Color aLineColorMerk(rXOut.GetOutDev()->GetLineColor());
-    Color aFillColorMerk(rXOut.GetOutDev()->GetFillColor());
-    rXOut.GetOutDev()->SetFillColor();
-
-    rXOut.GetOutDev()->SetLineColor(COL_BLACK);
-    rXOut.GetOutDev()->DrawRect(aTRBaseRect);
-
-    if(bIsPath)
-    {
-        rXOut.GetOutDev()->SetLineColor(COL_LIGHTRED);
-        XPolyPolygon aTRPoPo(aTRPolyPolygon);
-        aTRPoPo.Move(aTRBaseRect.Left(), aTRBaseRect.Top());
-        sal_uInt16 nCount(aTRPoPo.Count());
-        for(sal_uInt16 a(0); a < nCount; a++)
-            rXOut.GetOutDev()->DrawPolygon(XOutCreatePolygon(aTRPoPo[a], rXOut.GetOutDev()));
-    }
-
-    rXOut.GetOutDev()->SetLineColor(aLineColorMerk);
-    rXOut.GetOutDev()->SetFillColor(aFillColorMerk);
-
-    static BOOL bDoTestSetAllGeometry(FALSE);
-    if(bDoTestSetAllGeometry)
-        pObj->TRSetBaseGeometry(aOrigMat, aTRPolyPolygon);
-
-
+//
+//  Vector2D aTRScale;
+//  double fTRShear;
+//  double fTRRotate;
+//  Vector2D aTRTranslate;
+//  Matrix3D aOrigMat;
+//  XPolyPolygon aTRPolyPolygon;
+//
+//  BOOL bIsPath = pObj->TRGetBaseGeometry(aOrigMat, aTRPolyPolygon);
+//  aOrigMat.DecomposeAndCorrect(aTRScale, fTRShear, fTRRotate, aTRTranslate);
+//  Vector2D aVectorTranslate;
+//  aVectorTranslate.X() = FRound(aTRTranslate.X());
+//  aVectorTranslate.Y() = FRound(aTRTranslate.Y());
+//
+//  Point aPoint(aVectorTranslate.X(), aVectorTranslate.Y());
+//  Rectangle aTRBaseRect(
+//      aPoint,
+//      Size(FRound(aTRScale.X()), FRound(aTRScale.Y())));
+//
+//  Color aLineColorMerk(rXOut.GetOutDev()->GetLineColor());
+//  Color aFillColorMerk(rXOut.GetOutDev()->GetFillColor());
+//  rXOut.GetOutDev()->SetFillColor();
+//
+//  rXOut.GetOutDev()->SetLineColor(COL_BLACK);
+//  rXOut.GetOutDev()->DrawRect(aTRBaseRect);
+//
+//  if(bIsPath)
+//  {
+//      rXOut.GetOutDev()->SetLineColor(COL_LIGHTRED);
+//      XPolyPolygon aTRPoPo(aTRPolyPolygon);
+//      aTRPoPo.Move(aTRBaseRect.Left(), aTRBaseRect.Top());
+//      sal_uInt16 nCount(aTRPoPo.Count());
+//      for(sal_uInt16 a(0); a < nCount; a++)
+//          rXOut.GetOutDev()->DrawPolygon(XOutCreatePolygon(aTRPoPo[a], rXOut.GetOutDev()));
+//  }
+//
+//  rXOut.GetOutDev()->SetLineColor(aLineColorMerk);
+//  rXOut.GetOutDev()->SetFillColor(aFillColorMerk);
+//
+//  static BOOL bDoTestSetAllGeometry(FALSE);
+//  if(bDoTestSetAllGeometry)
+//      pObj->TRSetBaseGeometry(aOrigMat, aTRPolyPolygon);
+//
+//
 //////////////////////////////////////////////////////////////////////////////
                             }
 
