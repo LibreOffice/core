@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:38:55 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:17:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,8 +106,7 @@ PARFILES=                          \
         module_ooo.par             \
         profile_ooo.par            \
         profileitem_ooo.par        \
-        starregistryitem_ooo.par   \
-        configurationitem_ooo.par
+        starregistryitem_ooo.par 
 
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
@@ -116,7 +115,6 @@ PARFILES +=                        \
 .ENDIF
 
 ULFFILES=                          \
-        configurationitem_ooo.ulf  \
         directory_ooo.ulf          \
         helptext_ooo.ulf           \
         module_ooo.ulf             \
