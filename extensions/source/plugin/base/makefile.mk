@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-02 12:20:09 $
+#   last change: $Author: obo $ $Date: 2001-09-18 14:13:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@ PRJ=..$/..$/..
 
 PRJNAME=plugin
 TARGET=plbase
+TARGETTYPE=GUI
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  ..$/util$/makefile.pmk
