@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 10:44:17 $
+ *  last change: $Author: mba $ $Date: 2002-09-04 08:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,16 @@
 
 class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
 {
+    SfxBindings*        pBindings;
 public:
                         SfxRecordingFloatWrapper_Impl( Window* pParent ,
                                                 USHORT nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo );
+                        ~SfxRecordingFloatWrapper_Impl();
 
                         SFX_DECL_CHILDWINDOW(SfxRecordingFloatWrapper_Impl);
+    virtual sal_Bool    QueryClose();
 };
 
 class SfxRecordingFloat_Impl : public SfxFloatingWindow

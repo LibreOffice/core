@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 10:40:24 $
+ *  last change: $Author: mba $ $Date: 2002-09-04 08:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,37 @@ SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDO
 
 SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParent ,
                                                 USHORT nId ,
-                                                SfxBindings* pBindings ,
+                                                SfxBindings* pBind ,
                                                 SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParent , nId )
+                    , pBindings( pBind )
 {
     pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParent );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ( ( SfxFloatingWindow* ) pWindow )->Initialize( pInfo );
+}
+
+SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
+{
+    SfxBoolItem aItem( FN_PARAM_1, TRUE );
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
+    if ( xRecorder.is() )
+        pBindings->GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+}
+
+sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
+{
+    // asking for recorded macro should be replaced if index access is available!
+    BOOL bRet = TRUE;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
+    if ( xRecorder.is() && xRecorder->getRecordedMacro().getLength() )
+    {
+        QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , String( SfxResId( STR_MACRO_LOSS ) ) );
+        aBox.SetText( String( SfxResId(STR_CANCEL_RECORDING) ) );
+        bRet = ( aBox.Execute() == RET_YES );
+    }
+
+    return bRet;
 }
 
 SfxRecordingFloat_Impl::SfxRecordingFloat_Impl( SfxBindings* pBindings ,
@@ -112,25 +136,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl( SfxBindings* pBindings ,
 
 BOOL SfxRecordingFloat_Impl::Close()
 {
-    BOOL bRet = TRUE;
-
-    // asking for recorded macro should be replaced if index access is available!
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = GetBindings().GetRecorder();
-    if ( xRecorder.is() && xRecorder->getRecordedMacro().getLength() )
-    {
-        QueryBox aBox( this, WB_YES_NO | WB_DEF_NO , String( SfxResId( STR_MACRO_LOSS ) ) );
-        aBox.SetText( String( SfxResId(STR_CANCEL_RECORDING) ) );
-        bRet = ( aBox.Execute() == RET_YES );
-    }
-
-    if ( bRet )
-    {
-        SfxBindings& rBindings = GetBindings();
-        bRet = SfxFloatingWindow::Close();
-        SfxBoolItem aItem( FN_PARAM_1, TRUE );
-        rBindings.GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-    }
-
+    BOOL bRet = SfxFloatingWindow::Close();
     return bRet;
 }
 
@@ -156,4 +162,3 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
 
     SfxFloatingWindow::StateChanged( nStateChange );
 }
-
