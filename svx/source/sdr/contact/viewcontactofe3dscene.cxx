@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofe3dscene.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:45:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ namespace sdr
                     rDisplayInfo.GetPaintInfoRec()->bNotActive = rDisplayInfo.IsGhostedDrawModeActive();
 
                     // Paint the 3D scene. Just hand over to the old Paint() ATM.
-                    GetSdrObject().DoPaintObject_Wrapper(
+                    GetSdrObject().DoPaintObject(
                         *rDisplayInfo.GetExtendedOutputDevice(),
                         *rDisplayInfo.GetPaintInfoRec());
 
