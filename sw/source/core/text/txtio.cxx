@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:31:24 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
 void LayOutPut( const SwFrm* pFrm )
 {
 #ifndef MAC
-    static char *pOutName = 0;
+    static char* pOutName = 0;
     const sal_Bool bFirstOpen = pOutName ? sal_False : sal_True;
     if( bFirstOpen )
     {
