@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:46:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1380,6 +1380,44 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ slovak ] = "Prajete si zmazať zoznam ignorovaných výrazov?";
 };
  // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
