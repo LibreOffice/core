@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-16 15:23:11 $
+#   last change: $Author: hr $ $Date: 2004-02-04 12:29:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,9 +104,9 @@ UNOTYPES = \
     com.sun.star.reflection.XEnumTypeDescription
 
 .IF "$(COMEX)"=="10"
-CFLAGS += /clr:noAssembly,initialAppDomain
+CFLAGS += -clr:noAssembly,initialAppDomain
 .ELSE
-CFLAGS += /clr:noAssembly
+CFLAGS += -clr:noAssembly
 .ENDIF
 
 OBJFILES = \
