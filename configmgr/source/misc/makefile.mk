@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: lla $ $Date: 2001-05-31 14:48:56 $
+#   last change: $Author: jb $ $Date: 2001-06-20 20:16:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/anypair.obj	\
         $(SLO)$/bootstrap.obj	\
         $(SLO)$/providerfactory.obj	\
         $(SLO)$/tracer.obj	\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 09:33:08 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,70 +305,37 @@ namespace configmgr
             it != m_aChildren.GetSet().end();
             ++it)
             (**it).dispatch(anAction);
-    }
+      }
 
-// -------------------------- ValueNode implementation --------------------------
-    void ValueNode::check_init()    // may throw in the future
-    {
-        if (m_aValue.hasValue())
-        {
-            OSL_ASSERT(m_aType != ::getVoidCppuType());
-            OSL_ASSERT(m_aType == m_aValue.getValueType());
-        }
-        else OSL_ASSERT(getVoidCppuType() == m_aValue.getValueType());
+//  // -------------------------- ValueNode implementation --------------------------
+      void ValueNode::check_init()  // may throw in the future
+      {
+          m_aValuePair.check_init();
+      }
 
-        if (m_aDefaultValue.hasValue())
-        {
-            OSL_ASSERT(m_aType != ::getVoidCppuType());
-            OSL_ASSERT(m_aType == m_aDefaultValue.getValueType());
-        }
-        else OSL_ASSERT(getVoidCppuType() == m_aDefaultValue.getValueType());
-    }
-
-    void ValueNode::init()
-    {
-        OSL_ASSERT(m_aType == ::getVoidCppuType());
-
-        if (m_aDefaultValue.hasValue())
-        {
-            m_aType = m_aDefaultValue.getValueType();
-            OSL_ASSERT(m_aType != ::getVoidCppuType());
-        }
-        else if (m_aValue.hasValue())
-        {
-            m_aType = m_aValue.getValueType();
-            OSL_ASSERT(m_aType != ::getVoidCppuType());
-        }
+      void ValueNode::init()
+      {
+          m_aValuePair.init();
     }
 
 
-    void ValueNode::setValue(Any aValue)
+    void ValueNode::setValue(Any const& _aValue)
     {
-        m_aValue = aValue;
-        // flip the type if necessary
-        if  (   (m_aType.getTypeClass() == TypeClass_ANY)
-            &&  (aValue.getValueType().getTypeClass() != TypeClass_ANY)
-            &&  (aValue.getValueType().getTypeClass() != TypeClass_VOID)
-            )
-            m_aType = aValue.getValueType();
+        m_aValuePair.setFirst(_aValue);
     }
 
-    void ValueNode::changeDefault(Any aValue)
+    void ValueNode::changeDefault(Any const& _aValue)
     {
-        m_aDefaultValue = aValue;
-        // flip the type if necessary
-        if  (   (m_aType.getTypeClass() == TypeClass_ANY)
-            &&  (aValue.getValueType().getTypeClass() != TypeClass_ANY)
-            &&  (aValue.getValueType().getTypeClass() != TypeClass_VOID)
-            )
-            m_aType = aValue.getValueType();
+        m_aValuePair.setSecond(_aValue);
     }
 
     void ValueNode::setDefault()
     {
         // PRE: ????
         // POST: isDefault() == true
-        m_aValue = Any();
+        // OSL_ENSURE(false, "ValueNode::setDefault(): this isn't really defined yet.");
+        // m_aValue = Any();
+        // m_pFirst = NULL;
     }
 
     INode* ValueNode::clone() const

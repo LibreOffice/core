@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:43:13 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,12 @@
 #include "configpath.hxx"
 #endif
 
+#ifndef _UNO_ANY2_H_
+#include <uno/any2.h>
+#endif
+
+#include <anypair.hxx>
+
 namespace configmgr
 {
 
@@ -142,6 +148,54 @@ namespace configmgr
         // "rtti"
         RTTI_BASE(INode);
     };
+
+
+
+    //==========================================================================
+    //= ISubtree
+    //==========================================================================
+    // Abstract class
+
+    class ASubtree : public INode
+    {
+        sal_Int16           m_nLevel;                   /// determines if everything is read
+        ::rtl::OUString     m_sId;
+
+    public:
+        virtual bool isSetNode() const = 0;
+
+    };
+
+    //==========================================================================
+    //= GroupTree
+    //==========================================================================
+    class GroupTree : public ASubtree
+    {
+    public:
+        virtual bool isSetNode() const; // always false!
+
+    };
+
+    //==========================================================================
+    //= SetTree
+    //==========================================================================
+    class SetTree : public ASubtree
+    {
+        ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
+        ::rtl::OUString     m_sTemplateModule;          /// module of the template for child instantiation
+    public:
+        virtual bool isSetNode() const; // always true!
+    };
+
+
+
+
+
+
+
+// -----------------------------------------------------------------------------
+// ----------------------------------- O L D -----------------------------------
+// -----------------------------------------------------------------------------
 
     //==========================================================================
     //= ISubtree
@@ -223,9 +277,10 @@ namespace configmgr
     //==========================================================================
     class ValueNode : public INode
     {
-        uno::Type       m_aType;
-        uno::Any        m_aValue;
-        uno::Any        m_aDefaultValue;
+        AnyPair m_aValuePair;
+        // uno::Type        m_aType;
+        // uno::Any     m_aValue;
+        // uno::Any     m_aDefaultValue;
 
     public:
         ValueNode(){}
@@ -236,26 +291,32 @@ namespace configmgr
             :INode(aName, _aAttrs)
         {}
         ValueNode(rtl::OUString const& aName,uno::Type const& aType, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs), m_aType(aType)
-        { check_init(); }
+            :INode(aName, _aAttrs), m_aValuePair(aType)
+            {
+                check_init();
+            }
         ValueNode(rtl::OUString const& aName,uno::Any const& anAny, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs), m_aValue(anAny)
-        { init(); }
+            :INode(aName, _aAttrs), m_aValuePair(anAny)
+        {
+            init();
+        }
         ValueNode(rtl::OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs), m_aValue(anAny), m_aDefaultValue(aDefault)
-        { init(); }
+            :INode(aName, _aAttrs), m_aValuePair(anAny, aDefault)
+        {
+            init();
+        }
 
 
-        bool isNull() const {return !m_aValue.hasValue() && !m_aDefaultValue.hasValue();}
-        bool hasDefault() const {return getAttributes().bNullable || m_aDefaultValue.hasValue();}
-        bool isDefault() const {return !m_aValue.hasValue() && hasDefault();}
+        bool isNull() const {return m_aValuePair.isNull();}
+        bool hasDefault() const {return getAttributes().bNullable || m_aValuePair.hasSecond();}
+        bool isDefault() const {return !m_aValuePair.hasFirst() && hasDefault();}
 
-        uno::Type getValueType() const {return m_aType;}
-        uno::Any getValue() const {return isDefault() ? m_aDefaultValue : m_aValue;}
-        const uno::Any& getDefault() const {return m_aDefaultValue;}
+        uno::Type getValueType() const {return m_aValuePair.getValueType();}
+        uno::Any getValue() const {return isDefault() ? m_aValuePair.getSecond() : m_aValuePair.getFirst();}
+        uno::Any getDefault() const {return m_aValuePair.getSecond();}
 
-        void setValue(uno::Any aValue);
-        void changeDefault(uno::Any aValue);
+        void setValue(uno::Any const& _aValue);
+        void changeDefault(uno::Any const& _aValue);
         void setDefault();
 
         virtual INode* clone() const;
