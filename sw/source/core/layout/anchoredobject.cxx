@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:58:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,7 +976,7 @@ Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
     // --> OD 2005-01-27 #i33818# - search for cell frame, if object has to
     // follow the text flow.
     const SwFrm* pFrm( 0L );
-    if ( _bFollowTextFlow )
+    if ( _bFollowTextFlow && !GetAnchorFrm()->IsPageFrm() )
     {
         pFrm = GetAnchorFrm()->GetUpper();
         while ( !pFrm->IsCellFrm() && !pFrm->IsPageFrm() )
