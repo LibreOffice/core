@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-19 07:05:03 $
+ *  last change: $Author: sj $ $Date: 2001-10-12 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,7 @@ void GDIMetaFile::Move( long nX, long nY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            Replace( pModAct = pAct->Clone(), pAct );
+            Replace( pModAct = pAct->Clone(), GetCurPos() );
             pAct->Delete();
         }
         else
@@ -830,7 +830,7 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 
         if( pAct->GetRefCount() > 1 )
         {
-            Replace( pModAct = pAct->Clone(), pAct );
+            Replace( pModAct = pAct->Clone(), GetCurPos() );
             pAct->Delete();
         }
         else
