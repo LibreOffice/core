@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.47 2002-01-18 11:39:17 dvo Exp $
+	$Id: text.mod,v 1.48 2002-02-28 14:42:15 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -722,12 +722,6 @@
 <!ELEMENT text:endnote-body (text:h|text:p|
 							 text:ordered-list|text:unordered-list)*>
 
-<!ENTITY % sectionText "(text:h|text:p|text:ordered-list|
-						text:unordered-list|table:table|text:section|
-						text:table-of-content|text:illustration-index|
-						text:table-index|text:object-index|text:user-index|
-						text:alphabetical-index|text:bibliography|
-						text:index-title|%change-marks;)*">
 <!ENTITY % sectionAttr "text:name CDATA #REQUIRED
                         text:style-name %styleName; #IMPLIED
                         text:protected %boolean; 'false' ">

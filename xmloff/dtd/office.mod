@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.44 2001-09-20 17:47:53 dvo Exp $
+	$Id: office.mod,v 1.45 2002-02-28 14:42:15 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -213,11 +213,6 @@
 
 <!ELEMENT office:master-styles (draw:layer-set?,style:handout-master?,style:master-page*) >
 
-<!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
-					   text:user-field-decls?, text:dde-connection-decls?, 
-					   text:alphabetical-index-auto-mark-file?" >
-
-<!ENTITY % change-marks "text:change | text:change-start | text:change-end">
 
 <!ENTITY % body "(office:forms?,(text:tracked-changes|table:tracked-changes)?,%text-decls;,table:calculation-settings?,table:content-validations?,table:label-ranges?,
 		(text:h|text:p|text:ordered-list|
