@@ -3,6 +3,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sync
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
+mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\provider
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\browse
@@ -151,6 +153,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 ..\com\sun\star\ui\dialogs\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
+..\drafts\com\sun\star\geometry\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
+..\drafts\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
 ..\drafts\com\sun\star\frame\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 ..\drafts\com\sun\star\frame\status\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame\status
 ..\drafts\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
