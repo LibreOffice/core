@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-08-09 06:25:05 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
-                    pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
+//                  pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
                     (SID_DOCUMENT_MERGE == nWhich && pWrtShell->GetDoc()->GetRedlinePasswd().getLength()))
                     rSet.DisableItem(nWhich);
             break;
