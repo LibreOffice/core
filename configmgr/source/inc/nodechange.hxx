@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-07 16:26:28 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 16:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include "apitypes.hxx"
 #include "configexcept.hxx"
 
+#include <vector>
+
 namespace configmgr
 {
     namespace configuration
@@ -84,8 +86,9 @@ namespace configmgr
 
         class NodeChange;
         class NodeChangeImpl;
-        struct NodeChangeInfo;
-        struct ExtendedNodeChangeInfo;
+        class NodeChangeLocation;
+        class NodeChangeInformation;
+        class NodeChangesInformation;
 //-----------------------------------------------------------------------------
 
         /// represents a node position in some tree
@@ -110,9 +113,9 @@ namespace configmgr
             /// checks, if this represents an actual change (PRE: must be tested)
             bool isChange() const;
             /// retrieve information about the changed data
-            bool getChangeInfo(NodeChangeInfo& rInfo) const;
-            /// retrieve information about the changed data
-            bool getChangeInfo(ExtendedNodeChangeInfo& rInfo) const;
+            bool getChangeInfo(NodeChangeInformation& rInfo) const;
+            /// retrieve information about what node is changed
+            bool getChangeLocation(NodeChangeLocation& rLoc) const;
 
             /// test whether this would really be a change (as close as possible)
             NodeChange& test();
@@ -173,9 +176,7 @@ namespace configmgr
             ChangesList::size_type getCount() const { return m_aChanges.size(); }
 
             /// retrieve information about the changed data
-            bool getChangesInfo(std::vector<NodeChangeInfo>& rInfos) const;
-            /// retrieve information about the changed data
-            bool getChangesInfo(std::vector<ExtendedNodeChangeInfo>& rInfos) const;
+            bool getChangesInfo(NodeChangesInformation& rInfos) const;
 
             /// test all changes
             NodeChanges& test()             { implTest(); return *this; }

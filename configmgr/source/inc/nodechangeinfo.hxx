@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 16:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,10 @@
 #include "apitypes.hxx"
 #include "configpath.hxx"
 #include "noderef.hxx"
+
 #include <vos/ref.hxx>
+
+#include <vector>
 
 namespace configmgr
 {
@@ -78,75 +81,197 @@ namespace configmgr
         class Tree;
         class NodeRef;
         class NodeID;
-        class ElementTreeImpl;
 
+        class ElementTreeImpl;
         typedef vos::ORef<ElementTreeImpl>  ElementTreeHolder;
 
 //-----------------------------------------------------------------------------
-        struct NodeChangeInfo
+        /// captures the values of something changing
+        template <class DataT>
+        struct DataChange
         {
+            DataT newValue;
+            DataT oldValue;
+
+            DataChange()
+            : newValue(), oldValue()
+            {}
+
+            DataChange(DataT const& newValue_, DataT const& oldValue_)
+            : newValue(newValue_), oldValue(oldValue_)
+            {}
+
+            // note: maybe we should support a comparison object
+            bool isDataChange() const
+            { return !(oldValue == newValue); } // not using != to avoid conversion warning
+        };
+
+//-----------------------------------------------------------------------------
+        /// information about what changed (but close to no context)
+        class NodeChangeData
+        {
+        public:
         //-------------------------------------------------
             enum Type
             {
                 eNoChange,
 
+            // Changes to value nodes
                 eSetValue,
                 eSetDefault,
 
+            // Changes to set nodes
                 eInsertElement,
                 eReplaceElement,
                 eRemoveElement,
 
-                eRenameElementTree
+                eRenameElementTree // not fully supported yet
             };
         //-------------------------------------------------
-            NodeChangeInfo();
-            NodeChangeInfo(NodeChangeInfo const& aOther);
-            NodeChangeInfo& operator=(NodeChangeInfo const& aOther);
-            ~NodeChangeInfo();
-        //-------------------------------------------------
-            bool isChange() const;
 
-            bool isEmpty()          const { return eNoChange == type; }
+            bool isEmptyChange()    const { return eNoChange == type; }
             bool isValueChange()    const { return eSetValue <= type && type <= eSetDefault; }
             bool isSetChange()      const { return eInsertElement <= type && type <= eRemoveElement; }
+
         //-------------------------------------------------
-            Tree getNewElementTree() const;
-            Tree getOldElementTree() const;
+            bool isDataChange() const;
+
+        //-------------------------------------------------
+        // wrapper object creation
+            Tree    getNewElementTree() const;
+            Tree    getOldElementTree() const;
 
             NodeRef getNewElementNodeRef() const;
             NodeRef getOldElementNodeRef() const;
 
-            NodeID getNewElementNodeID() const;
-            NodeID getOldElementNodeID() const;
+            NodeID  getNewElementNodeID() const;
+            NodeID  getOldElementNodeID() const;
+        //-------------------------------------------------
+
+        //-- Compiler barrier for element tree ------------
+            NodeChangeData();
+            NodeChangeData(NodeChangeData const& aOther);
+            NodeChangeData& operator=(NodeChangeData const& aOther);
+            ~NodeChangeData();
         //-------------------------------------------------
             Type type;
 
-            UnoAny oldValue;
-            UnoAny newValue;
+            // Value change: old/new value; Set change: new/old api element (if known); Rename: old/new name
+            DataChange< UnoAny              > unoData;
+            // Value change: NULL,NULL; Set change: new/old tree element; Rename: the affected element-tree (twice)
+            DataChange< ElementTreeHolder   > element;
+        //-------------------------------------------------
+        };
 
-            ElementTreeHolder oldElement;
-            ElementTreeHolder newElement;
+        //-------------------------------------------------
+        // Identify the location of a change. Interpretation of members may depend upon
+        class NodeChangeLocation
+        {
+        public:
+        //-------------------------------------------------
+            // checks whether the base has been properly set up.
+            // Does not check for existence of the affected node
+
+            /// check whether the location has been initialized properly
+            bool isValidLocation() const;
+
+        //-------------------------------------------------
+            /// retrieve the path from the base node to the changed node (which might be a child of the affected node)
+            RelativePath getAccessor() const { return m_path; }
+
+            /// retrieve the tree where the change is actually initiated/reported
+            Tree getBaseTree() const;
+            /// retrieve the node where the change is actually initiated/reported
+            NodeRef getBaseNode() const;
+
+            /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
+            Tree getAffectedTree() const;
+            /// retrieve the node where the change is actually taking place (if the affected Tree is not empty)
+            NodeRef getAffectedNode() const;
+            /// identify the node where the change is actually taking place
+            NodeID getAffectedNodeID() const;
+
+            /// identify the node (within the affected tree), that actually is changed (this one may be a value node)
+            NodeID getChangedNodeID() const;
+
+        //-------------------------------------------------
+            void setAccessor( RelativePath const& aAccessor );
+
+            void setBase( NodeID const& aBaseID );
+            void setBase( Tree const& aBaseTree, NodeRef const& aBaseNode )
+            { setBase( NodeID(aBaseTree,aBaseNode) ); }
+
+            void setTarget( NodeID const& aTargetID );
+            void setTarget( Tree const& aTargetTree, NodeRef const& aTargetNode )
+            { setTarget( NodeID(aTargetTree,aTargetNode) ); }
+
+            void setChanging( NodeID const& aChangedID );
+            void setChanging( Tree const& aChangedTree, NodeRef const& aChangedNode )
+            { setChanging( NodeID(aChangedTree,aChangedNode) ); }
+        //-------------------------------------------------
+            NodeChangeLocation();
+        //  NodeChangeLocation(NodeChangeLocation const& aOther);
+        //  NodeChangeLocation& operator=(NodeChangeLocation const& aOther);
+        //  ~NodeChangeLocation();
+        //-------------------------------------------------
+        private:
+            RelativePath    m_path;     // path from baseNode to changing node
+            NodeID          m_base;     // a (non-empty) node
+            NodeID          m_target;   // identifies the affected node (if available)
+            NodeID          m_changed;  // identifies the affected node (if available)
         //-------------------------------------------------
         };
 //-----------------------------------------------------------------------------
-        struct ExtendedNodeChangeInfo
+        class NodeChangeInformation
         {
-            NodeChangeInfo  change;
-            Tree            baseTree;
-            NodeRef         baseNode;
-            RelativePath    accessor;
+        public:
+        //-------------------------------------------------
+            NodeChangeData      change;
+            NodeChangeLocation  location;
 
-            ExtendedNodeChangeInfo();
+        //-------------------------------------------------
+            bool hasValidLocation() const { return location.isValidLocation(); }
+            bool isDataChange()     const { return change.isDataChange(); }
 
-            bool isChange()         const { return change.isChange(); }
-
-            bool isEmpty()          const { return change.isEmpty(); }
+            bool isEmptyChange()    const { return change.isEmptyChange(); }
             bool isValueChange()    const { return change.isValueChange(); }
             bool isSetChange()      const { return change.isSetChange(); }
+        //-------------------------------------------------
+        };
+//-----------------------------------------------------------------------------
+
+        class NodeChangesInformation
+        {
+            typedef std::vector< NodeChangeInformation > Rep;
+        public:
+            typedef Rep::const_iterator Iterator;
+
+            Rep::size_type size() const { return m_data.size(); }
+            bool empty() const { return m_data.empty(); }
+
+            void reserve(Rep::size_type sz_)    { m_data.reserve(sz_); }
+            void resize(Rep::size_type sz_)     { m_data.resize(sz_); }
+            void clear() { m_data.clear(); }
+            void swap(NodeChangesInformation& aOther) throw() { m_data.swap(aOther.m_data); }
+
+            void push_back(NodeChangeInformation const& aChange_ = NodeChangeInformation())
+            { m_data.push_back(aChange_); }
+
+            Iterator begin() const { return m_data.begin(); }
+            Iterator end() const { return m_data.end(); }
+        private:
+            Rep m_data;
         };
 //-----------------------------------------------------------------------------
     }
+}
+
+namespace std
+{
+    template <>
+    inline
+    void swap(configmgr::configuration::NodeChangesInformation& lhs, configmgr::configuration::NodeChangesInformation& rhs)
+    { lhs.swap(rhs); }
 }
 
 #endif // CONFIGMGR_CONFIGCHANGEINFO_HXX_
