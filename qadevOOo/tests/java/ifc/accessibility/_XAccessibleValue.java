@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleValue.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:06:24 $
+ *  last change:$Date: 2003-10-06 13:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,11 @@ public class _XAccessibleValue extends MultiMethodTest {
             log.println("Current value of another component from group: " +
                 curValAnother);
             log.println("Set value of base component to " + curValAnother);
-            oObj.setCurrentValue(valAnotherFromGroup);
+            if (tEnv.getTestCase().getObjectName().equals("AccessibleRadioButton")) {
+                anotherFromGroup.setCurrentValue(new Integer(curValBase));
+            } else {
+                oObj.setCurrentValue(valAnotherFromGroup);
+            }
             log.println("Checking of values...");
             int newValBase = getIntegerValue(oObj.getCurrentValue());
             int newValAnother = getIntegerValue(
