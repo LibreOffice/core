@@ -154,7 +154,7 @@ Dim oSelListbox as Object
 			If SwitchFormat Then
 				If oRange.getPropertyState(&quot;NumberFormat&quot;) &lt;&gt; 1 Then
 					&apos; Range is hard formatted
-					SwitchNumberFormat(oRange, oFormats, sEuroSign))
+					SwitchNumberFormat(oRange, oFormats, sEuroSign)
 				End If
 			Else
 				SwitchNumberFormat(oRange, oFormats, sEuroSign)

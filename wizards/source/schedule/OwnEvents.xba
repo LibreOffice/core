@@ -32,8 +32,6 @@ End Sub
 
 
 Function CalCreateDateFromInput() as Date
-&apos;	Generiert aus den Eingabedaten der Ereignisseite 
-&apos;	ein Datum im Dateserial Format, 
 Dim newDate as Date
 Dim EvDay as Integer
 Dim EvYear as Integer
@@ -105,12 +103,11 @@ Dim CurEvDay as Integer
 	DateStr = CalCreateDateStrOfInput()
 	If DateStr = &quot;&quot; Then Exit Sub
 
-	&apos;	Es ist noch garnichts vorhanden
 	If Ubound(DlgCalModel.lstOwnData.StringItemList()) = -1 Then
 		DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, 0 + 1)
 		bInserted = True
 	Else
-		&apos;	gleiche jahre(auch keine Jahre sind gleiche jahre)-&gt;alt löschen neu rein
+		&apos;	same Years(&quot;no years&quot; are treated like same years) -&gt; delete old entry and insert new one
 		i = 0
 		Do
 			CurEvYear = CalGetYearOfEvent(i)
@@ -124,8 +121,7 @@ Dim CurEvDay as Integer
 			i = i + 1
 		Loop Until bInserted Or i &gt; LastIndex
 		
-		&apos;	Es existiert ein Datum mit Jahreszahl. Es wird dasselbe Datum
-		&apos;	ohne Angabe der Jahreszahl angegeben.
+		&apos;  There exists a date with a certain year number.
 		If Not bInserted And Not bGetYear Then
 			i = 0
 			Do
@@ -139,8 +135,7 @@ Dim CurEvDay as Integer
 			Loop Until bInserted Or i &gt; LastIndex
 		End If
 	
-		&apos;	Das einzufügende Datum besitzt eine Jahreszahl, es gibt bereits
-		&apos;	das Datum in der Liste, jedoch ohne Datum.
+		&apos;	the date to be inserted owns a year number. It exists already such a date in the list but without date
 		If Not bInserted And bGetYear Then
 			i = 0
 			Do
@@ -152,7 +147,7 @@ Dim CurEvDay as Integer
 			Loop Until bInserted Or i &gt; LastIndex
 		End If
 	
-		&apos;	Das Datum ist noch nicht vorhanden und wird richtig einsortiert
+		&apos; The date is not yet existing and will will be sorted in accordingly
 		If Not bInserted And Not bDateDoubled Then
 			i = 0
 			Do 

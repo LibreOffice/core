@@ -39,13 +39,8 @@ End Sub
 
 Sub CalInsertBankholiday(byval CurDate as Long, byval EventName as String, ByVal iLevel as Integer)
 Dim iDay
-	&apos;	Fuegt ein Ereignis in das globale EventArray ein.
-	&apos;	Der Sonderfall der eintreten kann, ist der, dass das Datum
-	&apos;	an dem eingefuegt werden soll, bereits ein Ereignis enthaelt.
-	&apos;	Dann werden beide Ereignisse mit einem Schraegstrich verbunden.
 	iDay =(Month(CurDate)-1)*31 +Day(CurDate)
 
-	&apos;	Hoehere Prioritaet des Feiertagtyps
 	If 0 &lt;&gt; CalTypeOfBankHoliday(iDay) Then
 		If iLevel &lt; CalTypeOfBankHoliday(iDay) Then
 			CalTypeOfBankHoliday(iDay) = iLevel
@@ -69,8 +64,7 @@ End Function
 
 
 Function CalMaxDayInMonth(ByVal iYear as Integer, ByVal iMonth as Integer) as Integer
-&apos; Liefert den maximalen Tag eines Monats in einem
-&apos; bestimmten Jahr.
+&apos; delivers the maximum Day of a month in a certain year
 	Dim TmpDate as Long
 	Dim	MaxDay as Long
 	
@@ -112,8 +106,7 @@ End Function
 
 
 Sub CalInsertOwnDataInTables(ByVal iSelYear as Integer)
-	&apos;	Fügt die eigenen Individuellen Daten aus der Tabelle in die
-	&apos;	bereits erstellte unsortierte Tabelle ein.	
+	&apos; inserts the individual data from the table into the previously unsorted list
 Dim CurEventName as String
 Dim CurYear as Integer
 Dim CurMonth as Integer

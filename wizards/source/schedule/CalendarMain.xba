@@ -7,10 +7,10 @@ Const _DEBUG = 0
 &apos; CalenderMain
 Public sCurLangLocale as String
 Public sCurCountryLocale as String
-&apos; Dieses Flag dient zur Abfrage ob die individuellen Daten abgespeichert werden sollen.
+&apos; This flag serves as a query if the individual Data should be saved
 Public bCalOwnDataChanged as Boolean
 
-&apos;BankHolidayFunctions
+&apos;BankHoliday Functions
 Public CalBankholidayName$ (1 To 374)
 Public CalTypeOfBankHoliday% (1 To 374)
 
@@ -32,8 +32,6 @@ Public sBitmapFilename$
 Public sCalendarTitle$, sMonthTitle$, sWizardTitle$, sError$
 Public cCalStyleWorkday$, cCalStyleWeekend$
 
-&apos; German only
-&apos; Variablen, die zur Verwaltung der Eingabe der Bundesländer dienen
 Public CalChoosenLand as Integer
 
 Public oDocument as Object
@@ -42,7 +40,7 @@ Public oSheet as Object
 Public oStatusLine as Object
 Public bCancelTask as Boolean
 
-&apos; BL* bedeutet BundesLand*
+&apos; BL* means &quot;BundesLand&quot; (for german states only)
 Public CONST CalBLBayern         = 1
 Public CONST CalBLBadenWuert     = 2
 Public CONST CalBLBerlin         = 3
