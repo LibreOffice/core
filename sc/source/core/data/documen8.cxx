@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 16:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "scdebug.hxx"
 #include "rechead.hxx"
 #include "ddelink.hxx"
+#include "scmatrix.hxx"
 #include "arealink.hxx"
 #include "dociter.hxx"
 #include "patattr.hxx"
@@ -1158,6 +1159,50 @@ BOOL ScDocument::GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, Str
         }
     }
     return FALSE;
+}
+
+BOOL ScDocument::GetDdeLinkResultDimension( USHORT nPos, USHORT& nCol, USHORT& nRow, ScMatrix* pMatrix)
+{
+    USHORT nDdeCount = 0;
+    if (pLinkManager)
+    {
+        const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nCount = rLinks.Count();
+        for (USHORT i=0; i<nCount; i++)
+        {
+            SvBaseLink* pBase = *rLinks[i];
+            if (pBase->ISA(ScDdeLink))
+            {
+                if ( nDdeCount == nPos )
+                {
+                    ScDdeLink* pDde = (ScDdeLink*)pBase;
+                    pMatrix = pDde->GetResult();
+                    if (pMatrix)
+                    {
+                        pMatrix->GetDimensions(nCol, nRow);
+                        return TRUE;
+                    }
+                }
+                ++nDdeCount;
+            }
+        }
+    }
+    return FALSE;
+}
+
+BOOL ScDocument::GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString)
+{
+    if (pMatrix)
+    {
+        BOOL bIsEmpty = pMatrix->IsEmpty(nCol, nRow);
+        bIsString = pMatrix->IsString(nCol, nRow);
+        if (bIsString)
+            rStrValue = pMatrix->GetString(nCol, nRow);
+        else
+            rDoubValue = pMatrix->GetDouble(nCol, nRow);
+        return bIsEmpty;
+    }
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
