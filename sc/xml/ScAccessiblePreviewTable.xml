@@ -4,7 +4,7 @@
     <module-name>sc</module-name>
     <component-description>
         <author>Sascha Ballach</author>
-        <name>ScAccessibleCell</name>
+        <name>ScAccessiblePreviewTable</name>
         <description>This objects give you the access to the content of a table in the page preview. Please habe also a look at the service description.</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
