@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-03 19:16:09 $
+ *  last change: $Author: oj $ $Date: 2001-05-08 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1914,8 +1914,8 @@ String STR_QUERYDESIGN_NO_VIEW_SUPPORT
 String STR_QUERYDESIGN_NO_VIEW_ASK
 {
     Text = "Möchten Sie statt dessen eine Abfrage erzeugen?";
-    Text [ ENGLISH ] = "Do you want to create a view instead?";
-    Text[ english_us ] = "Do you want to create a view instead?";
+    Text [ ENGLISH ] = "Do you want to create a query instead?";
+    Text[ english_us ] = "Do you want to create a query instead?";
 };
 
 String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
