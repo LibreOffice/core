@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-07 11:26:22 $
+ *  last change: $Author: os $ $Date: 2001-11-30 13:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,7 +1688,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 }
                                 else if( rSh.IsFrmSelected() )
                                     bDisable = GRAPHIC_NONE ==
-                                            rSh.GetIMapGraphic().GetType();
+                                            rSh.GetIMapGraphic().GetType()||
+                                            nSel & SwWrtShell::SEL_FRM;
                             }
                             bSet = bDisable ? FALSE : rWrap.IsContour();
 
