@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:56:47 $
+ *  last change: $Author: nn $ $Date: 2001-01-30 17:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #include <svx/sizeitem.hxx>
 #include <offmgr/app.hxx>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/docinf.hxx>
 #include <sfx2/misccfg.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
@@ -583,7 +585,44 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
     aDocument.EndChangeTracking();
     aDocument.StartChangeTracking();
 
+    String aOldUser;
+    pTrack = aDocument.GetChangeTrack();
+    if ( pTrack )
+    {
+        aOldUser = pTrack->GetUser();
+
+        //  check if comparing to same document
+
+        String aThisFile;
+        const SfxMedium* pThisMed = GetMedium();
+        if (pThisMed)
+            aThisFile = pThisMed->GetName();
+        String aOtherFile;
+        SfxObjectShell* pOtherSh = rOtherDoc.GetDocumentShell();
+        if (pOtherSh)
+        {
+            const SfxMedium* pOtherMed = pOtherSh->GetMedium();
+            if (pOtherMed)
+                aOtherFile = pOtherMed->GetName();
+        }
+        BOOL bSameDoc = ( aThisFile == aOtherFile && aThisFile.Len() );
+        if ( !bSameDoc )
+        {
+            //  create change actions from comparing with the name of the user
+            //  who last saved the document
+            //  (only if comparing different documents)
+
+            String aDocUser = GetDocInfo().GetChanged().GetName();
+            if ( aDocUser.Len() )
+                pTrack->SetUser( aDocUser );
+        }
+    }
+
     aDocument.CompareDocument( rOtherDoc );
+
+    pTrack = aDocument.GetChangeTrack();
+    if ( pTrack )
+        pTrack->SetUser( aOldUser );
 
     PostPaintGridAll();
     SetDocumentModified();
