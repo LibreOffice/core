@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,78 @@
 #ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
 #define _SC_XMLSTYLESEXPORTHELPER_HXX
 
-#include <vector>
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
 
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
 #ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
+#include <com/sun/star/table/CellAddress.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONTYPE_HPP_
+#include <com/sun/star/sheet/ValidationType.hpp>
+#endif
+
+class ScDocument;
+class   ScXMLExport;
+
+struct ScMyValidation
+{
+    rtl::OUString               sName;
+    rtl::OUString               sErrorMessage;
+    rtl::OUString               sErrorTitle;
+    rtl::OUString               sImputMessage;
+    rtl::OUString               sImputTitle;
+    rtl::OUString               sFormula1;
+    rtl::OUString               sFormula2;
+    com::sun::star::table::CellAddress          aBaseCell;
+    com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
+    com::sun::star::sheet::ValidationType       aValidationType;
+    com::sun::star::sheet::ConditionOperator    aOperator;
+    sal_Bool                    bShowErrorMessage;
+    sal_Bool                    bShowImputMessage;
+    sal_Bool                    bIgnoreBlanks;
+
+                                ScMyValidation();
+                                ~ScMyValidation();
+
+    sal_Bool                    IsEqual(const ScMyValidation& aVal) const;
+};
+
+typedef std::vector<ScMyValidation>         ScMyValidationVec;
+
+class ScMyValidationsContainer
+{
+private:
+    ScMyValidationVec           aValidationVec;
+    rtl::OUString               sEmptyString;
+protected:
+public:
+                                ScMyValidationsContainer();
+                                ~ScMyValidationsContainer();
+    sal_Bool                    AddValidation(const com::sun::star::uno::Any& aAny,
+                                    const com::sun::star::table::CellRangeAddress& aCellRange, sal_Int32& nValidationIndex);
+    rtl::OUString               GetCondition(const ScMyValidation& aValidation);
+    rtl::OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
+    void                        WriteMessage(ScXMLExport& rExport,
+                                    const rtl::OUString& sTitle, const rtl::OUString& sMessage,
+                                    const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage);
+    void                        WriteValidations(ScXMLExport& rExport);
+    const rtl::OUString&        GetValidationName(const sal_Int32 nIndex);
+};
+
+//==============================================================================
 
 struct ScMyRowFormatRange
 {
@@ -75,6 +142,7 @@ struct ScMyRowFormatRange
     sal_Int32   nRepeatColumns;
     sal_Int32   nRepeatRows;
     sal_Int32   nIndex;
+    sal_Int32   nValidationIndex;
     sal_Bool    bIsAutoStyle;
 
     ScMyRowFormatRange();
@@ -104,6 +172,7 @@ struct ScMyFormatRange
 {
     com::sun::star::table::CellRangeAddress aRangeAddress;
     sal_Int32                               nStyleNameIndex;
+    sal_Int32                               nValidationIndex;
     sal_Bool                                bIsAutoStyle;
 
     ScMyFormatRange();
@@ -125,11 +194,12 @@ public:
     void AddNewTable(const sal_Int16 nTable);
     sal_Int32 AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle = sal_True);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle);
+    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex );
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int16 nTable, ScRowFormatRanges& aFormatRanges);
-    void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex, const sal_Bool bIsAutoStyle);
-    rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow);
+    void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
+                    const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex);
+//  rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow);
     rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle);
     void Sort();
 };

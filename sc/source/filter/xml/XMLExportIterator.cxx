@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 12:26:19 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,8 @@
 #include "XMLExportIterator.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONANCHOR_HPP_
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
-#include <com/sun/star/sheet/XSheetCondition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XSIMPLETEXT_HPP_
 #include <com/sun/star/text/XSimpleText.hpp>
@@ -98,14 +92,8 @@
 #ifndef SC_DOCITER_HXX
 #include "dociter.hxx"
 #endif
-#ifndef SC_UNONAMES_HXX
-#include "unonames.hxx"
-#endif
 #ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
-#endif
-#ifndef _SC_XMLCONVERTER_HXX
-#include "XMLConverter.hxx"
 #endif
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
@@ -430,441 +418,6 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
 
 //==============================================================================
 
-ScMyValidationRange::ScMyValidationRange() :
-    nIndex(0),
-    bUsed(sal_False)
-{
-}
-
-ScMyValidationRange::~ScMyValidationRange()
-{
-}
-
-ScMyValidation::ScMyValidation()
-    : sName(),
-    sErrorMessage(),
-    sErrorTitle(),
-    sImputMessage(),
-    sImputTitle(),
-    sFormula1(),
-    sFormula2(),
-    bShowErrorMessage(sal_False),
-    bShowImputMessage(sal_False),
-    bIgnoreBlanks(sal_False)
-{
-}
-
-ScMyValidation::~ScMyValidation()
-{
-}
-
-sal_Bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
-{
-    if (aVal.bIgnoreBlanks == bIgnoreBlanks &&
-        aVal.bShowImputMessage == bShowImputMessage &&
-        aVal.bShowErrorMessage == bShowErrorMessage &&
-        aVal.aBaseCell.Sheet == aBaseCell.Sheet &&
-        aVal.aBaseCell.Column == aBaseCell.Column &&
-        aVal.aBaseCell.Row == aBaseCell.Row &&
-        aVal.aAlertStyle == aAlertStyle &&
-        aVal.aValidationType == aValidationType &&
-        aVal.aOperator == aOperator &&
-        aVal.sErrorTitle == sErrorTitle &&
-        aVal.sImputTitle == sImputTitle &&
-        aVal.sErrorMessage == sErrorMessage &&
-        aVal.sImputMessage == sImputMessage &&
-        aVal.sFormula1 == sFormula1 &&
-        aVal.sFormula2 == sFormula2)
-        return sal_True;
-    else
-        return sal_False;
-}
-
-ScMyValidationsContainer::ScMyValidationsContainer()
-    : aValidationVec(),
-    aValidationRangeVec(),
-    sEmptyString()
-{
-}
-
-ScMyValidationsContainer::~ScMyValidationsContainer()
-{
-}
-
-sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
-    const table::CellRangeAddress& aCellRange)
-{
-    sal_Bool bAdded(sal_False);
-    uno::Reference<beans::XPropertySet> xPropertySet;
-    if (aTempAny >>= xPropertySet)
-    {
-        uno::Any aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)));
-        OUString sErrorMessage;
-        aAny >>= sErrorMessage;
-        aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)));
-        OUString sErrorTitle;
-        aAny >>= sErrorTitle;
-        aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)));
-        OUString sImputMessage;
-        aAny >>= sImputMessage;
-        aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)));
-        OUString sImputTitle;
-        aAny >>= sImputTitle;
-        aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)));
-        sal_Bool bShowErrorMessage;
-        aAny >>= bShowErrorMessage;
-        aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)));
-        sal_Bool bShowImputMessage;
-        aAny >>= bShowImputMessage;
-        aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)));
-        sheet::ValidationType aValidationType;
-        aAny >>= aValidationType;
-        if (bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
-            sErrorMessage.getLength() || sErrorTitle.getLength() || sImputMessage.getLength() || sImputTitle.getLength())
-        {
-            ScMyValidation aValidation;
-            aValidation.sErrorMessage = sErrorMessage;
-            aValidation.sErrorTitle = sErrorTitle;
-            aValidation.sImputMessage = sImputMessage;
-            aValidation.sImputTitle = sImputTitle;
-            aValidation.bShowErrorMessage = bShowErrorMessage;
-            aValidation.bShowImputMessage = bShowImputMessage;
-            aValidation.aValidationType = aValidationType;
-            aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)));
-            aAny >>= aValidation.bIgnoreBlanks;
-            aAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)));
-            aAny >>= aValidation.aAlertStyle;
-            uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
-            if (xCondition.is())
-            {
-                aValidation.sFormula1 = xCondition->getFormula1();
-                aValidation.sFormula2 = xCondition->getFormula2();
-                aValidation.aOperator = xCondition->getOperator();
-                aValidation.aBaseCell = xCondition->getSourcePosition();
-            }
-            ScMyValidationRange aValidationRange;
-            sal_Bool bEqualFound(sal_False);
-            sal_Int32 i = 0;
-            sal_Int32 nCount = aValidationVec.size();
-            while (i < nCount && !bEqualFound)
-            {
-                bEqualFound = aValidationVec[i].IsEqual(aValidation);
-                if (!bEqualFound)
-                    i++;
-            }
-            if (bEqualFound)
-                aValidationRange.nIndex = i;
-            else
-            {
-                sal_Int32 nNameIndex = nCount + 1;
-                OUString sCount = OUString::valueOf(nNameIndex);
-                OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM("val"));
-                aValidation.sName += sPrefix;
-                aValidation.sName += sCount;
-                aValidationVec.push_back(aValidation);
-                aValidationRange.nIndex = nCount;
-            }
-            aValidationRange.aRange = aCellRange;
-            sal_Int32 nStartRow = aCellRange.StartRow;
-            sal_Int32 nEndRow = aCellRange.EndRow;
-            for( sal_Int32 nRow = nStartRow; nRow <= nEndRow; nRow++ )
-            {
-                aValidationRange.aRange.StartRow = aValidationRange.aRange.EndRow = nRow;
-                aValidationRangeVec.push_back(aValidationRange);
-            }
-            bAdded = sal_True;
-        }
-    }
-    return bAdded;
-}
-
-OUString ScMyValidationsContainer::GetCondition(const ScMyValidation& aValidation)
-{
-    OUString sCondition;
-    if (aValidation.aValidationType != sheet::ValidationType_ANY)
-    {
-        switch (aValidation.aValidationType)
-        {
-            //case sheet::ValidationType_CUSTOM
-            case sheet::ValidationType_DATE :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date()"));
-            break;
-            case sheet::ValidationType_DECIMAL :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number()"));
-            break;
-            //case sheet::ValidationType_LIST :
-            case sheet::ValidationType_TEXT_LEN :
-                if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
-                    aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
-                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length()"));
-            break;
-            case sheet::ValidationType_TIME :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time()"));
-            break;
-            case sheet::ValidationType_WHOLE :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number()"));
-            break;
-        }
-        if (aValidation.sFormula1.getLength() ||
-            (aValidation.aOperator == sheet::ConditionOperator_BETWEEN &&
-            aValidation.aOperator == sheet::ConditionOperator_NOT_BETWEEN &&
-            aValidation.sFormula2.getLength()))
-        {
-            if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(" and "));
-            if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
-                aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
-            {
-                if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
-                switch (aValidation.aOperator)
-                {
-                    case sheet::ConditionOperator_EQUAL :
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                    break;
-                    case sheet::ConditionOperator_GREATER :
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-                    break;
-                    case sheet::ConditionOperator_GREATER_EQUAL :
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-                    break;
-                    case sheet::ConditionOperator_LESS :
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-                    break;
-                    case sheet::ConditionOperator_LESS_EQUAL :
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-                    break;
-                    case sheet::ConditionOperator_NOT_EQUAL :
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-                    break;
-                }
-                sCondition += aValidation.sFormula1;
-            }
-            else
-            {
-                if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
-                {
-                    if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-between("));
-                    else
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-not-between("));
-                }
-                else
-                {
-                    if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between("));
-                    else
-                        sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between("));
-                }
-                sCondition += aValidation.sFormula1;
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-                sCondition += aValidation.sFormula2;
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-            }
-        }
-        else
-            if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
-                sCondition = OUString();
-    }
-    return sCondition;
-}
-
-OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
-{
-    OUString sAddress;
-    ScAddress aAddress(aCell.Column, aCell.Row, aCell.Sheet);
-    ScXMLConverter::GetStringFromAddress( sAddress, aAddress, pDoc );
-    return sAddress;
-}
-
-void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
-    const OUString& sTitle, const OUString& sMessage,
-    const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage)
-{
-    if (sTitle.getLength())
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_title, sTitle);
-    if (bShowMessage)
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_true);
-    else
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_false);
-    SvXMLElementExport* pMessage = NULL;
-    if (bIsHelpMessage)
-        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_help_message, sal_True, sal_True);
-    else
-        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_error_message, sal_True, sal_True);
-    if (sMessage.getLength())
-    {
-        sal_Int32 i = 0;
-        OUStringBuffer sTemp;
-        while(i < sMessage.getLength())
-        {
-            if (sMessage[i] == '\n')
-            {
-                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
-            }
-            else
-                sTemp.append(sMessage[i]);
-            i++;
-        }
-        if (sTemp.getLength())
-        {
-            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-            rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
-        }
-    }
-    if (pMessage)
-        delete pMessage;
-}
-
-void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
-{
-    if (aValidationVec.size())
-    {
-        SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, sXML_content_validations, sal_True, sal_True);
-        ScMyValidationVec::iterator aItr = aValidationVec.begin();
-        while (aItr != aValidationVec.end())
-        {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_name, aItr->sName);
-            OUString sCondition = GetCondition(*aItr);
-            if (sCondition.getLength())
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_condition, sCondition);
-                if (aItr->bIgnoreBlanks)
-                    rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_allow_empty_cell, sXML_false);
-                else
-                    rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_allow_empty_cell, sXML_true);
-            }
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_base_cell_address, GetBaseCellAddress(rExport.GetDocument(), aItr->aBaseCell));
-            SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, sXML_content_validation, sal_True, sal_True);
-            if (aItr->bShowImputMessage || aItr->sImputMessage.getLength() || aItr->sImputTitle.getLength())
-            {
-                WriteMessage(rExport, aItr->sImputTitle, aItr->sImputMessage, aItr->bShowImputMessage, sal_True);
-            }
-            if (aItr->bShowErrorMessage || aItr->sErrorMessage.getLength() || aItr->sErrorTitle.getLength())
-            {
-                switch (aItr->aAlertStyle)
-                {
-                    case sheet::ValidationAlertStyle_INFO :
-                    {
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_message_type, sXML_information);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
-                    }
-                    break;
-                    case sheet::ValidationAlertStyle_WARNING :
-                    {
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_message_type, sXML_warning);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
-                    }
-                    break;
-                    case sheet::ValidationAlertStyle_STOP :
-                    {
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_message_type, sXML_stop);
-                        WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
-                    }
-                    break;
-                    case sheet::ValidationAlertStyle_MACRO :
-                    {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_name, aItr->sErrorTitle);
-                        if (aItr->bShowErrorMessage)
-                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_execute, sXML_true);
-                        else
-                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_execute, sXML_false);
-                        SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_error_macro, sal_True, sal_True);
-                    }
-                    break;
-                }
-            }
-            aItr++;
-        }
-    }
-}
-
-const OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nIndex)
-{
-    DBG_ASSERT( nIndex < aValidationVec.size(), "out of range" );
-    return aValidationVec[nIndex].sName;
-}
-
-const sal_Int32 ScMyValidationsContainer::GetValidationIndex(const table::CellAddress& aCell)
-{
-    if (aValidationVec.size())
-    {
-        ScMyValidationRangeVec::iterator aItr = aValidationRangeVec.begin();
-        sal_Bool bFound(sal_False);
-        while (aItr != aValidationRangeVec.end() && !bFound)
-        {
-            if (aCell.Sheet == aItr->aRange.Sheet &&
-                aCell.Column >= aItr->aRange.StartColumn &&
-                aCell.Column <= aItr->aRange.EndColumn &&
-                aCell.Row >= aItr->aRange.StartRow &&
-                aCell.Row <= aItr->aRange.EndRow)
-                bFound = sal_True;
-            else
-                if ((aCell.Sheet > aItr->aRange.Sheet ||
-                    (aCell.Row > aItr->aRange.EndRow && aCell.Sheet == aItr->aRange.Sheet) ||
-                    (aCell.Row == aItr->aRange.EndRow && aCell.Column > aItr->aRange.EndColumn && aCell.Sheet == aItr->aRange.Sheet)) &&
-                    aItr->bUsed)
-                    aItr = aValidationRangeVec.erase(aItr);
-                else
-                    aItr++;
-        }
-        if (bFound)
-        {
-            aItr->bUsed = sal_True;
-            return aItr->nIndex;
-        }
-    }
-    return -1;
-}
-
-sal_Bool ScMyValidationsContainer::GetFirstAddress( table::CellAddress& rCellAddress )
-{
-    sal_Int16 nTable = rCellAddress.Sheet;
-    if( aValidationRangeVec.size() )
-    {
-        ScUnoConversion::FillApiStartAddress( rCellAddress, aValidationRangeVec[0].aRange );
-        return (nTable == rCellAddress.Sheet);
-    }
-    return sal_False;
-}
-
-void ScMyValidationsContainer::SetCellData( ScMyCell& rMyCell )
-{
-    rMyCell.nValidationIndex = -1;
-    ScMyValidationRangeVec::iterator aItr = aValidationRangeVec.begin();
-    if( aItr != aValidationRangeVec.end() )
-    {
-        table::CellAddress aAddress;
-        ScUnoConversion::FillApiStartAddress( aAddress, aItr->aRange );
-        if( aAddress == rMyCell.aCellAddress )
-        {
-            rMyCell.nValidationIndex = aItr->nIndex;
-            if( aItr->aRange.StartColumn < aItr->aRange.EndColumn )
-                aItr->aRange.StartColumn++;
-            else
-                aValidationRangeVec.erase( aItr );
-        }
-    }
-}
-
-sal_Bool LessMyValidationRange(const ScMyValidationRange& aVal1, const ScMyValidationRange& aVal2)
-{
-    if (aVal1.aRange.Sheet != aVal2.aRange.Sheet)
-        return (aVal1.aRange.Sheet < aVal2.aRange.Sheet);
-    else if (aVal1.aRange.StartRow != aVal2.aRange.StartRow)
-        return (aVal1.aRange.StartRow < aVal2.aRange.StartRow);
-    else
-        return (aVal1.aRange.StartColumn < aVal2.aRange.StartColumn);
-}
-
-void ScMyValidationsContainer::Sort()
-{
-    std::sort(aValidationRangeVec.begin(), aValidationRangeVec.end(), LessMyValidationRange);
-}
-
-//==============================================================================
-
 ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
     aDetectiveObjVec()
 {
@@ -999,7 +552,6 @@ ScMyCell::ScMyCell() :
     bIsCovered( sal_False ),
     bHasAreaLink( sal_False ),
     bHasEmptyDatabase( sal_False ),
-    nValidationIndex( -1 ),
     bHasDetectiveObj( sal_False ),
     bHasDetectiveOp( sal_False ),
     bIsMatrixBase( sal_False ),
@@ -1021,7 +573,6 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     pMergedRanges(NULL),
     pAreaLinks(NULL),
     pEmptyDatabaseRanges(NULL),
-    pValidations(NULL),
     pDetectiveObj(NULL),
     pDetectiveOp(NULL),
     nCurrentTable(-1)
@@ -1126,8 +677,6 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
         pMergedRanges->UpdateAddress( aAddress );
     if( pAreaLinks )
         pAreaLinks->UpdateAddress( aAddress );
-    if( pValidations )
-        pValidations->UpdateAddress( aAddress );
     if( pDetectiveObj )
         pDetectiveObj->UpdateAddress( aAddress );
     if( pDetectiveOp )
@@ -1145,8 +694,6 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
             pMergedRanges->SetCellData( aCell );
         if( pAreaLinks )
             pAreaLinks->SetCellData( aCell );
-        if( pValidations )
-            pValidations->SetCellData( aCell );
         if( pDetectiveObj )
             pDetectiveObj->SetCellData( aCell );
         if( pDetectiveOp )

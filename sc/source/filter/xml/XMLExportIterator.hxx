@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-15 08:34:19 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,22 +66,6 @@
 #include <stl/vector>
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_ANY_H_
-#include <com/sun/star/uno/Any.h>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
-#endif
-
-#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
-#include <com/sun/star/sheet/ConditionOperator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
-#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_VALIDATIONTYPE_HPP_
-#include <com/sun/star/sheet/ValidationType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
@@ -239,71 +223,6 @@ public:
 
 //==============================================================================
 
-struct ScMyValidationRange
-{
-    com::sun::star::table::CellRangeAddress aRange;
-    sal_Int32                   nIndex;
-    sal_Bool                    bUsed;
-
-                                ScMyValidationRange();
-                                ~ScMyValidationRange();
-};
-
-struct ScMyValidation
-{
-    rtl::OUString               sName;
-    rtl::OUString               sErrorMessage;
-    rtl::OUString               sErrorTitle;
-    rtl::OUString               sImputMessage;
-    rtl::OUString               sImputTitle;
-    rtl::OUString               sFormula1;
-    rtl::OUString               sFormula2;
-    com::sun::star::table::CellAddress          aBaseCell;
-    com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
-    com::sun::star::sheet::ValidationType       aValidationType;
-    com::sun::star::sheet::ConditionOperator    aOperator;
-    sal_Bool                    bShowErrorMessage;
-    sal_Bool                    bShowImputMessage;
-    sal_Bool                    bIgnoreBlanks;
-
-                                ScMyValidation();
-                                ~ScMyValidation();
-
-    sal_Bool                    IsEqual(const ScMyValidation& aVal) const;
-};
-
-typedef std::vector<ScMyValidation>         ScMyValidationVec;
-typedef std::vector<ScMyValidationRange>    ScMyValidationRangeVec;
-
-class ScMyValidationsContainer : ScMyIteratorBase
-{
-private:
-    ScMyValidationVec           aValidationVec;
-    ScMyValidationRangeVec      aValidationRangeVec;
-    rtl::OUString               sEmptyString;
-protected:
-    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
-public:
-                                ScMyValidationsContainer();
-    virtual                     ~ScMyValidationsContainer();
-    sal_Bool                    AddValidation(const com::sun::star::uno::Any& aAny,
-                                    const com::sun::star::table::CellRangeAddress& aCellRange);
-    rtl::OUString               GetCondition(const ScMyValidation& aValidation);
-    rtl::OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
-    void                        WriteMessage(ScXMLExport& rExport,
-                                    const rtl::OUString& sTitle, const rtl::OUString& sMessage,
-                                    const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage);
-    void                        WriteValidations(ScXMLExport& rExport);
-    const rtl::OUString&        GetValidationName(const sal_Int32 nIndex);
-    const sal_Int32             GetValidationIndex(const com::sun::star::table::CellAddress& aCell);
-
-                                ScMyIteratorBase::UpdateAddress;
-    virtual void                SetCellData( ScMyCell& rMyCell );
-    virtual void                Sort();
-};
-
-//==============================================================================
-
 struct ScMyDetectiveObj
 {
     ::com::sun::star::table::CellAddress        aPosition;
@@ -377,7 +296,6 @@ struct ScMyCell
     ScMyShapeVec                aShapeVec;
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
-    sal_Int32                   nValidationIndex;
 
     sal_Bool                    bHasShape;
     sal_Bool                    bIsMergedBase;
@@ -405,7 +323,6 @@ class ScMyNotEmptyCellsIterator
     ScMyEmptyDatabaseRangesContainer*   pEmptyDatabaseRanges;
     ScMyMergedRangesContainer*          pMergedRanges;
     ScMyAreaLinksContainer*             pAreaLinks;
-    ScMyValidationsContainer*           pValidations;
     ScMyDetectiveObjContainer*          pDetectiveObj;
     ScMyDetectiveOpContainer*           pDetectiveOp;
 
@@ -433,8 +350,6 @@ public:
                                     { pMergedRanges = pNewMergedRanges; }
     inline void                 SetAreaLinks(ScMyAreaLinksContainer* pNewAreaLinks)
                                     { pAreaLinks = pNewAreaLinks; }
-    inline void                 SetValidations(ScMyValidationsContainer* pNewValidations)
-                                    { pValidations = pNewValidations; }
     inline void                 SetDetectiveObj(ScMyDetectiveObjContainer* pNewDetectiveObj)
                                     { pDetectiveObj = pNewDetectiveObj; }
     inline void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)

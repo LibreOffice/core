@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 13:08:37 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,13 @@
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
-#include <rtl/ustring>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -426,6 +431,23 @@ void ScXMLExport::_ExportMeta()
     nProgressReference += nProgressValue;
     GetProgressBarHelper()->SetReference(nProgressReference);
     GetProgressBarHelper()->SetValue(nProgressValue);
+    rtl::OUStringBuffer sBuffer;
+    if (nTableCount)
+    {
+        GetMM100UnitConverter().convertNumber(sBuffer, nTableCount);
+        AddAttribute(XML_NAMESPACE_META, sXML_table_count, sBuffer.makeStringAndClear());
+    }
+    if (nCellCount)
+    {
+        GetMM100UnitConverter().convertNumber(sBuffer, nCellCount);
+        AddAttribute(XML_NAMESPACE_META, sXML_cell_count, sBuffer.makeStringAndClear());
+    }
+    if (nShapesCount)
+    {
+        GetMM100UnitConverter().convertNumber(sBuffer, nShapesCount);
+        AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
+    }
+    SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -669,24 +691,25 @@ void ScXMLExport::WriteRowContent()
         if (bIsFirst)
         {
             nIndex = aRange.nIndex;
+            nPrevValidationIndex = aRange.nValidationIndex;
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = sal_False;
-            table::CellAddress aCellAddress;
+            /*table::CellAddress aCellAddress;
             aCellAddress.Column = aRange.aRangeAddress.EndColumn;
             aCellAddress.Row = aRange.aRangeAddress.EndRow;
             aCellAddress.Sheet = aRange.aRangeAddress.Sheet;
-            nPrevValidationIndex = aValidationsContainer.GetValidationIndex(aCellAddress);
+            nPrevValidationIndex = aValidationsContainer.GetValidationIndex(aCellAddress);*/
         }
         else
         {
-            table::CellAddress aCellAddress;
+            /*table::CellAddress aCellAddress;
             aCellAddress.Column = aRange.aRangeAddress.EndColumn;
             aCellAddress.Row = aRange.aRangeAddress.EndRow;
             aCellAddress.Sheet = aRange.aRangeAddress.Sheet;
-            sal_Int32 nValidationIndex = aValidationsContainer.GetValidationIndex(aCellAddress);
+            sal_Int32 nValidationIndex = aValidationsContainer.GetValidationIndex(aCellAddress);*/
             if (aRange.nIndex == nIndex && aRange.bIsAutoStyle == bIsAutoStyle &&
-                nPrevValidationIndex == nValidationIndex)
+                nPrevValidationIndex == aRange.nValidationIndex)
                 nCols += aRange.nRepeatColumns;
             else
             {
@@ -703,7 +726,7 @@ void ScXMLExport::WriteRowContent()
                 nIndex = aRange.nIndex;
                 bIsAutoStyle = aRange.bIsAutoStyle;
                 nCols = aRange.nRepeatColumns;
-                nPrevValidationIndex = nValidationIndex;
+                nPrevValidationIndex = aRange.nValidationIndex;
             }
         }
     }
@@ -1026,7 +1049,7 @@ void ScXMLExport::_ExportContent()
             aCellStyles.Sort();
             aShapesContainer.Sort();
             aMergedRangesContainer.Sort();
-            aValidationsContainer.Sort();
+//          aValidationsContainer.Sort();
             aDetectiveObjContainer.Sort();
 
             ScMyNotEmptyCellsIterator aCellsItr(*this);
@@ -1035,7 +1058,7 @@ void ScXMLExport::_ExportContent()
             aCellsItr.SetMergedRanges( &aMergedRangesContainer );
             aCellsItr.SetAreaLinks( &aAreaLinks );
             aCellsItr.SetEmptyDatabaseRanges( &aEmptyRanges );
-            aCellsItr.SetValidations( &aValidationsContainer );
+//          aCellsItr.SetValidations( &aValidationsContainer );
             aCellsItr.SetDetectiveObj( &aDetectiveObjContainer );
             aCellsItr.SetDetectiveOp( &aDetectiveOpContainer );
 
@@ -1224,69 +1247,6 @@ void ScXMLExport::_ExportAutoStyles()
                             aTableStyles.push_back(sName);
                         }
                     }
-/*                  uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
-                    if (xDrawPageSupplier.is())
-                    {
-                        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-                        uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
-                        if (xShapesIndex.is())
-                        {
-                            sal_Int32 nShapesCount = xShapesIndex->getCount();
-                            for (sal_Int32 nShape = 0; nShape < nShapesCount; nShape++)
-                            {
-                                uno::Any aShape = xShapesIndex->getByIndex(nShape);
-                                uno::Reference<drawing::XShape> xShape;
-                                if (aShape >>= xShape)
-                                {
-                                    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-                                    if( xShapeProp.is() )
-                                    {
-                                        uno::Any aPropAny = xShapeProp->getPropertyValue(
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
-                                        sal_Int16 nLayerID;
-                                        if( aPropAny >>= nLayerID )
-                                        {
-                                            if( nLayerID == SC_LAYER_INTERN )
-                                                CollectInternalShape( xShape );
-                                            else
-                                            {
-                                                SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-                                                if (pShapeImp)
-                                                {
-                                                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                                                    if (pSdrObj)
-                                                    {
-                                                        GetShapeExport()->collectShapeAutoStyles(xShape);
-                                                        if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
-                                                        {
-                                                            if (pDoc)
-                                                            {
-                                                                awt::Point aPoint = xShape->getPosition();
-                                                                awt::Size aSize = xShape->getSize();
-                                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                                ScRange aRange = pDoc->GetRange(nTable, aRectangle);
-                                                                ScMyShape aMyShape;
-                                                                aMyShape.aAddress = aRange.aStart;
-                                                                aMyShape.aEndAddress = aRange.aEnd;
-                                                                aMyShape.nIndex = nShape;
-                                                                aShapesContainer.AddNewShape(aMyShape);
-                                                                SetLastColumn(nTable, aRange.aStart.Col());
-                                                                SetLastRow(nTable, aRange.aStart.Row());
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            aTableShapes[nTable].push_back(nShape);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }*/
                     uno::Reference<sheet::XCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
                     if ( xCellFormatRanges.is() )
                     {
@@ -1308,7 +1268,8 @@ void ScXMLExport::_ExportAutoStyles()
                                         {
                                             table::CellRangeAddress aRangeAddress = xCellRangeAddressable->getRangeAddress();
                                             uno::Any aValidation = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)));
-                                            if (aValidationsContainer.AddValidation(aValidation, aRangeAddress))
+                                            sal_Int32 nValidationIndex(-1);
+                                            if (aValidationsContainer.AddValidation(aValidation, aRangeAddress, nValidationIndex))
                                             {
                                                 SetLastColumn(nTable, aRangeAddress.EndColumn);
                                                 SetLastRow(nTable, aRangeAddress.EndRow);
@@ -1339,7 +1300,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                         nIndex = aCellStyles.GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
                                                     SetLastColumn(nTable, aRangeAddress.EndColumn);
                                                     SetLastRow(nTable, aRangeAddress.EndRow);
-                                                    aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle);
+                                                    aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle, nValidationIndex);
                                                     uno::Reference<sheet::XSheetCellRange> xSheetCellRange(xCellRange, uno::UNO_QUERY);
                                                     if (xSheetCellRange.is())
                                                     {
@@ -1381,7 +1342,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                             }
                                                             rtl::OUString* pTemp = new rtl::OUString(sStyleName);
                                                             sal_Int32 nIndex = aCellStyles.AddStyleName(pTemp, sal_False);
-                                                            aCellStyles.AddRangeStyleName(aCellAddress, nIndex, sal_False);
+                                                            aCellStyles.AddRangeStyleName(aCellAddress, nIndex, sal_False, nValidationIndex);
                                                         }
                                                     }
                                                 }
@@ -1554,7 +1515,8 @@ void ScXMLExport::_ExportAutoStyles()
 
             GetPageExport()->exportAutoStyles();
 
-            GetProgressBarHelper()->SetValue(nOldProgressValue + nProgressObjects);
+            nProgressValue = nOldProgressValue + nProgressObjects;
+            GetProgressBarHelper()->SetValue(nProgressValue);
         }
     }
 }
@@ -1711,9 +1673,9 @@ sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference 
     return 0;
 }
 
-sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle)
+sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex)
 {
-    sal_Int32 nIndex = aCellStyles.GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle);
+    sal_Int32 nIndex = aCellStyles.GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle, nValidationIndex);
     if (nIndex > -1)
     {
         nStyleNameIndex = nIndex;
@@ -1738,10 +1700,11 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
 {
     sal_Int32 nIndex;
     sal_Bool bIsAutoStyle;
-    if (GetCellStyleNameIndex(aCell, nIndex, bIsAutoStyle))
+    sal_Int32 nValidationIndex;
+    if (GetCellStyleNameIndex(aCell, nIndex, bIsAutoStyle, nValidationIndex))
         AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aCellStyles.GetStyleNameByIndex(nIndex, bIsAutoStyle));
-    if (aCell.nValidationIndex > -1)
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, aValidationsContainer.GetValidationName(aCell.nValidationIndex));
+    if (nValidationIndex > -1)
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, aValidationsContainer.GetValidationName(nValidationIndex));
     sal_Bool bIsMatrix(aCell.bIsMatrixBase || aCell.bIsMatrixCovered);
     sal_Bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
     if (bIsFirstMatrixCell)
@@ -2127,7 +2090,6 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
         aCell1.bIsMatrixCovered == aCell2.bIsMatrixCovered &&
         aCell1.bHasAnnotation == aCell2.bHasAnnotation &&
         !aCell1.bHasShape && !aCell2.bHasShape &&
-        aCell1.nValidationIndex == aCell2.nValidationIndex &&
         aCell1.bHasAreaLink == aCell2.bHasAreaLink &&
         !aCell1.bHasDetectiveObj && !aCell2.bHasDetectiveObj)
     {
@@ -2140,10 +2102,12 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
             {
                 sal_Int32 nIndex1, nIndex2;
                 sal_Bool bIsAutoStyle1, bIsAutoStyle2;
-                if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1) &&
-                    GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2))
+                sal_Int32 nValidationIndex1, nValidationIndex2;
+                if (GetCellStyleNameIndex(aCell1, nIndex1, bIsAutoStyle1, nValidationIndex1) &&
+                    GetCellStyleNameIndex(aCell2, nIndex2, bIsAutoStyle2, nValidationIndex2))
                 {
                     if ((nIndex1 == nIndex2) && (bIsAutoStyle1 == bIsAutoStyle2) &&
+                        (nValidationIndex1 == nValidationIndex2) &&
                         IsCellTypeEqual(aCell1, aCell2))
                     {
                         table::CellContentType eCellType = aCell1.xCell->getType();
