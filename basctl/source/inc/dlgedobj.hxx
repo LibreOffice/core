@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-20 14:34:45 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ class DlgEdForm;
 
 class DlgEdObj: public SdrUnoObj
 {
-    friend class VCDlgEditor;
-    friend class VCDlgEditFactory;
+    friend class DlgEditor;
+    friend class DlgEdFactory;
     friend class DlgEdPropListenerImpl;
     friend class DlgEdForm;
 
@@ -99,48 +99,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener> m_xContainerListener;
 
-public:
-    TYPEINFO();
-
 protected:
     DlgEdObj();
     DlgEdObj(const ::rtl::OUString& rModelName);
     DlgEdObj(const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
-public:
-    virtual ~DlgEdObj();
-    virtual void SetPage(SdrPage* pNewPage);
-
-    virtual void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    virtual DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
-
-    virtual void SetRectFromProps();
-    virtual void SetPropsFromRect();
-    virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Int32   GetStep() const;
-    virtual void        SetStep( sal_Int32 nStep );
-    virtual void        UpdateStep();
-
-    virtual void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
-
-    ::rtl::OUString GetServiceName();
-    ::rtl::OUString GetDefaultName();
-    ::rtl::OUString GetUniqueName();
-
-    virtual sal_uInt32 GetObjInventor() const;
-    virtual sal_uInt16 GetObjIdentifier() const;
-
-    virtual SdrObject*  Clone() const;
-    virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
-    virtual void        operator= (const SdrObject& rObj);
-
-    virtual void clonedFrom(const DlgEdObj* _pSource);
-
-protected:
-    virtual void     WriteData(SvStream& rOut) const;
-    virtual void     ReadData(const SdrObjIOHeader& rHead, SvStream& rIn);
+    virtual void     WriteData(SvStream& rOut) const;                           // not working yet
+    virtual void     ReadData(const SdrObjIOHeader& rHead, SvStream& rIn);      // not working yet
 
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -148,13 +114,41 @@ protected:
 
     DECL_LINK(OnCreate, void* );
 
-    // start listening
     void StartListening();
-    // end listening
     void EndListening(sal_Bool bRemoveListener = sal_True);
     sal_Bool    isListening() const { return bIsListening; }
 
 public:
+    TYPEINFO();
+
+    virtual ~DlgEdObj();
+    virtual void SetPage(SdrPage* pNewPage);
+
+    virtual void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
+    virtual DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
+
+    virtual sal_uInt32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+
+    virtual SdrObject*  Clone() const;                                          // not working yet
+    virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;          // not working yet
+    virtual void        operator= (const SdrObject& rObj);                      // not working yet
+    virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
+
+    virtual ::rtl::OUString GetServiceName() const;
+    virtual ::rtl::OUString GetDefaultName() const;
+    virtual ::rtl::OUString GetUniqueName() const;
+
+    virtual sal_Int32   GetStep() const;
+    virtual void        SetStep( sal_Int32 nStep );
+    virtual void        UpdateStep();
+
+    virtual void SetRectFromProps();
+    virtual void SetPropsFromRect();
+
+    virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+
     // PropertyChangeListener
     virtual void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -171,15 +165,12 @@ public:
 
 class DlgEdForm: public DlgEdObj
 {
-    friend class VCDlgEditor;
-    friend class VCDlgEditFactory;
+    friend class DlgEditor;
+    friend class DlgEdFactory;
 
 private:
-    VCDlgEditor* pDlgEditor;
+    DlgEditor* pDlgEditor;
     ::std::vector<DlgEdObj*> pChilds;
-
-public:
-    TYPEINFO();
 
 protected:
     DlgEdForm(const ::rtl::OUString& rModelName);
@@ -187,10 +178,15 @@ protected:
               const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
     DlgEdForm();
 
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+
 public:
+    TYPEINFO();
+
     virtual ~DlgEdForm();
-    virtual void SetDlgEditor( VCDlgEditor* pEditor ) { pDlgEditor = pEditor; }
-    virtual VCDlgEditor* GetDlgEditor() const { return pDlgEditor; }
+
+    virtual void SetDlgEditor( DlgEditor* pEditor ) { pDlgEditor = pEditor; }
+    virtual DlgEditor* GetDlgEditor() const { return pDlgEditor; }
 
     virtual void AddChild( DlgEdObj* pDlgEdObj );
     virtual void RemoveChild( DlgEdObj* pDlgEdObj );
@@ -200,10 +196,6 @@ public:
     virtual void SortByTabIndex();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
-
-protected:
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-
 };
 
 #endif // _BASCTL_DLGEDOBJ_HXX

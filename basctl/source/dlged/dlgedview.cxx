@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:48:56 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,40 +59,17 @@
  *
  ************************************************************************/
 
-#ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
+
+#ifndef _BASCTL_DLGEDVIEW_HXX
+#include "dlgedview.hxx"
 #endif
-
-#ifndef _SVDVIEW_HXX //autogen
-#include <svx/svdview.hxx>
-#endif
-
-#pragma hdrstop
-
-#include <svx/svdobj.hxx>
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
+
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#include <svx/svdlayer.hxx>
-
-#ifndef _BASCTL_DLGED_HXX
-#include "dlged.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFUNC_HXX
-#include "dlgedfunc.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFAC_HXX
-#include "dlgedfac.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDVIEW_HXX
-#include "dlgedview.hxx"
 #endif
 
 #ifndef _BASCTL_PROPBRW_HXX

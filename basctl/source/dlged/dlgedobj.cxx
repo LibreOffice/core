@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-20 14:37:07 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,22 +66,6 @@
 #include "dlgedobj.hxx"
 #endif
 
-#ifndef _TOOLS_RESMGR_HXX
-#include <tools/resmgr.hxx>
-#endif
-
-#ifndef _SVDIO_HXX //autogen
-#include <svx/svdio.hxx>
-#endif
-
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
-#endif
-
-#ifndef _SVX_FMGLOB_HXX
-#include <svx/fmglob.hxx>
-#endif
-
 #ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
 #endif
@@ -100,6 +84,28 @@
 
 #ifndef _BASCTL_DLGEDLIST_HXX
 #include "dlgedlist.hxx"
+#endif
+
+#ifndef _IDERID_HXX
+#include <iderid.hxx>
+#endif
+
+#ifndef _BASCTL_DLGRESID_HRC
+#include <dlgresid.hrc>
+#endif
+
+#include "vcsbxdef.hxx"
+
+#ifndef _TOOLS_RESMGR_HXX
+#include <tools/resmgr.hxx>
+#endif
+
+#ifndef _SVDIO_HXX //autogen
+#include <svx/svdio.hxx>
+#endif
+
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -122,13 +128,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#include <iderid.hxx>
-
-#ifndef _BASCTL_DLGRESID_HRC
-#include <dlgresid.hrc>
-#endif
-
-#include "vcsbxdef.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -619,7 +618,6 @@ void DlgEdObj::UpdateStep()
 
 //----------------------------------------------------------------------------
 
-
 void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
     // stop listening with all childs
@@ -697,7 +695,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString DlgEdObj::GetServiceName()
+::rtl::OUString DlgEdObj::GetServiceName() const
 {
     ::rtl::OUString aServiceName;
     Reference< lang::XServiceInfo > xServiceInfo( GetUnoControlModel() , UNO_QUERY );
@@ -714,7 +712,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString DlgEdObj::GetDefaultName()
+::rtl::OUString DlgEdObj::GetDefaultName() const
 {
     sal_uInt16 nResId = 0;
     ::rtl::OUString aDefaultName;
@@ -788,7 +786,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString DlgEdObj::GetUniqueName()
+::rtl::OUString DlgEdObj::GetUniqueName() const
 {
     ::rtl::OUString aUniqueName;
     uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
@@ -811,11 +809,6 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 
 sal_uInt32 DlgEdObj::GetObjInventor()   const
 {
-    /*
-    if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
-        return SdrInventor;
-    return FmFormInventor;
-    */
     return VCSbxInventor;
 }
 
@@ -823,23 +816,63 @@ sal_uInt32 DlgEdObj::GetObjInventor()   const
 
 sal_uInt16 DlgEdObj::GetObjIdentifier() const
 {
-    /*
-    if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
-        return OBJ_RECT;
-    return OBJ_FM_CONTROL;
-    */
-    return OBJ_FM_CONTROL;  // change this
+    ::rtl::OUString aServiceName = GetServiceName();
+
+    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ))
+    {
+        return OBJ_DIALOG;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
+    {
+        return OBJ_DLG_PUSHBUTTON;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ))
+    {
+        return OBJ_DLG_RADIOBUTTON;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
+    {
+        return OBJ_DLG_CHECKBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
+    {
+        return OBJ_DLG_LISTBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
+    {
+        return OBJ_DLG_COMBOBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+    {
+        return OBJ_DLG_GROUPBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
+    {
+        return OBJ_DLG_EDIT;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
+    {
+        return OBJ_DLG_FIXEDTEXT;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
+    {
+        return OBJ_DLG_PREVIEW;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
+void DlgEdObj::clonedFrom(const DlgEdObj* _pSource) // not working yet
 {
 }
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone() const
+SdrObject* DlgEdObj::Clone() const  // not working yet
 {
     SdrObject* pReturn = SdrUnoObj::Clone();
 
@@ -853,7 +886,7 @@ SdrObject* DlgEdObj::Clone() const
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
+SdrObject* DlgEdObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const // not working yet
 {
     SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
     if (!pReturn)
@@ -864,7 +897,7 @@ SdrObject* DlgEdObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::operator= (const SdrObject& rObj)
+void DlgEdObj::operator= (const SdrObject& rObj)    // not working yet
 {
     SdrUnoObj::operator= (rObj);
 
@@ -872,25 +905,14 @@ void DlgEdObj::operator= (const SdrObject& rObj)
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::WriteData(SvStream& rOut) const
+void DlgEdObj::WriteData(SvStream& rOut) const  // not working yet
 {
-    /*
-    FmFormModel* pModel = (FmFormModel*)GetModel();
-    if( pModel && pModel->IsStreamingOldVersion() )
-    {
-        SdrLayerID nOld = GetLayer();
-        ((FmFormObj*)this)->NbcSetLayer( pModel->GetControlExportLayerId( *this ) );
-        SdrUnoObj::WriteData( rOut );
-        ((FmFormObj*)this)->NbcSetLayer( nOld );
-        return;
-    }
-    */
     SdrUnoObj::WriteData(rOut);
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+void DlgEdObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn) // not working yet
 {
     SdrUnoObj::ReadData(rHead,rIn);
 }
@@ -921,7 +943,7 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     EndListening(sal_False);
 
     // set parent form
-    pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEd()->GetDlgEdForm();
+    pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEdForm();
 
     // add child to parent form
     pDlgEdForm->AddChild(this);
@@ -1337,8 +1359,17 @@ FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
+    // stop listening
+    EndListening(sal_False);
+
     // set geometry properties
     SetPropsFromRect();
+
+    // dialog model changed
+    GetDlgEditor()->SetDialogModelChanged(TRUE);
+
+    // start listening
+    StartListening();
 
     return bResult;
 }

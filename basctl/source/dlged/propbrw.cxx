@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-16 13:40:30 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,71 @@
  *
  ************************************************************************/
 
+
+#ifndef _BASCTL_PROPBRW_HXX
+#include "propbrw.hxx"
+#endif
+
+#ifndef _BASCTL_DLGEDOBJ_HXX
+#include "dlgedobj.hxx"
+#endif
+
+#include "basidesh.hxx"
+
+#ifndef _IDERID_HXX
+#include <iderid.hxx>
+#endif
+
+#ifndef _BASCTL_DLGRESID_HRC
+#include <dlgresid.hrc>
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
 #endif
+
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
 #endif
+
 #ifndef _SFX_OBJITEM_HXX
 #include <sfx2/objitem.hxx>
 #endif
+
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
+#endif
+
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
+
+#ifndef _SVDVIEW_HXX //autogen
+#include <svx/svdview.hxx>
+#endif
+
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
+#endif
+
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
+
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+
+#ifndef _SFXVIEWSH_HXX //autogen
+#include <sfx2/viewsh.hxx>
 #endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
@@ -111,48 +162,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
-#endif
-#ifndef _SVX_DIALMGR_HXX //autogen
-#include <svx/dialmgr.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-
-#ifndef _SVDVIEW_HXX //autogen
-#include <svx/svdview.hxx>
-#endif
-
-#ifndef _SVDOGRP_HXX
-#include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
-#include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDITER_HXX
-#include <svx/svditer.hxx>
-#endif
-
-#ifndef _SFXVIEWSH_HXX //autogen
-#include <sfx2/viewsh.hxx>
-#endif
-
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#include "dlgedobj.hxx"
-#endif
-
-#ifndef _BASCTL_PROPBRW_HXX
-#include "propbrw.hxx"
-#endif
-
-#include "basidesh.hxx"
-#include <iderid.hxx>
-
-#ifndef _BASCTL_DLGRESID_HRC
-#include <dlgresid.hrc>
-#endif
 
 //============================================================================
 // PropBrwMgr
