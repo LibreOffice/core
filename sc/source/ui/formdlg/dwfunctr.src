@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,19 +173,19 @@ DockingWindow FID_FUNCTION_BOX
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Zuletzt verwendet" ; Default ; > ;
-            < "Alle" ; Default ; > ;
-            < "Datenbank" ; Default ; > ;
-            < "Datum&Zeit" ; Default ; > ;
-            < "Finanz" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Logisch" ; Default ; > ;
-            < "Mathematik" ; Default ; > ;
-            < "Matrix" ; Default ; > ;
-            < "Statistik" ; Default ; > ;
-            < "Tabelle" ; Default ; > ;
-            < "Text" ; Default ; > ;
-            < "Add In" ; Default ; > ;
+            < "Recentemente usadas" ; Default ; > ;
+            < "Todas as fun��es" ; Default ; > ;
+            < "Banco de Dados" ; Default ; > ;
+            < "Data & Hora" ; Default ; > ;
+            < "Financeiras" ; Default ; > ;
+            < "Informa��o" ; Default ; > ;
+            < "L�gicas" ; Default ; > ;
+            < "Matem�ticas" ; Default ; > ;
+            < "Matriciais" ; Default ; > ;
+            < "Estat�sticas" ; Default ; > ;
+            < "Planilha" ; Default ; > ;
+            < "Texto" ; Default ; > ;
+            < "Aditivos" ; Default ; > ;
              //         < "Definido pelo usu�rio"; Default; >;
         };
         StringList [ portuguese ] =
@@ -342,9 +342,9 @@ DockingWindow FID_FUNCTION_BOX
     StringList [ polish ] =
     {
             < "Ostatnio u�yte" ; Default ; > ;
-        < "Wszystkie" ; Default ; > ;
+        < "Wszystko" ; Default ; > ;
         < "Baza danych" ; Default ; > ;
-        < "Data&Godzina" ; Default ; > ;
+        < "Data i godzina" ; Default ; > ;
         < "Finanse" ; Default ; > ;
         < "Informacja" ; Default ; > ;
         < "Logiczne" ; Default ; > ;
@@ -353,7 +353,7 @@ DockingWindow FID_FUNCTION_BOX
         < "Statystyka" ; Default ; > ;
         < "Arkusz kalkulacyjny" ; Default ; > ;
         < "Tekst" ; Default ; > ;
-        < "Add-in" ; Default ; > ;
+        < "Dodatek add-in" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -469,16 +469,16 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ turkish ] =
     {
-            < "Son kullan�m" ; Default ; > ;
+            < "Son kullan�lan" ; Default ; > ;
         < "T�m�" ; Default ; > ;
         < "Vertaban�" ; Default ; > ;
         < "Tarih&Saat" ; Default ; > ;
-        < "Finans" ; Default ; > ;
+        < "Finansal" ; Default ; > ;
         < "Bilgi" ; Default ; > ;
-        < "Mant�k" ; Default ; > ;
-        < "Matematik" ; Default ; > ;
-        < "Matris" ; Default ; > ;
-        < "�statistik" ; Default ; > ;
+        < "Mant�ksal" ; Default ; > ;
+        < "Matematiksel" ; Default ; > ;
+        < "Matriks" ; Default ; > ;
+        < "�statistiksel" ; Default ; > ;
         < "Tablo" ; Default ; > ;
         < "Metin" ; Default ; > ;
         < "Ekle" ; Default ; > ;
@@ -531,6 +531,54 @@ DockingWindow FID_FUNCTION_BOX
         < "ข้อความ" ; Default ; > ;
         < "เพิ่มใน" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Naposledy použité" ; Default ; > ;
+        < "Všechny" ; Default ; > ;
+        < "Databázové" ; Default ; > ;
+        < "Datum a čas" ; Default ; > ;
+        < "Finanční" ; Default ; > ;
+        < "Informační" ; Default ; > ;
+        < "Logické" ; Default ; > ;
+        < "Matematické" ; Default ; > ;
+        < "Pole" ; Default ; > ;
+        < "Statistické" ; Default ; > ;
+        < "Sešit" ; Default ; > ;
+        < "Text" ; Default ; > ;
+        < "Doplněk" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮שימוש אחרון‬" ; Default ; > ;
+        < "‮הכל‬" ; Default ; > ;
+        < "‮מסד נתונים‬" ; Default ; > ;
+        < "‮תאריך ושעה‬" ; Default ; > ;
+        < "‮כספים‬" ; Default ; > ;
+        < "‮מידע‬" ; Default ; > ;
+        < "‮לוגית‬" ; Default ; > ;
+        < "‮מתמטית‬" ; Default ; > ;
+        < "‮מערך‬" ; Default ; > ;
+        < "‮סטטיסטי‬" ; Default ; > ;
+        < "‮גליון עבודה‬" ; Default ; > ;
+        < "‮טקסט‬" ; Default ; > ;
+        < "‮תוספת‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "अंतिम बार उपयोग किया" ; Default ; > ;
+        < "सब" ; Default ; > ;
+        < "लेखासंचय" ; Default ; > ;
+        < "दिनांक और समय" ; Default ; > ;
+        < "वित्तसम्बन्धी" ; Default ; > ;
+        < "सूचना" ; Default ; > ;
+        < "तर्कानुसार" ; Default ; > ;
+        < "गणित सम्बन्धी" ; Default ; > ;
+        < "श्रेणी" ; Default ; > ;
+        < "अंकशास्त्र" ; Default ; > ;
+        < "स्प्रेडशीट्" ; Default ; > ;
+        < "टेक्स्ट्" ; Default ; > ;
+        < "में जोड़ो" ; Default ; > ;
+    };
     };
     ListBox DDLB_FUNC
     {
@@ -580,7 +628,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText = "Funktion in Rechenblatt einf�gen" ;
         QuickHelpText [ English ] = "Insert function into the spreedsheet." ;
         QuickHelpText [ english_us ] = "Insert Function into calculation sheet" ;
-        QuickHelpText [ portuguese_brazilian ] = "Funktion in Rechenblatt einf?en" ;
+        QuickHelpText [ portuguese_brazilian ] = "Inserir fun��o no c�lculo da planilha" ;
         QuickHelpText [ swedish ] = "Infoga funktion i ber�kningsark" ;
         QuickHelpText [ danish ] = "Inds�t funktion i regneark" ;
         QuickHelpText [ italian ] = "Inserisci funzione nel foglio di calcolo" ;
@@ -603,9 +651,12 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ catalan ] = "Insereix la funci� en el full de c�lcul";
         QuickHelpText[ finnish ] = "Lis�� funktio laskentataulukkoon";
         QuickHelpText[ thai ] = "Insert Function into calculation sheet";
+        QuickHelpText[ czech ] = "Vložit funkci do listu s výpočty";
+        QuickHelpText[ hebrew ] = "Funktion in Rechenblatt einfügen";
+        QuickHelpText[ hindi ] = "फंक्शन् को गणना करने के शीट् में जोड़ो";
     };
     Text [ english_us ] = "Functions" ;
-    Text [ portuguese_brazilian ] = "Funktionen" ;
+    Text [ portuguese_brazilian ] = "Fun��es" ;
     Text [ swedish ] = "Funktioner" ;
     Text [ danish ] = "Funktioner" ;
     Text [ italian ] = "Funzioni" ;
@@ -623,13 +674,25 @@ DockingWindow FID_FUNCTION_BOX
     Text[ chinese_simplified ] = "函数";
     Text[ greek ] = "�����������";
     Text[ korean ] = "함수";
-    Text[ turkish ] = "Fonksiyon";
+    Text[ turkish ] = "Fonksiyonlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funcions";
     Text[ finnish ] = "Funktiot";
     Text[ thai ] = "ฟังก์ชั่น";
+    Text[ czech ] = "Funkce";
+    Text[ hebrew ] = "‮פונקציות‬";
+    Text[ hindi ] = "फंक्शन्स";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
