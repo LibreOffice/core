@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:14:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
 
     if( pMap && pObj && pModel )
     {
-        if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
+        if( pMap->nWID >= OWN_ATTR_APPLET_DOCBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
             if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return;
@@ -439,6 +439,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
                 case OWN_ATTR_APPLET_CODE:
                 case OWN_ATTR_APPLET_COMMANDS:
                 case OWN_ATTR_APPLET_ISSCRIPT:
+                case OWN_ATTR_APPLET_DOCBASE:
                     // allow exceptions to pass through
                     xSet->setPropertyValue( aPropertyName, aValue );
                     bOwn = sal_True;
@@ -477,7 +478,7 @@ Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) th
 
     if( pMap && pObj && pModel )
     {
-        if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
+        if( pMap->nWID >= OWN_ATTR_APPLET_DOCBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
             if ( !svt::EmbeddedObjectRef::TryRunningState( ((SdrOle2Obj*)pObj)->GetObjRef() ) )
                 return uno::Any();
