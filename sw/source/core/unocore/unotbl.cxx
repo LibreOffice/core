@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:45:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,8 @@ inline rtl::OUString lcl_getString( SwXCell &rCell )
 /* -----------------30.04.02 08:00-------------------
  * non UNO function call to set string in SwXCell
  * --------------------------------------------------*/
-void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
+void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
+        BOOL bKeepNumberFmt )
 {
     if(rCell.IsValid())
     {
@@ -688,7 +689,8 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
         pBoxFmt->LockModify();
         pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
         pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
-        pBoxFmt->SetAttr( SwTblBoxNumFormat(NUMBERFORMAT_TEXT) );
+        if (!bKeepNumberFmt)
+            pBoxFmt->SetAttr( SwTblBoxNumFormat(NUMBERFORMAT_TEXT) );
         pBoxFmt->UnlockModify();
     }
     rCell.SwXText::setString(rTxt);
@@ -715,7 +717,7 @@ void lcl_setValue( SwXCell &rCell, double nVal )
         // Der Text muß zunaechst (vielleicht) geloescht werden
         ULONG nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
         if(ULONG_MAX != nNdPos)
-            lcl_setString( rCell, OUString() );
+            lcl_setString( rCell, OUString(), TRUE );   // TRUE == keep number format
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
@@ -964,7 +966,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
         // Der Text muß zunaechst (vielleicht) geloescht werden
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
-            setString(OUString());
+            lcl_setString( *this, OUString(), TRUE );
         String sFml(rFormula);
         if( sFml.EraseLeadingChars().Len() && '=' == sFml.GetChar( 0 ) )
                     sFml.Erase( 0, 1 );
