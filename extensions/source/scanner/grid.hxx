@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,12 @@ class GridWindow : public ModalDialog
 
     // stuff for handles
     B2dIAOManager               m_aIAOManager;
-    B2dIAOBitmapExReference*    m_pLeftMarker;
-    B2dIAOBitmapExReference*    m_pRightMarker;
-    B2dIAOBitmapExReference*    m_pDragMarker;
+
+    // #i21114#
+    // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
+    B2dIAOBitmapEx*             m_pLeftMarker;
+    B2dIAOBitmapEx*             m_pRightMarker;
+    B2dIAOBitmapEx*             m_pDragMarker;
 
     BitmapEx                    m_aMarkerBitmap;
 
