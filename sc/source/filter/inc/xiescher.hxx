@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:49:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,31 +406,9 @@ private:
 
 // Escher object data =========================================================
 
-/** Represents the position (anchor) of an Escher object in the Calc document. */
-struct XclImpEscherAnchor
-{
-    sal_uInt16                  mnScTab;    /// Calc sheet index of the object.
-
-    sal_uInt16                  mnLCol;     /// Left column index.
-    sal_uInt16                  mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16                  mnTRow;     /// Top row index.
-    sal_uInt16                  mnTY;       /// Y offset in top row (1/256 of row height).
-    sal_uInt16                  mnRCol;     /// Right column index.
-    sal_uInt16                  mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16                  mnBRow;     /// Bottom row index.
-    sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
-
-    explicit                    XclImpEscherAnchor( sal_uInt16 nScTab );
-};
-
-SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor );
-
-
-// ----------------------------------------------------------------------------
-
 /** Contains all information of an Escher object.
     @descr  This is the Escher object itself (XclImpEscherObj) and the position
-    in the Calc document (XclImpEscherAnchor). */
+    in the Calc document (XclEscherAnchor). */
 class XclImpObjData
 {
 public:
@@ -443,7 +421,7 @@ public:
     /** Returns the Escher object, if present. */
     inline XclImpEscherObj*     GetObj() { return mpEscherObj.get(); }
     /** Returns the anchor data. */
-    inline XclImpEscherAnchor&  GetAnchor() { return maAnchor; }
+    inline XclEscherAnchor&     GetAnchor() { return maAnchor; }
 
     /** Returns true, if the passed stream position is part of the current object. */
     bool                        ContainsStrmPos( sal_uInt32 nStrmPos ) const;
@@ -451,7 +429,7 @@ public:
 private:
     typedef ::std::auto_ptr< XclImpEscherObj > XclImpEscherObjPtr;
 
-    XclImpEscherAnchor          maAnchor;       /// The sheet position of the object.
+    XclEscherAnchor             maAnchor;       /// The sheet position of the object.
     XclImpEscherObjPtr          mpEscherObj;    /// The Escher object itself.
 };
 
@@ -480,7 +458,7 @@ public:
     XclImpEscherObj*            GetLastObj() const;
 
     /** Returns the anchor of the object at the passed Escher stream position. */
-    XclImpEscherAnchor*         GetAnchor( sal_uInt32 nStrmPos ) const;
+    XclEscherAnchor*            GetAnchor( sal_uInt32 nStrmPos ) const;
 
     /** Initializes the progress bar for all objects. */
     void                        InitProgress( ScfProgressBar& rProgress );
@@ -596,9 +574,9 @@ public:
     XclImpEscherObj*            GetLastEscherObjAcc();
 
     /** Returns the anchor of the object at the passed Escher stream position. */
-    const XclImpEscherAnchor*   GetEscherAnchor( sal_uInt32 nStrmPos ) const;
+    const XclEscherAnchor*      GetEscherAnchor( sal_uInt32 nStrmPos ) const;
     /** Returns access to the anchor of the object at the passed Escher stream position. */
-    XclImpEscherAnchor*         GetEscherAnchorAcc( sal_uInt32 nStrmPos );
+    XclEscherAnchor*            GetEscherAnchorAcc( sal_uInt32 nStrmPos );
 
 // *** Text boxes *** ---------------------------------------------------------
 
