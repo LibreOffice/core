@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:51:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #endif
 #include "strings.hrc"
 #include "ViewTabBar.hxx"
-
+#include "UpdateLockManager.hxx"
 
 namespace sd {
 
@@ -114,6 +114,7 @@ PresentationViewShellBase::PresentationViewShellBase (
     SfxViewShell* pOldShell)
     : ViewShellBase (pFrame, pOldShell, ViewShell::ST_PRESENTATION)
 {
+    GetUpdateLockManager().Disable();
 }
 
 
@@ -132,6 +133,8 @@ void PresentationViewShellBase::LateInit (void)
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
+
+
 
 } // end of namespace sd
 
