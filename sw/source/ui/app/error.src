@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-07 14:48:40 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE[ chinese_simplified ] = "ΤΪΈ΄ΦΖΚύΎέµ½ΌτΜω°εΚ±·ΆΙϊ΄νΞσ΅£";
     MESSAGE[ russian ] = "Ξψθακΰ οπθ κξοθπξβΰνθθ β αστεπ ξαμενΰ.";
     MESSAGE[ polish ] = "B³Ήd podczas kopiowania do schowka.";
-    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚ΙΊΛί°‚µ‚Δ‚Ά‚ι‚Μ΄Χ°B";
+    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚ΙΊΛί°‚·‚ιΫ‚Μ΄Χ°B";
     MESSAGE[ chinese_traditional ] = "½Ζ»sΈκ®Ζ¨μ°Ε¶KΓ―®Ιµo¥ΝΏω»~΅C";
     MESSAGE[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΗαδΣΞ Εαμ ΗαΝΗέΩΙ.";
     MESSAGE[ greek ] = "Σφάλμα κατά την αντιγραφή στο πρόχειρο.";
@@ -171,7 +171,7 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE[ chinese_simplified ] = "ΤΪ¶ΑΘ΅ΌτΜω°εΚ±·ΆΙϊ΄νΞσ΅£";
     MESSAGE[ russian ] = "Ξψθακΰ οπθ χςενθθ θη αστεπΰ ξαμενΰ.";
     MESSAGE[ polish ] = "B³Ήd odczytu ze schowka.";
-    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚©‚η“Η‚έζ‚θ‚Μ΄Χ°B";
+    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚©‚η“Η‚έζ‚ιΫ‚Μ΄Χ°B";
     MESSAGE[ chinese_traditional ] = "¦bΕª¨ϊ°Ε¶KΓ―®Ιµo¥ΝΏω»~΅C";
     MESSAGE[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΗαήΡΗΑΙ γδ ΗαΝΗέΩΙ.";
     MESSAGE[ language_user1 ] = " ";
