@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-13 16:14:17 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,21 @@ namespace configmgr
 
         class Timer : public vos::OTimer
         {
+            osl::Mutex  m_aMutex;
         public:
-            OTreeDisposeScheduler& rParent;
+            OTreeDisposeScheduler* pParent;
 
-            Timer(OTreeDisposeScheduler& _rParent) : rParent(_rParent) {};
+            Timer(OTreeDisposeScheduler& _rParent) : pParent(&_rParent) {};
 
             // vos::OTimer
             virtual void SAL_CALL onShot();
+
+            //
+            osl::Mutex&     getShotMutex() {return m_aMutex;}
+
+            // stop the scheduling
+            void dispose() {stop(); pParent = NULL;}
+
         };
         friend void Timer::onShot();
 
@@ -119,19 +127,21 @@ namespace configmgr
     //-------- Construction and destruction -----------------------------------
         explicit
         OTreeDisposeScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
-            : m_xTimer(0)
-            , m_rTreeManager(_rTreeManager)
+            : m_rTreeManager(_rTreeManager)
             , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupDelay)
-        {}
+        {
+            m_xTimer = new Timer(*this);
+        }
 
         explicit
         OTreeDisposeScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
-            : m_xTimer(0)
-            , m_rTreeManager(_rTreeManager)
+            : m_rTreeManager(_rTreeManager)
             , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupInterval)
-        {}
+        {
+            m_xTimer = new Timer(*this);
+        }
 
         ~OTreeDisposeScheduler() { stopAndClearTasks(); }
 
@@ -187,6 +197,10 @@ namespace configmgr
 
         /// stop and discard pending activities
         void stopAndClearTasks();
+
+        /// mutex for synchronisation
+        osl::Mutex&     getShotMutex() {return m_xTimer->getShotMutex();}
+
     private:
         // vos::OTimer
         void onTimerShot();
@@ -213,13 +227,21 @@ namespace configmgr
 
         class Timer : public vos::OTimer
         {
+            osl::Mutex  m_aMutex;
         public:
-            OTreeCacheWriteScheduler& rParent;
+            OTreeCacheWriteScheduler* pParent;
 
-            Timer(OTreeCacheWriteScheduler& _rParent) : rParent(_rParent) {};
+            Timer(OTreeCacheWriteScheduler& _rParent) : pParent(&_rParent) {};
 
             // vos::OTimer
             virtual void SAL_CALL onShot();
+
+            //
+            osl::Mutex&     getShotMutex() {return m_aMutex;}
+
+            // stop the scheduling
+            void dispose() {stop(); pParent = NULL;}
+
         };
         friend void Timer::onShot();
     private:
@@ -235,10 +257,11 @@ namespace configmgr
     //-------- Construction and destruction -----------------------------------
         explicit
         OTreeCacheWriteScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
-            : m_xTimer(0)
-            , m_rTreeManager(_rTreeManager)
+            : m_rTreeManager(_rTreeManager)
             , m_aCleanupInterval(_aCleanupDelay)
-        {}
+        {
+            m_xTimer = new Timer(*this);
+        }
         ~OTreeCacheWriteScheduler();
 
     //-------- Delay and Interval ---------------------------------------------
@@ -262,6 +285,10 @@ namespace configmgr
 
         /// stop and discard pending activities
         void stopAndWriteCache();
+
+        /// mutex for synchronisation
+        osl::Mutex&     getShotMutex() {return m_xTimer->getShotMutex();}
+
     private:
         // vos::OTimer
         void onTimerShot();

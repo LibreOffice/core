@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-13 16:14:16 $
+ *  last change: $Author: dg $ $Date: 2001-02-15 17:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,10 +141,8 @@ void OTreeDisposeScheduler::stopAndClearTasks()
     CFG_TRACE_INFO_NI("- %d cleanup tasks were pending", int(m_aAgenda.size()) );
 
     if (m_xTimer.isValid())
-    {
-        m_xTimer->stop(); // just to be sure
-        m_xTimer.unbind(); // just to be sure
-    }
+        m_xTimer->dispose(); // just to be sure
+
     m_aAgenda.clear();
 }
 // -------------------------------------------------------------------------
@@ -154,7 +152,6 @@ vos::ORef< OOptions > OTreeDisposeScheduler::getTask(TimeStamp const& _aActualTi
     OSL_ASSERT( _rNextTime.isNever() ); // internal contract, we set this only in the positive case
 
     osl::MutexGuard aOwnGuard( m_aMutex );
-
     vos::ORef< OOptions > xHandleNow;
 
     if (!m_aAgenda.empty())
@@ -181,14 +178,14 @@ vos::ORef< OOptions > OTreeDisposeScheduler::getTask(TimeStamp const& _aActualTi
 
 void OTreeDisposeScheduler::Timer::onShot()
 {
-    rParent.onTimerShot();
+    osl::MutexGuard aGuard(m_aMutex);
+    if (pParent)
+        pParent->onTimerShot();
 }
 // -------------------------------------------------------------------------
 
 void OTreeDisposeScheduler::onTimerShot()
 {
-    //m_aTimer.stop();
-
     CFG_TRACE_INFO("Cleanup Timer invoked - executing dispose task");
 
     TimeStamp aActualTime = TimeStamp::getCurrentTime();
@@ -263,23 +260,29 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
             else if (pInfo->isEmpty())// may have been the last one - check that
             {
+                // currently it is not possible to release options which are
+                // because it is not save to delete the info if another thread is running in
+                // a read request
+
+                /*
+
                 CFG_TRACE_INFO_NI("- Disposing last data for this options set => Removing TreeInfo" );
 
                 // get rid of it - see TreeManager::disposeOne
                 std::auto_ptr<TreeInfo> pDisposeInfo(pInfo);
 
                 m_rTreeManager.m_aTreeList.erase(xTaskOption);
-
                 // got it out of reachability - now dispose/notify without lock
 
                 aGuard.clear();
-
                 m_rTreeManager.ConfigChangeBroadcaster::disposeBroadcastHelper(pInfo->pBroadcastHelper);
 
                 OSL_ENSURE(pInfo->m_aNotificationList.empty(),
                             "WARNING: Empty TreeInfo still has notifications registered - will be leaked");
 
                 pInfo = NULL;
+
+                */
             }
             else
                 CFG_TRACE_INFO_NI("- Currently no more cleanup tasks for this options set" );
@@ -332,9 +335,6 @@ void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
     // check if we were cleared
     if (!m_aAgenda.empty() && !_aTime.isNever())
     {
-        if (m_xTimer.isEmpty())
-            m_xTimer = new Timer(*this);
-
         if (!m_xTimer->isTicking() || _aTime < getExpirationTime(*m_xTimer))
         {
             m_xTimer->setAbsoluteTime(_aTime.getTimeValue());
@@ -348,11 +348,8 @@ void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
     }
     else
     {
-        if (!m_xTimer.isEmpty())
-        {
-            m_xTimer->stop();
-            CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
-        }
+        m_xTimer->stop();
+        CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
     }
 }
 // -------------------------------------------------------------------------
@@ -395,17 +392,19 @@ void OTreeCacheWriteScheduler::stopAndWriteCache()
     CFG_TRACE_INFO("Cancelling all cache writings, Stopping timer");
 
     if (m_xTimer.isValid())
-    {
-        m_xTimer->stop(); // just to be sure
-        m_xTimer.unbind(); // just to be sure
-    }
+        m_xTimer->dispose(); // just to be sure
+
     runWriter();
 }
+
 // -------------------------------------------------------------------------
 void OTreeCacheWriteScheduler::Timer::onShot()
 {
-    rParent.onTimerShot();
+    osl::MutexGuard aGuard(m_aMutex);
+    if (pParent)
+        pParent->onTimerShot();
 }
+
 // -----------------------------------------------------------------------------
 void OTreeCacheWriteScheduler::onTimerShot()
 {
@@ -480,9 +479,6 @@ void OTreeCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
     // check if we were cleared
     if (!m_aWriteList.empty())
     {
-        if (m_xTimer.isEmpty())
-            m_xTimer = new Timer(*this);
-
         if (!m_xTimer->isTicking())
         {
             m_xTimer->setAbsoluteTime(_aTime.getTimeValue());
@@ -497,11 +493,8 @@ void OTreeCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
     }
     else
     {
-        if (!m_xTimer.isEmpty())
-        {
-            m_xTimer->stop();
-            CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
-        }
+        m_xTimer->stop();
+        CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
     }
 }
 
