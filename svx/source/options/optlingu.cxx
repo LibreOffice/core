@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 20:40:44 $
+ *  last change: $Author: tl $ $Date: 2000-11-28 02:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,30 +233,28 @@ sal_Bool KillFile_Impl( const String& rURL )
 
 class ModuleUserData_Impl
 {
-    ULONG   nVal;
+    BOOL bParent;
+    BOOL bIsChecked;
+    BYTE nType;
+    BYTE nIndex;
     String  sImplName;
 
 public:
-//  ModuleUserData_Impl( ULONG n): nVal(n){}
-    ModuleUserData_Impl( String sImpName, BOOL bIsParent, BOOL bIsChecked, BYTE nType, BYTE nIndex ) :
-        nVal(0),
+    ModuleUserData_Impl( String sImpName, BOOL bIsParent, BOOL bChecked, BYTE nSetType, BYTE nSetIndex ) :
+        bParent(bIsParent),
+        bIsChecked(bChecked),
+        nType(nSetType),
+        nIndex(nSetIndex),
         sImplName(sImpName)
         {
-            if(bIsParent)
-                nVal |= 0x01000000;
-            nVal |= (nType << 16);
-            if(bIsChecked)
-                nVal |= 0x00000100;
-            nVal |= nIndex;
         }
-    BOOL IsParent() const {return 0 != (nVal & 0x01000000);}
-    BYTE GetType() const {return (BYTE)(nVal & 0x00ff0000) >> 16;}
-    BOOL IsChecked() const {return 0 != (nVal& 0x0000100);}
-    BYTE GetIndex() const {return (BYTE)nVal & 0xff;}
-    void SetIndex(BYTE nSet)  {nVal &= 0xffffff00; nVal |= nSet;}
-    String GetImplName() const {return sImplName;}
+    BOOL IsParent() const {return bParent;}
+    BYTE GetType() const {return nType;}
+    BOOL IsChecked() const {return bIsChecked;}
+    BYTE GetIndex() const {return nIndex;}
+    void SetIndex(BYTE nSet)  {nIndex = nSet;}
+    const String& GetImplName() const {return sImplName;}
 
-//  ULONG   GetValue()const{return nVal;}
 };
 
 /*--------------------------------------------------
@@ -785,7 +783,7 @@ void SvxLinguData_Impl::AddServiceName(const ServiceInfo_Impl* pInfo)
 void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices)
 {
     const OUString* pConfiguredServices = rConfiguredServices.getConstArray();
-    for(sal_Int32 n = 0; n < aAvailSrvcNames.getLength(); n++)
+    for(sal_Int32 n = 0; n < rConfiguredServices.getLength(); n++)
     {
         for(int i = 0; i < aDisplayServiceArr.Count(); i++)
         {
@@ -1829,11 +1827,11 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
                 USHORT  nCurPos = pBox->GetSelectEntryPos();
                 if(nCurPos < pBox->GetEntryCount() - 2)
                 {
-                    bDisableUp = ((ModuleUserData_Impl*)pBox->GetEntry(nCurPos + 1)->GetUserData())->IsParent();
+                    bDisableDown = ((ModuleUserData_Impl*)pBox->GetEntry(nCurPos + 1)->GetUserData())->IsParent();
                 }
                 if(nCurPos > 1)
                 {
-                    bDisableDown = ((ModuleUserData_Impl*)pBox->GetEntry(nCurPos - 1)->GetUserData())->IsParent();
+                    bDisableUp = ((ModuleUserData_Impl*)pBox->GetEntry(nCurPos - 1)->GetUserData())->IsParent();
                 }
             }
             aPrioUpPB.Enable(!bDisableUp);
@@ -1882,7 +1880,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     Reference<XLinguServiceManager>&   xMgr = rLinguData.GetManager();
     if(pBox)
     {
-        sal_Int32 nStart = 0;
+        sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence<OUString> aChange;
         sal_Bool bChanged = FALSE;
         for(ULONG i = 0; i < aModulesCLB.GetEntryCount(); i++)
@@ -1895,9 +1893,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 {
                     aChange.realloc(nStart);
                     xMgr->setConfiguredServices(
-                        lcl_GetServiceName(pData->GetType()), aLastLocale, aChange);
+                        lcl_GetServiceName(pData->GetType() - 1), aLastLocale, aChange);
                 }
-                nStart = 0;
+                nLocalIndex = nStart = 0;
                 aChange.realloc(aModulesCLB.GetEntryCount());
                 bChanged = FALSE;
             }
@@ -1905,10 +1903,11 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 OUString* pChange = aChange.getArray();
                 pChange[nStart] = pData->GetImplName();
-                bChanged |= pData->GetIndex() != nStart ||
+                bChanged |= pData->GetIndex() != nLocalIndex ||
                     pData->IsChecked() != aModulesCLB.IsChecked(i);
                 if(aModulesCLB.IsChecked(i))
                     nStart++;
+                ++nLocalIndex;
             }
         }
         if(bChanged)
@@ -1987,6 +1986,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
  ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
 {
+    aModulesCLB.SetUpdateMode(FALSE);
     sal_Bool bUp = &aPrioUpPB == pBtn;
     USHORT  nCurPos = aModulesCLB.GetSelectEntryPos();
     SvLBoxEntry* pEntry = aModulesCLB.GetEntry(nCurPos);
@@ -1995,11 +1995,16 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
     ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
     SvLBoxEntry* pToInsert = CreateEntry( aModulesCLB.GetEntryText(pEntry), CBCOL_FIRST );
     pToInsert->SetUserData( (void *)pData);
+    BOOL bIsChecked = aModulesCLB.IsChecked(nCurPos);
+
     pModel->Remove(pEntry);
-    if(bUp)
-        pModel->Insert(pToInsert, nCurPos - 1);
-    else
-        pModel->Insert(pToInsert, nCurPos + 1);
+
+    USHORT nDestPos = bUp ? nCurPos - 1 : nCurPos + 1;
+    pModel->Insert(pToInsert, nDestPos);
+    aModulesCLB.CheckEntryPos(nDestPos, bIsChecked );
+    aModulesCLB.SelectEntryPos(nDestPos );
+    aModulesCLB.SetUpdateMode(TRUE);
+    SelectHdl_Impl(&aModulesCLB);
     return 0;
 }
 /* ---------------------------------------------------------------------------
