@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-09-12 15:08:04 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,14 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 namespace sd
 {
@@ -130,7 +137,7 @@ public:
     destructor.  An easy way to transfer the whole list is to call the swap
     method on an STL vector with the list as argument.
 */
-class   TemplateScanner
+class SD_DLLPUBLIC TemplateScanner
 {
 public:
     /** Create a new template scanner and prepare but do not execute the scanning.
