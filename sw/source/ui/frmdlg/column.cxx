@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 13:59:00 $
+ *  last change: $Author: os $ $Date: 2002-06-19 14:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include "svx/frmdiritem.hxx"
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 
 #include "globals.hrc"
@@ -1363,6 +1366,10 @@ void SwColumnPage::SetFrmMode(BOOL bMod)
  ---------------------------------------------------------------------------*/
 void SwColumnPage::SetInSection(BOOL bSet)
 {
+    SvtLanguageOptions aLangOptions;
+    if(!aLangOptions.IsCTLFontEnabled())
+        return;
+
     aVertFL.Show(bSet);
     aPropertiesFL.Show(bSet);
     aTextDirectionFT.Show(bSet);
