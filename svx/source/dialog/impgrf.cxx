@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-19 13:38:59 $
+ *  last change: $Author: sj $ $Date: 2001-01-23 16:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,12 +225,17 @@ USHORT FillFilter( GraphicFilter& rFilter )
         aFullConfigPath.Append( String( aNormalizedPath ) );
     }
     rFilter.SetConfigPath( aFullConfigPath );
+
+    INetURLObject aFilterPathUrl( aPathOpt.GetFilterPath() );
+    if ( aFilterPathUrl.HasError() )
+        aFilterPathUrl = INetURLObject( aPathOpt.GetFilterPath(), INET_PROT_FILE );
     rFilter.SetFilterPath( aPathOpt.GetFilterPath() );
-    INetURLObject aFltOptFile( aPathOpt.GetUserConfigPath() );
-    if ( aFltOptFile.HasError() )
-        aFltOptFile = INetURLObject( aPathOpt.GetUserConfigPath(), INET_PROT_FILE );
-    aFltOptFile.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( IMPGRF_GRAPHIC_OPTIONS_FILE ) ) );
-    rFilter.SetOptionsConfigPath( aFltOptFile );
+
+    INetURLObject aUserConfigPathUrl( aPathOpt.GetUserConfigPath() );
+    if ( aUserConfigPathUrl.HasError() )
+        aUserConfigPathUrl = INetURLObject( aPathOpt.GetUserConfigPath(), INET_PROT_FILE );
+    aUserConfigPathUrl.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( IMPGRF_GRAPHIC_OPTIONS_FILE ) ) );
+    rFilter.SetOptionsConfigPath( aUserConfigPathUrl );
 
     return rFilter.GetImportFormatCount();
 }
