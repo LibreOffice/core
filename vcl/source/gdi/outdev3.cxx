@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-28 17:01:41 $
+ *  last change: $Author: hdu $ $Date: 2002-12-05 17:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,7 @@ void ImplFreeOutDevFontData()
 {
     ImplSVData*         pSVData = ImplGetSVData();
     ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
-    while ( pEntry )
+    while( pEntry )
     {
         ImplFontSubstEntry* pNext = pEntry->mpNext;
         delete pEntry;
@@ -1231,24 +1231,24 @@ ImplDevFontList::~ImplDevFontList()
 
 void ImplDevFontList::ImplClear()
 {
-    // Alle Eintraege loeschen
-    ImplDevFontListData* pEntry = First();
-    while ( pEntry )
+    // clear all entries in the device font list
+    ImplFontSelectData aIFSD;
+    for( ImplDevFontListData* pEntry = First(); pEntry; pEntry = Next() )
     {
-        // Liste der Font loeschen
-        ImplFontData* pFontData = pEntry->mpFirst;
+        ImplFontData* pNextFD = pEntry->mpFirst;
         do
         {
-            ImplFontData* pTempFontData = pFontData;
-            pFontData = pFontData->mpNext;
-            delete pTempFontData;
+            ImplFontData* pFontData = pNextFD;
+            pNextFD = pFontData->mpNext;
+
+            // tell lower layers about the imminent death
+            SalGraphics::RemovingFont( pFontData );
+
+            delete pFontData;
         }
-        while ( pFontData );
+        while( pNextFD );
 
-        // Entry loeschen
         delete pEntry;
-
-        pEntry = Next();
     }
 }
 
@@ -1265,7 +1265,7 @@ void ImplDevFontList::Clear()
 static StringCompare ImplCompareFontDataWithoutSize( const ImplFontData* pEntry1,
                                                      const ImplFontData* pEntry2 )
 {
-    // Vergleichen nach Groesse, Breite, Weight, Italic, StyleName
+    // compare their width, weight, italic and style name
     if ( pEntry1->meWidthType < pEntry2->meWidthType )
         return COMPARE_LESS;
     else if ( pEntry1->meWidthType > pEntry2->meWidthType )
@@ -1400,12 +1400,11 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
             StringCompare eComp = ImplCompareFontData( pNewData, pTemp );
             if ( eComp != COMPARE_GREATER )
             {
-                // Wenn Font gleich ist, nehmen wir einen Devicefont,
-                // oder ignorieren den Font
+                // prefer device font, else remove duplicate
                 if ( eComp == COMPARE_EQUAL )
                 {
-                    // Wir nehmen den Font mit der besseren Quality,
-                    // ansonsten ziehen wir den Device-Font vor
+                    // prefer font with better quality
+                    // else prefer device font
                     if ( (pNewData->mnQuality > pTemp->mnQuality) ||
                          ((pNewData->mnQuality == pTemp->mnQuality) &&
                           (pNewData->mbDevice && !pTemp->mbDevice)) )
@@ -1605,14 +1604,10 @@ ImplFontCache::ImplFontCache( BOOL bPrinter )
 
 ImplFontCache::~ImplFontCache()
 {
-    // Alle Eintraege loeschen
-    ImplFontEntry* pTemp;
-    ImplFontEntry* pEntry = mpFirstEntry;
-    while ( pEntry )
+    for( ImplFontEntry* pEntry = mpFirstEntry, *pNext; pEntry; pEntry = pNext )
     {
-        pTemp = pEntry->mpNext;
+        pNext = pEntry->mpNext;
         delete pEntry;
-        pEntry = pTemp;
     }
 }
 
@@ -5672,7 +5667,6 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         if( pFallbackFont && (pFallbackFont != mpFontEntry) )
         {
             // use matching fallback font for text layout
-            OutputDevice& rOut = const_cast<OutputDevice&>(*this);
             ImplFontSelectData aIFSD = mpFontEntry->maFontSelData;
             aIFSD.mpFontData = pFallbackFont->maFontSelData.mpFontData;
             pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aIFSD, 1 );
