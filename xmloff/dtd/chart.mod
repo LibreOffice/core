@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.7 2000-12-04 09:10:50 bm Exp $
+	$Id: chart.mod,v 1.8 2000-12-04 09:44:22 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -60,7 +60,7 @@
 <!-- Chart element -->
 <!ELEMENT chart:chart ( chart:title?, chart:subtitle?, chart:legend?,
 					    chart:plot-area,
-						table:table )>
+						table:table? )>
 <!ATTLIST chart:chart
 		  chart:class %chart-class; #REQUIRED
 		  chart:add-in-name %string; #IMPLIED
