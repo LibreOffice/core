@@ -2,9 +2,9 @@
  *
  *  $RCSfile: counter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _BRIDGES_REMOTE_COUNTER_H_
 #include <stdio.h>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 struct MyCounter
 {
     MyCounter( sal_Char *pName ) :
