@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 11:41:05 $
+ *  last change: $Author: mba $ $Date: 2003-04-04 12:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,6 @@ void Interceptor::generateFeatureStateEvent()
             }
             else
             {
-                frame::FeatureStateEvent aStateEvent;
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
                 aStateEvent.FeatureDescriptor = rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
