@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:21:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@ DBG_NAMEEX( Window );
 
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
+
+//#define USE_NEW_RTL_IMPLEMENTATION
 
 // =======================================================================
 
@@ -711,7 +713,12 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
     if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
     {
         // - RTL - re-mirror frame pos at pChild
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+        Window *pRefWindow = (Window*) mpDummy4;
+        pRefWindow->ImplReMirror( aMousePos );
+#else
         ImplReMirror( aMousePos );
+#endif
     }
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                            mpFrameData->mnClickCount, 0,
@@ -782,8 +789,15 @@ void Window::EndTracking( USHORT nFlags )
         {
             Point           aMousePos( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY );
             if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            {
                 // - RTL - re-mirror frame pos at pChild
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+                Window *pRefWindow = (Window*) mpDummy4;
+                pRefWindow->ImplReMirror( aMousePos );
+#else
                 ImplReMirror( aMousePos );
+#endif
+            }
 
             MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                                    mpFrameData->mnClickCount, 0,
