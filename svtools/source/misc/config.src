@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:15:42 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ String STR_KEY_TEMPLATE_PATH
     Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
     Text[ dutch ] = "Sjablonen";
     Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
-    Text[ greek ] = "Ğñüôõğá åããñÜöùí";
+    Text[ greek ] = "Ğñüôõğá åããñÜöïõ";
     Text[ korean ] = "¹®¼­ ÅÛÇÃ¸®Æ®";
     Text[ turkish ] = "Belge şablonları";
     Text[ language_user1 ] = " ";
@@ -487,14 +487,14 @@ String STR_KEY_HELP_DIR
     Text [ danish ] = "Hjælp-filer" ;
     Text [ portuguese ] = "Ficheiros de ajuda" ;
     Text [ portuguese_brazilian ] = "Hilfedateien" ;
-    Text[ chinese_simplified ] = "ÇóÖúÎÄ¼ş";
+    Text[ chinese_simplified ] = "°ïÖúÎÄ¼ş";
     Text[ russian ] = "Ôàéëû ñïğàâêè";
     Text[ polish ] = "Pliki pomocy";
     Text[ japanese ] = "ÍÙÌßÌ§²Ù";
     Text[ chinese_traditional ] = "»¡©úÀÉ®×";
     Text[ arabic ] = "ãáİÇÊ ÇáãÓÇÚÏÉ";
     Text[ dutch ] = "Help-bestanden";
-    Text[ chinese_simplified ] = "ÇóÖúÎÄ¼ş";
+    Text[ chinese_simplified ] = "°ïÖúÎÄ¼ş";
     Text[ greek ] = "Áñ÷åßá âïŞèåéáò";
     Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ";
     Text[ turkish ] = "Yardım dosyaları";
@@ -669,14 +669,14 @@ String STR_KEY_STARTMENU_DIR
     Text [ spanish ] = "Menú de inicio" ;
     Text [ french ] = "Menu Démarrer" ;
     Text [ dutch ] = "Startmenu" ;
-    Text[ chinese_simplified ] = "¿ªÊ¼²Ëµ¥ÃüÁî";
+    Text[ chinese_simplified ] = "¿ªÊ¼²Ëµ¥";
     Text[ russian ] = "Ìåíş çàïóñêà";
     Text[ polish ] = "Menu Start";
     Text[ japanese ] = "½À°ÄÒÆ­°";
     Text[ chinese_traditional ] = "¶}©l¥\\¯àªí";
     Text[ arabic ] = "ŞÇÆãÉ ÇáÈÏÁ";
     Text[ dutch ] = "Startmenu";
-    Text[ chinese_simplified ] = "¿ªÊ¼²Ëµ¥ÃüÁî";
+    Text[ chinese_simplified ] = "¿ªÊ¼²Ëµ¥";
     Text[ greek ] = "Ìåíïı åêêßíçóçò";
     Text[ korean ] = "½ÃÀÛ ¸Ş´º";
     Text[ turkish ] = "Başlat mönüsü";
@@ -848,7 +848,7 @@ String STR_KEY_FAVORITES_DIR
     Text[ french ] = "Répertoires courants";
     Text[ spanish ] = "Marcadores de carpetas";
     Text[ swedish ] = "Mappbokmärken";
-    Text[ russian ] = "Çàêëàäêè ê ïàïêàì";
+    Text[ russian ] = "Çàêëàäêè ê ïàïêå";
     Text[ italian ] = "Bookmark della cartella";
     Text[ danish ] = "Mappe-bogmærker";
     Text[ polish ] = "Zak³adki folderu";
@@ -913,7 +913,7 @@ String STR_KEY_USERCONFIG_PATH
     Text [ English ] = "User Settings" ;
     Text[ english_us ] = "User Configuration";
     Text[ portuguese ] = "Configuração personalizada";
-    Text[ greek ] = "ĞáñÜìåôñïé ÷ñŞóôç";
+    Text[ greek ] = "Äéáìüñöùóç ôïõ ÷ñŞóôç";
     Text[ dutch ] = "Gebruikerscofiguratie";
     Text[ french ] = "Configuration d'utilisateur";
     Text[ spanish ] = "Configuración de usuario";
