@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:46:01 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:41:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,10 @@
 PRJ=..$/..$/..$/..$/..
 
 PRJNAME=officecfg
-TARGET=data
+TARGET=data_ooOffice
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
 
@@ -104,6 +105,8 @@ MODULEFILES= \
     Common-ctl.xcu   \
     Common-korea.xcu   \
     Writer-cjk.xcu \
+    Writer-defaultfontarial.xcu \
+    Writer-directcursor.xcu \
     Writer-javamail.xcu \
     Embedding-calc.xcu   \
     Embedding-chart.xcu   \
@@ -125,5 +128,4 @@ LOCALIZEDFILES= \
     Writer.xcu
 
 .INCLUDE :  target.mk
-.INCLUDE :  $(PRJ)$/registry$/data$/localtarget.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
