@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:00:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@
 #include "fuslshow.hxx"
 #endif
 #include "SdUnoOutlineView.hxx"
+#include "SpellDialogChildWindow.hxx"
+
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
@@ -247,6 +249,7 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
@@ -1457,6 +1460,23 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
             GetDocSh()->Execute (rReq);
             bForwardCall = false;
             break;
+
+        case SID_SPELL_DIALOG:
+        {
+            SfxViewFrame* pViewFrame = GetViewFrame();
+            if (rReq.GetArgs() != NULL)
+                pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_SPELL_DIALOG))).GetValue());
+            else
+                pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
+
+            pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
+            rReq.Done ();
+
+            bForwardCall = false;
+        }
+        break;
 
         default:
             OSL_TRACE ("OutlineViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
