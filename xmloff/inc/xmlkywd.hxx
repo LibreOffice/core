@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-15 11:29:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2018,4 +2018,10 @@ XML_CONSTASCII_ACTION( sXML_text_style_name, "text-style-name" );
 
 XML_CONSTASCII_ACTION( sXML_sort_algorithm, "sort-algorithm" );
 XML_CONSTASCII_ACTION( sXML_roll_from_top, "roll-from-top" );
+
+XML_CONSTASCII_ACTION( sXML_script_data, "script-data" );
+XML_CONSTASCII_ACTION( sXML_libraries, "libraries" );
+XML_CONSTASCII_ACTION( sXML_source_code, "source-code" );
+XML_CONSTASCII_ACTION( sXML_readonly, "readonly" );
+
 #endif
