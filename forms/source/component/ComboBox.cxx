@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 12:01:07 $
+ *  last change: $Author: fs $ $Date: 2001-02-27 17:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
     switch (_nHandle)
     {
         case PROPERTY_ID_LISTSOURCETYPE :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_eListSourceType);
+            bModified = tryPropertyValueEnum(_rConvertedValue, _rOldValue, _rValue, m_eListSourceType);
             break;
 
         case PROPERTY_ID_LISTSOURCE :
