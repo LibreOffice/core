@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:22:30 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ Window RID_SCDLG_NAVIGATOR
     Text [ italian ] = "Navigatore" ;
     Text [ portuguese_brazilian ] = "Navegador" ;
     Text [ portuguese ] = "Navegador" ;
-    Text [ finnish ] = "Navigaattori" ;
+    Text [ finnish ] = "Etsin" ;
     Text [ danish ] = "Navigator" ;
     Text [ french ] = "Navigateur" ;
     Text [ swedish ] = "Navigator" ;
@@ -498,7 +498,7 @@ Window RID_SCDLG_NAVIGATOR
                 HelpId = HID_SC_NAVIPI_SCEN ;
                 Text = "Szenarien" ;
                 Text [ ENGLISH ] = "Scenarios" ;
-                Text [ dutch ] = "Scenario´s" ;
+                Text [ dutch ] = "Scenario's" ;
                 Text [ english_us ] = "Scenarios" ;
                 Text [ italian ] = "Scenari" ;
                 Text [ spanish ] = "Escenarios" ;
@@ -513,7 +513,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ japanese ] = "ã‚·ãƒŠãƒªã‚ª";
                 Text[ chinese_traditional ] = "åˆ†æè—æœ¬";
                 Text[ arabic ] = "æÍÏÇÊ ÇáÓíäÇÑíæ";
-                Text[ dutch ] = "Scenario´s";
+                Text[ dutch ] = "Scenario's";
                 Text[ chinese_simplified ] = "æ–¹æ¡ˆ";
                 Text[ greek ] = "ÓåíÜñéá";
                 Text[ korean ] = "ì‹œë‚˜ë¦¬ì˜¤";
@@ -530,7 +530,7 @@ Window RID_SCDLG_NAVIGATOR
                 DropDown = TRUE ;
                 Text = "Dragmodus" ;
                 Text [ ENGLISH ] = "Drag mode" ;
-                Text [ dutch ] = "Dragmodus" ;
+                Text [ dutch ] = "Sleepmodus" ;
                 Text [ english_us ] = "Drag Mode" ;
                 Text [ italian ] = "Modo drag" ;
                 Text [ spanish ] = "Modo Arrastrar" ;
@@ -545,7 +545,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰";
                 Text[ chinese_traditional ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
-                Text[ dutch ] = "Dragmodus";
+                Text[ dutch ] = "Sleepmodus";
                 Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
                 Text[ korean ] = "ëŒê¸° ëª¨ë“œ";
@@ -561,7 +561,7 @@ Window RID_SCDLG_NAVIGATOR
     {
         Text = "Dragmodus" ;
         Text [ English ] = "Drag mode" ;
-        Text [ dutch ] = "Dragmodus" ;
+        Text [ dutch ] = "Sleepmodus" ;
         Text [ english_us ] = "Drag Mode" ;
         Text [ italian ] = "Modo drag" ;
         Text [ spanish ] = "Modo Arrastrar" ;
@@ -576,7 +576,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰";
         Text[ chinese_traditional ] = "æ‹–æ›³æ¨¡å¼";
         Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
-        Text[ dutch ] = "Dragmodus";
+        Text[ dutch ] = "Sleepmodus";
         Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
         Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
         Text[ korean ] = "ëŒê¸° ëª¨ë“œ";
@@ -600,7 +600,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ portuguese ] = "Mostrar" ;
         Text [ portuguese_brazilian ] = "Anzeige" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤º";
-        Text[ russian ] = "Ïîêàçàòü";
+        Text[ russian ] = "Îòîáğàçèòü";
         Text[ polish ] = "Wyœwietl";
         Text[ japanese ] = "è¡¨ç¤º";
         Text[ chinese_traditional ] = "é¡¯ç¤º";
@@ -773,7 +773,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ danish ] = "Kommentar";
         Text[ french ] = "Commentaire";
         Text[ swedish ] = "Kommentar";
-        Text[ dutch ] = "Commentaar";
+        Text[ dutch ] = "Opmerkingen";
         Text[ spanish ] = "Comentario";
         Text[ chinese_simplified ] = "æ³¨è§£";
         Text[ russian ] = "Êîììåíòàğèé";
@@ -781,7 +781,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
         Text[ chinese_traditional ] = "è¨»è§£";
         Text[ arabic ] = "ÊÚáíŞ";
-        Text[ dutch ] = "Commentaar";
+        Text[ dutch ] = "Opmerkingen";
         Text[ chinese_simplified ] = "æ³¨è§£";
         Text[ greek ] = "Ó÷üëéï";
         Text[ korean ] = "ì£¼ì„";
@@ -912,7 +912,7 @@ String SCSTR_CONTENT_TABLE
     Text [ portuguese ] = "Folhas" ;
     Text [ portuguese_brazilian ] = "Tabellen" ;
     Text[ chinese_simplified ] = "å·¥ä½œè¡¨";
-    Text[ russian ] = "Òàáëèöû";
+    Text[ russian ] = "Ëèñòû";
     Text[ polish ] = "Arkusze";
     Text[ japanese ] = "è¡¨";
     Text[ chinese_traditional ] = "å·¥ä½œè¡¨";
@@ -924,7 +924,7 @@ String SCSTR_CONTENT_TABLE
     Text[ turkish ] = "Tablolar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fulls";
-    Text[ finnish ] = "Lomakkeet";
+    Text[ finnish ] = "Taulukot";
     Text[ thai ] = "à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
 };
 String SCSTR_CONTENT_RANGENAME
@@ -941,7 +941,7 @@ String SCSTR_CONTENT_RANGENAME
     Text [ portuguese ] = "Nomes das áreas" ;
     Text [ portuguese_brazilian ] = "Bereichsnamen" ;
     Text[ chinese_simplified ] = "åŒºåŸŸåç§°";
-    Text[ russian ] = "Íàçâàíèÿ îáëàñòåé";
+    Text[ russian ] = "Íàçâàíèÿ äèàïàçîíà";
     Text[ polish ] = "Nazwy obszarów";
     Text[ japanese ] = "ç¯„å›²å";
     Text[ chinese_traditional ] = "å€åŸŸåç¨±";
@@ -960,7 +960,7 @@ String SCSTR_CONTENT_DBAREA
 {
     TEXT = "Datenbankbereiche" ;
     TEXT [ English ] = "Database areas" ;
-    Text [ dutch ] = "Database-bereiken" ;
+    Text [ dutch ] = "Databasebereiken" ;
     Text [ english_us ] = "Database Ranges" ;
     Text [ italian ] = "Aree database" ;
     Text [ spanish ] = "Áreas de base de datos" ;
@@ -975,7 +975,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ç¯„å›²";
     Text[ chinese_traditional ] = "è³‡æ–™åº«å€åŸŸ";
     Text[ arabic ] = "ãäÇØŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text[ dutch ] = "Database-bereiken";
+    Text[ dutch ] = "Databasebereiken";
     Text[ chinese_simplified ] = "æ•°æ®åº“åŒºåŸŸ";
     Text[ greek ] = "Ğåäßá âÜóçò äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì˜ì—­";
@@ -999,7 +999,7 @@ String SCSTR_CONTENT_GRAPHIC
     Text [ portuguese ] = "Imagens" ;
     Text [ portuguese_brazilian ] = "Grafiken" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ğèñóíêè";
+    Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Grafiki";
     Text[ japanese ] = "å›³";
     Text[ chinese_traditional ] = "åœ–å½¢";
@@ -1011,7 +1011,7 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ turkish ] = "Grafikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gràfics";
-    Text[ finnish ] = "Kuvat";
+    Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String SCSTR_CONTENT_OLEOBJECT
@@ -1028,7 +1028,7 @@ String SCSTR_CONTENT_OLEOBJECT
     Text [ portuguese ] = "Objectos OLE" ;
     Text [ portuguese_brazilian ] = "OLE-Objekte" ;
     Text[ chinese_simplified ] = "OLE-å¯¹è±¡";
-    Text[ russian ] = "Îáúåêòû OLE";
+    Text[ russian ] = "OLE îáúåêòû";
     Text[ polish ] = "Obiekty OLE";
     Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "OLE-ç‰©ä»¶";
@@ -1290,7 +1290,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ turkish ] = "Özellikler...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Propietats...";
-            Text[ finnish ] = "Ominaisuudet";
+            Text[ finnish ] = "Ominaisuudet...";
             Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
         };
     };
