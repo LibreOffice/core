@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:06:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,31 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVCONTNR_HXX
-#define BASIC_NODIALOGS
-#define _SFXMNUITEM_HXX
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SFXMNUITEM_HXX
-#define _DLGCFG_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXBASIC_HXX
-#define _MODALDLG_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _BASE_DLGS_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXTBXCTRL_HXX
-#define _PASSWD_HXX
-//#define _SFXFILEDLG_HXX
-//#define _SFXREQUEST_HXX
-#define _SFXOBJFACE_HXX
 
 // INCLUDE ---------------------------------------------------------------
 
