@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 08:32:55 $
+ *  last change: $Author: fs $ $Date: 2002-11-19 09:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4011,7 +4011,7 @@ void SbaTableQueryBrowser::frameAction(const ::com::sun::star::frame::FrameActio
             connectExternalDispatches();
     }
     else
-        OGenericUnoController::frameAction(aEvent);
+        SbaXDataBrowserController::frameAction(aEvent);
 
 }
 // -----------------------------------------------------------------------------
