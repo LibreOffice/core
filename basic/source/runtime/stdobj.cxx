@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-02 15:32:48 $
+ *  last change: $Author: ab $ $Date: 2002-11-18 08:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ static Methods aMethods[] = {
   { "delimiter",    SbxSTRING },
 { "Kill",           SbxNULL,      1 | _FUNCTION, RTLNAME(Kill)              },
   { "filespec",     SbxSTRING },
-{ "LBound",         SbxINTEGER,      1 | _FUNCTION, RTLNAME(LBound)         },
+{ "LBound",         SbxLONG,      1 | _FUNCTION, RTLNAME(LBound)         },
   { "Variant",      SbxVARIANT },
 { "LCase",          SbxSTRING,    1 | _FUNCTION, RTLNAME(LCase)             },
   { "string",       SbxSTRING },
@@ -562,7 +562,7 @@ static Methods aMethods[] = {
   { "Var",          SbxVARIANT },
 { "TypeName",       SbxSTRING,    1 | _FUNCTION, RTLNAME(TypeName)          },
   { "Var",          SbxVARIANT },
-{ "UBound",         SbxINTEGER,   1 | _FUNCTION, RTLNAME(UBound)           },
+{ "UBound",         SbxLONG,      1 | _FUNCTION, RTLNAME(UBound)           },
   { "Var",          SbxVARIANT },
 { "UCase",          SbxSTRING,    1 | _FUNCTION, RTLNAME(UCase)             },
   { "String",       SbxSTRING },
