@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 15:54:10 $
+ *  last change: $Author: bm $ $Date: 2000-12-22 11:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,8 @@ enum SchXMLPlotAreaAttrTokenMap
     XML_TOK_PA_Y,
     XML_TOK_PA_WIDTH,
     XML_TOK_PA_HEIGHT,
-    XML_TOK_PA_STYLE_NAME
+    XML_TOK_PA_STYLE_NAME,
+    XML_TOK_PA_TRANSFORM
 };
 
 enum SchXMLAxisAttrTokenMap
