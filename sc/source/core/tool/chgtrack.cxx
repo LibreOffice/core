@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 12:54:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,7 +1789,8 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
 {
     if (pOldCell)
         ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
-    aOldValue = sOldValue; // set again, because SetCell removes it
+    if ( sOldValue.Len() )     // #i40704# don't overwrite SetCell result with empty string
+        aOldValue = sOldValue; // set again, because SetCell removes it
 }
 
 ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
@@ -1807,7 +1808,8 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
 {
     if (pNewCell)
         ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
-    aNewValue = sNewValue; // set again, because SetCell removes it
+    if ( sNewValue.Len() )     // #i40704# don't overwrite SetCell result with empty string
+        aNewValue = sNewValue; // set again, because SetCell removes it
 }
 
 ScChangeActionContent::~ScChangeActionContent()
@@ -1935,11 +1937,15 @@ void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
     ScChangeActionContent::SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
 }
 
-void ScChangeActionContent::SetNewCell( ScBaseCell* pCell, ScDocument* pDoc )
+void ScChangeActionContent::SetNewCell( ScBaseCell* pCell, ScDocument* pDoc, const String& rFormatted )
 {
     DBG_ASSERT( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
     pNewCell = pCell;
     ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
+
+    // #i40704# allow to set formatted text here - don't call SetNewValue with String from XML filter
+    if ( rFormatted.Len() )
+        aNewValue = rFormatted;
 }
 
 void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
