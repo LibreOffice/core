@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:43:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,16 +130,6 @@ namespace basprov
         // TODO: check length of aOutParamIndex, aOutParam
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-        if ( StarBASIC::IsRunning() )
-        {
-            throw provider::ScriptFrameworkErrorException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic is already running!" ) ),
-                Reference< XInterface >(),
-                m_funcName,
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ),
-                provider::ScriptFrameworkErrorType::UNKNOWN  );
-        }
 
         Any aReturn;
 
