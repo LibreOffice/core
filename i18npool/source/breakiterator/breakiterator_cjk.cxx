@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-06 07:34:56 $
+ *  last change: $Author: khong $ $Date: 2002-10-11 18:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
     if (dict)
         return dict->previousWord(text.getStr(), anyPos, text.getLength(), wordType);
     else
-        BreakIterator_Unicode::previousWord(text, anyPos, nLocale, wordType);
+        return BreakIterator_Unicode::previousWord(text, anyPos, nLocale, wordType);
 }
 
 Boundary SAL_CALL
@@ -95,7 +95,7 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
     if (dict)
         return dict->nextWord(text.getStr(), anyPos, text.getLength(), wordType);
     else
-        BreakIterator_Unicode::nextWord(text, anyPos, nLocale, wordType);
+        return BreakIterator_Unicode::nextWord(text, anyPos, nLocale, wordType);
 }
 
 Boundary SAL_CALL
@@ -106,7 +106,7 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
     if (dict)
         return dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), wordType, bDirection);
     else
-        BreakIterator_Unicode::getWordBoundary(text, anyPos, nLocale, wordType, bDirection);
+        return BreakIterator_Unicode::getWordBoundary(text, anyPos, nLocale, wordType, bDirection);
 }
 
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
