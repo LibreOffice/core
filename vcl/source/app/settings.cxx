@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: th $ $Date: 2001-07-09 17:31:11 $
+ *  last change: $Author: th $ $Date: 2001-07-10 07:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1458,10 +1458,13 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     mnWindowUpdate              = rData.mnWindowUpdate;
     meLanguage                  = rData.meLanguage;
     meUILanguage                = rData.meUILanguage;
-    mpLocaleDataWrapper         = rData.mpLocaleDataWrapper;
-    mpUILocaleDataWrapper       = rData.mpUILocaleDataWrapper;
-    mpCollatorWrapper           = rData.mpCollatorWrapper;
-    mpUICollatorWrapper         = rData.mpUICollatorWrapper;
+    // Pointer couldn't shared and objects haven't a copy ctor
+    // So we create the cache objects new, if the GetFunction is
+    // called
+    mpLocaleDataWrapper         = NULL;
+    mpUILocaleDataWrapper       = NULL;
+    mpCollatorWrapper           = NULL;
+    mpUICollatorWrapper         = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1472,6 +1475,10 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpLocaleDataWrapper;
     if ( mpUILocaleDataWrapper )
         delete mpUILocaleDataWrapper;
+    if ( mpCollatorWrapper )
+        delete mpCollatorWrapper;
+    if ( mpUICollatorWrapper )
+        delete mpUICollatorWrapper;
 }
 
 // -----------------------------------------------------------------------
